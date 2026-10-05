@@ -20,8 +20,19 @@ runner 每次是临时机器，运行结束后释放。CI 是自动验证入口�
 
 ## 本地状态
 
-本次创建的 `DeflateMiner-20261006` WSL、Ubuntu 镜像和下载/缓存已删除；原有 `docker-desktop` 保留。D 盘可用空间已恢复至约15 GiB。最初用于资料核对的小型 `sources/` 源码副本仍在本地并被 Git 忽略；不包含工具链或依赖环境。
+本次创建的 `DeflateMiner-20261006` WSL、Ubuntu 镜像和下载/缓存已删除；原有 `docker-desktop` 保留。空间和路径核对见[清理回执](evidence/environment-cleanup-2026-10-06.json)。最初用于资料核对的小型 `sources/` 源码副本仍在本地并被 Git 忽略；不包含工具链或依赖环境。
 
 INIT_STATE 保留初始化时的历史观察；本文件记录此后采用的环境安排。
 
-首次 CI 验证：待实测；以 Actions 的实际结果为准。
+## 已实测结果（2026-10-06）
+
+**VERIFIED**：[CI 37353587399](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37353587399) 全部步骤成功，核验的 CI 配置提交为 `0823166f8c72916541599556ab71da54ed46b070`。
+
+- 官方固定源码 70/70 pins 匹配；doctor 与 check-pins 通过；官方源码工作树未修改。
+- 原版模板完成 Rust 检查、重新提取、`LZ77.Obligation` 类型检查和公理检查；仅使用 `Classical.choice`、`Quot.sound`、`propext`。
+- 公共 stage1 的 28 文件、15,930,000 原始字节完成 benchmark/round trip；完整 gate 输出 `accepted=true`。
+- 实测工具包括 Lean 4.31.0、Rust nightly-2026-08-18、just 1.58.0、uv 0.12.15；模板及每个 corpus 文件的哈希已保存。
+
+证据：[run 元数据](evidence/ci/37353587399.json)、[完整 gate 日志](evidence/ci/37353587399-baseline.log)、[基线 JSON](evidence/ci/37353587399-baseline.json)、[版本/输入哈希](evidence/ci/37353587399-provenance.txt)。JSON 中的字节总量、总秒数和 slowdown 是该机器上的绝对 telemetry，不能当作官网的 balanced 两轴评分。
+
+首轮[CI 37351619154](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37351619154) 在只读依赖缓存中补建 `AeneasMeta.Utils` 时返回 VALIDATOR ERROR。固定 Aeneas 的 `lakefile.lean` 根据 `CI` 是否存在决定模块预编译；官方 verifier 的环境白名单不保留 `CI`。CI 准备脚本移除这个变量后，同一份模板的原始验证通过。未改 parser、证明、官方 gate 或其只读权限。[首轮失败日志](evidence/ci/37351619154-failure.log)
