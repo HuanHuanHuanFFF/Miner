@@ -1,0 +1,56 @@
+name: DEFLATE baseline
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/deflate-baseline.yml'
+      - 'scripts/ci-*.sh'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deflate-baseline-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  baseline:
+    # Public standard runners are free; do not silently run against private billing.
+    if: github.event.repository.private == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Prepare isolated runner and pinned source
+        run: bash scripts/ci-prepare.sh
+      - name: Install official verification toolchain
+        run: bash scripts/ci-setup.sh
+      - name: Verify original template and public corpus
+        run: bash scripts/ci-baseline.sh
+      - name: Record result summary
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          {
+            echo '## DEFLATE baseline'
+            echo "Result: $JOB_STATUS"
+            echo 'Official source: a356bbff18b60c4527fbcc85d5a28ef9c20214e0'
+            echo 'Input: unmodified miner/template; public corpus-stage1 only.'
+            echo 'CI timing is host-specific evidence, not an official competition score.'
+            if [ -f "$RUNNER_TEMP/deflate-reports/provenance.txt" ]; then
+              echo '```text'
+              cat "$RUNNER_TEMP/deflate-reports/provenance.txt"
+              echo '```'
+            fi
+            if [ -f "$RUNNER_TEMP/deflate-reports/baseline.json" ]; then
+              echo '```json'
+              cat "$RUNNER_TEMP/deflate-reports/baseline.json"
+              echo '```'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          df -h /
