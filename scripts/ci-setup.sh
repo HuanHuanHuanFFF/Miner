@@ -3,6 +3,10 @@ set -euo pipefail
 [[ ${GITHUB_ACTIONS:-} == true && ${RUNNER_OS:-} == Linux ]]
 cd "${DEFLATE_ROOT:?}"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+# Pinned Aeneas enables precompiled meta modules only when CI is absent.
+# The official verifier's environment allowlist also omits CI. Build trusted
+# dependencies with that same setting before the gate freezes them read-only.
+unset CI
 # Install every extraction component first: upstream's presence check otherwise
 # mistakes a minimal nightly auto-installed by cargo for the full Charon toolchain.
 rustup toolchain install nightly-2026-08-18 --profile minimal \
