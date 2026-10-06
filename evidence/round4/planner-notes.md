@@ -137,3 +137,39 @@ Neither adds search depth, iterations, routing, loops, or proof state. The exist
 - Shared proof: `f14e3c7b8a5c89d84dcffdb5ffc43e4963a043538c42dd39e228cd351145ffaf`.
 
 Both are prepared only, awaiting the main thread's decision after G results. Build, gate, performance, stage2 and online outcomes remain **UNKNOWN**.
+
+## H-only core after the E elaboration timeout
+
+**VERIFIED (failure receipt):** the E H4 gate in `evidence/round4/37523141792/gate/r4-parse-plan-h4-gate.log` passed intake, source policy/static checks and fresh Charon/Aeneas extraction. Extraction took 174.8 seconds, followed by successful lake calls of 2.8 and 111.4 seconds. Statement elaboration then timed out at the unchanged official 900-second limit. The captured lake log contains the timeout, not an earlier Lean logic error; it does not establish that elaboration would eventually succeed. The logs were read with read-only elevation because the downloaded directory was inaccessible to the sandbox. No ACL was modified.
+
+**VERIFIED (G public screening):** the receipt reports H8-deep32 `(5.718398003, 33.875400384%)`, H4-deep32 `(5.309592262, 33.893514202%)`, and H4-deep16 `(5.154002353, 33.903047006%)`. These still lack the fresh H-family gate. The next action is therefore proof/extraction minimization, not a relaxation of the verifier or a correctness claim from benchmark round trips.
+
+One new candidate, `candidates/r4-parse-h8d32-core`, is generated from frozen H8-deep32 source `a7115baa44afa81dc761cb7435872db264e6dea6a3013acec3fb9d768e81f83c` and proof `f14e3c7b8a5c89d84dcffdb5ffc43e4963a043538c42dd39e228cd351145ffaf`.
+
+| Retained dependency | Static evidence |
+| --- | --- |
+| Rust `parse` plus all 147 `h_*` functions | Direct-call closure is exactly 148 functions; each declaration, adjacent attribute and body is copied verbatim from the frozen parent. |
+| 85 Rust constants | Transitive identifiers from the retained functions and proof references; each complete constant declaration is copied verbatim. |
+| Original `Submission` header | Imports `Lz77` and `Slot`, opens the same namespaces, and preserves existing options. |
+| Shared `T9!` / `T10!` proof macros | Defined between the original EA and ED namespaces and used by EH's `h_match_len` proofs. Both are copied verbatim; omitting them would leave missing proof dependencies. |
+| Complete `namespace EH` | 1821-line block retained verbatim, including verified-emitter correctness and H totality/loop proofs. All 225 `slot.h_*` references including generated loop references map to retained Rust function owners. |
+| Original final `Submission.parse_spec` | Exact statement and `EH.parse_mode_spec input out 0#usize hlen` body retained. |
+
+Removed: Rust A/D engines, the old exact-length portfolio, their unused constants/types, EA/ED proof namespaces, and outer router proofs. No custom decode invariant from A or D is imported into EH; EH carries its own `Matches`/emit lemmas and uses the public `LZ77` library.
+
+The complete retained/removed function and constant lists, proof block SHA256 values and source line ranges, plus extracted-reference-to-function-owner mapping are in `dependency-audit.json` beside the new candidate. Additional read-only checks found no omitted Submission-level `attribute`, `open` or declaration between the removed namespaces: only the retained T9/T10 macros occur there. Retained references to known Rust function names are direct calls or explicitly shadowed local identifiers; no implicit function-value dependency was found.
+
+An additional attribute audit over the entire removed proof prefix found no non-local `@[...]` registrations. The explicit `attribute` commands there are also `local ... in` declarations. Thus no omitted global simplification/step registration was found that EH would silently inherit from the removed engines. This remains a source audit; Lean elaboration is the decisive check.
+
+`scripts/make-round4-hcore.py` defaults to generating only the H8/depth32 core. It also contains fixed-SHA recipes for the prepared H4/depth32 wide and noslot parents; both recipes were evaluated and audited in memory without creating their candidate directories. Existing frozen parser/proof files are unchanged.
+
+| File | Parent bytes | Core bytes / lines | Core SHA256 |
+| --- | --- | --- | --- |
+| parse.rs | 271232 | 71184 / 2275 | `916f3a0b5f64b17919c7e4871f878ef2827530a9e3bf577020d8865e61b26953` |
+| Parse.lean | 405932 | 95901 / 1867 | `13f23fc46a6d18283aeb339f949cca102761133d6e1ff9b3a1007cd8b7926a46` |
+
+**VERIFIED locally:** generation and exact `--check` pass; retained source/proof text and declared dependency coverage are checked. No `sorry`, `admit` or new axiom is present. The official obligation wrapper and axiom whitelist remain external and unchanged; neither the 900-second limit nor any official file is modified.
+
+**INFERRED:** removing roughly three quarters of the proof text and non-H extracted program should reduce work. Byte/line reduction is not a measured proportional time reduction. Retaining the same H bodies/constants is strong static evidence for unchanged algorithm policy, but compiled layout and runtime may change.
+
+**UNKNOWN until fresh CI:** extracted names/signatures, Lean dependency completeness, `LZ77.Obligation` and axiom acceptance, elaboration within 900 seconds, round trip, finite-corpus token/output equivalence with the parent, timing, private stage2, admission and reward. The original timeout is not marked fixed yet.

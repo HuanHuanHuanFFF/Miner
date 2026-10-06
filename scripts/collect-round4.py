@@ -7,7 +7,6 @@ from pathlib import Path
 import statistics
 import subprocess
 import sys
-import tempfile
 import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -111,7 +110,10 @@ def main():
     if not (target / 'state.json').exists():
         # Download into a new folder: an interrupted transfer must not masquerade
         # as a complete receipt merely because state.json arrived first.
-        stage = Path(tempfile.mkdtemp(prefix='.' + args.phase + '-download-', dir=target.parent))
+        stage = target.parent / ('.' + args.phase + '-download-' + uuid.uuid4().hex)
+        # Path.mkdir uses inherited workspace permissions on Windows; Python's
+        # secure tempfile mode 0700 excludes the restricted worker's read ACL.
+        stage.mkdir()
         subprocess.run(['gh', 'run', 'download', args.run_id, '--repo', 'HuanHuanHuanFFF/Miner',
                         '--name', name, '--dir', str(stage)], env=env, check=True,
                        capture_output=True, text=True, encoding='utf-8', timeout=180)
