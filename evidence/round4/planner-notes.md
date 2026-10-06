@@ -226,3 +226,29 @@ Mode 3 is not generated in this batch: up to six added DP steps would have a lar
 - mode2/i4 proof: `7b33e0f50428d2629af0f93151f9fff3110409b57b8add5fcc06c6d61f9d216b`.
 
 Each parser/proof is 71184/95901 bytes. Actual normal/restart pass counts, public time/size, fresh gate, private stage2 and online outcomes remain **UNKNOWN**.
+
+## Confirmed H-core gate success
+
+**VERIFIED:** CI `37532140321` completed successfully. Its gate input files were independently compared byte-for-byte with current `r4-parse-h8d32-core`: source `916f3a0b5f64b17919c7e4871f878ef2827530a9e3bf577020d8865e61b26953`, proof `13f23fc46a6d18283aeb339f949cca102761133d6e1ff9b3a1007cd8b7926a46`.
+
+Fresh extraction took 12.6 seconds; the statement/elaboration lake call took 94.9 seconds. Verification through the axiom stage was accepted in 150.2 seconds under the unchanged 900-second limit. `LZ77.Obligation slot.parse` typechecked, and `accepted` depended only on `Classical.choice`, `Quot.sound`, and `propext`. The subsequent complete 28-file public gate reported `accepted=true`, with 15930000 input bytes and 4870697 output bytes. Evidence: `evidence/round4/37532140321/gate/r4-parse-h8d32-core-gate.log` and its gate JSON.
+
+The finite equivalence diagnostic reports 444 core-versus-parent cases, zero differences/failures, and return code 0 (`equivalence-research.json`). The run also records eight fixed generated inputs, two core measurement blocks, and no recorded failures in the synthetic validation. These checks do not establish all-input token equivalence or observe private stage2.
+
+The paired public analysis records core time 5.447409947 and size 33.875400384%; the full parent has the same size with time about 5.4282. Removing unreachable code/proof solved the observed elaboration-time failure for this exact core. No algorithm speed improvement is claimed from the small timing difference, which can include layout and measurement variation.
+
+This current exact-hash receipt supersedes the initial core manifest's generation-time UNKNOWN status; frozen manifests remain untouched. It does not certify different H16 constants or mode-entry variants: each still requires its own fresh gate. Private stage2, formal admission/ranking and reward for the core remain **UNKNOWN**.
+
+## One public299 EOB model-count experiment
+
+**VERIFIED (source):** in `references/round4-public-299/parse.rs`, `a_walk` sets `lf[256]=1` after every walk. `a_sample_pass` scales every entry 0..511, including 256, by A_SAMPLE and sums across sampled segments. `a_engine` then computes `sl=bl+lf`; when the encoder block is still partial it carries `sl` back into `bl`. Therefore the observed model count for EOB can exceed one within a single 16384-token block, whereas the official encoder adds one EOB per block.
+
+The single requested candidate, `r4-parse-299-eob1`, inserts only `sl[256]=1` immediately after the unique `a_add_counts(&mut sl, &bl, &lf, &mut sd, &bd, &df)` call in `a_engine`. All public299 classifier/configuration, depths, passes, other counts and emitter code remain unchanged. Root/Luna's alt299 candidates and scripts are not modified.
+
+**Model limit:** `a_set_costs_huff` subsequently adds one pseudocount to each of the 286 litlen symbols, including EOB. This candidate therefore normalizes the observed EOB component; it intentionally retains the existing smoothing policy, whose Huffman working count for EOB becomes two. It is not a claim that the full cost model now equals the official encoder. The previous accumulated count may have served useful regularization, so an output-size improvement is not assumed.
+
+**Proof review:** `a_engine_loop1_loop0_spec` carries bounds for the planned window, end position and token count, but no invariant fixing `sl` frequencies. The new statement is a fixed in-range write to index 256 of a 512-element array. It adds no loop, branch or loop-state field, and is after the theorem's sampled/full-pass cut, where the existing proof continues with `step*`. The complete original 279475-byte proof is copied; fresh extraction and gate are still necessary.
+
+`scripts/make-round4-eob.py --check` passes, locks the original public299 source/proof SHA256 values, and verifies that removing the one inserted line restores the original source exactly. New source SHA256 `f22c4fc3fff60f4640a9d1fb3d54a2be94a4415c914262514c4548b58215582f` (105089 bytes); proof SHA256 `9b77b3523cbf7044aaffa11b6fd9676b3615ca4bf148b43b3cb92da4073b3e3d` (279475 bytes). Attribution and the source endpoint remain linked from its manifest.
+
+**UNKNOWN:** compilation, extraction, proof/axiom acceptance, public time/size and online outcomes of eob1. No further count/model variants are generated in this batch.

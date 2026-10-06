@@ -1,0 +1,30 @@
+{
+  "candidate": "r4-parse-299-eob1",
+  "base_submission_id": "299",
+  "parent": {
+    "path": "references/round4-public-299",
+    "hashes": {
+      "parse.rs": "71314c4da7ccd29331a360bce9be8697857109c66adc87d3480eeaa22930625d",
+      "Parse.lean": "9b77b3523cbf7044aaffa11b6fd9676b3615ca4bf148b43b3cb92da4073b3e3d"
+    }
+  },
+  "hashes": {
+    "parse.rs": "f22c4fc3fff60f4640a9d1fb3d54a2be94a4415c914262514c4548b58215582f",
+    "Parse.lean": "9b77b3523cbf7044aaffa11b6fd9676b3615ca4bf148b43b3cb92da4073b3e3d"
+  },
+  "bytes": {
+    "parse.rs": 105089,
+    "Parse.lean": 279475
+  },
+  "change": "In a_engine only, immediately after a_add_counts(sl,bl,lf,sd,bd,df), set sl[256]=1.",
+  "mechanism": "Normalize observed EOB frequency after sampled segment scaling and partial-block count merging; a_walk emits one EOB into each segment's model, while the encoder has one EOB per 16384-token block.",
+  "preserved": "All classifier, CFG, search depths, pass counts, other frequencies, cost-model add-one priors, verified emitter and complete proof bytes remain unchanged.",
+  "model_limit": "a_set_costs_huff still adds one pseudocount to every litlen symbol, including EOB. This candidate corrects the observed count only; accumulated EOB may have acted as useful regularization. Improvement is not assumed.",
+  "proof_review": "a_engine_loop1_loop0_spec tracks window/path/token bounds, not sl frequency values. The added write is at fixed in-range index 256 of a 512-element array, with no new branch, loop, state field or changed measure. Copied proof still requires fresh extraction and gate.",
+  "attribution": {
+    "source_url": "https://conjectures.io/v1/competitions/deflate/submissions/299/source",
+    "miner_hotkey": "5En8AugiKmLmnoaWzrGMz9oWMbQYvekaMvZSjViLTLhrrq4E",
+    "note": "External public299 source; metadata and original files retained unchanged in the reference directory."
+  },
+  "verification": "VERIFIED local SHA locks, exact one-line change and --check only. Rust, official extraction, Lean obligation, axioms, round trip, performance, stage2, admission and reward UNKNOWN."
+}
