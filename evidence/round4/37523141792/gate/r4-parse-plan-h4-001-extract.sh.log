@@ -1,0 +1,58 @@
+warning: `cargo miri setup` failed for target `x86_64-unknown-linux-gnu`; falling back to rustc's default sysroot: error: 'cargo-miri' is not installed for the toolchain 'nightly-2026-08-18-x86_64-unknown-linux-gnu'.
+help: run `rustup component add --toolchain nightly-2026-08-18-x86_64-unknown-linux-gnu miri` to install it
+warning: type `A_BMf` should have an upper camel case name
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-gonjnj5y/slot/generated/parse.rs:1348:12
+     |
+1348 | pub struct A_BMf {
+     |            ^^^^^ help: convert the identifier to upper camel case: `ABmf`
+     |
+     = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: unused variable: `ew`
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-gonjnj5y/slot/generated/parse.rs:7122:102
+     |
+7122 | pub fn h_eval_mode(mode: usize, fr: &mut [u32], tbl: &mut [u32], nb: usize, nbmax: usize, damp: u32, ew: u32) -> u64 {
+     |                                                                                                      ^^ help: if this is intentional, prefix it with an underscore: `_ew`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `cmode`
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-gonjnj5y/slot/generated/parse.rs:7026:9
+     |
+7026 |     let cmode = mode;
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_cmode`
+
+warning: unused variable: `kend`
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-gonjnj5y/slot/generated/parse.rs:7034:9
+     |
+7034 |     let kend = H_H_KENDS[fc % 4].wrapping_add(fc.wrapping_mul(32));
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_kend`
+
+warning: unused variable: `force`
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-gonjnj5y/slot/generated/parse.rs:7038:9
+     |
+7038 |     let force = high & h_eq(route, 1) & h_ge(n, H_D_SMALL);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_force`
+
+warning: value assigned to `lt` is never read
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-gonjnj5y/slot/generated/parse.rs:1468:26
+     |
+1468 |             let mut lt = 0usize;
+     |                          ^^^^^^ this value is reassigned later and never used
+...
+1494 |                 lt = if wc < wi { 1 } else { 0 };
+     |                 -------------------------------- `lt` is overwritten here before the previous value is read
+     |
+     = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `k` is never read
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-gonjnj5y/slot/generated/parse.rs:2291:29
+     |
+2291 |                 let mut k = k0;
+     |                             ^^ this value is reassigned later and never used
+...
+2300 |                     k = a_c_extend(s, c, p, k0, lim);
+     |                     -------------------------------- `k` is overwritten here before the previous value is read
+
+warning: 7 warnings emitted
+

@@ -1,0 +1,287 @@
+Proof/Parse.lean:1785:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input : Slice U8
+ch : alloc.vec.Vec U32
+n : Usize
+mp mb cost : alloc.vec.Vec U32
+lit : Std.Array U32 256#usize
+lc : Std.Array U32 512#usize
+dc : Std.Array U32 32#usize
+lf : Std.Array U32 512#usize
+df : Std.Array U32 32#usize
+bl : Std.Array U32 512#usize
+bd : Std.Array U32 32#usize
+sl : Std.Array U32 512#usize
+sd : Std.Array U32 32#usize
+rot p0 need passes sampled pe k p1 t : Usize
+hn : ↑n = input.length
+hn26 : ↑n < 67108864
+hp0 : ↑p0 < ↑n
+hpe : ↑p0 ≤ ↑pe ∧ ↑pe ≤ ↑n
+hpe' : ↑pe = ↑n ∨ ↑p0 + ↑slot.A_MARGIN ≤ ↑pe
+hneed : ↑need ≤ 65536
+ht : ↑t ≤ ↑need
+hp1 : ↑p0 ≤ ↑p1 ∧ ↑p1 ≤ ↑p0 + 511 * ↑t
+hbt : 0 < ↑slot.BLOCK_TOKENS ∧ ↑slot.BLOCK_TOKENS ≤ 16384 ∧ ↑slot.A_MARGIN ≤ 65536 ∧ ↑slot.A_SLACK ≠ 0
+hseg :
+  256 ≤ ↑slot.A_SEG ∧
+    ↑slot.A_SEG ≤ 65536 ∧ ↑slot.A_SEG + 512 ≤ ↑slot.A_SEG * ↑slot.A_SAMPLE ∧ ↑slot.A_SEG * ↑slot.A_SAMPLE ≤ 1048576
+ch_ cost_ : alloc.vec.Vec U32
+lit_ : Std.Array U32 256#usize
+lc_ : Std.Array U32 512#usize
+dc_ : Std.Array U32 32#usize
+lf_ : Std.Array U32 512#usize
+df_ : Std.Array U32 32#usize
+sl_ : Std.Array U32 512#usize
+sd_ : Std.Array U32 32#usize
+pe_ k_ p1_ t_ : Usize
+hpe0 : ↑p0 ≤ ↑pe_
+hpe1 : ↑pe_ ≤ ↑n
+hpe2 : ↑pe_ = ↑n ∨ ↑p0 + ↑slot.A_MARGIN ≤ ↑pe_
+ht_ : ↑t_ ≤ ↑need
+hp10 : ↑p0 ≤ ↑p1_
+hp11 : ↑p1_ ≤ ↑p0 + 511 * ↑t_
+h✝² : k_ < passes
+ch1 cost1 : alloc.vec.Vec U32
+lf1 : Std.Array U32 512#usize
+df1 : Std.Array U32 32#usize
+pe1 p11 t1 : Usize
+hq0 : ↑p0 ≤ ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1
+hq1 : ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1 ≤ ↑n
+hq2 :
+  ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1 = ↑n ∨
+    ↑p0 + ↑slot.A_MARGIN ≤ ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1
+hq3 : ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.2 ≤ ↑need
+hq4 : ↑p0 ≤ ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.1
+hq5 : ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.1 ≤ ↑p0 + 511 * ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.2
+sl1 : Std.Array U32 512#usize
+sd1 : Std.Array U32 32#usize
+_✝³ : [> let(sl1, sd1) ← slot.a_add_counts sl_ bl lf1 sd_ bd df1 <]
+_✝² : U32
+index_mut_back : U32 → Std.Array U32 512#usize
+_✝¹ : [> let(_✝², index_mut_back) ← sl1.index_mut_usize 256#usize <]
+__post2 : index_mut_back = sl1.set 256#usize
+__post1 : _✝² = (↑sl1)[256]
+i : Usize
+_✝ : [> let i ← k_ + 1#usize <]
+i_post : ↑i = ↑k_ + 1
+h✝¹ : i < passes
+h✝ : k_ ≥ sampled
+x : Std.Array U32 256#usize × Std.Array U32 512#usize × Std.Array U32 32#usize
+_ : [> let x ← slot.a_set_costs_huff (index_mut_back 1#u32) sd1 lit_ lc_ dc_ <]
+⊢ (do
+      let (lit1, lc1, dc1, sl2) ←
+        let (lit2, lc2, dc2) := x
+          ok (lit2, lc2, dc2, index_mut_back 1#u32)
+      ok (cont (ch1, cost1, lit1, lc1, dc1, lf1, df1, sl2, sd1, pe1, i, p11, t1))) ⦃
+    r =>
+    match r with
+    | done y =>
+      ↑y.2.2.2.2.2.2.2.2.2.2 ≤ ↑need ∧
+        ↑p0 ≤ ↑y.2.2.2.2.2.2.2.2.2.1 ∧ ↑y.2.2.2.2.2.2.2.2.2.1 ≤ ↑p0 + 511 * ↑y.2.2.2.2.2.2.2.2.2.2
+    | cont x' =>
+      ↑p0 ≤ ↑x'.2.2.2.2.2.2.2.2.2.1 ∧
+        ↑x'.2.2.2.2.2.2.2.2.2.1 ≤ ↑n ∧
+          (↑x'.2.2.2.2.2.2.2.2.2.1 = ↑n ∨ ↑p0 + ↑slot.A_MARGIN ≤ ↑x'.2.2.2.2.2.2.2.2.2.1) ∧
+            ↑x'.2.2.2.2.2.2.2.2.2.2.2.2 ≤ ↑need ∧
+              ↑p0 ≤ ↑x'.2.2.2.2.2.2.2.2.2.2.2.1 ∧
+                ↑x'.2.2.2.2.2.2.2.2.2.2.2.1 ≤ ↑p0 + 511 * ↑x'.2.2.2.2.2.2.2.2.2.2.2.2 ∧
+                  ↑passes - ↑x'.2.2.2.2.2.2.2.2.2.2.1 < ↑passes - ↑k_ ⦄
+Proof/Parse.lean:1785:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input : Slice U8
+ch : alloc.vec.Vec U32
+n : Usize
+mp mb cost : alloc.vec.Vec U32
+lit : Std.Array U32 256#usize
+lc : Std.Array U32 512#usize
+dc : Std.Array U32 32#usize
+lf : Std.Array U32 512#usize
+df : Std.Array U32 32#usize
+bl : Std.Array U32 512#usize
+bd : Std.Array U32 32#usize
+sl : Std.Array U32 512#usize
+sd : Std.Array U32 32#usize
+rot p0 need passes sampled pe k p1 t : Usize
+hn : ↑n = input.length
+hn26 : ↑n < 67108864
+hp0 : ↑p0 < ↑n
+hpe : ↑p0 ≤ ↑pe ∧ ↑pe ≤ ↑n
+hpe' : ↑pe = ↑n ∨ ↑p0 + ↑slot.A_MARGIN ≤ ↑pe
+hneed : ↑need ≤ 65536
+ht : ↑t ≤ ↑need
+hp1 : ↑p0 ≤ ↑p1 ∧ ↑p1 ≤ ↑p0 + 511 * ↑t
+hbt : 0 < ↑slot.BLOCK_TOKENS ∧ ↑slot.BLOCK_TOKENS ≤ 16384 ∧ ↑slot.A_MARGIN ≤ 65536 ∧ ↑slot.A_SLACK ≠ 0
+hseg :
+  256 ≤ ↑slot.A_SEG ∧
+    ↑slot.A_SEG ≤ 65536 ∧ ↑slot.A_SEG + 512 ≤ ↑slot.A_SEG * ↑slot.A_SAMPLE ∧ ↑slot.A_SEG * ↑slot.A_SAMPLE ≤ 1048576
+ch_ cost_ : alloc.vec.Vec U32
+lit_ : Std.Array U32 256#usize
+lc_ : Std.Array U32 512#usize
+dc_ : Std.Array U32 32#usize
+lf_ : Std.Array U32 512#usize
+df_ : Std.Array U32 32#usize
+sl_ : Std.Array U32 512#usize
+sd_ : Std.Array U32 32#usize
+pe_ k_ p1_ t_ : Usize
+hpe0 : ↑p0 ≤ ↑pe_
+hpe1 : ↑pe_ ≤ ↑n
+hpe2 : ↑pe_ = ↑n ∨ ↑p0 + ↑slot.A_MARGIN ≤ ↑pe_
+ht_ : ↑t_ ≤ ↑need
+hp10 : ↑p0 ≤ ↑p1_
+hp11 : ↑p1_ ≤ ↑p0 + 511 * ↑t_
+h✝² : k_ < passes
+ch1 cost1 : alloc.vec.Vec U32
+lf1 : Std.Array U32 512#usize
+df1 : Std.Array U32 32#usize
+pe1 p11 t1 : Usize
+hq0 : ↑p0 ≤ ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1
+hq1 : ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1 ≤ ↑n
+hq2 :
+  ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1 = ↑n ∨
+    ↑p0 + ↑slot.A_MARGIN ≤ ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1
+hq3 : ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.2 ≤ ↑need
+hq4 : ↑p0 ≤ ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.1
+hq5 : ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.1 ≤ ↑p0 + 511 * ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.2
+sl1 : Std.Array U32 512#usize
+sd1 : Std.Array U32 32#usize
+_✝³ : [> let(sl1, sd1) ← slot.a_add_counts sl_ bl lf1 sd_ bd df1 <]
+_✝² : U32
+index_mut_back : U32 → Std.Array U32 512#usize
+_✝¹ : [> let(_✝², index_mut_back) ← sl1.index_mut_usize 256#usize <]
+__post2 : index_mut_back = sl1.set 256#usize
+__post1 : _✝² = (↑sl1)[256]
+i : Usize
+_✝ : [> let i ← k_ + 1#usize <]
+i_post : ↑i = ↑k_ + 1
+h✝¹ : i < passes
+h✝ : ¬k_ ≥ sampled
+x : Std.Array U32 256#usize × Std.Array U32 512#usize × Std.Array U32 32#usize
+_ : [> let x ← slot.a_set_costs (index_mut_back 1#u32) sd1 lit_ lc_ dc_ <]
+⊢ (do
+      let (lit1, lc1, dc1, sl2) ←
+        let (lit2, lc2, dc2) := x
+          ok (lit2, lc2, dc2, index_mut_back 1#u32)
+      ok (cont (ch1, cost1, lit1, lc1, dc1, lf1, df1, sl2, sd1, pe1, i, p11, t1))) ⦃
+    r =>
+    match r with
+    | done y =>
+      ↑y.2.2.2.2.2.2.2.2.2.2 ≤ ↑need ∧
+        ↑p0 ≤ ↑y.2.2.2.2.2.2.2.2.2.1 ∧ ↑y.2.2.2.2.2.2.2.2.2.1 ≤ ↑p0 + 511 * ↑y.2.2.2.2.2.2.2.2.2.2
+    | cont x' =>
+      ↑p0 ≤ ↑x'.2.2.2.2.2.2.2.2.2.1 ∧
+        ↑x'.2.2.2.2.2.2.2.2.2.1 ≤ ↑n ∧
+          (↑x'.2.2.2.2.2.2.2.2.2.1 = ↑n ∨ ↑p0 + ↑slot.A_MARGIN ≤ ↑x'.2.2.2.2.2.2.2.2.2.1) ∧
+            ↑x'.2.2.2.2.2.2.2.2.2.2.2.2 ≤ ↑need ∧
+              ↑p0 ≤ ↑x'.2.2.2.2.2.2.2.2.2.2.2.1 ∧
+                ↑x'.2.2.2.2.2.2.2.2.2.2.2.1 ≤ ↑p0 + 511 * ↑x'.2.2.2.2.2.2.2.2.2.2.2.2 ∧
+                  ↑passes - ↑x'.2.2.2.2.2.2.2.2.2.2.1 < ↑passes - ↑k_ ⦄
+Proof/Parse.lean:1785:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input : Slice U8
+ch : alloc.vec.Vec U32
+n : Usize
+mp mb cost : alloc.vec.Vec U32
+lit : Std.Array U32 256#usize
+lc : Std.Array U32 512#usize
+dc : Std.Array U32 32#usize
+lf : Std.Array U32 512#usize
+df : Std.Array U32 32#usize
+bl : Std.Array U32 512#usize
+bd : Std.Array U32 32#usize
+sl : Std.Array U32 512#usize
+sd : Std.Array U32 32#usize
+rot p0 need passes sampled pe k p1 t : Usize
+hn : ↑n = input.length
+hn26 : ↑n < 67108864
+hp0 : ↑p0 < ↑n
+hpe : ↑p0 ≤ ↑pe ∧ ↑pe ≤ ↑n
+hpe' : ↑pe = ↑n ∨ ↑p0 + ↑slot.A_MARGIN ≤ ↑pe
+hneed : ↑need ≤ 65536
+ht : ↑t ≤ ↑need
+hp1 : ↑p0 ≤ ↑p1 ∧ ↑p1 ≤ ↑p0 + 511 * ↑t
+hbt : 0 < ↑slot.BLOCK_TOKENS ∧ ↑slot.BLOCK_TOKENS ≤ 16384 ∧ ↑slot.A_MARGIN ≤ 65536 ∧ ↑slot.A_SLACK ≠ 0
+hseg :
+  256 ≤ ↑slot.A_SEG ∧
+    ↑slot.A_SEG ≤ 65536 ∧ ↑slot.A_SEG + 512 ≤ ↑slot.A_SEG * ↑slot.A_SAMPLE ∧ ↑slot.A_SEG * ↑slot.A_SAMPLE ≤ 1048576
+ch_ cost_ : alloc.vec.Vec U32
+lit_ : Std.Array U32 256#usize
+lc_ : Std.Array U32 512#usize
+dc_ : Std.Array U32 32#usize
+lf_ : Std.Array U32 512#usize
+df_ : Std.Array U32 32#usize
+sl_ : Std.Array U32 512#usize
+sd_ : Std.Array U32 32#usize
+pe_ k_ p1_ t_ : Usize
+hpe0 : ↑p0 ≤ ↑pe_
+hpe1 : ↑pe_ ≤ ↑n
+hpe2 : ↑pe_ = ↑n ∨ ↑p0 + ↑slot.A_MARGIN ≤ ↑pe_
+ht_ : ↑t_ ≤ ↑need
+hp10 : ↑p0 ≤ ↑p1_
+hp11 : ↑p1_ ≤ ↑p0 + 511 * ↑t_
+h✝¹ : k_ < passes
+ch1 cost1 : alloc.vec.Vec U32
+lf1 : Std.Array U32 512#usize
+df1 : Std.Array U32 32#usize
+pe1 p11 t1 : Usize
+hq0 : ↑p0 ≤ ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1
+hq1 : ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1 ≤ ↑n
+hq2 :
+  ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1 = ↑n ∨
+    ↑p0 + ↑slot.A_MARGIN ≤ ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.1
+hq3 : ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.2 ≤ ↑need
+hq4 : ↑p0 ≤ ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.1
+hq5 : ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.1 ≤ ↑p0 + 511 * ↑(ch1, cost1, lf1, df1, pe1, p11, t1).2.2.2.2.2.2
+sl1 : Std.Array U32 512#usize
+sd1 : Std.Array U32 32#usize
+_✝³ : [> let(sl1, sd1) ← slot.a_add_counts sl_ bl lf1 sd_ bd df1 <]
+_✝² : U32
+index_mut_back : U32 → Std.Array U32 512#usize
+_✝¹ : [> let(_✝², index_mut_back) ← sl1.index_mut_usize 256#usize <]
+__post2 : index_mut_back = sl1.set 256#usize
+__post1 : _✝² = (↑sl1)[256]
+i : Usize
+_✝ : [> let i ← k_ + 1#usize <]
+i_post : ↑i = ↑k_ + 1
+h✝ : ¬i < passes
+x : Std.Array U32 256#usize × Std.Array U32 512#usize × Std.Array U32 32#usize
+_ : [> let x ← slot.a_set_costs (index_mut_back 1#u32) sd1 lit_ lc_ dc_ <]
+⊢ (do
+      let (lit1, lc1, dc1, sl2) ←
+        let (lit2, lc2, dc2) := x
+          ok (lit2, lc2, dc2, index_mut_back 1#u32)
+      ok (cont (ch1, cost1, lit1, lc1, dc1, lf1, df1, sl2, sd1, pe1, i, p11, t1))) ⦃
+    r =>
+    match r with
+    | done y =>
+      ↑y.2.2.2.2.2.2.2.2.2.2 ≤ ↑need ∧
+        ↑p0 ≤ ↑y.2.2.2.2.2.2.2.2.2.1 ∧ ↑y.2.2.2.2.2.2.2.2.2.1 ≤ ↑p0 + 511 * ↑y.2.2.2.2.2.2.2.2.2.2
+    | cont x' =>
+      ↑p0 ≤ ↑x'.2.2.2.2.2.2.2.2.2.1 ∧
+        ↑x'.2.2.2.2.2.2.2.2.2.1 ≤ ↑n ∧
+          (↑x'.2.2.2.2.2.2.2.2.2.1 = ↑n ∨ ↑p0 + ↑slot.A_MARGIN ≤ ↑x'.2.2.2.2.2.2.2.2.2.1) ∧
+            ↑x'.2.2.2.2.2.2.2.2.2.2.2.2 ≤ ↑need ∧
+              ↑p0 ≤ ↑x'.2.2.2.2.2.2.2.2.2.2.2.1 ∧
+                ↑x'.2.2.2.2.2.2.2.2.2.2.2.1 ≤ ↑p0 + 511 * ↑x'.2.2.2.2.2.2.2.2.2.2.2.2 ∧
+                  ↑passes - ↑x'.2.2.2.2.2.2.2.2.2.2.1 < ↑passes - ↑k_ ⦄
+Proof/Parse.lean:3648:23: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+Proof/Parse.lean:3965:23: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+Proof/Parse.lean:3971:25: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`

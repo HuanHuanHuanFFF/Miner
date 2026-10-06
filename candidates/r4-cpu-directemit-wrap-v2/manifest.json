@@ -1,0 +1,52 @@
+{
+  "candidate": "r4-cpu-directemit-wrap-v2",
+  "base_candidate": "r3-432-fast3",
+  "base_path": "candidates/r3-432-fast3",
+  "base_submission_id": "432",
+  "base_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "change": {
+    "constants": {},
+    "inline_attributes": {},
+    "source_edits": [
+      "directemit",
+      "directemit_wrap_return"
+    ],
+    "proof_edits": [
+      "directemit_helpers",
+      "directemit_bounds",
+      "directemit_comment",
+      "directemit_wrap_return",
+      "pack_proof_v2",
+      "pack_token_equality_v2"
+    ]
+  },
+  "mechanism": "Same directemit-wrap Rust parser; proof-only repair based on F's full extraction/Lean goals. No new CPU algorithm or composition.",
+  "expected_token_equivalence": "VERIFIED source identity to the frozen directemit-wrap Rust file; executed outputs/benchmarks are inherited only at matching Rust/build hashes, and new Lean proof acceptance remains UNKNOWN.",
+  "rust_identical_to": "r4-cpu-directemit-wrap",
+  "rust_sha256": "8589dc90cd895e84d02a11e850b9e753767c44338f7c4897511000ff1b2039c8",
+  "expected_equivalent": true,
+  "actual_token_equivalence": "UNKNOWN: no execution or corpus token comparison in this generator",
+  "proof": {
+    "mode": "Proof-only repair of two explicit F Lean goals: bound/canonicalize the final wrapping add and use the pack postcondition for token equality. Specifications, axioms and Rust bytes are unchanged from directemit-wrap; fresh Lean acceptance required",
+    "sha256": "bcd69b587bd51a43658e517bf4fb6494c6e1ab453b3bd96e6dea78a99d324e13",
+    "fresh_gate": "UNKNOWN"
+  },
+  "diagnostic": "F lake.log shows pack_match_spec leaves an unbound final wrapping_add expression, and put_match equality must consume i_post rather than merely unfold mkMatch. This repair changes only those two proofs; speed evidence is unchanged.",
+  "hashes": {
+    "parse.rs": "8589dc90cd895e84d02a11e850b9e753767c44338f7c4897511000ff1b2039c8",
+    "Parse.lean": "bcd69b587bd51a43658e517bf4fb6494c6e1ab453b3bd96e6dea78a99d324e13"
+  },
+  "attribution": {
+    "source": "Officially published submission 432, then r3-432-fast3 constants",
+    "reference": "references/round3-public-432/PROVENANCE.md",
+    "public_miner_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "named_author": "UNKNOWN: official snapshot/source exposes no name",
+    "ownership": "Derivative of external public miner code; not an independent parser algorithm"
+  },
+  "scope": "Research candidate only; total paired compression, round trip, token hashes, fresh public gate, independent-runner reproduction, private stage2 and official admission are separate checks",
+  "cpu_gain": "UNKNOWN",
+  "formal_submission_sent": false
+}

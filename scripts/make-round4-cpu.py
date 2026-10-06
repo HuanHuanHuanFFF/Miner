@@ -153,6 +153,19 @@ VARIANTS = {
         "expected_token_equivalence": "INFERRED under the original parse obligation: Dec/MatchAt give nt+1 and p+l at most usize::MAX, so wrapping returns equal the specified sums. Actual all-input Lean and runtime identity are UNKNOWN.",
         "diagnostic": "F assembly proves a new p+l carry/panic branch on the prose kernel (direct 105ce/105d6 versus base 12567); it does not establish a new check on every route or nt+1. Compare emitted checks and paired/same-process parser and total times against both frozen directemit and fast3; no speed gain is assumed.",
     },
+    "r4-cpu-directemit-wrap-v2": {
+        "constant_changes": {},
+        "attributes": {},
+        "source_edits": ["directemit", "directemit_wrap_return"],
+        "proof_edits": ["directemit_helpers", "directemit_bounds", "directemit_comment", "directemit_wrap_return", "pack_proof_v2", "pack_token_equality_v2"],
+        "proof_mode": "Proof-only repair of two explicit F Lean goals: bound/canonicalize the final wrapping add and use the pack postcondition for token equality. Specifications, axioms and Rust bytes are unchanged from directemit-wrap; fresh Lean acceptance required",
+        "rust_identical_to": "r4-cpu-directemit-wrap",
+        "rust_sha256": "8589dc90cd895e84d02a11e850b9e753767c44338f7c4897511000ff1b2039c8",
+        "expected_equivalent": True,
+        "mechanism": "Same directemit-wrap Rust parser; proof-only repair based on F's full extraction/Lean goals. No new CPU algorithm or composition.",
+        "expected_token_equivalence": "VERIFIED source identity to the frozen directemit-wrap Rust file; executed outputs/benchmarks are inherited only at matching Rust/build hashes, and new Lean proof acceptance remains UNKNOWN.",
+        "diagnostic": "F lake.log shows pack_match_spec leaves an unbound final wrapping_add expression, and put_match equality must consume i_post rather than merely unfold mkMatch. This repair changes only those two proofs; speed evidence is unchanged.",
+    },
 }
 
 SOURCE_EDITS = {
@@ -367,6 +380,41 @@ PROOF_EDITS = {
         "    (wadd_val (by assumption) (by scalar_tac))\n"
         "    (wadd_val (by assumption) (by scalar_tac))",
     ),
+    "pack_proof_v2": (
+        "  rw [slot.pack_match]\n"
+        "  step*\n"
+        "  simp only [LZ77.mkMatch, LZ77.MATCH_BASE]\n"
+        "  scalar_tac",
+        "  rw [slot.pack_match]\n"
+        "  step*\n"
+        "  have hi : i.val = d.val := by\n"
+        "    rw [i_post, UScalar.cast_val_eq, UScalarTy.U32_numBits_eq,\n"
+        "      Nat.mod_eq_of_lt (by omega)]\n"
+        "  have hi2 : i2.val = l.val := by\n"
+        "    rw [i2_post, UScalar.cast_val_eq, UScalarTy.U32_numBits_eq,\n"
+        "      Nat.mod_eq_of_lt (by omega)]\n"
+        "  have hi1 : i1.val = d.val * 256 := by\n"
+        "    have hmul := i1_post2 (by scalar_tac)\n"
+        "    simpa only [hi] using hmul\n"
+        "  have hi1_bound : i1.val ≤ 8388608 := by rw [hi1]; omega\n"
+        "  have hi3 : i3.val = d.val * 256 + l.val := by\n"
+        "    have hadd := i3_post2 (by scalar_tac)\n"
+        "    simpa only [hi1, hi2] using hadd\n"
+        "  have hi3_bound : i3.val ≤ 8388866 := by rw [hi3]; omega\n"
+        "  rw [core.num.U32.wrapping_add_val_eq]\n"
+        "  rw [Nat.mod_eq_of_lt (by scalar_tac)]\n"
+        "  simp only [LZ77.mkMatch, LZ77.MATCH_BASE]\n"
+        "  rw [hi3]\n"
+        "  scalar_tac",
+    ),
+    "pack_token_equality_v2": (
+        "    (by simp only [LZ77.mkMatch, LZ77.MATCH_BASE]; scalar_tac)\n"
+        "    (wadd_val (by assumption) (by scalar_tac))\n"
+        "    (wadd_val (by assumption) (by scalar_tac))",
+        "    (by simpa only [LZ77.mkMatch, LZ77.MATCH_BASE] using i_post)\n"
+        "    (wadd_val (by assumption) (by scalar_tac))\n"
+        "    (wadd_val (by assumption) (by scalar_tac))",
+    ),
 }
 
 
@@ -413,6 +461,10 @@ def build(base, name, spec):
             raise AssertionError(f"{edit}: expected one proof anchor")
         proof = proof.replace(before, after, 1)
     files = {"parse.rs": text.encode("utf-8"), "Parse.lean": proof.encode("utf-8")}
+    if "rust_identical_to" in spec:
+        frozen_rust = (ROOT / "candidates" / spec["rust_identical_to"] / "parse.rs").read_bytes()
+        assert sha256(frozen_rust) == spec["rust_sha256"]
+        assert files["parse.rs"] == frozen_rust
     manifest = {
         "candidate": name,
         "base_candidate": "r3-432-fast3",
@@ -427,6 +479,7 @@ def build(base, name, spec):
         },
         "mechanism": spec["mechanism"],
         "expected_token_equivalence": spec["expected_token_equivalence"],
+        **({"rust_identical_to": spec["rust_identical_to"], "rust_sha256": spec["rust_sha256"]} if "rust_identical_to" in spec else {}),
         **({"expected_equivalent": spec["expected_equivalent"]} if "expected_equivalent" in spec else {}),
         "actual_token_equivalence": "UNKNOWN: no execution or corpus token comparison in this generator",
         "proof": {

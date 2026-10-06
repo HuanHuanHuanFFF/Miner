@@ -1,0 +1,138 @@
+Proof/Parse.lean:2236:2: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+d l : Usize
+hd1 : 1 ≤ ↑d
+hd32 : ↑d ≤ 32768
+hl3 : 3 ≤ ↑l
+hl258 : ↑l ≤ 258
+i : U32
+_✝² : [> let i ← lift (UScalar.cast UScalarTy.U32 d) <]
+i_post : i = UScalar.cast UScalarTy.U32 d
+i1 : U32
+_✝¹ : [> let i1 ← lift (core.num.U32.wrapping_mul i 256#u32) <]
+i1_post1 : i1 = core.num.U32.wrapping_mul i 256#u32
+i1_post2 : ↑i * 256 ≤ U32.max → ↑i1 = ↑i * 256
+i2 : U32
+_✝ : [> let i2 ← lift (UScalar.cast UScalarTy.U32 l) <]
+i2_post : i2 = UScalar.cast UScalarTy.U32 l
+i3 : U32
+_ : [> let i3 ← lift (core.num.U32.wrapping_add i1 i2) <]
+i3_post1 : i3 = core.num.U32.wrapping_add i1 i2
+i3_post2 : ↑i1 + ↑i2 ≤ U32.max → ↑i3 = ↑i1 + ↑i2
+⊢ ↑(core.num.U32.wrapping_add i3 16776957#u32) = 16777216 + (↑d - 1) * 256 + (↑l - 3)
+Proof/Parse.lean:2253:51: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : Slice U8
+out : Slice U32
+nt p d l : Usize
+hdec : Dec s out ↑nt ↑p
+hm : MatchAt s ↑p ↑l ↑d
+hmax : s.length ≤ Usize.max
+hp_bound : ↑p ≤ s.length
+hnt_bound : ↑nt ≤ ↑p
+hout_bound : s.length ≤ out.length
+right✝¹ : decode (toks out ↑nt) = some (List.take (↑p) (bytes s))
+h3 : 3 ≤ ↑l
+h258 : ↑l ≤ 258
+hpl : ↑p + ↑l ≤ s.length
+hd1 : 1 ≤ ↑d
+hd32 : ↑d ≤ 32768
+hdp : ↑d ≤ ↑p
+right✝ : Matches s (↑p - ↑d) ↑p ↑l
+i : U32
+_✝² : [> let i ← slot.pack_match d l <]
+i_post : ↑i = LZ77.mkMatch ↑d ↑l
+out1 : Slice U32
+_✝¹ : [> let out1 ← out.update nt i <]
+out1_post : out1 = out.set nt i
+i1 : Usize
+_✝ : [> let i1 ← nt + 1#usize <]
+i1_post : ↑i1 = ↑nt + 1
+i2 : Usize
+_ : [> let i2 ← p + l <]
+i2_post : ↑i2 = ↑p + ↑l
+⊢ ↑i = 16777216 + (↑d - 1) * 256 + (↑l - 3)
+Proof/Parse.lean:2373:26: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:2373:26: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:2422:6: warning: 'all_goals
+  first
+  | exact ⟨hdec, hm, rfl, le_refl _⟩
+  | scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:2422:16: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:2577:4: warning: 'all_goals
+  first
+  | exact ⟨hB, hie', hins⟩
+  | exact ⟨by assumption, by scalar_tac, by scalar_tac, by scalar_tac⟩' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:2577:14: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:3706:17: warning: Could not generate mvcgen spec for Submission.mlen_spec: (kernel) constant has already been declared 'Submission.mlen_spec.mvcgen_spec'
+Proof/Parse.lean:3795:2: warning: 'step*' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:3820:26: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:3820:26: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:3891:51: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:3891:51: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:3928:6: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:3929:6: warning: '(refine ⟨by assumption, by scalar_tac, by scalar_tac⟩)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:3928:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:3929:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:4092:35: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:4092:50: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:4092:35: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:4092:50: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:4136:4: warning: 'all_goals scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:4136:14: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:4273:4: warning: 'all_goals scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:4273:14: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`

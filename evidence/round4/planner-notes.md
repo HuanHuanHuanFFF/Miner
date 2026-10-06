@@ -270,3 +270,81 @@ Tree depth, PM, length windows and every engine body remain unchanged. Only the 
 - mode3/i8: `1c94d7dec959a9862fa79dd862df673abec80556d2f139924094e0a6a78ed840` / `edab13f3296ddd86cb2db928baa1050f5fdb532fc0facc671a4236478995b34e`.
 
 Each source/proof is 71184/95901 bytes. Fresh gate, independent public performance, private stage2, formal admission and payout remain **UNKNOWN**. No further new H proposals are generated after this final pair.
+
+## Time-bounded public299 DP/RMQ research attempt
+
+At the main thread's request, one structural planner experiment was prepared before the `2026-10-06 22:50 UTC` cutoff. This is deliberately a **research-only Rust candidate with an unadapted reference proof**, not a gate-ready submission.
+
+**VERIFIED (source):** `a_dp_pass` compares each candidate length using unsigned packed values
+`(cost[at].wrapping_add(lc[len]).wrapping_add(base) << 9) | len`.
+Only the low 23 cost bits survive the shift. A plain unsigned minimum of original costs is therefore insufficient: adding the shared bias can rotate modular order. Equal packed costs prefer shorter length because length occupies the low nine bits; the surrounding strict `<` keeps the existing candidate/distance on a full tie.
+
+The sole candidate `r4-dp299-rmq` maintains a backward-built 512-position ring with six min/max levels (widths 1,2,4,8,16,32). Each key is `(cost mod 2^23, absolute position)`. A complete length-code bucket of width at least four uses its cached minimum only if the minimum and maximum remain in order after adding the current length/distance/bias value modulo 2^23. Crossing that cut falls back to the original scalar expression. Partial buckets and nonuniform `lc` buckets also fall back; `lc` uniformity is explicitly checked once per DP call, rather than assumed from the cost model. Fixed/sentinel candidates remain scalar.
+
+The final normal length bucket is 227..257 (31 values), since length 258 has its own code. It is queried as two overlapping width-16 ranges, covering exactly those 31 positions. The cache is initialized in reverse over the same zeroed future-cost span and updated after each completed DP position. All existing routing/configuration, outer strict comparisons, token encoding, checked emitter, and official encoder remain unchanged.
+
+**VERIFIED (local arithmetic model only):** deterministic Python checks with seed 429966 covered 347600 range queries including width 31, 4000 mixed partial/nonuniform whole queries, and 168955 modular-wrap fallbacks with zero mismatches. Equal-cost cases and ring reuse beyond 512 positions are included. An intermediate model incorrectly treated the 31-value bucket as a single 16-range; the expanded check exposed that mismatch. Both final Rust logic and the model now explicitly combine two width-16 ranges. These checks do not compile or execute the Rust and cannot establish public or all-input token equivalence.
+
+Final source, frozen at `22:38 UTC`: `f14f364e2383b55a8b5c6fd180101a272c87ee9f681f042f5da1c8351a3b99dd`, 109316 bytes. The earlier preliminary c40a source is superseded and must not be confused with this final hash. `scripts/make-round4-dp.py --check` passes and `--model-check` reproduces the arithmetic checks.
+
+**Proof status — NOT_ADAPTED:** `Parse.lean` is copied from public299 solely as the migration reference, SHA256 `9b77b3523cbf7044aaffa11b6fd9676b3615ca4bf148b43b3cb92da4073b3e3d` (279475 bytes). It is not a proof for the new parser. Required work includes totality of the new cache helpers, query-loop progress and array/vector bounds, adapting `a_dp_pass` to the additional min/max state and uniform-mask capture, and replacing references to removed scalar inner loops. No sorry, axiom, weakened obligation or verifier change is introduced to conceal this gap. Research CI must keep `gate_candidates=[]` until proof migration is completed.
+
+**INFERRED performance tradeoff:** full long buckets replace many repeated packed-cost comparisons with cached extrema checks, but every DP position now pays cache updates and memory traffic, and each pass checks the length-cost buckets. Short-match or frequent-wrap cases can regress. No speedup or unchanged output is claimed before CI Rust compilation and finite token/decode equivalence against original public299, followed by the paired public benchmark. Source/code-layout effects and exact input coverage must be recorded at the final source hash.
+
+**UNKNOWN:** actual Rust compilation, extracted signatures, finite token equivalence, speed/size, a completed proof, official gate, private stage2, admission and rewards. The staged research variant is the only candidate in this direction; no further H parameters or official files were changed.
+
+## Final static counterexample audit of the frozen RMQ source
+
+Audit target: source `f14f364e2383b55a8b5c6fd180101a272c87ee9f681f042f5da1c8351a3b99dd`, submitted by the main thread to research CI `37542714311` at commit `4e22f24` with no gate candidates. This audit changes only these notes. It does not report CI compilation/equivalence results and does not reinterpret the Python model as Rust execution.
+
+**Finding:** no concrete counterexample was found under the exported `parse` path's actual preconditions. The argument below is a source-level audit, not a completed Lean equivalence theorem.
+
+1. **Initialization and order.** Original `a_dp_pass` zeros cost indices `pe..min(cl-1,pe+258)`. `r4_rmq_init` fills the same positions in descending order, allowing every valid higher-level interval to be assembled from already initialized later positions. Intervals extending beyond that initialized end may contain meaningless cells, but no valid query uses them: every query ends at `stop < cl` and `stop <= i+258`, with the first DP position `i=pe-1`. During the backward walk, each new `cost[i]` is cached only after its final assignment. Future costs queried at `i+3..i+258` are already fixed and do not change later within this DP call. A fresh cache is created for every call, including each sample/full pass.
+2. **Ring reuse.** Rewriting the physical slot of position `i` discards information for `i+512`. Queries need at most `i+258`, and all RMQ intervals are constrained to their complete length bucket within that range. A cached future interval needed by the current query therefore cannot have its start slot overwritten. Stored interval values are keys, not live pointers to lower cache levels, so later lower-level updates do not mutate an already computed interval.
+3. **31-value boundary.** The exceptional final ordinary bucket 227..257 uses `[at,at+15]` and `[at+15,at+30]`. Their union contains exactly 31 positions; overlap is harmless for min/max. Length 258 is never included and follows its own scalar one-value bucket. All other accelerated widths are 4,8,16 or 32.
+4. **Modular order and ties.** Let M=2^23 and r_j=cost[j] mod M. In a uniform bucket the old comparison is `(((r_j+C) mod M)<<9) | (j-i)` for the shared C. Adding C has at most one order cut. If that cut lies between the minimum and maximum residues, the transformed minimum is strictly greater than the transformed maximum, forcing scalar fallback. Otherwise order is preserved, and the cached minimum is sufficient. Equal residues have equal translated costs even if the original u32 values differed in discarded high bits; the key's lower position field chooses smaller j and hence shorter length. Original outer strict `<` comparisons, including literal-versus-match and equal-length/distance-candidate ties, remain untouched.
+5. **Position tags and large inputs.** The unchanged `make_plan` returns an empty plan for `input.len() >= 67108864`. All reachable A-planner cache positions are therefore at most n<2^26 and fit u32 exactly. Larger inputs, including n>u32::MAX on a 64-bit target, follow the original literal-emission path without entering RMQ. This reasoning applies to the official exported `parse`; no general promise is made for directly invoking auxiliary `parse_cfg`, `a_dp_pass` or helpers on arbitrary unbounded arguments/cache contents. The old DP spec also carries a bound on pe that must be retained during proof migration.
+6. **Nonuniform costs and partial buckets.** The uniform mask scans every cost entry in each bucket once per DP call. `lc` is borrowed read-only throughout the call, so a later model update cannot invalidate the mask mid-pass. A query starting inside a bucket or ending before its upper bound uses the original expression one length at a time. An empty original interval returns the same all-ones sentinel. The new out-of-range early returns are unreachable for nonempty intervals produced by the original A-planner loops: those loops produce lengths 3..258, enforce stop<cl and keep prev>=i+2.
+7. **Planner-window end.** A candidate may query the original zeroed future-cost suffix beyond pe; this was already allowed by the original code. Initializing that entire suffix preserves that behavior, rather than incorrectly forcing every match to end at pe. The final checked emitter still verifies actual match bytes and input bounds.
+
+### Shortest proof-migration route if measured performance warrants it
+
+The official correctness obligation requires the planner to be total and the original checked emitter to decode correctly. It does not require proving that RMQ chooses an optimal or token-identical plan. Therefore the first migration should reuse the existing `emit/check/mlen` proof unchanged and focus on these narrow totality obligations:
+
+- `r4_rmq_update`: bounded six-level loop; an invariant tying `half` to `level` (or finite cases for levels 1..6) proves ordinary arithmetic safe. Array reads/writes are bounded/modulo 3072.
+- `r4_rmq_init`: remaining count decreases; retain `pe+left <= cl` / usize-bound information from the guarded initialization span.
+- `r4_uniform_buckets`: code<29 and inner length<259 give bounded array accesses and progress. Keep fixed-table bounds available to the later query proof.
+- `r4_rmq_best`: after guards, `i <= at <= stop+1` and stop<cost.length; scalar fallback increments at, accelerated selection sets at to end+1 with end>=at and end<=stop. Use measure `stop+1-at`. The constant start/end table needs a small finite lemma establishing low<=high<=258. No cache-value semantic invariant is needed for totality.
+- Re-extract first, then adapt the old `a_dp_pass` loop statements to the actual new array/capture parameter order and replace removed scalar-loop spec references by the helper spec. Preserve the old cost/ch length and pe/position bounds. Do not guess tuple layouts from Rust variable order.
+
+Potential proof obstacles are extraction-generated loop numbering/state tuples, table-value bounds through constant-array indexing, and symbolic arithmetic for `half *= 2`; they are concrete remaining work. A separate RMQ semantic invariant would be needed to upgrade finite token equivalence into an all-input equality theorem, which this audit does not claim. No proof is written speculatively before the research timing/equivalence result.
+
+## Final three general-route hybrid candidates
+
+Prepared by `23:01:51 UTC` at the main thread's request, using original public299 and frozen H cores. These combine measured complementary engines; they do not add a file-name/hash lookup, exact-file-length identity, or another effort sweep.
+
+| Candidate | Original public299 branch | H branch |
+| --- | --- | --- |
+| `r4-hybrid-h16-small299` | input length <65536 | H16/depth64 core, mode 0 |
+| `r4-hybrid-h16-smallc299` | input length <65536, or original `classify` returns any value in the inclusive interval 1..3 | H16/depth64 core, mode 0 |
+| `r4-hybrid-h3r-smallc299` | Same small-input and content conditions | H mode3/i8 core, with its original depth32/16 and restart policy |
+
+The original classifier's classes 1..3 are explicit general features: nucleotide/newline sample share >=95%, zero share >=50%, or zero/control share >=2% together with high-byte share >=35%. Original CLASS_CFG/CFG maps these classes to C-engine configurations. The current CFG uses only A and C, but the original `plan_cfg` source and full proof retain the B branch; it was left intact to preserve engine declarations and existing proof structure rather than undertake another pruning rewrite under the deadline. Calling original S after the hybrid's content classifier may repeat classification; no timing saving is assumed from source alone.
+
+**VERIFIED locally:** `scripts/make-round4-hybrid.py --check` reconstructs all three candidates exactly. The two Rust bases share only the function name `parse`; public299's definition becomes `s_parse`, the old H-only parse wrapper is removed, and a new small/content dispatcher is added. All 233 resulting functions, except these specified entry-wrapper changes, all constants, and custom types were checked against their respective parents' exact declaration text. Only top-level `//!` markers are converted to ordinary `//` when concatenating Rust source, preventing invalid inner documentation after declarations. No official source or frozen parent is edited.
+
+The combined Lean file uses three separately closed/reopened `Submission` scopes. The original S proof changes only its final theorem name to `s_parse_spec` and the two corresponding `slot.parse` references to `slot.s_parse`. The H proof keeps its complete EH namespace and T9/T10 macros, removes duplicate imports and its old final parse wrapper theorem. The final fresh scope locally registers the two complete engine specs, plus original `classify_spec` for content variants, and proves the new dispatcher with `step*`. S's old local step/scalar rules therefore do not remain active while elaborating EH. No axiom, sorry, weakened obligation, official check or time-limit change is introduced.
+
+The two content variants have the same proof file hash because the final proof applies the generic `EH.parse_mode_spec`; the actual H mode (0 or 3) is determined by the freshly extracted dispatcher. The Rust entry is separately recorded and audited. This equality is not a claim that their parser behavior is the same.
+
+| Candidate | Rust SHA256 | Lean SHA256 | Rust / Lean bytes |
+| --- | --- | --- | --- |
+| h16-small299 | `d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d` | `ac2d894b3a4ccacb30ce4ed654a3dd3d3b3c167183eb8df008168772109215fa` | 176326 / 375539 |
+| h16-smallc299 | `39c82b4673440faaa7cf9f14ccbeb9367128a7f50a8ca8472880dc35ed24b83e` | `eec49d582853cddf843c33b950f444520561bbb40ef0197ee64ce9acfbb92791` | 176423 / 375553 |
+| h3r-smallc299 | `6814b45429d9dbbb66a94a2a18abca39bd23790756490e8acbb62e79306d18d9` | `eec49d582853cddf843c33b950f444520561bbb40ef0197ee64ce9acfbb92791` | 176422 / 375553 |
+
+Each candidate contains `composition-audit.json` with both parent hashes, conflict checks, retained declaration lists and the actual Rust/Lean entry text. All files fit the per-file 524288-byte limit.
+
+**INFERRED:** parent measurements suggest that the small-input route can recover the tiny-input size disadvantage and that original C specializes usefully on DNA/zero-rich/high-byte binary inputs. Adding the two engines changes extraction/compilation workload and binary layout. The roughly 375.5KB combined proof may take substantially longer than the 95KB H core; only a new gate can establish completion within 900 seconds. Parent-coordinate arithmetic is a screening hypothesis, and the hybrids have no reliable formal same-family anchor.
+
+**UNKNOWN:** new Rust compilation, exact extracted entry shape, final dispatcher proof/axiom checks, elaboration runtime, public paired time/size, private stage2, admission and rewards. These are the final three requested hybrids; no additional direction or candidate is generated.

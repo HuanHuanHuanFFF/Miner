@@ -101,3 +101,18 @@ The block policy uses `nt % 16384`, with no new loop state. Backward folding can
 **Proof boundary:** all three initially retain the exact fast3 proof. The first two only change constants already parameterized by the existing theorems. The third changes `e_pieces`' chosen piece to `min(end-q,258)` after the token threshold; `MatchAt.piece` requires precisely a length >=3, <=258 and <=remaining bytes. The existing loop invariant and decreasing measure remain unchanged. This is source-level proof reasoning, not Lean acceptance.
 
 `scripts/make-round4-symbols.py` SHA-locks the base, checks active-route anchors, and supports exact `--check`; no existing candidate is overwritten. New build, extraction, proof, axiom, round-trip and performance results are **UNKNOWN**. Stop each policy if both axes regress; do not broaden a palette/budget sweep without a measured explanation. If a policy helps, a useful next diagnostic is the final token stream's distinct literal/length/distance symbol count per actual encoder block, in addition to total token count and encoded bytes.
+
+## E token-profile follow-up
+
+`evidence/round4/37523141792/screen/token-profile.json` reports `DIAGNOSTIC_OK`, 84 file records and no failures. Independently checked: for each of fast3, symbol-len6 and symbol-block512, all 28 token hashes match the corresponding round-1 benchmark JSONL, and all decode checks are true. These are untimed token diagnostics, not an additional Lean or encoder-performance result.
+
+| Public evidence file | Candidate | Tokens | Literal symbols | Length symbols | Distance symbols |
+| --- | --- | --- | --- | --- | --- |
+| tiny-app.log | fast3 | 1043 | 50 | 4 | 13 |
+| tiny-app.log | len6 | 855 | 50 | 5 | 15 |
+| tiny-app.log | block512 | 827 | 50 | 17 | 14 |
+| tiny-config.json.txt | fast3 | 3393 | 78 | 4 | 8 |
+| tiny-config.json.txt | len6 | 2887 | 78 | 5 | 20 |
+| tiny-config.json.txt | block512 | 2539 | 78 | 27 | 21 |
+
+**VERIFIED:** the intended token reduction happened, but the literal alphabet did not shrink and the distance alphabet expanded. In particular, adding one length code admitted twelve additional distance codes on the small configuration input. The block512 policy opened many length codes in a still-small one-block input. **INFERRED:** these measured alphabet expansions explain why token reduction alone was an unreliable predictor of encoder savings; a timing attribution to package-merge itself would still require CPU profiling. The E screen's aggregate size improvements with time regressions do not currently establish a useful frontier position. No additional symbol variants were generated in response; H cost planning has priority.

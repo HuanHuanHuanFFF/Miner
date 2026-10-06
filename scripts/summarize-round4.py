@@ -32,7 +32,18 @@ def main():
         state = json.loads((directory / 'state.json').read_text())
         assert analysis['run_id'] == run.name == state['run_id']
         assert analysis['git_sha'] == state['git_sha']
+        ci = json.loads((directory / 'ci-run.json').read_text())
+        assert ci['headSha'] == state['git_sha']
+        first = state['metrics'][0]
+        raw = directory / f"round{first['round']}-{first['candidate']}.jsonl"
+        meta = json.loads(raw.read_text().splitlines()[0])
         provenance = {'run': run.name, 'phase': phase, 'git_sha': state['git_sha'],
+                      'completed_state_phase': state['phase'],
+                      'ci_status': ci['status'], 'ci_conclusion': ci['conclusion'],
+                      'measurement_processes': len(state['metrics']),
+                      'cpu_model': meta['cpu_model'],
+                      'rustc_version': meta['rustc_version'],
+                      'benchmark_provenance': meta['benchmark_provenance'],
                       'analysis_sha256': digest(directory / 'analysis.json'),
                       'state_sha256': digest(directory / 'state.json'),
                       'snapshot_id': analysis['snapshot']['snapshot_id']}
@@ -53,11 +64,15 @@ def main():
                 for file, expected in entry['hashes'].items():
                     assert digest(directory / ('input-' + name) / file) == expected
             equivalent = state.get('equivalence', {}).get(name)
+            anchor = entry.get('anchor', 'public432')
+            anchor_deltas = [100 * (by[name, b]['time'] / by[anchor, b]['time'] - 1) for b in blocks]
             record['runners'].append({**provenance, 'blocks': blocks, 'public_time': row['time'],
                                      'public_size_pct': row['size_pct'], 'delta_pct_vs_fast3': deltas,
                                      'mean_delta_pct_vs_fast3': statistics.mean(deltas),
                                      'own_anchor': row['own_anchor'], 'fixed_427': row['fixed_427'],
                                      'stress_1pct': row['stress_1pct'], 'public_equivalence': equivalent,
+                                     'anchor': anchor, 'delta_pct_vs_anchor': anchor_deltas,
+                                     'mean_delta_pct_vs_anchor': statistics.mean(anchor_deltas),
                                      'accepted_public_gate': gate.get('accepted') if gate else None,
                                      'calibration_scope': entry.get('calibration_scope', 'same-family hypothesis; private transfer unverified')})
     result = []

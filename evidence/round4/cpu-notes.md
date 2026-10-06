@@ -274,3 +274,63 @@ The `put_match_spec` statement, original Dec/MatchAt preconditions, canonical-to
 - Fresh `--check` reconstructs all sixteen candidates; Python syntax passes. Generation used `--only` for this new candidate. Frozen F directemit and hash32 source/proof hashes are unchanged.
 
 The minimum test is fast3, frozen directemit, and this wrapping variant as distinct methods, with all public/generated token identities, public decoder checks, actual overflow-branch inventory and paired/same-process total measurements. If the new carry branch disappears but parser/total regression remains, the deleted check does not explain enough of the cost; stop rather than treating a smaller branch count as a win. If a useful signal appears, full extraction/Lean/axiom/gate and independent-runner verification still precede a correctness or front-position claim.
+
+## Proof-only wrap v2 for two concrete F goals
+
+Read the full goal contexts in `evidence/round4/37524045017/gate/r4-cpu-directemit-005-lake.log`. F reports two errors: `pack_match_spec` leaves the final total wrapping-add expression unbound, so its modular value is not discharged by the existing `step*`; `put_match_spec` has `i_post : i.val = LZ77.mkMatch d.val l.val` but its last tactic unfolds the target without using this equality. The errors are proof failures, not a new correctness result; F's native public token identity remains a separate finite observation.
+
+`r4-cpu-directemit-wrap-v2` is the parent's requested **proof-only** derivative. Its Rust bytes are exactly the frozen wrap source, SHA256 `8589dc90cd895e84d02a11e850b9e753767c44338f7c4897511000ff1b2039c8`; the generator asserts both reference hash and byte identity. Proof SHA256 is `bcd69b587bd51a43658e517bf4fb6494c6e1ab453b3bd96e6dea78a99d324e13`.
+
+Only two proof bodies change. The pack proof uses the existing cast-value/modulo lemmas to show `i.val=d.val`, `i2.val=l.val`; consumes the actual `i1_post2` and `i3_post2` implications to derive `i1.val=d.val*256≤8388608` and `i3.val=d.val*256+l.val≤8388866`; rewrites the final `core.num.U32.wrapping_add_val_eq` and removes its modulus with the established bound; then proves the unchanged canonical token formula. The writer's token-value argument becomes `simpa only [LZ77.mkMatch, LZ77.MATCH_BASE] using i_post`. Return-value wrapping proofs, function specifications, other caller proofs, imports, axioms and Rust code are unchanged. No sorry/admit/axiom is added.
+
+**VERIFIED locally**: generator reconstruction and Python syntax pass, Rust byte equality holds, and the proof diff has only the two targeted hunks. **UNKNOWN**: v2 extraction/Lean/axiom/gate acceptance; no local Lean/Rust was run. The parent decides whether the weak H timing signal warrants a fresh gate. This repair creates no new CPU mechanism and cannot turn the native timing result into an improvement or a proof pass.
+
+## CPU route disposition, reviewed 2026-10-06 22:51:33 UTC
+
+**Decision: retain the frozen fast3 parser for the CPU route. No CPU derivative demonstrates a stable >=1% total-axis gain with reproducible evidence.** The native comparisons used the exact source hashes, public corpus, fixed encoder and pinned build. Complete public gate acceptance and timing benefit remain separate outcomes. This conclusion concerns the CPU family and the reviewed A/B/D/F/H receipts; it does not assert a global winner among the other round-4 research routes.
+
+The route produced **17 candidate packages, 16 distinct Rust parsers**: all sixteen native variants were screened publicly; the seventeenth is proof-only `directemit-wrap-v2` with the same Rust bytes as wrap. Under the reviewed receipts, three distinct CPU candidates have complete public `accepted=true` gate reports: `run1tai`, `foldni`, and `flushzero`. There are four accepted CPU gate executions because run1tai was accepted again in D. F directemit and H wrap were rejected by Lean; wrap-v2 is **pending, not accepted**. Other unselected CPU candidates have no fresh complete-gate result in these reviewed runs.
+
+| Family | Final reviewed paired result versus fast3 | Disposition |
+| --- | --- | --- |
+| `run1tai` | A four blocks -0.2773%; independent D four blocks +0.0774% | Correctness accepted; small timing result did not consistently reproduce |
+| `foldni` | A four blocks -0.0023% | Correctness accepted; no total-time gain |
+| `r1off/run1ni/commonni/stai` | A +1.782% / +4.317% / +0.823% / +0.265% | No gain; outlining/routing regressions discussed above |
+| `flush/endreload` | B four blocks -0.0581% / +0.1144% | No robust benefit |
+| `x2lazy/foldplain/slotonly` | B two blocks +0.792% / +1.081% / +1.135% | Slower initial screen; not upgraded |
+| `flushzero` | D four blocks -0.6211%; H four blocks +0.2111% | Correctness accepted; D improvement depended heavily on the incumbent-normalizer event and did not reproduce |
+| `classoutline` | D four blocks +3.0514% | Constant settings retained but text/prose kernels regress strongly |
+| `directemit` | F two blocks +0.5871%; H four blocks +0.3390% | No overall parser/total gain; F Lean rejected |
+| `directemit-wrap` | H four blocks +0.0986% | Removes a concretely observed check, but no stable measured gain; H Lean rejected |
+| `hash32` | F final four blocks +0.5020% (two-block screen +0.3130%); size -0.006946 pp | Token-changing tradeoff, not a demonstrated CPU improvement; no fresh accepted CPU gate in reviewed receipts |
+| `directemit-wrap-v2` | Same Rust as H wrap; no new independent timing result | Proof-only repair pending; never label accepted |
+
+### H shared-process test and same-byte shadow
+
+The independent local re-read of H's complete `forward-engine.jsonl` / `reverse-engine.jsonl` confirms 28 files, 11 measured repetitions per method, roundtrip/determinism success, and identical public token counts/hashes and DEFLATE output sizes/hashes for shadow, wrap and flushzero versus fast3. The summary reports `AUXILIARY_DIAGNOSTIC_OK`. The fast3 and shadow compiled libraries are exactly the same SHA256, `e3c97b3aef581e8e4a6e0f848cdd79427cdc9aa441d32c3110b73cc0508d3566`; all methods in a direction share its actual incumbent observation.
+
+| Method | Forward shared-denominator axis delta | Reverse shared-denominator axis delta | Forward/reverse mean per-file total delta |
+| --- | ---: | ---: | ---: |
+| same-byte `fast3-shadow` | -0.3284% | +0.0287% | +0.0068% / +0.0311% |
+| `directemit-wrap` | -0.4870% | +0.2205% | -0.1519% / +0.2209% |
+| `flushzero` | -0.8005% | +0.7423% | -0.3714% / +0.4649% |
+
+Forward order is `incumbent, fast3, shadow, wrap, flushzero`; reverse is `incumbent, flushzero, wrap, shadow, fast3`. This removes the separate-process denominator discrepancy for comparisons within each direction, but leaves execution-order and cross-method interference visible. Both proposed improvements reverse sign; the identical-byte control also varies. The small directional average is not evidence of a dependable gain or a private admission margin. All files, both directions and all repetitions remain in the receipts.
+
+### Correctness coverage and exact receipt pointers
+
+**VERIFIED finite identity**: A's six CPU candidates have public token/output identity checks. B's five, D's three, F's directemit, and H's directemit/flushzero/wrap also have successful 444-case token/decode checks (28 public inputs plus 416 fixed generated boundary cases). Repeated candidates reuse the same case family; these are not distinct new corpora each time. Hash32 deliberately changes tokens. No universal token-equivalence theorem is claimed from these tests.
+
+**VERIFIED public gate acceptance**, at the exact parser/proof hashes in each gate state's spec:
+
+- A `37515419910/gate/r4-cpu-run1tai-gate.json`, source `02690c07a5afd8bb13f25a6397680aa86128d7d65ae412e0591b3b8e166003aa`, proof `e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04`.
+- A `37515419910/gate/r4-cpu-foldni-gate.json`, source `5e61b341d942c0e8340607e10af8229cf450a4d432b76a3e7e7cec9989a4b699`, same proof `e2c200cf...`.
+- D `37522012041/gate/r4-cpu-flushzero-gate.json`, source `ed565b50c03230c6f08027af5e3ac81691cce3f66917a34da09dce4bdbe056c3`, proof `2ec5a9f7471cc94d23822ecfa990a637215eeaede7c232616412cfce0efa312d`; D's separate `r4-cpu-run1tai-gate.json` also says accepted.
+
+Each accepted report names only `corpus-stage1`, with 28 files / 15,930,000 raw bytes. Complete public acceptance does not observe private stage2, admission or rewards. Failed F/H proof reports are `37524045017/gate/state.json` plus `r4-cpu-directemit-005-lake.log`, and `37529887857/gate/state.json` plus `r4-cpu-directemit-wrap-005-lake.log`. H's final uploaded directory is named `gate/`, but its recorded `state.phase` is **`refine`**: the cancelled gate-stage upload preserved the completed refinement/interleaving evidence and an attempted wrap rejection, not a completed successful gate phase. The rejected versions are not repaired in place or presented as accepted.
+
+All paths above are relative to `evidence/round4/`. The committed final receipt directories retain the earlier blocks and diagnostics: A `37515419910/gate/`, B `37517466397/gate/`, D `37522012041/gate/`, F `37524045017/gate/`, and H `37529887857/gate/`. Use each final directory's `analysis.json` and `round*-*.jsonl` for primary timing; earlier `screen/`/`refine/` pointers in the chronological notes describe the files read during execution. The archived shared-process evidence is H `37529887857/gate/interleaved/{summary.json,forward-engine.jsonl,reverse-engine.jsonl,forward-metadata.json,reverse-metadata.json}`. Earlier notes preserve the exact decomposition of D's normalizer-driven reversal and the emitted instruction evidence, including perf-counter denial.
+
+Archive correction verified at 2026-10-06 23:02:05 UTC: F final `gate/analysis.json` has hash32 blocks `[1,2,3,4]`, relative time changes `[+0.134693%, +0.491315%, +0.480210%, +0.901843%]`, mean **+0.502015%**, size `36.59519315793334%` (delta `-0.006945948396840151` pp). The two-block `+0.313004%` figure is retained only as the earlier screen stage, not the final result. This update changes no raw record, candidate, script, ACL or run.
+
+Fast3 retains source `bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef` and proof `e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04`, with its pre-existing complete public gate from `ROUND3.md` / `evidence/round3/selection.json`. The CPU exploration found no reproducible improvement sufficient to replace those frozen bytes. **UNKNOWN / pending** remain wrap-v2's fresh Lean/axiom/gate result; universal token equivalence beyond actual proofs; private stage2 transfer; official admission/ranking/payment; and the hardware cause of residual timing/order variation. No new submission, wallet, CI dispatch, candidate/script change, ACL adjustment or deletion is made in this evidence-only closeout.
