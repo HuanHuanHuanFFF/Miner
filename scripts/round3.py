@@ -75,7 +75,7 @@ def main():
         for filename, expected in entry['hashes'].items():
             assert hashlib.sha256((p / filename).read_bytes()).hexdigest() == expected
         paths[entry['name']] = p
-    candidates = [e['name'] for e in batch['candidates']]
+    candidates = [e['name'] for e in batch['candidates'] if not e.get('control')]
     metrics, evidence, failures = [], {}, []
 
     def measure(block, order):
@@ -123,13 +123,21 @@ def main():
             y = ms[0]['size_pct']
             g = geometry(x, y, points)
             pessimistic = geometry(max(m['time'] for m in ms) * 1.01, y, points)
+            # A second estimate removes this runner's shift relative to #427's
+            # measured probe3 control. Both transfer assumptions remain unproven.
+            control = {m['round']: m['time'] for m in metrics if m['candidate'] == 'probe3'}
+            anchored_times = [0.46614327772931885 * m['time'] / control[m['round']] for m in ms]
+            anchor = geometry(statistics.mean(anchored_times) / TIME_FACTOR, y, points)
             front = pareto_front([Point(p['id'], p['official_time'], p['official_size']) for p in points] + [Point('candidate', g['calibrated_time'], g['calibrated_size'])])
             weights = local_global_improvement_space_log_weights(front)
             result.append({'candidate': name, 'public_time_mean': x, 'public_time_range': [min(m['time'] for m in ms), max(m['time'] for m in ms)],
                            'public_size_pct': y, 'blocks': len(ms), **g,
+                           'probe3_anchored_time': statistics.mean(anchored_times),
+                           'probe3_anchored_frontier': anchor['on_geometric_frontier'],
+                           'probe3_anchored_dominating_ids': anchor['dominating_ids'],
                            'pessimistic_time_frontier': pessimistic['on_geometric_frontier'],
                            'hypothetical_geometry_weight': weights.get('candidate', 0) if g['on_geometric_frontier'] else 0})
-        return sorted(result, key=lambda r: (-r['pessimistic_time_frontier'], -r['on_geometric_frontier'], -r['hypothetical_geometry_weight'], r['size_gap_pp'], r['time_gap_pct']))
+        return sorted(result, key=lambda r: (-r['probe3_anchored_frontier'], -r['pessimistic_time_frontier'], -r['on_geometric_frontier'], -r['hypothetical_geometry_weight'], r['size_gap_pp'], r['time_gap_pct']))
 
     names = list(paths)
     for block in range(1, batch['screen_blocks'] + 1):
@@ -141,6 +149,7 @@ def main():
         order = batch['controls'] + shortlist
         measure(block, order if block % 2 else list(reversed(order)))
     ranked = summarize(shortlist)
+    print('REFINED_SUMMARY ' + json.dumps(ranked), flush=True)
     gates = {}
     gate_names = batch.get('gate_candidates', [r['candidate'] for r in ranked[:batch['gate_limit']]])
     for name in gate_names:
@@ -165,6 +174,9 @@ def main():
         (reports / (name + '-gate.log')).write_text(log)
         if report.exists():
             verdict = json.loads(report.read_text())
+            if verdict.get('accepted'):
+                assert verdict['corpora'] == ['corpus-stage1']
+                assert verdict['methods']['submission']['output_bytes'] == evidence[name].totals(name).output_bytes
         else:
             verdict = {'accepted': False, 'origin': 'wrapper; official scoring report absent', 'gate_exit_code': code}
         gates[name] = verdict

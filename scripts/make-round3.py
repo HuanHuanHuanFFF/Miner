@@ -1,5 +1,6 @@
 """Generate a predeclared two-sided parameter screen; no correctness claim."""
 from pathlib import Path
+import argparse
 import hashlib
 import json
 import re
@@ -7,8 +8,10 @@ import re
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def generate():
+def generate(check=False):
     base = ROOT / 'candidates/probe3'
+    assert hashlib.sha256((base / 'parse.rs').read_bytes()).hexdigest() == 'e20ea5a7d2e77821008592faef393855077b9b8ceee244f390a85ac0257e047d'
+    assert hashlib.sha256((base / 'Parse.lean').read_bytes()).hexdigest() == '3906aeb259d83d315811629a54d796b514fc3953742063081451c47997b824b7'
     variants = {
         'r3-depth4': {'T_DEPTH': 4, 'P_DEPTH': 4, 'S_DEPTH': 4},
         'r3-depth8': {'T_DEPTH': 8, 'P_DEPTH': 8, 'S_DEPTH': 8},
@@ -34,20 +37,33 @@ def generate():
             text, n = re.subn(rf'(pub const {key}: (?:usize|u32|i32) = )\d+;', rf'\g<1>{value};', text)
             assert n == 1, key
         dest = ROOT / 'candidates' / name
-        dest.mkdir(exist_ok=True)
-        (dest / 'parse.rs').write_text(text, encoding='utf-8', newline='\n')
-        (dest / 'Parse.lean').write_bytes((base / 'Parse.lean').read_bytes())
+        files = {'parse.rs': text.encode('utf-8'), 'Parse.lean': (base / 'Parse.lean').read_bytes()}
+        if check:
+            assert all((dest / n).read_bytes() == data for n, data in files.items())
+        else:
+            dest.mkdir(exist_ok=True)
+            for n, data in files.items():
+                (dest / n).write_bytes(data)
         entries.append({'name': name, 'path': str(dest.relative_to(ROOT)).replace('\\', '/'), 'constants': changes,
-                        'hashes': {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(dest.iterdir())}})
+                        'hashes': {n: hashlib.sha256(data).hexdigest() for n, data in sorted(files.items())}})
+    for name in ('round3-speed-bucket16k', 'round3-speed-bucket8k'):
+        dest = ROOT / 'candidates' / name
+        entries.append({'name': name, 'path': dest.relative_to(ROOT).as_posix(),
+                        'hashes': {n: hashlib.sha256((dest / n).read_bytes()).hexdigest() for n in ('parse.rs', 'Parse.lean')}})
     out = ROOT / 'evidence/round3'
     out.mkdir(exist_ok=True)
     config = {'scope': 'public parameter screening before fresh Lean gate; no official submission',
               'base': 'probe3, derived from public submission 261; attribution retained',
               'controls': ['probe3', 'probe2', 'bucket2'], 'candidates': entries,
               'screen_blocks': 2, 'refine_blocks': 2, 'shortlist': 4, 'gate_limit': 0}
-    (out / 'batch-a.json').write_text(json.dumps(config, indent=2) + '\n', encoding='utf-8')
+    if check:
+        assert json.loads((out / 'batch-a.json').read_text()) == config
+    else:
+        (out / 'batch-a.json').write_text(json.dumps(config, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({'generated': len(entries), 'batch': 'evidence/round3/batch-a.json'}))
 
 
 if __name__ == '__main__':
-    generate()
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--check', action='store_true')
+    generate(ap.parse_args().check)
