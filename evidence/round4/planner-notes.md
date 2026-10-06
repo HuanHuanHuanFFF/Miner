@@ -67,3 +67,28 @@ The current logs do not report actual H iteration counts, cache-candidate counts
 - Both proof SHA256: `f14e3c7b8a5c89d84dcffdb5ffc43e4963a043538c42dd39e228cd351145ffaf`, retaining the direct `EH.parse_mode_spec` entry proof. This is not a new gate result.
 
 **UNKNOWN:** new public time/size, actual iterations/cache changes, extraction/Lean/axiom acceptance, private stage2, online admission, and payment. No further budget combinations are generated before these two measured comparisons return.
+
+## E-screen evidence and combined H staircase
+
+**VERIFIED (public screening):** `37523141792/screen/analysis.json` records H2-deep16 at `(4.674739, 33.974638%)` and H4 at `(4.811351, 33.998955%)`. Relative to H2's deterministic public output size, these reduce the size axis by about 0.090882 and 0.066565 percentage points, respectively. H2 came from a different runner, so these cross-run time coordinates do not by themselves give a precise causal incremental timing cost.
+
+The E token profile has `status=DIAGNOSTIC_OK`, 84 file records and no failures. An independent read matched all three profiled candidates' 28 token hashes against their official benchmark records and checked every `decode_checked` flag. Its candidates are fast3, symbol-len6 and symbol-block512. It does not report H iteration counts or H match-cache coverage, so no such profile evidence is assumed.
+
+The independently measured search and iteration steps justify exactly three further constant-only points, all with unchanged length relaxation (`H_CHW=8`, `H_CHWS=16`), mode 0 and the existing early-stop rule:
+
+| Candidate | Iteration cap | Larger/small tree depth | Question |
+| --- | --- | --- | --- |
+| `r4-parse-plan-h4-deep16` | 4 | 16 / 8 | Do the two measured improvements combine? |
+| `r4-parse-plan-h4-deep32` | 4 | 32 / 16 | Does another search-depth step provide useful alternatives? |
+| `r4-parse-plan-h8-deep32` | 8 | 32 / 16 | Does more model refinement help once that larger cache is available? |
+
+**INFERRED:** a size axis at or below roughly 33.86% and time at or below roughly 9 are current screening targets. The #427 transfer behind that target remains a cross-family hypothesis, and neither target is a gate/admission/payment result. The iteration cap still permits rather than forces passes. Higher depth and extra passes can interact, so the two earlier size gains must not simply be added as a prediction.
+
+All seven planner variants pass their generator's byte-for-byte `--check`; the four already measured planner directories retain exact bytes. Static entry closure and the direct EH proof interface remain the same. Each new parser still needs a fresh gate at its own exact source hash.
+
+- H4-deep16 source: `950cef398fe8e5f7bf96cba97c6a3702d7d2e1ef065f6bdfaddb5ad3fda0ba4a`.
+- H4-deep32 source: `4b15ae9dee3ead2f5b7450dcca08c9651fa45ef2bd2d0b0c332079196402e523`.
+- H8-deep32 source: `a7115baa44afa81dc761cb7435872db264e6dea6a3013acec3fb9d768e81f83c`.
+- Shared proof: `f14e3c7b8a5c89d84dcffdb5ffc43e4963a043538c42dd39e228cd351145ffaf`.
+
+**UNKNOWN:** new time/size, actual H passes and cache changes, fresh gate, private stage2, online admission, and rewards.

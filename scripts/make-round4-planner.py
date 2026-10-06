@@ -143,6 +143,22 @@ def main() -> None:
         },
         "mechanism": "Uniform H mode 0 with the same two-pass cap and length relaxation as h2, but double the binary-tree search depths: 8 -> 16 for larger inputs and 4 -> 8 for small inputs. This isolates whether the reduced Pareto match cache omitted useful length/distance alternatives that extra pricing passes alone cannot recover.",
     }
+    for name, iterations, depth, small_depth, mechanism in (
+        ("r4-parse-plan-h4-deep16", 4, 16, 8,
+         "Combine the independently measured h4 iteration budget and h2-deep16 search budget: uniform H mode 0, at most four DP passes, depths 16/8, unchanged length relaxation and early-stop rule. Tests whether their size gains combine."),
+        ("r4-parse-plan-h4-deep32", 4, 32, 16,
+         "Relative to h4-deep16, double only the search depths to 32/16, retaining four-pass cap and length relaxation. Tests additional cache coverage after the measured 8-to-16 depth gain."),
+        ("r4-parse-plan-h8-deep32", 8, 32, 16,
+         "Relative to h4-deep32, raise only the iteration cap to eight, retaining the content-dependent early stop. Tests further cost-model refinement with the expanded cache; eight passes are permitted, not forced."),
+    ):
+        policies[name] = {
+            **h2,
+            "constants": {
+                **h2["constants"], "H_ITERS": (20, iterations), "H_BTD": (32, depth),
+                "H_BTDS": (8, small_depth), "H_BTDMC": (24, depth), "H_BTDX": (32, depth),
+            },
+            "mechanism": mechanism,
+        }
     assert set(args.only) <= policies.keys(), "unknown --only candidate"
     for name, policy in policies.items():
         if args.only and name not in args.only:

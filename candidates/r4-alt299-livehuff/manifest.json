@@ -1,0 +1,28 @@
+{
+  "candidate": "r4-alt299-livehuff",
+  "base": "references/round4-public-299",
+  "base_hashes": {
+    "parse.rs": "71314c4da7ccd29331a360bce9be8697857109c66adc87d3480eeaa22930625d",
+    "Parse.lean": "9b77b3523cbf7044aaffa11b6fd9676b3615ca4bf148b43b3cb92da4073b3e3d"
+  },
+  "attribution": "Derivative of officially published submission 299, hotkey 5En8AugiKmLmnoaWzrGMz9oWMbQYvekaMvZSjViLTLhrrq4E; provenance retained.",
+  "mechanism": "In engine A Huffman refinement only, use actual live frequencies instead of adding one to every symbol; retain the existing unseen-symbol cost fallback, effort, classifier and checked emitter. This still is not the official package-merge/header/block-choice cost model.",
+  "changes": [],
+  "hashes": {
+    "parse.rs": "d81bef088efe7da013cfdd862dbf16e4d4c259932ff8cb36345328f35f509b96",
+    "Parse.lean": "9b77b3523cbf7044aaffa11b6fd9676b3615ca4bf148b43b3cb92da4073b3e3d"
+  },
+  "source_changes": [
+    {
+      "before": "lf[z] = lf0[z].wrapping_add(1);",
+      "after": "lf[z] = lf0[z];"
+    },
+    {
+      "before": "dd[i] = df[i].wrapping_add(1);",
+      "after": "dd[i] = df[i];"
+    }
+  ],
+  "proof_status": "Exact inherited proof; modified cost helper needs new extraction, Lean, axiom whitelist and round trip, all UNKNOWN.",
+  "performance": "UNKNOWN. Different costs can change both plans and block boundaries; no compression or speed gain is assumed.",
+  "formal_submission_sent": false
+}
