@@ -13,6 +13,16 @@ on:
         required: true
         type: boolean
         default: false
+      include_bucket2:
+        description: 'Also diagnose experimental bucket2; a proof rejection is recorded separately from required controls'
+        required: true
+        type: boolean
+        default: false
+      run_benchmarks:
+        description: 'Run the four-block performance experiment after required gates pass'
+        required: true
+        type: boolean
+        default: false
   push:
     branches: [codex/deflate-round2]
     paths:
@@ -36,19 +46,29 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
+      - name: Check CI gate policy and diagnostics
+        run: |
+          python3 scripts/test-round2-ci.py
+          bash -n scripts/ci-round2.sh
       - name: Prepare isolated runner and pinned source
         run: bash scripts/ci-prepare.sh
       - name: Install official verification toolchain
         run: bash scripts/ci-setup.sh
       - name: Check bucket equivalence and second-probe attribution
+        if: inputs.include_bucket2 == true
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round2.py
-      - name: Verify four candidate proofs with the official gate
+      - name: Verify required candidates and optional bucket2 with the official gate
         env:
           REUSE_VERIFIED_CONTROLS: ${{ inputs.reuse_verified_controls }}
+          INCLUDE_BUCKET2: ${{ inputs.include_bucket2 }}
         run: bash scripts/ci-round2.sh
+      - name: Require every maintained candidate gate to accept
+        run: |
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/check-round2-gates.py "$RUNNER_TEMP/deflate-reports"
       - name: Measure accepted candidates in four interleaved blocks
+        if: inputs.run_benchmarks == true
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           export PYTHONPATH="$DEFLATE_ROOT/validator"
@@ -61,6 +81,7 @@ jobs:
           {
             echo '## DEFLATE round 2'
             echo "Result: $JOB_STATUS"
+            echo 'Required gates: probe3, probe2-nice16, probe2-nice64. bucket2 is opt-in and experimental.'
             echo 'Public stage1 and finite synthetic inputs only; no submission or reward prediction.'
             for report in research.json comparison.json bucket2-gate.json probe3-gate.json probe2-nice16-gate.json probe2-nice64-gate.json; do
               if [ -f "$RUNNER_TEMP/deflate-reports/$report" ]; then
@@ -71,12 +92,3 @@ jobs:
               fi
             done
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Require every official gate to accept
-        run: |
-          "$DEFLATE_ROOT/.venv/bin/python" - <<'PY'
-          import json, os, pathlib
-          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'deflate-reports'
-          for name in ('bucket2', 'probe3', 'probe2-nice16', 'probe2-nice64'):
-              report = json.loads((root / (name + '-gate.json')).read_text())
-              assert report['accepted'], (name, report)
-          PY

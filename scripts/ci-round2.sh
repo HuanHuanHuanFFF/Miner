@@ -6,7 +6,11 @@ cd "${DEFLATE_ROOT:?}"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
 export VERIFY_CORPUS=corpus-stage1
 export PYTHONPATH="$DEFLATE_ROOT/validator"
-for candidate in bucket2 probe3 probe2-nice16 probe2-nice64; do
+candidates=(probe3 probe2-nice16 probe2-nice64)
+if [[ ${INCLUDE_BUCKET2:-false} == true ]]; then
+    candidates=(bucket2 "${candidates[@]}")
+fi
+for candidate in "${candidates[@]}"; do
     echo "CANDIDATE_GATE_BEGIN $candidate"
     if [[ ${REUSE_VERIFIED_CONTROLS:-false} == true && $candidate != bucket2 ]]; then
         .venv/bin/python - "$candidate" <<'PY'
@@ -32,10 +36,17 @@ PY
     # Keep independent gates running so one extraction failure does not discard
     # the other candidates' evidence. A later workflow step checks all verdicts.
     if .venv/bin/python validator/verifier/verify.py "$GITHUB_WORKSPACE/candidates/$candidate" \
-        --results "$RUNNER_TEMP/deflate-reports/$candidate-gate.json" --keep always; then
+        --results "$RUNNER_TEMP/deflate-reports/$candidate-gate.json" --keep always \
+        2>&1 | tee "$RUNNER_TEMP/deflate-reports/$candidate-gate.log"; then
         cat "$RUNNER_TEMP/deflate-reports/$candidate-gate.json"
     else
-        gate_exit=$?
+        pipeline_exits=("${PIPESTATUS[@]}")
+        gate_exit=${pipeline_exits[0]}
+        if [[ ${pipeline_exits[1]} != 0 ]]; then
+            echo 'Could not preserve official gate log; stop with a CI error.' >&2
+            exit 2
+        fi
+        .venv/bin/python "$GITHUB_WORKSPACE/scripts/round2-gate-diagnostics.py" "$candidate"
         if [ -f "$RUNNER_TEMP/deflate-reports/$candidate-gate.json" ]; then
             cat "$RUNNER_TEMP/deflate-reports/$candidate-gate.json"
         else
@@ -52,6 +63,11 @@ print(json.dumps(report))
 PY
         fi
         echo "CANDIDATE_GATE_FAILED $candidate"
+        # An experimental proof rejection is distinct from a validator error.
+        # Exit 2 means the environment/checker failed and must not be hidden.
+        if [[ $gate_exit == 2 ]]; then
+            exit 2
+        fi
     fi
     echo "CANDIDATE_GATE_END $candidate"
 done

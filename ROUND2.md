@@ -23,6 +23,8 @@
 
 ## 桶版的停止状态
 
+2026-10-06 后续用户明确要求“尝试把 bucket2 修复一下，如果不行就放弃掉，先修复 CI”。以下停止决定是此前阶段记录；新的维护范围为：先将三个已验证常量候选作为默认必过项，bucket2 仅手动启用；保存完整 Lean 错误并作一次定点修复尝试，仍拒绝则停止桶路线。本次不触发新的竞赛提交或钱包操作。
+
 **VERIFIED**：最初 tuple 包装、显式 tuple 展开包装、最后 scalar 参数包装，均通过 intake/policy/static 和重新提取，496 个有限 token-equivalence/decode 用例也均通过，但官方 stage4 statement 未接受。最初失败是 `Bucket2.find_spec` 的 tuple destructuring；第二次 `WP.spec_bind` 无法匹配未展开的 tuple let；最后一次日志摘要末尾显示主循环 `MainInv` 目标未闭合，完整错误首部被官方日志尾部摘要截断。因此最后一次失败的具体 tactic/展开原因仍 **UNKNOWN**，不能把它诊断为算法错误或宣称只差已解决的一处。
 
 本轮不再追加私有 CI。桶版留在 `candidates/bucket2/` 作为未通过证明的实验；没有其正式 benchmark 结论，不提升、不提交、不复用 probe2 的接受状态为它背书。后续若继续该路线，应先取得完整 statement 日志并闭合主循环证明；目前结构是两张独立 hash-keyed 表（SoA），不是同一 cache line 的 inline AoS bucket，失败或未来速度结果也不能否定所有 bucket 设计。
@@ -60,8 +62,10 @@ bucket2 新证明复用原 `find/walk`、字节匹配及 decode 层，另为 buc
 
 1. `scripts/research-round2.py` 对全部 stage1 和预定合成输入逐 token 比较；合成输入覆盖小/大路由边界、16/32 KB 相邻距离、零、binary、重复文本、扰动文本、数字结构，并另强制 structured engine 测试。有限 token decode 检查不是 Lean 或完整 DEFLATE round trip。
 2. 同脚本生成仅 runner 存在的诊断版，按第一候选长度记录第二访问和第二候选被选中的次数。诊断版 token 必须与 probe2 一致。它不参与官方 gate 或 timing；“被选中”不等于最终 emitted token 改变，backward/lazy 归因及 oracle 上界仍未知。
-3. `scripts/ci-round2.sh` 对四候选执行官方完整 gate，保存重新提取、Lean obligation、公理和公共 round trip 结果。一个候选拒绝不会丢弃其他结果，但最终 job 要求全部接受。
+3. `scripts/ci-round2.sh` 默认对 `probe3`、`probe2-nice16`、`probe2-nice64` 执行官方完整 gate，三者均为必过项。`include_bucket2=true` 才运行桶版等价检查及官方 gate；桶版拒绝保留为实验失败，不代表通过。验证器错误仍阻断 CI。`scripts/round2-gate-diagnostics.py` 输出官方保留工作目录中的完整错误日志，不修改官方 checker 或其裁决。
 4. `scripts/round2.py` 只测 gate 接受的候选，保留 template/#261/probe2；每文件 1 warmup + 11 measured，共四个交错顺序块。同一 CPU、官方 paired incumbent，保留每 repetition 原始结果和输出/token hashes。bucket2 要求与 probe2 的两种 hashes 都一致。
+
+维护运行默认 `run_benchmarks=false`，避免为修复 CI 重复完整性能实验；官方 gate 自身的公共 round trip/benchmark 仍执行。需性能复测时显式设为 true。`reuse_verified_controls` 默认仍为 false；若显式启用，则 Summary 和 gate 回执保留历史证明来源及文件哈希，不声称本次重新编译了这些证明。轻量回归入口为 `python scripts/test-round2-ci.py`，检查桶版实际拒绝与必过候选的缺失/拒绝/错误 scope，以及完整错误首部不会被 2000 字符摘要截掉。
 
 这些是公共 stage1 结果；外部 source-held-out、私有 stage2、线上 admission/排名及实际奖励分别保持 UNKNOWN。四块也不足以自动消除 CI 主机漂移；报告每块和文件分布，不凭一个平均数宣称可靠速度优势。
 
