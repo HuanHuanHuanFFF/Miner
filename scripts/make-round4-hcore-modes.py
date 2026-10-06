@@ -1,4 +1,4 @@
-"""Two uniform mode experiments on the frozen H8/depth32 core.
+"""Uniform mode experiments on the frozen H8/depth32 core.
 
 Only writes candidates/r4-parse-hmode-*/. Updates the Rust entry and the final
 Lean theorem argument together; all engine bodies and emitter proofs remain
@@ -34,6 +34,7 @@ def replace_once(text: str, old: str, new: str) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--only", action="append", default=[], help="Generate/check only named candidates; repeatable")
     args = ap.parse_args()
     source_bytes, proof_bytes = (BASE / "parse.rs").read_bytes(), (BASE / "Parse.lean").read_bytes()
     assert sha(source_bytes) == BASE_SOURCE and sha(proof_bytes) == BASE_PROOF, "H-core base drift"
@@ -43,8 +44,15 @@ def main() -> None:
          "Uniform mode 1 with the original eight-pass cap: halve the existing per-content stopping constant, potentially continuing cost fitting longer. No restart and no new initial-model family."),
         ("r4-parse-hmode-2-i4", 2, 4,
          "Uniform mode 2 with a four-pass normal cap: halve the stopping constant and allow one content-qualified restart, consisting of deterministic cost jitter and exactly three additional DP/refit steps over the existing cache. Reduce the normal cap to budget for restart work."),
+        ("r4-parse-hmode-2-i8", 2, 8,
+         "Uniform mode 2 with the eight-pass normal cap and at most one content-qualified three-step restart. Keep the H8/depth32 cache, query margin and length windows unchanged, testing restart after the stronger normal fit."),
+        ("r4-parse-hmode-3-i8", 3, 8,
+         "Uniform mode 3 with the eight-pass normal cap and at most two content-qualified restarts (three DP/refit steps each, distinct deterministic seeds). Search depth, query margin and length windows remain H8/depth32; no additional tree search."),
     ]
+    assert set(args.only) <= {r[0] for r in recipes}, "unknown --only candidate"
     for name, mode, iterations, mechanism in recipes:
+        if args.only and name not in args.only:
+            continue
         new_entry = OLD_ENTRY.replace("out, 0)", f"out, {mode})")
         new_proof_call = OLD_PROOF_CALL.replace("0#usize", f"{mode}#usize")
         text = replace_once(source, OLD_ENTRY, new_entry)
@@ -75,8 +83,8 @@ def main() -> None:
             "entrypoint": f"parse -> h_parse_mode(input, out, {mode}) for every input",
             "proof_entry": f"exact EH.parse_mode_spec input out {mode}#usize hlen",
             "initial_model": "Existing literal/lazy comparison and content-selected high-entropy seed retained. The ew argument computed by h_optimize is unused by h_eval_mode in this source.",
-            "restart_scope": "Mode 1 never restarts. Mode 2's single restart runs only when the existing general h_classify(input) % 4 == 0; no file identity or exact-length router is present.",
-            "restart_budget": {"maximum_restarts": 0 if mode == 1 else 1, "DP_steps_per_restart": 3,
+            "restart_scope": "Mode 3's at most two restarts run only when the existing general h_classify(input) % 4 == 0; no file identity or exact-length router is present." if mode == 3 else "Mode 1 never restarts. Mode 2's single restart runs only when the existing general h_classify(input) % 4 == 0; no file identity or exact-length router is present.",
+            "restart_budget": {"maximum_restarts": 0 if mode == 1 else 2 if mode == 3 else 1, "DP_steps_per_restart": 3,
                 "normal_iteration_cap": iterations, "actual_work": "UNKNOWN; normal early stopping and content qualification remain active"},
             "dependency_audit": "Same 148-function H-only closure as the parent. Reverse substitutions restore source/proof byte-for-byte; only entry mode and declared iteration constant change.",
             "attribution": "Public submission 402 derivative; original provenance retained at references/round4-public-402/PROVENANCE.json.",

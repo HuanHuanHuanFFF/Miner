@@ -252,3 +252,21 @@ The single requested candidate, `r4-parse-299-eob1`, inserts only `sl[256]=1` im
 `scripts/make-round4-eob.py --check` passes, locks the original public299 source/proof SHA256 values, and verifies that removing the one inserted line restores the original source exactly. New source SHA256 `f22c4fc3fff60f4640a9d1fb3d54a2be94a4415c914262514c4548b58215582f` (105089 bytes); proof SHA256 `9b77b3523cbf7044aaffa11b6fd9676b3615ca4bf148b43b3cb92da4073b3e3d` (279475 bytes). Attribution and the source endpoint remain linked from its manifest.
 
 **UNKNOWN:** compilation, extraction, proof/axiom acceptance, public time/size and online outcomes of eob1. No further count/model variants are generated in this batch.
+
+## Final two restart configurations
+
+**VERIFIED (K public screen):** `evidence/round4/37537479001/screen/analysis.json` gives mode2/i4 `(5.710209048, 33.882881080%)`, versus same-run H4/depth32 `(5.106794290, 33.893514202%)`: the mode2 configuration saves 0.010633 percentage points for roughly 0.603415 additional time-axis units. It includes the halved stopping threshold as well as restart, so the exact share attributable to restart alone is not isolated by this pair. Mode1/i8 gives `(5.621726124, 33.874432867%)`, compared with H8 core `(5.463136440, 33.875400384%)`.
+
+At the main thread's request, the last two new H configurations are prepared from the same frozen H8/depth32 core:
+
+- `r4-parse-hmode-2-i8`: mode 2, eight normal passes permitted, at most one qualified three-step restart.
+- `r4-parse-hmode-3-i8`: mode 3, eight normal passes permitted, at most two qualified three-step restarts with distinct deterministic seeds.
+
+Tree depth, PM, length windows and every engine body remain unchanged. Only the global Rust entry mode and corresponding Lean theorem literal change from the H8 core. Both normal early stopping and the existing content condition for restart remain active. The measured K increment is a budget reference, not a guarantee that either new configuration stays below time 10 or improves size.
+
+`make-round4-hcore-modes.py` now supports repeatable `--only`, which was used to write just these two candidates. All four mode variants pass exact `--check`; both old mode candidates and the core have no content diff. Source/proof hashes:
+
+- mode2/i8: `ca06c01a8099cc78b215236df5477b8a849f09e7c447ca7bdf5edc0546254f23` / `7b33e0f50428d2629af0f93151f9fff3110409b57b8add5fcc06c6d61f9d216b`.
+- mode3/i8: `1c94d7dec959a9862fa79dd862df673abec80556d2f139924094e0a6a78ed840` / `edab13f3296ddd86cb2db928baa1050f5fdb532fc0facc671a4236478995b34e`.
+
+Each source/proof is 71184/95901 bytes. Fresh gate, independent public performance, private stage2, formal admission and payout remain **UNKNOWN**. No further new H proposals are generated after this final pair.
