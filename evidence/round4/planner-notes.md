@@ -196,3 +196,33 @@ Prepared from the frozen H8/depth32 core while its first official gate is runnin
 - Shared proof: `13f23fc46a6d18283aeb339f949cca102761133d6e1ff9b3a1007cd8b7926a46`.
 
 Each parser is 71185 bytes. New official extraction, proof/axiom checks, public performance, stage2 and online outcomes remain **UNKNOWN**. No CI, push, submission or wallet operation was performed by this worker.
+
+## Uniform H modes and restart experiments
+
+**VERIFIED (H-core source):** mode is reduced modulo 8 inside `h_parse_mode`, but the exported entry can select one fixed mode for every input. Modes 1, 2 and 3 halve the per-content `gk` through `h_mode_gk`, affecting both predicted one-pass behavior and the normal early-stop threshold. They retain the same literal/lazy initial-plan comparison and high-entropy seed logic. Although `h_optimize` computes a mode-dependent `ew`, this source's `h_eval_mode` ignores that parameter and calls `h_eval_blocks` directly; it is not evidence of a changed initial or entropy model.
+
+| Mode | Normal stage | Additional stage |
+| --- | --- | --- |
+| 1 | Existing iteration cap, smaller stopping threshold | No restart |
+| 2 | Same smaller stopping threshold | At most one qualified restart |
+| 3 | Same smaller stopping threshold | At most two qualified restarts |
+
+A restart is qualified only when the existing `h_classify(input) % 4 == 0`. This classifier uses general fixed-window repeat coverage, a strided byte histogram/entropy, and a general small-input threshold; no removed exact-length portfolio or filename routing is involved. Each restart re-counts the current best plan, fits its tables, perturbs symbol costs deterministically by up to +/-16 units (one modeled bit), and performs exactly three DP/walk/evaluate steps. Each step copies its plan only if its evaluated cost improves. The match cache is reused; when the normal stage retained queries, the restart also reuses that pruned query set, so it does not rediscover deleted alternatives. It adds another classification pass and repeated DP/statistics/table work, not another tree search.
+
+Exactly two candidates are generated from frozen `r4-parse-h8d32-core`:
+
+| Candidate | Entry mode / normal cap | Purpose |
+| --- | --- | --- |
+| `r4-parse-hmode-1-i8` | 1 / 8 | Isolate the smaller stopping threshold with the same eight-pass cap; no restart. |
+| `r4-parse-hmode-2-i4` | 2 / 4 | Budget at most four normal passes plus three restart steps on qualified inputs. This combines the smaller stopping threshold, restart and lower normal cap; it is not a pure one-factor restart attribution. |
+
+Mode 3 is not generated in this batch: up to six added DP steps would have a larger unmeasured time cost. A public time axis below 10 and an additional size improvement of roughly 0.01--0.03 percentage points are hypotheses, not predictions or formal eligibility claims.
+
+`scripts/make-round4-hcore-modes.py` updates the exported Rust mode and final Lean `exact EH.parse_mode_spec input out <mode>#usize hlen` together. Reverse substitutions restore all parent source/proof bytes; all engine bodies, emission proofs and the 148-function closure are retained. The original core and tune candidates have no content changes. Generation and `--check` pass, but fresh extraction/gates remain required.
+
+- mode1/i8 source: `87550e2af37eb409f6d23f5ee23ca70b6fc55ace6b28bca1b85db38929d99a79`.
+- mode1/i8 proof: `ea44caf8730aa9dab5508cd49f8c3c9cf7277cfbba2c7084fe419670c723edc2`.
+- mode2/i4 source: `38171d3302345e1cb3eac22bebda1787a0cf956e5da35d00cca76bd9158dd4c7`.
+- mode2/i4 proof: `7b33e0f50428d2629af0f93151f9fff3110409b57b8add5fcc06c6d61f9d216b`.
+
+Each parser/proof is 71184/95901 bytes. Actual normal/restart pass counts, public time/size, fresh gate, private stage2 and online outcomes remain **UNKNOWN**.

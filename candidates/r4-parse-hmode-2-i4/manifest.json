@@ -1,0 +1,43 @@
+{
+  "candidate": "r4-parse-hmode-2-i4",
+  "base_submission_id": "402",
+  "parent": {
+    "candidate": "r4-parse-h8d32-core",
+    "path": "candidates/r4-parse-h8d32-core",
+    "source_sha256": "916f3a0b5f64b17919c7e4871f878ef2827530a9e3bf577020d8865e61b26953",
+    "proof_sha256": "13f23fc46a6d18283aeb339f949cca102761133d6e1ff9b3a1007cd8b7926a46"
+  },
+  "hashes": {
+    "parse.rs": "38171d3302345e1cb3eac22bebda1787a0cf956e5da35d00cca76bd9158dd4c7",
+    "Parse.lean": "7b33e0f50428d2629af0f93151f9fff3110409b57b8add5fcc06c6d61f9d216b"
+  },
+  "bytes": {
+    "parse.rs": 71184,
+    "Parse.lean": 95901
+  },
+  "delta_from_parent": {
+    "entry_mode": {
+      "old": 0,
+      "new": 2
+    },
+    "H_ITERS": {
+      "old": 8,
+      "new": 4
+    }
+  },
+  "mechanism": "Uniform mode 2 with a four-pass normal cap: halve the stopping constant and allow one content-qualified restart, consisting of deterministic cost jitter and exactly three additional DP/refit steps over the existing cache. Reduce the normal cap to budget for restart work.",
+  "entrypoint": "parse -> h_parse_mode(input, out, 2) for every input",
+  "proof_entry": "exact EH.parse_mode_spec input out 2#usize hlen",
+  "initial_model": "Existing literal/lazy comparison and content-selected high-entropy seed retained. The ew argument computed by h_optimize is unused by h_eval_mode in this source.",
+  "restart_scope": "Mode 1 never restarts. Mode 2's single restart runs only when the existing general h_classify(input) % 4 == 0; no file identity or exact-length router is present.",
+  "restart_budget": {
+    "maximum_restarts": 1,
+    "DP_steps_per_restart": 3,
+    "normal_iteration_cap": 4,
+    "actual_work": "UNKNOWN; normal early stopping and content qualification remain active"
+  },
+  "dependency_audit": "Same 148-function H-only closure as the parent. Reverse substitutions restore source/proof byte-for-byte; only entry mode and declared iteration constant change.",
+  "attribution": "Public submission 402 derivative; original provenance retained at references/round4-public-402/PROVENANCE.json.",
+  "performance_target": "Public time axis <10 and incremental size benefit are unmeasured hypotheses, not guarantees.",
+  "verification": "VERIFIED local generation/hash/paired-entry checks only. Fresh official extraction, Lean obligation, axioms, round trip, time/size, stage2, admission and payment UNKNOWN."
+}
