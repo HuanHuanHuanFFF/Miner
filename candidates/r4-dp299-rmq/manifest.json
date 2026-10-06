@@ -1,0 +1,32 @@
+{
+  "candidate": "r4-dp299-rmq",
+  "parent": {
+    "path": "references/round4-public-299",
+    "hashes": {
+      "parse.rs": "71314c4da7ccd29331a360bce9be8697857109c66adc87d3480eeaa22930625d",
+      "Parse.lean": "9b77b3523cbf7044aaffa11b6fd9676b3615ca4bf148b43b3cb92da4073b3e3d"
+    }
+  },
+  "hashes": {
+    "parse.rs": "f14f364e2383b55a8b5c6fd180101a272c87ee9f681f042f5da1c8351a3b99dd",
+    "Parse.lean": "9b77b3523cbf7044aaffa11b6fd9676b3615ca4bf148b43b3cb92da4073b3e3d"
+  },
+  "bytes": {
+    "parse.rs": 109316,
+    "Parse.lean": 279475
+  },
+  "mechanism": "Backward-maintained 512-slot sparse min/max table over cost modulo 2^23; full uniform DEFLATE length buckets of width >=4 use RMQ only when the base translation does not cross modular order. Partial/nonuniform/wrapping buckets retain exact original scalar packing and comparison.",
+  "tie_break": "RMQ key packs low-23-bit cost then absolute position, so equal translated costs select shorter length. Existing outer strict comparisons preserve earlier-distance ties.",
+  "proof_status": "NOT_ADAPTED: Parse.lean is the exact old public299 reference, not a proof for this new parser. New r4 helpers/cache state and changed a_dp_pass extracted loop signatures still need totality/loop proofs. Do not select an official gate as ready or submit.",
+  "gate_policy": "Research screen and finite token/decode equivalence only; gate_candidates must be empty until proof migration is completed.",
+  "proof_migration_needed": [
+    "r4_rmq_update/initialization totality",
+    "uniform-bucket loop totality",
+    "r4_rmq_best loop progress/index safety",
+    "new min/max arrays and uniform capture in a_dp_pass loop specs",
+    "removed scalar-loop extraction references must be replaced by helper spec"
+  ],
+  "preserved": "Original routing, effort settings, token packing, checked emitter, official encoder and all other public299 functions; fixed sentinel matches stay scalar.",
+  "attribution": "Derived from public299; see references/round4-public-299/PROVENANCE.json. Ring sparse-table organization follows the inspected public402 H approach, extended with max and modular-order fallback.",
+  "verification": "UNKNOWN Rust compilation, finite token equivalence, time/size, fresh extraction/proof/gate, stage2/admission/rewards. Local model-check is arithmetic only and cannot certify the Rust."
+}
