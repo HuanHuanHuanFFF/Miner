@@ -25,9 +25,13 @@
 
 2026-10-06 后续用户明确要求“尝试把 bucket2 修复一下，如果不行就放弃掉，先修复 CI”。以下停止决定是此前阶段记录；新的维护范围为：先将三个已验证常量候选作为默认必过项，bucket2 仅手动启用；保存完整 Lean 错误并作一次定点修复尝试，仍拒绝则停止桶路线。本次不触发新的竞赛提交或钱包操作。
 
+**VERIFIED（CI 维护）**：[37475195400](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37475195400)，提交 `a52795f45f552ff51e941e3b5b614ecf3f06218a`，整体 success。三个维护候选均重新完成公共完整 gate，没有复用历史证明；axioms 仍仅三项白名单。bucket2 的 496 个有限等价用例通过，但官方 Lean 拒绝被独立记录。默认 CI 不再把未验证实验候选列为必过项，维护候选及验证器错误仍保持阻断。
+
+**VERIFIED（完整错误）**：[完整 Lean 输出](evidence/round2/37475195400/bucket2-005-lake.log) 首先在 Lazy 循环第 2807 行停于 `let (i1, i2) := hq`，主循环第 3051 行同样停于 `let (i, i1) := hc`，此时 `hc.1 ≤ p` 和 head bound 已在上下文中。**INFERRED**：剩余程序尚未经 tuple 解构进入 `step*`，此前尾部显示的 `MainInv` 不足以诊断为算法或不变量错误。当前一次修复尝试仅显式拆开这两处 tuple 并继续原有自动证明；Rust、contract、encoder、gate、pins 不变。该尝试在官方 gate 完成前仍为 **UNKNOWN**，不标作已修复。
+
 **VERIFIED**：最初 tuple 包装、显式 tuple 展开包装、最后 scalar 参数包装，均通过 intake/policy/static 和重新提取，496 个有限 token-equivalence/decode 用例也均通过，但官方 stage4 statement 未接受。最初失败是 `Bucket2.find_spec` 的 tuple destructuring；第二次 `WP.spec_bind` 无法匹配未展开的 tuple let；最后一次日志摘要末尾显示主循环 `MainInv` 目标未闭合，完整错误首部被官方日志尾部摘要截断。因此最后一次失败的具体 tactic/展开原因仍 **UNKNOWN**，不能把它诊断为算法错误或宣称只差已解决的一处。
 
-本轮不再追加私有 CI。桶版留在 `candidates/bucket2/` 作为未通过证明的实验；没有其正式 benchmark 结论，不提升、不提交、不复用 probe2 的接受状态为它背书。后续若继续该路线，应先取得完整 statement 日志并闭合主循环证明；目前结构是两张独立 hash-keyed 表（SoA），不是同一 cache line 的 inline AoS bucket，失败或未来速度结果也不能否定所有 bucket 设计。
+在此前停止时点，决定不再追加私有 CI。桶版留在 `candidates/bucket2/` 作为实验；没有其正式性能对照结论，不提交、不复用 probe2 的接受状态为它背书。目前结构是两张独立 hash-keyed 表（SoA），不是同一 cache line 的 inline AoS bucket，失败或未来速度结果也不能否定所有 bucket 设计。后续维护状态按上面的最新证据更新。
 
 ## 研究吸收
 

@@ -88,6 +88,18 @@ theorem find_spec (s : Slice Std.U8) {W : Std.Usize} (prev : Array Std.U32 W)
     loops_start = proof.index('theorem back_loop_inv')
     loops_end = proof.index('/-! ## 13.', loops_start)
     loops = proof[loops_start:loops_end].replace('slot.run', 'slot.bucket_run')
+    # Aeneas emits a pure tuple destructuring before bucket_find. `step*`
+    # stops there until the captured pair is constructor-shaped. Decompose
+    # only that pair, then resume the unchanged loop proof automation.
+    for body, pair in (('slot.bucket_run_loop0_loop1.body', 'hq'),
+                       ('slot.bucket_run_loop0.body', 'hc')):
+        old = f'simp only [{body}]\n    step*\n    repeat\''
+        new = (f'simp only [{body}]\n    step*\n'
+               f'    all_goals (try rcases {pair} with ⟨{pair}0, {pair}1⟩)\n'
+               '    all_goals simp only at *\n'
+               '    all_goals step*\n    repeat\'')
+        assert loops.count(old) == 1, body
+        loops = loops.replace(old, new)
     run_start = proof.index('@[local step]\ntheorem run_spec')
     run_end = proof.index('theorem run_rest_spec', run_start)
     run_spec = proof[run_start:run_end].replace('slot.run', 'slot.bucket_run')

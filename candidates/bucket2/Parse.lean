@@ -2798,6 +2798,9 @@ theorem lazy_loop_inv {H W : Std.Usize} (input : Slice Std.U8) (out : Slice Std.
     obtain ⟨⟨hps, hntp, hso, _⟩, hL, ⟨h3, h258, hpl, hd1, hd32, hdp, _⟩, hB, hplim, hins⟩ := hinv'
     simp only [slot.bucket_run_loop0_loop1.body]
     step*
+    all_goals (try rcases hq with ⟨hq0, hq1⟩)
+    all_goals simp only at *
+    all_goals step*
     repeat' (split <;> step*)
     all_goals first
       | exact hinv.1
@@ -3042,6 +3045,9 @@ theorem main_loop_spec {H W : Std.Usize} (input : Slice Std.U8) (out : Slice Std
     obtain ⟨hdec, hL, hB, hmiss⟩ := hinv'
     simp only [slot.bucket_run_loop0.body]
     step*
+    all_goals (try rcases hc with ⟨hc0, hc1⟩)
+    all_goals simp only at *
+    all_goals step*
     repeat' (split <;> step*)
     all_goals first
       | exact FoundAt.real (by assumption) (by scalar_tac)

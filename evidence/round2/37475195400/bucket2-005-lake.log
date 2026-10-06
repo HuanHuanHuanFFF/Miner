@@ -1,0 +1,162 @@
+Proof/Parse.lean:2365:4: warning: 'all_goals
+  first
+  | exact ⟨hB, hie', hins⟩
+  | exact ⟨by assumption, by scalar_tac, by scalar_tac, by scalar_tac⟩' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:2365:14: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:2807:16: error: Invalid `⟨...⟩` notation: The expected type
+  (match
+      let (i1, i2) := hq
+      do
+      let (l1, d1) ← slot.bucket_find input prev1 i i1 i2 «have» minl slot.S_LDEPTH 1#usize
+      if l1 ≥ minl then do
+          let i3 ← slot.gain l1 d1
+          let i4 ← slot.gain l d
+          if i3 > i4 then do
+              let (nt1, out1) ← slot.put_lit input out nt p
+              ok (cont (out1, nt1, i, head1, prev1, ins1, l1, d1, 1#u32))
+            else ok (cont (out, nt, p, head1, prev1, ins1, l, d, 0#u32))
+        else ok (cont (out, nt, p, head1, prev1, ins1, l, d, 0#u32)) with
+    | ok x => WP.wp_return x
+    | fail e => fun x => False
+    | div => fun x => False)
+    fun r =>
+    match r with
+    | done y =>
+      LazyInv input L (↑lim) y.1 (↑y.2.1) (↑y.2.2.1) y.2.2.2.1 ↑y.2.2.2.2.2.1 ↑y.2.2.2.2.2.2.1 ↑y.2.2.2.2.2.2.2
+    | cont x' =>
+      LazyInv input L (↑lim) x'.1 (↑x'.2.1) (↑x'.2.2.1) x'.2.2.2.1 ↑x'.2.2.2.2.2.1 ↑x'.2.2.2.2.2.2.1
+          ↑x'.2.2.2.2.2.2.2.1 ∧
+        ↑lim - ↑x'.2.2.1 + ↑x'.2.2.2.2.2.2.2.2 < ↑lim - ↑p + ↑1#u32
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Proof/Parse.lean:2807:16: error: Invalid `⟨...⟩` notation: The expected type
+  (match
+      let (i1, i2) := hq
+      do
+      let (l1, d1) ← slot.bucket_find input prev1 i i1 i2 «have» minl slot.LDEPTH 1#usize
+      if l1 ≥ minl then do
+          let i3 ← slot.gain l1 d1
+          let i4 ← slot.gain l d
+          if i3 > i4 then do
+              let (nt1, out1) ← slot.put_lit input out nt p
+              ok (cont (out1, nt1, i, head1, prev1, ins1, l1, d1, 1#u32))
+            else ok (cont (out, nt, p, head1, prev1, ins1, l, d, 0#u32))
+        else ok (cont (out, nt, p, head1, prev1, ins1, l, d, 0#u32)) with
+    | ok x => WP.wp_return x
+    | fail e => fun x => False
+    | div => fun x => False)
+    fun r =>
+    match r with
+    | done y =>
+      LazyInv input L (↑lim) y.1 (↑y.2.1) (↑y.2.2.1) y.2.2.2.1 ↑y.2.2.2.2.2.1 ↑y.2.2.2.2.2.2.1 ↑y.2.2.2.2.2.2.2
+    | cont x' =>
+      LazyInv input L (↑lim) x'.1 (↑x'.2.1) (↑x'.2.2.1) x'.2.2.2.1 ↑x'.2.2.2.2.2.1 ↑x'.2.2.2.2.2.2.1
+          ↑x'.2.2.2.2.2.2.2.1 ∧
+        ↑lim - ↑x'.2.2.1 + ↑x'.2.2.2.2.2.2.2.2 < ↑lim - ↑p + ↑1#u32
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+Proof/Parse.lean:2894:4: warning: 'all_goals
+  first
+  | exact ⟨hB, hie', hins⟩
+  | exact ⟨by assumption, by scalar_tac, by scalar_tac, by scalar_tac⟩' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:2894:14: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proof/Parse.lean:3051:29: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal:
+H W : Usize
+input : Slice U8
+out✝ : Slice U32
+cls nt✝ p✝ : Usize
+mask : U32
+minl depth lazy skip skcap : Usize
+head✝ : Std.Array U32 H
+prev✝ : Std.Array U32 W
+lim ins✝ miss✝ fuel✝ : Usize
+L : ℕ
+hlim : ↑lim + 8 = input.length
+hminl : 3 ≤ ↑minl
+hminl8 : ↑minl ≤ 8
+hskip : ↑skip < 32
+hH : 0 < ↑H
+hW : 0 < ↑W
+hinv✝ : MainInv input L out✝ (↑nt✝) (↑p✝) head✝ ↑miss✝
+hmax : input.length ≤ Usize.max
+out : Slice U32
+nt p : Usize
+head : Std.Array U32 H
+prev : Std.Array U32 W
+ins miss fuel : Usize
+hinv : MainInv input L out (↑nt) (↑p) head ↑miss
+hdec : Dec input out ↑nt ↑p
+hL : out.length = L
+hB : HeadBound head ↑p
+hmiss : ↑miss ≤ ↑p
+h✝² : p < lim
+h✝¹ : fuel > 0#usize
+fuel1 : Usize
+_✝² : [> let fuel1 ← fuel - 1#usize <]
+fuel1_post1 : ↑fuel1 = ↑fuel - 1
+fuel1_post2 : 1 ≤ ↑fuel
+head1 : Std.Array U32 H
+prev1 : Std.Array U32 W
+_✝¹ : [> let(head1, prev1) ← slot.bucket_run_loop0_loop0 input p mask head prev ins <]
+head1_post : HeadBound head1 ↑p
+hc : Usize × Usize
+head2 : Std.Array U32 H
+prev2 : Std.Array U32 W
+_✝ : [> let(hc, head2, prev2) ← slot.bucket_insert input head1 prev1 p mask <]
+hc_post1 : ↑hc.1 ≤ ↑p
+hc_post2 : HeadBound head2 ↑p
+ins1 : Usize
+_ : [> let ins1 ← p + 1#usize <]
+ins1_post : ↑ins1 = ↑p + 1
+h✝ : ¬slot.STRIDE > 0#usize
+this : 32 ≤ System.Platform.numBits
+⊢ (let (i, i1) := hc
+    do
+    let (l, d) ← slot.bucket_find input prev2 p i i1 0#usize minl depth 0#usize
+    if l ≥ 3#usize then do
+        let (out1, nt1, p1, head3, prev3, ins2, l1, d1) ←
+          slot.bucket_run_loop0_loop1 input out cls nt p mask minl lazy head2 prev2 lim ins1 l d 1#u32
+        let (nt2, p2, l2) ← slot.bucket_run_loop0_loop2 input out1 nt1 p1 l1 d1 0#usize
+        let ((nt3, «end»), out2) ← slot.put_match input out1 nt2 p2 d1 l2
+        let i2 ← lift (core.num.Usize.wrapping_add ins2 slot.INS_MAX)
+        let stop ← if «end» > i2 then ok (core.num.Usize.wrapping_add ins2 slot.INS_MAX) else ok «end»
+        let stop1 ← if stop > lim then ok lim else ok stop
+        let (head4, prev4, ins3) ← slot.bucket_run_loop0_loop3 input mask head3 prev3 ins2 stop1
+        let i3 ← ins3 + slot.TAIL
+        let ins4 ← if i3 < «end» then «end» - slot.TAIL else ok ins3
+        let (head5, prev5, ins5) ← slot.bucket_run_loop0_loop6 input mask head4 prev4 lim ins4 «end»
+        if ins5 < «end» then ok (cont (out2, nt3, «end», head5, prev5, «end», 0#usize, fuel1))
+          else ok (cont (out2, nt3, «end», head5, prev5, ins5, 0#usize, fuel1))
+      else do
+        let (nt1, out1) ← slot.put_lit input out nt p
+        let miss1 ← miss + 1#usize
+        let step ← miss1 >>> skip
+        let step1 ← if step > skcap then ok skcap else ok step
+        let (out2, nt2, p1) ← slot.bucket_run_loop0_loop7 input out1 nt1 ins1 lim step1
+        if ins1 < p1 then ok (cont (out2, nt2, p1, head2, prev2, p1, miss1, fuel1))
+          else ok (cont (out2, nt2, p1, head2, prev2, ins1, miss1, fuel1))) ⦃
+    r =>
+    match r with
+    | done y => Dec input y.1 ↑y.2.1 ↑y.2.2 ∧ y.1.length = L
+    | cont x' => MainInv input L x'.1 (↑x'.2.1) (↑x'.2.2.1) x'.2.2.2.1 ↑x'.2.2.2.2.2.2.1 ∧ ↑x'.2.2.2.2.2.2.2 < ↑fuel ⦄
+Proof/Parse.lean:3110:58: warning: 'simp' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proof/Parse.lean:3110:58: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`

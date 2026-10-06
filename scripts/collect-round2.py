@@ -45,6 +45,22 @@ def main():
     # Preserve complete JSON verdicts printed inside each candidate's markers.
     lines = [re.sub(r'^.*?\t\d{4}-\d{2}-\d{2}T\S+\s?', '',line) for line in clean.splitlines()]
     plain = '\n'.join(lines)
+    for label, filename in (('RESEARCH', 'research.json'), ('COMPARISON', 'comparison.json')):
+        match = re.search(r'^' + label + r' (\{.*\})$', plain, re.M)
+        if match:
+            (target / filename).write_text(json.dumps(json.loads(match[1]), indent=2) + '\n', encoding='utf-8')
+    # The checker keeps full elaboration output, while its verdict prints only
+    # the last 2000 characters. Preserve the diagnostic presentation separately.
+    for match in re.finditer(r'^GATE_DIAGNOSTIC_BEGIN (\S+) (\S+)\n(.*?)\nGATE_DIAGNOSTIC_END \1 \2$', plain, re.M | re.S):
+        name, filename, full = match.groups()
+        assert name in ('bucket2', 'probe3', 'probe2-nice16', 'probe2-nice64')
+        assert re.fullmatch(r'\d{3}-[A-Za-z0-9_.-]+\.log', filename)
+        (target / (name + '-' + filename)).write_text(full.rstrip() + '\n', encoding='utf-8')
+    for match in re.finditer(r'^GATE_DIAGNOSTIC_MANIFEST (\{.*\})$', plain, re.M):
+        manifest = json.loads(match[1])
+        name = manifest['candidate']
+        assert name in ('bucket2', 'probe3', 'probe2-nice16', 'probe2-nice64')
+        (target / (name + '-diagnostics.json')).write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
     for name in ('bucket2','probe3','probe2-nice16','probe2-nice64'):
         match = re.search(r'CANDIDATE_GATE_BEGIN '+re.escape(name)+r'\n(.*?)CANDIDATE_GATE_END '+re.escape(name), plain,re.S)
         if not match:
