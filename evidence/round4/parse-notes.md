@@ -46,3 +46,34 @@ Rejection takes the existing miss branch after `head_set` and the p+1 prefetch h
 **INFERRED:** cost2048 isolates removal of matches with negative existing proxy gain; cost8192 tests a less aggressive cutoff. The backward-rescue variant tests the concrete confound that a currently short match can become valuable after backward merging. Since rejection grows miss and can increase skip acceleration, any timing gain cannot be attributed solely to avoiding one match token. Performance can improve or regress on either axis.
 
 **UNKNOWN:** all seven new parsers still need their own Rust build, extraction, Lean obligation, axiom whitelist and actual round-trip/performance evidence at these exact hashes. The second batch proof is the exact fast3 proof; no new proof success is claimed.
+
+## First screen attribution and two targeted follow-ups
+
+Evidence read on `2026-10-06` from `evidence/round4/37515419910/screen/`: `analysis.json` and each candidate's two raw JSONL blocks. The run was still refining/checking gates at the time of this analysis. Timing below is recomputed from the median of 11 measured repetitions in each file/process; the scored per-file term divides by the paired incumbent median before averaging over 28 files.
+
+**VERIFIED (screen measurements):** all four lazy variants change tokens/output only on `prose.txt`; the other 27 public files retain fast3's exact token and output hashes. The filename is used only to locate evidence, never as a parser route.
+
+| Candidate | Output bytes vs fast3 on changed file | Net token change | Parse-time increase, blocks 1/2 | Changed-file contribution to total time axis, two-block mean |
+| --- | --- | --- | --- | --- |
+| lazy6 | -18435 | +6337 | +2.982 / +2.945 ms | +0.001144 |
+| lazy9 | -20593 | +6710 | +3.083 / +3.099 ms | +0.001167 |
+| lazy9-one | -17763 | +5539 | +2.735 / +2.829 ms | +0.001107 |
+| lazy9-cost | -20165 | +6773 | +3.363 / +3.486 ms | +0.001228 |
+
+The `lazy9-cost` guard preserves 97.92% of `lazy9`'s size saving but does **not** show lower time cost on the affected file. Its lower aggregate time penalty comes mainly from the unchanged files: their net time-axis change is -0.000053 for cost, versus +0.002048 for lazy9. Such timing differences may include code-layout effects and measurement variability; the current data cannot attribute them to a reduced count of useful/failed prose lookups.
+
+The changed file's raw bytes per emitted token fall from 3.964 (fast3) to 3.894 (cost), even while output bytes improve. This supports investigating cheaper match/distance choices rather than assuming longer average phrases. The receipts contain total token counts but no match-vs-literal breakdown, probe counts, accepted lazy-step counts or match-length/distance histograms. Therefore actual average additional-match cost and the branches responsible for savings remain **UNKNOWN**. Net bytes saved per added token is not a causal per-match measurement.
+
+Two new hypotheses, frozen before measurements:
+
+1. `r4-parse-lazy4far`: `P_LAZY=5`, and prose lazy body requires `d > 2048`. Only length-4 far matches (negative current gain proxy) get an extra next-position lookup. The current match is retained if the next one is not better, including its existing backward fold. This is distinct from the second batch's main-match rejection.
+2. `r4-parse-lazy9-prefilter`: before entering the prose lazy body, compare the prefetched next candidate's first four bytes against the next input position. An obvious mismatch avoids the lazy head write and p+2 prefetch. This duplicates a necessary test from `probe_lazy` before those side effects; whether the compiler shares the input load is **UNKNOWN**. A skipped failed lazy step changes which interior match positions are recorded, so no token-equivalence claim is made.
+
+Both use general match properties and keep all non-prose lazy thresholds unchanged. They add no loop state or larger table. Fresh official extraction and gate remain necessary, especially for the prefilter's new `be8` call in the loop guard.
+
+**VERIFIED (source checks only):** `make-round4-parse.py --check` reconstructs all six lazy candidates. `--only` creates just the requested follow-ups; Git shows no content changes in the four candidates already running. New source hashes:
+
+- `r4-parse-lazy4far`: `e08199ffd476a41def075ada8fea028af4b9253306ae3d7e9b5a1ad771411e48`.
+- `r4-parse-lazy9-prefilter`: `943ac754b5fbdcc62cb78fa57df980dab60a00d353c47943289b39277fc915b8`.
+
+Both currently carry the same unmodified fast3 proof hash `e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04`; their build, proof and measured behavior are **UNKNOWN**.

@@ -41,6 +41,10 @@ jobs:
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round4.py
+      - name: Inspect token and coding-block costs without timing instrumentation
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/profile-round4-tokens.py
       - name: Screen public performance and inspect generated code
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"

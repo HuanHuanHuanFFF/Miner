@@ -37,17 +37,27 @@ def variants(source: str) -> dict[str, tuple[str, str]]:
                         }
                     } else {""")
     marginal = replace_once(body, """while go == 1 && l < lazy && p + 1 < lim {""", """while go == 1 && l < lazy && p + 1 < lim && (lazy != 9 || l < 6 || d > 1024) {""")
+    prefilter = replace_once(body, """while go == 1 && l < lazy && p + 1 < lim {""", """while go == 1 && l < lazy && p + 1 < lim && (lazy != 9 || ((pre_w ^ be8(input, p + 1)) >> 32) == 0) {""")
+    far4 = replace_once(source, "pub const P_LAZY: usize = 0;", "pub const P_LAZY: usize = 5;")
+    far_begin = far4.index("pub fn run1<const H:")
+    far_end = far4.index("pub fn r1_kind(", far_begin)
+    far_body = replace_once(far4[far_begin:far_end],
+        "while go == 1 && l < lazy && p + 1 < lim {",
+        "while go == 1 && l < lazy && p + 1 < lim && (lazy != 5 || d > 2048) {")
     return {
         "r4-parse-lazy6": (lazy6, "Prose P_LAZY 0 -> 6: the existing read-ahead loop only searches p+1 after lengths 4 or 5, and accepts by existing gain proxy."),
         "r4-parse-lazy9": (lazy9, "Prose P_LAZY 0 -> 9: existing read-ahead lazy search after lengths 4..8, providing the attribution control for the two restricted variants."),
         "r4-parse-lazy9-one": (lazy9[:begin] + single + lazy9[end:], "Prose P_LAZY 9 with at most one accepted lazy step for each main-loop match; structured-text and other lazy policies unchanged."),
         "r4-parse-lazy9-cost": (lazy9[:begin] + marginal + lazy9[end:], "Prose P_LAZY 9, but spend the extra lookup only for l < 6 or d > 1024; this is a declared proxy for marginal current matches, not an encoder cost claim."),
+        "r4-parse-lazy4far": (far4[:far_begin] + far_body + far4[far_end:], "Prose P_LAZY 5 plus distance > 2048: only a length-4 far match triggers existing lazy search. This isolates matches with negative current gain proxy without rejecting the main match."),
+        "r4-parse-lazy9-prefilter": (lazy9[:begin] + prefilter + lazy9[end:], "Prose P_LAZY 9, but enter the lazy body only when the prefetched next candidate shares the next position's first four bytes. This moves an existing necessary match test before the lazy head write and p+2 prefetch. Interior insertion order can change after a rejected prefilter; token equivalence is not assumed."),
     }
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--only", action="append", default=[], help="Generate/check only a named candidate; repeatable")
     args = ap.parse_args()
     base = {name: (BASE / name).read_bytes() for name in BASE_HASHES}
     for name, sha in BASE_HASHES.items():
@@ -55,7 +65,11 @@ def main() -> None:
     # Normalize only for exact edit anchors, then restore the source's line endings.
     newline = "\r\n" if b"\r\n" in base["parse.rs"] else "\n"
     source = base["parse.rs"].decode("utf-8").replace("\r\n", "\n")
-    for name, (text, mechanism) in variants(source).items():
+    choices = variants(source)
+    assert set(args.only) <= choices.keys(), "unknown --only candidate"
+    for name, (text, mechanism) in choices.items():
+        if args.only and name not in args.only:
+            continue
         data = text.replace("\n", newline).encode("utf-8")
         files = {"parse.rs": data, "Parse.lean": base["Parse.lean"]}
         assert all(len(content) <= 524288 for content in files.values())
