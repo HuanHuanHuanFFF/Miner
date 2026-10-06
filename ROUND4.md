@@ -5,6 +5,27 @@
 
 基线是上一轮已通过完整公共 gate 的 `r3-432-fast3`，源 SHA256 `bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef`，proof `e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04`。之前仅一台 runner 四块、有窄的校准前沿余量，不是正式 admission 或奖励证据。
 
+## 最终结果
+
+**新增压缩端候选 `r4-hybrid-h3r-smallc299`；速度端保留 `r3-432-fast3`。** 新组合满足用户提出的“公共结果乘 #427 系数后进入前沿”的筛选，并通过完整公共 gate，但还不能确认正式上榜或获得奖励。
+
+五小时窗口于 `23:44:59 UTC` 结束，之后没有新候选或新 CI。最后一项已启动的 O 验证于 `23:46:23 UTC` 完成，随后仅收集和核验回执。全轮 15 批含成功、候选拒绝及主动中止的实验，共测量 **56 个新候选版本、442 个公共 paired measurement 进程**；**13 次完整候选 gate 通过，覆盖 12 个不同版本**。失败及取消批次的有效测量保留，未将安装时的模板自检计作新候选 gate。
+
+| 候选/口径 | 时间轴 | 大小轴 | 快照 24830 的结论 |
+|---|---:|---:|---|
+| 新组合公共两块实测 | 7.403036 | 33.855552% | 公共成绩，不直接与正式榜比较 |
+| 新组合 × #427 系数 | 7.509661 | 34.093482% | **INFERRED**：几何前沿内，大小余量 0.008425 pp |
+| 新组合仅换用 #299 的大小系数 | 同上，作为敏感性比较 | 34.115192% | **INFERRED**：被支配，大小短缺 0.013285 pp |
+| fast3，15 runner 均值按同族 #432 校准 | 0.437767 | 36.991343% | **INFERRED**：几何前沿内，时间余量约 0.558% |
+
+新组合在小于 64 KiB、或原 #299 分类器识别为 DNA/零稀疏/高字节二进制的输入上用原 #299；其余用 H 的 mode3/i8 路径。三个组合所有公共文件/两个块的 token 和输出哈希均与实际采用的父引擎一致；小输入单独组合的大小与事前按父数据推算值完全一致。没有文件名、哈希或精确文件长度路由。
+
+**VERIFIED**：[O 的完整 CI](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37544346810) 重新提取后通过 `LZ77.Obligation`、三项公理白名单、公共 28 文件 gate 和八个固定生成输入的正反两块检查。至公理检查结束耗时 889.7 秒，这是整段验证耗时，不能误当作 statement 单步耗时；官方 900 秒单步限额保持原样。新候选 Rust 为 176422 字节、SHA256 `6814b45429d9dbbb66a94a2a18abca39bd23790756490e8acbb62e79306d18d9`；Lean 为 375553 字节、SHA256 `eec49d582853cddf843c33b950f444520561bbb40ef0197ee64ce9acfbb92791`。
+
+**VERIFIED / INFERRED 的边界**：fast3 对 #432 的同 runner 时间轴改善，15 台次均值全部为正向，等 runner 平均约快 0.820%；增加 1% 时间压力会失去几何位置。新组合尚只有一台 runner 的两个公共块，没有正式同族锚点。#299 大小系数只是一种敏感性比较；#432 对 H 的转移同样不是可靠校准。按 #427 可进入前沿，不能覆盖这些模型之间的分歧。
+
+快照 `24830` 的 `computed_at=2026-10-06T23:35:20.478745+00:00`，API 自报 freshness unknown；完整分页及官方权重重算见 `frontier-24830/`。新 #443 改变中间速度区，快端和这里使用的深压缩门槛未变。条件几何权重不是实际支付份额。本轮未进行新的正式竞赛提交、钱包或资金操作。
+
 ## 本轮入口和证据边界
 
 `scripts/round4.py` 分为 preflight / screen / refine / gate。每个 source/proof pair 在安装工具链前检查哈希，官方源码与 pins 保持原样。公共测量仍为 paired incumbent、28 文件、1 warmup + 11 measured，并按文件等权的中位总压缩时间比计算。
@@ -33,7 +54,7 @@ CPU 候选另做有限 token/decode 等价检查；它不是全输入等价证�
 | L | 37539732787 | edf8897 | failure；20 个测量有效；EOB 修正输出略差，statement 在新增数组写回后的状态展开处失败；停止该支线 |
 | M | 37541614789 | 0f157bd | success；16 个测量；mode3/i8 大小最优且完整 gate、生成输入通过；校准后仍差 0.004603 pp |
 | N | 37542714311 | 4e22f24 | research workflow success；10 个测量，RMQ 444 个用例等价，但时间轴恶化约 133.55%；旧证明 NOT_ADAPTED，没有候选 gate，通过 job 不代表 proof 通过 |
-| O | 37544346810 | 5d8fa14 | 最后三个通用 S/H 组合；小输入阈值与原 #299 内容分类复用，等待性能和选中的完整 gate |
+| O | 37544346810 | 5d8fa14 | success；18 个测量，三组合都通过公共 round trip；h3r-smallc299 完整 gate 与附加生成输入通过 |
 
 各批输入与 SHA 在 `evidence/round4/batch-*.json`，阶段回执保存到 `evidence/round4/<run-id>/<phase>/`。artifact 的原始 state 不覆盖改写，派生分析另存。
 
@@ -89,6 +110,8 @@ CPU 候选另做有限 token/decode 等价检查；它不是全输入等价证�
 
 `scripts/summarize-round4.py` 每台 runner 只取最新完整回执，核对原始测量、源码和 gate 输入哈希，记录上传阶段与实际完成阶段、CI 结论及 CPU 型号。`scripts/select-round4.py --snapshot <pareto-pages.json>` 用同一份官方快照复算两种校准、余量和条件几何权重；详细结果在 `evidence/round4/selection.json`。原始数据保留在各 run 的最终回执目录，未用重复的 screen/refine 把样本数放大。
 
-完整结果以精确哈希对应的回执为准；候选 manifest 的状态是生成时快照。RMQ 仍需要实际 Rust 结果及全新证明；所有候选的私有 stage2、正式 admission、实际排名与奖励均 **UNKNOWN**。本轮未进行新的正式竞赛提交、钱包或付款操作。
+完整结果以精确哈希对应的回执为准；候选 manifest 的状态是生成时快照。RMQ 已取得实际 Rust 等价/性能结果，因明显退化停止且没有迁移证明；CPU wrap-v2 也未作新 gate。所有候选的私有 stage2、正式 admission、实际排名与奖励均 **UNKNOWN**。本轮未进行新的正式竞赛提交、钱包或付款操作。
+
+最终复核入口是 `python scripts/verify-round4-receipts.py --git-index`：检查冻结回执哈希及 Git 暂存字节，重算每文件中位总时间、检查跨 runner 输出一致性，并将通过的 gate 绑定到实际输入源码/证明和公理记录。核验不会重写原始回执，结果在 `final-verification.json`。`receipt-manifest.json` 保存每台 runner 最终回执的逐文件 SHA256。
 
 回执下载中有一次可恢复超时，最终 gate 回执已覆盖同一批完整测量。早期 Python 临时目录在两个旧回执上建立了受保护 ACL；递归恢复继承的请求被自动审批拒绝，因此没有改动权限。后续下载改为继承工作区权限的新目录，旧回执通过获准的只读访问核验。该问题没有改变 CI 或测量数据。

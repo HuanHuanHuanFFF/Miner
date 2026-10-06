@@ -84,3 +84,8 @@ Hash audit of the older and J/K proof-gate evidence:
 The 12-runner selection report was computed against snapshot 24650. The final snapshot 24737 comparison shows no frontier membership or metric changes from 24650, so its stated geometric coordinates remain applicable to this refresh. Its gate and private-corpus limitations still apply.
 
 The central selection.json is regenerated as later receipts arrive. Its current runner count supersedes the historical 12-runner numerical example above; that example remains tied to its stated timestamp.
+
+
+## Final refresh at 23:35 UTC
+
+Snapshot 24830 (computed_at 2026-10-06T23:35:20.478745+00:00) has 444 Pareto items, 419 leaderboard rows and 72 frontier points. Newly admitted #443 (1.213514, 34.195086) replaces #351 in the middle-speed region; #444 is still running with no metrics. The fast and time>=3 boundaries used above remain unchanged. Fifteen snapshot-file hashes and the official scorer replay were verified. The current central selection report includes M/N/O public measurements: 15 runs and 56 new candidate versions; the historical examples above keep their original scope.

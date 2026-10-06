@@ -348,3 +348,14 @@ Each candidate contains `composition-audit.json` with both parent hashes, confli
 **INFERRED:** parent measurements suggest that the small-input route can recover the tiny-input size disadvantage and that original C specializes usefully on DNA/zero-rich/high-byte binary inputs. Adding the two engines changes extraction/compilation workload and binary layout. The roughly 375.5KB combined proof may take substantially longer than the 95KB H core; only a new gate can establish completion within 900 seconds. Parent-coordinate arithmetic is a screening hypothesis, and the hybrids have no reliable formal same-family anchor.
 
 **UNKNOWN:** new Rust compilation, exact extracted entry shape, final dispatcher proof/axiom checks, elaboration runtime, public paired time/size, private stage2, admission and rewards. These are the final three requested hybrids; no additional direction or candidate is generated.
+
+## Completed M/N outcomes, verified 23:07 UTC
+
+M (`37541614789/gate/`) completed 16 paired public measurement processes. Mode3/i8 scored (6.942604, 33.868489%) and passed a fresh full official gate, axiom whitelist and eight fixed generated inputs in both orders. Verification through axioms took 157.5 seconds. Its fixed-427 size projection is 34.106509949%, still 0.004602849 pp above the current slow frontier at that time coordinate. Mode2/i8 scored (6.402373, 33.870505%); it was measured but not selected for a fresh gate.
+
+N (`37542714311/gate/`) compiled the final RMQ source and completed 444 finite token/decode checks against original public299, with zero differing or failed cases. Both public blocks also produced identical tokens and DEFLATE output. However, public time axes were 22.119259 / 22.067124 versus original299's 9.474225 / 9.445378: relative regressions 133.4678% / 133.6288%, mean 133.5483%. This implementation is stopped. Its copied proof remains NOT_ADAPTED; no candidate Lean gate was run, and workflow success only reflects the explicitly restricted research checks. The earlier Python/static audit is superseded by these actual Rust observations for the tested finite inputs, not by an all-input equivalence claim.
+
+
+## Final hybrid verification
+
+O completed successfully at 2026-10-06T23:46:23Z after the fixed research window; no new experiment was launched after the window. The selected h3r-smallc299 source/proof pair passed fresh extraction, LZ77.Obligation, the three allowed axioms, full public gate and eight generated inputs in both orders. Through-axiom verification took 889.7 seconds in total; this is not a statement-only duration. Public axes are 7.403035728639496 and 33.85555195726892%. Fixed427 projects to 7.509660847163516 / 34.093481955464476 (snapshot24830 geometric frontier); substituting only the299 size factor gives34.11519168590491, which is dominated at that time. Full gate acceptance and this calibration disagreement are both retained. Neither private admission nor payment was observed.

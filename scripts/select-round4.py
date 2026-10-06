@@ -52,6 +52,7 @@ def main():
         time_limit = min((p.time_s for p in front if p.ratio_pct <= y), default=10)
         return {'time': x, 'size_pct': y, 'on_geometric_frontier': on_front,
                 'dominating_ids': dominators, 'size_gap_pp': max(0, y - size_limit),
+                'existing_size_envelope_at_time': size_limit,
                 'time_margin_pct': 100 * (time_limit / x - 1),
                 'conditional_geometry_weight': conditional_weight}
 
@@ -86,6 +87,8 @@ def main():
                   'anchor_time_change_pct_runner_range': [min(r['mean_delta_pct_vs_anchor'] for r in runners), max(r['mean_delta_pct_vs_anchor'] for r in runners)],
                   'runner_geometry_pass_count': sum(geometry(tx, ay)['on_geometric_frontier'] for tx in txs),
                   'fixed_427': geometry(x * TIME_FACTOR, y * SIZE_FACTOR),
+                  'slowest_public_block_fixed427_plus_1pct': geometry(
+                      max(t for r in runners for t in r['public_time_blocks']) * TIME_FACTOR * 1.01, y * SIZE_FACTOR),
                   'matched_anchor': geometry(statistics.mean(txs), ay),
                   'slowest_observed_anchor_block_plus_1pct': geometry(stress_x, ay),
                   'accepted_gate_runs': [r['run'] for r in runners if r['accepted_public_gate'] is True]}
@@ -118,10 +121,16 @@ def main():
     measured_new = [c for c in results if c['candidate'].startswith('r4-')]
     research_front = [c['candidate'] for c in measured_new if c['accepted_gate_runs'] and
                       c['matched_anchor']['on_geometric_frontier'] and c['fixed_427']['on_geometric_frontier']]
+    fixed_front = [c['candidate'] for c in measured_new if c['accepted_gate_runs'] and c['fixed_427']['on_geometric_frontier']]
+    compression = [c for c in measured_new if c['candidate'].startswith(('r4-parse-h', 'r4-hybrid-')) and
+                   c['candidate'] in fixed_front]
+    compression_name = min(compression, key=lambda c: (c['public_size_pct'], c['public_time_equal_runner_mean']))['candidate'] if compression else None
     report = {'checked_at_utc': datetime.now(timezone.utc).isoformat(),
               'research_window': ['2026-10-06T18:44:59Z', '2026-10-06T23:44:59Z'],
               'status': 'RESEARCH_EVIDENCE_ONLY; FORMAL_ADMISSION_AND_REWARD_UNKNOWN',
               'selected_baseline': 'r3-432-fast3', 'new_gated_candidates_passing_both_geometry_hypotheses': research_front,
+              'new_gated_candidates_passing_fixed427_geometry': fixed_front,
+              'compression_candidate_for_further_formal_evaluation': compression_name,
               'selection_warning': 'Geometry alone is insufficient. H has no formal-family anchor. Small CPU gains failed independent reproduction; selection requires reading the accompanying evidence.',
               'snapshot': context, 'snapshot_path': snapshot.relative_to(ROOT).as_posix(), 'snapshot_sha256': sha(snapshot),
               'official_weight_replay_max_error': score_error,

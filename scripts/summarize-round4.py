@@ -67,6 +67,7 @@ def main():
             anchor = entry.get('anchor', 'public432')
             anchor_deltas = [100 * (by[name, b]['time'] / by[anchor, b]['time'] - 1) for b in blocks]
             record['runners'].append({**provenance, 'blocks': blocks, 'public_time': row['time'],
+                                     'public_time_blocks': [by[name, b]['time'] for b in blocks],
                                      'public_size_pct': row['size_pct'], 'delta_pct_vs_fast3': deltas,
                                      'mean_delta_pct_vs_fast3': statistics.mean(deltas),
                                      'own_anchor': row['own_anchor'], 'fixed_427': row['fixed_427'],

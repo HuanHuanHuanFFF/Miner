@@ -1,6 +1,6 @@
 """Compose original public299 with frozen H cores using general input features.
 
-Only writes candidates/r4-hybrid-h16-small299/. Engine declarations and
+Only writes the three named candidates/r4-hybrid-* directories. Engine declarations and
 constants are copied exactly, except public299 parse is renamed s_parse and
 the H-only parse wrapper is removed. No toolchain or CI execution.
 """
