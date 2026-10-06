@@ -36,3 +36,9 @@ INIT_STATE 保留初始化时的历史观察；本文件记录此后采用的环
 证据：[run 元数据](evidence/ci/37353587399.json)、[完整 gate 日志](evidence/ci/37353587399-baseline.log)、[基线 JSON](evidence/ci/37353587399-baseline.json)、[版本/输入哈希](evidence/ci/37353587399-provenance.txt)。JSON 中的字节总量、总秒数和 slowdown 是该机器上的绝对 telemetry，不能当作官网的 balanced 两轴评分。
 
 首轮[CI 37351619154](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37351619154) 在只读依赖缓存中补建 `AeneasMeta.Utils` 时返回 VALIDATOR ERROR。固定 Aeneas 的 `lakefile.lean` 根据 `CI` 是否存在决定模块预编译；官方 verifier 的环境白名单不保留 `CI`。CI 准备脚本移除这个变量后，同一份模板的原始验证通过。未改 parser、证明、官方 gate 或其只读权限。[首轮失败日志](evidence/ci/37351619154-failure.log)
+
+## 第二轮开始时的环境变化
+
+**VERIFIED**：2026-10-06 第二轮提交 `76af598a166524be0c460916673094c04742973d` 的 [CI 37447313800](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37447313800) 被仓库可见性条件跳过。即时 GitHub 元数据为 `isPrivate=true`；此前“公开仓库标准 runner 免费”的观察不能继续当作现状。本轮不改变仓库可见性。
+
+第二轮入口见 [ROUND2](ROUND2.md)。自动 push 对私有仓库仍跳过；经用户明确授权的手动运行使用 `allow_private` 参数，默认 false。用户已在本轮明确回复“允许运行私有 CI，继续实测”。私有运行可能消耗套餐内分钟额度或产生超额费用；仅使用标准 ubuntu-24.04 runner，不缓存/上传大型 artifact。

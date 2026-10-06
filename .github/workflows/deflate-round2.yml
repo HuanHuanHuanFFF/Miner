@@ -2,6 +2,12 @@ name: DEFLATE round 2
 
 on:
   workflow_dispatch:
+    inputs:
+      allow_private:
+        description: 'Explicitly authorize this manual run to consume private-repository Actions minutes'
+        required: true
+        type: boolean
+        default: false
   push:
     branches: [codex/deflate-round2]
     paths:
@@ -18,7 +24,7 @@ concurrency:
 
 jobs:
   experiment:
-    if: github.event.repository.private == false
+    if: github.event.repository.private == false || (github.event_name == 'workflow_dispatch' && inputs.allow_private == true)
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     steps:
