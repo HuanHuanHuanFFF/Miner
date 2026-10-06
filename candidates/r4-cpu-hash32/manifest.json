@@ -1,0 +1,41 @@
+{
+  "candidate": "r4-cpu-hash32",
+  "base_candidate": "r3-432-fast3",
+  "base_path": "candidates/r3-432-fast3",
+  "base_submission_id": "432",
+  "base_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "change": {
+    "constants": {},
+    "inline_attributes": {},
+    "source_edits": [
+      "hash32"
+    ]
+  },
+  "mechanism": "Use a 32-bit immediate multiplicative hash in regular run1's slot_of_m instead of its 64-bit multiplicative high-bit hash; table cardinality, content dispatch and search policy are fixed.",
+  "expected_token_equivalence": "NOT_EXPECTED: bucket collisions and retained candidates change. Actual token/output changes and paired compression cost must be measured independently.",
+  "expected_equivalent": false,
+  "actual_token_equivalence": "UNKNOWN: no execution or corpus token comparison in this generator",
+  "proof": {
+    "mode": "Byte-for-byte copied from the baseline; new official extraction, Lean obligation, and axiom audit required",
+    "sha256": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04",
+    "fresh_gate": "UNKNOWN"
+  },
+  "diagnostic": "Base assembly keeps a 64-bit golden-ratio constant in a register and uses imul plus a 49-bit shift per slot. A 32-bit imul immediate can reduce instruction/register cost; collision quality and total speed are UNKNOWN. Original slot_of for run1t and insert for the chain engine are retained controls.",
+  "hashes": {
+    "parse.rs": "12ec6bf664aa3a20052b197f8db0e324c39f241fd1a5749d18cda233dc451f40",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "attribution": {
+    "source": "Officially published submission 432, then r3-432-fast3 constants",
+    "reference": "references/round3-public-432/PROVENANCE.md",
+    "public_miner_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "named_author": "UNKNOWN: official snapshot/source exposes no name",
+    "ownership": "Derivative of external public miner code; not an independent parser algorithm"
+  },
+  "scope": "Research candidate only; total paired compression, round trip, token hashes, fresh public gate, independent-runner reproduction, private stage2 and official admission are separate checks",
+  "cpu_gain": "UNKNOWN",
+  "formal_submission_sent": false
+}

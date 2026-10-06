@@ -125,3 +125,46 @@ Both are **INFERRED token-preserving experiments**. **UNKNOWN**: Rust compilatio
 | `r4-cpu-classoutline` | `36697422c014c5a140a0953311509dd510b9ce3e6e0f4106231418fe8193c572` | `41afa5a114f50a7fe1b8d0a3d5dc98408f1f989b8925734b7eb00f8a04aaf781` |
 
 Assembly receipts are capped at two million characters and marked truncated in their metadata. The parser functions and addresses cited above appear completely before that cutoff; no claim is made about the omitted library assembly. The fast3 library hash for this code-generation receipt is `e3c97b3aef581e8e4a6e0f848cdd79427cdc9aa441d32c3110b73cc0508d3566`; the runner reports AMD EPYC 7763 and the pinned nightly `rustc 1.100.0-nightly (8fa1c96cf 2026-08-17)`.
+
+## Token-profile format repair
+
+**VERIFIED failure**: C run `37520076712` generated no valid token profiles (`files=[]`). All three selected harness compilations returned 1 with `invalid format string: unmatched '}'`: the block println ended its final `{:?}` placeholder with only one additional closing brace, rather than the pair needed for a literal JSON `}`. This affected optional diagnostics only; C's official performance measurement continued. D had already started with the same diagnostic script, so its profiles must also be treated as unavailable if the same compile failure is returned.
+
+The script fixes that single format character and adds a lightweight generated-format guard. **VERIFIED local checks**: Python syntax passes; generating the harness as text checks all four ordinary `println!`/`format!` literals; removing the repaired brace reproduces a guard rejection. No Rust compiler is run locally. Repaired script SHA256 is `4f2e9f1dd2f3edd0d92976df49b13462fc6e2ce501d24321a56c8cbd04e71bb9`. **UNKNOWN**: actual Rust recompile and token-profile results in the next CI. Empty C profile files are not evidence about token distributions or costs.
+
+## B refinement and next general mechanisms
+
+Read `evidence/round4/37517466397/refine/analysis.json` and its raw per-file JSONL. **VERIFIED**: exact `flush` has about -0.058% mean total-axis change over four blocks; `endreload` about +0.114%. No useful general speed gain is established. Raw parser medians for `flush` on `bundle.min.js.txt` are consistently slower by +2.39%/+2.51%/+2.54%/+2.59%, despite the last block's total median decreasing by 2.61%; its encoder median in that block decreases by 4.03%. `endreload` helps raw parser medians on `binary.db.bin` (-3.66%/-3.74%/-3.99%/-5.24%) and `machine-code.bin` (-2.23%/-3.10%/-2.30%/-2.61%) but hurts `bundle.min.js.txt` (+3.08%/+3.38%/+2.44%/+3.23%). These raw process-to-process component deltas are diagnostics, not the official normalized two-axis computation. They do not justify combining or broadening the losing ablations.
+
+The next match-emission mechanism is supported by actual fast3 assembly from the same B receipt: `11705-1172d` repeats `p<n`, `l<=n-p`, `3<=l<=258`, `1<=d<=32768`, and `d<=p` tests after search/backward folding; packing then starts at `11738`, with the store at `1174a`. The existing `put_match_spec` already requires `hm : MatchAt`, which contains all those facts and byte-match evidence. All its original higher-level call-site proofs remain in the candidate; a fresh all-path Lean obligation is required to verify those callers after changing emission, irrespective of public token identity.
+
+`r4-cpu-directemit` replaces repeated fallback tests with `pack_match(d,l)` and safe indexed output plus count/position advance. Packing is `(d as u32).wrapping_mul(256).wrapping_add(l as u32).wrapping_add(16776957)`, equal to the contract's `16777216+(d-1)*256+(l-3)` on every legal length/distance. Maximum legal token is 25165823, so all these u32 intermediates fit. The proof adds two wrapping-u32 arithmetic specifications and `pack_match_spec`; `put_match_spec` and every main-loop caller continue to use `MatchAt`. Internal invalid-argument helper behavior changes, so the claim is about obligation-valid `parse` calls, not arbitrary direct calls to `put_match`. **UNKNOWN**: extraction shapes and tactic acceptance; repair must use the full new extraction/Lean log.
+
+`r4-cpu-hash32` is a separate token-changing experiment: only regular `slot_of_m` changes from a 64-bit high-bit multiplicative hash to `k.wrapping_mul(0x9E37_79B9) >> (32-HB)`. Cardinality and dispatch stay fixed. The emitted old hash uses a 64-bit multiplier register, 64-bit `imul`, and high-bit shift; an immediate 32-bit multiply may lower register/instruction cost. It changes collisions and retained candidates, so `expected_equivalent=false` explicitly. The original `slot_of`/`insert` code used by small-text and chain routes remains as a control. Correctness still requires actual matches and bounded slot positions; the exact old proof is copied with fresh extraction status UNKNOWN.
+
+| New candidate | Source SHA256 | Proof SHA256 | Expected token identity |
+| --- | --- | --- | --- |
+| `r4-cpu-directemit` | `023d3866d4ea46eac0a5837646484d6388f3c40d1af5f57f626d67d47d73e863` | `a420b275e7adee36074d4fb7393db811baa964d8243542a16e072e6512948537` | INFERRED under the parse obligation; actual UNKNOWN |
+| `r4-cpu-hash32` | `12ec6bf664aa3a20052b197f8db0e324c39f241fd1a5749d18cda233dc451f40` | `e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04` | NOT_EXPECTED; actual changes UNKNOWN |
+
+Fresh generator `--check` reproduces all fifteen candidates and Python syntax passes. New outputs were generated with `--only`; prior thirteen bytes stay frozen. No performance result is claimed. No CI/commit/push/submission or wallet action was performed by this worker.
+
+Minimum falsifiable next experiment: use fast3 and public432 in matched order blocks, plus the existing duplicate-fast3 negative control if available. For directemit, require public and boundary/generated token-prefix and DEFLATE hashes equal to fast3, independent byte validation, and emission assembly showing the repeated bounds/fallback branches removed. A useful signal then needs new extraction, Lean, axiom checks and complete gate before an independent runner replication. For hash32, do not assert equivalence; report per-file token/output changes, round trip and both compression axes, and check that the new immediate multiply actually replaces the original register multiply. If the total-axis gain does not approach 1% across matched blocks or a size loss moves the point behind fast3 after same-family calibration, stop the line. The roughly 7.4% parser reduction needed for a 1% fixed-token total-axis gain is a historical sensitivity, not a guarantee for these new candidates.
+
+### Direct-emission call-site audit
+
+There are exactly five source call sites for `put_match`, apart from its declaration. Their original proof contracts are retained:
+
+| Source engine/call | Formal source of the required real match |
+| --- | --- |
+| `run` after search/lazy and `fold_w` | `find_spec` + `FoundAt.real`, lazy invariant, `fold_w_spec`; `main_loop_spec` carries Dec/MatchAt |
+| `run_st` after `st_find` | `st_find_spec` returns FoundAt; `st_loop_spec` explicitly derives `FoundAt.real` in the taken-match branch |
+| `run_dna` after `dn_find` | `dn_find_spec` and `dn_loop_spec` derive `FoundAt.real`; proof is retained even though current `DN_ON=0` |
+| `e_pieces` for a permitted length piece | `LensBound`, remaining-match bytes and `MatchAt.piece`; `e_pieces_loop0_spec` derives a new MatchAt for every emitted piece |
+| `run1` after `fold_w` | `probe_m_spec` + `FoundAt.real`, lazy invariant and backward-fold MatchAt; `main1_loop_spec` carries the current Dec state |
+
+`run1t` and `run_z` use `e_pieces`, whose per-piece proof supplies the same precondition. The dormant planner emitter checks bytes separately and does not call `put_match`.
+
+`Dec` gives `nt≤p` and `input.length≤out.length`; `MatchAt` gives `l≥3` and `p+l≤input.length`. Therefore `nt<out.length`, `nt+1≤usize::MAX`, and `p+l≤usize::MAX`. The candidate's `put_match_spec` now explicitly extracts these Dec bounds and the slice-length maximum before its steps, rather than relying on their discovery. No runtime check is substituted for missing match evidence, and no new axiom/assumption is added to the obligation. This is a source/proof dependency audit; the new all-call-site theorem acceptance remains UNKNOWN until actual extraction and Lean succeed. Public token identity alone cannot settle it.
+
+Neither new candidate changes a main-loop acceptance condition or introduces another nested search loop. This avoids the particular B extraction failure reported by the parent (complex acceptance OR cloned the nested lazy loop), but does not prove the next extraction will succeed.

@@ -1,0 +1,46 @@
+{
+  "candidate": "r4-cpu-directemit",
+  "base_candidate": "r3-432-fast3",
+  "base_path": "candidates/r3-432-fast3",
+  "base_submission_id": "432",
+  "base_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "change": {
+    "constants": {},
+    "inline_attributes": {},
+    "source_edits": [
+      "directemit"
+    ],
+    "proof_edits": [
+      "directemit_helpers",
+      "directemit_bounds",
+      "directemit_comment"
+    ]
+  },
+  "mechanism": "Directly emit the canonical packed match token under the existing proven MatchAt precondition, deleting put_match's repeated runtime range/fallback tests. Safe out indexing and position/count advances remain.",
+  "expected_token_equivalence": "INFERRED for parse inputs satisfying the obligation: every put_match call is specified with a real in-range MatchAt. The invalid-argument behavior of this internal helper changes; no all-input theorem is claimed before fresh Lean acceptance.",
+  "expected_equivalent": true,
+  "actual_token_equivalence": "UNKNOWN: no execution or corpus token comparison in this generator",
+  "proof": {
+    "mode": "Baseline MatchAt call-site proofs plus wrapping-u32 packing specs; new extraction/Lean must validate every input path, not just the public corpus",
+    "sha256": "a420b275e7adee36074d4fb7393db811baa964d8243542a16e072e6512948537",
+    "fresh_gate": "UNKNOWN"
+  },
+  "diagnostic": "Base assembly at 11705-1172d repeats output-position, length and distance bounds before packing at 11738-1174a. Check that these branches disappear; then require exact public/synthetic tokens and round trip, paired total time, and all-call-site fresh gate.",
+  "hashes": {
+    "parse.rs": "023d3866d4ea46eac0a5837646484d6388f3c40d1af5f57f626d67d47d73e863",
+    "Parse.lean": "a420b275e7adee36074d4fb7393db811baa964d8243542a16e072e6512948537"
+  },
+  "attribution": {
+    "source": "Officially published submission 432, then r3-432-fast3 constants",
+    "reference": "references/round3-public-432/PROVENANCE.md",
+    "public_miner_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "named_author": "UNKNOWN: official snapshot/source exposes no name",
+    "ownership": "Derivative of external public miner code; not an independent parser algorithm"
+  },
+  "scope": "Research candidate only; total paired compression, round trip, token hashes, fresh public gate, independent-runner reproduction, private stage2 and official admission are separate checks",
+  "cpu_gain": "UNKNOWN",
+  "formal_submission_sent": false
+}

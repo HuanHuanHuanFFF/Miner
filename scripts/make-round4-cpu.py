@@ -122,6 +122,26 @@ VARIANTS = {
         "expected_token_equivalence": "INFERRED: wrappers call the same run1 instantiations with byte-identical constants. Other dispatch routes and all parser bodies remain unchanged.",
         "diagnostic": "Actual run1ni assembly loses per-class constant specialization: HN loads km/lazy from stack and uses runtime skip shifts, while common public text parser times rise 25-43%. This candidate keeps class constants visible while testing outline code footprint; new emitted assembly must confirm specialization.",
     },
+    "r4-cpu-directemit": {
+        "constant_changes": {},
+        "attributes": {},
+        "source_edits": ["directemit"],
+        "proof_edits": ["directemit_helpers", "directemit_bounds", "directemit_comment"],
+        "proof_mode": "Baseline MatchAt call-site proofs plus wrapping-u32 packing specs; new extraction/Lean must validate every input path, not just the public corpus",
+        "expected_equivalent": True,
+        "mechanism": "Directly emit the canonical packed match token under the existing proven MatchAt precondition, deleting put_match's repeated runtime range/fallback tests. Safe out indexing and position/count advances remain.",
+        "expected_token_equivalence": "INFERRED for parse inputs satisfying the obligation: every put_match call is specified with a real in-range MatchAt. The invalid-argument behavior of this internal helper changes; no all-input theorem is claimed before fresh Lean acceptance.",
+        "diagnostic": "Base assembly at 11705-1172d repeats output-position, length and distance bounds before packing at 11738-1174a. Check that these branches disappear; then require exact public/synthetic tokens and round trip, paired total time, and all-call-site fresh gate.",
+    },
+    "r4-cpu-hash32": {
+        "constant_changes": {},
+        "attributes": {},
+        "source_edits": ["hash32"],
+        "expected_equivalent": False,
+        "mechanism": "Use a 32-bit immediate multiplicative hash in regular run1's slot_of_m instead of its 64-bit multiplicative high-bit hash; table cardinality, content dispatch and search policy are fixed.",
+        "expected_token_equivalence": "NOT_EXPECTED: bucket collisions and retained candidates change. Actual token/output changes and paired compression cost must be measured independently.",
+        "diagnostic": "Base assembly keeps a 64-bit golden-ratio constant in a register and uses imul plus a 49-bit shift per slot. A 32-bit imul immediate can reduce instruction/register cost; collision quality and total speed are UNKNOWN. Original slot_of for run1t and insert for the chain engine are retained controls.",
+    },
 }
 
 SOURCE_EDITS = {
@@ -191,6 +211,41 @@ SOURCE_EDITS = {
     "classoutline_text_hs": ("run1::<HS>(input, out, T_SKIP, T_LAZY, SKCAP, 4294967295)", "run1_text::<HS>(input, out)"),
     "classoutline_prose_hn": ("run1::<HN>(input, out, P_SKIP, P_LAZY, SKCAP, P_KM)", "run1_prose::<HN>(input, out)"),
     "classoutline_prose_hs": ("run1::<HS>(input, out, P_SKIP, P_LAZY, SKCAP, P_KM)", "run1_prose::<HS>(input, out)"),
+    "directemit": (
+        "/// Emit a match (re-checked when VERIFY = 1), else a literal. Returns (tokens, next position).\n"
+        "#[inline(always)]\n"
+        "pub fn put_match(s: &[u8], out: &mut [u32], nt: usize, p: usize, d: usize, l: usize) -> (usize, usize) {\n"
+        "    let n = s.len();\n"
+        "    if d >= 1 && d <= 32768 && d <= p && l >= 3 && l <= 258 && p < n && l <= n - p && (VERIFY == 0 || same(s, p - d, p, l) == 1) {\n"
+        "        out[nt] = 16777216u32 + ((d - 1) as u32) * 256 + ((l - 3) as u32);\n"
+        "        (nt + 1, p + l)\n"
+        "    } else {\n"
+        "        out[nt] = s[p] as u32;\n"
+        "        (nt + 1, p + 1)\n"
+        "    }\n"
+        "}",
+        "/// Canonical match packing; its caller proves 1<=d<=32768 and 3<=l<=258.\n"
+        "#[inline(always)]\n"
+        "pub fn pack_match(d: usize, l: usize) -> u32 {\n"
+        "    (d as u32).wrapping_mul(256).wrapping_add(l as u32).wrapping_add(16776957)\n"
+        "}\n\n"
+        "/// Emit under the proven MatchAt precondition; no repeated fallback range tests.\n"
+        "#[inline(always)]\n"
+        "pub fn put_match(s: &[u8], out: &mut [u32], nt: usize, p: usize, d: usize, l: usize) -> (usize, usize) {\n"
+        "    out[nt] = pack_match(d, l);\n"
+        "    (nt + 1, p + l)\n"
+        "}",
+    ),
+    "hash32": (
+        "pub fn slot_of_m<const H: usize>(s: &[u8], i: usize, km: u32) -> usize {\n"
+        "    let k = (be4(s, i) & km) as u64;\n"
+        "    (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - HB)) as usize % H\n"
+        "}",
+        "pub fn slot_of_m<const H: usize>(s: &[u8], i: usize, km: u32) -> usize {\n"
+        "    let k = be4(s, i) & km;\n"
+        "    (k.wrapping_mul(0x9E37_79B9) >> (32 - HB)) as usize % H\n"
+        "}",
+    ),
 }
 
 PROOF_EDITS = {
@@ -237,6 +292,51 @@ PROOF_EDITS = {
         "      | exact run1_text_spec _ input out hlen (by simp)\n"
         "      | exact run1_prose_spec _ input out hlen (by simp)\n"
         "      | exact run1_spec _ input out _ _ _ _ hlen (by simp) (by simp)",
+    ),
+    "directemit_helpers": (
+        "/-- With `VERIFY = 0` and a real match, `put_match` writes the match token. -/",
+        "/-- Wrapping u32 addition is ordinary addition when its inputs fit. -/\n"
+        "@[local step]\n"
+        "theorem cpu_wadd_u32_spec (x y : Std.U32) :\n"
+        "    lift (core.num.U32.wrapping_add x y) ⦃ fun z => z = core.num.U32.wrapping_add x y ∧\n"
+        "      (x.val + y.val ≤ U32.max → z.val = x.val + y.val) ⦄ := by\n"
+        "  simp only [lift, Std.WP.spec_ok, true_and]\n"
+        "  intro h\n"
+        "  rw [core.num.U32.wrapping_add_val_eq]\n"
+        "  apply Nat.mod_eq_of_lt\n"
+        "  scalar_tac\n\n"
+        "/-- Wrapping u32 multiplication is ordinary multiplication when its inputs fit. -/\n"
+        "@[local step]\n"
+        "theorem cpu_wmul_u32_spec (x y : Std.U32) :\n"
+        "    lift (core.num.U32.wrapping_mul x y) ⦃ fun z => z = core.num.U32.wrapping_mul x y ∧\n"
+        "      (x.val * y.val ≤ U32.max → z.val = x.val * y.val) ⦄ := by\n"
+        "  simp only [lift, Std.WP.spec_ok, true_and]\n"
+        "  intro h\n"
+        "  rw [core.num.U32.wrapping_mul_val_eq]\n"
+        "  apply Nat.mod_eq_of_lt\n"
+        "  scalar_tac\n\n"
+        "/-- Direct packing equals the contract's match token on every legal match. -/\n"
+        "@[local step]\n"
+        "theorem pack_match_spec (d l : Std.Usize) (hd1 : 1 ≤ d.val) (hd32 : d.val ≤ 32768)\n"
+        "    (hl3 : 3 ≤ l.val) (hl258 : l.val ≤ 258) :\n"
+        "    slot.pack_match d l ⦃ fun r => r.val = LZ77.mkMatch d.val l.val ⦄ := by\n"
+        "  rw [slot.pack_match]\n"
+        "  step*\n"
+        "  simp only [LZ77.mkMatch, LZ77.MATCH_BASE]\n"
+        "  scalar_tac\n\n"
+        "/-- With a real MatchAt, direct put_match writes the canonical match token. -/",
+    ),
+    "directemit_comment": (
+        "  -- only the `VERIFY = 0`, all-checks-pass branch is left: the others contradict `MatchAt`",
+        "  -- MatchAt supplies all bounds; pack_match_spec supplies the canonical token value.",
+    ),
+    "directemit_bounds": (
+        "  rw [slot.put_match]\n  have hm' := hm",
+        "  rw [slot.put_match]\n"
+        "  have hmax : s.length ≤ Std.Usize.max := Std.Slice.length_ineq s\n"
+        "  have hdec' := hdec\n"
+        "  obtain ⟨hp_bound, hnt_bound, hout_bound, _⟩ := hdec'\n"
+        "  have hm' := hm",
     ),
 }
 
@@ -298,6 +398,7 @@ def build(base, name, spec):
         },
         "mechanism": spec["mechanism"],
         "expected_token_equivalence": spec["expected_token_equivalence"],
+        **({"expected_equivalent": spec["expected_equivalent"]} if "expected_equivalent" in spec else {}),
         "actual_token_equivalence": "UNKNOWN: no execution or corpus token comparison in this generator",
         "proof": {
             "mode": spec.get("proof_mode", "Baseline proof plus a local-step helper lemma; new official extraction, Lean obligation, and axiom audit required"
