@@ -1,0 +1,43 @@
+{
+  "candidate": "r4-cpu-flushzero",
+  "base_candidate": "r3-432-fast3",
+  "base_path": "candidates/r3-432-fast3",
+  "base_submission_id": "432",
+  "base_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "change": {
+    "constants": {},
+    "inline_attributes": {},
+    "source_edits": [
+      "flushzero"
+    ],
+    "proof_edits": [
+      "flushzero"
+    ]
+  },
+  "mechanism": "Return immediately when flush4 has zero pending literals, preserving its existing four-literal SIMD-friendly path for nonempty short runs.",
+  "expected_token_equivalence": "INFERRED for the counted prefix: the removed four speculative writes occur beyond nt when from==to; counted tokens and subsequent parse state are unchanged.",
+  "actual_token_equivalence": "UNKNOWN: no execution or corpus token comparison in this generator",
+  "proof": {
+    "mode": "Baseline proof plus a zero-literal return case in flush4_spec; new official extraction, Lean obligation, and axiom audit required",
+    "sha256": "2ec5a9f7471cc94d23822ecfa990a637215eeaede7c232616412cfce0efa312d",
+    "fresh_gate": "UNKNOWN"
+  },
+  "diagnostic": "Base screen assembly at fc9a/fcb6/fcbb/fcbf/fcc8 performs a four-byte load, two unpacks and a 16-byte store for pending<=4 without a zero test. This deletes that work only for empty literal runs; paired benefit remains UNKNOWN.",
+  "hashes": {
+    "parse.rs": "ed565b50c03230c6f08027af5e3ac81691cce3f66917a34da09dce4bdbe056c3",
+    "Parse.lean": "2ec5a9f7471cc94d23822ecfa990a637215eeaede7c232616412cfce0efa312d"
+  },
+  "attribution": {
+    "source": "Officially published submission 432, then r3-432-fast3 constants",
+    "reference": "references/round3-public-432/PROVENANCE.md",
+    "public_miner_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "named_author": "UNKNOWN: official snapshot/source exposes no name",
+    "ownership": "Derivative of external public miner code; not an independent parser algorithm"
+  },
+  "scope": "Research candidate only; total paired compression, round trip, token hashes, fresh public gate, independent-runner reproduction, private stage2 and official admission are separate checks",
+  "cpu_gain": "UNKNOWN",
+  "formal_submission_sent": false
+}

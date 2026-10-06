@@ -102,6 +102,26 @@ VARIANTS = {
         "expected_token_equivalence": "INFERRED: the skipped candidate/word is not searched on a lazy=0 match path; the p+1 slot is unchanged and end read-ahead reloads before the next iteration. Actual executed hashes are UNKNOWN.",
         "diagnostic": "Removes candidate-word reads after successful non-lazy probes, but moves probe before next-position preloads. Measure load reduction against branch latency; helper proof and new extraction require validation.",
     },
+    "r4-cpu-flushzero": {
+        "constant_changes": {},
+        "attributes": {},
+        "source_edits": ["flushzero"],
+        "proof_edits": ["flushzero"],
+        "proof_mode": "Baseline proof plus a zero-literal return case in flush4_spec; new official extraction, Lean obligation, and axiom audit required",
+        "mechanism": "Return immediately when flush4 has zero pending literals, preserving its existing four-literal SIMD-friendly path for nonempty short runs.",
+        "expected_token_equivalence": "INFERRED for the counted prefix: the removed four speculative writes occur beyond nt when from==to; counted tokens and subsequent parse state are unchanged.",
+        "diagnostic": "Base screen assembly at fc9a/fcb6/fcbb/fcbf/fcc8 performs a four-byte load, two unpacks and a 16-byte store for pending<=4 without a zero test. This deletes that work only for empty literal runs; paired benefit remains UNKNOWN.",
+    },
+    "r4-cpu-classoutline": {
+        "constant_changes": {},
+        "attributes": {},
+        "source_edits": ["classoutline_helpers", "classoutline_text_hn", "classoutline_text_hs", "classoutline_prose_hn", "classoutline_prose_hs"],
+        "proof_edits": ["classoutline_helpers", "classoutline_parse"],
+        "proof_mode": "Baseline proof plus two wrapper lemmas and parse dispatch alternatives; new official extraction, Lean obligation, and axiom audit required",
+        "mechanism": "Outline only the text and prose run1 class calls behind separate noinline wrappers, with the always-inline run1 body and all settings constant inside each wrapper.",
+        "expected_token_equivalence": "INFERRED: wrappers call the same run1 instantiations with byte-identical constants. Other dispatch routes and all parser bodies remain unchanged.",
+        "diagnostic": "Actual run1ni assembly loses per-class constant specialization: HN loads km/lazy from stack and uses runtime skip shifts, while common public text parser times rise 25-43%. This candidate keeps class constants visible while testing outline code footprint; new emitted assembly must confirm specialization.",
+    },
 }
 
 SOURCE_EDITS = {
@@ -150,6 +170,27 @@ SOURCE_EDITS = {
         "            };\n"
         "            pre_slot = a1.0;\n            pre_c = a1.1;\n            pre_w = a1.2;",
     ),
+    "flushzero": (
+        "pub fn flush4(input: &[u8], out: &mut [u32], nt0: usize, from: usize, to: usize) -> usize {\n    if from <= to",
+        "pub fn flush4(input: &[u8], out: &mut [u32], nt0: usize, from: usize, to: usize) -> usize {\n    if from == to {\n        nt0\n    } else if from <= to",
+    ),
+    "classoutline_helpers": (
+        "/// The class itself when `parse` gives class `cls` to `run1` (R1_ON, no stride recording, and one",
+        "/// Separate class kernels retain constant settings while keeping the main dispatch smaller.\n"
+        "#[inline(never)]\n"
+        "pub fn run1_text<const H: usize>(input: &[u8], out: &mut [u32]) -> usize {\n"
+        "    run1::<H>(input, out, T_SKIP, T_LAZY, SKCAP, 4294967295)\n"
+        "}\n\n"
+        "#[inline(never)]\n"
+        "pub fn run1_prose<const H: usize>(input: &[u8], out: &mut [u32]) -> usize {\n"
+        "    run1::<H>(input, out, P_SKIP, P_LAZY, SKCAP, P_KM)\n"
+        "}\n\n"
+        "/// The class itself when `parse` gives class `cls` to `run1` (R1_ON, no stride recording, and one",
+    ),
+    "classoutline_text_hn": ("run1::<HN>(input, out, T_SKIP, T_LAZY, SKCAP, 4294967295)", "run1_text::<HN>(input, out)"),
+    "classoutline_text_hs": ("run1::<HS>(input, out, T_SKIP, T_LAZY, SKCAP, 4294967295)", "run1_text::<HS>(input, out)"),
+    "classoutline_prose_hn": ("run1::<HN>(input, out, P_SKIP, P_LAZY, SKCAP, P_KM)", "run1_prose::<HN>(input, out)"),
+    "classoutline_prose_hs": ("run1::<HS>(input, out, P_SKIP, P_LAZY, SKCAP, P_KM)", "run1_prose::<HS>(input, out)"),
 }
 
 PROOF_EDITS = {
@@ -167,6 +208,35 @@ PROOF_EDITS = {
         "  have hmax : s.length ≤ Std.Usize.max := Std.Slice.length_ineq s\n"
         "  step*\n\n"
         "/-- `ahead_fix_m`: the read-ahead",
+    ),
+    "flushzero": (
+        "  rw [slot.flush4]\n  have hmax : input.length ≤ Std.Usize.max := Std.Slice.length_ineq input\n  step*\n  all_goals first\n",
+        "  rw [slot.flush4]\n  have hmax : input.length ≤ Std.Usize.max := Std.Slice.length_ineq input\n  step*\n  all_goals first\n"
+        "    | (refine ⟨?_, rfl⟩\n       convert hdec using 1 <;> scalar_tac)\n",
+    ),
+    "classoutline_helpers": (
+        "/-! ## 15g. The E paths:",
+        "@[local step]\n"
+        "theorem run1_text_spec (H : Std.Usize) (input : Slice Std.U8) (out : Slice Std.U32)\n"
+        "    (hlen : input.length ≤ out.length) (hH : 0 < H.val) :\n"
+        "    slot.run1_text H input out ⦃ fun r => r.1.val ≤ input.length ∧\n"
+        "      r.2.length = out.length ∧ LZ77.Valid (bytes input) (toks r.2 r.1.val) ⦄ := by\n"
+        "  rw [slot.run1_text]\n"
+        "  exact run1_spec _ input out _ _ _ _ hlen hH (by simp)\n\n"
+        "@[local step]\n"
+        "theorem run1_prose_spec (H : Std.Usize) (input : Slice Std.U8) (out : Slice Std.U32)\n"
+        "    (hlen : input.length ≤ out.length) (hH : 0 < H.val) :\n"
+        "    slot.run1_prose H input out ⦃ fun r => r.1.val ≤ input.length ∧\n"
+        "      r.2.length = out.length ∧ LZ77.Valid (bytes input) (toks r.2 r.1.val) ⦄ := by\n"
+        "  rw [slot.run1_prose]\n"
+        "  exact run1_spec _ input out _ _ _ _ hlen hH (by simp)\n\n"
+        "/-! ## 15g. The E paths:",
+    ),
+    "classoutline_parse": (
+        "      | exact run1_spec _ input out _ _ _ _ hlen (by simp) (by simp)",
+        "      | exact run1_text_spec _ input out hlen (by simp)\n"
+        "      | exact run1_prose_spec _ input out hlen (by simp)\n"
+        "      | exact run1_spec _ input out _ _ _ _ hlen (by simp) (by simp)",
     ),
 }
 
@@ -230,8 +300,8 @@ def build(base, name, spec):
         "expected_token_equivalence": spec["expected_token_equivalence"],
         "actual_token_equivalence": "UNKNOWN: no execution or corpus token comparison in this generator",
         "proof": {
-            "mode": ("Baseline proof plus a local-step helper lemma; new official extraction, Lean obligation, and axiom audit required"
-                     if proof_edits else "Byte-for-byte copied from the baseline; new official extraction, Lean obligation, and axiom audit required"),
+            "mode": spec.get("proof_mode", "Baseline proof plus a local-step helper lemma; new official extraction, Lean obligation, and axiom audit required"
+                             if proof_edits else "Byte-for-byte copied from the baseline; new official extraction, Lean obligation, and axiom audit required"),
             "sha256": sha256(files["Parse.lean"]),
             "fresh_gate": "UNKNOWN",
         },
@@ -255,13 +325,15 @@ def build(base, name, spec):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--only", nargs="+", choices=list(VARIANTS), help="Generate/check named candidates without rewriting frozen files")
     args = ap.parse_args()
     base = {n: (BASE / n).read_bytes() for n in BASE_HASHES}
     for name, expected in BASE_HASHES.items():
         observed = sha256(base[name])
         if observed != expected:
             raise AssertionError(f"Baseline drift: {name}: {observed} != {expected}")
-    for name, spec in VARIANTS.items():
+    for name in args.only or VARIANTS:
+        spec = VARIANTS[name]
         files, manifest = build(base, name, spec)
         dest = ROOT / "candidates" / name
         if args.check:

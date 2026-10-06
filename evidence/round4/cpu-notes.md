@@ -86,3 +86,42 @@ The script reads the official `token.rs` as an unchanged Rust module and extract
 The receipt is `round4-receipts/token-profile.json` (provenance, per-file totals, status and failures) plus `token-profile.jsonl` (provenance and per-block/full-frequency records). Compile/runtime diagnostics remain in `round4-receipts/token-profile-diagnostics/`. Input/source/proof/official-source/harness hashes and actual compiler/coreutils versions are recorded. Token hashes are SHA256 of the counted little-endian u32 prefix, matching the format in official `measure/src/record.rs`; coreutils receives token bytes on stdin without a token-array file. Source/proof and official file bytes are rechecked after execution. Only completed file profiles with matching input hashes and block accounting are retained.
 
 Failures are explicitly `DIAGNOSTIC_FAILED` or `DIAGNOSTIC_PARTIAL` and return zero so optional diagnostics do not change the gate or measurement outcome. **VERIFIED locally**: Python `py_compile` exits zero. **UNKNOWN**: Rust harness compilation and execution, public-file byte validation, and profile results; no local compiler/CI was invoked. The parent controls whether to run and upload these optional receipts.
+
+## First screen: actual code and file-level attribution
+
+Read from `evidence/round4/37515419910/screen/`, commit `be00e5792c94f36e99855f665a5c6a18a2d09899`, two public order blocks. A fresh local audit of all six CPU variants' raw JSONL checked the source hash against their manifest and verified the input hash, token count, token-prefix SHA256, output length, and output SHA256 against fast3 for **56 file/block records per candidate**. This is finite public identity, not all-input equivalence.
+
+| Candidate | Mean total time-axis change versus fast3 | Interpretation |
+| --- | ---: | --- |
+| `run1ni` | about +4.317% | Broad stable parser regression with visible loss of specialization |
+| `r1off` | about +1.782% | Existing read-ahead/no-window engine is beneficial overall on this corpus |
+| `commonni` | about +0.823% | No gain; outlining the extension helper is not selected |
+| `stai` | about +0.265% | No gain established |
+| `run1tai` | about -0.284% | Two blocks differ in sign; insufficient to attribute to its named small-text mechanism |
+| `foldni` | about -0.152% | Mixed file effects and small overall delta; insufficient evidence of a CPU gain |
+
+The raw parser medians make `run1ni`'s large regression directly falsifiable: `bundle.min.js.txt` +36.50%/+36.18%, `catalog.xml.txt` +42.27%/+41.69%, `docs.md.txt` +41.39%/+43.13%, `page.html.txt` +37.75%/+36.36%, and `source.rs.txt` +38.39%/+42.56%. Corresponding encoder medians stay roughly within a percent, with identical tokens. This is a parser effect rather than compression-output cost.
+
+**VERIFIED assembly**: fast3 has `parse` of `0x8d7b` bytes (36219) and an outlined `run1t::<4096>` of `0x13bc` bytes (5052). `run1ni` has only two generic `run1` bodies, H=4096 (`0x10b1`) and H=32768 (`0x1faf`), and `.text` falls from 317281 to 296549 bytes. In the H=32768 body, instruction `ee8f` masks the key with runtime `km` from `[rsp+0x20108]`; `fdc0` compares length to runtime `lazy` from `[rsp+0x80]`; `fde9/fdec/fdee` moves runtime skip from `ebp` to `cl` then shifts. These are direct evidence of lost per-class constant specialization. A 20732-byte smaller `.text` did not make it faster.
+
+`run1tai` removes the separate `run1t` symbol but grows `parse` to `0x9e09` (40457) while total `.text` falls only 952 bytes. Its two small text file parser deltas are **slower**: `tiny-app.log` +6.92%/+2.42%, `tiny-config.json.txt` +11.05%/+6.42%. Their raw lengths are 28000/12000; exact route identities still need content/route diagnostics. Conversely, many large files show parser decreases of roughly 1%-5%. Every public file above 65536 bytes cannot take `run1t` by the source guard. The main `parse` body changes globally, so code layout/register allocation and runner noise are possible explanations; the mean cannot be written as a proven `run1t` speedup. For `run_st`, `run_z`, `run_rest`, and `slot_parse`, fast3/run1tai instruction sequences are identical after normalizing relocation addresses and branch targets (303/325/2645/38 instructions respectively). Their location still changes; this normalization does not prove equal timing.
+
+**VERIFIED perf limitation**: the availability probe returned 255 with `perf_event_paranoid=4`, denying performance counters. This run supplies no cycles, branch-miss, or cache-miss evidence. Do not attribute the small deltas to I-cache or branches as an observed fact.
+
+Two source-level deletion points are present in emitted machine code, rather than merely predicted from Rust:
+
+- In fast3, `1094a/1094f` load and XOR the second pair of words before `10959` tests the first XOR and `1095f` selects with `cmovne`. The already-running `r4-cpu-x2lazy` specifically tests avoiding these eager reads.
+- Fast3's `flush4` short path at `fc9a` checks pending length <=4; `fcb6` loads four input bytes, `fcbb/fcbf` expand them, and `fcc8` stores sixteen bytes. There is no preceding zero-length short circuit in this path. `r4-cpu-flushzero` tests deleting that work only when pending length is zero, keeping the nonempty SIMD-friendly path.
+
+## Two new candidates supported by this assembly
+
+`r4-cpu-flushzero` adds `from==to -> nt0` to `flush4`. The proof adds a direct Dec-preserving return case to `flush4_spec`; unused output tail equality is not required. `r4-cpu-classoutline` adds separate noinline `run1_text` and `run1_prose` wrappers which call the always-inline `run1` with their original fixed constants, then changes only those four dispatch calls. Its proof adds two wrapper lemmas and two alternatives in `parse_spec`. It tests outlining while retaining specialization; the next assembly must show that skip/lazy/km are actually constants inside the new kernels.
+
+Both are **INFERRED token-preserving experiments**. **UNKNOWN**: Rust compilation, extraction, Lean, runtime hashes, and speed for the new exact hashes. Fresh local generator `--check` and Python syntax checks pass. The generator now has `--only` so newly authorized variants can be written without rewriting frozen files; all original eleven candidate bytes remain unchanged. No third candidate or combination is added before batch B's `x2lazy`, `flush`, and `slotonly` measurements.
+
+| New candidate | Source SHA256 | Proof SHA256 |
+| --- | --- | --- |
+| `r4-cpu-flushzero` | `ed565b50c03230c6f08027af5e3ac81691cce3f66917a34da09dce4bdbe056c3` | `2ec5a9f7471cc94d23822ecfa990a637215eeaede7c232616412cfce0efa312d` |
+| `r4-cpu-classoutline` | `36697422c014c5a140a0953311509dd510b9ce3e6e0f4106231418fe8193c572` | `41afa5a114f50a7fe1b8d0a3d5dc98408f1f989b8925734b7eb00f8a04aaf781` |
+
+Assembly receipts are capped at two million characters and marked truncated in their metadata. The parser functions and addresses cited above appear completely before that cutoff; no claim is made about the omitted library assembly. The fast3 library hash for this code-generation receipt is `e3c97b3aef581e8e4a6e0f848cdd79427cdc9aa441d32c3110b73cc0508d3566`; the runner reports AMD EPYC 7763 and the pinned nightly `rustc 1.100.0-nightly (8fa1c96cf 2026-08-17)`.
