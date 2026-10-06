@@ -1,0 +1,40 @@
+{
+  "candidate": "r4-parse-h16d32-core",
+  "base_submission_id": "402",
+  "parent": {
+    "candidate": "r4-parse-h8d32-core",
+    "path": "candidates/r4-parse-h8d32-core",
+    "source_sha256": "916f3a0b5f64b17919c7e4871f878ef2827530a9e3bf577020d8865e61b26953",
+    "proof_sha256": "13f23fc46a6d18283aeb339f949cca102761133d6e1ff9b3a1007cd8b7926a46"
+  },
+  "core_ancestor": {
+    "candidate": "r4-parse-h8d32-core",
+    "source_sha256": "916f3a0b5f64b17919c7e4871f878ef2827530a9e3bf577020d8865e61b26953",
+    "proof_sha256": "13f23fc46a6d18283aeb339f949cca102761133d6e1ff9b3a1007cd8b7926a46",
+    "dependency_audit_sha256": "c247d90535aa5746e8b7b0da77ae3531ce7f627e0b00eea549f321e38b2870f1"
+  },
+  "hashes": {
+    "parse.rs": "c1f9ea4621178e0f815066e43e5a577ec8262b9e188dfd703877f54d66905206",
+    "Parse.lean": "13f23fc46a6d18283aeb339f949cca102761133d6e1ff9b3a1007cd8b7926a46"
+  },
+  "bytes": {
+    "parse.rs": 71185,
+    "Parse.lean": 95901
+  },
+  "delta_from_parent": {
+    "H_ITERS": {
+      "type": "usize",
+      "old": 8,
+      "new": 16
+    }
+  },
+  "mechanism": "Permit up to sixteen learned-cost DP iterations, retaining the existing early-stop rule, depth 32/16, length windows and query margin. Tests remaining cost-refit headroom; actual pass count may remain below the cap.",
+  "source_audit": "VERIFIED reverse constant substitution restores the direct parent byte-for-byte; function bodies, uniform entry, constants outside the listed delta and 148-function closure are unchanged.",
+  "proof_change": "None; exact H-core proof retained. Tree-walk totality is parameterized by maxd, iteration measure uses H_ITERS, and H_PM is read in guarded/wrapping query-selection arithmetic. This is a source review, not a new Lean result.",
+  "performance_target": {
+    "public_time_axis_less_than": 10,
+    "status": "UNKNOWN until measured; not a proven time bound"
+  },
+  "attribution": "Public submission 402 derivative; original metadata in references/round4-public-402/PROVENANCE.json, through the frozen uniform-H and H-core parents.",
+  "verification": "VERIFIED local hashes and generation only. Fresh Rust build, official extraction, Lean obligation, axiom whitelist, round trip, time/size, stage2, admission and rewards UNKNOWN."
+}

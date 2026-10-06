@@ -173,3 +173,26 @@ An additional attribute audit over the entire removed proof prefix found no non-
 **INFERRED:** removing roughly three quarters of the proof text and non-H extracted program should reduce work. Byte/line reduction is not a measured proportional time reduction. Retaining the same H bodies/constants is strong static evidence for unchanged algorithm policy, but compiled layout and runtime may change.
 
 **UNKNOWN until fresh CI:** extracted names/signatures, Lean dependency completeness, `LZ77.Obligation` and axiom acceptance, elaboration within 900 seconds, round trip, finite-corpus token/output equivalence with the parent, timing, private stage2, admission and reward. The original timeout is not marked fixed yet.
+
+## Three H-core budget candidates
+
+Prepared from the frozen H8/depth32 core while its first official gate is running. Each candidate retains the same 95901-byte proof and H-only dependency structure, with no return to the full 402 proof. `scripts/make-round4-hcore-tune.py` SHA-locks the ancestor source/proof, records the direct parent, and verifies that reversing only the declared constant substitutions restores that parent's source byte-for-byte.
+
+| Candidate | Direct parent | Exact change |
+| --- | --- | --- |
+| `r4-parse-h16d32-core` | `r4-parse-h8d32-core` | H_ITERS 8 -> 16 |
+| `r4-parse-h16d64-core` | `r4-parse-h16d32-core` | H_BTD/H_BTDMC/H_BTDX 32 -> 64; H_BTDS 16 -> 32 |
+| `r4-parse-h16d32-pm256-core` | `r4-parse-h16d32-core` | H_PM 128 -> 256 |
+
+**VERIFIED (source review):** all listed constants affect the live H mode-0 path. H_ITERS is the iteration cap; its proof measure refers to that constant. The tree-walk totality theorem is generic in `maxd`, without a 32-depth premise. H_PM appears in guarded/wrapping first-pass query-retention arithmetic, not in an allocation-size or fixed-array-bound assumption; doubling it changes an eight-bit modeled cost margin to sixteen bits. On inputs stopping after one pass without retained queries it may have no effect. No hard-coded old-value restriction was found in these proof statements, but this is not fresh Lean acceptance.
+
+**INFERRED:** sixteen permitted passes may recover remaining model-refit gains, deeper search may supply additional match alternatives, and a larger retained-query margin may let later models reconsider first-pass alternatives. Existing early stopping and the first-pass candidate set remain important limits; increasing the cap alone need not execute more iterations. Larger depth/query sets may consume additional time and memory. Public time <10 is a required measured target, not a proven runtime bound or a promise.
+
+**VERIFIED locally:** all three tune candidates and the unchanged H8 core pass their respective generator `--check`; the original core has no content diff. Source hashes:
+
+- H16/depth32: `c1f9ea4621178e0f815066e43e5a577ec8262b9e188dfd703877f54d66905206`.
+- H16/depth64: `ba3c16422a5fc9432c41d80c0ad0ab5657605c1e020d14b7e1135e430ce3a7ee`.
+- H16/depth32/PM256: `b115f09b2c3c445b90054de5305131d498e5ad869157afa6bb168a9d1b5f2920`.
+- Shared proof: `13f23fc46a6d18283aeb339f949cca102761133d6e1ff9b3a1007cd8b7926a46`.
+
+Each parser is 71185 bytes. New official extraction, proof/axiom checks, public performance, stage2 and online outcomes remain **UNKNOWN**. No CI, push, submission or wallet operation was performed by this worker.

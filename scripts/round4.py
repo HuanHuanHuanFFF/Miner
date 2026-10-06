@@ -35,7 +35,32 @@ def validate(label):
             assert 0 < len(data) <= 524288 and hashlib.sha256(data).hexdigest() == h, (e['name'], f)
     assert {'probe3', 'r3-432-fast3', 'public432'} <= names
     assert 1 <= spec['screen_blocks'] <= 4 and 0 <= spec['refine_blocks'] <= 4
+    used = set()
+    for group in spec.get('gate_groups', []):
+        assert isinstance(group, list) and group and set(group) <= names
+        assert not used.intersection(group) and len(group) == len(set(group))
+        assert all(not e.get('control') for e in spec['entries'] if e['name'] in group)
+        used.update(group)
     return spec
+
+
+def grouped_gates(state):
+    """Pick one smallest-output candidate per declared family, inside time caps.
+
+    This only allocates expensive research gates; neither calibration establishes
+    private-corpus eligibility or admission.
+    """
+    by = {r['candidate']: r for r in state['summary']}
+    names, decisions = [], []
+    for group in state['spec']['gate_groups']:
+        eligible = [by[n] for n in group if n in by and
+                    by[n]['fixed_427']['time'] <= 10 and by[n]['own_anchor']['time'] <= 10]
+        chosen = min(eligible, key=lambda r: (r['size_pct'], r['time']))['candidate'] if eligible else None
+        decisions.append({'group': group, 'chosen': chosen, 'eligible': [r['candidate'] for r in eligible],
+                          'policy': 'minimum public size, then time; both declared time-transfer hypotheses <= 10'})
+        if chosen:
+            names.append(chosen)
+    return names, decisions
 
 
 def summarize(state, pages, scorer):
@@ -210,6 +235,10 @@ def main():
         finish()
     elif phase == 'gate':
         names = spec.get('gate_candidates')
+        if names is None and spec.get('gate_groups'):
+            names, state['gate_selection'] = grouped_gates(state)
+            save(state_path, state)
+            print('GATE_SELECTION ' + json.dumps(state['gate_selection']), flush=True)
         if names is None:
             names = [r['candidate'] for r in state['summary'] if not r['control'] and r['candidate'] in state.get('selected', [])][:spec['gate_limit']]
         for name in names:
