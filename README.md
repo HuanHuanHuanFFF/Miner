@@ -6,11 +6,12 @@ Conjectures.io / Bittensor SN66 的 DEFLATE 项目记录与本地开发环境。
 - [ENVIRONMENT](ENVIRONMENT.md)：仅在 GitHub Actions 运行的工具链、验证入口及存储边界。
 - [ROUND1](ROUND1.md)：首轮公开优化参照实验、候选差异和实测结论。
 - [ROUND2](ROUND2.md)：吸收深度研究后的两槽桶、搜索深度及停止门槛对照实验。
+- [ROUND3](ROUND3.md)：90 分钟内同时探索速度与压缩两端，按 #427 和同族正式参照校准，保留筛选、gate 与前沿缺口。
 - [官方比赛](https://conjectures.io/competitions/deflate)
 - [官方实现](https://github.com/conjectures-io/conjectures-optimisation-deflate)
 
 当前范围：初始化、原版模板和首轮公开实验已有验证证据；按 2026-10-06 的新指令吸收研究并继续优化。目标为可领奖 Pareto 前沿及较大持续奖励份额。本轮执行候选开发与公共数据集对照；注册和钱包状态不由开发文档推断，竞赛正式提交及资金操作另按用户请求处理。
 
-本轮已验证的更小版本为 [probe3](candidates/probe3/parse.rs) / [对应证明](candidates/probe3/Parse.lean)：公共大小轴 35.920838%，比 probe2 降低 0.114884 个百分点，八块测量增加约 0.33%～1.81% 总时间。两槽桶 `bucket2` 已修复 tuple 解构处的证明并通过公共完整 gate，保留为待性能对照的研究候选。维护 CI 与修复验证均成功，见 [CI 修复回执](evidence/round2/ci-repair.json) 和 ROUND2；公共验证不代表 stage2、正式前沿或奖励结果。
+第二轮已验证的更小版本为 [probe3](candidates/probe3/parse.rs) / [对应证明](candidates/probe3/Parse.lean)：公共大小轴 35.920838%，比 probe2 降低 0.114884 个百分点，八块测量的时间轴增加约 0.33%～1.81%。两槽桶 `bucket2` 已通过公共完整 gate；第三轮两台 runner 的四块配对对照没有支持提速，输出与 probe2 相同。维护与修复证据见 [CI 修复回执](evidence/round2/ci-repair.json)，后续优化和最新选择以 ROUND3 为准。公共验证与校准推断分别记录，不等于正式 admission 或奖励。
 
 大型工具链和依赖只在 GitHub Actions 的临时 Linux runner 中准备，本地不保留；最初核对资料的 `sources/` 副本被 Git 忽略。仓库保存轻量源码、证明、记录、证据和 CI 配置。
