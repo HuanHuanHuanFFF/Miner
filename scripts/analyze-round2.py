@@ -22,7 +22,7 @@ def total(method):
 
 
 def analyze(log):
-    records, reported, gates = {}, {}, {}
+    records, reported = {}, {}
     research = comparison = None
     for line in log.read_text(encoding='utf-8-sig').splitlines():
         match = re.search(r'RAW_EVIDENCE (\d+) (\S+) (\{.*\})$', line)
@@ -97,12 +97,30 @@ def analyze(log):
         })
     averages = {name:{'time':statistics.mean(metrics[b,name]['time'] for b in range(1,5)), 'size_pct':metrics[1,name]['size_pct']} for name in names}
     frontier = [name for name,a in averages.items() if not any(name!=other and b['time']<=a['time'] and b['size_pct']<=a['size_pct'] and (b['time']<a['time'] or b['size_pct']<a['size_pct']) for other,b in averages.items())]
+    attribution_summary = []
+    if research:
+        for r in research['attribution']:
+            visits = sum(r['second_visits_by_first_len'])
+            improved = sum(r['second_improvements_by_first_len'])
+            attribution_summary.append({
+                'file':r['file'],'class':r['class'],'first_visits':r['first_visits'],
+                'second_visits':visits,'second_selections':improved,
+                'second_selection_fraction':improved/visits if visits else None,
+                'second_visits_after_first_len_at_least_16':sum(r['second_visits_by_first_len'][16:]),
+                'second_selections_after_first_len_at_least_16':sum(r['second_improvements_by_first_len'][16:]),
+                'second_visits_after_first_len_at_least_32':sum(r['second_visits_by_first_len'][32:]),
+                'second_selections_after_first_len_at_least_32':sum(r['second_improvements_by_first_len'][32:]),
+            })
+    incumbent_totals = [sum(total(f['methods']['incumbent']) for f in fs.values()) for fs in files.values()]
     output = {
         'scope':'public stage1 only; empirical four-block local tradeoffs; no official rank/admission/reward claim',
         'metrics':[dict(v,per_file_time=v['per_file_time']) for v in metrics.values()],
         'averages':averages,'comparisons':comparisons,
         'observed_frontier_among_tested_versions':frontier,
         'bootstrap_caveat':'descriptive file bootstrap does not remove process drift or establish speed admission',
+        'paired_incumbent_total_time_range_s':[min(incumbent_totals),max(incumbent_totals)],
+        'paired_incumbent_process_drift_pct':100*(max(incumbent_totals)/min(incumbent_totals)-1),
+        'attribution_summary':attribution_summary,
         'ci_log_sha256':hashlib.sha256(log.read_bytes()).hexdigest(),
     }
     (log.parent/'analysis.json').write_text(json.dumps(output,indent=2,allow_nan=False)+'\n',encoding='utf-8')

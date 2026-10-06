@@ -130,8 +130,11 @@ fn main() {
     (root / 'research.rs').write_text(harness)
     subprocess.run(['rustc', '+nightly-2026-08-18', '--edition=2021', '-Awarnings', '-O', str(root / 'research.rs'), '-o', str(root / 'research')], check=True)
     corpus = Path(os.environ['DEFLATE_ROOT']) / 'data/benchmark/corpus-stage1'
-    result = subprocess.run([str(root / 'research'), str(corpus)], check=True, capture_output=True, text=True)
+    result = subprocess.run([str(root / 'research'), str(corpus)], capture_output=True, text=True)
     print(result.stdout, end='', flush=True)
+    if result.stderr:
+        print(result.stderr, end='', flush=True)
+    result.check_returncode()
     traces = [json.loads(line.removeprefix('ATTRIBUTION ')) for line in result.stdout.splitlines() if line.startswith('ATTRIBUTION ')]
     report = {
         'scope': 'finite token equivalence + token decode; official Lean and DEFLATE round trip separate',

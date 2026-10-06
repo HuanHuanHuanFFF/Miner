@@ -42,4 +42,10 @@ bucket2 新证明复用原 `find/walk`、字节匹配及 decode 层，另为 buc
 
 ## 当前状态
 
-已生成四候选、候选证明及 CI 验证入口。初次 CI 因仓库已私有而被自动费用保护条件跳过；用户随后明确授权运行私有 CI、继续实测。等待实际结果；在拿到 evidence 前不将任何候选写成已改进或正确。
+**VERIFIED**：[CI 37447673754](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37447673754)，提交 `ce3e5be14710d95dea42d178782697a55e7915ba`：bucket2 完成 496 个有限 token-equivalence/decode 用例（含全部公共 28 文件）；诊断版保持 probe2 token 流。bucket2 重新提取成功，但 `Bucket2.find_spec` 在 tuple 参数展开处存在一个未解决目标，未通过 Lean statement。其余三个常量变体完成完整 gate，`accepted=true`，公理仍仅三项白名单。
+
+**VERIFIED**：regular walk 的第二候选访问 1,332,720 次、被选中 171,566 次（约 12.87%）；这是查找层的选择，不能推断最终 emitted-token 的 oracle 价值。原始 trace 已保存。
+
+首轮第二轮运行的测量入口因拒绝候选没有评分 JSON 而中止，因此没有四块性能结论。已修正 tuple 展开和失败回执处理。修复后的复测只重新验证 bucket2；三个未改变的候选使用 [hash-bound proof receipts](evidence/round2/accepted-control-proofs.json)，CI 必须核对 parse.rs/Parse.lean SHA256 和固定官方 revision，然后在新 runner 重新测全部版本。这样复用已验证证明而不复用旧计时。原始失败和成功证据保存于 `evidence/round2/37447673754/`。
+
+初次自动 push 因仓库私有而跳过；用户随后明确授权运行私有 CI、继续实测。仍不把未完成验证和性能测量的桶版写成优化成功。

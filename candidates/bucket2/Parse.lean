@@ -2695,8 +2695,14 @@ theorem find_spec (s : Slice Std.U8) {W : Std.Usize} (prev : Array Std.U32 W)
     (hW : 0 < W.val) :
     slot.bucket_find s prev p st «have» minl depth gm ⦃ fun r => FoundAt s p.val r.1.val r.2.val ∧
       r.1.val ≤ 258 ∧ r.2.val ≤ 32768 ⦄ := by
+  rcases st with ⟨recent, older⟩
   rw [slot.bucket_find]
-  step*
+  dsimp only
+  apply Std.WP.spec_bind (lift_spec (UScalar.cast .U32 older))
+  intro older32 _
+  exact Submission.find_spec s (Std.Array.repeat 1#usize older32) p recent «have» minl depth gm
+    hp hst hhave hhave258 hminl hminl' (by simp)
+
 
 theorem back_loop_inv (input : Slice Std.U8) (out : Slice Std.U32) (nt p l d back : Std.Usize)
     (E P0 : Nat) (hP0 : P0 + 8 ≤ input.length)

@@ -8,6 +8,11 @@ on:
         required: true
         type: boolean
         default: false
+      reuse_verified_controls:
+        description: 'Reuse hash-bound prior official gates for the three unchanged constant variants'
+        required: true
+        type: boolean
+        default: false
   push:
     branches: [codex/deflate-round2]
     paths:
@@ -40,6 +45,8 @@ jobs:
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round2.py
       - name: Verify four candidate proofs with the official gate
+        env:
+          REUSE_VERIFIED_CONTROLS: ${{ inputs.reuse_verified_controls }}
         run: bash scripts/ci-round2.sh
       - name: Measure accepted candidates in four interleaved blocks
         run: |

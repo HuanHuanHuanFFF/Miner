@@ -29,7 +29,8 @@ def main():
     }
     gates = {}
     for name in ('bucket2', 'probe3', 'probe2-nice16', 'probe2-nice64'):
-        gates[name] = json.loads((reports / (name + '-gate.json')).read_text())['accepted']
+        report = reports / (name + '-gate.json')
+        gates[name] = report.exists() and json.loads(report.read_text())['accepted']
         if gates[name]:
             sources[name] = workspace / 'candidates' / name / 'parse.rs'
     names = list(sources)
