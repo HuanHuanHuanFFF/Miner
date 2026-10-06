@@ -8,7 +8,7 @@
 
 固定官方源码 `a356bbff18b60c4527fbcc85d5a28ef9c20214e0`，只验证未修改的 `miner/template` 和公共 stage1 corpus。每次在临时 Ubuntu 24.04 runner 安装官方固定工具链，检查 pins、doctor、公理与完整 gate/benchmark。详细版本、模板/corpus 哈希及结果输出到运行日志和 Summary。
 
-CI 通过表示该 runner 上的公共 corpus 基线可复现，不表示正式提交通过、stage2 成绩或可获得奖励。此阶段不实现优化，不运行提交客户端或任何链上操作。
+CI 通过表示该 runner 上的公共 corpus 基线可复现，不表示正式提交通过、stage2 成绩或可获得奖励。首轮优化另用 [DEFLATE round 1](https://github.com/HuanHuanHuanFFF/Miner/actions/workflows/deflate-round1.yml) 工作流和 `codex/deflate-round1` 分支，见 [ROUND1](ROUND1.md)。不运行提交客户端或任何链上操作。
 
 ## 存储与费用
 
