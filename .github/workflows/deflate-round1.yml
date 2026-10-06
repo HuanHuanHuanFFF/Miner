@@ -1,0 +1,58 @@
+name: DEFLATE round 1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/deflate-round1]
+    paths:
+      - '.github/workflows/deflate-round1.yml'
+      - 'scripts/ci-round1.sh'
+      - 'scripts/round1.py'
+      - 'candidates/**'
+      - 'references/submission-261/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deflate-round1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  experiment:
+    if: github.event.repository.private == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Prepare isolated runner and pinned source
+        run: bash scripts/ci-prepare.sh
+      - name: Install official verification toolchain
+        run: bash scripts/ci-setup.sh
+      - name: Measure controls and two bounded candidates
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round1.py
+      - name: Verify both candidate proofs with the official gate
+        run: bash scripts/ci-round1.sh
+      - name: Record experimental evidence
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          {
+            echo '## DEFLATE round 1'
+            echo "Result: $JOB_STATUS"
+            echo 'Public corpus-stage1 only. These are CI measurements, not a competition ranking.'
+            for report in comparison.json hash-wide-gate.json probe2-gate.json; do
+              if [ -f "$RUNNER_TEMP/deflate-reports/$report" ]; then
+                echo "### $report"
+                echo '```json'
+                cat "$RUNNER_TEMP/deflate-reports/$report"
+                echo '```'
+              fi
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
