@@ -4,20 +4,28 @@
 
 ## 已取得的性能结论
 
-**VERIFIED**：[CI 37451613962](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37451613962)，实测提交 `85cd1733ff4225c875402a905ef8198b532715ee`。同一 runner、28 文件、每文件 1 warmup + 11 measured、四个交错顺序块；三种常量变体的证明回执与当前源码/证明精确哈希一致，公共完整 gate 已在前次 CI 接受。所有测量版本跨四块 token/DEFLATE hashes 稳定。
+**本轮选择：`candidates/probe3/`。** 这是压缩更小、略慢的已验证版本；`probe2` 继续保留为速度/大小对照。桶版保持实验状态，不是通过官方 gate 的候选。
 
-| 版本 | 公共大小轴 | 相对 probe2 大小变化 | 相对 probe2 时间变化（四块范围） |
+**VERIFIED**：两次独立 CI runner、每次 28 文件、每文件 1 warmup + 11 measured、四个交错顺序块，共八块测量。三种常量变体的证明回执与当前源码/证明精确哈希一致，公共完整 gate 已在 [CI 37447673754](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37447673754) 接受。所有版本跨八块 token/DEFLATE hashes 稳定；大小结果一致。实测运行分别为 [37451613962](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37451613962)（提交 `85cd1733ff4225c875402a905ef8198b532715ee`）和 [37454635334](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37454635334)（提交 `2513b5d4db6fbcd1588038ab1a79323c2916aa36`）。
+
+| 版本 | 公共大小轴 | 相对 probe2 大小变化 | 相对 probe2 时间变化（八块范围） |
 |---|---:|---:|---:|
 | `probe2` | 36.035722% | — | — |
-| `probe3` | **35.920838%** | **−0.114884 pp** | +0.3332% ～ +0.7362% |
-| `probe2-nice16` | 36.054885% | +0.019163 pp | −0.2644% ～ +0.2222% |
-| `probe2-nice64` | 36.028891% | −0.006831 pp | −0.2380% ～ +0.2975% |
+| `probe3` | **35.920838%** | **−0.114884 pp** | +0.3332% ～ +1.8123% |
+| `probe2-nice16` | 36.054885% | +0.019163 pp | −0.2644% ～ +0.7493% |
+| `probe2-nice64` | 36.028891% | −0.006831 pp | −0.2380% ～ +1.1567% |
 
-**VERIFIED**：probe3 的 15 文件变小、2 文件变大、11 同大小，总输出少 28,710 字节。主要收益为 prose、C/Lean/source、UTF-8 多字节文本。**INFERRED（开发决策）**：probe3 是本轮已验证的进一步降大小版本，约增加 0.3%～0.7% 总压缩时间；值得保留该 tradeoff。nice16 没有稳定速度收益且大小变差，nice64 仅取得很小大小收益，速度符号也不稳定，不提升为主路线。
+**VERIFIED**：probe3 的 15 文件变小、2 文件变大、11 同大小，总输出少 28,710 字节。主要收益为 prose、C/Lean/source、UTF-8 多字节文本。**INFERRED（开发决策）**：probe3 是本轮已验证的进一步降大小版本，观察到约增加 0.3%～1.8% 总压缩时间；值得保留该 tradeoff，但不声称它支配 probe2。nice16 没有稳定速度收益且大小变差，nice64 仅取得很小大小收益，速度符号也不稳定，不提升为主路线。
 
-配对 incumbent 在 24 个测量进程间的总时间漂移约 1.48%；file bootstrap 仅为本 runner 的描述性数据，不涵盖 order/runner 不确定性，也不是官方 admission。原始记录、独立复算与逐文件差异保存在 `evidence/round2/37451613962/`，可用 `python scripts/analyze-round2.py evidence/round2/37451613962/ci.log` 重算。
+配对 incumbent 在每 runner 的 24 个测量进程间，总时间漂移分别约 1.48% / 1.29%；file bootstrap 仅为各 runner 的描述性数据，不涵盖 order/runner 不确定性，也不是官方 admission。两个运行的原始记录、独立复算与逐文件差异分别保存在 `evidence/round2/<run-id>/`，可用 `python scripts/analyze-round2.py evidence/round2/<run-id>/ci.log` 重算。
 
-**UNKNOWN**：外部 source-held-out、私有 stage2、正式两 corpus 坐标、线上 admission/排名与实际奖励。该 CI 最终为 failure：桶版仍未通过 Lean，因而被正确排除于性能测量；上述三个候选的成功 gate 与四块性能数据仍有效。桶版包装正在改为显式两个 scalar 参数，以避开提取层 tuple destructuring 的展开问题。
+**UNKNOWN**：外部 source-held-out、私有 stage2、正式两 corpus 坐标、线上 admission/排名与实际奖励。两个测量 CI 的最终状态均为 failure：桶版仍未通过 Lean，因而被正确排除于性能测量；上述三个候选的成功 gate 与八块性能数据仍有效。不能把整体红色 CI 写成四候选全通过，也不能把成功子结果丢弃。
+
+## 桶版的停止状态
+
+**VERIFIED**：最初 tuple 包装、显式 tuple 展开包装、最后 scalar 参数包装，均通过 intake/policy/static 和重新提取，496 个有限 token-equivalence/decode 用例也均通过，但官方 stage4 statement 未接受。最初失败是 `Bucket2.find_spec` 的 tuple destructuring；第二次 `WP.spec_bind` 无法匹配未展开的 tuple let；最后一次日志摘要末尾显示主循环 `MainInv` 目标未闭合，完整错误首部被官方日志尾部摘要截断。因此最后一次失败的具体 tactic/展开原因仍 **UNKNOWN**，不能把它诊断为算法错误或宣称只差已解决的一处。
+
+本轮不再追加私有 CI。桶版留在 `candidates/bucket2/` 作为未通过证明的实验；没有其正式 benchmark 结论，不提升、不提交、不复用 probe2 的接受状态为它背书。后续若继续该路线，应先取得完整 statement 日志并闭合主循环证明；目前结构是两张独立 hash-keyed 表（SoA），不是同一 cache line 的 inline AoS bucket，失败或未来速度结果也不能否定所有 bucket 设计。
 
 ## 研究吸收
 
