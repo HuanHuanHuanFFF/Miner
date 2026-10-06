@@ -58,3 +58,19 @@ The local official source copy's candidate Cargo release profile uses `opt-level
 The largest parser contributions to that time axis are `binary.db.bin`, `server.log`, `machine-code.bin`, `metrics.csv.txt`, `tiny-app.log`, `page.html.txt`, and `catalog.xml.txt`. `prose.txt` has the largest absolute parser time (about 5.688 ms) but a smaller normalized contribution (about 0.001783 axis units), so absolute milliseconds alone should not rank CPU directions. Each contribution uses the same incumbent normalization as the official objective. Route identities for these files are not inferred from filenames; exact route coverage requires input content or read-only CI diagnostics.
 
 Current constants `TF_TEXT=0` and `TZ_ON=1` make the `tf_plan`/`emit` branch in `parse` unreachable: `tf_route` gives either 2 or 3; 2 goes to `run_z`. **INFERRED**: the fat-LTO compiler likely removes the branch. Inspect actual symbols before adding an explicit dead-branch-removal candidate; source file size is not executed instruction size.
+
+## Third candidate: slot-only preparation after a non-lazy match
+
+`r4-cpu-slotonly` uses the exact fast3 constants and dispatch. The source adds `ahead_slot_m`, which computes the p+1 hash slot and retains the supplied candidate/word. The main `run1` probe now executes before next-position preparation. If `lazy==0` and its match is at least three bytes, it calls the slot-only helper; otherwise it retains the full `ahead_if_m` candidate/word load. No other engine is changed.
+
+**INFERRED token relation**: the successful `lazy=0` branch never searches p+1. It needs only its slot for `record3_m`'s first insertion. `pre_c/pre_w` keep describing a real word from an earlier candidate, which the correctness invariant permits; the next actual search obtains current match-end values through `ahead_fix_m`. The post-recording fallback at an in-range end reloads its values. A miss or an enabled lazy policy retains the original complete preparation. This reasoning is not a universal token-equivalence theorem or executed comparison.
+
+The candidate proof adds one `@[local step]` theorem, `ahead_slot_m_spec`, giving a valid slot and preserving word identity with candidate position at most the requested next position `i`. The helper's precondition supplies `c ≤ i`, avoiding an extra proof-only bound variable that `step` would have to synthesize. It does not alter the main loop invariant, obligation, or axiom policy. Its `H` argument is explicit because the new Rust helper's const generic is not inferred from an array-typed parameter. **UNKNOWN**: the actual Charon/Aeneas signature, helper Lean acceptance, main-loop `step*` coverage, decoded output, executed token identity, and speed. Main probe decision now precedes next-position reads, so reduced loads may be offset by losing latency overlap on misses.
+
+Files after fresh local `--check` and source/proof diff inspection:
+
+- Source SHA256: `9a869cf7e0f7a1ff8aef8f50177288066cd5d559c908491bbeeba1eeedee13ac`.
+- Proof SHA256: `3be9d11d3de31016c6149fd952f54f14abdf78bc2236827051859580cebc5a97`.
+- Original ten CPU candidate bytes remain unchanged. The generator can reconstruct all eleven candidate files and manifests; it invokes no toolchain or CI.
+
+The parent will measure token/DEFLATE prefix equivalence, round trip, and paired time in the next batch. A fresh official gate should follow only if the measurement provides a useful signal; any extraction/proof error should be repaired against its full log and exact extracted source, not guessed from source syntax.

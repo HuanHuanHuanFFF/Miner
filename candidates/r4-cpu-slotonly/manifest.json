@@ -1,0 +1,44 @@
+{
+  "candidate": "r4-cpu-slotonly",
+  "base_candidate": "r3-432-fast3",
+  "base_path": "candidates/r3-432-fast3",
+  "base_submission_id": "432",
+  "base_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "change": {
+    "constants": {},
+    "inline_attributes": {},
+    "source_edits": [
+      "matchslot_helper",
+      "matchslot_call"
+    ],
+    "proof_edits": [
+      "matchslot_helper"
+    ]
+  },
+  "mechanism": "When regular run1 has a match and lazy=0, prepare only the p+1 slot used for recording; retain the old candidate/word until the match-end reload. Miss and lazy paths retain full next-position loads.",
+  "expected_token_equivalence": "INFERRED: the skipped candidate/word is not searched on a lazy=0 match path; the p+1 slot is unchanged and end read-ahead reloads before the next iteration. Actual executed hashes are UNKNOWN.",
+  "actual_token_equivalence": "UNKNOWN: no execution or corpus token comparison in this generator",
+  "proof": {
+    "mode": "Baseline proof plus a local-step helper lemma; new official extraction, Lean obligation, and axiom audit required",
+    "sha256": "3be9d11d3de31016c6149fd952f54f14abdf78bc2236827051859580cebc5a97",
+    "fresh_gate": "UNKNOWN"
+  },
+  "diagnostic": "Removes candidate-word reads after successful non-lazy probes, but moves probe before next-position preloads. Measure load reduction against branch latency; helper proof and new extraction require validation.",
+  "hashes": {
+    "parse.rs": "9a869cf7e0f7a1ff8aef8f50177288066cd5d559c908491bbeeba1eeedee13ac",
+    "Parse.lean": "3be9d11d3de31016c6149fd952f54f14abdf78bc2236827051859580cebc5a97"
+  },
+  "attribution": {
+    "source": "Officially published submission 432, then r3-432-fast3 constants",
+    "reference": "references/round3-public-432/PROVENANCE.md",
+    "public_miner_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "named_author": "UNKNOWN: official snapshot/source exposes no name",
+    "ownership": "Derivative of external public miner code; not an independent parser algorithm"
+  },
+  "scope": "Research candidate only; total paired compression, round trip, token hashes, fresh public gate, independent-runner reproduction, private stage2 and official admission are separate checks",
+  "cpu_gain": "UNKNOWN",
+  "formal_submission_sent": false
+}

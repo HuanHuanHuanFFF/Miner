@@ -138,6 +138,8 @@ def main():
 
     def measure(block, names):
         for name in names:
+            if any(f['name'] == name for f in state['failures']):
+                continue
             print(f'MEASURE_BEGIN {block} {name}', flush=True)
             keep = phase == 'screen' and block == 1 and spec.get('cpu_diagnostics', False)
             try:

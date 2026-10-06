@@ -1,0 +1,19 @@
+{
+  "candidate": "r4-parse-cost2048-back",
+  "base_submission_id": "432",
+  "base_path": "candidates/r3-432-fast3",
+  "base_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "mechanism": "As cost2048, but retain a candidate when its immediately preceding byte also agrees at its distance, preserving a possible backward fold. The added guarded two-byte read occurs only for short/far prose matches.",
+  "route_scope": "At this frozen base, only cls=5 passes skip=P_SKIP=5 to run1; other classes pass 3 or 4. Small text run1t is unchanged.",
+  "hashes": {
+    "parse.rs": "5cb7a984f70cfd587891a86d533cd2fe084eb9d674be3edf2db575064ceebbb9",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "proof_change": "Exact fast3 proof copied, not yet reverified. Stronger match guard, same loop state and fuel, same literal/miss branch; no extra loop.",
+  "attribution": "Derivative of public submission 432 through fast3; see references/round3-public-432/PROVENANCE.md.",
+  "anticipated_tradeoff": "INFERRED: reject negative-proxy short matches without extra searches; more literals and lost fold opportunities may worsen both axes.",
+  "verification": "UNKNOWN: Rust build, official extraction, Lean obligation, axiom whitelist, public round trip/performance, private stage2 and admission."
+}

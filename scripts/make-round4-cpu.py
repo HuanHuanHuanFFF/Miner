@@ -93,6 +93,15 @@ VARIANTS = {
         "expected_token_equivalence": "INFERRED: ahead_fix_m already reloads unless the early candidate equals the post-recording head; direct post-recording ahead_if_m returns those same current values.",
         "diagnostic": "Tests early load overlap against duplicate reads and cache-validation branches. Keep the one-position main read-ahead unchanged.",
     },
+    "r4-cpu-slotonly": {
+        "constant_changes": {},
+        "attributes": {},
+        "source_edits": ["matchslot_helper", "matchslot_call"],
+        "proof_edits": ["matchslot_helper"],
+        "mechanism": "When regular run1 has a match and lazy=0, prepare only the p+1 slot used for recording; retain the old candidate/word until the match-end reload. Miss and lazy paths retain full next-position loads.",
+        "expected_token_equivalence": "INFERRED: the skipped candidate/word is not searched on a lazy=0 match path; the p+1 slot is unchanged and end read-ahead reloads before the next iteration. Actual executed hashes are UNKNOWN.",
+        "diagnostic": "Removes candidate-word reads after successful non-lazy probes, but moves probe before next-position preloads. Measure load reduction against branch latency; helper proof and new extraction require validation.",
+    },
 }
 
 SOURCE_EDITS = {
@@ -115,6 +124,49 @@ SOURCE_EDITS = {
     "endreload_after": (
         "                let a3 = ahead_fix_m::<H>(input, &head, p, lim, e, ae.0, ae.1, ae.2, pre_slot, pre_c, pre_w, km);",
         "                let a3 = ahead_if_m::<H>(input, &head, p, lim, pre_slot, pre_c, pre_w, km);",
+    ),
+    "matchslot_helper": (
+        "/// `ahead_fix` with keys under `km`.",
+        "/// Slot-only preparation when a successful non-lazy match will not search i.\n"
+        "#[inline(always)]\n"
+        "pub fn ahead_slot_m<const H: usize>(s: &[u8], i: usize, lim: usize, a: usize, c: usize, w: u64, km: u32) -> (usize, usize, u64) {\n"
+        "    if i < lim {\n"
+        "        (slot_of_m::<H>(s, i, km), c, w)\n"
+        "    } else {\n"
+        "        (a, c, w)\n"
+        "    }\n"
+        "}\n\n"
+        "/// `ahead_fix` with keys under `km`.",
+    ),
+    "matchslot_call": (
+        "            let a1 = ahead_if_m::<H>(input, &head, p + 1, lim, pre_slot, pre_c, pre_w, km);\n"
+        "            pre_slot = a1.0;\n            pre_c = a1.1;\n            pre_w = a1.2;\n"
+        "            let f = probe_m(input, c, cw, p, km);",
+        "            let f = probe_m(input, c, cw, p, km);\n"
+        "            let a1 = if lazy == 0 && f.0 >= 3 {\n"
+        "                ahead_slot_m::<H>(input, p + 1, lim, pre_slot, pre_c, pre_w, km)\n"
+        "            } else {\n"
+        "                ahead_if_m::<H>(input, &head, p + 1, lim, pre_slot, pre_c, pre_w, km)\n"
+        "            };\n"
+        "            pre_slot = a1.0;\n            pre_c = a1.1;\n            pre_w = a1.2;",
+    ),
+}
+
+PROOF_EDITS = {
+    "matchslot_helper": (
+        "/-- `ahead_fix_m`: the read-ahead",
+        "/-- Slot-only preparation preserves the supplied candidate/word and gives a valid slot. -/\n"
+        "@[local step]\n"
+        "theorem ahead_slot_m_spec (H : Std.Usize) (s : Slice Std.U8)\n"
+        "    (i lim a c : Std.Usize) (w : Std.U64) (km : Std.U32)\n"
+        "    (hlim : lim.val + 8 = s.length) (ha : a.val < H.val)\n"
+        "    (hc : c.val ≤ i.val) (hw : w.val = word8 s c.val) (hH : 0 < H.val) :\n"
+        "    slot.ahead_slot_m H s i lim a c w km ⦃ fun r => r.1.val < H.val ∧\n"
+        "      r.2.1.val ≤ i.val ∧ r.2.2.val = word8 s r.2.1.val ⦄ := by\n"
+        "  rw [slot.ahead_slot_m]\n"
+        "  have hmax : s.length ≤ Std.Usize.max := Std.Slice.length_ineq s\n"
+        "  step*\n\n"
+        "/-- `ahead_fix_m`: the read-ahead",
     ),
 }
 
@@ -154,7 +206,14 @@ def build(base, name, spec):
     if not spec["constant_changes"] and not source_edits:
         strip = lambda x: re.sub(r"#\[inline\((?:always|never)\)\]", "", x)
         assert strip(text) == strip(base["parse.rs"].decode("utf-8"))
-    files = {"parse.rs": text.encode("utf-8"), "Parse.lean": base["Parse.lean"]}
+    proof_edits = spec.get("proof_edits", [])
+    proof = base["Parse.lean"].decode("utf-8")
+    for edit in proof_edits:
+        before, after = PROOF_EDITS[edit]
+        if proof.count(before) != 1:
+            raise AssertionError(f"{edit}: expected one proof anchor")
+        proof = proof.replace(before, after, 1)
+    files = {"parse.rs": text.encode("utf-8"), "Parse.lean": proof.encode("utf-8")}
     manifest = {
         "candidate": name,
         "base_candidate": "r3-432-fast3",
@@ -165,13 +224,15 @@ def build(base, name, spec):
             "constants": {k: {"old": a, "new": b} for k, (a, b) in spec["constant_changes"].items()},
             "inline_attributes": {k: {"old": a, "new": b} for k, (a, b) in spec["attributes"].items()},
             **({"source_edits": source_edits} if source_edits else {}),
+            **({"proof_edits": proof_edits} if proof_edits else {}),
         },
         "mechanism": spec["mechanism"],
         "expected_token_equivalence": spec["expected_token_equivalence"],
         "actual_token_equivalence": "UNKNOWN: no execution or corpus token comparison in this generator",
         "proof": {
-            "mode": "Byte-for-byte copied from the baseline; new official extraction, Lean obligation, and axiom audit required",
-            "sha256": BASE_HASHES["Parse.lean"],
+            "mode": ("Baseline proof plus a local-step helper lemma; new official extraction, Lean obligation, and axiom audit required"
+                     if proof_edits else "Byte-for-byte copied from the baseline; new official extraction, Lean obligation, and axiom audit required"),
+            "sha256": sha256(files["Parse.lean"]),
             "fresh_gate": "UNKNOWN",
         },
         "diagnostic": spec["diagnostic"],

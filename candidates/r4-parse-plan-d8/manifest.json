@@ -1,0 +1,113 @@
+{
+  "candidate": "r4-parse-plan-d8",
+  "base_submission_id": "402",
+  "base_path": "references/round4-public-402",
+  "base_hashes": {
+    "parse.rs": "0be90fc1b0f8e751012d259cda70a84a160b812dcc134b4c7e96071797166dca",
+    "Parse.lean": "e470d3d09d56b275556c36c5892ee68781a594cb7d6237255f009a62e18bce1d"
+  },
+  "hashes": {
+    "parse.rs": "c31807dadd8b0a459e759e0fe63656c35aee84251b3dc242c627f8748f357ab9",
+    "Parse.lean": "945c24e54b9bf479e2f83eac67c2dd59d0689835425c3685e8eb2053d02d9621"
+  },
+  "bytes": {
+    "parse.rs": 271215,
+    "Parse.lean": 405919
+  },
+  "source_attribution": {
+    "miner_hotkey": "5H1gDrr596T6DDAGrn9QNdigv44xXSFSzNzBtYz3PuvMxE1G",
+    "source_url": "https://conjectures.io/v1/competitions/deflate/submissions/402/source",
+    "retrieved_at_utc": "2026-10-06T18:58:39.763905+00:00",
+    "reference_metadata_sha256": "60273132baa0decc4656075169ed73c2b7342c3d9451f0139ff38ed74c7622db",
+    "note": "External public source, not an independent algorithm. Original provenance retained unchanged in the reference directory."
+  },
+  "entrypoint": "d_parse(input, out) for every input",
+  "constants": {
+    "D_DEPTH": {
+      "old": 512,
+      "new": 8
+    },
+    "D_LONG_DEPTH": {
+      "old": 64,
+      "new": 4
+    },
+    "D_LDEPTH": {
+      "old": 128,
+      "new": 4
+    },
+    "D_MDEPTH": {
+      "old": 32,
+      "new": 2
+    },
+    "D_INNER_D": {
+      "old": 24,
+      "new": 2
+    },
+    "D_INNER_L": {
+      "old": 24,
+      "new": 8
+    },
+    "D_INNER_MAXL": {
+      "old": 24,
+      "new": 8
+    },
+    "D_TRY_ALL": {
+      "old": 24,
+      "new": 8
+    },
+    "D_SPAN1": {
+      "old": 16,
+      "new": 8
+    },
+    "D_SPAN2": {
+      "old": 8,
+      "new": 4
+    }
+  },
+  "mechanism": "One uniform D engine: 32KiB blocks, sparse lazy match alternatives, learned literal/length/distance costs, backward DP and verified emit. Reduce search and short-length relaxation budgets; retain its existing second pass in the first four non-low-entropy blocks.",
+  "active_functions_static": [
+    "d_add_bias",
+    "d_backward",
+    "d_code_from",
+    "d_commit",
+    "d_copy16",
+    "d_cost16",
+    "d_count",
+    "d_dcode",
+    "d_dist_tables",
+    "d_emit",
+    "d_ext_len",
+    "d_extend_back",
+    "d_find",
+    "d_find_in",
+    "d_gain",
+    "d_hbuild",
+    "d_hcost",
+    "d_hins",
+    "d_hlens",
+    "d_insert",
+    "d_keep",
+    "d_lazy",
+    "d_learn",
+    "d_len_tables",
+    "d_load64",
+    "d_match_len",
+    "d_mix",
+    "d_parse",
+    "d_prefix",
+    "d_push_x",
+    "d_ravg",
+    "d_relax_run",
+    "d_seed",
+    "d_skip",
+    "d_tables",
+    "d_verified",
+    "parse"
+  ],
+  "routing_audit": "VERIFIED source-only direct-call closure excludes route, parse_c0/c1/c2 and all A-engine functions including hidden exact-length a_p_for; official extraction and deployed behavior unverified.",
+  "proof_change": "Only final Submission.parse_spec body replaced by direct existing engine theorem; all engine proof text retained. New constants and parser still require official re-extraction and complete gate.",
+  "proof_entry_theorem": "ED.parse_spec input out hlen",
+  "proof_entry_body": "rw [slot.parse]\nexact ED.parse_spec input out hlen",
+  "verification": "UNKNOWN: Rust build, extraction, Lean obligation, axiom whitelist, public round trip/performance, private stage2 and admission.",
+  "comparison_limit": "Original #402 mixes engines with exact-length routing, so its official point is not a matched same-engine calibration anchor for these uniform candidates."
+}

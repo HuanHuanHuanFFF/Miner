@@ -37,6 +37,10 @@ jobs:
         run: bash scripts/ci-prepare.sh
       - name: Install official verification toolchain
         run: bash scripts/ci-setup.sh
+      - name: Check finite CPU candidate equivalence
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round4.py
       - name: Screen public performance and inspect generated code
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
