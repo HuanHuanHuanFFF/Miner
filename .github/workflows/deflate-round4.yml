@@ -64,6 +64,11 @@ jobs:
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           export PYTHONPATH="$DEFLATE_ROOT/validator"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py refine
+      - name: Optional same-process relative timing diagnostic
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/interleaved-round4.py
       - name: Publish refined receipt
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

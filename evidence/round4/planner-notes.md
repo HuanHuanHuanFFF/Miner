@@ -92,3 +92,48 @@ All seven planner variants pass their generator's byte-for-byte `--check`; the f
 - Shared proof: `f14e3c7b8a5c89d84dcffdb5ffc43e4963a043538c42dd39e228cd351145ffaf`.
 
 **UNKNOWN:** new time/size, actual H passes and cache changes, fresh gate, private stage2, online admission, and rewards.
+
+## Read-only H search/cost audit and two prepared variants
+
+Source anchor throughout this section: frozen `candidates/r4-parse-plan-h4-deep32/parse.rs`, source SHA256 `4b15ae9dee3ead2f5b7450dcca08c9651fa45ef2bd2d0b0c332079196402e523`. Its G measurement was still running when the following hypotheses were prepared; no parent benefit is presumed.
+
+### What the length window removes
+
+**VERIFIED (source):** `h_prune_pos` and `h_relax_pos` process an ordinary cached maximum length `h` with lower bound `lo`: eligible lengths up to 10 are considered explicitly, while lengths >=11 start at `max(lo, 11, h-chw)`. Thus CHW=8 can leave only the final nine lengths of a long interval, not every shorter length. For a sole ordinary cached length 100, it tries 3..10 and 92..100, omitting 11..91. Inherited entries carrying the +512 flag try only their full length. Lengths within one DEFLATE length-code bucket use a range-minimum query; they are not all separate scalar relaxations.
+
+`h_push_slot1` with `H_SLOTM=1` replaces a shorter entry by a later longer entry when both have the same distance code. With unrestricted truncation, the longer match can represent every shorter prefix at the same distance-code cost. With CHW narrowing, deleting the shorter entry can also delete a useful length anchor: replacing length 20 by 100 removes the 12..20 interval that the shorter entry would have offered. This is a concrete interaction between two approximations. It does not establish how often the case occurs in the public corpus.
+
+The first query-recording pass also prunes alternatives farther than `H_PM=128` cost units (8 bits) from the running best, with an initial `H_MDEL=24` (1.5-bit) match discount. Later passes replay only the retained queries (`h_dp_pass` chooses `h_pass_items` once `pr!=0`). Extra pricing iterations therefore cannot recover lengths absent from either the match cache or this first retained-query set.
+
+### Cost model versus official encoding
+
+**VERIFIED (source and bounded formula checks):** `h_walk` re-counts exactly H_BT=16384 tokens per block, matching the official encoder's block criterion. Its length and distance code/extra-bit formulas were independently translated and checked against every official legal length (3..258) and distance (1..32768). Its RLE frequency/extra-bit formulas matched the official greedy RLE for all code-length values 0..15 and runs 1..318. These are local arithmetic checks, not execution of the candidate Rust or a full encoder-equivalence proof.
+
+The search costs still differ deliberately from emitted bits. `h_sym_costs` uses 25% approximate entropy and 75% Huffman-length cost for dynamic blocks (`H_EW=2` out of 8). Missing symbols use H_UNUSED=12 and an entropy prior. Starting with pass 2, H_OV=3 overrelaxes cost changes beyond the newly fitted value. DP uses raw block boundaries from the previous walk; its new path is then re-counted into actual 16384-token blocks, so the pricing boundary can lag by one pass. Header costs are included when a completed path is evaluated, but are not charged as per-symbol activation costs during the DP.
+
+`h_block_bits` includes dynamic header/RLE costs, fixed costs, and stored eligibility. It sums bit costs and omits actual stream alignment/final byte padding; stored writing can pay alignment dependent on the preceding stream. The dynamic tree builder has an ordinary-Huffman fast path with package-merge fallback, while the official encoder always uses package-merge. Its comments calling the result exact are not a proof that all tie cases or whole-stream byte counts agree. No measured mismatch is asserted here. The bounded table/RLE checks do not cover that question.
+
+### Best plan and early stop
+
+**VERIFIED (source):** `h_iterate` keeps the best evaluated plan using two choice buffers. `r = h_eval_mode(...)` is the sum of per-block `h_block_bits/4`; only `r < best` updates `bh`, and the final copy uses the `bh` buffer. If no pass improves, `bh=2` leaves the initial best literal/lazy plan. It does not blindly return the last pass.
+
+The stopping rule compares previous-pass `prev` with current `r`, not global best. Under H_RALPHA=2 it computes `((gain*r)/n*r)/n`, where `gain=max(prev-r,0)` and the source performs integer division after each product, multiplies the first-pass threshold by H_F1=8, and respects the minimum-pass count. A regression has zero gain and can stop once the minimum is reached; the best buffer remains protected, but further nonmonotonic cost fitting is not explored. Current receipts do not report these per-pass estimates or actual pass counts.
+
+### Prepared minimal experiments
+
+At the main thread's request, exactly two constant-only derivatives of the frozen H4-deep32 parent are prepared:
+
+| Candidate | Exact delta from parent | Expected distinction |
+| --- | --- | --- |
+| `r4-parse-plan-h4-deep32-wide` | H_CHW 8 -> 16; H_CHWS 16 -> 32 | Restore additional middle lengths without changing the search cache. This also enables the level-4 range-minimum update on larger inputs, adding work per DP position. |
+| `r4-parse-plan-h4-deep32-noslot` | H_SLOTM 1 -> 0 | Preserve shorter same-distance-code cache entries as length anchors, retaining the original narrow length windows. More cache entries and queries may increase time/memory. |
+
+Neither adds search depth, iterations, routing, loops, or proof state. The existing totality proofs and verified emitter are retained; they establish no optimality or performance property. A fresh official gate is required for each exact source. A roughly 0.05 percentage-point size improvement is a hypothesis to test, not a prediction from this audit.
+
+**VERIFIED (local generation):** all nine planner variants pass `make-round4-planner.py --check`. Each new manifest contains the parent source/proof SHA256, parent path and exact delta; generation checks the parent hashes. All earlier candidates retain exact bytes.
+
+- wide source: `3787e8f8f5fc9fa9674e21462b0600c9f3fdc86c175f40d673f0c3c3cf25a6e3`.
+- noslot source: `3a6aa5f4514a02526fbe1043b29e4e75aeea2e32eebf35a0984328c516f584d3`.
+- Shared proof: `f14e3c7b8a5c89d84dcffdb5ffc43e4963a043538c42dd39e228cd351145ffaf`.
+
+Both are prepared only, awaiting the main thread's decision after G results. Build, gate, performance, stage2 and online outcomes remain **UNKNOWN**.

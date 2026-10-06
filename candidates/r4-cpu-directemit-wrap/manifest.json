@@ -1,0 +1,48 @@
+{
+  "candidate": "r4-cpu-directemit-wrap",
+  "base_candidate": "r3-432-fast3",
+  "base_path": "candidates/r3-432-fast3",
+  "base_submission_id": "432",
+  "base_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "change": {
+    "constants": {},
+    "inline_attributes": {},
+    "source_edits": [
+      "directemit",
+      "directemit_wrap_return"
+    ],
+    "proof_edits": [
+      "directemit_helpers",
+      "directemit_bounds",
+      "directemit_comment",
+      "directemit_wrap_return"
+    ]
+  },
+  "mechanism": "The directemit experiment with count/position returns changed to safe wrapping_add, under the original Dec/MatchAt bounds proving no actual wrap. No other CPU ablation is combined.",
+  "expected_token_equivalence": "INFERRED under the original parse obligation: Dec/MatchAt give nt+1 and p+l at most usize::MAX, so wrapping returns equal the specified sums. Actual all-input Lean and runtime identity are UNKNOWN.",
+  "expected_equivalent": true,
+  "actual_token_equivalence": "UNKNOWN: no execution or corpus token comparison in this generator",
+  "proof": {
+    "mode": "Original Dec/MatchAt function specification retained; canonical packing plus wadd_val proves the two wrapping return values equal their non-overflowing sums; new all-path extraction/Lean required",
+    "sha256": "01c6b293c60336e8151ba94ec8b6869104f19c8784e196c016f86d06e7ce64b0",
+    "fresh_gate": "UNKNOWN"
+  },
+  "diagnostic": "F assembly proves a new p+l carry/panic branch on the prose kernel (direct 105ce/105d6 versus base 12567); it does not establish a new check on every route or nt+1. Compare emitted checks and paired/same-process parser and total times against both frozen directemit and fast3; no speed gain is assumed.",
+  "hashes": {
+    "parse.rs": "8589dc90cd895e84d02a11e850b9e753767c44338f7c4897511000ff1b2039c8",
+    "Parse.lean": "01c6b293c60336e8151ba94ec8b6869104f19c8784e196c016f86d06e7ce64b0"
+  },
+  "attribution": {
+    "source": "Officially published submission 432, then r3-432-fast3 constants",
+    "reference": "references/round3-public-432/PROVENANCE.md",
+    "public_miner_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "named_author": "UNKNOWN: official snapshot/source exposes no name",
+    "ownership": "Derivative of external public miner code; not an independent parser algorithm"
+  },
+  "scope": "Research candidate only; total paired compression, round trip, token hashes, fresh public gate, independent-runner reproduction, private stage2 and official admission are separate checks",
+  "cpu_gain": "UNKNOWN",
+  "formal_submission_sent": false
+}

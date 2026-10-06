@@ -159,6 +159,27 @@ def main() -> None:
             },
             "mechanism": mechanism,
         }
+    parent = policies["r4-parse-plan-h4-deep32"]
+    parent_ref = {
+        "candidate": "r4-parse-plan-h4-deep32",
+        "path": "candidates/r4-parse-plan-h4-deep32",
+        "source_sha256": "4b15ae9dee3ead2f5b7450dcca08c9651fa45ef2bd2d0b0c332079196402e523",
+        "proof_sha256": "f14e3c7b8a5c89d84dcffdb5ffc43e4963a043538c42dd39e228cd351145ffaf",
+    }
+    policies["r4-parse-plan-h4-deep32-wide"] = {
+        **parent,
+        "constants": {**parent["constants"], "H_CHW": (32, 16), "H_CHWS": (128, 32)},
+        "parent": parent_ref,
+        "delta_from_parent": {"H_CHW": {"old": 8, "new": 16}, "H_CHWS": {"old": 16, "new": 32}},
+        "mechanism": "Relative to frozen h4-deep32, widen only the candidate-length tail: CHW 8 -> 16, CHWS 16 -> 32. Restore middle match lengths omitted between the always-considered short lengths and the last chw+1 lengths of each ordinary cached match. Search depths, iteration cap, early stop, cost model and routing unchanged.",
+    }
+    policies["r4-parse-plan-h4-deep32-noslot"] = {
+        **parent,
+        "constants": {**parent["constants"], "H_SLOTM": (1, 0)},
+        "parent": parent_ref,
+        "delta_from_parent": {"H_SLOTM": {"old": 1, "new": 0}},
+        "mechanism": "Relative to frozen h4-deep32, disable only replacement of a shorter cached match by a longer one sharing its distance code. With narrowed CHW, the shorter entry can anchor useful middle lengths otherwise discarded. Search depths, iteration cap, length-tail widths, cost model and routing unchanged.",
+    }
     assert set(args.only) <= policies.keys(), "unknown --only candidate"
     for name, policy in policies.items():
         if args.only and name not in args.only:
@@ -198,6 +219,13 @@ def main() -> None:
             "verification": "UNKNOWN: Rust build, extraction, Lean obligation, axiom whitelist, public round trip/performance, private stage2 and admission.",
             "comparison_limit": "Original #402 mixes engines with exact-length routing, so its official point is not a matched same-engine calibration anchor for these uniform candidates.",
         }
+        if "parent" in policy:
+            parent_info = policy["parent"]
+            parent_path = ROOT / parent_info["path"]
+            assert digest((parent_path / "parse.rs").read_bytes()) == parent_info["source_sha256"], "parent source drift"
+            assert digest((parent_path / "Parse.lean").read_bytes()) == parent_info["proof_sha256"], "parent proof drift"
+            metadata["parent"] = parent_info
+            metadata["delta_from_parent"] = policy["delta_from_parent"]
         files["manifest.json"] = (json.dumps(metadata, indent=2) + "\n").encode()
         dest = ROOT / "candidates" / name
         if args.check:

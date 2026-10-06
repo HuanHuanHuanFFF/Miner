@@ -142,6 +142,17 @@ VARIANTS = {
         "expected_token_equivalence": "NOT_EXPECTED: bucket collisions and retained candidates change. Actual token/output changes and paired compression cost must be measured independently.",
         "diagnostic": "Base assembly keeps a 64-bit golden-ratio constant in a register and uses imul plus a 49-bit shift per slot. A 32-bit imul immediate can reduce instruction/register cost; collision quality and total speed are UNKNOWN. Original slot_of for run1t and insert for the chain engine are retained controls.",
     },
+    "r4-cpu-directemit-wrap": {
+        "constant_changes": {},
+        "attributes": {},
+        "source_edits": ["directemit", "directemit_wrap_return"],
+        "proof_edits": ["directemit_helpers", "directemit_bounds", "directemit_comment", "directemit_wrap_return"],
+        "proof_mode": "Original Dec/MatchAt function specification retained; canonical packing plus wadd_val proves the two wrapping return values equal their non-overflowing sums; new all-path extraction/Lean required",
+        "expected_equivalent": True,
+        "mechanism": "The directemit experiment with count/position returns changed to safe wrapping_add, under the original Dec/MatchAt bounds proving no actual wrap. No other CPU ablation is combined.",
+        "expected_token_equivalence": "INFERRED under the original parse obligation: Dec/MatchAt give nt+1 and p+l at most usize::MAX, so wrapping returns equal the specified sums. Actual all-input Lean and runtime identity are UNKNOWN.",
+        "diagnostic": "F assembly proves a new p+l carry/panic branch on the prose kernel (direct 105ce/105d6 versus base 12567); it does not establish a new check on every route or nt+1. Compare emitted checks and paired/same-process parser and total times against both frozen directemit and fast3; no speed gain is assumed.",
+    },
 }
 
 SOURCE_EDITS = {
@@ -246,6 +257,16 @@ SOURCE_EDITS = {
         "    (k.wrapping_mul(0x9E37_79B9) >> (32 - HB)) as usize % H\n"
         "}",
     ),
+    "directemit_wrap_return": (
+        "pub fn put_match(s: &[u8], out: &mut [u32], nt: usize, p: usize, d: usize, l: usize) -> (usize, usize) {\n"
+        "    out[nt] = pack_match(d, l);\n"
+        "    (nt + 1, p + l)\n"
+        "}",
+        "pub fn put_match(s: &[u8], out: &mut [u32], nt: usize, p: usize, d: usize, l: usize) -> (usize, usize) {\n"
+        "    out[nt] = pack_match(d, l);\n"
+        "    (nt.wrapping_add(1), p.wrapping_add(l))\n"
+        "}",
+    ),
 }
 
 PROOF_EDITS = {
@@ -337,6 +358,14 @@ PROOF_EDITS = {
         "  have hdec' := hdec\n"
         "  obtain ⟨hp_bound, hnt_bound, hout_bound, _⟩ := hdec'\n"
         "  have hm' := hm",
+    ),
+    "directemit_wrap_return": (
+        "  exact Dec.match_step hdec hm (by assumption)\n"
+        "    (by simp only [LZ77.mkMatch, LZ77.MATCH_BASE]; scalar_tac) (by assumption) (by assumption)",
+        "  exact Dec.match_step hdec hm (by assumption)\n"
+        "    (by simp only [LZ77.mkMatch, LZ77.MATCH_BASE]; scalar_tac)\n"
+        "    (wadd_val (by assumption) (by scalar_tac))\n"
+        "    (wadd_val (by assumption) (by scalar_tac))",
     ),
 }
 

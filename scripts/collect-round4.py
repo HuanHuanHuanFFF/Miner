@@ -7,6 +7,8 @@ from pathlib import Path
 import statistics
 import subprocess
 import sys
+import tempfile
+import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -98,16 +100,34 @@ def main():
     env = helper.gh_env()
     meta = json.loads(helper.run(['run', 'view', args.run_id, '--repo', 'HuanHuanHuanFFF/Miner', '--json', 'databaseId,headSha,headBranch,event,status,conclusion,createdAt,updatedAt,url,jobs'], env))
     artifacts = json.loads(helper.run(['api', f'repos/HuanHuanHuanFFF/Miner/actions/runs/{args.run_id}/artifacts'], env))['artifacts']
-    print('STATUS', args.run_id, meta['status'], meta['conclusion'], 'artifacts', [(a['name'], a['size_in_bytes']) for a in artifacts if not a['expired']])
+    print('STATUS', args.run_id, meta['status'], meta['conclusion'], 'artifacts', [(a['name'], a['size_in_bytes']) for a in artifacts if not a['expired']], flush=True)
     if args.mode == 'status':
         print('ACTIVE_STEPS', [s['name'] for j in meta['jobs'] for s in j['steps'] if s['status'] == 'in_progress']); return
     name = f'r4-{args.run_id}-{args.phase}'
     artifact = next((a for a in artifacts if a['name'] == name and not a['expired']), None)
     if artifact is None:
         print('Requested phase receipt is not available yet.'); return
-    target.mkdir(parents=True, exist_ok=True)
+    target.parent.mkdir(parents=True, exist_ok=True)
     if not (target / 'state.json').exists():
-        helper.run(['run', 'download', args.run_id, '--repo', 'HuanHuanHuanFFF/Miner', '--name', name, '--dir', str(target)], env)
+        # Download into a new folder: an interrupted transfer must not masquerade
+        # as a complete receipt merely because state.json arrived first.
+        stage = Path(tempfile.mkdtemp(prefix='.' + args.phase + '-download-', dir=target.parent))
+        subprocess.run(['gh', 'run', 'download', args.run_id, '--repo', 'HuanHuanHuanFFF/Miner',
+                        '--name', name, '--dir', str(stage)], env=env, check=True,
+                       capture_output=True, text=True, encoding='utf-8', timeout=180)
+        state = json.loads((stage / 'state.json').read_text())
+        assert state['run_id'] == args.run_id and state['git_sha'] == meta['headSha']
+        for metric in state['metrics']:
+            assert (stage / f"round{metric['round']}-{metric['candidate']}.jsonl").is_file()
+        evidence_root = (ROOT / 'evidence/round4').resolve()
+        assert stage.resolve().is_relative_to(evidence_root)
+        assert target.resolve().is_relative_to(evidence_root) and not target.is_symlink()
+        if target.exists():
+            backup = target.with_name(target.name + '-incomplete-' + uuid.uuid4().hex[:8])
+            assert backup.resolve().is_relative_to(evidence_root)
+            target.rename(backup)
+            print('Preserved earlier incomplete receipt:', backup.relative_to(ROOT), flush=True)
+        stage.rename(target)
     (target / 'ci-run.json').write_text(json.dumps(meta, indent=2) + '\n')
     (target / 'artifact-receipt.json').write_text(json.dumps(artifact, indent=2) + '\n')
     if meta['status'] == 'completed' and args.phase == 'gate':

@@ -168,3 +168,109 @@ There are exactly five source call sites for `put_match`, apart from its declara
 `Dec` gives `nt≤p` and `input.length≤out.length`; `MatchAt` gives `l≥3` and `p+l≤input.length`. Therefore `nt<out.length`, `nt+1≤usize::MAX`, and `p+l≤usize::MAX`. The candidate's `put_match_spec` now explicitly extracts these Dec bounds and the slice-length maximum before its steps, rather than relying on their discovery. No runtime check is substituted for missing match evidence, and no new axiom/assumption is added to the obligation. This is a source/proof dependency audit; the new all-call-site theorem acceptance remains UNKNOWN until actual extraction and Lean succeed. Public token identity alone cannot settle it.
 
 Neither new candidate changes a main-loop acceptance condition or introduces another nested search loop. This avoids the particular B extraction failure reported by the parent (complex acceptance OR cloned the nested lazy loop), but does not prove the next extraction will succeed.
+
+## D: outlining remains slower even with constants retained
+
+Read `evidence/round4/37522012041/screen/` only; F inputs are frozen and unchanged. D total-axis changes versus fast3 are `fast3-shadow` +0.3151%/-0.2771% (mean about +0.019%), `flushzero` +0.2694%/+0.3919%, `run1tai` +0.7999%/+0.1222%, and `classoutline` +2.9604%/+3.4472%. A's small negative `run1tai` result did not independently reproduce as a total-axis improvement. No new CPU direction is selected from these data.
+
+**VERIFIED classoutline code generation**: separate `run1_prose::<32768>` and `run1_text::<32768>` kernels each occupy `0x178a` bytes (6026). Prose's miss shift is the immediate `shr rax,0x5` at `efac`; text's is immediate `shr rax,0x3` at `11afc`. Their hash operations (`def7/defb` and `10a47/10a4b`) multiply and shift directly with no runtime km mask read. The kernels take only the input/output slice arguments, not skip/lazy/km settings; the `lazy=0` search loop is absent. The remaining variable `shr ...,cl` at `ed4b`/`1189b` is the backward-word mask, not the miss skip. The experiment therefore retained the settings that generic `run1ni` lost.
+
+**VERIFIED structural costs**: `.text` is 323617 bytes, **6336 larger** than fast3, while main `parse` shrinks to `0x73a5` (29605). Main `parse` still probes/allocates a 128 KiB stack frame at `1217a-12198`; a taken outlined text/prose kernel probes/allocates another 128 KiB frame at `de9a-deb8` or `109ea-10a08`, and clears its head array. Fast3's corresponding parser uses one such main frame. Thus class outlining duplicated code/stack work rather than providing a general footprint reduction. Registers, code addresses and head-table stack placement also change. These are observed machine-code differences; without hardware counters their contributions to the full slowdown cannot be apportioned.
+
+The regression is concentrated on the outlined routes: raw parser medians for `prose.txt` +38.36%/+38.22%, `bundle.min.js.txt` +33.69%/+33.10%, `source.py.txt` +35.45%/+35.26%, with near-unchanged encoder medians. Binary/database, machine-code, server-log and metrics examples remain near baseline. Consequently, constant loss is **not a sufficient explanation** for generic `run1ni`'s regression: a constant-preserving outline also regresses strongly. It is sound to report the generic kernel's extra runtime settings and the outline experiment's structural costs; it is not sound to assign the full +4.317% generic slowdown solely to runtime shifts, or to claim a measured I-cache/branch cause.
+
+`flushzero` shows small raw parser decreases on some bins (-4.01%/-5.02% database and -4.45%/-4.26% machine-code), but its total axis is slower in both blocks. `run1tai` again shows faster raw parsers on several large files while encoder drift and the total axis do not establish a gain. The duplicate fast3 control changes sign across order blocks. Keep parser components as diagnostics and decide with matched official total ratios.
+
+**VERIFIED finite checks**: `equivalence-research.json`, harness SHA256 `e51ddb9c7fb5de29b917fc5642711c6c376adde7911329bec375aaa5d53916e7`, returns 0 and reports 444 cases with zero different/failed cases for each of `flushzero`, `classoutline`, and `run1tai`. The harness is 28 public inputs plus 26 boundary lengths ×8 generated modes ×2 seeds (416 generated inputs), comparing counted tokens with fast3 and independently decoding them. Modes include source-like text, noisy text, prose, structured records, random bytes, parity data, zero-rich bytes and DNA-like bytes. A separate fresh local raw-file audit verifies public input, token/count, and DEFLATE output hash/length identity on 56 file/block records per CPU variant. These tests do not replace a full input-domain theorem or fresh obligation.
+
+D's optional token-profile uses the old script SHA256 `0d722070...` and failed compilation on both selected parsers with the same unmatched JSON closing brace as C. `files=[]`, so D has no token-block distributions. The fixed `4f2e9f1d...` script is reserved for later runs; these failed profiles are not used as zero counts or cost evidence. D's perf capability remains denied. No candidate, generator, profiler or F frozen bytes were changed during this read-only attribution pass.
+
+## D refinement: the flushzero mean reverses through normalization
+
+Read all four blocks in `evidence/round4/37522012041/refine/`; no unfavorable file/block is removed. `flushzero`'s relative time-axis changes are **+0.26936%, +0.39191%, -2.72246%, -0.42319%**, mean about **-0.62110%**. The first screen's positive mean therefore flips mainly through block 3. Source and library identity do not change: fast3 source `bae80141...` / library `e3c97b3aef581e8e4a6e0f848cdd79427cdc9aa441d32c3110b73cc0508d3566`; flushzero source `ed565b50...` / library `a817dd0837b3884b67c138289d057142cfac1ac3a5ac9d6c54b1c445bdceb335` are fixed across four blocks. Engine/host hashes and reported AMD EPYC 7763 identity are also fixed. A fresh raw audit confirms candidate and incumbent input/token/output identities for all 112 file/block records.
+
+To separate components without falsely adding independent medians, select the actual repetition at each method's median **total** time. Its parser and encoder sum to that total. For a file, with candidate total `C`, baseline total `B`, candidate-process incumbent median `I_C` and baseline-process incumbent median `I_B`, the exact ratio difference is:
+
+`C/I_C - B/I_B = (P_C-P_B)/I_B + (E_C-E_B)/I_B + C*(1/I_C-1/I_B)`.
+
+Average all 28 files and divide by the block's baseline axis. These terms are an arithmetic attribution, not proof of causal CPU/encoder/host effects:
+
+| Block | Parser numerator | Encoder numerator | Incumbent normalizer | Full relative time-axis change |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | -0.17223 | +0.24820 | +0.19339 | +0.26936 |
+| 2 | -0.11694 | -0.29815 | +0.80699 | +0.39191 |
+| 3 | -0.07035 | +0.11096 | **-2.76307** | **-2.72246** |
+| 4 | -0.30071 | -1.19917 | +1.07669 | -0.42319 |
+
+All cells are percentage-point contributions to the **relative time-axis percentage change**, not compression-size percentage points. Block 3's improvement is almost entirely due to a slower incumbent in the flushzero measurement process; the parser term is only -0.07035. Block 4 also includes sizable encoder and normalizer differences, despite identical encoded bytes.
+
+Block 3 has several large normalizer differences rather than one discarded observation:
+
+| File | Incumbent total median difference vs baseline process | Candidate own total difference | Contribution to relative time-axis change | Normalizer part |
+| --- | ---: | ---: | ---: | ---: |
+| `sparse.bin` | +16.860% | -0.579% | -0.9451 | -0.9085 |
+| `binary.db.bin` | +9.075% | -1.467% | -0.3507 | -0.2975 |
+| `catalog.xml.txt` | +12.507% | -0.218% | -0.3156 | -0.3095 |
+| `tiny-config.json.txt` | +6.720% | +3.630% | -0.1569 | -0.3536 |
+| `dump.sql.txt` | +8.444% | +0.588% | -0.1378 | -0.1490 |
+
+The sparse incumbent parser median rises from **144.059 us to 268.451 us (+86.348%)** while its encoder median changes only -0.664%. Ten of its eleven measured parser repetitions are near 268-280 us, versus the baseline process's repetitions near 144-155 us. Thus this is not a single sample that median filtering removes. Database and catalog incumbent parsers rise +14.120% and +16.544%; SQL +9.651%, again affecting many repetitions. Their exact raw records remain in the receipt. These shifts could reflect execution interference or other runtime effects; perf/counter evidence is unavailable, so their cause is UNKNOWN.
+
+The four-block mean is an observed public ratio and must be kept, but is **not sufficient evidence that zero-flush improves CPU speed or achieves a robust >=1% total gain**. A separate runner, with the exact source/library and incumbent provenance, matched forward/reverse blocks and the duplicate-fast3 control, is the minimum useful follow-up if the parent chooses to spend another CI run. It should retain all files and repetitions, report normalizer/component differences again, and resolve whether the effect persists before selecting this candidate. No code or frozen input was changed during this analysis.
+
+## Optional shared-process relative diagnostic
+
+`scripts/interleaved-round4.py` adds an optional experiment without changing `round4.py`, a workflow, or any official file. Read `ROUND4_SPEC`; absent/empty `interleaved_names` performs no build/output operations. Otherwise it accepts at most three distinct names already in that spec, always includes fast3 and the official incumbent, and checks both candidate file hashes against the spec before and after the experiment.
+
+**VERIFIED API review**: the pinned `measure/src/main.rs` parses any vector of `name=crate-dir` arguments, loads every method, and iterates that vector in CLI order for each warmup/measured round. The driver intentionally calls the engine separately for each candidate, but its `_make_workspace`, `_generate`, `_build`, `_rustc_version`, `measure_sandbox` and `_cleanup` helpers can be used unchanged for this auxiliary call. Local AST review matches all six function signatures; the script also checks those signatures on the runner. The first implementation mistakenly used Windows CRLF working-copy hashes (`c17cb16c...` / `fe9ff7fc...`), which do not match Linux Git blob bytes. The parent caught this during review and corrected the hard locks by reading the fixed official Git objects: driver `8b29e832a5849c9e97649b390496dcda12c3ed081c39c0bf4a1c94d593f827e3`, engine main `ea4d6378fb0c03681488e4471a97ae001aa0dd3a61a30e9912606d5c4bd7adaa`. These corrected values are present in the shared script. A mismatch refuses the diagnostic rather than modifying official code.
+
+The script uses the same official crate template, cargo release/offline build, fixed toolchain, encoder, 2048/4096-MB defaults, selected CPU, and read-only measurement sandbox as the parent round4 entry. One process uses `[incumbent, fast3, requested...]`; the second keeps incumbent first and reverses the entire non-incumbent group, placing fast3 at the opposite end. Each has one warmup and eleven measured repetitions per method/file. Every method's 28 public file records must have complete repetitions, round trips and deterministic hashes; raw `order_index` certifies actual method order. Cross-order token/output identities and loaded source/library hashes are checked. Any failure makes the optional report `AUXILIARY_DIAGNOSTIC_FAILED` even though the script returns zero to leave the primary experiment independent.
+
+All complete engine stdout is preserved verbatim under `RUNNER_TEMP/round4-receipts/interleaved/`, with stderr, CLI/order metadata and a summary. The summary reports the equal-file total-time axis using the same process's incumbent per-file denominator, the axis ratio to fast3, separate unweighted candidate/fast3 file ratios, compression percentages and public hash equality. Independent parser/encoder medians are labeled as diagnostics, not added as though their medians necessarily sum. No admission, Pareto or reward calculation is made. This shares the reference observation rather than deleting a noisy record; order and cross-method execution interference can still affect times, so it does not replace the official per-candidate paired result.
+
+Build libraries/toolchains are not uploaded. The pinned driver creates a unique child of `RUNNER_TEMP/round4-interleaved-build/`; resolved path/direct-child/non-symlink checks precede any cleanup. Only that exact child is deleted after confirmed success. Failed workspaces remain in the ephemeral runner until its disposal, with their path reported; neither the parent build directory nor the official checkout is removed. Engine, encoder, template, toolchain, incumbent and source/proof bytes are checked for changes.
+
+**VERIFIED locally (first implementation)**: `py_compile` succeeds, the six AST signatures match, and a pure Python 28-file fixture accepts correct records while rejecting a roundtrip failure and wrong execution order. Its hash check matched the local CRLF files only; it did not verify Linux compatibility and was superseded by the parent's Git-blob correction above. **UNKNOWN**: actual runner build, sandbox invocation, multi-method results and timing behavior. No local Rust, CI dispatch, push or candidate edit was performed for this utility.
+
+## F directemit: fewer predicates, no measured parser gain
+
+Read `evidence/round4/37524045017/screen/`. **VERIFIED finite checks**: directemit's 444 cases return 0 with zero different/failed cases, harness hash `4ad5e34551a2c41178d131d5ed16d528390a74b86ebdef98703d05e063ae5f8f`. An independent raw audit confirms token count, token-prefix SHA256, output size/SHA256 against fast3 for all 56 public file/block records. This is not new Lean acceptance.
+
+Using the exact total-median-repetition decomposition described above:
+
+| Block | Parser numerator | Encoder numerator | Incumbent normalizer | Full relative time-axis change |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | +0.40396 | +0.23673 | -0.09287 | +0.54782 |
+| 2 | +0.23956 | -0.13733 | +0.52417 | +0.62640 |
+
+There is no overall parser improvement hidden by the normalizer in these two blocks. Raw parser medians regress on `bundle.min.js.txt` +5.016%/+4.021%, `prose.txt` +3.197%/+6.413%, `machine-code.bin` +2.548%/+1.264%, and database +0.433%/+1.044%. Some files vary (metrics -0.552%/+2.191%, server +1.894%/-0.322%); all are retained. Repairing a failed all-path proof is not justified by an established speed signal in this version.
+
+**VERIFIED assembly inventory** (static instruction counts include cold/panic blocks; they are not dynamic executed counts):
+
+| Emitted function / source call-site coverage | Instructions base/direct | Conditional branches base/direct | Add-overflow panic call blocks base/direct |
+| --- | ---: | ---: | ---: |
+| `parse` / inlined `run1` instances | 8649 / 8697 | 1235 / 1176 | 19 / 19 |
+| `run_rest` / regular `run` instances | 2645 / 2530 | 356 / 337 | 9 / 10 |
+| `run_st` / stride writer | 303 / 283 | 37 / 34 | 2 / 2 |
+| `run1t::<4096>` / `e_pieces` | 1256 / 1244 | 167 / 161 | 10 / 10 |
+| `run_z` / `e_pieces` | 325 / 308 | 41 / 38 | 6 / 6 |
+
+The fifth source call site, `run_dna`, is not emitted under the frozen `DN_ON=0`; its proof remains part of the candidate file. `pack_match` is inlined, so there is no new function-call cost. Pack construction remains a u32 shift/lea/add without a new packing overflow branch. The main `parse` size changes only `0x8d7b -> 0x8d71` (-10 bytes), and `.text` falls 720 bytes. Fewer guard branches do not make the loop uniformly smaller or faster: main parse has 48 more static instructions, while other writer bodies shrink.
+
+There is direct evidence that removal loses at least some machine-level no-overflow information. The prose kernel is identified by its immediate miss shift `P_SKIP=5`: in fast3, pack at `12559` is followed by `12567 add rbx,rax`, then the record path at `126c2` without checking carry. In directemit, pack at `105c6` is followed by `105ce add r10,r9` and **`105d6 jb 17a9b`**; target `17aa2` calls `panic_const_add_overflow`. Thus an extra check on returning `p+l` is observed on this hot path. Some other base kernels already check that add (e.g. `1174d/1175d` and stride `18304/18307`), so the new effect is not claimed for every call. No extra `nt+1` or packing panic cost is established from the inspected sites.
+
+A single separate return-wrapping variant is therefore falsifiable: use safe `wrapping_add` for `nt+1` and `p+l`, prove their natural values using the original Dec/MatchAt bounds, and compare the removed carry branch plus actual parser/total times with both fast3 and frozen directemit. It must not use unsafe or unchecked indexing. This candidate is justified by the emitted branch, not by a demonstrated speed gain; formal and runtime validation remain required. No F frozen byte is changed.
+
+The repaired token-profile script now returns `DIAGNOSTIC_OK` in F for fast3, hash32, and alt299-halfpass. Its scope is untimed token/block statistics with independent byte validation, not encoder timing or proof; C/D's empty failed profiles remain unavailable.
+
+## One follow-up: directemit wrapping returns
+
+At the parent's explicit request after the carry-branch inspection, `r4-cpu-directemit-wrap` is generated as a separate candidate. It contains directemit's unchanged canonical packing and changes only the two returns to `nt.wrapping_add(1)` and `p.wrapping_add(l)`. It is not combined with zero-flush or another ablation. The machine-code evidence establishes a newly introduced **prose p+l carry check**; it does not establish that nt+1 gained a check or every path changed in the same way.
+
+The `put_match_spec` statement, original Dec/MatchAt preconditions, canonical-token conclusion, and all-path caller proofs are retained. The new return proof applies the existing `wadd_val` theorem twice. Dec gives `nt≤p`; MatchAt gives `l≥3`, `p+l≤input.length`; the slice length is at most usize::MAX. Thus `nt+1` and `p+l` do not overflow in the function's specified domain and their wrapping values are the same sums. No axiom, weakened postcondition, unsafe block, or unchecked indexing is added. Actual extraction/Lean acceptance remains UNKNOWN, including the packing helper inherited from directemit.
+
+- Source SHA256: `8589dc90cd895e84d02a11e850b9e753767c44338f7c4897511000ff1b2039c8`.
+- Proof SHA256: `01c6b293c60336e8151ba94ec8b6869104f19c8784e196c016f86d06e7ce64b0`.
+- Fresh `--check` reconstructs all sixteen candidates; Python syntax passes. Generation used `--only` for this new candidate. Frozen F directemit and hash32 source/proof hashes are unchanged.
+
+The minimum test is fast3, frozen directemit, and this wrapping variant as distinct methods, with all public/generated token identities, public decoder checks, actual overflow-branch inventory and paired/same-process total measurements. If the new carry branch disappears but parser/total regression remains, the deleted check does not explain enough of the cost; stop rather than treating a smaller branch count as a win. If a useful signal appears, full extraction/Lean/axiom/gate and independent-runner verification still precede a correctness or front-position claim.
