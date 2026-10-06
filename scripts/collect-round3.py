@@ -25,7 +25,7 @@ def analyze(target):
         match = re.search(r'RAW_EVIDENCE (\d+) (\S+) (\{.*\})$', line)
         if match:
             records.setdefault((int(match[1]), match[2]), []).append(json.loads(match[3]))
-        match = re.search(r'MEASUREMENT (\{.*\})$', line)
+        match = re.search(r'(?<![A-Za-z_])MEASUREMENT (\{.*\})$', line)
         if match:
             d = json.loads(match[1]); reported[d['round'], d['candidate']] = d
         match = re.search(r'GATE_RESULT (\{.*\})$', line)
