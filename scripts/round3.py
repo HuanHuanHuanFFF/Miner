@@ -76,7 +76,9 @@ def main():
     batch_name = os.environ['ROUND3_BATCH']
     assert batch_name in ('batch-a', 'batch-b', 'batch-c')
     batch = json.loads((workspace / 'evidence/round3' / (batch_name + '.json')).read_text())
-    targets = json.loads((workspace / 'evidence/round3/frontier-targets.json').read_text())
+    frontier_file = (workspace / batch.get('frontier_file', 'evidence/round3/frontier-targets.json')).resolve()
+    assert frontier_file.is_relative_to((workspace / 'evidence/round3').resolve())
+    targets = json.loads(frontier_file.read_text())
     points = targets['points']
     corpus = corpora.load(upstream / 'validator').by_name('corpus-stage1')
     assert corpus.public
@@ -90,6 +92,7 @@ def main():
             assert hashlib.sha256((p / filename).read_bytes()).hexdigest() == expected
         paths[entry['name']] = p
     candidates = [e['name'] for e in batch['candidates'] if not e.get('control')]
+    control_names = batch['controls'] + [e['name'] for e in batch['candidates'] if e.get('control')]
     metrics, evidence, failures = [], {}, []
 
     def measure(block, order):
@@ -100,9 +103,10 @@ def main():
                 errors = measured.failures(name) + measured.failures(INCUMBENT)
                 assert not errors, errors
             except Exception as exc:
-                failures.append({'candidate': name, 'round': block, 'error': str(exc)})
+                failures.append({'candidate': name, 'round': block, 'error': str(exc),
+                                 'detail': getattr(exc, 'detail', None)})
                 print('SCREEN_FAILURE ' + json.dumps(failures[-1]), flush=True)
-                if name in batch['controls']:
+                if name in control_names:
                     raise
                 continue
             files = [f for f in measured.files if f.raw_bytes > 0]
@@ -160,7 +164,7 @@ def main():
     print('SCREEN_SUMMARY ' + json.dumps(screen), flush=True)
     shortlist = [r['candidate'] for r in screen[:batch['shortlist']]]
     for block in range(batch['screen_blocks'] + 1, batch['screen_blocks'] + batch['refine_blocks'] + 1):
-        order = batch['controls'] + shortlist
+        order = control_names + shortlist
         measure(block, order if block % 2 else list(reversed(order)))
     ranked = summarize(shortlist)
     print('REFINED_SUMMARY ' + json.dumps(ranked), flush=True)
@@ -202,8 +206,13 @@ def main():
             raise RuntimeError('Official verifier infrastructure error')
     summary = {'scope': 'public stage1; speculative calibration; no stage2, admission or payout evidence',
                'batch': batch_name, 'snapshot': targets['context'], 'cpu_affinity': cpu,
-               'screen': screen, 'refined': ranked, 'controls': summarize(batch['controls']),
+               'screen': screen, 'refined': ranked, 'controls': summarize(control_names),
                'gates': gates, 'failures': failures, 'metrics': metrics}
+    if batch.get('synthetic_validation'):
+        from round3_synthetic import run_validation
+        validated = [name for name, v in gates.items() if v.get('accepted')]
+        if validated:
+            summary['synthetic_validation'] = run_validation(config, paths, ['probe3'] + validated, reports)
     (reports / 'round3-summary.json').write_text(json.dumps(summary, indent=2) + '\n')
     print('ROUND3_SUMMARY ' + json.dumps(summary), flush=True)
     subprocess.run(['git', 'diff', '--exit-code'], cwd=upstream, check=True)

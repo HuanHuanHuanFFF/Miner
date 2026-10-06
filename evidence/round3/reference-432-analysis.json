@@ -1,0 +1,94 @@
+{
+  "created_at_utc": "2026-10-06T16:00:14.798Z",
+  "snapshot": {
+    "file": "evidence/round3/snapshot-23817/pareto-pages.json",
+    "snapshot_id": "23817",
+    "computed_at_utc": "2026-10-06T15:44:54.566565+00:00",
+    "item_count": 436,
+    "frontier_count": 71,
+    "freshness": "unknown"
+  },
+  "source": {
+    "submission_id": "432",
+    "endpoint": "https://conjectures.io/v1/competitions/deflate/submissions/432/source",
+    "retrieval_http_status": 200,
+    "source_get_count": 1,
+    "fetched_at_utc": "2026-10-06T15:50:00.442Z",
+    "snapshot_gate_status": "passed",
+    "snapshot_on_frontier": false,
+    "snapshot_admission": "passed",
+    "metrics": {
+      "balanced_time_ratio": 0.4413850574969763,
+      "mean_file_compression_pct": 36.91273515631194,
+      "total_compression_seconds": 0.6171259450000001
+    },
+    "miner_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "named_author_exposed": false,
+    "project_affiliation": "UNKNOWN; the public snapshot/source exposes a miner hotkey but no named author or project link"
+  },
+  "files": {
+    "parse_rs": {
+      "path": "references/round3-public-432/parse.rs",
+      "size_bytes": 106749,
+      "sha256": "160d1b3f9edb307a0f97bde13cd972b5f6f0a426dd669515f639e4bfa24ef054"
+    },
+    "proof_lean": {
+      "path": "references/round3-public-432/Parse.lean",
+      "size_bytes": 221898,
+      "sha256": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+    }
+  },
+  "actual_entry": {
+    "exported_function": "pub fn parse",
+    "source_line": 1604,
+    "call_chain": [
+      "tf_route (parse.rs:2901) checks only the general threshold len <= TF_N (65536), then tf_class samples up to TF_SAMPLE=256 bytes and classifies control/zero/digit proportions. With TF_TEXT=0, only kind 2 is returned by this route.",
+      "If kind==2, TZ_ON=1 selects run_z. The planner+emit branch exists in parse but is not selected for the current kind-2 route; ordinary text returns kind 3 and proceeds to sniff.",
+      "sniff (parse.rs:206) samples up to SAMPLE=2048 bytes and selects DNA-like, text, high-entropy binary, other binary, zero-rich high-entropy, prose, or structured-text classes.",
+      "st_route (parse.rs:626) only considers class 2 or 4 with len > ST_MIN=65536. st_phase (parse.rs:592) samples up to ST_SAMPLE=4096 byte pairs; it routes only when one parity has at most ST_FEW=32 distinct values and the other at least ST_MANY=160. run_st (parse.rs:695) searches every other position with a three-byte direct-mapped table and accepts distances ST_DMIN=129 through ST_DMAX=32768.",
+      "e_kind (parse.rs:1024) sends classes 1, 5, 6 at len <= TM_MAX=65536 to run1t with T_SKIP. At larger lengths, class 1 and class 6 meet r1_kind single-step conditions and use run1 with T_SKIP; class 5 has P_DEPTH=4 and uses the P_SKIP path.",
+      "DN_ON=0 makes the DNA branch inactive. R1_ON=1 and the current one-step class depths enable the read-ahead run1 path for qualifying classes."
+    ],
+    "hardcoding_review": {
+      "exact_input_length_match": "No input.len()==literal file-size branch found in the active entry/classifier search.",
+      "exact_content_signature": "No file name, digest, or fixed header signature found in the active routing chain; routing uses sampled byte-category histograms and parity diversity.",
+      "generic_thresholds": "TF_N, TM_MAX, SMALL and ST_MIN are general cutoffs, not exact-file matches."
+    }
+  },
+  "comparison": {
+    "probe3_261": "Shares fastX class sniffing, hash-chain search, lazy choice, backward token merge and skip acceleration. The exported #432 parser adds the run1 read-ahead path and stride-2 pair-structured binary path. #432 has T_SKIP=4 and T_DEPTH=1; probe3 has T_SKIP=3 and T_DEPTH=3.",
+    "source_407": "Both use content-dependent routing, but #407 parse starts with a quick RLE sample, can consume an fl_part prefix, then dispatches the remainder through sampled entropy/mode lanes. #432 routes directly from tf_route/sniff into run_z, run1t, run_st, run1 or the general hash-chain run; its special structural-binary path is parity-based."
+  },
+  "proof_risk": {
+    "source_proof": "Parse.lean contains parse_spec at line 4463, plus skip_len_spec (3141), run1_spec (3647), run1t_spec (4027), st_slot_spec (4119), st_find_spec (4185), and run_st_spec (4306).",
+    "documented_constant_constraints": "T_SKIP is a skip shift with skip<32 (global shifts <=31); ST_DMIN is free; ST_HB must be 1..64; ST_HN >=1; ST_DMAX <=32768.",
+    "local_verification": "Not run. The source pair was not compiled, and no axiom audit, round trip, stage1 gate rerun or benchmark was performed."
+  },
+  "c_batch": {
+    "reference_control": "Public #432 source pair",
+    "recommended_variants": [
+      {
+        "name": "T_SKIP4_to_3",
+        "rank": 1,
+        "change": "T_SKIP: 4 -> 3",
+        "active_path": "Current T_SKIP=4 is active for e_kind small classes 1/5/6 via run1t; large text class 1 and structured-text class 6 select run1 with T_SKIP. Large prose class 5 uses P_SKIP=5 because P_DEPTH=4, so it is not affected.",
+        "mechanism": "skip_len=min(miss >> skip, skcap); lowering the shift from 4 to 3 starts skipping earlier and advances farther, reducing search density. The current shift 4 is denser than probe3/261 shift 3.",
+        "risk": "One constant in existing paths; proof requires skip < 32 and the general constant policy caps shifts at 31. skip_len_spec, run1_spec and run1t_spec are present. Expected direction is speed versus possible ratio loss; measure both axes."
+      },
+      {
+        "name": "ST_DMIN129_to_257",
+        "rank": 2,
+        "change": "ST_DMIN: 129 -> 257",
+        "active_path": "Only affects inputs with ST_ON=1, length > ST_MIN, class 2 or 4, and st_phase parity diversity at most ST_FEW=32 versus at least ST_MANY=160 in up to ST_SAMPLE=4096 pairs.",
+        "mechanism": "st_find accepts distances ST_DMIN..ST_DMAX. Existing source comment says 129 keeps distance symbols 14..29; 257 would restrict them to 16..29. This is a compression-alphabet hypothesis, not an expected result.",
+        "risk": "Lean constants section marks ST_DMIN free; st_find_spec and run_st_spec cover the path. No new code path or proof statement is required, but run the official gate after a change."
+      }
+    ],
+    "deferred_alternative": "ST_HB=16 / ST_HN=65536 also satisfies documented st_slot constraints and halves direct-table initialization, with more collisions. Defer it to avoid a third variant and keep the two-variant batch interpretable."
+  },
+  "unknowns": [
+    "Named author and organization behind hotkey are not exposed by the public endpoint.",
+    "Which public corpus files activate run_st and the measured impact of each path.",
+    "Whether either proposed variant improves the official paired two-axis measurement."
+  ]
+}
