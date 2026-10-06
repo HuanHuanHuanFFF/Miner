@@ -25,7 +25,8 @@ for filename in ('parse.rs', 'Parse.lean'):
 report = json.loads((workspace / receipt['gate_report']).read_text())
 assert report['accepted'] and report['corpora'] == ['corpus-stage1']
 report['proof_evidence'] = {'reuse': True, 'ci_run': receipts['ci_run'], 'commit': receipts['commit'],
-                          'sha256': receipt['sha256'], 'scope': 'same source/proof, pinned official revision and toolchain; fresh timing follows'}
+                          'sha256': receipt['sha256'],
+                          'scope': 'same source/proof and pinned official revision; reused gate timing is historical, fresh performance measurement is opt-in'}
 target = pathlib.Path(os.environ['RUNNER_TEMP']) / 'deflate-reports' / (candidate + '-gate.json')
 target.write_text(json.dumps(report, indent=2) + '\n')
 print(json.dumps(report))

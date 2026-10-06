@@ -4,7 +4,7 @@
 
 ## 已取得的性能结论
 
-**本轮选择：`candidates/probe3/`。** 这是压缩更小、略慢的已验证版本；`probe2` 继续保留为速度/大小对照。桶版保持实验状态，不是通过官方 gate 的候选。
+**本轮性能选择：`candidates/probe3/`。** 这是压缩更小、略慢的已验证版本；`probe2` 继续保留为速度/大小对照。桶版已在后续 CI 修复中通过公共完整 gate，但尚未进行独立配对性能对照，仍未替换性能选择。
 
 **VERIFIED**：两次独立 CI runner、每次 28 文件、每文件 1 warmup + 11 measured、四个交错顺序块，共八块测量。三种常量变体的证明回执与当前源码/证明精确哈希一致，公共完整 gate 已在 [CI 37447673754](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37447673754) 接受。所有版本跨八块 token/DEFLATE hashes 稳定；大小结果一致。实测运行分别为 [37451613962](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37451613962)（提交 `85cd1733ff4225c875402a905ef8198b532715ee`）和 [37454635334](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37454635334)（提交 `2513b5d4db6fbcd1588038ab1a79323c2916aa36`）。
 
@@ -21,13 +21,17 @@
 
 **UNKNOWN**：外部 source-held-out、私有 stage2、正式两 corpus 坐标、线上 admission/排名与实际奖励。两个测量 CI 的最终状态均为 failure：桶版仍未通过 Lean，因而被正确排除于性能测量；上述三个候选的成功 gate 与八块性能数据仍有效。不能把整体红色 CI 写成四候选全通过，也不能把成功子结果丢弃。
 
-## 桶版的停止状态
+## 桶版修复与此前停止记录
 
 2026-10-06 后续用户明确要求“尝试把 bucket2 修复一下，如果不行就放弃掉，先修复 CI”。以下停止决定是此前阶段记录；新的维护范围为：先将三个已验证常量候选作为默认必过项，bucket2 仅手动启用；保存完整 Lean 错误并作一次定点修复尝试，仍拒绝则停止桶路线。本次不触发新的竞赛提交或钱包操作。
 
 **VERIFIED（CI 维护）**：[37475195400](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37475195400)，提交 `a52795f45f552ff51e941e3b5b614ecf3f06218a`，整体 success。三个维护候选均重新完成公共完整 gate，没有复用历史证明；axioms 仍仅三项白名单。bucket2 的 496 个有限等价用例通过，但官方 Lean 拒绝被独立记录。默认 CI 不再把未验证实验候选列为必过项，维护候选及验证器错误仍保持阻断。
 
-**VERIFIED（完整错误）**：[完整 Lean 输出](evidence/round2/37475195400/bucket2-005-lake.log) 首先在 Lazy 循环第 2807 行停于 `let (i1, i2) := hq`，主循环第 3051 行同样停于 `let (i, i1) := hc`，此时 `hc.1 ≤ p` 和 head bound 已在上下文中。**INFERRED**：剩余程序尚未经 tuple 解构进入 `step*`，此前尾部显示的 `MainInv` 不足以诊断为算法或不变量错误。当前一次修复尝试仅显式拆开这两处 tuple 并继续原有自动证明；Rust、contract、encoder、gate、pins 不变。该尝试在官方 gate 完成前仍为 **UNKNOWN**，不标作已修复。
+**VERIFIED（原因与修复）**：[完整 Lean 输出](evidence/round2/37475195400/bucket2-005-lake.log) 首先在 Lazy 循环第 2807 行停于 `let (i1, i2) := hq`，主循环第 3051 行同样停于 `let (i, i1) := hc`，此时 `hc.1 ≤ p` 和 head bound 已在上下文中。显式拆开这两处 tuple、化简投影并继续原有 `step*` 后，[CI 37480653625](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37480653625) 接受了精确对应的候选（提交 `e8664c786540b0a477e0d43ecc9b96d41b52f564`）：重新提取、Lean obligation、axiom audit 和公共 28 文件完整 gate/round trip 全部通过。Rust、contract、encoder、gate、pins 均未改变，没有新增公理。496 个有限 token-equivalence/decode 用例再次通过。
+
+该版本不放弃，保留为已通过公共正确性 gate 的研究候选。`parse.rs` SHA256=`38bb6c7d4df093e6cedbad9651d5ee4377d75fa995106d70dce5c08585cac4db`，`Parse.lean` SHA256=`421c58d4695b80d25b3b17eb53d065fa5764185352491f4c1b17d32fff26a7c1`。详见 [修复回执](evidence/round2/ci-repair.json)；前一个 [manifest](evidence/round2/manifest.json) 是旧测量提交的历史快照，未覆盖写。修复后的生成器仍可逐字重建四候选，三个维护候选的源码/证明哈希不变。
+
+第二次 CI 的三个维护候选使用第一次修复 CI 的精确哈希回执；其 gate JSON 内的 timing 为历史值，未运行四块性能对照。旧回执文案 `fresh timing follows` 与本次禁用 timing 的配置不符，原始日志保留，生成文案已校正。bucket2 的新 gate 自身有公共 benchmark telemetry，但跨 runner 的总秒数不能作为配对速度收益。**UNKNOWN**：bucket2 的独立配对性能收益、外部 source-held-out 与私有 stage2、线上 admission/排名/奖励。此次未正式提交 bucket2，也未改变 probe3 的文件。
 
 **VERIFIED**：最初 tuple 包装、显式 tuple 展开包装、最后 scalar 参数包装，均通过 intake/policy/static 和重新提取，496 个有限 token-equivalence/decode 用例也均通过，但官方 stage4 statement 未接受。最初失败是 `Bucket2.find_spec` 的 tuple destructuring；第二次 `WP.spec_bind` 无法匹配未展开的 tuple let；最后一次日志摘要末尾显示主循环 `MainInv` 目标未闭合，完整错误首部被官方日志尾部摘要截断。因此最后一次失败的具体 tactic/展开原因仍 **UNKNOWN**，不能把它诊断为算法错误或宣称只差已解决的一处。
 
