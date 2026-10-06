@@ -1,0 +1,81 @@
+name: DEFLATE round 4
+on:
+  workflow_dispatch:
+    inputs:
+      allow_private:
+        description: 'Authorize standard private-repository Actions minutes'
+        required: true
+        type: boolean
+        default: false
+      specification:
+        description: 'Tracked batch name under evidence/round4'
+        required: true
+        type: string
+        default: batch-a
+  push:
+    branches: [codex/deflate-round4]
+    paths: ['.github/workflows/deflate-round4.yml']
+permissions:
+  contents: read
+concurrency:
+  group: deflate-round4-${{ github.run_id }}
+  cancel-in-progress: false
+jobs:
+  experiment:
+    if: github.event.repository.private == false || (github.event_name == 'workflow_dispatch' && inputs.allow_private == true)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      ROUND4_SPEC: ${{ inputs.specification || 'batch-a' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Validate batch and exact candidate bytes
+        run: python3 scripts/round4.py preflight
+      - name: Prepare isolated runner and pinned source
+        run: bash scripts/ci-prepare.sh
+      - name: Install official verification toolchain
+        run: bash scripts/ci-setup.sh
+      - name: Screen public performance and inspect generated code
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py screen
+      - name: Publish early research receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r4-${{ github.run_id }}-screen
+          path: ${{ runner.temp }}/round4-receipts/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: ignore
+      - name: Refine shortlisted candidates
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py refine
+      - name: Publish refined receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r4-${{ github.run_id }}-refine
+          path: ${{ runner.temp }}/round4-receipts/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: ignore
+      - name: Run selected fresh official gates
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py gate
+      - name: Publish final evidence without toolchains or binaries
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r4-${{ github.run_id }}-gate
+          path: ${{ runner.temp }}/round4-receipts/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: ignore

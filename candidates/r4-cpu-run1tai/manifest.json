@@ -1,0 +1,42 @@
+{
+  "candidate": "r4-cpu-run1tai",
+  "base_candidate": "r3-432-fast3",
+  "base_path": "candidates/r3-432-fast3",
+  "base_submission_id": "432",
+  "base_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "change": {
+    "constants": {},
+    "inline_attributes": {
+      "run1t": {
+        "old": "never",
+        "new": "always"
+      }
+    }
+  },
+  "mechanism": "Inline the small-text run1t engine at its single dispatch call so skip/lazy/skcap/lm are visible constants.",
+  "expected_token_equivalence": "INFERRED: Rust function bodies and constants are byte-identical after removing inline attributes. Attribute changes do not specify a token algorithm change.",
+  "actual_token_equivalence": "UNKNOWN: no execution or corpus token comparison in this generator",
+  "proof": {
+    "mode": "Byte-for-byte copied from the baseline; new official extraction, Lean obligation, and axiom audit required",
+    "sha256": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04",
+    "fresh_gate": "UNKNOWN"
+  },
+  "diagnostic": "Check whether constant propagation removes lazy/skip branches and whether larger parse code offsets any gain. Separate small-text files in paired data.",
+  "hashes": {
+    "parse.rs": "02690c07a5afd8bb13f25a6397680aa86128d7d65ae412e0591b3b8e166003aa",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "attribution": {
+    "source": "Officially published submission 432, then r3-432-fast3 constants",
+    "reference": "references/round3-public-432/PROVENANCE.md",
+    "public_miner_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "named_author": "UNKNOWN: official snapshot/source exposes no name",
+    "ownership": "Derivative of external public miner code; not an independent parser algorithm"
+  },
+  "scope": "Research candidate only; total paired compression, round trip, token hashes, fresh public gate, independent-runner reproduction, private stage2 and official admission are separate checks",
+  "cpu_gain": "UNKNOWN",
+  "formal_submission_sent": false
+}
