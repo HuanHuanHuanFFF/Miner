@@ -33,6 +33,8 @@ def generate():
     bucket_run = source[start:end].replace('pub fn run<', 'pub fn bucket_run<')
     bucket_run = re.sub(r'\binsert\(', 'bucket_insert(', bucket_run)
     bucket_run = re.sub(r'\bfind\(', 'bucket_find(', bucket_run)
+    bucket_run = bucket_run.replace('p, hc, 0,', 'p, hc.0, hc.1, 0,')
+    bucket_run = bucket_run.replace('q, hq, have,', 'q, hq.0, hq.1, have,')
     helpers = '''/// Insert into two recent-position slots; snapshot both before rotation.
 /// The second table is keyed by hash, rather than by input position.
 #[inline(always)]
@@ -50,9 +52,9 @@ pub fn bucket_insert<const H: usize, const W: usize>(s: &[u8], head: &mut [u32; 
 /// After that, nx == c stops the original verified walk. The array is scalar
 /// after inlining; no position-indexed chain access is required.
 #[inline(always)]
-pub fn bucket_find<const W: usize>(s: &[u8], _prev: &[u32; W], p: usize, st: (usize, usize), have: usize, minl: usize, depth: usize, gm: usize) -> (usize, usize) {
-    let link = [st.1 as u32; 1];
-    find(s, &link, p, st.0, have, minl, depth, gm)
+pub fn bucket_find<const W: usize>(s: &[u8], _prev: &[u32; W], p: usize, st: usize, older: usize, have: usize, minl: usize, depth: usize, gm: usize) -> (usize, usize) {
+    let link = [older as u32; 1];
+    find(s, &link, p, st, have, minl, depth, gm)
 }
 
 '''
@@ -70,23 +72,17 @@ pub fn bucket_find<const W: usize>(s: &[u8], _prev: &[u32; W], p: usize, st: (us
     insert_spec = insert_spec.replace('r.1.val ≤ B', 'r.1.1.val ≤ B')
     find_spec = '''@[local step]
 theorem find_spec (s : Slice Std.U8) {W : Std.Usize} (prev : Array Std.U32 W)
-    (p : Std.Usize) (st : Std.Usize × Std.Usize) («have» minl depth gm : Std.Usize)
-    (hp : p.val ≤ s.length) (hst : st.1.val ≤ p.val) (hhave : p.val + «have».val ≤ s.length)
+    (p st older «have» minl depth gm : Std.Usize)
+    (hp : p.val ≤ s.length) (hst : st.val ≤ p.val) (hhave : p.val + «have».val ≤ s.length)
     (hhave258 : «have».val ≤ 258) (hminl : 1 ≤ minl.val) (hminl' : p.val + minl.val ≤ s.length + 1)
     (hW : 0 < W.val) :
-    slot.bucket_find s prev p st «have» minl depth gm ⦃ fun r => FoundAt s p.val r.1.val r.2.val ∧
+    slot.bucket_find s prev p st older «have» minl depth gm ⦃ fun r => FoundAt s p.val r.1.val r.2.val ∧
       r.1.val ≤ 258 ∧ r.2.val ≤ 32768 ⦄ := by
   rw [slot.bucket_find]
-'''
-    find_spec = find_spec.replace('  rw [slot.bucket_find]\n', '''  rcases st with ⟨recent, older⟩
-  rw [slot.bucket_find]
-  dsimp only
   apply Std.WP.spec_bind (lift_spec (UScalar.cast .U32 older))
   intro older32 _
-  exact Submission.find_spec s (Std.Array.repeat 1#usize older32) p recent «have» minl depth gm
+  exact Submission.find_spec s (Std.Array.repeat 1#usize older32) p st «have» minl depth gm
     hp hst hhave hhave258 hminl hminl' (by simp)
-''')
-    find_spec += '''
 
 '''
     loops_start = proof.index('theorem back_loop_inv')

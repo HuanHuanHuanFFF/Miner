@@ -2,6 +2,23 @@
 
 日期：2026-10-06（北京时间）。用户要求吸收研究文档并继续尝试更好的版本；延续首轮参照实验，工具链仍只在临时 GitHub runner。正式竞赛提交、钱包和资金操作不在本轮执行范围。第二轮开始时实时核对仓库已私有，CI 运行须另确认额度授权，见 ENVIRONMENT。
 
+## 已取得的性能结论
+
+**VERIFIED**：[CI 37451613962](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37451613962)，实测提交 `85cd1733ff4225c875402a905ef8198b532715ee`。同一 runner、28 文件、每文件 1 warmup + 11 measured、四个交错顺序块；三种常量变体的证明回执与当前源码/证明精确哈希一致，公共完整 gate 已在前次 CI 接受。所有测量版本跨四块 token/DEFLATE hashes 稳定。
+
+| 版本 | 公共大小轴 | 相对 probe2 大小变化 | 相对 probe2 时间变化（四块范围） |
+|---|---:|---:|---:|
+| `probe2` | 36.035722% | — | — |
+| `probe3` | **35.920838%** | **−0.114884 pp** | +0.3332% ～ +0.7362% |
+| `probe2-nice16` | 36.054885% | +0.019163 pp | −0.2644% ～ +0.2222% |
+| `probe2-nice64` | 36.028891% | −0.006831 pp | −0.2380% ～ +0.2975% |
+
+**VERIFIED**：probe3 的 15 文件变小、2 文件变大、11 同大小，总输出少 28,710 字节。主要收益为 prose、C/Lean/source、UTF-8 多字节文本。**INFERRED（开发决策）**：probe3 是本轮已验证的进一步降大小版本，约增加 0.3%～0.7% 总压缩时间；值得保留该 tradeoff。nice16 没有稳定速度收益且大小变差，nice64 仅取得很小大小收益，速度符号也不稳定，不提升为主路线。
+
+配对 incumbent 在 24 个测量进程间的总时间漂移约 1.48%；file bootstrap 仅为本 runner 的描述性数据，不涵盖 order/runner 不确定性，也不是官方 admission。原始记录、独立复算与逐文件差异保存在 `evidence/round2/37451613962/`，可用 `python scripts/analyze-round2.py evidence/round2/37451613962/ci.log` 重算。
+
+**UNKNOWN**：外部 source-held-out、私有 stage2、正式两 corpus 坐标、线上 admission/排名与实际奖励。该 CI 最终为 failure：桶版仍未通过 Lean，因而被正确排除于性能测量；上述三个候选的成功 gate 与四块性能数据仍有效。桶版包装正在改为显式两个 scalar 参数，以避开提取层 tuple destructuring 的展开问题。
+
 ## 研究吸收
 
 输入为用户提供的《Conjectures.io / Bittensor SN66 DEFLATE 压缩竞赛深度研究：从 probe2 到可支付 Pareto 前沿》。原文是研究材料，不是新的操作授权；原文件保持本地，不公开上传。哈希和对照记录见 `evidence/round2/research-receipt.json`。
@@ -46,6 +63,6 @@ bucket2 新证明复用原 `find/walk`、字节匹配及 decode 层，另为 buc
 
 **VERIFIED**：regular walk 的第二候选访问 1,332,720 次、被选中 171,566 次（约 12.87%）；这是查找层的选择，不能推断最终 emitted-token 的 oracle 价值。原始 trace 已保存。
 
-首轮第二轮运行的测量入口因拒绝候选没有评分 JSON 而中止，因此没有四块性能结论。已修正 tuple 展开和失败回执处理。修复后的复测只重新验证 bucket2；三个未改变的候选使用 [hash-bound proof receipts](evidence/round2/accepted-control-proofs.json)，CI 必须核对 parse.rs/Parse.lean SHA256 和固定官方 revision，然后在新 runner 重新测全部版本。这样复用已验证证明而不复用旧计时。原始失败和成功证据保存于 `evidence/round2/37447673754/`。
+首次第二轮 CI 的测量入口因拒绝候选没有评分 JSON 而中止。已修正失败回执处理；后续 CI 成功测量三个接受的候选。复测只重新验证 bucket2；三个未改变的候选使用 [hash-bound proof receipts](evidence/round2/accepted-control-proofs.json)，CI 必须核对 parse.rs/Parse.lean SHA256 和固定官方 revision，然后在新 runner 重新测全部版本。这样复用已验证证明而不复用旧计时。原始失败和成功证据保存于 `evidence/round2/37447673754/` 和 `evidence/round2/37451613962/`。
 
 初次自动 push 因仓库私有而跳过；用户随后明确授权运行私有 CI、继续实测。仍不把未完成验证和性能测量的桶版写成优化成功。

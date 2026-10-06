@@ -413,9 +413,9 @@ pub fn bucket_insert<const H: usize, const W: usize>(s: &[u8], head: &mut [u32; 
 /// After that, nx == c stops the original verified walk. The array is scalar
 /// after inlining; no position-indexed chain access is required.
 #[inline(always)]
-pub fn bucket_find<const W: usize>(s: &[u8], _prev: &[u32; W], p: usize, st: (usize, usize), have: usize, minl: usize, depth: usize, gm: usize) -> (usize, usize) {
-    let link = [st.1 as u32; 1];
-    find(s, &link, p, st.0, have, minl, depth, gm)
+pub fn bucket_find<const W: usize>(s: &[u8], _prev: &[u32; W], p: usize, st: usize, older: usize, have: usize, minl: usize, depth: usize, gm: usize) -> (usize, usize) {
+    let link = [older as u32; 1];
+    find(s, &link, p, st, have, minl, depth, gm)
 }
 
 #[inline(always)]
@@ -470,7 +470,7 @@ pub fn bucket_run<const H: usize, const W: usize>(input: &[u8], out: &mut [u32],
             }
             let hc = bucket_insert(input, &mut head, &mut prev, p, mask);
             ins = p + 1;
-            let f = bucket_find(input, &prev, p, hc, 0, minl, depth, 0);
+            let f = bucket_find(input, &prev, p, hc.0, hc.1, 0, minl, depth, 0);
             let mut l = f.0;
             let mut d = f.1;
             if l >= 3 {
@@ -489,7 +489,7 @@ pub fn bucket_run<const H: usize, const W: usize>(input: &[u8], out: &mut [u32],
                     if cls == 6 {
                         ldep = S_LDEPTH;
                     }
-                    let g = bucket_find(input, &prev, q, hq, have, minl, ldep, 1);
+                    let g = bucket_find(input, &prev, q, hq.0, hq.1, have, minl, ldep, 1);
                     if g.0 >= minl && gain(g.0, g.1) > gain(l, d) {
                         nt = put_lit(input, out, nt, p);
                         p = q;

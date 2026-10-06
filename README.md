@@ -9,6 +9,6 @@ Conjectures.io / Bittensor SN66 的 DEFLATE 项目记录与本地开发环境。
 - [官方比赛](https://conjectures.io/competitions/deflate)
 - [官方实现](https://github.com/conjectures-io/conjectures-optimisation-deflate)
 
-当前范围：初始化、原版模板和首轮公开实验已有验证证据；按 2026-10-06 的新指令吸收研究并继续优化。目标为可领奖 Pareto 前沿及较大持续奖励份额。本轮执行候选开发与公共 CI 对照；注册和钱包状态不由开发文档推断，竞赛正式提交及资金操作另按用户请求处理。
+当前范围：初始化、原版模板和首轮公开实验已有验证证据；按 2026-10-06 的新指令吸收研究并继续优化。目标为可领奖 Pareto 前沿及较大持续奖励份额。本轮执行候选开发与公共数据集对照；注册和钱包状态不由开发文档推断，竞赛正式提交及资金操作另按用户请求处理。
 
 大型工具链和依赖只在 GitHub Actions 的临时 Linux runner 中准备，本地不保留；最初核对资料的 `sources/` 副本被 Git 忽略。仓库保存轻量源码、证明、记录、证据和 CI 配置。
