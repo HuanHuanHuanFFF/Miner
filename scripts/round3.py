@@ -6,6 +6,7 @@ benchmark does round trips; only a later full gate can certify a candidate.
 from __future__ import annotations
 import dataclasses
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -17,6 +18,16 @@ import sys
 
 TIME_FACTOR = 1.014402891250616
 SIZE_FACTOR = 1.0070277985275755
+
+
+def load_scorer(path):
+    # Import the pure file directly: scoring.__init__ imports database services
+    # and creates a circular import in a measurement-only process.
+    spec = importlib.util.spec_from_file_location('round3_official_pareto', path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 def geometry(x, y, points):
@@ -54,10 +65,13 @@ def main():
     from bench import corpora
     from bench.driver import Config, Keep, run
     from bench.results import INCUMBENT
-    from scoring.pareto import Point, pareto_front, local_global_improvement_space_log_weights
 
     workspace = Path(os.environ['GITHUB_WORKSPACE'])
     upstream = Path(os.environ['DEFLATE_ROOT'])
+    scorer = load_scorer(upstream / 'validator/scoring/pareto.py')
+    Point = scorer.Point
+    pareto_front = scorer.pareto_front
+    local_global_improvement_space_log_weights = scorer.local_global_improvement_space_log_weights
     reports = Path(os.environ['RUNNER_TEMP']) / 'deflate-reports'
     batch_name = os.environ['ROUND3_BATCH']
     assert batch_name in ('batch-a', 'batch-b', 'batch-c')
