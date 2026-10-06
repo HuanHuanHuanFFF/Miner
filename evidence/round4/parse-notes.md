@@ -77,3 +77,27 @@ Both use general match properties and keep all non-prose lazy thresholds unchang
 - `r4-parse-lazy9-prefilter`: `943ac754b5fbdcc62cb78fa57df980dab60a00d353c47943289b39277fc915b8`.
 
 Both currently carry the same unmodified fast3 proof hash `e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04`; their build, proof and measured behavior are **UNKNOWN**.
+
+## Symbol and token-cost hypotheses
+
+The cost-rejection follow-up returned little public size benefit (`37517466397/refine/analysis.json`): cost2048-back size 36.599037%, cost8192 36.601865%, against fast3 36.602139%, with aggregate time regressions. These results do not support extending that rejection sweep.
+
+**VERIFIED (live path and encoder source):** fast3 has `TM_ON=1`; small text classes 1/5/6 use `run1t` and its `e_pieces` emission. This route is active despite `TF_TEXT=0`, which controls the separate planner route. `run1t` currently uses four length codes (12,18,25,28), and backward merging examines at most 16 prior tokens. The fixed encoder creates its blocks every 16384 tokens and performs package-merge using positive-frequency symbols before choosing dynamic/fixed/stored encoding. These are source facts; the inherited comment estimating a per-symbol microsecond cost has not been validated here.
+
+**VERIFIED (receipt diagnostics):** in `37517466397/refine/round1-r3-432-fast3.jsonl`, tiny-app.log emits 1043 tokens, tiny-config.json.txt 3393, and sparse.bin 1446. Each is one encoder block. Median encoding time divided by median total time is approximately 83.6%, 93.1%, and 96.6%, respectively. These per-file diagnostic ratios are not a separately scored encoder axis, and filenames identify observations only.
+
+No available receipt contains per-block length-code, distance-code or literal-symbol histograms. Thus the count of symbols that a policy might remove/add, and the corresponding CPU savings, remain **UNKNOWN** before a diagnostic trace or measurement.
+
+Three independently generated candidates from the unchanged fast3 base:
+
+| Candidate | One mechanism | Falsifiable benefit / cost |
+| --- | --- | --- |
+| `r4-parse-symbol-len6` | Add only code 260 (length 6) to the four-code small-text palette | Short repeats previously emitted as literals may reduce output bytes and token count; extra distance symbols could erase the single-length-symbol budget advantage. |
+| `r4-parse-symbol-back64` | Increase `TM_BACK` 16 -> 64, keeping the four-code palette | Longer backward-merged spans may need fewer pieces/literal tails; extra matching work may outweigh savings or the deeper budget may not be exercised. |
+| `r4-parse-symbol-block512` | Keep the palette during the first 512 tokens of each actual encoder block, then allow full match length at distance >1 | Test whether the fixed symbol-table overhead has become small enough to favor fewer tokens. This does not estimate final block length, so opening the alphabet could still hurt a small block. |
+
+The block policy uses `nt % 16384`, with no new loop state. Backward folding can retract tokens across a block boundary; computing from current `nt` avoids stale cached block identity. `run_z` calls `e_pieces` only at distance 1, so it retains its existing binary behavior. Tiny text distance-1 runs also retain the original palette. Larger `run1` paths are unchanged; no file name, input hash or exact-size identity is used.
+
+**Proof boundary:** all three initially retain the exact fast3 proof. The first two only change constants already parameterized by the existing theorems. The third changes `e_pieces`' chosen piece to `min(end-q,258)` after the token threshold; `MatchAt.piece` requires precisely a length >=3, <=258 and <=remaining bytes. The existing loop invariant and decreasing measure remain unchanged. This is source-level proof reasoning, not Lean acceptance.
+
+`scripts/make-round4-symbols.py` SHA-locks the base, checks active-route anchors, and supports exact `--check`; no existing candidate is overwritten. New build, extraction, proof, axiom, round-trip and performance results are **UNKNOWN**. Stop each policy if both axes regress; do not broaden a palette/budget sweep without a measured explanation. If a policy helps, a useful next diagnostic is the final token stream's distinct literal/length/distance symbol count per actual encoder block, in addition to total token count and encoded bytes.

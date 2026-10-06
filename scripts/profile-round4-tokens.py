@@ -53,6 +53,32 @@ def select(spec):
     return [next(e for e in entries if e["name"] == n) for n in chosen]
 
 
+def check_rust_formats(source):
+    """Check brace escaping in this harness's ordinary Rust format literals."""
+    count = 0
+    for match in re.finditer(r'(?:println|format)!\(\s*("(?:\\.|[^"\\])*")', source):
+        value = json.loads(match[1])
+        count += 1
+        i = 0
+        while i < len(value):
+            c = value[i]
+            if c in "{}" and i + 1 < len(value) and value[i + 1] == c:
+                i += 2
+                continue
+            if c == "{":
+                end = value.find("}", i + 1)
+                if end < 0 or "{" in value[i + 1:end]:
+                    raise ValueError("Invalid generated Rust format opening brace")
+                i = end + 1
+                continue
+            if c == "}":
+                raise ValueError("Invalid generated Rust format closing brace")
+            i += 1
+    if count < 4:
+        raise ValueError("Missing generated Rust profile format strings")
+    return count
+
+
 HARNESS = r'''
 #[path = __PARSER_PATH__] mod parser;
 #[path = __TOKEN_PATH__] mod official_token;
@@ -139,7 +165,7 @@ fn block(label: &str, bi: usize, start: usize, ts: &[u32], raw_start: usize) -> 
     let la = ll[..256].iter().filter(|&&v| v > 0).count();
     let ma = ll[257..286].iter().filter(|&&v| v > 0).count();
     let da = ds.iter().filter(|&&v| v > 0).count();
-    println!("TOKEN_PROFILE {{\"kind\":\"block\",\"file\":{},\"block_index\":{},\"token_start\":{},\"token_end\":{},\"token_count\":{},\"raw_start\":{},\"raw_end\":{},\"literal_bytes\":{},\"match_bytes\":{},\"match_tokens\":{},\"literal_active_symbols\":{},\"length_active_symbols\":{},\"distance_active_symbols\":{},\"litlen_active_with_eob\":{},\"end_of_block_frequency\":1,\"distance_dummy_code_needed\":{},\"length_extra_bits\":{},\"distance_extra_bits\":{},\"total_extra_bits\":{},\"litlen_frequencies\":{:?},\"distance_frequencies\":{:?}}",
+    println!("TOKEN_PROFILE {{\"kind\":\"block\",\"file\":{},\"block_index\":{},\"token_start\":{},\"token_end\":{},\"token_count\":{},\"raw_start\":{},\"raw_end\":{},\"literal_bytes\":{},\"match_bytes\":{},\"match_tokens\":{},\"literal_active_symbols\":{},\"length_active_symbols\":{},\"distance_active_symbols\":{},\"litlen_active_with_eob\":{},\"end_of_block_frequency\":1,\"distance_dummy_code_needed\":{},\"length_extra_bits\":{},\"distance_extra_bits\":{},\"total_extra_bits\":{},\"litlen_frequencies\":{:?},\"distance_frequencies\":{:?}}}",
         quoted(label),bi,start,start+ts.len(),ts.len(),raw_start,raw_end,literals,matched_bytes,matches,
         la,ma,da,la+ma+1,da==0,length_extra_bits,distance_extra_bits,length_extra_bits+distance_extra_bits,ll,ds);
     raw_end
@@ -270,6 +296,7 @@ def run_profile(output, working, report):
                 "__DIST_TABLE__": "[" + ",".join(f"({a},{b})" for a,b in distances) + "]",
             }.items():
                 harness = harness.replace(key, value)
+            check_rust_formats(harness)
             work = working / name
             work.mkdir(exist_ok=True)
             rust_path, binary = work / "token_profile.rs", work / "token_profile"

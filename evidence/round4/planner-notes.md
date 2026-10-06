@@ -44,3 +44,26 @@ Screen both against fast3 with the fixed public paired benchmark, and inspect sy
 **UNKNOWN:** Rust build, official extraction, Lean obligation, axiom whitelist, round trip, public paired time/size, synthetic behavior, private stage2, admission and payout. Original #402's mixed exact-length portfolio score is not a matched same-engine anchor for either uniform candidate. Its formal-to-public transfer is **UNKNOWN**; the #427 multiplier is at most a heuristic, not validation.
 
 No local Rust/Lean tools, CI dispatch, commits, pushes, submission or wallet operations were performed by this worker.
+
+## C-screen evidence and two independent H-budget steps
+
+**VERIFIED (public screen, 2026-10-06):** `evidence/round4/37520076712/screen/analysis.json` and raw JSONL repetitions give H2 `(time 4.324145365, size 34.065519888%)` and D8 `(1.279206855, 34.254324750%)`. These are public paired coordinates, not formal results. H2 saves another 0.188805 percentage points of the size axis over D8 at approximately 3.045 additional time-axis units.
+
+Per-file output-size differences, independently recomputed from block 1, show H2's largest extra size savings over D8 at dump.sql.txt (-0.032857 axis pp), prose.txt (-0.022905), sourcemap.map.txt (-0.020071), binary.db.bin (-0.015650), and metrics.csv.txt (-0.014192). H2 is worse on weights-f32.bin (+0.029765 axis pp) and slightly worse on both tiny text files. File names locate evidence only; the new parsers never inspect them.
+
+The current logs do not report actual H iteration counts, cache-candidate counts, search-depth exhaustion, or the contribution of omitted short lengths. Two candidate-generation budgets can therefore be separated without asserting an unmeasured bottleneck:
+
+| Candidate | Delta from H2 | Mechanism and limitation |
+| --- | --- | --- |
+| `r4-parse-plan-h4` | H_ITERS 2 -> 4 only | Permit additional learned-cost DP passes over the same cached matches. `h_stop_rule` and minimum-pass settings remain unchanged, so the candidate can still stop before four passes. Identical output would not establish that four passes were executed. |
+| `r4-parse-plan-h2-deep16` | Larger-input tree depths 8 -> 16; small-input depth 4 -> 8 | Same two-pass cap and length relaxation; search for additional length/distance alternatives before building the cache. Pricing iterations cannot recover alternatives omitted during search, so this tests a separate possible bottleneck. |
+
+**INFERRED target:** a public size near 33.86% is a screening hypothesis derived from the #427 multiplier, not a validated transfer for the H family. The new timing is also unknown; increasing a cap is not a guarantee of staying under the formal time bound. Both policies retain the uniform mode-0 entry, checked emission, and no-restart mode. A future content-based H/D choice may be worth investigating if these budgets are expensive, but no such router is implemented here.
+
+**VERIFIED (local source checks):** `make-round4-planner.py --check` reconstructs both frozen initial planners plus the two additions. The generator now has repeatable `--only`, used to create just these additions. The three symbol candidates also pass their own `--check`; no frozen candidate file has a Git content diff. New parsers remain below the per-file size limit, use the same 148-function static H closure, and exclude the original exact-length routes and all A functions.
+
+- H4 source SHA256: `a9a525afb91ea0163d7b785c751264c3d27926359e3e67357aea43a32eb54298`.
+- H2-deep16 source SHA256: `2fcc954ee157dae033cc560d370e5aa553709ce684d90e0c1a329aafeb64786c`.
+- Both proof SHA256: `f14e3c7b8a5c89d84dcffdb5ffc43e4963a043538c42dd39e228cd351145ffaf`, retaining the direct `EH.parse_mode_spec` entry proof. This is not a new gate result.
+
+**UNKNOWN:** new public time/size, actual iterations/cache changes, extraction/Lean/axiom acceptance, private stage2, online admission, and payment. No further budget combinations are generated before these two measured comparisons return.

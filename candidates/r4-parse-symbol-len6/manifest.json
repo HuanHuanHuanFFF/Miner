@@ -1,0 +1,27 @@
+{
+  "candidate": "r4-parse-symbol-len6",
+  "base_submission_id": "432",
+  "base_path": "candidates/r3-432-fast3",
+  "base_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "hashes": {
+    "parse.rs": "01499412d577267078b310421781ccaf37ec586ab3f7ed1546c00cb818dad92c",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "mechanism": "Add only length code 260 (length 6) to the active run1t length palette; a fifth length symbol may replace many short-repeat literals and reduce token count.",
+  "changes": {
+    "TM_LM": {
+      "old": 302256128,
+      "new": 302256136
+    }
+  },
+  "changed_functions": [],
+  "risk": "More short matches may introduce distance symbols; one added length code need not reduce total live symbols or encoder work.",
+  "active_route": "parse -> e_kind -> run1t for text classes 1/5/6 with n <= TM_MAX=65536. TF_TEXT=0 and TF planner settings unchanged. run_z calls e_pieces only with distance 1, so the block512 policy leaves that path's behavior unchanged.",
+  "proof_change": "Exact fast3 proof copied, not reverified. Constants already parameterized by the proof; block512 keeps e_pieces loop state and measure and bounds the selected piece by remaining bytes and 258, matching existing MatchAt.piece obligations.",
+  "attribution": "Public submission 432 derivative through fast3; original provenance in references/round3-public-432/PROVENANCE.md.",
+  "evidence": "Pinned encoder uses 16384 tokens/block and constructs dynamic Huffman tables before choosing a representation. Public receipts show encoder-heavy small files, but no per-block live-symbol profile is available.",
+  "status": "INFERRED mechanism. UNKNOWN build, official extraction, Lean obligation, axioms, round trip, performance, stage2, admission and payment."
+}

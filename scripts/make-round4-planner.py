@@ -95,6 +95,7 @@ def closure(source: str, entry_call: str, prefix: str) -> list[str]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--only", action="append", default=[], help="Generate/check only a named candidate; repeatable")
     args = ap.parse_args()
     base = {name: (BASE / name).read_bytes() for name in HASHES}
     for name, sha in HASHES.items():
@@ -128,7 +129,24 @@ def main() -> None:
             "mechanism": "One uniform H engine in mode 0: whole-input Pareto match cache, lazy/all-literal warm start, at most two learned-cost DP passes, verified emit. Depth 8 (4 for small inputs), narrowed length relaxation. Content features still set cost/stop parameters; mode 0 performs no restart passes.",
         },
     }
+    h2 = policies["r4-parse-plan-h2"]
+    policies["r4-parse-plan-h4"] = {
+        **h2,
+        "constants": {**h2["constants"], "H_ITERS": (20, 4)},
+        "mechanism": "Uniform H mode 0, identical candidate search and length relaxation to h2, but increase the DP iteration cap from 2 to 4. Preserve the content-dependent early-stop rule, so this permits rather than forces additional cost-refit passes. Retain the best estimated-cost plan.",
+    }
+    policies["r4-parse-plan-h2-deep16"] = {
+        **h2,
+        "constants": {
+            **h2["constants"], "H_BTD": (32, 16), "H_BTDS": (8, 8),
+            "H_BTDMC": (24, 16), "H_BTDX": (32, 16),
+        },
+        "mechanism": "Uniform H mode 0 with the same two-pass cap and length relaxation as h2, but double the binary-tree search depths: 8 -> 16 for larger inputs and 4 -> 8 for small inputs. This isolates whether the reduced Pareto match cache omitted useful length/distance alternatives that extra pricing passes alone cannot recover.",
+    }
+    assert set(args.only) <= policies.keys(), "unknown --only candidate"
     for name, policy in policies.items():
+        if args.only and name not in args.only:
+            continue
         text = replace_once(source, OLD_ENTRY,
             "// Round4 uniform entry: the inherited exact-length portfolio is unreachable.\n"
             "pub fn parse(input: &[u8], out: &mut [u32]) -> usize {\n"
