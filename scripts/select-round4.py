@@ -10,6 +10,7 @@ import hashlib
 import json
 from pathlib import Path
 import statistics
+import subprocess
 
 from round4 import load_scorer, TIME_FACTOR, SIZE_FACTOR
 
@@ -100,7 +101,20 @@ def main():
     assert base['hashes'] == {f: v['sha256'] for f, v in prior['files'].items()}
     for f, expected in base['hashes'].items():
         assert sha(ROOT / 'candidates/r3-432-fast3' / f) == expected
+    old_run = ROOT / 'evidence/round3/37493517227'
+    old_ci = json.loads((old_run / 'ci-run.json').read_text())
+    old_gate = json.loads((old_run / 'r3-432-fast3-gate.json').read_text())
+    assert old_ci['headSha'] == prior['candidate_ci_commit']
+    assert old_ci['conclusion'] == 'success' and old_gate['accepted'] is True
+    old_hashes = {}
+    for f, expected in base['hashes'].items():
+        blob = subprocess.check_output(['git', '-c', f'safe.directory={ROOT.as_posix()}',
+                                        'show', f"{old_ci['headSha']}:candidates/r3-432-fast3/{f}"], cwd=ROOT)
+        old_hashes[f] = hashlib.sha256(blob).hexdigest()
+        assert old_hashes[f] == expected
     base['accepted_gate_runs'].append('37493517227')
+    base['prior_gate_binding'] = {'ci_commit': old_ci['headSha'], 'git_tree_sha256': old_hashes,
+                                  'accepted_gate_json_sha256': sha(old_run / 'r3-432-fast3-gate.json')}
     measured_new = [c for c in results if c['candidate'].startswith('r4-')]
     research_front = [c['candidate'] for c in measured_new if c['accepted_gate_runs'] and
                       c['matched_anchor']['on_geometric_frontier'] and c['fixed_427']['on_geometric_frontier']]
