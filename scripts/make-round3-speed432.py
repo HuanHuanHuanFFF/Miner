@@ -1,4 +1,4 @@
-"""Two single-factor, generally routed derivatives of public submission 432."""
+"""Generally routed speed derivatives of public submission 432."""
 from pathlib import Path
 import argparse
 import hashlib
@@ -17,14 +17,20 @@ def main():
     args = ap.parse_args()
     base = {n: (BASE / n).read_bytes() for n in HASHES}
     assert all(hashlib.sha256(base[n]).hexdigest() == h for n, h in HASHES.items())
-    variants = {'r3-432-tshift3': ('T_SKIP', 4, 3, 'Larger miss >> skip steps in the existing read-ahead text and structured-text paths; fewer probes, routing unchanged.'),
-                'r3-432-dmin257': ('ST_DMIN', 129, 257, 'Exclude two more short-distance code groups in the existing parity-selected binary path; all routing unchanged.')}
-    for name, (key, old, new, explanation) in variants.items():
-        text, count = re.subn(rf'(pub const {key}: usize = ){old};', rf'\g<1>{new};', base['parse.rs'].decode())
-        assert count == 1
+    variants = {
+        'r3-432-tshift3': ({'T_SKIP': (4, 3)}, 'Larger miss >> skip steps in the existing read-ahead text and structured-text paths; fewer probes, routing unchanged.'),
+        'r3-432-dmin257': ({'ST_DMIN': (129, 257)}, 'Exclude two more short-distance code groups in the existing parity-selected binary path; all routing unchanged.'),
+        'r3-432-fast3': ({'T_SKIP': (4, 3), 'P_DEPTH': (4, 1)}, 'Fewer text probes plus the existing one-probe read-ahead prose path, selected by general content class.'),
+        'r3-432-fast2': ({'T_SKIP': (4, 2), 'P_DEPTH': (4, 1)}, 'More aggressive miss acceleration than fast3, with the same one-probe read-ahead prose path.'),
+    }
+    for name, (changes, explanation) in variants.items():
+        text = base['parse.rs'].decode()
+        for key, (old, new) in changes.items():
+            text, count = re.subn(rf'(pub const {key}: usize = ){old};', rf'\g<1>{new};', text)
+            assert count == 1
         files = {'parse.rs': text.encode(), 'Parse.lean': base['Parse.lean']}
         manifest = {'candidate': name, 'base_submission_id': '432', 'base_path': BASE.relative_to(ROOT).as_posix(),
-                    'base_hashes': HASHES, 'change': {key: {'old': old, 'new': new}}, 'mechanism': explanation,
+                    'base_hashes': HASHES, 'change': {key: {'old': old, 'new': new} for key, (old, new) in changes.items()}, 'mechanism': explanation,
                     'hashes': {n: hashlib.sha256(v).hexdigest() for n, v in files.items()},
                     'attribution': 'Original public miner source, not an independent algorithm; see reference PROVENANCE.md',
                     'scope': 'Unverified derivative; new official gate and paired performance required'}

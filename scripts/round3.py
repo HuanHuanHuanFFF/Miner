@@ -74,7 +74,7 @@ def main():
     local_global_improvement_space_log_weights = scorer.local_global_improvement_space_log_weights
     reports = Path(os.environ['RUNNER_TEMP']) / 'deflate-reports'
     batch_name = os.environ['ROUND3_BATCH']
-    assert batch_name in ('batch-a', 'batch-b', 'batch-c')
+    assert batch_name in ('batch-a', 'batch-b', 'batch-c', 'batch-d')
     batch = json.loads((workspace / 'evidence/round3' / (batch_name + '.json')).read_text())
     frontier_file = (workspace / batch.get('frontier_file', 'evidence/round3/frontier-targets.json')).resolve()
     assert frontier_file.is_relative_to((workspace / 'evidence/round3').resolve())
