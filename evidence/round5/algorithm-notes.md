@@ -1,5 +1,7 @@
 # Round 5 independent algorithm candidates
 
+**Final disposition: STOPPED for insufficient measured benefit.** The same-endpoint correction removed the observed boundary/size regressions on the public corpus, but saved only 6 bytes and remained outside snapshot 25803 under the matched299 calibration. No full proof/gate or further candidate is pursued. See the final run closure below.
+
 Prepared 2026-10-07 06:16 UTC. Scope: two new research candidates; no local Rust/Lean installation, CI dispatch, Git commit/push, formal submission or wallet action by this worker. Parent sources and the official encoder remain unchanged.
 
 ## Source findings
@@ -80,3 +82,94 @@ For small-select, the shortest semantic addition is a zero-offset specialization
 **Cost limitation clarified:** a full DP pass can still yield fewer than the remaining 16384 tokens when `a_walk` reaches its byte limit. Thus `r5_hist_bits` sometimes scores a hypothetical finalized partial encoder block, including a header that the actual continuing block will not yet emit. The bits-per-byte objective both normalizes varying endpoints and remains a heuristic about future block completion. Only `r5_token_bytes` has a complete token stream and explicitly tracks stored alignment/final padding. A's score deliberately omits position-dependent stored alignment and final-file padding; it is not advertised as exact final output bytes.
 
 The cost driver tests the complete-token scorer against the unmodified official encoder, while public paired measurements decide whether the A heuristic is useful. A passing cost driver does not validate A's ratio objective or prove either parser's contract.
+
+## Actual extraction and cost differential received
+
+**VERIFIED (CI run 37582348267, git b94837db0ccb2ae5a8a4c3d36cd9a718b8fb50aa):** `evidence/round5/37582348267/new-mechanisms-a/extraction/research.json` records both exact Rust hashes accepted by official extract-only, exit 0. This is extraction acceptance, not a completed Lean obligation. small-select Funs is 734247 bytes, SHA256 `a14d5f5d32e7f031aba3d37d6398fbc475adb226a9248d90f8d55af81b2a56e4`; best299 Funs is 743987 bytes, SHA256 `6c3ab0d2d921045f91db24a1194bd8b4a83bc5421fc63a5c513a429c03af43fc`. The receipt retains each Types/Constants hash and original extraction logs.
+
+**VERIFIED:** the actual Rust cost driver compiled with exit 0 and ran with exit 0, printing `COST_DIFFERENTIAL_OK 383`. These 383 fixed token streams agreed with the unmodified official encoder's output byte lengths. This supersedes the earlier UNKNOWN status for that finite Rust differential only. It does not prove universal cost equivalence, either parser's decode contract, public performance, or A's ratio objective.
+
+The independent `small-select-proof-draft.lean` now follows the actual signatures. The scorer adds one loop with state `(fr, lens, bits, i, used)` and returns `(fr, lens, bits)`; block scoring returns `(score, frequency slice, lens slice)`. The final parser's mutable Vec borrow and copied slice are explicit. Existing get/set/copy forms agree with the anticipated interfaces. No extra hidden control state or A-engine migration is needed for small-select.
+
+The minimum integration is three cost-totality lemmas (block, token loop, token wrapper), a semantic safe-get/set boundary and zero-offset copy loop/wrapper, plus the final parser composition. The scorer needs only totality; the copied-prefix loop is the sole new semantic invariant. New `r5_hist_bits` and its two loops are unreachable from small-select's entry and need no theorem for that obligation. Parent S/EH scopes can remain in their original order.
+
+Remaining concrete issues are tactic acceptance for the strong copy loop, the Vec deref/backward reborrow representation equality, checked-counter bounds in the token scanner, and complete proof elaboration within the unchanged limit. The parent proof is 375553 bytes against a 524288-byte cap; this narrow addition has substantial file-size room, while runtime remains unmeasured. The draft's six pure interface lemmas and three observed-definition adapter lemmas remain NOT_COMPILED; no proof has been promoted into frozen candidates.
+
+## Failed mechanisms: measured outcome and one bounded correction
+
+**VERIFIED (run 37582348267, two public blocks):** small-select time axis 8.126776 versus h3r-smallc299 7.508665; both size axes are exactly 33.855551957%. All 28 files have equal counted-token SHA256, not merely equal compressed length. This mechanism and its proof work are stopped.
+
+**VERIFIED:** a-best299 time axis 9.457209 versus public299 9.147551 (about +3.39%). Size is 33.853277993% versus 33.842831048%, a regression of 0.010446945 percentage points / 2139 output bytes. Replaying `round1-*` raw records reproduces the same deterministic size difference as the second block. Thirteen files are larger, one is smaller, fourteen have equal byte lengths. The changed token streams span sixteen files. The one byte saving is source.c (-9 bytes); this is insufficient to compensate the losses.
+
+| File (evidence label only) | Extra compressed bytes | Axis regression pp | Token-count change |
+| --- | ---: | ---: | ---: |
+| docs.md.txt | 884 | 0.003946429 | +2351 |
+| machine-code.bin | 289 | 0.002064286 | -455 |
+| bundle.min.js.txt | 340 | 0.001214286 | -1462 |
+| metrics.csv.txt | 296 | 0.000813187 | -1343 |
+| records.json.txt | 85 | 0.000758929 | +41 |
+
+The original public299 was not separately profiled in this batch. To avoid guessing its histogram, the review matched all 28 input hashes and counted-token hashes of `evidence/round4/37535056448/gate/token-profile.jsonl` candidate `r4-alt299-tinydepth32` against this batch's actual public299 raw records. All 28 match. Its historical block profile is therefore a token-identical comparator for these fixed files; its historical timing is not used.
+
+**VERIFIED (endpoint evidence):** docs changes from 8 blocks to 9, from 129437 to 131788 tokens, with 3341 extra literal bytes and 990 fewer match tokens. Parent block ends are `[79715,186651,293396,393233,471217,571372,656228,800000]`; failed candidate ends are `[70436,158129,273344,378263,460414,559317,646667,794011,800000]`. Machine-code has the same first end 61398 but second end changes 125848 ->125996 and subsequent boundaries move. Bundle retains the first five ends but its sixth changes 512380 ->515457 and subsequent ends move. Fewer total tokens on machine-code/bundle does not imply fewer output bits: their distance extra bits increase 2784/7690, respectively.
+
+**VERIFIED (independent cost replay):** a Python implementation of the official explicit-package-symbol-list package-merge, code-length RLE, fixed/dynamic/stored decision and byte alignment was applied to the actual token-profile block histograms for both new candidates. It reproduced every official byte length: 56 file records / 558 blocks, zero discrepancies. Combined with the earlier actual 383-case Rust differential, this provides no evidence that an encoder-cost arithmetic error caused these file regressions.
+
+**INFERRED mechanism:** the old ratio compared paths ending at different bytes and then fed the selected earlier counts/endpoint into later rounds. The profile directly verifies resulting boundary drift; it cannot distinguish exactly how much damage comes from immediate ratio ranking versus subsequent model feedback because no per-pass trace was recorded. Both are parts of an invalid interchangeable-plan assumption. The correction below makes the substitution genuinely interchangeable at the next round boundary rather than trying another ratio, budget or cutoff.
+
+### Sole follow-up: `r5-opt-a-sameend299`
+
+New Rust SHA256 `2ce6bee2d1c94896bfa4f1f87bd2ae22ebfab53c15df5d705ce82b0ba223e0d3`, 182094 bytes. Proof stays **NOT_ADAPTED**, SHA256 `a1b00aed62e68c8e57d65b91aa23facdd8dd430f2afc4837cfa0c6407cede184`, 375647 bytes. The same generator has one explicit new recipe; fresh `--check` reproduces all three candidates and leaves the two failed candidates' source/proof/manifests exact.
+
+The new recipe starts from the original unmodified A engine, not from a progressively mutated failing parser. It replaces only completed, same-endpoint output segments:
+
+- A pass is eligible only when `t == need` or `p1 == n`, where the original `need = BLOCK_TOKENS - used` includes the existing token carry. Intermediate partial blocks do not participate.
+- Costs include original prefix counts `bl/bd`, plus this pass's `lf/df`, with one EOB. Earlier candidates are discarded when the byte endpoint changes.
+- The block must contain at least one match. Both current and saved candidates therefore use dynamic/fixed encoding, whose bit length does not depend on incoming alignment; no hidden stored-block padding is compared.
+- A saved plan replaces the final plan only at the same byte endpoint and with strictly fewer bits. Non-EOF replacement explicitly also requires equal token count. At EOF differing token counts are permitted because both alternatives finish the same last block and input.
+- The original final-pass `p1`, `t`, frequencies, next cost model, `used`, and `bpt` are never replaced. There is no chosen-plan rewalk. The next search follows the original299 trajectory; only an already completed output segment changes. The original classifier, budgets, match search and DP transitions remain untouched.
+
+**INFERRED checkable consequence:** encoder block raw-end arrays and block count should remain identical to public299 on every test input. With validated plans and correct histogram costing, completed match-bearing substitutions reduce packed bits, while any unchanged later stored block aligns monotonically with incoming bit count. This is a source argument, not an all-input equivalence/size theorem or a measured result. It deliberately misses cheaper plans whose endpoints do not equal the final pass; that restriction is the cost of avoiding the demonstrated failure mode.
+
+The strongest first validation is same-run public299 + oldbest + sameend: compare every full `raw_end` array and block count, per-file compressed bytes, decode, and paired time. Profiling public299 directly in the new batch is preferable; the token-identical historical proxy was needed only for this diagnosis. Any moved full-block boundary, more encoded bytes, cost disagreement or decode failure falsifies the correction's intended isolation and stops it. If outputs remain equal or savings do not justify measured overhead, stop the mechanism; do not follow with another same-family budget/ratio sweep. New native build, extraction, performance and proof remain **UNKNOWN** at generation.
+
+## Read-only selection audit script
+
+`scripts/analyze-round5-selection.py` reads a supplied gate receipt directory and prints JSON to stdout. It does not write files, invoke dependencies, contact the network or launch CI. Default candidate is sameend; baseline is the historical tinydepth32 profile at `37535056448/gate`, rebound on every invocation to the supplied run's actual public299 input/token/output hashes and counts. Both historical public299 and historical tinydepth32 native outputs must equal current public299 before their block profile is accepted.
+
+The script recomputes parser-source SHA256 from local frozen files and profile-JSONL SHA256 from saved bytes, binds profile source/proof metadata to run specs/native source metadata, checks all 28 stage1 files and histogram/contiguity/full-block/decode fields, and cross-checks native input/token/output hashes across every available round. A different engine/token/encoder version rejects the comparison. It reports both full raw-end arrays, block counts, block token counts, byte/token changes, public time and absolute public size axes. It also records all consumed receipt hashes.
+
+Content-hash limit is explicit: the saved histograms contain no original token or compressed byte streams. Their token/output content hashes can be cross-checked against independent native receipts but cannot be recomputed from a histogram. The script does not claim otherwise.
+
+Usage for the pending run:
+
+```sh
+python scripts/analyze-round5-selection.py evidence/round5/37585987361/sameend-mechanism/gate
+```
+
+Use the actual downloaded batch-directory label if it differs. Exit 1 means missing/inconsistent evidence. Exit 2 means a mechanism stop (boundary/block-count moved, any file grew, or no public size-axis gain). Exit 0 means only that these stop conditions were absent and fresh time/size/frontier review is appropriate; it is not formal gate/admission acceptance. No historical size threshold is hardcoded: a time coordinate near 9.5 must use its own freshly scored frontier, not the earlier 6.5 region's threshold.
+
+**VERIFIED (fresh negative replay):** running with `evidence/round5/37582348267/new-mechanisms-a/gate --candidate r5-opt-a-best299` returns exit 2 / STOP. It rebinds 28 baseline files, catches 14 files with changed endpoints, 13 files with larger encoded size, docs 8->9 blocks and +884 bytes, total +2139 bytes / +0.010446945316588173 percentage points, and time-axis +3.3851470326612842%.
+
+**VERIFIED (control replay):** running the same checker on historical `37535056448/gate --candidate r4-alt299-tinydepth32` produces no boundary/size false positives, zero changed bytes, and correctly returns STOP solely for no size gain. Both runs read the existing evidence unchanged. New sameend results remain pending; this script does not manufacture them.
+
+
+## Final run closure — stop the same-endpoint route
+
+**Decision: STOPPED.** `r5-opt-a-sameend299` fixes the observed boundary/size regression mechanism of oldbest on the tested public inputs, but its compression gain is too small for useful frontier progress. Do not adapt a full proof or continue this family with additional budget/ratio variants. Frozen candidates, scripts and manifests remain unchanged at this closure.
+
+**VERIFIED (run 37585987361, commit 9791449538e20bd1eb6e71bcfdb952b64a20a35d):** a fresh read-only audit of `evidence/round5/37585987361/sameend-mechanism/gate` returns exit 0 for the structural checks. All 28 files retain public299's complete encoder-block raw-end arrays and block counts; no file grows. Only config.yaml saves 4 bytes, metrics.csv 1 byte and multibyte 1 byte, for 6 bytes total. That exit code means the intended substitution constraints held in this finite test, not that the candidate has adequate performance or passed a formal gate.
+
+| Same runner, two public blocks | Time axis | Size axis |
+| --- | ---: | ---: |
+| Original public299 | 9.482091132402893 | 33.84283104811855% |
+| sameend299 | 9.50581725635131 | 33.84278933982684% |
+| Change | +0.2502203745684328% time | -0.00004170829170829171 percentage points |
+
+The earlier -9-byte isolated oldbest file was not treated as sufficient evidence of competitive benefit. This final correction's aggregate -6 bytes is the complete observed public saving.
+
+**INFERRED, matched299 calibration:** `analysis-snapshot-25803.json` maps sameend to `(9.199596907093085, 34.102331191383946%)`. At snapshot 25803, computed 2026-10-07 15:09:58.649118 +08:00 with API freshness reported unknown, #305 and #316 dominate it. The size gap is 0.0013545707823254816 percentage points and conditional geometric weight is zero. This is a public-to-formal calibration estimate at the observed time coordinate, not a new formal score or reward observation. A different-family #427 projection is not used to override this result.
+
+**VERIFIED validation scope:** the unchanged Rust source `2ce6bee2d1c94896bfa4f1f87bd2ae22ebfab53c15df5d705ce82b0ba223e0d3` compiled and passed official extract-only. Actual Funs SHA256 is `7d96af125eeb489ee2a94e7d844aac253e6dcae400ee9a772bf5cba1fc5df4e6`. Public native records and independent token profiles passed finite decode checks. Eight fixed synthetic inputs completed both measurement blocks; the raw CI records contain all 16 sameend file results, deterministic=true and no errors, with matching input/token/output hashes across the two blocks. This is finite public/synthetic validation only.
+
+**NO_FULL_GATE:** `state.json` has an empty `gates` map; extract-only `proof_status` is `NOT_RUN`. The copied proof remains NOT_ADAPTED. No fresh Lean obligation, axiom whitelist, private stage2, formal admission, on-chain action or reward is claimed for this candidate. The useful result retained from this route is the diagnosed failure and verified finite correction, not a competition-ready improvement.
