@@ -1,0 +1,50 @@
+warning: `cargo miri setup` failed for target `x86_64-unknown-linux-gnu`; falling back to rustc's default sysroot: error: 'cargo-miri' is not installed for the toolchain 'nightly-2026-08-18-x86_64-unknown-linux-gnu'.
+help: run `rustup component add --toolchain nightly-2026-08-18-x86_64-unknown-linux-gnu miri` to install it
+warning: unused variable: `ew`
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-0ipdqwcn/slot/generated/parse.rs:5156:102
+     |
+5156 | pub fn h_eval_mode(mode: usize, fr: &mut [u32], tbl: &mut [u32], nb: usize, nbmax: usize, damp: u32, ew: u32) -> u64 {
+     |                                                                                                      ^^ help: if this is intentional, prefix it with an underscore: `_ew`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `cmode`
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-0ipdqwcn/slot/generated/parse.rs:5084:9
+     |
+5084 |     let cmode = mode;
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_cmode`
+
+warning: unused variable: `kend`
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-0ipdqwcn/slot/generated/parse.rs:5092:9
+     |
+5092 |     let kend = H_H_KENDS[fc % 4].wrapping_add(fc.wrapping_mul(32));
+     |         ^^^^ help: if this is intentional, prefix it with an underscore: `_kend`
+
+warning: unused variable: `force`
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-0ipdqwcn/slot/generated/parse.rs:5096:9
+     |
+5096 |     let force = high & h_eq(route, 1) & h_ge(n, H_D_SMALL);
+     |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_force`
+
+warning: value assigned to `lt` is never read
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-0ipdqwcn/slot/generated/parse.rs:1230:26
+     |
+1230 |             let mut lt = 0usize;
+     |                          ^^^^^^ this value is reassigned later and never used
+...
+1256 |                 lt = if wc < wi { 1 } else { 0 };
+     |                 -------------------------------- `lt` is overwritten here before the previous value is read
+     |
+     = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `k` is never read
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-0ipdqwcn/slot/generated/parse.rs:2051:29
+     |
+2051 |                 let mut k = k0;
+     |                             ^^ this value is reassigned later and never used
+...
+2060 |                     k = c_extend(s, c, p, k0, lim);
+     |                     ------------------------------ `k` is overwritten here before the previous value is read
+
+warning: 6 warnings emitted
+

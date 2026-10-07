@@ -73,3 +73,116 @@ For each completed block, require all 28 input identities and candidate token/ou
 - Preserve positive screening as measured evidence, then run the complete fresh gate at unchanged limits. A public CPU/gate improvement remains separate from private transfer, live frontier placement and payment.
 
 Only the two named candidates and their generator/this note were created by this line. The frozen R5 baseline, other agents' candidate files, official sources, gate, pins and encoder were preserved.
+
+## Update — CPU screen and actual code-generation audit
+
+Reviewed `2026-10-07T08:59:02Z`: CI `37594267200`, commit `69e4c010708d5c295836eb2b07c90b88ad091744`, receipts under `evidence/round6/37594267200/cpu-screen/screen/`. Reported CPU is AMD EPYC 9V74, with Rust `1.100.0-nightly (8fa1c96cf 2026-08-17)`. Candidate compilation is the recorded sandboxed release build; timing instrumentation was not added.
+
+**VERIFIED screening, not adoption:** Both candidates passed the 444-case finite token/decode comparison with zero differing/failed cases. In the two public blocks, all **56 file/block input, token and output identities** match H16 baseline. Independent reconstruction from each JSONL's eleven measured total-time repetitions gives these paired axes and candidate-versus-baseline movements:
+
+| Method | Block 1 public x | Block 2 public x | Block changes vs H16 (%) | Mean change (%) |
+|---|---:|---:|---|---:|
+| `h16-base` | 7.004229441357 | 7.071716884710 | reference | reference |
+| `h16-shadow` | 7.025337402439 | 7.061414258468 | +0.301360 / -0.145688 | +0.077836 |
+| `rm-inline` | 6.999392167322 | 7.037248699929 | -0.069062 / -0.487409 | -0.278236 |
+| `replay-inline` | 6.964369050806 | 7.065619484932 | -0.569090 / -0.086222 | -0.327656 |
+
+All public size axes are unchanged at 33.863213837353%. The same-source shadow changes sign between blocks despite an identical library, so the small candidate movements do not establish a CPU benefit. Auxiliary forward/reverse relative timing had not arrived when this screen was reviewed. `h16-analysis.json` records no fresh candidate gate at this phase.
+
+### Complete symbols, partial library assembly, complete candidate functions
+
+The four measured `.so` files all have `text=361525`, `data=12336`, `bss=778` bytes. The libraries themselves have these recorded identities:
+
+| Method | Measured library SHA256 |
+|---|---|
+| baseline and shadow | `8d522047524519e4d9bc46f46d52f51d89f1060bf16b26b774f430fcbf402a24` |
+| rm-inline | `3a660cbffef5b9fcda4a799e38eb0da9533c3ee142ce844d7be78f6872615bb3` |
+| replay-inline | `1f7660136175f044bd8796f03ebf0ebda481b324cc7598a5b238827c982276e9` |
+
+**VERIFIED full symbol comparison:** All four complete, untruncated `*-symbols.txt` files are byte-identical, SHA256 `cdc9ff9776328d02cb2ec9130e78d9a4efa841b2de3a80bd0b9163dc3d1ea72d`. No standalone `h_rm_upd`, `h_rm_update`, `h_rm_update3`, `h_relax_items`, `h_dp_items`, `h_dp_prune`, or their block-pass wrapper symbol appears in any of them. Their source-level call chain therefore does not correspond to a surviving named machine-code call chain in baseline.
+
+**VERIFIED truncation boundary:** Each saved assembly is capped at two million characters; the original full outputs are about 5.224 million characters, and every metadata file says `truncated=true`. Baseline/shadow end in a partial function near address `0x311ad`; the two candidates end near `0x311ab`, with the few-character difference explained by different output-header lengths. Before the conservative common cutoff **`0x311ab`**, all **35425 parsed instruction/continuation rows have identical addresses, machine bytes and instruction text** across all four files. This does not establish whole-library assembly or `.text` equality.
+
+The cutoff does **not** hide the H candidate implementation: all **26 named `candidate::parse::*` symbols** start and end before `0x25d55`. For every symbol, the audit reconstructed each byte from objdump's hexadecimal rows (including continuation rows), checked complete coverage of its nm-reported address/size range, and compared the complete bytes across all four builds. **All 26 function byte sequences, totaling 88199 bytes, match exactly**, with the same addresses and sizes. This covers `parse`, `plan_cfg`, all surviving named H functions, and every other named function in that module.
+
+Key complete ranges and machine-byte hashes:
+
+| Actual emitted function | Start / bytes | Complete machine-byte SHA256 (all four equal) |
+|---|---|---|
+| `candidate::parse::parse` | `0x177f0` / 20887 | `25d4a8cae9004f40591f2e978ba3f9e883071f70283330008894d9126b035482` |
+| `candidate::parse::plan_cfg` | `0x1dbb0` / 28746 | `c5d5d780bc275da2246b3ebc6e5fb05655c35a807ee76e0164ca0e3c168d3607` |
+| `candidate::parse::h_eval_mode` | `0x11a50` / 487 | `ab29f8820ef9ed74614dad685d00a60215f45e52538a7db893efbe9248027f48` |
+| `candidate::parse::h_filled` | `0x1d930` / 634 | `5f280f31aa5601fc2e1e9d41c0a87e495060a69d1c09caba9a74235f841028d7` |
+| `candidate::parse::h_load_ct` | `0x25900` / 1109 | `5f09a15c962837ca610c29151ec778e23312230a05b32dc52a12c4dd005fdb07` |
+| `candidate::parse::h_walk` | `0x1c990` / 1175 | `bf140b3cc0436321342866dd3f670730d1da0ff79c5cf053f02fda583ea4d4bf` |
+| `candidate::parse::h_sort_live` | `0x127e0` / 1220 | `8da9d549ca1b38b654d9772638892f2f3f6e284c7b6d0ed30657ae170bda1ea2` |
+| `candidate::parse::h_fill_table` | `0x15b80` / 1672 | `a22856a9dba111c85ea21fa6dcbb57391f3c9a646bfa3adffaa5e21a7e737fc1` |
+| `candidate::parse::h_sym_costs` | `0x12cb0` / 1969 | `f38359f7304d61b0deefe8dac675b84cfe016d7bb78b2ba186acb73d34aee9e8` |
+| `candidate::parse::h_pkg_merge` | `0x11c40` / 2968 | `0431471066b5dd0765f3aa658dfce559b12c11f753c368164f8e323042883440` |
+| `candidate::parse::h_block_bits` | `0x13ea0` / 7380 | `89b2300db9116dd8f23d3ad32575099b7b981bc54fa2cad02abbbb4d85ed0b4f` |
+
+**INFERRED interpretation:** The default fat-LTO build already absorbs/optimizes the proposed ring-update and replay call boundaries. The two attributes have no observed effect on the emitted candidate-function machine instructions or layout in this run. This falsifies the specific intended call-elimination mechanism for this build; it does not prove every possible compiler environment ignores the attributes. The differing complete-library hashes may come from data or metadata, such as changed panic source locations, but that cause has not been measured and remains UNKNOWN.
+
+### Smallest remaining diagnostic and decision
+
+No extra targeted disassembly of the original H targets is needed to establish the result above: the complete symbol table and all complete candidate-function bytes are already covered by the saved prefix. If the root wants to locate the differing library hashes and close the remaining whole-library-code gap, the smallest follow-up is to record hashes of `.text`, `.rodata`, `.data`, and optionally `.data.rel.ro` from those same built libraries, plus section sizes; it need not upload libraries, retain toolchains, request perf permissions, or collect another five-megabyte disassembly. This is an optional diagnostic request, not a dispatched CI.
+
+At this point neither candidate is selected as a CPU optimization. Preserve the small timing values as observed screen results, await the already-running forward/reverse auxiliary check, and do not spend a fresh gate merely to certify an unestablished performance gain. The candidate inputs and generator are unchanged by this audit. Any future positive interpretation requires the root's completed matched evidence; public screen identity remains separate from full Lean acceptance and admission.
+
+## Update — auxiliary timing closes the inline hypotheses
+
+The completed `cpu-screen/gate/h16-analysis.json` for CI `37594267200` reports `AUXILIARY_DIAGNOSTIC_OK`, with valid forward and reverse phases. Observed changes relative to the H16 baseline are:
+
+| Method | Forward (%) | Reverse (%) |
+|---|---:|---:|
+| identical-source shadow | -0.069696 | +0.003622 |
+| rm-inline | -0.009903 | +0.085939 |
+| replay-inline | -0.007801 | +0.031131 |
+
+**VERIFIED:** The candidate signs reverse with ordering and their forward differences are near zero. Together with identical complete candidate-function machine bytes, this supplies no reliable gain from either inline annotation. Both attribute candidates are retained as negative/no-benefit evidence, not selected. Their original source/proof/metadata bytes remain unchanged.
+
+## Final extra hypothesis — guarded copy32 fast path
+
+Reviewed and generated at `2026-10-07T09:09:05Z`. The root authorized exactly one final extra CPU hypothesis after the other four initial candidates failed to establish useful improvement. This line changes only `h_copy32` in a new `r6-h16-cpu-copyfast` pair; it does not combine or revise those four candidates.
+
+### Evidence justifies a test, not a forecast
+
+The original `h_copy32` (parent line 4328) iterates over `m` words and uses `h_get(src, soff.wrapping_add(i))` followed by `h_set(dst, doff.wrapping_add(i), value)`. Invalid source indices read zero and invalid destination indices skip the write. It is syntactically used by `h_sort_live` once, `h_block_bits` twice, `h_iterate` once, `h_optimize` three times and `h_cx_restarts` once. Mode-0 reachability and dynamic call/count distributions are not inferred from that static list.
+
+The complete saved baseline `candidate::parse::parse` symbol contains no `memcpy`, `memmove` or `rep movs` call/instruction. Its two `movdqu` rows operate on a different stack-work region; they do not supply a bulk-copy implementation of the best-plan copy below. No independent `h_copy32` symbol survives. This means the copy is inlined, but it does **not** mean its guards were eliminated.
+
+**VERIFIED machine evidence:** Immediately after `h_walk` at `0x1a9c0` and `h_eval_mode` at `0x1a9f8`, the best-cost comparison branches into a scalar, two-element-unrolled copying region at `0x1aa40–0x1aad4`. Each word still has separate source and destination tests:
+
+| Operation | Addresses |
+|---|---|
+| first source compare / branch | `0x1aa50` / `0x1aa55` |
+| first u32 load | `0x1aa5f` |
+| first destination compare / branch | `0x1aa62` / `0x1aa65` |
+| first u32 store | `0x1aa95` |
+| second source compare / branch | `0x1aa6d` / `0x1aa72` |
+| second u32 load | `0x1aa7c` |
+| second destination compare / branch | `0x1aa80` / `0x1aa83` |
+| second u32 store | `0x1aaaa` |
+
+Mapping this region to `h_optimize`'s first `h_copy32(choice,0,plan,0,lz?n:0)` is **INFERRED** from the immediately preceding walk/evaluation and best-cost branch sequence. The repeated guards and scalar copying are directly observed. This is enough to test one guard-hoisting path; it does not establish the fraction of total compression time spent copying, a benefit magnitude, or the shape of every other copy call.
+
+### Exact candidate and source-level semantics
+
+`scripts/make-round6-h16-copy.py` writes only `candidates/r6-h16-cpu-copyfast/{parse.rs,Parse.lean,manifest.json,copy-audit.json}`. Generator SHA256 is `bcbda8d4fe3b5f253383e18b7c75a1f18dd3d0fa58bf41d2d301a7701252abaa`. Generation and no-write `--check` both exited 0; an independent comparison checked the exact function boundary, unchanged prefix/suffix, fallback bytes, proof copy and manifest hashes.
+
+| Artifact | SHA256 | Bytes |
+|---|---|---:|
+| Rust | `d414c981b22a23cae40561173e6812e4846f3fb8ba500ad6dd5d4ef5582efb19` | 176577 |
+| inherited Lean | `d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7` | 264194 |
+
+**VERIFIED text delta:** Only `h_copy32` gains a legal-range branch. It first checks `soff <= src.len()` and `doff <= dst.len()`, then, via Rust short-circuit conditions, checks `m <= src.len()-soff` and `m <= dst.len()-doff`. On that branch it uses an ordinary indexed loop, `dst[doff+i] = src[soff+i]`, followed by return. Otherwise it executes the complete original counter setup and wrapping/get/set loop byte-for-byte. No unsafe block, slice-copy external operation, new helper, budget, route, cost model or encoder change is added.
+
+**INFERRED equivalence argument:** On the legal branch, every `i < m` satisfies `soff+i < src.len()` and `doff+i < dst.len()`. The sums fit usize, so ordinary indexing has the same reads/writes as the guarded helpers and cannot take a panic path. If either offset/range condition is false, the checks perform no writes and reach the exact original loop, including wrapping offsets, zero reads, and skipped writes. In particular, invalid offsets that can wrap into valid indices during the loop retain their old fallback behavior. This argument still requires actual Rust execution and the extracted Lean proof; it is not labeled formal acceptance.
+
+Audit identities: original copy declaration `fcfe83e35317d8f35a14cf213e03287cf26c3427aa0ed3ba7b33f1677243a053`; new declaration `2e0d73af638443c300f811d8cc8f39fef411cdfda9fb3b43ceea0c076d491a78`; exact fallback block `1ac53824bbdb2ef1aaebf7a4b96d9df4e56e20ee420d965ef88f019cf14677f2`.
+
+### Proof status and stopping condition
+
+**NOT_ADAPTED:** The copied Lean is kept solely as its frozen provenance and starting point. `EH.copy32_loop_spec`/`copy32_spec` currently refer to the original single loop. The guarded direct-index loop plus fallback is expected to produce new extracted loop definitions, potentially `h_copy32_loop0` and `h_copy32_loop1`; exact signatures/names are UNKNOWN until the root supplies actual Funs. This new Rust hash must not be described as gate-ready with the inherited proof.
+
+First require the finite/public token/output comparison and paired total-compression screen against exact H16 baseline and shadow. Inspect the new legal-range copying code for hoisted guards, vectorized operations, or compiler-generated bulk copy. Ordinary source indexing alone does not prove those changes occur; extra guards, overflow checks or layout could instead regress time. If the last screen has no stable useful gain, stop this CPU line without further variants. If the result is useful, adapt only the new copy loop specs against actual extraction and run the unchanged complete official gate. Full correctness, runtime benefit, private migration, admission and payment remain UNKNOWN at candidate creation.
