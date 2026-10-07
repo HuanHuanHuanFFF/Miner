@@ -25,6 +25,9 @@ The first two implementation agents own disjoint candidate and generator paths; 
 
 - 03:50:52: budget starts; restoration, reading, tool setup and coordination all count toward the five hours.
 - 03:53: initial independent routes selected. No new candidate measurement, proof, admission or reward is established yet.
+- 04:04:24: `explore-a` dispatched as run `37679261323`, frozen commit `16d80788891d3ce7fece4fa990078eb1eee62dcb`. Five candidates, seven controls, two public blocks; extraction requested for seed/tag4/hash5, no full gates on unadapted proof files. Native finite diagnostics will check the claimed rs preservation and supplementary record validity.
+- 04:17: the current frontier replay confirms a 6.074% further same-family scalar speed target at fixed size, or 16.654% against the declared adverse scenario. Snapshot `27331`, 491 Pareto rows; freshness unknown. The local scorer reproduces published weights within 6.94e-18.
+- 04:17: a separate `rmq-a` screen is prepared to test eight-endpoint cached minima inside actual constant-price runs. This changes how neighboring nodes reuse endpoint prices, rather than rescanning supposedly duplicated intervals. Independent bounded arithmetic/ring model found no counterexample, but no Rust output/Lean/performance result exists yet. Cap: one two-block screen with finite output comparison and extraction, then stop unless a useful total-time signal supports combination. Existing forward/finder proof drafts remain untested pending real extraction.
 
 ## Evidence index
 

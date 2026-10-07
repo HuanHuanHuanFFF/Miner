@@ -16,6 +16,7 @@ def main():
     ap.add_argument('--extract', nargs='*', default=[])
     ap.add_argument('--gate', nargs='*', default=[])
     ap.add_argument('--synthetic', nargs='*', default=[])
+    ap.add_argument('--equivalent', nargs='*', default=[], metavar='CANDIDATE=REFERENCE')
     ap.add_argument('--forward-diagnostics', action='store_true')
     ap.add_argument('--finder-diagnostics', action='store_true')
     ap.add_argument('--blocks', type=int, choices=[1, 2, 3, 4], default=2)
@@ -36,6 +37,11 @@ def main():
         hashes = {f: hashlib.sha256((path / f).read_bytes()).hexdigest() for f in ['parse.rs', 'Parse.lean']}
         entries.append({'name': name, 'path': path.relative_to(ROOT).as_posix(),
                         'control': False, 'anchor': 'public361', 'hashes': hashes})
+    by_name = {e['name']: e for e in entries}
+    for pair in args.equivalent:
+        candidate, reference = pair.split('=', 1)
+        assert candidate in args.candidates and reference in by_name and candidate != reference
+        by_name[candidate]['expected_equivalent_to'] = reference
     spec = {'entries': entries, 'snapshot_pages': 'evidence/round10/official-start/pareto-pages.json',
             'screen_blocks': args.blocks, 'refine_blocks': 0, 'shortlist': len(args.candidates),
             'gate_candidates': args.gate, 'gate_limit': len(args.gate),
