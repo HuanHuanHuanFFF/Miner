@@ -1,5 +1,6 @@
 """CI-only coarse parser phase attribution; separate from official paired timing."""
 from pathlib import Path
+from contextlib import contextmanager
 import hashlib
 import json
 import os
@@ -54,6 +55,28 @@ def instrument(source):
     return source + INSTRUMENT
 
 
+def run_logged(command, log, timeout):
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
+    except subprocess.TimeoutExpired as error:
+        def decoded(value):
+            return value.decode('utf-8', errors='replace') if isinstance(value, bytes) else (value or '')
+        log.write_text(decoded(error.stdout) + decoded(error.stderr), encoding='utf-8')
+        raise
+    log.write_text(result.stdout + result.stderr, encoding='utf-8')
+    return result
+
+
+@contextmanager
+def failure_receipt(report, path):
+    try:
+        yield
+    except Exception as error:
+        report.update(status='DIAGNOSTIC_FAILED', error=f'{type(error).__name__}: {error}')
+        save(path, report)
+        raise
+
+
 def main():
     assert os.environ.get('GITHUB_ACTIONS') == 'true' and os.environ.get('RUNNER_OS') == 'Linux'
     assert os.environ.get('GITHUB_REPOSITORY') == 'HuanHuanHuanFFF/Miner'
@@ -76,28 +99,29 @@ def main():
               'candidate': entry['name'], 'source_sha256': entry['hashes']['parse.rs'], 'phases': PHASES,
               'corpus': [{'file': f.name, 'bytes': f.stat().st_size, 'sha256': hashlib.sha256(f.read_bytes()).hexdigest()} for f in files]}
     save(output / 'phases.json', report)
-    binary = build / 'phase-profile'
-    proc = subprocess.run(['rustc', '+nightly-2026-08-18', '--edition=2021', '-O', '-C', 'overflow-checks=yes', str(build / 'main.rs'), '-o', str(binary)], capture_output=True, text=True, timeout=180)
-    (output / 'build.log').write_text(proc.stdout + proc.stderr)
-    if proc.returncode:
-        raise RuntimeError('Phase diagnostic compilation failed; see retained build.log')
-    cpu = str(min(os.sched_getaffinity(0)))
-    proc = subprocess.run(['taskset', '-c', cpu, str(binary), *map(str, files)], capture_output=True, text=True, timeout=240)
-    (output / 'runtime.log').write_text(proc.stdout + proc.stderr)
-    rows = [json.loads(line.removeprefix('R9_PHASE ')) for line in proc.stdout.splitlines() if line.startswith('R9_PHASE ')]
-    assert proc.returncode == 0 and len(rows) == 84 and all(r['tokens_equal'] for r in rows)
-    assert {(r['file_index'], r['rep']) for r in rows} == {(i, j) for i in range(28) for j in range(3)}
-    summary = []
-    for i, file in enumerate(files):
-        data = [r for r in rows if r['file_index'] == i]
-        total = statistics.median(r['instrumented_ns'] for r in data)
-        phases = {name: statistics.median(r['phase_ns'][j] for r in data) for j, name in enumerate(PHASES)}
-        summary.append({'file': file.name, 'reference_ns': statistics.median(r['reference_ns'] for r in data), 'instrumented_ns': total,
-                        'phase_ns': phases, 'phase_fraction_of_instrumented_parser': {k: v / total for k, v in phases.items()}})
-    report.update(status='VERIFIED_FINITE_PHASE_DIAGNOSTIC', records=rows, files=summary, cpu_affinity=cpu,
-                  instrumented_sha256=hashlib.sha256((build / 'instrumented.rs').read_bytes()).hexdigest())
-    save(output / 'phases.json', report)
-    print('ROUND9_PHASES', json.dumps({'status': report['status'], 'files': len(summary), 'token_comparisons': len(rows)}))
+    with failure_receipt(report, output / 'phases.json'):
+        binary = build / 'phase-profile'
+        proc = run_logged(['rustc', '+nightly-2026-08-18', '--edition=2021', '-O', '-C', 'overflow-checks=yes', str(build / 'main.rs'), '-o', str(binary)], output / 'build.log', 180)
+        report['compile_exit'] = proc.returncode
+        if proc.returncode:
+            raise RuntimeError('Phase diagnostic compilation failed; see retained build.log')
+        cpu = str(min(os.sched_getaffinity(0)))
+        proc = run_logged(['taskset', '-c', cpu, str(binary), *map(str, files)], output / 'runtime.log', 240)
+        report['runtime_exit'] = proc.returncode
+        rows = [json.loads(line.removeprefix('R9_PHASE ')) for line in proc.stdout.splitlines() if line.startswith('R9_PHASE ')]
+        assert proc.returncode == 0 and len(rows) == 84 and all(r['tokens_equal'] for r in rows)
+        assert {(r['file_index'], r['rep']) for r in rows} == {(i, j) for i in range(28) for j in range(3)}
+        summary = []
+        for i, file in enumerate(files):
+            data = [r for r in rows if r['file_index'] == i]
+            total = statistics.median(r['instrumented_ns'] for r in data)
+            phases = {name: statistics.median(r['phase_ns'][j] for r in data) for j, name in enumerate(PHASES)}
+            summary.append({'file': file.name, 'reference_ns': statistics.median(r['reference_ns'] for r in data), 'instrumented_ns': total,
+                            'phase_ns': phases, 'phase_fraction_of_instrumented_parser': {k: v / total for k, v in phases.items()}})
+        report.update(status='VERIFIED_FINITE_PHASE_DIAGNOSTIC', records=rows, files=summary, cpu_affinity=cpu,
+                      instrumented_sha256=hashlib.sha256((build / 'instrumented.rs').read_bytes()).hexdigest())
+        save(output / 'phases.json', report)
+        print('ROUND9_PHASES', json.dumps({'status': report['status'], 'files': len(summary), 'token_comparisons': len(rows)}))
 
 
 if __name__ == '__main__':

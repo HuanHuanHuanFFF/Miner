@@ -1,0 +1,986 @@
+{
+  "status": "INFERRED_LINEAR_PHASE_REMOVAL_MODEL",
+  "run_id": "37660750561",
+  "candidate": "r7-mid361-block1",
+  "candidate_source_sha256": "950eb21b3918adce71bad2737774f2e37531cfbcd45fb17afdd806ee0adc3ed5",
+  "phase_input": "evidence/round9/37660750561/block-a/screen/phase-diagnostics/phases.json",
+  "phase_input_sha256": "76219cfe6bd86fa56ae064c6e1a1bd74d43748e894a9575fa6e47df276d45883",
+  "formula": {
+    "phase_fraction_i": "mean over 3 raw records of d_dp_ns / instrumented_ns for the same file",
+    "removed_parser_seconds_i": "median(measured time_s) * phase_fraction_i",
+    "original_balanced_axis": "mean_i median(candidate measured total_s) / median(incumbent measured total_s)",
+    "modeled_free_backward_axis": "mean_i (median(candidate measured total_s) - removed_parser_seconds_i) / median(incumbent measured total_s)"
+  },
+  "assumptions": [
+    "Entire d_dp phase becomes free, including all its callees; other parser work and encoder time do not change.",
+    "Instrumented raw phase fractions transfer linearly to uninstrumented sandbox benchmark parser medians.",
+    "Output and input hashes stay fixed; no allocation, cache, scheduling, or compiler interaction is modeled.",
+    "This is an optimistic scenario inside a linear model, not a measured speedup or a hard mathematical upper bound."
+  ],
+  "comparison_target": {
+    "reduction_pct": 17.25,
+    "source": "Main-thread conservative-frontier screening requirement; this review does not recompute that frontier threshold."
+  },
+  "blocks": [
+    {
+      "block": 1,
+      "benchmark_path": "evidence/round9/37660750561/block-a/screen/round1-r7-mid361-block1.jsonl",
+      "benchmark_sha256": "5a09be7235d0ec94a84e9b6a3fe554b52c54d4ba16e095822ef6fb4c89059cda",
+      "original_balanced_axis": 1.4308989763450752,
+      "modeled_free_backward_axis": 1.2363928732100566,
+      "modeled_reduction_pct": 13.593279913571727,
+      "gap_to_17_25pct_target_pp": 3.6567200864282725,
+      "required_fraction_of_d_dp_time_to_remove_for_target": 1.2690094009450472,
+      "sensitivity_using_single_phase_repetition": [
+        {
+          "phase_rep": 0,
+          "modeled_axis": 1.2330715499548948,
+          "reduction_pct": 13.825394361206982
+        },
+        {
+          "phase_rep": 1,
+          "modeled_axis": 1.2392258933028573,
+          "reduction_pct": 13.395291086992444
+        },
+        {
+          "phase_rep": 2,
+          "modeled_axis": 1.2368811763724177,
+          "reduction_pct": 13.559154292515775
+        }
+      ],
+      "files": [
+        {
+          "file": "binary.db.bin",
+          "input_sha256": "6d48a129b156a4e032a6378b96d4258f89c9ccd759decdc66fdbf32c312277f4",
+          "parser_median_s": 0.016473863,
+          "total_median_s": 0.020218207999999998,
+          "incumbent_total_median_s": 0.012497079000000001,
+          "raw_phase_fractions": [
+            0.24762688991842943,
+            0.2437642511290762,
+            0.24401474567253725
+          ],
+          "mean_phase_fraction": 0.24513529557334762,
+          "modeled_removed_parser_s": 0.004038325275739834,
+          "original_file_ratio": 1.6178346956116703,
+          "modeled_file_ratio": 1.2946931618388715
+        },
+        {
+          "file": "bundle.min.js.txt",
+          "input_sha256": "ada4433d366405395b1a415fbec247ce7e38525c05f4f09e40c111230394353c",
+          "parser_median_s": 0.060979437,
+          "total_median_s": 0.07258743,
+          "incumbent_total_median_s": 0.044220196,
+          "raw_phase_fractions": [
+            0.21053597883297892,
+            0.1986121948818486,
+            0.214150390685788
+          ],
+          "mean_phase_fraction": 0.2077661881335385,
+          "modeled_removed_parser_s": 0.012669465180019258,
+          "original_file_ratio": 1.641499508505118,
+          "modeled_file_ratio": 1.3549909371722535
+        },
+        {
+          "file": "catalog.xml.txt",
+          "input_sha256": "94a0152009cf44a20483a564f8b32d7ef32e4fbbea53843da9848e7b5f43743a",
+          "parser_median_s": 0.015449893,
+          "total_median_s": 0.017845948,
+          "incumbent_total_median_s": 0.010282695,
+          "raw_phase_fractions": [
+            0.23662753560866615,
+            0.23846731445911482,
+            0.23520616883054798
+          ],
+          "mean_phase_fraction": 0.23676700629944297,
+          "modeled_removed_parser_s": 0.0036580249132567196,
+          "original_file_ratio": 1.7355321732289055,
+          "modeled_file_ratio": 1.379786436021226
+        },
+        {
+          "file": "compressed.bin",
+          "input_sha256": "dd2679f1b4553beb286ec43eda622e6c40e664b841de3af4887ee89faee223ec",
+          "parser_median_s": 0.010071699,
+          "total_median_s": 0.021973635999999998,
+          "incumbent_total_median_s": 0.017814759,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 1.2334512075072135,
+          "modeled_file_ratio": 1.2334512075072135
+        },
+        {
+          "file": "config.yaml.txt",
+          "input_sha256": "9353520d1b7b493a7f6f90d019e876c1580636732fc0d3197e51ed0766e2d4e2",
+          "parser_median_s": 0.022061241,
+          "total_median_s": 0.025561036,
+          "incumbent_total_median_s": 0.014002866,
+          "raw_phase_fractions": [
+            0.20235409590469444,
+            0.20128074982415392,
+            0.20247335583300238
+          ],
+          "mean_phase_fraction": 0.2020360671872836,
+          "modeled_removed_parser_s": 0.004457166368910855,
+          "original_file_ratio": 1.8254145972688733,
+          "modeled_file_ratio": 1.507110732266462
+        },
+        {
+          "file": "docs.md.txt",
+          "input_sha256": "793cb2bc299557521c052defd985cddb934feac72d13b995cf475a0ff16347a5",
+          "parser_median_s": 0.051636451,
+          "total_median_s": 0.060641741,
+          "incumbent_total_median_s": 0.037575335,
+          "raw_phase_fractions": [
+            0.19943684759284974,
+            0.20555546785765128,
+            0.21847594652561658
+          ],
+          "mean_phase_fraction": 0.2078227539920392,
+          "modeled_removed_parser_s": 0.010731229453194987,
+          "original_file_ratio": 1.6138709342178852,
+          "modeled_file_ratio": 1.32827855152336
+        },
+        {
+          "file": "dump.sql.txt",
+          "input_sha256": "eb8d600ef976556175ab9410909871582d6845712bba0ad30607a0e79e9e60ba",
+          "parser_median_s": 0.005813685,
+          "total_median_s": 0.006572054000000001,
+          "incumbent_total_median_s": 0.004474051000000001,
+          "raw_phase_fractions": [
+            0.2511945508150056,
+            0.23062058588884785,
+            0.2311194978521698
+          ],
+          "mean_phase_fraction": 0.23764487818534108,
+          "modeled_removed_parser_s": 0.0013815924636329446,
+          "original_file_ratio": 1.4689269299791174,
+          "modeled_file_ratio": 1.1601256973528142
+        },
+        {
+          "file": "genome.fasta",
+          "input_sha256": "4b01b6b751d82ab6e1b5e5275c3308db25dd58e20afcd5c79b72caab7f8a2baf",
+          "parser_median_s": 0.073106007,
+          "total_median_s": 0.084536656,
+          "incumbent_total_median_s": 0.08710245200000001,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.9705427810459342,
+          "modeled_file_ratio": 0.9705427810459342
+        },
+        {
+          "file": "images.bin",
+          "input_sha256": "4cbc5cc76fe6bf05b5d2d49c5b7c7fe23780e0c8895a503d68f913479ba17254",
+          "parser_median_s": 0.011485383,
+          "total_median_s": 0.021805129,
+          "incumbent_total_median_s": 0.014894717000000002,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 1.4639505403157373,
+          "modeled_file_ratio": 1.4639505403157373
+        },
+        {
+          "file": "lean.txt",
+          "input_sha256": "30ff2371b060320afcf60fa4e30c6a73855b5b704569e006bccc99262d37548e",
+          "parser_median_s": 0.062264439,
+          "total_median_s": 0.071179961,
+          "incumbent_total_median_s": 0.042483190000000004,
+          "raw_phase_fractions": [
+            0.21411308515634925,
+            0.2049384922960611,
+            0.21203473213450022
+          ],
+          "mean_phase_fraction": 0.21036210319563686,
+          "modeled_removed_parser_s": 0.013098078342336436,
+          "original_file_ratio": 1.6754853154859604,
+          "modeled_file_ratio": 1.3671732903688154
+        },
+        {
+          "file": "machine-code.bin",
+          "input_sha256": "f58b5b1ba7cb2061f5a747ac87f84f2508b287219101f4a9d78c9513cb237204",
+          "parser_median_s": 0.02774185,
+          "total_median_s": 0.036605374,
+          "incumbent_total_median_s": 0.025471262,
+          "raw_phase_fractions": [
+            0.18054022672378267,
+            0.1805644775291088,
+            0.18118307137825113
+          ],
+          "mean_phase_fraction": 0.18076259187704755,
+          "modeled_removed_parser_s": 0.005014688709464271,
+          "original_file_ratio": 1.4371244738482138,
+          "modeled_file_ratio": 1.2402481388843527
+        },
+        {
+          "file": "metrics.csv.txt",
+          "input_sha256": "4af8e993743404696f1a54e4d67e88f6a509414aed516b602c230b12e533e75c",
+          "parser_median_s": 0.064006892,
+          "total_median_s": 0.07444525299999999,
+          "incumbent_total_median_s": 0.048752626,
+          "raw_phase_fractions": [
+            0.19924646220033118,
+            0.2089704864853453,
+            0.21635577388666113
+          ],
+          "mean_phase_fraction": 0.20819090752411254,
+          "modeled_removed_parser_s": 0.013325652933277858,
+          "original_file_ratio": 1.5269998584281386,
+          "modeled_file_ratio": 1.2536678550755835
+        },
+        {
+          "file": "multibyte.txt",
+          "input_sha256": "174352fedf18646ab739edcb5ecea17832e4f8b700aa3f5d4f824e0c6221722e",
+          "parser_median_s": 0.072763635,
+          "total_median_s": 0.08303702499999999,
+          "incumbent_total_median_s": 0.042883484,
+          "raw_phase_fractions": [
+            0.22295929906181036,
+            0.2137360924572376,
+            0.2189856576301698
+          ],
+          "mean_phase_fraction": 0.21856034971640592,
+          "modeled_removed_parser_s": 0.015903245512236912,
+          "original_file_ratio": 1.9363404568528058,
+          "modeled_file_ratio": 1.5654926611784403
+        },
+        {
+          "file": "page.html.txt",
+          "input_sha256": "e2d69618c902e4c1847794b6f18ec67bb965da50ff68cda05305485b566e6ff2",
+          "parser_median_s": 0.022454536,
+          "total_median_s": 0.026476285,
+          "incumbent_total_median_s": 0.015666755,
+          "raw_phase_fractions": [
+            0.24415408638245306,
+            0.21264059346953576,
+            0.2126727242985658
+          ],
+          "mean_phase_fraction": 0.2231558013835182,
+          "modeled_removed_parser_s": 0.005010859975775059,
+          "original_file_ratio": 1.6899661097655512,
+          "modeled_file_ratio": 1.3701257870072607
+        },
+        {
+          "file": "prose.txt",
+          "input_sha256": "77bcc8ef22132bc4ef34324dc7897870e76e9b97452d1a3610e7f803a4486f17",
+          "parser_median_s": 0.181819763,
+          "total_median_s": 0.199678638,
+          "incumbent_total_median_s": 0.11206617299999999,
+          "raw_phase_fractions": [
+            0.17626835966506887,
+            0.17627446145924194,
+            0.1803429985649621
+          ],
+          "mean_phase_fraction": 0.17762860656309098,
+          "modeled_removed_parser_s": 0.03229639114732145,
+          "original_file_ratio": 1.7817922451942747,
+          "modeled_file_ratio": 1.493601881565801
+        },
+        {
+          "file": "records.json.txt",
+          "input_sha256": "63decf627edee015caecc4a8ab97c8a6d19606fcf115e2a98a9ac837c7ca1646",
+          "parser_median_s": 0.012478655,
+          "total_median_s": 0.014994935999999999,
+          "incumbent_total_median_s": 0.007161585,
+          "raw_phase_fractions": [
+            0.2548982030708205,
+            0.22183146482056637,
+            0.22201572556368832
+          ],
+          "mean_phase_fraction": 0.23291513115169174,
+          "modeled_removed_parser_s": 0.002906467565921714,
+          "original_file_ratio": 2.0938013023653284,
+          "modeled_file_ratio": 1.6879599186602248
+        },
+        {
+          "file": "server.log",
+          "input_sha256": "d7f2ee8a39592832c2c46089d07fc33c0bf1f985084577849a6db368d90cb700",
+          "parser_median_s": 0.002003335,
+          "total_median_s": 0.003163542,
+          "incumbent_total_median_s": 0.005207312,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.6075191960842753,
+          "modeled_file_ratio": 0.6075191960842753
+        },
+        {
+          "file": "source.c.txt",
+          "input_sha256": "b04133d396ba4c81be9b5b9cf096402ed61526a85e2918c8553e3c9c15717cc3",
+          "parser_median_s": 0.092783698,
+          "total_median_s": 0.10454691399999999,
+          "incumbent_total_median_s": 0.060954891,
+          "raw_phase_fractions": [
+            0.20630528170411264,
+            0.20017259034736587,
+            0.20030115324310335
+          ],
+          "mean_phase_fraction": 0.20225967509819395,
+          "modeled_removed_parser_s": 0.01876640061188895,
+          "original_file_ratio": 1.7151521770418718,
+          "modeled_file_ratio": 1.4072785953814773
+        },
+        {
+          "file": "source.py.txt",
+          "input_sha256": "dd4793f64b001c006b92f74e4488e91d4022893259bd88a2acbdf16cdad7a44b",
+          "parser_median_s": 0.036372198,
+          "total_median_s": 0.041172032000000004,
+          "incumbent_total_median_s": 0.023632663,
+          "raw_phase_fractions": [
+            0.1987011124282091,
+            0.19948104138797335,
+            0.19978482499944877
+          ],
+          "mean_phase_fraction": 0.19932232627187707,
+          "modeled_removed_parser_s": 0.007249791116981315,
+          "original_file_ratio": 1.7421664244947765,
+          "modeled_file_ratio": 1.4353964630654907
+        },
+        {
+          "file": "source.rs.txt",
+          "input_sha256": "12edca346da882992b772a5686a191324858e46842626967cd89130d4c70bbd3",
+          "parser_median_s": 0.037193656,
+          "total_median_s": 0.041905265,
+          "incumbent_total_median_s": 0.023814033999999998,
+          "raw_phase_fractions": [
+            0.2074090278855234,
+            0.20731193714794988,
+            0.2070841561706023
+          ],
+          "mean_phase_fraction": 0.20726837373469187,
+          "modeled_removed_parser_s": 0.007709068592367564,
+          "original_file_ratio": 1.7596877958602057,
+          "modeled_file_ratio": 1.435968236529453
+        },
+        {
+          "file": "sourcemap.map.txt",
+          "input_sha256": "0f7395da91e686b53af9c818b6b96fa0a2eb7ac0b243a42247319341b8e7d522",
+          "parser_median_s": 0.018068037,
+          "total_median_s": 0.020572356,
+          "incumbent_total_median_s": 0.011951171,
+          "raw_phase_fractions": [
+            0.2226595492539969,
+            0.22019827764750413,
+            0.22251009494501467
+          ],
+          "mean_phase_fraction": 0.2217893072821719,
+          "modeled_removed_parser_s": 0.0040072974101786505,
+          "original_file_ratio": 1.7213673873463948,
+          "modeled_file_ratio": 1.3860615491001969
+        },
+        {
+          "file": "sparse.bin",
+          "input_sha256": "e5d1db67caf732b985c2226791836f311774b6fe464a5d71e6f3fff3e6725f36",
+          "parser_median_s": 7.6194e-05,
+          "total_median_s": 0.000645435,
+          "incumbent_total_median_s": 0.000720047,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.8963789863717229,
+          "modeled_file_ratio": 0.8963789863717229
+        },
+        {
+          "file": "tiny-app.log",
+          "input_sha256": "0f806a930a41f56b5c9d85f91e81af6e90edf17ee6c66dabd88dcf63e18acf14",
+          "parser_median_s": 0.000102333,
+          "total_median_s": 0.00032223699999999996,
+          "incumbent_total_median_s": 0.0003931,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.8197328923937928,
+          "modeled_file_ratio": 0.8197328923937928
+        },
+        {
+          "file": "tiny-config.json.txt",
+          "input_sha256": "4ecee10b0b6b41ba5d1693b70ac95cb03de1a05712739e4bc6641b3af6cb0a73",
+          "parser_median_s": 0.000290657,
+          "total_median_s": 0.000623084,
+          "incumbent_total_median_s": 0.000402237,
+          "raw_phase_fractions": [
+            0.18928864498922968,
+            0.18589856865170526,
+            0.1693802505306586
+          ],
+          "mean_phase_fraction": 0.18152248805719784,
+          "modeled_removed_parser_s": 5.276078181124095e-05,
+          "original_file_ratio": 1.5490469549046955,
+          "modeled_file_ratio": 1.4178785596271826
+        },
+        {
+          "file": "weights-bf16.bin",
+          "input_sha256": "e64e112bd3b2c63509c2dc3e687bb91e7e06dbc4bd13ecbdaac41241d0f03b1f",
+          "parser_median_s": 0.003348229,
+          "total_median_s": 0.022692872,
+          "incumbent_total_median_s": 0.027848116,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.8148799724907781,
+          "modeled_file_ratio": 0.8148799724907781
+        },
+        {
+          "file": "weights-f16.bin",
+          "input_sha256": "134a2ec77375f13fab74a200a80bc768dd6c3d4403bfccb473b38941fb2ff955",
+          "parser_median_s": 0.001858642,
+          "total_median_s": 0.012850204,
+          "incumbent_total_median_s": 0.016597065,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.7742455669119811,
+          "modeled_file_ratio": 0.7742455669119811
+        },
+        {
+          "file": "weights-f32.bin",
+          "input_sha256": "cbb1608ac057ef06f7dd2e6bb0ba32fa6a6ce6f91699c0e9c05f5644acc2c74d",
+          "parser_median_s": 0.012240926,
+          "total_median_s": 0.02564253,
+          "incumbent_total_median_s": 0.023233831,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 1.1036720547721983,
+          "modeled_file_ratio": 1.1036720547721983
+        },
+        {
+          "file": "weights-q8.bin",
+          "input_sha256": "c81adeb809c26ef1dd391c0a640c95b3ad76ebab127d690b5a7fdbe2e412779a",
+          "parser_median_s": 0.001877748,
+          "total_median_s": 0.013375915,
+          "incumbent_total_median_s": 0.015758826,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.848788799368684,
+          "modeled_file_ratio": 0.848788799368684
+        }
+      ]
+    },
+    {
+      "block": 2,
+      "benchmark_path": "evidence/round9/37660750561/block-a/screen/round2-r7-mid361-block1.jsonl",
+      "benchmark_sha256": "111906724086f5004e9f514fea2e06278616a216dd086a300e2578c0ab468abb",
+      "original_balanced_axis": 1.4381401407532213,
+      "modeled_free_backward_axis": 1.2423909116830798,
+      "modeled_reduction_pct": 13.611276364737199,
+      "gap_to_17_25pct_target_pp": 3.638723635262801,
+      "required_fraction_of_d_dp_time_to_remove_for_target": 1.2673315519982873,
+      "sensitivity_using_single_phase_repetition": [
+        {
+          "phase_rep": 0,
+          "modeled_axis": 1.2390459580459745,
+          "reduction_pct": 13.843865216290524
+        },
+        {
+          "phase_rep": 1,
+          "modeled_axis": 1.2452357747825418,
+          "reduction_pct": 13.413460935013362
+        },
+        {
+          "phase_rep": 2,
+          "modeled_axis": 1.2428910022207231,
+          "reduction_pct": 13.576502942907707
+        }
+      ],
+      "files": [
+        {
+          "file": "binary.db.bin",
+          "input_sha256": "6d48a129b156a4e032a6378b96d4258f89c9ccd759decdc66fdbf32c312277f4",
+          "parser_median_s": 0.016809846,
+          "total_median_s": 0.020663948,
+          "incumbent_total_median_s": 0.012554066999999999,
+          "raw_phase_fractions": [
+            0.24762688991842943,
+            0.2437642511290762,
+            0.24401474567253725
+          ],
+          "mean_phase_fraction": 0.24513529557334762,
+          "modeled_removed_parser_s": 0.004120686567752455,
+          "original_file_ratio": 1.6459963133859332,
+          "modeled_file_ratio": 1.3177611233274085
+        },
+        {
+          "file": "bundle.min.js.txt",
+          "input_sha256": "ada4433d366405395b1a415fbec247ce7e38525c05f4f09e40c111230394353c",
+          "parser_median_s": 0.061518125,
+          "total_median_s": 0.073220396,
+          "incumbent_total_median_s": 0.04434815,
+          "raw_phase_fractions": [
+            0.21053597883297892,
+            0.1986121948818486,
+            0.214150390685788
+          ],
+          "mean_phase_fraction": 0.2077661881335385,
+          "modeled_removed_parser_s": 0.012781386332372538,
+          "original_file_ratio": 1.6510360860599593,
+          "modeled_file_ratio": 1.3628304600671606
+        },
+        {
+          "file": "catalog.xml.txt",
+          "input_sha256": "94a0152009cf44a20483a564f8b32d7ef32e4fbbea53843da9848e7b5f43743a",
+          "parser_median_s": 0.015567696,
+          "total_median_s": 0.017974772,
+          "incumbent_total_median_s": 0.010311291,
+          "raw_phase_fractions": [
+            0.23662753560866615,
+            0.23846731445911482,
+            0.23520616883054798
+          ],
+          "mean_phase_fraction": 0.23676700629944297,
+          "modeled_removed_parser_s": 0.003685916776899813,
+          "original_file_ratio": 1.7432125618411893,
+          "modeled_file_ratio": 1.3857484211337054
+        },
+        {
+          "file": "compressed.bin",
+          "input_sha256": "dd2679f1b4553beb286ec43eda622e6c40e664b841de3af4887ee89faee223ec",
+          "parser_median_s": 0.010100223,
+          "total_median_s": 0.022157583,
+          "incumbent_total_median_s": 0.018049554,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 1.2275972580818342,
+          "modeled_file_ratio": 1.2275972580818342
+        },
+        {
+          "file": "config.yaml.txt",
+          "input_sha256": "9353520d1b7b493a7f6f90d019e876c1580636732fc0d3197e51ed0766e2d4e2",
+          "parser_median_s": 0.022260248,
+          "total_median_s": 0.025786732,
+          "incumbent_total_median_s": 0.014054444,
+          "raw_phase_fractions": [
+            0.20235409590469444,
+            0.20128074982415392,
+            0.20247335583300238
+          ],
+          "mean_phase_fraction": 0.2020360671872836,
+          "modeled_removed_parser_s": 0.004497372960533595,
+          "original_file_ratio": 1.834774253609748,
+          "modeled_file_ratio": 1.5147777485517324
+        },
+        {
+          "file": "docs.md.txt",
+          "input_sha256": "793cb2bc299557521c052defd985cddb934feac72d13b995cf475a0ff16347a5",
+          "parser_median_s": 0.052022472,
+          "total_median_s": 0.060873250000000004,
+          "incumbent_total_median_s": 0.037565157,
+          "raw_phase_fractions": [
+            0.19943684759284974,
+            0.20555546785765128,
+            0.21847594652561658
+          ],
+          "mean_phase_fraction": 0.2078227539920392,
+          "modeled_removed_parser_s": 0.010811453400513748,
+          "original_file_ratio": 1.6204710657804517,
+          "modeled_file_ratio": 1.3326657093296923
+        },
+        {
+          "file": "dump.sql.txt",
+          "input_sha256": "eb8d600ef976556175ab9410909871582d6845712bba0ad30607a0e79e9e60ba",
+          "parser_median_s": 0.005830747,
+          "total_median_s": 0.006599105,
+          "incumbent_total_median_s": 0.004500873,
+          "raw_phase_fractions": [
+            0.2511945508150056,
+            0.23062058588884785,
+            0.2311194978521698
+          ],
+          "mean_phase_fraction": 0.23764487818534108,
+          "modeled_removed_parser_s": 0.001385647160544543,
+          "original_file_ratio": 1.466183338210165,
+          "modeled_file_ratio": 1.158321472180054
+        },
+        {
+          "file": "genome.fasta",
+          "input_sha256": "4b01b6b751d82ab6e1b5e5275c3308db25dd58e20afcd5c79b72caab7f8a2baf",
+          "parser_median_s": 0.073392602,
+          "total_median_s": 0.08517285,
+          "incumbent_total_median_s": 0.08720177300000001,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.9767330074813959,
+          "modeled_file_ratio": 0.9767330074813959
+        },
+        {
+          "file": "images.bin",
+          "input_sha256": "4cbc5cc76fe6bf05b5d2d49c5b7c7fe23780e0c8895a503d68f913479ba17254",
+          "parser_median_s": 0.011551237,
+          "total_median_s": 0.022009705,
+          "incumbent_total_median_s": 0.015055691,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 1.461886073512003,
+          "modeled_file_ratio": 1.461886073512003
+        },
+        {
+          "file": "lean.txt",
+          "input_sha256": "30ff2371b060320afcf60fa4e30c6a73855b5b704569e006bccc99262d37548e",
+          "parser_median_s": 0.063052266,
+          "total_median_s": 0.072048409,
+          "incumbent_total_median_s": 0.042591791,
+          "raw_phase_fractions": [
+            0.21411308515634925,
+            0.2049384922960611,
+            0.21203473213450022
+          ],
+          "mean_phase_fraction": 0.21036210319563686,
+          "modeled_removed_parser_s": 0.013263807287010744,
+          "original_file_ratio": 1.6916031777109348,
+          "modeled_file_ratio": 1.3801861892351335
+        },
+        {
+          "file": "machine-code.bin",
+          "input_sha256": "f58b5b1ba7cb2061f5a747ac87f84f2508b287219101f4a9d78c9513cb237204",
+          "parser_median_s": 0.02807231,
+          "total_median_s": 0.036968983999999996,
+          "incumbent_total_median_s": 0.025563673,
+          "raw_phase_fractions": [
+            0.18054022672378267,
+            0.1805644775291088,
+            0.18118307137825113
+          ],
+          "mean_phase_fraction": 0.18076259187704755,
+          "modeled_removed_parser_s": 0.00507442351557596,
+          "original_file_ratio": 1.4461530625900276,
+          "modeled_file_ratio": 1.2476517159495837
+        },
+        {
+          "file": "metrics.csv.txt",
+          "input_sha256": "4af8e993743404696f1a54e4d67e88f6a509414aed516b602c230b12e533e75c",
+          "parser_median_s": 0.064262059,
+          "total_median_s": 0.074763473,
+          "incumbent_total_median_s": 0.048758175,
+          "raw_phase_fractions": [
+            0.19924646220033118,
+            0.2089704864853453,
+            0.21635577388666113
+          ],
+          "mean_phase_fraction": 0.20819090752411254,
+          "modeled_removed_parser_s": 0.013378776382578063,
+          "original_file_ratio": 1.5333525711329432,
+          "modeled_file_ratio": 1.2589621456796103
+        },
+        {
+          "file": "multibyte.txt",
+          "input_sha256": "174352fedf18646ab739edcb5ecea17832e4f8b700aa3f5d4f824e0c6221722e",
+          "parser_median_s": 0.073377411,
+          "total_median_s": 0.083753358,
+          "incumbent_total_median_s": 0.043039907,
+          "raw_phase_fractions": [
+            0.22295929906181036,
+            0.2137360924572376,
+            0.2189856576301698
+          ],
+          "mean_phase_fraction": 0.21856034971640592,
+          "modeled_removed_parser_s": 0.01603739260944445,
+          "original_file_ratio": 1.9459465374774159,
+          "modeled_file_ratio": 1.5733297330441616
+        },
+        {
+          "file": "page.html.txt",
+          "input_sha256": "e2d69618c902e4c1847794b6f18ec67bb965da50ff68cda05305485b566e6ff2",
+          "parser_median_s": 0.022689177,
+          "total_median_s": 0.026775599,
+          "incumbent_total_median_s": 0.015652824,
+          "raw_phase_fractions": [
+            0.24415408638245306,
+            0.21264059346953576,
+            0.2126727242985658
+          ],
+          "mean_phase_fraction": 0.2231558013835182,
+          "modeled_removed_parser_s": 0.00506322147616749,
+          "original_file_ratio": 1.7105922228474557,
+          "modeled_file_ratio": 1.3871220633307135
+        },
+        {
+          "file": "prose.txt",
+          "input_sha256": "77bcc8ef22132bc4ef34324dc7897870e76e9b97452d1a3610e7f803a4486f17",
+          "parser_median_s": 0.182706857,
+          "total_median_s": 0.200524593,
+          "incumbent_total_median_s": 0.11279182400000001,
+          "raw_phase_fractions": [
+            0.17626835966506887,
+            0.17627446145924194,
+            0.1803429985649621
+          ],
+          "mean_phase_fraction": 0.17762860656309098,
+          "modeled_removed_parser_s": 0.03245396441843192,
+          "original_file_ratio": 1.777829153645037,
+          "modeled_file_ratio": 1.490095847563987
+        },
+        {
+          "file": "records.json.txt",
+          "input_sha256": "63decf627edee015caecc4a8ab97c8a6d19606fcf115e2a98a9ac837c7ca1646",
+          "parser_median_s": 0.012581195,
+          "total_median_s": 0.015183419,
+          "incumbent_total_median_s": 0.007198248000000001,
+          "raw_phase_fractions": [
+            0.2548982030708205,
+            0.22183146482056637,
+            0.22201572556368832
+          ],
+          "mean_phase_fraction": 0.23291513115169174,
+          "modeled_removed_parser_s": 0.0029303506834700084,
+          "original_file_ratio": 2.1093214626670265,
+          "modeled_file_ratio": 1.7022292530807484
+        },
+        {
+          "file": "server.log",
+          "input_sha256": "d7f2ee8a39592832c2c46089d07fc33c0bf1f985084577849a6db368d90cb700",
+          "parser_median_s": 0.002004599,
+          "total_median_s": 0.0031700160000000003,
+          "incumbent_total_median_s": 0.005198759000000001,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.6097639840585032,
+          "modeled_file_ratio": 0.6097639840585032
+        },
+        {
+          "file": "source.c.txt",
+          "input_sha256": "b04133d396ba4c81be9b5b9cf096402ed61526a85e2918c8553e3c9c15717cc3",
+          "parser_median_s": 0.093563332,
+          "total_median_s": 0.10552986099999999,
+          "incumbent_total_median_s": 0.061347360000000004,
+          "raw_phase_fractions": [
+            0.20630528170411264,
+            0.20017259034736587,
+            0.20030115324310335
+          ],
+          "mean_phase_fraction": 0.20225967509819395,
+          "modeled_removed_parser_s": 0.018924089131424453,
+          "original_file_ratio": 1.7202021570284358,
+          "modeled_file_ratio": 1.411727772288417
+        },
+        {
+          "file": "source.py.txt",
+          "input_sha256": "dd4793f64b001c006b92f74e4488e91d4022893259bd88a2acbdf16cdad7a44b",
+          "parser_median_s": 0.036599138,
+          "total_median_s": 0.041439550000000006,
+          "incumbent_total_median_s": 0.023651890000000002,
+          "raw_phase_fractions": [
+            0.1987011124282091,
+            0.19948104138797335,
+            0.19978482499944877
+          ],
+          "mean_phase_fraction": 0.19932232627187707,
+          "modeled_removed_parser_s": 0.007295025325705455,
+          "original_file_ratio": 1.7520608289654653,
+          "modeled_file_ratio": 1.443627747055079
+        },
+        {
+          "file": "source.rs.txt",
+          "input_sha256": "12edca346da882992b772a5686a191324858e46842626967cd89130d4c70bbd3",
+          "parser_median_s": 0.037629399,
+          "total_median_s": 0.04239499,
+          "incumbent_total_median_s": 0.023859291,
+          "raw_phase_fractions": [
+            0.2074090278855234,
+            0.20731193714794988,
+            0.2070841561706023
+          ],
+          "mean_phase_fraction": 0.20726837373469187,
+          "modeled_removed_parser_s": 0.007799384335343841,
+          "original_file_ratio": 1.7768755157058103,
+          "modeled_file_ratio": 1.4499846481044285
+        },
+        {
+          "file": "sourcemap.map.txt",
+          "input_sha256": "0f7395da91e686b53af9c818b6b96fa0a2eb7ac0b243a42247319341b8e7d522",
+          "parser_median_s": 0.018153619,
+          "total_median_s": 0.020682525,
+          "incumbent_total_median_s": 0.011970808,
+          "raw_phase_fractions": [
+            0.2226595492539969,
+            0.22019827764750413,
+            0.22251009494501467
+          ],
+          "mean_phase_fraction": 0.2217893072821719,
+          "modeled_removed_parser_s": 0.004026278582674474,
+          "original_file_ratio": 1.7277467820050243,
+          "modeled_file_ratio": 1.391405360216748
+        },
+        {
+          "file": "sparse.bin",
+          "input_sha256": "e5d1db67caf732b985c2226791836f311774b6fe464a5d71e6f3fff3e6725f36",
+          "parser_median_s": 7.7777e-05,
+          "total_median_s": 0.000641539,
+          "incumbent_total_median_s": 0.000715007,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.8972485584057218,
+          "modeled_file_ratio": 0.8972485584057218
+        },
+        {
+          "file": "tiny-app.log",
+          "input_sha256": "0f806a930a41f56b5c9d85f91e81af6e90edf17ee6c66dabd88dcf63e18acf14",
+          "parser_median_s": 0.000103365,
+          "total_median_s": 0.000321246,
+          "incumbent_total_median_s": 0.000390045,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.8236126600776834,
+          "modeled_file_ratio": 0.8236126600776834
+        },
+        {
+          "file": "tiny-config.json.txt",
+          "input_sha256": "4ecee10b0b6b41ba5d1693b70ac95cb03de1a05712739e4bc6641b3af6cb0a73",
+          "parser_median_s": 0.000304213,
+          "total_median_s": 0.00063141,
+          "incumbent_total_median_s": 0.000405895,
+          "raw_phase_fractions": [
+            0.18928864498922968,
+            0.18589856865170526,
+            0.1693802505306586
+          ],
+          "mean_phase_fraction": 0.18152248805719784,
+          "modeled_removed_parser_s": 5.522150065934433e-05,
+          "original_file_ratio": 1.5555993545128668,
+          "modeled_file_ratio": 1.4195506210735676
+        },
+        {
+          "file": "weights-bf16.bin",
+          "input_sha256": "e64e112bd3b2c63509c2dc3e687bb91e7e06dbc4bd13ecbdaac41241d0f03b1f",
+          "parser_median_s": 0.003382353,
+          "total_median_s": 0.023227461,
+          "incumbent_total_median_s": 0.028029018,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.8286933562923967,
+          "modeled_file_ratio": 0.8286933562923967
+        },
+        {
+          "file": "weights-f16.bin",
+          "input_sha256": "134a2ec77375f13fab74a200a80bc768dd6c3d4403bfccb473b38941fb2ff955",
+          "parser_median_s": 0.001887897,
+          "total_median_s": 0.013060672,
+          "incumbent_total_median_s": 0.016669111,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.7835254081636387,
+          "modeled_file_ratio": 0.7835254081636387
+        },
+        {
+          "file": "weights-f32.bin",
+          "input_sha256": "cbb1608ac057ef06f7dd2e6bb0ba32fa6a6ce6f91699c0e9c05f5644acc2c74d",
+          "parser_median_s": 0.012302884,
+          "total_median_s": 0.025959348,
+          "incumbent_total_median_s": 0.023595954,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 1.100160985226535,
+          "modeled_file_ratio": 1.100160985226535
+        },
+        {
+          "file": "weights-q8.bin",
+          "input_sha256": "c81adeb809c26ef1dd391c0a640c95b3ad76ebab127d690b5a7fdbe2e412779a",
+          "parser_median_s": 0.001891073,
+          "total_median_s": 0.013616108,
+          "incumbent_total_median_s": 0.016023735,
+          "raw_phase_fractions": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_phase_fraction": 0.0,
+          "modeled_removed_parser_s": 0.0,
+          "original_file_ratio": 0.849746204614592,
+          "modeled_file_ratio": 0.849746204614592
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "original_axes_replay_state_json": "matched within 1e-12",
+    "file_hashes_match_phase_corpus": true,
+    "measured_samples_per_file_per_method": 11,
+    "warmups_excluded": true
+  }
+}
