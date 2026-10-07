@@ -1,0 +1,53 @@
+{
+  "status": "VERIFIED_EXTRACTION_INTERFACE_ONLY",
+  "run_id": "37693029351",
+  "source_sha256": "474714b7007f73ac04d7ff7e2c5199385fd3d10e4b3fc323ad6fd3c58a7ba576",
+  "extracted_files": {
+    "Types.lean": {
+      "bytes": 503,
+      "sha256": "276d4089d337e0d7da19d73f67b92ed57aa61ce5b0b548420962498a78bf5966"
+    },
+    "Constants.lean": {
+      "bytes": 16204,
+      "sha256": "4a083c4264c013f437fcb492c86cec195ab7ff1b1c5cd74fd0afda2ded2e5773"
+    },
+    "Funs.lean": {
+      "bytes": 645167,
+      "sha256": "0aa6682c30b62ccc5eb8f25a48ceabc63f74494f77fbecc7003635274bfb085f"
+    }
+  },
+  "interfaces": {
+    "ep_search": "input rs prev4 prev7 i h3 h4 h7 b8 d4 d7 h3d nice tbmax dupmode",
+    "ep_insert_range_loop": "input head3 head4 prev4 head7 prev7 rs \u00abto\u00bb sh7 d4 d7 h3d nice tbmax dupmode target q",
+    "ep_insert_range": "input head3 head4 prev4 head7 prev7 rs \u00abfrom\u00bb \u00abto\u00bb sh7 true_end d4 d7 h3d nice tbmax dupmode",
+    "d_parse_loop": "input plan rs ct lazyn d4 d7 skip h3d tbmax lz2max dupmode fback d7l d7e nice n head3 head4 prev4 head7 prev7 pa tb lsym dtab nextl lf df litc lc dcc lim sh7 s next_upd cands pc pn ppos cl cd cdc i anchor alen"
+  },
+  "ep_search_result": "rs only; prev arrays read-only",
+  "range_loop_state": [
+    "head3",
+    "head4",
+    "prev4",
+    "head7",
+    "prev7",
+    "rs",
+    "q"
+  ],
+  "range_result": [
+    "head3",
+    "head4",
+    "prev4",
+    "head7",
+    "prev7",
+    "rs"
+  ],
+  "d_parse_outer_loop_state_count": 26,
+  "d_parse_inner_long_jump_result": "Adds updated rs immediately after plan; outer loop already carries rs and keeps 26 elements.",
+  "proof_scope": [
+    "ep_search totality from existing probe/skip_same/d_walk/d_record specs, head<=i and cap bounds",
+    "ep_insert_range totality with heads bound and measure to-q; added rs does not alter head bound invariant",
+    "Adapt inner long-jump product/uncurry of d_parse_loop_spec for six-result range helper",
+    "Reuse external d_parse specification and existing emit/original obligation unchanged"
+  ],
+  "cost_judgment": "More than record-nonempty one-guard proof; narrower than rebase16 because no coordinate conversion invariant or new table. Exact proof runtime unknown.",
+  "proof_status": "NOT_STARTED; wait for useful paired performance. No theorem/proof acceptance claim."
+}

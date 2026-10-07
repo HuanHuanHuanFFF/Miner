@@ -69,9 +69,20 @@ Six completed runs now contain 114 paired public processes and twelve distinct n
 - A deliberately optimistic [public-file oracle](public-oracle-third-loop.json) allows free independent choice among fourteen measured programs, including controls. Whole-program coordinates reproduce the declared family transfer within 7.2e-15. Its best sampled supporting vertex is 1.1632703 / 34.2057848 with 0.591141% geometric share, still 0 additional new-point share on the known hotkey. This is fitted to public timings, includes noise-selected CPU choices, has no implementable feature rule or switching cost, and is not a private-set bound or candidate. It only shows that the tested per-file tradeoffs are uneven; it does not justify filename-based routing or claim the maximum along convex-hull edges.
 - Next bounded CPU probes preserve record-nonempty as parent: skip rebuilding a cost table only while its inputs remain unchanged, and move an already-required immutable next-link read before the current match probe. Both must preserve finite tokens and exact public bytes. Retain actual benchmark-library assembly for same-run comparison; no machine-code change or no useful paired gain closes the corresponding probe.
 
+## Fourth completed loop and source-backed restoration
+
+`selective-e` and `cost-f` both completed naturally with no measurement failures. Eight finished runs now have 152 public paired processes and fifteen distinct new Rust sources. [Fourth-loop recomputation](fourth-loop-summary.json) uses fresh full snapshot27641 (06:26:41 +08:00), 494 rows/76 frontier points. #453 survives and the same-hotkey limitation remains; weights/current belongs to a different snapshot.
+
+- Endprobe: +0.07335% total time versus scalar (blocks +0.4368%/-0.2901%), -0.00177651pp, 319 total bytes saved across16 files and zero public size regressions. 112 finite coverage/plan/decode cases pass. Retain this small quality option, no tail-position/depth expansion or full proof allocation yet.
+- Row16-mask: -4.28885% versus the same-output row16, but +7.06406% versus scalar and +0.00795585pp. Its444 native comparisons and public tokens agree with row16. Close the row implementation without full proof.
+- Costseed: -3.09882% versus scalar but +0.06561168pp. The price filter recovers about29% of lazyseed's size loss, at extra time. Same rs in18 public D and66 generated inputs. Close this seed-statistics route rather than adding cost knobs or passes.
+- `cpu-g`, run37695105461, commitc7150e907aaf6f44945e1e48cd15ed6b6aa2e29b, started06:16:26. Dirty cost caching and next-chain read scheduling are independent children of verified record. Count actual skipped/rebuilt model calls and retain actual benchmark-library assembly.
+- `restore-h`, run37695964878, commitf918b7f77be7bbac197b0f0af3d2cbbffd387d86, started06:24:19. One child ports the original DP insertion pipeline into D with cached-head refresh after jumps. The other restores original per-class key/update/halving settings while retaining D's sparse flen16 first pass. Neither includes the unmeasured CPU-g changes.
+- Nearby frontier source requests #375/#418/#422/#443/#489 return official403 SOURCE_WITHHELD. [Audit](public-neighbor-audit.md) preserves the body and known request times. Their metrics cannot identify implementation differences or justify an inaccessible new baseline.
+
 ## Evidence index
 
-- Current complete frontier capture: `official-mid-payability/`; initial capture: `official-start/`.
+- Latest complete frontier capture: `official-late-research/`; prior complete captures: `official-mid-payability/`, `official-start/`.
 - Forward mechanism and candidates: `forward-notes.md`.
 - Supplemental finder: `finder-notes.md`, `row-finder-notes.md`.
 - CI receipts: each run retained under its numeric run ID and batch, with original bytes and hashes.
