@@ -1,0 +1,30 @@
+{
+  "candidate": "r10-forward-delta16-proof",
+  "parent": "candidates/r10-forward-delta16",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "1ddbe9f60a2a5dec38a67dcf80211dc2f43bd1160f4916074bb545128a967ee5",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "hashes": {
+    "parse.rs": "1ddbe9f60a2a5dec38a67dcf80211dc2f43bd1160f4916074bb545128a967ee5",
+    "Parse.lean": "732055386a474f0590cc1c5a17553262b3f1c2265ebb22f7c9332c55d774d9d7"
+  },
+  "bytes": {
+    "parse.rs": 182240,
+    "Parse.lean": 412366
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "mechanism": "D-only predecessor arrays change from absolute u32 positions to u16 backward distances 1..32768, with zero termination; absolute hash heads and all forward/backward planning remain unchanged.",
+  "fixed_chain_state_bytes_before": 262144,
+  "fixed_chain_state_bytes_after": 131072,
+  "audit": "Only d_parse's two prev array types and six helper call sites change; five copied/small helpers are added. Reversing that region restores the scalar source exactly. Shared DP functions, router, knobs, candidates, record encoding, planner and emitters remain byte-identical.",
+  "equivalence_argument": "For live c with 0 < i-c < WN, the slot still belongs to c, so a representable link recovers its original predecessor. A discarded link is already older than the active window. At c=i-WN the slot may have just been overwritten, but every strictly decreasing successor is out of window in either representation. A stale skip_same start likewise cannot reach a newer in-window node.",
+  "equivalence_status": "INFERRED: requires fresh 444-case Rust token/decode equality and public output equality. Finite link-model tests are separate evidence, not a proof of compression semantics.",
+  "proof_status": "DRAFT_UNTESTED: local helper and U16 loop-state bridge; real extraction signatures and complete original gate remain pending",
+  "performance_status": "UNKNOWN: saves 128 KiB of fixed chain state and half its initialization/store traffic but adds one distance encode/decode operation; measure paired total compression."
+}
