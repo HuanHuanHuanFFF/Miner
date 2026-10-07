@@ -100,9 +100,58 @@ restoring the reference proof, and full-variant byte identity all passed.
 | top | 404514 | `db90661d955ff77cdc33f9bd939c8c260435a179ae235eef75526cbc5c1a33a4` |
 | suffix | 405054 | `2363fd863754bad50e62f9734ec32ebbb80e0f425d0e3989f0ab2dfd6659f7a7` |
 
-The table uses the reference's original newline bytes. **UNKNOWN**: helper
-signatures agree with fresh Round 8 extraction, Lean compilation succeeds, the
-official obligation and axiom gate pass, or any candidate improves performance.
+The table uses the reference's original newline bytes. At draft generation,
+helper signatures and all official proof results were **UNKNOWN**. The following
+interface review resolves the signature question only.
+
+## Fresh extraction interface review
+
+**VERIFIED**, 2026-10-08: the `cost-a` extraction receipt from run `37651940395`,
+source commit `5df29263c9304ae649e578529c4b890169f494dc`, records
+`extraction_accepted=true` and `exit_code=0` for top and suffix. Both receipt
+entries explicitly have `proof_status=NOT_RUN`; extraction acceptance is not a
+Lean proof verdict.
+
+Receipt: `evidence/round8/37651940395/cost-a/extraction/research.json`.
+
+| Extracted file under that receipt directory | Funs.lean SHA-256 |
+|---|---|
+| `r8-mid361-cost-top/Funs.lean` | `1f0366d3dae59a8e83505c7f44455ebd6a1be131a619cbb395dea216db23bc2a` |
+| `r8-mid361-cost-suffix/Funs.lean` | `826ecd17bb5e2cb05e52ddb15aa6afe02159b81e9f3a773ed8b26cef0377fea3` |
+
+The saved files match the receipt hashes. **VERIFIED** interface facts:
+
+- Suffix lines 7368–7377 define
+  `rc_pick_suffix_loop cands nc dtab dcc chosen price k`, returning `Std.U32`,
+  with mutable loop state `(chosen, price, k)`. The drafted loop theorem's
+  arguments and `16 - k` measure match this interface. Its loop body at
+  lines 7331–7362 guards the candidate index with `k < 16` and increments `k`.
+- Suffix lines 7382–7394 define wrapper arguments
+  `(cands, nc, k0, dtab, dcc)` and call that loop exactly as drafted.
+- Top lines 7330–7356 define wrapper arguments
+  `(cands, nc, k0, dtab, dcc)`, matching `rc_pick_top_spec`.
+- Top lines 7501–7513 and suffix lines 7539–7551 retain `lo` in the
+  `rc_seq_loop` parameters and retain state `(pa, lo, k)`. The reference
+  `rc_seq_loop_spec` signature and three-state measure remain applicable.
+- The original candidate `c` and its `dd`/`ds` remain in the loop body. Suffix
+  lines 7482–7491 select another distance only for forward relaxation; lines
+  7500–7525 use the original `dd`, `ds`, and packed `c` for backward extension.
+  The original proof's `dp_shr9 c` bound therefore still addresses that branch.
+
+**VERIFIED**: `candidates/r8-mid361-cost-suffix-proof/Parse.lean` has hash
+`2363fd863754bad50e62f9734ec32ebbb80e0f425d0e3989f0ab2dfd6659f7a7`, the drafted
+helper proof supplied to the second batch. The copied proof in the original
+`cost-suffix` directory is a distinct file and is not that batch's gate input.
+
+No definite interface failure was found, so the generator and submitted
+candidate files were left unchanged during this review. **UNKNOWN**: Lean
+tactics compile, the original obligation and axiom gate pass, or performance
+improves. The second batch's actual gate will decide its proof outcome.
+
+For full, `adapt_full_dead_lo` remains an explicit backup for a future extraction
+that removes dead `lo` state. The default `adapt(proof, "full")` still preserves
+the reference proof bytes. Full's actual extraction was unavailable during this
+interface review, so the backup was not selected.
 
 ## Higher-risk changes to defer from this experiment
 
