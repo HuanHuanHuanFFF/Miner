@@ -1,5 +1,7 @@
 # ROUND3 — 校准后的前沿探索
 
+> 历轮研究记录，保留当时的证据与判断。当前任务入口见 [任务索引](../TASK_INDEX.md)，执行规则只在 [AGENTS.md](../../AGENTS.md) 维护。
+
 2026-10-06 15:13:51 UTC 开始，用户指定先研究 90 分钟。目标是寻找公共两轴经 #427 校准后仍有前沿空间的候选；同时探索速度端与压缩端。工具链仅在临时标准 GitHub runner，沿用用户的私有 CI 授权。正式竞赛提交、钱包和资金操作不在这次研究执行范围。
 
 ## 最终选择
@@ -21,7 +23,7 @@
 
 **限制**：所选版本只有一台 runner 的四块测量。对公开文件重采样、相对 #432 的速度增益下侧 5% 分位约 **+0.600%**，但这不是官方参考点/两 corpus 的 admission bootstrap。取较慢实测块再增加 1% 时间后会掉出前沿，余量有限。八个生成输入是附加数据检查，不能代替私有 stage2。未进行新的正式提交、钱包操作或实际奖励核验。
 
-全轮完成 **33 个新候选、144 个公共 paired measurement 进程、5 个新完整 gate**，另外检查 96 个生成输入/进程记录。完整选择、哈希、校准及限制见 [selection.json](evidence/round3/selection.json)，可用 `scripts/rank-round3.py` 对保存快照重算。候选 manifest 的 UNVERIFIED/UNKNOWN 描述是生成时状态，最新状态以精确文件哈希对应的 gate 回执为准。
+全轮完成 **33 个新候选、144 个公共 paired measurement 进程、5 个新完整 gate**，另外检查 96 个生成输入/进程记录。完整选择、哈希、校准及限制见 [selection.json](../../evidence/round3/selection.json)，可用 `scripts/rank-round3.py` 对保存快照重算。候选 manifest 的 UNVERIFIED/UNKNOWN 描述是生成时状态，最新状态以精确文件哈希对应的 gate 回执为准。
 
 ## 筛选基准
 

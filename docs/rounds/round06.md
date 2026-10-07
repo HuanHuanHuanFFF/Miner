@@ -1,5 +1,7 @@
 # ROUND6 — H16-small 核心与CPU优化
 
+> 历轮研究记录，保留当时的证据与判断。当前任务入口见 [任务索引](../TASK_INDEX.md)，执行规则只在 [AGENTS.md](../../AGENTS.md) 维护。
+
 **最终结论：本轮结束，保留原H16-small。六个研究变体未建立稳定总压缩耗时收益，均未晋级；四批CI完成，未请求新完整Lean gate或正式提交。**
 
 本轮按用户要求优先优化H16-small，基线为已通过公共完整gate的r5-h16-small-proofopt。仓库即时核对仍为私有，沿用用户已授权的标准GitHub Actions；不进行正式竞赛提交或钱包操作。

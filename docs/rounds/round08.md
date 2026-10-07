@@ -1,5 +1,7 @@
 # 第八轮：固定搜索预算的距离编码成本选择
 
+> 历轮研究记录，保留当时的证据与判断。当前任务入口见 [任务索引](../TASK_INDEX.md)，执行规则只在 [AGENTS.md](../../AGENTS.md) 维护。
+
 2026-10-08；本轮用户授权约一小时，目标为均衡及附近的可支付前沿。**结果：三个变体均未改善压缩大小，按最终快照 26976 校准后都进不了前沿；本轮没有值得正式提交的新版本。两次 CI 完整成功结束，未取消。**
 
 ## 这一轮只检验一个机制
@@ -16,7 +18,7 @@
 
 **INFERRED：** 在已有候选按长度递增、价格不溢出的状态下，full 与 suffix 的前向选择应一致；这一点通过公共输入和额外生成输入的 token/解码对比检查。有限检查不等于所有输入的等价证明。实际编码大小可能受后续统计、路径和编码块边界影响，不能从局部价格降低直接推出压缩率改善。
 
-设计依据：[算法分析](evidence/round8/algorithm-design.md)、[证明可行性](evidence/round8/proof-feasibility.md)。参照来源与作者归属保留在 [#361 provenance](references/round7-public-361/PROVENANCE.json)。
+设计依据：[算法分析](../../evidence/round8/algorithm-design.md)、[证明可行性](../../evidence/round8/proof-feasibility.md)。参照来源与作者归属保留在 [#361 provenance](../../references/round7-public-361/PROVENANCE.json)。
 
 ## 验证安排与状态
 
@@ -35,13 +37,13 @@
 
 full 与 suffix 两次各完成 444 个有限输入的 token/解码对比，均无差异；这是同一组 444 个输入的重复检查，不能计为 888 种不同输入。两个通过的候选各另完成 8 个固定合成输入、2 个测量块。
 
-完整 gate 精确绑定 [full 的源文件和原证明](candidates/r8-mid361-cost-full/VERIFICATION.json)、[suffix 的源文件和适配证明](candidates/r8-mid361-cost-suffix-proof/VERIFICATION.json)：官方重新提取、原始 `LZ77.Obligation`、三项公理白名单及公共 round trip 均通过。top 未运行完整 gate；初始 suffix 目录中的原证明也不因此取得通过结论。
+完整 gate 精确绑定 [full 的源文件和原证明](../../candidates/r8-mid361-cost-full/VERIFICATION.json)、[suffix 的源文件和适配证明](../../candidates/r8-mid361-cost-suffix-proof/VERIFICATION.json)：官方重新提取、原始 `LZ77.Obligation`、三项公理白名单及公共 round trip 均通过。top 未运行完整 gate；初始 suffix 目录中的原证明也不因此取得通过结论。
 
 **UNKNOWN：** 本轮三种算法没有正式提交，私有集表现、线上 admission 和实际奖励未知。
 
 ## 最终成绩
 
-两轴均越低越好。公共时间对两个 CI 运行等权汇总；每个运行内按测量块等权。大小在四个测量块中完全一致。下表及完整逐块结果由 [final-summary.json](evidence/round8/final-summary.json) 保留。
+两轴均越低越好。公共时间对两个 CI 运行等权汇总；每个运行内按测量块等权。大小在四个测量块中完全一致。下表及完整逐块结果由 [final-summary.json](../../evidence/round8/final-summary.json) 保留。
 
 | 方案 | 公共时间比 | 公共压缩后比例 | 相对同场 #361 时间 | 同族校准时间 / 大小 | 保守时间 / 大小 | 条件份额 |
 |---|---:|---:|---:|---|---|---:|
@@ -53,13 +55,13 @@ full 与 suffix 两次各完成 444 个有限输入的 token/解码对比，均�
 
 ## 为什么停止这条机制
 
-第二次 CI 的[独立成本诊断](evidence/round8/37653054884/cost-b/gate/cost-diagnostics/cost-diagnostics.json)共观察到 5,988,653 个候选长度段，其中仅 36,818 个（约 0.615%）能选择更便宜的距离。后缀实现为此执行 9,267,822 次扫描迭代。诊断的 28 个输入均正确解码。
+第二次 CI 的[独立成本诊断](../../evidence/round8/37653054884/cost-b/gate/cost-diagnostics/cost-diagnostics.json)共观察到 5,988,653 个候选长度段，其中仅 36,818 个（约 0.615%）能选择更便宜的距离。后缀实现为此执行 9,267,822 次扫描迭代。诊断的 28 个输入均正确解码。
 
-[逐文件比较](evidence/round8/first-screen-file-changes.json)显示 13 个输入改变了 token，但整个公共 corpus 合计只多了 10 字节；优化模型中的备选边价格没有转化为最终编码大小收益。两轮测量复现相同结果，因此停止后缀缓存、单候选快路等后续实现。它们可能降低本机制的开销，但现有证据没有显示值得保留的压缩收益。
+[逐文件比较](../../evidence/round8/first-screen-file-changes.json)显示 13 个输入改变了 token，但整个公共 corpus 合计只多了 10 字节；优化模型中的备选边价格没有转化为最终编码大小收益。两轮测量复现相同结果，因此停止后缀缓存、单候选快路等后续实现。它们可能降低本机制的开销，但现有证据没有显示值得保留的压缩收益。
 
 ## 前沿判断
 
-开始时取到官方快照 **26901**，计算于北京时间 **2026-10-08 00:23:23.987**；[开始快照](evidence/round8/frontier-start/pareto-pages.json)及[门槛分析](evidence/round8/frontier-targets.json)保留查询时间与来源。最终成绩表改用 **26976**，计算于北京时间 **2026-10-08 01:00:21.304**，5 页 489 条记录。官方 API 标注 `freshness=unknown`；[最终快照与抓取回执](evidence/round8/frontier-final/receipt.json)绑定完整分页。
+开始时取到官方快照 **26901**，计算于北京时间 **2026-10-08 00:23:23.987**；[开始快照](../../evidence/round8/frontier-start/pareto-pages.json)及[门槛分析](../../evidence/round8/frontier-targets.json)保留查询时间与来源。最终成绩表改用 **26976**，计算于北京时间 **2026-10-08 01:00:21.304**，5 页 489 条记录。官方 API 标注 `freshness=unknown`；[最终快照与抓取回执](../../evidence/round8/frontier-final/receipt.json)绑定完整分页。
 
 #361 的正式记录为时间比 `1.1608686942`、压缩后比例 `34.2099577557%`，在该快照中已经不在前沿。它只用于同族校准。
 
@@ -69,6 +71,6 @@ full 与 suffix 两次各完成 444 个有限输入的 token/解码对比，均�
 
 ## 下一轮方向的证据
 
-[已测候选库的理想大小下界](evidence/round8/old-family-size-bound.json)只比较既有输出，假设逐文件完美选择且没有额外时间代价。在 #361 时间及其加 2% 的位置，第七轮八个参数候选的理想公共大小为 `33.956368%`，乘 1.008 后为 `34.228019%`，仍比当时门槛差 `0.020451` 个百分点。纳入全部 17 个候选后，理想公共大小为 `33.931367%`，保守大小 `34.202818%`，尺寸余量也只有 `0.004750` 个百分点，而且完全未支付块级规划的时间成本。这是已测库内择优的研究边界，不能排除尚未实现的新参数组合或新 token 路径。
+[已测候选库的理想大小下界](../../evidence/round8/old-family-size-bound.json)只比较既有输出，假设逐文件完美选择且没有额外时间代价。在 #361 时间及其加 2% 的位置，第七轮八个参数候选的理想公共大小为 `33.956368%`，乘 1.008 后为 `34.228019%`，仍比当时门槛差 `0.020451` 个百分点。纳入全部 17 个候选后，理想公共大小为 `33.931367%`，保守大小 `34.202818%`，尺寸余量也只有 `0.004750` 个百分点，而且完全未支付块级规划的时间成本。这是已测库内择优的研究边界，不能排除尚未实现的新参数组合或新 token 路径。
 
-下一轮更值得先诊断**匹配发现质量与块级规划成本**。本轮另外核对了已公开 #454 的文件哈希和 bundle digest，并[审查其二叉树/LCP 匹配器](evidence/round8/next-mechanism-review.md)。该源码混合多种引擎及精确长度分流，不能把整份正式成绩归因于某个匹配器；这也不是官方违规判断。最小下一步是固定 #361 的实际搜索位置，对比新匹配机会和树维护成本，取得质量信号后再实现候选及证明。本轮没有为这条后续研究新增候选或 CI。
+下一轮更值得先诊断**匹配发现质量与块级规划成本**。本轮另外核对了已公开 #454 的文件哈希和 bundle digest，并[审查其二叉树/LCP 匹配器](../../evidence/round8/next-mechanism-review.md)。该源码混合多种引擎及精确长度分流，不能把整份正式成绩归因于某个匹配器；这也不是官方违规判断。最小下一步是固定 #361 的实际搜索位置，对比新匹配机会和树维护成本，取得质量信号后再实现候选及证明。本轮没有为这条后续研究新增候选或 CI。

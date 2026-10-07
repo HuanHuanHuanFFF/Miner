@@ -1,5 +1,7 @@
 # 第九轮：块级规划成本与匹配发现
 
+> 历轮研究记录，保留当时的证据与判断。当前任务入口见 [任务索引](../TASK_INDEX.md)，执行规则只在 [AGENTS.md](../../AGENTS.md) 维护。
+
 2026-10-08。本轮约一小时的实验已完成，两次私有标准 CI 均成功结束，没有取消。**得到不到 1% 的小幅速度信号，四个版本均未达到前沿门槛；本轮没有值得正式提交的新版本。**
 
 ## 选择与候选
@@ -13,7 +15,7 @@
 | `r9-push-single` | 新启用的六个 D 配置只保留完整端点回扩，省去第二端点回扩 | 有意改变质量／速度取舍 |
 | `r9-block-tail` | D 链搜索增加已有快速路径的八字节尾部过滤 | 一次 CI 的公共输出及有限 token 检查与 block1 相同 |
 
-源码、证明、路由、搜索预算和变化边界见 [后向规划设计](evidence/round9/block-design.md)、[尾部过滤设计](evidence/round9/tail-design.md)及各候选 manifest。官方 contract、encoder、gate 和 pins 保持原版。原始公开作者的归属通过 #361 provenance 及父版本记录保留。
+源码、证明、路由、搜索预算和变化边界见 [后向规划设计](../../evidence/round9/block-design.md)、[尾部过滤设计](../../evidence/round9/tail-design.md)及各候选 manifest。官方 contract、encoder、gate 和 pins 保持原版。原始公开作者的归属通过 #361 provenance 及父版本记录保留。
 
 ## 验证与证据
 
@@ -24,19 +26,19 @@
 
 公共测量为 28 个固定文件，每个进程每文件一次预热、11 次测量，与 incumbent 配对，按文件中位数计算官方时间和大小两轴。相同 public361 字节的 shadow 对照用于观察漂移。前三份 Rust 各完成 2 次 CI 的测量、4 个测量块，tail 完成 1 次 CI 的测量、2 块；合计 38 个 paired 测量进程，未发现 benchmark 失败。
 
-**VERIFIED：** scalar、unroll4、tail 都通过官方重新提取。scalar 的 [完整 gate 记录](candidates/r9-block-scalar/VERIFICATION.json)绑定实际 Rust 和 Lean 哈希，包含原始 obligation、公理白名单和公共 round trip。scalar、unroll4 两次各完成 444 个有限 token/解码检查；tail 一次完成 444 个检查，均与 block1 一致。它们不是不同的 2,220 个输入，而是同一组 444 个输入的五组候选／运行对照。
+**VERIFIED：** scalar、unroll4、tail 都通过官方重新提取。scalar 的 [完整 gate 记录](../../candidates/r9-block-scalar/VERIFICATION.json)绑定实际 Rust 和 Lean 哈希，包含原始 obligation、公理白名单和公共 round trip。scalar、unroll4 两次各完成 444 个有限 token/解码检查；tail 一次完成 444 个检查，均与 block1 一致。它们不是不同的 2,220 个输入，而是同一组 444 个输入的五组候选／运行对照。
 
-tail 的 [完整 gate 记录](candidates/r9-block-tail/VERIFICATION.json)也已绑定精确文件并通过相同检查。scalar 和 tail 各另通过 8 个固定合成输入的验证；push-single 未运行完整 gate。全部公共计时、源码／证明对应及最终条件份额见 [final-summary.json](evidence/round9/final-summary.json)。
+tail 的 [完整 gate 记录](../../candidates/r9-block-tail/VERIFICATION.json)也已绑定精确文件并通过相同检查。scalar 和 tail 各另通过 8 个固定合成输入的验证；push-single 未运行完整 gate。全部公共计时、源码／证明对应及最终条件份额见 [final-summary.json](../../evidence/round9/final-summary.json)。
 
-unroll4 的第一版证明草稿有尾循环参数顺序错误，真实提取为 `(l,bv)`。已另外生成 [修正版目录](candidates/r9-block-unroll4-proof/manifest.json)，Rust 字节不变，Lean 参数和终止度量按真实接口修正；修正版没有运行完整 Lean gate，不能作为已验证提交包。原始正在测量的候选文件保持原字节。[接口核验记录](evidence/round9/proof-interface-review.md)说明两份证明的边界。
+unroll4 的第一版证明草稿有尾循环参数顺序错误，真实提取为 `(l,bv)`。已另外生成 [修正版目录](../../candidates/r9-block-unroll4-proof/manifest.json)，Rust 字节不变，Lean 参数和终止度量按真实接口修正；修正版没有运行完整 Lean gate，不能作为已验证提交包。原始正在测量的候选文件保持原字节。[接口核验记录](../../evidence/round9/proof-interface-review.md)说明两份证明的边界。
 
 阶段诊断只给 block1 的 `d_parse`、`d_tally`、`d_dp`、`d_extract`、`emit`、`emit_pos` 添加临时计时，并逐 token 对比未插桩父版本。它测 parser 内部成本，不含公共 encoder，不能当成比赛时间。分项和总计各自的中位数之比也不能直接相加作为严格的 100% 分解。
 
-二叉树诊断使用公开 #454 的 `q9_hfind`，对照 #361 的真实搜索位置，检查新匹配、丢失匹配和维护成本；不采用 #454 的精确长度分流，也不把整份 #454 正式成绩迁移给假想混合方案。[诊断说明](evidence/round9/finder-design.md)保留来源与范围。
+二叉树诊断使用公开 #454 的 `q9_hfind`，对照 #361 的真实搜索位置，检查新匹配、丢失匹配和维护成本；不采用 #454 的精确长度分流，也不把整份 #454 正式成绩迁移给假想混合方案。[诊断说明](../../evidence/round9/finder-design.md)保留来源与范围。
 
 ## 预先确定的前沿门槛
 
-起始快照 **27039**，计算于北京时间 **2026-10-08 01:31:06.604**；完整 5 页共 489 条记录，API `freshness=unknown`。查询与分析见 [block-targets.json](evidence/round9/block-targets.json)。
+起始快照 **27039**，计算于北京时间 **2026-10-08 01:31:06.604**；完整 5 页共 489 条记录，API `freshness=unknown`。查询与分析见 [block-targets.json](../../evidence/round9/block-targets.json)。
 
 保持 block1 输出不变时，同族 #361 传递大小为 `34.185517%`，需严格快于 #418 的 `1.333373`，相对第七轮四块平均总时间至少降低约 **6.92%**。保守大小 `public × 1.008 = 34.205841%`，最慢相对时间再加 2% 后需严格快于 #443 的 `1.213514`，相对第七轮最慢块至少降低约 **17.25%**。
 
@@ -57,10 +59,10 @@ tail 只在第二次 CI 测量，因此不能拿它的绝对公共时间直接�
 
 ## 诊断改变了下一步优先级
 
-[实际诊断结论](evidence/round9/diagnostic-conclusions.md)基于 28 个文件的 84 次插桩／原版 token 对比，以及 34 个公共和固定生成输入的匹配器检查。18 个 D 路由文件的原始计时汇总中，前向搜索及初始规划 `d_parse` 约占 73.34%，后向规划 `d_dp` 约占 20.28%。这不是说链搜索函数单独占 73%，也不代表官方总压缩时间的比例；插桩本身可扰动代码布局和时序。
+[实际诊断结论](../../evidence/round9/diagnostic-conclusions.md)基于 28 个文件的 84 次插桩／原版 token 对比，以及 34 个公共和固定生成输入的匹配器检查。18 个 D 路由文件的原始计时汇总中，前向搜索及初始规划 `d_parse` 约占 73.34%，后向规划 `d_dp` 约占 20.28%。这不是说链搜索函数单独占 73%，也不代表官方总压缩时间的比例；插桩本身可扰动代码布局和时序。
 
-按原始公共 paired 数据映射回官方文件等权时间轴，假设整个后向阶段免费且输出、encoder 和其余代码不变，[线性模型](evidence/round9/phase-axis-model.json)只给出约 13.59%／13.61% 的两块总时间改善，仍不够 17.25%。它是基于测量的粗模型，不是严格的算法上界；下一轮应优先研究前向阶段的实际工作，而非继续细抠后向扫描。
+按原始公共 paired 数据映射回官方文件等权时间轴，假设整个后向阶段免费且输出、encoder 和其余代码不变，[线性模型](../../evidence/round9/phase-axis-model.json)只给出约 13.59%／13.61% 的两块总时间改善，仍不够 17.25%。它是基于测量的粗模型，不是严格的算法上界；下一轮应优先研究前向阶段的实际工作，而非继续细抠后向扫描。
 
 q9 诊断在 13 个公共 DP 文件的约 454 万搜索位置上找到约 20.2 万处更长匹配，也丢失约 3.95 万处原有较长匹配；可支持长度的净增加约 2.53%。这些是候选机会，不能解释成压缩字节收益。完整 finder 构建时间的文件等权平均为原 #361 整个 parser 的约 3.608 倍，尚未支付后续规划和编码成本。因而停止整份二叉树缓存移植；保留新增匹配的证据，下一步先区分便宜的近邻缓存和树遍历各贡献多少，再决定是否做维护成本低的补充查找。
 
-阶段诊断脚本的失败处理也已修正：超时保留部分输出，非零退出或断言失败写 `DIAGNOSTIC_FAILED`。本地[故障路径检查](evidence/round9/helper-failure-check/result.json)覆盖超时、非零退出和成功路径；Rust harness、插桩文本和阶段常量保持相同。两次正在运行的 CI 使用其固定提交，该 Python 故障处理修正不追溯改变已有测量。
+阶段诊断脚本的失败处理也已修正：超时保留部分输出，非零退出或断言失败写 `DIAGNOSTIC_FAILED`。本地[故障路径检查](../../evidence/round9/helper-failure-check/result.json)覆盖超时、非零退出和成功路径；Rust harness、插桩文本和阶段常量保持相同。两次正在运行的 CI 使用其固定提交，该 Python 故障处理修正不追溯改变已有测量。

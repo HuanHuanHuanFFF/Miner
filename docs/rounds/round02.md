@@ -1,5 +1,7 @@
 # ROUND2 — 吸收研究与浅层搜索优化
 
+> 历轮研究记录，保留当时的证据与判断。当前任务入口见 [任务索引](../TASK_INDEX.md)，执行规则只在 [AGENTS.md](../../AGENTS.md) 维护。
+
 日期：2026-10-06（北京时间）。用户要求吸收研究文档并继续尝试更好的版本；延续首轮参照实验，工具链仍只在临时 GitHub runner。正式竞赛提交、钱包和资金操作不在本轮执行范围。第二轮开始时实时核对仓库已私有，CI 运行须另确认额度授权，见 ENVIRONMENT。
 
 ## 已取得的性能结论
@@ -27,9 +29,9 @@
 
 **VERIFIED（CI 维护）**：[37475195400](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37475195400)，提交 `a52795f45f552ff51e941e3b5b614ecf3f06218a`，整体 success。三个维护候选均重新完成公共完整 gate，没有复用历史证明；axioms 仍仅三项白名单。bucket2 的 496 个有限等价用例通过，但官方 Lean 拒绝被独立记录。默认 CI 不再把未验证实验候选列为必过项，维护候选及验证器错误仍保持阻断。
 
-**VERIFIED（原因与修复）**：[完整 Lean 输出](evidence/round2/37475195400/bucket2-005-lake.log) 首先在 Lazy 循环第 2807 行停于 `let (i1, i2) := hq`，主循环第 3051 行同样停于 `let (i, i1) := hc`，此时 `hc.1 ≤ p` 和 head bound 已在上下文中。显式拆开这两处 tuple、化简投影并继续原有 `step*` 后，[CI 37480653625](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37480653625) 接受了精确对应的候选（提交 `e8664c786540b0a477e0d43ecc9b96d41b52f564`）：重新提取、Lean obligation、axiom audit 和公共 28 文件完整 gate/round trip 全部通过。Rust、contract、encoder、gate、pins 均未改变，没有新增公理。496 个有限 token-equivalence/decode 用例再次通过。
+**VERIFIED（原因与修复）**：[完整 Lean 输出](../../evidence/round2/37475195400/bucket2-005-lake.log) 首先在 Lazy 循环第 2807 行停于 `let (i1, i2) := hq`，主循环第 3051 行同样停于 `let (i, i1) := hc`，此时 `hc.1 ≤ p` 和 head bound 已在上下文中。显式拆开这两处 tuple、化简投影并继续原有 `step*` 后，[CI 37480653625](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37480653625) 接受了精确对应的候选（提交 `e8664c786540b0a477e0d43ecc9b96d41b52f564`）：重新提取、Lean obligation、axiom audit 和公共 28 文件完整 gate/round trip 全部通过。Rust、contract、encoder、gate、pins 均未改变，没有新增公理。496 个有限 token-equivalence/decode 用例再次通过。
 
-该版本不放弃，保留为已通过公共正确性 gate 的研究候选。`parse.rs` SHA256=`38bb6c7d4df093e6cedbad9651d5ee4377d75fa995106d70dce5c08585cac4db`，`Parse.lean` SHA256=`421c58d4695b80d25b3b17eb53d065fa5764185352491f4c1b17d32fff26a7c1`。详见 [修复回执](evidence/round2/ci-repair.json)；前一个 [manifest](evidence/round2/manifest.json) 是旧测量提交的历史快照，未覆盖写。修复后的生成器仍可逐字重建四候选，三个维护候选的源码/证明哈希不变。
+该版本不放弃，保留为已通过公共正确性 gate 的研究候选。`parse.rs` SHA256=`38bb6c7d4df093e6cedbad9651d5ee4377d75fa995106d70dce5c08585cac4db`，`Parse.lean` SHA256=`421c58d4695b80d25b3b17eb53d065fa5764185352491f4c1b17d32fff26a7c1`。详见 [修复回执](../../evidence/round2/ci-repair.json)；前一个 [manifest](../../evidence/round2/manifest.json) 是旧测量提交的历史快照，未覆盖写。修复后的生成器仍可逐字重建四候选，三个维护候选的源码/证明哈希不变。
 
 第二次 CI 的三个维护候选使用第一次修复 CI 的精确哈希回执；其 gate JSON 内的 timing 为历史值，未运行四块性能对照。旧回执文案 `fresh timing follows` 与本次禁用 timing 的配置不符，原始日志保留，生成文案已校正。bucket2 的新 gate 自身有公共 benchmark telemetry，但跨 runner 的总秒数不能作为配对速度收益。**UNKNOWN**：bucket2 的独立配对性能收益、外部 source-held-out 与私有 stage2、线上 admission/排名/奖励。此次未正式提交 bucket2，也未改变 probe3 的文件。
 
@@ -51,7 +53,7 @@
 
 ## 候选及证伪条件
 
-所有修改位于 `candidates/`；参照来源见 [PROVENANCE](references/submission-261/PROVENANCE.md)。官方 gate、encoder、contract、pins 和阅读用源码副本不改。
+所有修改位于 `candidates/`；参照来源见 [PROVENANCE](../../references/submission-261/PROVENANCE.md)。官方 gate、encoder、contract、pins 和阅读用源码副本不改。
 
 | 候选 | 相对 probe2 | 本轮假设 |
 |---|---|---|
@@ -66,7 +68,7 @@ bucket2 新证明复用原 `find/walk`、字节匹配及 decode 层，另为 buc
 
 ## 验证入口与证据边界
 
-[DEFLATE round 2](https://github.com/HuanHuanHuanFFF/Miner/actions/workflows/deflate-round2.yml) 在 `codex/deflate-round2` 分支运行，复用 [ENVIRONMENT](ENVIRONMENT.md) 的固定官方 revision 和临时 Linux 环境。
+[DEFLATE round 2](https://github.com/HuanHuanHuanFFF/Miner/actions/workflows/deflate-round2.yml) 在 `codex/deflate-round2` 分支运行，复用 [ENVIRONMENT](../history/environment-setup.md) 的固定官方 revision 和临时 Linux 环境。
 
 1. `scripts/research-round2.py` 对全部 stage1 和预定合成输入逐 token 比较；合成输入覆盖小/大路由边界、16/32 KB 相邻距离、零、binary、重复文本、扰动文本、数字结构，并另强制 structured engine 测试。有限 token decode 检查不是 Lean 或完整 DEFLATE round trip。
 2. 同脚本生成仅 runner 存在的诊断版，按第一候选长度记录第二访问和第二候选被选中的次数。诊断版 token 必须与 probe2 一致。它不参与官方 gate 或 timing；“被选中”不等于最终 emitted token 改变，backward/lazy 归因及 oracle 上界仍未知。
@@ -83,6 +85,6 @@ bucket2 新证明复用原 `find/walk`、字节匹配及 decode 层，另为 buc
 
 **VERIFIED**：regular walk 的第二候选访问 1,332,720 次、被选中 171,566 次（约 12.87%）；这是查找层的选择，不能推断最终 emitted-token 的 oracle 价值。原始 trace 已保存。
 
-首次第二轮 CI 的测量入口因拒绝候选没有评分 JSON 而中止。已修正失败回执处理；后续 CI 成功测量三个接受的候选。复测只重新验证 bucket2；三个未改变的候选使用 [hash-bound proof receipts](evidence/round2/accepted-control-proofs.json)，CI 必须核对 parse.rs/Parse.lean SHA256 和固定官方 revision，然后在新 runner 重新测全部版本。这样复用已验证证明而不复用旧计时。原始失败和成功证据保存于 `evidence/round2/37447673754/` 和 `evidence/round2/37451613962/`。
+首次第二轮 CI 的测量入口因拒绝候选没有评分 JSON 而中止。已修正失败回执处理；后续 CI 成功测量三个接受的候选。复测只重新验证 bucket2；三个未改变的候选使用 [hash-bound proof receipts](../../evidence/round2/accepted-control-proofs.json)，CI 必须核对 parse.rs/Parse.lean SHA256 和固定官方 revision，然后在新 runner 重新测全部版本。这样复用已验证证明而不复用旧计时。原始失败和成功证据保存于 `evidence/round2/37447673754/` 和 `evidence/round2/37451613962/`。
 
 初次自动 push 因仓库私有而跳过；用户随后明确授权运行私有 CI、继续实测。仍不把未完成验证和性能测量的桶版写成优化成功。

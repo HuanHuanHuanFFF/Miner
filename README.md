@@ -1,26 +1,27 @@
-# Miner — DEFLATE competition workspace
+# SN66 DEFLATE 竞赛工作区
 
-Conjectures.io / Bittensor SN66 的 DEFLATE 项目记录与本地开发环境。
+目标是优化可验证的 LZ77 parser，争取 Conjectures.io 的可支付 Pareto 前沿。项目执行规则统一在 [AGENTS.md](AGENTS.md)，资料按任务查找。
 
-- [优化方法与实验结论](OPTIMIZATION_METHODS.md)：第一至七轮的方法归纳、负面结果、正式校准经验和下一轮验证方向。
-- [INIT_STATE](INIT_STATE.md)：官方入口、parser / correctness / benchmark / submission / reward 机制，以及初始化时的已知与未知。
-- [ENVIRONMENT](ENVIRONMENT.md)：仅在 GitHub Actions 运行的工具链、验证入口及存储边界。
-- [ROUND1](ROUND1.md)：首轮公开优化参照实验、候选差异和实测结论。
-- [ROUND2](ROUND2.md)：吸收深度研究后的两槽桶、搜索深度及停止门槛对照实验。
-- [ROUND3](ROUND3.md)：90 分钟内同时探索速度与压缩两端，按 #427 和同族正式参照校准，保留筛选、gate 与前沿缺口。
-- [ROUND4](ROUND4.md)：五小时 CPU、匹配成本、规划与通用组合实验；原始回执、跨 runner 复测、证明状态和最新候选选择。
-- [ROUND5](ROUND5.md)：H16 证明精简、旧速度候选复测和完整编码成本选择实验。
-- [ROUND6](ROUND6.md)：H16 CPU 与核心优化的负面结果，以及后续 #474 正式结果校准。
-- [第七轮总表](evidence/round7/final-summary.json)：17 个中段候选、四批完整 CI、76 次公共配对测量；方法说明见优化总览。
-- [官方比赛](https://conjectures.io/competitions/deflate)
-- [官方实现](https://github.com/conjectures-io/conjectures-optimisation-deflate)
+| 要做什么 | 从这里开始 |
+|---|---|
+| 继续均衡附近的优化 | [任务索引](docs/TASK_INDEX.md) → 第九轮；重点是前向搜索和初始规划 |
+| 回看 fast3、H16、bucket2 等选择理由 | [优化方法总览](docs/research/optimization-methods.md) |
+| 运行或诊断公共验证 | [验证环境与入口](docs/validation.md) |
+| 核对比赛、提交和奖励机制 | [比赛与提交入口](docs/competition.md) |
+| 查历史文件或老路径 | `python scripts/project.py find H16`；`python scripts/project.py resolve ROUND9.md` |
 
-截至 2026-10-07 第七轮归档，目标仍为可支付 Pareto 前沿。各 ROUND 文件保留当时的假设与状态；方法总览汇总后续证据。注册、提交额度和钱包状态须独立核对，正式提交与资金操作按相应用户请求处理。
+最近研究记录更新于 **2026-10-08**，使用已保存快照 **27127（02:14:49 +08:00）**。这里的排名与份额不是实时值。
 
-速度端 [fast3](candidates/r3-432-fast3/parse.rs) 后续正式提交为 **#453**，已有通过 admission 和历史奖励记录，用户也已确认到账。压缩端 H16-small **#474** 的正式 gate 通过，但 admission 判定被支配；#427 的乐观迁移系数不能继续作为跨算法族的默认依据。两者的记录见 [保存的官方快照](evidence/round7/frontier-final/pareto-pages.json) 与 [#474 校准](evidence/round6/formal-474/calibration.json)。这些是历史时点，不是实时排名。
+- **速度端 fast3／#453**：有正式 admission 和历史奖励记录，用户已确认到账。源码在 [候选目录](candidates/r3-432-fast3)，来源与选择过程见第三轮。
+- **H16-small／#474**：正式 gate 通过，admission 判定被支配；正式两轴和迁移系数见 [校准记录](evidence/round6/formal-474/calibration.json)。
+- **最近均衡研究 scalar**：公共两轴 `1.400032 / 33.934366%`，相对同场 block1 平均时间变化 `−0.884%`，已过完整公共 gate；保守估值仍在前沿外。[第九轮结果](docs/rounds/round09.md)保留测试次数和边界。
 
-第七轮中段实验得到 [block1](candidates/r7-mid361-block1/VERIFICATION.json) 的完整公共 gate 通过记录；17 个候选在快照 26815 下经同族校准和保守情景均未进入预测前沿，没有新的正式提交。源码、证明、测试次数与原始回执见第七轮总表。
+文件分工：
 
-[probe2](candidates/probe2/parse.rs)、[probe3](candidates/probe3/parse.rs)、[bucket2](candidates/bucket2/parse.rs) 和 H 系列继续作为有明确来源及验证边界的研究对照；不从公共 gate 或单次速度改善推断线上支付资格。
+- `docs/`：任务目录、历轮报告、机制和环境资料；`docs/history/` 为历史初始化记录。
+- `candidates/`：可回溯的源码／证明包；`references/`：公开参照与作者归属。
+- `evidence/roundN/`：批次、原始回执、分析和冻结快照；早期逐字重复文件通过路径映射定位。
+- `scripts/` 与 `.github/workflows/`：生成、收集、复算和手动验证入口。
+- `sources/`、`.registration-private/`、`.local-maintenance/`：本地忽略资料，不作为 Git 交付内容。
 
-大型工具链和依赖只在 GitHub Actions 的临时 Linux runner 中准备，本地不保留；最初核对资料的 `sources/` 副本被 Git 忽略。仓库保存源码、证明、原始研究回执和 CI 配置。第四轮证据按原字节归档，避免跨平台换行转换破坏已记录的 SHA256。
+本次整理已把历轮分支合入 main，工作流改为手动启动。查询任务使用 `python scripts/project.py tasks`，检查文档、路径和配置使用 `python scripts/project.py check`；这些操作不会启动 CI。

@@ -1,5 +1,7 @@
 # ROUND1 — 公开首轮优化参照实验
 
+> 历轮研究记录，保留当时的证据与判断。当前任务入口见 [任务索引](../TASK_INDEX.md)，执行规则只在 [AGENTS.md](../../AGENTS.md) 维护。
+
 日期：2026-10-06（北京时间）。用户已授权开始优化，并明确选择公开首轮参照实验。
 
 目标是进入可支付的 Pareto 前沿并争取较大持续份额。正确性通过、公共 corpus 有改进、线上进入前沿及实际领奖是不同结果，分别记录。
@@ -19,7 +21,7 @@
 
 ## 两个候选
 
-使用官方已公开的被超越提交 #261 作为控制，保留原始两文件与 [来源说明](references/submission-261/PROVENANCE.md)。这是他人已公开成果，不能计作我们的独立优化收益。
+使用官方已公开的被超越提交 #261 作为控制，保留原始两文件与 [来源说明](../../references/submission-261/PROVENANCE.md)。这是他人已公开成果，不能计作我们的独立优化收益。
 
 | 候选 | 相对 #261 的改动 | 待验证假设 |
 |---|---|---|
@@ -47,7 +49,7 @@
 
 **INFERRED（开发决策）**：`probe2` 提供了明确的压缩/速度交换，比扩表更值得作为下一轮开发参照；`hash-wide` 的大小收益很小，当前数据没有可靠的速度收益证据。两轮不足以建立正式 admission 的置信结论，CI 时间亦不能消除机器差异。配对 incumbent 自身的总时间在这 8 个进程间约有 1.8% 漂移；部分单文件 repetition 的 max/min 达 1.67，细小速度差不能计作稳健优势。
 
-证据：[运行元数据](evidence/round1/ci-run.json)、[完整日志](evidence/round1/ci.log)、[两轮测量](evidence/round1/comparison.json)、[原始数据复算/逐文件差异](evidence/round1/analysis.json)、[hash-wide gate](evidence/round1/hash-wide-gate.json)、[probe2 gate](evidence/round1/probe2-gate.json)。每进程原始记录另保存为 `evidence/round1/round*-*.jsonl`，可用 `python scripts/analyze-round1.py evidence/round1/ci.log` 无工具链复算。日志仅清理 ANSI 与行尾空白，保留时间戳；JSON timing 内容未改变。
+证据：[运行元数据](../../evidence/round1/ci-run.json)、[完整日志](../../evidence/round1/ci.log)、[两轮测量](../../evidence/round1/comparison.json)、[原始数据复算/逐文件差异](../../evidence/round1/analysis.json)、[hash-wide gate](../../evidence/round1/hash-wide-gate.json)、[probe2 gate](../../evidence/round1/probe2-gate.json)。每进程原始记录另保存为 `evidence/round1/round*-*.jsonl`，可用 `python scripts/analyze-round1.py evidence/round1/ci.log` 无工具链复算。日志仅清理 ANSI 与行尾空白，保留时间戳；JSON timing 内容未改变。
 
 **UNKNOWN**：私有 stage2、线上机器/实际 admission、该候选线上排名、是否可领奖。公共 stage1 与官网两 corpus 的坐标不能直接比较；bootstrap 的正式 admission 由线上对特定历史参照完成。
 

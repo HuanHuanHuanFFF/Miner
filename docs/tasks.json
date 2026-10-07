@@ -1,0 +1,194 @@
+{
+  "updated_on": "2026-10-08",
+  "conversation": {
+    "thread_id": "01a11272-3ca5-75d3-aa0a-68376e856f18",
+    "title": "主优化agent",
+    "host_id": "local"
+  },
+  "tasks": [
+    {
+      "id": "environment",
+      "title": "环境与验证入口",
+      "tags": [
+        "CI",
+        "环境",
+        "基线",
+        "pins",
+        "Lean",
+        "gate"
+      ],
+      "report": "docs/validation.md",
+      "evidence": [
+        "evidence/ci"
+      ],
+      "decision": "手动 CI；环境和当前工具版本从实际入口、回执读取。"
+    },
+    {
+      "id": "round01",
+      "title": "首轮：扩表与 probe2",
+      "tags": [
+        "probe2",
+        "hash-wide",
+        "NICE",
+        "匹配搜索"
+      ],
+      "report": "docs/rounds/round01.md",
+      "evidence": [
+        "evidence/round1"
+      ],
+      "decision": "probe2 明显改善公共大小，耗时略增；公共 gate 通过。"
+    },
+    {
+      "id": "round02",
+      "title": "第二轮：probe3 与 bucket2 修复",
+      "tags": [
+        "probe3",
+        "bucket2",
+        "两槽",
+        "proof",
+        "门槛"
+      ],
+      "report": "docs/rounds/round02.md",
+      "evidence": [
+        "evidence/round2"
+      ],
+      "decision": "probe3 更小；bucket2 后续 gate 修复成功，速度收益不稳定。"
+    },
+    {
+      "id": "round03",
+      "title": "第三轮：速度端 fast3",
+      "tags": [
+        "fast3",
+        "432",
+        "453",
+        "速度",
+        "奖励",
+        "支付"
+      ],
+      "report": "docs/rounds/round03.md",
+      "evidence": [
+        "evidence/round3"
+      ],
+      "decision": "fast3 后续 #453 正式 admission 通过，有历史奖励及到账确认。"
+    },
+    {
+      "id": "round04",
+      "title": "第四轮：H 系列与多方向筛选",
+      "tags": [
+        "H16",
+        "H3R",
+        "CPU",
+        "匹配缓存",
+        "混合"
+      ],
+      "report": "docs/rounds/round04.md",
+      "evidence": [
+        "evidence/round4/selection.json",
+        "evidence/round4"
+      ],
+      "decision": "大量质量／速度交换；公共筛选不能代替正式表现。"
+    },
+    {
+      "id": "round05",
+      "title": "第五轮：H16 证明与完整编码成本",
+      "tags": [
+        "H16-small",
+        "H16-smallC",
+        "proofopt",
+        "证明",
+        "sameend"
+      ],
+      "report": "docs/rounds/round05.md",
+      "evidence": [
+        "evidence/round5/final-summary.json"
+      ],
+      "decision": "精简证明使部分 H16 通过 gate；完整成本选择的收益不足。"
+    },
+    {
+      "id": "round06",
+      "title": "第六轮：H16 CPU 复测与 #474 校准",
+      "tags": [
+        "H16",
+        "474",
+        "299",
+        "427",
+        "校准",
+        "被支配"
+      ],
+      "report": "docs/rounds/round06.md",
+      "evidence": [
+        "evidence/round6/final-summary.json",
+        "evidence/round6/formal-474/calibration.json"
+      ],
+      "decision": "#474 正式 gate 通过但被支配，否定乐观跨族系数。"
+    },
+    {
+      "id": "round07",
+      "title": "第七轮：中段与 block1",
+      "tags": [
+        "block1",
+        "361",
+        "中段",
+        "均衡",
+        "多遍"
+      ],
+      "report": "docs/rounds/round07.md",
+      "evidence": [
+        "evidence/round7/final-summary.json"
+      ],
+      "decision": "17 个版本均未进入预测前沿；block1 成为后续父版本。"
+    },
+    {
+      "id": "round08",
+      "title": "第八轮：距离成本重选",
+      "tags": [
+        "cost",
+        "距离成本",
+        "suffix",
+        "top",
+        "均衡"
+      ],
+      "report": "docs/rounds/round08.md",
+      "evidence": [
+        "evidence/round8/final-summary.json"
+      ],
+      "decision": "三种变体无大小收益，停止扩展；两个完整公共 gate 通过。"
+    },
+    {
+      "id": "round09",
+      "title": "第九轮：块级 CPU 与前向瓶颈",
+      "tags": [
+        "scalar",
+        "tail",
+        "unroll4",
+        "前向",
+        "均衡",
+        "二叉树",
+        "q9"
+      ],
+      "report": "docs/rounds/round09.md",
+      "evidence": [
+        "evidence/round9/final-summary.json",
+        "evidence/round9/diagnostic-conclusions.md"
+      ],
+      "decision": "scalar 约 0.884% 小幅速度信号，仍无预测份额；前向阶段约 73%，整份 q9 预处理过贵。"
+    },
+    {
+      "id": "maintenance-20261008",
+      "title": "合并、去重与竞赛环境整理",
+      "tags": [
+        "main",
+        "分支",
+        "清理",
+        "任务查找",
+        "规则",
+        "中文提交"
+      ],
+      "report": "docs/history/maintenance-2026-10-08.md",
+      "evidence": [
+        "evidence/maintenance/2026-10-08-cleanup.json"
+      ],
+      "decision": "实验历史合入 main；回执去重、文档分层、规则统一，CI 手动启动。"
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # INIT_STATE
 
+> 历史记录，保留当时的观察与故障原因。当前执行规则以 [AGENTS.md](../../AGENTS.md) 为准，工作入口见 [任务索引](../TASK_INDEX.md)。本文件中的阶段状态、授权与价格不代表现状。
+
 核对日期：2026-10-06（北京时间）。阶段：初始化完成，等待指令。
 
 **VERIFIED**＝本次直接读取官方资料/源码/API 或本机观察；**INFERRED**＝据此推断；**UNKNOWN**＝未取得直接验证。源码核对不代表本地 gate 通过或线上部署逐字一致。
@@ -42,7 +44,7 @@
 | 官方要求/pins | x86_64 Linux/Bash/apt、Python≥3.11、C构建环境、bubblewrap；生产限额用 systemd user；just≥1.58.0、setup 固定 uv 0.12.15；Rust nightly-2026-08-18、Lean/Mathlib 4.31.0、Aeneas nightly-2026.08.27-5b9dcf3、Charon rev 4ad295c1…（LLBC 0.1.245） |
 | Windows 克隆限制 | core.autocrlf=true；70个 PINS 文件原始哈希均不匹配，恢复LF后70/70匹配；slot/src/parse.rs 应为symlink，本机是普通文本。保持现状，副本用于阅读，未认证为可运行gate环境 |
 
-副本：`D:\CodingProject\Bitget\sources\`。证据：[API快照](evidence/deflate-competition-2026-10-06.json)、[查询回执](evidence/deflate-competition-2026-10-06-receipt.json)。依赖依据为专用仓库 `setup.sh`、`validator/verifier/config.sh`、Rust toolchain 与 Lean manifest。
+副本：`D:\CodingProject\Bitget\sources\`。证据：[API快照](../../evidence/deflate-competition-2026-10-06.json)、[查询回执](../../evidence/deflate-competition-2026-10-06-receipt.json)。依赖依据为专用仓库 `setup.sh`、`validator/verifier/config.sh`、Rust toolchain 与 Lean manifest。
 
 ## 5. 已确认事实与仍待确认的问题
 
@@ -52,6 +54,8 @@
 - **UNKNOWN**：SN66 当前 finalized block 的注册价格/开关/容量、tempo、commit-reveal、实际权重/emission 与treasury身份。未独立查询链RPC，公开源码规则不等于即时链状态。
 - **UNKNOWN**：本机原版模板的编译、Lean公理检查与完整gate结果。不存在本项目候选成绩或submission结果。
 
-## 6. 优化前最先完成的一件事
+## 6. 初始化时的下一步（已完成）
 
 **取得可复现的“未修改官方模板完整gate＋公共corpus baseline”结果**：在合适Linux环境保留LF/符号链接，固定源码/工具链/corpus身份，运行 `miner/template` 的公共corpus完整检查并留存报告。本阶段未执行，也未制定优化路线。
+
+后续原版公共基线已经在 CI 37353587399 通过。继续研究时从当前任务索引选择最近一轮，不重复初始化阶段。
