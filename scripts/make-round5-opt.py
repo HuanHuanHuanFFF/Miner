@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / 'candidates/r4-hybrid-h3r-smallc299'
 LOCK = {'parse.rs':'6814b45429d9dbbb66a94a2a18abca39bd23790756490e8acbb62e79306d18d9',
         'Parse.lean':'eec49d582853cddf843c33b950f444520561bbb40ef0197ee64ce9acfbb92791'}
-RECIPES = ['r5-opt-small-select', 'r5-opt-a-best299']
+RECIPES = ['r5-opt-small-select', 'r5-opt-a-best299', 'r5-opt-a-sameend299']
 spec = importlib.util.spec_from_file_location('hybrid_generator', ROOT/'scripts/make-round4-hybrid.py')
 hybrid = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(hybrid)
@@ -147,6 +147,53 @@ def best_engine(src, fs):
     return once(src,fs['a_engine']['text'],a)
 
 
+
+def sameend_engine(src, fs):
+    a=fs['a_engine']['text']
+    a=once(a,'    let mut p0 = 0usize;', '''    let mut r5_saved = zeros(n);
+    let mut r5_block_start = 0usize;
+    let mut p0 = 0usize;''')
+    a=once(a,'        let mut k = 0usize;', '''        let mut r5_best_end = p0;
+        let mut r5_best_tokens = 0usize;
+        let mut r5_best_bits = 0u64;
+        let mut r5_last_bits = 0u64;
+        let mut r5_have_best = false;
+        let mut k = 0usize;''')
+    a=once(a,'                t = r.1;', '''                t = r.1;
+                // Compare interchangeable completed blocks only. need is
+                // BLOCK_TOKENS - used, so existing carry counts toward fullness.
+                if t > 0 && p1 > p0 && p1 > r5_block_start && (t == need || p1 == n) {
+                    a_add_counts(&mut sl, &bl, &lf, &mut sd, &bd, &df);
+                    // Match-bearing blocks cannot choose stored encoding, so
+                    // their bit cost is independent of incoming byte alignment.
+                    let matches = h_sum_range(&sd, 0, 30);
+                    if matches > 0 {
+                        let bits = r5_hist_bits(&sl, &sd, p1 - r5_block_start);
+                        r5_last_bits = bits;
+                        if !r5_have_best || r5_best_end != p1 || bits < r5_best_bits {
+                            r5_best_end = p1;
+                            r5_best_tokens = t;
+                            r5_best_bits = bits;
+                            r5_have_best = true;
+                            h_copy32(ch, p0, &mut r5_saved, p0, p1 - p0);
+                        }
+                    } else {
+                        r5_have_best = false;
+                    }
+                } else {
+                    r5_have_best = false;
+                }''')
+    a=once(a,'        used += t;', '''        if r5_have_best && r5_best_end == p1 && p1 > p0 && r5_best_bits < r5_last_bits && (p1 == n || r5_best_tokens == t) {
+            h_copy32(&r5_saved, p0, ch, p0, p1 - p0);
+        }
+        // Keep the original final-pass p1/t, counts, next model and bpt.
+        // Only the emitted plan changes; subsequent searches remain baseline.
+        used += t;''')
+    a=once(a,'            used = 0;', '''            used = 0;
+            r5_block_start = p1;''')
+    return once(src,fs['a_engine']['text'],a)
+
+
 def generate(name,check):
     frozen={n:(BASE/n).read_bytes() for n in LOCK}
     for n,h in LOCK.items(): assert sha(frozen[n])==h,(n,'parent drift')
@@ -160,12 +207,13 @@ def generate(name,check):
         source=once(source,fs['parse']['text'],ENTRY)
         mechanism='For n<65536, run original S and H mode3, compare complete token stream byte-cost models, preserve S on ties; larger inputs keep the complete original h3r-smallc299 dispatcher.'
     else:
-        source=best_engine(source,fs)
+        source=sameend_engine(source,fs) if name=='r5-opt-a-sameend299' else best_engine(source,fs)
         source=once(source,fs['parse']['text'],'''pub fn parse(input: &[u8], out: &mut [u32]) -> usize {
     s_parse(input, out)
 }''')
         changed.add('a_engine')
-        mechanism='Original public299 routing/budgets; after each full A DP pass, compare estimated complete encoder-block bits per decoded byte, save the best prefix and endpoint, restore it and rebuild counts/model before continuing. Sampled passes never compete. Ratio objective is a heuristic when endpoints differ, not global optimality.'
+        mechanism=('Original public299 trajectory preserved. Save better A plans only for the same decoded-byte endpoint at completed token blocks (t=16384-used, including carry) or EOF, with at least one match so stored-block alignment cannot affect the local bit comparison. Commit a strictly smaller same-end plan with the same non-EOF token count without changing p1/t, counts, next cost model or bpt. Different endpoints reset the comparison. This corrects the failed ratio/feedback substitution as one interchangeable-block selection mechanism; no effort knob change.' if name=='r5-opt-a-sameend299' else
+            'Original public299 routing/budgets; after each full A DP pass, compare estimated complete encoder-block bits per decoded byte, save the best prefix and endpoint, restore it and rebuild counts/model before continuing. Sampled passes never compete. Ratio objective is a heuristic when endpoints differ, not global optimality.')
     source+='\n\n'+block+'\n'+HELPERS
     nf,nc,nt=hybrid.declarations(source)
     for n,d in fs.items():
