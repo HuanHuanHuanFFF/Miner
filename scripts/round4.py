@@ -41,6 +41,8 @@ def validate(label):
             assert 0 < len(data) <= 524288 and hashlib.sha256(data).hexdigest() == h, (e['name'], f)
     assert {'probe3', 'r3-432-fast3', 'public432'} <= names
     assert 1 <= spec['screen_blocks'] <= 4 and 0 <= spec['refine_blocks'] <= 4
+    synthetic_refs = spec.get('synthetic_reference_candidates', [])
+    assert len(synthetic_refs) == len(set(synthetic_refs)) <= 3 and set(synthetic_refs) <= names
     used = set()
     for group in spec.get('gate_groups', []):
         assert isinstance(group, list) and group and set(group) <= names
@@ -300,13 +302,15 @@ def main():
             from round3_synthetic import run_validation
             selected = [n for n, v in state['gates'].items() if v.get('accepted')]
             if selected:
-                state['synthetic_validation'] = run_validation(config, paths, ['r3-432-fast3'] + selected, output)
+                synthetic_names = list(dict.fromkeys(['r3-432-fast3'] + spec.get('synthetic_reference_candidates', []) + selected))
+                state['synthetic_validation'] = run_validation(config, paths, synthetic_names, output)
         research_inputs = spec.get('research_synthetic_candidates', [])
         if research_inputs:
             assert len(research_inputs) == len(set(research_inputs)) <= 3
             assert set(research_inputs) <= set(entries) and 'r3-432-fast3' not in research_inputs
             from round3_synthetic import run_validation
-            state['research_synthetic_validation'] = run_validation(config, paths, ['r3-432-fast3'] + research_inputs, output)
+            synthetic_names = list(dict.fromkeys(['r3-432-fast3'] + spec.get('synthetic_reference_candidates', []) + research_inputs))
+            state['research_synthetic_validation'] = run_validation(config, paths, synthetic_names, output)
             state['research_synthetic_validation']['proof_status'] = 'NO_FULL_GATE_IMPLIED; finite data checks only'
         finish()
         if any(not v.get('accepted') for v in state['gates'].values()):

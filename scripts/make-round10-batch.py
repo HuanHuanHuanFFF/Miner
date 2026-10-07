@@ -23,6 +23,8 @@ def main():
     ap.add_argument('--endprobe-diagnostics', action='store_true')
     ap.add_argument('--cpu-candidates', nargs='*', default=[])
     ap.add_argument('--costcache-diagnostics', action='store_true')
+    ap.add_argument('--packed-record-diagnostics', action='store_true')
+    ap.add_argument('--synthetic-references', nargs='*', default=[])
     ap.add_argument('--blocks', type=int, choices=[1, 2, 3, 4], default=2)
     args = ap.parse_args()
     assert re.fullmatch(r'[a-z0-9-]{1,48}', args.batch)
@@ -45,6 +47,7 @@ def main():
                         'control': False, 'anchor': 'public361', 'hashes': hashes})
     by_name = {e['name']: e for e in entries}
     assert set(args.cpu_candidates) <= set(by_name)
+    assert len(args.synthetic_references) <= 3 and set(args.synthetic_references) <= set(by_name)
     for pair in args.equivalent:
         candidate, reference = pair.split('=', 1)
         assert candidate in args.candidates and reference in by_name and candidate != reference
@@ -59,6 +62,8 @@ def main():
             'forward_diagnostic_candidate': args.forward_diagnostic_candidate,
             'endprobe_diagnostics': args.endprobe_diagnostics,
             'costcache_diagnostics': args.costcache_diagnostics,
+            'packed_record_diagnostics': args.packed_record_diagnostics,
+            'synthetic_reference_candidates': args.synthetic_references,
             'research_synthetic_candidates': args.synthetic,
             'description': 'R10 bounded structural experiment; exact bytes frozen in this specification.',
             'selection_policy': 'Same-family 361 paired transfer; adverse max observed relative-time+2%, size max(family+0.01pp,public*1.008). Geometry is conditional, not formal admission or reward.'}
