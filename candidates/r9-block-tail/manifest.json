@@ -1,0 +1,28 @@
+{
+  "candidate": "r9-block-tail",
+  "parent": "candidates/r7-mid361-block1",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "950eb21b3918adce71bad2737774f2e37531cfbcd45fb17afdd806ee0adc3ed5",
+    "Parse.lean": "f815bcb880d9da3c18d8fcb768f66ea2222a6348187646eb027c1cb020bb2fb0"
+  },
+  "hashes": {
+    "parse.rs": "5995eefc98d48964c9efd9267b12621754f9e485c6718d7725009c0a6ba69ec3",
+    "Parse.lean": "2b2fab469bc1acf3fc87f424e323392c82e5c40fd778e4e12bcd94b259f387ba"
+  },
+  "bytes": {
+    "parse.rs": 178290,
+    "Parse.lean": 402081
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json",
+    "mechanism_source": "#361 walk_t/tailw, copied into D's walk while retaining D's nice guard"
+  },
+  "mechanism": "Before probe, reject a chain node whose eight bytes ending at current best differ; update the cached tail only when best increases",
+  "audit": "Reverse only the d_walk source/proof region replacement restores block1 bytes. Original signature, nice guard, probe cap, candidate sequence, routes, depths, records, backward DP and emitters are retained.",
+  "equivalence_status": "INFERRED: beating best requires the checked tail bytes; below 8 both tails are zero. Fresh token/output differential required.",
+  "proof_status": "UNKNOWN: d_walk loop proof adapted from existing walk_t totality; six-state loop interface needs fresh extraction and original obligation/axiom gate.",
+  "performance_status": "UNKNOWN: tail filtering may save common scans or add load overhead; paired total compression required."
+}
