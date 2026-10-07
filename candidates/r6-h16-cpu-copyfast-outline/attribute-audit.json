@@ -1,0 +1,47 @@
+{
+  "parent": {
+    "path": "candidates/r6-h16-cpu-copyfast",
+    "hashes": {
+      "parse.rs": "d414c981b22a23cae40561173e6812e4846f3fb8ba500ad6dd5d4ef5582efb19",
+      "Parse.lean": "d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7"
+    },
+    "metadata_hashes": {
+      "manifest.json": "c544a73623dba8df6b09a3736be4fd6f3a548f46562f77a8482ce8d082a57cbb",
+      "copy-audit.json": "fef0cda0f7301323670054964d87f4abb2f224746da20bf587475adf7277465c"
+    }
+  },
+  "function": "h_copy32",
+  "parent_function_line": 4328,
+  "old_attribute": null,
+  "new_attribute": "inline(never)",
+  "added_attribute_sha256": "f92f11f4ff06f66a6d0fe6e7339834ce0b89feea0db114911802b6c6b39cda66",
+  "whole_source_reverse_equal": true,
+  "all_other_source_and_function_body_bytes": "VERIFIED exact copyfast parent; fast/fallback loops, guards, operations, call sites, routing, model, budget and existing attributes unchanged",
+  "proof_equal": true,
+  "proof_status": "NOT_ADAPTED",
+  "diagnostic_evidence": {
+    "copy_screen_run": "37598783885",
+    "copy_screen_commit": "a25dee2e56ba8d7f6d50ce9d132cae3e1af59d10",
+    "parent_screen_total_time_change_pct": [
+      0.5057813440609848,
+      0.8209222796345728
+    ],
+    "h_block_bits_function_bytes": {
+      "H16_baseline": 7380,
+      "copyfast": 14117
+    },
+    "local_vector_copy_observed": "Two XMM loads/two stores per eight u32 in parse at 0x1c640-0x1c65f and 0x1e170-0x1e18d",
+    "causality_status": "UNKNOWN whether duplication/code layout caused the screen regression; this single annotation is an explicit mechanism diagnostic, not proof of that cause"
+  },
+  "expected_machine_effect": "INFERRED: compiler outlines one shared h_copy32 body, shrinks caller duplication, adds real call overhead and may lose constant specialization. Actual symbol sizes/call sites/vector loops must be inspected",
+  "extraction_expectation": "INFERRED unchanged copyfast semantic body; the attribute is a compiler hint. New official extraction must still establish the actual definitions; parent copy proof is NOT_ADAPTED",
+  "not_established": [
+    "Rust build",
+    "outlined symbol",
+    "retained vectorization",
+    "token/output identity",
+    "paired total benefit",
+    "adapted proof",
+    "complete gate"
+  ]
+}
