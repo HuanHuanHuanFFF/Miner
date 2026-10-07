@@ -7,14 +7,15 @@ on:
         required: true
         type: boolean
         default: false
-      specification:
-        description: 'Tracked batch name under evidence/round5'
-        required: true
-        type: string
-        default: h16-small-gate
   push:
     branches: [codex/deflate-round5]
-    paths: ['.github/workflows/deflate-round5.yml']
+    paths:
+      - '.github/workflows/deflate-round5.yml'
+      - 'candidates/**'
+      - 'references/**'
+      - 'scripts/**'
+      - 'evidence/round5/h16-small-gate.json'
+      - 'evidence/round5/h16-smallc-gate.json'
 permissions:
   contents: read
 concurrency:
@@ -22,14 +23,19 @@ concurrency:
   cancel-in-progress: false
 jobs:
   experiment:
-    if: github.event.repository.private == false || (github.event_name == 'workflow_dispatch' && inputs.allow_private == true)
+    if: github.event_name == 'push' || github.event.repository.private == false || (github.event_name == 'workflow_dispatch' && inputs.allow_private == true)
+    strategy:
+      fail-fast: false
+      matrix:
+        specification: [h16-small-gate, h16-smallc-gate]
+    name: ${{ matrix.specification }}
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     env:
-      ROUND4_SPEC: ${{ inputs.specification || 'h16-small-gate' }}
+      ROUND4_SPEC: ${{ matrix.specification }}
       ROUND4_SPEC_DIR: evidence/round5
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
       - name: Validate batch and exact candidate bytes
@@ -46,7 +52,7 @@ jobs:
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/profile-round4-tokens.py
-      - name: Screen public performance and inspect generated code
+      - name: Screen time and compression axes
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           export PYTHONPATH="$DEFLATE_ROOT/validator"
@@ -55,7 +61,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: r5-${{ github.run_id }}-screen
+          name: r5-${{ github.run_id }}-${{ matrix.specification }}-screen
           path: ${{ runner.temp }}/round4-receipts/
           retention-days: 1
           compression-level: 9
@@ -74,12 +80,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: r5-${{ github.run_id }}-refine
+          name: r5-${{ github.run_id }}-${{ matrix.specification }}-refine
           path: ${{ runner.temp }}/round4-receipts/
           retention-days: 1
           compression-level: 9
           if-no-files-found: ignore
-      - name: Run selected fresh official gates
+      - name: Run selected fresh official gate
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           export PYTHONPATH="$DEFLATE_ROOT/validator"
@@ -88,7 +94,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: r5-${{ github.run_id }}-gate
+          name: r5-${{ github.run_id }}-${{ matrix.specification }}-gate
           path: ${{ runner.temp }}/round4-receipts/
           retention-days: 1
           compression-level: 9
