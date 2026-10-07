@@ -24,6 +24,7 @@ def main():
     ap.add_argument('--cpu-candidates', nargs='*', default=[])
     ap.add_argument('--costcache-diagnostics', action='store_true')
     ap.add_argument('--packed-record-diagnostics', action='store_true')
+    ap.add_argument('--prefixmask-diagnostics', action='store_true')
     ap.add_argument('--synthetic-references', nargs='*', default=[])
     ap.add_argument('--blocks', type=int, choices=[1, 2, 3, 4], default=2)
     args = ap.parse_args()
@@ -63,6 +64,7 @@ def main():
             'endprobe_diagnostics': args.endprobe_diagnostics,
             'costcache_diagnostics': args.costcache_diagnostics,
             'packed_record_diagnostics': args.packed_record_diagnostics,
+            'prefixmask_diagnostics': args.prefixmask_diagnostics,
             'synthetic_reference_candidates': args.synthetic_references,
             'research_synthetic_candidates': args.synthetic,
             'description': 'R10 bounded structural experiment; exact bytes frozen in this specification.',

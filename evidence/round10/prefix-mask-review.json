@@ -1,0 +1,219 @@
+{
+  "status": "VERIFIED_FINITE_PREFIX_MASK_MODEL",
+  "scope": "Python recurrence and source-publication model only; no Rust candidate, timing, extraction or Lean acceptance.",
+  "exhaustive": {
+    "max_length": 8,
+    "alphabet": [
+      0,
+      1,
+      2
+    ],
+    "queries": 317388,
+    "publications": 73812,
+    "pops": 56286,
+    "cost_comparisons": 91248,
+    "sequences": 9840
+  },
+  "ring_model": {
+    "ring_size": 1024,
+    "window": 32,
+    "patterns": 4,
+    "positions_each": 2401,
+    "publications": 9600,
+    "pops": 7196,
+    "cost_comparisons": 11536,
+    "queries": 28776,
+    "pending_earlier_writes": 46416,
+    "length_price_block_changes": 260
+  },
+  "counterexamples_to_bad_assumptions": {
+    "strict_pop_loses_shortest_tie": {
+      "costs": [
+        5,
+        5
+      ],
+      "correct_mask": 1,
+      "wrong_pop_strict_mask": 3,
+      "correct_argmin": 0,
+      "wrong_argmin": 1
+    },
+    "full_word_comparison_wrong_tie": {
+      "upper_costs": [
+        7,
+        7
+      ],
+      "lower_choices": [
+        900,
+        0
+      ],
+      "correct_argmin": 0,
+      "wrong_full_word_argmin": 1
+    },
+    "stale_price_run_after_block_change": {
+      "endpoint_costs": [
+        0,
+        1
+      ],
+      "old_lc": [
+        0,
+        0
+      ],
+      "new_lc": [
+        100,
+        0
+      ],
+      "stale_run_answer": 0,
+      "correct_answer": 1
+    },
+    "post_publication_mutation": {
+      "published_costs": [
+        5,
+        10
+      ],
+      "mask": 1,
+      "later_costs": [
+        5,
+        0
+      ],
+      "stale_answer": 0,
+      "correct_answer": 1
+    },
+    "len32_shift": {
+      "invalid_rust_expression": "(1u32 << 32) - 1",
+      "safe_rule": "len==32 -> u32::MAX; otherwise (1u32<<len)-1"
+    },
+    "zero_mask": {
+      "required_action": "scalar fallback before highest-set-bit computation"
+    },
+    "nonconsecutive_publication": {
+      "required_action": "reject/reset cache validity and use scalar fallback; do not shift a mask from an unrelated frontier"
+    }
+  },
+  "fallback_required": [
+    "lo>=e or e>259 -> original d_best_len behavior",
+    "zero/invalid/unpublished mask -> original scalar query",
+    "nonconsecutive finalization -> disable cache fast path",
+    "position arithmetic overflow or queried endpoint past n -> original fallback",
+    "length-price run cache not current -> rebuild or fallback"
+  ],
+  "publication_sources": [
+    "ring[n % 1024]=0 initialization",
+    "each of three finalized ring[q]=v writes inside d_gap",
+    "ring[p]=best after d_node_best in d_dp"
+  ],
+  "not_publication": [
+    "d_push writes p-x only",
+    "d_init writes z<p only"
+  ],
+  "source_bounds": {
+    "max_candidate_future_offset": 258,
+    "max_backward_push": 255,
+    "max_snapshot_future_offset_p_plus": 289,
+    "ring_capacity": 1024
+  },
+  "required_price_cache_rebuilds": [
+    "initial d_load in d_dp",
+    "d_load in d_block on each actual block change"
+  ],
+  "no_runtime_gain_claim": true,
+  "fallback_model_cases": [
+    {
+      "bits": 32,
+      "case": "empty",
+      "original_scalar_result": 18446744073709551615,
+      "fallback_selected": true
+    },
+    {
+      "bits": 32,
+      "case": "reversed",
+      "original_scalar_result": 18446744073709551615,
+      "fallback_selected": true
+    },
+    {
+      "bits": 32,
+      "case": "long-range",
+      "original_scalar_result": 20297219,
+      "fallback_selected": true
+    },
+    {
+      "bits": 32,
+      "case": "wide-old-range",
+      "original_scalar_result": 2035398132,
+      "fallback_selected": true
+    },
+    {
+      "bits": 32,
+      "case": "zero-mask",
+      "original_scalar_result": 20297219,
+      "fallback_selected": true
+    },
+    {
+      "bits": 32,
+      "case": "unpublished",
+      "original_scalar_result": 20297219,
+      "fallback_selected": true
+    },
+    {
+      "bits": 32,
+      "case": "stale-price-generation",
+      "original_scalar_result": 20297219,
+      "fallback_selected": true
+    },
+    {
+      "bits": 32,
+      "case": "overflow-position",
+      "original_scalar_result": 4079107,
+      "fallback_selected": true
+    },
+    {
+      "bits": 64,
+      "case": "empty",
+      "original_scalar_result": 18446744073709551615,
+      "fallback_selected": true
+    },
+    {
+      "bits": 64,
+      "case": "reversed",
+      "original_scalar_result": 18446744073709551615,
+      "fallback_selected": true
+    },
+    {
+      "bits": 64,
+      "case": "long-range",
+      "original_scalar_result": 20297219,
+      "fallback_selected": true
+    },
+    {
+      "bits": 64,
+      "case": "wide-old-range",
+      "original_scalar_result": 2035398132,
+      "fallback_selected": true
+    },
+    {
+      "bits": 64,
+      "case": "zero-mask",
+      "original_scalar_result": 20297219,
+      "fallback_selected": true
+    },
+    {
+      "bits": 64,
+      "case": "unpublished",
+      "original_scalar_result": 20297219,
+      "fallback_selected": true
+    },
+    {
+      "bits": 64,
+      "case": "stale-price-generation",
+      "original_scalar_result": 20297219,
+      "fallback_selected": true
+    },
+    {
+      "bits": 64,
+      "case": "overflow-position",
+      "original_scalar_result": 4079107,
+      "fallback_selected": true
+    }
+  ],
+  "fallback_model_scope": "Guard-routing model invokes the unchanged scalar oracle for invalid cache/range states. This does not test any future Rust cache implementation.",
+  "random_seed": 3201024
+}
