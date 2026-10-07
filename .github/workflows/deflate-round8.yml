@@ -1,0 +1,92 @@
+name: DEFLATE middle round 8
+on:
+  workflow_dispatch:
+    inputs:
+      specification:
+        description: 'Tracked middle-frontier experiment batch'
+        required: true
+        type: string
+        default: 'cost-a'
+      allow_private:
+        description: 'Authorize standard private-repository Actions minutes'
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: deflate-round8-${{ github.run_id }}
+  cancel-in-progress: false
+jobs:
+  experiment:
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true)
+    name: ${{ inputs.specification }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      ROUND4_SPEC: ${{ inputs.specification }}
+      ROUND4_SPEC_DIR: evidence/round8
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Validate batch and exact candidate bytes
+        run: python3 scripts/round4.py preflight
+      - name: Prepare isolated runner and pinned source
+        run: bash scripts/ci-prepare.sh
+      - name: Install official verification toolchain
+        run: bash scripts/ci-setup.sh
+      - name: Check requested finite equivalence
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round4.py
+      - name: Extract requested research candidates
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round5.py
+      - name: Diagnose retained-candidate price choices
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round8.py
+      - name: Publish early extraction diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r8-${{ github.run_id }}-${{ inputs.specification }}-extraction
+          path: ${{ runner.temp }}/round4-receipts/research5/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: ignore
+      - name: Screen time and compression axes
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py screen
+      - name: Publish early paired measurement receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r8-${{ github.run_id }}-${{ inputs.specification }}-screen
+          path: ${{ runner.temp }}/round4-receipts/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: ignore
+      - name: Refine shortlisted candidates
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py refine
+      - name: Run selected fresh official gate
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py gate
+      - name: Publish final evidence without toolchains or binaries
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r8-${{ github.run_id }}-${{ inputs.specification }}-gate
+          path: ${{ runner.temp }}/round4-receipts/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: ignore

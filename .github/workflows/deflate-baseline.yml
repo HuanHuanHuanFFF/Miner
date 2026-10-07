@@ -2,23 +2,23 @@ name: DEFLATE baseline
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/deflate-baseline.yml'
-      - 'scripts/ci-*.sh'
-
+    inputs:
+      allow_private:
+        description: 'Authorize standard private-repository Actions minutes for this manual run'
+        required: true
+        type: boolean
+        default: false
 permissions:
   contents: read
 
 concurrency:
-  group: deflate-baseline-${{ github.ref }}
-  cancel-in-progress: true
+  group: deflate-baseline-${{ github.run_id }}
+  cancel-in-progress: false
 
 jobs:
   baseline:
     # Public standard runners are free; do not silently run against private billing.
-    if: github.event.repository.private == false
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true)
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     steps:

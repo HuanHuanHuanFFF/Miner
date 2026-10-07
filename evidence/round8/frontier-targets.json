@@ -1,0 +1,564 @@
+{
+  "status": "VERIFIED_OFFICIAL_SNAPSHOT_WITH_INFERRED_TARGETS",
+  "snapshot": {
+    "id": "26901",
+    "computed_at_utc": "2026-10-07T16:23:23.987423+00:00",
+    "computed_at_asia_shanghai": "2026-10-08T00:23:23.987423+08:00",
+    "status": "ready",
+    "freshness": "unknown",
+    "freshness_reason": "Recorded scoring pass; live policy changes require a new pass.",
+    "retrieved_start_utc": "2026-10-07T16:23:31.643016+00:00",
+    "retrieved_end_utc": "2026-10-07T16:23:38.518844+00:00",
+    "server_date": "Wed, 07 Oct 2026 16:23:40 GMT",
+    "competition": {
+      "slug": "deflate",
+      "name": "DEFLATE",
+      "submissions_open": true,
+      "queue_depth": 1,
+      "current_snapshot_id": "26901",
+      "policy_status": "ready"
+    },
+    "pareto_pages": 5,
+    "scored_submission_rows": 488,
+    "published_frontier_points": 71,
+    "official_scorer_replay_max_abs_error": 6.938893903907228e-18,
+    "api_evidence_sha256": {
+      "competition.json": {
+        "sha256": "b2b7a4cfb5f026d62ecc150ee892bf9c530290e23dc3c0969d18c1cd5fe53213",
+        "bytes": 1458
+      },
+      "pareto-pages.json": {
+        "sha256": "530d1a2d9818b171520ee0193ebb09e2a2cbe3d6eab7b4573ad7bbc8a8880e1f",
+        "bytes": 985757
+      }
+    }
+  },
+  "anchor_361": {
+    "status": "VERIFIED_CURRENT_SNAPSHOT_RECORD",
+    "metrics": {
+      "balanced_time_ratio": 1.1608686942402877,
+      "mean_file_compression_pct": 34.209957755736326,
+      "timing_interval_95pct": {
+        "metric": "balanced_time_ratio",
+        "estimate": 1.1608686942402877,
+        "lower": 1.1601148378790898,
+        "upper": 1.1616186196950253,
+        "confidence_level": 0.95,
+        "method": "paired-per-file-compression-bootstrap-v4",
+        "draws": 2000
+      }
+    },
+    "admission": {
+      "decision_id": "365",
+      "status": "recorded",
+      "outcome": "passed",
+      "admitted": true,
+      "reason_code": "speed-advantage-established",
+      "explanation": "The lower confidence bound is above zero: the speed improvement passed.",
+      "reference_submission_id": "351",
+      "freshness": "unknown"
+    },
+    "current_snapshot_score": {
+      "snapshot_id": "26901",
+      "on_frontier": false,
+      "pareto_weight": 0.0,
+      "improvement_weight": 0.0,
+      "combined_weight": 0.0,
+      "payable_weight": 0.0,
+      "payment_eligible": true,
+      "unpaid_reason": null,
+      "bounty_earned_alpha": 2.513132616,
+      "bounty_capped": false
+    },
+    "current_frontier_order": null,
+    "calibration_conclusion": "Still usable as the same formal x/y transfer anchor: the latest API record retains the metric values and Round 7 has a paired stage1 public361 reference. It is not itself a current reward frontier point: snapshot 26901 marks it off-frontier with zero Pareto weight; current geometry and conditional reward projections must use snapshot 26901.",
+    "stage1_public361_reference": {
+      "status": "VERIFIED_ROUND7_PUBLIC_PAIRED_MEASUREMENT",
+      "public_y_pct": 33.95862675598211,
+      "public_time_seconds": 1.1630316616744163,
+      "candidate_name": "public361",
+      "source_sha256": "f426f7cec777ef2ca74616eb62205d54ae0bf6938799835a1fe6024ed59b5c45",
+      "evidence_path": "evidence/round7/37636990183/middle-cpu/gate/state.json"
+    }
+  },
+  "transfer_and_safety_formulas": {
+    "formal_x_before_time_margin": "official_x_361 * max(candidate_stage1_time / paired_public361_time)",
+    "conservative_x": "formal_x_before_time_margin * 1.02",
+    "formal_y_before_size_margin": "official_y_361 * (candidate_stage1_public_y / paired_public361_stage1_y)",
+    "conservative_y": "max(formal_y_before_size_margin + 0.01 percentage points, candidate_stage1_public_y * 1.008)",
+    "frontier_entry_condition": "conservative_y must be strictly below the current minimum official y among points with official x <= conservative_x.",
+    "source": "scripts/analyze-round7-middle.py; conservative_y mirrors its stress_size_factor_1008 path."
+  },
+  "middle_frontier_0_8_to_2_0": {
+    "thresholds": [
+      {
+        "stress_x_after_2pct_time_margin": 0.8,
+        "limiting_current_frontier_submission_id": "321",
+        "current_official_y_threshold_pct": 34.380925972043826,
+        "strict_public_y_ceiling_pct": 34.10806148020221,
+        "public_y_target_with_0_01pp_extra_raw_margin_pct": 34.09806148020221,
+        "formal_transferred_y_at_target_pct": 34.350424449502505,
+        "conservative_y_after_max_plus_0_01pp_or_public_times_1_008_pct": 34.37084597204383,
+        "pre_margin_formal_x": 0.7843137254901961,
+        "candidate_public_time_ratio_to_public361_max": 0.6756265625747431,
+        "hypothetical_conditional_pareto_weight_pct": 0.8862731967434337
+      },
+      {
+        "stress_x_after_2pct_time_margin": 0.9,
+        "limiting_current_frontier_submission_id": "486",
+        "current_official_y_threshold_pct": 34.31392045672581,
+        "strict_public_y_ceiling_pct": 34.0415877546883,
+        "public_y_target_with_0_01pp_extra_raw_margin_pct": 34.0315877546883,
+        "formal_transferred_y_at_target_pct": 34.283458745675965,
+        "conservative_y_after_max_plus_0_01pp_or_public_times_1_008_pct": 34.30384045672581,
+        "pre_margin_formal_x": 0.8823529411764706,
+        "candidate_public_time_ratio_to_public361_max": 0.760079882896586,
+        "hypothetical_conditional_pareto_weight_pct": 0.2515612914987934
+      },
+      {
+        "stress_x_after_2pct_time_margin": 1.0,
+        "limiting_current_frontier_submission_id": "290",
+        "current_official_y_threshold_pct": 34.26386339082544,
+        "strict_public_y_ceiling_pct": 33.991927967088735,
+        "public_y_target_with_0_01pp_extra_raw_margin_pct": 33.98192796708874,
+        "formal_transferred_y_at_target_pct": 34.23343142130423,
+        "conservative_y_after_max_plus_0_01pp_or_public_times_1_008_pct": 34.25378339082545,
+        "pre_margin_formal_x": 0.9803921568627451,
+        "candidate_public_time_ratio_to_public361_max": 0.8445332032184288,
+        "hypothetical_conditional_pareto_weight_pct": 0.3394794268336609
+      },
+      {
+        "stress_x_after_2pct_time_margin": 1.1,
+        "limiting_current_frontier_submission_id": "450",
+        "current_official_y_threshold_pct": 34.22828621046612,
+        "strict_public_y_ceiling_pct": 33.95663314530369,
+        "public_y_target_with_0_01pp_extra_raw_margin_pct": 33.94663314530369,
+        "formal_transferred_y_at_target_pct": 34.19787537921399,
+        "conservative_y_after_max_plus_0_01pp_or_public_times_1_008_pct": 34.21820621046612,
+        "pre_margin_formal_x": 1.0784313725490198,
+        "candidate_public_time_ratio_to_public361_max": 0.9289865235402719,
+        "hypothetical_conditional_pareto_weight_pct": 0.7231726609495589
+      },
+      {
+        "stress_x_after_2pct_time_margin": 1.2,
+        "limiting_current_frontier_submission_id": "375",
+        "current_official_y_threshold_pct": 34.20756800243407,
+        "strict_public_y_ceiling_pct": 33.936079367494116,
+        "public_y_target_with_0_01pp_extra_raw_margin_pct": 33.92607936749412,
+        "formal_transferred_y_at_target_pct": 34.17716948095612,
+        "conservative_y_after_max_plus_0_01pp_or_public_times_1_008_pct": 34.19748800243407,
+        "pre_margin_formal_x": 1.1764705882352942,
+        "candidate_public_time_ratio_to_public361_max": 1.0134398438621146,
+        "hypothetical_conditional_pareto_weight_pct": 0.3669035074695111
+      },
+      {
+        "stress_x_after_2pct_time_margin": 1.35,
+        "limiting_current_frontier_submission_id": "360",
+        "current_official_y_threshold_pct": 34.178676565200675,
+        "strict_public_y_ceiling_pct": 33.90741722738162,
+        "public_y_target_with_0_01pp_extra_raw_margin_pct": 33.897417227381624,
+        "formal_transferred_y_at_target_pct": 34.148295209641105,
+        "conservative_y_after_max_plus_0_01pp_or_public_times_1_008_pct": 34.16859656520068,
+        "pre_margin_formal_x": 1.3235294117647058,
+        "candidate_public_time_ratio_to_public361_max": 1.140119824344879,
+        "hypothetical_conditional_pareto_weight_pct": 2.6217065239949244
+      },
+      {
+        "stress_x_after_2pct_time_margin": 1.5,
+        "limiting_current_frontier_submission_id": "419",
+        "current_official_y_threshold_pct": 34.16099862057585,
+        "strict_public_y_ceiling_pct": 33.889879583904616,
+        "public_y_target_with_0_01pp_extra_raw_margin_pct": 33.87987958390462,
+        "formal_transferred_y_at_target_pct": 34.1306277684105,
+        "conservative_y_after_max_plus_0_01pp_or_public_times_1_008_pct": 34.15091862057586,
+        "pre_margin_formal_x": 1.4705882352941175,
+        "candidate_public_time_ratio_to_public361_max": 1.2667998048276432,
+        "hypothetical_conditional_pareto_weight_pct": 2.373927834732382
+      },
+      {
+        "stress_x_after_2pct_time_margin": 1.6,
+        "limiting_current_frontier_submission_id": "419",
+        "current_official_y_threshold_pct": 34.16099862057585,
+        "strict_public_y_ceiling_pct": 33.889879583904616,
+        "public_y_target_with_0_01pp_extra_raw_margin_pct": 33.87987958390462,
+        "formal_transferred_y_at_target_pct": 34.1306277684105,
+        "conservative_y_after_max_plus_0_01pp_or_public_times_1_008_pct": 34.15091862057586,
+        "pre_margin_formal_x": 1.5686274509803921,
+        "candidate_public_time_ratio_to_public361_max": 1.3512531251494861,
+        "hypothetical_conditional_pareto_weight_pct": 0.19716002007930272
+      },
+      {
+        "stress_x_after_2pct_time_margin": 1.8,
+        "limiting_current_frontier_submission_id": "421",
+        "current_official_y_threshold_pct": 34.14149511936476,
+        "strict_public_y_ceiling_pct": 33.87053087238568,
+        "public_y_target_with_0_01pp_extra_raw_margin_pct": 33.86053087238568,
+        "formal_transferred_y_at_target_pct": 34.11113585525255,
+        "conservative_y_after_max_plus_0_01pp_or_public_times_1_008_pct": 34.13141511936477,
+        "pre_margin_formal_x": 1.7647058823529411,
+        "candidate_public_time_ratio_to_public361_max": 1.520159765793172,
+        "hypothetical_conditional_pareto_weight_pct": 1.5613981085296358
+      },
+      {
+        "stress_x_after_2pct_time_margin": 2.0,
+        "limiting_current_frontier_submission_id": "468",
+        "current_official_y_threshold_pct": 34.13102501481653,
+        "strict_public_y_ceiling_pct": 33.860143863905286,
+        "public_y_target_with_0_01pp_extra_raw_margin_pct": 33.85014386390529,
+        "formal_transferred_y_at_target_pct": 34.100671971542646,
+        "conservative_y_after_max_plus_0_01pp_or_public_times_1_008_pct": 34.12094501481653,
+        "pre_margin_formal_x": 1.9607843137254901,
+        "candidate_public_time_ratio_to_public361_max": 1.6890664064368577,
+        "hypothetical_conditional_pareto_weight_pct": 2.6247206108266274
+      }
+    ],
+    "current_highest_conditional_weight_points": [
+      {
+        "id": "468",
+        "x": 1.8726596963357829,
+        "y_pct": 34.13102501481653,
+        "pareto_weight_pct": 2.8569977878741044
+      },
+      {
+        "id": "447",
+        "x": 0.9167745572331639,
+        "y_pct": 34.27757104552194,
+        "pareto_weight_pct": 2.574666129879276
+      },
+      {
+        "id": "365",
+        "x": 1.0089932919166604,
+        "y_pct": 34.23654789337647,
+        "pareto_weight_pct": 2.3478874539720893
+      },
+      {
+        "id": "486",
+        "x": 0.8433386414019144,
+        "y_pct": 34.31392045672581,
+        "pareto_weight_pct": 2.2196637106116386
+      },
+      {
+        "id": "487",
+        "x": 1.6052016849797124,
+        "y_pct": 34.14833934379113,
+        "pareto_weight_pct": 2.213715626842896
+      },
+      {
+        "id": "443",
+        "x": 1.2135138687566638,
+        "y_pct": 34.1950856833147,
+        "pareto_weight_pct": 1.9676705400016778
+      },
+      {
+        "id": "375",
+        "x": 1.1345058208806609,
+        "y_pct": 34.20756800243407,
+        "pareto_weight_pct": 1.799015742348394
+      },
+      {
+        "id": "422",
+        "x": 1.356941007486944,
+        "y_pct": 34.177242462844696,
+        "pareto_weight_pct": 1.2640671318178323
+      }
+    ]
+  },
+  "recommended_testable_goal": {
+    "classification": "INFERRED_PUBLIC_STAGE1_TARGET; not an official result or reward claim",
+    "conservative_x_max": 1.35,
+    "max_public_stage1_time_ratio_vs_paired_public361": 1.140119824344879,
+    "public_stage1_mean_file_compression_pct_max": 33.89,
+    "projected_formal_y_pct": 34.140823086660006,
+    "conservative_y_pct": 34.161120000000004,
+    "current_frontier_y_threshold_pct": 34.178676565200675,
+    "limiting_frontier_submission_id": "360",
+    "conservative_y_headroom_pp": 0.01755656520067106,
+    "conditional_hypothetical_pareto_weight_pct": 4.1492763911441255,
+    "interpretation": "This point would sit inside the current public geometric frontier under the declared transfer and safety assumptions. The computed weight is conditional on admission and the current scoring method; it is not expected payment."
+  },
+  "round7_historical_public_points": {
+    "classification": "VERIFIED_PUBLIC_MEASUREMENTS_AND_GATES; not formal submissions or official frontier results",
+    "source": "evidence/round7/final-summary.json",
+    "candidate_count": 17,
+    "formal_online_submissions_recorded": 0,
+    "public_full_gates_passed": 1,
+    "current_frontier_entry_candidates_under_same_safety_formula": 0,
+    "best_headroom_candidate": {
+      "candidate": "r7-mid361-rc-outline",
+      "source_sha256": "f6934499c7b200867cedf1308ec4c32c707e99bf068b73bef308ebb7576e322e",
+      "public_stage1_y_pct": 33.95862675598211,
+      "public_max_relative_time_vs_public361": 1.0223633478815697,
+      "conservative_x_after_2pct": 1.210566196788295,
+      "conservative_y_pct": 34.23029577002997,
+      "current_frontier_y_threshold_pct": 34.20756800243407,
+      "limiting_frontier_submission_id": "375",
+      "conditional_geometric_frontier_entry": false,
+      "headroom_to_current_frontier_pp": -0.022727767595895898,
+      "hypothetical_conditional_pareto_weight_pct": 0.0,
+      "public_full_gate_passed_in_round7": false,
+      "online_submission": false
+    },
+    "candidates": [
+      {
+        "candidate": "r7-mid361-rc-outline",
+        "source_sha256": "f6934499c7b200867cedf1308ec4c32c707e99bf068b73bef308ebb7576e322e",
+        "public_stage1_y_pct": 33.95862675598211,
+        "public_max_relative_time_vs_public361": 1.0223633478815697,
+        "conservative_x_after_2pct": 1.210566196788295,
+        "conservative_y_pct": 34.23029577002997,
+        "current_frontier_y_threshold_pct": 34.20756800243407,
+        "limiting_frontier_submission_id": "375",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.022727767595895898,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-relax-contiguous",
+        "source_sha256": "bade600c87fd54a585dcadd0de94151f028bd3e2ea88e7c888144f98dca8d567",
+        "public_stage1_y_pct": 33.95862675598211,
+        "public_max_relative_time_vs_public361": 1.0217655133493198,
+        "conservative_x_after_2pct": 1.2098583092476138,
+        "conservative_y_pct": 34.23029577002997,
+        "current_frontier_y_threshold_pct": 34.20756800243407,
+        "limiting_frontier_submission_id": "375",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.022727767595895898,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-upd2",
+        "source_sha256": "ae78c6d77553fc9bb811042a66665fddf8f79eb1d980f414ac71833cacaf0ba3",
+        "public_stage1_y_pct": 33.961849708327385,
+        "public_max_relative_time_vs_public361": 0.9962730669153903,
+        "conservative_x_after_2pct": 1.1796730585827728,
+        "conservative_y_pct": 34.233544505994004,
+        "current_frontier_y_threshold_pct": 34.20756800243407,
+        "limiting_frontier_submission_id": "375",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.02597650355993153,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-upd4",
+        "source_sha256": "fe22961ced37e8d6cb858d031bfba7ac8272c6566b4c623e887c0d3c307da9df",
+        "public_stage1_y_pct": 33.96583684024309,
+        "public_max_relative_time_vs_public361": 0.9959755008743556,
+        "conservative_x_after_2pct": 1.1793207147792364,
+        "conservative_y_pct": 34.237563534965034,
+        "current_frontier_y_threshold_pct": 34.20756800243407,
+        "limiting_frontier_submission_id": "375",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.0299955325309611,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-d7half",
+        "source_sha256": "3c430aaa53dedfa23b9956090a95982f043b97f76f74dcc4a7a040940e00cd4e",
+        "public_stage1_y_pct": 33.96697903257457,
+        "public_max_relative_time_vs_public361": 0.9858176785373122,
+        "conservative_x_after_2pct": 1.1672929788674533,
+        "conservative_y_pct": 34.23871486483517,
+        "current_frontier_y_threshold_pct": 34.20756800243407,
+        "limiting_frontier_submission_id": "375",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.03114686240109421,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-seed1",
+        "source_sha256": "dcaf4ec04d29300bdb34030f3907b9cc24280b7e02f5123902db85aaacde88fa",
+        "public_stage1_y_pct": 33.93902164621093,
+        "public_max_relative_time_vs_public361": 1.1949981437196138,
+        "conservative_x_after_2pct": 1.4149806534137428,
+        "conservative_y_pct": 34.21053381938062,
+        "current_frontier_y_threshold_pct": 34.177242462844696,
+        "limiting_frontier_submission_id": "422",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.0332913565359263,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-back16",
+        "source_sha256": "4fd3c92128ca31b06681de830733a201a6fe1b72c4f36ec9a7389123f3721af2",
+        "public_stage1_y_pct": 33.97013623340945,
+        "public_max_relative_time_vs_public361": 0.999683287391533,
+        "conservative_x_after_2pct": 1.1837110531378081,
+        "conservative_y_pct": 34.241897323276724,
+        "current_frontier_y_threshold_pct": 34.20756800243407,
+        "limiting_frontier_submission_id": "375",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.03432932084265161,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-walk-outline",
+        "source_sha256": "21a7b79902be7d97a45481f8ccbf974ed2f38d41fcd370be408cc7af9f37aad9",
+        "public_stage1_y_pct": 33.95862675598211,
+        "public_max_relative_time_vs_public361": 1.0342426187784977,
+        "conservative_x_after_2pct": 1.2246322759568313,
+        "conservative_y_pct": 34.23029577002997,
+        "current_frontier_y_threshold_pct": 34.1950856833147,
+        "limiting_frontier_submission_id": "443",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.03521008671526715,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-blockselect",
+        "source_sha256": "8c66eb6b7b00e852113f98e558aa3edaa30fca3d2732150a481f72b90476bc81",
+        "public_stage1_y_pct": 33.941836960063746,
+        "public_max_relative_time_vs_public361": 1.162347617650735,
+        "conservative_x_after_2pct": 1.3763196203786283,
+        "conservative_y_pct": 34.213371655744254,
+        "current_frontier_y_threshold_pct": 34.177242462844696,
+        "limiting_frontier_submission_id": "422",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.036129192899558404,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-ct6",
+        "source_sha256": "712539513147e1f9840489f7f76d1724620349ce007f79420520689e35f388ad",
+        "public_stage1_y_pct": 33.961740260929545,
+        "public_max_relative_time_vs_public361": 1.0421214907508138,
+        "conservative_x_after_2pct": 1.2339615384917921,
+        "conservative_y_pct": 34.23343418301698,
+        "current_frontier_y_threshold_pct": 34.1950856833147,
+        "limiting_frontier_submission_id": "443",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.03834849970228049,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-blockmix",
+        "source_sha256": "f5cf8f99e0dd914f1270ab352017aec57440566bf5e61f0e2871144e024a8098",
+        "public_stage1_y_pct": 33.9335259442938,
+        "public_max_relative_time_vs_public361": 1.2352783110680556,
+        "conservative_x_after_2pct": 1.4626758383927803,
+        "conservative_y_pct": 34.20499415184815,
+        "current_frontier_y_threshold_pct": 34.1664835935394,
+        "limiting_frontier_submission_id": "417",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.03851055830875083,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-block1",
+        "source_sha256": "950eb21b3918adce71bad2737774f2e37531cfbcd45fb17afdd806ee0adc3ed5",
+        "public_stage1_y_pct": 33.934365747942536,
+        "public_max_relative_time_vs_public361": 1.2384957625504316,
+        "conservative_x_after_2pct": 1.46648557786793,
+        "conservative_y_pct": 34.205840673926076,
+        "current_frontier_y_threshold_pct": 34.1664835935394,
+        "limiting_frontier_submission_id": "417",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.0393570803866794,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": true,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-lazy1",
+        "source_sha256": "4caacc8b252eb5d9515c1378c973f9329726ac74d7583e0f0f53ffe4c9f385de",
+        "public_stage1_y_pct": 33.997037025771846,
+        "public_max_relative_time_vs_public361": 0.941386477340134,
+        "conservative_x_after_2pct": 1.1146826125398117,
+        "conservative_y_pct": 34.26901332197802,
+        "current_frontier_y_threshold_pct": 34.22828621046612,
+        "limiting_frontier_submission_id": "450",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.040727111511898784,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-seed2",
+        "source_sha256": "0fcef7c6b82d8688810d6a3a8537748651e91d9d912d2d5f0a939c9faf041a02",
+        "public_stage1_y_pct": 33.93370370789924,
+        "public_max_relative_time_vs_public361": 1.35063764363349,
+        "conservative_x_after_2pct": 1.5992712169117203,
+        "conservative_y_pct": 34.205173337562435,
+        "current_frontier_y_threshold_pct": 34.16099862057585,
+        "limiting_frontier_submission_id": "419",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.04417471698658204,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-huff8k",
+        "source_sha256": "6fab1e378a57db33caee8423fec7099d32a70093df5e7ff9446b41cb6f52e73d",
+        "public_stage1_y_pct": 33.972951597509635,
+        "public_max_relative_time_vs_public361": 1.0289067811065442,
+        "conservative_x_after_2pct": 1.2183141849076942,
+        "conservative_y_pct": 34.24473521028971,
+        "current_frontier_y_threshold_pct": 34.1950856833147,
+        "limiting_frontier_submission_id": "443",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.049649526975009906,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-skip32",
+        "source_sha256": "4f1852679bb2557c25188a022f20ce3fc9fedf47ea6fb505fc07e9dc84414221",
+        "public_stage1_y_pct": 33.988767437027256,
+        "public_max_relative_time_vs_public361": 0.9664450141796584,
+        "conservative_x_after_2pct": 1.144354076899092,
+        "conservative_y_pct": 34.26067757652348,
+        "current_frontier_y_threshold_pct": 34.20756800243407,
+        "limiting_frontier_submission_id": "375",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.05310957408940453,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      },
+      {
+        "candidate": "r7-mid361-block2",
+        "source_sha256": "1ba7a2085aaa6d69602afc66c79c0622d913bab367a1054c88b439f237533762",
+        "public_stage1_y_pct": 33.93193999423196,
+        "public_max_relative_time_vs_public361": 1.3940101680173587,
+        "conservative_x_after_2pct": 1.6506280187740752,
+        "conservative_y_pct": 34.203395514185814,
+        "current_frontier_y_threshold_pct": 34.14833934379113,
+        "limiting_frontier_submission_id": "487",
+        "conditional_geometric_frontier_entry": false,
+        "headroom_to_current_frontier_pp": -0.055056170394685466,
+        "hypothetical_conditional_pareto_weight_pct": 0.0,
+        "public_full_gate_passed_in_round7": false,
+        "online_submission": false
+      }
+    ],
+    "note": "Code and metric points are historical public-stage1 observations. Current conditional projections do not establish private stage2 performance, official admission, ranking, payout, or eligibility."
+  },
+  "unknowns": [
+    "API freshness is reported as unknown; snapshot 26901 is the currently published scoring pass observed during this retrieval, not a guarantee that no newer pass appears later.",
+    "Private stage2, official gate/admission for a new candidate, and actual chain payout are unknown."
+  ]
+}
