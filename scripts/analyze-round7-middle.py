@@ -56,19 +56,22 @@ def main():
             continue
         stress_x=formal['balanced_time_ratio']*max(relative)*1.02
         stress_y=y+0.01
+        conservative_y=max(stress_y,public_size*1.008)
         results.append({'candidate':n,'source_sha256':e['hashes']['parse.rs'],'proof_sha256':e['hashes']['Parse.lean'],
             'anchor_submission_id':entries[anchor]['formal_id'],'blocks':blocks,
             'public_time_ratio':statistics.mean(by[n,b]['time'] for b in blocks),'public_compressed_pct':public_size,
             'relative_time_changes_pct':[100*(r-1) for r in relative],
             'public_size_change_pp':public_size-by[anchor,blocks[0]]['size_pct'],
             'own_family_transfer':geometry(x,y),'stress_time_2pct_size_001pp':geometry(stress_x,stress_y),
+            'stress_size_factor_1008':geometry(stress_x,conservative_y),
             'gate':state.get('gates',{}).get(n),'transfer_status':'INFERRED; not private evaluation, admission or payment'})
-    results.sort(key=lambda r:(-r['stress_time_2pct_size_001pp']['conditional_share_pct'],
+    results.sort(key=lambda r:(-r['stress_size_factor_1008']['conditional_share_pct'],
+        -r['stress_time_2pct_size_001pp']['conditional_share_pct'],
         -r['own_family_transfer']['conditional_share_pct'],r['own_family_transfer']['size_gap_pp'],r['public_time_ratio']))
     result={'status':'VERIFIED_PUBLIC_RECEIPT_WITH_INFERRED_FORMAL_TRANSFERS','run_id':state['run_id'],
         'source_commit':state['git_sha'],'batch':state['batch'],'snapshot':pages[0]['context'],
         'scorer_replay_max_error':replay_error,'same_byte_shadow':shadow,'failures':state['failures'],
-        'stress_scope':'Declared adverse scenario, not a statistical confidence interval: maximum block-relative time plus 2%, transferred size plus 0.01 percentage points.',
+        'stress_scope':'Declared adverse scenarios, not statistical confidence intervals: maximum block-relative time plus 2%; size plus 0.01 percentage points, and a stricter size floor of public_size * 1.008.',
         'candidates':results}
     (args.receipt/'middle-analysis.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result))
