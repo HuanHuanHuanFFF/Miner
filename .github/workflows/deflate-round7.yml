@@ -39,6 +39,23 @@ jobs:
         run: bash scripts/ci-prepare.sh
       - name: Install official verification toolchain
         run: bash scripts/ci-setup.sh
+      - name: Check requested finite equivalence
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round4.py
+      - name: Extract requested research candidates
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round5.py
+      - name: Publish early extraction diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r7-${{ github.run_id }}-${{ inputs.specification }}-extraction
+          path: ${{ runner.temp }}/round4-receipts/research5/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: ignore
       - name: Screen time and compression axes
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
