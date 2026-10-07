@@ -19,6 +19,7 @@ def main():
     ap.add_argument('--equivalent', nargs='*', default=[], metavar='CANDIDATE=REFERENCE')
     ap.add_argument('--forward-diagnostics', action='store_true')
     ap.add_argument('--finder-diagnostics', action='store_true')
+    ap.add_argument('--endprobe-diagnostics', action='store_true')
     ap.add_argument('--blocks', type=int, choices=[1, 2, 3, 4], default=2)
     args = ap.parse_args()
     assert re.fullmatch(r'[a-z0-9-]{1,48}', args.batch)
@@ -48,6 +49,7 @@ def main():
             'synthetic_validation': True, 'retain_extracted_lean': True,
             'cpu_diagnostics': False, 'extract_candidates': args.extract, 'cost_differential': False,
             'forward_diagnostics': args.forward_diagnostics, 'finder_diagnostics': args.finder_diagnostics,
+            'endprobe_diagnostics': args.endprobe_diagnostics,
             'research_synthetic_candidates': args.synthetic,
             'description': 'R10 bounded structural experiment; exact bytes frozen in this specification.',
             'selection_policy': 'Same-family 361 paired transfer; adverse max observed relative-time+2%, size max(family+0.01pp,public*1.008). Geometry is conditional, not formal admission or reward.'}

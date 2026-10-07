@@ -1,0 +1,30 @@
+{
+  "candidate": "r10-forward-endprobe",
+  "parent": "candidates/r9-block-scalar",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "faf1d7281678d12c3243002121feecdd0ea139633dea197dbc77d86fb6319257",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "hashes": {
+    "parse.rs": "474714b7007f73ac04d7ff7e2c5199385fd3d10e4b3fc323ad6fd3c58a7ba576",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "bytes": {
+    "parse.rs": 181677,
+    "Parse.lean": 405395
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "mechanism": "At each original D long jump, one extra query at true_end-2 inside the unchanged position-insertion loop; append only nonempty candidate records. No new matchfinder table or extra preprocessing pass.",
+  "budget": "Use existing d4,d7,h3d,nice values at this one position. Original search and skip parameters are unchanged. Candidate backward extension uses the existing tbmax.",
+  "state_isolation": "The supplementary query reads existing prev arrays and pre-insertion head snapshots; it changes only rs. Original cands, pc, pn, ppos, pa, costs, first plan, and future search schedule remain untouched.",
+  "continuation_argument": "The old longest continuation has only two bytes left at true_end-2. Splitting the old gap there retains every original >=3 continuation at positions <=true_end-3. Other DP interactions and encoded size still require measurement; no size-monotonicity claim.",
+  "audit": "One call replacement inside d_parse plus two helpers. Reversing that region exactly restores scalar. Every insertion still calls original insert_pos once in the original order.",
+  "equivalence_status": "Expected first-plan identity and ordered preservation of original rs node payloads; final tokens intentionally may differ. Fresh byte-valid extra-record and decode diagnostics required.",
+  "proof_status": "UNADAPTED_PARENT_ONLY: new helpers and changed rs mutation require fresh extraction and original totality/obligation/axiom gate.",
+  "performance_status": "UNKNOWN: extra bounded search and recording may improve available parse edges but can cost more total compression time or produce worse encoded blocks."
+}
