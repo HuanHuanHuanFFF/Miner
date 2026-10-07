@@ -1,4 +1,4 @@
-"""Generate one proof-only H16 timeout candidate; no compilation or CI dispatch.
+"""Generate proof-only H16 timeout candidates; no compilation or CI dispatch.
 
 The Rust file is copied byte-for-byte from the frozen small-only H16 parent.
 Only its unused B-engine proof section is replaced: the frozen CFG's first
@@ -19,6 +19,27 @@ DEST = ROOT / "candidates/r5-h16-small-proofopt"
 LOCKS = {
     "parse.rs": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
     "Parse.lean": "ac2d894b3a4ccacb30ce4ed654a3dd3d3b3c167183eb8df008168772109215fa",
+}
+SMALL_OUTPUT_LOCKS = {
+    "parse.rs": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
+    "Parse.lean": "d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7",
+    "manifest.json": "1d96b09a4305f9bdc88c57cb51efc951d507bc98c6b98d7d88d271a0e866d68e",
+    "proof-audit.json": "37badcccfb3f9551dcc326f5fd8785123c997544fc9a8258c715eac73261486d",
+}
+RECIPES = {
+    DEST.name: {
+        "parent": PARENT,
+        "locks": LOCKS,
+        "failure": {"run_id": "37580297956", "git_sha": "8cddb52db662f2c45d8de42e412a140ea6640e59", "stage": "4 statement", "reason": "Proof/Parse.lean did not elaborate within 900s"},
+    },
+    "r5-h16-smallc-proofopt": {
+        "parent": ROOT / "candidates/r4-hybrid-h16-smallc299",
+        "locks": {
+            "parse.rs": "39c82b4673440faaa7cf9f14ccbeb9367128a7f50a8ca8472880dc35ed24b83e",
+            "Parse.lean": "eec49d582853cddf843c33b950f444520561bbb40ef0197ee64ce9acfbb92791",
+        },
+        "failure": {"run_id": "37581080647", "git_sha": "c47efca9476f375d0e801610ea90c6367530aff2", "stage": "4 statement", "reason": "Proof/Parse.lean did not elaborate within 900s"},
+    },
 }
 B_BEGIN = "/-! # sec_engB (owner: engB)"
 B_END = "/-! PROTOTYPE: sec_engC.lean"
@@ -109,10 +130,12 @@ def cfg_rows(source: str) -> list[list[int]]:
     return rows
 
 
-def generate() -> tuple[dict[str, bytes], dict]:
-    parent = {name: (PARENT / name).read_bytes() for name in LOCKS}
+def generate(candidate: str = DEST.name) -> tuple[dict[str, bytes], dict]:
+    recipe = RECIPES[candidate]
+    parent_path, locks = recipe["parent"], recipe["locks"]
+    parent = {name: (parent_path / name).read_bytes() for name in locks}
     for name, data in parent.items():
-        assert sha(data) == LOCKS[name], (name, "frozen parent drift")
+        assert sha(data) == locks[name], (name, "frozen parent drift")
     rust, proof = parent["parse.rs"].decode(), parent["Parse.lean"].decode()
     assert "\r\n" not in rust + proof
     rows = cfg_rows(rust)
@@ -165,7 +188,7 @@ def generate() -> tuple[dict[str, bytes], dict]:
     assert files["parse.rs"] == parent["parse.rs"]
     assert all(len(value) < 524288 for value in files.values())
     audit = {
-        "parent": {"path": PARENT.relative_to(ROOT).as_posix(), "hashes": LOCKS},
+        "parent": {"path": parent_path.relative_to(ROOT).as_posix(), "hashes": locks},
         "source_preservation": "VERIFIED byte-identical frozen Rust; no route, constant or engine changes",
         "frozen_CFG_rows": rows,
         "selected_engine_ids": sorted({row[0] for row in rows}),
@@ -196,7 +219,7 @@ def generate() -> tuple[dict[str, bytes], dict]:
         "validation_scope": "Static generation and dependency audit only; no local Rust/Lean installation, CI run, axiom-query acceptance or timeout repair claim",
     }
     manifest = {
-        "candidate": DEST.name,
+        "candidate": candidate,
         "parent": audit["parent"],
         "hashes": {name: sha(data) for name, data in files.items()},
         "bytes": {name: len(data) for name, data in files.items()},
@@ -204,29 +227,39 @@ def generate() -> tuple[dict[str, bytes], dict]:
         "mechanism": "Proof-only elimination of B totality proofs; every frozen CFG row selects A or C, and the impossible B branch is closed from the table and real branch condition",
         "public_obligation_preserved": True,
         "proof_audit": "proof-audit.json",
-        "original_failure": {"run_id": "37580297956", "git_sha": "8cddb52db662f2c45d8de42e412a140ea6640e59", "stage": "4 statement", "reason": "Proof/Parse.lean did not elaborate within 900s"},
+        "original_failure": recipe["failure"],
         "official_limits": "Unchanged external verifier, LZ77.Obligation, axiom whitelist and 900-second per-call timeout",
         "verification": "VERIFIED local generation, Rust equality, CFG values and static proof dependency scopes only. Fresh extraction, Lean typecheck/axioms, runtime <900s and full gate UNKNOWN; original failure is not repaired until that gate passes",
         "performance": "Rust bytes unchanged; no algorithm/performance improvement claimed",
     }
     files["proof-audit.json"] = (json.dumps(audit, indent=2) + "\n").encode()
     files["manifest.json"] = (json.dumps(manifest, indent=2) + "\n").encode()
+    if candidate == DEST.name:
+        assert {name: sha(data) for name, data in files.items()} == SMALL_OUTPUT_LOCKS, "running small-only candidate byte drift"
     return files, manifest
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="compare only; no writes")
+    parser.add_argument("--only", action="append", choices=sorted(RECIPES), default=[],
+                        help="default remains the existing small-only candidate")
     args = parser.parse_args()
-    files, manifest = generate()
-    if args.check:
-        for name, data in files.items():
-            assert (DEST / name).read_bytes() == data, (name, "candidate drift")
-    else:
-        DEST.mkdir(parents=True, exist_ok=True)
-        for name, data in files.items():
-            (DEST / name).write_bytes(data)
-    print(json.dumps({"candidate": DEST.name, "hashes": manifest["hashes"], "bytes": manifest["bytes"], "check_only": args.check}))
+    for candidate in args.only or [DEST.name]:
+        files, manifest = generate(candidate)
+        target = ROOT / "candidates" / candidate
+        if args.check:
+            for name, data in files.items():
+                assert (target / name).read_bytes() == data, (name, "candidate drift")
+        else:
+            target.mkdir(parents=True, exist_ok=True)
+            for name, data in files.items():
+                path = target / name
+                if path.exists() and path.read_bytes() == data:
+                    continue
+                assert candidate != DEST.name or not path.exists(), "preserve running small-only input"
+                path.write_bytes(data)
+        print(json.dumps({"candidate": candidate, "hashes": manifest["hashes"], "bytes": manifest["bytes"], "check_only": args.check}))
 
 
 if __name__ == "__main__":
