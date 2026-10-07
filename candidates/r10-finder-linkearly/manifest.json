@@ -1,0 +1,39 @@
+{
+  "candidate": "r10-finder-linkearly",
+  "parent": "candidates/r10-record-nonempty",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "7f1c661fd1ce29d12c69671f034ff5a713e284ed1fcba66ba404ff25479b55b7",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "hashes": {
+    "parse.rs": "5be4838170b8eb45e2b7f11e53b54e7cd236bc572785fe595d3612c0da1cff8d",
+    "Parse.lean": "bd717cba95eb4ecc6c061169874621e80638b41e64ca46311831373c4b6d9224"
+  },
+  "bytes": {
+    "parse.rs": 179400,
+    "Parse.lean": 405221
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "mechanism": "Move the existing immutable D-chain next-link load before the current probe, attempting memory-latency overlap without adding or removing any read/probe/candidate",
+  "source_audit": "Only one existing read line moves within d_walk; reverse exactly that move restores accepted record-nonempty Rust. No table, key, depth, cap/nice, insertion, records, costs, routing or output change.",
+  "proof_audit": "Only d_walk_loop_spec's existing modulo/index bind pair moves before probe_spec; public helper signature, five-state loop, depth measure, invariant and all final proof statements remain unchanged. Reverse bind move restores accepted parent Lean.",
+  "equivalence_status": "INFERRED same-output for all defined executions: prev is immutable and its modulo-bounded read is independent of probe/candidate writes. Fresh444 native tokens/decode and public tokens/output equality still required.",
+  "expected_equivalent_to": "r10-record-nonempty",
+  "proof_status": "UNCOMPILED_REORDERED_LOOP_DRAFT: no new lemma/axiom/sorry; actual extraction binding order and original obligation/axiom/public round trip NOT_RUN for this source",
+  "performance_status": "UNKNOWN: LLVM may already schedule the read early, or the longer live range may add spills and cost. Require same-runner paired official total compression; historical late read does not prove current code opportunity.",
+  "historical_machine_evidence": {
+    "path": "evidence/round7/37636990183/middle-cpu/gate/cpu/r7-mid361-walk-outline-assembly.txt",
+    "sha256": "ba1c58fdc604a89d3c4df5c87929a129618be4ac62df72ca131841b5b8d1a86c",
+    "source": "r7 walk-outline (older ordinary walk, not current inlined D)",
+    "first_probe_word_load_address": "0x1f670",
+    "next_link_load_address": "0x1f8e1",
+    "boundary": "VERIFIED late-load example only; current accepted record D release code needs same-runner comparison"
+  },
+  "cost_scope": "Same number of chain reads and byte probes; only dependency scheduling/lifetime changes. No assumed6% improvement or d_walk phase fraction.",
+  "stop": "Stop if compiler normalizes the intended dependency order away, native output differs, or paired total time lacks a material positive signal. Register/address-only differences do not establish successful load scheduling; no ordering micro-variant sweep."
+}

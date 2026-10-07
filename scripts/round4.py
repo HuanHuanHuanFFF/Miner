@@ -172,7 +172,8 @@ def main():
             if any(f['name'] == name for f in state['failures']):
                 continue
             print(f'MEASURE_BEGIN {block} {name}', flush=True)
-            keep = phase == 'screen' and block == 1 and spec.get('cpu_diagnostics', False)
+            keep = (phase == 'screen' and block == 1 and spec.get('cpu_diagnostics', False)
+                    and name in spec.get('cpu_diagnostic_candidates', entries))
             try:
                 observation = run(dataclasses.replace(config, keep=Keep.ALWAYS if keep else Keep.NEVER), {name: paths[name] / 'parse.rs'}, corpus)
                 measured = observation.only()

@@ -1,0 +1,32 @@
+{
+  "candidate": "r10-forward-costcache",
+  "parent": "candidates/r10-record-nonempty",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "7f1c661fd1ce29d12c69671f034ff5a713e284ed1fcba66ba404ff25479b55b7",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "hashes": {
+    "parse.rs": "157f16e6c2c589f58a34b8a6c92396fa932eb9ad08ca4b7a88099f8428eea961",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "bytes": {
+    "parse.rs": 180346,
+    "Parse.lean": 405221
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "mechanism": "Preserve every D price-update position and halving decision; skip only make_costs when frequency inputs have not changed since the last build and no halving occurs now.",
+  "source_evidence": "UPD=2048 and CHUNK=4096; statistics change at backtrack/direct long-match updates, while the original update_costs unconditionally reconstructs prices at each UPD boundary.",
+  "dirty_protocol": "Initially true because two halvings follow the initial make_costs; mark true after either in-loop backtrack (the long-jump case also includes direct match counts); clear after each scheduled update. The final tail backtrack has no later update.",
+  "halving_guard": "The original wrapping frequency sum and HALF_AT comparison always execute. Any halving forces a rebuild even when dirty was false; no assumed count bound is used to suppress halving.",
+  "unchanged": "UPD/CHUNK/HALF_AT, sampling/model formulas, routes, search schedule and budgets, rs recording, backward pass, and output verification.",
+  "audit": "One helper plus four localized d_parse substitutions; reverse the region to restore the verified record-nonempty parent exactly. No new finder table, greedy seed, pass, or alternative cost model.",
+  "verified_parent": "candidates/r10-record-nonempty/VERIFICATION.json",
+  "equivalence_status": "INFERRED exact prices/plan/tokens: make_costs is pure in lf/df/lsym/huff and every possible in-loop frequency mutation marks dirty. Requires 444-case token/decode equality and identical public output.",
+  "proof_status": "UNADAPTED_PARENT_ONLY: cached-update totality and the additional Boolean loop state need fresh extraction and original complete gate.",
+  "performance_status": "UNKNOWN: dependent on how many scheduled updates occur without new statistics; flag overhead and code layout may erase saved rebuilds. Paired total compression required."
+}

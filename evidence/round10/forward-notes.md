@@ -327,3 +327,69 @@ UNKNOWN.** Added histogram and literal-prefix work can erase any size recovery.
 Do not invest in a gate merely because public size improves: continuation
 requires the current projected tradeoff to improve on the verified record
 baseline. This is one candidate with fixed settings, not a renewed seed sweep.
+
+## Endprobe proof scope, after actual extraction
+
+`selective-e`, run `37693029351`, accepted extraction of endprobe Rust
+`474714b7007f73ac04d7ff7e2c5199385fd3d10e4b3fc323ad6fd3c58a7ba576`.
+The extraction-file digests and four relevant signatures were checked against
+`research.json`; `Funs.lean` SHA-256 is
+`0aa6682c30b62ccc5eb8f25a48ceabc63f74494f77fbecc7003635274bfb085f`.
+Machine-readable audit: `candidates/r10-forward-endprobe-audit/interface-audit.json`.
+
+The remaining proof changes are bounded but nontrivial:
+
+- `ep_search` returns only rs. Existing probe, skip, walk and record totality
+  lemmas cover its work once the input-cap and pre-insertion-head bounds are
+  established. It has no new traversal loop of its own.
+- `ep_insert_range` carries `(head3, head4, prev4, head7, prev7, rs, q)` and
+  returns the five tables followed by rs. Its old `to-q` measure and head-table
+  bounds remain suitable; the added query reads the tables without modifying
+  them.
+- The outer D parser loop remains 26 elements. Only the inner long-jump result
+  adds updated rs immediately after plan, requiring product/uncurry repairs
+  around the range-helper call. External `d_parse`, checked emitters and the
+  original obligation retain their interfaces.
+
+This scope is larger than record-nonempty's single write guard, but narrower
+than rebase16's relative-coordinate invariants. No formal proof was started
+and no proof-runtime estimate is established. Performance must first justify
+that work; accepted extraction is not accepted proof.
+
+## Independent CPU simplification: dirty cost models
+
+Source evidence identifies repeated pure cost-table construction: D checks its
+model every `UPD=2048` positions, while ordinary token statistics are tallied at
+`CHUNK=4096` boundaries or around directly accepted long matches. Some scheduled
+updates therefore have unchanged inputs. R7 upd2/upd4 changed the schedule and
+the resulting quality; this experiment retains every original update position.
+
+`r10-forward-costcache` is based on the **verified** `r10-record-nonempty`
+parent, as requested by the coordinator. Exact Rust SHA-256:
+`157f16e6c2c589f58a34b8a6c92396fa932eb9ad08ca4b7a88099f8428eea961`.
+It carries one Boolean marking whether frequency inputs changed. Initially it
+is true because the initial price build is followed by two halvings. Both
+in-loop backtracks set it true; the long-jump branch's direct match counts are
+covered by that same mark. Every scheduled update still computes the original
+wrapping total and performs the original `HALF_AT` test. A halving always forces
+`make_costs`, even if the flag was false. Otherwise only unchanged-input builds
+are skipped; each completed update clears the flag. The final tail backtrack
+has no subsequent update and needs no mark.
+
+This does not presume that a previous halving brought totals below the
+threshold. The finite state model explicitly covers several successive halvings
+without added counts, initial double halving, 113 long jumps crossing an update
+boundary, and 32 CHUNK flushes. Across 697 scheduled updates it skipped 217 pure
+rebuilds and performed four halvings while previously clean; baseline and cached
+frequency arrays plus the complete pure-function argument fingerprints agree
+after each update. These are **model counts, not workload performance estimates**.
+The report is `candidates/r10-forward-costcache/dirty-model-check.json`.
+
+Generator `scripts/build-round10-forward-costcache.py` checks the parent's
+verified exact files. One helper and four local D substitutions reverse exactly
+to that parent. All search, recording, model formulas, update times, halving,
+backward planning and output checks remain unchanged in intent. The copied
+record proof at `86cfc36a...` is explicitly unadapted to the new helper and
+Boolean loop state. Require 444-case Rust token/decode equality, identical
+public outputs, paired comparison to record and scalar, and fresh extraction.
+No performance gain or complete gate is yet established.
