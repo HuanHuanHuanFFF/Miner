@@ -42,7 +42,7 @@ def main():
         by[name, block] = out
     result = {'run_id': state['run_id'], 'source_commit': state['git_sha'], 'phase': state['phase'],
               'scope': 'Public per-file measurements recomputed from original repetitions; diagnostic timers remain parser-only and allocation/order-sensitive.',
-              'candidates': [], 'forward': None, 'finder': None}
+              'candidates': [], 'forward': None, 'finder': None, 'endprobe': None, 'costcache': None}
     forward_path = folder / 'forward-diagnostics/forward.json'
     routes = {}
     if forward_path.exists():
@@ -93,12 +93,27 @@ def main():
         finder = load(finder_path)
         result['finder'] = {'status': finder['status'], 'totals': finder.get('totals'),
             'coverage_scope': finder['coverage_scope'], 'not_measured': finder['not_measured']}
+    endprobe_path = folder / 'endprobe-diagnostics/endprobe.json'
+    if endprobe_path.exists():
+        ep = load(endprobe_path)
+        assert ep['status'] == 'VERIFIED_FINITE_ENDPROBE_DIAGNOSTIC'
+        records = ep['records']
+        result['endprobe'] = {'status': ep['status'], 'scope': ep['scope'], 'totals': ep['totals'],
+            'records': len(records), 'source_sha256': ep['candidate_sha256'],
+            'count_limit': 'Additional match/length/backward coverage overlaps and is not a count of bytes saved.'}
+    costcache_path = folder / 'costcache-diagnostics/costcache.json'
+    if costcache_path.exists():
+        cc = load(costcache_path)
+        assert cc['status'] == 'VERIFIED_FINITE_COSTCACHE_COUNTS'
+        result['costcache'] = {'status': cc['status'], 'scope': cc['scope'], 'totals': cc['totals'],
+            'source_sha256': cc['source_sha256'], 'files': len(cc['records'])}
     result['evidence_files_sha256'] = {p.relative_to(folder).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
-                                      for p in [folder / 'state.json', forward_path, finder_path] if p.exists()}
-    (folder / 'mechanism-analysis.json').write_text(json.dumps(result, indent=2) + '\n')
+                                      for p in [folder / 'state.json', forward_path, finder_path, endprobe_path, costcache_path] if p.exists()}
+    (folder / 'mechanism-analysis.json').write_bytes((json.dumps(result, indent=2) + '\n').encode())
     print(json.dumps({'run_id': result['run_id'], 'forward': None if result['forward'] is None else
         {k: v for k, v in result['forward'].items() if k != 'public_files'},
-        'finder': result['finder'], 'candidate_groups': {r['name']: r['groups'] for r in result['candidates']}}, indent=2))
+        'finder': result['finder'], 'endprobe': result['endprobe'], 'costcache': result['costcache'],
+        'candidate_groups': {r['name']: r['groups'] for r in result['candidates']}}, indent=2))
 
 
 if __name__ == '__main__':

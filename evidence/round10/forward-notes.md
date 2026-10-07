@@ -393,3 +393,67 @@ record proof at `86cfc36a...` is explicitly unadapted to the new helper and
 Boolean loop state. Require 444-case Rust token/decode equality, identical
 public outputs, paired comparison to record and scalar, and fresh extraction.
 No performance gain or complete gate is yet established.
+
+The optional `scripts/research-round10-costcache.py` enables real opportunity
+counts under `costcache_diagnostics: true`: scheduled updates, actual rebuilds,
+skips and halvings. It compares frozen and instrumented parser tokens and
+decoding once on each of the 28 public inputs, binds source and corpus hashes,
+and uses no microfunction timer. Local syntax and insertion-point checks pass;
+actual runner counts remain pending.
+
+## Route model coupling and one precise restoration candidate
+
+The R7 migration copied only DP_KNOBS's first six search settings into the new
+D rows, plus D-specific fields. Source inspection confirms these model changes:
+
+| Existing content class | D row | Original DP row | Original key / update / half | D prior to this experiment |
+|---|---:|---:|---|---|
+| 5 XML, 6 HTML | 5 | 0 | 8 / 8192 / 8000 | 7 / 2048 / 10000 |
+| 10 JSON | 6 | 2 | 8 / 8192 / 8000 | 7 / 2048 / 10000 |
+| 11 long lines | 7 | 3 | 8 / 4096 / 10000 | 7 / 2048 / 10000 |
+| 12 text, 13 multibyte, 15 prose | 8 / 9 / 10 | 4 / 5 / 6 | 7 / 2048 / 10000 | same |
+
+There is an additional substantive difference: DP uses `rc_seq` and tries every
+length, whereas D with `fback=100` calls `relax_cands` using `nextl` constructed
+at `flen16`. Both retain TMAX=64 and BTRUNC=1. The inherited first six search
+parameters match, huff=0 matches, lz2max=258 matches, and the migrated D rows use
+the same d7 for regular/lazy/end positions. D still uses direct insertion and
+plain `d_walk`; DP uses pipelined head reads and a tail-word long walk. Those
+latter differences are intended as CPU changes but their equivalence is not
+promoted here to a universal theorem.
+
+One authorized candidate, `r10-forward-routecfg`, restores only the original
+three model settings, with no flen258 alternative and no unmeasured costcache
+combination. It derives from verified record-nonempty. Rust SHA-256:
+`917eee4fb794e0fa83ea92c131c0dfa97ad3f1b613a907d59e1f2c459b900979`.
+Generator: `scripts/build-round10-forward-routecfg.py`; mapping evidence is
+`source-audit.json` in the candidate. It hashes the original public361 source,
+checks every migration row and search setting, preserves D_KNOBS and CLASS_TAB,
+and verifies that reversing five changed regions restores the exact parent.
+
+`D_MODEL` supplies [key bytes, update interval, halving threshold] per existing D
+row. Initialization reuses `dp_sh7`, `dp_upd`, `dp_half`; updates use the existing
+`update_costs_h` with that threshold. Native D retains [7,2048,10000]. The D loop
+needs only two additional frozen parameters, not an additional evolving state.
+The first pass remains sparse at flen16: **this is model-configuration
+restoration, not complete restoration of the original DP plan**. Unlike R7's
+global upd2/upd4 sweep, the values and affected rows come directly from the
+pre-migration profiles and also restore the key/halving choices.
+
+Local checks cover exact source reversal, mapping, 21 parameter-boundary cases
+and both 32/64-bit guarded-input-plus-update bounds. The existing clamps ensure
+shift 0..56, update <=1048576 and a u32 threshold. Actual Rust and Lean remain
+untested. The copied record proof at `86cfc36a...` does not cover the changed
+parser/glue signatures or new model table.
+
+First falsifiers and proof boundary:
+
+- Reject build/extraction failure or any round-trip failure. Unexpected public
+  token changes in the unchanged-model/native routes require diagnosis.
+- Use the four affected classes' per-file changes and the whole official
+  time/size axes against record, scalar and public361. Original-author settings
+  do not guarantee a better sparse-D/backward combination or private outcome.
+- Only a useful current projection justifies proof work. That bridge can reuse
+  the existing clamp and `update_costs_h` lemmas, adapt frozen updn/halfn loop
+  arguments and glue-array accesses, and retain the original output obligation.
+  There is no accepted proof or proof-runtime result for this version.
