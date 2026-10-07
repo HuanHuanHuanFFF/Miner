@@ -1,7 +1,13 @@
-name: DEFLATE middle round 9
+name: DEFLATE balanced research
 on:
   workflow_dispatch:
     inputs:
+      experiment_round:
+        description: 'Tracked evidence namespace'
+        required: true
+        type: choice
+        default: '9'
+        options: ['9', '10']
       specification:
         description: 'Tracked middle-frontier experiment batch'
         required: true
@@ -25,7 +31,7 @@ jobs:
     timeout-minutes: 90
     env:
       ROUND4_SPEC: ${{ inputs.specification }}
-      ROUND4_SPEC_DIR: evidence/round9
+      ROUND4_SPEC_DIR: evidence/round${{ inputs.experiment_round }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -47,13 +53,15 @@ jobs:
       - name: Diagnose block phases and candidate discovery
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
-          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round9-phases.py
-          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round9-finder.py
+          if [[ "$ROUND4_SPEC_DIR" == evidence/round9 ]]; then "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round9-phases.py; fi
+          if [[ "$ROUND4_SPEC_DIR" == evidence/round9 ]]; then "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round9-finder.py; fi
+          if [[ "$ROUND4_SPEC_DIR" == evidence/round10 && -f scripts/research-round10-forward.py ]]; then "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round10-forward.py; fi
+          if [[ "$ROUND4_SPEC_DIR" == evidence/round10 && -f scripts/research-round10-finder.py ]]; then "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round10-finder.py; fi
       - name: Publish early extraction diagnostics
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: r9-${{ github.run_id }}-${{ inputs.specification }}-extraction
+          name: r${{ inputs.experiment_round }}-${{ github.run_id }}-${{ inputs.specification }}-extraction
           path: ${{ runner.temp }}/round4-receipts/research5/
           retention-days: 1
           compression-level: 9
@@ -67,7 +75,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: r9-${{ github.run_id }}-${{ inputs.specification }}-screen
+          name: r${{ inputs.experiment_round }}-${{ github.run_id }}-${{ inputs.specification }}-screen
           path: ${{ runner.temp }}/round4-receipts/
           retention-days: 1
           compression-level: 9
@@ -86,7 +94,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: r9-${{ github.run_id }}-${{ inputs.specification }}-gate
+          name: r${{ inputs.experiment_round }}-${{ github.run_id }}-${{ inputs.specification }}-gate
           path: ${{ runner.temp }}/round4-receipts/
           retention-days: 1
           compression-level: 9

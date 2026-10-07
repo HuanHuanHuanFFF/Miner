@@ -1,0 +1,38 @@
+{
+  "candidate": "r10-finder-tag4",
+  "parent": "candidates/r9-block-scalar",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "faf1d7281678d12c3243002121feecdd0ea139633dea197dbc77d86fb6319257",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "hashes": {
+    "parse.rs": "6ecc62c72c945b4ae4dee33d7e4e3eadf95e44d24190e3448cde4b8aa24a417f",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "bytes": {
+    "parse.rs": 181503,
+    "Parse.lean": 405395
+  },
+  "attribution": {
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "parent": {
+      "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+      "public_reference": "references/round7-public-361/PROVENANCE.json",
+      "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+    },
+    "supplement_source": "references/round8-public-454/PROVENANCE.json",
+    "supplement_author_hotkey": "5HYsKBJ49UnjNVXBN8hMynUp2Y9M3YqPrsmAqTJrhGnBa4r9"
+  },
+  "mechanism": "Streaming exact-tag four-byte two-slot cache, derived from #454 q9_cache4; no tree or all-input match cache",
+  "supplemental_fixed_cache_bytes": 524288,
+  "maintenance": "One bounded O(1) update alongside every original D insertion, including taken-match inserted ranges; no byte comparison during maintenance",
+  "query": "One extra probe only in the original search branch, after original chains and continuation; append a strictly longer candidate only when nc<16; never remove/replace original records",
+  "coverage_limit": "Original candidates at each visited node are preserved. Supplemental longer matches can change future continuation, skipped searches and forward statistics; whole-parse equivalence is neither expected nor claimed.",
+  "cost_bound": "Extra fixed cache initialization, one update per inserted position, and at most one <=258-byte probe per searched node. No all-position tree or match-record prepass.",
+  "audit": "Reverse four exact D-region substitutions and remove three new helpers restores scalar source byte-for-byte. Other routes, knob tables, original chain depths, recording/DP implementations and checked emission code remain byte-identical.",
+  "proof_status": "UNKNOWN / UNADAPTED_PARENT_DRAFT: copied parent Parse.lean does not match the new helper calls and cache carried by d_parse_loop. Requires fresh extraction, helper totality, loop interface/invariant adaptation, original obligation, axiom whitelist and round trip.",
+  "correctness_status": "UNKNOWN until fresh Rust build and finite decode checks; parent emitter rechecks planned matches but does not replace candidate validation or full gate.",
+  "performance_status": "UNKNOWN: paired official total-compression measurements required; additional discovered lengths are not encoded size gains.",
+  "falsification": "Stop this variant if build/decode fails, public size gain is absent, or paired total-time/size tradeoff remains dominated; do not expand cache/depth based on unmeasured opportunity counts."
+}
