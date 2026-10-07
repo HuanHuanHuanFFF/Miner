@@ -457,3 +457,138 @@ First falsifiers and proof boundary:
   the existing clamp and `update_costs_h` lemmas, adapt frozen updn/halfn loop
   arguments and glue-array accesses, and retain the original output obligation.
   There is no accepted proof or proof-runtime result for this version.
+
+## Source-only study: earlier queries without deleting old gap continuations
+
+This section records a bounded mechanism study, **not an implemented candidate**.
+The endprobe diagnostic reports 17412 eligible public tail positions, 13926
+extra nodes and 23234 extra candidates; its small observed encoded gain does
+not establish that a substantially larger overlay mechanism will pay for itself.
+
+### A concrete counterexample to an ordinary earlier node
+
+The structural issue already appears at `j=E-4`, even if the new node contains
+the old continuation as a candidate. The following 89-byte construction was
+checked byte-for-byte locally:
+
+```python
+S = bytes(range(65, 93)) + b"abcd"  # 32 bytes
+data = b"abcdy|" + S + b"!" + S + b"y?0123456789abcdef"
+```
+
+At p=39, `(length=32, distance=33)` ends at E=71. At j=67, both `(4,33)` and
+`(5,67)` are exact valid matches and stop at their next byte. At q=68 the old
+gap offered `(3,33)`. An ordinary new node's `d_top` uses its longest `(5,67)`,
+so the gap above j instead offers `(4,67)` and **removes `(3,33)`**. Inserting
+the shorter old carry into the candidate list does not repair the upper gap.
+Length alone cannot dominate distance price: illustrative valid-scale prices
+give the old local option 144 units versus the new one 224 units. These prices
+are a source-level witness, not an encoder measurement on that constructed file.
+The example establishes loss of an old edge; it does not claim a measured
+compression regression or global minimum counterexample length.
+
+### A mechanism that preserves the old d_gap choices
+
+The clearest representation is a separate sparse stream of supplemental
+events, leaving original rs bytes unchanged. The ordinary original node p
+remains the **owner** of its gap `(p, hi)` and supplies its original continuation
+endpoint E and distance d. For an event j inside that gap:
+
+1. Process the upper gap down **through j** with the original owner E/d and the
+   original block-boundary/previous-push handling. Thus the baseline cell at j
+   includes its old literal, continuation and prior-push choices.
+2. Merge the supplemental candidates and their permitted backward pushes with
+   that baseline cell using the existing packed minimum. Do not reinitialize
+   the node to its literal cost alone.
+3. Continue the lower gap using the same owner E/d until the original node p.
+
+With one event per original long jump, p<j<E and the original next queried node
+is at or beyond E. Original literal and >=3-byte continuation edges are therefore
+retained over every subinterval. This construction can add candidate choices at
+j and backward starts without expanding rs at every position or running another
+whole-position matchfinder. It deliberately does not propagate the new match's
+continuation to positions above j. Adding that propagation requires a two-carry
+gap minimum that compares **both** old and new continuations rather than replacing
+the old one; that is more per-position work.
+
+A compact alternative marks supplemental records in an unused high bit of the
+node-count word. The decoder masks that bit before using the bounded count.
+Because exactly one supplemental node occurs inside a long jump, its immediately
+older original node supplies E/d by a bounded peek at the previous header/top.
+This avoids extra payload words but changes rs semantics and requires explicit
+validation of the older node and ownership condition. Merely writing E/d into
+metadata is insufficient: d_dp must actually use it for the upper gap and the
+baseline at j. The separate-stream design makes ownership and original-record
+preservation easier to state; the marker design minimizes stored data.
+
+Required conditions include strict event ordering, one valid original owner per
+event, valid endpoint/distance bounds, processing each original gap byte exactly
+once, unchanged block-table selection, and preserving existing initialized ring
+cells when new backward pushes lower the initialized frontier. Every malformed
+header or absent owner still needs a total fallback for the original obligation.
+
+### Why gap preservation is not the whole old edge set
+
+`d_back` pushes only a candidate's full endpoint and, under pmode bit 0, its
+**currently cheapest** endpoint. Additional future choices may change that
+cheapest endpoint and thereby remove a formerly pushed endpoint. For example,
+take lengths 3..6 with lc[3,4,5,6,7] = [48,48,160,48,48]. Let suffix costs at
+3..6 be [144,320,1024,784], then improve only the cost at 4 to 128. The selected
+best length changes 3→4. At a one-byte backward start, the retained full/best
+push minimum changes from 192 to 288 (common distance cost omitted). This
+arithmetic example was checked locally; it illustrates the pruning mechanism,
+not an executed parser or encoder result.
+
+Consequently the overlay above can preserve **all old d_gap continuations**, but
+it cannot honestly claim that every dynamic old d_back edge or the final encoded
+size is preserved. A stronger union guarantee would need frozen baseline push
+endpoints or all possible endpoints/backward starts. That means another baseline
+pass/storage or much larger relaxation work, precisely the class of cost this
+balanced effort is trying to avoid.
+
+### Cost, proof and next falsifier
+
+The sparse representation adds only one event and its candidates per successful
+query. A marker needs no extra metadata word; a side stream adds cursor/allocator
+overhead but preserves rs format. Both need event detection during the reverse
+sweep. Existing public endprobe payload is about 204344 bytes across the corpus
+(two headers per 13926 nodes plus 23234 candidate words), not a per-file peak.
+Earlier queries can simply rediscover the already known continuation; seeding a
+supplemental search with that known remaining length would test only genuinely
+crossing extensions, but is an additional deliberately limited search policy,
+not evidence of benefit. No position or depth sweep was performed.
+
+Proof work reaches d_dp's format/merge loop, d_gap split composition, preserved
+ring initialization, and emitter/output-length bridging. It is materially larger
+than the current endprobe's forward-helper proof and does not inherit its
+extraction result. Total-time benefit is unknown: smaller finder scope does not
+bound marker/cursor checks, splitting overhead, or extra backward relaxation.
+
+**Recommendation:** retain this as a next-round structural option rather than
+displace the current measured candidates' validation budget. A first future
+falsifier should use fixed original cost tables and verify the old d_gap choice
+at every position, including the concrete counterexample, block crossings and
+ring wrap. Then test whether a single earlier query produces useful *crossing*
+matches under the original budgets. Only after that should paired total time and
+size justify full proof work. No implementation, parameter sweep or CI was
+authorized or performed for this study.
+
+The reproducible 89-byte input, its SHA-256/hex, all five exact byte-match checks,
+and the separate arithmetic push example are preserved in
+`candidates/r10-forward-overlay-study/counterexamples.json`. In particular,
+**original rs candidate retention is not entire dynamic-push edge retention**.
+Nothing in this source-only study upgrades the existing endprobe finite
+first-plan/record/decode evidence to universal edge preservation, optimality or
+size monotonicity. Overlay implementation work stops here pending a separately
+authorized future decision.
+
+## Costcache measured closure
+
+The coordinator's completed cpu-g receipt reports 6208 scheduled model updates:
+4685 rebuilds, 1523 skips (24.53%), and 368 halvings. Frozen/counter outputs and
+decoding agree on all 28 public files; the candidate also agrees with record in
+444 finite cases and public output. The two paired total-time changes versus
+record are -0.14171% and +0.02518%, averaging -0.058265%. This does not establish
+a stable total-time gain despite a real reduction in rebuild count. Close the
+costcache route without a full proof or combination; retain its opportunity
+counter and exact-state model as negative evidence.

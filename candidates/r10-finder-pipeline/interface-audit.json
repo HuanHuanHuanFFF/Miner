@@ -1,0 +1,154 @@
+{
+  "status": "VERIFIED_EXTRACTED_D_PIPELINE_INTERFACE_ONLY",
+  "created_at": "2026-10-07T22:51:39.296692+00:00",
+  "run_id": "37695964878",
+  "git_sha": "f918b7f77be7bbac197b0f0af3d2cbbffd387d86",
+  "batch": "restore-h",
+  "frozen_candidate_hashes": {
+    "parse.rs": "b74ae5fd9575101b6b34b9f2718d8835adca770c6765c30b33bb895878ba1adf",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "candidate_bytes_unchanged": true,
+  "extraction": {
+    "accepted": true,
+    "exit_code": 0,
+    "proof_status": "NOT_RUN",
+    "path": "evidence/round10/37695964878/restore-h/extraction/r10-finder-pipeline",
+    "files": {
+      "Types.lean": {
+        "bytes": 503,
+        "sha256": "276d4089d337e0d7da19d73f67b92ed57aa61ce5b0b548420962498a78bf5966"
+      },
+      "Constants.lean": {
+        "bytes": 16204,
+        "sha256": "4a083c4264c013f437fcb492c86cec195ab7ff1b1c5cd74fd0afda2ded2e5773"
+      },
+      "Funs.lean": {
+        "bytes": 639813,
+        "sha256": "5b6803aa4a3a092dc3f0cdfc8770b2717e66d0ac7e766ecf1a6fcf707cd4e1e9"
+      }
+    }
+  },
+  "functions": {
+    "d_parse_loop.body": {
+      "line": 4708,
+      "header": "def d_parse_loop.body\n  (input : Slice Std.U8) (ct : Std.Usize) (lazyn : Std.Usize) (d4 : Std.Usize)\n  (d7 : Std.Usize) (skip : Std.Usize) (h3d : Std.Usize) (tbmax : Std.Usize)\n  (lz2max : Std.Usize) (dupmode : Std.Usize) (fback : Std.Usize)\n  (d7l : Std.Usize) (d7e : Std.Usize) (nice : Std.Usize) (n : Std.Usize)\n  (lsym : Array Std.U8 512#usize) (dtab : Array Std.U8 512#usize)\n  (nextl : Array Std.U16 512#usize) (lim : Std.Usize) (sh7 : Std.U32)\n  (plan : alloc.vec.Vec Std.U32) (rs : alloc.vec.Vec Std.U32)\n  (head3 : Array Std.U32 16384#usize) (head4 : Array Std.U32 65536#usize)\n  (prev4 : Array Std.U32 32768#usize) (head7 : Array Std.U32 65536#usize)\n  (prev7 : Array Std.U32 32768#usize) (pa : Array Std.U64 8192#usize)\n  (tb : Array Std.U32 8192#usize) (lf : Array Std.U32 320#usize)\n  (df : Array Std.U32 32#usize) (litc : Array Std.U32 256#usize)\n  (lc : Array Std.U32 512#usize) (dcc : Array Std.U32 32#usize) (s : Std.Usize)\n  (next_upd : Std.Usize) (cands : Array Std.U32 16#usize)\n  (pc : Array Std.U32 16#usize) (pn : Std.Usize) (ppos : Std.Usize)\n  (cl : Std.Usize) (cd : Std.Usize) (cdc : Std.U32) (i : Std.Usize)\n  (anchor : Std.Usize) (alen : Std.Usize) (b8 : Std.U64) (i1 : Std.Usize)\n  (i2 : Std.Usize) (i3 : Std.Usize)\n  (pre : (Std.Usize × Std.Usize × Std.Usize)) :\n  Result (ControlFlow ((alloc.vec.Vec Std.U32) × (alloc.vec.Vec Std.U32) ×\n    (Array Std.U32 16384#usize) × (Array Std.U32 65536#usize) × (Array\n    Std.U32 32768#usize) × (Array Std.U32 65536#usize) × (Array Std.U32\n    32768#usize) × (Array Std.U64 8192#usize) × (Array Std.U32 8192#usize) ×\n    (Array Std.U32 320#usize) × (Array Std.U32 32#usize) × (Array Std.U32\n    256#usize) × (Array Std.U32 512#usize) × (Array Std.U32 32#usize) ×\n    Std.Usize × Std.Usize × (Array Std.U32 16#usize) × (Array Std.U32\n    16#usize) × Std.Usize × Std.Usize × Std.Usize × Std.Usize × Std.U32 ×\n    Std.Usize × Std.Usize × Std.Usize × Std.U64 × Std.Usize × Std.Usize ×\n    Std.Usize × (Std.Usize × Std.Usize × Std.Usize)) ((alloc.vec.Vec\n    Std.U32) × (alloc.vec.Vec Std.U32) × (Array Std.U64 8192#usize) × (Array\n    Std.U32 8192#usize) × (Array Std.U32 320#usize) × (Array Std.U32\n    32#usize) × Std.Usize × Std.Usize))",
+      "definition_sha256": "b4f8a5870a3228121d199c92713fd964c2e3e170d6ea7a3244568ba15a8caee3"
+    },
+    "d_parse_loop": {
+      "line": 5339,
+      "header": "def d_parse_loop\n  (input : Slice Std.U8) (plan : alloc.vec.Vec Std.U32)\n  (rs : alloc.vec.Vec Std.U32) (ct : Std.Usize) (lazyn : Std.Usize)\n  (d4 : Std.Usize) (d7 : Std.Usize) (skip : Std.Usize) (h3d : Std.Usize)\n  (tbmax : Std.Usize) (lz2max : Std.Usize) (dupmode : Std.Usize)\n  (fback : Std.Usize) (d7l : Std.Usize) (d7e : Std.Usize) (nice : Std.Usize)\n  (n : Std.Usize) (head3 : Array Std.U32 16384#usize)\n  (head4 : Array Std.U32 65536#usize) (prev4 : Array Std.U32 32768#usize)\n  (head7 : Array Std.U32 65536#usize) (prev7 : Array Std.U32 32768#usize)\n  (pa : Array Std.U64 8192#usize) (tb : Array Std.U32 8192#usize)\n  (lsym : Array Std.U8 512#usize) (dtab : Array Std.U8 512#usize)\n  (nextl : Array Std.U16 512#usize) (lf : Array Std.U32 320#usize)\n  (df : Array Std.U32 32#usize) (litc : Array Std.U32 256#usize)\n  (lc : Array Std.U32 512#usize) (dcc : Array Std.U32 32#usize)\n  (lim : Std.Usize) (sh7 : Std.U32) (s : Std.Usize) (next_upd : Std.Usize)\n  (cands : Array Std.U32 16#usize) (pc : Array Std.U32 16#usize)\n  (pn : Std.Usize) (ppos : Std.Usize) (cl : Std.Usize) (cd : Std.Usize)\n  (cdc : Std.U32) (i : Std.Usize) (anchor : Std.Usize) (alen : Std.Usize)\n  (b8 : Std.U64) (i1 : Std.Usize) (i2 : Std.Usize) (i3 : Std.Usize)\n  (pre : (Std.Usize × Std.Usize × Std.Usize)) :\n  Result ((alloc.vec.Vec Std.U32) × (alloc.vec.Vec Std.U32) × (Array Std.U64\n    8192#usize) × (Array Std.U32 8192#usize) × (Array Std.U32 320#usize) ×\n    (Array Std.U32 32#usize) × Std.Usize × Std.Usize)",
+      "definition_sha256": "33e306e2c4b7feb8603352f6a9c0e723a13d7d19f2a216707c704199341034e9"
+    },
+    "d_parse": {
+      "line": 5378,
+      "header": "def d_parse\n  (input : Slice Std.U8) (plan : alloc.vec.Vec Std.U32)\n  (rs : alloc.vec.Vec Std.U32) (ct : Std.Usize) (lazyn : Std.Usize)\n  (d4 : Std.Usize) (d7 : Std.Usize) (skip : Std.Usize) (h3d : Std.Usize)\n  (flen : Std.Usize) (tbmax : Std.Usize) (lz2max : Std.Usize)\n  (dupmode : Std.Usize) (fback : Std.Usize) (d7l : Std.Usize) (d7e : Std.Usize)\n  (nice : Std.Usize) :\n  Result ((alloc.vec.Vec Std.U32) × (alloc.vec.Vec Std.U32))",
+      "definition_sha256": "25fca5fe5b5f5443b9423812f0f97543f67a323f57191fe7bf7ce815ccbcdfcb"
+    },
+    "dp_store": {
+      "line": 3316,
+      "header": "def dp_store\n  (head3 : Array Std.U32 16384#usize) (head4 : Array Std.U32 65536#usize)\n  (prev4 : Array Std.U32 32768#usize) (head7 : Array Std.U32 65536#usize)\n  (prev7 : Array Std.U32 32768#usize) (i : Std.Usize) (x3 : Std.Usize)\n  (x4 : Std.Usize) (x7 : Std.Usize) (c4 : Std.Usize) (c7 : Std.Usize) :\n  Result ((Array Std.U32 16384#usize) × (Array Std.U32 65536#usize) × (Array\n    Std.U32 32768#usize) × (Array Std.U32 65536#usize) × (Array Std.U32\n    32768#usize))",
+      "definition_sha256": "78e4f3fbb534d363dadcb076b8d5c7deffed05eacf58a80bebc51c2c651c6dab"
+    },
+    "dp_heads": {
+      "line": 3296,
+      "header": "def dp_heads\n  (head3 : Array Std.U32 16384#usize) (head4 : Array Std.U32 65536#usize)\n  (head7 : Array Std.U32 65536#usize) (x3 : Std.Usize) (x4 : Std.Usize)\n  (x7 : Std.Usize) :\n  Result (Std.Usize × Std.Usize × Std.Usize)",
+      "definition_sha256": "4a97751efdc0182a32a1e30f3b02a93a7e24688cc2b1a3a18824bf3f10159a46"
+    },
+    "hashes": {
+      "line": 3372,
+      "header": "def hashes\n  (b8 : Std.U64) (sh7 : Std.U32) :\n  Result (Std.Usize × Std.Usize × Std.Usize)",
+      "definition_sha256": "adbc0c5eef9cc34124ab1f9d7aea9c89100004e6f41b6dd7b99ba24946852940"
+    }
+  },
+  "loop_state_order": [
+    "plan1",
+    "rs1",
+    "head31",
+    "head41",
+    "prev41",
+    "head71",
+    "prev71",
+    "pa1",
+    "tb1",
+    "lf1",
+    "df1",
+    "litc1",
+    "lc1",
+    "dcc1",
+    "s1",
+    "next_upd1",
+    "cands1",
+    "pc1",
+    "pn1",
+    "ppos1",
+    "cl1",
+    "cd1",
+    "cdc1",
+    "i4",
+    "anchor1",
+    "alen1",
+    "b81",
+    "i5",
+    "i6",
+    "i7",
+    "pre1"
+  ],
+  "loop_state_component_count": 31,
+  "scalar_parent_components": 26,
+  "additional_component_mapping": {
+    "b81": "current b8 U64",
+    "i5": "hash index H3 Usize",
+    "i6": "hash index H4 Usize",
+    "i7": "hash index H7 Usize",
+    "pre1": "three-Usize previous-head tuple"
+  },
+  "conceptual_new_states": [
+    "b8",
+    "hh",
+    "pre"
+  ],
+  "function_state_expansion_from_hh_confirmed": true,
+  "unchanged_done_shape": "(plan,rs,pa,tb,lf,df,s,i),8 components",
+  "d_parse_public_signature_unchanged": true,
+  "reused_helpers_byte_identical_to_parent_extract": [
+    "dp_store",
+    "dp_heads",
+    "hashes"
+  ],
+  "cache_bind_order": [
+    "dp_store head3 head4 prev4 head7 prev7 i i1 i2 i3 i5 i6",
+    "let b8n ← be8 input i7",
+    "let (i8, i9, i10) ← hashes b8n sh7",
+    "let pn1 ← dp_heads head31 head41 head71 i8 i9 i10",
+    "let (b81, i23, i24, i25, pre1) ←",
+    "if jumped",
+    "let b82 ← be8 input i22",
+    "let pre2 ← dp_heads head32 head42 head72 i26 i27 i28",
+    "else ok (b8n, i8, i9, i10, pn1)"
+  ],
+  "cache_branch_review": "jumped fresh-reads new i22 using post-range head32/head42/head72; nonjump uses b8n/i8/i9/i10/pn1 from immediately after current store",
+  "required_proof_changes": [
+    "Actual31-component D loop statement/call and state patterns",
+    "Cached-head triple<=i invariant in addition to all original D invariants",
+    "dp_store bind consumes cached pre.2.1/.2.2",
+    "Bound speculative wrapped i+1 be8/hash/heads preparations",
+    "Local jumped branch-return phi, fresh versus cached selector",
+    "Initialization be8/hashes/dp_heads before D loop"
+  ],
+  "proof_status": "UNADAPTED_PARENT; native Lean/original obligation/allowed axioms/full gate NOT_RUN",
+  "native_finite_equivalence": {
+    "candidate": "r10-finder-pipeline",
+    "reference": "r10-record-nonempty",
+    "cases": 444,
+    "different_or_failed": 0
+  },
+  "paired_total_time_change_pct_vs_record": [
+    -0.22295751931866725,
+    -0.4123903922774619
+  ],
+  "mean_paired_change_pct": -0.31767395579806457,
+  "public_size_delta_pp": 0.0,
+  "performance_boundary": "Small two-block same-byte signal, not robust confirmation; main thread noted same-runner shadow drift on similar scale",
+  "decision": "Preserve interface/source; no complete proof port now. Await larger pack result before considering any low-cost combination/confirmation."
+}

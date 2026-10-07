@@ -1,0 +1,121 @@
+{
+  "status": "VERIFIED_LOCAL_BYTES_AND_ARITHMETIC_ONLY",
+  "input_bytes": 89,
+  "input_sha256": "ee6226f4c8d671f581ef1fd414d9d18df5bfaf6f95fc7ed1b570dcd6f180c9c8",
+  "input_hex": "61626364797c4142434445464748494a4b4c4d4e4f505152535455565758595a5b5c61626364214142434445464748494a4b4c4d4e4f505152535455565758595a5b5c61626364793f30313233343536373839616263646566",
+  "construction_python": "S = bytes(range(65, 93)) + b\"abcd\"; data = b\"abcdy|\" + S + b\"!\" + S + b\"y?0123456789abcdef\"",
+  "positions": {
+    "original_node": 39,
+    "original_end": 71,
+    "ordinary_supplemental_node": 67,
+    "affected_gap_position": 68
+  },
+  "matches": [
+    {
+      "position": 39,
+      "distance": 33,
+      "length": 32,
+      "equal_bytes_verified": true,
+      "next_byte_differs_verified": true
+    },
+    {
+      "position": 67,
+      "distance": 33,
+      "length": 4,
+      "equal_bytes_verified": true,
+      "next_byte_differs_verified": true
+    },
+    {
+      "position": 67,
+      "distance": 67,
+      "length": 5,
+      "equal_bytes_verified": true,
+      "next_byte_differs_verified": true
+    },
+    {
+      "position": 68,
+      "distance": 33,
+      "length": 3,
+      "equal_bytes_verified": true,
+      "next_byte_differs_verified": true
+    },
+    {
+      "position": 68,
+      "distance": 67,
+      "length": 4,
+      "equal_bytes_verified": true,
+      "next_byte_differs_verified": true
+    }
+  ],
+  "gap_loss": {
+    "old_owner": [
+      39,
+      32,
+      33
+    ],
+    "supplemental_candidates_in_order": [
+      [
+        4,
+        33
+      ],
+      [
+        5,
+        67
+      ]
+    ],
+    "old_gap_choice_at_68": [
+      3,
+      33
+    ],
+    "new_gap_choice_at_68": [
+      4,
+      67
+    ],
+    "reason": "d_top selects the last/longest supplemental candidate; d_gap above that node no longer reads the original owner continuation."
+  },
+  "illustrative_local_price_units16": {
+    "length3": 48,
+    "length4": 48,
+    "distance33": 80,
+    "distance67": 176,
+    "suffix71_relative_to72": 16,
+    "suffix72_relative_to72": 0,
+    "old_choice": 144,
+    "replacement_choice": 224,
+    "scope": "illustrative fixed prices, not costs measured from this input"
+  },
+  "dynamic_push_counterexample": {
+    "length_costs_units16": {
+      "3": 48,
+      "4": 48,
+      "5": 160,
+      "6": 48,
+      "7": 48
+    },
+    "old_suffix_costs_units16": {
+      "3": 144,
+      "4": 320,
+      "5": 1024,
+      "6": 784
+    },
+    "improved_suffix_costs_units16": {
+      "3": 144,
+      "4": 128,
+      "5": 1024,
+      "6": 784
+    },
+    "old_best_length": 3,
+    "new_best_length": 4,
+    "one_byte_back_old_price": 192,
+    "one_byte_back_new_price": 288,
+    "common_distance_price_omitted": true,
+    "reason": "d_back keeps the full endpoint and only the current best endpoint; a changed best can drop a previously useful backward endpoint."
+  },
+  "limits": [
+    "No Rust parser or encoder was executed for this constructed input.",
+    "This shows a d_gap edge loss even when the old carry is stored at the new node; it does not claim globally minimal input size.",
+    "Original rs candidate retention is not entire dynamic-push edge retention.",
+    "Existing endprobe finite plan/record/decode checks are not upgraded by this study.",
+    "Overlay candidate implementation and CI are not authorized or performed."
+  ]
+}

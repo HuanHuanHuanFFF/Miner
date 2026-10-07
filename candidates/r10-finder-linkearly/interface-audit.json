@@ -1,0 +1,99 @@
+{
+  "status": "VERIFIED_ACTUAL_D_WALK_INTERFACE_BIND_ORDER_ONLY",
+  "created_at": "2026-10-07T22:35:01.914142+00:00",
+  "run_id": "37695105461",
+  "git_sha": "c7150e907aaf6f44945e1e48cd15ed6b6aa2e29b",
+  "batch": "cpu-g",
+  "frozen_candidate_hashes": {
+    "parse.rs": "5be4838170b8eb45e2b7f11e53b54e7cd236bc572785fe595d3612c0da1cff8d",
+    "Parse.lean": "bd717cba95eb4ecc6c061169874621e80638b41e64ca46311831373c4b6d9224"
+  },
+  "candidate_bytes_unchanged": true,
+  "extraction": {
+    "accepted": true,
+    "exit_code": 0,
+    "proof_status": "NOT_RUN",
+    "path": "evidence/round10/37695105461/cpu-g/extraction/r10-finder-linkearly",
+    "files": {
+      "Types.lean": {
+        "bytes": 503,
+        "sha256": "276d4089d337e0d7da19d73f67b92ed57aa61ce5b0b548420962498a78bf5966"
+      },
+      "Constants.lean": {
+        "bytes": 16204,
+        "sha256": "4a083c4264c013f437fcb492c86cec195ab7ff1b1c5cd74fd0afda2ded2e5773"
+      },
+      "Funs.lean": {
+        "bytes": 638743,
+        "sha256": "fbbfd99161a150f5cac4508fe021c528d4fe80e7113b3f901de53bc6e96e9840"
+      }
+    }
+  },
+  "parent_extraction": {
+    "path": "evidence/round10/37684506856/struct-b/gate/extracted-r10-record-nonempty/Funs.lean",
+    "Funs.lean_sha256": "57e663788321436be1020bbb9eaf095eacc5940489c635cf1d7c284f3b847b32"
+  },
+  "functions": {
+    "d_walk_loop.body": {
+      "line": 2744,
+      "header": "def d_walk_loop.body\n  (s : Slice Std.U8) (prev : Array Std.U32 32768#usize) (i : Std.Usize)\n  (b8 : Std.U64) (cap : Std.Usize) (nice : Std.Usize)\n  (cands : Array Std.U32 16#usize) (nc : Std.Usize) (best : Std.Usize)\n  (c : Std.Usize) (k : Std.Usize) :\n  Result (ControlFlow ((Array Std.U32 16#usize) × Std.Usize × Std.Usize ×\n    Std.Usize × Std.Usize) ((Array Std.U32 16#usize) × Std.Usize ×\n    Std.Usize))",
+      "definition_sha256": "fc6eef062903154bd6668c210f6674b8893c1e2c524566b1aa087faf830ee938"
+    },
+    "d_walk_loop": {
+      "line": 2799,
+      "header": "def d_walk_loop\n  (s : Slice Std.U8) (prev : Array Std.U32 32768#usize) (i : Std.Usize)\n  (b8 : Std.U64) (cap : Std.Usize) (cands : Array Std.U32 16#usize)\n  (nice : Std.Usize) (nc : Std.Usize) (best : Std.Usize) (c : Std.Usize)\n  (k : Std.Usize) :\n  Result ((Array Std.U32 16#usize) × Std.Usize × Std.Usize)",
+      "definition_sha256": "335b747e8f2e789bb5ac412b04edae732ed7dfe244920a1d9b8a2cc4479f9ea9"
+    },
+    "d_walk": {
+      "line": 2814,
+      "header": "def d_walk\n  (s : Slice Std.U8) (prev : Array Std.U32 32768#usize) (i : Std.Usize)\n  (start : Std.Usize) (depth : Std.Usize) (b8 : Std.U64) (cap : Std.Usize)\n  (cands : Array Std.U32 16#usize) (nc0 : Std.Usize) (best0 : Std.Usize)\n  (nice : Std.Usize) :\n  Result ((Std.Usize × Std.Usize) × (Array Std.U32 16#usize))",
+      "definition_sha256": "ab801081a58d587f043dfec6ca1f23d0e35c50f08dd97a8d6081d5c6cb25a1f0"
+    }
+  },
+  "loop_state_order": [
+    "cands",
+    "nc",
+    "best",
+    "c",
+    "k"
+  ],
+  "loop_state_count": 5,
+  "wrapper_and_loop_signature_unchanged": true,
+  "body_diff_audit": {
+    "exact_match_after": "Move exact modulo/index/cast block before probe, then rename candidate-inner locals i2..i6 to i4..i8; all other body bytes identical",
+    "old_body_sha256": "f3a58a10f4424cd14390c4d279112bbccf2b123e16e2e9d32a699631ef5e4314",
+    "new_body_sha256": "fc6eef062903154bd6668c210f6674b8893c1e2c524566b1aa087faf830ee938",
+    "outside_move_and_lexical_rename_changed": false
+  },
+  "proof_bind_audit": {
+    "actual_order": [
+      "c%WN",
+      "Array.index_usize prev",
+      "pure cast U32 toUsize",
+      "probe",
+      "candidate phi tuple",
+      "nx<c/depth decrement"
+    ],
+    "draft_order": [
+      "d3_rem32768",
+      "d3_idx32768",
+      "cast removed by simp only lift/bind_tc_ok",
+      "probe_spec bind",
+      "candidate phi bind",
+      "d3_unc twice",
+      "nx comparator/depth proof"
+    ],
+    "matches": true,
+    "state_measure_invariant_changed": false,
+    "public_d_walk_spec_changed": false
+  },
+  "not_verified": [
+    "Native Lean compilation/tactic closure",
+    "Original obligation",
+    "Allowed axioms",
+    "Full public round trip gate",
+    "Whole-input token equivalence",
+    "Actual release instruction scheduling or performance"
+  ],
+  "decision": "Existing bd717 proof needs no additional interface edit from this extraction; native proof remains UNKNOWN. Do not mutate frozen Rust/Lean or spend full gate before useful measured signal."
+}
