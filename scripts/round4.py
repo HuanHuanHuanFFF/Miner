@@ -22,7 +22,9 @@ def save(path, value):
 
 def validate(label):
     assert re.fullmatch(r'[a-z0-9-]{1,48}', label)
-    spec = json.loads((ROOT / 'evidence/round4' / (label + '.json')).read_text())
+    spec_directory = os.environ.get('ROUND4_SPEC_DIR', 'evidence/round4')
+    assert spec_directory in ('evidence/round4', 'evidence/round5')
+    spec = json.loads((ROOT / spec_directory / (label + '.json')).read_text())
     names = set()
     for e in spec['entries']:
         assert re.fullmatch(r'[A-Za-z0-9_-]+', e['name']) and e['name'] not in names
@@ -263,6 +265,22 @@ def main():
             state['gates'][name] = verdict
             save(state_path, state)
             print('GATE_RESULT ' + json.dumps({'candidate': name, 'verdict': verdict}), flush=True)
+            if spec.get('retain_extracted_lean'):
+                match = re.search(r'^workspace: (.+)$', log, re.M)
+                if match:
+                    work = Path(match[1].strip()).resolve()
+                    assert work.parent == (upstream / 'data/verification-workspace').resolve()
+                    extracted = output / ('extracted-' + name)
+                    extracted.mkdir(exist_ok=True)
+                    manifest = {}
+                    for filename in ('Types.lean', 'Constants.lean', 'Funs.lean'):
+                        path = work / 'lean/Slot' / filename
+                        if path.is_file():
+                            data = path.read_bytes()
+                            assert len(data) <= 10_000_000
+                            (extracted / filename).write_bytes(data)
+                            manifest[filename] = {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+                    save(extracted / 'manifest.json', {'scope': 'Actual official re-extraction text; not a proof verdict', 'files': manifest})
             if code:
                 diagnostics(name, log, upstream)
                 match = re.search(r'^workspace: (.+)$', log, re.M)

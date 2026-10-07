@@ -90,9 +90,10 @@ def main():
     ap.add_argument('run_id')
     ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate'], default='screen')
     ap.add_argument('--snapshot')
+    ap.add_argument('--round', choices=['4', '5'], default='4', help='Receipt namespace; original round4 remains the default')
     args = ap.parse_args()
     assert args.run_id.isdecimal()
-    target = ROOT / 'evidence/round4' / args.run_id / args.phase
+    target = ROOT / 'evidence' / ('round' + args.round) / args.run_id / args.phase
     if args.mode == 'analyze':
         analyze(target, args.snapshot); return
     helper = module('round4_gh', ROOT / 'scripts/collect-round2.py')
@@ -102,7 +103,7 @@ def main():
     print('STATUS', args.run_id, meta['status'], meta['conclusion'], 'artifacts', [(a['name'], a['size_in_bytes']) for a in artifacts if not a['expired']], flush=True)
     if args.mode == 'status':
         print('ACTIVE_STEPS', [s['name'] for j in meta['jobs'] for s in j['steps'] if s['status'] == 'in_progress']); return
-    name = f'r4-{args.run_id}-{args.phase}'
+    name = f'r{args.round}-{args.run_id}-{args.phase}'
     artifact = next((a for a in artifacts if a['name'] == name and not a['expired']), None)
     if artifact is None:
         print('Requested phase receipt is not available yet.'); return
@@ -121,7 +122,7 @@ def main():
         assert state['run_id'] == args.run_id and state['git_sha'] == meta['headSha']
         for metric in state['metrics']:
             assert (stage / f"round{metric['round']}-{metric['candidate']}.jsonl").is_file()
-        evidence_root = (ROOT / 'evidence/round4').resolve()
+        evidence_root = (ROOT / 'evidence' / ('round' + args.round)).resolve()
         assert stage.resolve().is_relative_to(evidence_root)
         assert target.resolve().is_relative_to(evidence_root) and not target.is_symlink()
         if target.exists():
