@@ -41,9 +41,33 @@ The first two implementation agents own disjoint candidate and generator paths; 
 - Coarse uninstrumented frontend diagnostic: collect+seed costs about 0.907x old forward work across D files, and seed is about 19.9% of the new frontend. Allocation/order differ, so these are diagnostic only. Sampled tiny-function timing gives inflated and overlapping estimates (including probe estimates above 100%); do not use it as a percentage decomposition.
 - `struct-b`: preserve the original quality-producing plan; compare 16-bit window-distance chains, key5, key6, and omission of zero-candidate records while retaining node zero. Require finite whole-parser equivalence for delta16/empty-record claims. Extract delta16 and run an original full gate for the minimal empty-record change. Models and source arguments guide the tests but do not replace them.
 
+## Second completed feedback and changed allocation
+
+`prove-a` ended **failure**, with four new `omega` termination-measure obligations left open in the seed proof (Parse invocation 497.6 seconds, not a timeout). Repeated Rust measurements reproduce the size loss. No more CI is allocated to this seed; an explicitly untested repair is retained separately. Two actual extracted Funs files differ only in Source comment workspace paths after a narrowly defined normalization; see [seed-extraction-comparison.json](seed-extraction-comparison.json).
+
+`struct-b` ended **success**. Delta16 is +1.2501% at identical output; key5 is +4.7821% / -0.0005412 pp, key6 +2.2458% / -0.0031119 pp. Stop these implementations and key sweeps. Record-nonempty is **-1.2342% at identical output** and passed a fresh complete public gate, including original obligation, allowed axioms and round trip. It has 444 finite equivalence cases and eight additional fixed inputs. Its exact accepted pair is recorded in [VERIFICATION.json](../../candidates/r10-record-nonempty/VERIFICATION.json); the small first-run signal is still awaiting independent confirmation. All ten measured Rust programs remain geometrically dominated. Full recomputation: [second-loop-summary.json](second-loop-summary.json).
+
+New allocation:
+
+- `row-c`, run `37688325585`, commit `5eb06c1ac9db3151ebaeef49e5220d5d8a1c45a0`: replace H7 pointer chains with one fixed row/tag/ring representation; do not add another finder table. Source-backed by Zstandard's design, but its SIMD speed results do not transfer to ordinary extractable Rust. One two-block screen and extraction; stop if coverage loss or maintenance cost negates the benefit. The same job independently repeats the frozen record-nonempty program.
+- `rebase-d`, run `37689247460`, commit `95c7ecff5bd827292bae1b5b3038dd0836d09bbc`: halve all five head/link tables using relative u16 positions and periodic whole-table rebasing. This removes the per-insert delta encoding of the slower delta16 trial, but pays roughly 26 sequential bytes of slide traffic per input byte. Inclusive distance 32768 is preserved rather than copying libdeflate's strict cutoff. One finite whole-parser equivalence screen, paired blocks and extraction; no proof investment until the time signal justifies it.
+
+## Payability constraint discovered and refreshed
+
+Official docs and `validator/scoring/combine.py` select only the oldest surviving frontier submission per hotkey for Pareto payout. A fresh full capture at snapshot **27460, 04:57:46 +08:00** still has known submission #453 on the payable frontier. Thus a new balanced point that leaves #453 on the frontier has zero *additional new-point share on that hotkey*, even if it has positive geometric weight. Other admission/registration/bounty conditions remain separate.
+
+[Payability analysis](payability-recheck.json) and [source note](payability-notes.md) distinguish geometry, same-hotkey new-point share, and the conditional share of a legally eligible distinct hotkey. No new identity, registration, signature, payment or official upload is performed. The separately requested weights endpoint advanced to snapshot 27461 during capture; it is not conflated with the pinned 27460 pages. Final ranking and this ownership condition will be refreshed again.
+
+## Third feedback and selective probes
+
+Six completed runs now contain 114 paired public processes and twelve distinct new Rust sources, recomputed in [third-loop-summary.json](third-loop-summary.json). Row16 is approximately 10.9% slower with +0.0079558 pp size; rebase16 is +2.9653% with identical output. Stop both implementations. Record-nonempty independently repeats at about -1.17%; two jobs/four blocks now support a small same-output signal, still geometrically dominated.
+
+- 05:57:53: `selective-e`, run `37693029351`, commit `0ac30937edf8df516a857485cb5a1dc48e965e47`. Endprobe adds one exact match-tail query; row16-mask keeps row16 maintenance and candidate ordering but changes packed-tag screening. Finite native diagnostics and extraction precede any proof investment. A speedup only against the slower row16 is insufficient.
+- 06:05:15: `cost-f`, run `37693861172`, commit `4f1b4169df1c2ece9f0b759ad28d2d57e0fd2108`. Test static match-versus-literal profitability in the lazy seed. This is one mechanism-specific response to seed quality loss, not another pass/depth sweep. Stop unless it improves the current verified starting point's projected tradeoff.
+
 ## Evidence index
 
-- Current frontier capture: `official-start/` (pending).
-- Forward mechanism and candidates: `forward-notes.md` (pending).
-- Supplemental finder: `finder-notes.md` (pending).
+- Current complete frontier capture: `official-mid-payability/`; initial capture: `official-start/`.
+- Forward mechanism and candidates: `forward-notes.md`.
+- Supplemental finder: `finder-notes.md`, `row-finder-notes.md`.
 - CI receipts: each run retained under its numeric run ID and batch, with original bytes and hashes.

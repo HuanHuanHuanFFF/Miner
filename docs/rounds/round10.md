@@ -31,9 +31,20 @@
 
 采样微函数计时包含计时成本和相互嵌套，甚至产生单项大于整体的外推值，不作为百分比分解。collect+seed 与旧前向的粗比较只作诊断，不能替代正式总时间。
 
-## 正在推进的确认与第二轮
+## 后续确认与第二轮
 
-- [prove-a / 37682364860](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37682364860)：seed/seed2 独立复测与 seed 精确源／证明对的原始完整 gate。它在性能首批结果出来前启动；即使性能不够，仍收齐自然终态。源与证明接口审计见 [interface-audit.json](../../candidates/r10-forward-seed-proof/interface-audit.json)。
-- [struct-b / 37684506856](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37684506856)：保留原初始计划，比较 16-bit 链距离、五／六字节长链键、空记录消除。delta16 与空记录消除要求有限 token 等价；后者另运行完整原始 gate。记录流省略的独立源码边界见 [record-review.md](../../evidence/round10/record-review.md)。
+- [prove-a / 37682364860](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37682364860) 自然失败：seed/seed2 的独立复测重现质量退化，seed 证明有四处终止度量未关闭。不是超时；原证明未通过，不为这份低收益版本再开 gate。源与证明接口审计见 [interface-audit.json](../../candidates/r10-forward-seed-proof/interface-audit.json)。
+- [struct-b / 37684506856](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37684506856) 自然成功：delta16 +1.2501% 总时间、大小不变；key5 +4.7821% / -0.0005412 pp，key6 +2.2458% / -0.0031119 pp，均停止扩展。空记录消除 -1.2342%、输出不变，另通过完整公共 gate 和八个固定输入；精确 pair 见 [VERIFICATION](../../candidates/r10-record-nonempty/VERIFICATION.json)。有限 token 等价仍不等于全输入 token 等价，源码边界见 [record-review.md](../../evidence/round10/record-review.md)。
+
+六个已终止 CI 共 **114 个公共配对测量进程、十二份新 Rust**。汇总见 [third-loop-summary.json](../../evidence/round10/third-loop-summary.json)，其中按 runner 内配对比值计算提速，再对 runner 等权；重复证明版本按同一 Rust 合并。
+
+- `row-c / 37688325585` 自然成功。行式长链比同场 scalar 慢约 10.9%，大小增加 0.0079558 pp。空记录消除独立复测约快 1.17%，输出不变；两 runner 四块方向一致，但仍未进入当前预测前沿。
+- `rebase-d / 37689247460` 自然成功。全表相对位置重基准两块分别慢 1.9954%、3.9353%，平均慢 2.9653%，输出不变，444 个有限等价检查通过。停止该实现，不追加完整证明。
+- `selective-e / 37693029351` 在 05:57:53 启动：原长匹配尾部额外查一个位置，及行式标签扫描改成整字掩码。后者保留旧行式版本作同场对照；必须相对 scalar 有价值，不能仅以改进一个慢版本作为继续理由。
+- `cost-f / 37693861172` 在 06:05:15 启动：静态长度／距离成本必须严格优于同跨度字面量才接受种子匹配。这检验短而远匹配污染统计的机制，保留原 lazyseed 作同场对照。两组均尚无性能和完整证明结论。
+
+## 几何前沿与当前 hotkey 的支付边界
+
+重新抓取的完整快照 **27460（04:57:46 +08:00）** 中，现有 #453 仍在可支付前沿。官方规则只支付同 hotkey 最早的前沿提交：新均衡点若未使 #453 退出前沿，即使几何份额为正，沿用该 hotkey 的新点额外份额仍为 0。详见 [payability-notes.md](../../evidence/round10/payability-notes.md) 与 [重放检查](../../evidence/round10/payability-recheck.json)。后续报告分别给几何条件份额和身份条件，不把新 hotkey 当作已获授权或已注册。最终会再次刷新该状态。
 
 目前没有新正式提交或资金动作。最终需要收齐全部 CI、冻结最好源码／证明对、跨运行复测、刷新完整官方快照，再给两轴、条件前沿、具体缺口和是否达成研究目标；这些仍待完成。

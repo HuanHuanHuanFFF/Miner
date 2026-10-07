@@ -1,0 +1,169 @@
+{
+  "status": "VERIFIED_EXTRACTED_INTERFACE_AUDIT_NOT_PROOF",
+  "created_at": "2026-10-07T21:32:26.096499+00:00",
+  "run_id": "37688325585",
+  "git_sha": "5eb06c1ac9db3151ebaeef49e5220d5d8a1c45a0",
+  "batch": "row-c",
+  "source_sha256": "ffe31d6253f851fd3e843a991c05e12564cbab289f117c41618653e9913dcc73",
+  "initial_proof_sha256": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af",
+  "candidate_bytes_frozen": true,
+  "extraction": {
+    "accepted": true,
+    "exit_code": 0,
+    "proof_status": "NOT_RUN",
+    "path": "evidence/round10/37688325585/row-c/extraction/r10-finder-row16",
+    "files": {
+      "Types.lean": {
+        "bytes": 503,
+        "sha256": "276d4089d337e0d7da19d73f67b92ed57aa61ce5b0b548420962498a78bf5966"
+      },
+      "Constants.lean": {
+        "bytes": 16204,
+        "sha256": "4a083c4264c013f437fcb492c86cec195ab7ff1b1c5cd74fd0afda2ded2e5773"
+      },
+      "Funs.lean": {
+        "bytes": 651786,
+        "sha256": "e6fc9a799f71e11825e2ea3369634af0a6b8063f0517592a4e19da7e31ff4ffa"
+      }
+    }
+  },
+  "functions": {
+    "r10_row_tag": {
+      "line": 2222,
+      "header": "def r10_row_tag\n  (tags : Array Std.U8 32768#usize) (slot : Std.Usize) : Result Std.U8",
+      "definition_sha256": "a6ab3be5450ecbbb15afad84217c6aa7e1c0d9ad71656d8bba6525ef2ebe37b1"
+    },
+    "r10_row_walk_loop.body": {
+      "line": 2291,
+      "header": "def r10_row_walk_loop.body\n  (input : Slice Std.U8) (rows : Array Std.U32 65536#usize)\n  (tags : Array Std.U8 32768#usize) (i : Std.Usize) (written : Std.Usize)\n  (victim : Std.U32) (victim_tag : Std.U8) (b8 : Std.U64) (cap : Std.Usize)\n  (nice : Std.Usize) (seen3 : Std.Usize) (seen4 : Std.Usize) (row : Std.Usize)\n  (write : Std.Usize) (wanted : Std.U8) (cands : Array Std.U32 16#usize)\n  (step : Std.Usize) (k : Std.Usize) (nc : Std.Usize) (best : Std.Usize) :\n  Result (ControlFlow ((Array Std.U32 16#usize) × Std.Usize × Std.Usize ×\n    Std.Usize × Std.Usize) ((Array Std.U32 16#usize) × Std.Usize ×\n    Std.Usize))",
+      "definition_sha256": "88836fb558bef66e163daaadcb158e919667a1ffd4c20c1386015a8a03c59857"
+    },
+    "r10_row_walk_loop": {
+      "line": 2379,
+      "header": "def r10_row_walk_loop\n  (input : Slice Std.U8) (rows : Array Std.U32 65536#usize)\n  (tags : Array Std.U8 32768#usize) (i : Std.Usize) (written : Std.Usize)\n  (victim : Std.U32) (victim_tag : Std.U8) (b8 : Std.U64) (cap : Std.Usize)\n  (cands : Array Std.U32 16#usize) (nice : Std.Usize) (seen3 : Std.Usize)\n  (seen4 : Std.Usize) (row : Std.Usize) (write : Std.Usize) (wanted : Std.U8)\n  (step : Std.Usize) (k : Std.Usize) (nc : Std.Usize) (best : Std.Usize) :\n  Result ((Array Std.U32 16#usize) × Std.Usize × Std.Usize)",
+      "definition_sha256": "089e20666de6b17d236012200bd60269dbc3f8dca616bdd6f40ed641a57e4f42",
+      "carried_state_order": [
+        "cands",
+        "step",
+        "k",
+        "nc",
+        "best"
+      ],
+      "carried_state_count": 5
+    },
+    "r10_row_walk": {
+      "line": 2397,
+      "header": "def r10_row_walk\n  (input : Slice Std.U8) (rows : Array Std.U32 65536#usize)\n  (tags : Array Std.U8 32768#usize) (i : Std.Usize) (h : Std.Usize)\n  (written : Std.Usize) (victim : Std.U32) (victim_tag : Std.U8)\n  (depth : Std.Usize) (b8 : Std.U64) (cap : Std.Usize)\n  (cands : Array Std.U32 16#usize) (nc0 : Std.Usize) (best0 : Std.Usize)\n  (nice : Std.Usize) (seen3 : Std.Usize) (seen4 : Std.Usize) :\n  Result ((Std.Usize × Std.Usize) × (Array Std.U32 16#usize))",
+      "definition_sha256": "25aab7b2dda28c6da7aefbabc23ba5013eb0df528aaf961304a868a9848ed066"
+    },
+    "r10_row_store": {
+      "line": 2429,
+      "header": "def r10_row_store\n  (rows : Array Std.U32 65536#usize) (tags : Array Std.U8 32768#usize)\n  (heads : Array Std.U8 4096#usize) (q : Std.Usize) (b8 : Std.U64)\n  (sh7 : Std.U32) :\n  Result ((Std.Usize × Std.Usize × Std.U32 × Std.U8) × (Array Std.U32\n    65536#usize) × (Array Std.U8 32768#usize) × (Array Std.U8 4096#usize))",
+      "definition_sha256": "43910bd34c661c41df95addf044ca6d776dc0ea600197d638722b5f2556444b9"
+    },
+    "r10_row_insert_pos": {
+      "line": 2495,
+      "header": "def r10_row_insert_pos\n  (head3 : Array Std.U32 16384#usize) (head4 : Array Std.U32 65536#usize)\n  (prev4 : Array Std.U32 32768#usize) (rows : Array Std.U32 65536#usize)\n  (tags : Array Std.U8 32768#usize) (heads : Array Std.U8 4096#usize)\n  (q : Std.Usize) (b8 : Std.U64) (sh7 : Std.U32) :\n  Result ((Std.Usize × Std.Usize × Std.Usize × Std.Usize × Std.U32 ×\n    Std.U8) × (Array Std.U32 16384#usize) × (Array Std.U32 65536#usize) ×\n    (Array Std.U32 32768#usize) × (Array Std.U32 65536#usize) × (Array Std.U8\n    32768#usize) × (Array Std.U8 4096#usize))",
+      "definition_sha256": "51673b901c0b4854ddd1177466ac800bd8bcd2122753419c90f7ad8d7c51b598"
+    },
+    "r10_row_insert_range_loop.body": {
+      "line": 2529,
+      "header": "def r10_row_insert_range_loop.body\n  (input : Slice Std.U8) («to» : Std.Usize) (sh7 : Std.U32)\n  (head3 : Array Std.U32 16384#usize) (head4 : Array Std.U32 65536#usize)\n  (prev4 : Array Std.U32 32768#usize) (rows : Array Std.U32 65536#usize)\n  (tags : Array Std.U8 32768#usize) (heads : Array Std.U8 4096#usize)\n  (q : Std.Usize) :\n  Result (ControlFlow ((Array Std.U32 16384#usize) × (Array Std.U32\n    65536#usize) × (Array Std.U32 32768#usize) × (Array Std.U32 65536#usize)\n    × (Array Std.U8 32768#usize) × (Array Std.U8 4096#usize) × Std.Usize)\n    ((Array Std.U32 16384#usize) × (Array Std.U32 65536#usize) × (Array\n    Std.U32 32768#usize) × (Array Std.U32 65536#usize) × (Array Std.U8\n    32768#usize) × (Array Std.U8 4096#usize)))",
+      "definition_sha256": "ad58f2ed5e3ff51b19340cd336375805fd3f4c890a47885ed09cb5880c3b0401"
+    },
+    "r10_row_insert_range_loop": {
+      "line": 2555,
+      "header": "def r10_row_insert_range_loop\n  (input : Slice Std.U8) (head3 : Array Std.U32 16384#usize)\n  (head4 : Array Std.U32 65536#usize) (prev4 : Array Std.U32 32768#usize)\n  (rows : Array Std.U32 65536#usize) (tags : Array Std.U8 32768#usize)\n  (heads : Array Std.U8 4096#usize) («to» : Std.Usize) (sh7 : Std.U32)\n  (q : Std.Usize) :\n  Result ((Array Std.U32 16384#usize) × (Array Std.U32 65536#usize) × (Array\n    Std.U32 32768#usize) × (Array Std.U32 65536#usize) × (Array Std.U8\n    32768#usize) × (Array Std.U8 4096#usize))",
+      "definition_sha256": "dc75873c5b3167eedb2e482bbf521ce3299e1ca1e64d5a3b65cf1bc928d6986a",
+      "carried_state_order": [
+        "head3",
+        "head4",
+        "prev4",
+        "rows",
+        "tags",
+        "heads",
+        "q"
+      ],
+      "carried_state_count": 7
+    },
+    "r10_row_insert_range": {
+      "line": 2575,
+      "header": "def r10_row_insert_range\n  (input : Slice Std.U8) (head3 : Array Std.U32 16384#usize)\n  (head4 : Array Std.U32 65536#usize) (prev4 : Array Std.U32 32768#usize)\n  (rows : Array Std.U32 65536#usize) (tags : Array Std.U8 32768#usize)\n  (heads : Array Std.U8 4096#usize) («from» : Std.Usize) («to» : Std.Usize)\n  (sh7 : Std.U32) :\n  Result ((Array Std.U32 16384#usize) × (Array Std.U32 65536#usize) × (Array\n    Std.U32 32768#usize) × (Array Std.U32 65536#usize) × (Array Std.U8\n    32768#usize) × (Array Std.U8 4096#usize))",
+      "definition_sha256": "aa806fce3c080e3d42a6b6b6c841cf2b421e9f1566596544c860243158bbbbf1"
+    },
+    "d_parse_loop.body": {
+      "line": 4825,
+      "header": "def d_parse_loop.body\n  (input : Slice Std.U8) (ct : Std.Usize) (lazyn : Std.Usize) (d4 : Std.Usize)\n  (d7 : Std.Usize) (skip : Std.Usize) (h3d : Std.Usize) (tbmax : Std.Usize)\n  (lz2max : Std.Usize) (dupmode : Std.Usize) (fback : Std.Usize)\n  (d7l : Std.Usize) (d7e : Std.Usize) (nice : Std.Usize) (n : Std.Usize)\n  (lsym : Array Std.U8 512#usize) (dtab : Array Std.U8 512#usize)\n  (nextl : Array Std.U16 512#usize) (lim : Std.Usize) (sh7 : Std.U32)\n  (plan : alloc.vec.Vec Std.U32) (rs : alloc.vec.Vec Std.U32)\n  (head3 : Array Std.U32 16384#usize) (head4 : Array Std.U32 65536#usize)\n  (prev4 : Array Std.U32 32768#usize) (r10_rows : Array Std.U32 65536#usize)\n  (r10_tags : Array Std.U8 32768#usize) (r10_heads : Array Std.U8 4096#usize)\n  (pa : Array Std.U64 8192#usize) (tb : Array Std.U32 8192#usize)\n  (lf : Array Std.U32 320#usize) (df : Array Std.U32 32#usize)\n  (litc : Array Std.U32 256#usize) (lc : Array Std.U32 512#usize)\n  (dcc : Array Std.U32 32#usize) (s : Std.Usize) (next_upd : Std.Usize)\n  (cands : Array Std.U32 16#usize) (pc : Array Std.U32 16#usize)\n  (pn : Std.Usize) (ppos : Std.Usize) (cl : Std.Usize) (cd : Std.Usize)\n  (cdc : Std.U32) (i : Std.Usize) (anchor : Std.Usize) (alen : Std.Usize) :\n  Result (ControlFlow ((alloc.vec.Vec Std.U32) × (alloc.vec.Vec Std.U32) ×\n    (Array Std.U32 16384#usize) × (Array Std.U32 65536#usize) × (Array\n    Std.U32 32768#usize) × (Array Std.U32 65536#usize) × (Array Std.U8\n    32768#usize) × (Array Std.U8 4096#usize) × (Array Std.U64 8192#usize) ×\n    (Array Std.U32 8192#usize) × (Array Std.U32 320#usize) × (Array Std.U32\n    32#usize) × (Array Std.U32 256#usize) × (Array Std.U32 512#usize) ×\n    (Array Std.U32 32#usize) × Std.Usize × Std.Usize × (Array Std.U32\n    16#usize) × (Array Std.U32 16#usize) × Std.Usize × Std.Usize ×\n    Std.Usize × Std.Usize × Std.U32 × Std.Usize × Std.Usize × Std.Usize)\n    ((alloc.vec.Vec Std.U32) × (alloc.vec.Vec Std.U32) × (Array Std.U64\n    8192#usize) × (Array Std.U32 8192#usize) × (Array Std.U32 320#usize) ×\n    (Array Std.U32 32#usize) × Std.Usize × Std.Usize))",
+      "definition_sha256": "af9b859e6e0ee7bbe73e880bc90906de54d5742b7d98ab7d370353a977af1ace"
+    },
+    "d_parse_loop": {
+      "line": 5431,
+      "header": "def d_parse_loop\n  (input : Slice Std.U8) (plan : alloc.vec.Vec Std.U32)\n  (rs : alloc.vec.Vec Std.U32) (ct : Std.Usize) (lazyn : Std.Usize)\n  (d4 : Std.Usize) (d7 : Std.Usize) (skip : Std.Usize) (h3d : Std.Usize)\n  (tbmax : Std.Usize) (lz2max : Std.Usize) (dupmode : Std.Usize)\n  (fback : Std.Usize) (d7l : Std.Usize) (d7e : Std.Usize) (nice : Std.Usize)\n  (n : Std.Usize) (head3 : Array Std.U32 16384#usize)\n  (head4 : Array Std.U32 65536#usize) (prev4 : Array Std.U32 32768#usize)\n  (r10_rows : Array Std.U32 65536#usize) (r10_tags : Array Std.U8 32768#usize)\n  (r10_heads : Array Std.U8 4096#usize) (pa : Array Std.U64 8192#usize)\n  (tb : Array Std.U32 8192#usize) (lsym : Array Std.U8 512#usize)\n  (dtab : Array Std.U8 512#usize) (nextl : Array Std.U16 512#usize)\n  (lf : Array Std.U32 320#usize) (df : Array Std.U32 32#usize)\n  (litc : Array Std.U32 256#usize) (lc : Array Std.U32 512#usize)\n  (dcc : Array Std.U32 32#usize) (lim : Std.Usize) (sh7 : Std.U32)\n  (s : Std.Usize) (next_upd : Std.Usize) (cands : Array Std.U32 16#usize)\n  (pc : Array Std.U32 16#usize) (pn : Std.Usize) (ppos : Std.Usize)\n  (cl : Std.Usize) (cd : Std.Usize) (cdc : Std.U32) (i : Std.Usize)\n  (anchor : Std.Usize) (alen : Std.Usize) :\n  Result ((alloc.vec.Vec Std.U32) × (alloc.vec.Vec Std.U32) × (Array Std.U64\n    8192#usize) × (Array Std.U32 8192#usize) × (Array Std.U32 320#usize) ×\n    (Array Std.U32 32#usize) × Std.Usize × Std.Usize)",
+      "definition_sha256": "15bacb3e20b7c606e99ba5b9b1dc8eaba876655cf288a333bf65ea3d52b26cd8",
+      "carried_state_order": [
+        "plan",
+        "rs",
+        "head3",
+        "head4",
+        "prev4",
+        "r10_rows",
+        "r10_tags",
+        "r10_heads",
+        "pa",
+        "tb",
+        "lf",
+        "df",
+        "litc",
+        "lc",
+        "dcc",
+        "s",
+        "next_upd",
+        "cands",
+        "pc",
+        "pn",
+        "ppos",
+        "cl",
+        "cd",
+        "cdc",
+        "i",
+        "anchor",
+        "alen"
+      ],
+      "carried_state_count": 27
+    },
+    "d_parse": {
+      "line": 5469,
+      "header": "def d_parse\n  (input : Slice Std.U8) (plan : alloc.vec.Vec Std.U32)\n  (rs : alloc.vec.Vec Std.U32) (ct : Std.Usize) (lazyn : Std.Usize)\n  (d4 : Std.Usize) (d7 : Std.Usize) (skip : Std.Usize) (h3d : Std.Usize)\n  (flen : Std.Usize) (tbmax : Std.Usize) (lz2max : Std.Usize)\n  (dupmode : Std.Usize) (fback : Std.Usize) (d7l : Std.Usize) (d7e : Std.Usize)\n  (nice : Std.Usize) :\n  Result ((alloc.vec.Vec Std.U32) × (alloc.vec.Vec Std.U32))",
+      "definition_sha256": "850aa5cd70415a3467c0f9dde323cfd0ace2e7c816d416244c17106ae01e2146"
+    }
+  },
+  "return_shapes": {
+    "r10_row_tag": "U8 tag",
+    "r10_row_store": "((h:Usize,slot:Usize,victim:U32,victim_tag:U8),rows:U32[65536],tags:U8[32768],heads:U8[4096])",
+    "r10_row_insert_pos": "((c3:Usize,c4:Usize,h:Usize,slot:Usize,victim:U32,victim_tag:U8),head3,head4,prev4,rows,tags,heads)",
+    "r10_row_insert_range_loop_done": "(head3,head4,prev4,rows,tags,heads)",
+    "r10_row_walk_loop_done": "(cands,nc,best)",
+    "r10_row_walk": "((nc,best),cands)",
+    "d_parse_loop_done": "(plan,rs,pa,tb,lf,df,s,i) -- unchanged8 components",
+    "d_parse": "(plan,rs) -- unchanged public signature"
+  },
+  "proof_plan_checks": {
+    "tag_shift": "CONFIRMED0/4 via U32 rem/mul then U8 shift; prove shift<8",
+    "range_measure": "CONFIRMED to-q; q state index6",
+    "walk_measure": "CONFIRMED16-step; step index1,k index2,nc index3,best index4",
+    "main_state_net_increase_one": "CONFIRMED27 components, head7/prev7 replaced by rows/tags/heads",
+    "main_invariants": "Retain H3/H4 LeAll; remove H7 bound; row/tag/cursor untrusted",
+    "query_position_guard": "CONFIRMED old>0 then cast(old)<=i before c=cast(old)-1 and probe",
+    "additional_cast_fact": "Establish U32-to-Usize cast preserves positive old from System.Platform.numBits>=32 for safe c subtraction",
+    "additional_loop_premises": "Row-walk-loop needs row<4096,9<=cap,i+cap<=input.length,input.length+8<=Usize.max,best<=cap; wrapper computes row=(h/16)%4096",
+    "victim_substitution": "CONFIRMED only at scanned slot==written; no extra mutable victim state"
+  },
+  "validation_boundaries": {
+    "native_Lean_compilation": "NOT_RUN",
+    "original_obligation": "NOT_RUN",
+    "axiom_whitelist": "NOT_RUN",
+    "public_round_trip_gate": "NOT_RUN",
+    "performance": "NOT_REVIEWED_BY_THIS_INTERFACE_AUDIT"
+  },
+  "decision": "No complete Parse port or gate expense before main-thread performance selection."
+}

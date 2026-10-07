@@ -1,0 +1,62 @@
+{
+  "status": "VERIFIED_INTERFACE_ONLY",
+  "run_id": "37684506856",
+  "source_sha256": "1ddbe9f60a2a5dec38a67dcf80211dc2f43bd1160f4916074bb545128a967ee5",
+  "proof_sha256": "d07ba3aed243ca6cb340bcaa1f6a015f095a16fb0cba2e7e51b187b26646547b",
+  "extracted_files": {
+    "Types.lean": {
+      "bytes": 503,
+      "sha256": "276d4089d337e0d7da19d73f67b92ed57aa61ce5b0b548420962498a78bf5966"
+    },
+    "Constants.lean": {
+      "bytes": 16204,
+      "sha256": "4a083c4264c013f437fcb492c86cec195ab7ff1b1c5cd74fd0afda2ded2e5773"
+    },
+    "Funs.lean": {
+      "bytes": 647743,
+      "sha256": "6a54c5420f6ba722ba9baba30f87609569689f328021044d76202e1fa5fb646c"
+    }
+  },
+  "interfaces": {
+    "d16_link": {
+      "arguments": "q c",
+      "u16_chain_arrays": 0
+    },
+    "d16_insert_pos": {
+      "arguments": "head3 head4 prev4 head7 prev7 q b8 sh7",
+      "u16_chain_arrays": 4
+    },
+    "d16_insert_range_loop": {
+      "arguments": "input head3 head4 prev4 head7 prev7 \u00abto\u00bb sh7 q",
+      "u16_chain_arrays": 2
+    },
+    "d16_insert_range": {
+      "arguments": "input head3 head4 prev4 head7 prev7 \u00abfrom\u00bb \u00abto\u00bb sh7",
+      "u16_chain_arrays": 2
+    },
+    "d16_skip_same": {
+      "arguments": "prev start depth same",
+      "u16_chain_arrays": 1
+    },
+    "d16_walk_loop": {
+      "arguments": "s prev i b8 cap cands nice nc best c k",
+      "u16_chain_arrays": 1
+    },
+    "d16_walk": {
+      "arguments": "s prev i start depth b8 cap cands nc0 best0 nice",
+      "u16_chain_arrays": 1
+    },
+    "d_parse_loop": {
+      "arguments": "input plan rs ct lazyn d4 d7 skip h3d tbmax lz2max dupmode fback d7l d7e nice n head3 head4 prev4 head7 prev7 pa tb lsym dtab nextl lf df litc lc dcc lim sh7 s next_upd cands pc pn ppos cl cd cdc i anchor alen",
+      "u16_chain_arrays": 2
+    }
+  },
+  "parent_definition_check": "After omitting Source comments and normalizing whitespace, all three D parser definitions equal the parent with only expected U16 types/zero values and helper call names replaced",
+  "normalized_parser_definition_sha256": {
+    "d_parse_loop.body": "b99623cfff45fa0b4acc68dd98469c1a7b87add09d9d4d30cf1501efd68d55ee",
+    "d_parse_loop": "3c7f4a7548f2deb7e38135cdc44b83236de193668586789bab6ff11edaede603",
+    "d_parse": "b690d15b1ee02b9a30d2eb4b65baabfb9922a7a5eb5c1e58aeeeb15bc78b6877"
+  },
+  "correction": "d16_walk_loop_spec predecessor parameter explicitly corrected from U32 to U16; d_parse's four explicit tuple-array types were already U16",
+  "proof_elaboration": "UNKNOWN: no local Lean toolchain; original obligation, axiom whitelist and round trip remain required"
+}

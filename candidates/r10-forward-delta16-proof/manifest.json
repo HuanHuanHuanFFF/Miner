@@ -8,7 +8,7 @@
   },
   "hashes": {
     "parse.rs": "1ddbe9f60a2a5dec38a67dcf80211dc2f43bd1160f4916074bb545128a967ee5",
-    "Parse.lean": "732055386a474f0590cc1c5a17553262b3f1c2265ebb22f7c9332c55d774d9d7"
+    "Parse.lean": "d07ba3aed243ca6cb340bcaa1f6a015f095a16fb0cba2e7e51b187b26646547b"
   },
   "bytes": {
     "parse.rs": 182240,
@@ -25,6 +25,7 @@
   "audit": "Only d_parse's two prev array types and six helper call sites change; five copied/small helpers are added. Reversing that region restores the scalar source exactly. Shared DP functions, router, knobs, candidates, record encoding, planner and emitters remain byte-identical.",
   "equivalence_argument": "For live c with 0 < i-c < WN, the slot still belongs to c, so a representable link recovers its original predecessor. A discarded link is already older than the active window. At c=i-WN the slot may have just been overwritten, but every strictly decreasing successor is out of window in either representation. A stale skip_same start likewise cannot reach a newer in-window node.",
   "equivalence_status": "INFERRED: requires fresh 444-case Rust token/decode equality and public output equality. Finite link-model tests are separate evidence, not a proof of compression semantics.",
-  "proof_status": "DRAFT_UNTESTED: local helper and U16 loop-state bridge; real extraction signatures and complete original gate remain pending",
-  "performance_status": "UNKNOWN: saves 128 KiB of fixed chain state and half its initialization/store traffic but adds one distance encode/decode operation; measure paired total compression."
+  "proof_status": "INTERFACE_RECONCILED_UNCOMPILED: exact helper and U16 state interfaces reconciled with run 37684506856; original full gate untested",
+  "performance_status": "UNKNOWN: saves 128 KiB of fixed chain state and half its initialization/store traffic but adds one distance encode/decode operation; measure paired total compression.",
+  "extracted_funs_sha256": "6a54c5420f6ba722ba9baba30f87609569689f328021044d76202e1fa5fb646c"
 }

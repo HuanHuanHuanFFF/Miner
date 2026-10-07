@@ -3299,7 +3299,7 @@ theorem d16_insert_range_loop_spec (input : Slice Std.U8) (head3 : Array Std.U32
   exact d16_insert_range_loop_spec input head3 head4 prev4 head7 prev7 e sh7 f B h3 h4 h7 he he8
 
 @[local step]
-theorem d16_walk_loop_spec (s : Slice Std.U8) (prev : Array Std.U32 32768#usize) (i : Std.Usize) (b8 : Std.U64)
+theorem d16_walk_loop_spec (s : Slice Std.U8) (prev : Array Std.U16 32768#usize) (i : Std.Usize) (b8 : Std.U64)
     (cap : Std.Usize) (cands) (nice nc best c k : Std.Usize)
     (hc : c.val ≤ i.val) (hcap : 9 ≤ cap.val) (hic : i.val + cap.val ≤ s.length)
     (hs8 : s.length + 8 ≤ Std.Usize.max) (hb : best.val ≤ cap.val) :

@@ -5,6 +5,7 @@ import hashlib
 import json
 import statistics
 from round3 import load_scorer
+from round10_payability import analyze_payability
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -41,8 +42,16 @@ def main():
         dominating = [p.name for p in points if p.time_s <= x and p.ratio_pct <= y]
         eligible = 0 < x <= bounds.time_s and 0 < y <= bounds.ratio_pct and not dominating
         w = sc.local_global_improvement_space_log_weights(sc.pareto_front(points + [sc.Point('hypothetical', x, y)]), bounds)
+        payment = analyze_payability(rows, x, y, '453', sc, pareto_share=float(policy['pareto_share']),
+                                     improvement_share=float(policy['improvement_share']))
+        owner = payment['same_hotkey_payability_if_admission_registration_and_bounty_remain_eligible']
         return {'time_ratio': x, 'compressed_pct': y, 'on_geometric_frontier': eligible,
                 'conditional_share_pct': w.get('hypothetical', 0) * 100 if eligible else 0,
+                'conditional_share_scope': 'Geometric Pareto share only; admission, registration and bounty are assumed, not verified',
+                'current_453_hotkey_new_point_share_pct': owner['candidate_additional_share_pct'],
+                'older_same_hotkey_frontier_ids_surviving': owner['older_same_hotkey_frontier_ids_surviving'],
+                'current_hotkey_payability_reason': owner['reason'],
+                'independent_eligible_hotkey_conditional_share_pct': payment['independent_eligible_hotkey_conditional_share']['share_pct_of_competition_pareto_pool'],
                 'dominating_ids': dominating,
                 'size_gap_pp': max(0, y - min((p.ratio_pct for p in points if p.time_s <= x), default=bounds.ratio_pct))}
 
@@ -141,6 +150,8 @@ def main():
     candidates.sort(key=lambda g: (-g['conservative_projection']['conditional_share_pct'], -g['same_family_projection']['conditional_share_pct'], g['public_size_pct'], g['same_family_projection']['time_ratio']))
     result = {'status': 'COMPLETED_CI_RECEIPTS_RECOMPUTED', 'snapshot': pages[0]['context'], 'scorer_replay_max_error': replay_error,
               'official_policy': policy, 'competition_capture_sha256': sha(competition_path),
+              'payability_reference_453': next({'submission_id': r['id'], 'metrics': r['metrics'], 'score': r['score']} for r in rows if r['id'] == '453'),
+              'payability_rule_source_sha256': sha(ROOT / 'sources/conjectures-optimisation-deflate/validator/scoring/combine.py'),
               'formal_anchor': {'submission_id': '361', 'metrics': formal}, 'completed_ci_runs': runs, 'candidate_count': len(candidates),
               'public_paired_processes': sum(r['public_paired_processes'] for r in runs), 'same_byte_shadows': shadows,
               'finite_equivalence_checks': checks, 'candidates': candidates, 'new_formal_submissions': 0, 'new_chain_transactions': 0,
@@ -148,7 +159,7 @@ def main():
                          'Proof status belongs to the exact source/proof pair recorded in gates, not every proof variant.',
                          'Adverse scenario: worst observed paired relative time plus 2%; size max(family+0.01pp, public*1.008). This is not a confidence interval.',
                          'Private corpus, online admission and rewards for these candidates are UNKNOWN.']}
-    args.output.write_text(json.dumps(result, indent=2) + '\n')
+    args.output.write_bytes((json.dumps(result, indent=2) + '\n').encode())
     print(json.dumps({'runs': len(runs), 'candidates': len(candidates), 'paired_processes': result['public_paired_processes'],
                       'results': [{k: g[k] for k in ('candidate', 'public_time', 'public_size_pct', 'relative_time_change_pct_vs_parent', 'public_size_change_pp_vs_parent', 'same_family_projection', 'conservative_projection', 'verified_source_proof_pairs')} for g in candidates]}))
 
