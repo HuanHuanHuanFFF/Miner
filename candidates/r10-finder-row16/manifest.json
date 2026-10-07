@@ -1,0 +1,52 @@
+{
+  "candidate": "r10-finder-row16",
+  "parent": "candidates/r9-block-scalar",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "faf1d7281678d12c3243002121feecdd0ea139633dea197dbc77d86fb6319257",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "hashes": {
+    "parse.rs": "ffe31d6253f851fd3e843a991c05e12564cbab289f117c41618653e9913dcc73",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "bytes": {
+    "parse.rs": 183433,
+    "Parse.lean": 405395
+  },
+  "attribution": {
+    "parent": {
+      "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+      "public_reference": "references/round7-public-361/PROVENANCE.json",
+      "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+    },
+    "row_design": "facebook/zstd v1.5.7 lib/compress/zstd_lazy.c, ZSTD_row_nextIndex / row_update_internalImpl / RowFindBestMatch and high-level design comment1124..1138",
+    "source_sha256": "dd6ccf357165dc8cb574ea56a34ff1db57b7b31728b32103d0c6b72319fd45b1",
+    "local_provenance": "candidates/r10-finder-row16/provenance/sources.json",
+    "license": "Zstandard dual BSD/GPL; source and both license notices retained. Scalar Rust implementation of row/tag/ring concept, not the SIMD/SWAR code."
+  },
+  "mechanism": "Replace D's H7 head/prev chain with4096 rows x16 recent u32 positions, packed4-bit tags and one cursor per row; H3/H4 and all downstream planners/recorders/emitters retain parent code",
+  "shape": {
+    "buckets": 4096,
+    "entries_per_row": 16,
+    "hash_bits": 16,
+    "row_bits": 12,
+    "tag_bits": 4,
+    "position_bytes": 262144,
+    "tag_bytes": 32768,
+    "cursor_bytes": 4096,
+    "total_bytes": 299008,
+    "old_h7_head_plus_prev_bytes": 393216,
+    "state_delta_bytes": -94208
+  },
+  "maintenance": "One O(1) ring insertion at each original inserted position, including taken-match ranges; update position, one packed tag byte and cursor. Capture evicted entry to query all16 entries existing before the current insertion.",
+  "query": "Scan at most16 consecutive row slots newest to oldest; row+tag reconstructs the original16-bit hash. Only valid matching tags consume the unchanged dep7 budget; duplicate already-probed H3/H4 heads consume budget but avoid byte probing. Existing nice/cap/nc guards and probe are retained.",
+  "cost_tradeoff": "Saves old head+prev state and pointer-dependent traversal, adds nibble/cursor maintenance and scalar tag scanning. SIMD release-note speed figures do not transfer; actual encoder-inclusive time remains unknown.",
+  "coverage_limit": "Only latest16 positions sharing a12-bit row are retained, so other tags can evict deep original chain nodes; no original long-chain coverage or token equivalence claim. The saved victim prevents accidental loss of one pre-insertion slot but does not restore older history.",
+  "audit": "Remove five new helpers and reverse four exact substitutions inside d_parse to restore scalar bytes. Original insert_pos/insert_range/d_walk functions, other routes/knobs, H3/H4 statements and every downstream planner/recorder/checked emitter remain byte-identical.",
+  "proof_status": "UNADAPTED_PARENT_DRAFT / NOT_RUN: new tag/store/insert/range/walk totality and D-state replacement require actual extraction and proof port. Original obligation/allowed axioms/full round trip must pass on exact final files.",
+  "proof_cost": "Retain H3/H4 head bounds; rows/tags/cursor content need not be trusted because query guards position<=i, nonzero and valid distance before probe. Replace two old chain arrays with three row arrays, remove H7 head bound, and preserve probe's best<=cap postcondition and bounded16-step termination.",
+  "correctness_status": "UNKNOWN native build/finite decode/full gate; parent checked emission is not a gate for changed Rust",
+  "performance_status": "UNKNOWN until same-runner paired public total-compression and encoded size; this is one fixed shape, not a row/depth sweep",
+  "falsification": "Stop if extraction/build/decode rejects, or loss of original long-chain coverage costs too much size for measured time gains; do not attribute any speed gain solely to layout without code/phase evidence."
+}

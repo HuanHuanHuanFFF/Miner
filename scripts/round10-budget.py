@@ -17,5 +17,5 @@ record = {'start_utc': start.isoformat(), 'deadline_utc': deadline.isoformat(),
           'new_experiment_cutoff_asia_shanghai': (deadline - reserve).astimezone(zone).isoformat(),
           'boundary': 'Stop new experiments at the allocation cutoff; running CI completes naturally or at configured timeout. All reading, fixes, dispatch and checks count.'}
 target = Path(__file__).resolve().parents[1] / 'evidence/round10/budget.json'
-target.write_text(json.dumps(record, indent=2) + '\n')
+target.write_bytes((json.dumps(record, indent=2) + '\n').encode())
 print(json.dumps(record))
