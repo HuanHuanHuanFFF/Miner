@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "snapshot": {
+    "snapshot_id": "25678",
+    "computed_at": "2026-10-07T14:10:41.852363+08:00",
+    "policy_version": "compression-policy-c255effb7d5afeef",
+    "status": "ready",
+    "freshness": "unknown",
+    "freshness_reason": "Recorded scoring pass; live policy changes require a new pass.",
+    "pareto_pages": 5,
+    "pareto_items": 454,
+    "leaderboard_pages": 5,
+    "leaderboard_rows": 430,
+    "evidence_dir": "evidence/round5/frontier-25678"
+  },
+  "official_sources": {
+    "competition": "https://conjectures.io/v1/competitions/deflate",
+    "pareto": "https://conjectures.io/v1/competitions/deflate/pareto?limit=100&snapshot_id=25678",
+    "leaderboard": "https://conjectures.io/v1/competitions/deflate/leaderboard?limit=100&snapshot_id=25678",
+    "submission_453": "https://conjectures.io/v1/competitions/deflate/submissions/453?snapshot_id=25678",
+    "submission_432": "https://conjectures.io/v1/competitions/deflate/submissions/432?snapshot_id=25678",
+    "submission_299": "https://conjectures.io/v1/competitions/deflate/submissions/299?snapshot_id=25678"
+  },
+  "scorer_replay": {
+    "status": "VERIFIED",
+    "loader": "scripts/round4.load_scorer",
+    "implementation": "sources/conjectures-optimisation-deflate/validator/scoring/pareto.py",
+    "method": "local_global_improvement_space_log_weights",
+    "published_frontier_points": 75,
+    "maximum_absolute_weight_difference": 6.938893903907228e-18,
+    "replayed_weight_sum": 1.0,
+    "submission_453_published_and_replayed_pareto_weight": 0.005035502557086433,
+    "hypothetical_weights_are": "conditional geometry diagnostics after adding a candidate point; not admission, ranking, payment, or reward predictions"
+  },
+  "anchors": {
+    "fast3_submission_453": {
+      "source_sha256": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+      "gate_status": "passed",
+      "admission": "recorded/passed",
+      "metrics": {
+        "balanced_time_ratio": 0.43787345819892,
+        "mean_file_compression_pct": 36.999728556810254
+      },
+      "on_frontier": true,
+      "payment_eligible": true,
+      "payable_weight": 0.005035502557086433,
+      "evidence": "evidence/round5/frontier-25678/submission-453.json"
+    },
+    "submission_432": {
+      "metrics": {
+        "balanced_time_ratio": 0.4413850574969763,
+        "mean_file_compression_pct": 36.91273515631194
+      },
+      "on_frontier": false,
+      "evidence": "evidence/round5/frontier-25678/submission-432.json"
+    },
+    "submission_299": {
+      "metrics": {
+        "balanced_time_ratio": 9.176642754907775,
+        "mean_file_compression_pct": 34.10237321953839
+      },
+      "on_frontier": false,
+      "evidence": "evidence/round5/frontier-25678/submission-299.json"
+    }
+  },
+  "candidate_coordinate_method": {
+    "fast3_family": "#453 official coordinates times same-run candidate/fast3 time ratio; official size multiplied by same-run public size ratio. If public output is unchanged, size must remain exactly the anchor's official size.",
+    "submission_432_family": "#432 current official coordinates scaled by the candidate's prior #432-relative calibration from snapshot 23961.",
+    "conditional_geometry": "Each candidate point was added to the snapshot 25678 official frontier and evaluated with the official pure scorer. These transfers are INFERRED; candidate private-stage2 behavior and admission are UNKNOWN."
+  },
+  "shortlist": [
+    {
+      "priority": 1,
+      "candidate": "r4-cpu-run1tai",
+      "candidate_path": "candidates/r4-cpu-run1tai",
+      "family_anchor": "submission 453 / fast3",
+      "source_sha256": "02690c07a5afd8bb13f25a6397680aa86128d7d65ae412e0591b3b8e166003aa",
+      "proof_sha256": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04",
+      "completed_gate_runs": [
+        {
+          "run_id": "37515419910",
+          "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37515419910"
+        },
+        {
+          "run_id": "37522012041",
+          "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37522012041"
+        }
+      ],
+      "historical_gate_status": "VERIFIED: two successful candidate gates; finite public token and output equality with fast3, not an all-input equivalence claim",
+      "historical_performance": {
+        "runner_count": 2,
+        "cpu_model": "AMD EPYC 7763 64-Core Processor",
+        "mean_time_delta_vs_fast3_pct": -0.09998055207754986,
+        "runner_delta_range_pct": [
+          -0.27732651595041014,
+          0.07736541179531042
+        ],
+        "every_runner_faster": false,
+        "public_size_pct": 36.60213910633018
+      },
+      "current_same_family_transfer": {
+        "status": "INFERRED",
+        "balanced_time_ratio": 0.43743566989801164,
+        "mean_file_compression_pct": 36.999728556810254,
+        "on_frontier_if_transfer_holds": true,
+        "conditional_geometry_weight_if_added": 0.005869548155895462
+      },
+      "why_retest": "Two complete gates, but the small speed gain changes sign between runners; a new independent four-block runner with fast3-shadow and same-process CPU control is the best immediate check."
+    },
+    {
+      "priority": 2,
+      "candidate": "r4-cpu-flushzero",
+      "candidate_path": "candidates/r4-cpu-flushzero",
+      "family_anchor": "submission 453 / fast3",
+      "source_sha256": "ed565b50c03230c6f08027af5e3ac81691cce3f66917a34da09dce4bdbe056c3",
+      "proof_sha256": "2ec5a9f7471cc94d23822ecfa990a637215eeaede7c232616412cfce0efa312d",
+      "completed_gate_runs": [
+        {
+          "run_id": "37522012041",
+          "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37522012041"
+        }
+      ],
+      "additional_measurement_runs": [
+        {
+          "run_id": "37529887857",
+          "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37529887857",
+          "status": "cancelled after measurements; not a completed candidate gate"
+        }
+      ],
+      "historical_gate_status": "VERIFIED: one successful candidate gate; finite public token and output equality with fast3, not an all-input equivalence claim",
+      "historical_performance": {
+        "runner_count": 2,
+        "mean_time_delta_vs_fast3_pct": -0.20499483517216893,
+        "runner_delta_range_pct": [
+          -0.62109673658787,
+          0.21110706624353215
+        ],
+        "every_runner_faster": false,
+        "public_size_pct": 36.60213910633018
+      },
+      "current_same_family_transfer": {
+        "status": "INFERRED",
+        "balanced_time_ratio": 0.43697584022502245,
+        "mean_file_compression_pct": 36.999728556810254,
+        "on_frontier_if_transfer_holds": true,
+        "conditional_geometry_weight_if_added": 0.006768127972744046
+      },
+      "why_retest": "Largest fast3-family speed estimate, but the paired result reverses sign and only one candidate gate completed; high-priority follow-up after run1tai if the first CPU result is promising."
+    },
+    {
+      "priority": 3,
+      "candidate": "r4-parse-lazy4far",
+      "candidate_path": "candidates/r4-parse-lazy4far",
+      "family_anchor": "submission 453 / fast3",
+      "source_sha256": "e08199ffd476a41def075ada8fea028af4b9253306ae3d7e9b5a1ad771411e48",
+      "proof_sha256": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04",
+      "completed_gate_runs": [
+        {
+          "run_id": "37520076712",
+          "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37520076712"
+        }
+      ],
+      "historical_gate_status": "VERIFIED: one successful candidate gate; performance output differs on a narrow public input subset",
+      "historical_performance": {
+        "runner_count": 1,
+        "mean_time_delta_vs_fast3_pct": 0.1792729433137935,
+        "runner_delta_range_pct": [
+          0.1792729433137935,
+          0.1792729433137935
+        ],
+        "public_size_pct": 36.57722958252065
+      },
+      "current_same_family_transfer": {
+        "status": "INFERRED",
+        "balanced_time_ratio": 0.43865844683542304,
+        "mean_file_compression_pct": 36.97454845417324,
+        "on_frontier_if_transfer_holds": true,
+        "conditional_geometry_weight_if_added": 0.001902769523869859
+      },
+      "why_retest": "One four-block runner gives a small compression improvement with a slightly slower mean; another runner can distinguish that tradeoff from measurement noise."
+    },
+    {
+      "priority": 4,
+      "candidate": "r3-432-dmin257",
+      "candidate_path": "candidates/r3-432-dmin257",
+      "family_anchor": "submission 432",
+      "source_sha256": "e52127cc74f6b437f7f50b2433522f6d3b9dbb6847cbb5397532ef5716773fe2",
+      "proof_sha256": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04",
+      "completed_gate_runs": [
+        {
+          "run_id": "37492693356",
+          "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37492693356"
+        }
+      ],
+      "historical_gate_status": "VERIFIED: successful four-block candidate gate; this candidate is based on #432, so its estimate uses the current #432 same-family detail rather than #453",
+      "historical_performance": {
+        "runner_count": 1,
+        "matched_blocks": 4,
+        "time_range": [
+          0.4388068984748475,
+          0.44053808397231853
+        ],
+        "time_change_pct_by_block_vs_432": [
+          -0.31018171570160735,
+          -0.19188994060216347,
+          -0.5841065478630281,
+          -0.39600835284121505
+        ],
+        "size_change_pp_vs_432": 0.0016349206349204337,
+        "descriptive_public_file_bootstrap_lower5_speed_gain_pct": 0.18604580010221178,
+        "bootstrap_scope": "public-file resampling only; not official admission bootstrap"
+      },
+      "current_same_family_transfer": {
+        "status": "INFERRED",
+        "balanced_time_ratio": 0.4397495200002608,
+        "mean_file_compression_pct": 36.91438746163741,
+        "on_frontier_if_transfer_holds": true,
+        "conditional_geometry_weight_if_added": 0.0033033010962804734,
+        "one_percent_slow_stress_remained_on_frontier": false
+      },
+      "why_retest": "A genuine time/size tradeoff close to the current frontier with four paired blocks but only one runner; retain only after the fast3 CPU checks."
+    },
+    {
+      "priority": 5,
+      "candidate": "r3-432-tshift3",
+      "candidate_path": "candidates/r3-432-tshift3",
+      "family_anchor": "submission 432",
+      "source_sha256": "9ec9e306353a1f5747429db553e10c8c46be013c3f6c62b5a9d696cd649eae6c",
+      "proof_sha256": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04",
+      "completed_gate_runs": [
+        {
+          "run_id": "37492693356",
+          "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37492693356"
+        }
+      ],
+      "historical_gate_status": "VERIFIED: successful four-block candidate gate; same #432 source family",
+      "historical_performance": {
+        "runner_count": 1,
+        "matched_blocks": 4,
+        "time_range": [
+          0.43938995396359865,
+          0.44243346800086214
+        ],
+        "time_change_pct_by_block_vs_432": [
+          -0.42570507553969517,
+          -0.43834569303830007,
+          -0.45200975871080296,
+          0.2375274119679638
+        ],
+        "size_change_pp_vs_432": 0.0145399246586706,
+        "descriptive_public_file_bootstrap_lower5_speed_gain_pct": -0.012393091842529114,
+        "bootstrap_scope": "public-file resampling only; not official admission bootstrap"
+      },
+      "current_same_family_transfer": {
+        "status": "INFERRED",
+        "balanced_time_ratio": 0.44019493649418057,
+        "mean_file_compression_pct": 36.92742968914265,
+        "on_frontier_if_transfer_holds": true,
+        "conditional_geometry_weight_if_added": 0.0012541744832806061,
+        "one_percent_slow_stress_remained_on_frontier": false
+      },
+      "why_retest": "Low-cost same-gate comparison requested for coverage; its one-run public lower-tail speed estimate crosses zero and its projected conditional weight is below dmin257."
+    }
+  ],
+  "excluded_after_correction": [
+    {
+      "candidate": "r4-alt299-tinydepth32",
+      "source_sha256": "ca41b676a56eb31607199e941893a03466dc5c5e74823d1630449ed2f3384863",
+      "proof_sha256": "9b77b3523cbf7044aaffa11b6fd9676b3615ca4bf148b43b3cb92da4073b3e3d",
+      "gate_run": "37535056448",
+      "reason": "Public size equals public299. Correct family transfer preserves #299 formal size 34.10237321953839%; the earlier trial coordinate 33.84283105% was a calibration error. At corrected inferred coordinates (9.0805508023, 34.1023732195), the official scorer says it is not on snapshot 25678's frontier. Keep #299 as the true family anchor; do not use #453 for it."
+    }
+  ],
+  "unknowns": [
+    "Independent-runner performance and noise for every shortlisted candidate.",
+    "Private corpus stage2 behavior, online admission for any hypothetical candidate, future snapshot positions, and actual rewards."
+  ],
+  "ci_launched_by_this_task": false
+}
