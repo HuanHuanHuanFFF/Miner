@@ -186,3 +186,143 @@ Audit identities: original copy declaration `fcfe83e35317d8f35a14cf213e03287cf26
 **NOT_ADAPTED:** The copied Lean is kept solely as its frozen provenance and starting point. `EH.copy32_loop_spec`/`copy32_spec` currently refer to the original single loop. The guarded direct-index loop plus fallback is expected to produce new extracted loop definitions, potentially `h_copy32_loop0` and `h_copy32_loop1`; exact signatures/names are UNKNOWN until the root supplies actual Funs. This new Rust hash must not be described as gate-ready with the inherited proof.
 
 First require the finite/public token/output comparison and paired total-compression screen against exact H16 baseline and shadow. Inspect the new legal-range copying code for hoisted guards, vectorized operations, or compiler-generated bulk copy. Ordinary source indexing alone does not prove those changes occur; extra guards, overflow checks or layout could instead regress time. If the last screen has no stable useful gain, stop this CPU line without further variants. If the result is useful, adapt only the new copy loop specs against actual extraction and run the unchanged complete official gate. Full correctness, runtime benefit, private migration, admission and payment remain UNKNOWN at candidate creation.
+
+## Copy screen outcome — vectorization occurred, total time did not improve
+
+Reviewed `2026-10-07T09:38:31Z`: CI `37598783885`, commit `a25dee2e56ba8d7f6d50ce9d132cae3e1af59d10`, reported AMD EPYC 7763. Receipts are `evidence/round6/37598783885/copy-screen/screen/`. The exact source remains `d414c981b22a23cae40561173e6812e4846f3fb8ba500ad6dd5d4ef5582efb19`; source, inherited proof and generator were not edited by this review.
+
+**VERIFIED public/finite behavior:** The diagnostic reports 444 cases with zero differing/failed cases and exit 0. An independent read of the two public JSONL blocks confirmed all 56 input/token/output identity records against the frozen H16 baseline. Public size remains 33.863213837353%. Recomputing the medians from all eleven measured repetitions and the equal-file paired-incumbent ratios gives:
+
+| Method | Block 1 public x | Block 2 public x | Changes vs H16 (%) | Mean change (%) |
+|---|---:|---:|---|---:|
+| H16 baseline | 7.283624396998 | 7.260642384291 | reference | reference |
+| identical-source shadow | 7.249515494347 | 7.261823837332 | -0.468296 / +0.016272 | -0.226012 |
+| copyfast | 7.320463610369 | 7.320246615269 | **+0.505781 / +0.820922** | **+0.663352** |
+
+Both measured copyfast blocks regress total compression time; they do not establish a useful optimization. Auxiliary timing was still running and no saved `copy-screen/gate/h16-analysis.json` existed when this note was finalized.
+
+### Actual copy code changes
+
+**VERIFIED coverage:** Despite the two-million-character disassembly cap, every byte of all 26 `candidate::parse::*` symbols is present in each saved prefix. Baseline's last such symbol ends at `0x25d55`, before the prefix ends near `0x311ae`; copyfast's last ends at `0x27ba5`, before its prefix ends near `0x320f9`. Function-size metadata and instruction inspection are therefore complete for the discussed candidate code, without asserting whole-library assembly equivalence.
+
+The new `parse` at `0x19330` contains a real vector copying body at **`0x1c640–0x1c65f`**: two `movdqu` loads, two `movdqu` stores, an index increment by **8 u32 / 32 bytes**, and only the loop-end comparison/back edge. There are **no per-word source/destination guards inside this vector body**. Another plan-copy vector body at **`0x1e170–0x1e18d`** has the same 32-byte-per-iteration shape. Additional table-copy vector bodies occur at `0x1c7d0` and `0x1c940`, and `h_sort_live` has a `movups` 32-byte copying body at `0x12b40–0x12b60`.
+
+The optimization is partial. The legal-path scalar cleanup at **`0x1c670–0x1c690`** still checks both source and destination bounds before each residual word, with branches to panic paths. The final-plan cleanup at **`0x1e1d0–0x1e1f0`** likewise retains both checks per scalar word. The original invalid-range fallback remains a guarded scalar path, for example `0x1c590–0x1c602`. There is no memcpy/memmove call in the complete new `parse` symbol: LLVM vectorized loop portions rather than replacing the whole helper with a library call.
+
+**Supported mechanism finding:** Unlike the two inline candidates, copyfast did alter the machine code and produce bulk vector copies with the repeated guards removed from their vector interiors. The claim “LLVM already optimized all original copies, so no change occurred” is false for this new build. Equally, “all copy bounds checks were removed” is false because scalar cleanup and fallback retain checks. The local code change did not improve the measured total objective.
+
+### Code size is evidence, not a measured cause
+
+GNU size reports its aggregate `text` column **361525 → 369277 (+7752)**, data **12336 → 12384 (+48)**, and bss **778 → 1162 (+384)**. The bss value was corrected during the later three-way outline review against the original raw size receipt. Actual nm function-size changes are concentrated in three functions:
+
+| Function | Baseline bytes | copyfast bytes | Delta |
+|---|---:|---:|---:|
+| `h_sort_live` | 1220 | 1380 | +160 |
+| `h_block_bits` | 7380 | 14117 | +6737 |
+| `parse` | 20887 | 21679 | +792 |
+
+These increases and address/layout shifts are directly observed. There are no counter/profile or controlled layout experiments establishing that code growth, cache behavior, extra guards, or any one function caused the total-time regression. The fraction of runtime spent in each copy path is also UNKNOWN. Code-size growth is not used as a causal explanation for the +0.663% result.
+
+**Decision:** Stop this final CPU hypothesis at the screen result, retain the negative evidence and the already-running auxiliary receipt when it arrives, and create no additional copy variant or experiment. Do not spend proof migration/full-gate work on an unhelpful timing screen. The inherited Lean remains **NOT_ADAPTED**; there is no new extraction, formal acceptance, admission or reward claim for copyfast. Original baseline and all prior candidates remain frozen.
+
+## Explicit correction authorized after the copy screen — one outline control
+
+The previous stop applies to the original unhelpful `copyfast` candidate. After reviewing the new machine-code evidence, the root explicitly authorized **one** additional mechanism diagnostic: `r6-h16-cpu-copyfast-outline`. This update preserves the failed screen and does not revise its original inputs or claim that the failure cause is already known. No other algorithm, budget or attribute setting is added.
+
+The measured copyfast `h_block_bits` expansion (7380→14117 bytes) and realized vector-copy bodies support a falsifiable question: does keeping a single shared copy body out of its callers improve the overall tradeoff? Code growth was not proven to cause the regression. The new single-source-variable intervention is an `#[inline(never)]` hint on `h_copy32`; it can also change call overhead, constant specialization and layout, so even a favorable result would not uniquely identify an instruction-cache cause.
+
+### Frozen inputs and exact generated delta
+
+Generated and independently checked at `2026-10-07T09:46:48Z`. `scripts/make-round6-h16-copy-outline.py` writes only the new directory and has SHA256 `b1f37141a0ec90e0c0169ed18f0eef8a1958eb9cb1d7d468d4790b9c86fa5306`. It hard-locks both copyfast source/proof files and its two metadata artifacts. Generation and no-write `--check` completed with exit 0.
+
+| Artifact | SHA256 | Bytes |
+|---|---|---:|
+| new outline Rust | `f08d6bb24fc3a9f62b2b0b271e7d0f8364aaf0341951dc6dbb7e097207294dfe` | 176594 |
+| exact inherited copyfast Lean | `d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7` | 264194 |
+| unchanged copyfast Rust parent | `d414c981b22a23cae40561173e6812e4846f3fb8ba500ad6dd5d4ef5582efb19` | 176577 |
+
+**VERIFIED:** The new Rust differs from its frozen copyfast parent by exactly **17 bytes**, the one `#[inline(never)]` line immediately before `h_copy32`. Removing that named attribute reproduces the entire parent byte-for-byte. Both fast/fallback loops, range checks, operations, signatures, call sites, existing attributes, H/S routing, cost model and budgets remain exact. The Lean is also byte-identical. Independent parent metadata hashes remain manifest `c544a73623dba8df6b09a3736be4fd6f3a548f46562f77a8482ce8d082a57cbb` and copy audit `fef0cda0f7301323670054964d87f4abb2f224746da20bf587475adf7277465c`. None of the original five candidate artifacts or their generators is edited by this correction.
+
+The new directory includes `attribute-audit.json` and `manifest.json` with parent identities, single-attribute reverse equality, diagnostic evidence and **NOT_ADAPTED** proof status. The copied proof does not acquire acceptance merely because the additional edit is an attribute: the inherited copyfast two-loop proof itself remains unadapted.
+
+### Required three-way interpretation and final stop
+
+The root will compare exact H16 original, frozen copyfast and this outline control on the same runner. **INFERRED expected machine effect:** One shared `h_copy32` symbol appears, caller duplication decreases, and the vector loop survives inside that shared function. That is a prediction, not an observed build. The inline hint can be ignored; outlining can instead lose constant-specific optimization or make small-copy calls expensive.
+
+Inspect actual named symbol/call sites, complete function sizes and fast/fallback copying code before interpreting times. Record same-run paired total compression, all input/token/output hashes, and the original/source-shadow or order controls. A smaller caller, preserved vectorization, or parser-only improvement is not by itself success. A successful result must be a useful stable total-time improvement without changing outputs; then the root can request proof adaptation from actual Funs and a complete unchanged-limit gate.
+
+**UNKNOWN at creation:** Actual outlining, vector-loop retention, net code size, raw/paired runtime, finite/public identity, adapted Lean and gate acceptance. If this one control still has no useful gain, end the round's CPU line without any additional version or knob. This subthread performs no CI/Git/wallet action.
+
+## Outline screen — machine-code intervention succeeded, timing remains undecided
+
+Reviewed `2026-10-07T10:04:36Z`: CI `37602950761`, commit `487a63492248ef8e8eb6aca52213cbd82ba24c66`, reported AMD EPYC 9V45. One public block was saved under `evidence/round6/37602950761/copy-outline-screen/screen/`. Auxiliary forward/reverse results were still pending at review time. No candidate or generator was modified.
+
+**VERIFIED finite/public identities:** Both frozen copyfast and outline passed the 444-case finite comparison with zero differing/failed cases and exit 0. Each of baseline, shadow, copyfast and outline has all 28 input/token/output hashes equal to H16 baseline in this block. Recomputing from the eleven measured repetitions gives:
+
+| Method | One-block public x | Relative to baseline (%) |
+|---|---:|---:|
+| H16 baseline | 7.387289303386 | reference |
+| identical-source shadow | 7.342948327317 | -0.600233 |
+| unchanged copyfast | 7.319132468222 | -0.922623 |
+| copyfast-outline | 7.311759032730 | -1.022436 |
+
+Outline is only **0.100742% lower than copyfast** in this block's paired axis, and 0.424752% lower than shadow. This is one screen block, not independent reproduction or a full candidate gate. The old copyfast's exact library SHA256 remains `c7e7a74f336e098c0bf30ccf507b632369db139d28f778bd34b6bb33f4ef13ac` across the earlier positive-time-regression run and this apparently faster run, while baseline remains `8d522047524519e4d9bc46f46d52f51d89f1060bf16b26b774f430fcbf402a24`. That sign reversal, different reported CPU and substantial identical-binary shadow movement prevent attributing this one block's apparent speed to outlining or code-size reduction.
+
+### Outlined copy, caller shrinkage, and vector preservation are directly observed
+
+`candidate::parse::h_copy32` is now an independent **495-byte** symbol at **`0x1d630`**, complete machine-byte SHA256 `321f245f776959b93a9cc399a7a89c9c972601fb4ba38d500c8fe50bc99eabbc`. All 27 emitted `candidate::parse::*` function byte ranges, including this copy body, were checked for complete coverage in the saved assembly prefix. The last ends at `0x25c45`, within the saved range near `0x311fd`; this is complete candidate-function coverage, not complete library disassembly.
+
+There are eight actual static call instructions to this shared body: `0x12b32` and `0x12c07` in `h_sort_live`; `0x148d5` and `0x14900` in `h_block_bits`; `0x1a9ac`, `0x1aa27`, `0x1aa6e` and `0x1c0b4` in `parse`. These are instruction sites, not dynamic frequency counts.
+
+Vectorization survives inside the shared body. **`0x1d6d0–0x1d6ed`** contains two `movups` loads and two stores, advances by **8 u32 / 32 bytes**, and has only a vector-loop counter comparison/back edge. Source/destination range checks precede this body. Scalar cleanup at `0x1d730–0x1d750` still has two per-word bounds checks with panic branches, and the guarded wrapping fallback remains at `0x1d757` onward. The machine result therefore satisfies the predicted combination of a real outlined body and retained vector-copy interior.
+
+| Code measure | H16 original | copyfast | outline |
+|---|---:|---:|---:|
+| `h_copy32` independent symbol bytes | absent | absent | 495 |
+| `h_sort_live` bytes | 1220 | 1380 | 1188 |
+| `h_block_bits` bytes | 7380 | 14117 | 7045 |
+| `parse` bytes | 20887 | 21679 | 20265 |
+| GNU aggregate `text` bytes | 361525 | 369277 | 361253 |
+| GNU `data` bytes | 12336 | 12384 | 12384 |
+| GNU `bss` bytes | 778 | 1162 | 1002 |
+
+Outline removes 8024 aggregate text bytes versus copyfast and is 272 bytes below original. The measurements correct the earlier unverified bss-unchanged wording for copyfast. Data/bss/code deltas are factual build observations; no particular delta is treated as the performance cause.
+
+**Causal boundary:** The intended code-generation intervention is real: one attribute creates the shared function, shrinks the inflated callers, preserves vector copying, and introduces explicit call sites. Its net runtime effect is still UNKNOWN. It also changes call overhead, constant specialization, layout and smaller-copy handling, so one favorable axis does not isolate instruction-cache pressure or prove that prior code growth caused the earlier regression. Await the root's already-running matched auxiliary results before selecting a candidate. Both copy variants retain **NOT_ADAPTED** proof status and no admission/reward conclusion. No further candidate or parameter is authorized by this review.
+
+## Final disposition — all six candidates stopped, no new complete gate
+
+Final receipts reviewed `2026-10-07T10:10:01Z`. The completed `37602950761/copy-outline-screen/gate/h16-analysis.json` reports `AUXILIARY_DIAGNOSTIC_OK` with valid matched forward/reverse phases:
+
+| Method | Forward vs H16 (%) | Reverse vs H16 (%) |
+|---|---:|---:|
+| same-source shadow | +0.120772 | -0.221331 |
+| frozen copyfast | -0.373956 | -0.688278 |
+| copyfast-outline | +0.203932 | -0.122193 |
+
+Outline is **0.083160 pp slower than shadow forward** and **0.099137 pp slower reverse** in the reported normalized changes. Converting each phase's aggregate ratio to a shadow-relative ratio gives +0.083060% and +0.099357%, respectively. The one-block apparent improvement was not reproduced as a useful advantage over identical-source shadow in the completed auxiliary control. Actual outlining/caller shrinkage/vector retention remain verified machine-code observations; they do not establish a stable total-time gain or explain the old copyfast regression causally.
+
+The exact frozen copyfast also changes direction across recorded runners. In `37598783885/copy-screen/gate`, auxiliary forward/reverse were **+0.285371% / +0.413065%**; in the new outline comparison they are **-0.373956% / -0.688278%**. Retain both complete receipts and the original source/library identity. The role of CPU/environment/load/order in that discrepancy is **UNKNOWN**; neither favorable run cancels the unfavorable run. This is insufficient to upgrade H16 baseline or assert a portable speedup.
+
+### Six terminal research outcomes
+
+The root's final decision is **STOPPED / RESEARCH_ONLY / NO_FULL_GATE** for every new Round 6 candidate. This records observed results and bounded scope; it does not mean a formal gate rejected them.
+
+| Candidate | Main stopping evidence | New complete gate |
+|---|---|---|
+| `r6-h16-cpu-rm-inline` | Target code/symbols unchanged; auxiliary -0.009903% forward / +0.085939% reverse supplies no stable gain | **NO_FULL_GATE** |
+| `r6-h16-cpu-replay-inline` | Target code/symbols unchanged; auxiliary -0.007801% / +0.031131% supplies no stable gain | **NO_FULL_GATE** |
+| `r6-h16-core-h3prefix` | Core screen mean total time +1.193692%; finite/public identity does not turn a regression into an optimization | **NO_FULL_GATE** |
+| `r6-h16-core-lazy-t5` | Core screen mean total time +0.502008%; no useful total-time result | **NO_FULL_GATE** |
+| `r6-h16-cpu-copyfast` | Local vector optimization is real, but paired/auxiliary direction depends on the recorded runner and is not robust | **NO_FULL_GATE** |
+| `r6-h16-cpu-copyfast-outline` | Shared/vector body and smaller callers are real; both completed auxiliary phases remain slower than same-source shadow | **NO_FULL_GATE** |
+
+Core values and statuses were checked directly in `37594271466/core-screen/gate/h16-analysis.json`; both core candidates report 444 cases, zero differences/failures, public token/output equality and `gate=null`. The six manifests and complete study receipts retain exact hashes and provenance. Core, copyfast and outline proofs remain **NOT_ADAPTED**; the two initial inline variants retain baseline Lean bytes but have no changed-source gate verdict.
+
+**VERIFIED NO_FULL_GATE boundary:** Each study batch's final `gate-summary.json` has an empty `gates` object: `37594267200/cpu-screen/gate`, `37594271466/core-screen/gate`, `37598783885/copy-screen/gate`, and `37602950761/copy-outline-screen/gate`. The phase folder being named `gate`, a successful research job, 444-case equality, or public output equality is not a new official extraction/Lean/axiom/full-gate acceptance.
+
+### Retained baseline and completed scope
+
+The retained H16 baseline is the previously public-gate-accepted `r5-h16-small-proofopt`, Rust `d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d`, Lean `d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7`, with its Round 5 accepted receipt `37584216832`. Both hashes were rechecked during this finalization. None of the six new candidates is promoted into it, and none supplies a private-stage2, admission, rank or reward result.
+
+All six candidate artifacts and generators remain frozen as research evidence. This final update changes only this note. No more candidate, parameter, proof migration or experiment is scheduled or performed by this CPU line.

@@ -1,0 +1,621 @@
+{
+  "recorded_at": "2026-10-07T10:19:06.935974+00:00",
+  "decision": "Retain frozen, previously accepted H16-small baseline. No research candidate promoted.",
+  "baseline": {
+    "path": "candidates\\r5-h16-small-proofopt",
+    "hashes": {
+      "parse.rs": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
+      "Parse.lean": "d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7"
+    },
+    "prior_full_gate": "37584216832/h16-proofopt-gate"
+  },
+  "distinct_research_candidates": 6,
+  "completed_experiment_jobs": 4,
+  "official_public_paired_processes": 54,
+  "finite_checks": [
+    {
+      "candidate": "r6-h16-cpu-rm-inline",
+      "run_id": "37594267200",
+      "cases": 444,
+      "differences": 0
+    },
+    {
+      "candidate": "r6-h16-cpu-replay-inline",
+      "run_id": "37594267200",
+      "cases": 444,
+      "differences": 0
+    },
+    {
+      "candidate": "r6-h16-core-h3prefix",
+      "run_id": "37594271466",
+      "cases": 444,
+      "differences": 0
+    },
+    {
+      "candidate": "r6-h16-core-lazy-t5",
+      "run_id": "37594271466",
+      "cases": 444,
+      "differences": 0
+    },
+    {
+      "candidate": "r6-h16-cpu-copyfast",
+      "run_id": "37598783885",
+      "cases": 444,
+      "differences": 0
+    },
+    {
+      "candidate": "r6-h16-cpu-copyfast",
+      "run_id": "37602950761",
+      "cases": 444,
+      "differences": 0
+    },
+    {
+      "candidate": "r6-h16-cpu-copyfast-outline",
+      "run_id": "37602950761",
+      "cases": 444,
+      "differences": 0
+    }
+  ],
+  "new_full_proof_gates": 0,
+  "all_public_outputs_equal_to_baseline": true,
+  "same_process_forward_reverse_diagnostics": "completed in all four jobs; separate auxiliary evidence",
+  "new_formal_submissions": 0,
+  "reason": "Inline candidates generated identical candidate code; core changes regressed; copy changes produced real vector/layout effects but performance signs did not transfer consistently between runners or exceed same-byte/order controls.",
+  "runs": [
+    {
+      "scope": "Public H16 relative measurements; finite equality and auxiliary timing are not proof or admission",
+      "run_id": "37594267200",
+      "batch": "cpu-screen",
+      "git_sha": "69e4c010708d5c295836eb2b07c90b88ad091744",
+      "phase": "gate",
+      "baseline": "h16-base",
+      "failures": [],
+      "candidates": [
+        {
+          "candidate": "h16-shadow",
+          "source_sha256": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
+          "blocks": [
+            1,
+            2
+          ],
+          "paired_time_change_pct": [
+            0.30136021755018394,
+            -0.14568776450860632
+          ],
+          "mean_time_change_pct": 0.07783622652078881,
+          "public_time_axis": 7.043375830453696,
+          "public_size_pct": 33.86321383735312,
+          "size_change_pp": 0.0,
+          "public_token_and_output_equal": true,
+          "changed_files": [],
+          "finite_equivalence": null,
+          "gate": null
+        },
+        {
+          "candidate": "r6-h16-cpu-rm-inline",
+          "source_sha256": "153bb783a43d9ebbf9a404754ca1deb163b46390a48676efab9e64b4410f87f2",
+          "blocks": [
+            1,
+            2
+          ],
+          "paired_time_change_pct": [
+            -0.06906218699997968,
+            -0.48740900325178194
+          ],
+          "mean_time_change_pct": -0.2782355951258808,
+          "public_time_axis": 7.018320433625834,
+          "public_size_pct": 33.86321383735312,
+          "size_change_pp": 0.0,
+          "public_token_and_output_equal": true,
+          "changed_files": [],
+          "finite_equivalence": {
+            "candidate": "r6-h16-cpu-rm-inline",
+            "reference": "h16-base",
+            "cases": 444,
+            "different_or_failed": 0
+          },
+          "gate": null
+        },
+        {
+          "candidate": "r6-h16-cpu-replay-inline",
+          "source_sha256": "54264fb3e7fed7260f68139c0398d2b6715dc1e23dc51cce907258aadde07ee7",
+          "blocks": [
+            1,
+            2
+          ],
+          "paired_time_change_pct": [
+            -0.5690903030079464,
+            -0.08622234002658713
+          ],
+          "mean_time_change_pct": -0.32765632151726676,
+          "public_time_axis": 7.014994267868838,
+          "public_size_pct": 33.86321383735312,
+          "size_change_pp": 0.0,
+          "public_token_and_output_equal": true,
+          "changed_files": [],
+          "finite_equivalence": {
+            "candidate": "r6-h16-cpu-replay-inline",
+            "reference": "h16-base",
+            "cases": 444,
+            "different_or_failed": 0
+          },
+          "gate": null
+        }
+      ],
+      "finite_check_status": {
+        "returncode": 0,
+        "scope": "finite token/decode checks; not full proof or timing evidence"
+      },
+      "auxiliary_status": "AUXILIARY_DIAGNOSTIC_OK",
+      "auxiliary_phases": [
+        {
+          "phase": "forward",
+          "status": "VALID_AUXILIARY_DIAGNOSTIC",
+          "changes": [
+            {
+              "candidate": "h16-shadow",
+              "change_pct": -0.06969632340828591
+            },
+            {
+              "candidate": "r6-h16-cpu-rm-inline",
+              "change_pct": -0.009902580184661947
+            },
+            {
+              "candidate": "r6-h16-cpu-replay-inline",
+              "change_pct": -0.0078012813683803195
+            }
+          ]
+        },
+        {
+          "phase": "reverse",
+          "status": "VALID_AUXILIARY_DIAGNOSTIC",
+          "changes": [
+            {
+              "candidate": "r6-h16-cpu-replay-inline",
+              "change_pct": 0.0311314729204204
+            },
+            {
+              "candidate": "r6-h16-cpu-rm-inline",
+              "change_pct": 0.08593903784541723
+            },
+            {
+              "candidate": "h16-shadow",
+              "change_pct": 0.003621821820143367
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "Public H16 relative measurements; finite equality and auxiliary timing are not proof or admission",
+      "run_id": "37594271466",
+      "batch": "core-screen",
+      "git_sha": "69e4c010708d5c295836eb2b07c90b88ad091744",
+      "phase": "gate",
+      "baseline": "h16-base",
+      "failures": [],
+      "candidates": [
+        {
+          "candidate": "h16-shadow",
+          "source_sha256": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
+          "blocks": [
+            1,
+            2
+          ],
+          "paired_time_change_pct": [
+            0.05791208820074001,
+            -0.19582734528033052
+          ],
+          "mean_time_change_pct": -0.06895762853979526,
+          "public_time_axis": 7.017326074581278,
+          "public_size_pct": 33.86321383735312,
+          "size_change_pp": 0.0,
+          "public_token_and_output_equal": true,
+          "changed_files": [],
+          "finite_equivalence": null,
+          "gate": null
+        },
+        {
+          "candidate": "r6-h16-core-h3prefix",
+          "source_sha256": "d48a03aa05b8dd5149eb2dbfedd3849e16e183c5cafe8dc9895618b485294416",
+          "blocks": [
+            1,
+            2
+          ],
+          "paired_time_change_pct": [
+            1.4685659377774662,
+            0.9188188879669879
+          ],
+          "mean_time_change_pct": 1.193692412872227,
+          "public_time_axis": 7.105978010831951,
+          "public_size_pct": 33.86321383735312,
+          "size_change_pp": 0.0,
+          "public_token_and_output_equal": true,
+          "changed_files": [],
+          "finite_equivalence": {
+            "candidate": "r6-h16-core-h3prefix",
+            "reference": "h16-base",
+            "cases": 444,
+            "different_or_failed": 0
+          },
+          "gate": null
+        },
+        {
+          "candidate": "r6-h16-core-lazy-t5",
+          "source_sha256": "9171ad2e5e159dc73f60bc5693322c6c0fe9a655d2338e768495cc252a12147f",
+          "blocks": [
+            1,
+            2
+          ],
+          "paired_time_change_pct": [
+            0.766483850423505,
+            0.2375326858550686
+          ],
+          "mean_time_change_pct": 0.5020082681392868,
+          "public_time_axis": 7.057407661703315,
+          "public_size_pct": 33.86321383735312,
+          "size_change_pp": 0.0,
+          "public_token_and_output_equal": true,
+          "changed_files": [],
+          "finite_equivalence": {
+            "candidate": "r6-h16-core-lazy-t5",
+            "reference": "h16-base",
+            "cases": 444,
+            "different_or_failed": 0
+          },
+          "gate": null
+        }
+      ],
+      "finite_check_status": {
+        "returncode": 0,
+        "scope": "finite token/decode checks; not full proof or timing evidence"
+      },
+      "auxiliary_status": "AUXILIARY_DIAGNOSTIC_OK",
+      "auxiliary_phases": [
+        {
+          "phase": "forward",
+          "status": "VALID_AUXILIARY_DIAGNOSTIC",
+          "changes": [
+            {
+              "candidate": "h16-shadow",
+              "change_pct": 0.03575161147200134
+            },
+            {
+              "candidate": "r6-h16-core-h3prefix",
+              "change_pct": 1.2663845675938479
+            },
+            {
+              "candidate": "r6-h16-core-lazy-t5",
+              "change_pct": 0.23177931760121062
+            }
+          ]
+        },
+        {
+          "phase": "reverse",
+          "status": "VALID_AUXILIARY_DIAGNOSTIC",
+          "changes": [
+            {
+              "candidate": "r6-h16-core-lazy-t5",
+              "change_pct": 0.3731642282236436
+            },
+            {
+              "candidate": "r6-h16-core-h3prefix",
+              "change_pct": 1.2726667895051946
+            },
+            {
+              "candidate": "h16-shadow",
+              "change_pct": 0.05113898461688304
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "Public H16 relative measurements; finite equality and auxiliary timing are not proof or admission",
+      "run_id": "37598783885",
+      "batch": "copy-screen",
+      "git_sha": "a25dee2e56ba8d7f6d50ce9d132cae3e1af59d10",
+      "phase": "gate",
+      "baseline": "h16-base",
+      "failures": [],
+      "candidates": [
+        {
+          "candidate": "h16-shadow",
+          "source_sha256": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
+          "blocks": [
+            1,
+            2
+          ],
+          "paired_time_change_pct": [
+            -0.46829573838496064,
+            0.01627201806730927
+          ],
+          "mean_time_change_pct": -0.22601186015882568,
+          "public_time_axis": 7.255669665839356,
+          "public_size_pct": 33.86321383735312,
+          "size_change_pp": 0.0,
+          "public_token_and_output_equal": true,
+          "changed_files": [],
+          "finite_equivalence": null,
+          "gate": null
+        },
+        {
+          "candidate": "r6-h16-cpu-copyfast",
+          "source_sha256": "d414c981b22a23cae40561173e6812e4846f3fb8ba500ad6dd5d4ef5582efb19",
+          "blocks": [
+            1,
+            2
+          ],
+          "paired_time_change_pct": [
+            0.5057813440609848,
+            0.8209222796345728
+          ],
+          "mean_time_change_pct": 0.6633518118477788,
+          "public_time_axis": 7.320355112818987,
+          "public_size_pct": 33.86321383735312,
+          "size_change_pp": 0.0,
+          "public_token_and_output_equal": true,
+          "changed_files": [],
+          "finite_equivalence": {
+            "candidate": "r6-h16-cpu-copyfast",
+            "reference": "h16-base",
+            "cases": 444,
+            "different_or_failed": 0
+          },
+          "gate": null
+        }
+      ],
+      "finite_check_status": {
+        "returncode": 0,
+        "scope": "finite token/decode checks; not full proof or timing evidence"
+      },
+      "auxiliary_status": "AUXILIARY_DIAGNOSTIC_OK",
+      "auxiliary_phases": [
+        {
+          "phase": "forward",
+          "status": "VALID_AUXILIARY_DIAGNOSTIC",
+          "changes": [
+            {
+              "candidate": "h16-shadow",
+              "change_pct": -0.016962421412058948
+            },
+            {
+              "candidate": "r6-h16-cpu-copyfast",
+              "change_pct": 0.28537110109949637
+            }
+          ]
+        },
+        {
+          "phase": "reverse",
+          "status": "VALID_AUXILIARY_DIAGNOSTIC",
+          "changes": [
+            {
+              "candidate": "r6-h16-cpu-copyfast",
+              "change_pct": 0.41306480177338845
+            },
+            {
+              "candidate": "h16-shadow",
+              "change_pct": 0.03287424622706592
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "Public H16 relative measurements; finite equality and auxiliary timing are not proof or admission",
+      "run_id": "37602950761",
+      "batch": "copy-outline-screen",
+      "git_sha": "487a63492248ef8e8eb6aca52213cbd82ba24c66",
+      "phase": "gate",
+      "baseline": "h16-base",
+      "failures": [],
+      "candidates": [
+        {
+          "candidate": "h16-shadow",
+          "source_sha256": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
+          "blocks": [
+            1
+          ],
+          "paired_time_change_pct": [
+            -0.6002333771982116
+          ],
+          "mean_time_change_pct": -0.6002333771982116,
+          "public_time_axis": 7.342948327316869,
+          "public_size_pct": 33.86321383735312,
+          "size_change_pp": 0.0,
+          "public_token_and_output_equal": true,
+          "changed_files": [],
+          "finite_equivalence": null,
+          "gate": null
+        },
+        {
+          "candidate": "r6-h16-cpu-copyfast",
+          "source_sha256": "d414c981b22a23cae40561173e6812e4846f3fb8ba500ad6dd5d4ef5582efb19",
+          "blocks": [
+            1
+          ],
+          "paired_time_change_pct": [
+            -0.9226230673325286
+          ],
+          "mean_time_change_pct": -0.9226230673325286,
+          "public_time_axis": 7.319132468222358,
+          "public_size_pct": 33.86321383735312,
+          "size_change_pp": 0.0,
+          "public_token_and_output_equal": true,
+          "changed_files": [],
+          "finite_equivalence": {
+            "candidate": "r6-h16-cpu-copyfast",
+            "reference": "h16-base",
+            "cases": 444,
+            "different_or_failed": 0
+          },
+          "gate": null
+        },
+        {
+          "candidate": "r6-h16-cpu-copyfast-outline",
+          "source_sha256": "f08d6bb24fc3a9f62b2b0b271e7d0f8364aaf0341951dc6dbb7e097207294dfe",
+          "blocks": [
+            1
+          ],
+          "paired_time_change_pct": [
+            -1.0224355315501255
+          ],
+          "mean_time_change_pct": -1.0224355315501255,
+          "public_time_axis": 7.311759032729766,
+          "public_size_pct": 33.86321383735312,
+          "size_change_pp": 0.0,
+          "public_token_and_output_equal": true,
+          "changed_files": [],
+          "finite_equivalence": {
+            "candidate": "r6-h16-cpu-copyfast-outline",
+            "reference": "h16-base",
+            "cases": 444,
+            "different_or_failed": 0
+          },
+          "gate": null
+        }
+      ],
+      "finite_check_status": {
+        "returncode": 0,
+        "scope": "finite token/decode checks; not full proof or timing evidence"
+      },
+      "auxiliary_status": "AUXILIARY_DIAGNOSTIC_OK",
+      "auxiliary_phases": [
+        {
+          "phase": "forward",
+          "status": "VALID_AUXILIARY_DIAGNOSTIC",
+          "changes": [
+            {
+              "candidate": "h16-shadow",
+              "change_pct": 0.12077243080876876
+            },
+            {
+              "candidate": "r6-h16-cpu-copyfast",
+              "change_pct": -0.37395638800825637
+            },
+            {
+              "candidate": "r6-h16-cpu-copyfast-outline",
+              "change_pct": 0.20393225867387788
+            }
+          ]
+        },
+        {
+          "phase": "reverse",
+          "status": "VALID_AUXILIARY_DIAGNOSTIC",
+          "changes": [
+            {
+              "candidate": "r6-h16-cpu-copyfast-outline",
+              "change_pct": -0.12219338451135986
+            },
+            {
+              "candidate": "r6-h16-cpu-copyfast",
+              "change_pct": -0.6882781018333617
+            },
+            {
+              "candidate": "h16-shadow",
+              "change_pct": -0.2213307406417675
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "baseline_frontier_projection": {
+    "scope": "Baseline H16 only, because no tested variant is promoted; transfers are hypotheses, not formal scores or payments",
+    "context": {
+      "snapshot_id": "26180",
+      "computed_at": "2026-10-07T10:12:38.897988+00:00",
+      "policy_version": "compression-policy-c255effb7d5afeef",
+      "status": "ready",
+      "freshness": "unknown",
+      "freshness_reason": "Recorded scoring pass; live policy changes require a new pass."
+    },
+    "independent_jobs": 4,
+    "blocks": 7,
+    "baseline_public": {
+      "time": 7.150266081975469,
+      "size_pct": 33.86321383735312
+    },
+    "fixed427": {
+      "time": 7.25325058676713,
+      "size_pct": 34.101197681698245,
+      "on_frontier": true,
+      "conditional_weight": 0.014381249001175999,
+      "dominating_ids": []
+    },
+    "matched299": {
+      "time": 7.0061281992701545,
+      "size_pct": 34.12291232528709,
+      "on_frontier": false,
+      "conditional_weight": 0,
+      "dominating_ids": [
+        "387",
+        "393",
+        "396",
+        "399",
+        "430",
+        "457",
+        "458",
+        "459",
+        "460",
+        "461"
+      ]
+    },
+    "submission453": {
+      "id": "453",
+      "kind": "miner",
+      "hotkey": "5Fptjyxg1hWJUxqM7PLTjMs54iESgjQVDd4QibAtgVm2vWFA",
+      "baseline_name": null,
+      "submitted_at": "2026-10-07T05:32:46.443112+00:00",
+      "gate_status": "passed",
+      "aggregation_id": "544",
+      "metrics": {
+        "balanced_time_ratio": 0.43787345819892,
+        "mean_file_compression_pct": 36.999728556810254,
+        "total_compression_seconds": 0.612869307,
+        "lz77_seconds": 0.09503057999999999,
+        "byte_weighted_compression_pct": 34.29500941619586
+      },
+      "admission": {
+        "decision_id": "455",
+        "status": "recorded",
+        "outcome": "passed",
+        "admitted": true,
+        "reason_code": "speed-advantage-established",
+        "explanation": "The lower confidence bound is above zero: the speed improvement passed.",
+        "reference_submission_id": "433",
+        "freshness": "unknown"
+      },
+      "score": {
+        "snapshot_id": "26180",
+        "on_frontier": true,
+        "pareto_weight": 0.004814344872533298,
+        "improvement_weight": 0.0,
+        "combined_weight": 0.004814344872533298,
+        "payable_weight": 0.004814344872533298,
+        "payment_eligible": true,
+        "unpaid_reason": null,
+        "bounty_earned_alpha": 0.568696314,
+        "bounty_capped": false
+      },
+      "frontier_order": 1,
+      "timing_interval": {
+        "metric": "balanced_time_ratio",
+        "estimate": 0.43787345819892,
+        "lower": 0.4372856918165951,
+        "upper": 0.43855385112859685,
+        "confidence_level": 0.95,
+        "method": "paired-per-file-compression-bootstrap-v4",
+        "draws": 2000
+      },
+      "bounds": {
+        "eligible": true,
+        "max_balanced_time_ratio": 10.0,
+        "max_mean_file_compression_pct": 40.0,
+        "observed_balanced_time_ratio": 0.43787345819892,
+        "observed_mean_file_compression_pct": 36.999728556810254,
+        "violations": []
+      }
+    }
+  }
+}
