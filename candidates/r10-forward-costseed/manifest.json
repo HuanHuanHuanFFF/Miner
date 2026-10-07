@@ -1,0 +1,32 @@
+{
+  "candidate": "r10-forward-costseed",
+  "parent": "candidates/r10-forward-lazyseed",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "9b7b78681517c6dbaf1e2788bb03cca26ba9517e0881d9eab54ea4d8cfad815d",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "hashes": {
+    "parse.rs": "f397e8c9a4648551eaf363e2efa3663e27e1d65426e26ff0771cce004ff16242",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "bytes": {
+    "parse.rs": 187207,
+    "Parse.lean": 405395
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "mechanism": "At a lazyseed token boundary, take its selected match only when static length+distance price is strictly below the literal price of the same span. Build one model via original fill_tables/init_counts/make_costs(huff=0).",
+  "hypothesis": "Short distant matches can be worse than cheap literals and bias the greedy seed's block statistics; filter that mechanism directly without changing discovered matches or adding passes.",
+  "price_units": "Original 1/16-bit entropy prices including length/distance extra bits; histogram and original match priors are retained.",
+  "arithmetic": "Compare u64 match cost (two u32 values, <2^33) and u64 literal sum (at most258 u32 values, <2^41). Accept early only when accumulated nonnegative literal cost is already strictly greater. Ties remain literals.",
+  "seed_lazy": 1,
+  "backward_passes": 1,
+  "audit": "Only one helper and the d_seed cost initialization/acceptance condition change. Reversing the region restores frozen lazyseed bytes. d_collect, rs, sparse map, active longest interval, one-byte lookahead, original routes, backward pass and emitters are byte-identical.",
+  "equivalence_status": "Expected same original rs stream and valid complete seed; seed/final tokens intentionally may differ. Reuse forward diagnostics with candidate entry parameterized by the parent.",
+  "proof_status": "UNADAPTED_PARENT_ONLY / UNKNOWN: copied original proof is not a proof of collect/seed/profitability helpers; seed-proof2 is also untested and not promoted.",
+  "performance_status": "UNKNOWN: added one-time histogram/model work and per-accepted-match-prefix comparisons may outweigh size recovery. Require paired official axes and current projection better than verified record baseline before any full gate."
+}

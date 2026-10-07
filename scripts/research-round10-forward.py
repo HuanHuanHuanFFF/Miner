@@ -108,7 +108,8 @@ def main():
         print("ROUND10_FORWARD_NOT_REQUESTED")
         return
     reference = next(e for e in spec["entries"] if e["name"] == "r9-block-scalar")
-    candidate = next(e for e in spec["entries"] if e["name"] == "r10-forward-seed")
+    candidate_name = spec.get("forward_diagnostic_candidate", "r10-forward-seed")
+    candidate = next(e for e in spec["entries"] if e["name"] == candidate_name)
     sources = {}
     for label, entry in (("reference", reference), ("candidate", candidate)):
         raw = (ROOT / entry["path"] / "parse.rs").read_bytes()
@@ -126,6 +127,7 @@ def main():
     (build / "main.rs").write_text(HARNESS)
     report = {"status": "PENDING", "run_id": os.environ["GITHUB_RUN_ID"], "git_sha": os.environ["GITHUB_SHA"],
               "reference_sha256": reference["hashes"]["parse.rs"], "candidate_sha256": candidate["hashes"]["parse.rs"],
+              "candidate_name": candidate_name,
               "scope": "Finite rs-stream equality, seed validity and decode. Sampled helper costs are inclusive/overlapping and instrumented; parser-only, no official axes.",
               "phases": PHASES, "corpus": [{"file": f.name, "bytes": f.stat().st_size, "sha256": hashlib.sha256(f.read_bytes()).hexdigest()} for f in files]}
     save(output / "forward.json", report)

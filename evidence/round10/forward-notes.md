@@ -188,3 +188,142 @@ identical public outputs, paired total-compression timing or fresh full gate.
 first mismatch before claiming equivalence. If output agrees but paired timing
 regresses, the saved state/initialization has not paid for distance encoding in
 this implementation; do not automatically combine it with other CPU changes.
+
+## Delta16 interface receipt and seed proof failure retention
+
+Run `37684506856` accepted extraction for exact delta16 Rust
+`1ddbe9f60a2a5dec38a67dcf80211dc2f43bd1160f4916074bb545128a967ee5`.
+The proof draft's explicit `d16_walk_loop_spec` predecessor type was still U32;
+it is now U16. The reconciled draft Lean SHA-256 is
+`d07ba3aed243ca6cb340bcaa1f6a015f095a16fb0cba2e7e51b187b26646547b`.
+The generator checks all extraction-file digests, eight interfaces, and the
+predecessor-array types. Omitting generated Source comments and normalizing
+whitespace, the extracted D loop body, loop wrapper and parser wrapper exactly
+match their R9 counterparts after only the expected U16 type/zero-value and
+helper-name substitutions. This is an interface/control-text audit, not a Lean
+execution or full semantic equivalence proof. Actual gate and performance
+remain pending; evidence is in the proof directory's `interface-audit.json`.
+
+The seed proof at frozen SHA `b41316b5...` failed naturally in run `37682364860`.
+The retained `r10-forward-seed-proof-005-lake.log` reports exactly four errors:
+lines 3676, 3815, 3821 and 3945. Their omega counterexample descriptions retain
+tuple projections for the current cursor instead of exposing the named `i4`,
+`end` or `q1`; the other new helper proofs emitted no errors in that log. This
+does not establish an accepted theorem or gate.
+
+A bounded four-term repair was saved independently as
+`candidates/r10-forward-seed-proof2/`, Lean SHA-256
+`0926ce11166ba9e4bc11a985467945e42e952800647fb6e8dae7a2165d283545`.
+Each repaired term gives omega an explicit arithmetic proposition for the
+decreasing cursor, leaving tuple projection reduction to definitional equality.
+Rust, declarations, loop invariants, original obligation and frozen failed
+proof remain unchanged. `failure-repair-note.json` binds the exact error log.
+Status is **UNTESTED_REPAIR_DRAFT_NO_CI**; no compilation or renewed seed gate
+was requested. The measured size regression remains the reason to stop that
+performance family.
+
+## Whole-state relative positions: one new controlled experiment
+
+The `struct-b` screen preserves delta16's public bytes but measures about
+**+1.25%** total time versus scalar. Stop that implementation and do not spend a
+full gate on it. Its finite equivalence and model artifacts remain useful.
+
+The replacement `r10-forward-rebase16` changes a different cost structure:
+encode the current position once, copy relative codes into predecessor links,
+and periodically rebase every head/link array together. Its exact Rust SHA-256
+is `8382914307102bb37f690180cf0ba0dbd605a6eecc136263766ec847884fb2fb`.
+The parent proof is explicitly **UNADAPTED_PARENT_ONLY**. Generator and retained
+source evidence are `scripts/build-round10-forward-rebase16.py` and the
+candidate's `primary-source-reference.json`.
+
+**Primary-source check:** fixed libdeflate commit
+`92e6a0db9fa848d742f9eb286c92afc60f2c3dda` uses signed 16-bit matchfinder
+positions, slides heads and links together, and handles sliding during skipped
+byte insertion. `matchfinder_common.h` lines 118-157 describe saturating
+rebasing and a portable loop; architecture-specific implementations are also
+selected. `hc_matchfinder.h` slides at 32768 and rejects `cur_node <= cutoff`.
+That strict cutoff excludes the exact 32768 endpoint, unlike the parent here;
+the implementation is a reference mechanism, not an equivalent transplant.
+
+Our unsigned encoding is `position-base+1`. Zero decodes to
+`max(base-1,0)`: it is the original default position zero in the initial epoch,
+and safely stale after rebasing. Before `q-base` reaches 65535, update
+`base=q-32768` and saturating-subtract the shift from all five arrays. Normal
+shift is **32767**, so the position exactly 32768 behind remains encoded as 1.
+Each call in `insert_range` performs the same rebase check, so a skipped match
+can cross an epoch without losing maintenance. Inputs above `u32::MAX` use the
+unchanged parent D parser, preserving the parent's absolute-position truncation
+semantics instead of silently changing behavior beyond 4 GiB.
+
+Nominal finder state drops from **851968 bytes (832 KiB) to 425984 bytes
+(416 KiB)**. This does not prove smaller generated stack frames or faster code.
+The periodic scan touches 212992 u16 cells about every 32767 inserted bytes,
+after the first 65535 bytes: roughly 26 bytes of sequential read/write traffic
+per inserted byte. Normal head/link traffic halves from a nominal 32 to 16
+bytes per insertion, excluding cache-line and write-allocation effects. The
+rebase adds traffic while reducing random-access working state; source code
+alone does not establish which effect wins. Ordinary safe loops use u16
+saturating subtraction, with vectorization left to LLVM and not yet observed.
+
+**VERIFIED locally:** deterministic generation/exact hashes, size limits,
+Python syntax and absence of unsafe code. The finite rebase model performs
+1050608 insertions, 201984 direct/skip_same visible-visit comparisons, 132 whole
+state rebases and 46922 exact-window-boundary visits; all comparisons match.
+Insertions are complete and large-window queries are sampled, with explicit
+checks around rebases. This is **Python model evidence only**.
+
+**Next falsifiers:** run 444 whole-parser token/decode equality cases plus
+identical public outputs, paired total compression and extraction. Stop on an
+unexplained mismatch or unfavorable measured cost. No parameter sweep, complex
+proof or full gate is justified before a performance signal. This candidate
+does not combine the failed RMQ or delta-distance implementations.
+
+## Rebase result and the single static-cost seed revisit
+
+**VERIFIED in run `37689247460`, `rebase-d`:** rebase16 retains public output
+bytes but takes about +2% and +3.94% more total time in the two paired blocks,
+approximately +2.97% on average. Stop this implementation and do not begin its
+complex relative-coordinate proof. Its source, extraction and boundary model
+remain archived; halved table state did not produce a measured speed gain here.
+
+The next authorized seed revisit is a distinct, fixed mechanism:
+`r10-forward-costseed`, directly derived from frozen `r10-forward-lazyseed`.
+Rust SHA-256 is
+`f397e8c9a4648551eaf363e2efa3663e27e1d65426e26ff0771cce004ff16242`.
+Generator: `scripts/build-round10-forward-costseed.py`.
+
+**Hypothesis, not a measured diagnosis:** a length-only seed can consume short,
+distant matches whose length/distance symbols cost more than the corresponding
+cheap literals, biasing its subsequent block statistics. This candidate tests
+that explanation with the original static symbol model, rather than increasing
+passes or adjusting a threshold.
+
+Inside `d_seed`, call the original `fill_tables`, `init_counts` and
+`make_costs(huff=0)` once. This preserves the original strided byte histogram
+and match priors. At a token boundary that already passed the original sparse
+map, longest-interval, range and one-byte-lookahead conditions, accept the match
+only if `lc[length] + dcc[dsym(distance)]` is **strictly less** than the literal
+cost of that same span. Prices retain their original 1/16-bit units and include
+the length/distance extra bits. Equal prices select a literal.
+
+Literal prices are nonnegative, so the helper can accept as soon as a partial
+literal sum strictly exceeds the match cost. It otherwise examines at most 258
+bytes. Comparisons use u64: two u32 match components total less than 2^33, and
+258 u32 literal prices total less than 2^41, so the accumulation cannot wrap
+under the explicit length guard. The model is never refit during the seed.
+
+`d_collect`, exact rs stream, sparse map, one-byte lookahead, route table,
+single backward pass and checked emitters remain unchanged. Only one helper
+and `d_seed` initialization/acceptance change; reversing that region restores
+lazyseed byte-for-byte. No speculative proof repair is attached: the candidate
+copies the original proof and remains **UNADAPTED_PARENT_ONLY / UNKNOWN**.
+
+Local checks confirm deterministic generation, source/manifest hashes, size
+limits, Python syntax, unchanged proof bytes and the integer-sum bounds. The
+existing forward diagnostic can validate record equality, every seed match,
+complete coverage and final decoding after its candidate entry is selected by
+the main thread. **Rust execution, two-axis performance and full gate remain
+UNKNOWN.** Added histogram and literal-prefix work can erase any size recovery.
+Do not invest in a gate merely because public size improves: continuation
+requires the current projected tradeoff to improve on the verified record
+baseline. This is one candidate with fixed settings, not a renewed seed sweep.

@@ -18,6 +18,7 @@ def main():
     ap.add_argument('--synthetic', nargs='*', default=[])
     ap.add_argument('--equivalent', nargs='*', default=[], metavar='CANDIDATE=REFERENCE')
     ap.add_argument('--forward-diagnostics', action='store_true')
+    ap.add_argument('--forward-diagnostic-candidate', default='r10-forward-seed')
     ap.add_argument('--finder-diagnostics', action='store_true')
     ap.add_argument('--endprobe-diagnostics', action='store_true')
     ap.add_argument('--blocks', type=int, choices=[1, 2, 3, 4], default=2)
@@ -27,6 +28,8 @@ def main():
     assert len(args.extract) <= 3 and len(args.synthetic) <= 3
     assert all(n.startswith('r10-') and re.fullmatch(r'[a-z0-9-]+', n) for n in args.candidates)
     assert set(args.extract + args.gate + args.synthetic) <= set(args.candidates)
+    if args.forward_diagnostics:
+        assert args.forward_diagnostic_candidate in args.candidates
     old = json.loads((ROOT / 'evidence/round9/block-b.json').read_text())
     entries = [e for e in old['entries'] if e.get('control')]
     scalar = next(e for e in old['entries'] if e['name'] == 'r9-block-scalar').copy()
@@ -49,6 +52,7 @@ def main():
             'synthetic_validation': True, 'retain_extracted_lean': True,
             'cpu_diagnostics': False, 'extract_candidates': args.extract, 'cost_differential': False,
             'forward_diagnostics': args.forward_diagnostics, 'finder_diagnostics': args.finder_diagnostics,
+            'forward_diagnostic_candidate': args.forward_diagnostic_candidate,
             'endprobe_diagnostics': args.endprobe_diagnostics,
             'research_synthetic_candidates': args.synthetic,
             'description': 'R10 bounded structural experiment; exact bytes frozen in this specification.',
