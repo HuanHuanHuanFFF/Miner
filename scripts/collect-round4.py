@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import re
 from pathlib import Path
 import statistics
 import subprocess
@@ -91,9 +92,14 @@ def main():
     ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate', 'extraction'], default='screen')
     ap.add_argument('--snapshot')
     ap.add_argument('--round', choices=['4', '5'], default='4', help='Receipt namespace; original round4 remains the default')
+    ap.add_argument('--batch', help='Matrix batch label; omit for legacy single-job artifacts')
     args = ap.parse_args()
+    assert args.batch is None or re.fullmatch(r'[a-z0-9-]{1,48}', args.batch)
     assert args.run_id.isdecimal()
-    target = ROOT / 'evidence' / ('round' + args.round) / args.run_id / args.phase
+    target = ROOT / 'evidence' / ('round' + args.round) / args.run_id
+    if args.batch:
+        target = target / args.batch
+    target = target / args.phase
     if args.mode == 'analyze':
         if args.phase == 'extraction':
             raise ValueError('Extraction diagnostics have no performance or proof verdict to analyze')
@@ -105,7 +111,8 @@ def main():
     print('STATUS', args.run_id, meta['status'], meta['conclusion'], 'artifacts', [(a['name'], a['size_in_bytes']) for a in artifacts if not a['expired']], flush=True)
     if args.mode == 'status':
         print('ACTIVE_STEPS', [s['name'] for j in meta['jobs'] for s in j['steps'] if s['status'] == 'in_progress']); return
-    name = f'r{args.round}-{args.run_id}-{args.phase}'
+    batch_suffix = '-' + args.batch if args.batch else ''
+    name = f'r{args.round}-{args.run_id}{batch_suffix}-{args.phase}'
     artifact = next((a for a in artifacts if a['name'] == name and not a['expired']), None)
     if artifact is None:
         print('Requested phase receipt is not available yet.'); return
@@ -123,6 +130,7 @@ def main():
                        capture_output=True, text=True, encoding='utf-8', timeout=180)
         state = json.loads((stage / marker).read_text())
         assert state['run_id'] == args.run_id and state['git_sha'] == meta['headSha']
+        assert not args.batch or state['batch'] == args.batch
         for metric in state.get('metrics', []):
             assert (stage / f"round{metric['round']}-{metric['candidate']}.jsonl").is_file()
         evidence_root = (ROOT / 'evidence' / ('round' + args.round)).resolve()
