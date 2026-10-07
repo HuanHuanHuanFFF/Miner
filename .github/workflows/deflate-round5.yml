@@ -42,6 +42,19 @@ jobs:
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round4.py
+      - name: Extract research candidates and compare token cost without proof claims
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round5.py
+      - name: Publish early extraction diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r5-${{ github.run_id }}-extraction
+          path: ${{ runner.temp }}/round4-receipts/research5/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: ignore
       - name: Inspect token and coding-block costs without timing instrumentation
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"

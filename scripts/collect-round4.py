@@ -88,13 +88,15 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('mode', choices=['status', 'pull', 'analyze'])
     ap.add_argument('run_id')
-    ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate'], default='screen')
+    ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate', 'extraction'], default='screen')
     ap.add_argument('--snapshot')
     ap.add_argument('--round', choices=['4', '5'], default='4', help='Receipt namespace; original round4 remains the default')
     args = ap.parse_args()
     assert args.run_id.isdecimal()
     target = ROOT / 'evidence' / ('round' + args.round) / args.run_id / args.phase
     if args.mode == 'analyze':
+        if args.phase == 'extraction':
+            raise ValueError('Extraction diagnostics have no performance or proof verdict to analyze')
         analyze(target, args.snapshot); return
     helper = module('round4_gh', ROOT / 'scripts/collect-round2.py')
     env = helper.gh_env()
@@ -108,7 +110,8 @@ def main():
     if artifact is None:
         print('Requested phase receipt is not available yet.'); return
     target.parent.mkdir(parents=True, exist_ok=True)
-    if not (target / 'state.json').exists():
+    marker = 'research.json' if args.phase == 'extraction' else 'state.json'
+    if not (target / marker).exists():
         # Download into a new folder: an interrupted transfer must not masquerade
         # as a complete receipt merely because state.json arrived first.
         stage = target.parent / ('.' + args.phase + '-download-' + uuid.uuid4().hex)
@@ -118,9 +121,9 @@ def main():
         subprocess.run(['gh', 'run', 'download', args.run_id, '--repo', 'HuanHuanHuanFFF/Miner',
                         '--name', name, '--dir', str(stage)], env=env, check=True,
                        capture_output=True, text=True, encoding='utf-8', timeout=180)
-        state = json.loads((stage / 'state.json').read_text())
+        state = json.loads((stage / marker).read_text())
         assert state['run_id'] == args.run_id and state['git_sha'] == meta['headSha']
-        for metric in state['metrics']:
+        for metric in state.get('metrics', []):
             assert (stage / f"round{metric['round']}-{metric['candidate']}.jsonl").is_file()
         evidence_root = (ROOT / 'evidence' / ('round' + args.round)).resolve()
         assert stage.resolve().is_relative_to(evidence_root)
@@ -136,7 +139,12 @@ def main():
     if meta['status'] == 'completed' and args.phase == 'gate':
         log = helper.run(['run', 'view', args.run_id, '--repo', 'HuanHuanHuanFFF/Miner', '--log'], env)
         (target / 'ci.log').write_text(log, encoding='utf-8')
-    analyze(target, args.snapshot)
+    if args.phase == 'extraction':
+        report = json.loads((target / marker).read_text())
+        print('RESEARCH_ONLY', {name: item['extraction_accepted'] for name, item in report['extractions'].items()},
+              'cost', report.get('cost_differential'), 'PROOF_NOT_RUN')
+    else:
+        analyze(target, args.snapshot)
 
 
 if __name__ == '__main__':

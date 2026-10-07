@@ -220,7 +220,8 @@ def run_profile(output, working, report):
     label = os.environ["ROUND4_SPEC"]
     if not re.fullmatch(r"[a-z0-9-]{1,48}", label):
         raise ValueError("Invalid ROUND4_SPEC")
-    spec_path = ROOT / "evidence/round4" / f"{label}.json"
+    from round4 import specification_path
+    spec_path = specification_path(label)
     spec_bytes = spec_path.read_bytes()
     spec = json.loads(spec_bytes)
     selected = select(spec)

@@ -40,7 +40,8 @@ def requested():
     label = os.environ["ROUND4_SPEC"]
     if not re.fullmatch(r"[a-z0-9-]{1,48}", label):
         raise ValueError("Invalid ROUND4_SPEC")
-    path = ROOT / "evidence/round4" / f"{label}.json"
+    from round4 import specification_path
+    path = specification_path(label)
     data = path.read_bytes()
     spec = json.loads(data)
     names = spec.get("interleaved_names")

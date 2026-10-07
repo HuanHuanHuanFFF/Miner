@@ -20,11 +20,15 @@ def save(path, value):
     path.write_text(json.dumps(value, indent=2, allow_nan=False) + '\n', encoding='utf-8')
 
 
-def validate(label):
+def specification_path(label):
     assert re.fullmatch(r'[a-z0-9-]{1,48}', label)
     spec_directory = os.environ.get('ROUND4_SPEC_DIR', 'evidence/round4')
     assert spec_directory in ('evidence/round4', 'evidence/round5')
-    spec = json.loads((ROOT / spec_directory / (label + '.json')).read_text())
+    return ROOT / spec_directory / (label + '.json')
+
+
+def validate(label):
+    spec = json.loads(specification_path(label).read_text())
     names = set()
     for e in spec['entries']:
         assert re.fullmatch(r'[A-Za-z0-9_-]+', e['name']) and e['name'] not in names
@@ -296,6 +300,13 @@ def main():
             selected = [n for n, v in state['gates'].items() if v.get('accepted')]
             if selected:
                 state['synthetic_validation'] = run_validation(config, paths, ['r3-432-fast3'] + selected, output)
+        research_inputs = spec.get('research_synthetic_candidates', [])
+        if research_inputs:
+            assert len(research_inputs) == len(set(research_inputs)) <= 3
+            assert set(research_inputs) <= set(entries) and 'r3-432-fast3' not in research_inputs
+            from round3_synthetic import run_validation
+            state['research_synthetic_validation'] = run_validation(config, paths, ['r3-432-fast3'] + research_inputs, output)
+            state['research_synthetic_validation']['proof_status'] = 'NO_FULL_GATE_IMPLIED; finite data checks only'
         finish()
         if any(not v.get('accepted') for v in state['gates'].values()):
             raise SystemExit('A selected experimental gate rejected; evidence retained')
