@@ -12,15 +12,6 @@ on:
         required: true
         type: boolean
         default: false
-  push:
-    branches: [codex/deflate-round5]
-    paths:
-      - '.github/workflows/deflate-round5.yml'
-      - 'candidates/**'
-      - 'references/**'
-      - 'scripts/**'
-      - 'evidence/round5/h16-small-gate.json'
-      - 'evidence/round5/h16-smallc-gate.json'
 permissions:
   contents: read
 concurrency:
@@ -28,7 +19,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   experiment:
-    if: github.event_name == 'push' || github.event.repository.private == false || (github.event_name == 'workflow_dispatch' && inputs.allow_private == true)
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true)
     strategy:
       fail-fast: false
       matrix:

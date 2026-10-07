@@ -14,10 +14,6 @@ on:
         type: choice
         options: [batch-a, batch-b, batch-c, batch-d]
         default: batch-a
-  push:
-    branches: [codex/deflate-round3]
-    paths: ['.github/workflows/deflate-round3.yml']
-
 permissions:
   contents: read
 
@@ -27,7 +23,7 @@ concurrency:
 
 jobs:
   experiment:
-    if: github.event.repository.private == false || (github.event_name == 'workflow_dispatch' && inputs.allow_private == true)
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true)
     runs-on: ubuntu-24.04
     timeout-minutes: 75
     steps:

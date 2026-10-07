@@ -23,23 +23,16 @@ on:
         required: true
         type: boolean
         default: false
-  push:
-    branches: [codex/deflate-round2]
-    paths:
-      - '.github/workflows/deflate-round2.yml'
-      - 'scripts/*round2*'
-      - 'candidates/**'
-
 permissions:
   contents: read
 
 concurrency:
-  group: deflate-round2-${{ github.ref }}
-  cancel-in-progress: true
+  group: deflate-round2-${{ github.run_id }}
+  cancel-in-progress: false
 
 jobs:
   experiment:
-    if: github.event.repository.private == false || (github.event_name == 'workflow_dispatch' && inputs.allow_private == true)
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true)
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     steps:
