@@ -1,0 +1,38 @@
+{
+  "candidate": "r6-h16-core-lazy-t5",
+  "parent": {
+    "path": "candidates/r5-h16-small-proofopt",
+    "hashes": {
+      "parse.rs": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
+      "Parse.lean": "d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7"
+    },
+    "fresh_gate": "37584216832/h16-proofopt-gate",
+    "gate_scope": "Existing parent only; not new candidate proof"
+  },
+  "hashes": {
+    "parse.rs": "9171ad2e5e159dc73f60bc5693322c6c0fe9a655d2338e768495cc252a12147f",
+    "Parse.lean": "1e9c4d96dcd3eae1454182b32af83e4d925da5384bc9b67d7304befffc6db082"
+  },
+  "bytes": {
+    "parse.rs": 176526,
+    "Parse.lean": 264292
+  },
+  "mechanism": "When i5 has zero low bit, hi=(Boolean & i5) is zero and the t5 table can never be copied into the active model. Allocate an empty t5 and skip its per-literal-block construction. Otherwise preserve the exact original table allocation/build. Keep literal evaluation, histograms, tlit and active models unchanged.",
+  "changed_functions": [
+    "h_literal_bits",
+    "h_optimize"
+  ],
+  "preserved": "Exact parent declaration text for every other function, all constants/types, small-input routing, A/C portfolio, H search budgets, cost tables, encoder and checked emission.",
+  "proof_status": "NOT_ADAPTED",
+  "proof_migration": "h_literal_bits loop gains a conditional optional-table update; h_optimize changes allocation length. The old totality proof is retained only as reference until the actual new extraction is checked.",
+  "validation": "VERIFIED local hash locks, declaration scope and generation only. Rust build/extraction, finite token/decode equality, matched performance, new Lean/axioms and gate remain UNKNOWN.",
+  "expected_equivalent_to": "h16-base",
+  "gate_policy": "Research native/finite equivalence/extract-only first; no complete candidate gate until actual proof migration is validated.",
+  "performance_risks": [
+    "Only avoids the optional initialization work; if that work is a small part of total time, benefit may be negligible.",
+    "Branching in literal-block initialization and altered allocation/layout may regress time.",
+    "Equivalence argument concerns the complete exported parser; direct callers can observe a shorter optional scratch vector only inside h_optimize, whose result does not expose it."
+  ],
+  "attribution": "External public submissions 299 and 402 via frozen r5-h16-small-proofopt. Original source/provenance retained under references/round4-public-299 and references/round4-public-402.",
+  "frontier_scope": "H/S calibration remains disputed: snapshot25924 fixed427 and matched299 projections differ. Unchanged public size plus measured speed is not formal admission or payout."
+}

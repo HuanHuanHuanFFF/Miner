@@ -1,0 +1,39 @@
+{
+  "candidate": "r6-h16-cpu-rm-inline",
+  "parent": {
+    "path": "candidates/r5-h16-small-proofopt",
+    "hashes": {
+      "parse.rs": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
+      "Parse.lean": "d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7"
+    }
+  },
+  "hashes": {
+    "parse.rs": "153bb783a43d9ebbf9a404754ca1deb163b46390a48676efab9e64b4410f87f2",
+    "Parse.lean": "d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7"
+  },
+  "bytes": {
+    "parse.rs": 176380,
+    "Parse.lean": 264194
+  },
+  "mechanism": "Add inline(always) only to the guarded ring-minimum update dispatcher and its two fixed-depth leaf updates; retain every body, index, comparison, budget and call site",
+  "source_evidence": "h_dp_prune and h_dp_items call h_rm_upd once per backward byte; h_rm_upd selects the four/five-level ring update from l4. These functions have no parent inline attribute",
+  "hypothesis": "Inlining this bounded update chain may remove per-byte dispatch/call boundaries or expose a stable l4 branch to the surrounding DP loop. The release compiler may already inline it",
+  "diagnostic": "Compare baseline/shadow/candidate symbol sizes and actual calls in h_dp_prune/h_dp_items; inspect whether h_rm_upd and its leaf calls survive, and whether total code size grows",
+  "attribute_functions": [
+    "h_rm_update",
+    "h_rm_update3",
+    "h_rm_upd"
+  ],
+  "attribute_audit": "attribute-audit.json",
+  "expected_equivalent": true,
+  "equivalence_reference": "r5-h16-small-proofopt",
+  "expected_equivalence_scope": "INFERRED identical Rust bodies/control flow plus unchanged proof; finite execution and fresh official proof still required",
+  "baseline_gate": {
+    "run_id": "37584216832",
+    "commit": "3d9494eb4370e20e8c76ed243a2093d6c8b2ec60",
+    "scope": "Full public gate only; does not certify changed source hashes"
+  },
+  "attribution": "CPU derivative of frozen H16 small-only combination of external public submissions 299 and 402; original source/provenance retained in references/round4-public-299 and references/round4-public-402",
+  "verification": "VERIFIED static generation/reverse-byte/function/proof checks only. Fresh build, extraction, Lean/axioms, round trip, token/output identity and paired H16-baseline/shadow performance UNKNOWN",
+  "scope": "CPU code-generation hypothesis only; no H/S routing, search budget, global cost model or encoder change; no private-stage2, admission, rank or reward claim"
+}

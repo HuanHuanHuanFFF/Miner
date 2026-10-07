@@ -1,0 +1,38 @@
+{
+  "candidate": "r6-h16-core-h3prefix",
+  "parent": {
+    "path": "candidates/r5-h16-small-proofopt",
+    "hashes": {
+      "parse.rs": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
+      "Parse.lean": "d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7"
+    },
+    "fresh_gate": "37584216832/h16-proofopt-gate",
+    "gate_scope": "Existing parent only; not new candidate proof"
+  },
+  "hashes": {
+    "parse.rs": "d48a03aa05b8dd5149eb2dbfedd3849e16e183c5cafe8dc9895618b485294416",
+    "Parse.lean": "1e9c4d96dcd3eae1454182b32af83e4d925da5384bc9b67d7304befffc6db082"
+  },
+  "bytes": {
+    "parse.rs": 176640,
+    "Parse.lean": 264292
+  },
+  "mechanism": "Pass the already compared H3 source c3 and exact prefix length l3 into the tree walk. At the same tree source only, start comparison at max(existing proven prefix,l3). Preserve traversal order, stop/depth bounds, record emission, cache policy and all cost/iteration settings.",
+  "changed_functions": [
+    "h_bt_walk",
+    "h_find_pos"
+  ],
+  "preserved": "Exact parent declaration text for every other function, all constants/types, small-input routing, A/C portfolio, H search budgets, cost tables, encoder and checked emission.",
+  "proof_status": "NOT_ADAPTED",
+  "proof_migration": "h_bt_walk and its extracted loop gain known_pos/known_len captures; h_find_pos calls the changed signature. Preserve checked emitter/match proof; adapt totality specs from fresh Funs before any gate.",
+  "validation": "VERIFIED local hash locks, declaration scope and generation only. Rust build/extraction, finite token/decode equality, matched performance, new Lean/axioms and gate remain UNKNOWN.",
+  "expected_equivalent_to": "h16-base",
+  "gate_policy": "Research native/finite equivalence/extract-only first; no complete candidate gate until actual proof migration is validated.",
+  "performance_risks": [
+    "Two extra live scalar arguments and a compare/select at every visited tree node can outweigh the skipped byte loads; no speedup claimed.",
+    "Prefix reuse relies on equality of the encoded source position cur==c3; do not replace it with a hash equality.",
+    "Lexicographic comparison must remain identical whenever len<stop; when reaching stop its tie-direction bit is unused."
+  ],
+  "attribution": "External public submissions 299 and 402 via frozen r5-h16-small-proofopt. Original source/provenance retained under references/round4-public-299 and references/round4-public-402.",
+  "frontier_scope": "H/S calibration remains disputed: snapshot25924 fixed427 and matched299 projections differ. Unchanged public size plus measured speed is not formal admission or payout."
+}
