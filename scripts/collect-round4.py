@@ -1,6 +1,7 @@
 """Download staged text receipts and recompute official public axes from raw reps."""
 from __future__ import annotations
 import argparse
+import hashlib
 import importlib.util
 import json
 import re
@@ -133,6 +134,14 @@ def main():
         assert not args.batch or state['batch'] == args.batch
         for metric in state.get('metrics', []):
             assert (stage / f"round{metric['round']}-{metric['candidate']}.jsonl").is_file()
+        # Freeze downloaded file bytes before adding local metadata or analyses.
+        original_files = {p.relative_to(stage).as_posix(): {'bytes': p.stat().st_size,
+                           'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
+                          for p in sorted(stage.rglob('*')) if p.is_file()}
+        (stage / 'raw-artifact-files.json').write_text(json.dumps({
+            'scope': 'SHA-256 of extracted files as downloaded; not an independent ZIP digest verification',
+            'artifact_id': artifact['id'], 'artifact_name': name,
+            'github_artifact_digest': artifact.get('digest'), 'files': original_files}, indent=2) + '\n')
         evidence_root = (ROOT / 'evidence' / ('round' + args.round)).resolve()
         assert stage.resolve().is_relative_to(evidence_root)
         assert target.resolve().is_relative_to(evidence_root) and not target.is_symlink()

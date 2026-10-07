@@ -146,8 +146,7 @@ def main() -> None:
     leaderboard_pages = load_json(args.leaderboard)
     leaderboard_rows = page_rows(leaderboard_pages, "ranking", "hotkey", snapshot_id)
     weights_current = load_json(args.weights)
-    if str(weights_current.get("context", {}).get("snapshot_id")) != snapshot_id:
-        raise ValueError("weights/current does not match the captured snapshot")
+    weights_same_snapshot = str(weights_current.get("context", {}).get("snapshot_id")) == snapshot_id
 
     policy = competition["policy"]
     bounds = type("PublishedBounds", (), {
@@ -271,6 +270,8 @@ def main() -> None:
             for key in ("payable_competition_weight", "unpaid_competition_weight", "competition_share",
                         "weight_set_id", "dry_run", "chain_accepted")
         },
+        "current_weights_context": weights_current.get("context"),
+        "weights_same_snapshot": weights_same_snapshot,
         "leaderboard_top_10": leaderboard_top,
         "anchor_361": {
             "metrics": anchor["metrics"],
@@ -305,7 +306,7 @@ def main() -> None:
         "limits": [
             "API freshness is unknown; snapshot records a scoring pass and does not prove the current live validator deployment is byte-identical.",
             "Candidate projections and conditional Pareto shares are inferred from public stage-1 measurements; private stage-2 results, admission and actual rewards remain unknown.",
-            "weights/current reports chain_accepted=false in this snapshot; on-chain acceptance and realized emissions are not established here.",
+            "weights/current is separately timed and may use a newer snapshot; its chain_accepted field is reported without inferring realized emissions.",
             "The official leaderboard and weights are snapshot scoring outputs, not a promise of future payment to a candidate.",
         ],
     }

@@ -21,12 +21,17 @@ def main():
     args = ap.parse_args()
     pages = json.loads(args.snapshot.read_text())
     assert len({p['context']['snapshot_id'] for p in pages}) == 1
+    competition_path = args.snapshot.parent / 'competition.json'
+    competition = json.loads(competition_path.read_text())
+    assert competition['current_snapshot_id'] == pages[0]['context']['snapshot_id']
+    policy = competition['policy']
+    assert policy['scoring_method'] == 'local-global-improvement-space-log'
     rows = [r for p in pages for r in p['items']]
     assert len({r['id'] for r in rows}) == len(rows)
     formal = next(r['metrics'] for r in rows if r['id'] == '361')
     front = [r for r in rows if (r.get('score') or {}).get('on_frontier')]
     sc = load_scorer(ROOT / 'sources/conjectures-optimisation-deflate/validator/scoring/pareto.py')
-    bounds = sc.Boundaries(10, 40)
+    bounds = sc.Boundaries(float(policy['max_balanced_time_ratio']), float(policy['max_mean_file_compression_pct']))
     points = [sc.Point(r['id'], r['metrics']['balanced_time_ratio'], r['metrics']['mean_file_compression_pct']) for r in front]
     weights = sc.local_global_improvement_space_log_weights(sc.pareto_front(points), bounds)
     replay_error = max(abs(weights[r['id']] - r['score']['pareto_weight']) for r in front)
@@ -34,12 +39,12 @@ def main():
 
     def geometry(x, y):
         dominating = [p.name for p in points if p.time_s <= x and p.ratio_pct <= y]
-        eligible = 0 < x <= 10 and 0 < y <= 40 and not dominating
+        eligible = 0 < x <= bounds.time_s and 0 < y <= bounds.ratio_pct and not dominating
         w = sc.local_global_improvement_space_log_weights(sc.pareto_front(points + [sc.Point('hypothetical', x, y)]), bounds)
         return {'time_ratio': x, 'compressed_pct': y, 'on_geometric_frontier': eligible,
                 'conditional_share_pct': w.get('hypothetical', 0) * 100 if eligible else 0,
                 'dominating_ids': dominating,
-                'size_gap_pp': max(0, y - min((p.ratio_pct for p in points if p.time_s <= x), default=40))}
+                'size_gap_pp': max(0, y - min((p.ratio_pct for p in points if p.time_s <= x), default=bounds.ratio_pct))}
 
     groups, runs, checks, shadows = {}, [], [], []
     deterministic_records = {}
@@ -47,6 +52,9 @@ def main():
         state = json.loads((folder / 'state.json').read_text())
         ci = json.loads((folder / 'ci-run.json').read_text())
         assert ci['status'] == 'completed', 'Final result requires a completed CI receipt'
+        raw_manifest = json.loads((folder / 'raw-artifact-files.json').read_text())
+        assert all((folder / name).stat().st_size == record['bytes'] and sha(folder / name) == record['sha256']
+                   for name, record in raw_manifest['files'].items()), 'Original artifact file bytes changed'
         assert str(ci['databaseId']) == state['run_id'] and ci['headSha'] == state['git_sha']
         entries = {e['name']: e for e in state['spec']['entries']}
         by = {}
@@ -132,6 +140,7 @@ def main():
         candidates.append(g)
     candidates.sort(key=lambda g: (-g['conservative_projection']['conditional_share_pct'], -g['same_family_projection']['conditional_share_pct'], g['public_size_pct'], g['same_family_projection']['time_ratio']))
     result = {'status': 'COMPLETED_CI_RECEIPTS_RECOMPUTED', 'snapshot': pages[0]['context'], 'scorer_replay_max_error': replay_error,
+              'official_policy': policy, 'competition_capture_sha256': sha(competition_path),
               'formal_anchor': {'submission_id': '361', 'metrics': formal}, 'completed_ci_runs': runs, 'candidate_count': len(candidates),
               'public_paired_processes': sum(r['public_paired_processes'] for r in runs), 'same_byte_shadows': shadows,
               'finite_equivalence_checks': checks, 'candidates': candidates, 'new_formal_submissions': 0, 'new_chain_transactions': 0,

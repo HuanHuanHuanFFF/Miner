@@ -1,0 +1,126 @@
+{
+  "status": "MODEL_DIFFERENTIAL_NO_COUNTEREXAMPLE",
+  "scope": "Python model of the generated Rust RMQ helper and the scalar endpoint minimum only.",
+  "input_files": {
+    "builder": {
+      "path": "scripts/build-round10-rmq.py",
+      "sha256": "0092e2da527a2eabebaf9a24d05642ae423f896ef375d3332888e6d33ea92ff4"
+    },
+    "candidate_parse_rs": {
+      "path": "candidates/r10-rmq8/parse.rs",
+      "sha256": "7235e6c6afbc59339ec63f6a93249493488cfe76bcae9363f8d6db39a97c1857"
+    },
+    "scalar_parse_rs": {
+      "path": "candidates/r9-block-scalar/parse.rs",
+      "sha256": "faf1d7281678d12c3243002121feecdd0ea139633dea197dbc77d86fb6319257"
+    },
+    "candidate_parse_lean": {
+      "path": "candidates/r10-rmq8/Parse.lean",
+      "sha256": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+    },
+    "scalar_parse_lean": {
+      "path": "candidates/r9-block-scalar/Parse.lean",
+      "sha256": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+    },
+    "candidate_manifest": {
+      "path": "candidates/r10-rmq8/manifest.json",
+      "candidate_hashes": {
+        "parse.rs": "7235e6c6afbc59339ec63f6a93249493488cfe76bcae9363f8d6db39a97c1857",
+        "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+      },
+      "parent_hashes": {
+        "parse.rs": "faf1d7281678d12c3243002121feecdd0ea139633dea197dbc77d86fb6319257",
+        "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+      }
+    }
+  },
+  "model": {
+    "usize_bits": 64,
+    "ring_positions": 1024,
+    "summary_slots": 128,
+    "summary_group_size": 8,
+    "lengths_covered": "3..258 inclusive, queried as half-open [lo,e) with e <= 259",
+    "costs": "high 32 bits of ring cells; low 32-bit choice payloads vary but are ignored by both scalar and RMQ queries",
+    "price_domain": "u32, including 0 and u32::MAX"
+  },
+  "checks": {
+    "price_runs": {
+      "arrays_checked": 769,
+      "endpoints_checked": 393728,
+      "reused_buffer_across_arrays": true
+    },
+    "exhaustive_intervals": {
+      "fixtures": [
+        "constant-price-ties",
+        "segmented-cross-price-ties",
+        "long-runs-and-extremes"
+      ],
+      "absolute_positions": [
+        0,
+        1000,
+        1020,
+        2044,
+        18446744073709551515
+      ],
+      "intervals_per_position_fixture": 32896,
+      "differential_comparisons": 493440,
+      "summary_queries": 4497146,
+      "scalar_tail_queries": 6458672,
+      "q_crosses_1024_ring_boundary": true,
+      "usize_wrap_case_included": true
+    },
+    "random_intervals": {
+      "seed": 20261008,
+      "cases": 256,
+      "queries_per_case_requested": 64,
+      "differential_comparisons": 17305,
+      "price_domain_includes_u32_max": true,
+      "cost_domain_includes_unset_and_u32_max": true
+    },
+    "invalid_range_fallbacks": {
+      "fallback_intervals_checked": 7,
+      "lo_ge_e": true,
+      "e_above_259": true
+    },
+    "backward_push_sweep": {
+      "previous_node": 2058,
+      "lower_node": 1800,
+      "lower_node_ring_slot": 776,
+      "query_endpoint_ring_slots": [
+        779,
+        10
+      ],
+      "previous_push_target_ring_slots": [
+        779,
+        9
+      ],
+      "previous_pushes_applied": 255,
+      "gap_positions_finalized_high_to_low": 258,
+      "post_gap_all_interval_comparisons": 32896,
+      "current_node_pushes_applied_after_query": 255,
+      "committed_future_groups_unchanged": true,
+      "committed_future_cells_unchanged": true,
+      "query_unchanged_by_earlier_pushes_below_current_node": true,
+      "ring_wrap_crossed": true
+    }
+  },
+  "review_findings": [
+    "No output mismatch was found in the exercised scalar-versus-eight-summary model.",
+    "Constant-price grouping is half-open and covers all 512 price slots; rebuilding the ends array overwrites every slot at each modeled block-price change.",
+    "Packed summary cost is (high_cost << 3) | offset; low offset breaks cost ties toward the earliest endpoint, matching ascending scalar length order inside a constant-price run.",
+    "The sweep model includes up to 255 backward pushes from a prior node, applies them before high-to-low gap finalization, and confirms committed future groups remain stable after later pushes strictly below the current node."
+  ],
+  "review_boundaries": [
+    "This Python model is not Rust execution, compiler checking, official re-extraction, Lean totality, proof-obligation coverage, or a public round-trip gate.",
+    "The candidate copies the parent's Parse.lean unchanged although d_gap, d_cand, d_block, and d_dp interfaces plus new helpers changed; formal acceptance remains unverified.",
+    "Price tables and rings are modeled at helper boundaries. Real block transitions, extracted dataflow, maximum-size input behavior, and full candidate outputs remain for the official gate.",
+    "The ring-generation argument relies on D_RING=1024 exceeding the 258-byte forward query plus at most 255-byte backward push span; any future range or ring-size change requires rechecking this invariant."
+  ],
+  "not_checked": [
+    "Rust toolchain",
+    "Lean",
+    "candidate full parser",
+    "official contract",
+    "performance"
+  ]
+}
