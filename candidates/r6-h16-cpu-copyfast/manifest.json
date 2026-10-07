@@ -1,0 +1,33 @@
+{
+  "candidate": "r6-h16-cpu-copyfast",
+  "parent": {
+    "path": "candidates/r5-h16-small-proofopt",
+    "hashes": {
+      "parse.rs": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
+      "Parse.lean": "d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7"
+    }
+  },
+  "hashes": {
+    "parse.rs": "d414c981b22a23cae40561173e6812e4846f3fb8ba500ad6dd5d4ef5582efb19",
+    "Parse.lean": "d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7"
+  },
+  "bytes": {
+    "parse.rs": 176577,
+    "Parse.lean": 264194
+  },
+  "mechanism": "Single h_copy32 legal-range fast path: check both offset/remaining-length conditions once, use ordinary indexed copy loop; retain exact original guarded wrapping fallback for every invalid range",
+  "expected_equivalent": true,
+  "equivalence_reference": "r5-h16-small-proofopt",
+  "expected_equivalence_scope": "INFERRED valid-range arithmetic plus byte-preserved fallback; finite execution and adapted formal proof required",
+  "proof_status": "NOT_ADAPTED",
+  "proof_scope": "Frozen Lean is carried for provenance only until actual Funs and new copy32 loop specs are supplied; no gate acceptance claim",
+  "proof_audit": "copy-audit.json",
+  "baseline_gate": {
+    "run_id": "37584216832",
+    "commit": "3d9494eb4370e20e8c76ed243a2093d6c8b2ec60",
+    "scope": "Exact baseline only"
+  },
+  "attribution": "H16 small-only CPU derivative of external public submissions 299 and 402; original provenance remains in references/round4-public-299 and references/round4-public-402",
+  "verification": "VERIFIED static single-function delta/fallback preservation/generation only. New Rust build, finite/public output identity, realized copy optimization, adapted Lean/axioms, complete gate and total-time gain UNKNOWN",
+  "scope": "Last extra CPU hypothesis; no routing, budgets, model, encoder, official gate or pins changed; no stage2/admission/reward inference"
+}

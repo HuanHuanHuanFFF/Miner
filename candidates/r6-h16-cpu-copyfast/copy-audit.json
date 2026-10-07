@@ -1,0 +1,49 @@
+{
+  "parent": {
+    "path": "candidates/r5-h16-small-proofopt",
+    "hashes": {
+      "parse.rs": "d9826bc92ba02f49cb6e552ed172a4fb82dc10fa8fb51aacf73e7947ed38a94d",
+      "Parse.lean": "d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7"
+    }
+  },
+  "changed_function": "h_copy32",
+  "parent_line": 4328,
+  "old_declaration_sha256": "fcfe83e35317d8f35a14cf213e03287cf26c3427aa0ed3ba7b33f1677243a053",
+  "new_declaration_sha256": "2e0d73af638443c300f811d8cc8f39fef411cdfda9fb3b43ceea0c076d491a78",
+  "all_other_Rust_bytes": "VERIFIED reverse replacement restores the entire baseline source byte-for-byte",
+  "fallback_loop": {
+    "sha256": "1ac53824bbdb2ef1aaebf7a4b96d9df4e56e20ee420d965ef88f019cf14677f2",
+    "preservation": "VERIFIED exact original wrapping/get/set loop, including counter initialization and increment"
+  },
+  "valid_range_reasoning": "If soff<=src.length, doff<=dst.length and m<=both remaining lengths, then every 0<=i<m has soff+i<src.length and doff+i<dst.length; sums cannot wrap and ordinary indexing has the same read/write semantics as original guarded helpers",
+  "invalid_range_reasoning": "Short-circuit guard evaluates subtraction only after offset<=length. A false guard mutates nothing and reaches the byte-identical original loop, preserving wrapping indices, out-of-range zero reads and skipped writes",
+  "formal_reasoning_status": "INFERRED source-level reasoning, not a new Lean proof; platform widths and actual extracted branch/loop names must be validated",
+  "unsafe_or_external_copy_added": false,
+  "proof": {
+    "sha256": "d55744de52bb0469768f0bbfd73ffecbabf9899b63e0167469fd7bb79c6293c7",
+    "status": "NOT_ADAPTED",
+    "reason": "New guarded direct-index loop plus original fallback may introduce h_copy32_loop0/loop1; inherited copy32_loop_spec/copy32_spec do not certify this new extraction"
+  },
+  "assembly_evidence": {
+    "run_id": "37594267200",
+    "source": "evidence/round6/37594267200/cpu-screen/screen/cpu/h16-base-assembly.txt",
+    "fully_covered_symbol": "candidate::parse::parse at 0x177f0, size 0x5197",
+    "first_plan_copy": "after h_eval_mode call at 0x1a9f8, scalar copy at 0x1aa40-0x1aad4",
+    "per_element_checks": [
+      "source cmp/branch at 0x1aa50/0x1aa55",
+      "destination cmp/branch at 0x1aa62/0x1aa65",
+      "next-element source cmp/branch at 0x1aa6d/0x1aa72",
+      "next-element destination cmp/branch at 0x1aa80/0x1aa83"
+    ],
+    "observed_loads": [
+      "0x1aa5f",
+      "0x1aa7c"
+    ],
+    "observed_stores": [
+      "0x1aa95",
+      "0x1aaaa"
+    ],
+    "interpretation": "VERIFIED scalar two-element unroll with repeated src/dst guards; no memcpy/memmove/rep-movs call in the complete parse symbol. Location-to-source copy association is INFERRED from immediately preceding h_walk/h_eval_mode and the guarded best-cost branch"
+  },
+  "diagnostic": "Measure unchanged public/finite token outputs and baseline/shadow paired total time; inspect whether only legal-range copy becomes vectorized/memcpy or fewer-guard scalar code. Copy time fraction and realized gain remain UNKNOWN"
+}
