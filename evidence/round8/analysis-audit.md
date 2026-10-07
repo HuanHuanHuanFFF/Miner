@@ -4,15 +4,15 @@
 
 ## 实质结论
 
-1. **当前 full 与 suffix 不会跨组串 gate。**  
+1. **当前 full 与 suffix 不会跨组串 gate。**
    [summarize-round8.py:97-110](../../scripts/summarize-round8.py) 按 parse.rs SHA 分组；full/suffix 的 Rust SHA 不同，因此属于两个组，组级 any(accepted) 不会把 full 的通过传给 suffix。JSON 的 gates 明细也保留 candidate 与文件哈希，第134行说明 proof 状态只适用于精确 source/proof pair。
 
    仍有一处展示边界值得收紧：若未来同一 Rust SHA 有多个 proof 变体，组级 full_public_gate_passed（第126行）表达的是“该源码组至少一个 proof 通过”，不能解释为组内每份 proof 均通过；终端输出（第138-139行）只打印这个布尔值。主线程计划改为列出通过的 source/proof pairs，并在终端输出 candidate 与 proof hash，足以消除这层歧义。
 
-2. **计数是独立 CI 运行数，不是物理 runner 数。**  
+2. **计数是独立 CI 运行数，不是物理 runner 数。**
    [summarize-round8.py:100-106,117-126](../../scripts/summarize-round8.py) 每个源码组拒绝重复 CI run ID，并以不同 run ID 计数；这适合称为独立 CI 运行。若同一源码组的多个 proof 变体在同一 CI run 中重复提供测量行，第117行会断言失败，而非合并该次性能观测。建议保留一次每源码、每 CI run 的性能点，同时独立保留精确 proof 的 gate 记录；文案使用“独立 CI 运行”，不要外推物理机器独立。
 
-3. **目标文件中两个 x=1.35 的 share 用的是不同 y 点。**  
+3. **目标文件中两个 x=1.35 的 share 用的是不同 y 点。**
    [frontier-targets.json:155-164](frontier-targets.json) 的表格点 public y=33.897417%，条件权重为2.6217%；[第268-277行](frontier-targets.json) 的推荐点 public y=33.89%，条件权重为4.1493%。两者公式一致，差异来自推荐点压缩更好；为避免读者只按 x 比较，建议让每个 share 同列 public y 和保守 x/y，或只给推荐点的条件权重。
 
    [第215行](frontier-targets.json) 的 current_highest_conditional_weight_points 列的是当前 API 快照的官方 pareto_weight_pct。建议改名为 current_official_frontier_weights，与 hypothetical conditional weight 分开。
