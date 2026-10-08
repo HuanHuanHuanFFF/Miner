@@ -20,3 +20,5 @@ initial-a最终CI失败并非证明失败：abs15原始gate已VERIFIED接受，�
 nearer-b首轮abs15对514仅-0.05855%，Pad64对新abs15 +0.10821%（变慢）；未跨当前同族投影边界。相同源码public514-shadow移动约3%，远超欲跨的约0.08%间隔，不能取shadow对照夸大收益。安排独立runner四块确认，plainabs15完整gate，并只在未计时observer副本计数max258的可消除追链工作。cap-prune隔离源码已准备，未与布局先行组合。
 
 confirm-c未计时观察：PC1014141首轮请求，初始cap258仅1633次(0.161%)，228358第二跳中g达到258仅483次。cap-prune当前收益空间偏小，暂停完整性能投入，只有444有限同token原生检验作为可复用成果。改投#514新增EF32一槽键的碰撞机会，宽15/16-bit影子表沿原p位置观察、不选择新match；先取得新增候选/字节机会，非新增压缩收益。
+
+ef32-d37844475132自然成功：cap-prune444实际token/decode等价无差异，但不测性能／gate。EF32只影响weights-f32.bin(350000B)，35065探测、31998match覆盖96216B；宽15/16-bit均未找回任何match/byte。暂停这两张扩表，不投入测量。新缺口变为极短匹配编码值：Lits3按原位置原步进把3-byte match写为literal；min4另改拒绝后miss步进作密度对照。先用正式原encoder做两轴，不把96216覆盖字节当成可节省压缩字节。Lits3证明原稿明确未适配，只有性能有机会才新冻结证明pair。
