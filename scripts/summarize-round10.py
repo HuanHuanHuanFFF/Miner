@@ -146,10 +146,21 @@ def main():
                  same_family_projection=geometry(x, y), conservative_projection=geometry(stress_x, max(y + 0.01, g['public_size_pct'] * 1.008)),
                  has_verified_source_proof_pair=any(v['accepted'] for v in g['gates']),
                  verified_source_proof_pairs=[v for v in g['gates'] if v['accepted']])
+        # The original R9 parent was scalar, but later R10 children have other
+        # source parents. Retain old fields as explicit legacy aliases only.
+        g['relative_time_change_pct_vs_public361'] = g['relative_time_change_pct']
+        g['relative_time_change_pct_vs_scalar'] = g['relative_time_change_pct_vs_parent']
+        g['public_size_change_pp_vs_scalar'] = g['public_size_change_pp_vs_parent']
+        g['legacy_parent_comparison_baseline'] = 'r9-block-scalar'
         candidates.append(g)
     candidates.sort(key=lambda g: (-g['conservative_projection']['conditional_share_pct'], -g['same_family_projection']['conditional_share_pct'], g['public_size_pct'], g['same_family_projection']['time_ratio']))
     result = {'status': 'COMPLETED_CI_RECEIPTS_RECOMPUTED', 'snapshot': pages[0]['context'], 'scorer_replay_max_error': replay_error,
               'official_policy': policy, 'competition_capture_sha256': sha(competition_path),
+              'field_definitions': {
+                  'relative_time_change_pct': 'Versus same-run public361, not the manifest source parent.',
+                  'relative_time_change_pct_vs_parent': 'Legacy alias for relative_time_change_pct_vs_scalar: baseline is always r9-block-scalar.',
+                  'public_size_change_pp_vs_parent': 'Legacy alias for public_size_change_pp_vs_scalar: baseline is always r9-block-scalar.',
+                  'source_parent': 'Read candidate manifest; use raw paired metrics for that specific comparison.'},
               'payability_reference_453': next({'submission_id': r['id'], 'metrics': r['metrics'], 'score': r['score']} for r in rows if r['id'] == '453'),
               'payability_rule_source_sha256': sha(ROOT / 'sources/conjectures-optimisation-deflate/validator/scoring/combine.py'),
               'formal_anchor': {'submission_id': '361', 'metrics': formal}, 'completed_ci_runs': runs, 'candidate_count': len(candidates),

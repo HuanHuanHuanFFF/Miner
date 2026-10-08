@@ -1,75 +1,127 @@
-# 第十轮：五小时结构研究（进行中）
+# 第十轮：同字节优化、完整验证与前沿边界
 
-执行规则见 [AGENTS.md](../../AGENTS.md)。本轮会话 ID：`01a117eb-0257-7f51-a1b9-a7621bdf16dc`，原始接续会话为 `01a11272-3ca5-75d3-aa0a-68376e856f18`。实际开始北京时间 **2026-10-08 03:50:52**，五小时截止 **08:50:52**；当前预算读数见 [budget.json](../../evidence/round10/budget.json)，路线变化见 [research-state.md](../../evidence/round10/research-state.md)。本页是阶段报告，尚非本轮最终交付。
+执行规则见 [AGENTS.md](../../AGENTS.md)。会话 ID：`01a117eb-0257-7f51-a1b9-a7621bdf16dc`。本轮北京时间 2026-10-08 **03:50:52** 开始，五小时截止 **08:50:52**；当前 [预算回执](../../evidence/round10/budget.json) 与逐次决策 [research-state.md](../../evidence/round10/research-state.md) 保留阶段状态。本报告的最终快照与归档校验尚在收尾。
 
-## 起点与当前门槛
+## 结果
 
-从已通过完整公共 gate 的 `r9-block-scalar` 继续。起始官方完整快照为 **27331，03:54:35 +08:00**，491 个 Pareto 条目、74 个前沿点；API freshness 仍为 `unknown`。原始响应及哈希见 [receipt.json](../../evidence/round10/official-start/receipt.json)，当前函数重放见 [frontier-start.json](../../evidence/round10/frontier-start.json)。官方前沿权重与本地公开 scorer 的最大误差为 `6.94e-18`，不证明线上部署代码逐字相同。
+**尚未取得新的均衡可支付前沿点。** 全部 13 个 CI 已自然结束，测试了 **21 份不同 Rust 源码、246 个公共配对测量进程**，得到两份通过完整公共 gate 的新源码／证明对。其余独有负面结果、提取拒绝和未验证草稿均保留。完整复算见 [pre-final-summary.json](../../evidence/round10/pre-final-summary.json)。
 
-固定 scalar 输出时，同族 #361 校准需再快约 **6.074%**；按已声明的大小系数和最慢块加 2% 场景需再快约 **16.654%**。这些是推算门槛，不是私有集或奖励保证。
+当前最好的已验证包是 [r10-finder-pipeline-proof](../../candidates/r10-finder-pipeline-proof)：空记录消除加原 DP 插入预读流程。两个独立 runner、四个公共计时块平均比本轮起点 scalar 快 **1.7122%**，压缩输出逐字相同；相对同场 record 父版，平均再快 **0.6522%**。幅度在 runner 间变化，不能把均值解释成保证值或统计置信界。
 
-## 第一轮已完成的结果
+备选 [r10-record-nonempty](../../candidates/r10-record-nonempty) 只省去空候选记录，改动与证明更小。七个 runner、十四块平均比 scalar 快 **0.9795%**，输出相同，也有完整公共 gate。后续需要较小证明迁移成本时可复用此包。
 
-两个 CI 均自然成功结束：`37679261323` / `explore-a` 与 `37680712729` / `rmq-a`。共六份新 Rust、40 个公共配对测量进程；每份候选两块，每文件一次预热和 11 次测量。所有指标从原始 reps 重算，包含 parser 和公共 encoder。结果见 [first-loop-summary.json](../../evidence/round10/first-loop-summary.json)。
+本轮没有正式竞赛上传、链交易、新注册、签名或付款。公共 gate、条件投影、正式 admission 与实际奖励是不同证据层。
 
-下表均相对**同一 CI、同一块**的 scalar；不比较跨 runner 的绝对时间。
+## 精确交付与验证
 
-| 候选 | 机制 | 总时间变化 | 大小变化 pp | 决策 |
-|---|---|---:|---:|---|
-| forward-seed | 删首遍价格 DP，改用贪心统计种子 | −5.607% | +0.1351735 | 停止此种子扩展 |
-| forward-lazyseed | 同种子增加一字节 lookahead | −5.132% | +0.0926915 | 质量损失仍过大 |
-| forward-seed2 | 同种子后做两遍后向规划 | +9.545% | +0.0583781 | 比父版本更慢、更大 |
-| finder-tag4 | 两槽精确四字节标签补充缓存 | +6.071% | −0.0013716 | 收益不足，停止 |
-| finder-hash5 | 五字节最近位置补充缓存 | +4.484% | −0.0053775 | 新匹配有效，但叠加成本过高 |
-| rmq8 | 已完成端点的八元素最小值摘要 | +5.133% | 0 | 同字节但变慢，停止 |
+| 包 | Rust SHA-256 | Lean SHA-256 | 完整 gate |
+|---|---|---|---|
+| pipeline-proof | `b74ae5fd9575101b6b34b9f2718d8835adca770c6765c30b33bb895878ba1adf` | `e0ded4248a894e8c53bc1ce644c7c3f5c6681fe3c06eaab597caf10a5bf472db` | [37700280634](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37700280634)，通过 |
+| record-nonempty | `7f1c661fd1ce29d12c69671f034ff5a713e284ed1fcba66ba404ff25479b55b7` | `86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d` | [37684506856](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37684506856)，通过 |
 
-六者在同族校准与保守场景下均被支配，条件份额为 0。首两批的 `gate` artifact **未执行完整 Lean gate**（`gates={}`），不能用 CI 成功或 artifact 名称声称证明通过。
+证书分别为 [pipeline VERIFICATION](../../candidates/r10-finder-pipeline-proof/VERIFICATION.json) 和 [record VERIFICATION](../../candidates/r10-record-nonempty/VERIFICATION.json)。旧试验目录中的复制父证明仍保留当时的未适配状态，接受结论只属于上表精确 pair。
 
-**VERIFIED：** seed 的原／新匹配记录流在 18 个公共 D 路由输入及 66 个生成输入上逐字相同；它的质量损失出现在后续种子／成本规划。tag4/hash5 各完成 444 个有限检查，检查解码、确定性、插桩一致性及所访问节点的原候选保留。rmq8 完成 444 个有限 token/decode 等价检查，公共输出也相同。三种代表及 rmq8 通过了官方重新提取，但并未因此关闭原始 Lean obligation。
+pipeline 的官方检查重新运行 Charon/Aeneas，核对原始 `LZ77.Obligation slot.parse`，公理恰为 `Classical.choice`、`Quot.sound`、`propext`，并完成 28 文件公共往返／评分；原输入 15,930,000 字节、输出合计 4,882,102 字节。核心验证 542.4 秒，其中 Parse 调用 374.9 秒；核心时间不包含后续 benchmark 和生成语料。公开原作者及来源继续见 [#361 PROVENANCE](../../references/round7-public-361/PROVENANCE.json)。
 
-**INFERRED：** 简单恢复原生 D 路由仍留下显著文本质量损失，不继续增加同类种子遍数。hash5 的 97,744 次公共新增中，92,650 次来自已有最佳长度 4..7；下一步检验替换原长键，而非叠加维护表。源与机制分析分别见 [forward-notes](../../evidence/round10/forward-notes.md)、[finder-notes](../../evidence/round10/finder-notes.md)、[原始资料检索](../../evidence/round10/research-sources.md)。
+这不是对“与父版在所有输入上 token 相同”的 Lean 证明。原生 444 用例、公共同 token／输出、代码机制论证与完整原始正确性 gate 分别记录，不互相替代。
 
-采样微函数计时包含计时成本和相互嵌套，甚至产生单项大于整体的外推值，不作为百分比分解。collect+seed 与旧前向的粗比较只作诊断，不能替代正式总时间。
+## 配对性能与波动
 
-## 后续确认与第二轮
+正式时间轴按每文件候选／配对 incumbent 总压缩时间中位数之比，再等权平均；包含 parser 和公共 encoder。每文件 1 次预热、11 次正式重复。相对父版先比较同 runner、同 block 的轴，runner 内等权汇总后再对 runner 等权。没有用不同机器绝对秒数相除。
 
-- [prove-a / 37682364860](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37682364860) 自然失败：seed/seed2 的独立复测重现质量退化，seed 证明有四处终止度量未关闭。不是超时；原证明未通过，不为这份低收益版本再开 gate。源与证明接口审计见 [interface-audit.json](../../candidates/r10-forward-seed-proof/interface-audit.json)。
-- [struct-b / 37684506856](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/37684506856) 自然成功：delta16 +1.2501% 总时间、大小不变；key5 +4.7821% / -0.0005412 pp，key6 +2.2458% / -0.0031119 pp，均停止扩展。空记录消除 -1.2342%、输出不变，另通过完整公共 gate 和八个固定输入；精确 pair 见 [VERIFICATION](../../candidates/r10-record-nonempty/VERIFICATION.json)。有限 token 等价仍不等于全输入 token 等价，源码边界见 [record-review.md](../../evidence/round10/record-review.md)。
+pipeline 公共四块相对同场 record 的变化：
 
-六个已终止 CI 共 **114 个公共配对测量进程、十二份新 Rust**。汇总见 [third-loop-summary.json](../../evidence/round10/third-loop-summary.json)，其中按 runner 内配对比值计算提速，再对 runner 等权；重复证明版本按同一 Rust 合并。
+| runner | block 1 | block 2 |
+|---|---:|---:|
+| restore-h | −0.22296% | −0.41239% |
+| confirm-j | −1.27203% | −0.70140% |
 
-- `row-c / 37688325585` 自然成功。行式长链比同场 scalar 慢约 10.9%，大小增加 0.0079558 pp。空记录消除独立复测约快 1.17%，输出不变；两 runner 四块方向一致，但仍未进入当前预测前沿。
-- `rebase-d / 37689247460` 自然成功。全表相对位置重基准两块分别慢 1.9954%、3.9353%，平均慢 2.9653%，输出不变，444 个有限等价检查通过。停止该实现，不追加完整证明。
-- `selective-e / 37693029351` 在 05:57:53 启动：原长匹配尾部额外查一个位置，及行式标签扫描改成整字掩码。后者保留旧行式版本作同场对照；必须相对 scalar 有价值，不能仅以改进一个慢版本作为继续理由。
-- `cost-f / 37693861172` 在 06:05:15 启动：静态长度／距离成本必须严格优于同跨度字面量才接受种子匹配。这检验短而远匹配污染统计的机制，保留原 lazyseed 作同场对照。
+第一台 runner 的小信号低于当场同源码 clone 的最大观察波动 0.6472%；第二台的平均变化 −0.9867% 大于其 clone 最大观察变化 0.4710%。clone 只是描述性对照，不能据此宣称统计显著性。
 
-两组现已自然成功结束，全轮累计 **8 个已终止 CI、15 份独立新 Rust、152 个公共配对测量进程**，见 [fourth-loop-summary.json](../../evidence/round10/fourth-loop-summary.json)。新增结果：
+[稳定性复核](../../evidence/round10/stability-confirmed.md) 按相同输入 SHA 将 18 个 D 路由与 10 个未改非 D 路由分开。confirm-j 的 pipeline 改善主要来自 D：贡献 −1.1112 pp，非 D 贡献 +0.1245 pp；二者合为 −0.9867%。未改路由贡献也是测量结果，不能自动视为纯噪声。
 
-| 候选 | 相对同场 scalar 总时间 | 大小变化 pp | 结果与决策 |
+公共压缩大小轴固定为 **33.934365747942536%**。八个脚本生成输入也有独立诊断；它们公开、固定且不是私有 stage2。早期生成语料没有同场 scalar，不能据此推断相对 scalar 的反转；后期 pack/confirm/mask 加入同场 scalar 与 record。见 [早期审计](../../evidence/round10/synthetic-transfer-audit.md)、[pack 同场审计](../../evidence/round10/pack-transfer-audit.md)。
+
+## 所有实测版本
+
+以下全部相对同场 scalar；跨 runner 按上述方式汇总。“大小”单位为百分点 pp。表中 0 表示完全相同的公共输出大小，具体 token／输出身份以原始回执为准。
+
+| Rust 版本后缀 | 总时间变化 | 大小变化 pp | 结论 |
 |---|---:|---:|---|
-| endprobe | +0.0734% | −0.0017765 | 16 文件共少 319 字节，其余不变；两块时间变号，不宣称稳定免费，保留小幅质量备选 |
-| row16-mask | +7.0641% | +0.0079558 | 比同场 row16 快 4.2889%，但仍慢且大；444 原生等价与公共同输出通过，关闭行表路线 |
-| costseed | −3.0988% | +0.0656117 | 比 lazyseed 追回约 29% 的大小损失，同时更慢，关闭种子统计路线 |
+| finder-pipeline | −1.7122% | 0 | 最佳已验证包；两个 runner 复现 |
+| record-nonempty | −0.9795% | 0 | 完整 gate；较小改动备选 |
+| forward-seed | −5.5527% | +0.1351735 | 质量损失复现；证明另有四处终止错误 |
+| forward-lazyseed | −5.0739% | +0.0926915 | 质量损失过大 |
+| forward-seed2 | +9.6347% | +0.0583781 | 追加 pass 仍更慢、更大 |
+| forward-costseed | −3.0988% | +0.0656117 | 追回部分质量却增加成本，停止 |
+| finder-tag4 | +6.0713% | −0.0013716 | 新增表没有形成有用两轴收益 |
+| finder-hash5 | +4.4842% | −0.0053775 | 发现新增匹配，未形成有用两轴收益 |
+| finder-key5 | +4.7821% | −0.0005412 | 停止长键替换扫参 |
+| finder-key6 | +2.2458% | −0.0031119 | 收益不足 |
+| forward-delta16 | +1.2501% | 0 | 同字节但变慢 |
+| forward-rebase16 | +2.9653% | 0 | 空间变小，但同字节总时间增加 |
+| rmq8 | +5.1328% | 0 | 同字节总时间增加，具体时间归因未测 |
+| finder-row16 | +11.3824% | +0.0079558 | 两 runner 均慢且大 |
+| finder-row16-mask | +7.0641% | +0.0079558 | 对 row16 恢复 4.2889%，仍无用 |
+| forward-endprobe | +0.0734% | −0.0017765 | 16 文件共省 319 字节；保留小质量研究材料，未完整证明 |
+| forward-costcache | −0.5420% | 0 | 相对 record 仅 −0.0583%，无可辨新增收益 |
+| finder-linkearly | −0.2394% | 0 | 相对 record 慢 0.2458%，停止 |
+| forward-routecfg | −1.4047% | +0.0001288 | 相对 record 小变化，不足前沿目标 |
+| record-packed | +0.2475% | 0 | 相对 record 慢 1.4456%，停止 |
+| backward-prefixmask | +7.1519% | 0 | 相对 record 慢 7.8532%；官方提取拒绝，停止 |
 
-endprobe 在 28 公共和 84 固定生成输入上检查了原首遍计划／节点保留、额外位置与字节匹配以及解码；公共额外 13,926 节点、23,234 候选并不等于实际节省字节。costseed 在 18 公共 D 路由与 66 生成输入上保留原 rs，质量差距仍存在。两组都只执行了提取和有限检查，**没有完整 Lean gate**。
+所有 21 份源码在当前同族与声明的压力场景中都没有前沿份额。source 相同的 proof 包没有重复计作新 Rust。
 
-`cpu-g / 37695105461` 与 `restore-h / 37695964878` 现已自然成功结束，全轮累计 **10 个已终止 CI、19 份独立新 Rust、192 个公共配对测量进程**，见 [fifth-loop-summary.json](../../evidence/round10/fifth-loop-summary.json)。四个新版本仍未进入当前预测前沿：
+## 从反馈得到的机制结论
 
-| 候选 | 相对同场 record 总时间 | 大小变化 pp | 判断 |
-|---|---:|---:|---|
-| costcache | −0.0583% | 0 | 少重建 24.53% 的成本表，却无可辨总时间收益；停止 |
-| linkearly | +0.2458% | 0 | 实际机器码确认部分加载提前，总时间无收益；停止 |
-| pipeline | −0.3177% | 0 | 两块同向，但幅度小，准备一次有限证明移植与独立确认 |
-| routecfg | −0.3752% | +0.0001288 | 只影响预期五文件，仍不足以形成有用 tradeoff；停止 |
+- **统计种子不能只看搜索覆盖。** seed/costseed 的原匹配流在 18 个公共 D 输入和 66 个生成输入上保持一致，但后续种子／成本规划仍损失质量。成本筛选追回约 29% 的 lazyseed 大小损失，剩余差距仍过大，停止继续调同类种子与 pass。
+- **少做局部工作不等于总压缩提速。** costcache 少重建了 1,523/6,208 次成本表，整体对 record 仅 −0.0583%，两块变号。linkearly 的实际完整机器码确认下一指针读取部分提前，同时观察到额外栈存储；实际总时间无收益。见 [机器码审计](../../candidates/r10-finder-linkearly/codegen-result.md)。
+- **记录更紧凑也可能更慢。** packed 在 18 个公共 D 路由累计少存 17,238,988 字节，节点流和首遍计划不变，444 等价及公共输出检查通过；但公共对 record 慢 1.4456%，生成语料仅有 −0.1438% 小反向信号。所省是多个记录流的存储合计，不是峰值 RSS。
+- **端点区间实际很短。** prefixmask 有 6,967,033 次选择，原长度扫描合计 28,038,648，平均约 4.02；维护 12,812,018 次逐字节发布后，`pm_cost+d_bcost` 合计约 51.02M 次逻辑调用，约为原区间长度总数的 1.82 倍。计数不是硬件 load 或时间占比。该版本 444 与公共输出一致，但官方 Aeneas 第 3 阶段退出 1，未产出完整提取；工具丢弃了 stdout，具体原因仍 UNKNOWN，不能称为 Lean 失败或 Miri 缺失所致。
+- **加入节点需要分析旧边是否保留。** 末尾补查确有小质量收益，但更早插普通节点有一个 [89 字节反例](../../candidates/r10-forward-overlay-study/counterexamples.json)，会删除原 gap continuation 选择；即便补上 gap owner，动态最佳端点回推仍可能改变原边集。原 rs 候选保留不等于整个规划图边集保留。
+- **迁移附带改变也要拆开核查。** 原 DP 转 D 时同时改变了部分 key/update/half 及长度枚举。routecfg 只恢复模型配置，仍保留 flen16，未声称恢复原 DP 计划；实际变化仅在预期五文件，仍不足目标。
 
-record 在四个 runner 的八块中，平均比 scalar 快 **0.9814%**，全部输出相同；只有原 `struct-b` 精确 pair 通过完整 gate。pipeline 的 444 有限等价和真实提取已通过，完整证明尚未完成。机器码分析区分实际加载顺序、额外栈存储与未测得的动态访存重叠，见 [codegen-result](../../candidates/r10-finder-linkearly/codegen-result.md)。
+## 前沿与支付边界
 
-06:49:10 启动 `pack-i / 37698560245`：把小输入的每节点两字元数据压成一字，大输入保持旧格式，逻辑节点与候选保持不变。独立 [边界审计](../../evidence/round10/packed-record-review.md) 已完成；原生节点流、公共两轴、生成语料同场 scalar／record 对照和完整证明仍待反馈。
+当前复算使用完整快照 **27641，2026-10-08 06:26:41 +08:00**，494 行、76 个前沿点，API freshness 标为 unknown。原始响应、请求时间与 SHA 见 [receipt](../../evidence/round10/official-late-research/receipt.json)。公开 scorer 重放误差为 `6.94e-18`。
 
-## 几何前沿与当前 hotkey 的支付边界
+| pipeline 条件模型 | 时间轴 | 大小轴 | 几何份额 |
+|---|---:|---:|---:|
+| 同族 #361 迁移 | 1.40378031 | 34.18551719% | 0 |
+| 声明的压力场景 | 1.43836924 | 34.20584067% | 0 |
 
-最新完整快照 **27641（06:26:41 +08:00）** 共 494 行、76 个前沿点，现有 #453 仍在可支付前沿。官方规则只支付同 hotkey 最早的前沿提交：新均衡点若未使 #453 退出前沿，即使几何份额为正，沿用该 hotkey 的新点额外份额仍为 0。详见 [payability-notes.md](../../evidence/round10/payability-notes.md) 与 [最新重放](../../evidence/round10/payability-late-research.json)。新增前沿 #492/#493 位于较慢一端，均衡附近阈值未变；这次 weights/current 也不与固定分页同一快照，不能拼成链上结论。最终会再次刷新该状态。
+同族模型仍被 #360/#418/#422 支配。固定此大小时，时间还需再改善约 5.02% 才可能跨过现有几何门槛。压力场景取最慢观察配对比值再加 2%，大小取同族值加 0.01 pp 与公共大小×1.008 的较大者；它不是置信区间或私有集保证。
 
-附近 #375/#418/#422/#443/#489 的官方源码接口均明确返回 `SOURCE_WITHHELD`，前沿提交尚未开放源码。已保留响应和时间／哈希 [审计](../../evidence/round10/public-neighbor-audit.md)，没有根据坐标推断它们实现了什么优化，也没有访问未开放代码。
+官方只为同 hotkey 最早的存活前沿提交分配 Pareto 支付。本次快照中该点仍为 #453；即使未来均衡点有正几何份额，只要新点加入后仍有更早的同 hotkey 前沿点，新点本身的可支付份额仍为 0。见 [规则与源代码核对](../../evidence/round10/payability-notes.md) 和 [支付重放](../../evidence/round10/payability-late-research.json)。weights/current 与固定分页不是同一快照，不据此推断本次分数已被链接受。
 
-目前没有新正式提交或资金动作。最终需要收齐全部 CI、冻结最好源码／证明对、跨运行复测、刷新完整官方快照，再给两轴、条件前沿、具体缺口和是否达成研究目标；这些仍待完成。
+邻近 #375/#418/#422/#443/#489 的公开源码接口均返回 `SOURCE_WITHHELD`，不能由其坐标猜测内部优化。见 [原始响应审计](../../evidence/round10/public-neighbor-audit.md)。本轮没有触及未开放源码。
+
+## CI 与复现
+
+| 批次 | Run ID | 结果 | 公共配对进程 |
+|---|---|---|---:|
+| explore-a | 37679261323 | success，筛选／提取／有限诊断 | 24 |
+| rmq-a | 37680712729 | success，有限等价；无完整 gate | 16 |
+| prove-a | 37682364860 | failure，seed 四处 omega 终止义务未关闭 | 18 |
+| struct-b | 37684506856 | success，record 完整 gate | 22 |
+| row-c | 37688325585 | success，独立复测 record | 18 |
+| rebase-d | 37689247460 | success，有限等价；无完整 gate | 16 |
+| selective-e | 37693029351 | success，末尾补查／行掩码 | 20 |
+| cost-f | 37693861172 | success，成本种子 | 18 |
+| cpu-g | 37695105461 | success，缓存与加载顺序 | 20 |
+| restore-h | 37695964878 | success，流水与模型配置 | 20 |
+| pack-i | 37698560245 | success，节点压缩／生成对照 | 18 |
+| confirm-j | 37700280634 | success，pipeline 独立复测与完整 gate | 18 |
+| mask-k | 37702101006 | success，但研究提取被拒绝、未执行完整 gate | 18 |
+
+246 包含对照进程，不是 246 个独立 runner；每个进程覆盖 28 文件。只有表中两份新 pair 完整 gate 接受。失败 seed 的另一个修复草稿、delta16/row/其他接口草稿仍属于未验证材料。
+
+每批保存原始 reps、输入／token／输出 SHA、编译器与 runner、官方日志、提取和 `raw-artifact-files.json`。目录为 `evidence/round10/<run>/<batch>/gate/`；没有改写原始回执的字节与哈希。可用 `scripts/summarize-round10.py` 对报告列出的 gate 目录重新计算；`scripts/analyze-round10-stability.py` 复核分组贡献，`scripts/write-round10-verification.py` 核对接受 pair。另有 [独立结论审计](../../evidence/round10/final-claims-review.md) 复核数值、基线、证明与下一步假设边界。
+
+开发分支为 `codex/round10-balanced`；原 `main` 的 `4ce98ccfe48ced871a501a016518076baf8a81d9` 保留，未合并。官方 sources/contract/encoder/gate/pins 阅读副本未改，工作流仍只手动启动，私有开关默认 false。本地未新增编译工具链或已编译二进制。
+
+## 下一次最有价值的最小实验
+
+**建议先计数，不直接继续添加缓存。** 现有端点范围平均只有约四项；下一问题是 `d_gap` 无 pending-push 部分中，有多少字节处于“续接匹配已胜出、长度成本保持相同”的区间，区间宽度是否足够批量填充。先保存覆盖率、宽度分布和候选 token 一致性，再决定是否实现。
+
+这个想法尚未实现、未测性能、未完成证明。必须处理打包成本的 u32 回绕、字面量价格、choice tie、块边界和数组界；发现反例或覆盖率不足就停止。当前能够交付的是已验证的约 1.7% 同字节收益及完整负面证据，不能将下一步假设写成已有前沿成果。
