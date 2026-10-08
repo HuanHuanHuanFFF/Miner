@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   experiment:
-    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true)
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && !(inputs.experiment_round == '11' && inputs.specification == 'huffman-1')
     name: ${{ inputs.specification }}
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
@@ -118,6 +118,34 @@ jobs:
         with:
           name: r${{ inputs.experiment_round }}-${{ github.run_id }}-${{ inputs.specification }}-gate
           path: ${{ runner.temp }}/round4-receipts/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: ignore
+  native_diagnostic:
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && inputs.experiment_round == '11' && inputs.specification == 'huffman-1'
+    name: ${{ inputs.specification }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
+    env:
+      ROUND4_SPEC_DIR: evidence/round11
+      ROUND4_SPEC: ${{ inputs.specification }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Validate exact source bytes
+        run: python3 scripts/round4.py preflight
+      - name: Prepare pinned public source and minimal native toolchain
+        run: bash scripts/ci-prepare-native.sh
+      - name: Compare actual Huffman cost models without changing output
+        run: |
+          python3 scripts/research-round11-huffman.py --corpus "$DEFLATE_ROOT/data/benchmark/corpus-stage1" --output "$RUNNER_TEMP/round4-receipts/huffman-diagnostics"
+      - name: Publish original diagnostic text without binaries
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r11-${{ github.run_id }}-${{ inputs.specification }}-diagnostics
+          path: ${{ runner.temp }}/round4-receipts/huffman-diagnostics/
           retention-days: 1
           compression-level: 9
           if-no-files-found: ignore

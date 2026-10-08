@@ -14,7 +14,7 @@ def main():
     parser.add_argument('--git-ref')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    checks, targets, inventories, source_pairs, captures = [], {}, [], [], []
+    checks, targets, inventories, source_pairs, captures, cli_failures = [], {}, [], [], [], []
 
     def verify(path, expected, size=None, kind='raw_artifact'):
         path = path.resolve()
@@ -58,6 +58,19 @@ def main():
             source_pairs.append({'run_id': state['run_id'], 'name': entry['name'],
                                  'path': entry['path'], 'hashes': entry['hashes']})
 
+    for manifest in sorted(BASE.rglob('raw-cli-files.json')):
+        record = json.loads(manifest.read_bytes())
+        metadata(manifest, 'cli_failure_inventory')
+        for name, expected in record['files'].items():
+            path = (manifest.parent/name).resolve()
+            assert path.is_relative_to(manifest.parent.resolve())
+            verify(path, expected['sha256'], expected['bytes'], 'raw_cli_failure_output')
+        ci = json.loads((manifest.parent/'ci-run.raw.json').read_bytes())
+        assert ci['status']=='completed' and ci['conclusion']=='failure'
+        assert str(ci['databaseId'])==record['run_id'] and ci['headSha']==record['git_sha']
+        cli_failures.append({'run_id':record['run_id'], 'batch':record['batch'],
+                             'path':manifest.relative_to(ROOT).as_posix(), 'files':len(record['files'])})
+
     for folder in sorted(BASE.glob('official-*')):
         receipt_path = folder / 'receipt.json'
         if not receipt_path.exists():
@@ -86,6 +99,7 @@ def main():
               'checks': len(checks), 'unique_paths': len(targets),
               'mismatches': [x for x in checks if not x['match']],
               'inventories': inventories, 'source_pairs': source_pairs, 'captures': captures,
+              'cli_failures_without_artifacts': cli_failures,
               'git': git_result,
               'limits': ['Byte preservation and CI/source binding only; no new correctness, timing or admission claim.']}
     args.output.write_bytes((json.dumps(result, indent=2) + '\n').encode())
