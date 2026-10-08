@@ -122,7 +122,7 @@ pipeline 公共四块相对同场 record 的变化：
 
 每批保存原始 reps、输入／token／输出 SHA、编译器与 runner、官方日志、提取和 `raw-artifact-files.json`。目录为 `evidence/round10/<run>/<batch>/gate/`；没有改写原始回执的字节与哈希。可用 `scripts/summarize-round10.py` 对报告列出的 gate 目录重新计算；`scripts/analyze-round10-stability.py` 复核分组贡献，`scripts/write-round10-verification.py` 核对接受 pair。另有 [独立结论审计](../../evidence/round10/final-claims-review.md) 复核数值、基线、证明与下一步假设边界。
 
-[最终归档校验](../../evidence/round10/archive-final-check.json) 检查 621 份原始实验文件、246 项源码／证明与 6 项 gate 输入检查，全部一致；706 个 Git 路径的归档字节也匹配。完整及失败官方快照的 [24 个 Git 路径](../../evidence/round10/frontier-capture-git-check.json) 另行通过原字节核对。另对 [13 次冻结提交](../../evidence/round10/frozen-run-input-check.json) 的 220 个不同输入路径分别核对，确认每次实际 run 的提交保留了对应源码／证明。检查结果绑定各自记录的提交，不把之后的报告提交冒充被验证对象。新增的明确基线字段及策略校验也经过 [旧汇总数值回归](../../evidence/round10/summary-generator-check.json)，1,804 个原有标量字段保持一致。
+[最终归档校验](../../evidence/round10/archive-final-check.json) 检查 621 份原始实验文件、246 项源码／证明与 6 项 gate 输入检查，全部一致；706 个 Git 路径的归档字节也匹配。交付相关的完整、stale、失败官方快照及 #501 源码拒绝响应共 [62 个 Git 路径](../../evidence/round10/handoff-capture-git-check.json) 另行通过原字节核对。另对 [13 次冻结提交](../../evidence/round10/frozen-run-input-check.json) 的 220 个不同输入路径分别核对，确认每次实际 run 的提交保留了对应源码／证明。检查结果绑定各自记录的提交，不把之后的报告提交冒充被验证对象。新增的明确基线字段及策略校验也经过 [旧汇总数值回归](../../evidence/round10/summary-generator-check.json)，1,804 个原有标量字段保持一致。
 
 开发分支为 `codex/round10-balanced`；原 `main` 的 `4ce98ccfe48ced871a501a016518076baf8a81d9` 保留，未合并。官方 sources/contract/encoder/gate/pins 阅读副本未改，工作流仍只手动启动，私有开关默认 false。本地未新增编译工具链或已编译二进制。
 

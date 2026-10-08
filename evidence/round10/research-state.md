@@ -122,3 +122,7 @@ Six completed runs now contain 114 paired public processes and twelve distinct n
 - Forward mechanism and candidates: `forward-notes.md`.
 - Supplemental finder: `finder-notes.md`, `row-finder-notes.md`.
 - CI receipts: each run retained under its numeric run ID and batch, with original bytes and hashes.
+
+## Delivery closure
+
+Completion receipt at 2026-10-08T00:49:32.201210+00:00: all13 CI runs completed naturally, both exact verified packages and all negative evidence are archived. Final-summary uses27915; #453 is off-frontier, while all21 new-source projections remain dominated. Final Git checks at760b02c verify706 experiment/source paths and62 official-response paths. The branch remains separate from unchanged main. No formal submission, chain transaction or merge occurred. The follow-up gap design remains unimplemented and unrun.
