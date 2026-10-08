@@ -330,12 +330,17 @@ def main():
         result["counts"]["git_archive_mismatched"] = git_result["counts"]["mismatched"] + git_result["counts"]["git_errors"]
         if result["counts"]["git_archive_missing"] or result["counts"]["git_archive_mismatched"]:
             result["status"] = "GIT_ARCHIVE_HAS_MISSING_OR_MISMATCHED_FILES"
+        elif fs_failures == 0:
+            result["status"] = "VERIFIED_FILESYSTEM_AND_GIT"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"status": result["status"], "mode": result["mode"], "output": rel_repo(output_path),
                       "counts": result["counts"],
                       "gate_accepted": [(r["run_id"], g["candidate"], g["accepted"])
                                         for r in runs for g in r["gate_attempts"]]}, indent=2))
+    if fs_failures or (git_result and (result["counts"]["git_archive_missing"] or
+                                      result["counts"]["git_archive_mismatched"])):
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

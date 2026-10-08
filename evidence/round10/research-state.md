@@ -100,6 +100,13 @@ Six completed runs now contain 114 paired public processes and twelve distinct n
 - Prefixmask's444 finite cases and public outputs equal record, yet paired total time is +7.47181%/+8.23451%, mean+7.85316%. Actual counters have zero fallback/disabled cases:28,038,648 scalar range entries over6,967,033 calls (mean4.02), versus51,023,656 pm_cost/d_bcost invocations after12,812,018 publications. These are logical operations, not hardware loads or time shares. Stop the candidate and extraction repair; no further diagnostic CI is justified for this negative implementation.
 - All13 CI runs are finished (12success/1failure);21 distinct new Rust versions and246 public paired processes. Two exact new source/proof pairs accepted, one rejected full proof attempt. [Pre-final recomputation](pre-final-summary.json) and [independent claims review](final-claims-review.md) agree. No new algorithm work remains; final official refresh, Git-byte archive verification and final report are the remaining delivery work.
 
+## Delivery checks in progress
+
+- 08:18: original CI receipt, current source/proof and gate-input checks are all consistent: 621 raw artifact files, 873 filesystem checks, 706 Git paths at delivery HEAD `146ac62c014c75c24534302a6d927c8dddc0f87b`. Separately, 220 distinct source/proof paths across the exact 13 CI commits match their frozen specifications; all those commits remain ancestors of the delivery branch.
+- The archive checker now exits nonzero on a failed filesystem or Git audit; isolated inconsistent-summary and missing-Git-object fixtures verify that behavior. The actual full receipt set passes.
+- The final summarizer explicitly names scalar and public361 baselines and validates the captured scoring policy. All 1,804 previous scalar fields recompute exactly; historical `pre-final-summary.json` remains immutable. weights/current explanations now follow actual snapshot IDs, without equating `weight_set_id` to an absent snapshot ID.
+- A final source-only review is refining the next d_gap opportunity-counting experiment's guards and stop conditions. No new Rust/Lean variant or CI is started. Final public snapshot refresh and final handoff remain pending.
+
 ## Evidence index
 
 - Latest complete frontier capture: `official-late-research/`; prior complete captures: `official-mid-payability/`, `official-start/`.

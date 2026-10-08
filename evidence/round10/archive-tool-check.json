@@ -1,0 +1,28 @@
+{
+  "status": "VERIFIED_EXIT_STATUS_REGRESSION",
+  "recorded_utc": "2026-10-08T00:13:27.185279+00:00",
+  "script": "scripts/check-round10-archive.py",
+  "script_sha256": "25c74d61120800a22fbeeb870f82e9dc29eb05121587cd6022aec8d4b110a8f3",
+  "cases": [
+    {
+      "case": "inconsistent summary count",
+      "exit_code": 1,
+      "status": "FILESYSTEM_AUDIT_HAS_FAILURES",
+      "verified": true
+    },
+    {
+      "case": "workspace file missing from git ref",
+      "exit_code": 1,
+      "status": "GIT_ARCHIVE_HAS_MISSING_OR_MISMATCHED_FILES",
+      "verified": true
+    },
+    {
+      "case": "consistent synthetic summary in filesystem-only mode",
+      "exit_code": 0,
+      "status": "VERIFIED_FILESYSTEM",
+      "verified": true,
+      "scope": "checks summary shape only; not an experiment receipt"
+    }
+  ],
+  "real_data_check": "archive-check.json separately checks all actual completed receipts and Git bytes"
+}

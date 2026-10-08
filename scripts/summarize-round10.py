@@ -5,7 +5,7 @@ import hashlib
 import json
 import statistics
 from round3 import load_scorer
-from round10_payability import analyze_payability
+from round10_payability import analyze_payability, validate_policy_for_replay
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -22,6 +22,7 @@ def main():
     args = ap.parse_args()
     pages = json.loads(args.snapshot.read_text())
     assert len({p['context']['snapshot_id'] for p in pages}) == 1
+    assert pages[-1].get('next_cursor') is None, 'Frontier pagination is incomplete'
     competition_path = args.snapshot.parent / 'competition.json'
     competition = json.loads(competition_path.read_text())
     assert competition['current_snapshot_id'] == pages[0]['context']['snapshot_id']
@@ -32,6 +33,7 @@ def main():
     formal = next(r['metrics'] for r in rows if r['id'] == '361')
     front = [r for r in rows if (r.get('score') or {}).get('on_frontier')]
     sc = load_scorer(ROOT / 'sources/conjectures-optimisation-deflate/validator/scoring/pareto.py')
+    policy_validation = validate_policy_for_replay(policy, rows, sc)
     bounds = sc.Boundaries(float(policy['max_balanced_time_ratio']), float(policy['max_mean_file_compression_pct']))
     points = [sc.Point(r['id'], r['metrics']['balanced_time_ratio'], r['metrics']['mean_file_compression_pct']) for r in front]
     weights = sc.local_global_improvement_space_log_weights(sc.pareto_front(points), bounds)
@@ -43,7 +45,7 @@ def main():
         eligible = 0 < x <= bounds.time_s and 0 < y <= bounds.ratio_pct and not dominating
         w = sc.local_global_improvement_space_log_weights(sc.pareto_front(points + [sc.Point('hypothetical', x, y)]), bounds)
         payment = analyze_payability(rows, x, y, '453', sc, pareto_share=float(policy['pareto_share']),
-                                     improvement_share=float(policy['improvement_share']))
+                                     improvement_share=float(policy['improvement_share']), bounds=bounds)
         owner = payment['same_hotkey_payability_if_admission_registration_and_bounty_remain_eligible']
         return {'time_ratio': x, 'compressed_pct': y, 'on_geometric_frontier': eligible,
                 'conditional_share_pct': w.get('hypothetical', 0) * 100 if eligible else 0,
@@ -155,7 +157,8 @@ def main():
         candidates.append(g)
     candidates.sort(key=lambda g: (-g['conservative_projection']['conditional_share_pct'], -g['same_family_projection']['conditional_share_pct'], g['public_size_pct'], g['same_family_projection']['time_ratio']))
     result = {'status': 'COMPLETED_CI_RECEIPTS_RECOMPUTED', 'snapshot': pages[0]['context'], 'scorer_replay_max_error': replay_error,
-              'official_policy': policy, 'competition_capture_sha256': sha(competition_path),
+              'official_policy': policy, 'scoring_policy_validation': policy_validation,
+              'competition_capture_sha256': sha(competition_path),
               'field_definitions': {
                   'relative_time_change_pct': 'Versus same-run public361, not the manifest source parent.',
                   'relative_time_change_pct_vs_parent': 'Legacy alias for relative_time_change_pct_vs_scalar: baseline is always r9-block-scalar.',

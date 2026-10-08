@@ -7,13 +7,13 @@
 | 任务 | 入口 |
 |---|---|
 | 原版模板和公共 corpus 基线 | `.github/workflows/deflate-baseline.yml` |
-| 复现某一轮批次 | 相应 `deflate-roundN.yml`，ref 选择 `main`，批次 JSON 位于 `evidence/roundN/` |
-| 最新批次预检 | `ROUND4_SPEC_DIR=evidence/round9` 与 `scripts/round4.py preflight block-b` |
-| 下载已有 CI 回执 | `scripts/collect-round4.py status/pull RUN --round 9 --batch block-b` |
-| 最近结果复算 | `scripts/summarize-round9.py RECEIPT... --snapshot SNAPSHOT` |
+| 复现某一轮批次 | 相应工作流，ref 选择原始 run 的 `source_commit`；批次 JSON 位于 `evidence/roundN/`。第十轮复用 `deflate-round9.yml`，输入 `experiment_round=10` |
+| 最新已验证包的批次预检 | `ROUND4_SPEC_DIR=evidence/round10` 与 `scripts/round4.py preflight confirm-j` |
+| 下载已有 CI 回执 | `scripts/collect-round4.py status/pull 37700280634 --round 10 --batch confirm-j` |
+| 最近结果复算 | `scripts/summarize-round10.py RECEIPT... --snapshot SNAPSHOT`；13 个原始 run 见 [第十轮报告](rounds/round10.md) |
 | 文档和路径自检 | `python scripts/project.py check` |
 
-所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。仓库在本次维护时通过 GitHub 元数据核实为私有。源码 push 不产生自动实验；重放旧实验也使用 main 上保留的历史配置，不依赖已经删除的实验分支。
+所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。仓库在本次维护时通过 GitHub 元数据核实为私有。源码 push 不产生自动实验。已合并历史配置也可从 main 查阅；第十轮尚未合并，使用 `codex/round10-balanced` 或回执所绑定的精确提交，不能假定 main 已含这些文件。
 
 ## 实际执行版本
 
