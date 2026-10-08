@@ -1,0 +1,65 @@
+{
+  "candidate": "r11-fast-skipahead-proof",
+  "parent": "candidates/r11-fast-skipahead",
+  "parent_hashes": {
+    "parse.rs": "3e68ad368a56115111fc0f61038dcaa3658e2b31dee40db24916445b49add08e",
+    "Parse.lean": "672a5c17aabdc647e13ee0c73a4535f73dc3c242785bf7fb5d07e44cefda687f"
+  },
+  "hashes": {
+    "parse.rs": "3e68ad368a56115111fc0f61038dcaa3658e2b31dee40db24916445b49add08e",
+    "Parse.lean": "4eb2b087f3249475d132e0f83a1b415b0711b6da39d009946e289e7b042ff202"
+  },
+  "attribution": {
+    "source": "Public #432 via fast3",
+    "reference": "references/round3-public-432/PROVENANCE.md",
+    "author_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "ownership": "Derivative of external public miner code"
+  },
+  "mechanism": "For lazy=0 run1, pre-read the exact destination of a hypothetical current miss, after recording current p but before probe. A real miss reuses it instead of discarding p+1 and issuing another head/candidate-word load. A real match repairs the first insertion slot to ins; original lazy path is retained.",
+  "difference": "R4 slotonly gated successful non-lazy matches after probe; R4 endreload moved only match-end loads. This keeps early overlap and changes only the skip-miss lookahead destination. No skip/depth/NICE/lazy/layout constants changed.",
+  "equivalence_status": "INFERRED valid parser state; native444/public equality REQUIRED",
+  "proof_status": "ACTUAL_INTERFACE_AUDITED_UNCOMPILED; exact new pair requires original gate",
+  "invariants": [
+    "head_set(current p) precedes forecast read; same-slot collisions therefore see p exactly as original late miss reload",
+    "No table writes occur between original p+1 read and miss reload",
+    "When forecast!=ins, compute slot_of_m(ins) for record3, even if backward fold changes match start; ins and end retain original meanings",
+    "If lazy>0 forecast=p+1, record_slot retains old pre_slot, miss reload remains old code",
+    "Forecast reaching lim may retain a different unused cache tuple; loop exits before consuming it"
+  ],
+  "expected_counters": [
+    "run1 loop iterations",
+    "lazy0 forecast>p+1",
+    "actual skipped miss reuses",
+    "match branch first-slot repairs",
+    "lazy>0 untouched path"
+  ],
+  "cost_risks": [
+    "Forecast arithmetic is paid before knowing match/miss",
+    "A match after a predicted skip recomputes insertion slot",
+    "Extra live forecast register may spill or alter scheduling",
+    "Parser component was15.8% of current diagnostic sum; total-axis gain is not implied"
+  ],
+  "asm_evidence": "R4 raw baseline assembly at11000..1106b performs miss shift/cap then new hash/head/candidate-word reload; source also issues p+1 read before probe. No new assembly or hardware profile yet.",
+  "stops": [
+    "Any native/public token or decode mismatch",
+    "No removable skip-miss events or repair work dominates",
+    "No paired total compression improvement beyond control movement"
+  ],
+  "formal_submission_sent": false,
+  "proof_changes": "Keep two helper specs after exact argument/result audit; fresh local names for ae destructuring in main1_loop_spec. No invariant, measure, statement, emitter or axiom changed.",
+  "extraction_run": "37734806965",
+  "extracted_files": {
+    "Types.lean": {
+      "bytes": 503,
+      "sha256": "276d4089d337e0d7da19d73f67b92ed57aa61ce5b0b548420962498a78bf5966"
+    },
+    "Constants.lean": {
+      "bytes": 9485,
+      "sha256": "8d267c4d89a1379b4f9004b8c9d475bb761126b9bd56d0990fd01b8af0c8687b"
+    },
+    "Funs.lean": {
+      "bytes": 279922,
+      "sha256": "62a64b105271fd79094d7033f1b8b222ced7ea1d4fe9017bbcebc62a58fa6eac"
+    }
+  }
+}

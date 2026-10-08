@@ -1,0 +1,68 @@
+{
+  "status": "SOURCE_AND_ACTUAL_INTERFACE_REVIEW_ONLY",
+  "run_id": "37734806965",
+  "git_sha": "6a4bfa9db8eda243653139c665524ea67053a6f3",
+  "files": {
+    "parse.rs": "3e68ad368a56115111fc0f61038dcaa3658e2b31dee40db24916445b49add08e",
+    "Parse.lean": "4eb2b087f3249475d132e0f83a1b415b0711b6da39d009946e289e7b042ff202"
+  },
+  "interfaces": {
+    "r11_next": {
+      "arguments": "p miss skip skcap lim lazy",
+      "definition_sha256": "324a461aa941ee09fc4333e6f2e40d97796dcdf92776f6852ed1b83e4d73bcfe"
+    },
+    "r11_record_slot": {
+      "arguments": "H s ins lim forecast slot lazy km",
+      "definition_sha256": "073729da0541e43fe3be2acfbbaaa3f7ae5a024bfe545d63376eb5a29c379266"
+    },
+    "run1_loop0_loop0": {
+      "arguments": "input lazy km p head lim pre_slot pre_c pre_w l d ins go",
+      "definition_sha256": "1483b55c374b7d181371588d06e6b8510a4c041bf2dcfed87048dc3d2d4e7dda"
+    },
+    "run1_loop0": {
+      "arguments": "input out skip lazy skcap km nt ls p head lim miss fuel pre_slot pre_c pre_w",
+      "definition_sha256": "d267ec18e41e40547edc5f3e79d6832cb93c585663f3c9208771d422969f7cf1"
+    },
+    "run1": {
+      "arguments": "H input out skip lazy skcap km",
+      "definition_sha256": "b1917fc4f9d67e1994d98d7d76bdeeb817fa415a10dbf2e32b3545f2b5c6fde7"
+    }
+  },
+  "actual_main_call_order": [
+    "head_set head pre_slot p",
+    "r11_next p miss skip skcap lim lazy",
+    "ahead_if_m input head1 forecast lim pre_slot pre_c pre_w km",
+    "probe_m input pre_c pre_w p km",
+    "r11_record_slot H input ins1 lim forecast pre_slot2 lazy km",
+    "record3_m input head2 ins1 record_slot «end» lim km"
+  ],
+  "main_loop_state": [
+    "out",
+    "nt",
+    "ls",
+    "p",
+    "head",
+    "miss",
+    "fuel",
+    "pre_slot",
+    "pre_c",
+    "pre_w"
+  ],
+  "measure": "Original fuel projection unchanged",
+  "preserved_main_invariant": "Dec at ls, ls<=p, HeadBound head p, miss<=p, valid pre_slot, pre_c<=p, pre_w=word8 pre_c",
+  "helper_bridge": [
+    "r11_next postcondition p<forecast<=lim supplies ahead_if hBi and keeps miss+1<=forecast",
+    "ahead_if uses HeadBound head1 at old p, so pre_c<=old p even when forecast skips farther; no p+1 cache assumption is imported",
+    "r11_record_slot only needs H>0, old slot<H and lim+8=input length; ins<lim in its active branch proves be4 arithmetic safe",
+    "Lazy loop state stays unchanged; lazy0 body uses forecast as its next p; lazy>0 retains original miss reload"
+  ],
+  "changed_tactic_sites": [
+    "main1_loop_spec ae destructuring names made fresh; actual Funs uses i3/i4/i5 where old extraction used i4/i5/i6"
+  ],
+  "remaining_unknown": [
+    "Lean compilation of two helper specs",
+    "step* inference of ahead_if_m ghost bound at forecast",
+    "main-loop branch closure and whole original obligation/axiom whitelist gate"
+  ],
+  "formal_or_performance_claim": false
+}
