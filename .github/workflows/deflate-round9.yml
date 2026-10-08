@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   experiment:
-    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && !(inputs.experiment_round == '11' && inputs.specification == 'huffman-1') && !(inputs.experiment_round == '12' && inputs.specification == 'probe-e')
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && !(inputs.experiment_round == '11' && inputs.specification == 'huffman-1') && !(inputs.experiment_round == '12' && inputs.specification == 'probe-e') && !(inputs.experiment_round == '13' && inputs.specification == 'ef32-d')
     name: ${{ inputs.specification }}
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
@@ -87,6 +87,7 @@ jobs:
             ${{ runner.temp }}/round4-receipts/gap-diagnostics/
             ${{ runner.temp }}/round4-receipts/fast-diagnostics/
             ${{ runner.temp }}/round4-receipts/r13-pc-counts/
+            ${{ runner.temp }}/round4-receipts/r13-ef-counts/
           retention-days: 1
           compression-level: 9
           if-no-files-found: ignore
@@ -138,7 +139,7 @@ jobs:
           compression-level: 9
           if-no-files-found: ignore
   native_diagnostic:
-    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && ((inputs.experiment_round == '11' && inputs.specification == 'huffman-1') || (inputs.experiment_round == '12' && inputs.specification == 'probe-e'))
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && ((inputs.experiment_round == '11' && inputs.specification == 'huffman-1') || (inputs.experiment_round == '12' && inputs.specification == 'probe-e') || (inputs.experiment_round == '13' && inputs.specification == 'ef32-d'))
     name: ${{ inputs.specification }}
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
@@ -160,6 +161,11 @@ jobs:
       - name: Run deadline-limited Round 12 finite native diagnostic
         if: inputs.experiment_round == '12'
         run: python3 scripts/research-round12-native.py
+      - name: Check R13 capped-match equivalence and untimed EF32 opportunities
+        if: inputs.experiment_round == '13'
+        run: |
+          python3 scripts/research-round13-native.py
+          python3 scripts/research-round13-ef32.py
       - name: Publish original diagnostic text without binaries
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

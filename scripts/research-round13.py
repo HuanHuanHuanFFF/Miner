@@ -30,5 +30,8 @@ def main():
     if spec.get('pc_prune_counts'):
         loader=importlib.util.spec_from_file_location('r13_pc_counts',ROOT/'scripts/research-round13-counts.py')
         module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main()
+    if spec.get('ef32_wide_counts'):
+        loader=importlib.util.spec_from_file_location('r13_ef_counts',ROOT/'scripts/research-round13-ef32.py')
+        module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main()
 
 if __name__=='__main__':main()

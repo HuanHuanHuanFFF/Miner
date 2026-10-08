@@ -18,3 +18,5 @@ initial-a37838456854已完成18公共配对进程的screen：compact16两块慢1
 initial-a最终CI失败并非证明失败：abs15原始gate已VERIFIED接受，重新提取+原始obligation+三项公理白名单+公共roundtrip均过，证明532.4秒。随后完整gate附加测试与research附加测试重复建立synthetic-transfer目录触发FileExistsError；保存原失败，修复为独立research-synthetic路径。性能仍不支持507父版上榜，证明成果不替代排名。
 
 nearer-b首轮abs15对514仅-0.05855%，Pad64对新abs15 +0.10821%（变慢）；未跨当前同族投影边界。相同源码public514-shadow移动约3%，远超欲跨的约0.08%间隔，不能取shadow对照夸大收益。安排独立runner四块确认，plainabs15完整gate，并只在未计时observer副本计数max258的可消除追链工作。cap-prune隔离源码已准备，未与布局先行组合。
+
+confirm-c未计时观察：PC1014141首轮请求，初始cap258仅1633次(0.161%)，228358第二跳中g达到258仅483次。cap-prune当前收益空间偏小，暂停完整性能投入，只有444有限同token原生检验作为可复用成果。改投#514新增EF32一槽键的碰撞机会，宽15/16-bit影子表沿原p位置观察、不选择新match；先取得新增候选/字节机会，非新增压缩收益。
