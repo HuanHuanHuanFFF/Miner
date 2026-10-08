@@ -43,3 +43,5 @@ ahead-j37855505557自然成功，14公共配对、444有限token/decode相同和
 expired-k37858528540原父observer自然成功且token/decode同父：3700174 ahead，953035过期，其中689313非零(18.63%)。据此仅对非零过期hint归零，仍取实际word8(0)维持原coherent-word缓存不变式；有效预取及顺序保持旧版。可能缓存fix reuse减少／分支成本抵消，UNKNOWN；expired-l单源码两块+444严格eq+原提取，不先申请完整gate。
 
 增加明确目的的balance-n第三环境四块冻结replication：已原gate接受的abs15微小中心信号尚未超过同库shadow，所有4批实际parent/shadow ELF hash逐字相同。新排序让parent/candidate分别同占0/1/5/6位置，四块镜像，改变固定控制在前造成的位置相关性；原28数据已影响选择，不当新的未见数据确认。只重复这个合法边界附近版本，不重复全部负面候选或追加完整gate。
+
+rescue-m37860415256原observer自然成功：824975 primary miss、232705 live-head miss、107435 older-live；一步recover28382/181442覆盖B，原depthrecover29428/187955，>=7有6076、>=16有997。只做一步恢复以买较小工作量，保留主hit原deepening；用pc_probe_m真实cachedWord检验老predecessor，窗口/字节全部原版。raw与gain正评分两个源，先实际原encoder看encoded bytes，原证明明示未适配，未申请完整gate。
