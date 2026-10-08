@@ -28,10 +28,15 @@ def main():
     for name in args.candidates:
         path = ROOT/'candidates'/name
         anchor = 'public507' if manifests[name].get('formal_anchor_id')=='507' else 'r3-432-fast3'
-        entries.append({'name': name, 'path': path.relative_to(ROOT).as_posix(), 'control': False,
+        entry = {'name': name, 'path': path.relative_to(ROOT).as_posix(), 'control': False,
             'anchor': anchor, 'anchor_scope': 'Declared parent structural derivative; transfer hypothesis only',
-            'comparison_baseline': anchor, 'expected_equivalent_to': anchor,
-            'hashes': {f: hashlib.sha256((path/f).read_bytes()).hexdigest() for f in ('parse.rs','Parse.lean')}})
+            'comparison_baseline': anchor,
+            'hashes': {f: hashlib.sha256((path/f).read_bytes()).hexdigest() for f in ('parse.rs','Parse.lean')}}
+        if manifests[name].get('native_relation')=='decode_only':
+            entry['native_decode_reference'] = anchor
+        else:
+            entry['expected_equivalent_to'] = anchor
+        entries.append(entry)
     spec = {'entries': entries, 'snapshot_pages': 'evidence/round12/official-start-2/pareto-pages.json',
         'screen_blocks': args.blocks, 'refine_blocks': 0, 'shortlist': len(args.candidates),
         'gate_candidates': args.candidates if args.gate else [], 'gate_limit': len(args.candidates) if args.gate else 0,

@@ -55,6 +55,11 @@ jobs:
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round5.py
+      - name: Check search-changing Round 12 sources decode correctly
+        if: inputs.experiment_round == '12' && (inputs.specification == 'probe-c' || inputs.specification == 'confirm-d')
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round12-decode.py
       - name: Diagnose block phases and candidate discovery
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
