@@ -27,5 +27,8 @@ def main():
         main_source=source[source.index('def main():'):source.index("if __name__")]
         exec(main_source,namespace);namespace['main']()
         print('R13_NATIVE_DECODE expected540 finite cases; not original gate')
+    if spec.get('pc_prune_counts'):
+        loader=importlib.util.spec_from_file_location('r13_pc_counts',ROOT/'scripts/research-round13-counts.py')
+        module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main()
 
 if __name__=='__main__':main()

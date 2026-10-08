@@ -78,14 +78,15 @@ jobs:
           if [[ "$ROUND4_SPEC_DIR" == evidence/round10 && -f scripts/research-round10-prefixmask.py ]]; then "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round10-prefixmask.py; fi
           if [[ "$ROUND4_SPEC_DIR" == evidence/round11 && -f scripts/research-round11-gap.py ]]; then "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round11-gap.py; fi
           if [[ "$ROUND4_SPEC_DIR" == evidence/round11 && -f scripts/research-round11-fast.py ]]; then "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round11-fast.py; fi
-      - name: Publish early Round 11 mechanism diagnostics
-        if: always() && inputs.experiment_round == '11'
+      - name: Publish early mechanism diagnostics
+        if: always() && (inputs.experiment_round == '11' || inputs.experiment_round == '13')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: r11-${{ github.run_id }}-${{ inputs.specification }}-diagnostics
+          name: r${{ inputs.experiment_round }}-${{ github.run_id }}-${{ inputs.specification }}-diagnostics
           path: |
             ${{ runner.temp }}/round4-receipts/gap-diagnostics/
             ${{ runner.temp }}/round4-receipts/fast-diagnostics/
+            ${{ runner.temp }}/round4-receipts/r13-pc-counts/
           retention-days: 1
           compression-level: 9
           if-no-files-found: ignore

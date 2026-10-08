@@ -104,6 +104,8 @@ def main():
     save(output / 'equivalence-research.json', result)
     if run.returncode:
         raise SystemExit('Diagnostic harness or baseline failed; inspect logs')
+    if len(result['cases']) != len(pairs) or any(row['different_or_failed'] for row in result['cases']):
+        raise SystemExit('Requested finite token equality failed or result missing; receipt retained')
 
 
 if __name__ == '__main__':
