@@ -39,3 +39,5 @@ structure-h37850501371自然成功，16公共配对进程、pair64444有限等�
 choice-i-native37853349223四实际程序原encoder自然成功，28父output/token哈希一致且全zlibdecode：gain仍+1614B；seven省217B，公共大小36.2009312%仅-0.0022143pp，不能单独跨#539大小边界(约需1369B)。保留极小大小替代但不投入配对／证明；不把无计时诊断当两轴。转向新的PClazy0未用ahead word：匹配支路保留插入key、复用当前真实word，miss/lazy支路仍旧完整ahead；原pc_run1c纯probe提前，实际token等价须验证。1014141匹配机会明显大于稀少cap退出，但分支/流水重叠损失UNKNOWN，单受控版本ahead-j，两块配对+提取、不先申请昂贵完整gate。
 
 ahead-j37855505557自然成功，14公共配对、444有限token/decode相同和公共同字节、原提取接受。总时间+1.298957%，关闭这份Rust不投入完整gate；逻辑未用Word次数不等于机器节省，流水/缓存或编译消除解释UNKNOWN。下一步expired-k只计数原pc_ahead_m里过期非零候选，区别于仍有效但当下不用的预取；零sentinel已热，不把它们当冷读取空间。依原父byte/token observer约束，不改变任何输出。
+
+expired-k37858528540原父observer自然成功且token/decode同父：3700174 ahead，953035过期，其中689313非零(18.63%)。据此仅对非零过期hint归零，仍取实际word8(0)维持原coherent-word缓存不变式；有效预取及顺序保持旧版。可能缓存fix reuse减少／分支成本抵消，UNKNOWN；expired-l单源码两块+444严格eq+原提取，不先申请完整gate。
