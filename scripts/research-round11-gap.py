@@ -276,15 +276,20 @@ def instrument(source: str) -> str:
 
 def run_candidate_checks(spec):
     """Finite loaded-table/rs checks, separate from the observer and full gate."""
+    groups = bool(spec.get("gap_groups_checks"))
+    name = "r11-gap-groups" if groups else "r11-gap-meta"
+    rust_pin = "6ef07be874052d23fbe3cdca8de7e311e82a306338a93f70389fe35006e99992" if groups else "25bd4ee52560288f36c73f813a769345044cab2c4924705e6c4c92a64c017de6"
+    harness_pin = "fc7c3e0faaaf88e0cd4345eb7e47a87127e1186db854d44494e2118827f5d880" if groups else "24b6fb47cb660bcb3c57554c01f9a16178d054a472b2efa5baab4928f200aeca"
+    marker = "R11_GAP_GROUPS_BOUNDARY " if groups else "R11_GAP_BOUNDARY "
+    prefix = "groups-checks" if groups else "candidate-checks"
     base = next(e for e in spec["entries"] if e["name"] == "r10-finder-pipeline-proof")
-    entry = next(e for e in spec["entries"] if e["name"] == "r11-gap-meta")
+    entry = next(e for e in spec["entries"] if e["name"] == name)
     frozen = (ROOT / base["path"] / "parse.rs").read_bytes()
     candidate = (ROOT / entry["path"] / "parse.rs").read_bytes()
     harness = (ROOT / entry["path"] / "native-helper-check.rs").read_bytes()
     assert hashlib.sha256(frozen).hexdigest() == base["hashes"]["parse.rs"] == BASE_SHA
-    assert hashlib.sha256(candidate).hexdigest() == entry["hashes"]["parse.rs"] == \
-        "25bd4ee52560288f36c73f813a769345044cab2c4924705e6c4c92a64c017de6"
-    assert hashlib.sha256(harness).hexdigest() == "24b6fb47cb660bcb3c57554c01f9a16178d054a472b2efa5baab4928f200aeca"
+    assert hashlib.sha256(candidate).hexdigest() == entry["hashes"]["parse.rs"] == rust_pin
+    assert hashlib.sha256(harness).hexdigest() == harness_pin
     build = Path(os.environ["RUNNER_TEMP"]) / "round11-gap-checks"
     output = Path(os.environ["RUNNER_TEMP"]) / "round4-receipts/gap-diagnostics"
     build.mkdir(parents=True, exist_ok=True); output.mkdir(parents=True, exist_ok=True)
@@ -296,18 +301,18 @@ def run_candidate_checks(spec):
               "harness_sha256": hashlib.sha256(harness).hexdigest(),
               "diagnostic_script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               "scope": "Finite generic-rs d_dp output equality, loaded-table metadata, reachable slot510, honest cost-wrap fallback; expected false-metadata counterexample. Not universal helper equivalence or a proof gate."}
-    receipt = output / "gap-candidate-checks.json"; save(receipt, report)
+    receipt = output / ("gap-groups-checks.json" if groups else "gap-candidate-checks.json"); save(receipt, report)
     with failure_receipt(report, receipt):
         binary = build / "gap-helper-checks"
         proc = run_logged(["rustc", "+nightly-2026-08-18", "--edition=2021", "-O", "-C", "overflow-checks=yes",
-                           str(build / "main.rs"), "-o", str(binary)], output / "candidate-checks-build.log", 180)
+                           str(build / "main.rs"), "-o", str(binary)], output / (prefix + "-build.log"), 180)
         report["compile_exit"] = proc.returncode
         if proc.returncode: raise RuntimeError("Gap candidate helper compilation failed; retained log")
-        proc = run_logged([str(binary)], output / "candidate-checks-runtime.log", 120)
+        proc = run_logged([str(binary)], output / (prefix + "-runtime.log"), 120)
         report["runtime_exit"] = proc.returncode
         if proc.returncode: raise RuntimeError("Gap candidate helper check failed; retained log")
-        rows = [json.loads(s.removeprefix("R11_GAP_BOUNDARY ")) for s in proc.stdout.splitlines() if s.startswith("R11_GAP_BOUNDARY ")]
-        assert len(rows) == 1 and rows[0]["loader_cases"] == 10 and rows[0]["dp_cases"] == 1540
+        rows = [json.loads(s.removeprefix(marker)) for s in proc.stdout.splitlines() if s.startswith(marker)]
+        assert len(rows) == 1 and rows[0]["loader_cases"] == (14 if groups else 10) and rows[0]["dp_cases"] == (2156 if groups else 1540)
         assert all(rows[0][key] for key in ("slot510_witness", "honest_wrap_fallback", "false_metadata_counterexample_expected"))
         report.update(status="VERIFIED_FINITE_GAP_HELPER_CHECKS", checks=rows[0],
                       limits=["False metadata intentionally fails semantic equivalence; only actual d_load_meta-origin metadata is trusted.",
@@ -320,7 +325,7 @@ def main():
     assert os.environ.get("GITHUB_ACTIONS") == "true" and os.environ.get("RUNNER_OS") == "Linux"
     assert os.environ.get("GITHUB_REPOSITORY") == "HuanHuanHuanFFF/Miner"
     spec = validate(os.environ["ROUND4_SPEC"])
-    if spec.get("gap_candidate_checks"):
+    if spec.get("gap_candidate_checks") or spec.get("gap_groups_checks"):
         run_candidate_checks(spec)
     if not spec.get("gap_diagnostics"):
         print("ROUND11_GAP_NOT_REQUESTED")
