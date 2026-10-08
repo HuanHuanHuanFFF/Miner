@@ -23,7 +23,7 @@ def main():
     scorer=load_scorer(ROOT/'sources/conjectures-optimisation-deflate/validator/scoring/pareto.py')
     policy=competition['policy'];policy_check=validate_policy_for_replay(policy,rows,scorer)
     bounds=scorer.Boundaries(policy['max_balanced_time_ratio'],policy['max_mean_file_compression_pct'])
-    formal={r['id']:r for r in rows};groups={};runs=[];identities={};input_ids={};timing_owners={};shadows=[]
+    formal={r['id']:r for r in rows};groups={};runs=[];identities={};input_ids={};timing_owners={};shadows=[];pipeline_shadows=[]
     for folder in args.receipts:
         state=json.loads((folder/'state.json').read_bytes());ci=json.loads((folder/'ci-run.json').read_bytes())
         assert str(ci['databaseId'])==state['run_id'] and ci['headSha']==state['git_sha']
@@ -73,6 +73,13 @@ def main():
         blocks=sorted(b for n,b in by if n=='fast-shadow')
         if blocks:shadows.append({'run_id':state['run_id'],'changes_pct':[100*(by['fast-shadow',b]['time']/by['r3-432-fast3',b]['time']-1) for b in blocks],
             'identical_public_tokens_and_output':all(file_id['fast-shadow',b]==file_id['r3-432-fast3',b] for b in blocks)})
+        pipeline_blocks=sorted(b for n,b in by if n=='pipeline-shadow')
+        if pipeline_blocks:
+            assert entries['pipeline-shadow']['hashes']==entries['r10-finder-pipeline-proof']['hashes']
+            pipeline_shadows.append({'run_id':state['run_id'],'blocks':pipeline_blocks,
+                'changes_pct':[100*(by['pipeline-shadow',b]['time']/by['r10-finder-pipeline-proof',b]['time']-1) for b in pipeline_blocks],
+                'identical_public_tokens_and_output':all(file_id['pipeline-shadow',b]==file_id['r10-finder-pipeline-proof',b] for b in pipeline_blocks),
+                'scope':'Identical-source D-family control, observed variation only; not a confidence interval or correction factor.'})
         for n,e in entries.items():
             if e.get('control') or not n.startswith('r11-'):continue
             blocks=sorted(b for name,b in by if name==n)
@@ -110,6 +117,7 @@ def main():
         candidates.append(g)
     result={'status':'COMPLETED_FINAL_ARTIFACTS_RECOMPUTED' if args.final else 'SCREEN_OR_COMPLETED_RECEIPTS_RECOMPUTED',
         'snapshot':context,'capture':str(args.capture),'policy_validation':policy_check,'runs':runs,'candidates':candidates,'fast_shadows':shadows,
+        'pipeline_shadows':pipeline_shadows,
         'paired_processes':sum(r['paired_processes'] for r in runs),
         'field_definitions':{'full_gate_accepted':'At least one exact pair in verified_pairs passed; it does not certify other proof variants with the same Rust.',
                              'final_mode':'Final artifacts from completed CI; failed CI is retained as negative evidence and is not labeled successful.'},

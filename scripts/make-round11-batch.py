@@ -23,6 +23,7 @@ def main():
     ap.add_argument('--gap-groups-check-v2', action='store_true')
     ap.add_argument('--cpu-candidates', nargs='*', default=[])
     ap.add_argument('--fast-diagnostics', action='store_true')
+    ap.add_argument('--pipeline-shadow', action='store_true')
     ap.add_argument('--blocks', type=int, choices=[1,2,3,4], default=2)
     args = ap.parse_args()
     assert re.fullmatch(r'[a-z0-9-]{1,48}', args.batch)
@@ -42,6 +43,11 @@ def main():
     shadow.update(name='fast-shadow', anchor='r3-432-fast3')
     shadow.pop('formal_id', None)
     entries.append(shadow)
+    if args.pipeline_shadow:
+        pipeline_shadow = next(e for e in entries if e['name']=='r10-finder-pipeline-proof').copy()
+        pipeline_shadow.update(name='pipeline-shadow', expected_equivalent_to='r10-finder-pipeline-proof')
+        pipeline_shadow.pop('formal_id', None)
+        entries.append(pipeline_shadow)
     for name in args.candidates:
         path=ROOT/'candidates'/name
         fast=name.startswith('r11-fast-')
