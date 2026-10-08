@@ -75,6 +75,18 @@ slot511不是可自认证的metadata：若单独向新fast helper传任意lc与l
 
 原生444、公共同token/byte、真实Aeneas提取、精确新Lean及完整gate与总时间均仍UNKNOWN，不能继承父证明接受。下一步由主线程同run筛选和提取；有有效同字节时间信号才在独立 `r11-gap-meta-proof` 适配真实接口，否则停止此固定实现，不扫阈值或扩缓存。
 
+## 最终负反馈与证明停止（12:12）
+
+上段UNKNOWN为11:47时状态，现补充后续实物：gap-b `37724534982` / commit `d703bdbc901f9518b1443093437ba210b5de0540` 自然success。真实官方提取accepted，`extraction/r11-gap-meta/Funs.lean` SHA256 `dd29b3f280b82c2e942deb633b03daca246fe9885734961028d8a28a562cc955`；native444及公共token/output同父，专用helper检查也通过10loader/1540DP、slot510 witness、正确metadata wrap回退与伪metadata预期反例。它们不构成新Lean完整gate。
+
+实际Funs显示max_loop三项state `(i,maximum,positive)` 返回 `(maximum,positive)`；new gap前两段与嵌套 `d_gap_meta_loop2_loop0` 均四项 `(ring,out,q,nxt)`，outer loop2 state同四项、返回 `(nxt,ring,out)`；d_dp内外仍各九项。新loop2 scalar seed的写入被Aeneas转为Array/Slice.index_mut_usize及back闭包，需单独处理Slice back长度。Std API模式参照已有官方作者Array proof及 [Aeneas Slice.index_mut_usize_spec](https://github.com/AeneasVerif/aeneas/blob/main/backends/lean/Aeneas/Std/Slice.lean#L255)；最终仍须针对比赛固定pin编译，主分支资料不当作已通过pin的证据。
+
+12:05:36开始第一次实际接口迁移，12:12:15生成独立 `candidates/r11-gap-meta-proof`：Rust逐字 `25bd4ee52560288f36c73f813a769345044cab2c4924705e6c4c92a64c017de6`，Lean `052fc5336cef9214a140c3204fe23c214e1be637cec8899ec98d03aa02aaaa46`。builder `scripts/build-round11-gap-meta-proof.py` SHA256 `7c199de56ba100e33833000801e76e25070572a04c39263560175b138dd41821`。静态反转恢复父证明全部字节：新增helpers和四处调用绑定之外，原checked emitter/root suffix不变，无新sorry/axiom。**此草稿UNCOMPILED；没有运行Lean或完整gate。** 剩余义务为mutable-back API及长度wrapper、nested q<=entry与outer严格下降、投影/shift/lift/bind战术对齐和整份原始gate。状态在该目录 `UNCOMPILED_STATUS.json`，第一次草稿/manifest保留生成时状态，不改写为已验收。
+
+配对公共总时间相对同场pipeline两块为 **+1.04529253% / +1.11799604%**，均值 **+1.08164428%**；公共大小轴保持33.934365747942536%，delta0pp。汇总 `evidence/round11/two-loop-summary.json`，原始 `evidence/round11/37724534982/gap-b/gate`。该固定实现被支配，主线程指示立即停止proof修复/fullgate；没有独立性能确认、正式admission或任何资金动作。D/nonD归因由主线程另外核对，此处不推断原因已确认。
+
+本轮取得的最小结论：slot511的窄用途与0禁用正价max编码，在现有调用链源证据和有限病态检查下保持原消费范围；宽泛“padding皆空闲”的假设没有采用，0..510原价完整保留。公共实际有55.1%的third seed后安全位置，但该直接填充实现仍更慢，否定由覆盖/廉价metadata直接推导总时间收益。段平均仅3.92、seed-only多、失败下一lc探测及代码布局/寄存器变化都是待区分解释，不能冒充已测CPU原因。停止本固定实现，不以调整阈值或扩缓存救负方向。
+
 ## 预先停止条件
 
 观察副本token/decode不同或守卫内v!=vc先停止并保留失败；不解释为收益。每表保守覆盖为空或只有seed、仅逐字节oracle有长覆盖且没有便宜来源不变量、物理/平台/block截断加setup后同类新增工作抵消可省工作，均停止当前方案。若机会集中于单个文件，保留逐文件等权轴贡献及外推缺口，不用总字节覆盖代替性能。计数支持时也只授权一份候选的真实配对判断，不承诺速度或前沿收益。

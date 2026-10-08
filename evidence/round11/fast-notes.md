@@ -68,3 +68,37 @@ pendingfold 的额外成本也已定位：`MatchAt.back_lit`（第 2228 行）�
 这与旧 tiny-rep1 的“tiny planner 各点优先试上次距离并改变 tie 顺序”不同，也不是把关闭的 258 边界条件放宽：它换用了延迟输出提供的隐式历史、只在已跨 gap 的原失败搜索点执行，保留每个原有效 probe 结果。可能减少 literal tokens，从而减少 encoder 的频率统计／块数／符号工作；但新增失败探测也可能更贵。没有大小单调、收益或前沿保证，不扫 gap 宽度／长度阈值。
 
 原生诊断沿用 `fast_diagnostics` 接口，新增 `calls/original_match/gap_with_previous_token/attempts/rescued/rescued_bytes` 六个计数，要求 444 例 decode 与 frozen/插桩 token 相同，允许且记录父 token 差异。诊断脚本现 SHA `820debef0c7dcad5e16a1e22f63bdd0c871c09bb6d15051810bcebfd46e43f47`；两旧候选的插桩源码 SHA 保持原样。当前尚未运行新 Rust，也未取得新提取或配对结果。预计证明仅需在 `probe_m_spec` 后加一个返回同样 FoundAt／length／distance 界的 wrapper 规格；主循环 tuple 不变。新提取前不冒充真实接口或可编译证书。
+
+## gaprepeat 的精确证明前提预审
+
+主线程报告 repeat-c 的第一次 attempt `37725246499` 因 workflow 超时表达式类型失败、没有实际 job；修复后的 `37725504795` 于 12:01:40 开始，冻结提交 `0554981`，单 job cap 45 分钟。这里只记录执行故障，不将它归因于候选 Rust 或 Lean。再次核验 d987… Rust 未改。新提取尚未到手，本节不假定新 helper 的 Aeneas 签名或生成 proof 文件。
+
+已核对父证明第 3218 行 `probe_m_spec` 及上一批真实 Funs 中**未改的原 probe_m**：所需全部语义前提只有 `(1) c.val<=p.val`、`(2) cw.val=word8 s c.val`、`(3) p.val+8<=s.length`。其结果为 `FoundAt s p l d` 且 `l<=258`、`d<=32768`。gap wrapper 可保持相同结果；不需要 `Dec`、`ls<=p`、`nt<=input.length`、输出容量大于输入等附加前提。
+
+尤其 **out 的元素可为任意 u32**，也无需预先知道最后元素来自合法 match：
+
+1. 原 probe 先执行，已有原规格。任何原有效 match 及其他早退都可直接复用这份结果。
+2. 到达旧 token 读取时，运行时 guard 已给 `nt>0` 且 `nt<=out.length`，所以 `nt-1` 和索引安全；不依赖输出解码不变量。
+3. 只有 `16777216<=t<25165824` 才做减法、除法及加一。此时 `(t-16777216)/256+1` 位于 1..32768，u32 不下溢、不加法溢出，转换 usize 在 32/64 位模型均保值；可使用既有 `U32.cast_Usize_val_eq`／`cast_usize_le`（父第 1828 行）。这只是候选整数的范围，不是匹配字节的证明。
+4. 只有 `d<=p` 才读取 `rc=p-d`；于是 `rc<=p`，由原第三前提立即得 `rc+8<=s.length`。`be8_spec`（第 1334 行）给 rw 与 rc 的 word8 关系，再应用同一个 `probe_m_spec`。备用匹配有效与否全部交给原 byte comparison。
+5. 原／备用结果任选其一，均满足同样 FoundAt 和两个上界。无新循环，无变化的数组，无额外主循环不变量；父 `FoundAt.real` 仍在接受 match 时提取 `MatchAt`。
+
+真实提取到手后的最小适配预案是：把 wrapper 的 `[local step]` 定理放在 `probe_m_spec` 之后，以 `Std.WP.spec_bind` 显式取得第一次 probe 的三项结果，分支里复用它或第二次 probe 结果。这样保留“旧 f 返回”证据，避免把任意 token 解释成已认证 match。需要实际核验新 helper 是否仅返回 pair、run1_loop0 状态及唯一调用替换，再生成独立 `r11-fast-gaprepeat-proof`。若两轴反馈否决，停止此适配，不为了绿 gate 继续投入。
+
+## gaprepeat 完成后的关闭审计
+
+repeat-c / `37725504795` 已完成。直接读取原始 `gate/round{1,2}-r11-fast-gaprepeat.jsonl` 和同场 fast3／shadow，逐文件从 11 measured reps 的 median(total_s) 重新计算官方轴；并重加诊断的 28 文件计数。结构化结果与逐文件变化在 [fast-closure.json](fast-closure.json)，不改原始回执。
+
+公共时间相对 fast3 为 **+0.562329747%／+1.139501466%**，均值 **+0.850915607%**；shadow 同场为 -0.217369224%／+0.119384227%。公共 mean-file 大小为 36.5798767059%，相对父版 **-0.0222624004 pp**。declared #453 同族投影为 `0.4415993918 / 36.9772243319%`，在快照 28214 下仍被 #481／#506／#507 支配。这是公共到正式的条件投影，不是新 admission 结果。
+
+**实际探测效率很低。** 2,434,768 次包装后的原 probe 中，761,239 次进入 gap fallback（31.2654%），只有 859 次找回匹配：**0.112842% 命中率，约每 886 次尝试成功一次**。成功返回的 match 长度和是 34,542，平均 40.21 字节／次；这是函数返回长度计数，不是净减少的输出字节、token 或独立覆盖字节，更不是耗时分解。该有限观察与“额外失败探测抵消了压缩收益”的解释相符，但没有分离硬件访存或各 helper 的时间。
+
+实际公共结果是少 **2,802 tokens、2,718 输出字节**。20 个文件 token 变化，15 个文件变小、5 个变大、8 个输出逐字相同。较大字节收益来自 `images.bin` -683、`catalog.xml.txt` -640、`multibyte.txt` -603、`records.json.txt` -542；最多 rescue 的 `bundle.min.js.txt` 有 158 次／92,857 尝试，却只少 65 字节。`prose.txt` 有 73,795 次尝试、5 次成功，仅少 5 字节。不能从 rescue 次数直接推断最终编码收益。
+
+五个变大文件为 `docs.md.txt` +1、`dump.sql.txt` +22、`lean.txt` +69、`source.py.txt` +1、`weights-f32.bin` +2 字节。前两个甚至 token 分别少 39／18，却仍变大，再次说明更多有效匹配、较少 token 均不保证动态编码大小单调；后续匹配调度、符号频率与固定 token 分块都会变化。
+
+**八个固定生成输入没有质量收益。** 原始每文件 reps 保存于 `ci.log` 的 `SYNTHETIC_RAW`，本审计直接解析这些记录，核对两个 block、11 reps 和八份输入 SHA，重算相对 fast3 时间 **+1.626070489%／+1.717567811%**，均值 **+1.671819150%**。八文件输出大小分别都不变；`table.csv` 少一个 token，token／DEFLATE SHA 改变，另七文件的 tokens 和输出逐字相同。因此只能说八文件“同大小”，不能说全部 same-byte。它们是固定公开脚本生成输入，不是私有 stage2，也没有提供质量改善可迁移的正信号。
+
+原生 444 例均 decode、frozen／插桩 tokens 相同，其中 38 例相对父版 token 变化（包括 20 个公共文件）。真实官方 extraction accepted：Funs SHA `5ba3f2f7b45da4772d5f9f3e8cf4211a71dbebcade4abed5bd3181d72ea2632b`；helper 的真实参数为 `s out nt ls c cw p km`，返回 `Result (Usize × Usize)`。第一／第二 probe、索引 guard 和距离解码顺序与源级桥接预审一致。**完整证明／gate 没有运行，也不再生成无编译 proof 草稿。**
+
+本次停止的是这个广泛失败点 fallback 实现，不是证明所有历史距离复用都无效。可复用成果是：延迟输出可提供不增加主循环状态的候选距离；守卫后的任意 token 不必被当作匹配证书；该实现通过真实提取和有限 decode；另有完整的低命中率、逐文件变大反例和生成输入无大小收益证据。没有便宜且经过独立支持的筛选方法前，不继续扫 miss／长度阈值。速度端本轮至此停止新候选与完整证明投入。
