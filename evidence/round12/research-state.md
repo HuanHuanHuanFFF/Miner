@@ -7,3 +7,5 @@
 本次独立机制：(1)wordhead把实际输入word从head hashing携带到probe，减少重复load；(2)strideword保留st_find的距离及三字节前缀守卫，借已有common_from按8字节延伸。先444有限检查、真实提取、两个顺逆序公共配对块和同源fast-shadow；不在首筛套用父证明通过状态。没有有用总时间信号就停止这版；值得确认则冻结并在新runner确认，再完整gate。
 
 与旧R4 lazy-second-load/slotonly及R11 skipahead不同：wordhead改变循环间共享的数据，strideword改变stride路径的延伸单位。精确来源归属和source-reversal在候选manifest；源码/证明冻结在batch JSON。首批job35分钟上限，排队另外计入墙钟。
+
+用户在本聊天明确回复“允许推送到云端验证；当前已改为公开仓库”。允许本轮实验分支推送及最多4次、每次35分钟手动runner验证；仓库visibility在每次dispatch前读取GitHub元数据，公开仓库保持allow_private=false。之前自动审批拒绝外发的尝试未执行，不通过其他路径绕过。

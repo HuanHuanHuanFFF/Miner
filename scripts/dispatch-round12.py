@@ -20,13 +20,14 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('batch')
     ap.add_argument('--ref', default='codex/round12-frontier')
-    ap.add_argument('--max-minutes', type=int, default=45)
+    ap.add_argument('--max-minutes', type=int, default=35)
     args = ap.parse_args()
     budget = json.loads((ROOT / 'evidence/round12/budget.json').read_text())
     deadline = datetime.fromisoformat(budget['deadline_utc'])
     available = int((deadline - datetime.now(timezone.utc)).total_seconds() // 60) - 5
-    job_minutes = min(args.max_minutes, available)
+    job_minutes = min(args.max_minutes, available, 35)
     assert 10 <= job_minutes <= 90, 'Insufficient remaining budget for a bounded CI job'
+    assert len(list((ROOT / 'evidence/round12').glob('dispatch-*.json'))) < 4, 'Four-run authorization limit reached'
     os.environ['ROUND4_SPEC_DIR'] = 'evidence/round12'
     from round4 import validate
     validate(args.batch)
@@ -36,6 +37,8 @@ def main():
     helper = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(helper)
     env = helper.gh_env()
+    repository = json.loads(helper.run(['api', f'repos/{REPO}'], env))
+    allow_private = bool(repository['private'])
     remote = json.loads(helper.run(['api', f'repos/{REPO}/commits/{args.ref}'], env))['sha']
     assert remote == sha, 'Push the frozen commit before dispatch'
     list_args = ['run', 'list', '--repo', REPO, '--branch', args.ref,
@@ -44,12 +47,14 @@ def main():
     existing = {r['databaseId'] for r in json.loads(helper.run(list_args, env))}
     helper.run(['workflow', 'run', 'deflate-round9.yml', '--repo', REPO, '--ref', args.ref,
                 '-f', 'experiment_round=11', '-f', 'specification=' + args.batch,
-                '-f', 'allow_private=true', '-f', 'job_minutes=' + str(job_minutes)], env)
+                '-f', 'allow_private=' + str(allow_private).lower(), '-f', 'job_minutes=' + str(job_minutes)], env)
     for _ in range(10):
         runs = json.loads(helper.run(list_args, env))
         matching = [r for r in runs if r['headSha'] == sha and r['databaseId'] not in existing]
         if matching:
-            record = {'batch': args.batch, 'git_sha': sha, 'allow_private': True,
+            record = {'batch': args.batch, 'git_sha': sha, 'allow_private': allow_private,
+                      'repository_visibility_verified': 'private' if repository['private'] else 'public',
+                      'authorization': 'Direct user approval in this chat: 允许推送到云端验证; up to four jobs, each capped at35minutes',
                       'workflow': 'deflate-round9.yml', 'ref': args.ref, 'job_timeout_minutes': job_minutes,
                       'runtime_scope': 'GitHub job timeout; dispatch queue time is separate. Five minutes of remaining budget reserved outside the cap.',
                       'run': matching[0]}
