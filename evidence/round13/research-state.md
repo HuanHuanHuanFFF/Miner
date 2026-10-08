@@ -45,3 +45,5 @@ expired-k37858528540原父observer自然成功且token/decode同父：3700174 ah
 增加明确目的的balance-n第三环境四块冻结replication：已原gate接受的abs15微小中心信号尚未超过同库shadow，所有4批实际parent/shadow ELF hash逐字相同。新排序让parent/candidate分别同占0/1/5/6位置，四块镜像，改变固定控制在前造成的位置相关性；原28数据已影响选择，不当新的未见数据确认。只重复这个合法边界附近版本，不重复全部负面候选或追加完整gate。
 
 rescue-m37860415256原observer自然成功：824975 primary miss、232705 live-head miss、107435 older-live；一步recover28382/181442覆盖B，原depthrecover29428/187955，>=7有6076、>=16有997。只做一步恢复以买较小工作量，保留主hit原deepening；用pc_probe_m真实cachedWord检验老predecessor，窗口/字节全部原版。raw与gain正评分两个源，先实际原encoder看encoded bytes，原证明明示未适配，未申请完整gate。
+
+rescue-o37861230138实际程序原encoder自然成功：raw公共大小36.1981519%(-0.0049936pp)，gain36.1952896%(-0.00785585pp)；gain14变化文件都没有增大压缩字节。时间UNKNOWN，覆盖并非新增净压缩收益；只将较佳gain送rescue-p两块真实两轴/540decode/提取，原证明未适配不申请完整gate。
