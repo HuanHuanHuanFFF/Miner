@@ -30,3 +30,5 @@ confirm-c最终CI成功、#514abs15精确pair原始gate接受(511.8秒)，白名
 ef32-short-e37845275650自然成功且两个540decode通过，唯一token变化weights-f32。原284138B；Lits3输出288073(+3935B)，总体大小+0.040153pp／总时间+1.257595%；min4输出287858(+3720B)，+0.037959pp／+0.872356%。原三字节match虽短仍有实际编码价值，反驳只根据长度/覆盖判断收益。关闭两份Rust，不投入证明迁移，避免继续盲扫minlen。下一次先看实际符号／距离收益或保留短匹配减少探测工作。
 
 price-f37848061003原encoder轻量重放自然成功：28父版token/output哈希逐字同公共原回执，所有34输出zlib独立decode。31860个len3里31814按原block实际码长更便宜，只有39更贵(局部损失56bit)。选择性price0/2实际+15/+1B，距离类d32/d128/d512/d2048分别+5505/+3557/+2532/+507B。关闭这个父版的短token价格改写，不由局部bits保证最后bytes。新机制为补充第四字节key(保留3-byte后备)的真实更长match机会；另对PC仅dp1/lazy0行测试完整双32位置AoS，同容量，区别于旧HN SoA bucket2和Chat pair16。先native有限eq与observer，再决定测量／证明投入。
+
+pair-g-native37849678652自然成功：pair64全32bit位置AoS444 token/decode同public514。Key4 observer保持父输出：35065探测找到12711更长match、新增18740覆盖B，>=7有332，>=11零；不把覆盖B当压缩B。冻结独立structure-h两个候选，原encoder配对筛选；aux4保留原head3、严格更长才选head4、tie偏原head3；额外64直接EF32浮点模式边界decode用例补足原泛型样本。两份原证明均未适配新函数，不在首轮申请完整gate。

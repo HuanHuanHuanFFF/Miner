@@ -33,5 +33,8 @@ def main():
     if spec.get('ef32_wide_counts'):
         loader=importlib.util.spec_from_file_location('r13_ef_counts',ROOT/'scripts/research-round13-ef32.py')
         module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main()
+    if any(e.get('native_function_check')for e in spec['entries']):
+        loader=importlib.util.spec_from_file_location('r13_ef_direct',ROOT/'scripts/research-round13-ef32-native.py')
+        module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main()
 
 if __name__=='__main__':main()
