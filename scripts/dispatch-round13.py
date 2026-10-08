@@ -13,7 +13,7 @@ def main():
     native_route=args.batch in ('ef32-d','price-f') or args.batch.endswith('-native')
     assert bool(spec.get('native_only'))==native_route,'Native/full workflow route must match the frozen specification'
     s=importlib.util.spec_from_file_location('r13_gh',ROOT/'scripts/collect-round2.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);env=m.gh_env()
-    sha=subprocess.check_output(['git','rev-parse',args.ref],text=True).strip();repo=json.loads(m.run(['api',f'repos/{REPO}'],env));private=bool(repo['private']);remote=json.loads(m.run(['api',f'repos/{REPO}/commits/{args.ref}'],env))['sha'];assert remote==sha
+    sha=subprocess.check_output(['git','rev-parse',args.ref],text=True).strip();repo=json.loads(m.run(['api',f'repos/{REPO}'],env));private=bool(repo['private']);assert not private,'R13 renewed public-runner scope does not automatically authorize additional private Actions billing';remote=json.loads(m.run(['api',f'repos/{REPO}/commits/{args.ref}'],env))['sha'];assert remote==sha
     frozen=json.loads(subprocess.check_output(['git','show',sha+f':evidence/round{ROUND}/{args.batch}.json']));assert frozen==spec
     listing=['run','list','--repo',REPO,'--branch',args.ref,'--workflow','deflate-round9.yml','--limit','20','--json','databaseId,headSha,status,createdAt,url'];seen={r['databaseId']for r in json.loads(m.run(listing,env))}
     inputs={'experiment_round':str(ROUND),'specification':args.batch,'allow_private':str(private).lower(),'job_minutes':str(minutes)}

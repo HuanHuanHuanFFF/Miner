@@ -32,3 +32,6 @@ ef32-short-e37845275650自然成功且两个540decode通过，唯一token变化w
 price-f37848061003原encoder轻量重放自然成功：28父版token/output哈希逐字同公共原回执，所有34输出zlib独立decode。31860个len3里31814按原block实际码长更便宜，只有39更贵(局部损失56bit)。选择性price0/2实际+15/+1B，距离类d32/d128/d512/d2048分别+5505/+3557/+2532/+507B。关闭这个父版的短token价格改写，不由局部bits保证最后bytes。新机制为补充第四字节key(保留3-byte后备)的真实更长match机会；另对PC仅dp1/lazy0行测试完整双32位置AoS，同容量，区别于旧HN SoA bucket2和Chat pair16。先native有限eq与observer，再决定测量／证明投入。
 
 pair-g-native37849678652自然成功：pair64全32bit位置AoS444 token/decode同public514。Key4 observer保持父输出：35065探测找到12711更长match、新增18740覆盖B，>=7有332，>=11零；不把覆盖B当压缩B。冻结独立structure-h两个候选，原encoder配对筛选；aux4保留原head3、严格更长才选head4、tie偏原head3；额外64直接EF32浮点模式边界decode用例补足原泛型样本。两份原证明均未适配新函数，不在首轮申请完整gate。
+
+structure-h37850501371自然成功，16公共配对进程、pair64444有限等价／公共同字节，aux4540 Root decode+64直接EF32浮点边界decode均过。pair64对parent+0.027512%(基本持平，无上榜优势)；aux4对parent -0.071930%但大小+0.035561pp，f32从284138到287623(+3485B)，tokens285782→274567(-11215)。暂停两份原Rust完整证明投入。辅助key仍有新增信息，但最长优先过多选了远距离短收益；仅改变选择predicate的gain/7按原encoder轻量筛选，不盲延长full CI。
+当前finalized区块9241236只读注册核验：UID46仍注册且归属/key一致，原历史链hash一致；完整账户回执留本地忽略目录，未签名/转账/提交。官方checkpoint2 snapshot29211(22:04:39UTC)freshness=stale保留，新增547提交但速度端#539边界未变。

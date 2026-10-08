@@ -6,6 +6,9 @@ from round4 import ROOT,validate
 def main():
     assert os.environ.get('GITHUB_ACTIONS')=='true'and os.environ.get('RUNNER_OS')=='Linux'
     spec=validate(os.environ['ROUND4_SPEC']);out=Path(os.environ['RUNNER_TEMP'])/'round4-receipts';out.mkdir(exist_ok=True)
+    if spec.get('native_encoder'):
+        loader=importlib.util.spec_from_file_location('r13_native_encoder',ROOT/'scripts/research-round13-encoder-native.py')
+        module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main();return
     record={'run_id':os.environ['GITHUB_RUN_ID'],'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],
         'status':'STARTED_NATIVE_ONLY','candidate_hashes':{e['name']:e['hashes']for e in spec['entries']if not e['control']},
         'scope':'R13 native token/decode diagnostic only. Official extraction, paired two axes, full gate and ranking NOT_RUN.'}
