@@ -35,3 +35,5 @@ pair-g-native37849678652自然成功：pair64全32bit位置AoS444 token/decode�
 
 structure-h37850501371自然成功，16公共配对进程、pair64444有限等价／公共同字节，aux4540 Root decode+64直接EF32浮点边界decode均过。pair64对parent+0.027512%(基本持平，无上榜优势)；aux4对parent -0.071930%但大小+0.035561pp，f32从284138到287623(+3485B)，tokens285782→274567(-11215)。暂停两份原Rust完整证明投入。辅助key仍有新增信息，但最长优先过多选了远距离短收益；仅改变选择predicate的gain/7按原encoder轻量筛选，不盲延长full CI。
 当前finalized区块9241236只读注册核验：UID46仍注册且归属/key一致，原历史链hash一致；完整账户回执留本地忽略目录，未签名/转账/提交。官方checkpoint2 snapshot29211(22:04:39UTC)freshness=stale保留，新增547提交但速度端#539边界未变。
+
+choice-i-native37853349223四实际程序原encoder自然成功，28父output/token哈希一致且全zlibdecode：gain仍+1614B；seven省217B，公共大小36.2009312%仅-0.0022143pp，不能单独跨#539大小边界(约需1369B)。保留极小大小替代但不投入配对／证明；不把无计时诊断当两轴。转向新的PClazy0未用ahead word：匹配支路保留插入key、复用当前真实word，miss/lazy支路仍旧完整ahead；原pc_run1c纯probe提前，实际token等价须验证。1014141匹配机会明显大于稀少cap退出，但分支/流水重叠损失UNKNOWN，单受控版本ahead-j，两块配对+提取、不先申请昂贵完整gate。
