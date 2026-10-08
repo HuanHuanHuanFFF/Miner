@@ -83,20 +83,22 @@ pipeline 公共四块相对同场 record 的变化：
 
 ## 前沿与支付边界
 
-当前复算使用完整快照 **27887，2026-10-08 08:29:15 +08:00**，501 行、79 个前沿点，API freshness 标为 unknown。原始响应、请求时间与 SHA 见 [receipt](../../evidence/round10/official-final-retry1/receipt.json)，另有 [逐字节与分页核对](../../evidence/round10/frontier-capture-check.json) 和 [独立最终前沿审查](../../evidence/round10/final-frontier-review.md)。公开 scorer 重放误差为 `2.78e-17`。首次最终刷新在第 4 页遇到 `SNAPSHOT_NOT_FOUND`；[不完整响应](../../evidence/round10/official-final/capture-failure.json) 单独保留，没有进入本次复算。
+最终复算使用完整快照 **27915，2026-10-08 08:43:20 +08:00**，502 行、79 个前沿点，API freshness 标为 unknown。原始响应、请求时间与 SHA 见 [receipt](../../evidence/round10/official-handoff-confirm/receipt.json)，另有 [交付前逐字节与分页核对](../../evidence/round10/handoff-capture-check.json)。此前 [08:29 独立前沿审查](../../evidence/round10/final-frontier-review.md) 的已评分坐标、权重与主要结论在本次快照中不变；新增 #502 仍在验证，尚无评分坐标。公开 scorer 重放误差为 `2.78e-17`。
+
+首次最终刷新在第 4 页遇到 `SNAPSHOT_NOT_FOUND`；[不完整响应](../../evidence/round10/official-final/capture-failure.json) 单独保留。交付前的中间快照 27913 被官方标记为 stale，原因是评分后的提交成员或所选证据变化；[该快照](../../evidence/round10/official-handoff/receipt.json) 也保留，但二者均未进入最终复算。
 
 | pipeline 条件模型 | 时间轴 | 大小轴 | 几何份额 |
 |---|---:|---:|---:|
 | 同族 #361 迁移 | 1.40378031 | 34.18551719% | 0 |
 | 声明的压力场景 | 1.43836924 | 34.20584067% | 0 |
 
-同族模型仍被 #360/#418/#422 支配。固定此大小时，时间还需再改善约 5.02% 才可能跨过现有几何门槛。压力场景取最慢观察配对比值再加 2%，大小取同族值加 0.01 pp 与公共大小×1.008 的较大者；它不是置信区间或私有集保证。
+同族模型仍被 #360/#418/#422 支配。固定此大小时，时间还需再改善约 **5.02%** 才可能跨过现有几何门槛；固定压力场景的大小时，则需再改善约 **15.63%**，门槛来自 #443。压力场景取最慢观察配对比值再加 2%，大小取同族值加 0.01 pp 与公共大小×1.008 的较大者；它不是置信区间或私有集保证。
 
 **最终刷新改变了旧提交的状态：#453 已退出前沿，公布 Pareto／payable weight 均为 0。** 新前沿点 #501 的坐标 `0.43541753 / 36.79888211%` 在两轴上严格优于 #453 的 `0.43787346 / 36.99972856%`；#453 的 API 支付资格字段 `payment_eligible` 仍为 true，归零不是由此字段变为不合格造成。该 hotkey 在本快照中没有其他存活前沿点。详见 [快照变化核对](../../evidence/round10/frontier-change-final.json)。此前 06:26 快照里的非零权重仍保留为历史观察，不能改写成当时已经归零。
 
-官方只为同 hotkey 最早的存活前沿提交分配 Pareto 支付，这条规则没有变化；但“#453 仍存活”的前提已不再成立。假设未来点达到 `1.25 / 34.18%`，本快照重放的几何份额及该 hotkey 新点条件份额都约为 **2.2241%**；这是未实现的假设坐标，仍假定准入、注册、额度等条件满足。本轮实际候选的份额为 0，原因仍是性能坐标被支配。见 [历史规则核对](../../evidence/round10/payability-notes.md) 和 [最终支付重放](../../evidence/round10/payability-final.json)。本次 weights/current 与固定分页记录了同一 snapshot ID；这只验证 API 身份对齐，不是 finalized 链接受或新收益到账证明。
+官方只为同 hotkey 最早的存活前沿提交分配 Pareto 支付，这条规则没有变化；但“#453 仍存活”的前提已不再成立。假设未来点达到 `1.25 / 34.18%`，本快照重放的几何份额及该 hotkey 新点条件份额都约为 **2.2241%**；这是未实现的假设坐标，仍假定准入、注册、额度等条件满足。本轮实际候选的份额为 0，原因仍是性能坐标被支配。见 [历史规则核对](../../evidence/round10/payability-notes.md) 和 [最终支付重放](../../evidence/round10/payability-final.json)。本次 weights/current 已前进到快照 27916，与固定分页 27915 不同，不据此推断 27915 的 finalized 链接受或新收益到账。
 
-邻近 #375/#418/#422/#443/#489 的公开源码接口均返回 `SOURCE_WITHHELD`，不能由其坐标猜测内部优化。见 [原始响应审计](../../evidence/round10/public-neighbor-audit.md)。本轮没有触及未开放源码。
+邻近 #375/#418/#422/#443/#489 的公开源码接口均返回 `SOURCE_WITHHELD`；08:37 对新支配点 [#501 的单次官方请求](../../evidence/round10/new-frontier-source-501/receipt.json) 也返回同一拒绝原因。不能由其坐标猜测内部优化。见 [原始邻点响应审计](../../evidence/round10/public-neighbor-audit.md)。本轮没有取得这些未开放源码。
 
 ## CI 与复现
 
@@ -120,7 +122,7 @@ pipeline 公共四块相对同场 record 的变化：
 
 每批保存原始 reps、输入／token／输出 SHA、编译器与 runner、官方日志、提取和 `raw-artifact-files.json`。目录为 `evidence/round10/<run>/<batch>/gate/`；没有改写原始回执的字节与哈希。可用 `scripts/summarize-round10.py` 对报告列出的 gate 目录重新计算；`scripts/analyze-round10-stability.py` 复核分组贡献，`scripts/write-round10-verification.py` 核对接受 pair。另有 [独立结论审计](../../evidence/round10/final-claims-review.md) 复核数值、基线、证明与下一步假设边界。
 
-[归档校验](../../evidence/round10/archive-check.json) 检查 621 份原始实验文件、246 项源码／证明与 6 项 gate 输入检查，全部一致；706 个 Git 路径的归档字节也匹配。另对 [13 次冻结提交](../../evidence/round10/frozen-run-input-check.json) 的 220 个不同输入路径分别核对，确认每次实际 run 的提交保留了对应源码／证明。检查结果绑定各自记录的提交，不把之后的报告提交冒充被验证对象。新增的明确基线字段及策略校验也经过 [旧汇总数值回归](../../evidence/round10/summary-generator-check.json)，1,804 个原有标量字段保持一致。
+[最终归档校验](../../evidence/round10/archive-final-check.json) 检查 621 份原始实验文件、246 项源码／证明与 6 项 gate 输入检查，全部一致；706 个 Git 路径的归档字节也匹配。完整及失败官方快照的 [24 个 Git 路径](../../evidence/round10/frontier-capture-git-check.json) 另行通过原字节核对。另对 [13 次冻结提交](../../evidence/round10/frozen-run-input-check.json) 的 220 个不同输入路径分别核对，确认每次实际 run 的提交保留了对应源码／证明。检查结果绑定各自记录的提交，不把之后的报告提交冒充被验证对象。新增的明确基线字段及策略校验也经过 [旧汇总数值回归](../../evidence/round10/summary-generator-check.json)，1,804 个原有标量字段保持一致。
 
 开发分支为 `codex/round10-balanced`；原 `main` 的 `4ce98ccfe48ced871a501a016518076baf8a81d9` 保留，未合并。官方 sources/contract/encoder/gate/pins 阅读副本未改，工作流仍只手动启动，私有开关默认 false。本地未新增编译工具链或已编译二进制。
 
