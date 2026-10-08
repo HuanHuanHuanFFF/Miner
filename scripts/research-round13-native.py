@@ -1,6 +1,6 @@
 """R13 lightweight native diagnostic within the renewed seven-hour window."""
 from pathlib import Path
-import hashlib,json,os,subprocess,sys
+import hashlib,importlib.util,json,os,subprocess,sys
 from round4 import ROOT,validate
 
 def main():
@@ -13,6 +13,10 @@ def main():
     result=subprocess.run([sys.executable,str(ROOT/'scripts/research-round4.py')],check=False)
     eq=json.loads((out/'equivalence-research.json').read_bytes())if(out/'equivalence-research.json').exists()else{}
     record.update(status='VERIFIED_FINITE_NATIVE_ONLY'if result.returncode==0 and eq.get('returncode')==0 and eq.get('cases') and all(r['cases']==444 and r['different_or_failed']==0 for r in eq['cases'])else'FAILED_OR_INCOMPLETE_NATIVE_ONLY',equivalence=eq)
-    dest.write_text(json.dumps(record,indent=2)+'\n');print(json.dumps(record));assert record['status']=='VERIFIED_FINITE_NATIVE_ONLY'
+    dest.write_text(json.dumps(record,indent=2)+'\n');print(json.dumps(record))
+    if spec.get('ef32_key4_counts'):
+        loader=importlib.util.spec_from_file_location('r13_key4_probe',ROOT/'scripts/research-round13-key4.py')
+        module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main()
+    assert record['status']=='VERIFIED_FINITE_NATIVE_ONLY'
 
 if __name__=='__main__':main()

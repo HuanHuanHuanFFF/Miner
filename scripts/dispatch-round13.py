@@ -10,6 +10,8 @@ def main():
     budget=json.loads((ROOT/f'evidence/round{ROUND}/budget.json').read_bytes());left=int((datetime.fromisoformat(budget['deadline_utc'])-datetime.now(timezone.utc)).total_seconds()//60)-8
     minutes=min(args.max_minutes,left,90);assert 10<=minutes<=90
     os.environ['ROUND4_SPEC_DIR']=f'evidence/round{ROUND}';from round4 import validate;spec=validate(args.batch);assert args.ref.startswith('codex/')
+    native_route=args.batch in ('ef32-d','price-f') or args.batch.endswith('-native')
+    assert bool(spec.get('native_only'))==native_route,'Native/full workflow route must match the frozen specification'
     s=importlib.util.spec_from_file_location('r13_gh',ROOT/'scripts/collect-round2.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m);env=m.gh_env()
     sha=subprocess.check_output(['git','rev-parse',args.ref],text=True).strip();repo=json.loads(m.run(['api',f'repos/{REPO}'],env));private=bool(repo['private']);remote=json.loads(m.run(['api',f'repos/{REPO}/commits/{args.ref}'],env))['sha'];assert remote==sha
     frozen=json.loads(subprocess.check_output(['git','show',sha+f':evidence/round{ROUND}/{args.batch}.json']));assert frozen==spec
