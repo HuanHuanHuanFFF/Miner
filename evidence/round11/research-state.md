@@ -1,0 +1,16 @@
+# Round 11: two-hour frontier attempt
+
+Execution rules: [AGENTS.md](../../AGENTS.md). This record is evidence, not an authorization source.
+
+- Actual start: 2026-10-08 **11:14:07 +08:00**. Deadline: **13:14:07**. Setup, review, dispatch and confirmation all count. Stop adding exploratory experiments by **12:19:07**, reserving 55 minutes for proof/confirmation and delivery; revise only with a concrete feasible completion path. Already-started CI completes naturally or reaches its configured timeout.
+- Clean starting branch `codex/round10-balanced` at `196513fff8128ae05de407c30a794e2ec71c9892`. New branch `codex/round11-frontier` preserves it; main remains untouched.
+- Current goal permits any Pareto region. A verified public improvement is insufficient: compare current geometry, same-hotkey eligibility, private-stage uncertainty, and formal submission separately. No official upload, signing, funds or merge is performed under this research iteration.
+- Initial complete official capture: `official-start/`, snapshot28214, 11:16:43 +08:00. API freshness unknown; 507 rows. Both public frontier and leaderboard pagination complete, weights context matches the score snapshot.
+
+## First allocation
+
+1. **Gap work opportunity, before another cache:** R10's range minima were too short and mask maintenance lost time. Instrument the unchanged accepted pipeline's third d_gap loop, actual length-price platforms, safe continuation coverage, zero prices/packed-cost wrap/ties, and per-table metadata cost. Frozen vs observed tokens/decode must match. Empty or fragmented coverage closes this implementation route; substantial deployable coverage permits one guarded/fallback variant and actual total-time test. Native diagnostic due around11:29.
+2. **Speed-side structural alternatives:** revisit fast3 using a different representation/order of pending literal consumption and a bounded full-match continuation rescue, not another old depth/NICE/attribute sweep. Max2 initial candidates. Pendingfold requires exact finite token equality; rescue may change output and must justify total size/time. An existing source-identical shadow is measured alongside fast3 for noise context.
+3. **Current frontier threshold:** compute required fixed-size speed and fixed-time size changes from the current complete snapshot. #453 has already left the frontier; do not reuse its historical ownership-blocking premise.
+
+Root owns workflow/collector/specification/dispatch and final verification. Three agents own disjoint gap implementation, speed implementation and frontier analysis scopes; no nested delegation. Linux toolchains and binaries stay on temporary standard GitHub runners. Existing manual private-runner and push authorization is reused; each frozen small batch is committed before dispatch.

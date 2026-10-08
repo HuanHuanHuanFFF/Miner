@@ -90,9 +90,9 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('mode', choices=['status', 'pull', 'analyze'])
     ap.add_argument('run_id')
-    ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate', 'extraction'], default='screen')
+    ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate', 'extraction', 'diagnostics'], default='screen')
     ap.add_argument('--snapshot')
-    ap.add_argument('--round', choices=['4', '5', '6', '7', '8', '9', '10'], default='4', help='Receipt namespace; original round4 remains the default')
+    ap.add_argument('--round', choices=['4', '5', '6', '7', '8', '9', '10', '11'], default='4', help='Receipt namespace; original round4 remains the default')
     ap.add_argument('--batch', help='Matrix batch label; omit for legacy single-job artifacts')
     args = ap.parse_args()
     assert args.batch is None or re.fullmatch(r'[a-z0-9-]{1,48}', args.batch)
@@ -102,7 +102,7 @@ def main():
         target = target / args.batch
     target = target / args.phase
     if args.mode == 'analyze':
-        if args.phase == 'extraction':
+        if args.phase in ('extraction', 'diagnostics'):
             raise ValueError('Extraction diagnostics have no performance or proof verdict to analyze')
         analyze(target, args.snapshot); return
     helper = module('round4_gh', ROOT / 'scripts/collect-round2.py')
@@ -118,7 +118,7 @@ def main():
     if artifact is None:
         print('Requested phase receipt is not available yet.'); return
     target.parent.mkdir(parents=True, exist_ok=True)
-    marker = 'research.json' if args.phase == 'extraction' else 'state.json'
+    marker = 'raw-artifact-files.json' if args.phase == 'diagnostics' else ('research.json' if args.phase == 'extraction' else 'state.json')
     if not (target / marker).exists():
         # Download into a new folder: an interrupted transfer must not masquerade
         # as a complete receipt merely because state.json arrived first.
@@ -129,11 +129,18 @@ def main():
         subprocess.run(['gh', 'run', 'download', args.run_id, '--repo', 'HuanHuanHuanFFF/Miner',
                         '--name', name, '--dir', str(stage)], env=env, check=True,
                        capture_output=True, text=True, encoding='utf-8', timeout=180)
-        state = json.loads((stage / marker).read_text())
-        assert state['run_id'] == args.run_id and state['git_sha'] == meta['headSha']
-        assert not args.batch or state['batch'] == args.batch
-        for metric in state.get('metrics', []):
-            assert (stage / f"round{metric['round']}-{metric['candidate']}.jsonl").is_file()
+        if args.phase == 'diagnostics':
+            reports = [json.loads(p.read_text()) for p in stage.rglob('*.json')]
+            bound = [r for r in reports if isinstance(r, dict) and 'run_id' in r and 'git_sha' in r]
+            assert bound, 'Diagnostic artifact must identify the frozen run and commit'
+            assert all(str(r['run_id']) == args.run_id and r['git_sha'] == meta['headSha'] for r in bound)
+            assert all(not r.get('batch') or r['batch'] == args.batch for r in bound)
+        else:
+            state = json.loads((stage / marker).read_text())
+            assert state['run_id'] == args.run_id and state['git_sha'] == meta['headSha']
+            assert not args.batch or state['batch'] == args.batch
+            for metric in state.get('metrics', []):
+                assert (stage / f"round{metric['round']}-{metric['candidate']}.jsonl").is_file()
         # Freeze downloaded file bytes before adding local metadata or analyses.
         original_files = {p.relative_to(stage).as_posix(): {'bytes': p.stat().st_size,
                            'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
@@ -156,7 +163,10 @@ def main():
     if meta['status'] == 'completed' and args.phase == 'gate':
         log = helper.run(['run', 'view', args.run_id, '--repo', 'HuanHuanHuanFFF/Miner', '--log'], env)
         (target / 'ci.log').write_text(log, encoding='utf-8')
-    if args.phase == 'extraction':
+    if args.phase == 'diagnostics':
+        print('DIAGNOSTICS_ONLY', len(json.loads((target / marker).read_text())['files']),
+              'original files; not timing or proof evidence')
+    elif args.phase == 'extraction':
         report = json.loads((target / marker).read_text())
         print('RESEARCH_ONLY', {name: item['extraction_accepted'] for name, item in report['extractions'].items()},
               'cost', report.get('cost_differential'), 'PROOF_NOT_RUN')
