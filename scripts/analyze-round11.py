@@ -23,41 +23,53 @@ def main():
     scorer=load_scorer(ROOT/'sources/conjectures-optimisation-deflate/validator/scoring/pareto.py')
     policy=competition['policy'];policy_check=validate_policy_for_replay(policy,rows,scorer)
     bounds=scorer.Boundaries(policy['max_balanced_time_ratio'],policy['max_mean_file_compression_pct'])
-    formal={r['id']:r for r in rows};groups={};runs=[];identities={};shadows=[]
+    formal={r['id']:r for r in rows};groups={};runs=[];identities={};input_ids={};timing_owners={};shadows=[]
     for folder in args.receipts:
         state=json.loads((folder/'state.json').read_bytes());ci=json.loads((folder/'ci-run.json').read_bytes())
         assert str(ci['databaseId'])==state['run_id'] and ci['headSha']==state['git_sha']
         if args.final: assert ci['status']=='completed'
         inv=json.loads((folder/'raw-artifact-files.json').read_bytes())
+        if args.final:
+            assert inv['artifact_name']==f"r11-{state['run_id']}-{state['batch']}-gate", 'Use the final artifact, not an early screen snapshot'
         for name,record in inv['files'].items():
             p=(folder/name).resolve();assert p.is_relative_to(folder.resolve())
             assert p.stat().st_size==record['bytes'] and sha(p)==record['sha256']
-        entries={e['name']:e for e in state['spec']['entries']};by={};file_id={}
+        entries={e['name']:e for e in state['spec']['entries']};by={};file_id={};environment=None
         for metric in state['metrics']:
             n,b=metric['candidate'],metric['round'];e=entries[n]
             raw=[json.loads(v) for v in (folder/f'round{b}-{n}.jsonl').read_text().splitlines()]
             meta,files=raw[0],[v for v in raw if v['kind']=='file']
             assert meta['corpus']=='corpus-stage1' and len(files)==28 and sum(f['raw_bytes'] for f in files)==15930000
             assert meta['measured_rounds']==11 and meta['warmup_rounds']==1
+            env={k:meta[k] for k in ('os','arch','rustc_version','cpu_model','cpu_governor','benchmark_provenance')}
+            if environment is None:environment=env
+            assert environment==env
             assert meta['methods'][n]['source_sha256']==e['hashes']['parse.rs']==metric['source_sha256']
-            axis=[];fid={}
+            axis=[];fid={};timing_signature=[]
             for f in files:
+                assert input_ids.setdefault(f['file'],f['sha256'])==f['sha256']
                 times={}
                 for method in (n,'incumbent'):
                     item=f['methods'][method];reps=[r for r in item['reps'] if r['phase']=='measured']
                     assert item['deterministic'] and not item['errors'] and len(reps)==11 and all(r['total_s']>0 for r in reps)
                     times[method]=statistics.median(r['total_s'] for r in reps)
                 axis.append(times[n]/times['incumbent'])
+                timing_signature.append((f['sha256'],[(method==n,[r['total_s'] for r in f['methods'][method]['reps']]) for method in (n,'incumbent')]))
                 item=f['methods'][n];value=(f['sha256'],item['tokens_sha256'],item['output_sha256'],item['output_bytes'])
                 assert identities.setdefault((metric['source_sha256'],f['file']),value)==value
                 fid[f['file']]=value
             assert abs(statistics.mean(axis)-metric['time'])<1e-12
+            timing_digest=hashlib.sha256(json.dumps(timing_signature,sort_keys=True).encode()).hexdigest()
+            owner=timing_owners.setdefault((metric['source_sha256'],timing_digest),state['run_id'])
+            assert owner==state['run_id'], 'Identical measured timing vectors cannot be counted as independent CI evidence'
             assert abs(statistics.mean(100*f['methods'][n]['output_bytes']/f['raw_bytes'] for f in files)-metric['size_pct'])<1e-12
+            assert (n,b) not in by
             by[n,b]=metric;file_id[n,b]=fid
         for e in entries.values():
             for name,digest in e['hashes'].items():assert sha(ROOT/e['path']/name)==digest
         runs.append({'run_id':state['run_id'],'batch':state['batch'],'commit':ci['headSha'],'status':ci['status'],
-            'conclusion':ci['conclusion'],'paired_processes':len(by),'failures':state['failures'],'gates':state['gates']})
+            'conclusion':ci['conclusion'],'paired_processes':len(by),'failures':state['failures'],'gates':state['gates'],
+            'environment':environment})
         blocks=sorted(b for n,b in by if n=='fast-shadow')
         if blocks:shadows.append({'run_id':state['run_id'],'changes_pct':[100*(by['fast-shadow',b]['time']/by['r3-432-fast3',b]['time']-1) for b in blocks],
             'identical_public_tokens_and_output':all(file_id['fast-shadow',b]==file_id['r3-432-fast3',b] for b in blocks)})
@@ -82,6 +94,7 @@ def main():
                 assert gate['corpora']==['corpus-stage1']
                 assert all(sha(folder/('input-'+n)/f)==v for f,v in e['hashes'].items())
                 g['verified_pairs'].append({'name':n,'run_id':state['run_id'],'files':e['hashes']})
+    assert len(runs)==len({r['run_id'] for r in runs}), 'A CI run may only be counted once'
     candidates=[]
     for g in groups.values():
         rr=g['runs'];assert len(rr)==len({r['run_id'] for r in rr})
@@ -95,9 +108,11 @@ def main():
             same_family=scenario(x,y),stress=scenario(fm['balanced_time_ratio']*max(v for r in rr for v in r['relative_to_anchor'])*1.01,y+0.01),
             public_equal_to_parent=all(r['public_equal_to_parent'] for r in rr),full_gate_accepted=bool(g['verified_pairs']))
         candidates.append(g)
-    result={'status':'COMPLETED_RECEIPTS_RECOMPUTED' if args.final else 'SCREEN_OR_COMPLETED_RECEIPTS_RECOMPUTED',
+    result={'status':'COMPLETED_FINAL_ARTIFACTS_RECOMPUTED' if args.final else 'SCREEN_OR_COMPLETED_RECEIPTS_RECOMPUTED',
         'snapshot':context,'capture':str(args.capture),'policy_validation':policy_check,'runs':runs,'candidates':candidates,'fast_shadows':shadows,
         'paired_processes':sum(r['paired_processes'] for r in runs),
+        'field_definitions':{'full_gate_accepted':'At least one exact pair in verified_pairs passed; it does not certify other proof variants with the same Rust.',
+                             'final_mode':'Final artifacts from completed CI; failed CI is retained as negative evidence and is not labeled successful.'},
         'limits':['Same-family transfer and stress (worst block relative time plus1%, size plus0.01pp) are declared hypotheses, not private guarantees.',
                   'Full public gate is bound to exact source/proof pairs; neither projected geometry nor same-hotkey conditional share is formal admission or realized reward.']}
     args.output.write_bytes((json.dumps(result,indent=2)+'\n').encode())

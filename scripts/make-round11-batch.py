@@ -18,6 +18,7 @@ def main():
     ap.add_argument('--equivalent', nargs='*', default=[])
     ap.add_argument('--synthetic', nargs='*', default=[])
     ap.add_argument('--gap-diagnostics', action='store_true')
+    ap.add_argument('--gap-candidate-checks', action='store_true')
     ap.add_argument('--fast-diagnostics', action='store_true')
     ap.add_argument('--blocks', type=int, choices=[1,2,3,4], default=2)
     args = ap.parse_args()
@@ -43,6 +44,7 @@ def main():
         fast=name.startswith('r11-fast-')
         entries.append({'name':name,'path':path.relative_to(ROOT).as_posix(),
             'control':False,'anchor':'r3-432-fast3' if fast else 'public361',
+            'anchor_scope':'fast3 run1 structural derivative' if fast else 'pipeline D-planner derivative; other families need an explicit anchor review',
             'comparison_baseline':'r3-432-fast3' if fast else 'r10-finder-pipeline-proof',
             'hashes':{f:hashlib.sha256((path/f).read_bytes()).hexdigest() for f in ('parse.rs','Parse.lean')}})
     by={e['name']:e for e in entries}
@@ -57,7 +59,8 @@ def main():
         'synthetic_validation':True,
         'synthetic_reference_candidates':['r10-finder-pipeline-proof'],
         'research_synthetic_candidates':args.synthetic,
-        'gap_diagnostics':args.gap_diagnostics,'fast_diagnostics':args.fast_diagnostics,
+        'gap_diagnostics':args.gap_diagnostics,'gap_candidate_checks':args.gap_candidate_checks,
+        'fast_diagnostics':args.fast_diagnostics,
         'description':'R11 two-hour frontier research; all source/proof bytes frozen before dispatch.',
         'selection_policy':'Declared same-family formal anchor and same-run parent comparisons; geometric share is conditional, not admission or reward.'}
     target=ROOT/'evidence/round11'/(args.batch+'.json')

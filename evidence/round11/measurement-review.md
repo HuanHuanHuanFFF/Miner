@@ -1,0 +1,15 @@
+# R11 measurement-script review
+
+Static review only; neither script was run or changed. I reviewed the current versions of [analyze-round11.py](../../scripts/analyze-round11.py) and [make-round11-batch.py](../../scripts/make-round11-batch.py).
+
+The core measurement arithmetic is sound: each file uses the median of 11 measured `total_s` reps for the method divided by its paired incumbent, averages the 28 file ratios, and checks the result against the saved metric. Output-size axes are recomputed from per-file output bytes. Blocks are averaged within each run, then runs are weighted equally. The family anchor is used for formal-coordinate projection; `comparison_baseline` is separately used for the public parent comparison. The same-hotkey result is conditional through `analyze_payability`; the helper does not infer admission, registration, bounty eligibility, or chain acceptance.
+
+Two safeguards are important before treating an output as final:
+
+1. `--final` currently checks only `ci.status == "completed"` ([analyze-round11.py:28–30](../../scripts/analyze-round11.py)). It does not require a successful conclusion or a gate-phase receipt. A completed screen, failed run, or cancelled run can therefore produce `COMPLETED_RECEIPTS_RECOMPUTED`. `full_gate_accepted` is reported separately, but it means **at least one** accepted source/proof pair exists in that Rust-SHA group; it does not mean every proof variant in the group passed. The exact accepted pairs are retained in `verified_pairs`, so the Boolean should not be read alone.
+
+2. The batch builder selects anchors by candidate-name prefix: `r11-fast-*` uses #453/fast3; every other candidate uses #361, while the comparison baseline is fast3 or the R10 pipeline ([make-round11-batch.py:40–47](../../scripts/make-round11-batch.py)). The analyzer keeps those fields separate ([analyze-round11.py:74–85](../../scripts/analyze-round11.py)), but calls every resulting projection `same_family`. That is justified only when the candidate mechanism actually belongs to the declared family. For a new hybrid or compression-side route, #361 may be a screening anchor rather than a family anchor; record an explicit `anchor_scope`/rationale or label the output as a declared-anchor projection.
+
+For confirmation, `independent_runs` counts distinct CI run IDs. The current duplicate-ID check prevents counting the same ID twice, but a copied/replayed artifact under a new run ID can still receive another equal weight. A final independent-confirmation claim should also distinguish screen from gate and avoid counting identical measurement artifacts as a new runner observation.
+
+Gate binding is otherwise tied to the candidate entry: the accepted state gate must equal its gate JSON and the `input-<name>` parse/proof files must match the frozen hashes ([analyze-round11.py:86–90](../../scripts/analyze-round11.py)). The final limits correctly keep private-corpus, admission, and reward outcomes unknown. Parent-requested input-SHA, `(name, block)`, run-ID, and environment checks are present in the current analyzer and are not repeated here.

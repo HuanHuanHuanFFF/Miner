@@ -30,3 +30,27 @@
 **已准备、尚未执行的 runner 判别。** `scripts/research-round11-fast.py` 由 `spec.fast_diagnostics=true` 或候选名列表启用，未请求则早退。冻结与计数插桩版本各跑 28 公共和 416 固定合成输入，逐项验证 tokens 相同及 decode；pendingfold 另要求对 fast3 token 相同；continuation 允许变化并保存文件清单。计数包括 pending 被吞掉字节、continuation 满长边界、原 head 失效、备用 key 检查与实际替换次数。来源 SHA、公共输入 SHA、harness SHA、run_id/git_sha/batch、逐例数据和失败日志存入 `RUNNER_TEMP/round4-receipts/fast-diagnostics`。编译 180 秒、运行 240 秒 timeout；不采微函数时间，不把 relaxed atomic 调用计数作硬件读写计数或计时占比。
 
 本地仅执行生成、反转审计、30,000 模型和诊断注入 self-check；没有编译 Rust、执行 Lean 或新增大型依赖。实际原生等价、官方提取、配对两轴和完整 gate 均等待主线程临时 Linux runner。
+
+## 首批已派发与证明连接预审
+
+主线程于 11:27:13 派发 probe-a / run `37722786008`，冻结提交 `02e8095`。此处只记录已启动，不预填运行结果。主线程给出的官方快照 28214 的速度端门槛：固定 #453 大小时需时间严格低于约 0.4342678（相对 #453 再快约 0.82345%）；固定 #453 时间时需大小低于约 36.6646026%（减少约 0.335126 pp）。旧同 hotkey 前沿为空。门槛和新候选公共到正式迁移仍需分开：它们不使任何当前候选自动通过私有准入。
+
+等待真实提取期间，已按父 Lean 实际源码预审 continuation 的最小连接；**尚未写入新 Lean 定理，也没有假造提取签名**：
+
+- `Parse.lean:3586` 的 `MainInv1` 只要求 `ps < N`、`pc <= p`、`pw = word8 input pc`，不要求缓存候选仍等于 head 的当前单元。
+- 新 helper 的目标规格可以只声明返回 slot 等于输入 `a`、候选位置不超过 `p`、缓存字等于该位置的 `word8`。前提为 `lim+8=input.length`、旧候选 `c<=p` 和旧缓存字正确；slot 界由原值恒等传回。`span`、`d`、`km` 无需额外全局不变量，因为新分支自行检查。
+- `p<lim` 与上述 `hlim` 足以证明第一次读取 `p+8<=input.length`；`d<=p` 再给 `p-d+8<=input.length`。两次都复用 `be8_spec`（父 Lean 第 1334 行）。不必证明前缀筛选最优性、哈希位置归属或旧距离检测的性能含义。
+- `ahead_fix_m_spec`（第 3201 行）已经提供旧缓存的三个事实；新规格可注册为 `@[local step]`，放在该规则之后。`probe_m_spec`（第 3218 行）及 `FoundAt.real` 继续证明真正的匹配；因此没有新的 MatchAt 推导、循环或主循环状态。旧 `main1_loop_spec` 的 `step*` 可能直接消费新规则，仍须真实 Funs 的返回 tuple、分支和调用顺序核验。
+- 预计最低证明改动为一个无循环 helper 定理，最多修补主循环自动化收尾；任何估计均非 Lean 验收结果。若收益成立，另建 `r11-fast-continuation-proof`，保留首批字节。
+
+pendingfold 的额外成本也已定位：`MatchAt.back_lit`（第 2228 行）可直接用于未写出字面量的向左延伸；但必须新建维护 `ls<=p`、原 `Dec nt ls`、`MatchAt p l d`、`p+l=E` 和预算／终止量的循环不变量，再调用 `flush4_spec`。跨入旧 tokens 后可用 `fold_bt_spec`，其两条定理目前在第 3768／3798 行、位于 main1 之后，需要不破坏依赖地前移。不能直接套 `BackInv.lit`，因为其 Dec 指向的是已写出 token 的末端；本项保持只估计，不与 continuation 同时展开适配。
+
+## 真实提取与第一份 continuation 证明候选
+
+11:41 已读取 probe-a 的 `extraction/research.json` 和实际 Funs，两个冻结 Rust 均获官方 extraction accepted，proof 均为 NOT_RUN。continuation 实际 Funs SHA 为 `1e4de3ba6d82b1123ebac92c68dc4f9f85f7f662600174021e0615000febb820`；新 helper 的实参顺序为 `s p lim span d a c cw km`，主循环在 `ahead_fix_m` 之后调用，主循环返回状态仍是原十元组。其 fallback 代码在提取中出现两个分支副本，但没有新增循环或状态。
+
+已新增独立 `candidates/r11-fast-continuation-proof`：Rust 保持 `72129aa1e666d7d0faf51731b7ba6fd99922dc6b9149b5b1c6cf2067c7ee3c7a`；Lean 为 `57df49048ddf50bb8219fd88779dde2e1381f756299ad3db4abe3086e12f1cfa`。与父 Lean 的唯一差异是 `r11_continuation_spec`，置于 ahead-fix 与 probe-m 两条规则之间，声明原 slot、候选界和缓存字事实。无新增 axiom、sorry 或义务替换，所有原定理原文保留。生成器 `scripts/build-round11-fast-proof.py --check` 和反转／实物 SHA／参数顺序审计已通过；`proof-audit.json` 列出实际接口及剩余检查。
+
+状态仍为 **ADAPTED_TO_REAL_EXTRACTION_UNCOMPILED**：本地未运行 Lean；`step*` 对新 helper 两条分支的收尾和旧 main1 自动消费新规格仍需真实 gate。主线程根据性能决定是否投入。
+
+已直接读取并重加 `diagnostics/fast-diagnostics/fast.json` 的逐例计数：两份各 444 例均 decode，冻结／插桩 token 相同。pendingfold 对 fast3 全等；公共 helper 调用 1,274,968 次，其中 407,829 次有 pending，吞掉 44,991 个尚未写出的 literal。continuation 公共满长边界 2,063 次、原候选失效 248 次、实际替换 237 次；12 个公共文件 token 改变，全部 444 例中 32 例改变。此时公共压缩大小和配对总时间仍未收到，不据次数宣布收益。
