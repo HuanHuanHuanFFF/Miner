@@ -46,7 +46,7 @@ def main():
                  '--json', 'databaseId,headSha,status,createdAt,url']
     existing = {r['databaseId'] for r in json.loads(helper.run(list_args, env))}
     helper.run(['workflow', 'run', 'deflate-round9.yml', '--repo', REPO, '--ref', args.ref,
-                '-f', 'experiment_round=11', '-f', 'specification=' + args.batch,
+                '-f', 'experiment_round=12', '-f', 'specification=' + args.batch,
                 '-f', 'allow_private=' + str(allow_private).lower(), '-f', 'job_minutes=' + str(job_minutes)], env)
     for _ in range(10):
         runs = json.loads(helper.run(list_args, env))

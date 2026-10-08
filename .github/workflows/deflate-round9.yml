@@ -89,7 +89,7 @@ jobs:
           compression-level: 9
           if-no-files-found: ignore
       - name: Count Round 12 structural opportunities without timing observers
-        if: inputs.experiment_round == '12' && inputs.specification == 'probe-a'
+        if: inputs.experiment_round == '12' && (inputs.specification == 'probe-a' || inputs.specification == 'probe-b')
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round12-counts.py

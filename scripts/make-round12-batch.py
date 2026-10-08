@@ -18,11 +18,19 @@ def main():
     parent = json.loads((ROOT/'evidence/round11/fast-l.json').read_bytes())
     entries = [e.copy() for e in parent['entries'] if e['name'] in ('probe3','r3-432-fast3','public432','fast-shadow')]
     assert len(entries) == 4
+    manifests = {name: json.loads((ROOT/'candidates'/name/'manifest.json').read_bytes()) for name in args.candidates}
+    if any(m.get('formal_anchor_id')=='507' for m in manifests.values()):
+        ref = ROOT/'references/round12-public-507'
+        entries.append({'name':'public507','path':ref.relative_to(ROOT).as_posix(),'control':True,
+            'anchor':'public507','formal_id':'507','hashes':{f:hashlib.sha256((ref/f).read_bytes()).hexdigest()for f in ('parse.rs','Parse.lean')}})
+        shadow = entries[-1].copy();shadow.update(name='pc507-shadow');shadow.pop('formal_id')
+        entries.append(shadow)
     for name in args.candidates:
         path = ROOT/'candidates'/name
+        anchor = 'public507' if manifests[name].get('formal_anchor_id')=='507' else 'r3-432-fast3'
         entries.append({'name': name, 'path': path.relative_to(ROOT).as_posix(), 'control': False,
-            'anchor': 'r3-432-fast3', 'anchor_scope': 'fast3 structural derivative; transfer hypothesis only',
-            'comparison_baseline': 'r3-432-fast3', 'expected_equivalent_to': 'r3-432-fast3',
+            'anchor': anchor, 'anchor_scope': 'Declared parent structural derivative; transfer hypothesis only',
+            'comparison_baseline': anchor, 'expected_equivalent_to': anchor,
             'hashes': {f: hashlib.sha256((path/f).read_bytes()).hexdigest() for f in ('parse.rs','Parse.lean')}})
     spec = {'entries': entries, 'snapshot_pages': 'evidence/round12/official-start-2/pareto-pages.json',
         'screen_blocks': args.blocks, 'refine_blocks': 0, 'shortlist': len(args.candidates),

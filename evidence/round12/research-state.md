@@ -9,3 +9,6 @@
 与旧R4 lazy-second-load/slotonly及R11 skipahead不同：wordhead改变循环间共享的数据，strideword改变stride路径的延伸单位。精确来源归属和source-reversal在候选manifest；源码/证明冻结在batch JSON。首批job35分钟上限，排队另外计入墙钟。
 
 用户在本聊天明确回复“允许推送到云端验证；当前已改为公开仓库”。允许本轮实验分支推送及最多4次、每次35分钟手动runner验证；仓库visibility在每次dispatch前读取GitHub元数据，公开仓库保持allow_private=false。之前自动审批拒绝外发的尝试未执行，不通过其他路径绕过。
+
+首个dispatch37775674308的CLI输入仍为experiment_round=11：复制脚本漏改无round前缀的数字常量。实际作业回放旧R11 probe-a而非新候选，已有r11 artifact确认；不取消，按既定35分钟自然结束。该作业消耗本轮授权4次中的1次，单独记录，不计作新Rust实测。本轮新probe-b合并wordhead、strideword与刚公开#507的PC浅链delta16重访，余3次用于筛选、冻结确认及完整gate。
+#507公开提供新起点：旧R10 delta16在D深搜索两张表未获益；本次为PC浅链depth1/2、每输入一张表，固定链存储由128KiB减到64KiB。不是新机制发明，而是明确改变计算条件的重访。其原路由包含精确长度，保持原版且未增加任何长度；公开到私有迁移仍UNKNOWN。
