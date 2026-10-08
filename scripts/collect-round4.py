@@ -92,7 +92,7 @@ def main():
     ap.add_argument('run_id')
     ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate', 'extraction', 'diagnostics'], default='screen')
     ap.add_argument('--snapshot')
-    ap.add_argument('--round', choices=['4', '5', '6', '7', '8', '9', '10', '11'], default='4', help='Receipt namespace; original round4 remains the default')
+    ap.add_argument('--round', choices=['4', '5', '6', '7', '8', '9', '10', '11', '12'], default='4', help='Receipt namespace; original round4 remains the default')
     ap.add_argument('--batch', help='Matrix batch label; omit for legacy single-job artifacts')
     args = ap.parse_args()
     assert args.batch is None or re.fullmatch(r'[a-z0-9-]{1,48}', args.batch)
