@@ -105,6 +105,18 @@ slot511不是可自认证的metadata：若单独向新fast helper传任意lc与l
 
 官方提取已成功，Funs SHA256 `d00bd9e6bec3571e140db0484d71eaf02625d4a72eddf1d278cc2d249c954c45`。接口事实已保存 `r11-gap-groups-proof/interface-audit.json`：fill四state `(ring,out,ri,p)` 返回两数组；word inner `(l,flat)` 返回Bool，outer `(mask,g)` 返回U32；groups gap四state与mut-back闭包保持，word/max为稳定参数；变量移位rhs实际为Usize，由g<20和%32界处理。因fixture重发压缩剩余时间，遵根指令只留接口与依赖，尚未生成新groups Lean，不宣称可在预算内通过完整gate+独立确认。
 
+## groups-e最终状态与release机器码审计（13:07）
+
+修正fixture后的同Rust重跑groups-e `37729066378`、commit `647a9ad99b81706b04d4b963b960ebd5c906bffb` 完成success；v2专项compile/runtime均0，14loader/2156DP、slot510/wrap/伪metadata预期反例通过，根另增cross-ring检查也通过。原native444、公共token/output同父。根最终汇总总时间相对pipeline **约−1.1922258%**，大小同33.934365747942536%，仍无当前预测前沿。原始回执在 `evidence/round11/37729066378/groups-e/gate`，最终摘要 `evidence/round11/three-loop-summary.json`；逐文件/路由性能由其他审计负责，本任务没有重复复算。目录名gate是回执阶段名，**没有为groups运行完整原始Lean gate，也没有新groups Parse.lean或独立最终性能确认**。最新完整证明接受的起点仍为R10 pipeline。
+
+**VERIFIED静态向量化：** `gate/cpu/r11-gap-groups-metadata.json` 绑定Rust6ef...与实际bench release库SHA256 `a8cc20e457e465401ed4173e9a324fd30f99579648720ad216ad4f56f68d0d27`。其screen/gate两份metadata指向同库SHA。nm/size完整；objdump全量5,540,788字符被截至2M。不过所审计 `candidate::parse::d_plan` 完整位于0x20530..0x24fe8，后继 `s_plan` 的0x24ff0头也在保存文件中：`r11-gap-groups-assembly.txt` 15681..20369行，目标两段均在截断之前。
+
+scalar seed及rem11..257/cost守卫在0x23c10..0x23ca3；group decode/count和ring物理分段在随后的0x23caf..0x23e36。第一fill的向量循环0x23ee0..0x23f24，第二fill为0x24000..0x2404b：`psubq`形成四个位置的choice，`por`合并广播的高cost，两次16-byte `movdqu`写四个u64 ring cell，再一次16-byte `movdqu`写四个u32 out choice。第一循环byte offset每轮+0x10，第二cell index每轮+4；它们是实际批填路径，而非table初始化或其他原有SIMD。长度不足四位置或尾部走0x23f50/0x24070等标量循环，不能说所有批量段都向量化。
+
+对照库pipeline SHA256 `942ebdee5f125b0eca944868b8c1fa913fcfd3d8bbc824700d8e258fbaac9bdc`，完整d_plan0x20140..0x244a8也在保存文件中，其已有其他SIMD，但该完整函数内没有上述`psubq`批填循环。d_plan体积从0x4368（17,256）增至0x4ab8（19,128），+1,872字节；整体text从381,557至384,437，+2,880。库SHA、地址或寄存器差异本身不作机制证据；这里的结论来自group分段之后的连续数据流和4cell store循环。
+
+**UNKNOWN动态解释：** perf因paranoid=4被拒绝（根核验），无硬件采样、路径计数或实际向量iteration占比；不能由static SSE2循环推出动态覆盖，也不能把约−1.1922%归因已确认给向量化。实测边界是一次同机两块、输出一致、均值改善但两块变号（**+0.33337% / −2.71782%**），没有未参与选择的独立确认或私有集保证。未生新Lean/候选、未发CI/提交/资金动作；本任务到此收束，保留groups的精确源码、接口事实和负/正读数。
+
 ## 预先停止条件
 
 观察副本token/decode不同或守卫内v!=vc先停止并保留失败；不解释为收益。每表保守覆盖为空或只有seed、仅逐字节oracle有长覆盖且没有便宜来源不变量、物理/平台/block截断加setup后同类新增工作抵消可省工作，均停止当前方案。若机会集中于单个文件，保留逐文件等权轴贡献及外推缺口，不用总字节覆盖代替性能。计数支持时也只授权一份候选的真实配对判断，不承诺速度或前沿收益。
