@@ -20,6 +20,7 @@ def main():
     ap.add_argument('--gap-diagnostics', action='store_true')
     ap.add_argument('--gap-candidate-checks', action='store_true')
     ap.add_argument('--gap-groups-checks', action='store_true')
+    ap.add_argument('--gap-groups-check-v2', action='store_true')
     ap.add_argument('--cpu-candidates', nargs='*', default=[])
     ap.add_argument('--fast-diagnostics', action='store_true')
     ap.add_argument('--blocks', type=int, choices=[1,2,3,4], default=2)
@@ -64,6 +65,7 @@ def main():
         'research_synthetic_candidates':args.synthetic,
         'gap_diagnostics':args.gap_diagnostics,'gap_candidate_checks':args.gap_candidate_checks,
         'gap_groups_checks':args.gap_groups_checks,
+        'gap_groups_check_v2':args.gap_groups_check_v2,
         'cpu_diagnostics':bool(args.cpu_candidates),'cpu_diagnostic_candidates':args.cpu_candidates,
         'fast_diagnostics':args.fast_diagnostics,
         'description':'R11 two-hour frontier research; all source/proof bytes frozen before dispatch.',

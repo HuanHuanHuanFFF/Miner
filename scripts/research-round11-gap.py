@@ -280,13 +280,16 @@ def run_candidate_checks(spec):
     name = "r11-gap-groups" if groups else "r11-gap-meta"
     rust_pin = "6ef07be874052d23fbe3cdca8de7e311e82a306338a93f70389fe35006e99992" if groups else "25bd4ee52560288f36c73f813a769345044cab2c4924705e6c4c92a64c017de6"
     harness_pin = "fc7c3e0faaaf88e0cd4345eb7e47a87127e1186db854d44494e2118827f5d880" if groups else "24b6fb47cb660bcb3c57554c01f9a16178d054a472b2efa5baab4928f200aeca"
+    corrected = groups and spec.get("gap_groups_check_v2", False)
+    if corrected:
+        harness_pin = "5e791ea2a9176cfcfd951ccf9bb5a15857276292bd72de2abc37b347579a9959"
     marker = "R11_GAP_GROUPS_BOUNDARY " if groups else "R11_GAP_BOUNDARY "
     prefix = "groups-checks" if groups else "candidate-checks"
     base = next(e for e in spec["entries"] if e["name"] == "r10-finder-pipeline-proof")
     entry = next(e for e in spec["entries"] if e["name"] == name)
     frozen = (ROOT / base["path"] / "parse.rs").read_bytes()
     candidate = (ROOT / entry["path"] / "parse.rs").read_bytes()
-    harness = (ROOT / entry["path"] / "native-helper-check.rs").read_bytes()
+    harness = (ROOT / entry["path"] / ("native-helper-check-v2.rs" if corrected else "native-helper-check.rs")).read_bytes()
     assert hashlib.sha256(frozen).hexdigest() == base["hashes"]["parse.rs"] == BASE_SHA
     assert hashlib.sha256(candidate).hexdigest() == entry["hashes"]["parse.rs"] == rust_pin
     assert hashlib.sha256(harness).hexdigest() == harness_pin
@@ -311,6 +314,19 @@ def run_candidate_checks(spec):
         proc = run_logged([str(binary)], output / (prefix + "-runtime.log"), 120)
         report["runtime_exit"] = proc.returncode
         if proc.returncode: raise RuntimeError("Gap candidate helper check failed; retained log")
+        if corrected:
+            extra = (ROOT / entry["path"] / "native-cross-ring-check.rs").read_bytes()
+            assert hashlib.sha256(extra).hexdigest() == "5e4bf1f8dda7e27bd439787360c106b6a3fe6a7e227bbb2168b5e57dfab21aa0"
+            extra_path = build / "cross.rs"; extra_path.write_bytes(extra)
+            extra_binary = build / "gap-cross-checks"
+            cp = run_logged(["rustc", "+nightly-2026-08-18", "--edition=2021", "-O", "-C", "overflow-checks=yes",
+                             str(extra_path), "-o", str(extra_binary)], output / "cross-build.log", 180)
+            assert cp.returncode == 0
+            cp = run_logged([str(extra_binary)], output / "cross-runtime.log", 120)
+            assert cp.returncode == 0
+            report["additional_cross_ring_checks"] = {"harness_sha256": hashlib.sha256(extra).hexdigest(),
+                                                      "compile_exit": 0, "runtime_exit": 0,
+                                                      "stdout": cp.stdout}
         rows = [json.loads(s.removeprefix(marker)) for s in proc.stdout.splitlines() if s.startswith(marker)]
         assert len(rows) == 1 and rows[0]["loader_cases"] == (14 if groups else 10) and rows[0]["dp_cases"] == (2156 if groups else 1540)
         assert all(rows[0][key] for key in ("slot510_witness", "honest_wrap_fallback", "false_metadata_counterexample_expected"))

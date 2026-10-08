@@ -145,7 +145,20 @@ def generate():
 
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--check',action='store_true');args=ap.parse_args(); files=generate();dest=ROOT/'candidates'/NAME;dest.mkdir(parents=True,exist_ok=True)
+    ap=argparse.ArgumentParser();ap.add_argument('--check',action='store_true');ap.add_argument('--harness-v2',action='store_true');args=ap.parse_args(); files=generate();dest=ROOT/'candidates'/NAME;dest.mkdir(parents=True,exist_ok=True)
+    if args.harness_v2:
+        # Keep the failed v1 receipt/bytes. The broad mode-range substitution
+        # also changed the substring in520..552 to520..752; fix only this fixture.
+        old=b'for i in 520..752 { tabs[i] = 17; }'
+        new=b'for i in 520..552 { tabs[i] = 17; }'
+        raw=files['native-helper-check.rs'];assert raw.count(old)==1
+        raw=raw.replace(old,new,1)
+        p=dest/'native-helper-check-v2.rs'
+        if args.check:assert p.read_bytes()==raw
+        elif p.exists():assert p.read_bytes()==raw, 'Refusing frozen v2 mutation'
+        else:p.write_bytes(raw)
+        print(json.dumps({'candidate':NAME,'status':'FIXTURE_V2_NATIVE_UNCOMPILED','rust_sha256':sha(files['parse.rs']),'original_harness_sha256':sha(files['native-helper-check.rs']),'v2_harness_sha256':sha(raw),'builder_sha256':sha(Path(__file__).read_bytes())}))
+        return
     for f,data in files.items():
         p=dest/f
         if args.check: assert p.read_bytes()==data
