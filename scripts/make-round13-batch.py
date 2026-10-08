@@ -9,14 +9,19 @@ def main():
     assert re.fullmatch(r'[a-z0-9-]{1,48}',args.batch)and len(set(args.candidates))==len(args.candidates)<=3
     manifests={n:json.loads((ROOT/'candidates'/n/'manifest.json').read_bytes())for n in args.candidates}
     old=json.loads((ROOT/'evidence/round12/probe-c.json').read_bytes())
-    entries=[e.copy()for e in old['entries']if e['control']]
+    anchors={m.get('formal_anchor_id','453')for m in manifests.values()}
+    entries=[e.copy()for e in old['entries']if e['control']and(e['name']not in('public507','pc507-shadow')or'507'in anchors)]
     by={e['name']:e for e in entries}
+    for aid in anchors-{'453','507'}:
+        ref=ROOT/f'references/round13-public-{aid}';name='public'+aid
+        e={'name':name,'path':ref.relative_to(ROOT).as_posix(),'control':True,'anchor':name,'formal_id':aid,'hashes':{f:hashlib.sha256((ref/f).read_bytes()).hexdigest()for f in('parse.rs','Parse.lean')}}
+        entries.append(e);by[name]=e;shadow={**e,'name':name+'-shadow'};shadow.pop('formal_id');entries.append(shadow);by[shadow['name']]=shadow
     for n,m in manifests.items():
         baseline=m.get('comparison_baseline','r3-432-fast3')
-        if baseline not in by:
+        if baseline not in by and baseline not in args.candidates:
             p=ROOT/'candidates'/baseline
-            e={'name':baseline,'path':p.relative_to(ROOT).as_posix(),'control':True,'anchor':'public507'if m.get('formal_anchor_id')=='507'else'r3-432-fast3','hashes':{f:hashlib.sha256((p/f).read_bytes()).hexdigest()for f in('parse.rs','Parse.lean')}};entries.append(e);by[baseline]=e
-        anchor='public507'if m.get('formal_anchor_id')=='507'else'r3-432-fast3'
+            e={'name':baseline,'path':p.relative_to(ROOT).as_posix(),'control':True,'anchor':('public'+m['formal_anchor_id'])if m.get('formal_anchor_id')not in(None,'453')else'r3-432-fast3','hashes':{f:hashlib.sha256((p/f).read_bytes()).hexdigest()for f in('parse.rs','Parse.lean')}};entries.append(e);by[baseline]=e
+        anchor=('public'+m['formal_anchor_id'])if m.get('formal_anchor_id')not in(None,'453')else'r3-432-fast3'
         p=ROOT/'candidates'/n;e={'name':n,'path':p.relative_to(ROOT).as_posix(),'control':False,'anchor':anchor,'comparison_baseline':baseline,'anchor_scope':'Declared parent family; public-to-formal transfer is a hypothesis','hashes':{f:hashlib.sha256((p/f).read_bytes()).hexdigest()for f in('parse.rs','Parse.lean')}}
         if m.get('native_relation')=='decode_only':e['native_decode_reference']=baseline
         else:e['expected_equivalent_to']=baseline
