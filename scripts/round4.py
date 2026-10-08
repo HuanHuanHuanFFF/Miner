@@ -361,7 +361,9 @@ def main():
             assert set(research_inputs) <= set(entries) and 'r3-432-fast3' not in research_inputs
             from round3_synthetic import run_validation
             synthetic_names = list(dict.fromkeys(['r3-432-fast3'] + spec.get('synthetic_reference_candidates', []) + research_inputs))
-            state['research_synthetic_validation'] = run_validation(config, paths, synthetic_names, output)
+            research_reports = output / 'research-synthetic'
+            research_reports.mkdir(exist_ok=True)
+            state['research_synthetic_validation'] = run_validation(config, paths, synthetic_names, research_reports)
             state['research_synthetic_validation']['proof_status'] = 'NO_FULL_GATE_IMPLIED; finite data checks only'
         finish()
         if any(not v.get('accepted') for v in state['gates'].values()):

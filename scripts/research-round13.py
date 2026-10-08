@@ -1,4 +1,4 @@
-"""Runner-only R13 native decode and imported Chat source/fixture checks."""
+"""Runner-only R13 native decode of actual candidate Rust."""
 from pathlib import Path
 import importlib.util,json,os,subprocess,sys
 from round4 import ROOT,validate
@@ -20,6 +20,7 @@ def main():
         module.harness=expanded
         # The added six lengths × eight modes × two seeds produce96 cases.
         source=path.read_text().replace("int(count)==444", "int(count)==540")
+        source=source.replace('444 finite reference/candidate', '540 finite reference/candidate')
         namespace=dict(module.__dict__);namespace['harness']=expanded;namespace['__name__']='r13_extended_decode'
         # Define main against the copied repository logic while preserving the
         # expanded harness binding; no uploaded package code is executed remotely.
