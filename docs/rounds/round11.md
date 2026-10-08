@@ -2,9 +2,13 @@
 
 执行规则见 [AGENTS.md](../../AGENTS.md)。北京时间2026-10-08 **11:14:07** 开始，首个两小时截止 **13:14:07**；用户随后明确追加两小时、先独立复测，当前截止延至 **15:14:07**。本轮目标覆盖任意 Pareto 区间。分支 `codex/round11-frontier` 从第十轮 `196513f` 起步。时间、选择与原始证据入口见 [budget](../../evidence/round11/budget.json)、[research-state](../../evidence/round11/research-state.md)。
 
-## 追加窗口：独立复测进行中
+## 追加窗口：独立复测否定原信号，继续速度端结构研究
 
-同一groups Rust／Lean对保持冻结，在两个新runner各做2块公共配对计时，增加pipeline同源码对照，避免只用fast-shadow解释D路由波动。`confirm-h` **37732081737**、`confirm-i` **37732089677**均于13:22派发，每job上限35分钟。上个groups-e只作筛选证据，不计入这两次独立确认。确认结果决定证明投入或换路；原始窗口结果保留如下。
+同一groups Rust／Lean对保持冻结，在两个新runner各做2块公共配对计时，增加pipeline同源码对照。`confirm-h` **37732081737**、`confirm-i` **37732089677**均成功完成，共32个公共配对进程。候选分别比pipeline慢**0.381761%／0.397257%**，独立两run等权均值慢**0.389509%**；相对pipeline-shadow也慢**0.207429%**。公共输出完全相同，444有限检查通过，但没有稳定增益，停止这版的证明投入。见[独立确认](../../evidence/round11/independent-confirmation.json)。旧groups-e仍是筛选证据，不混入独立确认。
+
+新只读诊断 **37733279121** 在28个SHA固定公共输入上比较了130个实际D成本块、260张Huffman表：原模型与官方package-merge的活跃符号码长、unseen价格全部相同，没有触发15位限长修补。观察副本token／decode保持一致，因此不生成PM候选。见[原始诊断](../../evidence/round11/37733279121/huffman-1/diagnostics/huffman.json)。这个结论限于实际公共表，不宣称两算法普遍等价。
+
+剩余预算转向两个分开的fast3结构候选：skip miss时避免读取随后不用的p+1缓存；分类采样的计数改为按特征累计，保留采样、阈值和路由。目前尚未获得新测量，不能预填收益。
 
 前两次复测配置f/g（37731607283／37731630390）在有限等价入口自然失败，没有计时或artifact：同源码shadow共用文件路径，而原检查器拒绝同路径配对。h/i仅移除这项冗余finite请求，仍核对公共shadow输出且保留候选444项检查；预检现在提前拒绝该错误。失败CLI原始字节与精确提交保留在各run的`no-artifact-failure/`，不计作有效性能运行。
 
