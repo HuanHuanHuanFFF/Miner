@@ -1,0 +1,39 @@
+{
+  "status": "FIRST_SCREEN_DECISION",
+  "run_id": "37776887371",
+  "results": [
+    {
+      "candidate": "r12-fast-wordhead",
+      "screen_time_pct_vs_parent": 1.7803853453955742,
+      "decision": "CLOSE_THIS_VERSION_NO_FULL_GATE",
+      "rust_sha256": "5254d20cda7eea89c9cb99bc4b2d27f2a867ec0642f4d5bbc1c64e524912002f",
+      "public_equal_to_parent": true,
+      "exact_gate_status": "NOT_RUN"
+    },
+    {
+      "candidate": "r12-fast-strideword",
+      "screen_time_pct_vs_parent": 0.22224559028929392,
+      "decision": "CLOSE_THIS_VERSION_NO_FULL_GATE",
+      "rust_sha256": "bcbdc69254ece1bbc2a0a25dcc6ff66165595ce09bb754f37e221558711ffcd5",
+      "public_equal_to_parent": true,
+      "exact_gate_status": "NOT_RUN"
+    },
+    {
+      "candidate": "r12-fast-pc507-prev16",
+      "screen_time_pct_vs_parent": 0.9941488686469269,
+      "decision": "CLOSE_THIS_VERSION_NO_FULL_GATE",
+      "rust_sha256": "5c33209f11c1c09328877d10d0b04a5634999fd38bebb4765975a4df94bd7507",
+      "public_equal_to_parent": true,
+      "exact_gate_status": "NOT_RUN"
+    }
+  ],
+  "mechanism_findings": {
+    "stride_extension_bytes": 442,
+    "stride_prefix_passes": 92349,
+    "stride_length_ge11": 0,
+    "stride_conclusion": "This frozen parent has no actual public eight-byte extension chunk after its three-byte seed. Do not equate stride searches with wide-comparison opportunity.",
+    "wordhead_conclusion": "Both paired blocks regress1.312..2.248%; many changed text inputs also show raw-total regressions. Additional live word and scheduling costs remain an explanation, not a measured hardware cause.",
+    "prev16_conclusion": "Both paired blocks regress0.893..1.095%; storage reduction alone did not improve total compression. Revisit moves encode work off every store, with explicit token-changing search hints."
+  },
+  "next_action": "Two frozen modular position versions, third authorized job. If no worthwhile frontier signal, no complete gate for those versions. A useful version needs independent frozen confirmation and exact gate in the final job."
+}

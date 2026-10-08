@@ -78,6 +78,45 @@ def grouped_gates(state):
     return names, decisions
 
 
+def confirmation_gates(state, names):
+    """Opt-in R12 allocation: use only this fresh frozen confirmation's feedback.
+
+    This screen controls proof spending. It does not certify bootstrap admission,
+    private transfer or reward, even when it permits an exact public gate.
+    """
+    policy = state['spec'].get('confirmation_gate_policy')
+    if not policy:
+        return names, []
+    entries = {e['name']: e for e in state['spec']['entries']}
+    parent, shadow = policy['parent'], policy['shadow']
+    assert entries[parent]['hashes'] == entries[shadow]['hashes']
+    assert entries[parent]['control'] and entries[shadow]['control']
+    blocks = list(range(1, state['spec']['screen_blocks'] + 1))
+    assert len(blocks) == 4 and policy['min_improved_blocks'] == 3
+    by = {(m['candidate'], m['round']): m for m in state['metrics']}
+    summaries = {r['candidate']: r for r in state['summary']}
+    selected, decisions = [], []
+    for name in names:
+        assert entries[name]['anchor'] == parent and not entries[name]['control']
+        assert summaries[name]['control'] is False
+        rel_parent = [by[name,b]['time']/by[parent,b]['time'] for b in blocks]
+        rel_shadow = [by[name,b]['time']/by[shadow,b]['time'] for b in blocks]
+        frontier = bool(summaries[name]['own_anchor']['on_frontier'])
+        checks = {'fresh_mean_improves_parent': statistics.mean(rel_parent) < 1,
+                  'fresh_mean_improves_shadow': statistics.mean(rel_shadow) < 1,
+                  'at_least_three_blocks_improve_parent': sum(v < 1 for v in rel_parent) >= 3,
+                  'at_least_three_blocks_improve_shadow': sum(v < 1 for v in rel_shadow) >= 3,
+                  'current_declared_family_projection_on_frontier': frontier}
+        permit = all(checks.values())
+        if permit:
+            selected.append(name)
+        decisions.append({'candidate': name, 'run_id': state['run_id'], 'checks': checks,
+                          'relative_to_parent': rel_parent, 'relative_to_shadow': rel_shadow,
+                          'full_gate_allocated': permit,
+                          'scope': 'Fresh four-block confirmation only. Discovery timings are excluded. Family projection is conditional; no private/admission/payment guarantee.'})
+    return selected, decisions
+
+
 def summarize(state, pages, scorer):
     from collections import defaultdict
     rows = [r for p in pages for r in p['items']]
@@ -257,6 +296,11 @@ def main():
             print('GATE_SELECTION ' + json.dumps(state['gate_selection']), flush=True)
         if names is None:
             names = [r['candidate'] for r in state['summary'] if not r['control'] and r['candidate'] in state.get('selected', [])][:spec['gate_limit']]
+        names, decisions = confirmation_gates(state, names)
+        if decisions:
+            state['gate_confirmation_decisions'] = decisions
+            save(state_path, state)
+            print('GATE_CONFIRMATION ' + json.dumps(decisions), flush=True)
         for name in names:
             folder = output / ('input-' + name)
             folder.mkdir(exist_ok=True)
