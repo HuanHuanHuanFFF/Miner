@@ -1,0 +1,17 @@
+{
+  "status": "ACTUAL_EXTRACTION_INTERFACE_ONLY__NO_NEW_LEAN",
+  "run_id": "37727588709",
+  "rust_sha256": "6ef07be874052d23fbe3cdca8de7e311e82a306338a93f70389fe35006e99992",
+  "funs_sha256": "d00bd9e6bec3571e140db0484d71eaf02625d4a72eddf1d278cc2d249c954c45",
+  "types_sha256": "276d4089d337e0d7da19d73f67b92ed57aa61ce5b0b548420962498a78bf5966",
+  "constants_sha256": "4a083c4264c013f437fcb492c86cec195ab7ff1b1c5cd74fd0afda2ded2e5773",
+  "interfaces": {
+    "d_gap_group_fill_loop": {"state": ["ring", "out", "ri", "p"], "return": ["ring", "out"], "measure": "hi-p", "explicit_guards": ["p<hi", "p<out.length", "ri<D_RING", "endpoint>=p"]},
+    "d_gap_word_loop0_loop0": {"state": ["l", "flat"], "return": "flat Bool", "measure": "512-l", "guards": ["l<group_end", "l<512"]},
+    "d_gap_word_loop0": {"state": ["mask", "g"], "return": "mask U32", "measure": "20-g", "variable_shift": "1#u32 <<< g, g<20"},
+    "d_gap_groups_loop0_loop1": {"state": ["ring", "out", "q", "nxt"], "return": ["ring", "out", "q", "nxt"]},
+    "d_gap_groups_loop2": {"state": ["ring", "out", "q", "nxt"], "return": ["nxt", "ring", "out"], "stable_parameters": ["word U32", "maximum U64", "kc U64"], "borrow": "scalar seed uses Array/Slice index_mut back closures", "query_shift": "word >>> i20, i20 from%32", "q_decrease": "scalar q1=q-1; bulk guarded count>0,count<=q1, lower=q1-count"}
+  },
+  "required_postconditions": {"fill": "out.length preserved", "group_price_loops": "forall totality, post True", "groups_gap": "out.length preserved, no metadata-origin premise", "original_obligation": "unchanged"},
+  "limits": ["No new Lean or full gate run", "Initial native helper failed in fixture distance table range520..752, not a candidate mismatch", "Corrected v2 must run before finite boundary checks can be reported passed", "Fake metadata semantic counterexample remains intentional; generic original helpers retained"]
+}

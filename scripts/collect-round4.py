@@ -119,7 +119,8 @@ def main():
         print('Requested phase receipt is not available yet.'); return
     target.parent.mkdir(parents=True, exist_ok=True)
     marker = 'raw-artifact-files.json' if args.phase == 'diagnostics' else ('research.json' if args.phase == 'extraction' else 'state.json')
-    if not (target / marker).exists():
+    failed_before_screen = target / 'collection-status.json'
+    if not (target / marker).exists() and not failed_before_screen.exists():
         # Download into a new folder: an interrupted transfer must not masquerade
         # as a complete receipt merely because state.json arrived first.
         stage = target.parent / ('.' + args.phase + '-download-' + uuid.uuid4().hex)
@@ -135,12 +136,18 @@ def main():
             assert bound, 'Diagnostic artifact must identify the frozen run and commit'
             assert all(str(r['run_id']) == args.run_id and r['git_sha'] == meta['headSha'] for r in bound)
             assert all(not r.get('batch') or r['batch'] == args.batch for r in bound)
-        else:
+        elif (stage / marker).exists():
             state = json.loads((stage / marker).read_text())
             assert state['run_id'] == args.run_id and state['git_sha'] == meta['headSha']
             assert not args.batch or state['batch'] == args.batch
             for metric in state.get('metrics', []):
                 assert (stage / f"round{metric['round']}-{metric['candidate']}.jsonl").is_file()
+        else:
+            assert args.phase in ('screen', 'refine', 'gate')
+            assert meta['status'] == 'completed' and meta['conclusion'] != 'success'
+            reports = [json.loads(p.read_text()) for p in stage.rglob('*.json')]
+            bound = [r for r in reports if isinstance(r, dict) and 'run_id' in r and 'git_sha' in r]
+            assert bound and all(str(r['run_id']) == args.run_id and r['git_sha'] == meta['headSha'] for r in bound)
         # Freeze downloaded file bytes before adding local metadata or analyses.
         original_files = {p.relative_to(stage).as_posix(): {'bytes': p.stat().st_size,
                            'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
@@ -149,6 +156,12 @@ def main():
             'scope': 'SHA-256 of extracted files as downloaded; not an independent ZIP digest verification',
             'artifact_id': artifact['id'], 'artifact_name': name,
             'github_artifact_digest': artifact.get('digest'), 'files': original_files}, indent=2) + '\n')
+        if args.phase in ('screen', 'refine', 'gate') and not (stage / 'state.json').exists():
+            (stage / 'collection-status.json').write_bytes((json.dumps({
+                'status': 'COMPLETED_JOB_FAILED_BEFORE_SCREEN_STATE', 'run_id': args.run_id,
+                'git_sha': meta['headSha'], 'batch': args.batch, 'ci_conclusion': meta['conclusion'],
+                'scope': 'Original failure artifact preserved; no state.json, public metrics or full gate is invented.'
+            }, indent=2) + '\n').encode())
         evidence_root = (ROOT / 'evidence' / ('round' + args.round)).resolve()
         assert stage.resolve().is_relative_to(evidence_root)
         assert target.resolve().is_relative_to(evidence_root) and not target.is_symlink()
@@ -163,7 +176,9 @@ def main():
     if meta['status'] == 'completed' and args.phase == 'gate':
         log = helper.run(['run', 'view', args.run_id, '--repo', 'HuanHuanHuanFFF/Miner', '--log'], env)
         (target / 'ci.log').write_text(log, encoding='utf-8')
-    if args.phase == 'diagnostics':
+    if failed_before_screen.exists():
+        print('PRE_SCREEN_FAILURE_PRESERVED', args.run_id, 'no measurement state; not analyzed')
+    elif args.phase == 'diagnostics':
         print('DIAGNOSTICS_ONLY', len(json.loads((target / marker).read_text())['files']),
               'original files; not timing or proof evidence')
     elif args.phase == 'extraction':

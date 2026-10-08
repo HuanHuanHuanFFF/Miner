@@ -87,6 +87,24 @@ slot511不是可自认证的metadata：若单独向新fast helper传任意lc与l
 
 本轮取得的最小结论：slot511的窄用途与0禁用正价max编码，在现有调用链源证据和有限病态检查下保持原消费范围；宽泛“padding皆空闲”的假设没有采用，0..510原价完整保留。公共实际有55.1%的third seed后安全位置，但该直接填充实现仍更慢，否定由覆盖/廉价metadata直接推导总时间收益。段平均仅3.92、seed-only多、失败下一lc探测及代码布局/寄存器变化都是待区分解释，不能冒充已测CPU原因。停止本固定实现，不以调整阈值或扩缓存救负方向。
 
+## 最后一次表示改变：groups（父线程另行批准）
+
+主线程确认D路由普遍慢后，批准一份实质不同的固定表示：把每query逐字节lc判价改为每load一次20个固定宽组的实际平坦性验证；价格0或max>4095、无平坦组则禁用。slot511 high20bits是实际验证mask，low12bits是全正价max，不假定任意tabs遵循DEFLATE code。范围11..18四个2宽、19..34四个4宽、35..66四个8宽、67..130四个16宽、131..257四个至32宽；258不可bulk。0..510及原公共helpers保持原字节。
+
+12:24生成 `r11-gap-groups` Rust `6ef07be874052d23fbe3cdca8de7e311e82a306338a93f70389fe35006e99992`，父Lean e0de仍UNADAPTED；builder `build-round11-gap-groups.py` SHA256 `edfb90dd28fb6eb7944fc50dd0dd92c0701d76247cdf67ab49aa2fabbc705171`。query用O(1)宽组end与bit验证取得count，按stop/group界限制；严格seed且无成本回绕后，最多两次按ring物理界分开的升序contiguous fill，完全不逐字节读lc/price或更新nxt，最后nxt取最低pos cell。所需ring/out存储不省。源码guard保证generic totality，语义仅明确来源数组下，不声称任意假metadata等价。
+
+专用native harness `fc7c3e0faaaf88e0cd4345eb7e47a87127e1186db854d44494e2118827f5d880` 扩为14loader/2156DP，加入全flat与单组nonflat输入，false-metadata/wrap反例移至rem11..12，保留slot510 witness。12:25:48 builder --check/Python语法通过，尚未native。CI脚本SHA `9d013599a30e9c920dd561694968518450afda326df7fda0e5371315521f639b`，spec `gap_groups_checks:true` 输出 `gap-diagnostics/gap-groups-checks.json`。没有移植前版的负性能或证明接受。
+
+主线程12:27:43派发groups-d `37727588709` / freeze `fac6392`，比12:26目标晚约1分36秒（源码已提前就绪，根预检/审阅/提交耗时），job cap40分钟，余量约46分钟。没有本地Rust/Lean、子线程CI/提交。准备依赖在 `r11-gap-groups-proof/helper-dependencies.md`；实际Funs到后优先8–10分钟首份UNCOMPILED草稿，不能保证编译闭合。性能/提取/新gate当前UNKNOWN；若无有效时间信号则关闭，不再改参数或表示。
+
+### groups-d fixture失败与仅fixture v2修正（12:43）
+
+真实native专项compile_exit0、runtime101；日志 `evidence/round11/37727588709/groups-d/diagnostics/gap-diagnostics/groups-checks-runtime.log` 指向main.rs:12 index560越界、Vec长度560。精确原因为builder扩测试模式时宽泛 `.replace('0..5','0..7')` 意外匹配距离表循环 `520..552` 的子串，把它变为 `520..752`。这不是一次候选token不等价读数，也不能预填其余检查通过。
+
+保留原harness fc7c...全部字节；新增 `native-helper-check-v2.rs` SHA256 `5e791ea2a9176cfcfd951ccf9bb5a15857276292bd72de2abc37b347579a9959`，唯一变更恢复该循环520..552。builder新增可选 `--harness-v2`（可和--check一起使用），当前builder SHA256 `7e75c13fa843d510052c27332e90b12ace7ccb1d2f9ccef2c211b02a67046166`。默认--check依然复现旧fc7错误fixture及冻结候选，v2 --check复现新fixture。Rust6ef/e0 Lean均未改变；没有本地native执行、CI重发或证明修复。根线程负责checker/spec选择v2重发；当前未预填成功。
+
+官方提取已成功，Funs SHA256 `d00bd9e6bec3571e140db0484d71eaf02625d4a72eddf1d278cc2d249c954c45`。接口事实已保存 `r11-gap-groups-proof/interface-audit.json`：fill四state `(ring,out,ri,p)` 返回两数组；word inner `(l,flat)` 返回Bool，outer `(mask,g)` 返回U32；groups gap四state与mut-back闭包保持，word/max为稳定参数；变量移位rhs实际为Usize，由g<20和%32界处理。因fixture重发压缩剩余时间，遵根指令只留接口与依赖，尚未生成新groups Lean，不宣称可在预算内通过完整gate+独立确认。
+
 ## 预先停止条件
 
 观察副本token/decode不同或守卫内v!=vc先停止并保留失败；不解释为收益。每表保守覆盖为空或只有seed、仅逐字节oracle有长覆盖且没有便宜来源不变量、物理/平台/block截断加setup后同类新增工作抵消可省工作，均停止当前方案。若机会集中于单个文件，保留逐文件等权轴贡献及外推缺口，不用总字节覆盖代替性能。计数支持时也只授权一份候选的真实配对判断，不承诺速度或前沿收益。
