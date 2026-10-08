@@ -16,6 +16,16 @@ from round3 import load_scorer, diagnostics, TIME_FACTOR, SIZE_FACTOR
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def screen_order(spec, block, names):
+    orders = spec.get('screen_orders')
+    if orders is None:
+        return list(names) if block % 2 else list(reversed(names))
+    assert len(orders) == spec['screen_blocks']
+    assert all(len(order) == len(names) and len(set(order)) == len(order) and set(order) == set(names)
+               for order in orders), 'Every frozen screen order must contain each candidate/control exactly once'
+    return list(orders[block - 1])
+
+
 def save(path, value):
     path.write_text(json.dumps(value, indent=2, allow_nan=False) + '\n', encoding='utf-8')
 
@@ -48,6 +58,8 @@ def validate(label):
             assert (ROOT/e['path']/'parse.rs').resolve() != (ROOT/by_name[ref]['path']/'parse.rs').resolve(), \
                 f"{e['name']}: finite equivalence rejects identical source paths; inspect shared-source shadows through measurement output"
     assert 1 <= spec['screen_blocks'] <= 4 and 0 <= spec['refine_blocks'] <= 4
+    if 'screen_orders' in spec:
+        screen_order(spec, 1, list(by_name))
     synthetic_refs = spec.get('synthetic_reference_candidates', [])
     assert len(synthetic_refs) == len(set(synthetic_refs)) <= 3 and set(synthetic_refs) <= names
     used = set()
@@ -278,8 +290,7 @@ def main():
         perf = subprocess.run(['bash', '-c', 'if command -v perf >/dev/null 2>&1; then perf stat -e cycles,instructions,branches,branch-misses,cache-misses -- true; else echo PERF_NOT_INSTALLED; fi'], capture_output=True, text=True)
         save(output / 'perf-capability.json', {'returncode': perf.returncode, 'stdout': perf.stdout, 'stderr': perf.stderr, 'scope': 'availability probe only, not candidate profile'})
         for block in range(1, spec['screen_blocks'] + 1):
-            names = list(entries)
-            measure(block, names if block % 2 else list(reversed(names)))
+            measure(block, screen_order(spec, block, list(entries)))
         finish()
     elif phase == 'refine':
         selected = [r['candidate'] for r in state['summary'] if not r['control']][:spec['shortlist']]

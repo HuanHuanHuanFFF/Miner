@@ -6,6 +6,9 @@ from round4 import ROOT,validate
 def main():
     assert os.environ.get('GITHUB_ACTIONS')=='true'and os.environ.get('RUNNER_OS')=='Linux'
     spec=validate(os.environ['ROUND4_SPEC']);out=Path(os.environ['RUNNER_TEMP'])/'round4-receipts';out.mkdir(exist_ok=True)
+    if spec.get('pc_rescue_counts'):
+        loader=importlib.util.spec_from_file_location('r13_rescue',ROOT/'scripts/research-round13-rescue.py')
+        module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main();return
     if spec.get('pc_expired_counts'):
         loader=importlib.util.spec_from_file_location('r13_expired',ROOT/'scripts/research-round13-expired.py')
         module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main();return
