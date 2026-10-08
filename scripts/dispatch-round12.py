@@ -21,13 +21,17 @@ def main():
     ap.add_argument('batch')
     ap.add_argument('--ref', default='codex/round12-frontier')
     ap.add_argument('--max-minutes', type=int, default=35)
+    ap.add_argument('--additional-run-approved', action='store_true', help='Use only after direct human approval for the prepared fifth screen')
     args = ap.parse_args()
     budget = json.loads((ROOT / 'evidence/round12/budget.json').read_text())
     deadline = datetime.fromisoformat(budget['deadline_utc'])
-    available = int((deadline - datetime.now(timezone.utc)).total_seconds() // 60) - 5
-    job_minutes = min(args.max_minutes, available, 35)
-    assert 10 <= job_minutes <= 90, 'Insufficient remaining budget for a bounded CI job'
-    assert len(list((ROOT / 'evidence/round12').glob('dispatch-*.json'))) < 4, 'Four-run authorization limit reached'
+    available = int((deadline - datetime.now(timezone.utc)).total_seconds() // 60) - (1 if args.additional_run_approved else 5)
+    if args.additional_run_approved:
+        assert args.batch == 'probe-e'
+    limit = 5 if args.additional_run_approved else 4
+    job_minutes = min(args.max_minutes, available, 3 if args.additional_run_approved else 35)
+    assert (1 if args.additional_run_approved else 10) <= job_minutes <= 90, 'Insufficient remaining budget for a bounded CI job'
+    assert len(list((ROOT / 'evidence/round12').glob('dispatch-*.json'))) < limit, 'Authorized run limit reached'
     os.environ['ROUND4_SPEC_DIR'] = 'evidence/round12'
     from round4 import validate
     validate(args.batch)
@@ -54,7 +58,8 @@ def main():
         if matching:
             record = {'batch': args.batch, 'git_sha': sha, 'allow_private': allow_private,
                       'repository_visibility_verified': 'private' if repository['private'] else 'public',
-                      'authorization': 'Direct user approval in this chat: 允许推送到云端验证; up to four jobs, each capped at35minutes',
+                      'authorization': ('Direct human approval for one additional prepared probe-e, at most20min and inside the original deadline' if args.additional_run_approved else 'Direct user approval in this chat: 允许推送到云端验证; up to four jobs, each capped at35minutes'),
+                      'additional_run_approved': args.additional_run_approved,
                       'workflow': 'deflate-round9.yml', 'ref': args.ref, 'job_timeout_minutes': job_minutes,
                       'runtime_scope': 'GitHub job timeout; dispatch queue time is separate. Five minutes of remaining budget reserved outside the cap.',
                       'run': matching[0]}

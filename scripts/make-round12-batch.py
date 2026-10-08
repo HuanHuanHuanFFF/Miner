@@ -25,17 +25,24 @@ def main():
             'anchor':'public507','formal_id':'507','hashes':{f:hashlib.sha256((ref/f).read_bytes()).hexdigest()for f in ('parse.rs','Parse.lean')}})
         shadow = entries[-1].copy();shadow.update(name='pc507-shadow');shadow.pop('formal_id')
         entries.append(shadow)
+    for name,manifest in manifests.items():
+        baseline = manifest.get('comparison_baseline')
+        if baseline and baseline.startswith('r12-') and not any(e['name']==baseline for e in entries):
+            path=ROOT/'candidates'/baseline
+            entries.append({'name':baseline,'path':path.relative_to(ROOT).as_posix(),'control':True,
+                'anchor':'public507','hashes':{f:hashlib.sha256((path/f).read_bytes()).hexdigest()for f in('parse.rs','Parse.lean')}})
     for name in args.candidates:
         path = ROOT/'candidates'/name
         anchor = 'public507' if manifests[name].get('formal_anchor_id')=='507' else 'r3-432-fast3'
+        baseline = manifests[name].get('comparison_baseline',anchor)
         entry = {'name': name, 'path': path.relative_to(ROOT).as_posix(), 'control': False,
             'anchor': anchor, 'anchor_scope': 'Declared parent structural derivative; transfer hypothesis only',
-            'comparison_baseline': anchor,
+            'comparison_baseline': baseline,
             'hashes': {f: hashlib.sha256((path/f).read_bytes()).hexdigest() for f in ('parse.rs','Parse.lean')}}
         if manifests[name].get('native_relation')=='decode_only':
             entry['native_decode_reference'] = anchor
         else:
-            entry['expected_equivalent_to'] = anchor
+            entry['expected_equivalent_to'] = baseline
         entries.append(entry)
     spec = {'entries': entries, 'snapshot_pages': 'evidence/round12/official-start-2/pareto-pages.json',
         'screen_blocks': args.blocks, 'refine_blocks': 0, 'shortlist': len(args.candidates),
