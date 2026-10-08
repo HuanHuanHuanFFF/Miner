@@ -18,6 +18,11 @@ on:
         required: true
         type: boolean
         default: false
+      job_minutes:
+        description: 'Maximum job runtime in minutes for this manually dispatched batch'
+        required: true
+        type: number
+        default: 90
 permissions:
   contents: read
 concurrency:
@@ -28,7 +33,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true)
     name: ${{ inputs.specification }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: ${{ inputs.job_minutes }}
     env:
       ROUND4_SPEC: ${{ inputs.specification }}
       ROUND4_SPEC_DIR: evidence/round${{ inputs.experiment_round }}

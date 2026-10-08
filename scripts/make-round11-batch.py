@@ -57,7 +57,7 @@ def main():
         'gate_candidates':args.gate,'gate_limit':len(args.gate),
         'extract_candidates':args.extract,'retain_extracted_lean':True,
         'synthetic_validation':True,
-        'synthetic_reference_candidates':['r10-finder-pipeline-proof'],
+        'synthetic_reference_candidates':(['r10-finder-pipeline-proof'] if any(not n.startswith('r11-fast-') for n in args.candidates) else []),
         'research_synthetic_candidates':args.synthetic,
         'gap_diagnostics':args.gap_diagnostics,'gap_candidate_checks':args.gap_candidate_checks,
         'fast_diagnostics':args.fast_diagnostics,

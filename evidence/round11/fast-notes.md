@@ -54,3 +54,17 @@ pendingfold 的额外成本也已定位：`MatchAt.back_lit`（第 2228 行）�
 状态仍为 **ADAPTED_TO_REAL_EXTRACTION_UNCOMPILED**：本地未运行 Lean；`step*` 对新 helper 两条分支的收尾和旧 main1 自动消费新规格仍需真实 gate。主线程根据性能决定是否投入。
 
 已直接读取并重加 `diagnostics/fast-diagnostics/fast.json` 的逐例计数：两份各 444 例均 decode，冻结／插桩 token 相同。pendingfold 对 fast3 全等；公共 helper 调用 1,274,968 次，其中 407,829 次有 pending，吞掉 44,991 个尚未写出的 literal。continuation 公共满长边界 2,063 次、原候选失效 248 次、实际替换 237 次；12 个公共文件 token 改变，全部 444 例中 32 例改变。此时公共压缩大小和配对总时间仍未收到，不据次数宣布收益。
+
+## 首批关闭与最后一份跨 gap 探索
+
+随后完整 probe-a 数据到手：pendingfold 两块相对 fast3 慢 0.742774500%／0.695778837%，均值 **+0.719276668%**，公共 bytes 不变；continuation 慢 0.609618120%／0.483303492%，均值 **+0.546460806%**，大小 **-0.006406698 pp**。同源码 shadow 两块 +0.517555615%／-0.174695750%，均值 +0.171429932%。两候选当前两轴都不足前沿，停止完整 gate；已适配未编译 continuation proof 保留，不把它标成接受。没有把两个负版组合。
+
+为重新核对实际瓶颈，11:56 从本批 fast3 的两份原始 JSONL 重算 56 个文件／块，每文件每组件各取 11 次 measured 中位数后等文件平均：parser 占组件中位数和 **15.7968106%**，encoder 占 **84.2031894%**。总轴为 0.4283697544；保留实际 encoder、将 parser 理想化为零的反事实轴为 0.3718825681（改善 13.1865487%）。这再次说明单纯减少 parser 写入范围有限，但不是可达到的性能预测。输入回执 SHA 分别为 `366ff1bb38490161d0f9a5833bde31c3140579af712438b82a20de3ec2bb2e50`、`b98a8179f992ada090d2a3b30d5ff0e0af5b913121536cd04c18a10a4f298efc`；路径为该 run 的 `gate/round{1,2}-r3-432-fast3.jsonl`。组件中位数和与 median(total_s) 并非同一统计量，未将其当成精确总轴分解。
+
+最后只新增 `r11-fast-gaprepeat`，父版本仍为原 fast3，Rust SHA `d9871c561eea64f98c7e976644198c5798f028c8d6e8c17b83f34feae74da9b7`，父 Lean 原样复制、未适配。生成器 `scripts/build-round11-fast-gaprepeat.py --check` 已通过；一处 run1 probe 调用替换及一个无循环 helper，反转精确恢复父源码。
+
+机制从立即匹配边界换为**实际 literal gap 内的失败搜索点**。run1 延迟写出 pending literals，所以 `out[nt-1]` 仍保存上次 match token，可用作隐式距离缓存，不增加 loop 状态或表。helper 先运行原 `probe_m`；原匹配合法即原样返回。仅在原 probe 失败且 `ls<p`、有可读的旧 token 时，从该 token 的合法编码范围解出候选距离，再调用原 `probe_m` 一次。输出中该值只提供候选，完全不承担“它必然是正确 match”的证明前提；新 bytes 仍由 probe 验证。原短 match 的立即末端不尝试，因为它通常刚由下一字节不等终止；跨过已知 literal 后相同偏移片段可以重新出现。
+
+这与旧 tiny-rep1 的“tiny planner 各点优先试上次距离并改变 tie 顺序”不同，也不是把关闭的 258 边界条件放宽：它换用了延迟输出提供的隐式历史、只在已跨 gap 的原失败搜索点执行，保留每个原有效 probe 结果。可能减少 literal tokens，从而减少 encoder 的频率统计／块数／符号工作；但新增失败探测也可能更贵。没有大小单调、收益或前沿保证，不扫 gap 宽度／长度阈值。
+
+原生诊断沿用 `fast_diagnostics` 接口，新增 `calls/original_match/gap_with_previous_token/attempts/rescued/rescued_bytes` 六个计数，要求 444 例 decode 与 frozen/插桩 token 相同，允许且记录父 token 差异。诊断脚本现 SHA `820debef0c7dcad5e16a1e22f63bdd0c871c09bb6d15051810bcebfd46e43f47`；两旧候选的插桩源码 SHA 保持原样。当前尚未运行新 Rust，也未取得新提取或配对结果。预计证明仅需在 `probe_m_spec` 后加一个返回同样 FoundAt／length／distance 界的 wrapper 规格；主循环 tuple 不变。新提取前不冒充真实接口或可编译证书。

@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import subprocess
 import time
+from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[1]
 REPO = 'HuanHuanHuanFFF/Miner'
@@ -19,7 +20,13 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('batch')
     ap.add_argument('--ref', default='codex/round11-frontier')
+    ap.add_argument('--max-minutes', type=int, default=45)
     args = ap.parse_args()
+    budget = json.loads((ROOT / 'evidence/round11/budget.json').read_text())
+    deadline = datetime.fromisoformat(budget['deadline_utc'])
+    available = int((deadline - datetime.now(timezone.utc)).total_seconds() // 60) - 5
+    job_minutes = min(args.max_minutes, available)
+    assert 10 <= job_minutes <= 90, 'Insufficient remaining budget for a bounded CI job'
     os.environ['ROUND4_SPEC_DIR'] = 'evidence/round11'
     from round4 import validate
     validate(args.batch)
@@ -37,13 +44,15 @@ def main():
     existing = {r['databaseId'] for r in json.loads(helper.run(list_args, env))}
     helper.run(['workflow', 'run', 'deflate-round9.yml', '--repo', REPO, '--ref', args.ref,
                 '-f', 'experiment_round=11', '-f', 'specification=' + args.batch,
-                '-f', 'allow_private=true'], env)
+                '-f', 'allow_private=true', '-f', 'job_minutes=' + str(job_minutes)], env)
     for _ in range(10):
         runs = json.loads(helper.run(list_args, env))
         matching = [r for r in runs if r['headSha'] == sha and r['databaseId'] not in existing]
         if matching:
             record = {'batch': args.batch, 'git_sha': sha, 'allow_private': True,
-                      'workflow': 'deflate-round9.yml', 'ref': args.ref, 'run': matching[0]}
+                      'workflow': 'deflate-round9.yml', 'ref': args.ref, 'job_timeout_minutes': job_minutes,
+                      'runtime_scope': 'GitHub job timeout; dispatch queue time is separate. Five minutes of remaining budget reserved outside the cap.',
+                      'run': matching[0]}
             target = ROOT / 'evidence/round11' / ('dispatch-' + str(matching[0]['databaseId']) + '.json')
             assert not target.exists(), 'Do not overwrite a dispatch receipt'
             target.write_text(json.dumps(record, indent=2) + '\n')

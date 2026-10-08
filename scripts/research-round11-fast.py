@@ -18,6 +18,7 @@ from round4 import validate
 FIELDS={
     'r11-fast-pendingfold':['calls','pending_nonempty','pending_consumed','budget_exhausted','length_cap','reach_old_tokens'],
     'r11-fast-continuation':['calls','full_boundary','old_invalid','repeat_key_checks','replaced'],
+    'r11-fast-gaprepeat':['calls','original_match','gap_with_previous_token','attempts','rescued','rescued_bytes'],
 }
 
 
@@ -34,13 +35,20 @@ def instrument(name,raw):
             ('        let nt = flush4(input, out, nt0, ls, p);','        r11_fast_hit(3, (back == BACKTOK) as u64);\n        r11_fast_hit(4, (l == 258) as u64);\n        let nt = flush4(input, out, nt0, ls, p);'),
             ('        if p == ls && back < BACKTOK {','        if p == ls && back < BACKTOK {\n            r11_fast_hit(5, 1);'),
         ]
-    else:
-        assert name=='r11-fast-continuation'
+    elif name=='r11-fast-continuation':
         edits=[
             ('    if span == 258 && p < lim && p <= s.len().saturating_sub(8) {','    r11_fast_hit(0, 1);\n    if span == 258 && p < lim && p <= s.len().saturating_sub(8) {\n        r11_fast_hit(1, 1);'),
             ('        if !(old_d.wrapping_sub(1) < 32768 && (((cw ^ pw) >> 32) & (km as u64)) == 0) {','        if !(old_d.wrapping_sub(1) < 32768 && (((cw ^ pw) >> 32) & (km as u64)) == 0) {\n            r11_fast_hit(2, 1);'),
             ('                let rc = p - d;','                r11_fast_hit(3, 1);\n                let rc = p - d;'),
             ('                    return (a, rc, rw);','                    r11_fast_hit(4, 1);\n                    return (a, rc, rw);'),
+        ]
+    else:
+        assert name=='r11-fast-gaprepeat'
+        edits=[
+            ('    let f = probe_m(s, c, cw, p, km);','    r11_fast_hit(0, 1);\n    let f = probe_m(s, c, cw, p, km);\n    r11_fast_hit(1, (f.0 >= 3) as u64);'),
+            ('    let t = out[nt - 1];','    r11_fast_hit(2, 1);\n    let t = out[nt - 1];'),
+            ('            let g = probe_m(s, rc, rw, p, km);','            r11_fast_hit(3, 1);\n            let g = probe_m(s, rc, rw, p, km);'),
+            ('                return g;','                r11_fast_hit(4, 1);\n                r11_fast_hit(5, g.0 as u64);\n                return g;'),
         ]
     for old,new in edits:
         assert helper.count(old)==1,(name,old)
@@ -82,8 +90,11 @@ def main():
     spec=validate(os.environ['ROUND4_SPEC']);requested=spec.get('fast_diagnostics')
     if not requested:
         print('fast diagnostics not requested');return
-    names=list(FIELDS) if requested is True else list(requested)
-    entries={e['name']:e for e in spec['entries']};assert all(n in entries and n in FIELDS for n in names)
+    entries={e['name']:e for e in spec['entries']}
+    names=[n for n in FIELDS if n in entries] if requested is True else list(requested)
+    assert all(n in entries and n in FIELDS for n in names)
+    if not names:
+        print('no supported fast diagnostic candidates in this spec');return
     out=Path(os.environ['RUNNER_TEMP'])/'round4-receipts/fast-diagnostics';out.mkdir(parents=True,exist_ok=True)
     build=Path(os.environ['RUNNER_TEMP'])/'round11-fast-build';build.mkdir(parents=True,exist_ok=True)
     base=ROOT/'candidates/r3-432-fast3/parse.rs'
