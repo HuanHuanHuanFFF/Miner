@@ -33,7 +33,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true)
     name: ${{ inputs.specification }}
     runs-on: ubuntu-24.04
-    timeout-minutes: ${{ inputs.job_minutes }}
+    timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
     env:
       ROUND4_SPEC: ${{ inputs.specification }}
       ROUND4_SPEC_DIR: evidence/round${{ inputs.experiment_round }}
