@@ -23,7 +23,7 @@ def save(path, value):
 def specification_path(label):
     assert re.fullmatch(r'[a-z0-9-]{1,48}', label)
     spec_directory = os.environ.get('ROUND4_SPEC_DIR', 'evidence/round4')
-    assert spec_directory in ('evidence/round4', 'evidence/round5', 'evidence/round6', 'evidence/round7', 'evidence/round8', 'evidence/round9')
+    assert spec_directory in ('evidence/round4', 'evidence/round5', 'evidence/round6', 'evidence/round7', 'evidence/round8', 'evidence/round9', 'evidence/round10', 'evidence/round11')
     return ROOT / spec_directory / (label + '.json')
 
 
@@ -40,7 +40,16 @@ def validate(label):
             data = (path / f).read_bytes()
             assert 0 < len(data) <= 524288 and hashlib.sha256(data).hexdigest() == h, (e['name'], f)
     assert {'probe3', 'r3-432-fast3', 'public432'} <= names
+    by_name = {e['name']: e for e in spec['entries']}
+    for e in spec['entries']:
+        ref = e.get('expected_equivalent_to')
+        if ref:
+            assert ref in by_name and ref != e['name']
+            assert (ROOT/e['path']/'parse.rs').resolve() != (ROOT/by_name[ref]['path']/'parse.rs').resolve(), \
+                f"{e['name']}: finite equivalence rejects identical source paths; inspect shared-source shadows through measurement output"
     assert 1 <= spec['screen_blocks'] <= 4 and 0 <= spec['refine_blocks'] <= 4
+    synthetic_refs = spec.get('synthetic_reference_candidates', [])
+    assert len(synthetic_refs) == len(set(synthetic_refs)) <= 3 and set(synthetic_refs) <= names
     used = set()
     for group in spec.get('gate_groups', []):
         assert isinstance(group, list) and group and set(group) <= names
@@ -172,7 +181,8 @@ def main():
             if any(f['name'] == name for f in state['failures']):
                 continue
             print(f'MEASURE_BEGIN {block} {name}', flush=True)
-            keep = phase == 'screen' and block == 1 and spec.get('cpu_diagnostics', False)
+            keep = (phase == 'screen' and block == 1 and spec.get('cpu_diagnostics', False)
+                    and name in spec.get('cpu_diagnostic_candidates', entries))
             try:
                 observation = run(dataclasses.replace(config, keep=Keep.ALWAYS if keep else Keep.NEVER), {name: paths[name] / 'parse.rs'}, corpus)
                 measured = observation.only()
@@ -299,13 +309,15 @@ def main():
             from round3_synthetic import run_validation
             selected = [n for n, v in state['gates'].items() if v.get('accepted')]
             if selected:
-                state['synthetic_validation'] = run_validation(config, paths, ['r3-432-fast3'] + selected, output)
+                synthetic_names = list(dict.fromkeys(['r3-432-fast3'] + spec.get('synthetic_reference_candidates', []) + selected))
+                state['synthetic_validation'] = run_validation(config, paths, synthetic_names, output)
         research_inputs = spec.get('research_synthetic_candidates', [])
         if research_inputs:
             assert len(research_inputs) == len(set(research_inputs)) <= 3
             assert set(research_inputs) <= set(entries) and 'r3-432-fast3' not in research_inputs
             from round3_synthetic import run_validation
-            state['research_synthetic_validation'] = run_validation(config, paths, ['r3-432-fast3'] + research_inputs, output)
+            synthetic_names = list(dict.fromkeys(['r3-432-fast3'] + spec.get('synthetic_reference_candidates', []) + research_inputs))
+            state['research_synthetic_validation'] = run_validation(config, paths, synthetic_names, output)
             state['research_synthetic_validation']['proof_status'] = 'NO_FULL_GATE_IMPLIED; finite data checks only'
         finish()
         if any(not v.get('accepted') for v in state['gates'].values()):

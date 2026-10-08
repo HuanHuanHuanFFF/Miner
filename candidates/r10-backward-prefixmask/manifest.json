@@ -1,0 +1,35 @@
+{
+  "candidate": "r10-backward-prefixmask",
+  "parent": "candidates/r10-record-nonempty",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "7f1c661fd1ce29d12c69671f034ff5a713e284ed1fcba66ba404ff25479b55b7",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "hashes": {
+    "parse.rs": "5a4b534b9966d21f06f8cde90fe0c5c6f5d6c4429c2c19c57a2a1e300c9993c1",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "bytes": {
+    "parse.rs": 184724,
+    "Parse.lean": 405221
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "verified_parent": "candidates/r10-record-nonempty/VERIFICATION.json",
+  "mechanism": "Publish a 32-bit strict prefix-record mask at every finalized endpoint; constant-length-price segments use <=32 prefix queries and one endpoint read per nonsingleton chunk.",
+  "differences_from_rmq8": "Arbitrary-alignment prefix queries avoid scalar edge fragments; rolling monotone-mask publication replaces aligned eight-cell rescans. Publication now occurs at every finalized byte and uses a larger 4KiB mask cache.",
+  "local_reuse": "pm_price_ends is a renamed copy of the existing r10_price_ends helper in scripts/build-round10-rmq.py; original #361 attribution remains inherited. Other mask/getter/state/query helpers are new experiment code.",
+  "tie_policy": "Pop earlier rolling records on cost>=new cost; masks compare upper32 endpoint cost only; queries select the highest low-prefix set bit, then packed cost/length minima preserve shortest global ties.",
+  "publication": "Only terminal n, all three final d_gap writes and final d_dp node write. Never d_init or d_push. Nonconsecutive publication disables the cache for the rest of that DP call.",
+  "fallback": "Original d_best_len for invalid ranges, invalid/unpublished state, position/domain mismatch, malformed run ends, empty masks or exhausted bounded progress. Singleton ranges/chunks use original d_bcost directly. len32 uses u32::MAX explicitly.",
+  "bounds": "Publish loop fuel32; run loop fuel259; per-run chunk loop fuel9. Existing <=258 future query and <=255 pending-backward writes fit well inside D_RING1024; each snapshot reaches at most p+289.",
+  "audit": "Fourteen exact reversible regions restore verified parent. Original forward parser, finder, model, routing, record payloads and emitter are unchanged; no costcache/pipeline/packing combination.",
+  "model_reference": "evidence/round10/prefix-mask-review.json",
+  "equivalence_status": "INFERRED exact endpoint minima with shortest ties; source recurrence model passed, but actual 444 token/decode checks and public same bytes are still required.",
+  "proof_status": "UNADAPTED_PARENT_ONLY: new bounded helpers and extra D cache state/interfaces require actual extraction and original full obligation/axiom gate. No formal acceptance is claimed.",
+  "performance_status": "UNKNOWN: every-byte publication, pop comparisons, 4KiB cache traffic and run-end loading can outweigh constant-query savings. Paired total-compression screen is mandatory before proof work."
+}

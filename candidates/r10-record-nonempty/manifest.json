@@ -1,0 +1,28 @@
+{
+  "candidate": "r10-record-nonempty",
+  "parent": "candidates/r9-block-scalar",
+  "parent_hashes": {
+    "parse.rs": "faf1d7281678d12c3243002121feecdd0ea139633dea197dbc77d86fb6319257",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "hashes": {
+    "parse.rs": "7f1c661fd1ce29d12c69671f034ff5a713e284ed1fcba66ba404ff25479b55b7",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "bytes": {
+    "parse.rs": 179400,
+    "Parse.lean": 405221
+  },
+  "mechanism": "Omit [position,0] records except position zero. Retain all match records and all original search/seed-planning work, letting backward gaps handle omitted literal-only positions.",
+  "equivalence_hypothesis": "An empty searched node cannot lie inside a lower recorded match with at least three bytes remaining, because the forward continuation would be offered. Gaps preserve literal/pushed-value choices and block transitions. This needs whole-parser finite discrimination.",
+  "important_boundary": "Node zero must remain: d_dp has no separate final prefix sweep after consuming rs.",
+  "source_audit": "One d_record write guard and its totality proof only. Reverse edits restore exact parent bytes.",
+  "proof_status": "UNCOMPILED_ADAPTED_D_RECORD_SPEC; original obligation/axiom/public roundtrip gate required.",
+  "performance_status": "NOT_RUN; same-byte finite check and paired total-compression timing required.",
+  "stop": "An output mismatch refutes the claimed equivalence; retain negative evidence and diagnose before any combination."
+}

@@ -1,0 +1,33 @@
+{
+  "candidate": "r10-forward-rebase16",
+  "parent": "candidates/r9-block-scalar",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "faf1d7281678d12c3243002121feecdd0ea139633dea197dbc77d86fb6319257",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "hashes": {
+    "parse.rs": "8382914307102bb37f690180cf0ba0dbd605a6eecc136263766ec847884fb2fb",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "bytes": {
+    "parse.rs": 189670,
+    "Parse.lean": 405395
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "mechanism": "For D inputs <=u32::MAX, all three heads and two predecessor arrays use u16 positions relative to a shared base. Rebase all five arrays by unsigned saturating subtraction before q-base reaches 65535. Original forward/backward planning is retained.",
+  "encoding": "code=position-base+1; zero decodes to max(base-1,0). Rebase next=q-32768, normal shift=32767, preserving distance exactly 32768.",
+  "fixed_finder_bytes_before": 851968,
+  "fixed_finder_bytes_after": 425984,
+  "ordinary_store_cost": "One current-position encoding shared across all heads; predecessor stores copy existing u16 codes, avoiding per-link distance calculations.",
+  "rebase_cost": "212992 u16 cells scanned about every 32767 inserted bytes after the first 65535; nominal read+write traffic about 26 bytes per input byte, sequential. Actual vectorization and net time remain unmeasured.",
+  "huge_input_fallback": "For input.len()>u32::MAX use byte-identical parent d_parse, preserving its truncated u32 head semantics.",
+  "audit": "Original d_parse and all its helpers remain byte-identical. New rb16 helpers plus copied D parser are appended, and d_plan_k selects the new path only below the u32 limit. Search schedule, planning, record encoding, routes and checked emission are unchanged in intent.",
+  "equivalence_status": "INFERRED: boundary state model and 444 Rust token/decode comparisons plus public output equality required. Representation equivalence is not assumed from libdeflate precedent.",
+  "proof_status": "UNADAPTED_PARENT_ONLY: relative coordinate invariants, rebasing helpers and new call bridge need fresh extraction and original complete gate; copied proof is not validation.",
+  "performance_status": "UNKNOWN: half-sized random-access state trades against periodic full-table scans and position decoding."
+}

@@ -1,0 +1,41 @@
+{
+  "candidate": "r10-finder-key6",
+  "parent": "candidates/r9-block-scalar",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "faf1d7281678d12c3243002121feecdd0ea139633dea197dbc77d86fb6319257",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "hashes": {
+    "parse.rs": "d33ae66a2973a4756d6c76c05d6f8feab898f6aad1539337805ab25571ae580a",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "bytes": {
+    "parse.rs": 179207,
+    "Parse.lean": 405395
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "mechanism": "Replace engine D's seven-byte long-chain hash key with 6 bytes, retaining original chain table, insertion/search code and all depth budgets",
+  "key_bytes": 6,
+  "old_key_bytes": 7,
+  "extra_state_bytes": 0,
+  "extra_insertion_operations": 0,
+  "extra_search_operations": 0,
+  "motivation": "R10 hash5 supplement added 97744 public longer records, 92650 of them after an existing 4..7-byte best, but its +4.5% time cost outweighed -0.005377pp size. Reuse the existing long chain to explore the shorter key without a side-cache update.",
+  "old_trial_review": "No other candidate source with global pub const KB7=5 or6 was found in the current repository; relevant historical manifests/generator scripts/reports did not record this D-global-key trial. DP_KNOBS per-row key lengths are a distinct interface already used by the DP engine.",
+  "coverage_limit": "This replaces, rather than supplements, long-chain grouping: depth-limited seven-byte-key matches can be displaced by nearer shorter-key occurrences and collisions. Original table/depth/search branch schedule code is unchanged, but match results can change future continuation/skipping/cost statistics.",
+  "audit": "Reverse exactly one source-byte constant edit restores verified scalar Rust. No new table, helper, loop, condition, route or budget; complete parent Lean bytes retained.",
+  "proof_review": {
+    "constant_lemma": "dp_KB7_bound: slot.KB7.val<=8, proved by simp [slot.KB7]",
+    "uses": "Only d_parse_spec's U32 8*KB7 and 64-8*KB7 arithmetic; values40/48 satisfy the same symbolic safety bound. No exact KB7=7 statement or new state/interface.",
+    "required": "New exact source extraction, native Lean compilation, original obligation, allowed axioms and full public round trip"
+  },
+  "proof_status": "COMPATIBLE_SYMBOLIC_PARENT_DRAFT / NOT_RUN: constant lemma remains true at five/six bytes; exact new Rust has not passed a fresh full gate",
+  "correctness_status": "UNKNOWN pending fresh native build/finite decode and complete gate",
+  "performance_status": "UNKNOWN until fixed-corpus paired parser+official encoder measurements; side-cache opportunity counts do not establish this replacement's encoded gain",
+  "falsification": "Stop a key if public size does not improve or loss of depth-limited original long-key coverage outweighs short-match gains; no gate expenditure for a dominated time/size tradeoff"
+}

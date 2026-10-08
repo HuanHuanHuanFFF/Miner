@@ -1,0 +1,33 @@
+{
+  "candidate": "r10-finder-pipeline",
+  "parent": "candidates/r10-record-nonempty",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "7f1c661fd1ce29d12c69671f034ff5a713e284ed1fcba66ba404ff25479b55b7",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "hashes": {
+    "parse.rs": "b74ae5fd9575101b6b34b9f2718d8835adca770c6765c30b33bb895878ba1adf",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "bytes": {
+    "parse.rs": 180231,
+    "Parse.lean": 405221
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "mechanism": "Port #361 dp_parse's existing software-pipelined insertion to D: carry current b8/hash/pre-heads, store i using cached heads, immediately read i+1, refresh after taken-match range insertion",
+  "mechanism_source": "record parent's dp_parse lines1495..1509 and1600..1609; existing hashes/dp_heads/dp_store and their contracts reused unchanged",
+  "old_trial_review": "No D insertion-pipeline candidate in narrow R7/R9 script/manifest/design searches; original DP already used it, so mechanism is attributed reuse rather than invention",
+  "expected_equivalent_to": "r10-record-nonempty",
+  "equivalence_status": "INFERRED: speculative next heads are read after current stores, ordinary/continuation branches do not mutate heads, longjump range insertion forces fresh new-i heads. Finite cache model passed, native444 and public rs/tokens/bytes checks pending",
+  "source_audit": "Reverse five exact D-region substitutions restores verified record Rust; existing shared helpers, D matching/record/relax/backward/emit functions and all routes/knobs retain exact parent bytes. Does not combine linkearly.",
+  "proof_status": "UNADAPTED_PARENT_DRAFT / NOT_RUN: D loop carries extra pipeline values and branch jump flag; port actual extracted interfaces using existing DP store/heads contracts. Original obligation/allowed axioms/public round trip still required",
+  "proof_cost": "Three conceptual states b8/hh/pre; existing DP extraction flattens hh into x3/x4/x7, so anticipate five extra function-state components. Add cached-head<=i bounds; no cached-word truth needed for planner totality, but equality needed for same-output claim.",
+  "cost_scope": "Mostly same insertion/hash/head-read work redistributed across iterations; speculative i+1 is unused on long jumps and final exit, adding bounded prepare work. Cache/value live ranges can add spills. No assumed speedup.",
+  "performance_status": "UNKNOWN paired total compression/current codegen; original DP use does not prove useful scheduling in D's larger loop",
+  "stop": "Reject unexplained cache/record/token/output mismatch; stop if speculative work/register pressure loses time or actual release code has no useful head-load overlap. One fixed transfer, no new pipeline parameter sweep."
+}

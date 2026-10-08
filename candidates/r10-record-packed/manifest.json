@@ -1,0 +1,31 @@
+{
+  "candidate": "r10-record-packed",
+  "parent": "candidates/r10-record-nonempty",
+  "parent_hashes": {
+    "parse.rs": "7f1c661fd1ce29d12c69671f034ff5a713e284ed1fcba66ba404ff25479b55b7",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "verified_parent": "candidates/r10-record-nonempty/VERIFICATION.json",
+  "hashes": {
+    "parse.rs": "3c77fc38b07211b83b98fdfb1d1806961c5dc7e2d17fbbc270c6ba5eecda2770",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "bytes": {
+    "parse.rs": 180341,
+    "Parse.lean": 405221
+  },
+  "mechanism": "Remove one u32 metadata word from every retained node for n<2^27; pack position in high27 bits and count in low5. Candidate words and parse/search/price decisions unchanged.",
+  "fallback": "For n>=2^27 keep original [position as u32,count] format. The decoder uses the same input-length decision. No forced threshold or exact corpus length routing.",
+  "node_zero": "The retained empty position-zero node is a single word0. The backward loop now accepts e>=header_words, including this one-word sentinel.",
+  "bounds": "Actual small-input positions <2^27 and counts<=16 encode exactly. Malformed streams still have guarded lengths/positions, get0 reads and strictly decreasing e with header_words in {1,2}. No arithmetic is unchecked.",
+  "source_audit": "Five reversed substitutions restore exact accepted record source. Three small format helpers, d_top offset, D decoder and header writer only; no finder, choice, route, cost or push-heuristic change.",
+  "equivalence_status": "INFERRED same decoded node stream, hence same planner inputs. Require finite native token/decode, node-stream comparison and public same output. Not an all-input equivalence theorem.",
+  "proof_status": "UNADAPTED_PARENT_ONLY: new format helpers, changed d_top and D decoder loop/header bound need actual extraction and full original gate.",
+  "performance_status": "UNKNOWN: saves four rs bytes per retained node; unpacking/branching and allocation capacity may erase the gain. Compare paired total time to record, no assumed benefit.",
+  "stop": "Reject unexplained node/token/output mismatch. Stop if total time does not improve beyond existing record; do not sweep packing widths or format thresholds."
+}

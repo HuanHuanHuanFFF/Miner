@@ -1,0 +1,45 @@
+{
+  "status": "VERIFIED_SOURCE_INTERFACE_ONLY_LEAN_UNCOMPILED",
+  "rust_sha256": "86e44e1cd2bbb50810f971edb1f0e4fbc71a89c43142850c0eb4097cb03704d5",
+  "parent_lean_sha256": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04",
+  "extraction_path": "evidence\\round11\\37737625602\\fast-l\\extraction\\r11-fast-lensconst",
+  "Funs_sha256": "89ee43599f62996045f375a42a9f7761ad46927084f1f9d761b5e50bd00c46e6",
+  "helper": {
+    "name": "slot.r11_e_lens",
+    "arguments": [
+      "m : U32"
+    ],
+    "return": "Result (Array U16 260#usize)",
+    "loop_count": 0,
+    "fixed_branch": "ok(Array.make 260 literal U16 values)",
+    "fallback": "Array.repeat 260 zero; unchanged e_lens lens m"
+  },
+  "callers": {
+    "run1t": "let lens <- r11_e_lens lm; existing loops consume lens",
+    "run_z": "let lens <- r11_e_lens TZ_LM; existing loop consumes lens"
+  },
+  "changes": [
+    "one new r11_e_lens_spec",
+    "remove redundant initial zero-table hL0 in run1t_spec and run_z_spec"
+  ],
+  "array_check": {
+    "entries": 260,
+    "max": 258,
+    "zero_indices": [
+      0,
+      1,
+      2,
+      259
+    ]
+  },
+  "proof_method": "ordinary decide on finite List membership, getElem!_pos, List.getElem_mem; original e_lens_spec fallback",
+  "source_reversal": "VERIFIED: removing helper and restoring two caller hL0 statements recovers exact e2c parent",
+  "statement_axioms_checked_emitter": "original text preserved by reversible insertion/removals",
+  "not_proved": [
+    "all-input token equivalence to old source",
+    "Lean elaboration",
+    "original obligation gate",
+    "allowed axioms receipt",
+    "round trip"
+  ]
+}

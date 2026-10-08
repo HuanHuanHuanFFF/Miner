@@ -1,0 +1,124 @@
+{
+  "audit": "round10-fast3-opportunity",
+  "decision": "NO_NEW_FAST3_PROBE_RECOMMENDED",
+  "scope": {
+    "read_only_source_audit": true,
+    "no_candidate_created": true,
+    "no_ci_or_submission": true,
+    "purpose": "Assess a fast3-family speed-side alternative under the current same-hotkey payout constraint; the main round10 objective remains balanced-frontier research."
+  },
+  "payability_context": {
+    "source": "Primary task context supplied snapshot 27460 at evidence/round10/official-mid-payability/pareto-pages.json.",
+    "submission_453_remains_same_hotkey_frontier": true,
+    "submission_453_payable_weight": 0.0034836620532421396,
+    "incremental_same_hotkey_share_if_453_survives": 0.0,
+    "condition_for_a_new_point_to_replace_453": "The new point must dominate #453 in official score geometry and remain eligible; admission, registration ownership, bounty eligibility, and any resulting award remain UNKNOWN and unauthorized for action."
+  },
+  "candidate": {
+    "name": "r3-432-fast3",
+    "base_submission": "#432",
+    "source_sha256": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "proof_sha256": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04",
+    "proof_relation": "Parse.lean is byte-identical to the #432 proof per candidate manifest; round03 records successful fresh official extraction and gate for the derivative.",
+    "source_changes": {
+      "T_SKIP": "4 -> 3",
+      "P_DEPTH": "4 -> 1"
+    },
+    "attribution": "Public #432 derivative, not an independent algorithm."
+  },
+  "measurement_source": {
+    "run_id": "37493517227",
+    "cpu": "AMD EPYC 7763 64-Core Processor",
+    "corpus": "corpus-stage1",
+    "per_block": "28 files, one warmup and 11 measured repetitions per method and file.",
+    "raw_files": [
+      {
+        "path": "evidence/round3/37493517227/round1-r3-432-fast3.jsonl",
+        "sha256": "f69c128bd2623413afe377119651f9f2fe0bb4c6803b7624435c54ff23bacb6c",
+        "started_at_unix": 1791303839.620891
+      },
+      {
+        "path": "evidence/round3/37493517227/round2-r3-432-fast3.jsonl",
+        "sha256": "a4b36b2639c06e0ff4c0575ebf171805d1163192f41606f86cc8c383e343df14",
+        "started_at_unix": 1791303938.2019808
+      },
+      {
+        "path": "evidence/round3/37493517227/round3-r3-432-fast3.jsonl",
+        "sha256": "c8218ef715a37eea4fa5e4d4e89be2dec125aee008c5e5ed61986e9d45634830",
+        "started_at_unix": 1791304015.7688808
+      },
+      {
+        "path": "evidence/round3/37493517227/round4-r3-432-fast3.jsonl",
+        "sha256": "b6e32b1a5fcb4070ffe9c416c10b8277bdadbbcacca3378b227f79efc211ad47",
+        "started_at_unix": 1791304074.7090685
+      }
+    ],
+    "integrity_checks": {
+      "same_28_input_filenames_in_all_blocks": true,
+      "same_input_sha256_per_filename_across_blocks": true,
+      "same_fast3_token_and_output_hash_per_filename_across_blocks": true,
+      "all_four_blocks_have_11_measured_repetitions_and_no_recorded_method_errors": true
+    }
+  },
+  "observed_public_metrics": {
+    "block_time_axes": [
+      0.43162252408316687,
+      0.43306333075039366,
+      0.43255202976965723,
+      0.43223605757785494
+    ],
+    "equal_file_and_block_time_axis": 0.4323684855452682,
+    "equal_file_and_block_size_axis_pct": 36.60213910633018,
+    "interpretation": "Time axis is the equal-file mean, for each block, of median measured total_s(candidate)/median measured total_s(incumbent); block results are then equally weighted. Size is equal-file output_bytes/raw_bytes."
+  },
+  "component_share_model": {
+    "observations": 112,
+    "method": "For every file in every block, take the median of the 11 measured parser time_s values and the median of the 11 measured encode_s values; calculate each component's share of their sum, then average the 112 file-block shares equally.",
+    "parser_share_pct": 16.390604635048134,
+    "encoder_share_pct": 83.60939536495187,
+    "caveat": "Component shares are diagnostic medians, not the official score metric; the median of per-repetition total_s need not equal the sum of component medians."
+  },
+  "free_parser_sensitivity": {
+    "assumption": "Set parser time to zero while leaving each observed fast3 encoder time unchanged; use the observed incumbent median total_s as denominator for each file and block, then average equally across 112 observations.",
+    "modeled_time_axis_floor": 0.3735450038010073,
+    "modeled_absolute_axis_reduction": 0.058823481744260886,
+    "modeled_reduction_pct_of_observed_time_axis": 13.604942013772693,
+    "status": "Sensitivity ceiling only; not a measured or attainable speedup and not a confidence bound."
+  },
+  "failed_or_exhausted_directions": [
+    {
+      "direction": "More aggressive fast2 settings",
+      "evidence": "Round03 records fast2 as slower and larger than fast3; it was rejected."
+    },
+    {
+      "direction": "NICE and nearby skip/depth parameter search",
+      "evidence": "Optimization methods records nice16/nice64 without stable time benefit. Round03 dmin257 and tshift3 had narrow calibrated geometry but missed the fixed #427 screening threshold."
+    },
+    {
+      "direction": "Round04 fast3 CPU/layout rewrites",
+      "evidence": "Closing read-ahead was about 1.78% slower and forced non-inline run1 about 4.32% slower. run1tai's roughly 0.277% gain across one runner's blocks reversed to a loss on an independent runner; foldni's small initial gain washed out. Five further CPU rewrites were initially 0.55%-1.14% slower, and the independent CPU variants did not establish a repeatable total-time gain."
+    },
+    {
+      "direction": "Lazy and parse-cost variants",
+      "evidence": "Round04 reports lazy4far about 0.179% slower with 36.577230% size; lazy9-cost and classoutline were slower on the independent runner. Short remote-cost rejection variants had no useful two-axis gain."
+    }
+  ],
+  "probe_recommendation": {
+    "count": 0,
+    "reason": "No distinct, low-proof-cost fast3 probe is supported by current evidence as likely to improve total time while holding output size equal or smaller. Parser is only about 16.4% of measured parser-plus-encoder component time, the official encoder dominates, and prior output-preserving CPU rewrites were slower or failed independent replication. Search-budget changes already show the speed/size tradeoff and provide no small-output-preserving path."
+  },
+  "evidence_classification": {
+    "VERIFIED": [
+      "Raw measurement hashes, source/proof hashes, four-block metrics, and per-file component calculations in this audit.",
+      "Round03/round04 documented gate and performance outcomes for the named variants."
+    ],
+    "INFERRED": [
+      "The free-parser floor and its score-axis reduction are a counterfactual model.",
+      "No probe is recommended based on the limited prior CPU and parameter-search evidence."
+    ],
+    "UNKNOWN": [
+      "Whether any untested parser change could preserve all outputs and produce a reproducible improvement large enough to dominate #453.",
+      "Official admission, registration ownership, bounty eligibility, and payment for a future candidate."
+    ]
+  }
+}

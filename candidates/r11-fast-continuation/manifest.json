@@ -1,0 +1,28 @@
+{
+  "candidate": "r11-fast-continuation",
+  "parent": "candidates/r3-432-fast3",
+  "parent_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "hashes": {
+    "parse.rs": "72129aa1e666d7d0faf51731b7ba6fd99922dc6b9149b5b1c6cf2067c7ee3c7a",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "attribution": {
+    "source": "Official public submission 432, then r3-432-fast3",
+    "reference": "references/round3-public-432/PROVENANCE.md",
+    "public_miner_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "named_author": "UNKNOWN; no name in official source response",
+    "ownership": "Derivative of external public miner code; not an independent parser algorithm"
+  },
+  "mechanism": "Only after an emitted 258-byte run1 match, replace the next cached head candidate if its existing key/distance test fails and the same-distance continuation key matches. Original next-loop probe extends it; no second common-prefix search or new table.",
+  "difference_from_old_work": "Not NICE/depth/skip/lazy sweep. Not old round3-tiny-rep1: this changes large run1 at the exact DEFLATE max-length truncation boundary, only when the original candidate would fail, with no eager full match scan or tie preference.",
+  "equivalence_status": "Tokens intentionally may change; old valid head candidates remain selected, but later parse schedule can change. Decode and both score axes are required; no size monotonicity claim.",
+  "proof_status": "UNADAPTED_PARENT_ONLY; official extraction/original obligation/axiom gate UNKNOWN",
+  "proof_cost": "New helper preserves pre_slot bound, pre_c<=p and pre_w=word8(input,pre_c). Existing MainInv1 permits arbitrary such candidates; original probe supplies MatchAt. No extra loop state. Parent Lean is UNADAPTED.",
+  "audit": "One isolated run1 call-site replacement and one helper; reverse replacement restores exact parent bytes. All constants and routing unchanged.",
+  "performance_status": "UNKNOWN; parser was only 16.39% of diagnostic component time in R3. Instruction/store reduction is not a total-time claim.",
+  "stop_condition": "Decode failure stops immediately. Pendingfold token difference rejects its equivalence premise. No improvement of current two-axis frontier projection or total-time regression closes the candidate; no parameter sweep.",
+  "formal_submission_sent": false
+}

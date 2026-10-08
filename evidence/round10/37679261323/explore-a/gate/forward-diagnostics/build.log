@@ -1,0 +1,31 @@
+warning: value assigned to `k` is never read
+    --> /home/runner/work/_temp/round10-forward-build/reference.rs:4045:29
+     |
+4045 |                 let mut k = k0;
+     |                             ^^ this value is reassigned later and never used
+...
+4054 |                     k = c_extend(s, c, p, k0, lim);
+     |                     ------------------------------ `k` is overwritten here before the previous value is read
+     |
+     = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `k` is never read
+    --> /home/runner/work/_temp/round10-forward-build/instrumented.rs:4054:29
+     |
+4054 |                 let mut k = k0;
+     |                             ^^ this value is reassigned later and never used
+...
+4063 |                     k = c_extend(s, c, p, k0, lim);
+     |                     ------------------------------ `k` is overwritten here before the previous value is read
+
+warning: value assigned to `k` is never read
+    --> /home/runner/work/_temp/round10-forward-build/candidate.rs:4223:29
+     |
+4223 |                 let mut k = k0;
+     |                             ^^ this value is reassigned later and never used
+...
+4232 |                     k = c_extend(s, c, p, k0, lim);
+     |                     ------------------------------ `k` is overwritten here before the previous value is read
+
+warning: 3 warnings emitted
+

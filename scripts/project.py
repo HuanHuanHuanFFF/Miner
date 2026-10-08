@@ -57,7 +57,10 @@ def show_tasks(query=None):
         print('  结论: ' + task['decision'])
         print('  报告: ' + str(ROOT / task['report']))
         print('  证据: ' + ', '.join(task['evidence']))
-    print(f"匹配 {len(found)} 个任务；原始会话 {catalog['conversation']['title']} / {catalog['conversation']['thread_id']}")
+        conversation = task.get('conversation', catalog['conversation'])
+        caption = conversation.get('title', '')
+        print('  会话: ' + (caption + ' / ' if caption else '') + conversation['thread_id'])
+    print(f"匹配 {len(found)} 个任务")
     return 0 if found else 1
 
 

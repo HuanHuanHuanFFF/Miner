@@ -1,0 +1,72 @@
+{
+  "status": "ACTUAL_INTERFACE_CHECKED_LEAN_UNCOMPILED",
+  "extraction_run": "37722786008",
+  "extraction_git_sha": "02e8095c8f719f9026791354ee7531b4cf8f3059",
+  "extraction": {
+    "exit_code": 0,
+    "extraction_accepted": true,
+    "source_sha256": "72129aa1e666d7d0faf51731b7ba6fd99922dc6b9149b5b1c6cf2067c7ee3c7a",
+    "files": {
+      "Types.lean": {
+        "bytes": 503,
+        "sha256": "276d4089d337e0d7da19d73f67b92ed57aa61ce5b0b548420962498a78bf5966"
+      },
+      "Constants.lean": {
+        "bytes": 9485,
+        "sha256": "8d267c4d89a1379b4f9004b8c9d475bb761126b9bd56d0990fd01b8af0c8687b"
+      },
+      "Funs.lean": {
+        "bytes": 280795,
+        "sha256": "1e4de3ba6d82b1123ebac92c68dc4f9f85f7f662600174021e0615000febb820"
+      }
+    },
+    "proof_status": "NOT_RUN"
+  },
+  "interfaces": {
+    "r11_continuation": {
+      "args": "s p lim span d a c cw km",
+      "signature_sha256": "fae5fbffc971213033822485278583ed19850b64eff0d3f32964e84581342444"
+    },
+    "run1_loop0_loop0": {
+      "args": "input lazy km p head lim pre_slot pre_c pre_w l d ins go",
+      "signature_sha256": "b7320897e2c5fa64a140761921c76ed8cff48a55105f25377e23c282f6192a43"
+    },
+    "run1_loop0": {
+      "args": "input out skip lazy skcap km nt ls p head lim miss fuel pre_slot pre_c pre_w",
+      "signature_sha256": "cb42ccbf241412ab087137a4ee3be218a483645ac2647f9787d54bebe676e3e9"
+    },
+    "run1": {
+      "args": "H input out skip lazy skcap km",
+      "signature_sha256": "55444af8d32fbde8f559d904367d5704bd3db6410df8ed5c46ade3a522bba243"
+    }
+  },
+  "actual_call": "r11_continuation input «end» lim i3 d1 i7 i8 i9 km",
+  "new_theorems": [
+    "r11_continuation_spec"
+  ],
+  "proof_diff": "One local step theorem before probe_m_spec. Parent proof bytes restored by removing the inserted bridge; no existing theorem/obligation/axiom changed.",
+  "preconditions": [
+    "lim.val + 8 = input.length",
+    "old candidate c.val <= p.val",
+    "old cached cw.val = word8 input c.val"
+  ],
+  "postconditions": [
+    "slot value unchanged",
+    "candidate <= p",
+    "cached word equals word8 at candidate"
+  ],
+  "reuse": [
+    "be8_spec",
+    "ahead_fix_m_spec",
+    "probe_m_spec",
+    "MainInv1",
+    "main1_loop_spec"
+  ],
+  "arithmetic": "p<lim makes p+8 safe; checked d<=p makes rc=p-d safe and rc+8<=input.length. Prefix/distance predicates only choose a cache entry.",
+  "unverified": [
+    "Lean compilation of new theorem",
+    "Automatic consumption of new step rule in original main1_loop_spec",
+    "Fresh extraction during complete gate",
+    "Original obligation, allowed axioms and full public roundtrip for this exact pair"
+  ]
+}

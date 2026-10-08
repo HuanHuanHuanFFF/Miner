@@ -1,0 +1,191 @@
+{
+  "status": "READ_ONLY_ADVERSARIAL_SOURCE_REVIEW_NO_BLOCKER_FOUND",
+  "reviewed_utc": "2026-10-08T04:33:55.416817+00:00",
+  "source_sha256": "6ef07be874052d23fbe3cdca8de7e311e82a306338a93f70389fe35006e99992",
+  "proof_sha256": "e0ded4248a894e8c53bc1ce644c7c3f5c6681fe3c06eaab597caf10a5bf472db",
+  "scope": "Source and harness review plus bounded arithmetic enumeration; no Rust/Lean execution, no new candidate, no source changes. Running groups-d receipts were not assumed.",
+  "metadata": {
+    "producer": "d_load_groups first calls exact original d_load, then d_gap_word computes actual all-positive max and actual equal-price groups before overwriting lc[511].",
+    "invalid_disables": [
+      "any literal price zero",
+      "literal maximum >4095",
+      "no flat group"
+    ],
+    "word": "mask20 in bits12..31, positive max in bits0..11; no overlap; last valid bit is bit31",
+    "lifetime": "Only d_dp loader/block calls switched; all actual loads regenerate metadata from the resulting arrays; read-only consumers do not mutate litc/lc/dcc.",
+    "semantic_precondition": "mask bits and max must describe current arrays; arbitrary fake metadata can invalidate equivalence; totality is not this provenance invariant.",
+    "reserved_slot": "Caller source audit bounds actual d_dp gap rem<=510 even for malformed len511; d_cand/d_push use<=258. Retained generic helpers keep original source."
+  },
+  "retained_helpers_byte_equal": [
+    "d_load",
+    "d_block",
+    "d_gap",
+    "d_bcost",
+    "d_best_len_scalar",
+    "d_best_len_old",
+    "d_best_len",
+    "d_push",
+    "d_cand",
+    "d_back"
+  ],
+  "d_dp_only_four_name_replacements": true,
+  "group_arithmetic_check": {
+    "rem_values": 512,
+    "covered_valid_rem_values": 247,
+    "group_ranges": [
+      [
+        11,
+        13
+      ],
+      [
+        13,
+        15
+      ],
+      [
+        15,
+        17
+      ],
+      [
+        17,
+        19
+      ],
+      [
+        19,
+        23
+      ],
+      [
+        23,
+        27
+      ],
+      [
+        27,
+        31
+      ],
+      [
+        31,
+        35
+      ],
+      [
+        35,
+        43
+      ],
+      [
+        43,
+        51
+      ],
+      [
+        51,
+        59
+      ],
+      [
+        59,
+        67
+      ],
+      [
+        67,
+        83
+      ],
+      [
+        83,
+        99
+      ],
+      [
+        99,
+        115
+      ],
+      [
+        115,
+        131
+      ],
+      [
+        131,
+        163
+      ],
+      [
+        163,
+        195
+      ],
+      [
+        195,
+        227
+      ],
+      [
+        227,
+        258
+      ]
+    ],
+    "all_matched_actual_constants": true,
+    "maximum_following_count": 31,
+    "limit": "Source arithmetic enumeration, not native end-to-end verification."
+  },
+  "bulk_argument": {
+    "seed": "Original scalar step decreases q and writes position q. Fill [lower,q) excludes that seed.",
+    "count": "min(q-stop, group_end-1-rem) ends at last index below exclusive group_end; rem258 is scalar.",
+    "strictness": "Current metadata requires every literal>0; seed vc<vl sets nxt high C. C+maximum<2^32 prevents the next literal cost wrapping; same lc keeps continuation high C, so it wins strictly regardless of low choice tie.",
+    "choice": "chd<=0xfffffefd and rem<=258 keep chd+rem<2^32; dlit<2^32 prevents low choice from contaminating upper cost.",
+    "ring": "count<=31<1024 yields distinct ring slots and at most two physical segments. All values are independent of fill order because kc/high are cached and this phase has no ring-min push lookup.",
+    "writes": "Seed establishes q<s.len(), q<out.len(), end>q. Fill p is below q, so helper bounds cover all count positions in actual call.",
+    "nxt": "After both ascending segments, q=lower and nxt reconstructs the cell for lower (the final position in original descending traversal), not the last physically written cell."
+  },
+  "coverage_caveats": [
+    {
+      "id": "loader-count",
+      "detail": "14 harness loader cases comprise 7 d_load_groups comparisons plus 7 calls to unchanged generic new::d_load at usize::MAX. Do not describe this as 14 new metadata-loader cases."
+    },
+    {
+      "id": "physical-ring-wrap",
+      "detail": "Existing 2156 fixed DP fixtures do not explicitly put a bulk interval across1024: p0 ends<=511; p600 match ends858; p1100 len511 exceeds room so no continuation. n1025 alone does not cover bulk wrap. Public equality may exercise it, but no current branch counter establishes that coverage."
+    }
+  ],
+  "ring_boundary_witness": {
+    "type": "manually derived source trace, not executed test",
+    "input_out_length_minimum": 1045,
+    "hi": 1027,
+    "stop": 1020,
+    "end": 1045,
+    "lo": 2000,
+    "literal_price_all": 1,
+    "lc_group_19_23": 2,
+    "cached_endpoint_high_cost": 10,
+    "kcd": 0,
+    "chd": 512,
+    "nxt0_high_cost": 13,
+    "seed_q": 1026,
+    "seed_rem": 19,
+    "count": 3,
+    "lower": 1023,
+    "segments": [
+      [
+        1023,
+        1024,
+        1023
+      ],
+      [
+        1024,
+        1026,
+        0
+      ]
+    ],
+    "first_bulk_restored_nxt_cost": 12,
+    "first_bulk_restored_nxt_choice": 534,
+    "function_continues_to_stop": 1020,
+    "final_choice_with_flat_2_prices": 537
+  },
+  "proof_and_gate_boundary": "No assertion of metadata semantics from totality or gate. Native14/2156 and whole parser checks remain running in groups-d. No repair or additional run requested by reviewer.",
+  "additional_harness": {
+    "path": "candidates/r11-gap-groups/native-cross-ring-check.rs",
+    "sha256": "5e4bf1f8dda7e27bd439787360c106b6a3fe6a7e227bbb2168b5e57dfab21aa0",
+    "status": "UNCOMPILED_UNRUN",
+    "cases": 9,
+    "metadata_origin": "Actual d_load_groups; no direct metadata forgery",
+    "scope": [
+      "isolated crossing at1023, stop1023, expected finalchoice534",
+      "same crossing continued tostop1020, expected finalchoice537",
+      "translated noncross control",
+      "bit31 last-group crossing/noncross with packed metadatau32MAX",
+      "zero/max4096/no-flat disable cases",
+      "honest max cost-wrap fallback"
+    ],
+    "comparison": "Entire ring/out and returned nxt against original parent d_gap; parent/new actual loaders compared for real prices"
+  }
+}

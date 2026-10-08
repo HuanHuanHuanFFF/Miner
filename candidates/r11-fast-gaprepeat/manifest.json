@@ -1,0 +1,27 @@
+{
+  "candidate": "r11-fast-gaprepeat",
+  "parent": "candidates/r3-432-fast3",
+  "parent_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "hashes": {
+    "parse.rs": "d9871c561eea64f98c7e976644198c5798f028c8d6e8c17b83f34feae74da9b7",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "attribution": {
+    "source": "Official public #432 then fast3; references/round3-public-432/PROVENANCE.md",
+    "public_miner_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "named_author": "UNKNOWN",
+    "ownership": "Derivative of external public miner source, not an independently authored parser"
+  },
+  "mechanism": "At existing run1 search positions, keep the original head match whenever valid. Only after at least one pending literal and an original failed probe, read the previous output match token as an implicit repeat-distance cache and probe it once. No extra table, main-loop state, or eager scan on valid matches.",
+  "difference_from_previous": "Closed continuation searched only exact 258-byte match boundaries; a short-match immediate continuation is impossible because the next byte mismatched. This probe instead crosses actual literal gaps. Unlike R3 tiny-rep1, it runs in existing run1, retains every valid original candidate, does not favor repeats on ties, and does not carry an added rep variable or run the tiny planner.",
+  "cost_hypothesis": "May trade one cheap failed-probe fallback for fewer literal tokens and less encoder work; extra fallback work can outweigh both. Encoder occupied most historical fast3 component time. No time or size benefit is asserted.",
+  "proof_status": "UNADAPTED_PARENT_ONLY; native checks, fresh extraction and complete original gate UNKNOWN",
+  "proof_cost": "One wrapper spec using original probe_m_spec twice, be8_spec for the fallback and guarded token read/position arithmetic. Return FoundAt and original length/distance bounds. No new loops or main-state tuple changes.",
+  "equivalence_status": "Final tokens may change. Original valid probe is preserved at the current state, but later search states/encoder blocks may change; no size monotonicity claim.",
+  "audit": "One run1 call replacement and one helper. Reversing both restores exact parent bytes. All constants, routing, record logic and encoder unchanged.",
+  "stop_condition": "Any native decode failure stops. If measured two-axis projection has no frontier opportunity, stop this version without threshold/depth variants. No combination with closed pendingfold/continuation candidates.",
+  "formal_submission_sent": false
+}

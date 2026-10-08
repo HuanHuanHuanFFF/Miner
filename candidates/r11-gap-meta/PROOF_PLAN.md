@@ -1,0 +1,3 @@
+# Actual-extraction proof pending
+
+Original helpers/theorems remain. Add totality specs for d_gap_positive_max, d_load_meta, d_block_meta and d_gap_meta loops. Rebind d_dp initial/inner/node calls, expected unchanged9-state tuples. Outer scalar seed q decrements before nested fill, so prove nested q_out<=q_seed and out.length equality, then q_out<q_entry. Original obligation, axiom whitelist and checked emitter unchanged. This copied Lean is UNADAPTED and must not be gated as accepted. Stand-alone false metadata has a known semantic counterexample; loaded-source invariant is separate from totality.

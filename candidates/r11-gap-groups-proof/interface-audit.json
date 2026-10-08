@@ -1,0 +1,37 @@
+{
+  "status": "ACTUAL_EXTRACTION_INTERFACE_ONLY__NO_NEW_LEAN",
+  "run_id": "37727588709",
+  "rust_sha256": "6ef07be874052d23fbe3cdca8de7e311e82a306338a93f70389fe35006e99992",
+  "funs_sha256": "d00bd9e6bec3571e140db0484d71eaf02625d4a72eddf1d278cc2d249c954c45",
+  "types_sha256": "276d4089d337e0d7da19d73f67b92ed57aa61ce5b0b548420962498a78bf5966",
+  "constants_sha256": "4a083c4264c013f437fcb492c86cec195ab7ff1b1c5cd74fd0afda2ded2e5773",
+  "interfaces": {
+    "d_gap_group_fill_loop": {"state": ["ring", "out", "ri", "p"], "return": ["ring", "out"], "measure": "hi-p", "explicit_guards": ["p<hi", "p<out.length", "ri<D_RING", "endpoint>=p"]},
+    "d_gap_word_loop0_loop0": {"state": ["l", "flat"], "return": "flat Bool", "measure": "512-l", "guards": ["l<group_end", "l<512"]},
+    "d_gap_word_loop0": {"state": ["mask", "g"], "return": "mask U32", "measure": "20-g", "variable_shift": "1#u32 <<< g, g<20"},
+    "d_gap_groups_loop0_loop1": {"state": ["ring", "out", "q", "nxt"], "return": ["ring", "out", "q", "nxt"]},
+    "d_gap_groups_loop2": {"state": ["ring", "out", "q", "nxt"], "return": ["nxt", "ring", "out"], "stable_parameters": ["word U32", "maximum U64", "kc U64"], "borrow": "scalar seed uses Array/Slice index_mut back closures", "query_shift": "word >>> i20, i20 from%32", "q_decrease": "scalar q1=q-1; bulk guarded count>0,count<=q1, lower=q1-count"}
+  },
+  "required_postconditions": {"fill": "out.length preserved", "group_price_loops": "forall totality, post True", "groups_gap": "out.length preserved, no metadata-origin premise", "original_obligation": "unchanged"},
+  "limits": ["No new Lean or full gate run", "Initial native helper failed in fixture distance table range520..752, not a candidate mismatch", "Later groups-e v2 helper checks14/2156 and9 cross-ring cases passed; this does not establish full gate", "Fake metadata semantic counterexample remains intentional; generic original helpers retained"],
+  "extension_feasibility_audit": {
+    "deadline": "2026-10-08T15:14:07+08:00",
+    "status": "READ_ONLY_FEASIBILITY__NO_LEAN_GENERATED",
+    "parent_lean_sha256": "e0ded4248a894e8c53bc1ce644c7c3f5c6681fe3c06eaab597caf10a5bf472db",
+    "meta_draft_sha256": "052fc5336cef9214a140c3204fe23c214e1be637cec8899ec98d03aa02aaaa46",
+    "aeneas_pin": "5b9dcf33dccdb1560ea7203ac57ea202476b6ed3",
+    "dp_inner_components_verified": 9,
+    "dp_outer_components_verified": 9,
+    "caller_binding_changes": 4,
+    "estimated_new_specs": 14,
+    "mutable_back_bridge_helpers": 2,
+    "unsigned_shift_reuse": "parent e0 d1_shr/d1_shl lines1671..1679 already call generic UScalar shift specs",
+    "group_function_expansion": {"lines": 425, "if_count": 62, "constant_div_count": 31, "d_min_calls": 16},
+    "measure_map": {"positive_max": "256-i", "word_inner": "512-l", "word_outer": "20-g", "fill": "hi-p", "gap": "q", "dp_inner": "fuel", "dp_outer": "e"},
+    "new_totality_origin_premises": false,
+    "first_complete_gate_attempt_estimate_hours": {"central": 1.0, "range": [0.75, 1.5], "status": "PROVISIONAL_INFERENCE, not accepted guarantee"},
+    "compile_unknowns": ["mut-back API/elaboration", "loop2 lift/bind/out.length composition", "q-count strict decrease context", "branch expansion term and compile cost"],
+    "observed_gate_seconds": {"pipeline_core": 542.4, "pipeline_Parse_compile": 374.9, "not_included": "runner startup and subsequent public scoring"},
+    "AA_runtime_reference": "Unavailable publicly for matched Sol/xhigh; bounded direct lookup about3seconds"
+  }
+}

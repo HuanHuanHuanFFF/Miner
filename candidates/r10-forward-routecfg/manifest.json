@@ -1,0 +1,158 @@
+{
+  "candidate": "r10-forward-routecfg",
+  "parent": "candidates/r10-record-nonempty",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "7f1c661fd1ce29d12c69671f034ff5a713e284ed1fcba66ba404ff25479b55b7",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "hashes": {
+    "parse.rs": "917eee4fb794e0fa83ea92c131c0dfa97ad3f1b613a907d59e1f2c459b900979",
+    "Parse.lean": "86cfc36adb009970bccbb5a9c543c5f559148d729e8c0f041934aab44e95592d"
+  },
+  "bytes": {
+    "parse.rs": 180225,
+    "Parse.lean": 405221
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "verified_parent": "candidates/r10-record-nonempty/VERIFICATION.json",
+  "mechanism": "Restore original DP long-key/update/halving settings to its migrated D content rows via one D_MODEL table. Retain D's sparse flen16 first pass and single backward refinement.",
+  "model_columns": [
+    "kb7",
+    "upd",
+    "half"
+  ],
+  "route_models": [
+    {
+      "class": 5,
+      "D_row": 5,
+      "original_DP_row": 0,
+      "before": [
+        7,
+        2048,
+        10000
+      ],
+      "after": [
+        8,
+        8192,
+        8000
+      ],
+      "model_changes": true,
+      "D_flen_retained": 16
+    },
+    {
+      "class": 6,
+      "D_row": 5,
+      "original_DP_row": 0,
+      "before": [
+        7,
+        2048,
+        10000
+      ],
+      "after": [
+        8,
+        8192,
+        8000
+      ],
+      "model_changes": true,
+      "D_flen_retained": 16
+    },
+    {
+      "class": 10,
+      "D_row": 6,
+      "original_DP_row": 2,
+      "before": [
+        7,
+        2048,
+        10000
+      ],
+      "after": [
+        8,
+        8192,
+        8000
+      ],
+      "model_changes": true,
+      "D_flen_retained": 16
+    },
+    {
+      "class": 11,
+      "D_row": 7,
+      "original_DP_row": 3,
+      "before": [
+        7,
+        2048,
+        10000
+      ],
+      "after": [
+        8,
+        4096,
+        10000
+      ],
+      "model_changes": true,
+      "D_flen_retained": 16
+    },
+    {
+      "class": 12,
+      "D_row": 8,
+      "original_DP_row": 4,
+      "before": [
+        7,
+        2048,
+        10000
+      ],
+      "after": [
+        7,
+        2048,
+        10000
+      ],
+      "model_changes": false,
+      "D_flen_retained": 16
+    },
+    {
+      "class": 13,
+      "D_row": 9,
+      "original_DP_row": 5,
+      "before": [
+        7,
+        2048,
+        10000
+      ],
+      "after": [
+        7,
+        2048,
+        10000
+      ],
+      "model_changes": false,
+      "D_flen_retained": 16
+    },
+    {
+      "class": 15,
+      "D_row": 10,
+      "original_DP_row": 6,
+      "before": [
+        7,
+        2048,
+        10000
+      ],
+      "after": [
+        7,
+        2048,
+        10000
+      ],
+      "model_changes": false,
+      "D_flen_retained": 16
+    }
+  ],
+  "native_D": "Rows0,1,3,4 retain [7,2048,10000]; other unassigned D rows retain the same defaults.",
+  "important_limit": "Not an exact reconstruction of the original DP first plan: D still uses sparse length endpoints above flen16, direct insertion and plain D walk instead of the DP pipeline and tail-word walk.",
+  "same_mathematical_settings": "First six search knobs, huff0, tmax64 on fback100, BTRUNC1, lz2max258, and equal D long depths at normal/lazy/end nodes already matched the original DP profiles.",
+  "bounds": "Reuse original dp_sh7, dp_upd and dp_half clamps. updn<=1048576; halfn fits u32; key shifts remain in the original safe 0..56 range. No new evolving loop state is required.",
+  "audit": "Five reversible regions: one constant model table, D wrapper/model plumbing, and D model initialization/update calls. D_KNOBS/CLASS_TAB/record optimization/search code/backward planning/emitters are unchanged; costcache is not combined.",
+  "equivalence_status": "Final tokens may change for classes5,6,10,11; other route model settings are unchanged. No all-parser token equivalence or original-DP first-plan identity claim.",
+  "proof_status": "UNADAPTED_PARENT_ONLY: D parser/glue signatures and frozen loop parameters require fresh extraction and bridge to original obligation; copied record proof does not validate the new code.",
+  "performance_status": "UNKNOWN: exact old model settings can improve or worsen this sparse-D/refinement combination. Compare paired axes and current projection against record, scalar and public361 before any full gate."
+}

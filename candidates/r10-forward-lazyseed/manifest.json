@@ -1,0 +1,30 @@
+{
+  "candidate": "r10-forward-lazyseed",
+  "parent": "candidates/r9-block-scalar",
+  "base_submission_id": "361",
+  "parent_hashes": {
+    "parse.rs": "faf1d7281678d12c3243002121feecdd0ea139633dea197dbc77d86fb6319257",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "hashes": {
+    "parse.rs": "9b7b78681517c6dbaf1e2788bb03cca26ba9517e0881d9eab54ea4d8cfad815d",
+    "Parse.lean": "aa21da6f74e81314297df07beecbfc98b15c848354437674bdb9347d8632f0af"
+  },
+  "bytes": {
+    "parse.rs": 185948,
+    "Parse.lean": 405395
+  },
+  "attribution": {
+    "author_hotkey": "5EyJCp9MBB8S6QLj4xawJ8TKBcT644xDSSjMLKSgdujmeGqA",
+    "public_reference": "references/round7-public-361/PROVENANCE.json",
+    "verified_parent": "candidates/r7-mid361-block1/VERIFICATION.json"
+  },
+  "mechanism": "Remove the first forward price planner while retaining D's original search schedule and candidate stream. Build greedy block statistics from recorded intervals, then run the unchanged scalar backward DP.",
+  "seed_lazy": 1,
+  "backward_passes": 1,
+  "seed_uses_backward_endpoints": true,
+  "audit": "Original d_parse remains byte-identical and callable as a diagnostic reference. Only d_plan_k calls new d_collect and d_seed; router, finder, recording, backward planner, emitters and encoder are unchanged.",
+  "equivalence_status": "INFERRED exact rs stream; final tokens intentionally may differ. Fresh rs differential and decode/public round trip required.",
+  "proof_status": "UNVERIFIED_PARENT_ONLY: Parse.lean is copied verbatim. New d_collect/d_seed totality and changed d_plan_k bridge are missing; do not run or label a successful gate until completed.",
+  "performance_status": "UNKNOWN: no Rust runtime or paired total-compression result locally. Public screen plus independent confirmation required."
+}
