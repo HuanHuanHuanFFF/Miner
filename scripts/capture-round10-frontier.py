@@ -20,7 +20,7 @@ def main():
     args = ap.parse_args()
     dest = args.destination.resolve()
     evidence_root = (ROOT / 'evidence').resolve()
-    assert dest.is_relative_to(evidence_root) and dest.parent.name in ('round10', 'round11', 'round12')
+    assert dest.is_relative_to(evidence_root) and dest.parent.name in ('round10', 'round11', 'round12', 'round13')
     dest.mkdir(parents=True, exist_ok=True)
     assert not any(dest.iterdir()), 'Use a fresh directory; prior response bodies are immutable'
     started = now()
