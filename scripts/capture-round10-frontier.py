@@ -24,10 +24,11 @@ def main():
     assert not any(dest.iterdir()), 'Use a fresh directory; prior response bodies are immutable'
     started = now()
     raw_receipts = []
+    session = requests.Session()
 
     def get(endpoint, filename, params=None):
         before = now()
-        response = requests.get(BASE + endpoint, params=params, timeout=40)
+        response = session.get(BASE + endpoint, params=params, timeout=40)
         after = now()
         raw = response.content
         (dest / filename).write_bytes(raw)
@@ -87,6 +88,8 @@ def main():
             'started_utc': started, 'ended_utc': now(), 'error': f'{type(error).__name__}: {error}',
             'raw_response_files': raw_receipts}, indent=2) + '\n')
         raise
+    finally:
+        session.close()
 
 
 if __name__ == '__main__':

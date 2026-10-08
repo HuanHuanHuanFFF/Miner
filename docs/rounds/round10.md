@@ -1,10 +1,10 @@
 # 第十轮：同字节优化、完整验证与前沿边界
 
-执行规则见 [AGENTS.md](../../AGENTS.md)。会话 ID：`01a117eb-0257-7f51-a1b9-a7621bdf16dc`。本轮北京时间 2026-10-08 **03:50:52** 开始，五小时截止 **08:50:52**；当前 [预算回执](../../evidence/round10/budget.json) 与逐次决策 [research-state.md](../../evidence/round10/research-state.md) 保留阶段状态。本报告的最终快照与归档校验尚在收尾。
+执行规则见 [AGENTS.md](../../AGENTS.md)。会话 ID：`01a117eb-0257-7f51-a1b9-a7621bdf16dc`。本轮北京时间 2026-10-08 **03:50:52** 开始，五小时截止 **08:50:52**；[预算回执](../../evidence/round10/budget.json) 与逐次决策 [research-state.md](../../evidence/round10/research-state.md) 保留时间分配和阶段状态。实验结论、评分快照和归档核对分别记录如下。
 
 ## 结果
 
-**尚未取得新的均衡可支付前沿点。** 全部 13 个 CI 已自然结束，测试了 **21 份不同 Rust 源码、246 个公共配对测量进程**，得到两份通过完整公共 gate 的新源码／证明对。其余独有负面结果、提取拒绝和未验证草稿均保留。完整复算见 [pre-final-summary.json](../../evidence/round10/pre-final-summary.json)。
+**未取得新的均衡可支付前沿点。** 全部 13 个 CI 已自然结束，测试了 **21 份不同 Rust 源码、246 个公共配对测量进程**，得到两份通过完整公共 gate 的新源码／证明对。其余独有负面结果、提取拒绝和未验证草稿均保留。完整复算见 [final-summary.json](../../evidence/round10/final-summary.json)。
 
 当前最好的已验证包是 [r10-finder-pipeline-proof](../../candidates/r10-finder-pipeline-proof)：空记录消除加原 DP 插入预读流程。两个独立 runner、四个公共计时块平均比本轮起点 scalar 快 **1.7122%**，压缩输出逐字相同；相对同场 record 父版，平均再快 **0.6522%**。幅度在 runner 间变化，不能把均值解释成保证值或统计置信界。
 
@@ -83,7 +83,7 @@ pipeline 公共四块相对同场 record 的变化：
 
 ## 前沿与支付边界
 
-当前复算使用完整快照 **27641，2026-10-08 06:26:41 +08:00**，494 行、76 个前沿点，API freshness 标为 unknown。原始响应、请求时间与 SHA 见 [receipt](../../evidence/round10/official-late-research/receipt.json)。公开 scorer 重放误差为 `6.94e-18`。
+当前复算使用完整快照 **27887，2026-10-08 08:29:15 +08:00**，501 行、79 个前沿点，API freshness 标为 unknown。原始响应、请求时间与 SHA 见 [receipt](../../evidence/round10/official-final-retry1/receipt.json)，另有 [逐字节与分页核对](../../evidence/round10/frontier-capture-check.json) 和 [独立最终前沿审查](../../evidence/round10/final-frontier-review.md)。公开 scorer 重放误差为 `2.78e-17`。首次最终刷新在第 4 页遇到 `SNAPSHOT_NOT_FOUND`；[不完整响应](../../evidence/round10/official-final/capture-failure.json) 单独保留，没有进入本次复算。
 
 | pipeline 条件模型 | 时间轴 | 大小轴 | 几何份额 |
 |---|---:|---:|---:|
@@ -92,7 +92,9 @@ pipeline 公共四块相对同场 record 的变化：
 
 同族模型仍被 #360/#418/#422 支配。固定此大小时，时间还需再改善约 5.02% 才可能跨过现有几何门槛。压力场景取最慢观察配对比值再加 2%，大小取同族值加 0.01 pp 与公共大小×1.008 的较大者；它不是置信区间或私有集保证。
 
-官方只为同 hotkey 最早的存活前沿提交分配 Pareto 支付。本次快照中该点仍为 #453；即使未来均衡点有正几何份额，只要新点加入后仍有更早的同 hotkey 前沿点，新点本身的可支付份额仍为 0。见 [规则与源代码核对](../../evidence/round10/payability-notes.md) 和 [支付重放](../../evidence/round10/payability-late-research.json)。weights/current 与固定分页不是同一快照，不据此推断本次分数已被链接受。
+**最终刷新改变了旧提交的状态：#453 已退出前沿，公布 Pareto／payable weight 均为 0。** 新前沿点 #501 的坐标 `0.43541753 / 36.79888211%` 在两轴上严格优于 #453 的 `0.43787346 / 36.99972856%`；#453 的 API 支付资格字段 `payment_eligible` 仍为 true，归零不是由此字段变为不合格造成。该 hotkey 在本快照中没有其他存活前沿点。详见 [快照变化核对](../../evidence/round10/frontier-change-final.json)。此前 06:26 快照里的非零权重仍保留为历史观察，不能改写成当时已经归零。
+
+官方只为同 hotkey 最早的存活前沿提交分配 Pareto 支付，这条规则没有变化；但“#453 仍存活”的前提已不再成立。假设未来点达到 `1.25 / 34.18%`，本快照重放的几何份额及该 hotkey 新点条件份额都约为 **2.2241%**；这是未实现的假设坐标，仍假定准入、注册、额度等条件满足。本轮实际候选的份额为 0，原因仍是性能坐标被支配。见 [历史规则核对](../../evidence/round10/payability-notes.md) 和 [最终支付重放](../../evidence/round10/payability-final.json)。本次 weights/current 与固定分页记录了同一 snapshot ID；这只验证 API 身份对齐，不是 finalized 链接受或新收益到账证明。
 
 邻近 #375/#418/#422/#443/#489 的公开源码接口均返回 `SOURCE_WITHHELD`，不能由其坐标猜测内部优化。见 [原始响应审计](../../evidence/round10/public-neighbor-audit.md)。本轮没有触及未开放源码。
 
@@ -126,4 +128,4 @@ pipeline 公共四块相对同场 record 的变化：
 
 **建议先计数，不直接继续添加缓存。** 现有端点范围平均只有约四项；下一问题是 `d_gap` 无 pending-push 部分中，有多少字节处于“续接匹配已胜出、长度成本保持相同”的区间，区间宽度是否足够批量填充。先保存覆盖率、宽度分布和候选 token 一致性，再决定是否实现。
 
-这个想法尚未实现、未测性能、未完成证明。必须处理打包成本的 u32 回绕、字面量价格、choice tie、块边界和数组界；发现反例或覆盖率不足就停止。当前能够交付的是已验证的约 1.7% 同字节收益及完整负面证据，不能将下一步假设写成已有前沿成果。
+这个想法尚未实现、未测性能、未完成证明。[最小计数实验设计](../../evidence/round10/gap-next-experiment.md) 已列出具体分支、充分条件、计数分母与停止条件，并分开严格分支获胜和完整 cell 相同。必须处理打包成本的 u32 回绕、字面量价格、choice tie、块边界和数组界；发现反例或覆盖率不足就停止。当前能够交付的是已验证的约 1.7% 同字节收益及完整负面证据，不能将下一步假设写成已有前沿成果。

@@ -107,9 +107,16 @@ Six completed runs now contain 114 paired public processes and twelve distinct n
 - The final summarizer explicitly names scalar and public361 baselines and validates the captured scoring policy. All 1,804 previous scalar fields recompute exactly; historical `pre-final-summary.json` remains immutable. weights/current explanations now follow actual snapshot IDs, without equating `weight_set_id` to an absent snapshot ID.
 - A final source-only review is refining the next d_gap opportunity-counting experiment's guards and stop conditions. No new Rust/Lean variant or CI is started. Final public snapshot refresh and final handoff remain pending.
 
+## Final public refresh changed the old frontier position
+
+- 08:28: the first final capture returned pages 1–3 for snapshot27885, then page4 returned HTTP404 `SNAPSHOT_NOT_FOUND`. Every received body and hash is retained under `official-final/`; this incomplete capture is not used in rankings. Connection reuse was added to reduce pagination overhead, without changing official parameters or reconstructing missing pages.
+- Complete retry: snapshot **27887, 08:29:15 +08:00**,501 rows/79 frontier. Its weights/current context has the same snapshot ID; finalized-chain acceptance remains unverified. [Final recomputation](final-summary.json) still gives zero geometric share to all21 tested Rusts under the family/stress models.
+- #453 is now **off the frontier with Pareto/payable weight0**, while its API payment_eligible remains true. New frontier #501 at0.4354175268/36.7988821096 strictly dominates it; no older frontier point survives on the same hotkey. This changes the earlier ownership premise, not the oldest-frontier-point payment rule. A hypothetical1.25/34.18 point now has2.2241319% geometric and same-hotkey conditional new-point share. It is not an implemented candidate or admission/reward result. [Snapshot delta](frontier-change-final.json) preserves both old and new observations.
+- Source-only review completed [the next opportunity-counting design](gap-next-experiment.md): exact third d_gap loop, low32 choice guards, literal cost wrapping and ties, deployable versus oracle guard coverage, setup costs and affected Lean definitions. No new experiment or implementation ran.
+
 ## Evidence index
 
-- Latest complete frontier capture: `official-late-research/`; prior complete captures: `official-mid-payability/`, `official-start/`.
+- Latest complete frontier capture: `official-final-retry1/`; prior complete captures: `official-late-research/`, `official-mid-payability/`, `official-start/`. `official-final/` is the retained incomplete attempt.
 - Forward mechanism and candidates: `forward-notes.md`.
 - Supplemental finder: `finder-notes.md`, `row-finder-notes.md`.
 - CI receipts: each run retained under its numeric run ID and batch, with original bytes and hashes.

@@ -16,7 +16,7 @@
 | round07 | [第七轮：中段与 block1](rounds/round07.md) | 17 个版本均未进入预测前沿；block1 成为后续父版本。 |
 | round08 | [第八轮：距离成本重选](rounds/round08.md) | 三种变体无大小收益，停止扩展；两个完整公共 gate 通过。 |
 | round09 | [第九轮：块级 CPU 与前向瓶颈](rounds/round09.md) | scalar 约 0.884% 小幅速度信号，仍无预测份额；前向阶段约 73%，整份 q9 预处理过贵。 |
-| round10 | [第十轮：同字节优化与前沿边界](rounds/round10.md) | 21 份 Rust／13 CI；pipeline 约快 1.712%，完整 gate 通过，仍无预测份额；最终归档复核中。 |
+| round10 | [第十轮：同字节优化与前沿边界](rounds/round10.md) | 21 份 Rust／13 CI；pipeline 同字节约快 1.712%，完整 gate 通过，新点仍无预测份额；#453 在最终快照退出前沿。 |
 | maintenance-20261008 | [合并、去重与竞赛环境整理](history/maintenance-2026-10-08.md) | 实验历史合入 main；回执去重、文档分层、规则统一，CI 手动启动。 |
 
 ## 常用查找
