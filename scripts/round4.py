@@ -40,6 +40,13 @@ def validate(label):
             data = (path / f).read_bytes()
             assert 0 < len(data) <= 524288 and hashlib.sha256(data).hexdigest() == h, (e['name'], f)
     assert {'probe3', 'r3-432-fast3', 'public432'} <= names
+    by_name = {e['name']: e for e in spec['entries']}
+    for e in spec['entries']:
+        ref = e.get('expected_equivalent_to')
+        if ref:
+            assert ref in by_name and ref != e['name']
+            assert (ROOT/e['path']/'parse.rs').resolve() != (ROOT/by_name[ref]['path']/'parse.rs').resolve(), \
+                f"{e['name']}: finite equivalence rejects identical source paths; inspect shared-source shadows through measurement output"
     assert 1 <= spec['screen_blocks'] <= 4 and 0 <= spec['refine_blocks'] <= 4
     synthetic_refs = spec.get('synthetic_reference_candidates', [])
     assert len(synthetic_refs) == len(set(synthetic_refs)) <= 3 and set(synthetic_refs) <= names

@@ -45,7 +45,8 @@ def main():
     entries.append(shadow)
     if args.pipeline_shadow:
         pipeline_shadow = next(e for e in entries if e['name']=='r10-finder-pipeline-proof').copy()
-        pipeline_shadow.update(name='pipeline-shadow', expected_equivalent_to='r10-finder-pipeline-proof')
+        pipeline_shadow.update(name='pipeline-shadow')
+        pipeline_shadow.pop('expected_equivalent_to', None)
         pipeline_shadow.pop('formal_id', None)
         entries.append(pipeline_shadow)
     for name in args.candidates:
