@@ -104,3 +104,12 @@
 - 已写待提交/派发demotion-aq-native：短DNA匹配在原搜索结束后转换为字面量，原codec比较0/6/8/10/12/16/all阈值，原582与split4两个冻结来源，仅publicgenome；计数token膨胀与实际大小，cap20min。它是变换token流诊断，不是可运行候选。先前gain40改变了搜索进程而literal-only多token增时；本次若有好点，应在pc_run1原匹配进程中保留end/插入位置，只改emission，然后全28文件、原计时、独立确认与精确gate。
 
 当前没有任何本轮实测候选达到5或15。所有新优化的证明仍草稿，除selective完整gate通过。新方向还可推进约1小时55分，必须保留最后140分钟；不要由于一个CI结束提前结束8小时。本worktree只推codex/round18-frontier，main b5cb035未推送、未合并。最新已知远端8b3b540，之后可能继续提交。
+
+
+## 2026-10-09T21:30:55.363444+00:00 预检纠错与在途更新
+
+AQ demotion-aq-native run37992768154（commitbda216b，UTC21:19:39，20mincap）已完成并收齐。原582固定token位置短匹配<=8改literal，genome少8735B，但177559tokens增至869751；纯literal端点900000tokens/277999B与原始资料一致。时间不变的29430条件模型仅0.17055%，不制作实际demotion候选或投入gate；原始转换token流只作诊断。
+
+发现本轮早先gain40预检解释有误：actual pc_HLIT=80（5bit），原源码减24实际3.5bit，不是2.5bit。原Rust8739f3ea...、原始J回执+1213B保持；manifest保留原说明并加更正，dna-cost-preflight-correction.json记录实质错误。新r18-dna-literal40-corrected Rust38299b88...真的减40实现2.5bit；新r18-dna-chain2 Rust3f2e792f...复用PC紧凑链多一个旧候选(dp=1)，保留DNA密集插入/nofold，Lean包裹调用改PC.run1c但仍草稿d7fa2759...。AR native配置已预检，等待本次提交后派发。两个候选均未知时间和完整gate，不继承原2.5bit“失败”结论。
+
+AP run37992099832和AN run37992121536仍按原开始/超时运行。最新已知分支bda216b，main b5cb035保持排除。截止与新方向冻结点不变。

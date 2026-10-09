@@ -5,7 +5,7 @@
     "parse.rs": "8739f3eab2ad8a8425e7cd3bf1767ec75deaab4e2009658cb0c721f5ea4b46be",
     "Parse.lean": "cf4b7c1ecc93ee2b4c9701d9f84dcd0d07662ffccd4f7967dd6df7397418bd39"
   },
-  "mechanism": "In the existing DNA engine, accept a match only if its estimated saving remains positive at2.5bits perliteral. OtherPCmodes remain unchanged. Existinggain model includes length/distance extra bits; this subtracts24sixteenth-bits perbyte from its4bit literal assumption.",
+  "mechanism": "The frozen source actually tests3.5bits perliteral: pc_HLIT=80 and subtraction24 imply56/16. The previous2.5bit description was incorrect; source and measured negative result are unchanged.",
   "difference_from_old_work": "Hnative showed pureliteralDNA6564bytes smaller despite5x tokens; Dpack6 made shorter/higher-count output worse. This tests matching cost against the observed2.471bit-perbyte literal encoding, not simply longer-match count. It may increaseparse scanning orencoderwork; actualfulltime decides.",
   "attribution": {
     "source": "Official published514; original source headers retained",
@@ -15,5 +15,18 @@
   },
   "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
   "performance_status": "UNKNOWN",
-  "formal_submission_sent": false
+  "formal_submission_sent": false,
+  "original_mechanism_description": "In the existing DNA engine, accept a match only if its estimated saving remains positive at2.5bits perliteral. OtherPCmodes remain unchanged. Existinggain model includes length/distance extra bits; this subtracts24sixteenth-bits perbyte from its4bit literal assumption.",
+  "assumption_correction": {
+    "status": "VERIFIED_PREVIOUS_EXPERIMENT_DEFINITION_ERROR",
+    "source": "candidates/r18-dna-gain40/parse.rs",
+    "actual_pc_HLIT_units": 80,
+    "previous_subtraction_units": 24,
+    "previous_effective_literal_units": 56,
+    "previous_effective_bits": 3.5,
+    "previous_claimed_bits": 2.5,
+    "new_target_units": 40,
+    "required_subtraction_units": 40,
+    "scope": "The prior exact source and all native receipts remain unchanged. It tested3.5bits, not2.5; its observed+1213B does not refute the intended2.5bit criterion."
+  }
 }
