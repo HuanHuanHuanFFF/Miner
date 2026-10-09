@@ -315,6 +315,12 @@ def main():
             state['gate_confirmation_decisions'] = decisions
             save(state_path, state)
             print('GATE_CONFIRMATION ' + json.dumps(decisions), flush=True)
+        if spec.get('confirmation_share_gate_policy'):
+            from round15_gate import share_confirmation_gates
+            names, share_decisions = share_confirmation_gates(state, names, pages, scorer)
+            state['gate_share_confirmation_decisions'] = share_decisions
+            save(state_path, state)
+            print('SHARE_GATE_CONFIRMATION ' + json.dumps(share_decisions), flush=True)
         for name in names:
             folder = output / ('input-' + name)
             folder.mkdir(exist_ok=True)
