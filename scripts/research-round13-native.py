@@ -24,6 +24,9 @@ def main():
     if spec.get('r18_a_ring_check'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-a-ring.py')],check=True);return
+    if spec.get('r18_dna_domain_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-dna-domains.py')],check=True);return
     if spec.get('r18_function_profile'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-functions.py')],check=True);return
