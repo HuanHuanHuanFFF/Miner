@@ -1,0 +1,18 @@
+{
+  "candidate": "r18-586-a-ring",
+  "parent": "r18-586-selective-rf",
+  "hashes": {
+    "parse.rs": "6ed817e29417af37702ff1e8b68018d53742c7f99958fcc6ebdb46b7c1d61d15",
+    "Parse.lean": "8c5d3ebbcf0f681f7005cc86a5d4a3045778af7165ffd145439b4d9b125ca9f2"
+  },
+  "mechanism": "Represent A backward dynamic-program costs by a512-cell rolling vector, retaining the original logical input bound, endpoint resets, match offers and tie rules. A pass only reads the next258 positions; full positional choices remain unchanged.",
+  "difference_from_old_work": "Z profiling places0.893s inclusive in A DP, separate from RF. The old vector is input-sized and zeroed once per parse though only a bounded future window is live. This tests working-set and initialization reduction; the added index masks may offset it. No prior A-cost-ring experiment was found in task methods/build scripts; prior contiguous-ring negative concerned forward relax layout.",
+  "attribution": {
+    "parent": "references/round18-public-586/source-receipt.json",
+    "evidence": "evidence/round18/37982889694",
+    "ownership": "Original public586 authors retained; bounded cost-storage transformation is this research."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}
