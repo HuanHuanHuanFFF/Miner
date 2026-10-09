@@ -21,3 +21,8 @@ R13原abs15完整公共gate通过，但约0.12%的历史速度信号没有独立
 
 
 E批新内容编码检查已通过：lazy8-binary在12/12份输入上更小，共少22,582B；lazy8-depth2在10份更小、两份原不变路径相同，共少35,732B。全部原编码器输出通过独立zlib解码。见[迁移记录](../../evidence/round16/transfer-e-decision.json)。这些新内容结果不替代正式总时间或私有评分。
+
+
+B/D两台runner共38个标准公共配对进程已收齐并逐rep重算。depth2对abs15慢0.579%，lazy8两环境等权慢1.768%；后者实际节省字节但总成本偏高。lazy16、lazy8-depth2、lazy8-binary的新环境条件份额分别0.828%、0.943%、0.990%，都未达到冻结的1.7365%目标；压力情景均为零。见[完整复算](../../evidence/round16/quality-bd-analysis.json)、[逐文件成本记账](../../evidence/round16/quality-b-costs.json)。这不是正式成绩。
+
+新变化转向成本：F批32位hash相对组合多106B，slack2再少857B，是否值得取决于H总时间。G按需读取只改前看拒绝后的无用候选字读取，444项有限token/decode检查与父版相同；新cache引理尚未编译，不能继承原证明。此前R13失败的main-probe重排保留关闭，本次不改变主探测顺序。I只组合D中已测量且作用于不同原路由组的文本/二进制改进，仍需实际组合测量。
