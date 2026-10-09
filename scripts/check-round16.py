@@ -13,6 +13,10 @@ def main():
     ap=argparse.ArgumentParser();ap.add_argument('--final',action='store_true');args=ap.parse_args()
     budget=read(EVIDENCE/'budget.json');start=datetime.fromisoformat(budget['start_utc']);deadline=datetime.fromisoformat(budget['deadline_utc'])
     assert int((deadline-start).total_seconds())==7200
+    frozen=read(EVIDENCE/'frozen-candidates.json')
+    assert len(frozen['candidates'])==12
+    for entry in frozen['candidates']:
+        assert all(sha(ROOT/'candidates'/entry['candidate']/name)==value for name,value in entry['files'].items()), 'Frozen exact candidate changed'
     runs=[];pending=[];accepted=[];metrics=0
     for path in sorted(EVIDENCE.glob('dispatch-*.json')):
         d=read(path);rid=str(d['run']['databaseId']);batch=d['batch'];assert path.name==f'dispatch-{rid}.json'and d['round']==16

@@ -26,3 +26,8 @@ E批新内容编码检查已通过：lazy8-binary在12/12份输入上更小，�
 B/D两台runner共38个标准公共配对进程已收齐并逐rep重算。depth2对abs15慢0.579%，lazy8两环境等权慢1.768%；后者实际节省字节但总成本偏高。lazy16、lazy8-depth2、lazy8-binary的新环境条件份额分别0.828%、0.943%、0.990%，都未达到冻结的1.7365%目标；压力情景均为零。见[完整复算](../../evidence/round16/quality-bd-analysis.json)、[逐文件成本记账](../../evidence/round16/quality-b-costs.json)。这不是正式成绩。
 
 新变化转向成本：F批32位hash相对组合多106B，slack2再少857B，是否值得取决于H总时间。G按需读取只改前看拒绝后的无用候选字读取，444项有限token/decode检查与父版相同；新cache引理尚未编译，不能继承原证明。此前R13失败的main-probe重排保留关闭，本次不改变主探测顺序。I只组合D中已测量且作用于不同原路由组的文本/二进制改进，仍需实际组合测量。
+
+
+22:02按原计划冻结全部12份新Rust，[冻结哈希](../../evidence/round16/frozen-candidates.json)后续自动复核。H按需读取同输出但对直接父版慢0.516%，hash32慢0.156%、slack2慢0.976%，这些精确版本不晋级。J真实组合少66,283B，却比原abs15慢2.446%，该次条件投影已被支配。统一原abs15作对照的[发现汇总](../../evidence/round16/discovery-common-parent.json)避免把相对不同直接父版的差值混作整体提速。
+
+最后K只尝试最短4字节文本匹配或3字节二进制匹配前看，分别少27,227B、5,932B，M在测其真实代价；不扩展阈值扫描。L对此前最高单环境条件中心lazy8-binary做唯一一次四块独立确认，冻结的1.7365%分配条件仍然不变，未过则不分配gate。当前快照[29352](../../evidence/round16/official-confirmation/receipt.json)新增#574，#573可支付份额为1.7035%，仍属历史快照观察而非未来保证。
