@@ -101,3 +101,11 @@ combine-z37868528362自然成功，540 Root decode、原提取接受、16标准�
 公共重复采样诊断复用固定原函数，不抽文件、不合并块、各2000draw。本地首次导入bench包初始化器因无loguru失败，尚无统计输出；改为仅加载未修改纯模块／AST函数，不安装runner依赖。保留在此的失败摘要仅是本地导入，不计CI、测量或proof失败。最终对shadow四块都inconclusive；第四块parent比较abs15和相同ELF shadow同时在纯函数里passed，显示该重复层统计不覆盖host drift。单stage1轻量envelope适配不是SQL聚合／线上部署／539真实admission/held-out或收入；不改变组合STOP。原始12文件哈希、源码函数哈希及synthetic observation ID保存。
 
 02:06 UTC公开539/source无认证GET仍403 SOURCE_WITHHELD，原响应byte/SHA219B保留；不绕过权限或继续构造新候选。card守卫补上初始化失败的自身进程回收与consume前重新检查硬截止/过期；这是未消费条件的本地准备，没有测试消费RPC。剩余时间只做当前文件／索引／原回执复核、最终官方与额度读取、归档和交付，02:52硬截止不后移。没有新正式admission/排名/本轮新奖励证据；goal未完成，不因阶段停止或gate通过标complete。
+
+## 最终冻结（2026-10-09 02:49UTC）
+
+全部27作业终态、237标准配对、13性能CI/13声明候选Rust组、两exact公共gate已审计，pending=[]。没有新Rust或新CI追加。最后全量官方读取最初29250，截止核验发现推进29257后补齐557提交/529leaderboard原页和weights同快照；policy c255未变，freshness仍unknown，速度端539不变，新555进中段。最终两轴已绑定29257；旧29243诊断和顺序复算各注明其原始capture，不覆盖当时观察。
+
+当前finalized9242455注册仍true UID46、归属/key一致；旧私有回执已先保存原字节，新full账户留本地忽略，仅脱敏状态发布。最新Quota57已用/43剩余，Oct23卡仍available未消耗；未达阈值。不把账户共享用量差当本轮专属成本。final-status.json保存未达goal、冻结结果和下一起点；当前已知注册地址在本轮窗口的最终API新提交IDs=[]，未有本轮formal upload/admission/rank/reward。原ZIP/完整导入、钱包/账户、卡ID/幂等记录均未入Git。
+
+硬截止02:52UTC(北京时间10:52)，到期结束本轮并交付。Goal不得因归档、预算到期或两个gate完成而标complete；新的实验需要用户新增预算。自动续跑若在截止后仍触发，只能如实处理预算耗尽，不再重复测试/改源/派CI；按上层规则，同一预算阻塞达到连续三goal turn再标blocked。此冻结发生在截止前，尚不冒充已满足三次阻塞条件。

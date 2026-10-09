@@ -1,6 +1,6 @@
-# 第十三轮：Chat研究接入与七小时续跑（最终归档中）
+# 第十三轮：Chat研究接入与七小时优化
 
-执行规则见 [AGENTS.md](../../AGENTS.md)。用户本轮窗口为北京时间2026-10-09 **03:52—10:52**，原始预算见 [budget.json](../../evidence/round13/budget.json)。本报告截至10:19；算法探索和最后独立确认已结束，剩余时间做最终证据归档，争榜目标未完成。
+执行规则见 [AGENTS.md](../../AGENTS.md)。用户本轮窗口为北京时间2026-10-09 **03:52—10:52**，原始预算见 [budget.json](../../evidence/round13/budget.json)。最终证据在10:49冻结；探索、独立确认和归档已完成，本轮在10:52截止，争榜拿奖励的目标未完成。
 
 本轮尚未取得新的正式admission、排名或奖励。已完成的实际收益是两个精确Rust/Lean pair通过原始公共gate；已收取的标准性能结果仍不足以支持一个新的可支付前沿点。原始数据和失败均保留。
 
@@ -61,12 +61,12 @@ Windows原生成器有strict-resolve/TemporaryDirectory环境错误（原七项f
 
 ## 当前官方状态与剩余工作
 
-最新完整官方读取见 [checkpoint4](../../evidence/round13/official-checkpoint-4/receipt.json)：重新请求仍为快照29243，UTC00:37:19计算，553提交/527leaderboard行，weights同快照，官方freshness为unknown。速度端仍#539；新压缩侧#546支配#542。几何权重和同族校准均是条件模型，不能当收入或private保证。
+最新完整官方读取见 [official-final-2](../../evidence/round13/official-final-2/receipt.json)：快照29257，UTC02:43:19计算，557提交/529leaderboard行，weights同快照，官方freshness为unknown。截止前先读到29250，随后检测到版本推进并补齐新全页；之前原始快照全部保留。速度端仍#539，新#555进入中段，不改变本轮快端判断；#546仍支配#542。最终两轴已按29257重算，几何权重和同族校准均是条件模型，不能当收入或private保证。
 
 当前注册在finalized区块9242455只读核验通过，UID46归属/key一致，见 [脱敏回执](../../evidence/round13/registration-final-sanitized.json)。旧9241236回执原字节保留在本地忽略目录，完整账户信息未发布。注册不证明还有未消费的accepted-gate提交额度。没有正式上传、钱包签名、燃注册、转账或提款；本轮没有已确认的新正式成绩或新奖励证据。
 
-额度最近剩43%，10月23日到期卡未使用；只在剩余降到1%触发指定卡。身份/幂等记录不进Git或CI。
+额度最后读取仍剩43%，10月23日到期卡未使用，见 [脱敏额度记录](../../evidence/round13/quota-final-read.json)；没有触发剩余1%条件。身份/幂等记录不进Git或CI，账号共享额度变化不当作本轮独占成本。
 
-最后确认37869790385已自然完成并收齐；四镜像块的anchor/candidate/direct-parent/shadow平均位置均3.5。proof1仅添加新helper局部合约，Rust逐字不变，因确认失败而保持Lean未编译，不是第三个验证通过的pair。01:22UTC后未扩新算法探索；后续只刷新最终官方记录、复核索引与版本并交付，02:52UTC预算到期保存未闭合目标。
+最后确认37869790385已自然完成并收齐；四镜像块的anchor/candidate/direct-parent/shadow平均位置均3.5。proof1仅添加新helper局部合约，Rust逐字不变，因确认失败而保持Lean未编译，不是第三个验证通过的pair。01:22UTC后未扩新算法探索；27作业终态原字节审计、回执顺序反向重算、源版本与索引检查通过。02:52UTC预算到期结束本轮，保留未闭合目标，不将阶段完成或两个gate标为争榜成功。
 
 下一轮的可复用起点是两个已验证的U16证明pair、收益明确但时间不够好的gain恢复、仅省217B且未测时间/证明的EF32 seven。首先需要新的总时间或真实编码字节机会，再分配实现和完整gate预算；相同布局、调用计数或最长匹配代理不足以重启已经关闭的精确版本。UTC02:06对#539官方公开source端点的无认证GET返回403 `SOURCE_WITHHELD`，见 [原始响应与哈希](../../evidence/round13/source539-final/receipt.json)；没有绕过权限。当前family模型没有替代其正式admission比较。查验不能把预算结束、两个gate通过或实验数量替代上榜拿奖励。
