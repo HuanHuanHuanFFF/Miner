@@ -4,6 +4,10 @@ from round4 import validate
 
 def main():
     assert os.environ.get('ROUND4_SPEC_DIR') == 'evidence/round18'
+    if os.environ['ROUND18_MODE']=='gate':
+        import importlib
+        spec=importlib.import_module('verify-round18-exact').validate(os.environ['ROUND4_SPEC'])
+        print('R18_EXACT_PAIR_PREFLIGHT',spec['candidate'],spec['files']);return
     spec = validate(os.environ['ROUND4_SPEC'])
     mode = os.environ['ROUND18_MODE']
     assert mode in ('native', 'standard', 'diagnostic')

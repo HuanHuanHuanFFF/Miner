@@ -228,7 +228,7 @@ jobs:
     env:
       ROUND4_SPEC: ${{ inputs.specification }}
       ROUND4_SPEC_DIR: evidence/round18
-      ROUND18_MODE: ${{ endsWith(inputs.specification, '-native') && 'native' || endsWith(inputs.specification, '-diagnostic') && 'diagnostic' || 'standard' }}
+      ROUND18_MODE: ${{ startsWith(inputs.specification, 'gate-') && 'gate' || endsWith(inputs.specification, '-native') && 'native' || endsWith(inputs.specification, '-diagnostic') && 'diagnostic' || 'standard' }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -265,11 +265,16 @@ jobs:
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           export PYTHONPATH="$DEFLATE_ROOT/validator"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round18-multimethod.py
+      - name: Run the frozen pair through the original full public gate
+        if: env.ROUND18_MODE == 'gate'
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/verify-round18-exact.py
       - name: Preserve all original text evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: r18-${{ github.run_id }}-${{ inputs.specification }}-${{ env.ROUND18_MODE == 'standard' && 'gate' || 'diagnostics' }}
+          name: r18-${{ github.run_id }}-${{ inputs.specification }}-${{ env.ROUND18_MODE == 'gate' && 'exact-gate' || env.ROUND18_MODE == 'standard' && 'gate' || 'diagnostics' }}
           path: ${{ runner.temp }}/round4-receipts/
           retention-days: 1
           compression-level: 9

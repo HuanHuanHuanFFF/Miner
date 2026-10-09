@@ -15,12 +15,13 @@ def main():
     left=int((datetime.fromisoformat(budget['deadline_utc'])-datetime.now(timezone.utc)).total_seconds()//60)-10
     minutes=min(args.max_minutes,left,75);assert 10<=minutes<=75
     os.environ['ROUND4_SPEC_DIR']='evidence/round18'
+    import importlib
     from round4 import validate
-    spec=validate(args.batch)
-    mode='native' if args.batch.endswith('-native') else 'diagnostic' if args.batch.endswith('-diagnostic') else 'standard'
+    mode='gate' if args.batch.startswith('gate-') else 'native' if args.batch.endswith('-native') else 'diagnostic' if args.batch.endswith('-diagnostic') else 'standard'
+    spec=importlib.import_module('verify-round18-exact').validate(args.batch) if mode=='gate' else validate(args.batch)
+    assert not spec.get('preflight_only'), 'Preflight fixtures cannot be dispatched as research results'
     assert spec['r18_mode']==mode and bool(spec.get('native_only'))==(mode=='native')
     os.environ.update(ROUND4_SPEC=args.batch,ROUND18_MODE=mode)
-    import importlib
     importlib.import_module('round18-preflight').main()
     assert args.ref=='codex/round18-frontier'
     helper_spec=importlib.util.spec_from_file_location('r18_gh',ROOT/'scripts/collect-round2.py')
