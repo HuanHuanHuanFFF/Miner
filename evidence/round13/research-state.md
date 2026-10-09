@@ -47,3 +47,7 @@ expired-k37858528540原父observer自然成功且token/decode同父：3700174 ah
 rescue-m37860415256原observer自然成功：824975 primary miss、232705 live-head miss、107435 older-live；一步recover28382/181442覆盖B，原depthrecover29428/187955，>=7有6076、>=16有997。只做一步恢复以买较小工作量，保留主hit原deepening；用pc_probe_m真实cachedWord检验老predecessor，窗口/字节全部原版。raw与gain正评分两个源，先实际原encoder看encoded bytes，原证明明示未适配，未申请完整gate。
 
 rescue-o37861230138实际程序原encoder自然成功：raw公共大小36.1981519%(-0.0049936pp)，gain36.1952896%(-0.00785585pp)；gain14变化文件都没有增大压缩字节。时间UNKNOWN，覆盖并非新增净压缩收益；只将较佳gain送rescue-p两块真实两轴/540decode/提取，原证明未适配不申请完整gate。
+
+balance-n37860597828最终自然成功28配对：四块+0.08706/-0.00960/+0.19295/-3.48176%，均值-0.80284%。前三块诊断均值+0.09014%，第四未改的sparse/tiny-app/tiny-config也-14.8/-17.9/-8.0%，源无影响这些路径；故不提升为可信时间收益，异常原因UNKNOWN，不丢弃第四原回执或把前三当选择后的最终胜利。当前已累计154公共配对(含本次)，完整gate仍只验证两基础pair；无新正式排名/奖励。
+
+rescue-p37861591198自然成功14配对：540 decode+提取过；时间+0.228702%，大小-0.00785585pp，仍被539支配，关闭这份原Rust完整证明投入。原定reserve保持。取得当前新公开542(被546支配)，PC四fn与514逐字相同，整体路由/非PC包括PIM/O_A不同；只迁移已验证过的U16机制到新压缩侧父版，独立542锚，不沿用514/R12性能或证书。transfer-q单受控候选两块+540decode+提取，暂不申请full gate，作为本窗最后新的起点迁移。
