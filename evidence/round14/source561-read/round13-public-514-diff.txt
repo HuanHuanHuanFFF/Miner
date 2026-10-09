@@ -1,0 +1,40 @@
+--- 
+
++++ 
+
+@@ -7412,2 +7412,3 @@
+
+ pub fn pc_flush4(input: &[u8], out: &mut [u32], nt0: usize, from: usize, to: usize) -> usize {
++ if from == to { return nt0; }
+     if from <= to && to - from <= 4 && from + 4 <= input.len() && nt0 + 4 <= out.len() {
+@@ -7428,3 +7429,4 @@
+
+     let k = (pc_be4(s, i) & km) as u64;
+-    (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - pc_HB)) as usize % H
++    let hb = if H >= 65536 { 16u32 } else { 15u32 };
++    (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - hb)) as usize % H
+ }
+@@ -9707,7 +9709,7 @@
+
+ 
+-#[inline(never)] pub fn p125_row5(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row6(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,5,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row7(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
++#[inline(never)] pub fn p125_row5(input:&[u8],out:&mut[u32])->usize{pc_run1::<65536>(input,out,4,0,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row6(input:&[u8],out:&mut[u32])->usize{pc_run1::<65536>(input,out,5,0,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row7(input:&[u8],out:&mut[u32])->usize{pc_run1::<65536>(input,out,4,258,1000000,4294967295)}
+ 
+@@ -9719,5 +9721,5 @@
+
+ 
+-#[inline(never)] pub fn p125_row11(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,4,0,1000000,302256128)}
+-
+-#[inline(never)] pub fn p125_row12(input:&[u8],out:&mut[u32])->usize{et_tiny(input,out,302256384)}
++#[inline(never)] pub fn p125_row11(input:&[u8],out:&mut[u32])->usize{q4_run1t::<4096>(input,out,4,0,1000000,302256384)}
++
++#[inline(never)] pub fn p125_row12(input:&[u8],out:&mut[u32])->usize{et_tiny(input,out,302256896)}
+ 
