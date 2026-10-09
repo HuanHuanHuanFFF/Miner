@@ -9,7 +9,7 @@ def main():
     upstream=Path(os.environ['DEFLATE_ROOT'])
     sys.path.insert(0,str(upstream/'validator'))
     from bench import driver,corpora
-    from bench.results import INCUMBENT,parse_results
+    from bench.results import INCUMBENT
     from sandbox import bwrap
     cpu=str(min(os.sched_getaffinity(0)))
     config=dataclasses.replace(driver.Config.from_env(upstream/'validator'),reps=11,warmup=1,cpus=cpu,keep=driver.Keep.NEVER,bars=False)
@@ -23,7 +23,7 @@ def main():
         cmd=[str(config.engine),str(corpus.path)]+[f'{n}={crates[n]}'for n in order]+['--corpus-name',corpus.name,'--reps','11','--warmup','1','--rustc-version',rustc,'--no-bars']
         r=bwrap.run(driver.measure_sandbox(config,workspace,corpus),cmd,cwd=None,timeout=config.timeout)
         (out/f'block{block}.stderr.log').write_text(r.stderr);assert r.returncode==0
-        measured=parse_results(r.stdout,corpus);measured.raw_records[0]['benchmark_provenance']=driver.provenance(config)
+        measured=driver.parse_results(r.stdout,corpus);measured.raw_records[0]['benchmark_provenance']=driver.provenance(config)
         assert not any(measured.failures(n)for n in order)
         meta=measured.raw_records[0];assert all(meta['methods'][n]['source_sha256']==by[n]['hashes']['parse.rs']for n in names)
         assert meta['methods']['public514']['lib_sha256']==meta['methods']['public514-shadow']['lib_sha256']

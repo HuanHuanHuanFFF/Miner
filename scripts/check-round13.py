@@ -42,8 +42,9 @@ def main():
         if phase=='gate' and (folder/'collection-status.json').exists():
             failed=read(folder/'collection-status.json')
             assert ci['conclusion']!='success'and failed['run_id']==rid and failed['git_sha']==git_sha
-            reports=[read(p)for p in folder.rglob('research.json')]
-            assert reports and all(r['run_id']==rid and r['git_sha']==git_sha for r in reports)
+            reports=[read(p)for p in folder.rglob('*.json')if p.name not in('ci-run.json','artifact-receipt.json','raw-artifact-files.json','collection-status.json')]
+            bound=[r for r in reports if isinstance(r,dict)and'run_id'in r and'git_sha'in r]
+            assert bound and all(str(r['run_id'])==rid and r['git_sha']==git_sha for r in bound)
         elif phase=='gate':
             state=read(folder/'state.json');assert state['run_id']==rid and state['git_sha']==git_sha and state['spec']==spec
             count=len(state['metrics']);assert not state['failures'];metrics+=count

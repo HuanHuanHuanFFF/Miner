@@ -67,3 +67,5 @@ repair-u37865601196 actual code/原encoder preflight成功，public542大小35.9
 新用户7h窗口19:52UTC→02:52UTC(北京时间10:52)优先于宿主旧goal字符串里的两小时；Goal仍active，目标未完成。现在只等待/判别两个已派发作业：final-v37865933625(完整隔离542源码，40min)，precision-w37865952376(显式validator sys.path修复的原engine四方法诊断+标准1块，40min)。前者若能跨542族当前边界才独立确认/完整gate；后者只诊断已有abs15微信号，不能改写正式排名。既有168公共配对，两个精确完整public gate接受，未正式上传/签名/转账，未有新奖励。Quota56已用/44剩余，Oct23卡未消耗；只剩<=1才允许目标卡。最后90min reserved，01:22UTC后不启动新算法探索，只确认/审计/交付。所有private ZIP/完整导入、quota及账户链回执保持忽略。无子agent授权，不派发。不要重跑已完成实验；所有源码/原始失败保留。
 
 待完成：收集两个最终回执，刷新官方快照；按精确两轴选择是否做确有价值的确认/gate，不宣称异常第四块-3.48%为收益；更新check-round13审计/current-analysis和最终报告/索引，提交推送实验分支；到02:52UTC停止新工作并如实交付未达目标。Goal工具旧objective时钟也错误，真实预算取budget.json。
+
+precision-w37865952376实际失败为results没有parse_results导出；真实pinned driver定义from.resultsimportparseasparse_results。修复用driver.parse_results并逐一AST核对全部9个引用入口存在，source-root路径已修；precision-x最终诊断重试，候选/engine/encoder不改，原两次import failures完整保留。
