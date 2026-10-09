@@ -223,9 +223,54 @@ jobs:
 
   round18:
     if: github.event_name == 'workflow_dispatch' && inputs.experiment_round == '18' && (github.event.repository.private == false || inputs.allow_private == true)
-    uses: ./.github/workflows/deflate-round18.yml
-    with:
-      specification: ${{ inputs.specification }}
-      mode: ${{ endsWith(inputs.specification, '-native') && 'native' || endsWith(inputs.specification, '-diagnostic') && 'diagnostic' || 'standard' }}
-      allow_private: ${{ inputs.allow_private }}
-      job_minutes: ${{ fromJSON(inputs.job_minutes) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
+    env:
+      ROUND4_SPEC: ${{ inputs.specification }}
+      ROUND4_SPEC_DIR: evidence/round18
+      ROUND18_MODE: ${{ endsWith(inputs.specification, '-native') && 'native' || endsWith(inputs.specification, '-diagnostic') && 'diagnostic' || 'standard' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Validate frozen inputs and workflow route
+        run: python3 scripts/round18-preflight.py
+      - name: Prepare native diagnostic environment
+        if: env.ROUND18_MODE == 'native'
+        run: bash scripts/ci-prepare-native.sh
+      - name: Prepare original full validation environment
+        if: env.ROUND18_MODE != 'native'
+        run: bash scripts/ci-prepare.sh
+      - name: Install original verification toolchain
+        if: env.ROUND18_MODE != 'native'
+        run: bash scripts/ci-setup.sh
+      - name: Run native encoding or mechanism diagnostic
+        if: env.ROUND18_MODE == 'native'
+        run: |
+          python3 scripts/research-round13-native.py
+      - name: Run standard candidate checks and paired measurements
+        if: env.ROUND18_MODE == 'standard'
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round4.py
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round5.py
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round14.py
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py screen
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py refine
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py gate
+      - name: Diagnose same-source measurement disagreement
+        if: env.ROUND18_MODE == 'diagnostic'
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round18-multimethod.py
+      - name: Preserve all original text evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r18-${{ github.run_id }}-${{ inputs.specification }}-${{ env.ROUND18_MODE == 'standard' && 'gate' || 'diagnostics' }}
+          path: ${{ runner.temp }}/round4-receipts/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: warn
