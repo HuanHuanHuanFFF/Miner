@@ -60,6 +60,9 @@ def validate(label):
     assert 1 <= spec['screen_blocks'] <= 4 and 0 <= spec['refine_blocks'] <= 4
     if 'screen_orders' in spec:
         screen_order(spec, 1, list(by_name))
+    if spec.get('native_encoder'):
+        assert 'public514' in names, 'Native exact-encoder calibration requires the frozen public514 reference'
+        assert set(spec.get('native_encoder_references', [])) <= names
     synthetic_refs = spec.get('synthetic_reference_candidates', [])
     assert len(synthetic_refs) == len(set(synthetic_refs)) <= 3 and set(synthetic_refs) <= names
     used = set()

@@ -25,6 +25,13 @@ def main():
         for e in spec['entries']:
             for f,h in e['hashes'].items():assert sha(ROOT/e['path']/f)==h,(batch,e['name'],f)
         phase='diagnostics'if spec.get('native_only')else'gate';folder=EVIDENCE/rid/batch/phase
+        no_artifact=folder.with_name('diagnostics-no-artifact')
+        if not (folder/'ci-run.json').exists() and (no_artifact/'collection-status.json').exists():
+            ci=read(no_artifact/'ci-run.json');receipt=read(no_artifact/'collection-status.json')
+            assert ci['status']=='completed'and ci['conclusion']!='success'and str(ci['databaseId'])==rid and ci['headSha']==git_sha
+            assert receipt['run_id']==rid and receipt['git_sha']==git_sha and (no_artifact/'ci.log').is_file()
+            runs.append({'run_id':rid,'batch':batch,'phase':'FAILED_WITHOUT_UPLOADED_ARTIFACT','ci_conclusion':ci['conclusion'],'paired_processes':0,'original_files':0,'scope':'OriginalGitHublog preserved; no artifact digest invented'})
+            continue
         if not (folder/'ci-run.json').exists():pending.append({'run_id':rid,'batch':batch,'reason':'Final receipt not collected'});continue
         ci=read(folder/'ci-run.json');assert str(ci['databaseId'])==rid and ci['headSha']==git_sha
         if ci['status']!='completed':pending.append({'run_id':rid,'batch':batch,'reason':'Collected CI status not terminal'});continue
