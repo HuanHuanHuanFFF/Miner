@@ -5,13 +5,17 @@ from round4 import ROOT, validate
 
 WRAPPER = r'''
 import json,os,pathlib,sys
+requested=sys.argv[1]
+affinity_initial=sorted(os.sched_getaffinity(0))
+if requested!='observe':
+ os.sched_setaffinity(0,{int(requested)})
 paths=['/proc/self/status','/proc/self/cgroup','/sys/fs/cgroup/cpuset.cpus.effective','/sys/fs/cgroup/cpu.max','/sys/fs/cgroup/memory.max']
 values={}
 for p in paths:
  try: values[p]=pathlib.Path(p).read_text()
  except OSError as e: values[p]={'unavailable':type(e).__name__}
-print('R18_ENGINE_PROCESS_CONTEXT '+json.dumps({'pid_before_exec':os.getpid(),'affinity_before_exec':sorted(os.sched_getaffinity(0)),'files':values,'scope':'This process immediately execs the unmodified engine; exec preserves affinity and cgroup membership.'}),file=sys.stderr,flush=True)
-os.execv(sys.argv[1],sys.argv[1:])
+print('R18_ENGINE_PROCESS_CONTEXT '+json.dumps({'pid_before_exec':os.getpid(),'affinity_initial':affinity_initial,'explicit_affinity_request':requested,'affinity_before_exec':sorted(os.sched_getaffinity(0)),'files':values,'scope':'This process immediately execs the unmodified engine; exec preserves affinity and cgroup membership. Explicit binding is diagnostic only.'}),file=sys.stderr,flush=True)
+os.execv(sys.argv[2],sys.argv[2:])
 '''
 
 def save(p, value):
@@ -68,19 +72,32 @@ def main():
             record(measured,[INCUMBENT,n],'official_isolated',block)
     workspace=driver._make_workspace(config,paths);crates=driver._generate(config,workspace,paths);driver._build(config,workspace,crates);rustc=driver._rustc_version(config,workspace,crates[INCUMBENT])
     wrapper=workspace/'r18-context.py';wrapper.write_text(WRAPPER)
-    for block in range(1,spec['multimethod_blocks']+1):
-        order=[INCUMBENT]+(names if block%2 else names[::-1])
+    def measure_shared(block, order, protocol, pin):
         cmd=[str(config.engine),str(corpus.path)]+[f'{n}={crates[n]}' for n in order]+['--corpus-name',corpus.name,'--reps','11','--warmup','1','--rustc-version',rustc,'--no-bars']
-        r=bwrap.run(driver.measure_sandbox(config,workspace,corpus),['/usr/bin/python3',str(wrapper)]+cmd,cwd=None,timeout=config.timeout)
-        (out/f'multi-block{block}.stderr.log').write_text(r.stderr);assert r.returncode==0
+        r=bwrap.run(driver.measure_sandbox(config,workspace,corpus),['/usr/bin/python3',str(wrapper),cpu if pin else 'observe']+cmd,cwd=None,timeout=config.timeout)
+        stem=f'{protocol}-block{block}-{"-".join(order[1:])}'
+        # Persist the original stream before any post-run assertion can fail.
+        (out/(stem+'.raw.jsonl')).write_text(r.stdout)
+        (out/(stem+'.stderr.log')).write_text(r.stderr)
+        assert r.returncode==0
         contexts=[json.loads(line.removeprefix('R18_ENGINE_PROCESS_CONTEXT ')) for line in r.stderr.splitlines() if line.startswith('R18_ENGINE_PROCESS_CONTEXT ')]
-        assert len(contexts)==1 and contexts[0]['affinity_before_exec']==[int(cpu)]
-        save(out/f'multi-block{block}-actual-process.json',contexts[0])
+        assert len(contexts)==1
+        save(out/(stem+'-actual-process.json'),contexts[0])
+        if pin: assert contexts[0]['affinity_before_exec']==[int(cpu)]
         measured=driver.parse_results(r.stdout,corpus)
         meta=measured.raw_records[0]
-        assert meta['methods'][names[0]]['lib_sha256']==meta['methods'][names[1]]['lib_sha256']
-        assert meta['methods'][names[2]]['lib_sha256']==meta['methods'][names[3]]['lib_sha256']
-        record(measured,order,'multimethod_diagnostic',block)
+        if len(order)>2:
+            assert meta['methods'][names[0]]['lib_sha256']==meta['methods'][names[1]]['lib_sha256']
+            assert meta['methods'][names[2]]['lib_sha256']==meta['methods'][names[3]]['lib_sha256']
+        record(measured,order,protocol,block)
+    for block in range(1,spec['multimethod_blocks']+1):
+        order=[INCUMBENT]+(names if block%2 else names[::-1])
+        modes=[False,True] if block%2 else [True,False]
+        for pin in modes:
+            measure_shared(block,order,'multimethod_pinned_diagnostic' if pin else 'multimethod_observed_diagnostic',pin)
+    for block in range(1,spec['isolated_blocks']+1):
+        for n in (names if block%2 else names[::-1]):
+            measure_shared(block,[INCUMBENT,n],'isolated_pinned_diagnostic',True)
     result['status']='COMPLETE_PROTOCOL_SEPARATED_MEASUREMENT_DIAGNOSTIC';save(out/'noise.json',result)
     print(result['status'],flush=True)
 
