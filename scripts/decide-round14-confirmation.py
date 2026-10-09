@@ -7,7 +7,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('receipt',type=Path);ap.add_argument('--capture',type=Path,required=True);ap.add_argument('--output',type=Path,required=True);a=ap.parse_args()
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('receipt',type=Path);ap.add_argument('--capture',type=Path,required=True);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--parent',default='public514');ap.add_argument('--shadow',default='public514-shadow');a=ap.parse_args()
     folder=a.receipt;state=json.loads((folder/'state.json').read_bytes());ci=json.loads((folder/'ci-run.json').read_bytes())
     assert ci['status']=='completed' and ci['conclusion']=='success' and ci['headSha']==state['git_sha']
     spec=state['spec'];assert spec['screen_blocks']==4 and spec['refine_blocks']==0
@@ -15,9 +15,12 @@ def main():
     assert original==spec
     policy_file=ROOT/'evidence/round14/confirmation-policy.json';policy_bytes=policy_file.read_bytes()
     assert subprocess.check_output(['git','show',state['git_sha']+':evidence/round14/confirmation-policy.json'])==policy_bytes
-    entries={e['name']:e for e in spec['entries']};parent='public514';shadow='public514-shadow'
+    entries={e['name']:e for e in spec['entries']};parent=a.parent;shadow=a.shadow
     assert entries[parent]['hashes']==entries[shadow]['hashes']
-    competition,context,rows=load_flat_rows(a.capture);formal=next(r for r in rows if r['id']=='514')['metrics']
+    assert entries[parent]['control'] and entries[shadow]['control']
+    if spec.get('confirmation_gate_policy'):
+        assert spec['confirmation_gate_policy']['parent']==parent and spec['confirmation_gate_policy']['shadow']==shadow
+    competition,context,rows=load_flat_rows(a.capture);anchor=next(r for r in rows if r['id']==entries[parent]['formal_id']);formal=anchor['metrics']
     frontier=[r for r in rows if(r.get('score')or{}).get('on_frontier')]
     metrics={};ids={}
     for e in entries.values():
@@ -39,6 +42,7 @@ def main():
     results=[]
     for e in entries.values():
         if e['control']:continue
+        assert e['anchor']==parent
         n=e['name'];rp=[metrics[n,b][0]/metrics[parent,b][0]for b in range(1,5)];rs=[metrics[n,b][0]/metrics[shadow,b][0]for b in range(1,5)]
         x=formal['balanced_time_ratio']*statistics.mean(rp);y=formal['mean_file_compression_pct']*metrics[n,1][1]/metrics[parent,1][1]
         dominators=[r['id']for r in frontier if r['metrics']['balanced_time_ratio']<=x and r['metrics']['mean_file_compression_pct']<=y]
@@ -49,7 +53,7 @@ def main():
             'checks':checks,'vs_parent_blocks_percent':[100*(v-1)for v in rp],'vs_shadow_blocks_percent':[100*(v-1)for v in rs],
             'vs_parent_mean_percent':100*(statistics.mean(rp)-1),'vs_shadow_mean_percent':100*(statistics.mean(rs)-1),
             'family_point':{'x':x,'y':y,'dominators':dominators},'prior_gate_reference':spec.get('reuse_public_gate')})
-    result={'run_id':state['run_id'],'batch':state['batch'],'commit':state['git_sha'],'policy_sha256':hashlib.sha256(policy_bytes).hexdigest(),'snapshot':context,'results':results,
+    result={'run_id':state['run_id'],'batch':state['batch'],'commit':state['git_sha'],'policy_sha256':hashlib.sha256(policy_bytes).hexdigest(),'snapshot':context,'formal_anchor_id':entries[parent]['formal_id'],'anchor_admission':anchor.get('admission'),'results':results,
         'scope':'Frozen fresh four-block decision only, no discovery pooling or trimming. All prior contradictory evidence retained separately. Conditional public family geometry and exact public gate do not certify private admission, entitlement or reward.'}
     a.output.write_bytes((json.dumps(result,indent=2)+'\n').encode());print(json.dumps(result,indent=2))
 if __name__=='__main__':main()
