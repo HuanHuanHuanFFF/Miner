@@ -27,6 +27,8 @@ def main():
     if spec.get('r18_dna_domain_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-dna-domains.py')],check=True);return
+    if spec.get('r18_dna_demotion_probe'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-dna-demotion.py')],check=True);return
     if spec.get('r18_function_profile'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-functions.py')],check=True);return
