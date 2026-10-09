@@ -4,17 +4,19 @@
 
 | 要做什么 | 从这里开始 |
 |---|---|
-| 继续均衡附近的优化 | [任务索引](docs/TASK_INDEX.md) → 第九轮；重点是前向搜索和初始规划 |
+| 继续优化与查重 | [任务索引](docs/TASK_INDEX.md) → 最近轮次；先看正式结果与[方法总览](docs/research/optimization-methods.md) |
 | 回看 fast3、H16、bucket2 等选择理由 | [优化方法总览](docs/research/optimization-methods.md) |
 | 运行或诊断公共验证 | [验证环境与入口](docs/validation.md) |
 | 核对比赛、提交和奖励机制 | [比赛与提交入口](docs/competition.md) |
 | 查历史文件或老路径 | `python scripts/project.py find H16`；`python scripts/project.py resolve ROUND9.md` |
 
-最近研究记录更新于 **2026-10-08**，使用已保存快照 **27127（02:14:49 +08:00）**。这里的排名与份额不是实时值。
+最近归档更新于 **2026-10-10**。正式结果采用已保存快照 **29394（00:37:57 +08:00）**；以下历史份额都有对应快照，实时状态需查询官方。
 
-- **速度端 fast3／#453**：有正式 admission 和历史奖励记录，用户已确认到账。源码在 [候选目录](candidates/r3-432-fast3)，来源与选择过程见第三轮。
-- **H16-small／#474**：正式 gate 通过，admission 判定被支配；正式两轴和迁移系数见 [校准记录](evidence/round6/formal-474/calibration.json)。
-- **最近均衡研究 scalar**：公共两轴 `1.400032 / 33.934366%`，相对同场 block1 平均时间变化 `−0.884%`，已过完整公共 gate；保守估值仍在前沿外。[第九轮结果](docs/rounds/round09.md)保留测试次数和边界。
+- **base-only／#573**：正式 gate 和 admission 通过，曾在快照29346取得竞赛池份额1.7365%；后续快照29388为0.4774%。[正式结果](evidence/round16/formal-573-start.json)、[预测回测](evidence/round17/formal-calibration-backtest.json)。
+- **DNA nofold／#582**：修补 Lean 后公共及正式 gate 均通过；正式两轴被#539支配，快照29394份额0%。[精确文件包](candidates/r17-dna-nofold-proof1)、[正式结果](evidence/round17/formal-582/result-summary.json)、[第十七轮报告](docs/rounds/round17.md)。原版DNA的旧Lean失败记录保留，不能与修补证明混用。
+- **fast3／#453**：曾有正式份额及奖励，用户已确认历史到账；快照29388已退出前沿。[第三轮](docs/rounds/round03.md)。
+- **H16-small／#474**：正式 gate 通过、admission被支配。[校准记录](evidence/round6/formal-474/calibration.json)。
+- **近期复用结论**：份额峰值不能替代独立确认；#533/#539之间的窄区间可触发评分跳变，原始时间与大小、同源码对照、公共gate、正式admission分别核实。[波动诊断](evidence/round17/dna-variance-diagnosis.json)。
 
 文件分工：
 
