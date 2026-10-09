@@ -23,6 +23,10 @@ def preflight():
 def main():
     orders=preflight();assert os.environ.get('GITHUB_ACTIONS')=='true' and os.environ.get('RUNNER_OS')=='Linux'
     spec=validate(os.environ['ROUND4_SPEC']);assert spec['r18_order_diagnostic']
+    block_count=spec.get('r18_order_blocks',4)
+    protocols=spec.get('r18_order_protocols',['original_fixed11','original_fixed20','balanced20'])
+    assert isinstance(block_count,int) and 1<=block_count<=4
+    assert protocols and len(protocols)==len(set(protocols)) and set(protocols)<={'original_fixed11','original_fixed20','balanced20'}
     up=Path(os.environ['DEFLATE_ROOT']);sys.path.insert(0,str(up/'validator'))
     from bench import driver,corpora
     from bench.results import INCUMBENT
@@ -45,12 +49,13 @@ def main():
     sp=importlib.util.spec_from_file_location('noise_wrapper',ROOT/'scripts/research-round18-multimethod.py');m=importlib.util.module_from_spec(sp);sp.loader.exec_module(m)
     wrapper=ws/'context.py';wrapper.write_text(m.WRAPPER)
     report={'run_id':os.environ['GITHUB_RUN_ID'],'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],'status':'STARTED','source_hashes':source_hashes,'original_engine_sha256':hashlib.sha256(config.engine.read_bytes()).hexdigest(),'balanced_engine_sha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'orders':orders,'blocks':[],
-            'scope':'Diagnostic only: original fixed11, original fixed20, scratch balanced20 schedules at explicitCPU0. Sharedoriginalencoder/token/loader unchanged. Not original protocol performance, Lean gate or payout.'}
+            'protocols':protocols,'declared_blocks':block_count,
+            'scope':'Diagnostic-only declared schedules at explicitCPU0. Original encoder/token/loader remain unchanged. Scratch balanced ordering is separate from original official protocol performance, Lean gate and payout.'}
     def save(): (out/'order.json').write_text(json.dumps(report,indent=2)+'\n')
     save();identities={}
-    for block in range(1,5):
+    for block in range(1,block_count+1):
         method_order=[INCUMBENT]+(names if block%2 else names[::-1])
-        modes=[('original_fixed11',config.engine,11),('original_fixed20',config.engine,20),('balanced20',binary,20)]
+        modes=[m for m in [('original_fixed11',config.engine,11),('original_fixed20',config.engine,20),('balanced20',binary,20)] if m[0] in protocols]
         if block%2==0:modes.reverse()
         for label,engine,reps in modes:
             cmd=[str(engine),str(corpus.path)]+[f'{n}={crates[n]}'for n in method_order]+['--corpus-name',corpus.name,'--reps',str(reps),'--warmup','1','--rustc-version',rustc,'--no-bars']
