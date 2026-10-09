@@ -21,6 +21,11 @@ def main():
     spec=importlib.import_module('verify-round18-exact').validate(args.batch) if mode=='gate' else validate(args.batch)
     assert not spec.get('preflight_only'), 'Preflight fixtures cannot be dispatched as research results'
     assert spec['r18_mode']==mode and bool(spec.get('native_only'))==(mode=='native')
+    if spec.get('r18_dispatch_after_gate_pair_known'):
+        for entry in spec['entries']:
+            if entry.get('control'):continue
+            cert=json.loads((ROOT/entry['path']/'VERIFICATION.json').read_bytes())
+            assert cert.get('status')=='VERIFIED_EXACT_ORIGINAL_PUBLIC_GATE_PASSED' and cert['files']==entry['hashes'], 'Final-pair confirmation requires the exact accepted Rust/Lean pair'
     os.environ.update(ROUND4_SPEC=args.batch,ROUND18_MODE=mode)
     importlib.import_module('round18-preflight').main()
     assert args.ref=='codex/round18-frontier'

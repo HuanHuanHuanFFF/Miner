@@ -113,3 +113,12 @@ AQ demotion-aq-native run37992768154（commitbda216b，UTC21:19:39，20mincap）
 发现本轮早先gain40预检解释有误：actual pc_HLIT=80（5bit），原源码减24实际3.5bit，不是2.5bit。原Rust8739f3ea...、原始J回执+1213B保持；manifest保留原说明并加更正，dna-cost-preflight-correction.json记录实质错误。新r18-dna-literal40-corrected Rust38299b88...真的减40实现2.5bit；新r18-dna-chain2 Rust3f2e792f...复用PC紧凑链多一个旧候选(dp=1)，保留DNA密集插入/nofold，Lean包裹调用改PC.run1c但仍草稿d7fa2759...。AR native配置已预检，等待本次提交后派发。两个候选均未知时间和完整gate，不继承原2.5bit“失败”结论。
 
 AP run37992099832和AN run37992121536仍按原开始/超时运行。最新已知分支bda216b，main b5cb035保持排除。截止与新方向冻结点不变。
+
+
+## 2026-10-09T21:40:16.945863+00:00 新18.27%信号及确认计划
+
+AP run37992099832已完整成功并收齐。base6 Rustf5c1437c...两块主份额0.016388%/18.274972%，shadow两块0；主时间相对582 -0.290738%/-0.151834%，同源码参照却差-0.214472%/-0.665171%。块1成为左端点而删除533所以份额低；块2落533/539之间得到18.27%；换shadow都被539支配。dna-ap-analysis/decision保存完整重放，不能宣布15%达标。split4主最高0.02434%、shadow均0。
+
+准备并即将派发gate-base6-1（原Rustf5c1437c/Lean cf4b7c1e，expectedpublicbytes5339229），以及noise-as-diagnostic（582/base6各两个同源码条目，CPU0、原fixed11与balanced20、两个镜像块）。它们是对高潜力且对照矛盾候选的有界投入。confirm-at四块联合确认base6+已验证selectiveRF已准备10条目、两个族锚点和shadow，但尚未派发；新增dispatch保护要求两个非control候选VERIFICATION精确pair均已通过后才可启动。若Lean修复，先更新最终pair与spec，再启动新确认；不要把旧proof绑定的测量当最终pair确认。
+
+AR dna-ar-native run37993962642，commit9c1c58a，UTC21:31:22启动25mincap，在途。AN run37992121536同进程RF诊断仍在途；不要取消。账户半程读数已用8%、剩92%、reset0。main重新核对仍只有b5cb035未推送且干净，未触碰。
