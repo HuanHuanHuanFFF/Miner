@@ -61,3 +61,9 @@ repair-r37864386007仍screen前失败：剩一个PIM pc_f_deepen U32调用边界
 repair-t37865259930原生先行没执行source程序：codec校准脚本需要public514 reference，但542 spec未列它，KeyError；无artifact，保存原GitHub完整日志/metadata，不编造digest。repair-u显式加入旧public514校准对照，新round4 preflight提前拒这种缺项；算法源不变。此处是配置错误，不是编译／算法／私有结果。
 
 repair-u37865601196 actual code/原encoder preflight成功，public542大小35.9216372%，PCU16私有callee版35.9216264%(-0.0000107pp)，仅bundle额外省3B相对542，其余token/output同该新父。正式同族perf仍UNKNOWN，final-v做两块time+540decode+提取，不预申请full gate。precision-s37864825973原log确定bench来源目录未在sys.path→ModuleNotFoundError；原540decode回执保留但没co-measure。precision-w修复source-root显式加载，同算法/原engine不动，仅测量协议诊断重跑。
+
+## 当前续跑检查点（2026-10-09 00:41UTC）
+
+新用户7h窗口19:52UTC→02:52UTC(北京时间10:52)优先于宿主旧goal字符串里的两小时；Goal仍active，目标未完成。现在只等待/判别两个已派发作业：final-v37865933625(完整隔离542源码，40min)，precision-w37865952376(显式validator sys.path修复的原engine四方法诊断+标准1块，40min)。前者若能跨542族当前边界才独立确认/完整gate；后者只诊断已有abs15微信号，不能改写正式排名。既有168公共配对，两个精确完整public gate接受，未正式上传/签名/转账，未有新奖励。Quota56已用/44剩余，Oct23卡未消耗；只剩<=1才允许目标卡。最后90min reserved，01:22UTC后不启动新算法探索，只确认/审计/交付。所有private ZIP/完整导入、quota及账户链回执保持忽略。无子agent授权，不派发。不要重跑已完成实验；所有源码/原始失败保留。
+
+待完成：收集两个最终回执，刷新官方快照；按精确两轴选择是否做确有价值的确认/gate，不宣称异常第四块-3.48%为收益；更新check-round13审计/current-analysis和最终报告/索引，提交推送实验分支；到02:52UTC停止新工作并如实交付未达目标。Goal工具旧objective时钟也错误，真实预算取budget.json。
