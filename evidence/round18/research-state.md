@@ -133,3 +133,12 @@ AU run37995550516：当前A变量查询75848577次/808367027项，均宽10.6576�
 AR两项后续AV run37995588693，commitb919738，UTC21:47:51启动45mincap，2原协议块、582/shadow/base6对照。literal40-corrected -9932B/+490992tokens；chain2 -321B/-6000tokens，未计时前不推成功。AN run37992121536已收齐，balanced20 dominance只+0.033/+0.064percent，和重复误差同级，暂停v0证明投入。
 
 资源统计cost-hour4.json截至UTC21:50：46派发、42完整收集（41成功/1失败），累计完成runner18342秒；224个原协议配对进程。另4作业当时尚未收齐，不据本地缺回执判断仍运行。账单与本任务模型费用UNKNOWN，账户用量92%剩余、reset0。新方向截止23:12:51/最终01:32:51 UTC不变，勿重新计时。
+
+
+## 2026-10-09T22:19:49.162453+00:00 base6证明修复与新负面确认
+
+Gate-base6-1 run37994890861已失败收齐：原版stage3提取通过，stage4 statement失败；005-lake.log只报PC.slot_of_m_spec的六个掩码cast索引界，加一个嵌套slot分支WP续体。不是timeout，proof进程379.9秒；其余重复mvcgen警告原样保留。新r18-dna-base6-proof1保持Rust f5c1437c6e613a5a3c0740d590ac7ce972a24b86d963122c6ace3c576c3a98fd，Lean改为5212249ffd5e292793c69568ea9f34331db407d2571ab3265cb6c86e6365ea04；仅使用Array.property、cast_mod≤原值、Nat.and_le_right以及WP.spec_bind。未编译，等待gate-base6-2原版完整验收。它是同候选的证明版本，不计第二种候选。confirm-at已改绑定proof1并继续由exactcertificate保护，未派发。
+
+AV run37995588693已收齐。literal40-corrected与chain2主/shadow两块全部0，暂停各自精确版本。base6作为对照新增两块主/shadow都是0；联合AP后base6主4块最佳18.27497%、中位0.008194%、2零值、1次≥5/15；shadow4块全0。仍未达标，不能选峰值。
+
+AW block-aw-native run37997434316，commit690a21e，UTC22:07:06启动25mincap，在途；先看2400helper/28file等价，再决定是否原协议计时。最终截止01:32:51 UTC、新方向冻结23:12:51仍固定。
