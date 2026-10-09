@@ -1,0 +1,45 @@
+verifying /home/runner/work/Miner/Miner/candidates/r13-542-abs15/parse.rs
+workspace: /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-26f89lab
+
+0 intake      ok — verification-input-420k0ixb: parse.rs, Parse.lean
+1 policy      ok — source prefilters passed
+
+REJECTED at stage 2 (static)
+  stream/data/verification-workspace/verify-26f89lab/slot/generated/parse.rs:2403:21
+     |
+2403 | pub fn q4_put_match(s: &[u8], out: &mut [u32], nt: usize, p: usize, d: usize, l: usize) -> (usize, usize) {out[nt]=((d-1)as u32).w...
+     |                     ^ help: if this is intentional, prefix it with an underscore: `_s`
+
+warning: unused variable: `m`
+   --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-26f89lab/slot/generated/parse.rs:594:143
+    |
+594 | ...input: &[u8], out: &mut [u32], m: usize, pos0: usize, ntok0: usize) -> usize {
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_m`
+
+warning: unused variable: `s`
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-26f89lab/slot/generated/parse.rs:2069:47
+     |
+2069 | #[inline(always)] pub fn pc_put_match_wrapped(s:&[u8],out:&mut[u32],nt:usize,p:usize,d:usize,l:usize)->(usize,usize){
+     |                                               ^ help: if this is intentional, prefix it with an underscore: `_s`
+
+warning: unused variable: `s`
+    --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-26f89lab/slot/generated/parse.rs:1522:21
+     |
+1522 | pub fn pc_put_match(s:&[u8],out:&mut[u32],nt:usize,p:usize,d:usize,l:usize)->(usize,usize){
+     |                     ^ help: if this is intentional, prefix it with an underscore: `_s`
+
+warning: unused variable: `s`
+   --> /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-26f89lab/slot/generated/parse.rs:898:22
+    |
+898 | pub fn fx0_put_match(s: &[u8], out: &mut [u32], nt: usize, p: usize, d: usize, l: usize) -> (usize, usize) {out[nt]=((d-1)as u32).w...
+    |                      ^ help: if this is intentional, prefix it with an underscore: `_s`
+
+error: aborting due to 7 previous errors; 17 warnings emitted
+
+For more information about this error, try `rustc --explain E0308`.
+ERROR Code failed to compile
+[32m2026-10-09 00:15:38.337[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_intake[0m:[36m261[0m - [34m[1m[gate] parse.rs fdcf880d22122c94 -> slot/generated/parse.rs[0m
+[32m2026-10-09 00:15:38.337[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_intake[0m:[36m261[0m - [34m[1m[gate] Parse.lean e3b0c44298fc1c14 -> lean/Proof/Parse.lean[0m
+[32m2026-10-09 00:15:38.428[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] rustup exit=0 in 0.0s[0m
+[32m2026-10-09 00:15:38.773[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] extract.sh exit=1 in 0.3s[0m
+[32m2026-10-09 00:15:38.774[0m | [1mINFO    [0m | [36m__main__[0m:[36mfail[0m:[36m116[0m - [1m[gate] rejected at stage 2 (static)[0m
