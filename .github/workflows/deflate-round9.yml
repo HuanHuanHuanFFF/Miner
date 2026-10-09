@@ -7,7 +7,7 @@ on:
         required: true
         type: choice
         default: '9'
-        options: ['9', '10', '11', '12', '13', '14']
+        options: ['9', '10', '11', '12', '13', '14', '15']
       specification:
         description: 'Tracked middle-frontier experiment batch'
         required: true
@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   experiment:
-    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && !(inputs.experiment_round == '11' && inputs.specification == 'huffman-1') && !(inputs.experiment_round == '12' && inputs.specification == 'probe-e') && !((inputs.experiment_round == '13' || inputs.experiment_round == '14') && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native')))
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && !(inputs.experiment_round == '11' && inputs.specification == 'huffman-1') && !(inputs.experiment_round == '12' && inputs.specification == 'probe-e') && !((inputs.experiment_round == '13' || inputs.experiment_round == '14' || inputs.experiment_round == '15') && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native')))
     name: ${{ inputs.specification }}
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
@@ -61,7 +61,7 @@ jobs:
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round13.py
       - name: Check Round 14 whole-parser and direct changed-path inputs
-        if: inputs.experiment_round == '14'
+        if: inputs.experiment_round == '14' || inputs.experiment_round == '15'
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round14.py
@@ -145,7 +145,7 @@ jobs:
           compression-level: 9
           if-no-files-found: ignore
   native_diagnostic:
-    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && ((inputs.experiment_round == '11' && inputs.specification == 'huffman-1') || (inputs.experiment_round == '12' && inputs.specification == 'probe-e') || ((inputs.experiment_round == '13' || inputs.experiment_round == '14') && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native'))))
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && ((inputs.experiment_round == '11' && inputs.specification == 'huffman-1') || (inputs.experiment_round == '12' && inputs.specification == 'probe-e') || ((inputs.experiment_round == '13' || inputs.experiment_round == '14' || inputs.experiment_round == '15') && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native'))))
     name: ${{ inputs.specification }}
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
@@ -178,6 +178,9 @@ jobs:
       - name: Check frozen R13 native candidates and declared opportunity probes
         if: (inputs.experiment_round == '13' || inputs.experiment_round == '14') && endsWith(inputs.specification, '-native')
         run: python3 scripts/research-round13-native.py
+      - name: Check R15 native bytes or bounded original phase profiles
+        if: inputs.experiment_round == '15' && endsWith(inputs.specification, '-native')
+        run: python3 scripts/research-round15-native.py
       - name: Publish original diagnostic text without binaries
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
