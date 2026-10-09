@@ -56,10 +56,15 @@ jobs:
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round5.py
       - name: Check Round 13 imported and search-changing native sources
-        if: inputs.experiment_round == '13' || inputs.experiment_round == '14'
+        if: inputs.experiment_round == '13'
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round13.py
+      - name: Check Round 14 whole-parser and direct changed-path inputs
+        if: inputs.experiment_round == '14'
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round14.py
       - name: Check search-changing Round 12 sources decode correctly
         if: inputs.experiment_round == '12' && (inputs.specification == 'probe-c' || inputs.specification == 'confirm-d')
         run: |
