@@ -25,9 +25,15 @@ def main():
         for f in ('Types.lean','Constants.lean','Funs.lean'):
             path=workspace/'lean/Slot'/f
             if path.is_file():assert path.stat().st_size<10000000;shutil.copyfile(path,dest/f)
+        logs=out/'logs';logs.mkdir()
+        for path in sorted((workspace/'logs').glob('*.log')):
+            assert path.stat().st_size<10000000
+            shutil.copyfile(path,logs/path.name)
     receipt.update(status='EXACT_ORIGINAL_PUBLIC_GATE_ACCEPTED' if verdict.get('accepted') else 'EXACT_ORIGINAL_PUBLIC_GATE_REJECTED',exit_code=p.returncode,verdict=verdict);save()
     assert all(sha(inp/f)==h for f,h in spec['files'].items())
-    if verdict.get('accepted'):assert verdict['corpora']==['corpus-stage1'] and 'LZ77.Obligation slot.parse' in log and 'verification accepted' in log
+    if verdict.get('accepted'):
+        assert verdict['corpora']==['corpus-stage1'] and 'LZ77.Obligation slot.parse' in log and 'verification accepted' in log
+        assert verdict['methods']['submission']['output_bytes']==spec['expected_public_output_bytes']
     subprocess.run(['git','diff','--exit-code'],cwd=root,check=True)
     if p.returncode or not verdict.get('accepted'):raise SystemExit(p.returncode or 1)
 if __name__=='__main__':main()
