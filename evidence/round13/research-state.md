@@ -59,3 +59,5 @@ transfer-q37863273684失败在screen之前：RustE0308，原542 PIM共享pc_f_li
 repair-r37864386007仍screen前失败：剩一个PIM pc_f_deepen U32调用边界E0308。补全原link/deepen U32函数及两PC原spec供PIM，PC独立U16名字，静态检查PC modified region不再调用旧callee；前两原错误源都保留。repair-t-native先actual整程序encoder preflight，省却一次不必要的完整setup；不新扩方向。precision-s同进程诊断source-root模块加载路径缺失在已冻结版本中潜在，已加入validator显式sys.path供后续修复版本，原job自然运行到结果，暂不重复派发。
 
 repair-t37865259930原生先行没执行source程序：codec校准脚本需要public514 reference，但542 spec未列它，KeyError；无artifact，保存原GitHub完整日志/metadata，不编造digest。repair-u显式加入旧public514校准对照，新round4 preflight提前拒这种缺项；算法源不变。此处是配置错误，不是编译／算法／私有结果。
+
+repair-u37865601196 actual code/原encoder preflight成功，public542大小35.9216372%，PCU16私有callee版35.9216264%(-0.0000107pp)，仅bundle额外省3B相对542，其余token/output同该新父。正式同族perf仍UNKNOWN，final-v做两块time+540decode+提取，不预申请full gate。precision-s37864825973原log确定bench来源目录未在sys.path→ModuleNotFoundError；原540decode回执保留但没co-measure。precision-w修复source-root显式加载，同算法/原engine不动，仅测量协议诊断重跑。
