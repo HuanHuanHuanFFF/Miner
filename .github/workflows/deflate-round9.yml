@@ -7,7 +7,7 @@ on:
         required: true
         type: choice
         default: '9'
-        options: ['9', '10', '11', '12', '13', '14', '15', '16', '17']
+        options: ['9', '10', '11', '12', '13', '14', '15', '16', '17', '18']
       specification:
         description: 'Tracked middle-frontier experiment batch'
         required: true
@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   experiment:
-    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && !(inputs.experiment_round == '11' && inputs.specification == 'huffman-1') && !(inputs.experiment_round == '12' && inputs.specification == 'probe-e') && !((inputs.experiment_round == '13' || inputs.experiment_round == '14' || inputs.experiment_round == '15' || (inputs.experiment_round == '16' || inputs.experiment_round == '17')) && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native'))) && !(inputs.experiment_round == '17' && startsWith(inputs.specification, 'gate-proof'))
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && !(inputs.experiment_round == '11' && inputs.specification == 'huffman-1') && !(inputs.experiment_round == '12' && inputs.specification == 'probe-e') && !((inputs.experiment_round == '13' || inputs.experiment_round == '14' || inputs.experiment_round == '15' || (inputs.experiment_round == '16' || inputs.experiment_round == '17')) && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native'))) && !(inputs.experiment_round == '17' && startsWith(inputs.specification, 'gate-proof')) && inputs.experiment_round != '18'
     name: ${{ inputs.specification }}
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
@@ -220,3 +220,12 @@ jobs:
           retention-days: 1
           compression-level: 9
           if-no-files-found: warn
+
+  round18:
+    if: github.event_name == 'workflow_dispatch' && inputs.experiment_round == '18' && (github.event.repository.private == false || inputs.allow_private == true)
+    uses: ./.github/workflows/deflate-round18.yml
+    with:
+      specification: ${{ inputs.specification }}
+      mode: ${{ endsWith(inputs.specification, '-native') && 'native' || endsWith(inputs.specification, '-diagnostic') && 'diagnostic' || 'standard' }}
+      allow_private: ${{ inputs.allow_private }}
+      job_minutes: ${{ fromJSON(inputs.job_minutes) }}

@@ -33,7 +33,7 @@ def save(path, value):
 def specification_path(label):
     assert re.fullmatch(r'[a-z0-9-]{1,48}', label)
     spec_directory = os.environ.get('ROUND4_SPEC_DIR', 'evidence/round4')
-    assert spec_directory in ('evidence/round4', 'evidence/round5', 'evidence/round6', 'evidence/round7', 'evidence/round8', 'evidence/round9', 'evidence/round10', 'evidence/round11', 'evidence/round12', 'evidence/round13', 'evidence/round14', 'evidence/round15', 'evidence/round16', 'evidence/round17')
+    assert spec_directory in ('evidence/round4', 'evidence/round5', 'evidence/round6', 'evidence/round7', 'evidence/round8', 'evidence/round9', 'evidence/round10', 'evidence/round11', 'evidence/round12', 'evidence/round13', 'evidence/round14', 'evidence/round15', 'evidence/round16', 'evidence/round17', 'evidence/round18')
     return ROOT / spec_directory / (label + '.json')
 
 
