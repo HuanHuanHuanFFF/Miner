@@ -10,6 +10,8 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-ranges.py')],check=True);return
     if spec.get('r18_dp_repeat_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-convergence.py')],check=True);return
+    if spec.get('r18_rf_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-rf-counts.py')],check=True);return
     if spec.get('r18_function_profile'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-functions.py')],check=True);return
