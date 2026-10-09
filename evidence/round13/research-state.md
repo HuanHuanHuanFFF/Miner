@@ -69,3 +69,9 @@ repair-u37865601196 actual code/原encoder preflight成功，public542大小35.9
 待完成：收集两个最终回执，刷新官方快照；按精确两轴选择是否做确有价值的确认/gate，不宣称异常第四块-3.48%为收益；更新check-round13审计/current-analysis和最终报告/索引，提交推送实验分支；到02:52UTC停止新工作并如实交付未达目标。Goal工具旧objective时钟也错误，真实预算取budget.json。
 
 precision-w37865952376实际失败为results没有parse_results导出；真实pinned driver定义from.resultsimportparseasparse_results。修复用driver.parse_results并逐一AST核对全部9个引用入口存在，source-root路径已修；precision-x最终诊断重试，候选/engine/encoder不改，原两次import failures完整保留。
+
+## 续跑检查点（2026-10-09 00:53UTC）
+
+上一goal turn属progress：修复审计覆盖、刷新官方快照29243、修复共测的pinned API读取，保留每次真实失败；没有改变成功验收口径。当前两个权威活跃句柄：final-v37865933625(screen进行中，原extract artifact已发布)，precision-x37866735582(install toolchain进行中)。precision-w37865952376因frombench.resultsimportparse_results失败，原记录已收；修复用driver.parse_results，全部9个入口与固定源码AST核对。precision-s/repair-r/repair-t等旧failed均不重启，只保留历史。当前共24个派发，22终态回执已校验，168标准配对、2exact original public gates；未有新正式admission/排名/奖励，未签名/燃注册。
+
+硬预算仍02:52UTC(北京时间10:52)，01:22UTC冻结新算法探索，剩时只对当前真实有意义信号做确认／exactgate／最终审计/汇总。不要以旧goal两小时字符串或宿主累计elapsed缩短用户7h窗口。下步：仅收两个current IDs实际结果，precision-x co-measure不算标准配对或private验证；若final-v没有跨当前542-family边界不追加昂贵gate。更新audit/currentanalysis/final报告/索引、提交push公开实验分支，确认所有已启动作业终态；Budget结束如实未完成争榜。实际额度最近44%剩余，Oct23卡未用。资料原包/账户/卡守卫仍私有忽略，不上传。不派发子agent。
