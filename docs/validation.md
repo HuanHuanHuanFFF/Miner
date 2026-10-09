@@ -13,7 +13,7 @@
 | 最近结果复算 | `scripts/summarize-round10.py RECEIPT... --snapshot SNAPSHOT`；13 个原始 run 见 [第十轮报告](rounds/round10.md) |
 | 文档和路径自检 | `python scripts/project.py check` |
 
-所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；第十四轮已核实为公开仓库。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至14轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
+所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；第十五轮派发已核实为公开仓库。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至15轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
 
 ## 实际执行版本
 
