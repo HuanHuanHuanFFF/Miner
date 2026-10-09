@@ -24,7 +24,7 @@ def main():
     assert 0 <= args.interval_seconds <= 10
     dest = args.destination.resolve()
     evidence_root = (ROOT / 'evidence').resolve()
-    assert dest.is_relative_to(evidence_root) and dest.parent.name in ('round10', 'round11', 'round12', 'round13', 'round14', 'round15', 'round16')
+    assert dest.is_relative_to(evidence_root) and dest.parent.name in ('round10', 'round11', 'round12', 'round13', 'round14', 'round15', 'round16', 'round17')
     dest.mkdir(parents=True, exist_ok=True)
     assert not any(dest.iterdir()), 'Use a fresh directory; prior response bodies are immutable'
     started = now()
