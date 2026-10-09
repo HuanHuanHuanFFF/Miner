@@ -79,3 +79,5 @@ precision-w37865952376实际失败为results没有parse_results导出；真实pi
 final-v37865933625自然成功，540 wholeParser decode及重新提取接受，14标准配对：对542 -0.231755%，大小-0.000010714pp(只少3B)，同族点0.4435568/36.215031仍被546支配。关闭这份源，不追加full gate／正式上传。已累计182标准配对；此前typed-call错误都保留未冒充结果。precision-x仍已启动运行，待收诊断与其中标准一块。
 
 precision-x37866735582自然成功，原engine4method共测四块诊断均值candidate-0.246814%、sameELF shadow+0.005794%；协议内block变化仍大，标准一候选块反而+0.815906%。不晋级、不合入标准性能统计。原4 raw blocks按11median重新核对，属于诊断。此新反馈支持一次低成本U16 representation+已测gain恢复组合，组合源必须重新测，不相加收益；combine-y-native在01:22探索冻结前单样本原encoder先行，无迭代组合扩展。
+
+combine-y37868172668原生整程序/原encoder自然成功，组合大小36.1952896%，公共token/output同独立rescue-gain，没有U16新增大小效应。时间UNKNOWN，不能相加co-measure微增益；combine-z同冻结source两块标准测量+540decode+提取，01:22前启动，无随后变体。实际仍非viable即停止组合，不申请full gate。
