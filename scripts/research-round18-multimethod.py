@@ -1,6 +1,6 @@
 """Separate original one-candidate measurements from same-process diagnostics."""
 from pathlib import Path
-import dataclasses, hashlib, json, os, statistics, sys
+import dataclasses, hashlib, json, os, statistics, sys, subprocess
 from round4 import ROOT, validate
 
 WRAPPER = r'''
@@ -24,6 +24,8 @@ def save(p, value):
 def main():
     assert os.environ.get('GITHUB_ACTIONS') == 'true' and os.environ.get('RUNNER_OS') == 'Linux'
     spec = validate(os.environ['ROUND4_SPEC']); assert spec['r18_mode'] == 'diagnostic'
+    if spec.get('r18_order_diagnostic'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-order.py')],check=True);return
     upstream = Path(os.environ['DEFLATE_ROOT'])
     sys.path.insert(0,str(upstream/'validator'))
     from bench import driver, corpora
