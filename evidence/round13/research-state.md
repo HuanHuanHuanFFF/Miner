@@ -81,3 +81,13 @@ final-v37865933625自然成功，540 wholeParser decode及重新提取接受，1
 precision-x37866735582自然成功，原engine4method共测四块诊断均值candidate-0.246814%、sameELF shadow+0.005794%；协议内block变化仍大，标准一候选块反而+0.815906%。不晋级、不合入标准性能统计。原4 raw blocks按11median重新核对，属于诊断。此新反馈支持一次低成本U16 representation+已测gain恢复组合，组合源必须重新测，不相加收益；combine-y-native在01:22探索冻结前单样本原encoder先行，无迭代组合扩展。
 
 combine-y37868172668原生整程序/原encoder自然成功，组合大小36.1952896%，公共token/output同独立rescue-gain，没有U16新增大小效应。时间UNKNOWN，不能相加co-measure微增益；combine-z同冻结source两块标准测量+540decode+提取，01:22前启动，无随后变体。实际仍非viable即停止组合，不申请full gate。
+
+## 最终确认检查点（2026-10-09 01:26UTC）
+
+combine-z37868528362自然成功，540 Root decode、原提取接受、16标准配对完成；全26作业终态原文件审计通过，累计205配对。组合对abs15+0.125527%，两块对public514为-0.739514/+0.279779%，对父+0.017544/+0.233511%；同源码514-shadow -0.232346/+0.333044%。条件同族点0.4312746/36.642633进入几何前沿，压力点仍被支配；一快一慢且父版同场也变快，尚不确认收益，非admission/奖励。第一次收取只在最后日志网络读取失败，原artifact已完整下载且审计通过；只重取日志成功，无重复运行、覆盖原artifact或伪造失败。
+
+唯一后续动作confirm-aa：同一Rust30277a30.../原未适配Lean38d157d9...，独立runner四镜像块32进程，parent/anchor/candidate/identical-shadow平均运行位置均3.5。预算上限35min，不改变源/参数、不再扩方向；复测真实两轴不支持当前几何机会则停止组合及full gate。01:22UTC已冻结新算法探索，剩余预算只确认/必要证明/审计与交付。
+
+官方checkpoint4重新全量读取仍snapshot29243、553提交/527leaderboard、weights同快照，freshness仍unknown，不当作最新私有结果保证。新增成本描述性拆分逐行选11正式total_s的实际median rep，parse+encode严格复算总轴；balance-n第四块总轴下降约83.9%来自encoder项(含独立incumbent波动)，同字节不能据此断言算法提速。成本拆分只作计时解释，不替换原metric、排除数据或构造新的标准分数。
+
+额度目的工具当前已用57%、剩43%，Oct23卡仍available未消耗；本地guard一次非提升启动initialize超时，没有调用消费RPC，不把超时说成重置。原卡/账户信息留本地忽略，后续阈值触发仍须精确卡与幂等记录。main不合并；原ZIP不发布；无正式上传/签名/资金动作。已推送阶段commit0420644。
