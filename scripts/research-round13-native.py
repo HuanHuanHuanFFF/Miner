@@ -15,6 +15,9 @@ def main():
     if spec.get('r18_rf_span_equiv'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-rf-span.py')],check=True);return
+    if spec.get('r18_rf_dominance_check'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-rf-dominance.py')],check=True);return
     if spec.get('r18_function_profile'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-functions.py')],check=True);return
