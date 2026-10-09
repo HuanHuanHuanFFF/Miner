@@ -16,6 +16,8 @@ def sha(b):return hashlib.sha256(b).hexdigest()
 def main():
     assert os.environ.get('GITHUB_ACTIONS')=='true'and os.environ.get('RUNNER_OS')=='Linux'
     spec=validate(os.environ['ROUND4_SPEC'])
+    if spec.get('r15_chain_profile'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round15-chain.py')],check=True);return
     if spec.get('r15_function_profile'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round15-functions.py')],check=True);return
     if not spec.get('r15_phase_profile'):
