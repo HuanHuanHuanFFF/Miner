@@ -40,3 +40,27 @@
 - 新标准分析器脚本analyze-round18.py已在旧R17及本轮F/I真实原始回执上复算；oracle-round18.py将输入层内均值、runner间中位作乐观免费选择，跨族514迁移只作诊断，不是私有估计。原始回执SHA均保留。
 - 额度18:38读数已用2%、剩余98%，从未兑换。本轮之后仍按剩余≤1%且最多一次成功处理；工具不能选择指定卡。
 - 报告docs/rounds/round18.md和TASK_INDEX/tasks.json已增加本轮入口。最后状态更新时commit为e95a075（后续可能前进），研究分支持续push；main上b5cb035仍未随本轮推送。
+
+
+## 两小时后：当前最好版本与在途验证（UTC 19:43附近）
+
+固定窗口仍为UTC17:32:51至次日01:32:51，北京时间01:32:51至09:32:51；不要重计。正式15%/5%目标未完成。
+
+当前最佳新候选r18-586-selective-rf：Rust b03af48fe3916b5b82dd563a4a69dbcc6e3e424579bd98ed0a11add6ef8b1bc6；Lean8c5d3ebbcf0f681f7005cc86a5d4a3045778af7165ffd145439b4d9b125ca9f2。只保留原RF类别13/25/26/29，public相对586多678B。screen-t原版2块在最新已取快照29421下：主对照份额2.4727/2.5190%，shadow2.4963/2.5248%，无零值；发现层，不是正式成绩。中心坐标约4.14628/34.098946。固定大小大约还需9%时间改善到5%，约37%到15%；小幅大小改善可降低速度要求，需测实际组合。
+
+已启动精确完整gate：gate-selective-1，run37982026752，commit702574d，UTC19:42:16启动，50分钟cap。新脚本verify-round18-exact.py调用原verify.py，校验源/证明哈希、obligation、公理由原gate检查、stage1输出4865533B及上游不变；artifact末尾exact-gate，收集用collect-round4.py pull RUN exact-gate --round 18 --batch gate-selective-1。尚未拿到结果。gate-entry-preflight只是旧R17pair本地路径检查fixture，preflight_only阻止派发，不得记作新gate。
+
+独立确认：confirm-y run37982104188，UTC19:42:57启动，4个新runner块（同一个新runner内4块），8条目含原586/shadow/base586/legacycontrols。r18_role=independent_confirmation，cap60min；尚未结果，原15/5目标未降低。需区分一个runner四块与四runner。
+
+环形区间版本r18-586-rf-span：Rust9bb0703cc59965032e03a65d162b03ca4d1d9c3110c575166c0d9c94842d16aa；Lean仍是原586，新增r18_rf_relax的证明尚缺。span-w-native run37980664775已成功，28files与selective逐token/输出相同，6000真实Rusthelper边界差分通过。screen-x准备/已派发，运行ID看dispatch文件或后续工具返回；原协议2块，与selective parent和586shadow比较，cap60min。若有提升，还需新增helper总性证明和精确gate；不要复用selective的通过状态。
+
+其他结果：
+- screen-r run37977934141：r18-573-short-range公共同输出，主对照两块约0.49-0.54%条件份额，shadow有一块0，微小速度被对照分歧覆盖，未达5%。r18-586-base-only在R/T两runner4块全部0份额。
+- selective以外RF实验：r18-586-rf-only（literal seed）多140696B；r18-586-dseed-rf（D第一遍匹配seed）多11350B，恢复多数但高端质量仍不足，未计时/未gate，暂停整版迁移；保留为局部替代。
+- rf-counts-v-native run37979051837：selective真实5800000位置，平均1.1318bucket，排序2482532次，length relax130964766次。停止排序bitmap方案；据此提出rf-span。所有计数/observer均保持token/decode，仅诊断。
+- #586分层profile：parse4.513s、RF2.113s；RF_find1.045s、RF_dp0.961s、RF_exact0.065s（含嵌套，不能相加）；tiny-app RF11.284ms换10B，tiny基本版845B/613tokens，full586835B/613tokens。既有576tiny844B，579tiny842B。这可作为进一步质量/成本研究线索，尚未新实验。
+- 最新已保存官方快照29421，计算UTC19:04:06，589记录/554账户，freshness unknown。official-hour2目录完整原始响应和hash；不要把计算时间称实时块。
+
+新增精确gate路由：workflow deflate-round9.yml 的R18 job直接手动启动；标签gate-*选择mode gate，其它规则见dispatch-round18.py。无自动CI、allow_private仍false。新的gate逻辑本地已用历史精确pair做预检，但第一次真实完整gate在上述run运行。
+
+当前研究重点：保存并独立确认约2.5%的最佳成果，同时继续降低selective的实际成本或提高质量以争取5/15。原始数据high-rt-analysis.json含全部单独/匹配块联合几何与阴影差异，不能挑峰值。主目录main的b5cb035始终排除，研究分支持续push。最新已知commit702574d，之后可能前进。账户UTC19:17左右读数已用4%、剩余96%，未使用reset；记录在usage-observations。
