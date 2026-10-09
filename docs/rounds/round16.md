@@ -31,3 +31,6 @@ B/D两台runner共38个标准公共配对进程已收齐并逐rep重算。depth2
 22:02按原计划冻结全部12份新Rust，[冻结哈希](../../evidence/round16/frozen-candidates.json)后续自动复核。H按需读取同输出但对直接父版慢0.516%，hash32慢0.156%、slack2慢0.976%，这些精确版本不晋级。J真实组合少66,283B，却比原abs15慢2.446%，该次条件投影已被支配。统一原abs15作对照的[发现汇总](../../evidence/round16/discovery-common-parent.json)避免把相对不同直接父版的差值混作整体提速。
 
 最后K只尝试最短4字节文本匹配或3字节二进制匹配前看，分别少27,227B、5,932B，M在测其真实代价；不扩展阈值扫描。L对此前最高单环境条件中心lazy8-binary做唯一一次四块独立确认，冻结的1.7365%分配条件仍然不变，未过则不分配gate。当前快照[29352](../../evidence/round16/official-confirmation/receipt.json)新增#574，#573可支付份额为1.7035%，仍属历史快照观察而非未来保证。
+
+
+L独立四块确认失败：按原514锚的中心份额0.2101%，按同源码shadow为0.1515%；两种校准均0/4块达到冻结目标，完整gate没有运行。[原决策](../../evidence/round16/confirm-l-decision.json)保留全部块。M最短匹配方案的中心分别0.264%/0.095%，原abs15对照下仍慢2.066%/0.831%，不追加验证。[剩余预算的最后确认](../../evidence/round16/confirm-n-rationale.json)仅针对尚未独立复测的lazy16，不重跑已失败来源、不改目标或Rust。
