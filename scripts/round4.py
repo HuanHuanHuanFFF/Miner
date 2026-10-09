@@ -33,7 +33,7 @@ def save(path, value):
 def specification_path(label):
     assert re.fullmatch(r'[a-z0-9-]{1,48}', label)
     spec_directory = os.environ.get('ROUND4_SPEC_DIR', 'evidence/round4')
-    assert spec_directory in ('evidence/round4', 'evidence/round5', 'evidence/round6', 'evidence/round7', 'evidence/round8', 'evidence/round9', 'evidence/round10', 'evidence/round11', 'evidence/round12', 'evidence/round13')
+    assert spec_directory in ('evidence/round4', 'evidence/round5', 'evidence/round6', 'evidence/round7', 'evidence/round8', 'evidence/round9', 'evidence/round10', 'evidence/round11', 'evidence/round12', 'evidence/round13', 'evidence/round14', 'evidence/round15', 'evidence/round16', 'evidence/round17')
     return ROOT / spec_directory / (label + '.json')
 
 
@@ -315,6 +315,12 @@ def main():
             state['gate_confirmation_decisions'] = decisions
             save(state_path, state)
             print('GATE_CONFIRMATION ' + json.dumps(decisions), flush=True)
+        if spec.get('confirmation_share_gate_policy'):
+            from round15_gate import share_confirmation_gates
+            names, share_decisions = share_confirmation_gates(state, names, pages, scorer)
+            state['gate_share_confirmation_decisions'] = share_decisions
+            save(state_path, state)
+            print('SHARE_GATE_CONFIRMATION ' + json.dumps(share_decisions), flush=True)
         for name in names:
             folder = output / ('input-' + name)
             folder.mkdir(exist_ok=True)

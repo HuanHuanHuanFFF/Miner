@@ -7,7 +7,7 @@ on:
         required: true
         type: choice
         default: '9'
-        options: ['9', '10', '11', '12', '13']
+        options: ['9', '10', '11', '12', '13', '14', '15', '16', '17']
       specification:
         description: 'Tracked middle-frontier experiment batch'
         required: true
@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   experiment:
-    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && !(inputs.experiment_round == '11' && inputs.specification == 'huffman-1') && !(inputs.experiment_round == '12' && inputs.specification == 'probe-e') && !(inputs.experiment_round == '13' && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native')))
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && !(inputs.experiment_round == '11' && inputs.specification == 'huffman-1') && !(inputs.experiment_round == '12' && inputs.specification == 'probe-e') && !((inputs.experiment_round == '13' || inputs.experiment_round == '14' || inputs.experiment_round == '15' || (inputs.experiment_round == '16' || inputs.experiment_round == '17')) && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native'))) && !(inputs.experiment_round == '17' && startsWith(inputs.specification, 'gate-proof'))
     name: ${{ inputs.specification }}
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
@@ -60,6 +60,11 @@ jobs:
         run: |
           export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
           "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round13.py
+      - name: Check Round 14 whole-parser and direct changed-path inputs
+        if: inputs.experiment_round == '14' || inputs.experiment_round == '15' || (inputs.experiment_round == '16' || inputs.experiment_round == '17')
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round14.py
       - name: Check search-changing Round 12 sources decode correctly
         if: inputs.experiment_round == '12' && (inputs.specification == 'probe-c' || inputs.specification == 'confirm-d')
         run: |
@@ -140,7 +145,7 @@ jobs:
           compression-level: 9
           if-no-files-found: ignore
   native_diagnostic:
-    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && ((inputs.experiment_round == '11' && inputs.specification == 'huffman-1') || (inputs.experiment_round == '12' && inputs.specification == 'probe-e') || (inputs.experiment_round == '13' && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native'))))
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && ((inputs.experiment_round == '11' && inputs.specification == 'huffman-1') || (inputs.experiment_round == '12' && inputs.specification == 'probe-e') || ((inputs.experiment_round == '13' || inputs.experiment_round == '14' || inputs.experiment_round == '15' || (inputs.experiment_round == '16' || inputs.experiment_round == '17')) && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native'))))
     name: ${{ inputs.specification }}
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
@@ -171,8 +176,11 @@ jobs:
         if: inputs.experiment_round == '13' && inputs.specification == 'price-f'
         run: python3 scripts/research-round13-price.py
       - name: Check frozen R13 native candidates and declared opportunity probes
-        if: inputs.experiment_round == '13' && endsWith(inputs.specification, '-native')
+        if: (inputs.experiment_round == '13' || inputs.experiment_round == '14' || (inputs.experiment_round == '16' || inputs.experiment_round == '17')) && endsWith(inputs.specification, '-native')
         run: python3 scripts/research-round13-native.py
+      - name: Check R15 native bytes or bounded original phase profiles
+        if: inputs.experiment_round == '15' && endsWith(inputs.specification, '-native')
+        run: python3 scripts/research-round15-native.py
       - name: Publish original diagnostic text without binaries
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -182,3 +190,33 @@ jobs:
           retention-days: 1
           compression-level: 9
           if-no-files-found: ignore
+
+  exact_proof:
+    if: github.event_name == 'workflow_dispatch' && inputs.experiment_round == '17' && startsWith(inputs.specification, 'gate-proof') && (github.event.repository.private == false || inputs.allow_private == true)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      ROUND17_SPEC: ${{ inputs.specification }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Validate exact pair
+        run: python3 scripts/verify-round17-exact.py --preflight
+      - name: Prepare isolated official source
+        run: bash scripts/ci-prepare.sh
+      - name: Install pinned verification toolchain
+        run: bash scripts/ci-setup.sh
+      - name: Run original full verifier
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/verify-round17-exact.py
+      - name: Preserve exact proof evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r17-${{ github.run_id }}-${{ inputs.specification }}-exact-gate
+          path: ${{ runner.temp }}/round17-exact/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: warn

@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import requests
+import time
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'https://conjectures.io/v1/competitions/deflate'
@@ -17,10 +18,13 @@ def now():
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--destination', type=Path, required=True)
+    ap.add_argument('--pareto-only', action='store_true', help='Capture complete scoring rows without the separate leaderboard view')
+    ap.add_argument('--interval-seconds', type=float, default=0, help='Space API requests, without retrying or bypassing rate limits')
     args = ap.parse_args()
+    assert 0 <= args.interval_seconds <= 10
     dest = args.destination.resolve()
     evidence_root = (ROOT / 'evidence').resolve()
-    assert dest.is_relative_to(evidence_root) and dest.parent.name in ('round10', 'round11', 'round12', 'round13')
+    assert dest.is_relative_to(evidence_root) and dest.parent.name in ('round10', 'round11', 'round12', 'round13', 'round14', 'round15', 'round16', 'round17')
     dest.mkdir(parents=True, exist_ok=True)
     assert not any(dest.iterdir()), 'Use a fresh directory; prior response bodies are immutable'
     started = now()
@@ -28,6 +32,8 @@ def main():
     session = requests.Session()
 
     def get(endpoint, filename, params=None):
+        if args.interval_seconds:
+            time.sleep(args.interval_seconds)
         before = now()
         response = session.get(BASE + endpoint, params=params, timeout=40)
         after = now()
@@ -37,6 +43,7 @@ def main():
                              'request_start_utc': before, 'request_end_utc': after,
                              'http_status': response.status_code,
                              'response_date_header': response.headers.get('Date'),
+                             'retry_after': response.headers.get('Retry-After'),
                              'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()})
         response.raise_for_status()
         return response.json()
@@ -46,7 +53,10 @@ def main():
         snapshot = competition['current_snapshot_id']
         derived = {'competition.json': competition}
         pagination = {}
-        for endpoint, identity, rows_key in [('pareto', 'id', 'items'), ('leaderboard', 'hotkey', 'ranking')]:
+        sections = [('pareto', 'id', 'items')]
+        if not args.pareto_only:
+            sections.append(('leaderboard', 'hotkey', 'ranking'))
+        for endpoint, identity, rows_key in sections:
             pages, cursor, seen = [], None, set()
             for page_no in range(1, 21):
                 params = {'limit': 100, 'snapshot_id': snapshot}
@@ -77,9 +87,10 @@ def main():
                    'snapshot_id': snapshot, 'retrieval_start_utc': started, 'retrieval_end_utc': now(),
                    'competition_context': competition['context'], 'policy': competition['policy'],
                    'pagination': pagination, 'raw_response_files': raw_receipts, 'derived_files': files,
+                   'captured_sections': [s[0] for s in sections],
                    'weights_context': weights.get('context'),
                    'weights_same_snapshot': str(weights.get('context', {}).get('snapshot_id')) == str(snapshot),
-                   'scope': 'Pareto and leaderboard are pinned to one published snapshot. weights/current is a separately timed current response and may advance. API freshness is retained, not upgraded.'}
+                   'scope': 'Every requested section is complete and pinned to one published snapshot. Leaderboard is deliberately omitted in pareto-only mode. weights/current is a separately timed current response and may advance. API freshness is retained, not upgraded.'}
         (dest / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
         print(json.dumps({'snapshot_id': snapshot, 'context': competition['context'],
                           'pagination': pagination, 'destination': str(dest),
