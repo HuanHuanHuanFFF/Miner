@@ -112,7 +112,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('mode', choices=['status', 'pull', 'analyze'])
     ap.add_argument('run_id')
-    ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate', 'extraction', 'diagnostics'], default='screen')
+    ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate', 'extraction', 'diagnostics', 'exact-gate'], default='screen')
     ap.add_argument('--snapshot')
     ap.add_argument('--round', choices=['4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'], default='4', help='Receipt namespace; original round4 remains the default')
     ap.add_argument('--batch', help='Matrix batch label; omit for legacy single-job artifacts')
@@ -124,7 +124,7 @@ def main():
         target = target / args.batch
     target = target / args.phase
     if args.mode == 'analyze':
-        if args.phase in ('extraction', 'diagnostics'):
+        if args.phase in ('extraction', 'diagnostics', 'exact-gate'):
             raise ValueError('Extraction diagnostics have no performance or proof verdict to analyze')
         analyze(target, args.snapshot); return
     helper = module('round4_gh', ROOT / 'scripts/collect-round2.py')
@@ -140,7 +140,7 @@ def main():
     if artifact is None:
         print('Requested phase receipt is not available yet.'); return
     target.parent.mkdir(parents=True, exist_ok=True)
-    marker = 'raw-artifact-files.json' if args.phase == 'diagnostics' else ('research.json' if args.phase == 'extraction' else 'state.json')
+    marker = 'raw-artifact-files.json' if args.phase in ('diagnostics', 'exact-gate') else ('research.json' if args.phase == 'extraction' else 'state.json')
     failed_before_screen = target / 'collection-status.json'
     if not (target / marker).exists() and not failed_before_screen.exists():
         # Download into a new folder: an interrupted transfer must not masquerade
@@ -152,7 +152,7 @@ def main():
         subprocess.run(['gh', 'run', 'download', args.run_id, '--repo', 'HuanHuanHuanFFF/Miner',
                         '--name', name, '--dir', str(stage)], env=env, check=True,
                        capture_output=True, text=True, encoding='utf-8', timeout=180)
-        if args.phase == 'diagnostics':
+        if args.phase in ('diagnostics', 'exact-gate'):
             reports = [json.loads(p.read_text()) for p in stage.rglob('*.json')]
             bound = [r for r in reports if isinstance(r, dict) and 'run_id' in r and 'git_sha' in r]
             assert bound, 'Diagnostic artifact must identify the frozen run and commit'
@@ -195,11 +195,14 @@ def main():
         rename_download(stage, target)
     (target / 'ci-run.json').write_text(json.dumps(meta, indent=2) + '\n')
     (target / 'artifact-receipt.json').write_text(json.dumps(artifact, indent=2) + '\n')
-    if meta['status'] == 'completed' and args.phase == 'gate':
+    if meta['status'] == 'completed' and args.phase in ('gate','exact-gate'):
         log = helper.run(['run', 'view', args.run_id, '--repo', 'HuanHuanHuanFFF/Miner', '--log'], env)
         (target / 'ci.log').write_text(log, encoding='utf-8')
     if failed_before_screen.exists():
         print('PRE_SCREEN_FAILURE_PRESERVED', args.run_id, 'no measurement state; not analyzed')
+    elif args.phase == 'exact-gate':
+        report=json.loads((target/'gate-receipt.json').read_bytes())
+        print('EXACT_ORIGINAL_GATE',report['status'],report.get('verdict',{}).get('accepted'),'paired performance blocks',report['paired_performance_blocks'])
     elif args.phase == 'diagnostics':
         print('DIAGNOSTICS_ONLY', len(json.loads((target / marker).read_text())['files']),
               'original files; not timing or proof evidence')
