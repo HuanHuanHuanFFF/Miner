@@ -1,5 +1,7 @@
 # 第十七轮：DNA高份额候选复测与完整证明
 
+后续正式提交：用户于2026-10-10授权试投DNA，已使用round4 hotkey（UID176）在北京时间00:29上传修补证明组合，服务端201创建 **#582**，slots_remaining=0，新增链上支出0 TAO。独立GET核对digest和Rust哈希一致，00:30状态为正式gate运行中，admission/份额待定。见[正式回执](../../evidence/round17/formal-582/accepted-receipt.json)。下文研究期间未提交的记录按原时间保留。
+
 用户明确要求对`r14-514-dna-nofold`再测两次，并完成Lean验证；份额表现是本次优先指标，不用“比父版稍慢”否决完整验证。执行规则见[AGENTS](../../AGENTS.md)。这是第十六轮结束后的独立授权，不延用已关闭的两小时时窗，也不包含正式竞赛上传或钱包签名。
 
 Rust保持`805c03a521b44b665aef3113cb4d6f823924032fec164524163aa0c756002542`。初始Lean为`f22880631041cea2d1f380aeb898fadfe36ca3f3a9912938abf0801d3acd11bf`。
