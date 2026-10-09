@@ -64,3 +64,18 @@
 新增精确gate路由：workflow deflate-round9.yml 的R18 job直接手动启动；标签gate-*选择mode gate，其它规则见dispatch-round18.py。无自动CI、allow_private仍false。新的gate逻辑本地已用历史精确pair做预检，但第一次真实完整gate在上述run运行。
 
 当前研究重点：保存并独立确认约2.5%的最佳成果，同时继续降低selective的实际成本或提高质量以争取5/15。原始数据high-rt-analysis.json含全部单独/匹配块联合几何与阴影差异，不能挑峰值。主目录main的b5cb035始终排除，研究分支持续push。最新已知commit702574d，之后可能前进。账户UTC19:17左右读数已用4%、剩余96%，未使用reset；记录在usage-observations。
+
+
+## 三小时检查点（UTC 20:40 附近）
+
+新快照29423，官方计算UTC19:48:20，589条提交/554账户，freshness unknown；原始数据official-hour3。固定截止01:32:51 UTC不变。
+
+- r18-586-selective-rf完整原版gate run37982026752通过，507.3秒，Rust/Lean仍是b03af48f/8c5d3ebb。VERIFICATION.json绑定原始回执；正式提交未做。
+- confirm-y run37982104188是一个新runner内四个新块。主对照条件份额2.776459–2.868103%，中位2.841345%；shadow2.620892–2.796631%，中位2.728139%。各0/4零份额、0/4达到5%、0/4达到15%。不能把一个runner四块说成四个runner，达标比例不是正式成功概率。
+- 含发现T及后来作为对照X的三runner八块：主范围1.957023–2.868103%、中位2.647744%；shadow2.026243–2.796631%、中位2.572858%；与独立确认分列。hour3-confirmation-analysis.json重新核对原始SHA、精确gate、同源码对照及匹配块联合几何。
+- rf-span screen-x run37982213585同输出却慢0.889652/1.444018%，条件份额1.56–2.02%，暂停精确版本。新增helper证明未完成，不能借用父版gate。
+- model-aa-native run37983701790：carry-model +2619B、+0.012301pp；carry-one +1272B、+0.005632pp。没有实际计时或完整gate，暂停整版，保留真实逐文件负面证据。
+- 361-ab-native run37986065782：原361底座加586RF文本再规划，public size改善0.05573944pp。源e96e4f5f、Lean仍是原361草稿，未迁移新wrapper/RF证明。准备screen-ad两原版块，有361/shadow、586和旧控制；若时间信号支持再迁移proof。
+- rank-ac-native run37986533350：586A使用长匹配tie以及另加2unit/token，两版分别恶化0.00669405pp和0.00829113pp；没有支持大量速度补偿的机制，暂停精确版本，保留局部质量信号。
+- 计划新的结构性RF优化：前一位置已经以不高于当前的basecost覆盖下一位置的多数等长度价格平台时，当前更新被支配。先用wholeparse逐token/编码及随机前向状态差分检验，再测原版总时间。它与失败的连续环形loop改写不同，不因span失败否决。
+- 账户20:29读数用6%、剩94%，未触发reset。main b5cb035继续排除，研究分支独立提交/推送。所有目标仍未完成。

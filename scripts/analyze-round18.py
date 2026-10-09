@@ -39,7 +39,7 @@ def main():
         entries={e['name']:e for e in state['spec']['entries']}
         for n,e in entries.items():
             if not e.get('control'):
-                decl={'candidate':n,'rust_sha256':e['hashes']['parse.rs'],'anchor_formal_id':entries[e['anchor']]['formal_id'],'parent':e.get('comparison_baseline',e['anchor'])}
+                decl={'candidate':n,'path':e['path'],'rust_sha256':e['hashes']['parse.rs'],'anchor_formal_id':entries[e['anchor']]['formal_id'],'parent':e.get('comparison_baseline',e['anchor'])}
                 prior=declarations.setdefault(e['hashes']['parse.rs'],decl)
                 assert (prior['anchor_formal_id'],prior['parent'])==(decl['anchor_formal_id'],decl['parent'])
         states.append((folder,state,ci,entries))
@@ -90,14 +90,38 @@ def main():
                     if (ref,b)not in by:continue
                     x=fm['balanced_time_ratio']*by[n,b]['time']/by[ref,b]['time'];y=fm['mean_file_compression_pct']*by[n,b]['size_pct']/by[ref,b]['size_pct']
                     shares,ids=scores([(n,x,y)])
-                    g['observations'].append({'run_id':state['run_id'],'block':b,'role':state['spec'].get('r18_role','discovery'),'calibration':label,'anchor_name':ref,'projected_time':x,'projected_size_pct':y,'single_pool_share_pct':shares[n],'new_frontier_ids':ids,'public_time':by[n,b]['time'],'public_size_pct':by[n,b]['size_pct'],'time_change_pct_vs_parent':100*(by[n,b]['time']/by[decl['parent'],b]['time']-1),'size_change_pp_vs_parent':by[n,b]['size_pct']-by[decl['parent'],b]['size_pct'],'proof_sha256':e['hashes']['Parse.lean'],'per_file':by[n,b]['per_file']})
+                    role=state['spec'].get('r18_role','discovery')
+                    if role=='independent_confirmation' and e.get('control'):role='incidental_control_in_confirmation_batch'
+                    g['observations'].append({'run_id':state['run_id'],'block':b,'role':role,'entry_role':'control'if e.get('control')else'candidate','calibration':label,'anchor_name':ref,'projected_time':x,'projected_size_pct':y,'single_pool_share_pct':shares[n],'new_frontier_ids':ids,'public_time':by[n,b]['time'],'public_size_pct':by[n,b]['size_pct'],'time_change_pct_vs_parent':100*(by[n,b]['time']/by[decl['parent'],b]['time']-1),'size_change_pp_vs_parent':by[n,b]['size_pct']-by[decl['parent'],b]['size_pct'],'proof_sha256':e['hashes']['Parse.lean'],'per_file':by[n,b]['per_file']})
             gate=state.get('gates',{}).get(n)
             if gate and gate.get('accepted'):
                 assert gate==read(folder/(n+'-gate.json')) and gate['corpora']==['corpus-stage1']
                 assert all(sha(folder/('input-'+n)/f)==h for f,h in e['hashes'].items())
                 g['verified_pairs'].append({'run_id':state['run_id'],'files':e['hashes']})
     for g in groups.values():
+        # Exact gates run separately from timing jobs. Validate their immutable
+        # receipt and input pair instead of expecting them in a timing state.json.
+        candidates={e['path'] for _,_,_,entries in states for e in entries.values() if e['hashes']['parse.rs']==g['rust_sha256']}
+        for path in candidates:
+            source=(ROOT/path).resolve();assert source.is_relative_to(ROOT.resolve())
+            certpath=source/'VERIFICATION.json'
+            if not certpath.exists():continue
+            cert=read(certpath)
+            if cert.get('status')!='VERIFIED_EXACT_ORIGINAL_PUBLIC_GATE_PASSED':continue
+            assert cert['files']['parse.rs']==g['rust_sha256']
+            assert all(sha(source/f)==h for f,h in cert['files'].items())
+            receipt=(ROOT/cert['receipt']).resolve();assert receipt.is_relative_to((ROOT/'evidence').resolve())
+            gate=read(receipt);assert gate['status']=='EXACT_ORIGINAL_PUBLIC_GATE_ACCEPTED' and all(gate['checks'].values())
+            assert gate['spec']['files']==cert['files'] and gate['run_id']==cert['run_id'] and gate['git_sha']==cert['git_sha']
+            candidates_root=[p for p in (receipt.parent,receipt.parent.parent)if(p/'raw-artifact-files.json').is_file()]
+            assert len(candidates_root)==1;artifact_root=candidates_root[0];inv=read(artifact_root/'raw-artifact-files.json');ci=read(artifact_root/'ci-run.json')
+            assert ci['status']=='completed' and ci['conclusion']=='success' and ci['headSha']==gate['git_sha']
+            for name,v in inv['files'].items():
+                f=(artifact_root/name).resolve();assert f.is_relative_to(artifact_root.resolve()) and f.stat().st_size==v['bytes'] and sha(f)==v['sha256']
+            pair={'run_id':gate['run_id'],'files':cert['files'],'receipt':cert['receipt'],'scope':'exact separate original public gate'}
+            if not any(p['run_id']==pair['run_id'] and p['files']==pair['files'] for p in g['verified_pairs']):g['verified_pairs'].append(pair)
         g['summary']={}
+        g['independent_confirmation_summary']={}
         for cal in ('primary','shadow'):
             obs=[o for o in g['observations']if o['calibration']==cal]
             if not obs:continue
@@ -105,6 +129,9 @@ def main():
             assert all(abs(o['projected_size_pct']-my)<1e-12 for o in obs)
             ss,_=scores([(g['candidate'],mx,my)])
             g['summary'][cal]={**distribution([o['single_pool_share_pct']for o in obs]),'runner_count':len(rid),'runner_equal_center_time':mx,'projected_size_pct':my,'score_at_center_NOT_expected_reward_pct':ss[g['candidate']]}
+            independent=[o for o in obs if o['role']=='independent_confirmation' and o['entry_role']=='candidate']
+            if independent:
+                g['independent_confirmation_summary'][cal]={**distribution([o['single_pool_share_pct']for o in independent]),'runner_count':len({o['run_id']for o in independent}),'run_ids':sorted({o['run_id']for o in independent})}
     joint=[]
     for a,b in itertools.combinations(groups.values(),2):
         oa={(o['run_id'],o['block'],o['calibration']):o for o in a['observations']};ob={(o['run_id'],o['block'],o['calibration']):o for o in b['observations']}
