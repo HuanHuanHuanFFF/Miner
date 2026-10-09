@@ -75,3 +75,7 @@ precision-w37865952376实际失败为results没有parse_results导出；真实pi
 上一goal turn属progress：修复审计覆盖、刷新官方快照29243、修复共测的pinned API读取，保留每次真实失败；没有改变成功验收口径。当前两个权威活跃句柄：final-v37865933625(screen进行中，原extract artifact已发布)，precision-x37866735582(install toolchain进行中)。precision-w37865952376因frombench.resultsimportparse_results失败，原记录已收；修复用driver.parse_results，全部9个入口与固定源码AST核对。precision-s/repair-r/repair-t等旧failed均不重启，只保留历史。当前共24个派发，22终态回执已校验，168标准配对、2exact original public gates；未有新正式admission/排名/奖励，未签名/燃注册。
 
 硬预算仍02:52UTC(北京时间10:52)，01:22UTC冻结新算法探索，剩时只对当前真实有意义信号做确认／exactgate／最终审计/汇总。不要以旧goal两小时字符串或宿主累计elapsed缩短用户7h窗口。下步：仅收两个current IDs实际结果，precision-x co-measure不算标准配对或private验证；若final-v没有跨当前542-family边界不追加昂贵gate。更新audit/currentanalysis/final报告/索引、提交push公开实验分支，确认所有已启动作业终态；Budget结束如实未完成争榜。实际额度最近44%剩余，Oct23卡未用。资料原包/账户/卡守卫仍私有忽略，不上传。不派发子agent。
+
+final-v37865933625自然成功，540 wholeParser decode及重新提取接受，14标准配对：对542 -0.231755%，大小-0.000010714pp(只少3B)，同族点0.4435568/36.215031仍被546支配。关闭这份源，不追加full gate／正式上传。已累计182标准配对；此前typed-call错误都保留未冒充结果。precision-x仍已启动运行，待收诊断与其中标准一块。
+
+precision-x37866735582自然成功，原engine4method共测四块诊断均值candidate-0.246814%、sameELF shadow+0.005794%；协议内block变化仍大，标准一候选块反而+0.815906%。不晋级、不合入标准性能统计。原4 raw blocks按11median重新核对，属于诊断。此新反馈支持一次低成本U16 representation+已测gain恢复组合，组合源必须重新测，不相加收益；combine-y-native在01:22探索冻结前单样本原encoder先行，无迭代组合扩展。
