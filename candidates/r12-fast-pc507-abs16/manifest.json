@@ -1,0 +1,30 @@
+{
+  "candidate": "r12-fast-pc507-abs16",
+  "parent": "references/round12-public-507",
+  "parent_hashes": {
+    "parse.rs": "b49ee231d6342d55346d926f8c6c3c3d81333d98ad83039ed3509a3e30abc021",
+    "Parse.lean": "68c2df942c2f1c01cb4e34ea4b880fd1ebcf226be0dab75096da3b54d020ddd1"
+  },
+  "hashes": {
+    "parse.rs": "4d2713183f50937c669e809492a0a37cce29456fc0c2598bbc1789e144ac033a",
+    "Parse.lean": "ff47a7025633a831438bd29ee1a7c79842dad1828a74249afa570bfd00598716"
+  },
+  "formal_anchor_id": "507",
+  "comparison_baseline": "public507",
+  "native_relation": "decode_only",
+  "attribution": {
+    "source": "Officially public #507, existing #435/#436/#488/#503 lineage retained",
+    "author_hotkey": "5DDVkqSe7Bun524R176c3ZgLoFh95sRZcB4n7wWBQcAGjKZu",
+    "reference": "references/round12-public-507/PROVENANCE.md"
+  },
+  "mechanism": "Store predecessor position modulo65536 inU16 without per-insertion distance encode/invalid-link branch. Reconstruct an older candidate at reads; all distance and byte checks remain in pc_f_try.",
+  "difference_from_previous": "The failed distance-coded version paid subtraction and cap handling at every link store. This changes where work is paid and may search a reconstructed nearby position when the original predecessor was too old; it is not a same-token optimization claim.",
+  "semantic_status": "Intentional token/search differences permitted. Reconstructed positions are only hints: pc_f_try requires strict decrease, valid window, input bounds and actual matching bytes; original obligation still mandatory.",
+  "proof_status": "DRAFT_UNCOMPILED; nine U16 predecessor types plus search-helper totality bridge; real extraction and full original gate not yet run",
+  "fixed_predecessor_bytes_before": 131072,
+  "fixed_predecessor_bytes_after": 65536,
+  "source_reversal": "Exact isolated PC link region reverses; every route, row, search depth, original byte validator and other engine unchanged.",
+  "limits": "Original #507 exact-length routes retained, no new ones introduced. Public-to-formal transfer is a hypothesis. No compression monotonicity, all-input token equality or private guarantee.",
+  "stop_condition": "Any decode/panic failure stops. No worthwhile paired two-axis gain versus current geometry closes this fixed source. Confirmation and exact full gate required before formal submission.",
+  "formal_submission_sent": false
+}

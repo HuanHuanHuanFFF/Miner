@@ -1,0 +1,28 @@
+{
+  "candidate": "r12-fast-wordhead",
+  "parent": "candidates/r3-432-fast3",
+  "parent_hashes": {
+    "parse.rs": "bae8014121e4710f4a34ce63452578b4bf69121b4f695e1b1356780a019108ef",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "hashes": {
+    "parse.rs": "5254d20cda7eea89c9cb99bc4b2d27f2a867ec0642f4d5bbc1c64e524912002f",
+    "Parse.lean": "e2c200cf084eca95eb70d26c0efb04e70d88f015315610d2a54d20b6adb7cf04"
+  },
+  "attribution": {
+    "source": "Public #432 via fast3",
+    "reference": "references/round3-public-432/PROVENANCE.md",
+    "author_hotkey": "5EAM7rJK571o7asrBBk6oozUZCRubR1tMiDKBNWmWhw66PRy",
+    "ownership": "Derivative of public miner code"
+  },
+  "mechanism": "Carry the current input word in read-ahead state; use its high four bytes for the original head hash and consume it at probe time. Preserve insert/skip/lazy/end-cache schedules.",
+  "difference_from_old_work": "Changes the value reused across loop iterations. R11 skipahead changes the target position; R4 slotonly suppresses match-path loads. Neither carried the current input word from hashing to probing.",
+  "proof_cost": "Four new helper specs, an additional current-word invariant in run1/lazy state and its real extracted tuple plumbing. Original helpers and other engines unchanged. Parent Lean UNADAPTED.",
+  "proof_status": "UNADAPTED_PARENT_ONLY; official gate UNKNOWN",
+  "expected_equivalent_to": "r3-432-fast3",
+  "equivalence_status": "INFERRED for valid parser calls; native/public checks pending",
+  "performance_status": "UNKNOWN; total parser plus encoder timing required",
+  "source_reversal": "Asserted exact original bytes after reversing the isolated source edits",
+  "stop_condition": "Token/decode mismatch rejects premise. No useful independently repeated total-time gain closes this fixed version. Do not infer formal admission or reward from public projection.",
+  "formal_submission_sent": false
+}

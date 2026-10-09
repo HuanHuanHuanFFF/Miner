@@ -4,14 +4,36 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import os
 import re
 from pathlib import Path
 import statistics
 import subprocess
 import sys
+import time
 import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def rename_download(stage, target):
+    """Bounded Windows sharing-lock retry; never replace an existing receipt."""
+    evidence = (ROOT / 'evidence').resolve()
+    assert stage.resolve().is_relative_to(evidence) and target.resolve().is_relative_to(evidence)
+    assert stage.parent.resolve() == target.parent.resolve() and not stage.is_symlink()
+    delays = (0, .25, .5, 1, 2, 4, 8)
+    for attempt, delay in enumerate(delays):
+        if delay:
+            time.sleep(delay)
+        if target.exists():
+            raise FileExistsError('Receipt destination appeared; original staged bytes retained')
+        try:
+            stage.rename(target)
+            return
+        except PermissionError as exc:
+            if os.name != 'nt' or getattr(exc, 'winerror', None) not in (5, 32) or attempt == len(delays) - 1:
+                raise
+            print('TRANSFER_RENAME_RETRY', attempt + 1, 'Windows sharing/access error; staged receipt retained', flush=True)
 
 
 def module(name, path):
@@ -92,7 +114,7 @@ def main():
     ap.add_argument('run_id')
     ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate', 'extraction', 'diagnostics'], default='screen')
     ap.add_argument('--snapshot')
-    ap.add_argument('--round', choices=['4', '5', '6', '7', '8', '9', '10', '11'], default='4', help='Receipt namespace; original round4 remains the default')
+    ap.add_argument('--round', choices=['4', '5', '6', '7', '8', '9', '10', '11', '12', '13'], default='4', help='Receipt namespace; original round4 remains the default')
     ap.add_argument('--batch', help='Matrix batch label; omit for legacy single-job artifacts')
     args = ap.parse_args()
     assert args.batch is None or re.fullmatch(r'[a-z0-9-]{1,48}', args.batch)
@@ -170,7 +192,7 @@ def main():
             assert backup.resolve().is_relative_to(evidence_root)
             target.rename(backup)
             print('Preserved earlier incomplete receipt:', backup.relative_to(ROOT), flush=True)
-        stage.rename(target)
+        rename_download(stage, target)
     (target / 'ci-run.json').write_text(json.dumps(meta, indent=2) + '\n')
     (target / 'artifact-receipt.json').write_text(json.dumps(artifact, indent=2) + '\n')
     if meta['status'] == 'completed' and args.phase == 'gate':

@@ -1,0 +1,10 @@
+{
+  "status": "DELAYED_SAME_PYTHON_RENAME_SUCCEEDED",
+  "seconds": 0.0004965999978594482,
+  "original_files": 15,
+  "hypothesis": "Consistent with transient sharing lock; holder not identified",
+  "regression": "scripts/check-collector-sharing.py",
+  "regression_result": "Original directory promotion red WinError5 while Funs.lean held open; bounded retry green after release; destination-exists refusal preserved both files.",
+  "mitigation": "Only Windows5/32, up to15.75 seconds total wait; no ACL changes or overwrite; persistent errors retain staged original bytes.",
+  "root_cause_status": "Transient sharing is supported by delayed real promotion success and controlled reproduction. Actual original lock-holder UNKNOWN."
+}

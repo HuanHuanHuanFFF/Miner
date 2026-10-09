@@ -1,0 +1,24 @@
+{
+  "run_id": "37845275650",
+  "ci_conclusion": "success",
+  "native_decode_cases_per_source": 540,
+  "decision": "CLOSE_BOTH_FROZEN_RUST_NO_FULL_GATE",
+  "candidates": [
+    {
+      "name": "r13-514-ef32-lits3",
+      "source_sha256": "6bbe45cf36e1a7af410a47fd1f82d7bc747be201363b7fd90be0b92ca3faa8be",
+      "total_time_change_pct_vs_public514": 1.2575948685506821,
+      "size_change_pp": 0.040153061224494024,
+      "weights_f32_extra_bytes": 3935
+    },
+    {
+      "name": "r13-514-ef32-min4",
+      "source_sha256": "526cd7dc743bb212a3d3c63a014883db52fd639e4af2615f54d00f0398d3d2aa",
+      "total_time_change_pct_vs_public514": 0.872355989451945,
+      "size_change_pp": 0.03795918367347184,
+      "weights_f32_extra_bytes": 3720
+    }
+  ],
+  "observation": "Almost all EF32 matches are length3, but they are still valuable under actual common encoder. Removing them gives larger/slower output. Frequency/cap/length by itself did not predict encoding value.",
+  "next": "Use actual symbol/distance/token evidence or change probe work while retaining short-match value; avoid minimum-length sweep."
+}

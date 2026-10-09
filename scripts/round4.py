@@ -16,6 +16,16 @@ from round3 import load_scorer, diagnostics, TIME_FACTOR, SIZE_FACTOR
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def screen_order(spec, block, names):
+    orders = spec.get('screen_orders')
+    if orders is None:
+        return list(names) if block % 2 else list(reversed(names))
+    assert len(orders) == spec['screen_blocks']
+    assert all(len(order) == len(names) and len(set(order)) == len(order) and set(order) == set(names)
+               for order in orders), 'Every frozen screen order must contain each candidate/control exactly once'
+    return list(orders[block - 1])
+
+
 def save(path, value):
     path.write_text(json.dumps(value, indent=2, allow_nan=False) + '\n', encoding='utf-8')
 
@@ -23,7 +33,7 @@ def save(path, value):
 def specification_path(label):
     assert re.fullmatch(r'[a-z0-9-]{1,48}', label)
     spec_directory = os.environ.get('ROUND4_SPEC_DIR', 'evidence/round4')
-    assert spec_directory in ('evidence/round4', 'evidence/round5', 'evidence/round6', 'evidence/round7', 'evidence/round8', 'evidence/round9', 'evidence/round10', 'evidence/round11')
+    assert spec_directory in ('evidence/round4', 'evidence/round5', 'evidence/round6', 'evidence/round7', 'evidence/round8', 'evidence/round9', 'evidence/round10', 'evidence/round11', 'evidence/round12', 'evidence/round13')
     return ROOT / spec_directory / (label + '.json')
 
 
@@ -48,6 +58,11 @@ def validate(label):
             assert (ROOT/e['path']/'parse.rs').resolve() != (ROOT/by_name[ref]['path']/'parse.rs').resolve(), \
                 f"{e['name']}: finite equivalence rejects identical source paths; inspect shared-source shadows through measurement output"
     assert 1 <= spec['screen_blocks'] <= 4 and 0 <= spec['refine_blocks'] <= 4
+    if 'screen_orders' in spec:
+        screen_order(spec, 1, list(by_name))
+    if spec.get('native_encoder'):
+        assert 'public514' in names, 'Native exact-encoder calibration requires the frozen public514 reference'
+        assert set(spec.get('native_encoder_references', [])) <= names
     synthetic_refs = spec.get('synthetic_reference_candidates', [])
     assert len(synthetic_refs) == len(set(synthetic_refs)) <= 3 and set(synthetic_refs) <= names
     used = set()
@@ -76,6 +91,45 @@ def grouped_gates(state):
         if chosen:
             names.append(chosen)
     return names, decisions
+
+
+def confirmation_gates(state, names):
+    """Opt-in R12 allocation: use only this fresh frozen confirmation's feedback.
+
+    This screen controls proof spending. It does not certify bootstrap admission,
+    private transfer or reward, even when it permits an exact public gate.
+    """
+    policy = state['spec'].get('confirmation_gate_policy')
+    if not policy:
+        return names, []
+    entries = {e['name']: e for e in state['spec']['entries']}
+    parent, shadow = policy['parent'], policy['shadow']
+    assert entries[parent]['hashes'] == entries[shadow]['hashes']
+    assert entries[parent]['control'] and entries[shadow]['control']
+    blocks = list(range(1, state['spec']['screen_blocks'] + 1))
+    assert len(blocks) == 4 and policy['min_improved_blocks'] == 3
+    by = {(m['candidate'], m['round']): m for m in state['metrics']}
+    summaries = {r['candidate']: r for r in state['summary']}
+    selected, decisions = [], []
+    for name in names:
+        assert entries[name]['anchor'] == parent and not entries[name]['control']
+        assert summaries[name]['control'] is False
+        rel_parent = [by[name,b]['time']/by[parent,b]['time'] for b in blocks]
+        rel_shadow = [by[name,b]['time']/by[shadow,b]['time'] for b in blocks]
+        frontier = bool(summaries[name]['own_anchor']['on_frontier'])
+        checks = {'fresh_mean_improves_parent': statistics.mean(rel_parent) < 1,
+                  'fresh_mean_improves_shadow': statistics.mean(rel_shadow) < 1,
+                  'at_least_three_blocks_improve_parent': sum(v < 1 for v in rel_parent) >= 3,
+                  'at_least_three_blocks_improve_shadow': sum(v < 1 for v in rel_shadow) >= 3,
+                  'current_declared_family_projection_on_frontier': frontier}
+        permit = all(checks.values())
+        if permit:
+            selected.append(name)
+        decisions.append({'candidate': name, 'run_id': state['run_id'], 'checks': checks,
+                          'relative_to_parent': rel_parent, 'relative_to_shadow': rel_shadow,
+                          'full_gate_allocated': permit,
+                          'scope': 'Fresh four-block confirmation only. Discovery timings are excluded. Family projection is conditional; no private/admission/payment guarantee.'})
+    return selected, decisions
 
 
 def summarize(state, pages, scorer):
@@ -239,8 +293,7 @@ def main():
         perf = subprocess.run(['bash', '-c', 'if command -v perf >/dev/null 2>&1; then perf stat -e cycles,instructions,branches,branch-misses,cache-misses -- true; else echo PERF_NOT_INSTALLED; fi'], capture_output=True, text=True)
         save(output / 'perf-capability.json', {'returncode': perf.returncode, 'stdout': perf.stdout, 'stderr': perf.stderr, 'scope': 'availability probe only, not candidate profile'})
         for block in range(1, spec['screen_blocks'] + 1):
-            names = list(entries)
-            measure(block, names if block % 2 else list(reversed(names)))
+            measure(block, screen_order(spec, block, list(entries)))
         finish()
     elif phase == 'refine':
         selected = [r['candidate'] for r in state['summary'] if not r['control']][:spec['shortlist']]
@@ -257,6 +310,11 @@ def main():
             print('GATE_SELECTION ' + json.dumps(state['gate_selection']), flush=True)
         if names is None:
             names = [r['candidate'] for r in state['summary'] if not r['control'] and r['candidate'] in state.get('selected', [])][:spec['gate_limit']]
+        names, decisions = confirmation_gates(state, names)
+        if decisions:
+            state['gate_confirmation_decisions'] = decisions
+            save(state_path, state)
+            print('GATE_CONFIRMATION ' + json.dumps(decisions), flush=True)
         for name in names:
             folder = output / ('input-' + name)
             folder.mkdir(exist_ok=True)
@@ -317,7 +375,9 @@ def main():
             assert set(research_inputs) <= set(entries) and 'r3-432-fast3' not in research_inputs
             from round3_synthetic import run_validation
             synthetic_names = list(dict.fromkeys(['r3-432-fast3'] + spec.get('synthetic_reference_candidates', []) + research_inputs))
-            state['research_synthetic_validation'] = run_validation(config, paths, synthetic_names, output)
+            research_reports = output / 'research-synthetic'
+            research_reports.mkdir(exist_ok=True)
+            state['research_synthetic_validation'] = run_validation(config, paths, synthetic_names, research_reports)
             state['research_synthetic_validation']['proof_status'] = 'NO_FULL_GATE_IMPLIED; finite data checks only'
         finish()
         if any(not v.get('accepted') for v in state['gates'].values()):

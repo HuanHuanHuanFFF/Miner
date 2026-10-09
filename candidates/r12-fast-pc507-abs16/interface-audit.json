@@ -1,0 +1,9 @@
+{
+  "status": "VERIFIED_REAL_EXTRACTION_INTERFACE_ONLY",
+  "run_id": "37779759066",
+  "source_sha256": "4d2713183f50937c669e809492a0a37cce29456fc0c2598bbc1789e144ac033a",
+  "proof_sha256": "ff47a7025633a831438bd29ee1a7c79842dad1828a74249afa570bfd00598716",
+  "funs_sha256": "9df9b7a327c2a472a2bfa5e0a2c8501708f43931bb45daa7feadb4f79ce0be57",
+  "helper_definition": "def r12_prev_unwrap (c : Std.Usize) (low : Std.U16) : Result Std.Usize := do\n  let i \u2190 lift (~~~ 65535#usize)\n  let i1 \u2190 lift (c &&& i)\n  let i2 \u2190 lift (UScalar.cast .Usize low)\n  let q \u2190 lift (i1 ||| i2)\n  if q < c\n  then ok q\n  else ok (core.num.Usize.wrapping_sub q 65536#usize)\n",
+  "proof_elaboration": "UNKNOWN; no complete original gate accepted"
+}

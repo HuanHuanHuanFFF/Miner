@@ -1,0 +1,31 @@
+{
+  "candidate": "r12-fast-pc507-prev16",
+  "parent": "references/round12-public-507",
+  "parent_hashes": {
+    "parse.rs": "b49ee231d6342d55346d926f8c6c3c3d81333d98ad83039ed3509a3e30abc021",
+    "Parse.lean": "68c2df942c2f1c01cb4e34ea4b880fd1ebcf226be0dab75096da3b54d020ddd1"
+  },
+  "hashes": {
+    "parse.rs": "5c33209f11c1c09328877d10d0b04a5634999fd38bebb4765975a4df94bd7507",
+    "Parse.lean": "68c2df942c2f1c01cb4e34ea4b880fd1ebcf226be0dab75096da3b54d020ddd1"
+  },
+  "formal_anchor_id": "507",
+  "comparison_baseline": "public507",
+  "attribution": {
+    "source": "Officially published #507; original comments retain #435/#436/#488/#503 lineage",
+    "author_hotkey": "5DDVkqSe7Bun524R176c3ZgLoFh95sRZcB4n7wWBQcAGjKZu",
+    "reference": "references/round12-public-507/PROVENANCE.md"
+  },
+  "mechanism": "Only PC run1c predecessor links become u16 backward distances. One32768-cell predecessor table falls from128KiB to64KiB; absolute heads, insertion order, shallow depth1/2 and every route remain unchanged.",
+  "difference_from_old_work": "Explicit R10 delta16 mechanism revisit under a new legitimate parent: #507 became public after #514 dominated it. R10 applied two predecessor arrays in D forward planning with deeper walks; this version changes one array in shallow PC speed-end rows. Encoding overhead remains a falsifiable cost, not assumed free.",
+  "equivalence_argument": "Live unaliased links recover the same older positions. A discarded >32768 link cannot lead to an in-window older candidate. At current-slot alias distance32768, every decreasing successor is out of window in both representations. Zero encodes a self terminator; candidate0 remains representable through positive deltas at positive insertion positions.",
+  "expected_equivalent_to": "public507",
+  "equivalence_status": "INFERRED reachable parser states; finite native/public identity required; general u32-position wrap not claimed as semantic equality",
+  "proof_status": "UNADAPTED_PARENT_ONLY; U16 PC loop-state and delta helper totality need actual extraction and complete original gate",
+  "source_reversal": "Exactly reverses three explicit array types, two reads, one store and one initializer; no new input lengths or routing features introduced",
+  "fixed_predecessor_bytes_before": 131072,
+  "fixed_predecessor_bytes_after": 65536,
+  "performance_status": "UNKNOWN. Initialization/store bandwidth versus encode/decode arithmetic must be measured in total compression.",
+  "stop_condition": "Any native/public mismatch rejects equivalence. No useful gain versus both parent copies closes this version without full gate. Public-to-formal #507 transfer remains a hypothesis.",
+  "formal_submission_sent": false
+}
