@@ -39,7 +39,10 @@ def main():
         if args.final: assert ci['status']=='completed'
         inv=json.loads((folder/'raw-artifact-files.json').read_bytes())
         if args.final:
-            assert inv['artifact_name']==f"r14-{state['run_id']}-{state['batch']}-gate", 'Use the final artifact, not an early screen snapshot'
+            namespace=folder.resolve().relative_to((ROOT/'evidence').resolve()).parts[0]
+            assert namespace in ('round13','round14'), 'Only compatible R13/R14 original protocol receipts are supported'
+            artifact_round=namespace.removeprefix('round')
+            assert inv['artifact_name']==f"r{artifact_round}-{state['run_id']}-{state['batch']}-gate", 'Use the final artifact, not an early screen snapshot'
         for name,record in inv['files'].items():
             p=(folder/name).resolve();assert p.is_relative_to(folder.resolve())
             assert p.stat().st_size==record['bytes'] and sha(p)==record['sha256']
