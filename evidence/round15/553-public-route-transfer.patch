@@ -1,0 +1,101 @@
+--- a/candidates/r15-553-compact-hash32/parse.rs
++++ b/candidates/r15-553-compact-hash32/parse.rs
+@@ -1,5 +1,8 @@
++// Derived from public submission #542, retaining its classifier and proven engine library.
++// Generic planner/search settings explored with public #514/#500 references and local measurements.
++// Prepared locally; no submission or hotkey assigned.
+ pub const SMALL: usize = 65536;
+ pub const HS: usize = 8192;
+ pub const WS: usize = 16384;
+ pub const NICE: usize = 128;
+ pub const INS_MAX: usize = 16;
+@@ -3486,28 +3489,28 @@
+ pub const pm_M_FX0_VERIFY: usize = 0;
+ pub const pm_M_FX0_LSLACK: usize = 1;
+ pub const pm_M_FX0_HLIT: u32 = 80;
+ pub const pm_M_FX0_GBASE: i32 = 168;
+ #[inline(never)] pub fn p135_row0(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32769>(input,out,5,0,1000000,4294967295,1,4)}
+-#[inline(never)] pub fn p135_row1(input:&[u8],out:&mut[u32])->usize{r109_bfraw::<65536,0>(input,out)}
++#[inline(never)] pub fn p135_row1(input:&[u8],out:&mut[u32])->usize{dx1_u118_run::<65536,32768,4294967295,4,3,0,2,1000000,32,1,12,32,64,0>(input,out)}
+ #[inline(never)] pub fn p135_row2(input:&[u8],out:&mut[u32])->usize{n_run::<65536,6,0,0,0,16,0,8,1>(input,out)}
+-#[inline(never)] pub fn p135_row3(input:&[u8],out:&mut[u32])->usize{pc_run1::<32769>(input,out,6,16,1000000,4294967295)}
++#[inline(never)] pub fn p135_row3(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,3,0,1000000,302256384)}
+ #[inline(never)] pub fn p135_row4(input:&[u8],out:&mut[u32])->usize{p12_p125_row15(input,out)}
+ #[inline(never)] pub fn p135_row5(input:&[u8],out:&mut[u32])->usize{n_run::<65536,6,1,0,0,5,0,2,12>(input,out)}
+ #[inline(never)] pub fn p135_row6(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
+ #[inline(never)] pub fn p135_row7(input:&[u8],out:&mut[u32])->usize{pim_run1c::<65536>(input,out,6,0,1000000,4294967040,2,3)}
+ #[inline(never)] pub fn p135_row8(input:&[u8],out:&mut[u32])->usize{fx0_run::<1,1,2,258>(input,out,0)}
+ #[inline(never)] pub fn p135_row9(input:&[u8],out:&mut[u32])->usize{p12_p125_row10(input,out)}
+-#[inline(never)] pub fn p135_row10(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,4,0,1000000,4294967295,1,4)}
++#[inline(never)] pub fn p135_row10(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,4,0,1000000,4294967295,2,4)}
+ #[inline(never)] pub fn p135_row11(input:&[u8],out:&mut[u32])->usize{{let k=pr_route(input);if k==8 {pc_run1::<32768>(input,out,4,0,1000000,4294967295)} else if k==25 {q4_run1t::<8192>(input,out,2,258,1000000,268435456)} else {q4_run1::<32768>(input,out,2,0,1000000,4294967295)}}}
+ #[inline(never)] pub fn p135_row12(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
+ #[inline(never)] pub fn p135_row13(input:&[u8],out:&mut[u32])->usize{{let k=pr_route(input);if k==8 {pc_run1::<32768>(input,out,2,0,1000000,4294967295)} else if k==25 {pc_run1::<32768>(input,out,3,0,1000000,4294967295)} else {pc_run1::<16384>(input,out,3,0,1000000,4294967295)}}}
+-#[inline(never)] pub fn p135_row14(input:&[u8],out:&mut[u32])->usize{dx1_u118_run::<65536,32768,4294967295,4,6,32,5,1000000,64,1,16,4,64,1>(input,out)}
++#[inline(never)] pub fn p135_row14(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
+ #[inline(never)] pub fn p135_row15(input:&[u8],out:&mut[u32])->usize{o_a_main_part::<10,256,8,5,32>(input,out,0,0,0)}
+-#[inline(never)] pub fn p135_row16(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,5,0,1000000,4294967295,1,4)}
+-#[inline(never)] pub fn p135_row17(input:&[u8],out:&mut[u32])->usize{pc_run1::<8192>(input,out,3,258,1000000,4294967295)}
+-#[inline(never)] pub fn p135_row18(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,8,0,1000000,4294967295,1,4)}
++#[inline(never)] pub fn p135_row16(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,5,0,1000000,4294967295,2,4)}
++#[inline(never)] pub fn p135_row17(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,4,0,1000000,302256128)}
++#[inline(never)] pub fn p135_row18(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,8,0,1000000,4294967295,2,4)}
+ #[inline(never)] pub fn p135_row19(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32770>(input,out,4,0,1000000,4294967040,4,3)}
+ 
+ #[inline(always)] pub fn bulk_parse_fallback(input:&[u8],out:&mut[u32])->usize{let k=pm_hy_ty(input);
+ if k==9{p135_row0(input,out)}
+ else if k==23{p135_row1(input,out)}
+--- a/candidates/r15-553-compact-hash32/Parse.lean
++++ b/candidates/r15-553-compact-hash32/Parse.lean
+@@ -8853,21 +8853,20 @@
+  rw [slot.p135_row0]
+  exact PC.run1c_spec _ input out _ _ _ _ _ _ hlen (by simp) (by simp))
+ @[local step]
+ theorem p135_row1_spec (input : Slice Std.U8) (out : Slice Std.U32) (hlen : input.length ≤ out.length) : slot.p135_row1 input out ⦃ fun r => r.1.val ≤ input.length ∧ r.2.length = out.length ∧ LZ77.Valid (bytes input) (toks r.2 r.1.val) ⦄ := by
+  rw [slot.p135_row1]
+- step*
++ apply DSLIM.U118_MAIN.run_spec <;> first | assumption | simp
+ @[local step]
+ theorem p135_row2_spec (input : Slice Std.U8) (out : Slice Std.U32) (hlen : input.length ≤ out.length) : slot.p135_row2 input out ⦃ fun r => r.1.val ≤ input.length ∧ r.2.length = out.length ∧ LZ77.Valid (bytes input) (toks r.2 r.1.val) ⦄ := by
+  rw [slot.p135_row2]
+  exact N70.n_run_spec _ _ _ _ _ _ _ _ _ input out hlen
+ attribute [local step] PC.run1_spec
+ @[local step]
+ theorem p135_row3_spec (input : Slice Std.U8) (out : Slice Std.U32) (hlen : input.length ≤ out.length) : slot.p135_row3 input out ⦃ fun r => r.1.val ≤ input.length ∧ r.2.length = out.length ∧ LZ77.Valid (bytes input) (toks r.2 r.1.val) ⦄ := by
+  rw [slot.p135_row3]
+- step*
+- repeat' (split <;> step*)
++ exact Q4.run1t_spec _ input out _ _ _ _ hlen (by simp) (by simp)
+ @[local step]
+ theorem p135_row4_spec (input : Slice Std.U8) (out : Slice Std.U32) (hlen : input.length ≤ out.length) : slot.p135_row4 input out ⦃ fun r => r.1.val ≤ input.length ∧ r.2.length = out.length ∧ LZ77.Valid (bytes input) (toks r.2 r.1.val) ⦄ := by
+  rw [slot.p135_row4]
+  exact P12.p125_row15_spec input out hlen
+ @[local step]
+@@ -8922,12 +8921,11 @@
+    · exact PC.run1_spec _ input out _ _ _ _ hlen (by simp) (by simp)
+ attribute [local step] DSLIM.U118_MAIN.run_spec
+ @[local step]
+ theorem p135_row14_spec (input : Slice Std.U8) (out : Slice Std.U32) (hlen : input.length ≤ out.length) : slot.p135_row14 input out ⦃ fun r => r.1.val ≤ input.length ∧ r.2.length = out.length ∧ LZ77.Valid (bytes input) (toks r.2 r.1.val) ⦄ := by
+  rw [slot.p135_row14]
+- step*
+- repeat' (split <;> step*)
++ exact PC.run1_spec _ input out _ _ _ _ hlen (by simp) (by simp)
+ attribute [local step] EO.EA.main_part_spec
+ @[local step]
+ theorem p135_row15_spec (input : Slice Std.U8) (out : Slice Std.U32) (hlen : input.length ≤ out.length) : slot.p135_row15 input out ⦃ fun r => r.1.val ≤ input.length ∧ r.2.length = out.length ∧ LZ77.Valid (bytes input) (toks r.2 r.1.val) ⦄ := by
+  rw [slot.p135_row15]
+  step*
+@@ -8939,12 +8937,11 @@
+  exact PC.run1c_spec _ input out _ _ _ _ _ _ hlen (by simp) (by simp))
+ attribute [local step] PC.run1_spec
+ @[local step]
+ theorem p135_row17_spec (input : Slice Std.U8) (out : Slice Std.U32) (hlen : input.length ≤ out.length) : slot.p135_row17 input out ⦃ fun r => r.1.val ≤ input.length ∧ r.2.length = out.length ∧ LZ77.Valid (bytes input) (toks r.2 r.1.val) ⦄ := by
+  rw [slot.p135_row17]
+- step*
+- repeat' (split <;> step*)
++ exact Q4.run1t_spec _ input out _ _ _ _ hlen (by simp) (by simp)
+ @[local step]
+ theorem p135_row18_spec (input : Slice Std.U8) (out : Slice Std.U32) (hlen : input.length ≤ out.length) : slot.p135_row18 input out ⦃ fun r => r.1.val ≤ input.length ∧ r.2.length = out.length ∧ LZ77.Valid (bytes input) (toks r.2 r.1.val) ⦄ := (by
+  rw [slot.p135_row18]
+  exact PC.run1c_spec _ input out _ _ _ _ _ _ hlen (by simp) (by simp))
+ @[local step]
