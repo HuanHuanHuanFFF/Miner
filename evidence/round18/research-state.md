@@ -27,3 +27,16 @@
 账户最新读数剩余99%、已用1%，未触发剩余≤1%。最多一次成功重置；工具没有指定卡的参数，当前可用卡实际到期也需再核验。共享账户用量不等于本任务成本。额度不延长窗口。
 
 已用技能：huan-open-research及实验/数学/搜索细则；噪声调查使用diagnosing-bugs，历史份额重放和实际affinity检查均为red。当前3个解释已向用户展示：AllowedCPUs未限制实际mask、进程间incumbent漂移、方法顺序/缓存；以新观测区分，不能提前宣布修复。
+
+
+## 后续检查点（UTC 2026-10-09 18:54附近，固定截止不变）
+
+- 官方hour1快照29415已完整保存。F与I各20个配对进程共40，四份候选全部没有5%或15%观测。hour1-analysis.json记录单独/联合、逐块及对照；582pack、583abs15、DNA literals、579base-tiny暂不晋升。I的579base-tiny快15.6%但仍被支配；DNA literals慢约0.49%。
+- noise-g与order-k已收齐：实际显式绑CPU0成功；原引擎在文件内固定方法顺序（不是逐rep轮转）。balanced20临时引擎副本只改调度，encoder/loader/token保留原字节；同源码绝对分歧中位数约0.104%，最大约0.199%，仍不能分辨0.108%窄窗。详见noise-g-analysis、order-k-analysis/decision。停止继续扩大测量基础设施，除非后续候选决策需要。原版协议仍是最终性能依据。
+- 项目检查原先不接受workflow_call。已将R18job直接折入deflate-round9.yml并删除本轮新建的独立reusable文件；project.py check新结果PASS（22tasks、346links、10manualworkflows、205manifest pairs）。没有修改AGENTS或放宽检查器。
+- 公共逐文件free-switch oracle仅作选路诊断，前后数据可使模型峰值32%变约9%，不是实际候选成绩。当前已实现r18-553-lookahead：原553三个PC文本wrapper从深度2/lazy0转为深度1/lazy16，其他引擎/原分类器不变。native37974541324真实11文件共少24982B、17输出不变，size -0.101228pp。标准screen-n运行37975340862，UTC18:44启动，40分钟cap，在途；冻结hash见manifest，尚未完整gate。
+- r18-573-short-range针对实际75%的1-3项查询做直接精确min，长范围保留原loop；native short-p运行37975915149，UTC18:49启动。结果应要求所有tokens/output等于base573，后续总时间未知。
+- 新公开586/587原始源码已保存；587只是579分类一处改动，586有全输入RF缓存/多轮DP refine新层。r18-586-base-only只把已有REFINE表置0，保留通用路由和基础引擎。refine-q-native已派发（dispatch文件或会话后续工具结果取run ID），同时跑原编码器和original586函数inclusive profile（parse/refine/rf_find/rf_dp/rf_exact/d_plan/s_plan/x32b_parse）。先根据真实质量损失和阶段成本决定。
+- 新标准分析器脚本analyze-round18.py已在旧R17及本轮F/I真实原始回执上复算；oracle-round18.py将输入层内均值、runner间中位作乐观免费选择，跨族514迁移只作诊断，不是私有估计。原始回执SHA均保留。
+- 额度18:38读数已用2%、剩余98%，从未兑换。本轮之后仍按剩余≤1%且最多一次成功处理；工具不能选择指定卡。
+- 报告docs/rounds/round18.md和TASK_INDEX/tasks.json已增加本轮入口。最后状态更新时commit为e95a075（后续可能前进），研究分支持续push；main上b5cb035仍未随本轮推送。
