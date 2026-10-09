@@ -53,3 +53,5 @@ balance-n37860597828最终自然成功28配对：四块+0.08706/-0.00960/+0.1929
 rescue-p37861591198自然成功14配对：540 decode+提取过；时间+0.228702%，大小-0.00785585pp，仍被539支配，关闭这份原Rust完整证明投入。原定reserve保持。取得当前新公开542(被546支配)，PC四fn与514逐字相同，整体路由/非PC包括PIM/O_A不同；只迁移已验证过的U16机制到新压缩侧父版，独立542锚，不沿用514/R12性能或证书。transfer-q单受控候选两块+540decode+提取，暂不申请full gate，作为本窗最后新的起点迁移。
 
 transfer-q37863273684失败在screen之前：RustE0308，原542 PIM共享pc_f_link仍传U32；PC区域改U16间接破坏共享callee签名。无decode/时间/full gate结果，保留完整原失败；新的isolated源保留原U32 helper及PC.f_link_spec供PIM，PC改用私有U16函数/桥接。修复不是改原参照，也不改旧失败source。repair-r重跑原生+提取+两块，无新方向追加。
+
+追加precision-s仅验证已有候选微小信号：同一未修改official measure进程载入incumbent/parent/abs15/identical-ELF shadow，原library边界和encoder不动，11reps/1warmup，四镜像block；engine每rep旋转method顺序。属于co-measure协议诊断，不代替原一候选隔离标准、未见数据或admission。另保留一个标准pair block，full gate不重跑。用于关闭目前高波动歧义，不生成新算法或降速行为。
