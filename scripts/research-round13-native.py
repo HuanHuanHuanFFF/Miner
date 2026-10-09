@@ -8,6 +8,8 @@ def main():
     spec=validate(os.environ['ROUND4_SPEC']);out=Path(os.environ['RUNNER_TEMP'])/'round4-receipts';out.mkdir(exist_ok=True)
     if spec.get('r18_range_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-ranges.py')],check=True);return
+    if spec.get('r18_dp_repeat_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-convergence.py')],check=True);return
     if spec.get('r16_transfer_candidates'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round16-transfer.py')],check=True);return
     if spec.get('pc_rescue_counts'):
