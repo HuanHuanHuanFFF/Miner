@@ -1,15 +1,17 @@
 """Unmodified trusted engine co-measurement of already verified boundary source."""
 from pathlib import Path
-import dataclasses,hashlib,json,os,statistics
+import dataclasses,hashlib,json,os,statistics,sys
 from round4 import ROOT,validate
 
 def main():
     assert os.environ.get('GITHUB_ACTIONS')=='true'and os.environ.get('RUNNER_OS')=='Linux'
     spec=validate(os.environ['ROUND4_SPEC']);assert spec.get('multimethod_diagnostic')
+    upstream=Path(os.environ['DEFLATE_ROOT'])
+    sys.path.insert(0,str(upstream/'validator'))
     from bench import driver,corpora
     from bench.results import INCUMBENT,parse_results
     from sandbox import bwrap
-    upstream=Path(os.environ['DEFLATE_ROOT']);cpu=str(min(os.sched_getaffinity(0)))
+    cpu=str(min(os.sched_getaffinity(0)))
     config=dataclasses.replace(driver.Config.from_env(upstream/'validator'),reps=11,warmup=1,cpus=cpu,keep=driver.Keep.NEVER,bars=False)
     names=['public514','r13-514-abs15','public514-shadow'];by={e['name']:e for e in spec['entries']}
     paths={n:ROOT/by[n]['path']/'parse.rs'for n in names}
