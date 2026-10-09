@@ -122,3 +122,14 @@ AP run37992099832已完整成功并收齐。base6 Rustf5c1437c...两块主份额
 准备并即将派发gate-base6-1（原Rustf5c1437c/Lean cf4b7c1e，expectedpublicbytes5339229），以及noise-as-diagnostic（582/base6各两个同源码条目，CPU0、原fixed11与balanced20、两个镜像块）。它们是对高潜力且对照矛盾候选的有界投入。confirm-at四块联合确认base6+已验证selectiveRF已准备10条目、两个族锚点和shadow，但尚未派发；新增dispatch保护要求两个非control候选VERIFICATION精确pair均已通过后才可启动。若Lean修复，先更新最终pair与spec，再启动新确认；不要把旧proof绑定的测量当最终pair确认。
 
 AR dna-ar-native run37993962642，commit9c1c58a，UTC21:31:22启动25mincap，在途。AN run37992121536同进程RF诊断仍在途；不要取消。账户半程读数已用8%、剩92%、reset0。main重新核对仍只有b5cb035未推送且干净，未触碰。
+
+
+## 2026-10-09T22:05:30.964188+00:00 诊断收敛与新有界候选
+
+AS run37994913713已完成：balanced20两块base6相对582均值+0.241222%、-0.097304%，582重复源码差-0.06041/-0.07877%，base6重复差+0.13145/+0.06296%。全16种候选/参照组合的评分敏感性保留在noise-as-analysis，不当成16独立样本或官方成绩。一个有利组合仍可能跨15%而其他为0，尚未解除0.108%窗口风险。base6 gate run37994890861（UTC21:40:47，50mincap，commit171b6a2）仍在原版gate阶段；confirm-at受保护，未启动。
+
+AU run37995550516：当前A变量查询75848577次/808367027项，均宽10.6576；价格分段264904352，16对齐块覆盖15.062%项，理论减少原始项读取14.12%但未算额外成本。停16设计。已写并预检r18-586-a-block8 Rust1c43cf11...：保留原全长cost和width<32循环，用64个tagged8格块保存min/max/最早index；长查询按实际同价段，23位打包成本若可能环绕则回原逐项算法。Lean仍原586未适配。AW native spec/harness已预检2400真实DP分组价格/U32wrap/fullcost比较和28字节等价，待提交派发；不展开blocksize扫描。
+
+AR两项后续AV run37995588693，commitb919738，UTC21:47:51启动45mincap，2原协议块、582/shadow/base6对照。literal40-corrected -9932B/+490992tokens；chain2 -321B/-6000tokens，未计时前不推成功。AN run37992121536已收齐，balanced20 dominance只+0.033/+0.064percent，和重复误差同级，暂停v0证明投入。
+
+资源统计cost-hour4.json截至UTC21:50：46派发、42完整收集（41成功/1失败），累计完成runner18342秒；224个原协议配对进程。另4作业当时尚未收齐，不据本地缺回执判断仍运行。账单与本任务模型费用UNKNOWN，账户用量92%剩余、reset0。新方向截止23:12:51/最终01:32:51 UTC不变，勿重新计时。
