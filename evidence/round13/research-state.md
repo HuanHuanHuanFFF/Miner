@@ -91,3 +91,13 @@ combine-z37868528362自然成功，540 Root decode、原提取接受、16标准�
 官方checkpoint4重新全量读取仍snapshot29243、553提交/527leaderboard、weights同快照，freshness仍unknown，不当作最新私有结果保证。新增成本描述性拆分逐行选11正式total_s的实际median rep，parse+encode严格复算总轴；balance-n第四块总轴下降约83.9%来自encoder项(含独立incumbent波动)，同字节不能据此断言算法提速。成本拆分只作计时解释，不替换原metric、排除数据或构造新的标准分数。
 
 额度目的工具当前已用57%、剩43%，Oct23卡仍available未消耗；本地guard一次非提升启动initialize超时，没有调用消费RPC，不把超时说成重置。原卡/账户信息留本地忽略，后续阈值触发仍须精确卡与幂等记录。main不合并；原ZIP不发布；无正式上传/签名/资金动作。已推送阶段commit0420644。
+
+## 确认终态与证据复核（2026-10-09 02:06UTC）
+
+唯一确认37869790385自然成功并全收：四块32进程，27全部终态，21成功/6失败，237标准配对。组合fresh对public514+0.0949366%、shadow+0.2656284%、abs15+0.2248934%；冻结的五项gate分配条件全部失败，STOP_COMPOSITION_NO_FULL_GATE。全两runner六块对abs15+0.1752105%，整体同族点被539支配。proof1源Rust30277...逐字同冻结组合，Lean88b9...只为准备，未编译／完整gate／正式提交，保持原失败和未验证边界。
+
+发现汇总器忽略候选后期control角色的性能记录；已按精确Rust预先声明族关系补齐，避免回执顺序影响包含。abs15全部六环境17块等runner中心-0.119968%、条件中心进几何前沿，但最新对同ELF shadow+0.041529%(仅2/4块胜)；已知异常块对中心影响足以翻符号。原17块都保留，反事实替换只作影响诊断，不能当筛选后的官方成绩。没有用聚合中心或条件16.96%份额冒充可支付收益。
+
+公共重复采样诊断复用固定原函数，不抽文件、不合并块、各2000draw。本地首次导入bench包初始化器因无loguru失败，尚无统计输出；改为仅加载未修改纯模块／AST函数，不安装runner依赖。保留在此的失败摘要仅是本地导入，不计CI、测量或proof失败。最终对shadow四块都inconclusive；第四块parent比较abs15和相同ELF shadow同时在纯函数里passed，显示该重复层统计不覆盖host drift。单stage1轻量envelope适配不是SQL聚合／线上部署／539真实admission/held-out或收入；不改变组合STOP。原始12文件哈希、源码函数哈希及synthetic observation ID保存。
+
+02:06 UTC公开539/source无认证GET仍403 SOURCE_WITHHELD，原响应byte/SHA219B保留；不绕过权限或继续构造新候选。card守卫补上初始化失败的自身进程回收与consume前重新检查硬截止/过期；这是未消费条件的本地准备，没有测试消费RPC。剩余时间只做当前文件／索引／原回执复核、最终官方与额度读取、归档和交付，02:52硬截止不后移。没有新正式admission/排名/本轮新奖励证据；goal未完成，不因阶段停止或gate通过标complete。

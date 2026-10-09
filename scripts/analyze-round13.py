@@ -24,6 +24,15 @@ def main():
     policy=competition['policy'];policy_check=validate_policy_for_replay(policy,rows,scorer)
     bounds=scorer.Boundaries(policy['max_balanced_time_ratio'],policy['max_mean_file_compression_pct'])
     formal={r['id']:r for r in rows};groups={};runs=[];identities={};input_ids={};timing_owners={};shadows=[];pipeline_shadows=[];pc507_shadows=[];family_shadows=[];verified_controls=[]
+    # A candidate's later control role must not discard its actual standard measurements.
+    # Determine declared families first so receipt argument order cannot affect inclusion.
+    declarations={}
+    for folder in args.receipts:
+        state=json.loads((folder/'state.json').read_bytes());entries={e['name']:e for e in state['spec']['entries']}
+        for n,e in entries.items():
+            if e.get('control') or not n.startswith(('r12-','r13-','chat-20261008-')):continue
+            value=(entries[e['anchor']]['formal_id'],e['comparison_baseline'])
+            assert declarations.setdefault(e['hashes']['parse.rs'],value)==value
     for folder in args.receipts:
         state=json.loads((folder/'state.json').read_bytes());ci=json.loads((folder/'ci-run.json').read_bytes())
         assert str(ci['databaseId'])==state['run_id'] and ci['headSha']==state['git_sha']
@@ -102,17 +111,20 @@ def main():
                 assert all(sha(folder/('input-'+n)/f)==v for f,v in e['hashes'].items())
                 verified_controls.append({'name':n,'run_id':state['run_id'],'files':e['hashes']})
         for n,e in entries.items():
-            if e.get('control') or not n.startswith(('r12-', 'r13-', 'chat-20261008-')):continue
+            if not n.startswith(('r12-', 'r13-', 'chat-20261008-')) or e['hashes']['parse.rs'] not in declarations:continue
             blocks=sorted(b for name,b in by if name==n)
             if not blocks:continue
-            anchor=e['anchor'];parent=e['comparison_baseline'];fid=entries[anchor]['formal_id'];fm=formal[fid]['metrics']
+            fid,parent=declarations[e['hashes']['parse.rs']]
+            anchor=next(name for name,entry in entries.items() if entry.get('formal_id')==fid)
+            assert parent in entries
+            fm=formal[fid]['metrics']
             rel=[by[n,b]['time']/by[anchor,b]['time'] for b in blocks]
             sizes=[fm['mean_file_compression_pct']*by[n,b]['size_pct']/by[anchor,b]['size_pct'] for b in blocks]
             assert max(sizes)-min(sizes)<1e-12
             g=groups.setdefault(e['hashes']['parse.rs'],{'candidate':n,'source_sha256':e['hashes']['parse.rs'],
                 'formal_anchor_id':fid,'comparison_baseline':parent,'runs':[],'verified_pairs':[]})
             assert g['formal_anchor_id']==fid and g['comparison_baseline']==parent
-            g['runs'].append({'run_id':state['run_id'],'name':n,'proof_sha256':e['hashes']['Parse.lean'],'blocks':blocks,
+            g['runs'].append({'run_id':state['run_id'],'name':n,'role_in_batch':'control' if e.get('control') else 'candidate','proof_sha256':e['hashes']['Parse.lean'],'blocks':blocks,
                 'relative_to_anchor':rel,'relative_to_parent':[by[n,b]['time']/by[parent,b]['time'] for b in blocks],
                 'public_size_pct':by[n,blocks[0]]['size_pct'],'public_size_change_pp':by[n,blocks[0]]['size_pct']-by[parent,blocks[0]]['size_pct'],
                 'projected_size_pct':sizes[0], 'public_equal_to_parent':all(file_id[n,b]==file_id[parent,b] for b in blocks)})
@@ -141,6 +153,7 @@ def main():
         'pipeline_shadows':pipeline_shadows,'pc507_shadows':pc507_shadows,'family_shadows':family_shadows,'verified_controls':verified_controls,
         'paired_processes':sum(r['paired_processes'] for r in runs),
         'field_definitions':{'full_gate_accepted':'At least one exact pair in verified_pairs passed; it does not certify other proof variants with the same Rust.',
+                             'candidate_measurements':'A declared exact Rust source retains later standard measurements even when used as a control. These remain fixed-public-data observations, not unseen-data confirmation.',
                              'final_mode':'Final artifacts from completed CI; failed CI is retained as negative evidence and is not labeled successful.'},
         'limits':['Same-family transfer and stress (worst block relative time plus1%, size plus0.01pp) are declared hypotheses, not private guarantees.',
                   'Full public gate is bound to exact source/proof pairs; neither projected geometry nor same-hotkey conditional share is formal admission or realized reward.']}

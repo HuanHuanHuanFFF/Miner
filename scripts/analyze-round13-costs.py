@@ -13,6 +13,7 @@ def median_rep(method):
 
 def main():
     analysis=json.loads((EVIDENCE/'final-analysis.json').read_bytes());runs=[]
+    declared={c['source_sha256']:c for c in analysis['candidates']}
     for run in analysis['runs']:
         folder=EVIDENCE/run['run_id']/run['batch']/'gate'
         state=json.loads((folder/'state.json').read_bytes());entries={e['name']:e for e in state['spec']['entries']}
@@ -24,8 +25,9 @@ def main():
             raw[name,block]={f['file']:f for f in files}
         comparisons=[]
         for (name,block),metric in metrics.items():
-            if entries[name].get('control'):continue
-            parent=entries[name]['comparison_baseline'];details=[]
+            source=entries[name]['hashes']['parse.rs']
+            if source not in declared:continue
+            parent=declared[source]['comparison_baseline'];details=[]
             for filename,f in raw[name,block].items():
                 p=raw[parent,block][filename]
                 assert f['sha256']==p['sha256']
