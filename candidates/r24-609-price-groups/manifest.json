@@ -1,0 +1,19 @@
+{
+  "candidate": "r24-609-price-groups",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "e13c3b1572e3ac432866768088f778c4d46d493ed5e61cf974473b5a493e4964",
+    "Parse.lean": "9606dd10d8f86913c244330f06540adb8d91ba15b612b1004a5d76c17f28345e"
+  },
+  "mechanism": "Build SF query endpoints from consecutive equal actual length prices, capped at32 covered values, instead of always ending at a DEFLATE length-code boundary. Existing two16-range minima already cover any interval up to32, so no added per-position RMQ levels are needed.",
+  "difference_from_old_work": "R11 groups optimized D gap filling and failed independent timing; this is SF minimum-query partitioning using the current block cost table. It does not batch writes, enlarge RMQ or change prices/search. Whole-output equality and actual query counts are checked before performance claims.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "source": "references/round24-public-609/source-receipt.json",
+    "prior_different_mechanism": "docs/rounds/round11.md",
+    "proof": "New endpoint-builder totality draft; exact extracted signature and original gate still required."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}
