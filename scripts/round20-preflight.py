@@ -20,6 +20,12 @@ def main():
         assert by[names[0]]['hashes'] == by[names[1]]['hashes']
         assert by[names[2]]['hashes'] == by[names[3]]['hashes']
         assert spec['isolated_blocks'] == 2 and spec['multimethod_blocks'] == 4
+        if spec.get('r18_order_diagnostic'):
+            from importlib import import_module
+            import_module('research-round18-order').preflight()
+            assert isinstance(spec.get('r18_order_blocks',4),int) and 1<=spec.get('r18_order_blocks',4)<=4
+            protocols=spec.get('r18_order_protocols',['original_fixed11','original_fixed20','balanced20'])
+            assert protocols and len(protocols)==len(set(protocols)) and set(protocols)<={'original_fixed11','original_fixed20','balanced20'}
         if spec.get('r20_order_diagnostic'):
             from importlib import import_module
             import_module('research-round20-order').preflight()
