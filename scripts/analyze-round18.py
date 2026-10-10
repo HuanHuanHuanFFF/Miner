@@ -118,10 +118,24 @@ def main():
             assert ci['status']=='completed' and ci['conclusion']=='success' and ci['headSha']==gate['git_sha']
             for name,v in inv['files'].items():
                 f=(artifact_root/name).resolve();assert f.is_relative_to(artifact_root.resolve()) and f.stat().st_size==v['bytes'] and sha(f)==v['sha256']
-            pair={'run_id':gate['run_id'],'files':cert['files'],'receipt':cert['receipt'],'scope':'exact separate original public gate'}
+            pair={'run_id':gate['run_id'],'files':cert['files'],'source_path':path,'receipt':cert['receipt'],'scope':'exact separate original public gate'}
             if not any(p['run_id']==pair['run_id'] and p['files']==pair['files'] for p in g['verified_pairs']):g['verified_pairs'].append(pair)
+        versions={}
+        for _,state,_,entries in states:
+            for name,e in entries.items():
+                if e['hashes']['parse.rs']!=g['rust_sha256']:continue
+                key=(e['path'],e['hashes']['Parse.lean'])
+                version=versions.setdefault(key,{'path':e['path'],'files':e['hashes'],'aliases':set(),'run_ids':set()})
+                version['aliases'].add(name);version['run_ids'].add(state['run_id'])
+        g['source_versions']=[{**v,'aliases':sorted(v['aliases']),'run_ids':sorted(v['run_ids']),'exact_gate_verified':any(p['files']==v['files'] and p.get('source_path',v['path'])==v['path'] for p in g['verified_pairs'])}for v in versions.values()]
+        verified_sources=[p for p in g['verified_pairs']if p.get('source_path')]
+        if verified_sources:
+            preferred=max(verified_sources,key=lambda p:int(p['run_id']))
+            g['preferred_verified_source_path']=preferred['source_path']
+            g['preferred_verified_files']=preferred['files']
         g['summary']={}
         g['independent_confirmation_summary']={}
+        g['by_run_summary']=[]
         for cal in ('primary','shadow'):
             obs=[o for o in g['observations']if o['calibration']==cal]
             if not obs:continue
@@ -132,6 +146,9 @@ def main():
             independent=[o for o in obs if o['role']=='independent_confirmation' and o['entry_role']=='candidate']
             if independent:
                 g['independent_confirmation_summary'][cal]={**distribution([o['single_pool_share_pct']for o in independent]),'runner_count':len({o['run_id']for o in independent}),'run_ids':sorted({o['run_id']for o in independent})}
+            for rid in sorted({o['run_id']for o in obs}):
+                ro=[o for o in obs if o['run_id']==rid]
+                g['by_run_summary'].append({'run_id':rid,'calibration':cal,'roles':sorted({o['role']for o in ro}),'entry_roles':sorted({o['entry_role']for o in ro}),**distribution([o['single_pool_share_pct']for o in ro])})
     joint=[]
     for a,b in itertools.combinations(groups.values(),2):
         oa={(o['run_id'],o['block'],o['calibration']):o for o in a['observations']};ob={(o['run_id'],o['block'],o['calibration']):o for o in b['observations']}
@@ -141,7 +158,7 @@ def main():
             matched.append({'run_id':key[0],'block':key[1],'calibration':key[2],'separate_pct':{a['candidate']:x['single_pool_share_pct'],b['candidate']:y['single_pool_share_pct']},'simultaneous_geometric_pct':ss,'simultaneous_frontier_ids':ids})
         joint.append({'candidates':[a['candidate'],b['candidate']],'matched_observations':matched,'scope':'Joint geometry on matching run/block/control. Conditional on admission and distinct eligible hotkeys without older surviving submissions. Same-hotkey rule pays only oldest surviving frontier submission; registration/slots are UNKNOWN and no new registration is authorized.'})
     result={'status':'VERIFIED_RAW_RECOMPUTATION_CONDITIONAL_PROJECTIONS','snapshot':context,'policy_validation':policy_check,'runs':runs,'paired_processes':sum(r['paired_processes']for r in runs),'candidates':list(groups.values()),'same_source_controls':shadows,'joint':joint,'raw_input_audit':raw_audit,'limits':['Original total-time public protocol only. Diagnostic timing is excluded.','Observed block/runner distributions are not formal success probabilities. Center-coordinate scores are not expected rewards.','No private-corpus, admission, registration, slot, signing, or realized reward claim.','Discovery and fresh confirmation roles remain distinct; all same-source later control measurements remain evidence.']}
-    args.output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
+    args.output.write_bytes((json.dumps(result,indent=2)+'\n').encode('utf-8'))
     print(json.dumps({'runs':len(runs),'paired_processes':result['paired_processes'],'candidates':[{'candidate':g['candidate'],'summary':g['summary'],'verified_pairs':g['verified_pairs']}for g in groups.values()],'same_source_controls':shadows,'joint_rows':sum(len(j['matched_observations'])for j in joint)},indent=2))
 
 if __name__=='__main__':main()

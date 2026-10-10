@@ -7,14 +7,15 @@
 | 任务 | 入口 |
 |---|---|
 | 原版模板和公共 corpus 基线 | `.github/workflows/deflate-baseline.yml` |
-| 复现某一轮批次 | 相应工作流，ref 选择原始 run 的 `source_commit`；批次 JSON 位于 `evidence/roundN/`。第十至十七轮复用 `deflate-round9.yml`，输入对应的 `experiment_round` |
+| 复现某一轮批次 | 相应工作流，ref 选择原始 run 的 `source_commit`；批次 JSON 位于 `evidence/roundN/`。第十至十八轮复用 `deflate-round9.yml`，输入对应的 `experiment_round` |
 | 通用批次预检 | `ROUND4_SPEC_DIR=evidence/roundN` 与 `scripts/round4.py preflight BATCH`；具体参数见冻结JSON |
 | 第十七轮精确证明预检 | `ROUND17_SPEC=gate-proof1` 与 `scripts/verify-round17-exact.py --preflight`；只检查已冻结文件对 |
+| 第十八轮精确配对与冻结确认 | `scripts/verify-round18-exact.py`、`scripts/dispatch-round18.py`；已通过配对与最终确认计划见[第十八轮](rounds/round18.md)，实际绑定以冻结批次及原始回执为准 |
 | 下载已有 CI 回执 | `scripts/collect-round4.py status/pull 37700280634 --round 10 --batch confirm-j` |
 | 最近结果复算 | `scripts/analyze-round17.py`与`scripts/summarize-round17-shares.py`；原始回执、正式#582和波动诊断见[第十七轮](rounds/round17.md) |
 | 文档和路径自检 | `python scripts/project.py check` |
 
-所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；第十五轮派发已核实为公开仓库。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至17轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
+所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；第十五轮派发已核实为公开仓库。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至18轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
 
 ## 实际执行版本
 

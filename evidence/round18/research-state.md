@@ -142,3 +142,25 @@ Gate-base6-1 run37994890861已失败收齐：原版stage3提取通过，stage4 s
 AV run37995588693已收齐。literal40-corrected与chain2主/shadow两块全部0，暂停各自精确版本。base6作为对照新增两块主/shadow都是0；联合AP后base6主4块最佳18.27497%、中位0.008194%、2零值、1次≥5/15；shadow4块全0。仍未达标，不能选峰值。
 
 AW block-aw-native run37997434316，commit690a21e，UTC22:07:06启动25mincap，在途；先看2400helper/28file等价，再决定是否原协议计时。最终截止01:32:51 UTC、新方向冻结23:12:51仍固定。
+
+
+## 2026-10-09T23:45:48.685852+00:00 最后确认阶段（算法已冻结）
+
+base6-proof2完整原版gate run38001724485通过，Rust f5c1437c...、Lean02a21f16...；gate506.4秒、Lean主体418.9秒，原900秒限制保持。原statement/公理白名单/roundtrip均通过，5339229B核对。VERIFICATION.json和两文件审阅zip已生成；不同proof版本只算同一个Rust候选。selectiveRF另一份完整gate和审阅包保留。两个正式奖励目标仍未完成。
+
+第一台最终联合确认AT run38003736134，commit87e407c，UTC23:18:15启动，4块/10条目，60mincap。第二台BA run38004111809，commit3fa33bc，UTC23:22:37启动，4块/10条目，60mincap；第二台在查看第一台结果前预先登记，不能为追逐高点选择性重复。final-confirmation-plan.json绑定两run与两份精确pair。final report应以AT+BA两台八块为可比最终确认；S早期Y四块另列，发现/后续control观测另列。source_versions与preferred_verified_source_path已加入分析器，保留proof历史且数学复算经原AP/AV数据核对不变。
+
+逐文件base6-time-components已精确复算候选总时间中位对应那次rep的parser/encoder，避免加两个独立中位数。AP高18.27%块，genome对总轴相对变化贡献+0.16427%，27个输出未变文件-0.31610%，合计-0.15183%；另块genome+0.21454%、其他-0.50527%。四块genome贡献始终为正。仅是观测分解，不能据此声称唯一因果根源。
+
+交付前官方主分支复核：main6bf303f比固定a356前进1commit（2026-10-08，发生在本轮之前）。SCORING/MINER/pareto原始字节与开场相同，verifier文本同本地固定阅读副本；完整11文件diff是快照保留、评分发布标识与weight发布相关，PINS只改db/models.py、db/scoring.py、workers/weight_setter.py三项摘要。contract/encoder/scorer/verifier/toolchain未变；线上部署字节身份仍UNKNOWN。源码/官方pins阅读副本未修改。官方API现保留最近1小时快照，原始API响应已归档，勿依赖旧URL长期可用。
+
+当前实验分支最后已知3fa33bc，后续文档/分析器变更待提交；main b5cb035保持排除。固定终点UTC01:32:51（北京时间09:32:51）不变，只继续确认、证据审计、最终快照和报告。Goal工具objective包含“未达标不得标完成”，不要因8h结束或两个gate通过而标目标complete。
+
+
+## UTC 2026-10-10 00:04:28 最终八块已收齐，目标仍未完成
+
+AT38003736134和BA38004111809均成功收齐，各4块；两台独立runner分别AMD EPYC9V74和7763，80个原协议配对进程。快照29456 computed UTC23:51:08，595提交/557账户；竞赛context freshness unknown，weights/current同快照但freshness stale，均原样保留。当前复算入口final-confirmation-summary-current.json，完整逐文件及同源码controls在final-confirmation-analysis-current.json。
+
+A(base6-proof2)单独主中位0%、范围0–0.04344465%、5/8零；shadow中位0.00811408%、范围0–0.07509123%、4/8零。5/8块换同源码对照会改变零/非零，全部0/8达到5或15。shadow平均坐标评分20.318689%，但实际八块最大仅0.075091%，不可作为期望收益。B(selectiveRF)单独主中位1.66765171%、范围1.40019436–1.89211222；shadow中位1.66814830%、范围1.37904819–2.03431030%，均0/8零、0/8达到5/15。联合重算主A/B中位0/1.76620174%，shadow0.00808149/1.70093389%，两目标同时达到0/8。相同测量从29434换29456，B主中位2.35364363%变1.66765171%，这是竞争前沿变化，不是代码退化。
+
+本地962个原始artifact文件逐字SHA已核对；HEAD中已提交864文件约85.99MB也与原始inventory相同，未发现换行转换破坏。新增完整审计工具将在最终提交后再次核对全部已提交文件。账户used12/remaining88，reset0；固定终点01:32:51UTC不变。余下只做证据/审阅包审计、当前前沿敏感性与下一步价值分析、最终快照/报告，不再展开新算法或新CI。
