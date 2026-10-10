@@ -8,3 +8,5 @@
 - B 38042741551：冻结603观察器与原token/decode一致；SFshape inclusive699ms，match343ms，solve248ms，SFprev15ms；不是官方时间轴，不把嵌套时间相加。
 - C预检：三候选budget保留CSV、depth1保留首链新匹配、reuse16增加已有匹配复用；三者都保持真实checked emitter。最小操作为28文件原encoder/decode并新增真实分类记录；最多20runner分钟。按质量和速度空间选原协议配对测量，不单因比父慢淘汰。
 - 所有新Lean均是复用草稿，须冻结后完整原版gate。至少保留末25分钟用于确认与收集。
+
+- C 38042906003：真实分类确认CSV=7，JSON=10，XML=5，日志=9。budget保留1181/1233B收益（多52B）；reuse16保留1187B（多46B）；depth1只保留577B（多656B）。D转入两块原协议时间轴比较，暂不凭字节单独淘汰depth1。
