@@ -1,0 +1,62 @@
+--- public514
+
++++ public535
+
+@@ -1,2 +1,5 @@
+
++// Derived from released public #512 parser and generic proofs; #478 genome settings when used.
++// General hash-table and small-input search settings tuned locally.
++// Prepared candidate targeting the external #514 region; no hotkey assigned.
+ // mA: a content-adaptive LZ77 parser for the fixed DEFLATE encoder (mid speed band).
+ //
+@@ -6879,5 +6882,5 @@
+
+ // Tokens: t < 256 literal, else 2^24 + (dist-1)*256 + (len-3).
+ 
+-pub const pc_HB: u32 = 15;
++pub const pc_HB: u32 = 16;
+ pub const pc_HN: usize = 32768;
+ pub const pc_WN: usize = 32768;
+@@ -9696,27 +9699,27 @@
+
+ }
+ 
+-#[inline(never)] pub fn p125_row0(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,5,0,1000000,4294967040,2,3)}
+-
+-#[inline(never)] pub fn p125_row1(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,4,0,1000000,4294967295,1,4)}
++#[inline(never)] pub fn p125_row0(input:&[u8],out:&mut[u32])->usize{pc_run1c::<65536>(input,out,5,0,1000000,4294967040,2,3)}
++
++#[inline(never)] pub fn p125_row1(input:&[u8],out:&mut[u32])->usize{pc_run1c::<65536>(input,out,4,0,1000000,4294967295,1,4)}
+ 
+ #[inline(never)] pub fn p125_row2(input:&[u8],out:&mut[u32])->usize{q4_run1::<8192>(input,out,3,0,1000000,4294967295)}
+ 
+-#[inline(never)] pub fn p125_row3(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,6,258,1000000,4294967295)}
++#[inline(never)] pub fn p125_row3(input:&[u8],out:&mut[u32])->usize{pc_run1::<65536>(input,out,6,258,1000000,4294967295)}
+ 
+ #[inline(never)] pub fn p125_row4(input:&[u8],out:&mut[u32])->usize{n_run::<65536,6,0,0,0,16,0,8,1>(input,out)}
+ 
+-#[inline(never)] pub fn p125_row5(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row6(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,5,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row7(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row8(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,3,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row9(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
++#[inline(never)] pub fn p125_row5(input:&[u8],out:&mut[u32])->usize{pc_run1::<65536>(input,out,4,0,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row6(input:&[u8],out:&mut[u32])->usize{pc_run1::<65536>(input,out,5,0,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row7(input:&[u8],out:&mut[u32])->usize{pc_run1::<65536>(input,out,4,258,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row8(input:&[u8],out:&mut[u32])->usize{pc_run1::<65536>(input,out,3,0,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row9(input:&[u8],out:&mut[u32])->usize{pc_run1::<65536>(input,out,4,258,1000000,4294967295)}
+ 
+ #[inline(never)] pub fn p125_row10(input:&[u8],out:&mut[u32])->usize{esparse_rle(input,out,285278208)}
+ 
+-#[inline(never)] pub fn p125_row11(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,4,0,1000000,302256128)}
++#[inline(never)] pub fn p125_row11(input:&[u8],out:&mut[u32])->usize{q4_run1t::<4096>(input,out,4,0,1000000,302256384)}
+ 
+ #[inline(never)] pub fn p125_row12(input:&[u8],out:&mut[u32])->usize{et_tiny(input,out,302256384)}

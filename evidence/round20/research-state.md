@@ -23,3 +23,9 @@ Both newrunners finished4blocks, bothsourcepairsstillgatequalified. Singlehead o
 U16primary0–0.24993%,shadow0–0.23396%, no top1orlarge stableimpact. Ring16knative adds1862Btofullring butstillconditional sizebelow595; Ntimingpending. DistanceHhas0%primary,0.0676–0.1374%shadow andsamebinarygapup to2.482%; no promotion. LazyqualityvariantsEbothzero; pausewhole-route lazy. Icounts showsecondary gains across bins, no selective length-pruning candidate.
 
 Oremovingfold adds142625B(chain)/236141B(head) and91403/159403tokens. Pwill answerend-to-end tradeoff beforegateallocation. New largealgorithm scope shouldstop around12:48UTC toretainconfirmation/delivery time. Originaldeadline13:18:10UTC unchanged. Inherited539classifier still containslengthconditions; no claimofnewgenerallength-independent routing.
+
+## Late checkpoint (12:45 UTC)
+
+Ring16k Nreturnedno reliablelargebenefit: own0.1101–0.1306%primary,0.0278–0.0623%shadow;5950–20.1368%primary but23.0751–24.1737%shadow. Public539same-sourcegap -0.265%/-1.019%; do notpromoteorgatebasedonprimaryonly. Pnofoldtimingisthelastpendingexperimentaldecision.
+
+Mbalanced20equal-repetitiondiagnostic reducedreferenceabsolutecontrolgap0.38574%->0.04906%; candidatecopygapstill0.20926%. Bothbalancedblocks nowshownegativecandidate_vs_reference, butonlydiagnostic evidence. No replacementoforiginalscores. Newpublic535/599releasedsourcesareknown514engineswithconfiguration/routingchanges; retainasreferences,notnewinventions.

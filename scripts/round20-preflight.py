@@ -20,6 +20,10 @@ def main():
         assert by[names[0]]['hashes'] == by[names[1]]['hashes']
         assert by[names[2]]['hashes'] == by[names[3]]['hashes']
         assert spec['isolated_blocks'] == 2 and spec['multimethod_blocks'] == 4
+        if spec.get('r20_library_diagnostic'):
+            from importlib import import_module
+            import_module('research-round20-library').preflight()
+            assert isinstance(spec.get('r20_library_blocks'),int) and 1<=spec['r20_library_blocks']<=2
         if spec.get('r18_order_diagnostic'):
             from importlib import import_module
             import_module('research-round18-order').preflight()

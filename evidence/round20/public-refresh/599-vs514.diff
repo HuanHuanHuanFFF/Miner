@@ -1,0 +1,117 @@
+--- public514
+
++++ public599
+
+@@ -285,21 +285,22 @@
+
+ #[inline(never)]
+ pub fn bulk_parse(input:&[u8],out:&mut[u32])->usize{let k=route(input);
+-if k==0 || k==1 || k==10{p125_row0(input,out)}
+-else if k==2 || k==4 || k==5 || k==12 || k==14 || k==15 || k==17 || k==18 || k==19 || k==20{p125_row1(input,out)}
+-else if k==3{p125_row2(input,out)}
+-else if k==6{p125_row3(input,out)}
+-else if k==7{p125_row4(input,out)}
+-else if k==8{p125_row5(input,out)}
+-else if k==9{p125_row6(input,out)}
+-else if k==11{p125_row7(input,out)}
+-else if k==13{p125_row8(input,out)}
+-else if k==16{p125_row9(input,out)}
+-else if k==21{p125_row10(input,out)}
+-else if k==22{p125_row11(input,out)}
+-else if k==23{p125_row12(input,out)}
+-else if k==24{p125_row13(input,out)}
+-else if k==25{p125_row14(input,out)}
+-else if k==26{p125_row15(input,out)}
+-else if k==27{p125_row16(input,out)}
++if k==0 || k==11{p125_row0(input,out)}
++else if k==1 || k==5 || k==13 || k==17 || k==19{p125_row1(input,out)}
++else if k==2{p125_row2(input,out)}
++else if k==3{p125_row3(input,out)}
++else if k==4 || k==6 || k==9 || k==16{p125_row4(input,out)}
++else if k==7{p125_row5(input,out)}
++else if k==8{p125_row6(input,out)}
++else if k==10{p125_row7(input,out)}
++else if k==12{p125_row8(input,out)}
++else if k==14{p125_row9(input,out)}
++else if k==15{p125_row10(input,out)}
++else if k==18 || k==20{p125_row11(input,out)}
++else if k==21{p125_row12(input,out)}
++else if k==22{p125_row13(input,out)}
++else if k==23{p125_row14(input,out)}
++else if k==24 || k==25{p125_row15(input,out)}
++else if k==26{p125_row16(input,out)}
++else if k==27{p125_row17(input,out)}
+ else{fallback(input,out)}}
+ 
+@@ -9696,36 +9697,38 @@
+
+ }
+ 
+-#[inline(never)] pub fn p125_row0(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,5,0,1000000,4294967040,2,3)}
+-
+-#[inline(never)] pub fn p125_row1(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,4,0,1000000,4294967295,1,4)}
+-
+-#[inline(never)] pub fn p125_row2(input:&[u8],out:&mut[u32])->usize{q4_run1::<8192>(input,out,3,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row3(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,6,258,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row4(input:&[u8],out:&mut[u32])->usize{n_run::<65536,6,0,0,0,16,0,8,1>(input,out)}
+-
+-#[inline(never)] pub fn p125_row5(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row6(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,5,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row7(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row8(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,3,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row9(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row10(input:&[u8],out:&mut[u32])->usize{esparse_rle(input,out,285278208)}
+-
+-#[inline(never)] pub fn p125_row11(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,4,0,1000000,302256128)}
+-
+-#[inline(never)] pub fn p125_row12(input:&[u8],out:&mut[u32])->usize{et_tiny(input,out,302256384)}
+-
+-#[inline(never)] pub fn p125_row13(input:&[u8],out:&mut[u32])->usize{r109_bfraw::<65536,0>(input,out)}
+-
+-#[inline(never)] pub fn p125_row14(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,2,258,1000000,268435456)}
+-#[inline(never)] pub fn p125_row15(input:&[u8],out:&mut[u32])->usize{ef32_run(input,out)}
+-
+-#[inline(never)] pub fn p125_row16(input:&[u8],out:&mut[u32])->usize{q4_run1::<32768>(input,out,2,0,1000000,4294967295)}
++#[inline(never)] pub fn p125_row0(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,6,0,1000000,4294967040,1,3)}
++
++#[inline(never)] pub fn p125_row1(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,5,0,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row2(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,6,0,1000000,4294967295,1,3)}
++
++#[inline(never)] pub fn p125_row3(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,4,0,1000000,302256400)}
++
++#[inline(never)] pub fn p125_row4(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,6,0,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row5(input:&[u8],out:&mut[u32])->usize{n_run::<65536,6,0,0,0,16,0,8,1>(input,out)}
++
++#[inline(never)] pub fn p125_row6(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,3,258,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row7(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,4,0,1000000,4294967040,1,3)}
++
++#[inline(never)] pub fn p125_row8(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,8,0,1000000,4294967295,1,4)}
++
++#[inline(never)] pub fn p125_row9(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,4,0,1000000,4294967295,2,4)}
++
++#[inline(never)] pub fn p125_row10(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,3,0,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row11(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,6,0,1000000,4294967295,1,4)}
++
++#[inline(never)] pub fn p125_row12(input:&[u8],out:&mut[u32])->usize{esparse_rle(input,out,285278208)}
++
++#[inline(never)] pub fn p125_row13(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,4,0,1000000,302256384)}
++
++#[inline(never)] pub fn p125_row14(input:&[u8],out:&mut[u32])->usize{et_tiny(input,out,302256128)}
++#[inline(never)] pub fn p125_row15(input:&[u8],out:&mut[u32])->usize{r109_bfraw::<65536,0>(input,out)}
++
++#[inline(never)] pub fn p125_row16(input:&[u8],out:&mut[u32])->usize{ef32_run(input,out)}
++#[inline(never)] pub fn p125_row17(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,4,0,1000000,4294967295,2,3)}
++
+ 
+ // ───────────── EF32 engine (row 15, weights-f32): element-aligned single-probe matcher ─────────────

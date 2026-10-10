@@ -38,6 +38,18 @@ def main():
                 for k in ['new_share_pct','top1_after_pct','top1_reduction_pp']:
                     vs=[r[k]for r in rs];item[k]={'median':statistics.median(vs),'min':min(vs),'max':max(vs)}
                 result['summaries'].append(item)
+        # Insert the actual same-block candidate coordinates together. This is
+        # not a sum of separately normalized single-candidate forecasts.
+        result['joint_observations']=[]
+        candidate_names=sorted({r['candidate']for r in result['observations']})
+        if len(candidate_names)>1:
+            keys=sorted({(r['run_id'],r['block'],r['calibration'])for r in result['observations']})
+            for run,block,cal in keys:
+                rs=[r for r in result['observations']if(r['run_id'],r['block'],r['calibration'])==(run,block,cal)]
+                if len(rs)!=len(candidate_names):continue
+                extras=[s.Point(r['candidate'],r['time'],r['size_pct'])for r in rs if 0<r['time']<=b.time_s and 0<r['size_pct']<=b.ratio_pct and not any(p.time_s<=r['time'] and p.ratio_pct<=r['size_pct']for p in f)]
+                nf=s.pareto_front(f+extras);w=s.local_global_improvement_space_log_weights(nf,b)
+                result['joint_observations'].append({'run_id':run,'block':block,'calibration':cal,'candidate_shares_pct':{n:100*w.get(n,0)for n in candidate_names},'top1_after_pct':100*w.get(topid,0),'top1_reduction_pp':base-100*w.get(topid,0),'existing_owned_geometric_pct':{n:100*w.get(n,0)for n in ['573','603']},'scope':'Conditional geometric shares; distinct eligible identities assumed. Same-hotkey, admission, registration and bounty gates remain separate.'})
     else:
         for y in [36.63644740383624,36.57814279549815,36.5653,36.5,36.2,35.5,34.1]:
             rs=[calc(0.425+i*.00001,y)for i in range(1501)]

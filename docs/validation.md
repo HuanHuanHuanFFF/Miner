@@ -17,7 +17,7 @@
 | 第十八轮字节审计 | `scripts/audit-round18-evidence.py`核对原始artifact清单、官方快照、已提交Git字节与两文件审阅ZIP；`scripts/summarize-round18-cost.py`从已收齐作业统计资源 |
 | 文档和路径自检 | `python scripts/project.py check` |
 
-所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；第十五轮派发已核实为公开仓库。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至19轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
+所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；第十五轮派发已核实为公开仓库。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至20轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
 
 ## 实际执行版本
 
