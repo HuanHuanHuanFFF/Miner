@@ -42,7 +42,11 @@ def main():
         assert len(names) == 4 and len(set(names)) == 4 and set(names) <= set(by)
         assert by[names[0]]['hashes'] == by[names[1]]['hashes']
         assert by[names[2]]['hashes'] == by[names[3]]['hashes']
-        assert spec['isolated_blocks'] == 2 and spec['multimethod_blocks'] == 4
+        if spec.get('r24_affinity_diagnostic'):
+            assert spec['isolated_blocks']==2 and spec['multimethod_blocks']==0
+            assert not spec.get('r18_order_diagnostic') and not spec.get('r20_library_diagnostic')
+        else:
+            assert spec['isolated_blocks'] == 2 and spec['multimethod_blocks'] == 4
         if spec.get('r24_library_diagnostic'):
             from importlib import import_module
             import_module('research-round24-library').preflight()

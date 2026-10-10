@@ -12,6 +12,19 @@ def distribution(values):
     assert values
     return {'n':len(values),'best_pct':max(values),'median_pct':st.median(values),'range_pct':[min(values),max(values)],'zero_count':sum(v==0 for v in values),'at_least_5_count':sum(v>=5 for v in values),'at_least_10_count':sum(v>=10 for v in values),'at_least_15_count':sum(v>=15 for v in values)}
 
+def joint_observations(observations):
+    """Prefer a declared candidate; never silently overwrite it with an alias."""
+    buckets={}
+    for o in observations:
+        buckets.setdefault((o['run_id'],o['block'],o['calibration']),[]).append(o)
+    selected={};ambiguous=[]
+    for key,rows in buckets.items():
+        candidates=[r for r in rows if r['entry_role']=='candidate']
+        choices=candidates or rows
+        if len(choices)==1:selected[key]=choices[0]
+        else:ambiguous.append({'run_id':key[0],'block':key[1],'calibration':key[2],'entries':[r.get('entry_name')for r in choices],'reason':'Multiple candidate entries'if candidates else'Multiple control aliases without a declared candidate'})
+    return selected,ambiguous
+
 def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('receipts',type=Path,nargs='+')
     ap.add_argument('--capture',type=Path,default=ROOT/'evidence/round18/official-start-live')
@@ -94,7 +107,7 @@ def main():
                     if role=='independent_confirmation' and e.get('control'):role='incidental_control_in_confirmation_batch'
                     parent_available=(decl['parent'],b) in by
                     assert parent_available or e.get('control'), 'A candidate measurement must include its declared actual parent'
-                    g['observations'].append({'run_id':state['run_id'],'block':b,'role':role,'entry_role':'control'if e.get('control')else'candidate','calibration':label,'anchor_name':ref,'projected_time':x,'projected_size_pct':y,'single_pool_share_pct':shares[n],'new_frontier_ids':ids,'public_time':by[n,b]['time'],'public_size_pct':by[n,b]['size_pct'],'actual_parent_reference_available':parent_available,'time_change_pct_vs_parent':100*(by[n,b]['time']/by[decl['parent'],b]['time']-1) if parent_available else None,'size_change_pp_vs_parent':by[n,b]['size_pct']-by[decl['parent'],b]['size_pct'] if parent_available else None,'proof_sha256':e['hashes']['Parse.lean'],'per_file':by[n,b]['per_file']})
+                    g['observations'].append({'run_id':state['run_id'],'block':b,'role':role,'entry_role':'control'if e.get('control')else'candidate','entry_name':n,'calibration':label,'anchor_name':ref,'projected_time':x,'projected_size_pct':y,'single_pool_share_pct':shares[n],'new_frontier_ids':ids,'public_time':by[n,b]['time'],'public_size_pct':by[n,b]['size_pct'],'actual_parent_reference_available':parent_available,'time_change_pct_vs_parent':100*(by[n,b]['time']/by[decl['parent'],b]['time']-1) if parent_available else None,'size_change_pp_vs_parent':by[n,b]['size_pct']-by[decl['parent'],b]['size_pct'] if parent_available else None,'proof_sha256':e['hashes']['Parse.lean'],'per_file':by[n,b]['per_file']})
             gate=state.get('gates',{}).get(n)
             if gate and gate.get('accepted'):
                 assert gate==read(folder/(n+'-gate.json')) and gate['corpora']==['corpus-stage1']
@@ -153,12 +166,12 @@ def main():
                 g['by_run_summary'].append({'run_id':rid,'calibration':cal,'roles':sorted({o['role']for o in ro}),'entry_roles':sorted({o['entry_role']for o in ro}),**distribution([o['single_pool_share_pct']for o in ro])})
     joint=[]
     for a,b in itertools.combinations(groups.values(),2):
-        oa={(o['run_id'],o['block'],o['calibration']):o for o in a['observations']};ob={(o['run_id'],o['block'],o['calibration']):o for o in b['observations']}
+        oa,aa=joint_observations(a['observations']);ob,ab=joint_observations(b['observations'])
         matched=[]
         for key in sorted(oa.keys()&ob.keys()):
             x,y=oa[key],ob[key];ss,ids=scores([(a['candidate'],x['projected_time'],x['projected_size_pct']),(b['candidate'],y['projected_time'],y['projected_size_pct'])])
-            matched.append({'run_id':key[0],'block':key[1],'calibration':key[2],'separate_pct':{a['candidate']:x['single_pool_share_pct'],b['candidate']:y['single_pool_share_pct']},'simultaneous_geometric_pct':ss,'simultaneous_frontier_ids':ids})
-        joint.append({'candidates':[a['candidate'],b['candidate']],'matched_observations':matched,'scope':'Joint geometry on matching run/block/control. Conditional on admission and distinct eligible hotkeys without older surviving submissions. Same-hotkey rule pays only oldest surviving frontier submission; registration/slots are UNKNOWN and no new registration is authorized.'})
+            matched.append({'run_id':key[0],'block':key[1],'calibration':key[2],'selected_entries':{a['candidate']:{'name':x.get('entry_name'),'role':x['entry_role']},b['candidate']:{'name':y.get('entry_name'),'role':y['entry_role']}},'separate_pct':{a['candidate']:x['single_pool_share_pct'],b['candidate']:y['single_pool_share_pct']},'simultaneous_geometric_pct':ss,'simultaneous_frontier_ids':ids})
+        joint.append({'candidates':[a['candidate'],b['candidate']],'selection_version':2,'selection_policy':'Prefer the unique declared candidate in each run/block/calibration; a unique incidental control is a fallback only when no candidate is present. Ambiguous aliases are not silently selected.','skipped_ambiguities':{a['candidate']:aa,b['candidate']:ab},'matched_observations':matched,'scope':'Joint geometry on matching run/block/control. Conditional on admission and distinct eligible hotkeys without older surviving submissions. Same-hotkey rule pays only oldest surviving frontier submission; registration/slots are UNKNOWN and no new registration is authorized.'})
     result={'status':'VERIFIED_RAW_RECOMPUTATION_CONDITIONAL_PROJECTIONS','snapshot':context,'policy_validation':policy_check,'runs':runs,'paired_processes':sum(r['paired_processes']for r in runs),'candidates':list(groups.values()),'same_source_controls':shadows,'joint':joint,'raw_input_audit':raw_audit,'limits':['Original total-time public protocol only. Diagnostic timing is excluded.','Observed block/runner distributions are not formal success probabilities. Center-coordinate scores are not expected rewards.','No private-corpus, admission, registration, slot, signing, or realized reward claim.','Discovery and fresh confirmation roles remain distinct; all same-source later control measurements remain evidence.']}
     args.output.write_bytes((json.dumps(result,indent=2)+'\n').encode('utf-8'))
     print(json.dumps({'runs':len(runs),'paired_processes':result['paired_processes'],'candidates':[{'candidate':g['candidate'],'summary':g['summary'],'verified_pairs':g['verified_pairs']}for g in groups.values()],'same_source_controls':shadows,'joint_rows':sum(len(j['matched_observations'])for j in joint)},indent=2))
