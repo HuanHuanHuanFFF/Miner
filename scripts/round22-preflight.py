@@ -9,6 +9,8 @@ def main():
         spec=importlib.import_module('verify-round22-exact').validate(os.environ['ROUND4_SPEC'])
         print('R22_EXACT_PAIR_PREFLIGHT',spec['candidate'],spec['files']);return
     spec = validate(os.environ['ROUND4_SPEC'])
+    if 'r22_expected_candidates' in spec:
+        assert sum(not e.get('control', False) for e in spec['entries']) == spec['r22_expected_candidates'], 'Frozen candidate count must match actual entries'
     mode = os.environ['ROUND22_MODE']
     assert mode in ('native', 'standard', 'diagnostic')
     assert spec['r22_mode'] == mode
