@@ -1,10 +1,11 @@
 """Read current official source metadata and raw scoring documentation/code."""
 from pathlib import Path
 from datetime import datetime, timezone
-import hashlib, json, requests
+import argparse, hashlib, json, requests
 
 ROOT = Path(__file__).resolve().parents[1]
-E = ROOT / 'evidence/round24/official-rules-start'
+ap=argparse.ArgumentParser();ap.add_argument('--destination',type=Path,default=ROOT/'evidence/round24/official-rules-start');args=ap.parse_args()
+E=args.destination.resolve();assert E.is_relative_to((ROOT/'evidence/round24').resolve())
 E.mkdir(exist_ok=False)
 session = requests.Session()
 records = []
