@@ -13,6 +13,12 @@ def main():
     assert mode in ('native', 'standard', 'diagnostic')
     assert spec['r21_mode'] == mode
     assert bool(spec.get('native_only')) == (mode == 'native')
+    if mode == 'standard':
+        from importlib import import_module
+        pairs=[e for e in spec['entries'] if e.get('native_decode_reference')]
+        if pairs:
+            assert len(pairs)<=4
+            import_module('research-round12-decode').harness(spec)
     if mode == 'diagnostic':
         names = spec['diagnostic_methods']
         by = {e['name']:e for e in spec['entries']}

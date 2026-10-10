@@ -177,7 +177,10 @@ def main():
             assert meta['status'] == 'completed' and meta['conclusion'] != 'success'
             reports = [json.loads(p.read_text()) for p in stage.rglob('*.json')]
             bound = [r for r in reports if isinstance(r, dict) and 'run_id' in r and 'git_sha' in r]
-            assert bound and all(str(r['run_id']) == args.run_id and r['git_sha'] == meta['headSha'] for r in bound)
+            workflow_run = artifact.get('workflow_run') or {}
+            assert (bound or (str(workflow_run.get('id')) == args.run_id and
+                              workflow_run.get('head_sha') == meta['headSha']))
+            assert all(str(r['run_id']) == args.run_id and r['git_sha'] == meta['headSha'] for r in bound)
         # Freeze downloaded file bytes before adding local metadata or analyses.
         original_files = {p.relative_to(stage).as_posix(): {'bytes': p.stat().st_size,
                            'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
