@@ -582,7 +582,7 @@ jobs:
     env:
       ROUND4_SPEC: ${{ inputs.specification }}
       ROUND4_SPEC_DIR: evidence/round24
-      ROUND24_MODE: ${{ startsWith(inputs.specification, 'gate-') && 'gate' || endsWith(inputs.specification, '-native') && 'native' || endsWith(inputs.specification, '-diagnostic') && 'diagnostic' || 'standard' }}
+      ROUND24_MODE: ${{ startsWith(inputs.specification, 'gate-') && 'gate' || endsWith(inputs.specification, '-extract') && 'extract' || endsWith(inputs.specification, '-native') && 'native' || endsWith(inputs.specification, '-diagnostic') && 'diagnostic' || 'standard' }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -602,6 +602,11 @@ jobs:
         if: env.ROUND24_MODE == 'native'
         run: |
           python3 scripts/research-round13-native.py
+      - name: Extract exact research Rust without claiming full proof
+        if: env.ROUND24_MODE == 'extract'
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round5.py
       - name: Run standard candidate checks and paired measurements
         if: env.ROUND24_MODE == 'standard'
         run: |

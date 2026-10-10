@@ -17,7 +17,7 @@ def main():
     os.environ['ROUND4_SPEC_DIR']='evidence/round24'
     import importlib
     from round4 import validate
-    mode='gate' if args.batch.startswith('gate-') else 'native' if args.batch.endswith('-native') else 'diagnostic' if args.batch.endswith('-diagnostic') else 'standard'
+    mode='gate' if args.batch.startswith('gate-') else 'extract' if args.batch.endswith('-extract') else 'native' if args.batch.endswith('-native') else 'diagnostic' if args.batch.endswith('-diagnostic') else 'standard'
     spec=importlib.import_module('verify-round24-exact').validate(args.batch) if mode=='gate' else validate(args.batch)
     assert not spec.get('preflight_only'), 'Preflight fixtures cannot be dispatched as research results'
     assert spec['r24_mode']==mode and bool(spec.get('native_only'))==(mode=='native')

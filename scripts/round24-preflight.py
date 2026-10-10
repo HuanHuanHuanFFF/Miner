@@ -12,9 +12,15 @@ def main():
     if 'r24_expected_candidates' in spec:
         assert sum(not e.get('control', False) for e in spec['entries']) == spec['r24_expected_candidates'], 'Frozen candidate count must match actual entries'
     mode = os.environ['ROUND24_MODE']
-    assert mode in ('native', 'standard', 'diagnostic')
+    assert mode in ('native', 'standard', 'diagnostic', 'extract')
     assert spec['r24_mode'] == mode
     assert bool(spec.get('native_only')) == (mode == 'native')
+    if mode == 'extract':
+        names=spec.get('extract_candidates',[])
+        by={e['name']:e for e in spec['entries']}
+        assert 1<=len(names)<=3 and len(names)==len(set(names))
+        assert all(n in by and not by[n].get('control') for n in names)
+        assert spec.get('gate_candidates')==[] and not spec.get('gate_limit')
     if mode == 'native' and spec.get('native_encoder'):
         names={'public514'} | set(spec.get('native_encoder_references',[])) | {e['name'] for e in spec['entries'] if not e.get('control')}
         assert len(names)<=6 and names <= {e['name'] for e in spec['entries']}
