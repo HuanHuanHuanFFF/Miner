@@ -28,10 +28,16 @@ def main():
  seconds=0
  for ident,m in run_meta.items():
   for j in m.get('jobs',[]):
-   if j.get('name')!='round23' or not j.get('startedAt')or not j.get('completedAt'):continue
+   if j.get('name')not in ('round23','round22') or not j.get('startedAt')or not j.get('completedAt'):continue
    seconds+=(dt.datetime.fromisoformat(j['completedAt'].replace('Z','+00:00'))-dt.datetime.fromisoformat(j['startedAt'].replace('Z','+00:00'))).total_seconds()
  hashes={}
- for p in (ROOT/'candidates').glob('r23-*/manifest.json'):
+ paths={p.parent for p in (ROOT/'candidates').glob('r23-*/manifest.json')}
+ for ds in dispatches:
+  spec=read(e/(ds['batch']+'.json'))
+  if spec.get('path'):paths.add(ROOT/spec['path'])
+  paths.update(ROOT/en['path'] for en in spec.get('entries',[]) if not en.get('control'))
+ for source in sorted(paths):
+  p=source/'manifest.json'
   d=read(p);actual={f:hashlib.sha256((p.parent/f).read_bytes()).hexdigest()for f in ['parse.rs','Parse.lean']};assert d['hashes']==actual
   hashes[p.parent.name]=actual
  result={'status':'VERIFIED_COLLECTED_RAW_BYTES','checked_at_utc':dt.datetime.now(dt.timezone.utc).isoformat(),'dispatched_runs':len(dispatches),'run_conclusions':{k:m.get('conclusion')for k,m in run_meta.items()},'uncollected_run_ids':pending,'raw_file_count':len(raw),'raw_bytes':sum(v['bytes']for v in raw.values()),'raw_files':raw,'original_protocol_batches':standard,'original_paired_processes':sum(r['paired_processes']for r in standard),'native_encoder_batches':native,'native_encoded_rows_including_controls':sum(r['rows']for r in native),'full_gates':gates,'runner_seconds':seconds,'runner_minutes':seconds/60,'candidate_pairs':hashes,'distinct_candidate_rust_count':len({v['parse.rs']for v in hashes.values()}),'limits':['Runner sums are concurrent elapsed job seconds, not money or wall-budget usage.','Cancelled CI is not success; complete raw timing batches remain separately auditable.','No formal submission or private-corpus performance claim.']}

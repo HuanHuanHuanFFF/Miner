@@ -103,7 +103,7 @@ def analyze(target, snapshot=None):
             base = all_files['r3-432-fast3', f]
             row['files_vs_fast3'].append({'file': f, 'output_byte_delta': data['methods'][name]['output_bytes'] - base['methods']['r3-432-fast3']['output_bytes'],
                                          'tokens_equal': data['methods'][name]['tokens_sha256'] == base['methods']['r3-432-fast3']['tokens_sha256']})
-    result = {'scope': 'recomputed public metrics; all frontier coordinates are conditional, not admission or reward',
+    result = {'scope': 'recomputed public metrics; summary frontier uses mean coordinates, not a per-block reward verdict or expected reward; all projections conditional, not admission or reward',
               'snapshot': pages[0]['context'], 'run_id': state['run_id'], 'git_sha': state['git_sha'], 'phase': state['phase'],
               'failures': state['failures'], 'summary': summary, 'metrics': state['metrics']}
     filename = 'analysis.json' if snapshot is None else 'analysis-snapshot-' + pages[0]['context']['snapshot_id'] + '.json'
@@ -112,7 +112,7 @@ def analyze(target, snapshot=None):
     for r in summary:
         print(r['candidate'], 'x', round(r['time'], 6), 'y', round(r['size_pct'], 6),
               'delta_vs_fast3', round(statistics.mean(r['time_change_pct_vs_fast3']), 3),
-              'own_front', r['own_anchor']['on_frontier'], 'stress', r['stress_1pct']['on_frontier'],
+              'mean_own_front_ONLY_NOT_BLOCK_VERDICT', r['own_anchor']['on_frontier'],
               'equiv', r['equivalence'], 'gate', r['gate'].get('accepted') if r['gate'] else None)
 
 
