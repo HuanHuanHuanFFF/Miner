@@ -1,0 +1,18 @@
+{
+  "candidate": "r21-sf-prevdist16",
+  "parent": "r19-sf-nooverlap",
+  "hashes": {
+    "parse.rs": "acd855586c6efc4c233ba103706b1175163f497f2f2a42fbd78fc10c74d129d6",
+    "Parse.lean": "221fd9090f1c0b7a616ec34ea6b42d8af97ccc2245a650e3d614ab194e22f032"
+  },
+  "mechanism": "Replace full-input32-bit absolute SF predecessors with16-bit legal backward distances; zero remains no predecessor. Push distances during hashing to remove the separate zero-fill pass. Reconstruct at guarded lookup; far predecessors are discarded exactly where old search stopped.",
+  "difference_from_old_work": "R19 shared match caches increased lifecycle overhead and mostly covered existing candidates. This changes predecessor representation and construction, preserving matching search policy. Unlike modular hints, explicit distancezero avoids wrap alias. Proof is a type-adapted draft until fresh extraction/gate.",
+  "attribution": {
+    "parent": "candidates/r19-sf-nooverlap",
+    "mechanism_evidence": "evidence/round19/38042741551/profile-b-native/diagnostics/r18-functions/functions.json",
+    "ownership": "Original public source authors retained; derived representation change."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}
