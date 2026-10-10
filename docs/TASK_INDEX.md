@@ -34,8 +34,9 @@
 | maintenance-20261008 | [合并、去重与竞赛环境整理](history/maintenance-2026-10-08.md) | 实验历史合入 main；回执去重、文档分层、规则统一，CI 手动启动。 |
 | maintenance-20261010 | [第十四至十七轮合并与分支整理](history/maintenance-2026-10-10.md) | 65个独有提交合入main；近期正式结果、验证入口及复用结论整理，已合并分支清理。 |
 | maintenance-20261009 | [第十二、十三轮合并与仓库整理](history/maintenance-2026-10-09.md) | 两轮41个提交完整合入main，已合并实验分支清理；1,607路径字节核对通过，跳过CI。 |
+| maintenance-20261011-round21-23 | [第21至23轮合并与整理](history/maintenance-2026-10-11-round21-23.md) | 39个分支提交合入main；1093份研究文件逐字核对，66份本地资料保全；已推送并清理三个实验分支及多余worktree。 |
 
-本次整合：[第十八至二十轮合并与分支整理](history/maintenance-2026-10-10-round18-20.md)。
+本次整合：[第21至23轮合并与整理](history/maintenance-2026-10-11-round21-23.md)。前次整合见[第十八至二十轮合并与分支整理](history/maintenance-2026-10-10-round18-20.md)。
 
 ## 常用查找
 
