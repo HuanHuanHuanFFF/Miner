@@ -1,0 +1,20 @@
+{
+  "candidate": "r24-609-inline-slot",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "f42256aaa2acea6230c8fed04b20c28eaee62790810946045b27d55a569d80bc",
+    "Parse.lean": "2d20d999d4a238c891d51e0d5ef484ac4509fc2738016a3cda0fed96aa15fa47"
+  },
+  "mechanism": "Store a single retained match token directly in each SF position slot; use a tagged offset and packed count only for2-4 matches. Keep exact match order and the original cost relaxation. Empty and single positions avoid the old second offset read and single-item storage.",
+  "difference_from_old_work": "N observed65.8percentof solver-position visits with one match, plus emptypositions. Earlier R10packed records savedspacebutadded decode work; this representation intentionally removes decoding/indirection for the common single case while keepingmulti-casecost explicit. No claim from bytes alone.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "source": "references/round24-public-609/source-receipt.json",
+    "cardinality_evidence": "evidence/round24/38085691541/groups-n-native/diagnostics/r24-groups/receipt.json",
+    "prior_negative": "docs/research/optimization-methods.md",
+    "proof": "Producer and consumer representations changed together. Old Lean file is DRAFT until exact new extraction and helper/loop migration."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}

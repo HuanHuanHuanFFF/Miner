@@ -4,6 +4,8 @@
 
 起点为main `5bd2a57597aa92219a39a28edace88bc059587f2`，隔离分支 `codex/round24-stable-dual`。开始时main与远端一致、工作区干净、没有运行中的CI；仓库可见性已重新确认公开。预算和判定口径见[budget](../../evidence/round24/budget.json)，GitHub状态见[原始查询](../../evidence/round24/github-start.json)。至少预留最后120分钟给最终冻结、两份完整gate、跨runner确认及交付；发现期可以提前验证，余量不因此自动挪走。
 
+本轮仍在进行；最新队列、暂停理由和下一步见[续跑状态](../../evidence/round24/research-state.md)，不会从上下文压缩时重新计时。
+
 ## 起点与当前缺口
 
 旧优先组合 `r22-595-chain-halfhead` 已通过完整公共gate，但R23四块独立确认最低0，主／同源码参照存在分歧；`r23-595-chain3` 更小且gate通过，尚未建立总时间收益。详见[上一轮](round23.md)。这些高峰不构成本轮稳定目标完成。
