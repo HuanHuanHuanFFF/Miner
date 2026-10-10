@@ -5,11 +5,17 @@ ROOT = Path(__file__).resolve().parents[1]
 E = ROOT / 'evidence/round24'
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('native_batch');ap.add_argument('run');ap.add_argument('screen_batch');a=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('native_batch');ap.add_argument('run');ap.add_argument('screen_batch');ap.add_argument('--drop-control',action='append',default=[]);a=ap.parse_args()
     native=ROOT/f'evidence/round24/{a.run}/{a.native_batch}/diagnostics/r13-encoder/encoder.json'
     n=json.loads(native.read_bytes());assert n['status']=='VERIFIED_FINITE_NATIVE_ORIGINAL_ENCODER_BYTES'
     s=json.loads((E/(a.native_batch+'.json')).read_bytes())
     s['entries']=[e for e in s['entries'] if e['name']!='public514']
+    by={e['name']:e for e in s['entries']}
+    assert all(n in by and by[n]['control'] for n in a.drop_control)
+    for e in s['entries']:
+        if e['name'] in a.drop_control:continue
+        assert not set(a.drop_control).intersection(e.get(k) for k in ['anchor','comparison_baseline','native_decode_reference','expected_equivalent_to'])
+    s['entries']=[e for e in s['entries'] if e['name'] not in a.drop_control]
     for e in s['entries']:
         if not e['control']: assert n['source_hashes'][e['name']]==e['hashes']
     s.update(r24_mode='standard',native_only=False,native_encoder=False,native_encoder_references=[],synthetic_validation=False,r18_role='discovery',description=f'Original paired total-compression timing of actual-byte-screened {a.native_batch}; both reversed blocks and all declared actual parents and same-source anchors. Exact Lean acceptance remains separate.')
