@@ -12,7 +12,8 @@
 | 第十七轮精确证明预检 | `ROUND17_SPEC=gate-proof1` 与 `scripts/verify-round17-exact.py --preflight`；只检查已冻结文件对 |
 | 第十八轮精确配对与冻结确认 | `scripts/verify-round18-exact.py`、`scripts/dispatch-round18.py`；已通过配对与最终确认计划见[第十八轮](rounds/round18.md)，实际绑定以冻结批次及原始回执为准 |
 | 下载已有 CI 回执 | `scripts/collect-round4.py status/pull 37700280634 --round 10 --batch confirm-j` |
-| 最近结果复算 | `scripts/analyze-round17.py`与`scripts/summarize-round17-shares.py`；原始回执、正式#582和波动诊断见[第十七轮](rounds/round17.md) |
+| 最近结果复算 | `scripts/analyze-round18.py`与`scripts/summarize-round18-final.py`；精确最终pair、两台runner八块确认及单独/联合估算见[第十八轮](rounds/round18.md)。第十七轮正式#582与波动诊断仍见[第十七轮](rounds/round17.md) |
+| 第十八轮字节审计 | `scripts/audit-round18-evidence.py`核对原始artifact清单、官方快照、已提交Git字节与两文件审阅ZIP；`scripts/summarize-round18-cost.py`从已收齐作业统计资源 |
 | 文档和路径自检 | `python scripts/project.py check` |
 
 所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；第十五轮派发已核实为公开仓库。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至18轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。

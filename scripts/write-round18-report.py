@@ -132,7 +132,7 @@ def main():
         '',
         '两个 runner 均为 Linux x86_64、rustc 1.100.0-nightly（2026-08-17，固定 nightly-2026-08-18 工具链）。原测量入口记录请求 CPU 0，但实际进程 affinity 为 0–3；原协议结果如实保留。显式 CPU0 / 平衡顺序的另行诊断与原协议分列，不宣称原确认已严格绑单核。',
         '',
-        f'A 在 {candidates["A"]["control_disagreement"]["zero_disagreement_count"]}/8 块更换同源码参照后发生零/非零切换；B 为 {candidates["B"]["control_disagreement"]["zero_disagreement_count"]}/8。两者都没有 5%/15% 达标判断分歧，因为本次所有逐块值均低于门槛。DNA 同源码时间差实测范围 −0.6131%—+0.6906%，#586 同源码范围 −0.3310%—+0.5284%。',
+        f'A 在 {candidates["A"]["control_disagreement"]["zero_disagreement_count"]}/8 块更换同源码参照后发生零/非零切换；B 为 {candidates["B"]["control_disagreement"]["zero_disagreement_count"]}/8。各自目标的达标判断分歧为 A {candidates["A"]["control_disagreement"]["target_disagreement_count"]}/8、B {candidates["B"]["control_disagreement"]["target_disagreement_count"]}/8。DNA 同源码时间差实测范围 −0.6131%—+0.6906%，#586 同源码范围 −0.3310%—+0.5284%。',
         '',
         f'{link("evidence/round18/final-confirmation-plan.json", "预先冻结计划")}；早期 Y 的一台四块确认、AP 的发现块及之后作为 control 的测量仍分别保存，未混入本节八块。',
         '',
@@ -142,7 +142,9 @@ def main():
     a_group = next(c for c in analysis['candidates'] if c['rust_sha256'] == candidates['A']['files']['parse.rs'])
     center = a_group['summary']['shadow']['score_at_center_NOT_expected_reward_pct']
     text += [
-        f'**VERIFIED 复算，INFERRED 收益**：A 的 shadow 平均坐标在该快照得到 **{number(center)}%**，但八个实际 shadow 块的最大值只有 **{number(candidates["A"]["single"]["shadow"]["best_pct"])}%**。平均坐标落入邻居切换的狭窄位置，不能当成期望收益。AP 历史单块 18.27497% 与其余低值、shadow 全零仍保留，不作最终达标证据。',
+        f'**VERIFIED 复算，INFERRED 收益**：在快照 29456，A 的 shadow 平均坐标评分为 20.318689%，八个实际 shadow 块的最大值仅 0.075091%；平均坐标落入邻居切换的狭窄位置。本文当前快照的平均坐标评分为 **{number(center)}%**，实际 shadow 块最大值为 **{number(candidates["A"]["single"]["shadow"]["best_pct"])}%**，两者仍分别报告，不能把平均坐标评分当成期望收益。AP 历史单块 18.27497% 与其余低值、shadow 全零保留，不作最终达标证据。',
+        '',
+        '在保存的快照 29456 上，仅以极小的合成坐标变化跨过 #533，评分由稍慢侧约 24.0223% 变成稍快侧约 0.00958%：候选支配并删除 #533 后成为最快端点，局部系数、全局系数与大小改善预算同时改变。跨过 #539 的慢侧则被支配为 0。该审计只解释评分跳变，不是新速度实测或收益达标。[边界逐项重放](../../evidence/round18/score-boundary-audit-29456.json)。',
         '',
         '同一最终测量从旧快照 29434 换到 29456，B 的主中位预测由 2.35364% 降到 1.66765%；这是竞争前沿变化，不是代码测量变慢。两次快照及同测量对比在 [前沿变化重放](../../evidence/round18/confirmation-frontier-change.json)。后续新快照的值见本文首表，不覆盖这个历史观察。',
         '',
@@ -162,7 +164,7 @@ def main():
             text.append(f'| {role} / {"改时间" if axis == "time" else "改大小"} | {values[0]} | {values[1]} |')
     text += [
         '',
-        '这里以实际观测的描述性中心为坐标参照，时间搜索 0.5—1.5 倍、大小搜索降低最多 0.1 pp，并检查每个已知前沿切换的两侧。它不是可实现算法、穷尽证明、压力测试或正式成功概率；更快也可能因删除邻居而获得更低份额。A 的实际时间跨度约 1.612%，远大于其近邻 15% 窗口约 0.0945%。',
+        '这里以实际观测的描述性中心为坐标参照，时间搜索 0.5—1.5 倍、大小搜索降低最多 0.1 pp，并检查每个已知前沿切换的两侧。它不是可实现算法、穷尽证明、压力测试或正式成功概率；更快也可能因删除邻居而获得更低份额。A 的实际时间跨度约 1.612%；在快照 29456，其近邻 15% 窗口仅约 0.0945%。当前快照的全部分段宽度保存在下方采样回执，不能沿用旧窗口作为当前门槛。',
         '',
         f'{link(rel(args.gaps), "全部采样点与分段")}。对 B 的七处原 RF 质量收益做 128 种固定文件选择，每种固定选择应用于全部八块，而非逐块挑赢家；快照 29456 下没有任何组合/对照达到 5%。最好混合的对照变体中位约 1.8271%、最大约 2.8207%。这是零路由开销的文件级机会模型，不是可运行分类器，也不是任意新机制不可能的证明。[已有 RF 恢复机会](../../evidence/round18/final-rf-restoration-options-current.json)。',
         '',
@@ -199,7 +201,7 @@ def main():
         '',
         '## 资源、可复核性与工作区',
         '',
-        f'截至 {cost["recorded_at_utc"]}，派发 **{cost["dispatched_run_count"]}** 次手动云端运行，收齐 **{cost["collected_completed_run_count"]}** 次；结论 {cost["collected_conclusions"]}。已完成 runner 作业累计 **{int(cost["completed_runner_wall_seconds"])} 秒**（{cost["completed_runner_wall_seconds"] / 3600:.3f} 小时，允许并行，不能当作研究墙钟时间或账单分钟）。原协议筛选/确认共 **{cost["original_screen_confirmation_paired_processes"]}** 个配对进程，另列原生、诊断及完整 gate。',
+        f'截至 {cost["recorded_at_utc"]}，派发 **{cost["dispatched_run_count"]}** 次手动云端运行，收齐 **{cost["collected_completed_run_count"]}** 次；{cost["collected_conclusions"].get("success",0)} 次成功、{cost["collected_conclusions"].get("failure",0)} 次失败。三次失败分别为首次计时环境检查、A 的证明缺口和 A 的证明超时，并非三个算法正确性反例。已完成 runner 作业累计 **{int(cost["completed_runner_wall_seconds"])} 秒**（{cost["completed_runner_wall_seconds"] / 3600:.3f} 小时，允许并行，不能当作研究墙钟时间或账单分钟）。原协议筛选/确认共 **{cost["original_screen_confirmation_paired_processes"]}** 个配对进程，另列原生、诊断及完整 gate。',
         '',
         f'账户初始用量 0%，最新已用 {cost["latest_shared_account_observation"]["used_percent"]}%、剩余 {cost["latest_shared_account_observation"]["remaining_percent"]}%；这是共享账户观察，不是本任务费用。成功兑换重置卡 **{cost["successful_resets"]}** 次，没有购买额度；没有达到剩余≤1%的授权触发点。工具不支持指定某张卡，未试兑。实际云端账单和可归属于本任务的模型金额 **UNKNOWN**。{link(rel(args.cost), "逐运行耗时与资源回执")}。',
         '',
