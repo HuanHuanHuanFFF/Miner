@@ -13,6 +13,9 @@ def main():
     assert mode in ('native', 'standard', 'diagnostic')
     assert spec['r21_mode'] == mode
     assert bool(spec.get('native_only')) == (mode == 'native')
+    if mode == 'native' and spec.get('native_encoder'):
+        names={'public514'} | set(spec.get('native_encoder_references',[])) | {e['name'] for e in spec['entries'] if not e.get('control')}
+        assert len(names)<=6 and names <= {e['name'] for e in spec['entries']}
     if mode == 'standard':
         from importlib import import_module
         pairs=[e for e in spec['entries'] if e.get('native_decode_reference')]
