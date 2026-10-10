@@ -40,6 +40,10 @@ def main():
                 key = str(raw.relative_to(ROOT))
                 assert hashlib.sha256(raw.read_bytes()).hexdigest() == analysis['raw_input_audit'][key]['sha256']
         for candidate in analysis['candidates']:
+            # Only the RF/SF family comparison is motivated by the composition.
+            # Applying591 to the unrelated539 speed parser would be arbitrary.
+            if candidate['anchor_formal_id'] != '586':
+                continue
             obs = [o for o in candidate['observations'] if o['run_id'] == run['run_id'] and o['calibration'] == 'primary']
             for ob in obs:
                 for name in anchors:
