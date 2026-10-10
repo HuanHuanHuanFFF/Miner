@@ -123,7 +123,10 @@ def main():
         payloads.append({'candidate': manifest['candidate'], 'files': manifest['files'],
                          'payload_sha256': manifest['payload_sha256'],
                          'manifest': path.relative_to(ROOT).as_posix()})
-    assert len(payloads) == 2 and len({p['files']['parse.rs'] for p in payloads}) == 2
+    # The extension may preserve more than the two original review packages.
+    # Package count is not evidence that reward goals or independent mechanisms exist.
+    assert len(payloads) >= 2
+    assert len({(p['files']['parse.rs'], p['files']['Parse.lean']) for p in payloads}) == len(payloads)
     tracked = set(subprocess.check_output(['git', 'ls-files', 'evidence/round18', 'references'],
                                          cwd=ROOT, text=True).splitlines())
     commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
