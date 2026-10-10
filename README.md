@@ -10,13 +10,14 @@
 | 核对比赛、提交和奖励机制 | [比赛与提交入口](docs/competition.md) |
 | 查历史文件或老路径 | `python scripts/project.py find H16`；`python scripts/project.py resolve ROUND9.md` |
 
-最近归档更新于 **2026-10-10**。正式结果采用已保存快照 **29394（00:37:57 +08:00）**；以下历史份额都有对应快照，实时状态需查询官方。
+最近研究归档更新于 **2026-10-10**。最新保存榜单为 **29551（20:38:51 +08:00）**，榜单抓取复核至21:12:31；实时状态需重新查询官方。
 
-- **base-only／#573**：正式 gate 和 admission 通过，曾在快照29346取得竞赛池份额1.7365%；后续快照29388为0.4774%。[正式结果](evidence/round16/formal-573-start.json)、[预测回测](evidence/round17/formal-calibration-backtest.json)。
-- **DNA nofold／#582**：修补 Lean 后公共及正式 gate 均通过；正式两轴被#539支配，快照29394份额0%。[精确文件包](candidates/r17-dna-nofold-proof1)、[正式结果](evidence/round17/formal-582/result-summary.json)、[第十七轮报告](docs/rounds/round17.md)。原版DNA的旧Lean失败记录保留，不能与修补证明混用。
-- **fast3／#453**：曾有正式份额及奖励，用户已确认历史到账；快照29388已退出前沿。[第三轮](docs/rounds/round03.md)。
-- **H16-small／#474**：正式 gate 通过、admission被支配。[校准记录](evidence/round6/formal-474/calibration.json)。
-- **近期复用结论**：份额峰值不能替代独立确认；#533/#539之间的窄区间可触发评分跳变，原始时间与大小、同源码对照、公共gate、正式admission分别核实。[波动诊断](evidence/round17/dna-variance-diagnosis.json)。
+- [正式提交收益看板](DASHBOARD.md)：历史提交、初始份额、快照份额和累计α；累计α采用官方API字段，不能当作钱包余额或净收益。
+- [第十八轮：十一小时研究](docs/rounds/round18.md)：候选A随后正式提交为#603，初始竞赛池份额5.7127%；在快照29551被#607支配，份额0%。
+- [第十九轮：高份额候选](docs/rounds/round19.md)：保留完整公共gate通过的候选；历史约7%预测随竞争变化失效，未正式上传。
+- [第二十轮：冲击第一名](docs/rounds/round20.md)：两份精确候选通过完整公共gate，四块冻结确认显示条件竞争影响；全部十二块原协议观察仍有零份额和无影响反例，未获得稳定Top1，未正式上传。
+- [优化方法与实验结论](docs/research/optimization-methods.md)：复用机制、负面结果、测量对照和独立确认方法；公共条件估算与正式可支付成绩分别记录。
+- 历史正式参照：#573初始1.7365%，#582正式gate通过但被支配；完整历史见看板与[任务索引](docs/TASK_INDEX.md)。
 
 文件分工：
 
