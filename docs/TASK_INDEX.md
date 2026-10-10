@@ -26,6 +26,7 @@
 | round17 | [DNA高份额候选复测与完整Lean验证](rounds/round17.md) | 两次复测8块收齐，修补Lean后公共gate通过；后续正式#582 gate通过、admission被支配、份额0%；附历史预测回测。 |
 | round18 | [第十八轮：八小时双候选与计时诊断](rounds/round18.md) | 两个不同Rust通过完整公共gate和两台runner八块冻结确认；快照29469下A主中位0.000000%、B1.919923%，15%/5%目标未完成，无正式提交。 |
 | round18-extension | [第十八轮追加三小时](rounds/round18-extension.md) | 追加3小时，总11小时；精确SF/RF主包及539补充包完成原版gate、两台runner各3块新确认；研究窗内15%/5%正式目标未完成。后续获授权提交A：[正式#603](rounds/round18-formal-a.md)通过gate及准入，快照29505可支付份额5.7127%、榜单第2，到账未核验。 |
+| round19 | [第十九轮：90分钟高份额研究](rounds/round19.md) | 研究进行中；以正式603为锚，检验重规划计算分配、匹配复用与同字节剪枝；尚无新正式结果。 |
 | maintenance-20261008 | [合并、去重与竞赛环境整理](history/maintenance-2026-10-08.md) | 实验历史合入 main；回执去重、文档分层、规则统一，CI 手动启动。 |
 | maintenance-20261010 | [第十四至十七轮合并与分支整理](history/maintenance-2026-10-10.md) | 65个独有提交合入main；近期正式结果、验证入口及复用结论整理，已合并分支清理。 |
 | maintenance-20261009 | [第十二、十三轮合并与仓库整理](history/maintenance-2026-10-09.md) | 两轮41个提交完整合入main，已合并实验分支清理；1,607路径字节核对通过，跳过CI。 |
