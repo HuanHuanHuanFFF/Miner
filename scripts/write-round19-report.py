@@ -36,9 +36,14 @@ def main():
         assert all(stats[key]['n'] == 4 and stats[key]['runner_count'] == 2 for key in ('primary', 'shadow'))
         public_changes = [o['time_change_pct_vs_parent'] for o in candidate['observations'] if o['calibration'] == 'primary']
         archive = packages / f"{name}-{cert['files']['parse.rs'][:12]}.zip"
-        if not archive.exists():
+        package_files = ('parse.rs', 'Parse.lean', 'manifest.json', 'VERIFICATION.json')
+        rebuild = not archive.exists()
+        if not rebuild:
+            with zipfile.ZipFile(archive) as z:
+                rebuild = any(z.read(file) != (source / file).read_bytes() for file in package_files)
+        if rebuild:
             with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
-                for file in ('parse.rs', 'Parse.lean', 'manifest.json', 'VERIFICATION.json'):
+                for file in package_files:
                     z.write(source / file, file)
         with zipfile.ZipFile(archive) as z:
             assert all(hashlib.sha256(z.read(file)).hexdigest() == digest for file, digest in cert['files'].items())
@@ -93,14 +98,25 @@ def main():
         '- 同距离码端点剪枝保持28文件输出，但两块原协议未建立提速，份额均零；函数工作量和字节等价不替代端到端性能。',
         '- 基础缓存覆盖97.25%的额外SF匹配项，直接替换仍多675B；少量缺失项可能贡献重要收益。改成保留原搜索、只复用同距离已知前缀后，诊断保持逐token/输出相同。',
         '- [显式缓存生命周期草稿](../../candidates/r19-sf-shared-prefix-draft) Rust `26aa056b94098d0d22f13f1e0ca3f6e5af09ec044341e82391b4bfd886506ff0` 已编译、28文件逐token/输出相同，无全局Mutex或缓存clone。新helper和A引擎返回值的Lean证明尚未迁移；它不属于上述两个完整验收包。',
-        '- 草稿的一块原协议发现若已收齐，见[单独分析](../../evidence/round19/analysis-s.json)。该块不属于冻结确认，不据此宣称稳定性能或正式份额；下一轮先独立确认是否值得投入证明。', '',
+        '- 草稿的一块原协议发现见[单独分析](../../evidence/round19/analysis-s.json)，不属于冻结确认。它尚未显示高于冻结主候选的条件收益；下一轮先与nooverlap同场配对、检查缓存查询新增成本，确认优势后再投入证明。', '',
         '## 消耗与证据', '',
         f"已收齐 **{len(audit['jobs'])}** 个手动作业；原协议配对进程 **{audit['original_paired_processes']}** 个（包含对照，不是独立样本数）；runner墙钟累计 **{audit['runner_seconds']:.0f}秒**。原始artifact文件 **{audit['raw_file_count']}** 个、**{audit['raw_bytes']}字节**，均逐项SHA-256核对。另有14份Rust候选及单列的观察器／诊断原型。", '',
-        '账户用量从已用22%开始，近期读取24%；属于共享账户读数，不能归因成本轮费用。重置0次、购买0次；实际模型与云端金额UNKNOWN。三次代理路径推送HTTP408后改用临时直连成功，未修改全局设置，故障耗时计入窗口。main的其他任务未推送提交保持原样。', '',
-        '- [预算与截止](../../evidence/round19/budget.json)、[决策过程](../../evidence/round19/research-state.md)、[冻结确认计划](../../evidence/round19/confirmation-plan.json)。',
-        '- [最终结构化结果](../../evidence/round19/final-summary.json)、[原始字节与成本审计](../../evidence/round19/audit-final.json)、[当前官方快照](../../evidence/round19/official-close/receipt.json)。',
+        '账户用量从已用22%开始，[收尾读取](../../evidence/round19/usage-close.json)为已用25%、剩余75%；属于共享账户读数，不能归因成本轮费用。重置0次、购买0次；实际模型与云端金额UNKNOWN。三次代理路径推送HTTP408后改用临时直连成功，未修改全局设置，故障耗时计入窗口。main的其他任务未推送提交保持原样。', '',
+        '- [预算与截止](../../evidence/round19/budget.json)、[决策过程](../../evidence/round19/research-state.md)、[冻结确认计划](../../evidence/round19/confirmation-plan.json)、[仍距15%的有界坐标要求](../../evidence/round19/final-coordinate-gaps-29533.json)。',
+        '- [最终结构化结果](../../evidence/round19/final-summary.json)、[原始字节与成本审计](../../evidence/round19/audit-final.json)、[当前官方快照](../../evidence/round19/official-final/receipt.json)。',
         '- [提交看板](../../DASHBOARD.md)、[可复用方法](../research/optimization-methods.md)。', '',
         '**VERIFIED**：精确文件、两份完整公共gate、两runner四块原协议观测与原始回执。**INFERRED**：单独／联合份额、私有迁移及缓存复用机会。**UNKNOWN**：新候选正式admission、正式可支付份额、实际到账，以及草稿的完整证明与独立确认。', '']
+    late_path = E / 'analysis-s.json'
+    if late_path.exists():
+        late = read(late_path)
+        if late.get('candidates'):
+            c = late['candidates'][0]
+            a, b = c['summary']['primary'], c['summary']['shadow']
+            change = next(o['time_change_pct_vs_parent'] for o in c['observations'] if o['calibration'] == 'primary')
+            text = f"共享缓存草稿S只有**1块发现数据**：相对同块#603总时间轴变化 {change:+.4f}%；主／影子条件份额 {a['median_pct']:.6f}%／{b['median_pct']:.6f}%。它仍缺独立确认、新Lean证明和完整gate，不能作为正式成绩或第三个完整验收包。"
+        else:
+            text = '共享缓存草稿S未取得可晋级的完整计时结果；失败或未完成记录保留在单独分析，性能结论仍为UNKNOWN。'
+        lines.insert(lines.index('## 消耗与证据'), text + '\n')
     (ROOT / 'docs/rounds/round19.md').write_bytes(('\n'.join(lines)).encode())
     print(json.dumps({'candidates': [r['candidate'] for r in results], 'snapshot': snapshot['snapshot_id'], 'joint': joint_summary}))
 
