@@ -1,5 +1,40 @@
 # R24 续跑状态
 
+## UTC23:21 活跃摘要（最高优先，前面旧摘要仅作历史）
+
+固定起点UTC19:28:08、截止次日UTC05:28:08／北京时间13:28:08，不重置。已用约3h53m，继续约6h07m，最后120min从UTC03:28:08起保留。当前分支HEAD `cbecde5352e63a903a84705f5f0fc4ebfecfa6b3`，已推送；主工作树main仍保留。新派发回执等未提交材料均本轮。
+
+### 已完整验收且已有新独立阶段确认
+
+N `r24-609-price-groups` 和T/L修复 `r24-609-buffer-split-proof1` 的完整原版gate均通过，证书在各自VERIFICATION.json，原900sLean限制未改。N gate523.4s，T gate918.4s是整个验收墙钟，不是Lean单独用时。
+
+Z1 `38091944225`、Z2 `38091958147`全部收齐，2新runner×2反序块，每份候选还有同Rust同库的副本。**主候选独立样本是4块，不能把副本加入称8块。** 使用`independent_confirmation_summary`；`summary`含8个主/副本测量，保留用于诊断。
+
+最新查询`official-checkpoint-z`快照29621（computed UTC22:43:04、读取约23:03，620/579，freshness unknown）。主候选四块：N主0–3.202605%、中位3.088055%、零1/4；609影子校准3.045051–3.170323%、中位3.129140%、零0/4。T主3.061541–3.579673%、中位3.495769%、零0/4；影子3.495874–3.509879%、中位3.500357%、零0/4。全部>=5/10/15次数0。正式/私有/支付UNKNOWN，稳定10/15仍未建立。
+
+**联合分析使用 `analysis-z-v2.json`。** 原`analysis-z.json`个体统计仍正确，但联合字典被后出现的同源码副本覆盖，保留旧文件，不再使用其joint字段。`joint-alias-fix.json`记录真实红→绿回归、原/新SHA及审计；R24其他分析和存在的R19–R23final-analysis均通过同一契约检查。`scripts/analyze-round18.py`已修正为每run/block/cal优先唯一candidate，无candidate才选唯一control，多alias明确跳过，并记录entry_name。`check-round24-joint.py`检查真实joint对应个体点。v2主联合N0–0.233436%、T3.061541–3.490958%；影子联合N0.150518–0.232938%、T3.408811–3.471273%。不可加独立份额。
+
+Z1block1 public609同源码控制差2.249808%，让N从0变3.156095%。`checkpoint-z-decomposition.json`显示主要数值贡献来自incumbent分母；四角A/A9.28245、B/A9.22542、A/B9.55306、B/B9.49129。交叉角仅诊断，不是新成绩。driver.provenance的affinity是父Python驱动，不是实际engine，不可从[0,1,2,3]断言绑核失败。
+
+### 活跃作业与下一动作
+
+- **AF `38094411590` `affinity-af-diagnostic`**，UTC23:15，cap55。先在原measure_sandbox里读取真实继承affinity（exec true）。若已单核就停止；否则同一个原版engine、incumbent+单候选、11reps，两块反序比较原cgroup请求与显式sched_setaffinity，共16诊断进程。数据在diagnostics/r24-affinity，不能放入官方份额样本。原每进程300s不改。
+- **AG `38094682573` `tree-ag-native`**，UTC23:20，cap20。组合AD紧凑child和AE删冗余状态，期待同once/组件token输出；待收齐。
+- **AH `38094699832` `proof-ah-extract`**，UTC23:20，cap55。AD/AE/AG三源原版stageextract，保留真实接口，尚不是Lean/fullgate；成功后用于有价值候选的证明迁移。
+- AD `38093247713`与AE `38093627577`已成功收齐，均28token/output同once。AD子链接按实际父节点编码相对距离，root仍U32；原子表256KiB→128KiB。AE对skip>=258用专门finder，去rct表和不可用cl/cd状态，保留skip<258原fallback。覆盖11/11调用、8.428M调用输入字节；lscpu原始记录L2one-size512K。不要把表尺寸等于L2解释为整个工作集适配或速度保证。
+- AC `38092743994`已收齐。17个小路由wrapper inline属性，所有body/table不变；28token/output同once。原基准Cargo模板编译：once及once-shadow整个lib/text/rodata都相同；AC text394402→395746B，rodata38394→35594B，代码确实改变，速度UNKNOWN。计划和AD/AE/AG同runner四臂原协议计时；**等AGnative一致后准备批次**，4候选正好native_decode_pairs上限4，AGactualparent用AE候选名，避免重复父alias。
+- XY `38091975486`已收齐，`analysis-xy.json`在29621：Y word-reuse约快1%，主2.992964–3.078363%、影子2.998832–3.019430%；X adaptive-search约慢4.2%，但质量改善69B，主3.061856–3.063077%、影子2.993791–3.068851%。均1runner2发现块、无完整gate；不因X稍慢丢掉质量起点，也不称稳定达标。
+- AB `38092226149`已收齐：N-DNA成本40/16版本只改变genome，-9112B、+491688tokens。新条件大小36.5154616681；最新29621重放10/15窗口仍0.42858–0.430455，宽0.437491%。`feedback-ab-native.json`决定暂缓计时（旧PC同机制曾增加成本且0），实际新速度仍UNKNOWN，未判死DNA。
+- AA `38091679388`已收齐，0新候选的606/611/614原版比较。611profile：base2.646s、SF.910s；Aengine1.791s、A_DP1.019s、RF.368s（其中find.152s、DP.181s），包含/嵌套时间不可相加推导收益。公开新来源`public-refresh-q3`。
+
+### 继续范围／工具
+
+下一步收AG/AH，准备AC/AD/AE/AG同场受控计时；AF运行期间继续分析或实现。候选改动之后必须新的精确完整gate与最终独立确认，现有N/T可作为已验收备用，不能宣称目标完成。
+
+完整gate pull用`exact-gate`（路径会包含两层exact-gate）；native/extract/诊断pull用`diagnostics`；标准计时用`gate`。派发同SHA须逐个等dispatch完成，网络/凭据读取用require_escalated，普通push skipCI。当前无挂起PTY session。
+
+最近账户UTC23:02已用9%／剩91%，`usage-0335m.json`，0重置/购买。projectcheck最新PASS313pairs／574links／31tasks／1298aliases／10manual workflows。没有正式上传/注册/签名授权。最终仍须刷新DASHBOARD、方法结论、索引、全部原始回执审计和实际消耗，按授权commit/push；不自动merge当前研究分支。
+
 ## UTC22:34 活跃摘要（以此为准）
 
 - 已用约3h06m，固定截止UTC05:28:08，仍继续约6h54m；不要结束或重置。最后120分钟保留。
