@@ -106,6 +106,8 @@ def main():
             'observed_projected_time_range': [min(xs), max(xs)],
             'observed_time_span_pct_of_reference': 100 * (max(xs) - min(xs)) / x0,
             'observation_control_variants': len(xs),
+            'observed_runner_count': len({o['run_id'] for o in observations}),
+            'observed_block_count': len({(o['run_id'], o['block']) for o in observations}),
             'reference_time_is_a_descriptive_center_not_expected_score': True,
             'time_grid_range': [min(time_grid), max(time_grid)],
             'size_grid_range': [min(size_grid), max(size_grid)],
@@ -122,7 +124,7 @@ def main():
         'limits': [
             'Each axis is varied separately. Time and quality changes have no demonstrated implementation.',
             'Finite samples are not an exhaustive feasibility theorem or formal success probability.',
-            'Sixteen control variants are eight observed blocks on two runners, not sixteen independent runs.',
+            'Primary/shadow views are not independent runs. Actual block and runner counts are reported per candidate.',
             'Observed time span is reported directly; no arbitrary pressure margin or private-corpus bound is substituted.',
             'Discontinuities are sampled on both sides. A faster candidate can receive less share when it removes a neighbor.',
             'No source/proof changes, new measurements, formal submission or ownership check are performed.',
