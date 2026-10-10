@@ -1,5 +1,6 @@
 """Render the R18 handoff from exact frozen confirmations and current capture."""
 from pathlib import Path
+from datetime import datetime, timezone
 import argparse
 import hashlib
 import json
@@ -34,6 +35,12 @@ def main():
     capture, cost = read(args.capture / 'receipt.json'), read(args.cost)
     gaps, payability = read(args.gaps), read(args.payability)
     budget = read(E / 'budget.json')
+    if args.ended:
+        assert datetime.now(timezone.utc) >= datetime.fromisoformat(budget['deadline_utc'])
+        assert budget['status'] == 'WINDOW_ENDED_OBJECTIVES_UNMET'
+    audit = E / 'evidence-audit-final.json'
+    if not audit.exists():
+        audit = E / 'evidence-audit-expanded-preclose.json'
     snapshot = summary['snapshot']['snapshot_id']
     assert {snapshot, analysis['snapshot']['snapshot_id'], capture['snapshot_id'],
             gaps['snapshot']['snapshot_id'], payability['snapshot']['snapshot_id']} == {snapshot}
@@ -184,9 +191,10 @@ def main():
         '',
         '## 替代起点与下一步',
         '',
-        '1. **优先研究低成本的真实质量改善。** B 离 5% 的当前坐标缺口已量化；恢复原有 RF 开关的免费组合仍不够。下一次实验应证明新增匹配、成本模型或共享阶段能在所需质量上保住总时间，再付完整证明成本。先做有限语料的原 encoder 字节和阶段归因；不能以少循环次数晋升。',
-        '2. **把 DNA 作为保留路线，先解决可辨识性。** 精确 radix6 包和完整证明已留存；若改键计算成本或其他质量机制，先对新点重放邻居切换，再用原协议及同源码对照判断。已有观测不支持仅移动平均速度约 0.1% 就宣布 15% 可支付。',
-        '3. **检查新公开 #591 的 SF 家族。** 本轮首次取得其源码时间是 00:13:41 UTC；实际公开释放时间未知。它与旧 #550 的基础引擎路由、候选缓存宽度/深度及编码块边界价格不同。原始来源及作者保留；精确长度条件仍是原作者代码，其私有迁移能力未验证。[来源和差分](../../evidence/round18/new-public-reference-check/receipt.json)、[有界诊断预检](../../evidence/round18/shape-bb-preflight.json)。',
+        '1. **优先用新公开 #539 比较实际匹配器。** 已有逐文件差异和执行路径，可以先查明 CSV 的质量损失与 lean/bundle/prose 收益分别来自哪个 matcher/配置，再选择一个通用机制做原 encoder 与配对总时间实验。全部走内容回退已在公共集得到相同输出，继续只改入口不会产生新的质量证据。证明接近文件上限，先查依赖/容量再迁移；#539 自身当前已被支配，不能把历史支付当未来保证。',
+        '2. **继续寻找 RF 家族低成本的真实质量改善。** B 离 5% 的当前坐标缺口已量化；恢复原有 RF 开关的免费组合仍不够。下一次实验应证明新增匹配、成本模型或共享阶段能在所需质量上保住总时间，再付完整证明成本。先做有限语料的原 encoder 字节和阶段归因；不能以少循环次数晋升。',
+        '3. **把 DNA 作为保留路线，先解决可辨识性。** 精确 radix6 包和完整证明已留存；若改键计算成本或其他质量机制，先对新点重放邻居切换，再用原协议及同源码对照判断。已有观测不支持仅移动平均速度约 0.1% 就宣布 15% 可支付。',
+        '4. **保留新公开 #591 的 SF 家族。** 本轮首次取得其源码时间是 00:13:41 UTC；实际公开释放时间未知。它与旧 #550 的基础引擎路由、候选缓存宽度/深度及编码块边界价格不同。原始来源及作者保留；精确长度条件仍是原作者代码，其私有迁移能力未验证。[来源和差分](../../evidence/round18/new-public-reference-check/receipt.json)、[有界诊断预检](../../evidence/round18/shape-bb-preflight.json)。',
         '',
     ]
     late = E / 'shape-bb-decision.json'
@@ -195,6 +203,10 @@ def main():
         text.append(data['report_paragraph'] + ' ' + link('evidence/round18/shape-bb-decision.json', '完整诊断结论'))
     else:
         text.append('这次单独的 25 分钟原生诊断尚在收集；只改变外层为 SFbase 的端点没有本轮完整 Lean gate，不列为第三份可提交成果。最终 A/B 文件保持冻结。')
+    for filename in ('public539-bd-decision.json', 'content-be-decision.json'):
+        path = E / filename
+        if path.exists():
+            text += ['', read(path)['report_paragraph'] + ' ' + link(rel(path), '原始证据与判断')]
     text += [
         '',
         '这些是后续最高价值动作，不是已执行实现或新授权；正式上传仍需另行审阅精确文件、当时官方要求、注册归属和额度。',
@@ -203,17 +215,23 @@ def main():
         '',
         f'截至 {cost["recorded_at_utc"]}，派发 **{cost["dispatched_run_count"]}** 次手动云端运行，收齐 **{cost["collected_completed_run_count"]}** 次；{cost["collected_conclusions"].get("success",0)} 次成功、{cost["collected_conclusions"].get("failure",0)} 次失败。三次失败分别为首次计时环境检查、A 的证明缺口和 A 的证明超时，并非三个算法正确性反例。已完成 runner 作业累计 **{int(cost["completed_runner_wall_seconds"])} 秒**（{cost["completed_runner_wall_seconds"] / 3600:.3f} 小时，允许并行，不能当作研究墙钟时间或账单分钟）。原协议筛选/确认共 **{cost["original_screen_confirmation_paired_processes"]}** 个配对进程，另列原生、诊断及完整 gate。',
         '',
+        f'本轮保留 **{cost.get("distinct_rust_source_count_including_diagnostic_endpoints", "UNKNOWN")} 份不同 Rust 源码**，包括诊断端点；不是同数量的已验证可提交候选。证明版本另行保留，不能靠换 proof 或改名增加算法数量。',
+        '',
         f'账户初始用量 0%，最新已用 {cost["latest_shared_account_observation"]["used_percent"]}%、剩余 {cost["latest_shared_account_observation"]["remaining_percent"]}%；这是共享账户观察，不是本任务费用。成功兑换重置卡 **{cost["successful_resets"]}** 次，没有购买额度；没有达到剩余≤1%的授权触发点。工具不支持指定某张卡，未试兑。实际云端账单和可归属于本任务的模型金额 **UNKNOWN**。{link(rel(args.cost), "逐运行耗时与资源回执")}。',
         '',
-        '原始 artifact、所有逐文件 reps、失败、官方响应均保留字节和 SHA-256。审阅 ZIP 仅含 `parse.rs` / `Parse.lean`，不含密钥、钱包、私密配置或正式上传动作。最终审计索引见 [研究状态](../../evidence/round18/research-state.md)。',
+        f'原始 artifact、所有逐文件 reps、失败、官方响应均保留字节和 SHA-256。审阅 ZIP 仅含 `parse.rs` / `Parse.lean`，不含密钥、钱包、私密配置或正式上传动作。{link(rel(audit), "已保存的完整字节核对")}同时比较公开参照文件与 API 原始字段。派生汇总曾有 CRLF/LF 序列化后的哈希绑定失效，已保留旧值并重建绑定，所有数值相同；原始测量字节未变。[更正记录](../../evidence/round18/summary-binding-correction.json)。',
         '',
-        '官方主分支复核到 `6bf303f14e6c7bccc63e9a557e4ac83e032fa9e8`，比本轮固定 pin `a356bbff18b60c4527fbcc85d5a28ef9c20214e0` 多一个发生在本轮之前的数据库保留/发布变更。SCORING、MINER、pareto 字节与开场相同，contract、encoder、verifier 和工具链未改变；线上实际部署字节身份仍 UNKNOWN。[完整比对](../../evidence/round18/official-code-final-check/receipt.json)。官方 API 旧快照可被清理，本仓库原始捕获不依赖旧 URL 长期可用。',
+        '官方主分支复核到 `6bf303f14e6c7bccc63e9a557e4ac83e032fa9e8`，比本轮固定 pin `a356bbff18b60c4527fbcc85d5a28ef9c20214e0` 多一个发生在本轮之前的数据库保留/发布变更；UTC 01:00 前的收尾复查仍是同一主分支。SCORING、MINER、pareto 字节与开场相同，contract、encoder、verifier 和工具链未改变；线上实际部署字节身份仍 UNKNOWN。[完整比对](../../evidence/round18/official-code-final-check/receipt.json)、[收尾主分支核对](../../evidence/round18/official-code-close-recheck/receipt.json)。官方 API 旧快照可被清理，本仓库原始捕获不依赖旧 URL 长期可用。',
         '',
         '工作仅位于隔离分支 `codex/round18-frontier`，从 `e000933527c41b9c5881401731d863b9898f571a` 开始。main 上其他任务的 `b5cb035d44ce7da96fe3b309373203bfde369396` 被排除，没有一起推送、合并或删除。最新远端核对与收尾提交见研究状态。',
         '',
         '**VERIFIED**：精确完整公共 gate、原始测量、哈希、公开规则重放和保存的快照。**INFERRED**：族内校准、当前单独/联合几何估算、坐标要求和机制取舍。**UNKNOWN**：正式上传后的 gate/admission、私有语料迁移、当前注册/额度、未来榜单与实际支付。八小时研究交付不能改写为两个奖励目标已完成。',
         '',
     ]
+    goal_usage = E / 'goal-usage-window-close.json'
+    if goal_usage.exists():
+        usage = read(goal_usage)
+        text += [f'Goal 工具在 {usage["read_at_utc"]} 的累计计数为 {usage["goal_tool_cumulative_tokens"]:,} tokens；这是工具计数，不是价格、发票或新的计时起点。', '']
     (ROOT / 'docs/rounds/round18.md').write_bytes(('\n'.join(text)).encode())
     print(json.dumps({'report': 'docs/rounds/round18.md', 'snapshot': snapshot,
                       'window_ended': args.ended, 'reward_targets': 'NOT_ESTABLISHED'}))

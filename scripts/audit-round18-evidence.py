@@ -60,6 +60,46 @@ def main():
                          'sha256': digest(path.read_bytes()),
                          'snapshot_id': receipt['snapshot_id'],
                          'raw_response_count': len(receipt['raw_response_files'])})
+    public_sources = []
+    reference_files = {}
+    for path in sorted((ROOT / 'references').glob('round18-public-*/source-receipt.json')):
+        receipt = read(path)
+        ident = receipt.get('submission_id', receipt.get('source', {}).get('id'))
+        assert ident
+        original = receipt.get('original_response', receipt.get('official_response'))
+        if original:
+            response = (ROOT / original).resolve()
+            assert response.is_relative_to(E.resolve())
+            expected_response_sha = receipt.get('original_response_sha256', receipt.get('official_response_sha256'))
+        else:
+            found = list(E.glob('**/' + str(ident) + '.response.json'))
+            assert len(found) == 1
+            response = found[0]
+            expected_response_sha = receipt['source']['sha256']
+        assert digest(response.read_bytes()) == expected_response_sha
+        data = read(response)
+        assert str(data['id']) == str(ident)
+        for filename, field in (('parse.rs', 'parse_rs'), ('Parse.lean', 'proof_lean')):
+            name, sha, size = check_file(path.parent, filename, receipt['files'][filename])
+            assert (path.parent / filename).read_bytes() == data[field].encode()
+            reference_files[name] = {'sha256': sha, 'bytes': size}
+        public_sources.append({'submission_id': str(ident), 'receipt': path.relative_to(ROOT).as_posix(),
+                               'receipt_sha256': digest(path.read_bytes()),
+                               'raw_response': response.relative_to(ROOT).as_posix(),
+                               'raw_response_sha256': expected_response_sha})
+    code_rechecks = []
+    for path in sorted(E.glob('official-code-*/receipt.json')):
+        receipt = read(path)
+        for record in receipt.get('raw_responses', []):
+            check_file(path.parent, record['file'], record)
+        if 'raw_response_sha256' in receipt:
+            assert digest((path.parent / 'main-head.response.json').read_bytes()) == receipt['raw_response_sha256']
+        if 'prior_code_audit' in receipt:
+            prior = (ROOT / receipt['prior_code_audit']).resolve()
+            assert prior.is_relative_to(E.resolve())
+            assert digest(prior.read_bytes()) == receipt['prior_code_audit_sha256']
+        code_rechecks.append({'receipt': path.relative_to(ROOT).as_posix(),
+                              'sha256': digest(path.read_bytes())})
     payloads = []
     for path in sorted((E / 'review-packages').glob('*.json')):
         manifest = read(path)
@@ -84,7 +124,7 @@ def main():
                          'payload_sha256': manifest['payload_sha256'],
                          'manifest': path.relative_to(ROOT).as_posix()})
     assert len(payloads) == 2 and len({p['files']['parse.rs'] for p in payloads}) == 2
-    tracked = set(subprocess.check_output(['git', 'ls-files', 'evidence/round18'],
+    tracked = set(subprocess.check_output(['git', 'ls-files', 'evidence/round18', 'references'],
                                          cwd=ROOT, text=True).splitlines())
     commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     checked = []
@@ -92,7 +132,7 @@ def main():
     process = subprocess.Popen(['git', 'cat-file', '--batch'], cwd=ROOT,
                                stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     try:
-        for path, expected in raw.items():
+        for path, expected in (raw | reference_files).items():
             if path not in tracked:
                 not_committed.append(path)
                 continue
@@ -116,14 +156,20 @@ def main():
         'artifact_inventory_count': len(inventories),
         'local_raw_file_count': len(raw),
         'local_raw_bytes': sum(v['bytes'] for v in raw.values()),
-        'committed_raw_files_checked': len(checked),
-        'uncommitted_raw_file_count': len(not_committed),
-        'uncommitted_raw_files': not_committed,
+        'committed_raw_files_checked': sum(p in raw for p in checked),
+        'public_source_file_count': len(reference_files),
+        'committed_public_source_files_checked': sum(p in reference_files for p in checked),
+        'uncommitted_raw_file_count': sum(p in raw for p in not_committed),
+        'uncommitted_raw_files': [p for p in not_committed if p in raw],
+        'uncommitted_public_source_file_count': sum(p in reference_files for p in not_committed),
         'inventory_sha256': inventories,
         'official_captures': captures,
+        'public_sources': public_sources,
+        'official_code_rechecks': code_rechecks,
         'review_payloads': payloads,
         'scope': ('Checks local original artifact byte inventories, stored HEAD blobs for '
-                  'already tracked raw files, complete API capture receipts and exact '
+                  'already tracked raw files and public reference sources, complete API '
+                  'capture receipts, public source API field bytes, official code rechecks and exact '
                   'two-file review ZIPs. It does not redownload ZIPs or equate GitHub '
                   'artifact digest with an independently verified ZIP digest. No formal '
                   'admission, private-corpus or payout result is established.'),
