@@ -1,4 +1,4 @@
-"""Dispatch one frozen R18 batch within the original eight-hour deadline."""
+"""Dispatch one frozen R18 batch within the currently authorized fixed deadline."""
 from pathlib import Path
 from datetime import datetime, timezone
 import argparse, importlib.util, json, os, subprocess, time
@@ -47,7 +47,7 @@ def main():
         matches=[r for r in json.loads(helper.run(listing,env)) if r['headSha']==sha and r['databaseId'] not in seen]
         if matches:
             assert len(matches)==1
-            record={'round':18,'batch':args.batch,'mode':mode,'git_sha':sha,'inputs':inputs,'dispatch_utc':started,'repository_visibility_verified':'public','authorization':'Current user eight-hour research, necessary cloud verification and experiment-branch push scope; no submission, registration or wallet actions.','job_timeout_minutes':minutes,'collection_reserve_minutes':10,'fixed_deadline_utc':budget['deadline_utc'],'run':matches[0]}
+            record={'round':18,'batch':args.batch,'mode':mode,'git_sha':sha,'inputs':inputs,'dispatch_utc':started,'repository_visibility_verified':'public','authorization':'Current user research budget including explicit extensions, necessary cloud verification and experiment-branch push scope; no submission, registration or wallet actions.','job_timeout_minutes':minutes,'collection_reserve_minutes':10,'fixed_deadline_utc':budget['deadline_utc'],'run':matches[0]}
             p=ROOT/f'evidence/round18/dispatch-{matches[0]["databaseId"]}.json';assert not p.exists();p.write_text(json.dumps(record,indent=2)+'\n')
             print(json.dumps(record));return
         time.sleep(2)
