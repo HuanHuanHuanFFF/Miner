@@ -25,6 +25,10 @@ def main():
             assert len(pairs)<=4
             import_module('research-round12-decode').harness(spec)
     if mode == 'diagnostic':
+        if 'r24_order_timeout_seconds' in spec:
+            seconds=spec['r24_order_timeout_seconds']
+            assert type(seconds) is int and 300<=seconds<=900
+            assert spec.get('r18_order_diagnostic') is True
         names = spec['diagnostic_methods']
         by = {e['name']:e for e in spec['entries']}
         assert len(names) == 4 and len(set(names)) == 4 and set(names) <= set(by)

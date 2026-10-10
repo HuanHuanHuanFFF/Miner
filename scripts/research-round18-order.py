@@ -33,6 +33,11 @@ def main():
     from sandbox import bwrap
     names=spec['diagnostic_methods'];by={e['name']:e for e in spec['entries']};paths={n:ROOT/by[n]['path']/'parse.rs'for n in names}
     config=dataclasses.replace(driver.Config.from_env(up/'validator'),reps=11,warmup=1,cpus=str(min(os.sched_getaffinity(0))),keep=driver.Keep.NEVER,bars=False)
+    if 'r24_order_timeout_seconds' in spec:
+        seconds=spec['r24_order_timeout_seconds']
+        assert os.environ.get('ROUND4_SPEC_DIR')=='evidence/round24'
+        assert type(seconds) is int and 300<=seconds<=900
+        config=dataclasses.replace(config,timeout=float(seconds))
     driver.check(config);corpus=corpora.load(up/'validator').by_name('corpus-stage1')
     ws=driver._make_workspace(config,paths);crates=driver._generate(config,ws,paths);driver._build(config,ws,crates);rustc=driver._rustc_version(config,ws,crates[INCUMBENT])
     out=Path(os.environ['RUNNER_TEMP'])/'round4-receipts/r18-order';out.mkdir(parents=True,exist_ok=True)
@@ -49,7 +54,7 @@ def main():
     sp=importlib.util.spec_from_file_location('noise_wrapper',ROOT/'scripts/research-round18-multimethod.py');m=importlib.util.module_from_spec(sp);sp.loader.exec_module(m)
     wrapper=ws/'context.py';wrapper.write_text(m.WRAPPER)
     report={'run_id':os.environ['GITHUB_RUN_ID'],'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],'status':'STARTED','source_hashes':source_hashes,'original_engine_sha256':hashlib.sha256(config.engine.read_bytes()).hexdigest(),'balanced_engine_sha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'orders':orders,'blocks':[],
-            'protocols':protocols,'declared_blocks':block_count,
+            'protocols':protocols,'declared_blocks':block_count,'configured_timeout_seconds':config.timeout,
             'scope':'Diagnostic-only declared schedules at explicitCPU0. Original encoder/token/loader remain unchanged. Scratch balanced ordering is separate from original official protocol performance, Lean gate and payout.'}
     def save(): (out/'order.json').write_text(json.dumps(report,indent=2)+'\n')
     save();identities={}

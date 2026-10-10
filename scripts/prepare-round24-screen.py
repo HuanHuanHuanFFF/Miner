@@ -16,6 +16,9 @@ def main():
         if e['name'] in a.drop_control:continue
         assert not set(a.drop_control).intersection(e.get(k) for k in ['anchor','comparison_baseline','native_decode_reference','expected_equivalent_to'])
     s['entries']=[e for e in s['entries'] if e['name'] not in a.drop_control]
+    for key in list(s):
+        if key.startswith('r24_') and (key.endswith('_counts') or key=='r24_output_state_entry'):
+            del s[key]
     for e in s['entries']:
         if not e['control']: assert n['source_hashes'][e['name']]==e['hashes']
     s.update(r24_mode='standard',native_only=False,native_encoder=False,native_encoder_references=[],synthetic_validation=False,r18_role='discovery',description=f'Original paired total-compression timing of actual-byte-screened {a.native_batch}; both reversed blocks and all declared actual parents and same-source anchors. Exact Lean acceptance remains separate.')
