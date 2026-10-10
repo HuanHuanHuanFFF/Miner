@@ -1,5 +1,23 @@
 # R24 续跑状态
 
+## UTC22:16 活跃摘要（最高优先）
+
+固定截止UTC05:28:08，剩约7h12m，不结束本轮。分支HEAD在b35847e7后仍有W/X及报告收尾待提交。
+
+- 当前查询快照29617，份额见`analysis-noq-lm.json`；N主约3.19%与L主约3.33%均只有1runner2发现块。没有稳定10/15候选、没有R24已确认完整gate。
+- T 38089577310已收齐：split完整Rust、constant小样例、nestedflag小样例全部提取成功；原L及原nestedreturn最小例失败保留。`feedback-t-extract.json`支持嵌套提前返回结构是触发条件，内部根因UNKNOWN。split Rust与原L28token/output相同（38089590199）。新的`r24-609-buffer-split-proof1`Rust4b40f24c、Lean7d7aca11；真实参数和证明依赖顺序已迁移，gate运行中。
+- N完整gate：38089867281 `gate-price-groups`，UTC22:01派发，50mincap；目前originalfullgate步骤。不要提前取消。原N Ruste13c3b15、Lean9606dd10。
+- T完整gate：38090360927 `gate-buffer-split1`，UTC22:09派发，50mincap。
+- U native38089849431已收齐，同once28token/output。31546013calls、13934263usefulprefixhits、201929031extraknownbytes；局部256槽同距离endpoint缓存，原搜索回退。`feedback-u-native.json`。原协议计时38090350074 `screen-u`（UTC22:09、45mincap）运行中。
+- V native38090058012成功并收齐，八槽实际4864104B（-22B），仅比L再少11B，目标空间仍不足；暂停昂贵计时，原始负面投入决定保留。
+- W native38090374946 `short-w-native`成功，待收集；A Z314宽度<=3直接求最小值，长循环不动，16000有限回绕/tie模型。Rust/Lean仍DRAFT。
+- X `adaptive-x-native`准备好未推送／派发：只在最长匹配<8时用额外预算，最大2x旧depth；两种collector都应用，实际质量未知。源码和预声明由build-round24-adaptive-search.py生成。
+- O proof1已写但因O计时主影子0/2.98%分歧且无稳定收益，gate-slot-proof1暂缓派发。N+O也未优于N，不机械叠加。
+- `quality-switch-noq.json`是合成坐标，不是新测量；小于最小体积端点会切换归一化并降份额。
+- 账户UTC22:04已用6%／剩94%，保存usage-0236m；0重置／购买。最近projectcheck通过305pairs，新文件后需再查。
+
+下一步收集W；收齐N/Tgate后仅修已识别错误或绑定证书。继续U反馈、X实际质量和其他有依据方向，最后120分钟确认／交付余量仍保留。所有gate候选与发现证据按精确哈希绑定。
+
 ## UTC21:56 补充（以下旧状态保留作时序，冲突以本段为准）
 
 - 当前剩余约7h32m；固定截止不变。最新完成捕获`official-feedback-lm`快照29615（computed UTC21:00:18）；`official-feedback-noq`正在刷新，当前份额报告先等刷新。
