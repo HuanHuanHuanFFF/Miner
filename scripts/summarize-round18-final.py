@@ -18,7 +18,8 @@ def main():
     for target in targets:
         matching=[g for g in data['candidates']if g['rust_sha256']==target['hashes']['parse.rs']];assert len(matching)==1;g=matching[0];groups[g['candidate']]=g
         assert any(p['files']==target['hashes']and p.get('source_path')==target['path']for p in g['verified_pairs'])
-        role = 'A' if target['name'].startswith('r18-dna-base6') else 'B'
+        role = target.get('role', 'A' if target['name'].startswith('r18-dna-base6') else 'B')
+        assert role in ('A', 'B')
         threshold = 15 if role == 'A' else 5
         aliases[g['candidate']] = role
         obs=[o for o in g['observations']if o['run_id']in ids and o['entry_role']=='candidate'and o['role']=='independent_confirmation'];assert all(o['proof_sha256']==target['hashes']['Parse.lean']for o in obs)
