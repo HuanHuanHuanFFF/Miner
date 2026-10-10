@@ -31,7 +31,7 @@ def main():
     response.raise_for_status();body=response.json();s=body['submission']
     assert s['id']=='603' and body['digest']==DIGEST and body['source_sha256']==SOURCE
     gate=s['gate_status'];admission=s.get('admission') or {};score=s.get('score') or {}
-    terminal=gate in ('rejected','failed','error') or (gate=='accepted' and admission.get('status')!='pending' and bool(s.get('score')))
+    terminal=gate in ('rejected','failed','error') or (gate in ('passed','accepted') and admission.get('admitted') is not None and bool(s.get('score')))
     summary={'checked_at_utc':receipt['read_at_utc'],'submission_id':'603','candidate':'r18-rf-sf-content-proof1','gate_status':gate,'admission':admission,'metrics':s.get('metrics'),'score':s.get('score'),'pipeline':body.get('pipeline'),'snapshot':body.get('context'),'bundle_digest':DIGEST,'source_sha256':SOURCE,'proof_sha256':'0a0171ac0dda3f6c06e574145e6b89b6b90fed45bd2d1d22be0ad199d18bacc7','raw_receipt':f'status-{stamp}.receipt.json','terminal_result_observed':terminal,'chain_transaction_sent':False}
     (dest/'latest-status.json').write_bytes((json.dumps(summary,indent=2)+'\n').encode())
     print(json.dumps({'checked_at_utc':summary['checked_at_utc'],'gate':gate,'admission':admission.get('status'),'outcome':admission.get('outcome'),'snapshot':body.get('context',{}).get('snapshot_id'),'metrics':s.get('metrics'),'score':s.get('score'),'terminal':terminal}),flush=True)
