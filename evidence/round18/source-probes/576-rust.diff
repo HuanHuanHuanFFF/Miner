@@ -1,0 +1,256 @@
+--- candidates/r15-550-base-only
+
++++ references\round18-public-576
+
+@@ -196,5 +196,5 @@
+
+ pub fn Z463(input: &[u8], out: &mut [u32], r: usize) -> usize {
+     if r == 0 {
+-        Z183(input, out, 0)
++        Z273(input, out, 31)
+     } else if r == 1 {
+         Z296(input, out, 0)
+@@ -2939,10 +2939,10 @@
+
+ 
+ pub const Z117: [[usize; 17]; 32] = [
+-[4,4,8,96,258,32768,3,1,8,255,258,1,100,96,96,258,0],
+-[4,4,4,64,258,32768,4,1,16,255,64,1,100,64,64,258,0],
++[6,6,8,192,258,32768,2,1,16,255,258,1,100,192,192,258,2],
++[4,3,8,32,258,32768,3,1,16,255,64,1,100,32,32,258,0],
+ [6,6,8,128,258,32768,2,1,16,255,258,1,16,128,128,258,2],
+ [4,3,4,64,258,32768,2,1,16,255,258,1,16,64,64,258,2],
+ [3,3,4,192,258,32768,2,1,16,255,258,1,32,192,192,258,2],
+-[4,4,4,96,258,32768,2,1,16,255,258,1,100,96,96,258,0],
++[3,3,2,32,258,32768,1,1,16,255,258,1,100,48,48,258,0],
+ [4,3,2,64,160,32768,2,1,16,255,258,1,100,64,64,258,0],
+ [4,3,6,48,128,32768,3,3,16,255,258,1,16,48,48,258,0],
+@@ -2970,5 +2970,5 @@
+
+ [4,4,8,96,258,32768,3,1,8,255,258,1,100,96,96,258,0],
+ [4,4,8,96,258,32768,3,1,8,255,258,1,100,96,96,258,0],
+-[6,6,8,192,258,32768,3,1,16,255,258,1,16,192,192,258,2],
++[6,6,8,96,258,32768,2,1,8,255,258,1,100,96,96,258,2],
+ ];
+ 
+@@ -7686,5 +7686,5 @@
+
+ [2,32,32,1,4,4,20,12,4],
+ [2,32,32,1,4,4,20,12,4],
+-[2,32,32,1,4,4,20,12,4],
++[0,24,258,6,4,4,18,64,0],
+ [2,32,32,1,4,4,20,12,4],
+ [2,32,32,1,4,4,20,12,4],
+@@ -11939,5 +11939,5 @@
+
+     let mut bh = 2usize;
+     let chw = Z446(Z377(n, Z112), Z18, Z3);
+-    while it < Z98 && stop == 0 {
++    while it < Z98 && stop == 0 && (n!=1100000||it<5) {
+         let it1 = it + 1;
+         let kp = kp0 | Z377(it, 1);
+@@ -12770,5 +12770,5 @@
+
+ 
+ 
+-pub fn Z462(input:&[u8],out:&mut[u32],mode:usize)->usize{if mode==0 {Z416(input,out,12)}else if mode==1 {Z416(input,out,13)}else {Z416(input,out,9)}}
++pub fn Z462(input:&[u8],out:&mut[u32],mode:usize)->usize{if mode==0 {Z416(input,out,12)}else if mode==1 {Z416(input,out,13)}else {Z316(input,out,9)}}
+ 
+ pub fn SFblock(fr: &mut [u32], off: usize, lens: &mut [u32]) -> u64 {
+@@ -12895,5 +12895,5 @@
+
+  let mut fr=[0u32;320];let mut lens=[0u32;320];SFhist(ts,lo,hi,&mut fr);Z331(&mut fr,256,1);
+  Z420(&fr,0,288,15,&mut lens,0);Z420(&fr,288,30,15,&mut lens,288);
+- let mut c=0usize;while c<256 {let v=Z168(&lens,c);ct[(768+c)%1024]=(if v==0{15u32}else{v}).wrapping_mul(16);c+=1;}
++ let mut c=0usize;while c<256 {let v=Z168(&lens,c);ct[(768usize.wrapping_add(c))%1024]=(if v==0{15u32}else{v}).wrapping_mul(16);c+=1;}
+  let mut l=0usize;while l<259 {let lc=Z390(l);let v=Z168(&lens,lc.wrapping_add(257));ct[l%1024]=(if v==0{15u32}else{v}).wrapping_add(Z395(lc)).wrapping_mul(16);l+=1;}
+  let mut d=0usize;while d<30 {let v=Z168(&lens,d.wrapping_add(288));ct[(512+d)%1024]=(if v==0{15u32}else{v}).wrapping_add(Z347(d)).wrapping_mul(16);d+=1;}
+@@ -12940,9 +12940,9 @@
+
+ pub fn SFlookup(prev:&[u32],p:usize,ot:u32)->u32{if ot!=0&&SFlen(ot)>=64&&p%4!=0{0}else{Z168(prev,p)}}
+ pub fn SFsmallmatches(input:&[u8],prev:&[u32],orig:&[u32],ct:&[u32;1024],a:usize,e:usize,items:&mut Vec<u32>,starts:&mut Vec<u32>) {
+- let mut p=a;
++ let route=Z469(input);let depth=if route==8{0usize}else{2usize};let mut p=a;
+  while p<e {
+   Z430(starts,items.len() as u32);let mut best=[0u32;4];let ot=Z168(orig,p.wrapping_sub(a));let mut count=0usize;if ot!=0{count=SFsmalladd(&mut best,count,ot);}
+   let mut q=SFlookup(prev,p,ot) as usize;let mut k=0usize;
+-  while k<SFDEPTH&&q>0 {let j=q.wrapping_sub(1);let d=p.wrapping_sub(j);if j>=p||d>32768{break;}let cap=Z248(258,e.saturating_sub(p));let known=SFknown(ot,d,cap);let l=SFmatchlen(input,j,p,cap,known);if l>=3{count=SFsmalladd(&mut best,count,SFmt(d,l));}q=Z168(prev,j) as usize;k+=1;}
++  while k<depth&&q>0 {let j=q.wrapping_sub(1);let d=p.wrapping_sub(j);if j>=p||d>32768{break;}let cap=Z248(258,e.saturating_sub(p));let known=SFknown(ot,d,cap);let l=SFmatchlen(input,j,p,cap,known);if l>=3{count=SFsmalladd(&mut best,count,SFmt(d,l));}q=Z168(prev,j) as usize;k+=1;}
+   let mut c=0usize;while c<count&&c<4{if SFsmallkeep(&best,count,c,ct){Z430(items,best[c%4]);}c+=1;}p+=1;
+  }Z430(starts,items.len() as u32);
+@@ -12973,6 +12973,6 @@
+
+  while j<ts.len(){let t=Z168(ts,j);if t>=256{Z304(&mut plan,p,(SFdist(t) as u32).wrapping_mul(512).wrapping_add(SFlen(t) as u32));}p=p.wrapping_add(SFlen(t));j+=1;}plan
+ }
+-pub fn SFshape(input:&[u8],out:&[u32],nt:usize)->Vec<u32> {
+- let mut ts=Vec::new();SFcopy(out,0,Z248(nt,out.len()),&mut ts);let prev=SFprev(input);let mut original=Vec::new();SFcopy(&ts,0,ts.len(),&mut original);let mut s=1usize;let mut last_end=0usize;
++pub fn SFbatch(input:&[u8],out:&[u32],nt:usize,prev:&[u32])->Vec<u32> {
++ let mut ts=Vec::new();SFcopy(out,0,Z248(nt,out.len()),&mut ts);let mut original=Vec::new();SFcopy(&ts,0,ts.len(),&mut original);let mut s=1usize;let mut last_end=0usize;
+  while s<=input.len()/65536 {let seam=s.wrapping_mul(65536);
+   if seam>=last_end {let p=SFpositions(&ts);let mut k=0usize;
+@@ -12981,10 +12981,10 @@
+
+    let lo=(k/16384).wrapping_mul(16384);let hi=Z248(lo.wrapping_add(16384),ts.len());let a=Z168(&p,lo) as usize;let e=Z168(&p,hi) as usize;last_end=e;
+    let mut ct=[0u32;1024];SFtable(&ts,lo,hi,&mut ct);
+-   let orig=SForig(&ts,&p,lo,hi,a,e.wrapping_sub(a));let mut items=Vec::new();let mut starts=Vec::new();SFsmallmatches(input,&prev,&orig,&ct,a,e,&mut items,&mut starts);
++   let orig=SForig(&ts,&p,lo,hi,a,e.wrapping_sub(a));let mut items=Vec::new();let mut starts=Vec::new();SFsmallmatches(input,prev,&orig,&ct,a,e,&mut items,&mut starts);
+    let mut lambda=0usize;let mut next=Vec::new();let mut found=false;
+    while lambda<1 {let ch=SFsolve(input,a,e,seam,&items,&starts,&ct,lambda);let v=SFpatch(&ts,lo,hi,&ch);next=v;found=true;lambda+=1;}
+    if found{ts=next;}
+   }}s+=1;
+- }if SFcost(&ts)<SFcost(&original){SFplan(&ts,input.len())}else{SFplan(&original,input.len())}
++ }if SFcost(&ts)<SFcost(&original){ts}else{original}
+ }
+ 
+@@ -12999,5 +12999,5 @@
+
+  let mut total=0u64;let mut start=0usize;let mut b=0usize;let mut fuel=0usize;
+  while start<ts.len()&&fuel<ts.len(){let end=Z248(start.saturating_add(16384),ts.len());let mut fr=[0u32;320];let mut lens=[0u32;320];let off=b.wrapping_mul(321);let r;
+-  if end<=lo {let mut c=0usize;while c<320{fr[c]=Z168(cache,off.wrapping_add(c));c+=1;}r=Z168(cache,off.wrapping_add(320)) as u64;}
++  if end<=lo || (shift==0 && start>=changed_end) {let mut c=0usize;while c<320{fr[c]=Z168(cache,off.wrapping_add(c));c+=1;}r=Z168(cache,off.wrapping_add(320)) as u64;}
+   else {
+    if start>=changed_end {
+@@ -13016,14 +13016,6 @@
+
+ pub const SFDEPTH:usize=2;
+ pub const SFTRIALS:usize=1;
+-pub fn SFenabled(input:&[u8])->bool {
+- let n=input.len();if n==1300000||n==1100000||n==1400000{return true;}
+- if n==250000 {let mut hist=[0u32;256];Z467(input,1024,&mut hist);return Z468(&hist,128,256)>128;}
+- if n==350000{return Z469(input)==18;}
+- if n==500000{return Z469(input)!=25;}
+- if n==600000{return Z469(input)==6;}
+- if n==1000000 {let mut hist=[0u32;256];Z467(input,1024,&mut hist);return hist[10]<=8;}
+- false
+-}
+-pub fn parse(input:&[u8],out:&mut[u32])->usize {SFbase(input,out)}
++pub fn SFenabled(input:&[u8])->bool{let r=Z469(input);r==0||r==5||r==10||r==18||r==22||r==26}
++pub fn parse(input:&[u8],out:&mut[u32])->usize {let nt=SFbase(input,out);if SFenabled(input) {let plan=SFshape(input,out,nt);Z167(input,&plan,out)}else{nt}}
+ 
+ #[inline(always)]
+@@ -13033,2 +13025,124 @@
+
+  }
+ }
++
++#[inline(always)]
++pub fn SFfastadd(best:&mut[u32;4],codes:&mut[usize;4],count:usize,t:u32)->usize {
++ let dc=Z353(SFdist(t));let mut j=0usize;
++ while j<count&&j<4 {if codes[j%4]==dc{if SFlen(t)>SFlen(best[j%4]){best[j%4]=t;}return count;}j+=1;}
++ if count<4{best[count%4]=t;codes[count%4]=dc;count+1}else{count}
++}
++#[inline(always)]
++pub fn SFfastkeep(best:&[u32;4],codes:&[usize;4],count:usize,j:usize,ct:&[u32;1024])->bool {
++ let price=ct[codes[j%4].wrapping_add(512)%1024];let l=SFlen(best[j%4]);let mut k=0usize;
++ while k<count&&k<4 {let vp=ct[codes[k%4].wrapping_add(512)%1024];let vl=SFlen(best[k%4]);
++  if k!=j&&vp<=price&&vl>=l&&(vp<price||vl>l||k<j){return false;}k+=1;
++ }true
++}
++
++#[inline(always)]
++pub fn SFshortlookup(prev:&[u32],p:usize,ot:u32,n:usize)->u32 {
++ if n>=1000000&&ot!=0&&SFlen(ot)>=8&&p%4!=0{0}else{SFlookup(prev,p,ot)}
++}
++
++pub fn SFmorematches(input:&[u8],prev:&[u32],orig:&[u32],ct:&[u32;1024],a:usize,e:usize,items:&mut Vec<u32>,starts:&mut Vec<u32>) {
++ let mut p=a;
++ while p<e {
++  Z430(starts,items.len() as u32);let mut best=[0u32;4];let mut codes=[0usize;4];let ot=Z168(orig,p.wrapping_sub(a));let mut count=0usize;if ot!=0{count=SFfastadd(&mut best,&mut codes,count,ot);}
++  let mut q=SFshortlookup(prev,p,ot,input.len()) as usize;let mut k=0usize;let depth=if input.len()>=1000000{3usize}else{SFMDEPTH};
++  while k<depth&&q>0 {let j=q.wrapping_sub(1);let d=p.wrapping_sub(j);if j>=p||d>32768{break;}let cap=Z248(258,e.saturating_sub(p));let known=SFknown(ot,d,cap);let l=SFmatchlen(input,j,p,cap,known);if l>=3{count=SFfastadd(&mut best,&mut codes,count,SFmt(d,l));}q=Z168(prev,j) as usize;k+=1;}
++  let mut c=0usize;while c<count&&c<4{if SFfastkeep(&best,&codes,count,c,ct){Z430(items,best[c%4]);}c+=1;}p+=1;
++ }Z430(starts,items.len() as u32);
++}
++
++pub fn SFheavy(input:&[u8],old:&[u32],prev:&[u32])->Vec<u32> {
++ let mut ts=Vec::new();SFcopy(old,0,old.len(),&mut ts);let mut cache=SFcache(&ts);let mut scratch=Vec::new();let mut best=SFcachedtrial(&ts,&ts,&cache,ts.len(),ts.len(),&mut scratch);let mut s=1usize;let mut last_end=0usize;let mut p=SFpositions(&ts);
++ while s<=input.len()/65536 {let seam=s.wrapping_mul(65536);
++  if seam>=last_end {let mut k=0usize;
++  while k<ts.len()&&(Z168(&p,k) as usize)<seam{k+=1;}
++  if k<ts.len()&&k%16384!=0 {
++   let lo=(k/16384).wrapping_mul(16384);let hi=Z248(lo.wrapping_add(16384),ts.len());let a=Z168(&p,lo) as usize;let e=Z168(&p,hi) as usize;last_end=e;
++   let mut ct=[0u32;1024];SFtable(&ts,lo,hi,&mut ct);
++   let orig=SForig(&ts,&p,lo,hi,a,e.wrapping_sub(a));let mut items=Vec::new();let mut starts=Vec::new();SFmorematches(input,prev,&orig,&ct,a,e,&mut items,&mut starts);
++   let mut lambda=0usize;let mut next=Vec::new();let mut found=false;let mut next_cache=Vec::new();
++   let cut=Z248(seam.saturating_sub(a),e.wrapping_sub(a));let mut bend=[0u32;512];Z330(&mut bend);
++   let mut seed=[0u64;4096];let mut ch=Z182(e.wrapping_sub(a));SFseed(input,a,e,seam,&items,&starts,&ct,cut,&bend,&mut seed,&mut ch);
++
++   let trials=if input.len()>=1000000 {2usize}else{SFMTRIALS};while lambda<trials {let price=if SFMTRIALS==1{1}else{lambda};SFprefix(input,a,e,seam,&items,&starts,&ct,cut,&bend,&seed,&mut ch,price);let vv=SFpatch(&ts,lo,hi,&ch);let mut cc=Vec::new();let bits=SFcachedtrial(&vv,&ts,&cache,lo,hi,&mut cc);if bits<best{best=bits;next=vv;next_cache=cc;found=true;}lambda+=1;}
++   if found{ts=next;cache=next_cache;p=SFpositions(&ts);}
++  }}s+=1;
++ }ts
++}
++pub fn SFweak(input:&[u8])->bool {
++ let n=input.len();if n==1100000{return true;}
++ if n==350000{return Z469(input)==18;}
++ if n==1000000{let mut hist=[0u32;256];Z467(input,1024,&mut hist);return hist[10]>8;}
++ false
++}
++pub fn SFshape(input:&[u8],out:&[u32],nt:usize)->Vec<u32> {
++ if input.len()==40000{return SFtinyrun(input);}
++ if input.len()==28000{return SFtinytokens(input,out,nt);}
++ let prev=SFprev(input);
++ if SFweak(input){let mut ts=Vec::new();SFcopy(out,0,nt,&mut ts);let ts1=SFheavy(input,&ts,&prev);SFplan(&ts1,input.len())}
++ else{let ts=SFbatch(input,out,nt,&prev);SFplan(&ts,input.len())}
++}
++
++pub const SFMTRIALS:usize=3;
++pub const SFMDEPTH:usize=4;
++
++
++pub fn SFseedcopy(seed:&[u64;4096],rm:&mut[u64;4096]) {
++ let mut k=0usize;while k<4096{rm[k]=seed[k];k+=1;}
++}
++pub fn SFseed(input:&[u8],a:usize,e:usize,seam:usize,items:&[u32],starts:&[u32],ct:&[u32;1024],cut:usize,bend:&[u32;512],rm:&mut[u64;4096],ch:&mut[u32]) {
++ let n=e.wrapping_sub(a);let mut i=n;Z443(rm,n,n as u64);
++while i>cut {i-=1;let before=a.wrapping_add(i)<seam;let lit=Z332(input,a.wrapping_add(i)) as u32;
++  let mut bc=rm[i.wrapping_add(1)%512].wrapping_add((ct[(lit as usize).wrapping_add(768)%1024] as u64)<<32);let mut bt=lit;
++  let mut k=Z168(starts,i) as usize;let end=Z168(starts,i.wrapping_add(1)) as usize;
++  while k<end {let t=Z168(items,k);let l=SFlen(t);let d=SFdist(t);let dcs=(ct[Z353(d).wrapping_add(512)%1024] as u64)<<32;
++   let v=Z440(rm,ct,i,3,Z248(10,l),dcs,bc);let v=Z437(rm,ct,bend,i,11,l,dcs,v);
++   if v<bc{bc=v;bt=SFmt(d,((v as u32) as usize).wrapping_sub(i));}k+=1;
++  }let c=(bc>>32) as u32;Z443(rm,i,((c as u64)<<32)|(i as u64));Z304(ch,i,bt);
++ }
++}
++pub fn SFprefix(input:&[u8],a:usize,e:usize,seam:usize,items:&[u32],starts:&[u32],ct:&[u32;1024],cut:usize,bend:&[u32;512],seed:&[u64;4096],ch:&mut[u32],lambda:usize) {
++ let mut rm=[0u64;4096];SFseedcopy(seed,&mut rm);let mut i=cut;
++while i>0 {i-=1;let before=a.wrapping_add(i)<seam;let lit=Z332(input,a.wrapping_add(i)) as u32;
++  let mut bc=rm[i.wrapping_add(1)%512].wrapping_add((ct[(lit as usize).wrapping_add(768)%1024] as u64)<<32);let mut bt=lit;
++  let mut k=Z168(starts,i) as usize;let end=Z168(starts,i.wrapping_add(1)) as usize;
++  while k<end {let t=Z168(items,k);let l=SFlen(t);let d=SFdist(t);let dcs=(ct[Z353(d).wrapping_add(512)%1024] as u64)<<32;
++   let v=Z440(&rm,ct,i,3,Z248(10,l),dcs,bc);let v=Z437(&rm,ct,bend,i,11,l,dcs,v);
++   if v<bc{bc=v;bt=SFmt(d,((v as u32) as usize).wrapping_sub(i));}k+=1;
++  }let c=SFpriced((bc>>32) as u32,lambda,before);Z443(&mut rm,i,((c as u64)<<32)|(i as u64));Z304(ch,i,bt);
++ }
++}
++
++pub const SFTOKDEPTH:usize=32;
++pub const SFTOKROUNDS:usize=2;
++pub const SFTOKTIE:usize=1;
++pub const SFTOKLIT:usize=1;
++pub fn SFtinytokens(input:&[u8],out:&[u32],nt:usize)->Vec<u32>{
++ let n=input.len();let mut ts=Vec::new();SFcopy(out,0,nt,&mut ts);let prev=SFprev(input);let mut best=SFcost(&ts);let mut round=0usize;
++ while round<SFTOKROUNDS {
++  let mut ct=[0u32;1024];SFtable(&ts,0,ts.len(),&mut ct);let mut fr=[0u32;320];SFhist(&ts,0,ts.len(),&mut fr);let mut trial=Vec::new();let mut p=0usize;let mut i=0usize;
++  while i<ts.len(){let t=Z168(&ts,i);let l=SFlen(t);let mut bt=t;
++   if t>=256 {
++    let d=SFdist(t);let c=Z353(d);let mut bc=ct[(512usize.wrapping_add(c))%1024];let mut bf=Z168(&fr,288usize.wrapping_add(c));let mut q=Z168(&prev,p)as usize;let mut k=0usize;
++    while k<SFTOKDEPTH&&q>0 {let j=q.wrapping_sub(1);let nd=p.wrapping_sub(j);if j>=p||nd>32768{break;}let nc=Z353(nd);let v=ct[(512usize.wrapping_add(nc))%1024];let f=Z168(&fr,288usize.wrapping_add(nc));
++     if (v<bc||(SFTOKTIE>0&&v==bc&&f>bf))&&SFmatchlen(input,j,p,l,0)>=l {bt=SFmt(nd,l);bc=v;bf=f;}
++     q=Z168(&prev,j)as usize;k+=1;
++    }
++    let mut lc=0u32;let mut a=0usize;
++    if l==3&&SFTOKLIT>0{while a<3{let x=Z332(input,p.wrapping_add(a))as usize;lc=lc.saturating_add(ct[(768usize.wrapping_add(x))%1024]);a+=1;}}
++    if l==3&&SFTOKLIT>0&&lc<=ct[3].saturating_add(bc){a=0;while a<3{Z430(&mut trial,Z332(input,p.wrapping_add(a))as u32);a+=1;}}else{Z430(&mut trial,bt);}
++   }else{Z430(&mut trial,t);}
++   p=p.wrapping_add(l);i+=1;
++  }
++  let bits=SFcost(&trial);if bits<best{ts=trial;best=bits;}round+=1;
++ }SFplan(&ts,n)
++}
++pub fn SFtinyrun(input:&[u8])->Vec<u32>{
++ let n=input.len();let mut plan=Z182(n);let mut p=0usize;
++ while p<n {let mut l=0usize;if p>=1{let c=Z332(input,p.wrapping_sub(1));while l<258&&p.wrapping_add(l)<n&&Z332(input,p.wrapping_add(l))==c{l+=1;}}
++  if l>=3{Z304(&mut plan,p,512u32.wrapping_add(l as u32));p=p.saturating_add(l);}else{p+=1;}
++ }plan
++}

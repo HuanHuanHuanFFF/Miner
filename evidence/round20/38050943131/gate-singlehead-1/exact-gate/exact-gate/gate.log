@@ -1,0 +1,72 @@
+verifying /home/runner/work/_temp/round4-receipts/exact-gate/input
+workspace: /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-8ffjtfjv
+
+0 intake      ok — input: parse.rs, Parse.lean
+1 policy      ok — source prefilters passed
+2 static      ok — resolved operations: core::num::{impl}::leading_zeros, core::num::{impl}::saturating_add, core::num::{impl}::wrapping_add, core::num::{impl}::wrapping_mul, core::num::{impl}::wrapping_sub, core::slice::{impl}::len
+3 extract     ok — charon+aeneas re-run by the verifier, no new axioms
+4 statement   ok — `LZ77.Obligation slot.parse` typechecks (bwrap, 900s, 16384 MB)
+5 axioms      ok — ['Classical.choice', 'Quot.sound', 'propext']; extraction intact
+6 score       running…
+
+Corpus: corpus-stage1
+file                       raw  incumbent  submission
+-----------------------------------------------------
+binary.db.bin           500000      76338       83172
+bundle.min.js.txt      1000000     301618      327071
+catalog.xml.txt         500000      62314       72292
+compressed.bin          300000     300194      300095
+config.yaml.txt         400000      85384       92298
+docs.md.txt             800000     226973      248368
+dump.sql.txt            150000      20817       19948
+genome.fasta            900000     292479      283718
+images.bin              250000     223767      229936
+lean.txt               1000000     235059      264731
+machine-code.bin        500000     167357      172126
+metrics.csv.txt        1300000     287282      284703
+multibyte.txt          1100000     273630      301642
+page.html.txt           600000     103618      111258
+prose.txt              1500000     579041      604061
+records.json.txt        400000      72255       76576
+server.log              300000      29404       29343
+source.c.txt           1400000     354325      388892
+source.py.txt           600000     132748      145201
+source.rs.txt           700000     134069      148663
+sourcemap.map.txt       350000      68389       77875
+sparse.bin               40000       1234        1270
+tiny-app.log             28000        965        1214
+tiny-config.json.txt     12000       2107        2487
+weights-bf16.bin        450000     362200      365611
+weights-f16.bin         250000     216274      212660
+weights-f32.bin         350000     284747      284138
+weights-q8.bin          250000     236246      235572
+-----------------------------------------------------
+TOTAL                 15930000    5130834     5364921
+
+method        bytes     ratio    lz77  encode   total  slowdown
+-------------------------------------------------------------------------------------------------------------------
+incumbent   5130834  1.00000x  0.354s  0.131s  0.485s     1.00x  the incumbent
+submission  5364921  1.04562x  0.030s  0.137s  0.168s     0.35x  no improvement — 4.562% larger than the incumbent.
+
+no improvement — 4.562% larger than the incumbent.
+[32m2026-10-10 12:14:34.663[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mmain[0m:[36m649[0m - [34m[1m[gate] benchmark sandbox: bwrap, 300s, 2048 MB, cpus=any[0m
+[32m2026-10-10 12:14:34.665[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_intake[0m:[36m261[0m - [34m[1m[gate] parse.rs a2341a458a6344ac -> slot/generated/parse.rs[0m
+[32m2026-10-10 12:14:34.666[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_intake[0m:[36m261[0m - [34m[1m[gate] Parse.lean 5238d0258e8c6c2f -> lean/Proof/Parse.lean[0m
+[32m2026-10-10 12:14:34.779[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] rustup exit=0 in 0.0s[0m
+[32m2026-10-10 12:14:35.457[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] extract.sh exit=0 in 0.7s[0m
+[32m2026-10-10 12:14:47.417[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] extract.sh exit=0 in 11.3s[0m
+[32m2026-10-10 12:14:47.418[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_extract[0m:[36m356[0m - [34m[1m[gate] extracted Types.lean 9658a2db0a257b0f, Funs.lean f9de72c6565c451a, Constants.lean 574bdb21fbd486ee[0m
+[32m2026-10-10 12:14:48.782[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] lake exit=0 in 1.4s[0m
+[32m2026-10-10 12:15:10.267[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] lake exit=0 in 21.5s[0m
+[32m2026-10-10 12:18:13.171[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] lake exit=0 in 182.9s[0m
+[32m2026-10-10 12:18:15.007[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] lake exit=0 in 1.8s[0m
+[32m2026-10-10 12:18:16.824[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] lake exit=0 in 1.8s[0m
+[32m2026-10-10 12:18:16.824[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_axioms[0m:[36m423[0m - [34m[1m[gate] axiom query stdout: "'accepted' depends on axioms: [propext, Classical.choice, Quot.sound]"[0m
+[32m2026-10-10 12:18:16.826[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m703[0m - [1m[gate] verification accepted in 222.2s (bwrap, 900s, 16384 MB)[0m
+[32m2026-10-10 12:18:16.871[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] rustc exit=0 in 0.0s[0m
+[32m2026-10-10 12:18:18.364[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] cargo exit=0 in 1.5s[0m
+[32m2026-10-10 12:18:18.364[0m | [34m[1mDEBUG   [0m | [36mbench.driver[0m:[36m_build[0m:[36m295[0m - [34m[1m[bench] built incumbent in 1.5s exit=0[0m
+[32m2026-10-10 12:18:21.365[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] cargo exit=0 in 3.0s[0m
+[32m2026-10-10 12:18:21.365[0m | [34m[1mDEBUG   [0m | [36mbench.driver[0m:[36m_build[0m:[36m295[0m - [34m[1m[bench] built submission in 3.0s exit=0[0m
+[32m2026-10-10 12:18:29.627[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] measure exit=0 in 8.3s[0m
+[32m2026-10-10 12:18:29.627[0m | [34m[1mDEBUG   [0m | [36mbench.driver[0m:[36m_measure[0m:[36m333[0m - [34m[1m[bench] measured submission in 8.3s exit=0[0m

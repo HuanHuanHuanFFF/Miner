@@ -6,6 +6,47 @@ from round4 import ROOT,validate
 def main():
     assert os.environ.get('GITHUB_ACTIONS')=='true'and os.environ.get('RUNNER_OS')=='Linux'
     spec=validate(os.environ['ROUND4_SPEC']);out=Path(os.environ['RUNNER_TEMP'])/'round4-receipts';out.mkdir(exist_ok=True)
+    if spec.get('r20_secondary_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round20-secondary.py')],check=True);return
+    if spec.get('r19_cache_prefix'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round19-cache-prefix.py')],check=True);return
+    if spec.get('r19_cache_prototype'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round19-cache-prototype.py')],check=True);return
+    if spec.get('r19_sf_cache'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round19-sf-cache.py')],check=True);return
+    if spec.get('r19_sf_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round19-sf-counts.py')],check=True);return
+    if spec.get('r18_range_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-ranges.py')],check=True);return
+    if spec.get('r18_dp_repeat_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-convergence.py')],check=True);return
+    if spec.get('r18_rf_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-rf-counts.py')],check=True);return
+    if spec.get('r18_rf_span_equiv'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-rf-span.py')],check=True);return
+    if spec.get('r18_rf_dominance_check'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-rf-dominance.py')],check=True);return
+    if spec.get('r18_rf_prefix_check'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-rf-prefix.py')],check=True);return
+    if spec.get('r18_a_ring_check'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-a-ring.py')],check=True);return
+    if spec.get('r18_dna_domain_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-dna-domains.py')],check=True);return
+    if spec.get('r18_dna_demotion_probe'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-dna-demotion.py')],check=True);return
+    if spec.get('r18_a_range_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-a-ranges.py')],check=True);return
+    if spec.get('r18_a_block_check'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-a-block.py')],check=True);return
+    if spec.get('r18_function_profile'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-functions.py')],check=True);return
     if spec.get('r16_transfer_candidates'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round16-transfer.py')],check=True);return
     if spec.get('pc_rescue_counts'):

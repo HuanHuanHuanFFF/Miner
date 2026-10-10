@@ -1,0 +1,985 @@
+{
+  "checked_at_utc": "2026-10-10T06:22:28.661073+00:00",
+  "submission_id": "603",
+  "candidate": "r18-rf-sf-content-proof1",
+  "gate_status": "passed",
+  "admission": {
+    "decision_id": "603",
+    "status": "recorded",
+    "outcome": "passed",
+    "admitted": true,
+    "reason_code": "speed-advantage-established",
+    "explanation": "The lower confidence bound is above zero: the speed improvement passed.",
+    "reference_submission_id": "585",
+    "freshness": "unknown"
+  },
+  "metrics": {
+    "balanced_time_ratio": 6.695226672218882,
+    "mean_file_compression_pct": 34.09272307637799,
+    "total_compression_seconds": 9.572356023000001,
+    "lz77_seconds": 9.094976451,
+    "byte_weighted_compression_pct": 30.82209353421218
+  },
+  "score": {
+    "snapshot_id": "29505",
+    "on_frontier": true,
+    "pareto_weight": 0.05712701594136391,
+    "improvement_weight": 0.0,
+    "combined_weight": 0.05712701594136391,
+    "payable_weight": 0.05712701594136391,
+    "payment_eligible": true,
+    "unpaid_reason": null,
+    "bounty_earned_alpha": 0.0,
+    "bounty_capped": false
+  },
+  "pipeline": {
+    "static": {
+      "status": "passed",
+      "started_at": null,
+      "finished_at": "2026-10-10T06:17:02.748016+00:00",
+      "reason_code": null,
+      "message": null
+    },
+    "lean": {
+      "status": "passed",
+      "started_at": null,
+      "finished_at": "2026-10-10T06:17:02.748016+00:00",
+      "reason_code": null,
+      "message": null
+    },
+    "benchmark": {
+      "status": "passed",
+      "started_at": null,
+      "finished_at": null,
+      "reason_code": null,
+      "message": null
+    },
+    "aggregation": {
+      "status": "passed",
+      "started_at": null,
+      "finished_at": null,
+      "reason_code": null,
+      "message": null
+    }
+  },
+  "snapshot": {
+    "snapshot_id": "29505",
+    "computed_at": "2026-10-10T06:20:47.898417+00:00",
+    "policy_version": "compression-policy-c255effb7d5afeef",
+    "status": "ready",
+    "freshness": "unknown",
+    "freshness_reason": "Recorded scoring pass; live policy changes require a new pass."
+  },
+  "bundle_digest": "38c4ccfd8dc9979cb05ea09b64f93dd09ba5f528d260c787b47b3edec8cfca53",
+  "source_sha256": "16390a77d6b500f96b37441027512b89ba2d62b5091435e0527d9aa07b9834ef",
+  "proof_sha256": "0a0171ac0dda3f6c06e574145e6b89b6b90fed45bd2d1d22be0ad199d18bacc7",
+  "raw_receipt": "status-20261010T062226809912Z.receipt.json",
+  "terminal_result_observed": true,
+  "chain_transaction_sent": false,
+  "status": "VERIFIED_FORMAL_GATE_ADMISSION_FRONTIER_AND_PAYABLE_SHARE",
+  "files": {
+    "parse.rs": "16390a77d6b500f96b37441027512b89ba2d62b5091435e0527d9aa07b9834ef",
+    "Parse.lean": "0a0171ac0dda3f6c06e574145e6b89b6b90fed45bd2d1d22be0ad199d18bacc7"
+  },
+  "competition_pool_share_pct": 5.712701594136391,
+  "leaderboard_rank": 2,
+  "bounty_earned_alpha_at_snapshot": 0.0,
+  "actual_wallet_payment": "UNKNOWN_NOT_QUERIED",
+  "weights_context": {
+    "snapshot_id": "29505",
+    "computed_at": "2026-10-10T06:20:47.898417+00:00",
+    "policy_version": "compression-policy-c255effb7d5afeef",
+    "status": "ready",
+    "freshness": "unknown",
+    "freshness_reason": "Recorded scoring pass; live policy changes require a new pass."
+  },
+  "chain_accepted_for_this_weight_pass": false,
+  "weight_pass_dry_run": false,
+  "admission_speed_test": {
+    "estimated_gain": 0.28515797275787313,
+    "lower_confidence_bound": 0.2832841212048178,
+    "confidence_level": 0.95,
+    "threshold": 0.0,
+    "comparison": "strictly_greater",
+    "passed": true,
+    "method": "mixed-files-independent-runs-percentile-v2",
+    "draws": 2000,
+    "resampling": "independent-runs",
+    "file_count": 56,
+    "corpora": [
+      "corpus-stage1",
+      "corpus-stage2"
+    ],
+    "limitations": [
+      "excludes host/corpus drift and cross-file dependence; nominal coverage is not guaranteed for small samples"
+    ],
+    "candidate_timing": {
+      "metric": "balanced_time_ratio",
+      "estimate": 6.695226672218882,
+      "lower": 6.693555481312108,
+      "upper": 6.698958360099972,
+      "confidence_level": 0.95,
+      "method": "paired-per-file-compression-bootstrap-v4",
+      "draws": 2000
+    },
+    "reference_timing": {
+      "metric": "balanced_time_ratio",
+      "estimate": 9.366022725397364,
+      "lower": 9.33909492519286,
+      "upper": 9.42185913013043,
+      "confidence_level": 0.95,
+      "method": "paired-per-file-compression-bootstrap-v4",
+      "draws": 2000
+    },
+    "gain_display_interval": {
+      "lower": 0.2832841212048178,
+      "upper": 0.28862351153319005,
+      "confidence_level": 0.9,
+      "method": "mixed-files-independent-runs-percentile-v2",
+      "sidedness": "two-sided"
+    },
+    "comparison_range": {
+      "lower": 6.662768357293517,
+      "upper": 6.712777208448819,
+      "confidence_level": 0.9,
+      "method": "reference-anchored-relative-comparison",
+      "sidedness": "two-sided"
+    },
+    "candidate": {
+      "label": "5HeFrhFAt3nNWifXyFKn7gmp3pnCx54of1XF7AYTRBdFmZRE",
+      "time_ratio": 6.695226672218882,
+      "submission_id": 603,
+      "aggregation_id": 702,
+      "compression_pct": 34.09272307637799,
+      "admission_check_id": null
+    },
+    "reference": {
+      "label": "5Feus2Y7GRxFv3nxrMMwv6r7pRhpYiJQWKceY5iPbaxvCwhu",
+      "time_ratio": 9.366022725397364,
+      "submission_id": 585,
+      "aggregation_id": 680,
+      "compression_pct": 34.09261352149834,
+      "admission_check_id": 585
+    },
+    "frontier_before": [
+      {
+        "label": "5HeXthCsDRy6jsu7wPvGshUBxUmW4nVnmQGZ1acxuLamvk1J",
+        "time_ratio": 0.43145385098716865,
+        "submission_id": 533,
+        "aggregation_id": 627,
+        "compression_pct": 38.20892282558711,
+        "admission_check_id": 533
+      },
+      {
+        "label": "5CciqiMAb9d1qu9CsZLtr2svoxCU4ywUtDX6pLHMZWmRB8D1",
+        "time_ratio": 0.4318296104699827,
+        "submission_id": 595,
+        "aggregation_id": 693,
+        "compression_pct": 36.57814279549815,
+        "admission_check_id": 595
+      },
+      {
+        "label": "5H4K4JHkviPniQv8467RDxrn86a1LeGCFm38AZEoVJTKWY2u",
+        "time_ratio": 0.4334843231749688,
+        "submission_id": 575,
+        "aggregation_id": 670,
+        "compression_pct": 36.56945540565586,
+        "admission_check_id": 575
+      },
+      {
+        "label": "5EbuBvUpc3tPmQnfYdeeUUxmeCnzJcG1HQ4stFLbknVf4kNW",
+        "time_ratio": 0.43377528131694243,
+        "submission_id": 578,
+        "aggregation_id": 673,
+        "compression_pct": 36.550332691762605,
+        "admission_check_id": 578
+      },
+      {
+        "label": "5EhZ6M3VsHP8ZKxypAsFNQAxSFEkwzfdxtGpetwzcQw3GpPp",
+        "time_ratio": 0.4377462914119613,
+        "submission_id": 601,
+        "aggregation_id": 700,
+        "compression_pct": 36.34556083029074,
+        "admission_check_id": 601
+      },
+      {
+        "label": "5C5jh8db6s5cFMog7H2bnEeYkp28qTRs6xJ46GrdCchXgWC6",
+        "time_ratio": 0.43920614369891425,
+        "submission_id": 598,
+        "aggregation_id": 697,
+        "compression_pct": 36.2416219599349,
+        "admission_check_id": 598
+      },
+      {
+        "label": "5CQKuKFFiSjj3AyBU36sY4nyxrTpq3eJMK8nD14RvDrSqEaV",
+        "time_ratio": 0.4409570603313834,
+        "submission_id": 546,
+        "aggregation_id": 640,
+        "compression_pct": 36.175873541091846,
+        "admission_check_id": 546
+      },
+      {
+        "label": "5DiMi2fdi6nrNL2wrpbHxKoazwzY9TGxyzXmegYftpYS4jJY",
+        "time_ratio": 0.4454947061046779,
+        "submission_id": 543,
+        "aggregation_id": 637,
+        "compression_pct": 36.03538468054762,
+        "admission_check_id": 543
+      },
+      {
+        "label": "5H6VakkNCuKyZfjfPxZEo49actZeVWmGgVKuKpKNmTCx4a1Q",
+        "time_ratio": 0.450549099664744,
+        "submission_id": 602,
+        "aggregation_id": 701,
+        "compression_pct": 35.929663986212205,
+        "admission_check_id": 602
+      },
+      {
+        "label": "5EKxqo8hNhCT4uhGCTviSVMQww9ohjLdJJyn7N4PrEvPfUjg",
+        "time_ratio": 0.4588753898041572,
+        "submission_id": 534,
+        "aggregation_id": 628,
+        "compression_pct": 35.7682327279863,
+        "admission_check_id": 534
+      },
+      {
+        "label": "5GvPmcAkwriijgfStvLeNrxyEgchnhpJycKPefjFnYWXZTpk",
+        "time_ratio": 0.46333607119242814,
+        "submission_id": 464,
+        "aggregation_id": 556,
+        "compression_pct": 35.75693332827886,
+        "admission_check_id": 466
+      },
+      {
+        "label": "5EF4A8uYkLs5RQG4XSYcFYkfqp9T6xJCM9J3m4GTXk3u7qts",
+        "time_ratio": 0.4656311571678372,
+        "submission_id": 528,
+        "aggregation_id": 621,
+        "compression_pct": 35.69752073819038,
+        "admission_check_id": 528
+      },
+      {
+        "label": "5CQERLuQJd6CiyDnhbCEmSWitFvmMvCd5Q2pDJ1RCacA2C8y",
+        "time_ratio": 0.47116298545451707,
+        "submission_id": 562,
+        "aggregation_id": 657,
+        "compression_pct": 35.5123546371783,
+        "admission_check_id": 562
+      },
+      {
+        "label": "5EPFCisQhDgJz7y1YiGKFAVN1Fe4suQGqeqUP9qd7JsAMA1c",
+        "time_ratio": 0.47935112217822706,
+        "submission_id": 540,
+        "aggregation_id": 634,
+        "compression_pct": 35.410345210147,
+        "admission_check_id": 540
+      },
+      {
+        "label": "5Dw8pZ8KTp7dZhrxXHTgMgxLKc4ki4mdwjWCxm8DA3Q6km8j",
+        "time_ratio": 0.483567251209776,
+        "submission_id": 556,
+        "aggregation_id": 650,
+        "compression_pct": 35.375270484723615,
+        "admission_check_id": 556
+      },
+      {
+        "label": "5G3VfbsT6PHgKJ3f3Toxrm42QksKFpTdGqRZjNfwqjv7PkSw",
+        "time_ratio": 0.4914987719786357,
+        "submission_id": 383,
+        "aggregation_id": 474,
+        "compression_pct": 35.2589554124447,
+        "admission_check_id": 386
+      },
+      {
+        "label": "5FA8YgFTvJKxtq9tkNL4f65ZXop82oMbPL6d5PfCB9jnFUHE",
+        "time_ratio": 0.49397984765282243,
+        "submission_id": 344,
+        "aggregation_id": 408,
+        "compression_pct": 35.21933347674151,
+        "admission_check_id": 348
+      },
+      {
+        "label": "5EvV5mQEXGNk1b2hEJ8AQ8tu29HKFn7vcSp6a7cTADEexKgN",
+        "time_ratio": 0.5008124745262179,
+        "submission_id": 319,
+        "aggregation_id": 372,
+        "compression_pct": 35.20511469388747,
+        "admission_check_id": 324
+      },
+      {
+        "label": "5CiKsZJjy89XgSC7YbPWjW8rZBebLMHQ4ipginLAvhzZ7iRZ",
+        "time_ratio": 0.5022885486969494,
+        "submission_id": 326,
+        "aggregation_id": 383,
+        "compression_pct": 35.18362114889079,
+        "admission_check_id": 331
+      },
+      {
+        "label": "5Fsb1AT1CDX6p5yhxRxPSkCkQwzpKcmUN6RKsYCtQ7uqovKA",
+        "time_ratio": 0.5102797799648172,
+        "submission_id": 276,
+        "aggregation_id": 291,
+        "compression_pct": 35.170718997619446,
+        "admission_check_id": 281
+      },
+      {
+        "label": "5GwzhwMTYkQmgXWSM26PHq6CJr3YrV59pqiJ1sVsZa2CKWJT",
+        "time_ratio": 0.5110795027417738,
+        "submission_id": 327,
+        "aggregation_id": 384,
+        "compression_pct": 35.11023280836227,
+        "admission_check_id": 332
+      },
+      {
+        "label": "5GNRxjKdMFLk7xxYjvmp8YZ2ZQz9RszJnGGg7yjv6GZGUUBf",
+        "time_ratio": 0.5144097446914135,
+        "submission_id": 491,
+        "aggregation_id": 585,
+        "compression_pct": 35.0326744710151,
+        "admission_check_id": 493
+      },
+      {
+        "label": "5H43YnfF5kB142K6gVqJ64BA1WvMgJqyCcxaZC9fph252294",
+        "time_ratio": 0.5196832497226367,
+        "submission_id": 408,
+        "aggregation_id": 498,
+        "compression_pct": 35.01681658812418,
+        "admission_check_id": 410
+      },
+      {
+        "label": "5CLu6EDABduuFZjj4PhMmiieBVnS78eJp2biJVN3AMRisEvb",
+        "time_ratio": 0.5260248624323429,
+        "submission_id": 328,
+        "aggregation_id": 385,
+        "compression_pct": 34.95997447502894,
+        "admission_check_id": 333
+      },
+      {
+        "label": "5FxR1oST1khghSpkiEbD5ur6gRKHAhcAfVttAVungwzMQiHa",
+        "time_ratio": 0.527010700231039,
+        "submission_id": 568,
+        "aggregation_id": 663,
+        "compression_pct": 34.95721728965479,
+        "admission_check_id": 568
+      },
+      {
+        "label": "5GYaxsS7iL1J22VhbvVcR6JziZzJov73e93bdCAv8Zk3N4jf",
+        "time_ratio": 0.5370296926378749,
+        "submission_id": 541,
+        "aggregation_id": 635,
+        "compression_pct": 34.94533445106481,
+        "admission_check_id": 541
+      },
+      {
+        "label": "5GEDaNS7NRrhkASkYm6ZWLFNtw1eYPwDVEvZg68ap2y2nucH",
+        "time_ratio": 0.5382039578146334,
+        "submission_id": 411,
+        "aggregation_id": 501,
+        "compression_pct": 34.90119966635547,
+        "admission_check_id": 413
+      },
+      {
+        "label": "5DkDQ3spvdE3uTtzE2QWDhYpqdG8PcaFrZT3MtvZtQ7eDGck",
+        "time_ratio": 0.5425926045733936,
+        "submission_id": 406,
+        "aggregation_id": 496,
+        "compression_pct": 34.85774133302213,
+        "admission_check_id": 408
+      },
+      {
+        "label": "5GT6h355y84oGiFL7XCxfdBAV8uJHaoWuLBFnUo36BThbKKD",
+        "time_ratio": 0.5516899210993218,
+        "submission_id": 567,
+        "aggregation_id": 662,
+        "compression_pct": 34.81300468336227,
+        "admission_check_id": 567
+      },
+      {
+        "label": "5Dk11Ad8i77eL1YB6criu89L1fDhSvkwHtVmyYkeV2QXk3ST",
+        "time_ratio": 0.5631209000752804,
+        "submission_id": 558,
+        "aggregation_id": 652,
+        "compression_pct": 34.753821160635,
+        "admission_check_id": 558
+      },
+      {
+        "label": "5CA3HWvWHFzbBnq6oNfpxPHbTExfkbsiphChFspMg6eekfoz",
+        "time_ratio": 0.5768910943186022,
+        "submission_id": 515,
+        "aggregation_id": 607,
+        "compression_pct": 34.70433281059219,
+        "admission_check_id": 515
+      },
+      {
+        "label": "5HmtmJE8nHbZWiLyiNASfiTChCvudxH1HdkoBF5dLcH3wVJa",
+        "time_ratio": 0.58408282828862,
+        "submission_id": 449,
+        "aggregation_id": 540,
+        "compression_pct": 34.69183520462673,
+        "admission_check_id": 451
+      },
+      {
+        "label": "5GYRF3Fhf9TbKRfNCvZS1nn6auMb1zP9Xq9KhtZSGzRvff1s",
+        "time_ratio": 0.5860417015846682,
+        "submission_id": 529,
+        "aggregation_id": 623,
+        "compression_pct": 34.691722302598194,
+        "admission_check_id": 529
+      },
+      {
+        "label": "5EX8TgykV6ME31cQujrVeKA4jdTQuVi7GAiNdZX82vpywUcU",
+        "time_ratio": 0.586086125521911,
+        "submission_id": 566,
+        "aggregation_id": 661,
+        "compression_pct": 34.678744191770534,
+        "admission_check_id": 566
+      },
+      {
+        "label": "5HTx1y4mgGs6Z6VuVoqbwgtTqBP5HQvJcKt4zrbkFfMyv269",
+        "time_ratio": 0.6138991813697057,
+        "submission_id": 348,
+        "aggregation_id": 413,
+        "compression_pct": 34.605197520089035,
+        "admission_check_id": 352
+      },
+      {
+        "label": "5CSFxcAWDjwFPqCKwjStKK69aG7WxHPESVPiHHdMEv3GPAoZ",
+        "time_ratio": 0.6168983270510243,
+        "submission_id": 516,
+        "aggregation_id": 608,
+        "compression_pct": 34.59707758100035,
+        "admission_check_id": 516
+      },
+      {
+        "label": "5ERQnyvnDTJqPLdve4dFYtKpSFwy4z2BkhRwGB4it9RutmR8",
+        "time_ratio": 0.623593689775799,
+        "submission_id": 524,
+        "aggregation_id": 616,
+        "compression_pct": 34.58381558981693,
+        "admission_check_id": 524
+      },
+      {
+        "label": "5HEMhrmdUjXMKsL2U4pkGxRTo5YvL7i7sfa9HExCNpYCZrpz",
+        "time_ratio": 0.6476239565560609,
+        "submission_id": 517,
+        "aggregation_id": 609,
+        "compression_pct": 34.539010690747745,
+        "admission_check_id": 517
+      },
+      {
+        "label": "5EhdBDyvU2MwbVALMMwj7SuCrMyrvGcchGZcG2YEFpSskPBG",
+        "time_ratio": 0.6618139200216682,
+        "submission_id": 526,
+        "aggregation_id": 619,
+        "compression_pct": 34.522596640760035,
+        "admission_check_id": 526
+      },
+      {
+        "label": "5GduydppctYPgN91FKzNFmzVcxTvvCn8WjMh49GzBk3rYjxC",
+        "time_ratio": 0.676603844662073,
+        "submission_id": 446,
+        "aggregation_id": 537,
+        "compression_pct": 34.51411172215681,
+        "admission_check_id": 448
+      },
+      {
+        "label": "5Ct5TonXWFzNMVK5v3zXZpSswGVak3BazzNndAU7WKoLfgHF",
+        "time_ratio": 0.7076075535165953,
+        "submission_id": 320,
+        "aggregation_id": 374,
+        "compression_pct": 34.464934262860154,
+        "admission_check_id": 325
+      },
+      {
+        "label": "5EsMErUWzgpBxqqhhn17w77tTSCGeCNxeipGeZFkguJ2udLR",
+        "time_ratio": 0.7382814251679961,
+        "submission_id": 405,
+        "aggregation_id": 495,
+        "compression_pct": 34.44728337545391,
+        "admission_check_id": 407
+      },
+      {
+        "label": "5HKHGgehrnv9AcWZ1gE4agfykju99cLWc6nfiQddrk46vP2X",
+        "time_ratio": 0.738615523940767,
+        "submission_id": 463,
+        "aggregation_id": 555,
+        "compression_pct": 34.4287910082477,
+        "admission_check_id": 465
+      },
+      {
+        "label": "5Gc6DRcgdDiNQpSedYyyK39BzWQeJTyhG2xTSvFdCNnwRNkj",
+        "time_ratio": 0.7397841454660702,
+        "submission_id": 518,
+        "aggregation_id": 610,
+        "compression_pct": 34.4092860623999,
+        "admission_check_id": 518
+      },
+      {
+        "label": "5HmAUYZ111Em5KDWDVSxFjiTTZTmSG8eDRDFmeGzUUJSj466",
+        "time_ratio": 0.7666170346061314,
+        "submission_id": 358,
+        "aggregation_id": 433,
+        "compression_pct": 34.403474306199755,
+        "admission_check_id": 362
+      },
+      {
+        "label": "5FKgEKMx8EwvhzJf8hv7vm43G4qHDdYV3KcrGoMAdFQ6UjKo",
+        "time_ratio": 0.7904355557471283,
+        "submission_id": 321,
+        "aggregation_id": 375,
+        "compression_pct": 34.380925972043826,
+        "admission_check_id": 326
+      },
+      {
+        "label": "5GTDmVyRqviaasThJPFfaExtL7ca6BRatrGRfbL5ofLsXzij",
+        "time_ratio": 0.801405824507759,
+        "submission_id": 520,
+        "aggregation_id": 612,
+        "compression_pct": 34.35823513579675,
+        "admission_check_id": 520
+      },
+      {
+        "label": "5FnwqEgRFEhDBVbySLaw9ounvEVedfBecXbppRQPHLQJBTSB",
+        "time_ratio": 0.8241583426053125,
+        "submission_id": 438,
+        "aggregation_id": 529,
+        "compression_pct": 34.35328889765988,
+        "admission_check_id": 440
+      },
+      {
+        "label": "5E7PMvZkcn4my5qVG5uh76mdjYv5LMQYdmDA2D9TT7htZdfD",
+        "time_ratio": 0.834655224088575,
+        "submission_id": 356,
+        "aggregation_id": 430,
+        "compression_pct": 34.33310942202638,
+        "admission_check_id": 360
+      },
+      {
+        "label": "5FEs8iWtmEJsucqrRfsxyPH1u3nCoGbKWLS1dGHY4ki5s3Em",
+        "time_ratio": 0.8433386414019144,
+        "submission_id": 486,
+        "aggregation_id": 580,
+        "compression_pct": 34.31392045672581,
+        "admission_check_id": 488
+      },
+      {
+        "label": "5DtLFqKpPzwUQSJ8s9NsL4K7qevfivohCx2VPASnS4hK3dxT",
+        "time_ratio": 0.8708943091967792,
+        "submission_id": 521,
+        "aggregation_id": 613,
+        "compression_pct": 34.30118430101645,
+        "admission_check_id": 521
+      },
+      {
+        "label": "5FC7dRd21bv2r2RkUz6oP9SXFvbem9Qe1obYEP76sspd6Wxb",
+        "time_ratio": 0.8755608614405457,
+        "submission_id": 563,
+        "aggregation_id": 658,
+        "compression_pct": 34.29318175658667,
+        "admission_check_id": 563
+      },
+      {
+        "label": "5F7fWFTY2NSoC8Lc8qKHB2EuBDzDnEkJvYNzLWoPQmihcU1p",
+        "time_ratio": 0.8803946182618994,
+        "submission_id": 547,
+        "aggregation_id": 641,
+        "compression_pct": 34.29102619652173,
+        "admission_check_id": 547
+      },
+      {
+        "label": "5Fo1Tj4YqvanAdibcn1nHVTnFzozBDZNLa6tBN9ut18Ku5ow",
+        "time_ratio": 0.9167745572331639,
+        "submission_id": 447,
+        "aggregation_id": 538,
+        "compression_pct": 34.27757104552194,
+        "admission_check_id": 449
+      },
+      {
+        "label": "5GjCr6MfxdkeUVQA5afT2B85XiJJVi9FwZT713GCdXyeWJRm",
+        "time_ratio": 0.9222873599293954,
+        "submission_id": 490,
+        "aggregation_id": 584,
+        "compression_pct": 34.266602086108335,
+        "admission_check_id": 492
+      },
+      {
+        "label": "5Cz5poJUv3vuk6onY2ZzEfPDrNGsHraa34H1UaQDXa9ShYfQ",
+        "time_ratio": 0.9251649130064328,
+        "submission_id": 564,
+        "aggregation_id": 659,
+        "compression_pct": 34.264915693334444,
+        "admission_check_id": 564
+      },
+      {
+        "label": "5CPiNeP8B6Ufo4X1bf279TUR59L6EVL7j4BF71Cugc4zooWg",
+        "time_ratio": 0.9949317694041512,
+        "submission_id": 290,
+        "aggregation_id": 308,
+        "compression_pct": 34.26386339082544,
+        "admission_check_id": 295
+      },
+      {
+        "label": "5CafFB33YwG1zgz7M7VMU9vqrWrFRmVNS5rKYRGTATniBN9J",
+        "time_ratio": 1.0089932919166604,
+        "submission_id": 365,
+        "aggregation_id": 456,
+        "compression_pct": 34.23654789337647,
+        "admission_check_id": 368
+      },
+      {
+        "label": "5DDV7sP4V7S6eme3pNcLkBg4Cf8uDWgUeDKLKtpHcfgiyJS6",
+        "time_ratio": 1.06854888373975,
+        "submission_id": 450,
+        "aggregation_id": 541,
+        "compression_pct": 34.22828621046612,
+        "admission_check_id": 452
+      },
+      {
+        "label": "5FbfExizC5QcQF479UFfiVwbd26C8sptHrsfFC3mqbCQEveD",
+        "time_ratio": 1.0711583992516513,
+        "submission_id": 545,
+        "aggregation_id": 639,
+        "compression_pct": 34.22358129915719,
+        "admission_check_id": 545
+      },
+      {
+        "label": "5HnQfMTs7SirzQUp4B5YWDB5BkbgUWhdhTzGqtuXE6WhQU74",
+        "time_ratio": 1.1345058208806609,
+        "submission_id": 375,
+        "aggregation_id": 466,
+        "compression_pct": 34.20756800243407,
+        "admission_check_id": 378
+      },
+      {
+        "label": "5EZSv2nPMUGRrMQKUFfmXkx88o4aADpAHkDRt789bXbmSmQL",
+        "time_ratio": 1.1910784697692447,
+        "submission_id": 570,
+        "aggregation_id": 665,
+        "compression_pct": 34.193850023785735,
+        "admission_check_id": 570
+      },
+      {
+        "label": "5FCWbH6D4YQiPhB9e3g7kMrmKoXjyqKJi5uyQWQUzhmC3UzZ",
+        "time_ratio": 1.2589438665311328,
+        "submission_id": 489,
+        "aggregation_id": 583,
+        "compression_pct": 34.190899477605726,
+        "admission_check_id": 491
+      },
+      {
+        "label": "5DZNP7e8ytUawBA3ujU2aiqjXxrSbB177T5WXjFcniRHJgd2",
+        "time_ratio": 1.3333734518014615,
+        "submission_id": 418,
+        "aggregation_id": 508,
+        "compression_pct": 34.180471052261225,
+        "admission_check_id": 420
+      },
+      {
+        "label": "5FeNX5L5srzv5BSbXVNVPFbsRbrUZVhyNoLdz2dgMzeg8UPs",
+        "time_ratio": 1.349825212595579,
+        "submission_id": 360,
+        "aggregation_id": 435,
+        "compression_pct": 34.178676565200675,
+        "admission_check_id": 364
+      },
+      {
+        "label": "5CiYbqKh7tbtxw8jfSoiFNgeH4r1G8AxYwZbgQR5Fgo7z17P",
+        "time_ratio": 1.356941007486944,
+        "submission_id": 422,
+        "aggregation_id": 512,
+        "compression_pct": 34.177242462844696,
+        "admission_check_id": 424
+      },
+      {
+        "label": "5DPAGiwejGoKc1hBNXPaJNRScLkke9PxrJh1nBjGNZqon9Jb",
+        "time_ratio": 1.4535042166163565,
+        "submission_id": 417,
+        "aggregation_id": 507,
+        "compression_pct": 34.1664835935394,
+        "admission_check_id": 419
+      },
+      {
+        "label": "5EpugxiCTKVxU2NFNs9b2bF6iJKbNYSummUQNZkZYGqZYDwD",
+        "time_ratio": 1.4857057097816875,
+        "submission_id": 296,
+        "aggregation_id": 319,
+        "compression_pct": 34.16305725088404,
+        "admission_check_id": 301
+      },
+      {
+        "label": "5DZs1gj7LwbXHiA1h1dnowVxEMyAJAEM8ftkDnyEjBXKsnTe",
+        "time_ratio": 1.4984568507592977,
+        "submission_id": 419,
+        "aggregation_id": 509,
+        "compression_pct": 34.16099862057585,
+        "admission_check_id": 421
+      },
+      {
+        "label": "5HQyrrra2M6YqqApTGD6aKRCunZEU7wq981E41rhQTfNwKok",
+        "time_ratio": 1.6052016849797124,
+        "submission_id": 487,
+        "aggregation_id": 581,
+        "compression_pct": 34.14833934379113,
+        "admission_check_id": 489
+      },
+      {
+        "label": "5CFHk74sBPWLVots37nM5jPy7Uw6WZqHNaxLL5vkw59oe8jN",
+        "time_ratio": 1.7551047163831885,
+        "submission_id": 357,
+        "aggregation_id": 431,
+        "compression_pct": 34.14263644267439,
+        "admission_check_id": 361
+      },
+      {
+        "label": "5F9uijyWzA7CXxRtRwJKofYfv3uTjhReMdX3Dds3RcdHujh2",
+        "time_ratio": 1.790432013223071,
+        "submission_id": 421,
+        "aggregation_id": 511,
+        "compression_pct": 34.14149511936476,
+        "admission_check_id": 423
+      },
+      {
+        "label": "5Gq3gFFcd55JmmcpCkZJWCyFVYFHfYuPJZ78UkHncQQ35pqu",
+        "time_ratio": 1.8025698730214645,
+        "submission_id": 455,
+        "aggregation_id": 546,
+        "compression_pct": 34.137767659374354,
+        "admission_check_id": 457
+      },
+      {
+        "label": "5DLsQWB6z8F9SZ8o1PpW7gSnVMCmhRj7ZRN5JTfLr3qM5k2H",
+        "time_ratio": 1.8726596963357829,
+        "submission_id": 468,
+        "aggregation_id": 560,
+        "compression_pct": 34.13102501481653,
+        "admission_check_id": 470
+      },
+      {
+        "label": "5GMwkVSzryn64JDf52otBbbHRkHeALvKnsp1efgTtemUAHrk",
+        "time_ratio": 2.043924744986618,
+        "submission_id": 523,
+        "aggregation_id": 615,
+        "compression_pct": 34.12505864542204,
+        "admission_check_id": 523
+      },
+      {
+        "label": "5CvfPSzNZcJz6YuVeJDkrKgibTDDs1751WXL56frWqWakASD",
+        "time_ratio": 2.115889594934878,
+        "submission_id": 461,
+        "aggregation_id": 553,
+        "compression_pct": 34.12285420165152,
+        "admission_check_id": 463
+      },
+      {
+        "label": "5CSCGc7R1xECWYsUThGC3iRfUNyyf6Go9ct9aTEXn5ZzRZXX",
+        "time_ratio": 2.180106697639041,
+        "submission_id": 509,
+        "aggregation_id": 601,
+        "compression_pct": 34.11985994055548,
+        "admission_check_id": 509
+      },
+      {
+        "label": "5G6FcLtaRN7GgeXUtLANUr2wUFCwuaoaDHNHGXP76HUw4tvP",
+        "time_ratio": 2.207542811144533,
+        "submission_id": 477,
+        "aggregation_id": 569,
+        "compression_pct": 34.11861587836766,
+        "admission_check_id": 479
+      },
+      {
+        "label": "5DJnBoWFcTtLs2YFiXEbHqLEqPSaX6KBUSDAFzEgR3mZnmKe",
+        "time_ratio": 2.3989179837511134,
+        "submission_id": 522,
+        "aggregation_id": 614,
+        "compression_pct": 34.114789510786835,
+        "admission_check_id": 522
+      },
+      {
+        "label": "5DvEtP4nwuDRcL4ZAoSKKgrghuBSAY9Cqi5RN3ZuoySGCczW",
+        "time_ratio": 2.5139935859602325,
+        "submission_id": 548,
+        "aggregation_id": 642,
+        "compression_pct": 34.112218210212404,
+        "admission_check_id": 548
+      },
+      {
+        "label": "5FnYJUitGUNdNyWAB7YnjoYoacLsd7TKxeAND4eYyiFVBP8q",
+        "time_ratio": 2.5624740852089234,
+        "submission_id": 552,
+        "aggregation_id": 646,
+        "compression_pct": 34.111279833261975,
+        "admission_check_id": 552
+      },
+      {
+        "label": "5HLBNiUym6J8JH5Sd4qKF81evUvo7J4EprDzHrmhXbsejKcB",
+        "time_ratio": 2.73350932481631,
+        "submission_id": 457,
+        "aggregation_id": 549,
+        "compression_pct": 34.10998586740641,
+        "admission_check_id": 459
+      },
+      {
+        "label": "5DcPE4e6ZTFSUGMVBzkiTuqmDSikYuHVY1FNws4DsKTWeeXc",
+        "time_ratio": 2.984659784405004,
+        "submission_id": 551,
+        "aggregation_id": 645,
+        "compression_pct": 34.10551606032856,
+        "admission_check_id": 551
+      },
+      {
+        "label": "5CoSkwbkKVmHY951bCxYgq4vjuoz9DiXqiC2A8SunN3R7Awo",
+        "time_ratio": 3.426469009690874,
+        "submission_id": 472,
+        "aggregation_id": 564,
+        "compression_pct": 34.10463443213533,
+        "admission_check_id": 474
+      },
+      {
+        "label": "5EquZuMWQThM3ffjj7pQ9rPwiqeRSM4h7VMCUWT18QRt3EmW",
+        "time_ratio": 3.6226432666047357,
+        "submission_id": 593,
+        "aggregation_id": 690,
+        "compression_pct": 34.10152409624106,
+        "admission_check_id": 593
+      },
+      {
+        "label": "5GEgZhp4ZbUJfAZTZKuPDVG9XKE2sh51f9Tk4Kx5AcDc5Tjk",
+        "time_ratio": 3.7741768836257457,
+        "submission_id": 573,
+        "aggregation_id": 668,
+        "compression_pct": 34.101458660288124,
+        "admission_check_id": 573
+      },
+      {
+        "label": "5HQbSoybKX52Qtr8JK24kigsgwN2tYZJ92spETkBLux6KpUF",
+        "time_ratio": 3.874807563582759,
+        "submission_id": 577,
+        "aggregation_id": 672,
+        "compression_pct": 34.101292192232364,
+        "admission_check_id": 577
+      },
+      {
+        "label": "5HGJPRPABRZJX8XbWqcf2Mg1fHZTC8zpshPiQHa8CJ3UJtGY",
+        "time_ratio": 4.0823948195430955,
+        "submission_id": 597,
+        "aggregation_id": 695,
+        "compression_pct": 34.100920127987095,
+        "admission_check_id": 597
+      },
+      {
+        "label": "5EqUsszef832u3WwaSfR4ZX4CUAb9DbMPCXCr8m7XgHJBXCQ",
+        "time_ratio": 4.223603788522332,
+        "submission_id": 510,
+        "aggregation_id": 602,
+        "compression_pct": 34.09944889465693,
+        "admission_check_id": 510
+      },
+      {
+        "label": "5FTRCY8ign9kUpbh3o2sep6bTYGETgsKzUSthYnc1Adcaits",
+        "time_ratio": 4.548566662213004,
+        "submission_id": 544,
+        "aggregation_id": 638,
+        "compression_pct": 34.099179493621456,
+        "admission_check_id": 544
+      },
+      {
+        "label": "5F9GEa8qSQg2NTMq95sbP3DLhFecsKFdKzXd6kMmjc2GnML8",
+        "time_ratio": 4.565396078741568,
+        "submission_id": 594,
+        "aggregation_id": 692,
+        "compression_pct": 34.09853120857318,
+        "admission_check_id": 594
+      },
+      {
+        "label": "5H3yARV4uio57iV3KonjCmFnmR36oATPYZ16oNtjRe9mKqeM",
+        "time_ratio": 4.571153037298876,
+        "submission_id": 592,
+        "aggregation_id": 688,
+        "compression_pct": 34.09782419965947,
+        "admission_check_id": 592
+      },
+      {
+        "label": "5D31hDi5uzyXmofcPGF5HoG8JcwUrem6m2ohQE7Z1AqV4YNn",
+        "time_ratio": 4.8945189132968885,
+        "submission_id": 569,
+        "aggregation_id": 664,
+        "compression_pct": 34.0976186378106,
+        "admission_check_id": 569
+      },
+      {
+        "label": "5DPZbYxmQbsJXs9jGswYzWyjb8DYPXeULStvdA2gKidhwd3o",
+        "time_ratio": 5.2151070431300255,
+        "submission_id": 572,
+        "aggregation_id": 667,
+        "compression_pct": 34.096942603131,
+        "admission_check_id": 572
+      },
+      {
+        "label": "5DhjavHTQSYcJG8J6n1iYKHAV5SkTRmtMf6gf1AqEtXa1NzH",
+        "time_ratio": 5.3426827767473135,
+        "submission_id": 588,
+        "aggregation_id": 684,
+        "compression_pct": 34.095084913945186,
+        "admission_check_id": 588
+      },
+      {
+        "label": "5FHf1GeS1ZTuPSjyvQ57CmLBBeBKfd3prCo4cBxatBKb9uJB",
+        "time_ratio": 5.530879798055935,
+        "submission_id": 600,
+        "aggregation_id": 699,
+        "compression_pct": 34.09479278940306,
+        "admission_check_id": 600
+      },
+      {
+        "label": "5CkYgW1Jm12CE4EYTce4iRDhut44UpH96tfwhE8x14KWRoiS",
+        "time_ratio": 7.426882929017131,
+        "submission_id": 596,
+        "aggregation_id": 694,
+        "compression_pct": 34.0943105169632,
+        "admission_check_id": 596
+      },
+      {
+        "label": "5Feus2Y7GRxFv3nxrMMwv6r7pRhpYiJQWKceY5iPbaxvCwhu",
+        "time_ratio": 9.366022725397364,
+        "submission_id": 585,
+        "aggregation_id": 680,
+        "compression_pct": 34.09261352149834,
+        "admission_check_id": 585
+      }
+    ]
+  },
+  "report": "evidence\\round18\\formal-a\\report-final-20261010T062309396109Z.response.json",
+  "leaderboard": "evidence\\round18\\formal-a\\leaderboard-20261010T062308244423Z.response.json",
+  "admission_receipt": "evidence\\round18\\formal-a\\admission-20261010T062307553966Z.response.json",
+  "audited_receipt_hashes": {
+    "admission-20261010T062307553966Z.receipt.json": "27ebbbe1d9874cd0321612c9ecdf5be8feac7f059e04fa529b7e89f76aa43272",
+    "leaderboard-20261010T062308244423Z.receipt.json": "2641ebddde2fbbc7f49fb47d3afc372b8355bf991b1417a976667e5b0493ac03",
+    "report-20261010T061432Z.receipt.json": "6966cf451affc69670c130f285466a202c1c6386dba95f3431872cf2551437d1",
+    "report-20261010T062047Z.receipt.json": "29a2dc817af99362545091765a8758e9631199011cbe8f4bc9fb6a464157b6a6",
+    "report-final-20261010T062309396109Z.receipt.json": "833eafa98b4e0ac5abb00b53a5cfd25f6bbc9e7156443d8af6a085dc7f7e40ce",
+    "status-20261010T060721877159Z.receipt.json": "fe49ce172870f64d98cf8d56e06f8c7f72f16e10c10f3eacc2ea4b21aee83162",
+    "status-20261010T060809133842Z.receipt.json": "1d82747d8bbfa4a5cd4007298c3fd01d1506212c4d24ea6214b30a4e6901e3e1",
+    "status-20261010T060855266752Z.receipt.json": "91e58ed0c5691405b275de86b0e8efa8d7c671b06ca4ee8e610f87541bf45f19",
+    "status-20261010T060941387271Z.receipt.json": "df92fefec9eb355b6122042e52a8b91e1064d0d6d80f7b29deafb88aaee2df0b",
+    "status-20261010T061027513182Z.receipt.json": "994f1f58e5c206c44d553ab6487e48c21fb55a0acdff416c96c9851990306845",
+    "status-20261010T061114437240Z.receipt.json": "9910634ddce57fba0ac5581cfe204a02933838d4e892109faa1ee07f431364e8",
+    "status-20261010T061200527589Z.receipt.json": "650a0028e45ff72afd98eecff0e2ceebbead85d43d639aab59c368b7c675a907",
+    "status-20261010T061246846758Z.receipt.json": "716444f5dc1548734cf6abfc839a65cefc266c4cf68ccd762d3a44dea7add509",
+    "status-20261010T061332926800Z.receipt.json": "65c8858c8edcc13488ef90ed6c746640bf9f971382083d1561f42148d0ea2318",
+    "status-20261010T061419116486Z.receipt.json": "a9968253478d7cc02cf380c87d54bc04dd6bc8b48ba3781dd83e328dbefcde8a",
+    "status-20261010T061505186304Z.receipt.json": "160d580b588a8e13d5d5796bc8224c780985f6698ebcebcad746ae8dbf46c145",
+    "status-20261010T061551727710Z.receipt.json": "43cb3b428c857e61e5cec7a777f1deb3bf18a021f638b50fac3181fe1240b592",
+    "status-20261010T061637802272Z.receipt.json": "735998615fb47601339905ffa7b9bde93c2e99db6d70773138223ca93626a982",
+    "status-20261010T061723859633Z.receipt.json": "84815b1add644ddaef94d7d51a38fa13460dfdc417b7f5952e6353cec0e6eeea",
+    "status-20261010T061809940610Z.receipt.json": "f0ef5c99f877a91056b2439c47f22bc421a37fa7e6fabf8236c5addaac32d9b1",
+    "status-20261010T061855985754Z.receipt.json": "638d5b05a21fafe71173634c468e8b9b88ffb62edd014b05e16add7f253e8109",
+    "status-20261010T061941964041Z.receipt.json": "e064794f21fefbe38b60348bdf601496002fd3fb0f4184fc90c88a4c0d5d6469",
+    "status-20261010T062027926686Z.receipt.json": "771a6e05457077c940b1956c695402379f2546f973085410383f3c308fda0b2a",
+    "status-20261010T062114201500Z.receipt.json": "bdde25ab769ba9c6baf209b31b8c7f71b497138b387880b2d8461fd95446c4e0",
+    "status-20261010T062200272988Z.receipt.json": "0450a909cc53de17cad663e76e644ea1b036bc39334964044d8add2c331e854f",
+    "status-20261010T062226809912Z.receipt.json": "7756f540dffe4fb73f578c2aa38ff5dc844e4cc3b01119781d022df81989c42f",
+    "weights-20261010T062310439626Z.receipt.json": "03184e52bac2d7508fe6b5fb63c31ce5843ca33d367f8244aaaca907608435d0"
+  },
+  "research_goal_status": "UNMET_A_BELOW_15_AND_B_NOT_FORMALLY_SUBMITTED",
+  "scope": "One official submission only. Snapshot eligibility/share is not an actual payment receipt or a guarantee of future share. Original 11-hour observations are retained."
+}

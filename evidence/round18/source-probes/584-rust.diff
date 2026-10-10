@@ -1,0 +1,51 @@
+--- references/round14-public-553
+
++++ references\round18-public-584
+
+@@ -1,5 +1,3 @@
+
+-// Derived from public submission #542, retaining its classifier and proven engine library.
+-// Generic planner/search settings explored with public #514/#500 references and local measurements.
+-// Prepared locally; no submission or hotkey assigned.
++// Research derived from public Conjectures DEFLATE submission #542; original source retained below.
+ pub const SMALL: usize = 65536;
+ pub const HS: usize = 8192;
+@@ -1406,5 +1404,5 @@
+
+ pub const pc_HS: usize = 4096;
+ pub const pc_WS: usize = 16384;
+-pub const pc_INS_MAX: usize = 2;
++pub const pc_INS_MAX: usize = 8;
+ pub const pc_TAIL: usize = 1;
+ pub const pc_STRIDE: usize = 0;
+@@ -3492,7 +3490,7 @@
+
+ pub const pm_M_FX0_GBASE: i32 = 168;
+ #[inline(never)] pub fn p135_row0(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32769>(input,out,5,0,1000000,4294967295,1,4)}
+-#[inline(never)] pub fn p135_row1(input:&[u8],out:&mut[u32])->usize{dx1_u118_run::<65536,32768,4294967295,4,3,0,2,1000000,32,1,12,32,64,0>(input,out)}
++#[inline(never)] pub fn p135_row1(input:&[u8],out:&mut[u32])->usize{r109_bfraw::<65536,0>(input,out)}
+ #[inline(never)] pub fn p135_row2(input:&[u8],out:&mut[u32])->usize{n_run::<65536,6,0,0,0,16,0,8,1>(input,out)}
+-#[inline(never)] pub fn p135_row3(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,3,0,1000000,302256384)}
++#[inline(never)] pub fn p135_row3(input:&[u8],out:&mut[u32])->usize{pc_run1::<32769>(input,out,6,16,1000000,4294967295)}
+ #[inline(never)] pub fn p135_row4(input:&[u8],out:&mut[u32])->usize{p12_p125_row15(input,out)}
+ #[inline(never)] pub fn p135_row5(input:&[u8],out:&mut[u32])->usize{n_run::<65536,6,1,0,0,5,0,2,12>(input,out)}
+@@ -3501,13 +3499,13 @@
+
+ #[inline(never)] pub fn p135_row8(input:&[u8],out:&mut[u32])->usize{fx0_run::<1,1,2,258>(input,out,0)}
+ #[inline(never)] pub fn p135_row9(input:&[u8],out:&mut[u32])->usize{p12_p125_row10(input,out)}
+-#[inline(never)] pub fn p135_row10(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,4,0,1000000,4294967295,2,4)}
++#[inline(never)] pub fn p135_row10(input:&[u8],out:&mut[u32])->usize{pc_run1c::<131072>(input,out,4,258,1000000,4294967295,2,4)}
+ #[inline(never)] pub fn p135_row11(input:&[u8],out:&mut[u32])->usize{{let k=pr_route(input);if k==8 {pc_run1::<32768>(input,out,4,0,1000000,4294967295)} else if k==25 {q4_run1t::<8192>(input,out,2,258,1000000,268435456)} else {q4_run1::<32768>(input,out,2,0,1000000,4294967295)}}}
+ #[inline(never)] pub fn p135_row12(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
+ #[inline(never)] pub fn p135_row13(input:&[u8],out:&mut[u32])->usize{{let k=pr_route(input);if k==8 {pc_run1::<32768>(input,out,2,0,1000000,4294967295)} else if k==25 {pc_run1::<32768>(input,out,3,0,1000000,4294967295)} else {pc_run1::<16384>(input,out,3,0,1000000,4294967295)}}}
+-#[inline(never)] pub fn p135_row14(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
++#[inline(never)] pub fn p135_row14(input:&[u8],out:&mut[u32])->usize{dx1_u118_run::<65536,32768,4294967295,4,6,32,5,1000000,64,1,16,4,64,1>(input,out)}
+ #[inline(never)] pub fn p135_row15(input:&[u8],out:&mut[u32])->usize{o_a_main_part::<10,256,8,5,32>(input,out,0,0,0)}
+-#[inline(never)] pub fn p135_row16(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,5,0,1000000,4294967295,2,4)}
+-#[inline(never)] pub fn p135_row17(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,4,0,1000000,302256128)}
+-#[inline(never)] pub fn p135_row18(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,8,0,1000000,4294967295,2,4)}
++#[inline(never)] pub fn p135_row16(input:&[u8],out:&mut[u32])->usize{pc_run1c::<131072>(input,out,5,258,1000000,4294967295,2,4)}
++#[inline(never)] pub fn p135_row17(input:&[u8],out:&mut[u32])->usize{pc_run1::<8192>(input,out,3,258,1000000,4294967295)}
++#[inline(never)] pub fn p135_row18(input:&[u8],out:&mut[u32])->usize{pc_run1c::<131072>(input,out,8,258,1000000,4294967295,2,4)}
+ #[inline(never)] pub fn p135_row19(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32770>(input,out,4,0,1000000,4294967040,4,3)}
+ 

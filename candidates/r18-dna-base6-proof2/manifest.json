@@ -1,0 +1,22 @@
+{
+  "candidate": "r18-dna-base6-proof2",
+  "parent": "r18-dna-base6",
+  "hashes": {
+    "parse.rs": "f5c1437c6e613a5a3c0740d590ac7ce972a24b86d963122c6ace3c576c3a98fd",
+    "Parse.lean": "02a21f164476aa843a97e3cb947c27c8fc74345aa625c497e76151721b63ec01"
+  },
+  "mechanism": "Same exactRust; use three proved local helper specifications for U64mask bounds, cast non-increase and total digit-table lookup. Their step hints exist only inside the hash-range proof section; restore only the completed slot-range theorem afterward. Explicitly handle the nested total slot choice.",
+  "difference_from_old_work": "Gate2 hit the original900second proof elaboration cap. Its broad simp_all is removed rather than increasing timeout or changing the gate. The three bounds are direct Nat.and_le_right/Nat.mod_le/array property proofs; original parse obligation and axiom policy remain intact. Same optimization candidate, proof revision only.",
+  "attribution": {
+    "parent": "candidates/r18-dna-base6/manifest.json",
+    "timeout_receipt": "evidence/round18/37998658096/gate-base6-2/exact-gate/exact-gate/gate-receipt.json",
+    "helper_pattern_reference": "candidates/r18-586-selective-rf/Parse.lean:total_array_get,rf_and_usize,d3_cast_le"
+  },
+  "proof_status": "VERIFIED_EXACT_ORIGINAL_PUBLIC_GATE_PASSED",
+  "performance_status": "VERIFIED_PUBLIC_FINAL_CONFIRMATION_CONDITIONAL_SCORES_BELOW_TARGETS",
+  "formal_submission_sent": false,
+  "artifact_role": "PROOF_REVISION_SAME_RUST_NOT_DISTINCT_CANDIDATE",
+  "verification_receipt": "evidence/round18/38001724485/gate-base6-3/exact-gate/exact-gate/gate-receipt.json",
+  "verification": "VERIFICATION.json",
+  "performance_evidence": "evidence/round18/final-confirmation-summary-29469.json"
+}

@@ -26,7 +26,13 @@ def main():
     mods=[];cases=[]
     for i,e in enumerate(entries):
         p=ROOT/e['path']/'parse.rs';assert sha(p.read_bytes())==e['hashes']['parse.rs'];mods.append(f'#[path={json.dumps(str(p))}]mod source{i};');cases.append(f'({json.dumps(e["name"])},source{i}::parse)')
-    text=HARNESS.replace('TOKEN',json.dumps(str(token))).replace('CODEC',json.dumps(str(codec))).replace('MODULES','\n'.join(mods)).replace('CASES',','.join(cases));source=build/'encoder.rs';source.write_text(text);binary=build/'encoder'
+    text=HARNESS.replace('TOKEN',json.dumps(str(token))).replace('CODEC',json.dumps(str(codec))).replace('MODULES','\n'.join(mods)).replace('CASES',','.join(cases))
+    if spec.get('native_classify_entry'):
+        index=names.index(spec['native_classify_entry'])
+        needle='for &(label,f)in cases{'
+        assert text.count(needle)==1
+        text=text.replace(needle,f'println!("CONTENT_CLASS {{}} {{}} {{}}",name,source{index}::classify(&s),source{index}::route_class(&s));'+needle)
+    source=build/'encoder.rs';source.write_text(text);binary=build/'encoder'
     c=subprocess.run(['rustc','+nightly-2026-08-18','--edition=2021','-O','-C','overflow-checks=yes',str(source),'-o',str(binary)],capture_output=True,text=True,timeout=180);(out/'compile.log').write_text(c.stdout+c.stderr);assert c.returncode==0
     corpus=upstream/'data/benchmark/corpus-stage1';r=subprocess.run([str(binary),str(corpus),str(spool)],capture_output=True,text=True,timeout=240);(out/'run.log').write_text(r.stdout+r.stderr);assert r.returncode==0
     fixture=ROOT/'evidence/round13/37845275650/ef32-short-e/gate/round1-public514.jsonl';raw_fixture=[json.loads(v)for v in fixture.read_text().splitlines()];assert raw_fixture[0]['methods']['public514']['source_sha256']==by['public514']['hashes']['parse.rs'];expected={r['file']:r for r in raw_fixture if r['kind']=='file'}
@@ -44,7 +50,9 @@ def main():
     for n in names:
         rr=[r for r in rows if r['candidate']==n];assert len(rr)==28 and sum(r['raw_bytes']for r in rr)==15930000
         summary.append({'candidate':n,'public_size_pct':statistics.mean(100*r['output_bytes']/r['raw_bytes']for r in rr),'changed_files':[{'file':r['file'],'extra_output_bytes':r['output_bytes']-parent[r['file']]['output_bytes'],'tokens_equal':r['tokens_sha256']==parent[r['file']]['tokens_sha256']}for r in rr if r['tokens_sha256']!=parent[r['file']]['tokens_sha256']or r['output_sha256']!=parent[r['file']]['output_sha256']]})
-    record={'run_id':os.environ['GITHUB_RUN_ID'],'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],'status':'VERIFIED_FINITE_NATIVE_ORIGINAL_ENCODER_BYTES','source_hashes':{e['name']:e['hashes']for e in entries},'codec_sha256':sha(codec.read_bytes()),'token_sha256':sha(token.read_bytes()),'harness_sha256':sha(source.read_bytes()),'rows':rows,'summary':summary,
+    classes=[dict(zip(('file','classify','route_class'),line.split()[1:]))for line in r.stdout.splitlines()if line.startswith('CONTENT_CLASS ')]
+    assert len(classes)==(28 if spec.get('native_classify_entry')else 0)
+    record={'run_id':os.environ['GITHUB_RUN_ID'],'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],'status':'VERIFIED_FINITE_NATIVE_ORIGINAL_ENCODER_BYTES','source_hashes':{e['name']:e['hashes']for e in entries},'codec_sha256':sha(codec.read_bytes()),'token_sha256':sha(token.read_bytes()),'harness_sha256':sha(source.read_bytes()),'rows':rows,'summary':summary,'content_classes':classes,
         'scope':'Actual frozen parse programs, original pinned encoder unmodified;28 parent outputs/tokens exact versus prior official-harness receipts and all outputs independently zlib decoded. One untimed encoding per input. This is public byte screening, not paired time axis, extraction, full gate, private admission or reward.'}
     (out/'encoder.json').write_text(json.dumps(record,indent=2)+'\n');print(json.dumps({'status':record['status'],'summary':summary}))
 

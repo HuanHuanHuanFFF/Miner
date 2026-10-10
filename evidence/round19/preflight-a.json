@@ -1,0 +1,26 @@
+{
+  "gap": "Official603 has 5.7% historical share; need substantially better time-quality position. SF adds about 1.8 public time-axis units for 1233 bytes.",
+  "changes": [
+    {
+      "candidate": "r19-sf-local1024",
+      "mechanism": "Limit seam replanning to the 1024-token neighborhood around each crossed 64KiB seam, rather than the entire 16384-token block.",
+      "difference": "Tests whether boundary-local quality can be retained with substantially less DP work; whole-stream SFcost still rejects a worse plan. This changes scope, not just search depth."
+    },
+    {
+      "candidate": "r19-sf-existing",
+      "mechanism": "Replan only from existing original matches: skip the full-input predecessor index and additional match-chain search.",
+      "difference": "Separates the value of retokenizing known matches from discovering new alternatives. Eliminates an entire search stage; quality may be lost."
+    },
+    {
+      "candidate": "r19-sf-selective",
+      "mechanism": "Skip SF for existing content classes 5, 7, 9 (markup and numeric structured text); retain the base parser there.",
+      "difference": "R18 per-file marginal evidence suggests low quality return for substantial SF cost in these classes. This is a generic content-class test, not a filename route."
+    }
+  ],
+  "minimum_operation": "Exact original encoder on28 public files, decode and per-file output deltas for3 distinct mechanism changes. Reuse existing toolchain path.",
+  "decision": "Keep useful quality/speed tradeoffs for original paired tests; near-zero useful quality stops a route. Frozen file pairs and new independent runs required before promotion.",
+  "cost_cap_runner_minutes": 20,
+  "confirmation_reserve_minutes": 25,
+  "evidence": "evidence/round19/<run>/probe-a-native/diagnostics",
+  "proof_risk": "SF helpers have totality-only contracts; checked emitter still establishes original obligation. Reused proof is a draft until exact original gate."
+}

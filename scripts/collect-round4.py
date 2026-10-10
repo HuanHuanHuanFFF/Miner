@@ -16,6 +16,14 @@ import uuid
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def exact_receipt_path(target):
+    """R17 uploaded its gate directory; R18 uploads the parent receipt directory."""
+    paths = [target / 'gate-receipt.json', target / 'exact-gate' / 'gate-receipt.json']
+    found = [p for p in paths if p.is_file()]
+    assert len(found) == 1, 'Expected exactly one known exact-gate receipt layout'
+    return found[0]
+
+
 def rename_download(stage, target):
     """Bounded Windows sharing-lock retry; never replace an existing receipt."""
     evidence = (ROOT / 'evidence').resolve()
@@ -114,7 +122,7 @@ def main():
     ap.add_argument('run_id')
     ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate', 'extraction', 'diagnostics', 'exact-gate'], default='screen')
     ap.add_argument('--snapshot')
-    ap.add_argument('--round', choices=['4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'], default='4', help='Receipt namespace; original round4 remains the default')
+    ap.add_argument('--round', choices=['4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'], default='4', help='Receipt namespace; original round4 remains the default')
     ap.add_argument('--batch', help='Matrix batch label; omit for legacy single-job artifacts')
     args = ap.parse_args()
     assert args.batch is None or re.fullmatch(r'[a-z0-9-]{1,48}', args.batch)
@@ -201,7 +209,7 @@ def main():
     if failed_before_screen.exists():
         print('PRE_SCREEN_FAILURE_PRESERVED', args.run_id, 'no measurement state; not analyzed')
     elif args.phase == 'exact-gate':
-        report=json.loads((target/'gate-receipt.json').read_bytes())
+        report=json.loads(exact_receipt_path(target).read_bytes())
         print('EXACT_ORIGINAL_GATE',report['status'],report.get('verdict',{}).get('accepted'),'paired performance blocks',report['paired_performance_blocks'])
     elif args.phase == 'diagnostics':
         print('DIAGNOSTICS_ONLY', len(json.loads((target / marker).read_text())['files']),

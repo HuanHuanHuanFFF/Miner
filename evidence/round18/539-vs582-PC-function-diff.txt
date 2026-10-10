@@ -1,0 +1,167 @@
+--- 539/pc_f_deepen
+
++++ 582/pc_f_deepen
+
+@@ -1,6 +1,6 @@
+
+-pub fn pc_f_deepen(s: &[u8], prev: &[u32; 32768], c: usize, c2: usize, p: usize, l: usize, d: usize, dp: usize, minl: usize) -> (usize, usize) {
++pub fn pc_f_deepen(s: &[u8], prev: &[u16; 32768], c: usize, c2: usize, p: usize, l: usize, d: usize, dp: usize, minl: usize) -> (usize, usize) {
+     let g = pc_f_try(s, c, c2, p, l, d, minl);
+     if dp >= 2 && c2 < c {
+-        let c3 = prev[c2 % 32768] as usize;
++        let c3 = r13_prev_unwrap(c2, prev[c2 % 32768]);
+         pc_f_try(s, c2, c3, p, g.0, g.1, minl)
+     } else {
+
+--- 539/pc_f_link
+
++++ 582/pc_f_link
+
+@@ -1,4 +1,4 @@
+
+-pub fn pc_f_link<const H: usize>(head: &mut [u32; H], prev: &mut [u32; 32768], a: usize, i: usize) {
+-    prev[i % 32768] = head[a];
++pub fn pc_f_link<const H: usize>(head: &mut [u32; H], prev: &mut [u16; 32768], a: usize, i: usize) {
++    prev[i % 32768] = (head[a] as u16) & 32767;
+     head[a] = i as u32;
+ }
+
+--- 539/pc_f_record3
+
++++ 582/pc_f_record3
+
+@@ -1,3 +1,3 @@
+
+-pub fn pc_f_record3<const H: usize>(s: &[u8], head: &mut [u32; H], prev: &mut [u32; 32768], ins0: usize, a0: usize, end: usize, lim: usize, km: u32) {
++pub fn pc_f_record3<const H: usize>(s: &[u8], head: &mut [u32; H], prev: &mut [u16; 32768], ins0: usize, a0: usize, end: usize, lim: usize, km: u32) {
+     let mut ins = ins0;
+     let mut stop = end;
+
+--- 539/pc_flush4
+
++++ 582/pc_flush4
+
+@@ -1,4 +1,3 @@
+
+ pub fn pc_flush4(input: &[u8], out: &mut [u32], nt0: usize, from: usize, to: usize) -> usize {
+- if from == to { return nt0; }
+     if from <= to && to - from <= 4 && from + 4 <= input.len() && nt0 + 4 <= out.len() {
+         out[nt0] = input[from] as u32;
+
+--- 539/pc_put_match
+
++++ 582/pc_put_match
+
+@@ -1,4 +1,10 @@
+
+-pub fn pc_put_match(s:&[u8],out:&mut[u32],nt:usize,p:usize,d:usize,l:usize)->(usize,usize){
+- out[nt]=(d.wrapping_sub(1)as u32).wrapping_mul(256).wrapping_add(16777216).wrapping_add(l.wrapping_sub(3)as u32);
+- (nt+1,p+l)
++pub fn pc_put_match(s: &[u8], out: &mut [u32], nt: usize, p: usize, d: usize, l: usize) -> (usize, usize) {
++    let n = s.len();
++    if d >= 1 && d <= 32768 && d <= p && l >= 3 && l <= 258 && p < n && l <= n - p && (pc_VERIFY == 0 || pc_same(s, p - d, p, l) == 1) {
++        out[nt] = 16777216u32 + ((d - 1) as u32) * 256 + ((l - 3) as u32);
++        (nt + 1, p + l)
++    } else {
++        out[nt] = s[p] as u32;
++        (nt + 1, p + 1)
++    }
+ }
+
+--- 539/pc_record3_m
+
++++ 582/pc_record3_m
+
+@@ -2,5 +2,6 @@
+
+     let mut ins = ins0;
+     let mut stop = end;
+-    if stop > ins.wrapping_add(pc_INS_MAX) {
++    // wrapping: pc_same code as `+` here (no overflow on any real input), total in the model
++    if km != 0 && stop > ins.wrapping_add(pc_INS_MAX) {
+         stop = ins.wrapping_add(pc_INS_MAX);
+     }
+
+--- 539/pc_run1
+
++++ 582/pc_run1
+
+@@ -2,10 +2,10 @@
+
+     let n = input.len();
+     let mut nt = 0usize;
+-    let mut ls = 0usize;                                                   
++    let mut ls = 0usize; // first position whose literal is not written yet
+     if n > 16 {
+         let mut p = 0usize;
+         let mut head = [0u32; H];
+         let lim = n - 8;
+-        let mut miss = 0usize;                                 
++        let mut miss = 0usize; // literals since the last match
+         let mut fuel = n.saturating_add(16);
+         let a0 = pc_ahead_m::<H>(input, &head, 0, km);
+@@ -27,4 +27,5 @@
+
+                 let mut d = f.1;
+                 let mut ins = p + 1;
++                // Lazy: move on while the next position has a better match by the saving estimate.
+                 let mut go = 1u32;
+                 while go == 1 && l < lazy && p + 1 < lim {
+@@ -50,6 +51,6 @@
+
+                 let ae = pc_ahead_if_m::<H>(input, &head, e, lim, pre_slot, pre_c, pre_w, km);
+                 nt = pc_flush4(input, out, nt, ls, p);
+-                let b = pc_fold_w(input, out, nt, p, l, d);
+-                let r = pc_put_match_h::<H>(input, out, b.0, b.1, d, b.2);
++                let b = r14_fold_optional(input, out, nt, p, l, d, km);
++                let r = pc_put_match(input, out, b.0, b.1, d, b.2);
+                 nt = r.0;
+                 let end = r.1;
+
+--- 539/pc_run1c
+
++++ 582/pc_run1c
+
+@@ -6,5 +6,5 @@
+
+         let mut p = 0usize;
+         let mut head = [0u32; H];
+-        let mut prev = [0u32; 32768];
++        let mut prev = [0u16; 32768];
+         let lim = n - 8;
+         let mut miss = 0usize;
+@@ -25,5 +25,5 @@
+
+             let f = pc_probe_m(input, c, cw, p, km);
+             if f.0 >= 3 {
+-                let cl = prev[c % 32768] as usize;
++                let cl = r13_prev_unwrap(c, prev[c % 32768]);
+                 let g = pc_f_deepen(input, &prev, c, cl, p, f.0, f.1, dp, minl);
+                 let mut l = g.0;
+@@ -54,5 +54,5 @@
+
+                 nt = pc_flush4(input, out, nt, ls, p);
+                 let b = pc_fold_w(input, out, nt, p, l, d);
+-                let r = pc_put_match_h::<H>(input, out, b.0, b.1, d, b.2);
++                let r = pc_put_match(input, out, b.0, b.1, d, b.2);
+                 nt = r.0;
+                 let end = r.1;
+
+--- 539/pc_slot_of_m
+
++++ 582/pc_slot_of_m
+
+@@ -1,4 +1,10 @@
+
+ pub fn pc_slot_of_m<const H: usize>(s: &[u8], i: usize, km: u32) -> usize {
+-    let k = (pc_be4(s, i) & km) as u64;
+-    (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (if H == 262144 {46u32} else if H == 131072 {47u32} else if H == 65536 {48u32} else {49u32})) as usize % H
++    if km == 0 {
++        // New six-byte key for the existing DNA route; bounds are still checked by the matcher.
++        let k = pc_be8(s, i) >> 16;
++        (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> 48) as usize % H
++    } else {
++        let k = (pc_be4(s, i) & km) as u64;
++        (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - pc_HB)) as usize % H
++    }
+ }

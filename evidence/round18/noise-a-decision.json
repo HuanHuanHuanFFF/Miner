@@ -1,0 +1,22 @@
+{
+  "status": "VERIFIED_ENGINE_CONTEXT_MISMATCH_AND_DIAGNOSTIC_HARNESS_ABORT",
+  "run_id": "37968372355",
+  "requested_cpu": "0",
+  "actual_affinity_before_engine_exec": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "actual_cgroup_cpuset_effective": "0-3",
+  "official_isolated_complete_processes": 8,
+  "missing": "Firstmultimethodenginecompletedbutstdoutwasnotretainedbecausecontextassertprecededrawpersistence; do not reconstruct itsmetrics. Stderr/context retained.",
+  "root_cause_of_noise": "UNKNOWN; affinity mismatch is a measured discrepancy, not sufficientattribution.",
+  "hypotheses": [
+    "Resourcewrapper AllowedCPUs not limiting actualaffinity; explicitsetaffinityshouldchangeobservablemask.",
+    "Separatelyrunningincumbent drift; sharedprocess shouldreduceshadowgap.",
+    "Methodorder/cache effects persist evenonsharedsingleCPU; mirroredordermayshiftsigns."
+  ],
+  "repair": "Persist rawstdoutbeforeassertion; treat observedmaskasdata; onlyassert singleCPUinexplicitbindingdiagnostics. Add protocolseparation.",
+  "historical_symptom_replay": "diagnose-dna-variance.py --check-stability exited1and reproduced18.019756vs0.092689poolpercent, difference0.970809percenttime."
+}

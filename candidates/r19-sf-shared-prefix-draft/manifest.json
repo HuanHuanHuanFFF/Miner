@@ -1,0 +1,27 @@
+{
+  "candidate": "r19-sf-shared-prefix-draft",
+  "parent": "r19-sf-nooverlap",
+  "hashes": {
+    "parse.rs": "26aa056b94098d0d22f13f1e0ca3f6e5af09ec044341e82391b4bfd886506ff0",
+    "Parse.lean": "0a0171ac0dda3f6c06e574145e6b89b6b90fed45bd2d1d22be0ad199d18bacc7"
+  },
+  "mechanism": "Return the already-created A match vectors, keep them alive through SF, and use same-distance cached lengths to skip known match prefixes. Preserve original SF search/fallback; no global state, Mutex or cloned cache.",
+  "difference_from_old_work": "Q diagnostic preserved exact public output with 7069779 longer prefixes; this is the actual explicit-lifetime implementation. ABI and helper proofs still need adaptation; no full performance or gate promotion.",
+  "attribution": {
+    "parent": "candidates/r19-sf-nooverlap/manifest.json",
+    "quality_diagnostic": "evidence/round19/38045695358/cache-q-native/diagnostics/r19-cache-prefix/quality.json"
+  },
+  "proof_status": "DRAFT_REQUIRES_A_ENGINE_RETURN_AND_NEW_HELPER_PROOFS",
+  "performance_status": "UNKNOWN_NOT_ORIGINAL_TIMED",
+  "formal_submission_sent": false,
+  "required_proof_work": [
+    "a_engine returns cache vectors; recheck existing totality proof",
+    "r19_known/r19_base_cached/r19_smallmatches/r19_shape helper totality",
+    "outer original LZ77.Obligation via checked emitters; fresh original full gate"
+  ],
+  "native_verification": {
+    "status": "VERIFIED_28_PUBLIC_TOKEN_OUTPUT_EQUAL_AND_DECODE",
+    "run_id": "38046023050",
+    "receipt": "evidence/round19/38046023050/probe-r-native/diagnostics/r13-encoder/encoder.json"
+  }
+}
