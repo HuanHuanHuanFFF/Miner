@@ -21,13 +21,14 @@ def write(p, value):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    for flag in ('analysis', 'summary', 'sensitivity', 'payability', 'cost', 'capture', 'audit'):
+    for flag in ('analysis', 'summary', 'sensitivity', 'payability', 'cost', 'capture', 'audit', 'gaps'):
         ap.add_argument('--' + flag, type=Path, required=True)
     args = ap.parse_args()
     a, s, f, pay, cost, audit = (read(getattr(args, k)) for k in ('analysis', 'summary', 'sensitivity', 'payability', 'cost', 'audit'))
     capture = read(args.capture / 'receipt.json')
     plan = read(E / 'extension-final-confirmation-plan.json')
     budget = read(E / 'budget.json')
+    gaps = read(args.gaps)
     assert s['analysis_sha256'] == hashlib.sha256(args.analysis.read_bytes()).hexdigest()
     assert len(s['run_ids']) == 2 and s['blocks_per_runner'] == 3
     assert s['snapshot']['snapshot_id'] == capture['snapshot_id'] == f['snapshot']['snapshot_id']
@@ -56,6 +57,10 @@ def main():
             d = stats[cal]
             assert d['n'] == 6
             text.append(f'| {name} / {cal} | {d["median_pct"]:.6f}% | {d["best_pct"]:.6f}% | {d["range_pct"][0]:.6f}%–{d["range_pct"][1]:.6f}% | {d["zero_count"]}/6 | {d["at_least_5_count"]}/6 | {d["at_least_15_count"]}/6 |')
+    text += ['', '| 主候选 / runner / 对照 | 块数 | 中位份额 | 观测范围 |', '|---|---:|---:|---|']
+    for c in s['candidates']:
+        for d in c['by_runner']:
+            text.append(f'| {c["role"]} / {d["run_id"]} / {d["calibration"]} | {d["n"]} | {d["median_pct"]:.6f}% | {d["range_pct"][0]:.6f}%–{d["range_pct"][1]:.6f}% |')
     text += ['', 'A为新增SF重规划候选，B为保留的旧RF选择版本；A追加了实际边界重规划机制，公共压缩结果改变，二者不是改名副本。A的目标仍为15%，B仍为5%，不能相加算达标。补充539版本是不同机制的已验收成果。以上样本比例不是正式成功概率；中心坐标算出的分数不是期望收益。', '',
              '## 两者同时加入', '', '| 校准 | A联合中位 / 范围 | B联合中位 / 范围 | 同时满足15%/5%的块数 |', '|---|---|---|---:|']
     for cal, j in s['joint_summary'].items():
@@ -71,7 +76,7 @@ def main():
         obs = [o['alternative_conditional_pool_pct'] for o in f['rows'] if o['candidate'] == c['name']]
         assert obs
         text.append(f'| {c["name"]} | {st.median(obs):.6f}% | {min(obs):.6f}%–{max(obs):.6f}% | {sum(v >= 5 for v in obs)}/{len(obs)} |')
-    text += ['', '| 候选 | 主/影子零份额判断分歧 | 对应目标判断分歧 | 最大份额差 |', '|---|---:|---:|---:|']
+    text += ['', '替代校准表的12项是6个计时块各自的两份参照视图，不是12块或12台runner。', '', '| 候选 | 主/影子零份额判断分歧 | 对应目标判断分歧 | 最大份额差 |', '|---|---:|---:|---:|']
     for c in s['candidates']:
         d = c['control_disagreement']
         text.append(f'| {c["name"]} | {d["zero_disagreement_count"]}/6 | {d["target_disagreement_count"]}/6 | {d["max_absolute_share_gap_pct"]:.6f}个百分点 |')
@@ -93,6 +98,11 @@ def main():
         m = read(p)
         if m['source_path'] in wanted:
             text.append(f'| {link(ROOT / m["payload_path"], m["candidate"])} | `{m["payload_sha256"]}` |')
+    ga = next(c for c in gaps['candidates'] if c['candidate'] == next(c['name'] for c in s['candidates'] if c['role'] == 'A'))
+    required = ga['targets']['15']['closest_sample_time']
+    requirement = ('在当前快照、大小轴固定时，A达到15%的最近采样时间轴为'
+                   f'{required["time"]:.6f}，相对当前描述性中心需变化{required["time_change_pct"]:.2f}%。'
+                   if required else '本次有界坐标搜索没有找到A的15%时间点。')
     text += ['', 'ZIP只含精确`parse.rs`和`Parse.lean`，已逐项核对哈希；没有上传正式竞赛。旧DNA包和原8小时证据也继续保留。', '',
              '## 关键决策与保留的负面结果', '',
              '- BF同机矩阵曾给出自由文件拼接约17.33%的估算；同方案另一家族校准仅3.33%。它从未作为可运行候选或正式成绩。',
@@ -103,12 +113,15 @@ def main():
              '## 实际消耗和后续动作', '',
              f'全11小时窗口累计手动派发并收齐 **{cost["dispatched_run_count"]}** 个作业：{cost["collected_conclusions"]}；原协议配对测量进程 **{cost["original_screen_confirmation_paired_processes"]}** 个；runner墙钟累计 **{cost["completed_runner_wall_seconds"]:.0f}秒**。这些累计值包含最初8小时，不是独立样本数或账单分钟。',
              f'相对原8小时记录，追加窗口新增{cost["dispatched_run_count"] - budget["extension"]["baseline_dispatched_runs"]}个作业、{cost["original_screen_confirmation_paired_processes"] - budget["extension"]["baseline_original_paired_processes"]}个原协议配对进程、{cost["completed_runner_wall_seconds"] - budget["extension"]["baseline_runner_wall_seconds"]:.0f}秒runner墙钟。账户最新观察已用{cost["latest_shared_account_observation"]["used_percent"]}%、剩余{cost["latest_shared_account_observation"]["remaining_percent"]}%，这是共享账户用量，不是本任务可归因费用。重置成功0次、购买0次；模型和云端实际金额UNKNOWN。', '',
-             '最高价值后续工作是降低SF实际总时间开销，并优先验证按内容分配重规划预算、复用已有匹配信息的成本与质量交换。发现期同大小下达到15%仍需约20%的时间轴改善；这不是对未来实现收益的保证。私有集迁移仍缺正式校准，任何未来上传应先以当前登记、额度和精确包单独审阅。', '',
+             '剩余额度没有降到1%，所以未触发兑换。本次工具返回的卡列表到期时间为北京时间10月30日与11月7日；工具不能选择指定卡，没有兑换原指定10月23日的卡。工具累计token计数另存[计数回执](../../evidence/round18/goal-tool-extension-0418.json)，它也不是账单金额。', '',
+             '最高价值后续工作是降低SF实际总时间开销，并优先验证按内容分配重规划预算、复用已有匹配信息的成本与质量交换。' + requirement + '这只是有限网格的坐标反推，不是已有实现或未来收益保证。私有集迁移仍缺正式校准，任何未来上传应先以当前登记、额度和精确包单独审阅。', '',
              '**VERIFIED**：精确文件、公有完整gate、原协议六块观测、原始回执与本地字节审计。**INFERRED**：单独/联合份额、跨家族校准、未来优化空间。**UNKNOWN**：私有集表现、正式admission、可支付份额、实际注册归属/额度、最终收益和可归因金额。', '',
+             '六块逐文件复算给出了更具体的后续诊断对象：`records.json.txt`没有减少压缩字节，却增加约0.171的时间轴贡献；`catalog.xml.txt`仅少28字节、贡献约0.279；`server.log`仅少24字节、贡献约0.212。这是同块配对总时间差，不是函数级因果归因，也不支持按文件名硬编码路由。应先诊断这些内容类别的无收益重规划，再验证通用的早停或预算分配。' + link(E / 'extension-final-per-file-marginals.json', '逐文件原始分解') + '。', '',
              '## 证据入口', '',
              '- ' + link(args.analysis, '原始计时逐项复算') + '；' + link(args.summary, '主候选六块确认与联合分布') + '；' + link(args.sensitivity, '同块家族校准敏感性') + '。',
              '- ' + link(args.payability, '公开hotkey支付规则情景') + '；' + link(args.capture / 'receipt.json', '官方快照及分页回执') + '。',
              '- ' + link(args.cost, '作业/配对/runner消耗') + '；' + link(args.audit, '原始字节与精确包审计') + '；' + link(E / 'extension-final-confirmation-plan.json', '预声明冻结计划') + '。', '',
+             '- ' + link(args.gaps, '当前两项目标的有界坐标要求') + '；' + link(E / 'official-code-extension-close/receipt.json', '官方代码主分支复核') + '；' + link(E / 'workspace-boundary-extension-close.json', '工作区和main边界') + '。', '',
              f'报告生成北京时间：{now.astimezone(timezone(timedelta(hours=8))).isoformat()}。固定截止及实际关闭状态见[budget](../../evidence/round18/budget.json)。工作仅在`codex/round18-frontier`；main的其他任务提交没有合并或一起推送。执行规则仍以[AGENTS.md](../../AGENTS.md)为准。', '']
     report = ROOT / 'docs/rounds/round18-extension.md'
     report.write_bytes('\n'.join(text).encode())
