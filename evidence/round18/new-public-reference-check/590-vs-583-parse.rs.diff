@@ -1,0 +1,17 @@
+--- 583/parse.rs
+
++++ 590/parse.rs
+
+@@ -1,2 +1,4 @@
+
++// Derived from public #583 with proven PC emission helpers from public #542.
++// Classifier and routing retained; only selected parameters, helpers and matching lemmas change.
+ // mA: a content-adaptive LZ77 parser for the fixed DEFLATE encoder (mid speed band).
+ //
+@@ -7414,4 +7416,5 @@
+
+ #[inline(always)]
+ pub fn pc_flush4(input: &[u8], out: &mut [u32], nt0: usize, from: usize, to: usize) -> usize {
++ if from == to { return nt0; }
+     if from <= to && to - from <= 4 && from + 4 <= input.len() && nt0 + 4 <= out.len() {
+         out[nt0] = input[from] as u32;

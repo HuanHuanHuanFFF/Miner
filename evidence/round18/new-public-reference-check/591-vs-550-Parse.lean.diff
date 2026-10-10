@@ -1,0 +1,154 @@
+--- 550/Parse.lean
+
++++ 591/Parse.lean
+
+@@ -9432,5 +9432,5 @@
+
+     · exact EB.u579 input out 0#usize hlen
+     · split
+-      · exact EB.u579 input out 1#usize hlen
++      · exact EC.u608 input out 4#usize hlen
+       · split
+         · exact EB.u579 input out 2#usize hlen
+@@ -9449,5 +9449,5 @@
+
+   · exact EB.u579 input out 7#usize hlen
+   · split
+-    · exact EB.u579 input out 8#usize hlen
++    · exact EA.EA.u192 input out 4#usize hlen
+     · split
+       · exact EB.u579 input out 9#usize hlen
+@@ -9466,7 +9466,7 @@
+
+   rw [slot.Z465]
+   split
+-  · exact EC.u608 input out 3#usize hlen
++  · exact EA.EA.u192 input out 2#usize hlen
+   · split
+-    · exact EC.u608 input out 4#usize hlen
++    · exact EB.u579 input out 0#usize hlen
+     · split
+       · exact EC.u608 input out 5#usize hlen
+@@ -9474,5 +9474,5 @@
+
+         · exact ED.u621 input out 0#usize hlen
+         · split
+-          · exact ED.u621 input out 1#usize hlen
++          · exact EA.EA.u192 input out 3#usize hlen
+           · split
+             · exact ED.u621 input out 2#usize hlen
+@@ -9758,5 +9758,5 @@
+
+ 
+ @[local step]
+-theorem SFsmalladd_loop_spec (best : Array Std.U32 4#usize) (count : Std.Usize) (t : Std.U32) (j : Std.Usize) (dc : Std.Usize):
++theorem SFsmalladd_loop_spec (best : Array Std.U32 8#usize) (count : Std.Usize) (t : Std.U32) (j : Std.Usize) (dc : Std.U32):
+  slot.SFsmalladd_loop best count t j dc ⦃ fun _ => True ⦄ := by
+  rw [slot.SFsmalladd_loop]
+@@ -9773,5 +9773,5 @@
+
+ 
+ @[local step]
+-theorem SFsmalladd_spec (best : Array Std.U32 4#usize) (count : Std.Usize) (t : Std.U32):
++theorem SFsmalladd_spec (best : Array Std.U32 8#usize) (count : Std.Usize) (t : Std.U32):
+  slot.SFsmalladd best count t ⦃ fun _ => True ⦄ := by
+  rw [slot.SFsmalladd]
+@@ -9781,5 +9781,5 @@
+
+ 
+ @[local step]
+-theorem SFsmallkeep_loop_spec (best : Array Std.U32 4#usize) (count : Std.Usize) (j : Std.Usize) (ct : Array Std.U32 1024#usize) (price : Std.U32) (l : Std.Usize) (k : Std.Usize):
++theorem SFsmallkeep_loop_spec (best : Array Std.U32 8#usize) (count : Std.Usize) (j : Std.Usize) (ct : Array Std.U32 1024#usize) (price : Std.U32) (l : Std.Usize) (k : Std.Usize):
+  slot.SFsmallkeep_loop best count j ct price l k ⦃ fun _ => True ⦄ := by
+  rw [slot.SFsmallkeep_loop]
+@@ -9796,5 +9796,5 @@
+
+ 
+ @[local step]
+-theorem SFsmallkeep_spec (best : Array Std.U32 4#usize) (count : Std.Usize) (j : Std.Usize) (ct : Array Std.U32 1024#usize):
++theorem SFsmallkeep_spec (best : Array Std.U32 8#usize) (count : Std.Usize) (j : Std.Usize) (ct : Array Std.U32 1024#usize):
+  slot.SFsmallkeep best count j ct ⦃ fun _ => True ⦄ := by
+  rw [slot.SFsmallkeep]
+@@ -9820,9 +9820,9 @@
+
+ 
+ @[local step]
+-theorem SFsmallmatches_loop0_loop0_spec (input : Slice Std.U8) (prev : Slice Std.U32) (e : Std.Usize) (p : Std.Usize) (best : Array Std.U32 4#usize) (ot : Std.U32) (count : Std.Usize) (q : Std.Usize) (k : Std.Usize):
+- slot.SFsmallmatches_loop0_loop0 input prev e p best ot count q k ⦃ fun _ => True ⦄ := by
++theorem SFsmallmatches_loop0_loop0_spec (input : Slice Std.U8) (prev : Slice Std.U32) (e : Std.Usize) (p : Std.Usize) (best : Array Std.U32 8#usize) (ot : Std.U32) (count : Std.Usize) (q : Std.Usize) (k : Std.Usize) (dep : Std.Usize):
++ slot.SFsmallmatches_loop0_loop0 input prev e p best ot count q k dep ⦃ fun _ => True ⦄ := by
+  rw [slot.SFsmallmatches_loop0_loop0]
+  apply Std.loop.spec_decr_nat
+-  (measure := fun q => slot.SFDEPTH.val - q.2.2.2.val)
++  (measure := fun q => dep.val - q.2.2.2.val)
+   (inv := fun _ => True)
+  · rintro ⟨best1, count1, q1, k1⟩ _
+@@ -9835,5 +9835,5 @@
+
+ 
+ @[local step]
+-theorem SFsmallmatches_loop0_loop1_spec (ct : Array Std.U32 1024#usize) (items : alloc.vec.Vec Std.U32) (best : Array Std.U32 4#usize) (count : Std.Usize) (c : Std.Usize):
++theorem SFsmallmatches_loop0_loop1_spec (ct : Array Std.U32 1024#usize) (items : alloc.vec.Vec Std.U32) (best : Array Std.U32 8#usize) (count : Std.Usize) (c : Std.Usize):
+  slot.SFsmallmatches_loop0_loop1 ct items best count c ⦃ fun _ => True ⦄ := by
+  rw [slot.SFsmallmatches_loop0_loop1]
+@@ -9848,4 +9848,12 @@
+
+    all_goals scalar_tac
+  · trivial
++
++@[local step]
++theorem SFdepth_spec (input : Slice Std.U8) :
++ slot.SFdepth input ⦃ fun _ => True ⦄ := by
++ rw [slot.SFdepth]
++ step*
++ repeat (split <;> step*)
++ all_goals trivial
+ 
+ @[local step]
+@@ -10164,4 +10172,17 @@
+
+ 
+ 
++theorem TBon_spec (input : Slice Std.U8) :
++    slot.TBon input ⦃ fun _ => True ⦄ := by
++  rw [slot.TBon]
++  step*
++
++attribute [local step] EA.EA.u192 in
++theorem TBpick_spec (input:I) (out:U) (nt:R)
++    (hlen:input.length  ≤  out.length) :
++    slot.TBpick input out nt ⦃ fun r => r.2.length = out.length ⦄ := by
++  rw [slot.TBpick]
++  step*
++  all_goals (first | assumption | simp_all | scalar_tac)
++
+ theorem parse_spec (input:I) (out:U)
+     (hlen:input.length ≤ out.length) :
+@@ -10171,15 +10192,16 @@
+
+   rintro ⟨nt, out1⟩ hr
+   dsimp only at hr
+-  apply Std.WP.spec_bind (SFenabled_spec input)
+-  intro b _
++  obtain ⟨hr1, hr2, hr3⟩ := hr
++  step*
++  apply Std.WP.spec_bind (TBon_spec input)
++  intro b0 _
+   split
+-  · apply Std.WP.spec_bind (SFshape_spec input out1 nt)
+-    intro plan _
+-    apply Std.WP.spec_mono (EA.EA.u26 input (alloc.vec.Vec.deref plan) out1 (by omega))
+-    rintro ⟨nt1,out2⟩ hr2
+-    dsimp only at hr2 ⊢
+-    rcases hr2 with ⟨h1,h2,h3⟩
+-    exact ⟨h1,by omega,h3⟩
+-  · exact hr
++  · apply Std.WP.spec_bind (TBpick_spec input out1 nt (by omega))
++    rintro ⟨plan, out2⟩ hl2
++    dsimp only at hl2
++    step*
++    all_goals exact ⟨by assumption, by omega, by assumption⟩
++  · step*
++    all_goals exact ⟨by assumption, by omega, by assumption⟩
+ 
+ end Submission

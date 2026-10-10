@@ -1,0 +1,25 @@
+--- 583/Parse.lean
+
++++ 590/Parse.lean
+
+@@ -5667,5 +5667,18 @@
+
+     (hdec : Dec input out nt.val a.val) (he : e.val + 8 ≤ input.length) (ha : a.val ≤ e.val) :
+     slot.pc_flush4 input out nt a e ⦃ fun r => Dec input r.2 r.1.val e.val ∧
+-      r.2.length = out.length ⦄ := C12595! slot.pc_flush4
++      r.2.length = out.length ⦄ := by
++  rw [slot.pc_flush4]
++  have hmax : input.length ≤ Std.Usize.max := Std.Slice.length_ineq input
++  step*
++  all_goals first
++    | (constructor; first | (convert hdec using 1 <;> scalar_tac) | rfl)
++    | exact flush_spec input out nt a e hdec (by first | assumption | omega | scalar_tac) ha
++    | (subst_vars; simp only [Std.Slice.set_length]; scalar_tac)
++    | exact Dec.flush4_step hdec ha (by assumption) (by first | assumption | omega | scalar_tac) (by first | assumption | omega | scalar_tac)
++        (by first | assumption | omega | scalar_tac) (by first | assumption | omega | scalar_tac) (by assumption) (by assumption) (by assumption)
++        (by assumption) (by first | assumption | omega | scalar_tac) (by assumption) (by assumption) (by assumption)
++        (by assumption) (by assumption) (by first | assumption | omega | scalar_tac) (by assumption) (by assumption)
++        (by assumption) (by assumption) (by assumption) (by first | assumption | omega | scalar_tac) (by assumption)
++        (by assumption) (by assumption) (by assumption) (by assumption)
+ @[local step]
+ theorem record3_m_loop0_spec {H : Std.Usize} (s : Slice Std.U8) (head : Array Std.U32 H)
