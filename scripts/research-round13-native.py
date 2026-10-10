@@ -22,6 +22,8 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-word-reuse.py')],check=True)
     if spec.get('r24_compile_identity'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-compile.py')],check=True)
+    if spec.get('r24_root_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-root.py')],check=True)
     if spec.get('r20_secondary_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round20-secondary.py')],check=True);return
     if spec.get('r19_cache_prefix'):
