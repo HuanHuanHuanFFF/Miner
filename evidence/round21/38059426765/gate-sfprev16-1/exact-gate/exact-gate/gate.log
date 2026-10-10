@@ -1,0 +1,76 @@
+verifying /home/runner/work/_temp/round4-receipts/exact-gate/input
+workspace: /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-ao_i8zsq
+
+0 intake      ok — input: parse.rs, Parse.lean
+1 policy      ok — source prefilters passed
+2 static      ok — resolved operations: alloc::alloc::Global::{impl}::drop_glue, alloc::vec::Vec::{impl}::drop_glue, alloc::vec::{impl}::deref, alloc::vec::{impl}::deref_mut, alloc::vec::{impl}::index, alloc::vec::{impl}::index_mut, alloc::vec::{impl}::len, alloc::vec::{impl}::new, alloc::vec::{impl}::push, alloc::vec::{impl}::with_capacity, core::num::{impl}::leading_zeros, core::num::{impl}::saturating_add, core::num::{impl}::saturating_sub, core::num::{impl}::wrapping_add, core::num::{impl}::wrapping_mul, core::num::{impl}::wrapping_shr, core::num::{impl}::wrapping_sub, core::slice::index::{impl}::get, core::slice::index::{impl}::get_mut, core::slice::index::{impl}::get_unchecked, core::slice::index::{impl}::get_unchecked_mut, core::slice::index::{impl}::index, core::slice::index::{impl}::index_mut, core::slice::{impl}::len
+3 extract     ok — charon+aeneas re-run by the verifier, no new axioms
+
+REJECTED at stage 4 (statement)
+  ad1)[↑h]
+cur : R
+_✝¹ : [> let cur ← lift (UScalar.cast UScalarTy.Usize i2) <]
+cur_post : cur = UScalar.cast UScalarTy.Usize i2
+i3 : R
+_✝ : [> let i3 ← lift (core.num.Usize.wrapping_add p1 1#usize) <]
+i3_post1 : i3 = core.num.Usize.wrapping_add p1 1#usize
+i3_post2 : ↑p1 + 1 ≤ Usize.max → ↑i3 = ↑p1 + 1
+d : R
+_ : [> let d ← lift (core.num.Usize.wrapping_sub i3 cur) <]
+d_post : d = core.num.Usize.wrapping_sub i3 cur
+h✝¹ : cur > 0#usize
+h✝ : ¬d > 0#usize
+⊢ v1.length < Usize.max
+Proof/Parse.lean:12196:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input : Slice U8
+v : alloc.vec.Vec U16
+head : Std.Array W 65536#usize
+p : R
+v1 : alloc.vec.Vec U16
+head1 : Std.Array W 65536#usize
+p1 : R
+a✝ : True
+h✝¹ : p1 < input.len
+i1 : R
+_✝⁴ : [> let i1 ← slot.SFhash input p1 <]
+h : R
+_✝³ : [> let h ← i1 % 65536#usize <]
+h_post : ↑h = ↑i1 % 65536
+i2 : W
+_✝² : [> let i2 ← head1.index_usize h <]
+i2_post : i2 = (↑head1)[↑h]
+cur : R
+_✝¹ : [> let cur ← lift (UScalar.cast UScalarTy.Usize i2) <]
+cur_post : cur = UScalar.cast UScalarTy.Usize i2
+i3 : R
+_✝ : [> let i3 ← lift (core.num.Usize.wrapping_add p1 1#usize) <]
+i3_post1 : i3 = core.num.Usize.wrapping_add p1 1#usize
+i3_post2 : ↑p1 + 1 ≤ Usize.max → ↑i3 = ↑p1 + 1
+d : R
+_ : [> let d ← lift (core.num.Usize.wrapping_sub i3 cur) <]
+d_post : d = core.num.Usize.wrapping_sub i3 cur
+h✝ : ¬cur > 0#usize
+⊢ v1.length < Usize.max
+Proof/Parse.lean:12477:26: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+Proof/Parse.lean:12515:26: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+Proof/Parse.lean:12669:17: warning: Could not generate mvcgen spec for Submission.R18SF.SFshape_spec: (kernel) constant has already been declared 'Submission.R18SF.SFshape_spec.mvcgen_spec'
+[32m2026-10-10 14:31:08.803[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mmain[0m:[36m649[0m - [34m[1m[gate] benchmark sandbox: bwrap, 300s, 2048 MB, cpus=any[0m
+[32m2026-10-10 14:31:08.806[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_intake[0m:[36m261[0m - [34m[1m[gate] parse.rs acd855586c6efc4c -> slot/generated/parse.rs[0m
+[32m2026-10-10 14:31:08.807[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_intake[0m:[36m261[0m - [34m[1m[gate] Parse.lean 221fd9090f1c0b7a -> lean/Proof/Parse.lean[0m
+[32m2026-10-10 14:31:08.978[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] rustup exit=0 in 0.0s[0m
+[32m2026-10-10 14:31:11.242[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] extract.sh exit=0 in 2.3s[0m
+[32m2026-10-10 14:32:29.522[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] extract.sh exit=0 in 75.7s[0m
+[32m2026-10-10 14:32:29.524[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_extract[0m:[36m356[0m - [34m[1m[gate] extracted Types.lean 276d4089d337e0d7, Funs.lean 709b4956b61b967a, Constants.lean 17bbab49961fb586[0m
+[32m2026-10-10 14:32:31.484[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] lake exit=0 in 2.0s[0m
+[32m2026-10-10 14:35:20.650[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] lake exit=0 in 169.2s[0m
+[32m2026-10-10 14:41:18.304[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] lake exit=1 in 357.6s[0m
+[32m2026-10-10 14:41:18.305[0m | [1mINFO    [0m | [36m__main__[0m:[36mfail[0m:[36m116[0m - [1m[gate] rejected at stage 4 (statement)[0m

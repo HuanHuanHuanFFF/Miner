@@ -122,7 +122,7 @@ def main():
     ap.add_argument('run_id')
     ap.add_argument('phase', nargs='?', choices=['screen', 'refine', 'gate', 'extraction', 'diagnostics', 'exact-gate'], default='screen')
     ap.add_argument('--snapshot')
-    ap.add_argument('--round', choices=['4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'], default='4', help='Receipt namespace; original round4 remains the default')
+    ap.add_argument('--round', choices=['4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'], default='4', help='Receipt namespace; original round4 remains the default')
     ap.add_argument('--batch', help='Matrix batch label; omit for legacy single-job artifacts')
     args = ap.parse_args()
     assert args.batch is None or re.fullmatch(r'[a-z0-9-]{1,48}', args.batch)
@@ -177,7 +177,10 @@ def main():
             assert meta['status'] == 'completed' and meta['conclusion'] != 'success'
             reports = [json.loads(p.read_text()) for p in stage.rglob('*.json')]
             bound = [r for r in reports if isinstance(r, dict) and 'run_id' in r and 'git_sha' in r]
-            assert bound and all(str(r['run_id']) == args.run_id and r['git_sha'] == meta['headSha'] for r in bound)
+            workflow_run = artifact.get('workflow_run') or {}
+            assert (bound or (str(workflow_run.get('id')) == args.run_id and
+                              workflow_run.get('head_sha') == meta['headSha']))
+            assert all(str(r['run_id']) == args.run_id and r['git_sha'] == meta['headSha'] for r in bound)
         # Freeze downloaded file bytes before adding local metadata or analyses.
         original_files = {p.relative_to(stage).as_posix(): {'bytes': p.stat().st_size,
                            'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}

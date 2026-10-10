@@ -1,0 +1,42 @@
+verifying /home/runner/work/_temp/round4-receipts/exact-gate/input
+workspace: /home/runner/work/_temp/deflate-upstream/data/verification-workspace/verify-wjbdxnox
+
+0 intake      ok — input: parse.rs, Parse.lean
+1 policy      ok — source prefilters passed
+2 static      ok — resolved operations: alloc::alloc::Global::{impl}::drop_glue, alloc::vec::Vec::{impl}::drop_glue, alloc::vec::{impl}::deref, alloc::vec::{impl}::deref_mut, alloc::vec::{impl}::index, alloc::vec::{impl}::index_mut, alloc::vec::{impl}::len, alloc::vec::{impl}::new, alloc::vec::{impl}::push, alloc::vec::{impl}::with_capacity, core::num::{impl}::leading_zeros, core::num::{impl}::saturating_add, core::num::{impl}::saturating_sub, core::num::{impl}::wrapping_add, core::num::{impl}::wrapping_mul, core::num::{impl}::wrapping_shr, core::num::{impl}::wrapping_sub, core::slice::index::{impl}::get, core::slice::index::{impl}::get_mut, core::slice::index::{impl}::get_unchecked, core::slice::index::{impl}::get_unchecked_mut, core::slice::index::{impl}::index, core::slice::index::{impl}::index_mut, core::slice::{impl}::len
+3 extract     ok — charon+aeneas re-run by the verifier, no new axioms
+
+REJECTED at stage 4 (statement)
+  constant has already been declared 'Submission.X239.ED.sort_live_spec.mvcgen_spec'
+Proof/Parse.lean:11937:17: warning: Could not generate mvcgen spec for Submission.X239.ED.sum_range_spec: (kernel) constant has already been declared 'Submission.X239.ED.sum_range_spec.mvcgen_spec'
+Proof/Parse.lean:11937:17: warning: Could not generate mvcgen spec for Submission.X239.ED.umax_spec: (kernel) constant has already been declared 'Submission.X239.ED.umax_spec.mvcgen_spec'
+Proof/Parse.lean:11937:17: warning: Could not generate mvcgen spec for Submission.X239.ED.umin_spec: (kernel) constant has already been declared 'Submission.X239.ED.umin_spec.mvcgen_spec'
+Proof/Parse.lean:11937:17: warning: Could not generate mvcgen spec for Submission.X239.ED.walk_bump_spec: (kernel) constant has already been declared 'Submission.X239.ED.walk_bump_spec.mvcgen_spec'
+Proof/Parse.lean:11937:17: warning: Could not generate mvcgen spec for Submission.a_word_at_spec: (kernel) constant has already been declared 'Submission.a_word_at_spec.mvcgen_spec'
+Proof/Parse.lean:11937:17: warning: Could not generate mvcgen spec for Submission.zeros_spec: (kernel) constant has already been declared 'Submission.zeros_spec.mvcgen_spec'
+Proof/Parse.lean:12206:12: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input : Slice U8
+⊢ (alloc.vec.Vec.with_capacity U16 input.len).length = ↑0#usize
+Proof/Parse.lean:12478:26: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+Proof/Parse.lean:12516:26: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+Proof/Parse.lean:12670:17: warning: Could not generate mvcgen spec for Submission.R18SF.SFshape_spec: (kernel) constant has already been declared 'Submission.R18SF.SFshape_spec.mvcgen_spec'
+[32m2026-10-10 14:51:17.636[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mmain[0m:[36m649[0m - [34m[1m[gate] benchmark sandbox: bwrap, 300s, 2048 MB, cpus=any[0m
+[32m2026-10-10 14:51:17.639[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_intake[0m:[36m261[0m - [34m[1m[gate] parse.rs acd855586c6efc4c -> slot/generated/parse.rs[0m
+[32m2026-10-10 14:51:17.641[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_intake[0m:[36m261[0m - [34m[1m[gate] Parse.lean 2f056215864c8b47 -> lean/Proof/Parse.lean[0m
+[32m2026-10-10 14:51:17.855[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] rustup exit=0 in 0.0s[0m
+[32m2026-10-10 14:51:20.452[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] extract.sh exit=0 in 2.6s[0m
+[32m2026-10-10 14:53:07.699[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] extract.sh exit=0 in 103.8s[0m
+[32m2026-10-10 14:53:07.701[0m | [34m[1mDEBUG   [0m | [36m__main__[0m:[36mstage_extract[0m:[36m356[0m - [34m[1m[gate] extracted Types.lean 276d4089d337e0d7, Funs.lean 644210fdbe23393d, Constants.lean 17bbab49961fb586[0m
+[32m2026-10-10 14:53:10.234[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] lake exit=0 in 2.5s[0m
+[32m2026-10-10 14:57:19.525[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] lake exit=0 in 249.3s[0m
+[32m2026-10-10 15:06:24.363[0m | [34m[1mDEBUG   [0m | [36msandbox.bwrap[0m:[36mrun[0m:[36m110[0m - [34m[1m[bwrap] lake exit=1 in 544.8s[0m
+[32m2026-10-10 15:06:24.364[0m | [1mINFO    [0m | [36m__main__[0m:[36mfail[0m:[36m116[0m - [1m[gate] rejected at stage 4 (statement)[0m

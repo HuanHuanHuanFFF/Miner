@@ -28,6 +28,7 @@
 | round18-extension | [第十八轮追加三小时](rounds/round18-extension.md) | 追加3小时，总11小时；精确SF/RF主包及539补充包完成原版gate、两台runner各3块新确认；研究窗内15%/5%正式目标未完成。后续获授权提交A：[正式#603](rounds/round18-formal-a.md)通过gate及准入，快照29505可支付份额5.7127%、榜单第2，到账未核验。 |
 | round19 | [第十九轮：90分钟高份额研究](rounds/round19.md) | 两份完整公共gate、两runner四块冻结确认；快照29533单独预测中位nooverlap7.0242%、nojson6.8163%，联合后者为0；15%未达，无正式上传，另留缓存草稿。 |
 | round20 | [第二十轮：第一名与份额影响](rounds/round20.md) | 19个手动作业全部收齐；两份完整公共gate与两runner四块确认通过。singlehead有条件竞争影响，但全部原协议12块仍有失效，自身Top1未稳定成立，无正式上传。 |
+| round21 | [第二十一轮：两小时冲击10%](rounds/round21.md) | 14作业收齐，12份新Rust／86原协议配对；最终单独投影全0，10%未达；价格打包微收益新runner缩小，字级比较未复现，两次原版gate失败，无正式上传。 |
 | maintenance-20261008 | [合并、去重与竞赛环境整理](history/maintenance-2026-10-08.md) | 实验历史合入 main；回执去重、文档分层、规则统一，CI 手动启动。 |
 | maintenance-20261010 | [第十四至十七轮合并与分支整理](history/maintenance-2026-10-10.md) | 65个独有提交合入main；近期正式结果、验证入口及复用结论整理，已合并分支清理。 |
 | maintenance-20261009 | [第十二、十三轮合并与仓库整理](history/maintenance-2026-10-09.md) | 两轮41个提交完整合入main，已合并实验分支清理；1,607路径字节核对通过，跳过CI。 |

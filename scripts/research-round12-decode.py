@@ -6,7 +6,7 @@ from round4 import ROOT,validate
 def harness(spec):
     by={e['name']:e for e in spec['entries']}
     pairs=[(e,by[e['native_decode_reference']])for e in spec['entries']if e.get('native_decode_reference')]
-    assert pairs and len(pairs)<=3
+    assert pairs and len(pairs)<=4
     for c,r in pairs:assert (ROOT/c['path']/'parse.rs').resolve()!=(ROOT/r['path']/'parse.rs').resolve()
     module=importlib.util.spec_from_file_location('r12_finite_parent',ROOT/'scripts/research-round4.py');m=importlib.util.module_from_spec(module);module.loader.exec_module(m)
     text=m.build_harness(pairs)

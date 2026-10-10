@@ -7,7 +7,7 @@ on:
         required: true
         type: choice
         default: '9'
-        options: ['9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
+        options: ['9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21']
       specification:
         description: 'Tracked middle-frontier experiment batch'
         required: true
@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   experiment:
-    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && !(inputs.experiment_round == '11' && inputs.specification == 'huffman-1') && !(inputs.experiment_round == '12' && inputs.specification == 'probe-e') && !((inputs.experiment_round == '13' || inputs.experiment_round == '14' || inputs.experiment_round == '15' || (inputs.experiment_round == '16' || inputs.experiment_round == '17')) && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native'))) && !(inputs.experiment_round == '17' && startsWith(inputs.specification, 'gate-proof')) && inputs.experiment_round != '18' && inputs.experiment_round != '19' && inputs.experiment_round != '20'
+    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true) && !(inputs.experiment_round == '11' && inputs.specification == 'huffman-1') && !(inputs.experiment_round == '12' && inputs.specification == 'probe-e') && !((inputs.experiment_round == '13' || inputs.experiment_round == '14' || inputs.experiment_round == '15' || (inputs.experiment_round == '16' || inputs.experiment_round == '17')) && (inputs.specification == 'ef32-d' || inputs.specification == 'price-f' || endsWith(inputs.specification, '-native'))) && !(inputs.experiment_round == '17' && startsWith(inputs.specification, 'gate-proof')) && inputs.experiment_round != '18' && inputs.experiment_round != '19' && inputs.experiment_round != '20' && inputs.experiment_round != '21'
     name: ${{ inputs.specification }}
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
@@ -393,6 +393,65 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: r20-${{ github.run_id }}-${{ inputs.specification }}-${{ env.ROUND20_MODE == 'gate' && 'exact-gate' || env.ROUND20_MODE == 'standard' && 'gate' || 'diagnostics' }}
+          path: ${{ runner.temp }}/round4-receipts/
+          retention-days: 1
+          compression-level: 9
+          if-no-files-found: warn
+
+  round21:
+    if: github.event_name == 'workflow_dispatch' && inputs.experiment_round == '21' && (github.event.repository.private == false || inputs.allow_private == true)
+    runs-on: ubuntu-24.04
+    timeout-minutes: ${{ fromJSON(inputs.job_minutes) }}
+    env:
+      ROUND4_SPEC: ${{ inputs.specification }}
+      ROUND4_SPEC_DIR: evidence/round21
+      ROUND21_MODE: ${{ startsWith(inputs.specification, 'gate-') && 'gate' || endsWith(inputs.specification, '-native') && 'native' || endsWith(inputs.specification, '-diagnostic') && 'diagnostic' || 'standard' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Validate frozen inputs and workflow route
+        run: python3 scripts/round21-preflight.py
+      - name: Prepare native diagnostic environment
+        if: env.ROUND21_MODE == 'native'
+        run: bash scripts/ci-prepare-native.sh
+      - name: Prepare original full validation environment
+        if: env.ROUND21_MODE != 'native'
+        run: bash scripts/ci-prepare.sh
+      - name: Install original verification toolchain
+        if: env.ROUND21_MODE != 'native'
+        run: bash scripts/ci-setup.sh
+      - name: Run native encoding or mechanism diagnostic
+        if: env.ROUND21_MODE == 'native'
+        run: |
+          python3 scripts/research-round13-native.py
+      - name: Run standard candidate checks and paired measurements
+        if: env.ROUND21_MODE == 'standard'
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round4.py
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round5.py
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round14.py
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py screen
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py refine
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/round4.py gate
+      - name: Diagnose same-source measurement disagreement
+        if: env.ROUND21_MODE == 'diagnostic'
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          export PYTHONPATH="$DEFLATE_ROOT/validator"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/research-round18-multimethod.py
+      - name: Run the frozen pair through the original full public gate
+        if: env.ROUND21_MODE == 'gate'
+        run: |
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$ELAN_HOME/bin:$PATH"
+          "$DEFLATE_ROOT/.venv/bin/python" scripts/verify-round21-exact.py
+      - name: Preserve all original text evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r21-${{ github.run_id }}-${{ inputs.specification }}-${{ env.ROUND21_MODE == 'gate' && 'exact-gate' || env.ROUND21_MODE == 'standard' && 'gate' || 'diagnostics' }}
           path: ${{ runner.temp }}/round4-receipts/
           retention-days: 1
           compression-level: 9

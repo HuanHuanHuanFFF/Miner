@@ -1,0 +1,20 @@
+--- 
++++ 
+@@ -1 +1,3 @@
++// Derived from public #514; selected generic search rows from our #590 (public #583/#542).
++// Proven match/flush helpers from public #542 when recorded. Classification and routing retained.
+ // mA: a content-adaptive LZ77 parser for the fixed DEFLATE encoder (mid speed band).
+@@ -220,2 +222,3 @@
+ 
++#[inline(never)]
+ pub fn format_id(s: &[u8]) -> usize {
+@@ -9709,3 +9712,3 @@
+ 
+-#[inline(never)] pub fn p125_row6(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,5,0,1000000,4294967295)}
++#[inline(never)] pub fn p125_row6(input:&[u8],out:&mut[u32])->usize{pc_run1::<65536>(input,out,6,0,1000000,4294967295)}
+ 
+@@ -9719,3 +9722,3 @@
+ 
+-#[inline(never)] pub fn p125_row11(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,4,0,1000000,302256128)}
++#[inline(never)] pub fn p125_row11(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,4,258,1000000,302256384)}
+ 

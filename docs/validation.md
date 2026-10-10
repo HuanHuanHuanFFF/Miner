@@ -17,7 +17,7 @@
 | 第十八轮字节审计 | `scripts/audit-round18-evidence.py`核对原始artifact清单、官方快照、已提交Git字节与两文件审阅ZIP；`scripts/summarize-round18-cost.py`从已收齐作业统计资源 |
 | 文档和路径自检 | `python scripts/project.py check` |
 
-所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；第十五轮派发已核实为公开仓库。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至20轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
+所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；第十五轮派发已核实为公开仓库。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至21轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
 
 ## 实际执行版本
 
@@ -34,3 +34,5 @@
 已有 GitHub CLI 收集脚本通过现有 Git credential helper 在子进程内取凭据，不打印或落盘。某些本地 PAT 没有 Actions 权限；重用收集脚本的 `gh_env()`，不要把 token 放在命令或日志。
 
 Windows 的换行转换曾破坏原始 receipt 的字节哈希；`evidence/.gitattributes` 已统一关闭文本转换。路径映射覆盖被去重的早期副本。基线初期的 CI 环境变量／Aeneas 预编译故障记录在 [环境历史](history/environment-setup.md)，不作为新的运行要求。
+
+第21轮通过`dispatch-round21.py`固定两小时截止，使用原版协议；容量与生成路径由`round21-preflight.py`预检。最终完整/超时测量、独立复现、两次gate失败与字节审计见[第21轮](rounds/round21.md)。
