@@ -15,9 +15,8 @@ pub fn Asetchild(kid:&mut[u16;65536],at:usize,now:usize,child:u32) {
 }
 
 '''
-def main():
-    p=ROOT/'candidates/r24-609-once';r=(p/'parse.rs').read_text();l=(p/'Parse.lean').read_text()
-    for name in ['Z162','Z189']:
+def transform(r,tree_names=('Z162','Z189'),finder_count=2):
+    for name in tree_names:
         old=fn(r,name);s=old;assert s.count('kid: &mut [u32; 65536]')==1;s=s.replace('kid: &mut [u32; 65536]','kid: &mut [u16; 65536]')
         changes={
             'kid[lo_at % 65536] = kid[pk % 65536];':'let left=Achild(kid,p,0);Asetchild(kid,lo_at,pos,left);',
@@ -28,8 +27,11 @@ def main():
             'cur = kid[hi_at % 65536] as usize;':'cur = Achild(kid,p,0) as usize;'}
         for a,b in changes.items():assert s.count(a)==1,(name,a);s=s.replace(a,b)
         assert r.count(old)==1;r=r.replace(old,s)
-    old='let mut kid = [0u32; 65536];';assert r.count(old)==2;r=r.replace(old,'let mut kid = [0u16; 65536];')
+    old='let mut kid = [0u32; 65536];';assert r.count(old)==finder_count;r=r.replace(old,'let mut kid = [0u16; 65536];')
     at=r.index('pub fn Z162(');r=r[:at]+HELPERS+r[at:]
+    return r
+def main():
+    p=ROOT/'candidates/r24-609-once';r=transform((p/'parse.rs').read_text());l=(p/'Parse.lean').read_text()
     e=w.write_candidate('r24-609-child16',p.name,r,l,'Store A binary-tree children as positive parent-relative distances below32768, zero for absent/expired edges; retain all full32bit root/near/short timestamps. Decode relative to the actual live parent, not the query position, to avoid stale-window aliasing. This halves the65536-entry child array.','Prior compact heads/predecessors in fast and SF families did not guarantee speed. This targets a different large child working set and preserves root age checks/hash/search depth. Links outside the window are only discarded when already unusable in all later queries; finite/public parity and measured timing must test the implementation.',{'parent':p.name,'profile':'evidence/round24/weighted-stage-priority.json','prior_compact_negative':'docs/research/optimization-methods.md','proof':'DRAFT: child array types and two new total helpers require fresh extraction and complete gate. No all-input equivalence claimed from finite model.'})
     e.update(anchor='public609',comparison_baseline='once',native_decode_reference='once',expected_equivalent_to='once')
     s=json.loads((E/'groups-n-native.json').read_bytes());s.pop('r24_group_counts');s['entries']=[x for x in s['entries']if x['control']]+[e];s.update(description='AD parent-relative U16tree children with fulltimestamp roots preserved. Finite edge/window model and original28file token/encoder/decode before total-time and proof.')
