@@ -15,3 +15,11 @@ B original paired2blocks is running; gateprev16 starts early to resolve proof fe
 Singlehead is~0.56–0.63% faster thanCSV18 in two blocks. Under539calibration, both primary/shadow predict#59524.4064% ->3.11–3.61%; ownprimary0.0506%/18.4971% andshadow0.0644%/0.1074%. Do notpromote the18.5%peak. Same-source539gaps0.532%/0.540% alterownrank; algebra shows bothnumerator andincumbentdenominator contribute, withoutCPUcausal attribution. Fullsingleheadgate38050943131 and diagnostic38050952723 underway.
 
 Prev16 time vsCSV18 -0.507%/+0.237% remains uncertain; gate38050376062 continues toterminal as required. Dchainlazy saves48058B, headlazy16339B; Eoriginaltiming38050645324 running. Fdistance comparator saves1059B, adds622tokens; retain as measured-quality alternative, fullspeed/proofunknown.
+
+## Frozen confirmation J/K (12:32 UTC)
+
+Both newrunners finished4blocks, bothsourcepairsstillgatequalified. Singlehead ownshareprimary0.02394–0.05378%, shadow0.02521–0.04936%; no top1. Samefourblocks predict5953.48749–3.96116%primary and3.53807–3.93247%shadow, down20.45–20.92pp. This isconditionalsnapshot29544, notformalprivatevalidation. Goriginaldiagnostic blocks also containviewswithnoimpact; retainthosecounterexamples separately.
+
+U16primary0–0.24993%,shadow0–0.23396%, no top1orlarge stableimpact. Ring16knative adds1862Btofullring butstillconditional sizebelow595; Ntimingpending. DistanceHhas0%primary,0.0676–0.1374%shadow andsamebinarygapup to2.482%; no promotion. LazyqualityvariantsEbothzero; pausewhole-route lazy. Icounts showsecondary gains across bins, no selective length-pruning candidate.
+
+Oremovingfold adds142625B(chain)/236141B(head) and91403/159403tokens. Pwill answerend-to-end tradeoff beforegateallocation. New largealgorithm scope shouldstop around12:48UTC toretainconfirmation/delivery time. Originaldeadline13:18:10UTC unchanged. Inherited539classifier still containslengthconditions; no claimofnewgenerallength-independent routing.
