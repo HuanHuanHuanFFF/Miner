@@ -17,7 +17,7 @@ def main():
         assert not set(a.drop_control).intersection(e.get(k) for k in ['anchor','comparison_baseline','native_decode_reference','expected_equivalent_to'])
     s['entries']=[e for e in s['entries'] if e['name'] not in a.drop_control]
     for key in list(s):
-        if key.startswith('r24_') and (key.endswith('_counts') or key=='r24_output_state_entry'):
+        if key.startswith('r24_') and (key.endswith('_counts') or key in ['r24_output_state_entry','r24_compile_identity']):
             del s[key]
     for e in s['entries']:
         if not e['control']: assert n['source_hashes'][e['name']]==e['hashes']
