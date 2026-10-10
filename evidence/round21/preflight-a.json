@@ -1,0 +1,30 @@
+{
+  "gap": "Current high-speed coordinate must move beyond control variation for>=10% geometry. Existing prev16 too slow near595, all-head-only loses substantial quality.",
+  "changes": [
+    {
+      "candidate": "r21-539-head10",
+      "mechanism": "Remove only existing auxiliary chain consumer route[10]; retain16-bit predecessor and all other routes. No new routing classifier or input-length branch.",
+      "difference": "R20 removed all three generic chain consumers and paid52122B. R21 isolates their end-to-end quality/time contribution with actual narrower storage; a bounded3-way allocation test, not repeating the old all-or-nothing source."
+    },
+    {
+      "candidate": "r21-539-head16",
+      "mechanism": "Remove only existing auxiliary chain consumer route[16]; retain16-bit predecessor and all other routes. No new routing classifier or input-length branch.",
+      "difference": "R20 removed all three generic chain consumers and paid52122B. R21 isolates their end-to-end quality/time contribution with actual narrower storage; a bounded3-way allocation test, not repeating the old all-or-nothing source."
+    },
+    {
+      "candidate": "r21-539-head18",
+      "mechanism": "Remove only existing auxiliary chain consumer route[18]; retain16-bit predecessor and all other routes. No new routing classifier or input-length branch.",
+      "difference": "R20 removed all three generic chain consumers and paid52122B. R21 isolates their end-to-end quality/time contribution with actual narrower storage; a bounded3-way allocation test, not repeating the old all-or-nothing source."
+    },
+    {
+      "candidate": "r21-539-headprev16",
+      "mechanism": "Store primary PC/PI/PIM head hints in16 bits as well as predecessor hints. Reconstruct low16-bit coordinate at lookup and check bounds before byte probe; retain valid distance checks.",
+      "difference": "R20 only narrowed predecessors; full-width heads remained. This reduces the principal table footprint and initialization, with a real reconstruction cost and possible hint semantic changes. Lean types are unadapted draft; no correctness claim."
+    }
+  ],
+  "minimum": "Original28file encoding plus444 finite native equivalence/decode cases and exact public output.",
+  "decision": "Preserve candidates with real quality/time potential; select original paired timing using actual quality. Compact-head success buys proof migration; quality regressions retain explicit tradeoff.",
+  "cost_cap_minutes": 15,
+  "final_reserve_minutes": 35,
+  "evidence": "evidence/round21/<run>/probe-a-native/diagnostics"
+}
