@@ -7,3 +7,8 @@
 优先对比新公开539的实际matcher，以及586/591高压缩率家族的阶段与质量互补。两轴收益、同源码波动、原协议独立确认、完整gate分层验收；正式上传、注册和资金签名仍不在范围内。
 
 续跑记录和当前预算：[research-state](../../evidence/round18/research-state.md)、[budget](../../evidence/round18/budget.json)。
+
+
+截至北京时间10:23，新增两条可复核的质量改进正在验收：539内容路由的CSV lazy引擎迁移少25,588B；原RF候选追加591边界重规划少1,244B。两者均通过28文件原encoder/decode，尚不能据此推导正式份额。详细记录见[续跑检查点](../../evidence/round18/research-state.md)。
+
+跨家族同机矩阵的自由文件混合模型曾出现17.33%条件估算，同一选择换用另一家族校准只有3.33%；该模型尚不可执行。[逐项评分重放](../../evidence/round18/cross-family-bf-geometry.json)保留邻居切换与归一化，避免只挑一个校准口径。
