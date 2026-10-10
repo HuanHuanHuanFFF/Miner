@@ -1,0 +1,19 @@
+{
+  "candidate": "r24-609-longkey6",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "ebe7f0d78ed394c8282e3169fbab6faba45827196f1b9f9055fe9dd1a84b1022",
+    "Parse.lean": "2d20d999d4a238c891d51e0d5ef484ac4509fc2738016a3cda0fed96aa15fa47"
+  },
+  "mechanism": "Keep the existing3-byte hint table and nearest4-byte hint, but index both A-family long-match trees by a6-byte prefix in the same65536-head capacity. Prefetch/tree-update indices are separated; short hints are not discarded because the tree head is now a different index.",
+  "difference_from_old_work": "A matching and DP together are substantial remaining work. Unlike table resizing or depth sweeps, this changes candidate organization and may reduce both traversal and recorded alternatives. Losing older4/5-byte choices or increasing hint cost is an explicit risk, tested with actual encoded output first.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "source": "references/round24-public-609/source-receipt.json",
+    "profile": "evidence/round24/38083109099/profile-i-native/diagnostics/r18-functions/functions.json",
+    "limits": "6-byte key is one controlled mechanism, not an input-identity router. Tuple/proof migration remainsDRAFT."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}

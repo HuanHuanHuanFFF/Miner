@@ -13,6 +13,8 @@ def main():
         assert sum(not e.get('control', False) for e in spec['entries']) == spec['r24_expected_candidates'], 'Frozen candidate count must match actual entries'
     mode = os.environ['ROUND24_MODE']
     assert mode in ('native', 'standard', 'diagnostic', 'extract')
+    if spec.get('r24_debug_extract_fixture'):
+        assert mode=='extract', 'Debug extraction fixtures must never enter performance or full-gate routes'
     assert spec['r24_mode'] == mode
     assert bool(spec.get('native_only')) == (mode == 'native')
     if mode == 'extract':
