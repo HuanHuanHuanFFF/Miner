@@ -20,7 +20,7 @@ def main():
   for n in folder.glob('**/encoder.json'):
    r=read(n);assert r['git_sha']==ci['headSha'] and r['run_id']==str(ci['databaseId']);native.append({'run_id':r['run_id'],'rows':len(r['rows']),'status':r['status']})
  for p in e.glob('*-failure-ci.json'):
-  r=read(p);ident=str(r.get('databaseId')or next(q for q in e.glob('dispatch-*.json')if read(q)['batch']=='probe-c-native').stem.removeprefix('dispatch-'));run_meta[ident]=r
+  r=read(p);ident=r.get('databaseId')or r.get('run_id');assert ident is not None, 'Failure metadata must identify its actual run';run_meta[str(ident)]=r
  dispatches=[read(p)for p in sorted(e.glob('dispatch-*.json'))]
  for d in dispatches:
   ident=str(d['run']['databaseId'])

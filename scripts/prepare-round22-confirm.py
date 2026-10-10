@@ -12,7 +12,7 @@ def main():
     ap.add_argument('--blocks',type=int,default=2)
     a=ap.parse_args();assert 1<=a.blocks<=4
     s=json.loads((E/'screen-c.json').read_bytes())
-    all_entries={e['name']:e for label in ('screen-c','screen-e') for e in json.loads((E/(label+'.json')).read_bytes())['entries']}
+    all_entries={e['name']:e for label in ('screen-c','screen-e','screen-k') if (E/(label+'.json')).exists() for e in json.loads((E/(label+'.json')).read_bytes())['entries']}
     assert a.candidate in all_entries and not all_entries[a.candidate].get('control')
     selected=all_entries[a.candidate]
     s['entries']=[copy.deepcopy(all_entries[n]) for n in ('probe3','r3-432-fast3','public432','public595','public595-shadow')]+[copy.deepcopy(selected)]
@@ -26,8 +26,8 @@ def main():
     else:
         assert a.label.endswith('-diagnostic')
         s['entries'].append({**copy.deepcopy(selected),'name':a.candidate+'-shadow','control':True})
-        s.update(r22_mode='diagnostic',r18_mode='diagnostic',r18_order_diagnostic=True,r18_order_blocks=a.blocks,r18_order_protocols=['original_fixed11','balanced20'],diagnostic_methods=['public595','public595-shadow',a.candidate,a.candidate+'-shadow'],isolated_blocks=2,multimethod_blocks=4)
-        s['description']='R22 measurement diagnosis only: two exact595 aliases and two exactcandidate aliases share binary hashes. Compare original fixed11 and scratch balanced20 schedules on explicit CPU; preserve all methods/input/output/source/environment hashes. Exclude diagnostic axes from official-protocol projections.'
+        s.update(r22_mode='diagnostic',r18_mode='diagnostic',r18_order_diagnostic=True,r18_order_blocks=a.blocks,r18_order_protocols=['original_fixed11','original_fixed20','balanced20'],diagnostic_methods=['public595','public595-shadow',a.candidate,a.candidate+'-shadow'],isolated_blocks=2,multimethod_blocks=4)
+        s['description']='Future measurement diagnosis: two exact595 aliases and two exactcandidate aliases share binary hashes. Compare fixed11, fixed20 and scratch balanced20 schedules on explicit CPU; the equal20rep control separates ordering from repetition count. Preserve method/input/output/source/environment hashes. Exclude diagnostic axes from official-protocol projections. Already frozen noise-f inputs stay unchanged.'
     names=[e['name'] for e in s['entries']]
     s['screen_orders']=[names if i%2==0 else names[::-1] for i in range(a.blocks)]
     dest=E/(a.label+'.json');assert not dest.exists()
