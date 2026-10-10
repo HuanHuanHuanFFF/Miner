@@ -10,7 +10,7 @@ def read(p):return json.loads(p.read_bytes())
 
 def distribution(values):
     assert values
-    return {'n':len(values),'best_pct':max(values),'median_pct':st.median(values),'range_pct':[min(values),max(values)],'zero_count':sum(v==0 for v in values),'at_least_5_count':sum(v>=5 for v in values),'at_least_15_count':sum(v>=15 for v in values)}
+    return {'n':len(values),'best_pct':max(values),'median_pct':st.median(values),'range_pct':[min(values),max(values)],'zero_count':sum(v==0 for v in values),'at_least_5_count':sum(v>=5 for v in values),'at_least_10_count':sum(v>=10 for v in values),'at_least_15_count':sum(v>=15 for v in values)}
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('receipts',type=Path,nargs='+')
