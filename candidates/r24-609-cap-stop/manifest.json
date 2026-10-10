@@ -1,0 +1,19 @@
+{
+  "candidate": "r24-609-cap-stop",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "b65fd661c3062a5e2f6d44a5cd00b8b2826647110c9e5bb0d78b019e8bfb4ae3",
+    "Parse.lean": "48d616d1d641343bafd7dd2e8305a6cb3b3c772440d24d661f14538460701b7a"
+  },
+  "mechanism": "On the original four-code SF collector, stop its strictly backward full-position chain once the buffer is full and the next distance code exceeds every retained code. Later distances cannot return to a retained code, and the original SFfastadd would discard those new codes without updating slots.",
+  "difference_from_old_work": "L observed millions of overflow additions and only11bytes from retaining new choices. This removes actual work the original collector cannot consume, rather than spending more work to improve the buffer. It is separate from L: do not combine its changed acceptance policy with this original-policy early stop.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "source": "references/round24-public-609/source-receipt.json",
+    "overflow_evidence": "evidence/round24/38084061512/buffer-l-native/diagnostics/r24-buffer/receipt.json",
+    "scope": "Token preservation is expected for the constructed monotone predecessor chain; finite equality and a new original gate remain required."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}
