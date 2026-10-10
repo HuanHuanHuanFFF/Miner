@@ -43,7 +43,18 @@ def main():
                     seconds += (datetime.fromisoformat(job['completedAt'].replace('Z', '+00:00')) - datetime.fromisoformat(job['startedAt'].replace('Z', '+00:00'))).total_seconds()
             state_path = folder / 'state.json'
             pairs = len(read(state_path)['metrics']) if state_path.exists() else 0
-            jobs[rid] = {'batch': dispatch['batch'], 'conclusion': ci['conclusion'], 'runner_seconds': seconds, 'original_paired_processes': pairs, 'source_commit': ci['headSha']}
+            original_diagnostic, nonstandard = 0, 0
+            noise = folder/'r18-noise/noise.json'
+            if noise.exists():
+                blocks = read(noise).get('blocks',[])
+                original_diagnostic = sum(v['protocol']=='official_isolated' for v in blocks)
+                nonstandard += len(blocks)-original_diagnostic
+            for name in ['r18-order/order.json','r20-library/order.json']:
+                if (folder/name).exists():nonstandard += len(read(folder/name).get('blocks',[]))
+            jobs[rid] = {'batch': dispatch['batch'], 'conclusion': ci['conclusion'], 'runner_seconds': seconds,
+                         'standard_batch_paired_processes': pairs, 'original_protocol_diagnostic_processes': original_diagnostic,
+                         'original_paired_processes': pairs+original_diagnostic, 'nonstandard_diagnostic_processes': nonstandard,
+                         'source_commit': ci['headSha']}
     candidates = []
     for path in sorted((ROOT / 'candidates').glob('r20-*')):
         manifest = read(path / 'manifest.json')
@@ -52,11 +63,18 @@ def main():
         certificate = read(path / 'VERIFICATION.json') if (path / 'VERIFICATION.json').exists() else None
         if certificate:
             assert certificate['files'] == pair
+            receipt=read(ROOT/certificate['receipt'])
+            assert receipt['status']=='EXACT_ORIGINAL_PUBLIC_GATE_ACCEPTED' and all(receipt['checks'].values())
+            assert receipt['spec']['files']==pair and certificate['axioms']==['Classical.choice','Quot.sound','propext']
         candidates.append({'candidate': path.name, 'files': pair, 'exact_public_gate': certificate['status'] if certificate else 'NOT_VERIFIED', 'formal_submission_sent': manifest['formal_submission_sent']})
     report = {'checked_at_utc': datetime.now(timezone.utc).isoformat(), 'status': 'VERIFIED_COLLECTED_BYTES',
         'jobs': jobs, 'uncollected_run_ids': missing, 'artifacts': artifacts, 'raw_file_count': count, 'raw_bytes': size,
         'runner_seconds': sum(j['runner_seconds'] for j in jobs.values()),
         'original_paired_processes': sum(j['original_paired_processes'] for j in jobs.values()),
+        'standard_batch_paired_processes': sum(j['standard_batch_paired_processes'] for j in jobs.values()),
+        'original_protocol_diagnostic_processes': sum(j['original_protocol_diagnostic_processes'] for j in jobs.values()),
+        'nonstandard_diagnostic_processes': sum(j['nonstandard_diagnostic_processes'] for j in jobs.values()),
+        'unique_new_rust_count':len({c['files']['parse.rs']for c in candidates}),
         'candidates': candidates, 'money_cost': 'UNKNOWN', 'reset_cards_used': 0,
         'scope': 'Counted original-protocol paired processes include controls and are not independent samples. Runner seconds sum concurrent jobs, not wall time or billed cost. No formal submission.'}
     args.output.write_bytes((json.dumps(report, indent=2) + '\n').encode())

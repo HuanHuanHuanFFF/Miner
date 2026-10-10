@@ -29,3 +29,9 @@ Oremovingfold adds142625B(chain)/236141B(head) and91403/159403tokens. Pwill answ
 Ring16k Nreturnedno reliablelargebenefit: own0.1101–0.1306%primary,0.0278–0.0623%shadow;5950–20.1368%primary but23.0751–24.1737%shadow. Public539same-sourcegap -0.265%/-1.019%; do notpromoteorgatebasedonprimaryonly. Pnofoldtimingisthelastpendingexperimentaldecision.
 
 Mbalanced20equal-repetitiondiagnostic reducedreferenceabsolutecontrolgap0.38574%->0.04906%; candidatecopygapstill0.20926%. Bothbalancedblocks nowshownegativecandidate_vs_reference, butonlydiagnostic evidence. No replacementoforiginalscores. Newpublic535/599releasedsourcesareknown514engineswithconfiguration/routingchanges; retainasreferences,notnewinventions.
+
+## Closing audit
+
+All19manualjobs collected successfully. FinalR sharedlibraryidentity didnotconsistentlyreducecopygap; noidentifiedsinglecause andno correctedofficialscore. Allsinglehead originalmeasurements now retained:6runners/12blocks, primary5zero/noimpact andshadow2zero/noimpact at29551; frozenJ/Kfourblocks remainseparate. Source/proofpairsareunchanged.
+
+A method-document append briefly targetedmain by cwd mistake. Before restoration, its entire preceding content was checked equal to mainHEAD; onlyournewsection was transferred to thisresearchworktree and mainfile bytes restoredfromverifiedHEAD. Mainworkingtree isclean, b5cb035 remainsunpublishedanduntouched.
