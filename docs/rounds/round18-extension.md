@@ -104,7 +104,7 @@ ZIP只含精确`parse.rs`和`Parse.lean`，已逐项核对哈希；没有上传�
 
 - [原始计时逐项复算](../../evidence/round18/extension-final-analysis-29481.json)；[主候选六块确认与联合分布](../../evidence/round18/extension-final-summary-29481.json)；[同块家族校准敏感性](../../evidence/round18/extension-final-family-sensitivity-29481.json)。
 - [公开hotkey支付规则情景](../../evidence/round18/extension-final-payability-29481.json)；[官方快照及分页回执](../../evidence/round18/official-extension-close/receipt.json)。
-- [作业/配对/runner消耗](../../evidence/round18/cost-extension-close.json)；[原始字节与精确包审计](../../evidence/round18/evidence-audit-extension-final.json)；[预声明冻结计划](../../evidence/round18/extension-final-confirmation-plan.json)。
+- [作业/配对/runner消耗](../../evidence/round18/cost-extension-close.json)；[原始字节与精确包审计](../../evidence/round18/evidence-audit-extension-close.json)；[预声明冻结计划](../../evidence/round18/extension-final-confirmation-plan.json)。
 
 - [当前两项目标的有界坐标要求](../../evidence/round18/extension-final-coordinate-gaps-29481.json)；[官方代码主分支复核](../../evidence/round18/official-code-extension-close/receipt.json)；[工作区和main边界](../../evidence/round18/workspace-boundary-extension-close.json)。
 
