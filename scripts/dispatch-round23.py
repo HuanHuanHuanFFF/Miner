@@ -39,7 +39,7 @@ def main():
     frozen=json.loads(subprocess.check_output(['git','show',sha+f':evidence/round23/{args.batch}.json']));assert frozen==spec
     listing=['run','list','--repo',REPO,'--branch',args.ref,'--workflow','deflate-round9.yml','--limit','25','--json','databaseId,headSha,status,createdAt,url']
     seen={r['databaseId'] for r in json.loads(helper.run(listing,env))}
-    inputs={'experiment_round':'22','specification':args.batch,'allow_private':'false','job_minutes':str(minutes)}
+    inputs={'experiment_round':'23','specification':args.batch,'allow_private':'false','job_minutes':str(minutes)}
     cmd=['workflow','run','deflate-round9.yml','--repo',REPO,'--ref',args.ref]
     for key,value in inputs.items():cmd+=['-f',f'{key}={value}']
     started=datetime.now(timezone.utc).isoformat();helper.run(cmd,env)
@@ -47,7 +47,7 @@ def main():
         matches=[r for r in json.loads(helper.run(listing,env)) if r['headSha']==sha and r['databaseId'] not in seen]
         if matches:
             assert len(matches)==1
-            record={'round':22,'batch':args.batch,'mode':mode,'git_sha':sha,'inputs':inputs,'dispatch_utc':started,'repository_visibility_verified':'public','authorization':'Current user research budget including explicit extensions, necessary cloud verification and experiment-branch push scope; no submission, registration or wallet actions.','job_timeout_minutes':minutes,'collection_reserve_minutes':10,'fixed_deadline_utc':budget['deadline_utc'],'run':matches[0]}
+            record={'round':23,'batch':args.batch,'mode':mode,'git_sha':sha,'inputs':inputs,'dispatch_utc':started,'repository_visibility_verified':'public','authorization':'Current user research budget including explicit extensions, necessary cloud verification and experiment-branch push scope; no submission, registration or wallet actions.','job_timeout_minutes':minutes,'collection_reserve_minutes':10,'fixed_deadline_utc':budget['deadline_utc'],'run':matches[0]}
             p=ROOT/f'evidence/round23/dispatch-{matches[0]["databaseId"]}.json';assert not p.exists();p.write_text(json.dumps(record,indent=2)+'\n')
             print(json.dumps(record));return
         time.sleep(2)

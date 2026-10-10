@@ -2,5 +2,12 @@
   "complex_inline_shell_parse_failure": "PowerShell rejected inlinequotes before execution; no branch orCI mutation. Replaced by savedpreparation script.",
   "mode_field_migration_failure": "Localgatepreflight caught r22_mode in cloned verifier; corrected all r23mode andexpectedcount fields before firstdispatch.",
   "cloud_jobs_affected": 0,
-  "candidate_source_changed": false
+  "candidate_source_changed": false,
+  "first_dispatch_wrong_round": {
+    "run_id": "38072840653",
+    "actual_experiment_round": 22,
+    "expected_experiment_round": 23,
+    "reason": "Literal workflow input and roundreceipt number survived namespace clone. First job used originalR22preflight and missingR22gate-combo spec; no candidategate result.",
+    "resolution": "Fix bothliterals; ASTpreflight crosschecks dispatcher andworkflow before retry. Preserve initialdispatch andfailedCI."
+  }
 }
