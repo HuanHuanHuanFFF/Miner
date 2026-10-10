@@ -1,0 +1,50 @@
+"""Seal R23 original evidence, matched diagnosis, exact pairs and remaining gaps."""
+from pathlib import Path
+from datetime import datetime,timezone
+import collections,hashlib,json,zipfile
+ROOT=Path(__file__).resolve().parents[1];E=ROOT/'evidence/round23'
+
+def read(p):return json.loads(p.read_bytes())
+def save(p,d):p.write_bytes((json.dumps(d,indent=2,ensure_ascii=False)+'\n').encode())
+def stat(s):return f"{s['median_pct']:.6f}%／{s['range_pct'][0]:.6f}–{s['range_pct'][1]:.6f}%"
+
+def main():
+    a=read(E/'final-analysis.json');audit=read(E/'audit-final.json');diag=read(E/'diagnostic-analysis.json');budget=read(E/'budget.json');assert not audit['uncollected_run_ids']
+    rows=[];bundles=[];delivery=E/'delivery';delivery.mkdir(exist_ok=True)
+    for c in a['candidates']:
+        files=c['preferred_verified_files'];source=ROOT/c['preferred_verified_source_path'];cert=read(source/'VERIFICATION.json');assert cert['files']==files
+        data={f:(source/f).read_bytes() for f in files};assert {f:hashlib.sha256(b).hexdigest() for f,b in data.items()}==files
+        m=read(source/'manifest.json');m['performance_status']='R23_ORIGINAL_PUBLIC_TIMING_AVAILABLE_NOT_FORMAL_REWARD';m['performance_evidence']='evidence/round23/final-analysis.json';save(source/'manifest.json',m)
+        z=delivery/(c['candidate']+'-review.zip')
+        if not z.exists():
+            with zipfile.ZipFile(z,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as out:
+                for f,b in data.items():
+                    info=zipfile.ZipInfo(f,(2026,10,11,1,38,14));info.compress_type=zipfile.ZIP_DEFLATED;out.writestr(info,b,compress_type=zipfile.ZIP_DEFLATED,compresslevel=9)
+        with zipfile.ZipFile(z) as out:assert set(out.namelist())==set(data) and len(out.namelist())==2 and all(out.read(f)==b for f,b in data.items())
+        bundles.append({'candidate':c['candidate'],'files':files,'zip':z.relative_to(ROOT).as_posix(),'zip_bytes':z.stat().st_size,'zip_sha256':hashlib.sha256(z.read_bytes()).hexdigest(),'public_gate_run_id':cert['run_id'],'formal_submission_sent':False})
+        independent=c['independent_confirmation_summary'];obs=[o for o in c['observations'] if o['calibration']=='primary' and o['entry_role']=='candidate' and o['time_change_pct_vs_parent'] is not None]
+        rows.append({'candidate':c['candidate'],'source_path':source.relative_to(ROOT).as_posix(),'files':files,'all_original_observation_summary':c['summary'],'independent_confirmation':independent,'by_run':c['by_run_summary'],'exact_actual_parent_time_delta_pct':[o['time_change_pct_vs_parent'] for o in obs],'original_public_gate':'VERIFIED_EXACT_PAIR_PASSED','gate_run_id':cert['run_id'],'gate_seconds':cert['gate_seconds'],'formal_reward_pool_share_pct':None})
+    save(delivery/'receipt.json',{'status':'VERIFIED_EXACT_ACCEPTED_PAIR_REVIEW_ZIPS','bundles':bundles,'scope':'Two frozen Rust/Lean members per package, public gate accepted only. No official upload, digest signing, admission, registration or realized reward.'})
+    combo=next(c for c in a['candidates'] if c['candidate']=='r22-595-chain-halfhead');confirm=combo['independent_confirmation_summary']
+    result={'status':'FIXED_BUDGET_DELIVERY_10PCT_STABILITY_AND_FORMAL_TARGET_NOT_ESTABLISHED','budget':budget,'snapshot':a['snapshot'],'candidates':rows,'priority_candidate':'r22-595-chain-halfhead','priority_independent_confirmation':confirm,'formal_submission_sent':False,'formal_admission':'UNKNOWN','formal_payable_share':'UNKNOWN','new_rust_count':1,'reused_frozen_candidate_count':1,'actual_cost_audit':'evidence/round23/audit-final.json','limits':['All shares are conditional public transfers against the saved official snapshot, not formal reward or success probability.','Four independent blocks include twozero primary and threezero shadow; mediansbelow10. A highpeak is not stable achievement.','Diagnostic fixed20/balanced20 comparison is separate from original isolated protocol.','Chain3 has a fresh exact gate but no new frozenindependentperformanceconfirmation.','No officialupload,registration,spending,walletsigning or reset action.']}
+    save(E/'final-summary.json',result)
+    lines=['# 第二十三轮：再推进50分钟','','固定窗口：北京时间 **2026-10-11 01:38:14–02:28:14**。上一轮一小时已封存，用户新授权50分钟，起点与截止没有因故障或排队重置。执行规则见[AGENTS.md](../../AGENTS.md)。','','**稳定10%与正式可支付10%目标未建立。** 原组合高份额信号在新runner部分复现，但保留所有零份额与参照分歧；两份精确Rust／Lean均通过原版完整公共gate，没有正式上传。',f"当前官方快照 **{a['snapshot']['snapshot_id']}**，计算时间 `{a['snapshot']['computed_at']}`，freshness=`{a['snapshot'].get('freshness','UNKNOWN')}`。官方API在本轮收尾仍返回同一已发布快照，查询时间与原始响应在[快照回执](../../evidence/round23/official-final/receipt.json)。",'', '**VERIFIED**：原始计时、输入／输出／库身份、源码／证明哈希、完整公共gate与CI。**INFERRED**：以正式595锚定的公开两轴迁移和份额重放。**UNKNOWN**：私有集、正式准入、实际可支付份额与钱包到账。','','## 优先组合：冻结后两台新runner四块确认','','|新确认视图|最佳值|中位数／范围|零次数|≥10次数|','|---|---:|---:|---:|---:|']
+    for name,label in [('primary','595主参照'),('shadow','595同源码参照')]:
+        s=confirm[name];lines.append(f"|{label}|{s['best_pct']:.6f}%|{stat(s)}|{s['zero_count']}/{s['n']}|{s['at_least_10_count']}/{s['n']}|")
+    lines+=['', '两份参照是同一块的两个校准视图，不算八份独立样本。样本达标次数不是正式成功概率。独立确认在通过完整gate并冻结精确文件后派发；之后Rust／Lean未修改。','','|runner／块|主估算|同源码估算|相对实际chain父版本总时间变化|','|---|---:|---:|---:|']
+    keys=sorted({(o['run_id'],o['block']) for o in combo['observations'] if o['role']=='independent_confirmation' and o['entry_role']=='candidate'})
+    for run,block in keys:
+        oo=[o for o in combo['observations'] if (o['run_id'],o['block'])==(run,block) and o['entry_role']=='candidate'];p=next(o for o in oo if o['calibration']=='primary');s=next(o for o in oo if o['calibration']=='shadow')
+        lines.append(f"|{run}／{block}|{p['single_pool_share_pct']:.6f}%|{s['single_pool_share_pct']:.6f}%|{p['time_change_pct_vs_parent']:+.6f}%|")
+    lines+=['', '最新确认有一块在两种校准下均超过10%，另有一块仅主视图超过10%；其余两块均0。与此前R22一高一零相比，增加了新的高峰复现和反例；不将主视图2/4解释为成功概率。','', '本轮全部原协议观测包括组合在另一筛选批次作为同源码对照的两块。主最高21.296089%、影子最高19.070477%；那两块不混入最终独立确认。全量、逐runner、逐文件总压缩时间与配对incumbent见[主分析](../../evidence/round23/final-analysis.json)。缺少实际本地父参照的控制块，其父版本差异保留UNKNOWN，不跨runner补算。','','## 新机制：追加第二个旧匹配','','仅在原组合route6增加一个实际可用旧匹配，总候选由二变三；保持32768主表、skip、lazy、fold和其他路线。原始编码与独立解码表明，在lean.txt再减少3097B，相对595总共少10335B；其余27文件保持原组合字节。平均文件大小36.14884855%，父组合36.15990926%。','','两块原版总时间相对实际combo父版本分别慢0.426438%与0.237179%；主／同源码估算均0/0，中位与最佳均0。源代码和更小输出成立，速度收益未成立；同源码参照差异达到约1.10%，因果仍未闭合，不把两块结果推广为所有深链路线无效。新版本通过精确完整gate，保留为压缩质量起点；未运行新的冻结独立性能确认。见[原始筛选](../../evidence/round23/38073624911/screen-f/gate/state.json)与[原始编码](../../evidence/round23/38073276904/depth-c-native/diagnostics/r13-encoder/encoder.json)。','', '当前条件大小仍高于612约0.0135个百分点，新增质量没有拓宽起始高份额速度窗口。评分几何是合成探测，不是实际速度、误差界或保证，见[低成本重放](../../evidence/round23/depth-c-space.json)。','','## 等次数测量诊断','','固定11次、固定20次、均衡20次，在同一新runner两块反向顺序执行。输入、输出、两对源码／共享库身份保持一致；仅scratch计时顺序改变，固定20和均衡20等重复次数。编码器、token、loader及官方树保持原版。','','|协议／块|595副本差异|组合副本差异|组合对主参照速度差异|','|---|---:|---:|---:|']
+    for r in diag['blocks']:lines.append(f"|{r['protocol']}／{r['block']}|{r['parent_alias_gap_pct']:+.6f}%|{r['candidate_alias_gap_pct']:+.6f}%|{r['candidate_vs_parent_primary_pct']:+.6f}%|")
+    lines+=['', '等20次对照支持顺序影响了参照分歧和候选差异的符号；均衡顺序并未将所有差异降为0，也不识别全部环境原因。诊断协议不替代原版单候选配对成绩，不加入上述份额样本。R22缺少的等次数控制在本轮补齐，R22原始数据不重写。见[诊断审计](../../evidence/round23/diagnostic-analysis.json)。','','## 精确文件、完整gate与包','','|候选|Rust SHA-256|Lean SHA-256|gate／耗时|','|---|---|---|---|']
+    for c in rows:lines.append(f"|[{c['candidate']}](../../{c['source_path']})|`{c['files']['parse.rs']}`|`{c['files']['Parse.lean']}`|{c['gate_run_id']}／{c['gate_seconds']:.1f}s|")
+    lines+=['', '两份均为官方重新提取、原始LZ77.Obligation、公理白名单与公共roundtrip的完整验收。原版Lean900s限制保留。共用Lean文本不继承另一个Rust的结果；分别绑定各自新gate。上述耗时是验证墙钟，不是比赛速度。','', '[两份精确双文件审阅包及ZIP哈希](../../evidence/round23/delivery/receipt.json)已准备；沒有提交竞赛、签名、注册或新资金动作。','','## 单独、联合与当前竞争影响','','两份单独估算见上述完整分布。相同run／block两点同时插入见[主分析joint](../../evidence/round23/final-analysis.json)与[全部同块点影响](../../evidence/round23/final-impact.json)，重新计算前沿及归一化，不能相加。没有跨不同runner伪造配对联合数据。同hotkey、注册及未来准入另行核验。','', '本轮F两块组合主视图含一个约21.30%峰值，链三主视图均0；对应影子视图组合也均0。已有正式Top1影响为条件几何估算，不把对手减少的份额计入自己的实际收入。','','## 消耗、故障与交接','','首次误派发旧轮次在入口处失败，未执行候选gate或计时。保留原始dispatch、CI和日志；纠正实际experiment_round并用AST交叉核对派发器与工作流。早期本地命令转义／字段迁移失败亦计入窗口，未重置起点。后续以保存文件及小型修补预检，避免依赖复杂内联命令。','',f"共{audit['dispatched_runs']}个手动作业，结论 `{dict(collections.Counter(audit['run_conclusions'].values()))}`；{audit['original_paired_processes']}个原协议配对进程（含对照），一份新增Rust、一份复用冻结Rust。{audit['raw_file_count']}份原始artifact／{audit['raw_bytes']:,}字节通过SHA-256；全部已收齐。runner累计{audit['runner_minutes']:.2f}分钟是并发之和，非50分钟墙钟或金额。见[完整审计](../../evidence/round23/audit-final.json)。",'', '真实账户用量由30%已用变31%，剩69%；账户范围读数不直接归因为本线程费用。0重置、0购买；GitHub实际计费和模型可归因成本UNKNOWN。[用量记录](../../evidence/round23/usage-summary.json)。', '', '下一步优先保持原组合为高潜力候选，明确21%峰值、0%最低值与两种参照分歧。若继续实现，先以真实质量／速度余量为目标，避免为落入窄窗加入延时。可检验的不同机制是：现有辅助搜索只因更长便接受，改为在原有更长条件上再要求估计编码收益为正；这可能拒绝代价较大的远距离延长，使用既有pc_gain计算，成本较完整重规划低。该提案仅由代码推导，尚未实现、证明或测量，收益UNKNOWN；先做原版编码最小实验，不能从提案推导收益。','', '[看板](../../DASHBOARD.md)、[方法结论](../research/optimization-methods.md)和索引已更新。正式可支付目标仍需未来另行授权上传后得到官方结果；本轮不自动授权该操作。','']
+    (ROOT/'docs/rounds/round23.md').write_bytes(('\n'.join(lines)).encode())
+    p=ROOT/'docs/TASK_INDEX.md';text=p.read_text();row='| round23 | [第二十三轮：50分钟续跑](rounds/round23.md) | 原组合／链三分别通过精确完整gate；四块新确认主中位8.78%、影子0，10%稳定目标未立；等20次对照支持顺序效应，无正式上传。 |\n'
+    if '| round23 |' not in text:text=text.replace('| maintenance-20261008 |',row+'| maintenance-20261008 |');p.write_bytes(text.encode())
+    t=read(ROOT/'docs/tasks.json');t['updated_on']='2026-10-11';entry={'id':'round23','title':'50分钟续跑及16%组合独立确认','tags':['chain-halfhead','chain3','595','pc_gain','等20次','顺序效应','10%','完整gate','独立确认'],'report':'docs/rounds/round23.md','evidence':['evidence/round23'],'decision':'两份完整gate，四块新确认部分高峰复现但中位未达10%；追加匹配少3097B无份额，8作业收齐，无正式上传。'};t['tasks']=[r for r in t['tasks'] if r['id']!='round23']+[entry];save(ROOT/'docs/tasks.json',t)
+    print(json.dumps({'report':'docs/rounds/round23.md','priority_independent':confirm,'full_gates':2,'new_rust':1,'formal_sent':False},indent=2))
+
+if __name__=='__main__':main()
