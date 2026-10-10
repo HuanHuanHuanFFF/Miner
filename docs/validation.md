@@ -17,7 +17,7 @@
 | 第十八轮字节审计 | `scripts/audit-round18-evidence.py`核对原始artifact清单、官方快照、已提交Git字节与两文件审阅ZIP；`scripts/summarize-round18-cost.py`从已收齐作业统计资源 |
 | 文档和路径自检 | `python scripts/project.py check` |
 
-所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；第十五轮派发已核实为公开仓库。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至21轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
+所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；近期每批均重新核实公开状态。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至22轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
 
 ## 实际执行版本
 
@@ -36,3 +36,5 @@
 Windows 的换行转换曾破坏原始 receipt 的字节哈希；`evidence/.gitattributes` 已统一关闭文本转换。路径映射覆盖被去重的早期副本。基线初期的 CI 环境变量／Aeneas 预编译故障记录在 [环境历史](history/environment-setup.md)，不作为新的运行要求。
 
 第21轮通过`dispatch-round21.py`固定两小时截止，使用原版协议；容量与生成路径由`round21-preflight.py`预检。最终完整/超时测量、独立复现、两次gate失败与字节审计见[第21轮](rounds/round21.md)。
+
+第22轮通过`dispatch-round22.py`固定追加一小时；`round22-preflight.py`绑定实际候选数量及原始文件。`verify-round22-exact.py`与`bind-round22-gate.py`绑定新精确验收，确认批次按通过的文件对派发。独立确认、同源码／分母分解、单独／联合重放及诊断协议边界见[第22轮](rounds/round22.md)。后续顺序诊断保留fixed11／fixed20／balanced20三组；本轮已冻结F实际只有fixed11／balanced20，不能按新准备器补写历史。
