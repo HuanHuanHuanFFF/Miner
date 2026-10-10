@@ -20,6 +20,18 @@
 
 ## 证据边界
 
+### B–E：公开高质量起点、去重复解析与有依据的剪枝
+
+#607／#609在本次普通公开接口查询返回200，原始源文件和归属保留于[公开参照回执](../../evidence/round24/public-start/receipt.json)。选择器在发现#615仍在前沿时于请求前停止；两份已收取源码保持原字节，[局部捕获记录](../../evidence/round24/public-start/capture-partial.json)保留该执行问题，不把未请求的源码当作公开。
+
+#609的外层入口对部分既有路线完整解析两次，第一次计数被丢弃，第二次覆盖输出。`r24-609-once`只保留一次实际解析，内层质量工作不变。[B原始编码](../../evidence/round24/38080638145/quality-b-native/diagnostics/r13-encoder/encoder.json)确认28文件token及压缩输出与原609一致（4,864,126字节）。它不是改名副本；对任意输入的等价与完整正确性尚不能由这次有限检查推出。screen-b安排原协议计时，两个块、实际609与同源码参照；较慢家族作业派发上限35分钟，原通用预检记录25分钟未同步，差异保留并在后续记录中更正，不改写原派发回执。
+
+[C诊断](../../evidence/round24/38080823460/profile-c-native/diagnostics/r18-functions/functions.json)保持完整token／decode一致，观测SFbase约2.13s、SFshape约1.17s；这些是带观察器的包含时间，嵌套项不可相加为可获得收益。四种初始输出缓冲内容也在28文件产生相同token，见[有限状态检查](../../evidence/round24/38080823460/profile-c-native/diagnostics/r24-output-state/receipt.json)。E进一步区分基础引擎的前向、后向及模型成本，避免仅因函数名称相同复用旧结论。
+
+D利用已经存在的seed token：新匹配若属于相同距离码且不可能超过其长度，就不做完整前缀比较。它不新增缓存，也不改变四槽占用和顺序；[最小实验](../../evidence/round24/38081181879/seedtail-d-native/diagnostics/r13-encoder/encoder.json)的28文件token和输出均与实际once父版一致。[下一步预声明](../../evidence/round24/preflight-d.json)要求生成输入等价、原版总时间和新的精确gate后才能晋升。
+
+截至此阶段：A两个成本接受版本已实际改善少量字节；B和D保住高质量输出；没有本轮完成的原协议时间／独立确认，两个稳定目标仍UNKNOWN而未达成。全部已启动作业按既定结束规则收齐。
+
 - VERIFIED：本轮已收取官方原始数据、版本、哈希和已完成检查；实验结果随回执补充。
 - INFERRED：公共到正式的族内迁移、合成评分几何及候选收益预测。
 - UNKNOWN：新候选正式准入、私有集表现、可支付份额和钱包到账。本轮没有正式竞赛上传授权。
