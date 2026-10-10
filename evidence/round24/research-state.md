@@ -1,5 +1,21 @@
 # R24 续跑状态
 
+## UTC22:34 活跃摘要（以此为准）
+
+- 已用约3h06m，固定截止UTC05:28:08，仍继续约6h54m；不要结束或重置。最后120分钟保留。
+- 最新捕获`official-feedback-u`／`official-public-refresh`为29620（computed UTC22:15:46），620/579，freshness unknown。U/W按此逐块重放均0。
+- **N完整gate通过且已绑定证书**：38089867281 `gate-price-groups`，523.4s总验收；Rust e13c3b1572e3ac432866768088f778c4d46d493ed5e61cf974473b5a493e4964、Lean9606dd10d8f86913c244330f06540adb8d91ba15b612b1004a5d76c17f28345e。
+- **T修复后L完整gate通过且已绑定证书**：38090360927 `gate-buffer-split1`，918.4s总验收（不是Lean单独用时，原900s限制保留）；Rust4b40f24c17abd5e18468b4af0432cb2cd1b99bfd148f98e0be10e6dc3b09b426、Lean7d7aca1168639a921a45a14fabeab7a3da47ce2c9781b23f8b9f8d54c04d22a0。目录`r24-609-buffer-split-proof1`。完整gate artifacts是`exact-gate`，不要用diagnostics去pull。
+- `prepare-round24-checkpoint.py`已运行，生成`checkpoint-z1`/`z2`，2新runner×2原协议反序块；N、T各自shadow＋609shadow，实际onceparent，10methods。预声明55min每run，仅在证书已知后可dispatch。**待提交／推送／派发**。这是冻结后独立阶段确认，不能代替最终后续修改版本的新确认；仍没10/15达标候选。
+- U标准38090350074成功收齐，`analysis-u.json`：两块两视图0，整体几乎无时间收益（平均约+0.084%），不少文件回退；暂停exact256slotcache，命中14M并未变为收益。
+- W标准38090872531成功收齐，`analysis-w.json`：约-0.26%时间，两块两视图0；暂停证明分配。无all-input等价／完整gate。
+- Y native38091160946收齐：33540736treecalls，16774393zero-prefix，10355290firstwordmismatch；28token/output同once。已生成`screen-xy`，把Y与X分别计时，8methods2blocks，50mincap；**待提交／推送／派发**。不代表实现已组合。
+- X native38090884260收齐：-69B至4864057，mean33.82807806895486，16文件大小变化；保留质量起点，time/proof UNKNOWN。V八槽-22B暂停，Rlongkey+1505B暂停。
+- 新普通公开参照606/611/614均200，原始证据`public-refresh-q3`。611/614是RF+SF家族，主要表配置不同，没有发现外层重复解析。**AA baselines38091679388运行中**（`baselines-aa-native`，UTC22:30，20mincap），明确0个新候选，6份原版编码对象并对611做stageprofile；不可误称baseline为候选优化。原入口一次rf_refine名字断言失败，已改真实`refine`，未执行错误CI。
+- 当前HEAD提交6aee36ae后有新gate证书、U/W/Y回执、XY/Z批次和状态待提交。工作区均本轮材料，没有其他用户改动。
+
+下一步：提交推送并顺序派发XY/Z1/Z2，收AA。继续独立机制分析／实现。所有正式上传／签名未授权；0重置/购买，最新账户剩94%（UTC22:04）。
+
 ## UTC22:16 活跃摘要（最高优先）
 
 固定截止UTC05:28:08，剩约7h12m，不结束本轮。分支HEAD在b35847e7后仍有W/X及报告收尾待提交。
