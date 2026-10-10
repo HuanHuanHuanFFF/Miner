@@ -92,7 +92,9 @@ def main():
                     shares,ids=scores([(n,x,y)])
                     role=state['spec'].get('r18_role','discovery')
                     if role=='independent_confirmation' and e.get('control'):role='incidental_control_in_confirmation_batch'
-                    g['observations'].append({'run_id':state['run_id'],'block':b,'role':role,'entry_role':'control'if e.get('control')else'candidate','calibration':label,'anchor_name':ref,'projected_time':x,'projected_size_pct':y,'single_pool_share_pct':shares[n],'new_frontier_ids':ids,'public_time':by[n,b]['time'],'public_size_pct':by[n,b]['size_pct'],'time_change_pct_vs_parent':100*(by[n,b]['time']/by[decl['parent'],b]['time']-1),'size_change_pp_vs_parent':by[n,b]['size_pct']-by[decl['parent'],b]['size_pct'],'proof_sha256':e['hashes']['Parse.lean'],'per_file':by[n,b]['per_file']})
+                    parent_available=(decl['parent'],b) in by
+                    assert parent_available or e.get('control'), 'A candidate measurement must include its declared actual parent'
+                    g['observations'].append({'run_id':state['run_id'],'block':b,'role':role,'entry_role':'control'if e.get('control')else'candidate','calibration':label,'anchor_name':ref,'projected_time':x,'projected_size_pct':y,'single_pool_share_pct':shares[n],'new_frontier_ids':ids,'public_time':by[n,b]['time'],'public_size_pct':by[n,b]['size_pct'],'actual_parent_reference_available':parent_available,'time_change_pct_vs_parent':100*(by[n,b]['time']/by[decl['parent'],b]['time']-1) if parent_available else None,'size_change_pp_vs_parent':by[n,b]['size_pct']-by[decl['parent'],b]['size_pct'] if parent_available else None,'proof_sha256':e['hashes']['Parse.lean'],'per_file':by[n,b]['per_file']})
             gate=state.get('gates',{}).get(n)
             if gate and gate.get('accepted'):
                 assert gate==read(folder/(n+'-gate.json')) and gate['corpora']==['corpus-stage1']
