@@ -9,6 +9,7 @@
 | 运行或诊断公共验证 | [验证环境与入口](docs/validation.md) |
 | 核对比赛、提交和奖励机制 | [比赛与提交入口](docs/competition.md) |
 | 查历史文件或老路径 | `python scripts/project.py find H16`；`python scripts/project.py resolve ROUND9.md` |
+| 合并研究分支、推送与清理 | [merge操作](docs/merge-operation.md)：预检后按授权执行，完成后检查回执 |
 
 最近研究归档更新于 **2026-10-10**。最新保存榜单为 **29551（20:38:51 +08:00）**，榜单抓取复核至21:12:31；实时状态需重新查询官方。
 

@@ -1,0 +1,32 @@
+{
+  "verified_at": "2026-10-10T21:37:32.191410+08:00",
+  "integration_tests": {
+    "command": "python scripts/test-merge-operation.py",
+    "passed": 9,
+    "failed": 0,
+    "scope": "临时本地Git仓库及bare远端，未触及真实origin",
+    "cases": [
+      "预检无修改及合并保留main独有提交",
+      "脏工作区停止",
+      "冲突停止且保留分支",
+      "同名本地远端不一致停止",
+      "检查失败阻止推送删除",
+      "忽略资料保留detached工作区",
+      "干净工作区移除及非实验分支保留",
+      "远端独有分支合并清理",
+      "远端并发更新阻止删除"
+    ]
+  },
+  "project_check": {
+    "status": "PASS",
+    "tasks": 26,
+    "local_links": 466,
+    "manual_workflows": 10,
+    "candidate_hash_pairs": 266
+  },
+  "limitations": [
+    "文档与看板内容由Agent在脚本执行后复核",
+    "含忽略资料或仓库外的worktree保留，需单独处理",
+    "仅集成测试使用本地bare远端；真实仓库当前无实验分支，做预检验证"
+  ]
+}
