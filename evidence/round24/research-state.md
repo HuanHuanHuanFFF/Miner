@@ -1,5 +1,37 @@
 # R24 续跑状态
 
+## UTC02:17 活跃摘要（最高优先）
+
+固定UTC05:28:08／BJT13:28:08结束，已用6h49m，继续3h11m。最后120分钟UTC03:28:08起保留（gate/冻结后独立确认/交付）。不要因CI结束或本摘要重置时钟／提前收尾。当前已推送HEAD7566a0f13fad20276d67f0c84be6c67135877773；下面BE/BF准备与BD回执待提交。仍无稳定10/15，正式/私有/支付UNKNOWN，无上传/注册/签名授权。
+
+### 新增已收齐证据
+
+- AV **38101377725** 诊断结束，16paired进程全部保留。child-only setarch -R确实把personality00000000→00040000，全局randomize_va_space始终2。once同源码绝对差中位0.063414%→0.186766%（变坏）；faststack0.360575%→0.201281%（改善）。**不支持统一修复，不替换原协议，也不继续机械ASLR复跑。** layout-av-analysis.json由analyze-round24-layout.py生成，原始source本地读取副本CRLF、runner LF；已用原pin Gitblob确认差异仅换行，保留原字节，非hash相同冒认。
+- AW **38101389424** 已收齐22原协议进程。analysis-aw.json／anchors-aw.json按29640：ASitem-price比once快0.677/0.579%，609主/影子两块全0，6070.109158–0.173292%，暂停独立完整gate。ATstack-adaptive对bufferstack慢4.086/4.151%，但质量让609主3.197968–3.198230%、影子3.126234–3.156502%，6073.412514–3.575804%，各两块均正；仍只发现，无10/15。
+- AZ **38102490596** native收齐：stack-packed 4864126B/mean33.828446718361，28token/output同faststack；fast-adaptive4864057B/33.82807806895485，与旧X28文件完全同token/output，比AT少8B。该实际交互保留于feedback-aw-az.json，不能加和。
+- BB **38102983632** 提取收齐，span-items/stack-packed/fast-adaptive全部接受，真实Funs在diagnostics/research5。span-items后续计时失败，不为它加完整gate。
+- AY **38102353514** 已收齐：span-items比once慢2.567/2.667%，609主/影子和607全部0，暂停这个精确版本，见analysis-ay.json、anchors-ay.json、feedback-ay.json。
+- **AT完整gate38102373130已接受且绑定**：r24-609-stack-adaptive-proof1，Rust eaa7752a8cbe6387cb8ea46ccd1d16096517e0eb895462e3ea2c6e2af297dfb0，Lean8d0d4b88407b7a0f8b79d392c950de93c1c678f967f6a7630ce023a11794cb5d；591.0s整体验收，原900sLean限制不变。现在已有6份gated不同Rust备用，但只有旧N/T曾做独立checkpoint。
+- AQ **gate38102363209失败**，实际owned lc数组被Aeneas移到捕获参数后部，7处theorem调用顺序未迁移，非Rust反例。原失败pair与完整logs保留。repair-round24-packed-proof.py精确修正7处顺序，Rust不变；proof2 Lean4ca4bd8f8c9cacb61466c4f7c9738df11366fa559c82971579c545ec6f4db86e，完整gate运行中。
+- Fastadaptive新proof1已按BB接口冻结：Rust ef3268f4b4183b50af7825e505266c7dc05b49e9bb1aebb1f642a5609fc6423e，Lean09f79e1d6b4d60bdcc692425a7baae6503f3995f8cc6f9937d7f23a347e9e20e，gate运行中。prepare-round24-bb-proof.py还可准备stack-packed证明；它目前只有check草稿，未freeze/gate，等BC是否保住组合收益。对其26个提取DP定义已与AQ实际Funs核对一致，参数修复可复用但不能继承完整gate。
+- **BD38104046597新链前缀机制native成功收齐**：r24-609-chain-lcp8 Rustbb8b714ad8f252b46b88087abc775a7bd7da29d6f645d3b7d398b3864fc0bc0a。现有32bitprev中保存16bit后向距离+4bit capped8-LCP，所有消费者含SFtinytokens已更新。20000有限字符串/链/cap/seed模型；实际31546013查询逐次与原matcher相同，14685076由LCP三角关系直接确定，13851887额外已知前缀，78782386额外已知字节；构建新增10136801短前缀计算。28token/output同once。**操作量不代表净提速**，BE计时/BF提取已准备尚未派发。它是本阶段最后一个新匹配机制，不继续扩展无证据参数路线。
+
+### 当前活跃CI
+
+|run|batch|派发UTC|cap|下一步|
+|---|---|---|---|---|
+|38102994768|screen-bc|01:47:11|65m|两个AZ实际组合、11方法×2块；收齐后刷新官方snapshot，用主分析和anchors工具都重放|
+|38104061119|gate-a-packed-proof2|02:06:21|50m|原失败7参数顺序修复；成功才bind，不覆盖proof1|
+|38104425023|gate-fast-adaptive-proof1|02:12:57|50m|最终质量候选潜力版本精确gate，Rust/Lean哈希如上|
+
+BE **screen-be**已冻结，9方法×2块/55mcap，chain-lcp8+once/once-shadow+607/609/影子；BF **proof-bf-extract**已冻结，1源/40mcap，链缓存新helper依赖与from/prior状态接口。先提交推送后顺序dispatch。BD有实质工作量减少但新增预计算，净性能未知，不要先称成功。只有BE原协议出现有意义收益后再考虑组合/全gate；若不够时间完成最终确认，保留实验起点而不掺进最终候选。
+
+scripts/prepare-round24-final.py已写好但**未执行**：--base某双候选原协议批次 --candidate精确通过gate目录（两次） --prefix confirm-final；从base按Rust匹配，保留必要父版/3旧快参照/609主影子/607和各候选shadow，3fresh runners×3blocks，65mincap每份；要求剩>=85min和精确证书已知。若最终两份来自不同批次，需要先构造含两份实际父版的合并基准spec，不能混配错误parent。生成后逐个dispatch，收齐后同最新snapshot个体+联合，主候选9块，不把影子当18块。
+
+最近账户UTC01:20:52剩86%，0重置／购买。最新官方仍official-feedback-ar／29640（computed01:26:38，读取约01:30）；后续当前报告前刷新。上一次dashboard --help不是支持参数，脚本意外执行refresh并被本地网络权限拒绝，**DASHBOARD/登记表保持原样**，failure.json在evidence/dashboard/20261011T020821518616Z已保留；收尾需以获授权网络权限、进程直连运行不带参数的python scripts/update-dashboard.py。它不支持指定snapshot；最终与候选分析核对快照时间，必要时刷新候选分析以同一最新榜单。
+
+当前无活动PTY/functions cell。collector要先等exec session完成再读数据；下载优先本进程清空代理，勿改全局。重型工具链只runner。最终仍需最新DASHBOARD、方法结论、报告/index、rawSHA/CI成本审计与commit/push；不自动合并main或删除worktree。
+
 ## UTC01:38 活跃摘要（最高优先）
 
 固定UTC05:28:08／BJT13:28:08截止不变，已用6h10m，仍继续3h50m。最后120分钟从UTC03:28:08保留。当前HEAD已推送 `bbae096728d164000cdb34b35d93cd40c42cd3cb`；新AZ派发回执未提交。主工作树main不动，无子线程。
