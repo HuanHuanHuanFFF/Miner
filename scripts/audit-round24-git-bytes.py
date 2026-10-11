@@ -53,6 +53,9 @@ def main():
         for name, value in receipt.get('derived_files', {}).items():
             add(p.parent / name, value['sha256'], value['bytes'])
     plan = read(E / 'confirm-final-plan.json')
+    for manifest in (ROOT / 'candidates').glob('r24-*/manifest.json'):
+        for filename, digest in read(manifest)['hashes'].items():
+            add(manifest.parent / filename, digest)
     for name, files in plan['files'].items():
         for filename, digest in files.items():
             add(ROOT / 'candidates' / name / filename, digest)
@@ -62,6 +65,9 @@ def main():
     assert len(zips) == 2
     for p in zips:
         name = next(n for n in plan['candidates'] if n in p.name)
+        record = next(r for r in packages['packages'] if r['candidate'] == name)
+        assert sha(p.read_bytes()) == record['archive_sha256']
+        assert p.stat().st_size == record['archive_bytes']
         with zipfile.ZipFile(p) as z:
             assert z.namelist() == ['parse.rs', 'Parse.lean']
             for filename, digest in plan['files'][name].items():

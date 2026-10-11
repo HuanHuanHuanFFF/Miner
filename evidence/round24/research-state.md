@@ -2,7 +2,7 @@
 
 ## 最终确认已收齐，仍在固定窗口内收尾
 
-固定窗口：UTC 2026-10-10 19:28:08 至 2026-10-11 05:28:08，北京时间03:28:08–13:28:08。不得重新计时。10%与15%稳定份额目标**未完成**；未正式上传，admission／私有成绩／正式可支付份额UNKNOWN。当前没有运行中的CI。
+固定窗口：UTC 2026-10-10 19:28:08 至 2026-10-11 05:28:08，北京时间03:28:08–13:28:08。不得重新计时。10%与15%稳定份额目标**未完成**；未正式上传，admission／私有成绩／正式可支付份额UNKNOWN。最后两份原生诊断也已收齐；当前没有运行中的CI。
 
 研究分支`codex/round24-stable-dual`，工作区`D:/CodingProject/Bitget/.runtime/r24-worktree`。主工作树保留；不合并、不清理分支或worktree。普通commit带`[skip ci]`，按现有授权推送研究分支。
 
@@ -52,3 +52,23 @@
 4. 到固定截止，更新budget/status为窗口结束且目标未完成，交付独立确认、完整gate、精确哈希、最新条件估算、成本与最高价值下一步。不能将公共条件估算写成正式可支付份额。
 
 无正式竞赛上传、新注册、钱包签名或支出授权。无子agent授权，不派发。
+
+## UTC04:30补充：最后的热路径与端点诊断
+
+自动审批曾拒绝推送，要求核实远端与新增回执外发范围。只读核实origin是既有公开HuanHuanHuanFFF/Miner、父SHA与已推送分支一致，新增228文件无私密路径／凭据模式；push-review-local/remote.json保存。之后审批通过，4c1b3221、747c450b均已推送，未绕过审批。原始CI日志空格不格式化；源码／文档diffcheck通过，1878已提交原始／源码／包文件190749689B的Gitblob逐字审计通过，git-byte-audit-confirmation.json。
+
+38111345139 closing-b-profile-native：冻结B真实函数观察器通过28文件token及解码一致，原始总parse3431.864ms，其中SFbase61.07%、SFshape38.45%，嵌套不可加。按原版逐文件时间轴权重作条件归因，SFshape约31.06–32.40%而非38.45%；此为模型，非实测省时或新成绩。closing-profile-analysis.json。
+
+38111633233 closing-base-native：新`r24-609-base-endpoint`只让Zmain返回完整SFbase、去掉SFshape，Rusta07a4780010619907f04eaaf2fc9d8a444aef698f7be9b86c6558bf8e4496ffb，Lean草稿88612c57659d99f8b3565ae7e8bdc1557a06c0a1e11e0a1337dfa3fcb71622bf。28文件原encoder/decode通过，但比A多1558B。条件质量34.099826/34.100048，需要时间轴约2.825/2.385才达10/15；原profile理想删除SFshape模型仍4.483–4.838。停止该精确端点的原协议计时／gate；其时间UNKNOWN、Lean未编译，不能叫零分实测候选或最终第三份。两个被冻结交付pair不变。closing-base-feedback.json与预声明plan保留。
+
+累计dispatch现在82，先前80次审计是中途值，最终audit要重跑。32种原协议已计时Rust不变，总源码哈希将增至40。正式目标仍未完成，剩余工作为最新榜单重放／同快照看板、最终审计和截止交付。
+
+## UTC04:46 收尾复核进展
+
+最新checkpoint快照29650（computedUTC04:12:17，captured约04:31），按此重跑全部主块/副本/联合及32种已测Rust；A/B统计逐项与29647一致。confirmation-29650、all-measured-29650保留新输出；看板同29650累计10.311602623α。
+
+82run最终诊断后审计：全部收集、1248原始artifact文件141780700B、444原协议paired、40不同R24Rust、944.3runner-min。audit-closing-diagnostics.json。新baseendpoint没有原协议计时，也未证明，不混入32已测候选。
+
+fast-headroom-29650是现有screen-a实际reps的解析缩放／编码固定条件模型，factor1复核原实测。gain只有0.925–0.930窄段共同达10/15，chain3无共同段，factor0约1.3%；不是新成绩或实测成功概率。next-actions.md保留跨阶段共享机会的首检与R18弱共享／精确缓存零命中反例。
+
+剩余必须完成：UTC05:15–05:20左右最终官方完整capture和规则查询，逐块重放+同快照看板、原始/Gitbyte审计、projectcheck、提交推送；截止UTC05:28:08结束窗口且目标UNMET。当前无活动CI，不新开预计无法收齐的作业。源文件最终pair不变。
