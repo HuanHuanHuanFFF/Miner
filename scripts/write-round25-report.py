@@ -49,6 +49,17 @@ def main():
     audit_rel = a.audit.relative_to(ROOT) if a.audit.is_absolute() else a.audit
     usage_path = E / ('usage-final.json' if (E / 'usage-final.json').exists() else 'usage-delivery-checkpoint.json')
     usage = read(usage_path)
+    inverse_path = E / f'inverse-all-{sid}.json'
+    inverse_note = ''
+    if inverse_path.exists():
+        inverse = read(inverse_path)
+        assert inverse['snapshot'] == context
+        selected_inverse = [next(r for r in inverse['results'] if r['candidate'] == n)
+                            for n in ('r25-astra-end4', 'r25-root-tiny-pc8')]
+        assert all(r['actual_block_count'] == 6 and r['runner_count'] == 3 for r in selected_inverse)
+        assert all(r['targets']['first']['least_time_axis_reduction_pct_on_grid'] is None for r in selected_inverse)
+        quality_gaps = [r['targets']['first']['least_quality_axis_pp_reduction_on_grid'] for r in selected_inverse]
+        inverse_note = f'''\n[基于全部主观察的投入网格](../../evidence/round25/inverse-all-{sid}.json)保留每份6个主块、3个runner及595主／影子视图。对end4和tinyPC，把时间轴统一降低0%～7.5%的扫描均未找到所有视图同时严格第一的格点；固定时间时，统一降低质量轴的首个取样命中分别为{quality_gaps[0]:.3f}和{quality_gaps[1]:.3f}个百分点。这只是由已观测坐标出发的假设规划，不是连续边界、可实现收益或未来误差界，也不排除不同文件／硬件上的非均匀改善。稳定性结论仍由实际四块新确认的全零结果给出。\n'''
     packages = read(E / 'review-packages/packages.json')
     by_id = {str(r['id']): r for r in rows}
     top = max(rows, key=lambda r: (r.get('score') or {}).get('payable_weight') or 0)
@@ -116,6 +127,7 @@ def main():
 [独立代数复算](../../evidence/round25/score-algebra-{sid}.json)从前沿扫描、局部／全局系数、增量对数轴预算和统一归一化重新计算，不调用原scorer实现。128个单独观测视图及56组对齐联合案例与原重放一致；这些视图包含校准和控制，不能当独立样本数。
 
 逆向网格用于判断投入空间：[同快照几何](../../{geometry_rel.as_posix()})。在快照{sid}中，平均压缩比例36.5%的取样榜首速度区间为{intervals(36.5)}；降到35.5%时为{intervals(35.5)}。它既不是连续边界，也不是实现成绩。最终保留版投影大小约36.519%和36.452%，且新确认速度仍落在这些区域之外。不能把原始public坐标直接与正式前沿比较，也不能把极窄窗口当稳定收益；[早期坐标误用的更正](../../evidence/round25/luna/late-target-note.md)另行保留。
+{inverse_note}
 
 ## 12种实现的真实结果
 
