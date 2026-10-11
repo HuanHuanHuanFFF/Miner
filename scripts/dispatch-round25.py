@@ -31,6 +31,8 @@ def verify_committed_inputs(spec, sha):
                 check(certpath)
                 cert=json.loads((ROOT/certpath).read_bytes())
                 check(cert['receipt'])
+    for path,digest in spec.get('r25_required_files',{}).items():
+        check(path,digest)
     return checked
 
 
