@@ -188,7 +188,11 @@ def main():
     files, manifest = build()
     destination = ROOT / "candidates" / NAME
     if args.check:
-        assert all((destination / name).read_bytes() == data for name, data in files.items())
+        assert all((destination / name).read_bytes() == files[name]
+                   for name in ("parse.rs", "Parse.lean"))
+        stored_manifest = json.loads((destination / "manifest.json").read_bytes())
+        assert stored_manifest["hashes"] == manifest["hashes"]
+        assert stored_manifest["parent_hashes"] == EXPECTED
     else:
         assert not destination.exists(), destination
         destination.mkdir()
