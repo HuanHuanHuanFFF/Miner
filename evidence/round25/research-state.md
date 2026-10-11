@@ -25,3 +25,6 @@
 最新提交5ff84aa8已推送，HI/J原始回执和新评分待下次提交。官方source/contract/encoder/pins阅读副本未改；临时诊断副本单列。
 
 账户北京时间17:56真实used11%/剩89%，仅共享读数，不当任务独占消耗；0重置/购买/正式上传/签名/注册。本轮推送仅实验分支。结束必须刷新看板、研究方法、round25报告/索引，核对原始回执与成本并project.py check。
+
+
+18:38更新：I proof1完整gate38130996700成功并绑定，原Rust5c20b99c/Lean3bd53694，540.2秒、原900秒、公理/roundtrip全过。K38131861001因早期读取本机sources目录失败，无算法结果；修复后K2 run38132193695成功，L run38132209168成功，原始回执已收齐并推送7091eec1。K2确认短文件LL live84→106、distance7→23，树/查表工作增加；L当前PC三字节亏损仅627局部bit，Sol准备按route/dcode完整反馈，不开阈值候选。M候选r25-astra-tiny-pc-sparse Rust84ccbcbe...仅固定稀疏发射+2行lens初始化，原匹配/路由不变，Lean3bd复制DRAFT；quality-m-native38132623194运行中，actualparent tiny-pc8，另有combo/595。无其它活跃CI。账户18:35真实used15%/剩85%，未重置/购买。累计原协议仍94进程、冻结后最终独立确认0。当前目标仍未达成；固定截止21:06:21不变。

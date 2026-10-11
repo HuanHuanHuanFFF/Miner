@@ -56,3 +56,14 @@ H mainonly相对真实dual8父版快1.276%–1.456%，但相对combo仍慢1.120%
 I tinyPC主两块总时间增加1.574% / 1.682%，最新主参照份额0.071394% / 0%；595影子0.111155% / 0%。候选副本和真实时间全部保留，不能将四个别名观察当四块确认。实际总时间中位数逐rep分解发现：唯一改变的tiny-config，其解析增加仅贡献约0.178–0.193个百分点，而编码增加贡献约1.499–1.654个百分点；27个同输出文件不是主要来源。该分解是原始坐标变化的描述性恒等式，不是改造后的提速承诺或新官方成绩。
 
 因此下一圈针对原encoder对token形状的成本，而非继续扩大匹配搜索。Astra检查tiny长度/距离符号及块树工作；Sol在R13已知反例约束下，对当前PC最终三字节匹配做未计时代码价格覆盖诊断，先判定是否有可实现的便宜规则。I完整gate已在发现结果前启动，仍按既定规则完成；质量组件与性能失败分别保留。详见[HIJ决定](../../evidence/round25/feedback-hij-decision.json)、[I原始分解](../../evidence/round25/cost-i-screen.json)、[H分解](../../evidence/round25/cost-h-screen-vs-combo.json)、[J分解](../../evidence/round25/cost-j-screen.json)。
+
+
+## 编码工作量诊断与固定发射隔离
+
+I的精确证明版通过[原版完整gate](../../candidates/r25-astra-tiny-pc8-proof1/VERIFICATION.json)，Rust `5c20b99c…b891f00`、Lean `3bd53694…5ccdb8`，gate540.2秒、原Lean900秒上限，三标准公理及公共roundtrip通过。正确性验收不消除既有总时间成本。
+
+第一次K诊断在runner准备前预检阶段失败，因为本机只读sources副本不在GitHub checkout；[原始失败日志](../../evidence/round25/38131861001/counts-k-native/failed-setup/receipt.json)保留。修复将本地生成检查与准备后的原字节强验收分开，有/无阅读副本的预检均复核；K2并未放宽实际codec/token SHA、原始token/输出身份或decode。[K2原始观察](../../evidence/round25/38132193695/counts-k2-native/diagnostics/r25-tiny-encoder/receipt.json)确认两个stream都为一个dynamic block；live literal都78，但长度符号5→27、距离符号7→23。LL树逻辑vector clone3426→4328，距离265→923，CL反而251→215，查表比较1891→7114。因此“更多token或更多block导致变慢”不是此例解释，而更宽的符号集合确实增加了部分树/查表工作；这些仍不是毫秒因果份额。
+
+M只在原I局部run中初始化父ETINY已有mask302256384的lens表，并将一处发射接到`q4_e_pieces`；保持匹配、lazy、fold、记录、H和路由。它用原五种长度码分段，并将余数写literal，返回完整match终点。短匹配收益和实际future fold轨迹可能改变，distance字母表也未被直接约束；不预先保证质量或速度。先做完整28文件原编码器/解码，参照I与combo。[预声明与停止条件](../../evidence/round25/astra/tiny-sparse-design.md)、[冻结源范围](../../evidence/round25/astra/tiny-sparse-preflight.json)。
+
+L诊断对combo/public578/public584共84个真实输入/source组合核对观察插桩与冻结parser逐token一致、追加观察函数与原encoder字节一致、历史SHA及独立zlib解码。[原始码价回执](../../evidence/round25/38132209168/price-l-native/diagnostics/r25-len3-price/counts.json)只描述原块价格，缺失literal码保留UNKNOWN，局部bit差不能直接当重编码收益。对当前PC路径，亏损匹配覆盖比全parser汇总更小，不能把bfraw/EF32的亏损错误归给PC，也不能把一个距离域里的正负样本混成单一有利阈值。该诊断不产生新候选。
