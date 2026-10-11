@@ -91,7 +91,7 @@
         "references/round18-public-584/parse.rs:1732",
         "references/round18-public-584/parse.rs:1807"
       ],
-      "matching_and_emission": "PC run-one parser with a 32769-entry last-position hash table keyed from 4 input bytes; it probes the current position and lazy lookahead under the supplied skip=6/lazy=16 settings, folds prior tokens, and can use the full match-length mask. This is a distinct parser engine path, not just a different routing constant."
+      "matching_and_emission": "PC run-one parser with a 32769-entry last-position hash table keyed from 4 input bytes; it probes the current position and lazy lookahead under the supplied skip=6/lazy=16 settings, folds prior tokens, and emits through the PC put-match path without ETINY's restricted allowed-length piece mask. This is a distinct parser engine path, not just a different routing constant."
     },
     "public595_and_combo": {
       "route": "route: input.len()==12000 -> 23; bulk_parse k==23 -> p125_row12",
@@ -139,6 +139,7 @@
     "full_gate_field": "NOT_RUN",
     "round25_jsonl_files_scanned": 56,
     "standard_jsonl_name_hits_for_tiny_tail": 0,
+    "standard_jsonl_rust_hash_hits_for_tiny_tail": 0,
     "control_timing_exists": true,
     "control_examples": [
       "evidence/round25/38124524718/screen-a/gate/round1-combo.jsonl",
