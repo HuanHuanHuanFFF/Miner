@@ -1,0 +1,31 @@
+{
+  "candidate": "r25-astra-tiny-pc-sparse",
+  "parent": "r25-root-tiny-pc8",
+  "hashes": {
+    "parse.rs": "84ccbcbe88c56d8459c6df0d8bad5391b0ce95209d4e2f5fb4148369c9c294e5",
+    "Parse.lean": "3bd53694534c0114453a95c2f120d743fde3af233de88c00e1d5c30fe05ccdb8"
+  },
+  "mechanism": "Keep the exact tiny-PC matcher, lazy search, fold, record8, route, H and skip. Only initialize the inherited ETINY mask302256384 lens table and replace the local match emission with inherited q4_e_pieces, which emits allowed lengths plus literal remainder and consumes the complete valid match span.",
+  "difference_from_old_work": "A single fixed emission isolation after native K2 identified broader length/distance symbols and greater package-merge and lookup work. No mask search, insertion/search/H tuning, new distance admission, encoder modification or combination.",
+  "reference_differences": "Starts from exact I Rust5c20b99c, with no matcher source replacement. Sparse emitter and mask are already present in the inherited public595/combo source.",
+  "attribution": {
+    "source": "references/round21-public-595/source-receipt.json",
+    "mechanism_reference": "references/round18-public-584/source-receipt.json",
+    "evidence": "evidence/round25/luna/tiny-alternatives.json"
+  },
+  "proof_status": "DRAFT_COPIED_GATE_PASSED_PROOF1_NOT_ADAPTED_TO_SPARSE_EMITTER",
+  "performance_status": "NOT_RUN",
+  "formal_submission_sent": false,
+  "proof_parent": "r25-astra-tiny-pc8-proof1",
+  "proof_parent_gate": "38130996700",
+  "native_encoder_status": "NOT_RUN",
+  "causal_cost_claim": "UNKNOWN: K2 logical work counts are not elapsed-time attribution; new original-encoder bytes and separate original-protocol timings are required.",
+  "risks": [
+    "Short matches below the minimum allowed length become literals.",
+    "Greedy allowed pieces can increase tokens and literal remainder.",
+    "Existing fold reads a changed historical token stream, though its full-span end invariant is retained.",
+    "Distance symbols are not directly restricted; reducing the LL alphabet may not recover the full encoder cost."
+  ],
+  "experiment_predeclaration": "evidence/round25/astra/tiny-sparse-design.md",
+  "diagnostic_evidence": "evidence/round25/38132193695/counts-k2-native/diagnostics/r25-tiny-encoder/receipt.json"
+}
