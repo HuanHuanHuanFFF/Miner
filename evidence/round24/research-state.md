@@ -1,5 +1,36 @@
 # R24 续跑状态
 
+## UTC01:38 活跃摘要（最高优先）
+
+固定UTC05:28:08／BJT13:28:08截止不变，已用6h10m，仍继续3h50m。最后120分钟从UTC03:28:08保留。当前HEAD已推送 `bbae096728d164000cdb34b35d93cd40c42cd3cb`；新AZ派发回执未提交。主工作树main不动，无子线程。
+
+### 最新反馈
+
+- 最新官方 **29640**（computed UTC01:26:38；读取约01:30）在official-feedback-ar，623提交582账户，规则同版本，freshness unknown。AR所有新份额用此快照，不把29638旧值称当前。
+- **AR38100245696已收齐**：query-inline相对once−0.033/−0.239%，主0与2.971643%、影子全0；暂停精确版本。a-packed相对once−1.091/−1.163%，609主3.050121–3.148662%、609影子3.065962–3.132576%，**607另口径只有0.178888–0.186328%**。1runner2发现块。once-shadow差+0.03136/−0.97594%，不能称稳定高份额。analysis-ar.json、anchors-ar.json、feedback-ar.json。607↔609此次速度迁移差1.5%–2.0%，大小差仍约0.0002222pp。
+- **AX38101740543已收齐**：r24-609-span-items Rust7af26149...，28token/output同once；12000有限价长/tie模型；18306409itemuses，其中4163012裁掉前缀。长度offers351659637→327731298，短terms92074432→77515027，长groups少2699499。首次artifact下载exit1、空stage保留，进程直连重试成功（collection-ax-retry.json）；CI没有失败/取消/重跑。性能和完整gate未知。
+- **AU38101365118已收齐**，a-packed/item-price/stack-adaptive三份原提取全部接受，Funs在diagnostics/research5各目录。只接口，不等于Lean验收。
+- 本次新增proof1：a-packed Rust e1eb9a33...／Lean3b90b88b...；stack-adaptive Rusteaa7752a...／Lean8d0d4b88...。prepare-round24-au-proof.py按AU实际接口构造：APprices两个全局step；AT从已gatebufferstackproof1增加limit/longest及5/6元状态decr。ASitem-price仅草稿check，未freeze/未gate；等AW。
+- 中途audit-mid-0600m.json通过：当时66dispatch、61已收集、779原始files共89968853B、238原协议配对进程、36不同R24Rust，累计已收集runner547.1min。是并行runner墙钟，不是账单或研究墙钟；不是最终统计。新audit-round24.py可最终再跑新输出路径。
+- 账户UTC01:20:52剩86%，usage-0553m.json；0重置/购买，共享读数不归因任务费用。
+
+### 活跃作业（尚未收取结果）
+
+|run|batch|派发UTC|上限|范围|
+|---|---|---|---|---|
+|38101377725|layout-av-diagnostic|01:18:11|55m|原engine11×16对进程，child-only setarch -R对比；权限探针失败立即停止，不改全局sysctl/perf或sandbox。诊断不替代成绩|
+|38101389424|screen-aw|01:18:24|65m|ASitem-price及ATbufferstack+X，11方法×2块，607/609/609影子、真实once/bufferstack/X父版|
+|38102353514|screen-ay|01:35:35|50m|AXspan-items，8方法×2块，加607辅助参照|
+|38102363209|gate-a-packed-proof1|01:35:46|50m|精确AQ完整原版gate|
+|38102373130|gate-stack-adaptive-proof1|01:35:57|50m|精确AT完整原版gate|
+|38102490596|compose-az-native|01:38:08|20m|两份新受控组合：faststack+AQ；faststack+X去掉L，以区分AT比X多8B的交互|
+
+AZ `r24-609-stack-packed` Rust92058566...、`r24-609-fast-adaptive` Rustef3268f4...；两者Lean继承faststack2108c3e0但均DRAFT不能复用gate。新机制代码已推送，native结果未知。成本组合保持Z184/Z307/Z314全部旧inline；质量组合不改X的2x/8byte门槛。实际父参照fast-stack为已经完整gate的proof1。下一步收AZnative，若有价值把AX+AZ两份一起做三源实际提取，再按结果决定精确gate/受控计时；不加和机制收益。
+
+当前可用完整gate备用仍是N、T、AE、faststackproof1、bufferstackproof1；只有N/T有冻结后2runner×2块旧checkpoint，不冒充新组合独立确认。当前两项稳定10/15仍未建立，607口径对微小质量优势的反例必须保留。最终候选要冻结精确pair、3新runner×3块原协议（预算允许）、自身与609同源码对照、607分列、联合重算；所有正式/私有/支付UNKNOWN，无上传/注册/签名授权。
+
+后续收集建议进程局部清空HTTPS_PROXY/HTTP_PROXY/ALL_PROXY（曾直连恢复下载）；不要改全局配置。exec_command返回session_id时必须先write_stdin等待完成，再读取该回执或stage；本次AX曾提前读导致FileNotFound，未改变原始数据。当前没有活动PTY或functions cell。gate用exact-gate，native/extract/diagnostic用diagnostics，标准用gate；同SHA dispatch逐个结束再下一次。
+
 ## UTC01:16 活跃摘要（最高优先）
 
 固定窗口UTC19:28:08→次日05:28:08，北京时间03:28:08→13:28:08；已用5h48m，仍研究4h12m，最后120分钟保留从UTC03:28:08起。不要提前结束或重新计时。主工作树保持；当前HEAD已推送f07e4d64，以下新回执／证书／批次待提交。
