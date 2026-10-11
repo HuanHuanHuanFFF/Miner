@@ -45,3 +45,14 @@ E的临时观测副本与冻结dual8在28文件token/decode一致，数到413058
 G在原combo上观察到61444次短主匹配/重复8字节前缀；最多8步的只读机会探测能找到部分不同来源，但长主匹配的同前缀节点本身也贡献有效改进。因此J只给短匹配重复来源多看一次prev，不改插入，不把只读8步探测直接部署成搜索深度。[G原始计数](../../evidence/round25/38129145575/prefix-g-native/diagnostics/r25-prefix-diversity-counts/counts.json)、[J预声明](../../evidence/round25/sol/duplicate-hop-predeclared.json)、[J实际质量](../../evidence/round25/feedback-j-native.json)。
 
 I来自历史同输入原编码器证据：public584在tiny-config上比当前ETINY少332B。新候选只替换已有短文件路由中的引擎，保留原路由与其他路径，以父版已验证的正常emitter和独立PC插入函数实现。实际28文件只有tiny-config从2487B降到2155B；这是固定公共语料按文件平均的收益，不是私有集保证，也不从旧584时间猜测新候选耗时。[预声明](../../evidence/round25/cycle-i-tiny-plan.json)、[I原始质量](../../evidence/round25/feedback-i-native.json)、[HI计时计划](../../evidence/round25/cycle-hi-screen-plan.json)。
+
+
+## HI/J反馈与下一缺口
+
+北京时间18:14–18:15重新抓取[官方快照29680](../../evidence/round25/official-score-hi/receipt.json)，官方计算18:12:14、freshness unknown。[38个新增原协议进程](../../evidence/round25/analysis-hij-29680.json)与[按主候选统计的份额](../../evidence/round25/rank-hij-29680.json)已经逐raw重算。
+
+H mainonly相对真实dual8父版快1.276%–1.456%，但相对combo仍慢1.120%–1.155%，且比combo多2556B，两块主/影子估算0；删除全部维护没有取得目标位置。J的12个目标文件全部变小，另外16个输出相同，但总时间增加0.617%–0.815%，主/影子估算均0，暂停该精确实现的完整证明。
+
+I tinyPC主两块总时间增加1.574% / 1.682%，最新主参照份额0.071394% / 0%；595影子0.111155% / 0%。候选副本和真实时间全部保留，不能将四个别名观察当四块确认。实际总时间中位数逐rep分解发现：唯一改变的tiny-config，其解析增加仅贡献约0.178–0.193个百分点，而编码增加贡献约1.499–1.654个百分点；27个同输出文件不是主要来源。该分解是原始坐标变化的描述性恒等式，不是改造后的提速承诺或新官方成绩。
+
+因此下一圈针对原encoder对token形状的成本，而非继续扩大匹配搜索。Astra检查tiny长度/距离符号及块树工作；Sol在R13已知反例约束下，对当前PC最终三字节匹配做未计时代码价格覆盖诊断，先判定是否有可实现的便宜规则。I完整gate已在发现结果前启动，仍按既定规则完成；质量组件与性能失败分别保留。详见[HIJ决定](../../evidence/round25/feedback-hij-decision.json)、[I原始分解](../../evidence/round25/cost-i-screen.json)、[H分解](../../evidence/round25/cost-h-screen-vs-combo.json)、[J分解](../../evidence/round25/cost-j-screen.json)。
