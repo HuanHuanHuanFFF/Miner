@@ -12,6 +12,7 @@ def main():
         print('R26_EXACT_PAIR_PREFLIGHT', spec['candidate'], spec['files'])
         return
     spec = validate(os.environ['ROUND4_SPEC'])
+    assert sum(bool(spec.get(k)) for k in ('r26_a_lazy_chain_counts', 'r26_a_distance12_counts', 'r26_a_second_look_counts')) <= 1
     assert spec['r26_mode'] == mode
     assert bool(spec.get('native_only')) == (mode == 'native')
     assert sum(not e.get('control', False) for e in spec['entries']) == spec['r26_expected_candidates']
@@ -27,7 +28,7 @@ def main():
             anchor = e.get('anchor', 'public432')
             assert anchor in by, f"Missing summary anchor {anchor} for {e['name']}"
             assert by[anchor].get('formal_id'), f"Summary anchor {anchor} needs a formal reference ID"
-    assert sum(bool(spec.get(k)) for k in ('r26_a_replay', 'r26_a_boundary', 'r26_a_boundary641', 'r26_b_match_sharing', 'r26_b_cache_integrity', 'r26_b_cache_phases', 'r26_b_d_front_counts', 'r26_b_a_repeat_counts', 'r18_function_profile')) <= 1
+    assert sum(bool(spec.get(k)) for k in ('r26_a_replay', 'r26_a_boundary', 'r26_a_boundary641', 'r26_a_distance12_observer_only', 'r26_b_match_sharing', 'r26_b_cache_integrity', 'r26_b_cache_phases', 'r26_b_d_front_counts', 'r26_b_a_repeat_counts', 'r18_function_profile')) <= 1
     if spec.get('r26_a_replay'):
         assert mode == 'native' and spec.get('native_encoder') is False
         assert all(e.get('control') for e in spec['entries'])
@@ -67,6 +68,13 @@ def main():
         assert mode == 'native' and spec.get('native_encoder') is True and not spec.get('r18_function_profile')
         assert not spec.get('r26_a_lazy_chain_counts')
         importlib.import_module('r26-a-distance12-counts').preflight(spec)
+    if spec.get('r26_a_distance12_observer_only'):
+        assert mode == 'native' and spec.get('native_encoder') is False
+        assert not spec.get('r26_a_distance12_counts') and all(e.get('control') for e in spec['entries'])
+        importlib.import_module('r26-a-distance12-counts').preflight(spec)
+    if spec.get('r26_a_second_look_counts'):
+        assert mode == 'native' and spec.get('native_encoder') is True and not spec.get('r18_function_profile')
+        importlib.import_module('r26-a-second-look-counts').preflight(spec)
     if spec.get('r18_function_profile'):
         assert mode == 'native' and spec.get('native_encoder') is True
         from round4 import ROOT

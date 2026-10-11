@@ -31,6 +31,9 @@ def main():
     if spec.get('r26_b_a_repeat_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-repeat-diagnostic.py')],check=True)
         return
+    if spec.get('r26_a_distance12_observer_only'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-distance12-counts.py')],check=True)
+        return
     if spec.get('r26_b_cache_integrity'):
         module=spec['r26_b_cache_integrity_module']
         assert module=='r26-b-cache-integrity-fix1'
@@ -148,6 +151,8 @@ def main():
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-lazy-chain-counts.py')],check=True)
         if spec.get('r26_a_distance12_counts'):
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-distance12-counts.py')],check=True)
+        if spec.get('r26_a_second_look_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-second-look-counts.py')],check=True)
         return
     record={'run_id':os.environ['GITHUB_RUN_ID'],'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],
         'status':'STARTED_NATIVE_ONLY','candidate_hashes':{e['name']:e['hashes']for e in spec['entries']if not e['control']},

@@ -15,8 +15,14 @@ def main():
     ap.add_argument('--capture', required=True, type=Path)
     ap.add_argument('--formal-id', required=True)
     ap.add_argument('--output', required=True, type=Path)
+    ap.add_argument('--min-time-factor', type=float, default=.80)
+    ap.add_argument('--max-time-factor', type=float, default=1.15)
+    ap.add_argument('--step', type=float, default=.0001)
     a = ap.parse_args()
     assert not a.output.exists()
+    assert 0 < a.min_time_factor < a.max_time_factor and a.step > 0
+    count = round((a.max_time_factor-a.min_time_factor)/a.step)+1
+    assert 2 <= count <= 50000
     q = json.loads(a.quality.read_bytes())
     assert q['status'] == 'VERIFIED_ORIGINAL_ENCODER_BYTES_ONLY'
     r = M.Replay(a.capture, M.ROOT/'evidence/round26/official-rules-start-live')
@@ -27,7 +33,7 @@ def main():
         'snapshot': r.context, 'native_quality_receipt_sha256': hashlib.sha256(a.quality.read_bytes()).hexdigest(),
         'native_quality_receipt': str(a.quality), 'formal_id': a.formal_id,
         'mapping': 'formal parent quality * native candidate quality / native parent quality',
-        'time_grid': {'relative_parent_min': .80, 'relative_parent_max': 1.15, 'step': .0001},
+        'time_grid': {'relative_parent_min': a.min_time_factor, 'relative_parent_max': a.max_time_factor, 'step': a.step},
         'candidates': [], 'limits': ['Quality mapping to hidden corpus is conditional.',
         'No candidate timing has been measured by this script.',
         'Sampled intervals are not continuous thresholds or stability evidence.',
@@ -37,8 +43,8 @@ def main():
             continue
         y = fm['mean_file_compression_pct']*row['public_size_pct']/parent['public_size_pct']
         xs = []
-        for i in range(3501):
-            f = .8 + i*.0001
+        for i in range(count):
+            f = a.min_time_factor + i*a.step
             score = r.describe([('candidate', fm['balanced_time_ratio']*f, y)])['points']['candidate']['share_pct']
             xs.append({'factor': f, 'minimum_share_pct': score, 'maximum_share_pct': score})
         output['candidates'].append({'candidate': row['candidate'], 'source_hashes': q['candidate_hashes'][row['candidate']],

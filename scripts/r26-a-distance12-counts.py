@@ -21,6 +21,24 @@ def dump(path, value): path.write_bytes((json.dumps(value, indent=2) + '\n').enc
 def once(text, old, new): return HELP.once(text, old, new)
 
 
+def build_harness(by, token, codec, codec_observer, parser_observer):
+    aliases = [('combo', 'combo'), ('strong', 'strong'), ('distance12', NAME)]
+    modules = '\n'.join('#[path=' + json.dumps(str(ROOT / by[name]['path'] / 'parse.rs')) + '] mod parser_' + label + ';' for label, name in aliases)
+    modules += '\n#[path=' + json.dumps(str(parser_observer)) + '] mod parsed_observer;'
+    cases = ','.join('(' + json.dumps(label) + ',parser_' + label + '::parse)' for label, _ in aliases)
+    harness = once(once(HELP.HARNESS, 'MODULES', modules), 'CASES', cases)
+    before = 'let ts=tokens(&s,f);assert!(decode(&s,&ts));'
+    after = before + '''
+if label=="distance12" { let other=tokens(&s,parsed_observer::parse);assert_eq!(ts,other);assert!(decode(&s,&other));let events=parsed_observer::r26_d12_take();print!("R26_D12_COUNT {}",name);for x in events{print!(" {}",x);}println!();}
+'''
+    harness = once(harness, before, after)
+    for marker, path in [('TOKEN', token), ('CODEC', codec), ('OBSERVED', codec_observer)]:
+        harness = once(harness, '#[path=' + marker + ']', '#[path=' + json.dumps(str(path)) + ']')
+    assert all(marker not in harness for marker in ['#[path=TOKEN]', '#[path=CODEC]', '#[path=OBSERVED]', '#[path=OBSERVER]', 'MODULES', 'CASES'])
+    assert harness.count('#[path=') == 7
+    return harness
+
+
 def instrument_parser(raw):
     assert sha(raw) == RUST
     helper = BUILD.HELPER
@@ -38,7 +56,14 @@ pub fn r26_d12_take() -> [u64; 6] { std::array::from_fn(|i| R26_D12_COUNTS[i].sw
 
 
 def preflight(spec):
-    assert spec['r26_mode'] == 'native' and spec['native_encoder'] is True
+    assert spec['r26_mode'] == 'native'
+    observer_only = spec.get('r26_a_distance12_observer_only', False)
+    assert bool(spec['native_encoder']) != observer_only
+    if observer_only:
+        assert all(e['control'] for e in spec['entries'])
+        expected = spec['r26_a_distance12_expected_encoder']
+        raw = (ROOT / expected['path']).read_bytes(); assert sha(raw) == expected['sha256']
+        assert json.loads(raw)['source_hashes'][NAME]['parse.rs'] == RUST
     by = {e['name']: e for e in spec['entries']}
     for name in ['strong', 'combo', 'public595', 'public514', NAME]:
         e = by[name]
@@ -46,9 +71,11 @@ def preflight(spec):
     assert by[NAME]['hashes']['parse.rs'] == RUST and by['strong']['hashes']['parse.rs'] == BUILD.RUST
     raw = (ROOT / by[NAME]['path'] / 'parse.rs').read_bytes(); assert BUILD.generate()[0] == raw
     observed = instrument_parser(raw)
+    harness = build_harness(by, Path('token.rs'), Path('codec.rs'), Path('codec-observer.rs'), Path('parser-observer.rs'))
     return {'status': 'VERIFIED_ONLINE_SOURCE_REVERSAL_AND_OBSERVER_GENERATION_NOT_NATIVE',
             'candidate_rust_sha256': RUST, 'parser_observer_sha256': sha(observed),
-            'strong_rust_sha256': BUILD.RUST, 'codec_sha256': HELP.CODEC_SHA, 'token_sha256': HELP.TOKEN_SHA}
+            'strong_rust_sha256': BUILD.RUST, 'codec_sha256': HELP.CODEC_SHA, 'token_sha256': HELP.TOKEN_SHA,
+            'generated_harness_has_no_unreplaced_placeholders': True, 'harness_preflight_sha256': sha(harness.encode())}
 
 
 def run():
@@ -66,16 +93,7 @@ def run():
     parser_observer = build / 'parser-observer.rs'; parser_raw = instrument_parser((ROOT / by[NAME]['path'] / 'parse.rs').read_bytes()); parser_observer.write_bytes(parser_raw)
     (out / 'parser-observer.rs').write_bytes(parser_raw)
     aliases = [('combo', 'combo'), ('strong', 'strong'), ('distance12', NAME)]
-    modules = '\n'.join('#[path=' + json.dumps(str(ROOT / by[name]['path'] / 'parse.rs')) + '] mod parser_' + label + ';' for label, name in aliases)
-    modules += '\n#[path=' + json.dumps(str(parser_observer)) + '] mod parsed_observer;'
-    cases = ','.join('(' + json.dumps(label) + ',parser_' + label + '::parse)' for label, _ in aliases)
-    harness = HELP.HARNESS.replace('MODULES', modules).replace('CASES', cases)
-    before = 'let ts=tokens(&s,f);assert!(decode(&s,&ts));'
-    after = before + '''
-if label=="distance12" { let other=tokens(&s,parsed_observer::parse);assert_eq!(ts,other);assert!(decode(&s,&other));let events=parsed_observer::r26_d12_take();print!("R26_D12_COUNT {}",name);for x in events{print!(" {}",x);}println!();}
-'''
-    harness = once(harness, before, after)
-    harness = harness.replace('TOKEN', json.dumps(str(token))).replace('CODEC', json.dumps(str(codec))).replace('OBSERVER', json.dumps(str(codec_observer)))
+    harness = build_harness(by, token, codec, codec_observer, parser_observer)
     driver = build / 'main.rs'; driver.write_text(harness); (out / 'harness.rs').write_text(harness)
     result = {'status': 'STARTED_ONLINE_DISTANCE12_ORIGINAL_ENCODER_WORK', 'run_id': os.environ['GITHUB_RUN_ID'],
               'git_sha': os.environ['GITHUB_SHA'], 'batch': os.environ['ROUND4_SPEC'], **checked,
@@ -87,7 +105,8 @@ if label=="distance12" { let other=tokens(&s,parsed_observer::parse);assert_eq!(
         RUN.captured(['rustc', '+nightly-2026-08-18', '--edition=2021', '-O', '-C', 'overflow-checks=yes', str(driver), '-o', str(binary)], out / 'compile.log', 180)
         corpus = upstream / 'data/benchmark/corpus-stage1'
         log = RUN.captured([str(binary), str(corpus), str(spool)], out / 'run.log', 180)
-        native_path = out.parent / 'r13-encoder/encoder.json'; native = json.loads(native_path.read_bytes())
+        native_path = ROOT / spec['r26_a_distance12_expected_encoder']['path'] if spec.get('r26_a_distance12_observer_only') else out.parent / 'r13-encoder/encoder.json'
+        native = json.loads(native_path.read_bytes())
         expected = {(r['candidate'], r['file']): r for r in native['rows']}
         traces = {}; events = {}; current = None
         for line in log.splitlines():
