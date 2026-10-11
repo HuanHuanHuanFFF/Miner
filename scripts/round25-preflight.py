@@ -17,6 +17,15 @@ def main():
         assert mode=='extract', 'Debug extraction fixtures must never enter performance or full-gate routes'
     assert spec['r25_mode'] == mode
     assert bool(spec.get('native_only')) == (mode == 'native')
+    assert sum(bool(spec.get(k)) for k in ('r25_dual8_counts','r25_dual8_origins','r25_prefix_diversity_counts'))<=1
+    if spec.get('r25_prefix_diversity_counts'):
+        assert mode=='native' and spec.get('native_encoder') is False
+        assert all(e.get('control') for e in spec['entries'])
+        import importlib
+        m=importlib.import_module('research-round25-prefix-diversity-counts')
+        e=next(e for e in spec['entries'] if e['path']==m.PARENT)
+        assert e['hashes']['parse.rs']==m.EXPECTED
+        m.instrument((m.ROOT/e['path']/'parse.rs').read_bytes())
     if spec.get('r25_dual8_origins'):
         assert mode=='native' and spec.get('native_encoder') is False and not spec.get('r25_dual8_counts')
         assert [e['name'] for e in spec['entries'] if not e.get('control')]==['r25-astra-dual8']
