@@ -34,6 +34,8 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-a-packed.py')],check=True)
     if spec.get('r24_item_price_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-item-price.py')],check=True)
+    if spec.get('r24_span_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-span.py')],check=True)
     if spec.get('r20_secondary_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round20-secondary.py')],check=True);return
     if spec.get('r19_cache_prefix'):
