@@ -17,7 +17,15 @@ def main():
         assert mode=='extract', 'Debug extraction fixtures must never enter performance or full-gate routes'
     assert spec['r25_mode'] == mode
     assert bool(spec.get('native_only')) == (mode == 'native')
-    assert sum(bool(spec.get(k)) for k in ('r25_dual8_counts','r25_dual8_origins','r25_prefix_diversity_counts'))<=1
+    assert sum(bool(spec.get(k)) for k in ('r25_dual8_counts','r25_dual8_origins','r25_prefix_diversity_counts','r25_tiny_encoder_counts','r25_len3_price'))<=1
+    for flag, module_name in [('r25_tiny_encoder_counts','research-round25-tiny-encoder'),
+                              ('r25_len3_price','research-round25-len3-price')]:
+        if spec.get(flag):
+            assert mode=='native' and spec.get('native_encoder') is False
+            assert all(e.get('control') for e in spec['entries'])
+            assert spec.get('extract_candidates')==[] and spec.get('gate_candidates')==[]
+            import importlib
+            importlib.import_module(module_name).preflight(spec)
     if spec.get('r25_prefix_diversity_counts'):
         assert mode=='native' and spec.get('native_encoder') is False
         assert all(e.get('control') for e in spec['entries'])
