@@ -102,3 +102,19 @@ X自适应短匹配搜索实际少69B，但总时间约增加4.2%；Y复用已�
 新机制由原路径数据支持：AD只把树子链接改为父节点相对16位距离，保留根表完整时间戳；AE在`skip>=258`时去除不再被消费的recent-root表和延续状态，较小skip保留原版回退。两者各自28文件逐token／输出同once；AE覆盖本次11/11次A finder调用、8.428M调用输入字节。AG组合正在验证，随后会把组件与组合放到同一runner测总时间；不能把内存减少或组件单项收益相加。[AD预声明](../../evidence/round24/preflight-ad.json)、[AE预声明](../../evidence/round24/preflight-ae.json)、[AG预声明](../../evidence/round24/preflight-ag.json)。三份真实提取接口也提前核对，避免到最后才发现证明障碍。
 
 当前约完成前4小时，固定窗口继续。账户UTC23:02剩91%，0重置/购买，[真实用量](../../evidence/round24/usage-0335m.json)。最终120分钟验收、确认与报告余量保留；两项目标均未完成。
+
+## 第四阶段：组合筛选与验收并行
+
+截至UTC00:50，固定窗口已过约5h22m。最新完整查询快照29628，计算UTC23:49:27，见[官方原文](../../evidence/round24/official-feedback-ai/receipt.json)。中途再次查询公共评分规则，HEAD及五份文件与起点一致，[对照](../../evidence/round24/official-rules-mid-comparison.json)。新#621处于前沿，未请求受保护源码。
+
+[AI原协议发现](../../evidence/round24/analysis-ai.json)显示，独立inline路由约减少0.97%–1.02%时间，删除冗余树状态AE约减少1.29%–1.80%；紧凑子链接AD反而增加0.49%–0.57%，与AE组合后也比实际AE父版慢0.12%–0.62%。因此暂停精确AD/AG，不能由内存减半推断更快。以上两块发现的候选最高条件份额约3.18%，没有达到5%／10%／15%。
+
+AE的[完整gate证书](../../candidates/r24-609-root-prune-proof1/VERIFICATION.json)已绑定精确Rust/Lean：原始提取、obligation、公理名单和roundtrip全部通过；整个验收1062.1s，原900s Lean限制未改。它和N、T组成当前可验收的备用集合，尚不是本轮目标完成。
+
+AF真实沙箱探测继承affinity为4核，显式限制后为单核。16个诊断进程、2块的结果没有统一改善同源码一致性：parent绝对差中位0.192528%降至0.113012%，N则从0.182030%升至0.270140%。保留原始结果和[诊断分析](../../evidence/round24/affinity-af-analysis.json)，不将显式pin替换原版成绩，也不机械重跑该干预。
+
+新组合仅使用已测得正向的N、Y、AE、AC；第二份再加入真实L槽位替换机制。[AK实际编码](../../evidence/round24/38097518629/compose-ak-native/diagnostics/r13-encoder/encoder.json)分别与AE/T父版28文件逐token和输出一致。AL提供真实提取接口，组合Lean已据此迁移，待完整gate；组件证明通过不能代表组合通过。AM把两份组合和独立SF32求解器放入同一新runner计时，保留实际父版、609同源码参照和全部负例，不相加组件收益。
+
+SF32使用有界成本的32位RMQ表示，保留不满足边界时的64位回退；94/94次求解实际覆盖，28文件逐token和输出一致，尚无速度结论。AN仅在无限长度枚举的A消费路径合并相邻同距离记录：7179505次提供合并1946351次，28文件输出不变。[原始计数](../../evidence/round24/38098770219/records-an-native/diagnostics/r24-records/receipt.json)只证明机会确实存在，AO将测新增判断是否抵消后续遍历节省；不把27.1%记录减少解释为时间减少。
+
+目标仍未完成，继续循环。UTC00:32账户剩88%，[读数](../../evidence/round24/usage-0505m.json)为共享账户状态；0重置、0购买。最终120分钟余量不变。

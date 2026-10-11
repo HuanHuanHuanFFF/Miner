@@ -1,5 +1,21 @@
 # R24 续跑状态
 
+## UTC00:50 活跃摘要（最高优先）
+
+固定截止仍为UTC05:28:08／北京时间13:28:08，最后120分钟从UTC03:28:08保留。已过约5h22m，未到收尾，10%与15%稳定目标均未建立。主工作树不变，继续codex/round24-stable-dual，最新已推送88a68cca；后续材料待提交。
+
+- AM `38098908048 screen-am` 正在原版计时：两个实际组合root-word-price、root-word-price-buffer，以及独立sf32，11方法×2反序块，65mincap，开始UTC00:34:49。
+- AE `38097639073 gate-root-prune-proof1` 已完成success，精确完整gate接受并绑定VERIFICATION.json。Rust329d3c9c...，Leandf36bda5...，总验收1062.1s（非Lean单独时间），原900sLean限制未改。候选r24-609-root-prune-proof1；Rust与AI实际计时AE相同。
+- AN `38098770219 records-an-native` 已收齐：28token/output同once，4864126B；7179505次记录提供中合并1946351（27.1%）。仅Z189无限长度枚举消费路径，未改Z162有界尾部。原版总时间仍UNKNOWN。已准备screen-ao（7方法×2块，50mincap），待提交／推送／派发。
+- AK native `38097518629 compose-ak-native`：两个组合分别同AE与T的28token/output；AL `38097534969 proof-al-extract`三个提取全部通过。新stack-proof1和buffer-proof1已按实际queryword参数顺序迁移，471446／472271B Lean，尚待完整gate。不能复用组件gate当组合验收。
+- AJ `38096204611 sf32-aj-native`：28token/output同once，94/94solvercalls、9386981positions实际进入32位路径；137504有限RMQ检查通过。性能等待AM，证明尚DRAFT。
+- AI `38095114589 screen-ai`：AC两块约快0.97–1.02%，AE快1.29–1.80%；AD慢0.49–0.57%，AG相对AE慢0.12–0.62%。因此暂停compactchild的精确版本，组合只用N/Y/AE/AC，再单独加L质量政策。analysis-ai.json在最新已捕获29628（computedUTC23:49:27，约00:00查询），各新候选份额最高约3.18%，无>=5/10/15。
+- AF `38094411590 affinity-af-diagnostic`已收齐：沙箱原继承[0,1,2,3]、显式pin[0]。两块parent副本绝对差中位0.192528%→0.113012%，N却0.182030%→0.270140%。不支持统一消除波动，不替换原协议。见affinity-af-analysis.json。
+- 最新官方快照29628在official-feedback-ai；新#621在前沿（源码未请求）。规则中途刷新official-rules-mid与起点同HEAD/5文件哈希。后续报告当前份额前再查询。
+- 账户UTC00:32:55已用12%／剩88%，usage-0505m.json；0重置／购买，账户读数不能归因本任务。所有正式上传／签名仍未授权。
+
+下一步提交并顺序派发AO与两个完整组合gate；CI期间继续真正不同机制或证明。保留N/T两个已验收备用，但最终任何新pair仍需新runner独立确认。最新Z联合只用analysis-z-v2.json，4主块而非把影子算8块。
+
 ## UTC23:21 活跃摘要（最高优先，前面旧摘要仅作历史）
 
 固定起点UTC19:28:08、截止次日UTC05:28:08／北京时间13:28:08，不重置。已用约3h53m，继续约6h07m，最后120min从UTC03:28:08起保留。当前分支HEAD `cbecde5352e63a903a84705f5f0fc4ebfecfa6b3`，已推送；主工作树main仍保留。新派发回执等未提交材料均本轮。
