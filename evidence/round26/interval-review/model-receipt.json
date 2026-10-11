@@ -1,0 +1,223 @@
+{
+  "status": "VERIFIED_BOUNDED_HELPER_MODEL_ONLY",
+  "generated_at_utc": "2026-10-11T22:16:59.904561+00:00",
+  "source": {
+    "path": "references/round24-public-552/parse.rs",
+    "sha256": "5adaaeac471b86128778bf6b67f786542f5c8e079adbf1160f0502309f7befb9",
+    "lean_path": "references/round24-public-552/Parse.lean",
+    "lean_sha256": "51b5ea83cbad026c044b5c7812c9189231f5273cc0902342c850af02a1c0b592"
+  },
+  "script_sha256": "0f4975f682e331235c4f3845e9ccb69576b52c41247e0175b6b0962cdef7c1f0",
+  "sampling": {
+    "D_KNOBS_flens": [
+      8,
+      16
+    ],
+    "length_code_ends": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      14,
+      16,
+      18,
+      22,
+      26,
+      30,
+      34,
+      42,
+      50,
+      58,
+      66,
+      82,
+      98,
+      114,
+      130,
+      162,
+      194,
+      226,
+      257,
+      258
+    ],
+    "exhaustive": [
+      {
+        "flen": 8,
+        "all_ordered_lo_hi_pairs": 65536,
+        "domain": "lo, hi in 3..258 inclusive, including empty hi < lo",
+        "max_visits_in_one_length_code_above_flen": 2,
+        "samples_3_258": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          12,
+          14,
+          16,
+          18,
+          22,
+          26,
+          30,
+          34,
+          42,
+          50,
+          58,
+          66,
+          82,
+          98,
+          114,
+          130,
+          162,
+          194,
+          226,
+          257,
+          258
+        ],
+        "samples_19_22": [
+          19,
+          22
+        ]
+      },
+      {
+        "flen": 16,
+        "all_ordered_lo_hi_pairs": 65536,
+        "domain": "lo, hi in 3..258 inclusive, including empty hi < lo",
+        "max_visits_in_one_length_code_above_flen": 2,
+        "samples_3_258": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          18,
+          22,
+          26,
+          30,
+          34,
+          42,
+          50,
+          58,
+          66,
+          82,
+          98,
+          114,
+          130,
+          162,
+          194,
+          226,
+          257,
+          258
+        ],
+        "samples_19_22": [
+          19,
+          22
+        ]
+      }
+    ],
+    "all_pairs_total": 131072
+  },
+  "packed_differential": {
+    "seed": 260012,
+    "cases": 5000,
+    "ring": 8192,
+    "start_positions": [
+      0,
+      1,
+      8190,
+      8191,
+      8192,
+      16383
+    ],
+    "costs": "u32 including deliberate wrapping and arbitrary same-code prices",
+    "purpose": "endpoint formula vs exact nextl traversal, not an optimized implementation"
+  },
+  "counterexamples": {
+    "dense_interval_changes_edge_set": {
+      "lo": 19,
+      "hi": 22,
+      "flen": 16,
+      "original_lengths": [
+        19,
+        22
+      ],
+      "new_lengths": [
+        20,
+        21
+      ],
+      "at_length_20_original_cell": 4611686014132420608,
+      "at_length_20_dense_cell": 4294967828
+    },
+    "only_global_endpoints_loses_edges": {
+      "lo": 19,
+      "hi": 21,
+      "original_lengths": [
+        19,
+        21
+      ]
+    },
+    "tie": "equal cost: literal, then lower distance, then shorter length; fixed destination means newer source",
+    "base_min_before_common_add": {
+      "bases": [
+        0,
+        4294967295
+      ],
+      "common_price": 1,
+      "wrapped_totals": [
+        1,
+        0
+      ]
+    },
+    "generation_price_must_be_frozen": {
+      "old_price": 32,
+      "competing_price": 50,
+      "new_price": 80
+    },
+    "epoch_reset": "an old pending price 7 arrival must not survive open_chunk reset to UNREACHED",
+    "back_best_tie": {
+      "subtotals": [
+        10,
+        10
+      ],
+      "selected_t": 1,
+      "strict_initial_cutoff": 1073741823
+    }
+  },
+  "paper_bound_for_D_only": {
+    "status": "INFERRED_REACHABLE_STATE_INDUCTION_NOT_FORMALIZED",
+    "numeric_arithmetic_checked": true,
+    "literal_price_bound": 320,
+    "length_price_bound": 400,
+    "distance_price_bound": 528,
+    "coarse_arrival_bound": 1311648,
+    "premises": [
+      "d_parse fixes huff=0; costs_from clamps symbol prices to 8..320",
+      "every current-chunk processed position is reachable via literal edges",
+      "chunk age is bounded by CHUNK=4096; skip resets chunk",
+      "backward-extension reads stay within the current chunk"
+    ],
+    "scope": "A proof route for D-specific no-wrap simplification; the Python model does not prove reachability."
+  },
+  "limits": [
+    "This models helper semantics on bounded lengths, not reachable whole-parser input states.",
+    "No Rust or Lean compile; no official extraction, obligations, gate, codec round trip, or timing.",
+    "No event queue implementation; no proof of full-parser byte identity or speed.",
+    "No public corpus frequency or stage-cost claims; route_b owns that separate diagnostic."
+  ]
+}

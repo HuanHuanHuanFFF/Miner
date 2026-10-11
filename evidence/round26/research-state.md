@@ -6,17 +6,24 @@
 
 工作区唯一，分支 codex/round26-stable-pair；main=48baf622 保持原位。R25的最后公开查询回执已归档在4864aef6，R26首批基础设施和源码在096f2d62已推送。Git与CI调度只由root执行，候选/证据独立文件范围。
 
-## 活动路线
+## 活动路线（UTC 22:25 后）
 
-- route_a，Astra/xhigh：A1 token规则、A2边界移动、A3精确641表尾裁剪native均已收齐。A3进入screen-a3两块原协议计时，含真实641父版/父版影子/候选影子，原Lean尚未通过新gate。继续比较新641起点与A2质量组件，不将收益相加。
-- route_b，Sol/xhigh：B1 public628 E/RF消融已收齐。RF DP份额较小，暂停后向DP原型的大投入；B2 **38176424063**，sharing-b2-native，20min cap，观测基础阶段与SF消费的真实供需，非性能成绩。
+- route_a，Astra/xhigh：A3原协议主块慢0.188/0.228%，主份额0；同源码copy只有一次约0.838%控制信号，不晋升。其CI最后summary失败但18份原测量完整，独立重放已通过，未重跑。A5完整边界postpass主块慢6.845/7.077%，主/控制均0，暂停；42个直接helper用例和444常规decode范围分开记录。A6 hash17/A7移除近距拒绝分别少2469B/7439B，独立合批 **38179533008 screen-a67** 正在运行，30min cap。接下来比较更大成本来源或不同机制，不续扫641小开关。
+- route_b，Sol/xhigh：B3共享缓存fix1实际强seed/前缀检查通过，但完整总时间仅快0.131/0.204%，又多524B，最新投影0；暂停完整证明。B6 hint恢复原pool，444有限与28原encoder token/output一致，原协议计时尚未派发。准备一次原628/shared/hint低频阶段诊断B7，区别collector节省与保留/消费成本，原计时仍是正式性能口径。B8为不同552起点的真实前向轨迹/成本检查草案，尚未启动。
 - score_verification，Sol/xhigh：已完成独立29785 API/代数/历史逐块重放及单独/联合规划，已停等。Root已核对22项交付哈希；说明早版手抄坐标错误已更正，机器计算原本正确。
+- interval_review，Astra/xhigh：按需约8分钟短审已完成并停等。552实际前向仅采样29/32个长度，长码域最多2写；连续区间事件会扩边，暂停原提案。有限模型/换价/tie/重构/epoch义务有证据，不当作新性能或全解析器证明。
 
 ## 官方依据
 
-完整当前起点 **29785**：official-start-live/。官方API freshness=unknown。评分源码 official-rules-start-live/，五文件与R25一致，rules-comparison.json。官方榜首当前池份额约4.3487%，5/10均高于起点单点最高；需真实较大改进，不能复用旧端点高峰。
+最新完整捕获 **29793**：official-hour1/，101前沿点，API独立重放score-api-hour1-29793.json。初始29785与中间29789保留不覆盖。官方API freshness=unknown。评分源码 official-rules-start-live/，政策在后续身份查询仍相同。当前没有新主候选达到5/10；A3、A5、B3各2个主发现块，不是冻结独立确认。role-summary-hour1-29793.json分离A5/B3主候选、copies、校准视图，8组same-source pairs全部同binary，copy不增加主样本数。
 
 public-start/ 保留613及629公开源码原回执。629与628的Rust/Lean逐字同SHA，两个正式测量坐标仍不同，这是校准限制证据；不能作为两个不同候选。
+
+## 执行修复与资源
+
+两项真实CI失败保留：B3初版缓存转移插在函数体外，另建fix1不覆盖失败源码；A3 summary缺参照，已在R26标准preflight拒绝，原18份计时不丢弃。native编译前新增execution identity，早期失败也可绑定run/SHA。B4脚本CRLF与Git LF差异在派发前规范化并另冻标签，旧未派发草案保留。
+
+Git最新已推送18011420（后续以实际HEAD为准），root统一commit/dispatch；main仍未移动。账户UTC21:39:28真实共享用量已用25%、剩75%，不当作任务独占成本；重置0、购买0、正式上传/链操作0。完整gate及最终独立确认尚未运行。本轮还有约6小时40分钟，不能因当前失败或一次CI结束而收尾。
 
 ## 本轮确认口径
 
