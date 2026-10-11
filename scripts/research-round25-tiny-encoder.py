@@ -174,12 +174,28 @@ def preflight(spec):
         entry = by_name[name]
         assert entry["control"] is True and entry["hashes"]["parse.rs"] == expected
         assert sha((ROOT / entry["path"] / "parse.rs").read_bytes()) == expected
+    assert FIXTURE.is_file(), "Frozen I native fixture must be committed before dispatch"
+    fixture = json.loads(FIXTURE.read_bytes())
+    assert fixture["status"] == "VERIFIED_FINITE_NATIVE_ORIGINAL_ENCODER_BYTES"
+    assert fixture["codec_sha256"] == CODEC_SHA and fixture["token_sha256"] == TOKEN_SHA
+    required = {(name, file) for name in ("combo", "r25-root-tiny-pc8") for file in FILES}
+    assert required <= {(r["candidate"], r["file"]) for r in fixture["rows"]}
+    for name, expected in (("combo", PARSERS["combo"]), ("r25-root-tiny-pc8", PARSERS["tiny_pc8"])):
+        assert fixture["source_hashes"][name]["parse.rs"] == expected
     codec = ROOT / "sources/conjectures-optimisation-deflate/validator/measure/src/deflate.rs"
-    original = codec.read_bytes()
-    observed = instrument(original.replace(b"\r\n", b"\n"))
-    assert codec.read_bytes() == original
-    return {"status": "VERIFIED_SPEC_AND_OBSERVER_GENERATION_ONLY", "observer_sha256": sha(observed),
-            "parsers": ["combo", "r25-root-tiny-pc8"], "files": FILES, "native": "NOT_RUN"}
+    result = {"status": "VERIFIED_FROZEN_SPEC_SOURCE_AND_FIXTURE_ONLY",
+              "parsers": ["combo", "r25-root-tiny-pc8"], "files": FILES, "native": "NOT_RUN",
+              "fixture_sha256": sha(FIXTURE.read_bytes()), "runtime_codec_sha256_required": CODEC_SHA,
+              "runtime_token_sha256_required": TOKEN_SHA}
+    if codec.is_file():
+        original = codec.read_bytes()
+        observed = instrument(original.replace(b"\r\n", b"\n"))
+        assert codec.read_bytes() == original
+        result.update(observer_generation="VERIFIED_OPTIONAL_LOCAL_READING_COPY", observer_sha256=sha(observed))
+    else:
+        result.update(observer_generation="PENDING_RUNTIME_AFTER_CI_PREPARE", observer_sha256=None,
+                      local_reader="Absent; not required before ci-prepare. Runtime DEFLATE_ROOT bytes remain mandatory.")
+    return result
 
 
 def main():
