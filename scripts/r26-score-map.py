@@ -151,7 +151,7 @@ def audit(replay):
                                 'combine': digest(rules / 'validator--scoring--combine.py')},
               'limits': ['API payout eligibility is observed; registration and cap decisions are not independently recomputed from chain.',
                          'Captured public scorer replay matches this recorded pass; exact live deployment bytes and finalized payment are UNKNOWN.',
-                         'Freshness remains API unknown. This audit performs no current refresh.']}
+                         f"Captured API freshness is {replay.context.get('freshness', 'UNKNOWN')}. This audit performs no current refresh."]}
     return result
 
 

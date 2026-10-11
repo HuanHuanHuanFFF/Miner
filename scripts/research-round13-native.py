@@ -28,6 +28,9 @@ def main():
     if spec.get('r26_b_d_front_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-d-front-diagnostic.py')],check=True)
         return
+    if spec.get('r26_b_a_repeat_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-repeat-diagnostic.py')],check=True)
+        return
     if spec.get('r26_b_cache_integrity'):
         module=spec['r26_b_cache_integrity_module']
         assert module=='r26-b-cache-integrity-fix1'

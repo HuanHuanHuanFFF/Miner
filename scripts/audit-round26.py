@@ -78,6 +78,12 @@ def main():
                     verify(reference, name, expected)
                 verify(reference, 'source-receipt.json', {})
         verify(p.parent, p.name, {})
+    external = BASE/'external-mechanisms/receipt.json'
+    if external.exists():
+        for record in json.loads(external.read_bytes()):
+            for item in record['files']:
+                verify(external.parent, item['file'], item)
+        verify(external.parent, external.name, {})
     sources = []
     for p in sorted((ROOT / 'candidates').glob('r26-*/manifest.json')):
         manifest = json.loads(p.read_bytes())
