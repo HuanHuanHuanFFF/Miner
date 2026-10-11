@@ -26,6 +26,13 @@ def main():
     if mode == 'native' and spec.get('native_encoder'):
         names={'public514'} | set(spec.get('native_encoder_references',[])) | {e['name'] for e in spec['entries'] if not e.get('control')}
         assert len(names)<=6 and names <= {e['name'] for e in spec['entries']}
+    if spec.get('r25_finite_equivalence'):
+        assert mode=='native' and spec.get('native_encoder') is True
+        import importlib
+        m=importlib.import_module('research-round4')
+        pairs=m.equivalence_pairs(spec)
+        assert pairs and all(e.get('expected_equivalent_to') for e in spec['entries'] if not e.get('control'))
+        m.build_harness(pairs)
     if mode == 'standard':
         from importlib import import_module
         pairs=[e for e in spec['entries'] if e.get('native_decode_reference')]
