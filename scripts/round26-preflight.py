@@ -63,6 +63,10 @@ def main():
     if spec.get('r26_a_lazy_chain_counts'):
         assert mode == 'native' and spec.get('native_encoder') is True and not spec.get('r18_function_profile')
         importlib.import_module('r26-a-lazy-chain-counts').preflight(spec)
+    if spec.get('r26_a_distance12_counts'):
+        assert mode == 'native' and spec.get('native_encoder') is True and not spec.get('r18_function_profile')
+        assert not spec.get('r26_a_lazy_chain_counts')
+        importlib.import_module('r26-a-distance12-counts').preflight(spec)
     if spec.get('r18_function_profile'):
         assert mode == 'native' and spec.get('native_encoder') is True
         from round4 import ROOT

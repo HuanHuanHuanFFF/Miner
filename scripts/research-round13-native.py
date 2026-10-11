@@ -146,6 +146,8 @@ def main():
         module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main()
         if spec.get('r26_a_lazy_chain_counts'):
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-lazy-chain-counts.py')],check=True)
+        if spec.get('r26_a_distance12_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-distance12-counts.py')],check=True)
         return
     record={'run_id':os.environ['GITHUB_RUN_ID'],'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],
         'status':'STARTED_NATIVE_ONLY','candidate_hashes':{e['name']:e['hashes']for e in spec['entries']if not e['control']},
