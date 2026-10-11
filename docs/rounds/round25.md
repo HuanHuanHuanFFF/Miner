@@ -4,7 +4,7 @@
 
 本轮保留的是两个已验证正确性的质量组件，不是建议立即提交的收益候选。全部份额为公共测量迁移到正式坐标后的条件估算；正式admission、私有结果和可支付收益为 **UNKNOWN**。没有正式上传、注册、签名或资金操作。
 
-执行规则见 [AGENTS.md](../../AGENTS.md)。[固定预算](../../evidence/round25/budget.json)、[逐块汇总](../../evidence/round25/outcome-29702.json)、[原始证据审计](../../evidence/round25/git-byte-audit-delivery.json)、[阶段决策](../../evidence/round25/feedback-nt-confirmation-decision.json)保留完整边界。
+执行规则见 [AGENTS.md](../../AGENTS.md)。[固定预算](../../evidence/round25/budget.json)、[逐块汇总](../../evidence/round25/outcome-29702.json)、[原始证据审计](../../evidence/round25/git-byte-audit-29702.json)、[阶段决策](../../evidence/round25/feedback-nt-confirmation-decision.json)保留完整边界。
 
 ## 最新官方依据与目标缺口
 
@@ -85,10 +85,12 @@ H比dual8快，但仍比combo慢1.120%–1.155%；M比I快，却仍比combo慢0.
 
 [实际CI消耗](../../evidence/round25/luna/ci-cost-final.md)：201.25 runner分钟，排队累计1.90分钟；计入setup／checkout，剔除所有skipped job，失败作业计入消耗。它们是并发作业之和，不等于5小时研究墙钟或现金账单。账户共享用量单独记录；未重置、未购买，任务独占token／金额成本UNKNOWN。
 
-[账户实时读数](../../evidence/round25/usage-delivery-checkpoint.json)：UTC `2026-10-11 12:28:43 UTC`，共享主窗口已用19%、剩余81%；次窗口未提供。共享读数不能归为本任务独占消耗。Git对象核验904份声明文件、115,585,735B；原始输入与源码保持字节一致，详见上述审计。重置0次、购买0次；链上支出及正式上传0次。
+[账户实时读数](../../evidence/round25/usage-final.json)：UTC `2026-10-11 12:56:45 UTC`，共享主窗口已用20%、剩余80%；次窗口未提供。共享读数不能归为本任务独占消耗。Git对象核验926份声明文件、118,119,517B；原始输入与源码保持字节一致，详见上述审计。重置0次、购买0次；链上支出及正式上传0次。
 
 用户授权最多4子线程，工具实际支持root加3子线程，因此使用Astra/xhigh、Sol/xhigh、Luna/max三个角色并行，根线程负责CI、Git和最终复核；无嵌套、无额外worktree。起点main／origin/main均为`48baf622466792f4d505c5c06d5696f784e27b7a`；成果留在`codex/round25-fast-quality`，不自动合并或清分支。普通提交跳过CI。
 
 **VERIFIED**：公共真实字节、原协议逐文件计时、两个精确完整gate、跨runner独立确认与原回执哈希。**INFERRED**：快照29702下的单独／联合份额以及机制投入判断。**UNKNOWN**：未测实现的速度、私有迁移、正式准入／奖励、任务独占现金成本。
+
+交付前还保存了新公开的[#628原始来源](../../evidence/round25/luna/source-628/receipt.json)及[五分钟静态审阅](../../evidence/round25/sol/public628-handoff.md)。它在#629支配后开放，主要增加选择性码价DP、种子匹配复用及窄入口的另一引擎，具有多遍与缓冲成本；删除609入口重复调用的改动在本仓B中早已存在。当前只作为后续起点，未对该公开源码运行本轮原encoder、计时或完整gate，不增加12种新实现或34个CI的数量。#629相同正式质量也不证明两者源码相同。
 
 下一轮优先判别如何在匹配接受阶段保留短文件质量、减少新增长度／距离符号集合的编码成本；其次考察带真实收益归因的稀疏索引记录。先测最小质量／成本端点，避免继续扫掩码、盲加搜索或重跑已失败的相同实现。具体判别实验和停止条件见[后续路线评估](../../evidence/round25/sol/next-route-assessment.md)。本轮经验已汇入[优化方法与实验结论](../research/optimization-methods.md)；历史正式提交及累计α另见根目录[看板](../../DASHBOARD.md)。

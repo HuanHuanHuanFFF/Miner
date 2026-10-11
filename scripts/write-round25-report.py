@@ -193,6 +193,8 @@ H比dual8快，但仍比combo慢1.120%–1.155%；M比I快，却仍比combo慢0.
 
 **VERIFIED**：公共真实字节、原协议逐文件计时、两个精确完整gate、跨runner独立确认与原回执哈希。**INFERRED**：快照{sid}下的单独／联合份额以及机制投入判断。**UNKNOWN**：未测实现的速度、私有迁移、正式准入／奖励、任务独占现金成本。
 
+交付前还保存了新公开的[#628原始来源](../../evidence/round25/luna/source-628/receipt.json)及[五分钟静态审阅](../../evidence/round25/sol/public628-handoff.md)。它在#629支配后开放，主要增加选择性码价DP、种子匹配复用及窄入口的另一引擎，具有多遍与缓冲成本；删除609入口重复调用的改动在本仓B中早已存在。当前只作为后续起点，未对该公开源码运行本轮原encoder、计时或完整gate，不增加12种新实现或34个CI的数量。#629相同正式质量也不证明两者源码相同。
+
 下一轮优先判别如何在匹配接受阶段保留短文件质量、减少新增长度／距离符号集合的编码成本；其次考察带真实收益归因的稀疏索引记录。先测最小质量／成本端点，避免继续扫掩码、盲加搜索或重跑已失败的相同实现。具体判别实验和停止条件见[后续路线评估](../../evidence/round25/sol/next-route-assessment.md)。本轮经验已汇入[优化方法与实验结论](../research/optimization-methods.md)；历史正式提交及累计α另见根目录[看板](../../DASHBOARD.md)。
 '''
     (ROOT / 'docs/rounds/round25.md').write_text(text, encoding='utf-8')
@@ -205,7 +207,11 @@ H比dual8快，但仍比combo慢1.120%–1.155%；M比I快，却仍比combo慢0.
     index_path.write_text('\n'.join(index_lines) + '\n', encoding='utf-8')
     tasks_path = ROOT / 'docs/tasks.json'
     tasks = read(tasks_path)
-    next(t for t in tasks['tasks'] if t['id'] == 'round25')['decision'] = decision
+    task = next(t for t in tasks['tasks'] if t['id'] == 'round25')
+    task['decision'] = decision
+    for tag in ('公开628', '符号集合成本', '同源码参照'):
+        if tag not in task['tags']:
+            task['tags'].append(tag)
     tasks['updated_on'] = '2026-10-11'
     tasks_path.write_text(json.dumps(tasks, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({'report': 'docs/rounds/round25.md', 'snapshot': sid,
