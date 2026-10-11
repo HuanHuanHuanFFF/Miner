@@ -40,7 +40,7 @@
     "global_last_actual_job_completedAt_raw": "2026-10-11T11:43:35Z",
     "global_observed_span_seconds_from_raw_strings": 12341.0,
     "global_observed_span_minutes_from_raw_strings": 205.68333333333334,
-    "absolute_UTC_alignment_certainty": "UNKNOWN: values below are verbatim source-reported Z timestamps; historical checkpoint normalization contains an exact eight-hour error. Relative within-run durations and queue differences are recomputed from raw timestamp strings. No manual +/-8h correction was applied."
+    "absolute_UTC_alignment_certainty": "VERIFIED for source-reported UTC consistency across the 34 raw dispatch and CI receipts: per-run dispatch/created/job-start offsets are coherent and the raw endpoint precedes the current tool UTC observation. This verifies the timestamp chain, not independent calibration of the provider clock."
   },
   "mode_totals": [
     {
@@ -115,9 +115,35 @@
     "same_old_run_population_raw_first_started": "2026-10-11T08:17:54Z",
     "old_checkpoint_claimed_absolute_last_completed": "2026-10-11T02:13:04Z",
     "same_old_run_population_raw_last_completed": "2026-10-11T10:13:04Z",
-    "finding": "The prior JSON checkpoint first/last UTC fields are each 28,800 seconds earlier than the matching raw CI receipts. This matches local-vs-UTC offset direction but is not applied as a correction. Those old normalized absolute endpoints are unreliable; present audit durations are recomputed from raw per-run strings. Cross-run absolute anchoring is marked UNKNOWN.",
+    "finding": "All raw source timestamps use explicit UTC markers and their per-run dispatch → CI-created → job-start order is consistent. The previous derived JSON endpoint fields are 28,800 seconds earlier than matching raw receipts; retract those derived endpoints. The transformation cause remains UNKNOWN, but this discrepancy is isolated to the prior derived report and is not evidence of an 8-hour error in the 34 raw dispatch/CI records.",
     "raw_minus_old_checkpoint_json_seconds_first": 28800.0,
-    "raw_minus_old_checkpoint_json_seconds_last": 28800.0
+    "raw_minus_old_checkpoint_json_seconds_last": 28800.0,
+    "raw_source_clock_crosscheck": {
+      "dispatch_utc_to_ci_createdAt_seconds": {
+        "run_count": 34,
+        "minimum": 1.700631,
+        "maximum": 3.397999,
+        "all_positive": true
+      },
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": {
+        "run_count": 34,
+        "minimum": 2.0,
+        "maximum": 7.0,
+        "all_nonnegative": true
+      },
+      "dispatch_utc_to_first_actual_job_startedAt_seconds": {
+        "run_count": 34,
+        "minimum": 4.700631,
+        "maximum": 9.355969,
+        "all_positive": true
+      },
+      "latest_raw_job_completion_before_tool_utc_observation_seconds": 923.0,
+      "tool_utc_observation_raw": "2026-10-11 11:58:58 UTC",
+      "windows_local_observation_raw": "2026-10-11T19:58:58.4313080+08:00"
+    },
+    "source_reported_raw_timestamp_alignment": "VERIFIED: all 34 dispatch_utc (+00:00), ci-run createdAt (Z) and first actual job startedAt (Z) are ordered consistently within each run; all dispatch→created and created→job offsets are nonnegative and bounded as reported. Latest job completion precedes the audit tool UTC clock by 923 seconds.",
+    "legacy_derived_endpoint_disposition": "RETRACTED: the old checkpoint JSON normalized global endpoints are 8 hours earlier than matching raw receipt endpoints and must not be used as the current raw UTC boundaries. The raw dispatch/CI timestamp chain is internally consistent.",
+    "legacy_transformation_root_cause": "UNKNOWN: the exact cause of the prior report conversion error was not independently established; no offset was applied to raw source strings."
   },
   "runs": [
     {
@@ -238,7 +264,10 @@
       "ci_run_path": "evidence/round25/38124303645/quality-a-native/diagnostics/ci-run.json",
       "ci_run_sha256": "fd99e14e7edf8fe89b969ce37621c097528f49a8de4436cee3af9eb3d4f47bd3",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.053083,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.053083
     },
     {
       "run_id": "38124524718",
@@ -358,7 +387,10 @@
       "ci_run_path": "evidence/round25/38124524718/screen-a/gate/ci-run.json",
       "ci_run_sha256": "0c5f9db4a82a7849090fce3bd1de9bddef71067f5b0a464c849cb9cbc94fc3c6",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.804446,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.804446
     },
     {
       "run_id": "38124536539",
@@ -478,7 +510,10 @@
       "ci_run_path": "evidence/round25/38124536539/proof-a-extract/diagnostics/ci-run.json",
       "ci_run_sha256": "e8cf2b0e8d85e10765e06ba36c0710451e05773d058eafa6be0587af647e8354",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.147907,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.147907
     },
     {
       "run_id": "38124984085",
@@ -598,7 +633,10 @@
       "ci_run_path": "evidence/round25/38124984085/quality-b-native/diagnostics/ci-run.json",
       "ci_run_sha256": "7f7687b083f3fe0ffc7e8fb3cc7df217749786d904e0942da2e919a555ad3c23",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.480449,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.480449
     },
     {
       "run_id": "38125243582",
@@ -718,7 +756,10 @@
       "ci_run_path": "evidence/round25/38125243582/gate-end4/exact-gate/ci-run.json",
       "ci_run_sha256": "cac0e3425aebb5666f650d1d9811a74f56d11cc96d62e1341fc56ae92e5867e4",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 1.700631,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 4.700631
     },
     {
       "run_id": "38125636793",
@@ -838,7 +879,10 @@
       "ci_run_path": "evidence/round25/38125636793/quality-c-native/diagnostics/ci-run.json",
       "ci_run_sha256": "3aa6247c92a46e04baab46d42fd787c6fdc1f43fcdc1fd2613c59cb1deff2959",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.471364,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.471364
     },
     {
       "run_id": "38126014186",
@@ -958,7 +1002,10 @@
       "ci_run_path": "evidence/round25/38126014186/screen-c/gate/ci-run.json",
       "ci_run_sha256": "5d4027f9bfa1fb2c8d2508cc116abb56effff57a1781e0b142204cf2fc48c617",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.355969,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 7.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 9.355969
     },
     {
       "run_id": "38126033837",
@@ -1078,7 +1125,10 @@
       "ci_run_path": "evidence/round25/38126033837/proof-c-extract/diagnostics/ci-run.json",
       "ci_run_sha256": "8d3829d24d2ebe53d229bb48e7d7598e28815e34750b07f43f5df3fca0ce7985",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.840244,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.840244
     },
     {
       "run_id": "38126399623",
@@ -1198,7 +1248,10 @@
       "ci_run_path": "evidence/round25/38126399623/quality-d-native/diagnostics/ci-run.json",
       "ci_run_sha256": "3711f9fb8c5490bcd77c3bbe39d4d2decb79490efaecdb6a7454943018bf68fb",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 1.741226,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 4.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.741226
     },
     {
       "run_id": "38126675905",
@@ -1318,7 +1371,10 @@
       "ci_run_path": "evidence/round25/38126675905/screen-d/gate/ci-run.json",
       "ci_run_sha256": "90d7852fa93998baccff5f44a1e8fea211392ac35fea6616b46cfed53ff4d67d",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 1.878399,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 4.878399
     },
     {
       "run_id": "38127500920",
@@ -1438,7 +1494,10 @@
       "ci_run_path": "evidence/round25/38127500920/counts-e-native/diagnostics/ci-run.json",
       "ci_run_sha256": "61bb76cf6b29b7474cc70165db300c9e3a945cfb197cdb9e6392af5ee5088d41",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.24561,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.24561
     },
     {
       "run_id": "38128787484",
@@ -1558,7 +1617,10 @@
       "ci_run_path": "evidence/round25/38128787484/origins-f-native/diagnostics/ci-run.json",
       "ci_run_sha256": "77a5e83112966981c062bb24d2e0e5e5f00d568623d223376059fcc4b50179b1",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.22877,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.22877
     },
     {
       "run_id": "38129145575",
@@ -1678,7 +1740,10 @@
       "ci_run_path": "evidence/round25/38129145575/prefix-g-native/diagnostics/ci-run.json",
       "ci_run_sha256": "cd4a356a009433b3b8f1a34b4f44e95ffd40e8b6b3148c60fa93f4f18c589473",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 1.934324,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 4.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.934324
     },
     {
       "run_id": "38129274435",
@@ -1798,7 +1863,10 @@
       "ci_run_path": "evidence/round25/38129274435/quality-h-native/diagnostics/ci-run.json",
       "ci_run_sha256": "7c53d7d2f717af0f9c6143fe9d379773ee2c5756c0572b9053f260ada024a186",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.433507,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.433507
     },
     {
       "run_id": "38129545231",
@@ -1918,7 +1986,10 @@
       "ci_run_path": "evidence/round25/38129545231/quality-i-native/diagnostics/ci-run.json",
       "ci_run_sha256": "065b4d0e1c4baee309aa638bcfd542faacbbbfcfae2c65c8f9c89e8ec8836b14",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.257802,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.257802
     },
     {
       "run_id": "38130275592",
@@ -2038,7 +2109,10 @@
       "ci_run_path": "evidence/round25/38130275592/screen-hi/gate/ci-run.json",
       "ci_run_sha256": "4bd2d047ff7dc28dd671656d97c62cd6d7f266b4fefcbc5e6ff2c35b08c7440f",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.76046,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.76046
     },
     {
       "run_id": "38130286911",
@@ -2158,7 +2232,10 @@
       "ci_run_path": "evidence/round25/38130286911/proof-i-extract/diagnostics/ci-run.json",
       "ci_run_sha256": "60b79df774bbf4e86605b376e8badc9be88d71424a509604d1539dd5857a87c4",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.290579,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 4.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 6.290579
     },
     {
       "run_id": "38130296690",
@@ -2278,7 +2355,10 @@
       "ci_run_path": "evidence/round25/38130296690/quality-j-native/diagnostics/ci-run.json",
       "ci_run_sha256": "a10dbcb2438eb1cb4636d83239e768085b5927e13b1e52bd97e33ea573946e45",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.80201,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.80201
     },
     {
       "run_id": "38130458692",
@@ -2398,7 +2478,10 @@
       "ci_run_path": "evidence/round25/38130458692/screen-j/gate/ci-run.json",
       "ci_run_sha256": "3b587b693ae51dc26c3a4f97dc08bae2724dd35ad5bbf446a760099798dc1b95",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.238026,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.238026
     },
     {
       "run_id": "38130996700",
@@ -2518,7 +2601,10 @@
       "ci_run_path": "evidence/round25/38130996700/gate-tiny-pc8-proof1/exact-gate/ci-run.json",
       "ci_run_sha256": "3bd364bbd36e276e249f5bcc5927f1c168d08a6426135e7c0b27f283842fa311",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.401236,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 5.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 7.401236
     },
     {
       "run_id": "38131861001",
@@ -2654,7 +2740,10 @@
           "sha256": "7f53cf0bdc387d093408be538b2a25b9819f7656b7150b4cf7e72b18710a7eb6",
           "bytes": 3124
         }
-      ]
+      ],
+      "dispatch_to_ci_createdAt_seconds": 2.493401,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 4.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 6.493401
     },
     {
       "run_id": "38132193695",
@@ -2774,7 +2863,10 @@
       "ci_run_path": "evidence/round25/38132193695/counts-k2-native/diagnostics/ci-run.json",
       "ci_run_sha256": "c9d698e6c49a4d383e23fc1ae7d7c748286ae918a13ab107a2fa4c0086c105aa",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.365868,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 4.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 6.365868
     },
     {
       "run_id": "38132209168",
@@ -2894,7 +2986,10 @@
       "ci_run_path": "evidence/round25/38132209168/price-l-native/diagnostics/ci-run.json",
       "ci_run_sha256": "998e9463162023b6a4c7b7341a1959749c311f7edfdb50a24478c83e87bcb00a",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 1.947375,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 4.947375
     },
     {
       "run_id": "38132623194",
@@ -3014,7 +3109,10 @@
       "ci_run_path": "evidence/round25/38132623194/quality-m-native/diagnostics/ci-run.json",
       "ci_run_sha256": "16f15220ef94e12098e9f289f1e5c3aceaee2614ba60bf187867f727fd7d4dfd",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.649417,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.649417
     },
     {
       "run_id": "38132849624",
@@ -3134,7 +3232,10 @@
       "ci_run_path": "evidence/round25/38132849624/screen-m/gate/ci-run.json",
       "ci_run_sha256": "eb6f0d4a0f9aca01b3c68e25ae790fb2196d9d3fa7ad8d6126904f0ae7d10b5f",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.250216,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 4.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 6.250216
     },
     {
       "run_id": "38132862529",
@@ -3254,7 +3355,10 @@
       "ci_run_path": "evidence/round25/38132862529/proof-m-extract/diagnostics/ci-run.json",
       "ci_run_sha256": "d6ce8dd8c62641437fbbaf251990252d57e9cce762bb826eb5c5deb1e7ad3885",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.490329,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.490329
     },
     {
       "run_id": "38134237148",
@@ -3374,7 +3478,10 @@
       "ci_run_path": "evidence/round25/38134237148/quality-n-native/diagnostics/ci-run.json",
       "ci_run_sha256": "a86f77748158af7c2e9bc5fef2367ad03b5fd7131adaac8fe4c9690a2b1e9f43",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.040807,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 4.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 6.040807
     },
     {
       "run_id": "38134540554",
@@ -3499,7 +3606,10 @@
       "ci_run_path": "evidence/round25/38134540554/screen-nt/gate/ci-run.json",
       "ci_run_sha256": "135a578f19075006cb3213af86ae6c1fac4697d2323913001898902601415a79",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 3.397999,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 2.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.397999
     },
     {
       "run_id": "38134827293",
@@ -3624,7 +3734,10 @@
       "ci_run_path": "evidence/round25/38134827293/confirm-components-a/gate/ci-run.json",
       "ci_run_sha256": "d03a0dd9586e176e2d356383fd22af4b7561e1c5598dbe632ec8f8945a0104df",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.998477,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.998477
     },
     {
       "run_id": "38134842459",
@@ -3749,7 +3862,10 @@
       "ci_run_path": "evidence/round25/38134842459/confirm-components-b/gate/ci-run.json",
       "ci_run_sha256": "b6344001b67fb9dc1a597549a0a90493ffdc171539df98b01378e391565ca8b8",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 3.269062,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 6.269062
     },
     {
       "run_id": "38135725985",
@@ -3869,7 +3985,10 @@
       "ci_run_path": "evidence/round25/38135725985/screen-nt2/gate/ci-run.json",
       "ci_run_sha256": "07de92fb3a60283750ba36771c1be53a86e003be0aaf802084fa7614da0e6b76",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.87252,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.87252
     },
     {
       "run_id": "38135739022",
@@ -3989,7 +4108,10 @@
       "ci_run_path": "evidence/round25/38135739022/confirm-components-a2/gate/ci-run.json",
       "ci_run_sha256": "d4e383795e181bddeae63c88b6cdea873c511a8c97baeb7f8500908b7bfce573",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 3.086121,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 6.086121
     },
     {
       "run_id": "38135751559",
@@ -4109,7 +4231,10 @@
       "ci_run_path": "evidence/round25/38135751559/confirm-components-b2/gate/ci-run.json",
       "ci_run_sha256": "64f354a95edf01400c14d508a088739ea7ae84c0f8d115983350f527a08861a8",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.438321,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.438321
     },
     {
       "run_id": "38136091624",
@@ -4229,7 +4354,10 @@
       "ci_run_path": "evidence/round25/38136091624/heldout-o-native/diagnostics/ci-run.json",
       "ci_run_sha256": "9d526442b2f8acbf4bbebd0ba580d2b744e01846108e33e4d777cdb4af04dde3",
       "ci_run_bytes": 8179,
-      "custom_failure_evidence": []
+      "custom_failure_evidence": [],
+      "dispatch_to_ci_createdAt_seconds": 2.682995,
+      "ci_createdAt_to_first_actual_job_startedAt_seconds": 3.0,
+      "dispatch_to_first_actual_job_startedAt_seconds": 5.682995
     }
   ]
 }

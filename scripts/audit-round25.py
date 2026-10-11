@@ -4,7 +4,10 @@ from datetime import datetime, timezone
 from collections import Counter
 import argparse
 import hashlib
+import io
 import json
+import subprocess
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / 'evidence/round25'
@@ -17,6 +20,7 @@ def digest(path):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--output', type=Path, required=True)
+    ap.add_argument('--git-ref', help='Also verify every audited file against this committed tree')
     args = ap.parse_args()
     assert not args.output.exists(), 'Preserve earlier audit observations'
     checked = {}
@@ -37,6 +41,9 @@ def main():
             verify(p.parent, name, expected)
         manifests.append({'path': p.relative_to(ROOT).as_posix(),
                           'sha256': digest(p), 'entries': len(inv['files'])})
+        for name in ('raw-artifact-files.json', 'ci-run.json', 'ci.log', 'artifact-receipt.json'):
+            if (p.parent / name).is_file():
+                verify(p.parent, name, {})
     failed = BASE / '38131861001/counts-k-native/failed-setup/receipt.json'
     for name, expected in json.loads(failed.read_bytes())['files'].items():
         verify(failed.parent, name, expected)
@@ -46,19 +53,41 @@ def main():
         entries = receipt.get('raw_response_files', receipt.get('files', []))
         if isinstance(entries, dict):
             entries = [dict(value, file=key) for key, value in entries.items()]
+        if not entries and 'sha256' in receipt and 'bytes' in receipt:
+            response_files = list(p.parent.glob('*.response.json'))
+            assert len(response_files) == 1
+            entries = [dict(receipt, file=response_files[0].name)]
         n = 0
         for entry in entries:
             if 'file' not in entry or 'sha256' not in entry:
                 continue
             verify(p.parent, entry['file'], entry)
             n += 1
+        for name, entry in receipt.get('derived_files', {}).items():
+            verify(p.parent, name, entry)
+        verify(p.parent, p.name, {})
         capture_receipts.append({'path': p.relative_to(ROOT).as_posix(),
                                  'sha256': digest(p), 'checked_files': n})
+    for p in sorted((BASE / 'luna').glob('source-*/receipt.json')):
+        records = json.loads(p.read_bytes())
+        for record in records:
+            if 'sha256' not in record:
+                continue
+            verify(p.parent, record['id'] + '.response.json', record)
+            if record.get('http_status') == 200:
+                reference = ROOT / ('references/round25-public-' + record['id'])
+                for name, expected in record['files'].items():
+                    verify(reference, name, expected)
+                verify(reference, 'source-receipt.json', {})
+        verify(p.parent, p.name, {})
     sources = []
     for p in sorted((ROOT / 'candidates').glob('r25-*/manifest.json')):
         manifest = json.loads(p.read_bytes())
         for name, expected in manifest['hashes'].items():
             verify(p.parent, name, {'sha256': expected})
+        verify(p.parent, p.name, {})
+        if (p.parent / 'VERIFICATION.json').exists():
+            verify(p.parent, 'VERIFICATION.json', {})
         sources.append({'path': p.parent.relative_to(ROOT).as_posix(),
                         'files': manifest['hashes'],
                         'proof_status': manifest.get('proof_status', 'UNKNOWN')})
@@ -83,7 +112,42 @@ def main():
                      'dispatch_sha256': digest(p),
                      'ci_metadata': cp.relative_to(ROOT).as_posix(),
                      'ci_metadata_sha256': digest(cp)})
+        verify(p.parent, p.name, {})
+        verify(cp.parent, cp.name, {})
     assert len(runs) == len(ci_by_id)
+    package_file = BASE / 'review-packages/packages.json'
+    packages = json.loads(package_file.read_bytes())
+    for package in packages['packages']:
+        archive = ROOT / package['archive']
+        verify(archive.parent, archive.name,
+               {'sha256': package['archive_sha256'], 'bytes': package['archive_bytes']})
+        with zipfile.ZipFile(archive) as z:
+            assert z.namelist() == ['parse.rs', 'Parse.lean'] and z.testzip() is None
+            for name, expected in package['files'].items():
+                assert hashlib.sha256(z.read(name)).hexdigest() == expected
+                assert z.read(name) == (ROOT / package['source_path'] / name).read_bytes()
+    verify(package_file.parent, package_file.name, {})
+    committed = None
+    if args.git_ref:
+        revision = subprocess.check_output(['git', 'rev-parse', args.git_ref], cwd=ROOT, text=True).strip()
+        names = sorted(checked)
+        for start in range(0, len(names), 32):
+            chunk = names[start:start + 32]
+            request = ''.join(revision + ':' + n + '\n' for n in chunk).encode()
+            content = subprocess.check_output(['git', 'cat-file', '--batch'], input=request, cwd=ROOT)
+            stream = io.BytesIO(content)
+            for name in chunk:
+                header = stream.readline().decode().strip()
+                assert not header.endswith(' missing'), ('Uncommitted audit input', name)
+                _, kind, size = header.split()
+                assert kind == 'blob'
+                blob = stream.read(int(size))
+                assert stream.read(1) == b'\n'
+                assert len(blob) == checked[name]['bytes'], name
+                assert hashlib.sha256(blob).hexdigest() == checked[name]['sha256'], name
+            assert stream.read() == b''
+        committed = {'status': 'VERIFIED_EXACT_COMMITTED_BYTES',
+                     'git_sha': revision, 'file_count': len(names)}
     out = {'status': 'VERIFIED_RETAINED_RAW_HASHES_SOURCES_AND_CI_COVERAGE',
            'checked_utc': datetime.now(timezone.utc).isoformat(),
            'raw_artifact_manifests': manifests,
@@ -92,6 +156,7 @@ def main():
            'checked_total_bytes': sum(x['bytes'] for x in checked.values()),
            'checked_files': checked, 'source_pairs': sources,
            'distinct_rust_count': len({s['files']['parse.rs'] for s in sources}),
+           'source_only_packages': len(packages['packages']), 'committed_bytes': committed,
            'run_count': len(runs), 'ci_conclusions': dict(Counter(r['conclusion'] for r in runs)),
            'runs': runs,
            'limits': ['Hash agreement proves retained bytes and provenance, not private acceptance or reward.',

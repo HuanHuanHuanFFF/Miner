@@ -1,69 +1,89 @@
 # 第二十五轮：五小时快速端低成本压缩研究
 
-北京时间 **2026-10-11 16:06:21–21:06:21**，目标稳定冲击竞赛奖励池份额榜首。状态：研究进行中。执行规则见 [AGENTS.md](../../AGENTS.md)，预算与接手状态见 [budget](../../evidence/round25/budget.json)、[研究状态](../../evidence/round25/research-state.md)、[GitHub 接手回执](../../evidence/round25/github-start.json)。
+北京时间 **2026-10-11 16:06:21–2026-10-11 21:06:21**。状态：**确认已收齐，交付核验中；稳定榜首目标未完成**。本轮实现12种不同Rust，完成34个手动作业（30成功、4失败）、180个原协议配对进程；两份精确Rust／Lean通过完整原版gate，并各完成2个新runner、4个主确认块。按快照 **29697** 重算，这两份的独立确认份额最低／中位／最高均为 **0%**，联合加入也均为0。未取得稳定正份额，更未取得榜首。
 
-起点 main `48baf622466792f4d505c5c06d5696f784e27b7a` 与 origin/main 一致，工作区干净、只有一个 worktree；远端公开、最近查询的作业均结束。使用同一 checkout 的实验分支 `codex/round25-fast-quality`。
+本轮保留的是两个已验证正确性的质量组件，不是建议立即提交的收益候选。全部份额为公共测量迁移到正式坐标后的条件估算；正式admission、私有结果和可支付收益为 **UNKNOWN**。没有正式上传、注册、签名或资金操作。
 
-先比较低成本质量机制与既有快速端负例，再做少量受控实现。新候选的公共条件估算、完整验收与正式可支付成绩分别记录；本轮不包含正式上传。
+执行规则见 [AGENTS.md](../../AGENTS.md)。[固定预算](../../evidence/round25/budget.json)、[逐块汇总](../../evidence/round25/outcome-29697.json)、[原始证据审计](../../evidence/round25/git-byte-audit-checkpoint.json)、[阶段决策](../../evidence/round25/feedback-nt-confirmation-decision.json)保留完整边界。
 
-## 前两圈：实际压缩与取舍
+## 最新官方依据与目标缺口
 
-本轮首次捕获官方快照29673，计算北京时间15:48:20、freshness为unknown；[原始响应](../../evidence/round25/official-feedback-a/receipt.json)与[评分源码](../../evidence/round25/official-rules-start/receipt.json)分列。该快照612为可支付榜首20.524717%，新626已进入快速前沿。纯scorer重放官方权重最大差异2.78e-17；[目标区域](../../evidence/round25/target-map-start.json)只是合成坐标网格，并非候选成绩。
+[完整官方捕获](../../evidence/round25/official-confirmation/receipt.json)：快照29697，官方计算UTC `2026-10-11T11:45:35.330581+00:00`；查询UTC `2026-10-11T11:49:20.845156+00:00` 至 `2026-10-11T11:49:36.544007+00:00`。官方freshness为`unknown`，不能冒称实时私有验证器状态已知。政策为`compression-policy-c255effb7d5afeef`，pool内Pareto权重1、improvement权重0；竞赛占验证者总权重的20%不是本报告份额的分母。
 
-两圈共五份不同Rust经过原encoder的28文件decode/真实字节检查；[首批逐文件结果](../../evidence/round25/feedback-a-native.json)、[第二批](../../evidence/round25/feedback-b-native.json)。相对精确combo父版：end4少7397B、均衡压缩率少0.0328587pp；backtie少1964B/0.00742976pp；gap1少1007B/0.00583408pp并保留文件级损失。替换尾key的tail4多6533B，暂停；tiny-tail只少8B，先留作微组件。[后两者取舍](../../evidence/round25/feedback-b-decision.json)。这些是质量筛选，时间、份额和完整正确性另行验收。
+当前捕获可支付榜首为 **#612，16.382040%**。它的正式坐标是时间比 `0.4304598592`、平均压缩比例 `36.5273012167%`。本轮先后捕获626、627与628的竞争变化，旧快照值独立保留，不沿用旧高份额。原scorer与该快照权重的重放误差见机器分析；源码捕获与部署身份是两个问题。
 
-end4/backtie实际重新提取均成功，[原始模型与日志](../../evidence/round25/38124536539/proof-a-extract/diagnostics/research5/research.json)支持证明接口迁移；提取本身不证明完整Lean。后续end4通过原版完整gate，首批计时已结束，结果见下。
+[独立代数复算](../../evidence/round25/score-algebra-29697.json)从前沿扫描、局部／全局系数、增量对数轴预算和统一归一化重新计算，不调用原scorer实现。128个单独观测视图及56组对齐联合案例与原重放一致；这些视图包含校准和控制，不能当独立样本数。
 
-把R23旧快速组合的原始确认重放到29673，四个主块仍2次零、影子3次零，详见[历史数据当前快照重放](../../evidence/round25/historical-fast-rank-29673.json)。这是旧测量重算，不能增加本轮独立样本数，亦不能解释为成功概率。
+逆向网格用于判断投入空间：[晚期几何及坐标纠正](../../evidence/round25/luna/late-target-note.md)。在其明示的29690快照中，平均压缩比例36.5%的取样榜首速度区间只有0.42860–0.43045；降到35.5%时取样区间才扩展到0.42860–0.43750。它既不是连续边界，也不是实现成绩。最终保留版投影大小约36.519%和36.452%，且新确认速度仍落在这些区域之外。不能把原始public坐标直接与正式前沿比较，也不能把极窄窗口当稳定收益。
 
+## 12种实现的真实结果
 
-## 截至北京时间18:02的阶段结果
+质量统一相对combo `r22-595-chain-halfhead`（公共输出5,332,621B、平均压缩比例36.159909265%）。时间列相对各批**实际父版本**：wordtail／N对end4，H对dual8，M对I，其余对combo。份额列只统计声明主候选、595主校准；发现与确认合并展示范围，但两类的逐块统计分列于机器汇总。副本与校准视图不增加样本。
 
-下列时间变化来自单runner两块原协议的逐文件总压缩时间；这是发现样本，未增加冻结后的跨runner确认。份额是列明官方快照上的公共条件估算，正式成绩仍UNKNOWN。
+| 实现 | 相对combo字节／均衡质量差 | 原协议总时间相对实际父版 | 主份额最低／中位／最高 | 主块零值 | 完整验收 |
+|---|---:|---:|---:|---:|---|
+| [四／八字节双头](../../candidates/r25-astra-dual8) | -14,674 B / -0.050599 pp | +3.019%～+3.264% | 0.000000 / 0.000000 / 0.000000% | 2/2 | 未完整验收 |
+| [双头只留主插入 H](../../candidates/r25-astra-dual8-mainonly) | +2,556 B / +0.009779 pp | -1.456%～-1.276% | 0.000000 / 0.000000 / 0.000000% | 2/2 | 未完整验收 |
+| [末端完整四字节索引](../../candidates/r25-astra-end4) | -7,397 B / -0.032859 pp | +0.720%～+1.294% | 0.000000 / 0.000000 / 0.000000% | 6/6 | 完整 gate 通过 |
+| [补一处未覆盖位置](../../candidates/r25-astra-gap1) | -1,007 B / -0.005834 pp | +0.124%～+0.479% | 0.000000 / 0.000000 / 0.000000% | 2/2 | 未完整验收 |
+| [稀疏发射 M](../../candidates/r25-astra-tiny-pc-sparse-proof1) | -46 B / -0.013690 pp | -1.381%～-1.226% | 0.000000 / 0.000000 / 0.000000% | 2/2 | 未完整验收 |
+| [短文件 PC I](../../candidates/r25-astra-tiny-pc8-proof1) | -332 B / -0.098810 pp | +1.574%～+2.845% | 0.000000 / 0.000000 / 0.075367% | 5/6 | 完整 gate 通过 |
+| [短文件余数修补](../../candidates/r25-astra-tiny-tail) | -8 B / -0.002381 pp | UNKNOWN（未计时） | UNKNOWN（未计时） | UNKNOWN（未计时） | 未完整验收 |
+| [等记录次数交换 N](../../candidates/r25-root-end4-budget) | +1,271 B / +0.002755 pp | +0.363%～+0.531% | 0.000000 / 0.000000 / 0.000000% | 2/2 | 未完整验收 |
+| [尾键替换 T](../../candidates/r25-root-tail4) | +6,533 B / +0.029023 pp | +0.509%～+1.343% | 0.000000 / 0.000000 / 0.000000% | 2/2 | 未完整验收 |
+| [反向合并同长择距](../../candidates/r25-sol-backtie) | -1,964 B / -0.007430 pp | +0.202%～+0.344% | 0.000000 / 0.000000 / 0.000000% | 2/2 | 未完整验收 |
+| [重复前缀有条件多看一跳 J](../../candidates/r25-sol-duplicate-hop) | -3,497 B / -0.016728 pp | +0.617%～+0.815% | 0.000000 / 0.000000 / 0.000000% | 2/2 | 未完整验收 |
+| [同字节 wordtail](../../candidates/r25-sol-end4-wordtail) | -7,397 B / -0.032859 pp | -0.060%～+0.495% | 0.000000 / 0.000000 / 0.000000% | 2/2 | 未完整验收 |
 
-| 候选 | 对实际父版公共质量变化 | 原协议时间变化 | 阶段决定 |
-|---|---:|---:|---|
-| end4 | 对combo少7397B / -0.032859pp | +0.720%～+0.924% | 29673两主块及595影子均0；保留通过完整gate的质量组件 |
-| backtie | 对combo少1964B / -0.007430pp | +0.202%～+0.344% | 同次估算全0，暂停单项完整gate |
-| gap1 | 对combo少1007B / -0.005834pp | +0.124%～+0.479% | 同次估算全0，保留逐文件损失，暂停单项完整gate |
-| tail4 | 对combo多6533B / +0.029023pp | 未测 | 暂停该固定替换；没有份额测量，不能记0 |
-| tiny-tail | 对combo少8B / -0.002381pp | 未测 | 保留小组件，未投入单项完整证明 |
-| dual8 | 对combo少14674B / -0.050599pp | +3.019%～+3.264% | 29676主/候选副本/595影子/578参照均0；先诊断维护成本 |
-| end4-wordtail | 与end4逐token及编码字节全同 | 对end4 -0.060%～+0.495% | 29677全0，未确认速度收益；444有限等价不替代完整gate |
-| dual8-mainonly | 对dual8多17230B；对combo多2556B | 测量进行中 | 不因体积退步直接淘汰；测减少维护的真实代价端点 |
-| tiny-pc8 | 对combo少332B / -0.098810pp | 测量进行中 | 只tiny-config改变；实际提取与证明准备并行 |
-| duplicate-hop | 对combo少3497B / -0.016728pp | 测量进行中 | 单次有条件额外链跳；先总时间再决定证明 |
+所有主块的严格榜首次数、达到10%／15%次数均为0。I在发现期的微小正值未在4个新确认主块中复现；后续同源码控制的正值、零值及与影子校准的分歧仍保留在[全部观测](../../evidence/round25/outcome-29697.json)，没有因为角色不同而删除。未计时的tiny-tail不赋零分；M的新证明草稿虽已对照实际提取接口迁移，仍未运行完整gate。
 
-[首批评分](../../evidence/round25/rank-a-29673.json)、[dual8评分](../../evidence/round25/rank-c-29676.json)、[wordtail评分](../../evidence/round25/rank-d-current.json)保留主测与同源码对照。旧快照下结果不可直接称为交付时当前成绩。
+H比dual8快，但仍比combo慢1.120%–1.155%；M比I快，却仍比combo慢0.467%–0.723%；N保持记录次数但比combo慢0.943%–1.031%。这些结果不能用“比自己的较慢父版本快”宣传成总体收益。T的同源码副本曾比combo快0.169%，另一块又慢0.080%；原主测更慢，所有校准下都没有份额，保留为测量分歧而不挑选副本。
 
-end4的精确Rust `03ec0aa4e617d622755e85324a9d4fbc77ef74e6572485b3170e2790681ed8e6`、Lean `4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6`通过原始obligation、原900秒Lean上限、公理白名单及完整round trip；[绑定证明](../../candidates/r25-astra-end4/VERIFICATION.json)与[原始gate回执](../../evidence/round25/38125243582/gate-end4/exact-gate/exact-gate/gate-receipt.json)独立于性能结论。
+### 旧快速父版仍需保留，但峰值不代表稳定
 
-### 用诊断选择下一次实验
+旧父版`r22-595-chain-halfhead`在本轮9个runner的18个块中作为对照测量。[按同一当前快照的补充重放](../../evidence/round25/parent-summary-29697.json)给出：595主校准最低0.000000%、中位0.000000%、最高26.259469%，零值13/18，严格第一5/18；影子校准最高21.300311%，中位0.000000%，零值14/18，严格第一2/18。它保留了高潜力线索，但没有稳定性证据。这18块是既有对照记录的重算，不是额外新增的独立确认作业。
 
-E的临时观测副本与冻结dual8在28文件token/decode一致，数到4130586次8字节哈希/写入，其中2538080次来自匹配内记录。F继续区分来源，全部82个旧计数逐文件复核一致：记录来源贡献53017次成功提示，不能视为可免费删掉的冗余。删除记录更新的H真实多17230B，说明来源计数不能直接换算保留压缩收益。[E原始计数](../../evidence/round25/38127500920/counts-e-native/diagnostics/r25-dual8-counts/counts.json)、[F原始计数](../../evidence/round25/38128787484/origins-f-native/diagnostics/r25-dual8-origins/counts.json)、[H实际质量](../../evidence/round25/feedback-h-native.json)。
+例如HI运行38130275592的块1，同一父版测量只换595同源码参照，预测从26.259469%变为0.046113%。[独立公式及邻居项](../../evidence/round25/parent-algebra-29697.json)保留前沿切换与归一化；原候选测量没有改变。旧R23四块冻结确认也按新快照重放并单列，未计入本轮180配对进程；保留该父版作为替代起点，不选峰值代替本轮目标。
 
-G在原combo上观察到61444次短主匹配/重复8字节前缀；最多8步的只读机会探测能找到部分不同来源，但长主匹配的同前缀节点本身也贡献有效改进。因此J只给短匹配重复来源多看一次prev，不改插入，不把只读8步探测直接部署成搜索深度。[G原始计数](../../evidence/round25/38129145575/prefix-g-native/diagnostics/r25-prefix-diversity-counts/counts.json)、[J预声明](../../evidence/round25/sol/duplicate-hop-predeclared.json)、[J实际质量](../../evidence/round25/feedback-j-native.json)。
+另有4个runner具备同块578相关父族参照：[额外校准视图](../../evidence/round25/parent-anchors-29697.json)共8块，最低0.000000%、中位0.000000%、最高18.462128%，零值7/8。它复用既有候选测量，不新增样本；不按哪个参照报酬高来选校准。
 
-I来自历史同输入原编码器证据：public584在tiny-config上比当前ETINY少332B。新候选只替换已有短文件路由中的引擎，保留原路由与其他路径，以父版已验证的正常emitter和独立PC插入函数实现。实际28文件只有tiny-config从2487B降到2155B；这是固定公共语料按文件平均的收益，不是私有集保证，也不从旧584时间猜测新候选耗时。[预声明](../../evidence/round25/cycle-i-tiny-plan.json)、[I原始质量](../../evidence/round25/feedback-i-native.json)、[HI计时计划](../../evidence/round25/cycle-hi-screen-plan.json)。
+## 冻结后独立确认与联合估算
 
+精确pair于UTC `2026-10-11T11:12:41.401932+00:00`冻结；原三次作业因缺失已提交快照依赖，在计时前失败，修复后使用相同源码和协议重跑。成功作业为[38135739022](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/38135739022)和[38135751559](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/38135751559)，每个runner各2主块，原版每文件1预热／11测量，逐文件总时间与配对incumbent全部保留。
 
-## HI/J反馈与下一缺口
+| 独立运行 | 环境 | end4相对combo总时间，块1／2 | tinyPC相对combo总时间，块1／2 | 各自单独／两者联合份额 |
+|---|---|---:|---:|---|
+| 38135739022 | AMD EPYC 7763；governor未报告 | +1.240% / +0.995% | +2.075% / +2.214% | 每块两者均0%／0% |
+| 38135751559 | Intel Xeon 6973P-C；performance | +1.143% / +1.294% | +1.638% / +2.845% | 每块两者均0%／0% |
 
-北京时间18:14–18:15重新抓取[官方快照29680](../../evidence/round25/official-score-hi/receipt.json)，官方计算18:12:14、freshness unknown。[38个新增原协议进程](../../evidence/round25/analysis-hij-29680.json)与[按主候选统计的份额](../../evidence/round25/rank-hij-29680.json)已经逐raw重算。
+两个候选各4主块：最低0%、中位0%、最高0%、零值4次、严格第一0次。595影子校准、578相关父族校准以及候选同源码副本也均为0。联合估算按同一runner／块／校准重新加入前沿及归一化，未直接相加独立估算。[独立pair审计](../../evidence/round25/astra/final-pair-audit.md)核对了44份JSONL，Rust／Lean、source hash、记录的binary hash和全部token／output身份一致。
 
-H mainonly相对真实dual8父版快1.276%–1.456%，但相对combo仍慢1.120%–1.155%，且比combo多2556B，两块主/影子估算0；删除全部维护没有取得目标位置。J的12个目标文件全部变小，另外16个输出相同，但总时间增加0.617%–0.815%，主/影子估算均0，暂停该精确实现的完整证明。
+同源码与环境分歧仍存在。确认阶段595对照间相对时间差为-0.319%～+0.362%；end4副本为-0.500%～+0.028%，tinyPC副本为-0.821%～+0.426%。这些是观测范围，不是误差保证。请求cpus=0与host affinity=[0,1,2,3]均保留；sandbox子进程实际mask未独立验出。不同runner不混成一个独立样本，样本零值次数不解释为未来归零概率。
 
-I tinyPC主两块总时间增加1.574% / 1.682%，最新主参照份额0.071394% / 0%；595影子0.111155% / 0%。候选副本和真实时间全部保留，不能将四个别名观察当四块确认。实际总时间中位数逐rep分解发现：唯一改变的tiny-config，其解析增加仅贡献约0.178–0.193个百分点，而编码增加贡献约1.499–1.654个百分点；27个同输出文件不是主要来源。该分解是原始坐标变化的描述性恒等式，不是改造后的提速承诺或新官方成绩。
+## 两个保留包的正确性与身份
 
-因此下一圈针对原encoder对token形状的成本，而非继续扩大匹配搜索。Astra检查tiny长度/距离符号及块树工作；Sol在R13已知反例约束下，对当前PC最终三字节匹配做未计时代码价格覆盖诊断，先判定是否有可实现的便宜规则。I完整gate已在发现结果前启动，仍按既定规则完成；质量组件与性能失败分别保留。详见[HIJ决定](../../evidence/round25/feedback-hij-decision.json)、[I原始分解](../../evidence/round25/cost-i-screen.json)、[H分解](../../evidence/round25/cost-h-screen-vs-combo.json)、[J分解](../../evidence/round25/cost-j-screen.json)。
+- **r25-astra-end4**：Rust SHA-256 `03ec0aa4e617d622755e85324a9d4fbc77ef74e6572485b3170e2790681ed8e6`；Lean SHA-256 `4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6`。原gate `38125243582`，验证556.1秒。[两文件ZIP](../../evidence/round25/review-packages/r25-astra-end4-03ec0aa4e617.zip)，ZIP SHA-256 `f54604453e52d9b1cbfc090af044a14fbd00bb9bd2abf68ad4b898c0a8979903`。
+- **r25-astra-tiny-pc8-proof1**：Rust SHA-256 `5c20b99cf52ac8e2f047b4e2e83be974b1f9b1f21b23d54ccccb25c58b891f00`；Lean SHA-256 `3bd53694534c0114453a95c2f120d743fde3af233de88c00e1d5c30fe05ccdb8`。原gate `38130996700`，验证540.2秒。[两文件ZIP](../../evidence/round25/review-packages/r25-astra-tiny-pc8-proof1-5c20b99cf52a.zip)，ZIP SHA-256 `3a07b474f01f1cfbacec0b185a2390e711ea54e057b58f48ed9013494a2165ae`。
 
+两份均使用官方重新提取、原LZ77 obligation、原900秒Lean限制、三允许公理与公共round trip。原pins／encoder／contract未修改；临时观察副本与正式计时分开。gate本身没有性能确认块，其smoke时间不计入正式两轴成绩。二进制实物和gate score逐文件JSONL未归档；后续确认已保留完整逐文件测量。私有stage2未运行，不能由完整公共gate推断正式通过。
 
-## 编码工作量诊断与固定发射隔离
+## 实验如何改变路线
 
-I的精确证明版通过[原版完整gate](../../candidates/r25-astra-tiny-pc8-proof1/VERIFICATION.json)，Rust `5c20b99c…b891f00`、Lean `3bd53694…5ccdb8`，gate540.2秒、原Lean900秒上限，三标准公理及公共roundtrip通过。正确性验收不消除既有总时间成本。
+1. **额外索引有质量收益，但成本必须实测。** end4保留7397B；双头dual8省14674B，却慢约3%。E/F将额外哈希／写入分成主插入与匹配内记录；后者贡献53017次有效提示，删除后真实多17230B，不能把大量记录都视为冗余。[诊断E](../../evidence/round25/38127500920/counts-e-native/diagnostics/r25-dual8-counts/counts.json)、[F](../../evidence/round25/38128787484/origins-f-native/diagnostics/r25-dual8-origins/counts.json)。
+2. **只读机会计数不能直接兑换字节或份额。** G暴露短匹配重复前缀机会，也发现长匹配依赖同前缀链；J只做一跳受控改变，12目标文件更小，却没有总耗时收益。停止这个实现，保留真实覆盖与负结果。[G](../../evidence/round25/38129145575/prefix-g-native/diagnostics/r25-prefix-diversity-counts/counts.json)、[J](../../evidence/round25/feedback-j-native.json)。
+3. **更少token也可能让原encoder更慢。** I的tiny-config从2487降到2155B，token从3094降到2276；两个流仍各一个dynamic block。长度活码从5增至27、距离活码7增至23，部分树复制和查表工作上升。新确认中，该文件编码额外时间对总评分轴的描述性贡献仍为+1.497～+1.949个百分点。解析、编码和独立配对分母分别核对，未用分解替换原成绩。[K原观察](../../evidence/round25/38132193695/counts-k2-native/diagnostics/r25-tiny-encoder/receipt.json)、[新确认A分解](../../evidence/round25/cost-confirm-a-vs-combo.json)、[B分解](../../evidence/round25/cost-confirm-b-vs-combo.json)。
+4. **固定稀疏发射确实降低代价，但损失了大部分质量。** M将编码成本大幅压回，最终只比combo省46B；对I的速度改善不等于可支付位置。离线改写I最终token得到3010个token，真实M为2954，说明发射会改变future fold轨迹；不能用终态重写替代真实parser。[M决定](../../evidence/round25/feedback-m-decision.json)、[反例](../../evidence/round25/sparse-offline-replay.json)。
+5. **真实调用路由与混合正负覆盖决定是否开实现。** L在84个原编码组合核验后发现，PC路径三字节匹配局部亏损仅627bit，所有距离码均有获益反例；bfraw／EF32亏损不归给PC，缺失literal码保留未知。不重开无证据的距离阈值扫。[L反馈](../../evidence/round25/sol/len3-price-feedback.json)。R13已有同族AoS双头表示的直接实验，因此停止重复实现；也撤回public584调用路由的早期静态误判。[历史起点审计](../../evidence/round25/sol/packed-head-preaudit.md)。
+6. **保留公共语料外的反例。** O用预先固定生成器、3结构族、两种有效路由长度和4种seed，另加3个不进入修改路径的控制。27输入、81次原编码与Rust/zlib解码均通过。tinyPC的12个active样本都更小，差额-1272～-828B、中位-1015B；end4为3小／4同体积／5大，-25～+103B、中位0。4个同体积中只有3个token／output完全相同。相同seed的长短样本共享前缀，不是24次独立抽样；本诊断没有时间或官方份额。[固定输入与独立审计](../../evidence/round25/sol/heldout-quality-feedback.md)。
 
-第一次K诊断在runner准备前预检阶段失败，因为本机只读sources副本不在GitHub checkout；[原始失败日志](../../evidence/round25/38131861001/counts-k-native/failed-setup/receipt.json)保留。修复将本地生成检查与准备后的原字节强验收分开，有/无阅读副本的预检均复核；K2并未放宽实际codec/token SHA、原始token/输出身份或decode。[K2原始观察](../../evidence/round25/38132193695/counts-k2-native/diagnostics/r25-tiny-encoder/receipt.json)确认两个stream都为一个dynamic block；live literal都78，但长度符号5→27、距离符号7→23。LL树逻辑vector clone3426→4328，距离265→923，CL反而251→215，查表比较1891→7114。因此“更多token或更多block导致变慢”不是此例解释，而更宽的符号集合确实增加了部分树/查表工作；这些仍不是毫秒因果份额。
+## 失败、资源与交付边界
 
-M只在原I局部run中初始化父ETINY已有mask302256384的lens表，并将一处发射接到`q4_e_pieces`；保持匹配、lazy、fold、记录、H和路由。它用原五种长度码分段，并将余数写literal，返回完整match终点。短匹配收益和实际future fold轨迹可能改变，distance字母表也未被直接约束；不预先保证质量或速度。先做完整28文件原编码器/解码，参照I与combo。[预声明与停止条件](../../evidence/round25/astra/tiny-sparse-design.md)、[冻结源范围](../../evidence/round25/astra/tiny-sparse-preflight.json)。
+四个CI失败全部保留：K首轮依赖本机未跟踪的sources阅读副本；另外三轮漏提交评分快照，在540有限decode后、原计时前失败。修复分别加严准备后身份核验和派发前Git树内依赖字节核验；旧失败不覆盖，不计性能样本。[回归复现](../../evidence/round25/snapshot-dependency-repair-check.json)。报告阶段也更正了原始public坐标／正式投影坐标混用，以及旧CI检查点派生UTC端点误减8小时；原始回执均未改写。
 
-L诊断对combo/public578/public584共84个真实输入/source组合核对观察插桩与冻结parser逐token一致、追加观察函数与原encoder字节一致、历史SHA及独立zlib解码。[原始码价回执](../../evidence/round25/38132209168/price-l-native/diagnostics/r25-len3-price/counts.json)只描述原块价格，缺失literal码保留UNKNOWN，局部bit差不能直接当重编码收益。对当前PC路径，亏损匹配覆盖比全parser汇总更小，不能把bfraw/EF32的亏损错误归给PC，也不能把一个距离域里的正负样本混成单一有利阈值。该诊断不产生新候选。
+[实际CI消耗](../../evidence/round25/luna/ci-cost-final.md)：201.25 runner分钟，排队累计1.90分钟；计入setup／checkout，剔除所有skipped job，失败作业计入消耗。它们是并发作业之和，不等于5小时研究墙钟或现金账单。账户共享用量单独记录；未重置、未购买，任务独占token／金额成本UNKNOWN。
+
+用户授权最多4子线程，工具实际支持root加3子线程，因此使用Astra/xhigh、Sol/xhigh、Luna/max三个角色并行，根线程负责CI、Git和最终复核；无嵌套、无额外worktree。起点main／origin/main均为`48baf622466792f4d505c5c06d5696f784e27b7a`；成果留在`codex/round25-fast-quality`，不自动合并或清分支。普通提交跳过CI。
+
+**VERIFIED**：公共真实字节、原协议逐文件计时、两个精确完整gate、跨runner独立确认与原回执哈希。**INFERRED**：快照29697下的单独／联合份额以及机制投入判断。**UNKNOWN**：未测实现的速度、私有迁移、正式准入／奖励、任务独占现金成本。
+
+下一轮优先判别如何在匹配接受阶段保留短文件质量、减少新增长度／距离符号集合的编码成本；其次考察带真实收益归因的稀疏索引记录。先测最小质量／成本端点，避免继续扫掩码、盲加搜索或重跑已失败的相同实现。具体判别实验和停止条件见[后续路线评估](../../evidence/round25/sol/next-route-assessment.md)。本轮经验已汇入[优化方法与实验结论](../research/optimization-methods.md)；历史正式提交及累计α另见根目录[看板](../../DASHBOARD.md)。
