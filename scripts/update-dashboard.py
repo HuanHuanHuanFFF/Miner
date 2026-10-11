@@ -1,6 +1,7 @@
 """Refresh the root submission dashboard from read-only official API snapshots."""
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -24,7 +25,7 @@ def number(value, suffix=''):
     return 'UNKNOWN' if value is None else f'{value:.6f}{suffix}'
 
 
-def refresh():
+def refresh(snapshot_id=None):
     registry_path = ROOT / 'docs/submissions.json'
     registry = json.loads(registry_path.read_bytes())
     entries = registry['submissions']
@@ -52,10 +53,14 @@ def refresh():
     rows = []
     try:
         with requests.Session() as session:
-            latest = get(session, 'latest', f'{BASE}/submissions/{ids[-1]}')
+            latest_url = f'{BASE}/submissions/{ids[-1]}'
+            if snapshot_id is not None:
+                latest_url += f'?snapshot_id={snapshot_id}'
+            latest = get(session, 'latest', latest_url)
             context = latest['context']
             snapshot = context['snapshot_id']
             assert snapshot and context['status'] == 'ready'
+            assert snapshot_id is None or str(snapshot) == snapshot_id, 'Requested snapshot must be preserved'
             for entry in entries:
                 sid = entry['submission_id']
                 body = get(session, sid, f'{BASE}/submissions/{sid}?snapshot_id={snapshot}', True)
@@ -127,4 +132,9 @@ def refresh():
 
 
 if __name__ == '__main__':
-    refresh()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--snapshot-id', help='Use this official snapshot for every row; default queries the latest snapshot.')
+    args = parser.parse_args()
+    if args.snapshot_id is not None and not args.snapshot_id.isdecimal():
+        parser.error('--snapshot-id must contain only decimal digits')
+    refresh(args.snapshot_id)

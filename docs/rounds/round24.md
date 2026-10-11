@@ -158,3 +158,15 @@ UTC02:40，固定窗口仍剩2h48m。最新[官方快照29643](../../evidence/ro
 [逆向目标位置分析](../../evidence/round24/target-gaps-29643.json)在固定当前质量、保留每块实际参照位置的条件模型中，显示质量版本距离10%／15%还分别需要约25.9%／35.4%的时间轴下降。该网格是投入判断，不是新测量、噪声压力、连续精确边界或正式成功概率。它解释了为何目前几个百分点的微优化仍不足以完成目标。
 
 布局诊断已完成，子进程随机化开关确实生效且全局设置未改；一类同源码差异变小，另一类变大，不支持统一修复。按原pin Git对象核对，Windows阅读副本与runner的incumbent源码只差CRLF/LF；原始字节和各自哈希保留。[完整诊断分析](../../evidence/round24/layout-av-analysis.json)。UTC02:39账户剩83%，[账户读数](../../evidence/round24/usage-0713m.json)，0重置／购买。最终120分钟余量保持，准备冻结后的新确认与收尾审计。
+
+## 冻结与最终确认计划
+
+最后的链前缀实现虽通过逐查询一致性与公共编码检查，BE原版总时间仍比once慢3.282%／2.133%，三个参照视图均0；停止该精确版本，不追加完整gate或组合。[实际结果](../../evidence/round24/analysis-be.json)、[辅助参照](../../evidence/round24/anchors-be.json)、[停止决定](../../evidence/round24/feedback-be.json)。额外构建、解码、分支或代码布局影响尚未逐项隔离，不把一种猜测写成已确认根因。
+
+北京时间10:53:23冻结最终两份：A `r24-609-root-word-price-proof1`对应10%目标，B `r24-609-fast-adaptive-proof1`对应15%目标，二者精确完整gate均已通过，当前目标仍未完成。[选择及同场单独／联合对照](../../evidence/round24/final-selection-decision.json)、[完整冻结计划](../../evidence/round24/confirm-final-plan.json)。选择保留两个不同速度／质量位置；A的#607口径较弱并未被隐藏，其他质量备用在同场与B联合时被支配为0，也保留了全部单独估算。
+
+三份新确认已于北京时间10:58:56、10:59:05、10:59:18启动，各三块原版1次预热／11次测量，冻结Git SHA `d05e119ba5b9162cc0d9063bbc454a35bd701862`。各候选ownshadow、#609影子、#607及实际父参照全部保留；每份主候选最终计划9块，副本和参照视图不增加独立样本数。已核对三个不同的[GitHub runner/job身份](../../evidence/round24/confirmation-runners-start/receipt.json)，不据此声称物理host互不相关。此段写入时作业仍运行，尚未写入不存在的确认结果。
+
+[审阅包](../../evidence/round24/review-packages/packages.json)只含两份源码，并与冻结哈希和完整gate逐字核对。[源码差异审计](../../evidence/round24/review-packages/source-delta-audit.json)确认B仅在两个匹配函数及对应循环证明中加入受控短匹配搜索，实际输出有差异，不是重命名副本。包中没有钱包、签名、nonce或秘密材料，本轮没有正式竞赛上传。
+
+为保证收尾使用同一榜单，看板脚本新增可选`--snapshot-id`，无参数仍读取最新快照；帮助与非法参数不会触发刷新，已做[无副作用验证](../../evidence/round24/dashboard-cli-check.json)。最终真实刷新、原始字节总审计和独立确认结果仍待收齐。

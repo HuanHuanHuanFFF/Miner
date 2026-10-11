@@ -1,5 +1,47 @@
 # R24 续跑状态
 
+## UTC03:33 活跃摘要（最高优先，最终确认运行中）
+
+固定开始UTC19:28:08／BJT03:28:08，**截止UTC05:28:08／BJT13:28:08**；已用约8h05m，剩1h55m。目标稳定单独10%与15%仍未建立，正式/私有/支付UNKNOWN。不要提前结束本轮或重新计时。已经进入完整验收、冻结后确认和交付余量；不再扩展新算法方向。主工作树不动，当前已推送研究分支HEADd05e119ba5b9162cc0d9063bbc454a35bd701862。之后只有收尾脚本、包、元数据待提交，没有改冻结Rust/Lean。
+
+### 最终冻结的两份
+
+- A（10%目标）：**r24-609-root-word-price-proof1**，Rust257fdd0d54ff0c3007c57f154fc91d92179d71cc5e0d920871e3fa5c4d780c80，Lean2108c3e042247eae8e6e0433155b830c085de736d32d80209092ef990f6700ca；完整gate38099485452，1031.7s，原900sLean不变。
+- B（15%目标）：**r24-609-fast-adaptive-proof1**，Rustef3268f4b4183b50af7825e505266c7dc05b49e9bb1aebb1f642a5609fc6423e，Lean09f79e1d6b4d60bdcc692425a7baae6503f3995f8cc6f9937d7f23a347e9e20e；完整gate38104425023，1069.9s，原900sLean不变。
+- 冻结时间UTC02:53:23.872342，confirm-final-plan.json；选择依据final-selection-decision.json，来源映射final-selection.json（preflight_only，不可直接dispatch）。A保留速度/质量不同点，但607口径明显弱，不能称稳定高份额；B发现约3.2–3.8%，仍低于5。AT质量备用在BC同块三参照与B共同加入均被支配为0，已逐行核对，而不是仅因稍慢淘汰。
+- Source-delta-audit.json确认A/B全文件差异只在SFsmallmatches/SFmorematches两个Rust函数及对应两个Lean loop theorem：B增加已有匹配仍短于8时至多2x搜索，真实公共输出少69B，不是重命名副本。差异和包内字节已核对。
+
+### 活跃CI（只有三份最终确认）
+
+|run|batch|dispatch UTC|runner ID|cap|
+|---|---|---|---|---|
+|38106900587|confirm-final-1|02:58:56|1000001154|65m|
+|38106909000|confirm-final-2|02:59:05|1000001155|65m|
+|38106920250|confirm-final-3|02:59:18|1000001156|65m|
+
+均冻结GitSHA **d05e119ba5b9162cc0d9063bbc454a35bd701862**，3块/runner，12方法/块（36paired进程/run）。03:33状态仍原协议测量，暂无artifact，不取消，等成功/失败/既定超时。真实三不同GitHubrunner/job身份在confirmation-runners-start/receipt.json；不声称不同物理host。完成后跑capture-round24-confirm-runners.py --label final。
+
+**样本层级很重要**：最终主候选每个9块、3runner。A还有fast-stack父alias和ownshadow，所以主分析summary会含27同源码观测/每校准；B含18。报告主样本必须用independent_confirmation_summary或筛entry_role=candidate且role=independent_confirmation，不能把27/18叫独立块。所有alias低值/零/判断分歧仍要单列。联合始终选择declared candidate，不用父alias覆盖。
+
+### 已准备的收尾工具／包
+
+- `summarize-round24-final.py --analysis ... --anchors ... --capture ... --out evidence/round24/<fresh-dir>` 已语法检查，**尚未在真实最终结果上执行**。需要三份完整原始分析、anchors分析以及confirmation-runners-final/receipt.json。它导出主块、全同源码alias、联合、逐文件总时间CSV，按runner分层，补算所有alias的607视图，并核对两种联合重算一致。若有真实数据接口问题，修复此派生工具，绝不改原始回执或冻结文件。
+- 原分析命令：`analyze-round24.py <3个gate目录> --capture <fresh官方目录> --output <new.json>`；辅助：`analyze-round24-anchors.py ...`；`check-round24-joint.py <analysis>`。全gate pull用exact-gate；最终确认pull用gate。源角色清楚，诊断不混进原协议。
+- `review-packages/packages.json`保存源包。A ZIP SHA **edb720e7c27dbaddb8a597a9c8c1f7aff5eb490fa8d40d1a21670ac62fde1662**，128478B；B ZIP SHA **98a022f82512f0511cc5fa104d9f4101c6a5c02200502f58edf5bcbf848f512f**，128556B。各仅parse.rs/Parse.lean；包名含Rust/Lean短hash，无秘密/签名/nonce，未上传正式竞赛。`package-round24.py`与`audit-round24-final-sources.py`已执行通过，不要重复覆盖已有源包。
+- **update-dashboard.py已做小修复（未提交）**：支持 `--snapshot-id N` 固定与候选分析相同的当前官方快照，原不带参数默认最新保留；--help及非法ID不联网/不改看板已验证，dashboard-cli-check.json。最终真实固定快照刷新尚未执行。原020821失败记录保留，表/登记表当时未动。
+- `audit-round24.py --output <new.json>`核对所有rawSHA、gate、sourcepair、CI实际runner秒、官方原响应；最终跑新路径。最后project.py check、primary main/worktrees/read-only Git复核、commit/push研究分支。没有merge/main或清理worktree授权。
+- 方法文档已有R24经验（原始分母、校准迁移、表示/操作数反例、组合交互、证明参数、角色统计），开头前九轮历史边界已修正。收尾把“仍在推进”更新成实际结果，补上最终确认事实和最高价值下一动作；没有AGENTS修改。
+- 本地与bundled Python均无matplotlib，未安装新依赖；选择表格/CSV交付即可，不为可选图表额外开CI。bundled依赖仅只读检查，重型Rust/Lean一直只在runner。
+
+### 新近停止结果／当前数据
+
+- BE38104748905已成功收齐：chain-LCP8比once慢3.282/2.133%，609/影子/607全部0。虽然31.546M逐query相等且14.685M免matcher，净收益没有成立。feedback-be.json暂停fullgate/后续组合；BF真实提取和prepare-round24-chain-proof.py草稿留作起点，未freeze/Lean执行。
+- 最新官方捕获official-selection是 **29644**，computedUTC02:21:21、读取约02:46，623/582，freshness unknown。最终结果报告前必须重新查询；不能把29644或更早29643称届时最新。
+- target-gaps-29643只是合成逆向目标模型：B全部既有视图到10/15还需约25.9/35.4%时间轴下降，不是观察结果/误差界/概率；A约31.2/42.8%。没有原协议发现块达到5/10/15。
+- 账户最近UTC02:39:42已用17%／剩83%，usage-0713m.json；0重置/购买。当前已收齐77个作业，3个最终确认仍运行；最终成本要按实际结束时间重算，不用估计或mid审计替代。
+
+当前无活动exec session/functions cell。继续必要分析、收集、同快照看板、报告与审计至固定截止；不要新开机械重跑来凑时间。所有原始失败、零份额与负面数据保留。最终报告需清楚写目标未完成及正式UNKNOWN，而不是用峰值/平均坐标改口径。
+
 ## UTC02:40 活跃摘要（最高优先）
 
 固定截止UTC05:28:08／北京时间13:28:08；已用7h12m，继续2h48m。UTC03:28:08起最后120min保留gate/冻结独立确认/报告，不延时。当前已推送HEAD4a334e8a78b4f68c03ee638b2fa7b170b42d9d43；BC回执/分析、方法文档、新proof成功/失败和新草稿待提交。当前没有稳定10/15目标候选；不得提前结束或以峰值宣布完成。

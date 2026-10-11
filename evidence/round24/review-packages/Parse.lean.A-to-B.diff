@@ -1,0 +1,38 @@
+--- r24-609-root-word-price-proof1/Parse.lean
++++ r24-609-fast-adaptive-proof1/Parse.lean
+@@ -9980,13 +9980,13 @@
+ 
+ 
+ @[local step]
+-theorem SFsmallmatches_loop0_loop0_spec (input : Slice Std.U8) (prev : Slice Std.U32) (e : Std.Usize) (depth : Std.Usize) (p : Std.Usize) (best : Array Std.U32 8#usize) (ot : Std.U32) (count : Std.Usize) (q : Std.Usize) (k : Std.Usize):
+- slot.SFsmallmatches_loop0_loop0 input prev e depth p best ot count q k ⦃ fun _ => True ⦄ := by
++theorem SFsmallmatches_loop0_loop0_spec (input : Slice Std.U8) (prev : Slice Std.U32) (e : Std.Usize) (depth : Std.Usize) (p : Std.Usize) (best : Array Std.U32 8#usize) (ot : Std.U32) (count : Std.Usize) (q : Std.Usize) (k limit longest : Std.Usize):
++ slot.SFsmallmatches_loop0_loop0 input prev e depth p best ot count q k limit longest ⦃ fun _ => True ⦄ := by
+  rw [slot.SFsmallmatches_loop0_loop0]
+  apply Std.loop.spec_decr_nat
+-  (measure := fun q => depth.val - q.2.2.2.val)
++  (measure := fun q => limit.val - q.2.2.2.1.val)
+   (inv := fun _ => True)
+- · rintro ⟨best1, count1, q1, k1⟩ _
++ · rintro ⟨best1, count1, q1, k1, longest1⟩ _
+    simp only [slot.SFsmallmatches_loop0_loop0.body]
+    step*
+    repeat' (split <;> step*)
+@@ -10471,13 +10471,13 @@
+ 
+ 
+ @[local step]
+-theorem SFmorematches_loop0_loop0_spec (input : Slice Std.U8) (prev : Slice Std.U32) (e : Std.Usize) (depth : Std.Usize) (p : Std.Usize) (best : Array Std.U32 4#usize) (codes : Array Std.Usize 4#usize) (ot : Std.U32) (count : Std.Usize) (q : Std.Usize) (k : Std.Usize):
+- slot.SFmorematches_loop0_loop0 input prev e depth p best codes ot count q k ⦃ fun _ => True ⦄ := by
++theorem SFmorematches_loop0_loop0_spec (input : Slice Std.U8) (prev : Slice Std.U32) (e : Std.Usize) (depth : Std.Usize) (p : Std.Usize) (best : Array Std.U32 4#usize) (codes : Array Std.Usize 4#usize) (ot : Std.U32) (count : Std.Usize) (q : Std.Usize) (k limit longest : Std.Usize):
++ slot.SFmorematches_loop0_loop0 input prev e depth p best codes ot count q k limit longest ⦃ fun _ => True ⦄ := by
+  rw [slot.SFmorematches_loop0_loop0]
+  apply Std.loop.spec_decr_nat
+-  (measure := fun q => depth.val - q.2.2.2.2.val)
++  (measure := fun q => limit.val - q.2.2.2.2.1.val)
+   (inv := fun _ => True)
+- · rintro ⟨best1, codes1, count1, q1, k1⟩ _
++ · rintro ⟨best1, codes1, count1, q1, k1, longest1⟩ _
+    simp only [slot.SFmorematches_loop0_loop0.body]
+    step*
+    repeat' (split <;> step*)
