@@ -1,5 +1,26 @@
 # R24 续跑状态
 
+## UTC02:40 活跃摘要（最高优先）
+
+固定截止UTC05:28:08／北京时间13:28:08；已用7h12m，继续2h48m。UTC03:28:08起最后120min保留gate/冻结独立确认/报告，不延时。当前已推送HEAD4a334e8a78b4f68c03ee638b2fa7b170b42d9d43；BC回执/分析、方法文档、新proof成功/失败和新草稿待提交。当前没有稳定10/15目标候选；不得提前结束或以峰值宣布完成。
+
+- **Fastadaptive完整gate38104425023已成功收齐并绑定**。候选r24-609-fast-adaptive-proof1：Rust ef3268f4b4183b50af7825e505266c7dc05b49e9bb1aebb1f642a5609fc6423e，Lean09f79e1d6b4d60bdcc692425a7baae6503f3995f8cc6f9937d7f23a347e9e20e；1069.9s整体验收，原900sLean不变。质量4864057B。尚无新pair独立确认。
+- **BC38102994768**已成功收齐22配对进程，最新快照 **29643**（official-feedback-bc；computed01:53:50，读取约02:20，623/582，freshness unknown）。analysis-bc.json与anchors-bc.json：fast-adaptive主3.579817–3.753575%、影子3.436959–3.724196%、6073.245332–3.625730%，1runner2发现块，全未达5/10/15。对faststack慢4.615/5.165%，但质量有用；比同场buffer-adaptive快且少8B。保留为质量finalist。
+- **stack-packed暂停**：BC对实际faststack−0.10449/+0.20193%，没保住孤立AQ约−1.1%的收益。虽609主3.418832–3.524642%、6070.331159–0.455915%，不是新增可确认提速。不要freeze或启动它的完整gate，已有prepare-round24-bb-proof.py只是check草稿。feedback-bc.json已记录。
+- **AQproof2 gate38104061119仍失败且已收齐**：参数类型错误消失，仅剩u469成本更新bind处最大递归深度错误（Proof行4900/4903，原maxRecDepth8192）。feedback-packed-proof2.json决定暂停第三次昂贵gate，因为组合无收益且有更好gated备用。建议未来有性能价值后用局部成本更新/Vec长度lemma，不盲增资源；未实施。原失败和精确proof1/2保持，不把AQ称可提交。
+- **BE38104748905 screen-be**，UTC02:18:55，55mincap，9方法×2块：chain-lcp8+once/once-shadow+607/609/影子。当前仍原协议计时，重点待收结果。BD已经有全部31.546M查询相等与28输出相等；计数大不代表速度。
+- **BF38104761403 proof-bf-extract**已成功收齐，r24-609-chain-lcp8原提取接受。prepare-round24-chain-proof.py已写成可check草稿（465337B），尚未freeze/gate：先把原SFmatchlen两个lemma移到新依赖SFprev前，加SFparent/SFchainlen总性，按真实6/7元循环状态添加frm/prior。**等BE净性能有意义再投入完整gate**；新匹配机制只剩这一条，不机械扩展。
+- target-gaps-29643.json由round24-target-gaps.py生成，是固定实际质量/每块参照位置的**合成逆向目标模型，不是测量或噪声压力、不是概率**。fastadaptive让全部现有609主/影子/607视图达到10/15分别还需约25.9%/35.4%时间轴下降；faststack约31.2%/42.8%。步长0.001不是连续精确边界。说明几个百分点微优化仍远不足目标。
+- 最新账户UTC02:39:42已用17%／剩83%，usage-0713m.json，0重置/购买，共享账户读数不归因本任务费用。
+
+最终倾向选一份速度/质量不同的已gate候选与fastadaptive共同新确认，仍需BE结果决定；faststack r24-609-root-word-price-proof1本身已gate，可作速度备用。ATbuffer-adaptive也已gate且三参照两块正，但被fastadaptive在BC同场速度/质量都胜过，不把复制/被支配备用当作第二个成功目标。最终两份仍按各自独立份额和联合重新计算，目标未达就明确未达。
+
+prepare-round24-final.py当前要求--base中的两份declared candidates按Rust匹配；若选faststack（在BC是control）+fastadaptive或跨批次的chain，需要先构建准确的final-selection标准spec，把两者作为candidate并保留实际父alias，再调用此脚本。它冻结3runner×3blocks、各候选ownshadow、609shadow、607、3旧fast控制，每run65mincap，要求剩>=85min和两份exactgate证书已知。父alias如fast-stack与候选同Rust时不要让它覆盖联合主点；主独立样本9块，其余alias另列。最好03:28前启动最终确认，不到截止才启动收不齐的任务。
+
+docs/research/optimization-methods.md已补第24轮可复用结论并把开头“目前仅fast3奖励”限定回前九轮历史；有原始证据链接，没有新增AGENTS规则。projectcheck最近PASS334pairs/623links，后续改动还要跑。最终DASHBOARD未刷新（先前不支持--help而触发的失败保留且原表未动）；收尾必须用有网络权限/本进程直连运行不带参数update-dashboard.py，再核对快照。
+
+当前无exec session/functions cell挂起。待stage之前确认收集完成，所有新增回执已完成下载。下一步：收BE；若好则冻结chainpair完整gate，若退步则停止此精确路线，冻结现有最好两份独立确认；期间完成方法/报告/原始审计准备。别再开启无证据的新大方向。无正式上传或资金授权，最终只commit/push研究分支，不merge main。
+
 ## UTC02:17 活跃摘要（最高优先）
 
 固定UTC05:28:08／BJT13:28:08结束，已用6h49m，继续3h11m。最后120分钟UTC03:28:08起保留（gate/冻结后独立确认/交付）。不要因CI结束或本摘要重置时钟／提前收尾。当前已推送HEAD7566a0f13fad20276d67f0c84be6c67135877773；下面BE/BF准备与BD回执待提交。仍无稳定10/15，正式/私有/支付UNKNOWN，无上传/注册/签名授权。
