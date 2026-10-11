@@ -1,0 +1,19 @@
+{
+  "candidate": "r25-astra-gap1",
+  "parent": "r22-595-chain-halfhead",
+  "hashes": {
+    "parse.rs": "7cba2449968092293b3f09cca786fdcf077ac42b73f415fa28d7ad7ba14ea0e5",
+    "Parse.lean": "4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6"
+  },
+  "mechanism": "On pc_run1c primary failure at exactly p=ls+1, probe the previous output match distance once. Reuse out[nt-1] rather than a new table/state variable; original successful primary and deepening path is preserved. No chain deepening follows a rescued match.",
+  "difference_from_old_work": "A bounded conditional revisit of R11 gaprepeat, which reduced size 0.0222624pp but cost 0.850916% total time on fast3. Old code tried all failed-probe positions with any pending literal gap; this permits one position per inter-match literal run, excludes long miss stretches, and operates on actual595 pc_run1c. R13 predecessor rescue instead retries hash-collision chains; this probes a distance independent of the hash chain. It is not claimed as an entirely new repeat-distance mechanism.",
+  "attribution": {
+    "source": "references/round21-public-595/source-receipt.json",
+    "parent": "candidates/r22-595-chain-halfhead/manifest.json",
+    "ownership": "Inherited public PC matcher, original routing and original author headers retained."
+  },
+  "proof_migration": "Add pc_f_find_gap1_spec returning FoundAt plus length<=258 and distance<=32768. Reuse probe_m_spec, f_deepen_spec, FoundAt.real and MatchAt bounds. Arbitrary out token is a hint and needs no decoded-token invariant; guards establish safe read and rc<=p. No main-loop tuple field or Rust loop parameter added, but actual extraction must be checked. Inherited Lean does not yet contain the helper theorem.",
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}

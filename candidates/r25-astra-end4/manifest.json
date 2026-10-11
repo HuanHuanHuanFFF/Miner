@@ -1,0 +1,19 @@
+{
+  "candidate": "r25-astra-end4",
+  "parent": "r22-595-chain-halfhead",
+  "hashes": {
+    "parse.rs": "03ec0aa4e617d622755e85324a9d4fbc77ef74e6572485b3170e2790681ed8e6",
+    "Parse.lean": "4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6"
+  },
+  "mechanism": "Add at most one previously unrecorded end-4 key after the original head positions and before end-1 in pc_f_record3. Existing chain depth, head tables, search/lazy/skip/fold rules and routes stay unchanged.",
+  "difference_from_old_work": "R3 INS_MAX 2-to-6/8 densified the match head. This retains that head density and inserts only the terminal four-byte key wholly inside the matched span; the original end-1 key crosses the first mismatch except at the 258 cap. R22/R23 increased search depth without improving insertion coverage. This experiment changes candidate availability, not depth.",
+  "attribution": {
+    "source": "references/round21-public-595/source-receipt.json",
+    "parent": "candidates/r22-595-chain-halfhead/manifest.json",
+    "ownership": "Inherited public PC matcher, original routing and original author headers retained."
+  },
+  "proof_migration": "No Rust function signature or explicit loop state changes. f_record3_spec must cover one extra slot_of_m/f_link call under j<lim and j<end. Original HeadBound, coherent ahead refresh and independent byte validators can be reused; exact extracted interface and fresh original gate remain required.",
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}
