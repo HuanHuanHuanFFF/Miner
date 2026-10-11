@@ -1,5 +1,38 @@
 # R24 续跑状态
 
+## UTC01:16 活跃摘要（最高优先）
+
+固定窗口UTC19:28:08→次日05:28:08，北京时间03:28:08→13:28:08；已用5h48m，仍研究4h12m，最后120分钟保留从UTC03:28:08起。不要提前结束或重新计时。主工作树保持；当前HEAD已推送f07e4d64，以下新回执／证书／批次待提交。
+
+### 本次新增结果
+
+- AM `38098908048 screen-am` 已成功收齐22配对进程。analysis-am.json在29638：faststack主3.392424–3.396483%、影子3.301763–3.408831%；bufferstack主3.384721–3.413146%、影子3.289619–3.429694%。1runner两块发现，所有>=5/10/15次数零。相对实际AE父版faststack快1.31/1.85%；bufferstack对faststack慢0.942/0.755%。相对once两块变号，原因见下。SF32比once慢2.036/6.586%，两视图全零，暂停精确版本完整gate；prepare-round24-sf32-proof.py只有接口草稿，未freeze或Lean执行。
+- 两个新组合完整gate都接受并绑定：38099485452 `gate-root-word-price-proof1`，总验收1031.7s，Rust257fdd0d...／Lean2108c3e0...；38099507694 `gate-root-word-price-buffer-proof1`，1102.9s，Rust523486ff...／Lean96188bad...。原900sLean限制未改；正确性证书在各proof1目录。还没有这些新pair的冻结后独立确认。
+- AO `38099461591 screen-ao` 记录合并比once慢1.038/0.813%，两视图两块全零。暂停精确inline合并版本，不由27.1%记录减少推断速度。原回执和analysis-ao.json保留。
+- AP `38099777173 sf-ap-native` 两候选28token/output同once。heavy-fixedpoint实际检查0、可省0、仍6heavycalls，暂停计时。旧profile逐文件本已显示6文件各1次，应以后先查分文件调用数再造类似prototype。query-inline实际text394402→394338B且同源码编译库相同；机器码不同不等于提速，进入AR。
+- AQ `38100047603 packed-aq-native`通过4800次真实Z184/Z307差分（choice和低23bit成本，窗口/tail/U32回绕），28token/output同once。保持旧inline属性，隔离R21曾意外移动never属性的混杂。进入AR。
+- AS `38100756262 item-as-native`成功：实际15366033条编码items、18306409次读取价格逐次等于原ct；28token/output同once。Rust8dfea972...，Lean仍原草稿。固定每块距离价格保存在item空余高5bit，三个solver消费时解包；无性能结论。
+- AT `38100776877 adaptive-at-native`成功：`r24-609-stack-adaptive` Rust eaa7752a...，实际4864065B，mean33.8281690538628；对once少61B、对bufferstack少50B、比X单独多8B（22/28文件token同X）。真实非加和交互，性能／完整证明未知。不能因稍慢就直接抛弃有质量余量版本。
+
+### 最新快照与测量可信度
+
+最新官方`official-mid-calibration`是29638，computed UTC00:36:07，读取约00:56，623提交582账户，freshness unknown，新622/623在前沿，未请求保护源码。`analysis-z-29638.json`逐块更新已确认N/T，仍无10/15；联合版本2已检查PASS8行，独立块仍4而非算影子8。
+
+`calibration-b-29638.json`新工具analyze-round24-anchors.py审计完整B原始文件后回测：607→609速度误差−2.986/−3.162%，609→607+3.078/+3.265%；大小误差约±0.0002222pp。这个大小迁移差大于L的0.0001286pp改善，可能改变前沿归属。保留609主校准，607仅分列相关家族敏感性，不按高份额选参照，不把误差当私有保证。后续最终确认加public607。
+
+`am-once-decomposition.json`：同once二进制两块原轴6.640831→6.366242；交叉candidateB/incumbentA为6.645617，candidateA/incumbentB为6.361351，所以主要是incumbent分母。tiny-app incumbent parse+52.679%，encode−0.622%，candidateparse+0.00083%；catalog/dump/server也主要incumbentparse。官方incumbent是固定stack-array hashchain，无随机哈希。局部读取官方源码SHA已记录，需runner比对。perf读取已被paranoid4拒绝，不修改global安全配置。
+
+### 活跃／准备派发
+
+- AR **38100245696 screen-ar**，UTC00:58:39，55mincap，10方法×2块：query-inline、a-packed；有once-shadow、609-shadow及public607。当前仍原版计时。收齐后同时跑analyze-round24.py和analyze-round24-anchors.py。
+- AU **proof-au-extract**已冻结待提交／推送／派发，55mincap：a-packed、item-price、stack-adaptive三份实际提取，保留Funs；不是完整gate。
+- AV **layout-av-diagnostic**已冻结待派发，55mincap。原bwrap中先探测child-only setarch x86_64 -R可用性及personality；若不允许即停止，不sudo、不改sysctl/perf权限。若允许，原engine11reps、原affinity请求、once及已gatefaststack各2同源码alias，2模式×2反序块16对进程；只改变child地址随机化，诊断不改原协议成绩。
+- AW **screen-aw**已冻结待派发，65mincap，11方法×2块：AS、AT，actualonce/bufferstack/X参照和607/609主影子，核实交互与迁移。不把61B当69+11B。
+
+先提交推送并顺序派发AU/AV/AW（每个dispatch返回完成后再同SHA下一次）；CI继续时做证明或分析。完整gate用exact-gate，标准用gate，native/extract/diagnostic用diagnostics。当前无挂起PTY；上次collect全部结束才stage。最新project check PASS31tasks1298aliases593links10manualworkflows326pairs。
+
+账户最新仍UTC00:32剩88%，0重置/购买；约半小时后再读取。无正式上传/注册/签名授权。最终刷新DASHBOARD、方法结论、报告、索引、rawSHA审计和实际消耗，按已有授权commit/push，不自动merge。主目标稳定10/15仍未完成。
+
 ## UTC00:50 活跃摘要（最高优先）
 
 固定截止仍为UTC05:28:08／北京时间13:28:08，最后120分钟从UTC03:28:08保留。已过约5h22m，未到收尾，10%与15%稳定目标均未建立。主工作树不变，继续codex/round24-stable-dual，最新已推送88a68cca；后续材料待提交。
