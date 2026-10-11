@@ -1,6 +1,6 @@
 # DEFLATE 提交看板
 
-最近查询：北京时间 **2026-10-11 13:12:12**。官方快照 **29651**，计算时间 **2026-10-11 13:04:55**；官方 freshness=`unknown`。
+最近查询：北京时间 **2026-10-11 13:21:47**。官方快照 **29652**，计算时间 **2026-10-11 13:15:43**；官方 freshness=`unknown`。
 
 汇总本项目已核验的正式提交；研究中的未提交候选见[任务索引](docs/TASK_INDEX.md)。执行与更新规则见 [AGENTS.md](AGENTS.md#提交看板维护)。
 
@@ -20,7 +20,7 @@
 
 已知累计奖励合计：**10.311603 α**（6/6 条具有官方数值；VERIFIED API 记录，非钱包余额或净利润）。
 
-[本次完整数据](evidence/dashboard/20261011T051205840280Z/summary.json) · [原始响应 SHA-256 与查询时间](evidence/dashboard/20261011T051205840280Z/receipts.json) · [提交登记表](docs/submissions.json)
+[本次完整数据](evidence/dashboard/20261011T052139394843Z/summary.json) · [原始响应 SHA-256 与查询时间](evidence/dashboard/20261011T052139394843Z/receipts.json) · [提交登记表](docs/submissions.json)
 
 初始记录计算时间（北京）：
 
