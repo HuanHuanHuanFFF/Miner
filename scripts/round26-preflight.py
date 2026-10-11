@@ -19,6 +19,9 @@ def main():
     if spec.get('r26_a_boundary_helper_check'):
         assert mode == 'standard'
         importlib.import_module('r26-a-boundary-helper-check').preflight(spec)
+    if spec.get('r26_a_pc_budget_counts'):
+        assert mode == 'standard' and not spec.get('r26_a_boundary_helper_check')
+        importlib.import_module('r26-a-pc-budget-counts').preflight(spec)
     if mode == 'standard':
         for e in spec['entries']:
             anchor = e.get('anchor', 'public432')

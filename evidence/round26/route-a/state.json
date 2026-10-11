@@ -1,0 +1,70 @@
+{
+  "route": "A",
+  "fixed_window_utc": [
+    "2026-10-11T21:06:52Z",
+    "2026-10-12T05:06:52Z"
+  ],
+  "goal": "两个不同候选稳定达到竞赛池5%与10%；公共投影不冒充正式收益。",
+  "owned_paths": [
+    "candidates/r26-a-*",
+    "scripts/r26-a-*",
+    "evidence/round26/route-a/"
+  ],
+  "cycles": {
+    "A1": {
+      "status": "诊断完成",
+      "feedback": "cycle-a1-feedback.json",
+      "decision": "coverage5输出变大，暂停；distance12仅保留组件线索。"
+    },
+    "A2": {
+      "status": "诊断完成",
+      "feedback": "cycle-a2-feedback.json",
+      "decision": "combo原价边界移动实际少16473B/.081912pp；继续迁移到641。"
+    },
+    "A3": {
+      "status": "native与原协议计时完成；CI最后汇总失败保留",
+      "candidate": "r26-a-641-trimhead",
+      "receipt": "evidence/round26/38176445754/screen-a3/gate",
+      "decision": "444有限等价及28公共同token/output；主块总时间+.1883/+.2285%，同源码对照分歧，暂不单独gate。"
+    },
+    "A4": {
+      "status": "诊断完成",
+      "feedback": "cycle-a4-feedback.json",
+      "decision": "641原价边界移动少10387B/.058959pp；实际PC路径包含16变化文件，row16的dx1分支排除。"
+    },
+    "A5": {
+      "status": "原协议完成，42直接Rust helper检查通过；暂停该完整后处理",
+      "candidate": "r26-a-641-boundary-log",
+      "feedback": "cycle-a5-native-feedback.json",
+      "decision": "主两块总时间+6.845/+7.077%，29793条件投影全0；保留边界数学组件，不调价阈值、不投入完整证明。",
+      "screen_feedback": "cycle-a5-screen-feedback.json"
+    },
+    "A6": {
+      "status": "原native/两块screen完成，暂停独立候选",
+      "candidate": "r26-a-641-hash17",
+      "draft": "quality-a6-native.json",
+      "decision": "主总时间+.5731/+.2820%，微小质量换来实际成本；不扫H、不完整gate。",
+      "screen_feedback": "cycle-a67-screen-feedback.json"
+    },
+    "A7": {
+      "status": "原native/两块screen完成，仅保留质量组件",
+      "candidate": "r26-a-641-allow-near",
+      "draft": "quality-a7-native.json",
+      "decision": "主总时间+1.0409/-.004535%，无5/10；真实parser/encoder与同源码分歧分开保留，不单独gate。",
+      "screen_feedback": "cycle-a67-screen-feedback.json"
+    },
+    "A8": {
+      "status": "native/计数完成；原协议两块草案+冻结预算观察器ready",
+      "candidate": "r26-a-641-lazy-chain",
+      "draft": "quality-a8-native.json",
+      "decision": "12更小16同，-.075064pp但新增1.211M probe；先真实总成本，同时被动分解normal存活与lazy拒绝，不扫参数。",
+      "run_id": "38181265447",
+      "feedback": "cycle-a8-native-feedback.json",
+      "screen_draft": "screen-a8.json"
+    }
+  },
+  "helper_coverage": "常规444中的416合成长度走641的fallback。独立42直接helper包已交root，包含1868次Python模型变更、distance32768和块内1/跨块0修改对照。",
+  "proof_status": "无本轮完整gate。A5原Lean未适配；boundary-log-proof-interface.json记录已有DSLIM后缀引理与新前缀/后缀循环缺口，性能有信号才投入。",
+  "next": "root调度A8 screen及≤180秒观察器。依据真实成本与normal/lazy消费对照决定是否重分配探测预算。",
+  "permissions": "routeA未启动CI、提交或推送Git、切换分支、修改官方源码、上传竞赛、签名或操作钱包。"
+}

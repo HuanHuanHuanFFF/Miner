@@ -82,6 +82,27 @@ def analyze(receipt_path, standard_path):
             'other_twenty_one_files': sum_phases([row for row in rows if not row['actual_b3_changed_output']]),
             'rows': rows,
         }
+    original_rows = {row['file']: row for row in output['public628']['rows']}
+    priority_models = []
+    for block in standard['analyses']:
+        if block['candidate'] != 'r26-b-628-shared-cache-fix1':
+            continue
+        model = {key: 0.0 for key in ['base_all', 'shape_all', 'refine_all',
+                                     'cache_prev', 'cache_collectors', 'cache_solve', 'cache_shape_all']}
+        for row in block['rows']:
+            profiled = original_rows[row['file']]
+            phases = profiled['phases_ns']
+            weight = row['parent']['parse_s'] / row['parent_incumbent']['total_s'] / 28 / block['parent_axis'] * 100
+            scale = weight / phases['parse']
+            for phase in ['base', 'shape', 'refine']:
+                model[phase + '_all'] += scale * phases[phase]
+            if profiled['actual_b3_changed_output']:
+                model['cache_prev'] += scale * phases['prev']
+                model['cache_collectors'] += scale * (phases['small'] + phases['more'])
+                model['cache_solve'] += scale * (phases['solve'] + phases['suffix_seed'] + phases['prefix_trials'])
+                model['cache_shape_all'] += scale * phases['shape']
+        priority_models.append({'block': block['block'], 'parent_axis': block['parent_axis'],
+                                'relative_parent_axis_percent_proxy': model})
     return {
         'status': 'VERIFIED_SAME_RECEIPT_COARSE_PHASE_ACCOUNTING_ONLY',
         'run_id': receipt['run_id'], 'git_sha': receipt['git_sha'],
@@ -90,6 +111,8 @@ def analyze(receipt_path, standard_path):
         'standard_decomposition': str(standard_path.relative_to(ROOT)).replace('\\', '/'),
         'standard_decomposition_sha256': sha(standard_raw),
         'entries': output,
+        'phase_fraction_priority_models': priority_models,
+        'phase_fraction_priority_model_status': 'INFERRED_PRIORITY_ONLY: transfer observed inclusive phase fractions into actual B3 original parser / paired incumbent weights. This is an ideal-elimination planning proxy, not a valid upper bound, causal estimate, expected performance or actual speedup.',
         'method': 'Alternative original/clone phase calls are checked per file. Shape children exclude the nested heavy container; parse children exclude nested seed and classifier containers. Residuals retain wrapper, cost, patch, copy and allocation work.',
         'limits': [
             'Observer clocks and changed wrapper layouts are diagnostic. Cross-variant observed seconds are not original paired benchmark gains, a causal attribution or a recoverable speedup bound.',
