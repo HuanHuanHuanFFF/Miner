@@ -1,25 +1,21 @@
 # R25 续跑状态
 
-固定北京时间窗口：2026-10-11 16:06:21–21:06:21；原起点 main `48baf622`，实验分支 `codex/round25-fast-quality`，一个 worktree。执行规则见 [AGENTS.md](../../AGENTS.md)。
+固定北京时间窗口：2026-10-11 16:06:21–21:06:21；main基线48baf622，分支codex/round25-fast-quality，一个worktree。执行规则见[AGENTS.md](../../AGENTS.md)。目标为快速端低成本改善压缩、争取稳定竞赛池份额榜首；截至18:00尚未建立稳定正份额，更未达成榜首。
 
-目标：快速端低成本改善压缩，争取稳定竞赛池份额榜首。新候选尚无成绩。R24 B 后续正式 #625 的旧快照份额不能作为本轮当前事实。
+截止不重算。19:36:21拟冻结，最后90分钟保留完整原版gate、精确文件对独立确认与交付；20:06后不派新普通发现实验。已启动CI自然完成或既定超时，不主动取消。
 
-当前阶段（北京时间17:12附近）：已完成A/B/C/D四批原编码器检查，A/C两批原协议计时和end4完整gate收齐；D计时与E机会域诊断进行中。最后 90 分钟预留精确冻结、跨 runner 独立复测、完整 Lean 和原版 gate 及交付；发现期可提前证明，不挪用该余量。
+分工：Astra/xhigh做tinyPC新helper Lean迁移，独占r25-astra-tiny-pc8-proof1等新增路径；Sol/xhigh完成duplicate-hop并审边界；Luna/max官方来源/算术审计当前空闲；主线程管理Git、CI、评分与共享入口。工具支持根加3子线程，无额外worktree，无嵌套。
 
-分工：Astra/xhigh 独立算法设计（`astra/`）；Sol/xhigh 实现（`candidates/r25-sol-*`、`scripts/build-round25-sol*.py`、`sol/`）；Luna/max 官方只读快照与来源检查（`official-*`、`luna/`及三份 capture 脚本）；主线程负责实验、验收、评分、提交和共享入口。工具允许主线程加三子线程同时运行，无嵌套。
+已收齐15个成功作业：A native/screen/extract；B native；end4完整gate；C native/screen/extract；D native/screen；E counts；F origins；G prefix；H native；I native。screen原协议共56配对进程，均发现测量。所有raw保留。F一次dispatch前只读网络失败另存，不是CI失败。
 
-关键旧反例：快速端 #595 系列多次高峰伴随零值；同源码参照足以改变判断。新增压缩必须计入 encoder 后果；局部 parser 计时不替代原协议。高信号先逐块重放评分与邻居切换，然后决定测量诊断及确认。
+性能：A end4/backtie/gap1各两块595主影子均0；end4对combo慢0.72%–0.92%。end4完整原版gate通过，Rust03ec0aa4.../Lean4ff09d16...绑定VERIFICATION，仅保留质量/正确性组件。C dual8少14674B但总时间慢3.02%–3.26%，595/影子/578视图全0；D wordtail与end4真实444有限等价和28文件输出相同，但主测时一块慢0.495%、一块快0.060%，份额全0，暂无收益，不扩展gate/asm。
 
-最新已捕获官方快照29676（官方计算16:59:58，freshness unknown），612当前20.524717%；来源规则commit6bf303f1，公式重放误差<3e-17。原始目录official-score-c/，规则official-rules-start/。rank脚本使用严格大于所有旧几何份额；合格支付身份仍是条件，不称正式榜首。此前29673/29674原始快照均保留。
+诊断：E确定dual8主成本为额外8字节哈希/维护；F的2538080次record写入贡献53017次获胜提示，不可视为无用。H mainonly实际删除这些写入后，比dual8多17230B，比combo多2556B；耗时未知，仍给一次原协议代价端点实验。G发现父链短匹配遇相同8字节前缀时有有据机会，但长匹配也依赖同前缀链，因此不整体替换prev；J只在短主匹配、dp1、合法重复前缀时多看一次prev，保持所有插入。
 
-当前候选：end4 原encoder对combo少7397B/-0.0328587pp，15文件体积均下降，原Lean接口可复用但编译未知；backtie少1964B/-0.00742976pp，15文件体积/token均下降；gap1少1007B/-0.00583408pp，保留文件级损失。tail4替换多6533B，暂停；tiny-tail少8B，保留微组件，暂停单项完整证明。全部性能份额尚未知。反馈在feedback-a-native.json、feedback-b-native.json和feedback-b-decision.json。
+最新质量信号I：r25-root-tiny-pc8 Rust5c20b99c...，只替换已有row12的ETINY为专用PC引擎，8头插入、正常验证过的emitter、原路由不变。28原编码器仅tiny-config变化2487→2155B，少332B，平衡压缩比例改善0.0988095pp；总时间/份额/完整gate未知。与历史584同文件体积一致不代表整体时间相同。
 
-已结束收齐：38124303645 quality-a-native；38124536539 proof-a-extract（真实Funs/Types/Constants，end4和backtie提取成功）；38124984085 quality-b-native；38124524718 screen-a（18原协议配对）；38125243582 gate-end4（556.1秒、原900秒Lean、公理白名单、5325224B，VERIFICATION已绑定）；38125636793 quality-c-native（dual8少14674B）；38126033837 proof-c-extract（dual8提取成功）；38126014186 screen-c（20原协议配对）；38126399623 quality-d-native（wordtail 444有限等价及28token/encoder全同end4）。
+下一批：screen-hi共11方法/22原协议配对进程、2块，含H/I两候选副本、595主影子、combo、dual8实际父；proof-i-extract实际提取供Astra迁移；quality-j-native测试duplicate-hop。计划与冻结hash在对应JSON，提交后手动派发。任何高份额先重放最新快照、邻居切换与同源码差异，再做冻结后跨runner确认。
 
-正在运行：38126675905 screen-d（wordtail两块9方法，共18配对原协议，25分钟job上限）；38127500920 counts-e-native（dual8临时副本82字段事件计数，12分钟）。运行结束后用collect-round4.py pull，标准阶段gate，原版验收exact-gate，native/extract是diagnostics。所有作业自然完成/超时，不主动取消。
+最新完整官方捕获official-score-d快照29677，计算北京时间17:09:45，freshness unknown；#612份额20.524717%，公式来自官方commit6bf303f1。此为最后已查证快照，不应当作18:00实时事实；每次当前投影前重新捕获。原始规则/快照和SHA全部保存。
 
-当前性能决定：A三份各2块主/595影子全0，end4对combo慢0.72%–0.92%；gap1慢0.12%–0.48%；backtie慢0.20%–0.34%。已保留end4质量+完整正确性组件，另两份暂停单项完整gate。dual8虽更小，C主块慢3.019%/3.264%，副本也慢且595/影子/578三个参照视图均0，停止完整证明；描述性拆分确认主要是被改动路径parser代价约3%，见astra/dual8-existing-cost-decomposition.json。计数E用于决定按需查询/更新是否有据，不能把callcount当提速。局部wordtail试图复用end4/end1共同字节，仍等真实总时间，不能靠有限相同输出称性能通过。
-
-下一动作：收齐D并查询最新官方后analyze-round25.py、rank-round25.py；收齐E计数并交Astra分析。`analyze-round25-anchors.py`用于595/578迁移分列，C回测质量差约0.00719pp、时间约0.1%–0.57%，不可挑乐观口径。若有候选复制品的排序分歧先诊断，其他机制继续。Sol负责wordtail后续；Astra负责dual8计数后的机制；Luna数字审计已完成，可复用其做最终独立审核。
-
-当前已推送提交80027989；工作分支仍codex/round25-fast-quality，只有一个worktree。本轮0重置/0购买/0正式上传；最近账户读数16:54为used8%/剩92%（共享读数，变化不当任务独占消耗）。轻量project.py check在17:00附近通过32任务、715链接、10手动workflow、342文件对。
+账户北京时间17:56真实used11%/剩89%，仅共享读数，不当任务独占消耗；0重置/购买/正式上传/签名/注册。本轮推送仅实验分支。结束必须刷新看板、研究方法、round25报告/索引，核对原始回执与成本并project.py check。

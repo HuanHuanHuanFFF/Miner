@@ -1,5 +1,5 @@
 {
-  "status": "VERIFIED_SOURCE_MAP_AND_BYTES_TIME_UNKNOWN",
+  "status": "VERIFIED_SOURCE_MAP_AND_BYTE_ROWS_PUBLIC584_TIME_UNKNOWN",
   "input": {
     "file": "tiny-config.json.txt",
     "raw_bytes": 12000,
@@ -89,9 +89,13 @@
         "references/round18-public-584/parse.rs:32",
         "references/round18-public-584/parse.rs:3494",
         "references/round18-public-584/parse.rs:1732",
-        "references/round18-public-584/parse.rs:1807"
+        "references/round18-public-584/parse.rs:1807",
+        "references/round18-public-584/parse.rs:1406",
+        "references/round18-public-584/parse.rs:1859",
+        "references/round18-public-584/parse.rs:2053",
+        "references/round18-public-584/parse.rs:2063"
       ],
-      "matching_and_emission": "PC run-one parser with a 32769-entry last-position hash table keyed from 4 input bytes; it probes the current position and lazy lookahead under the supplied skip=6/lazy=16 settings, folds prior tokens, and emits through the PC put-match path without ETINY's restricted allowed-length piece mask. This is a distinct parser engine path, not just a different routing constant."
+      "matching_and_emission": "PC run-one parser with a 32769-entry last-position table keyed from 4 input bytes; it probes the current position and lazy lookahead under skip=6/lazy=16, folds prior tokens, and emits through pc_put_match_h::<H>. For H=32769 (odd), that helper selects pc_put_match_checked. Its pc_INS_MAX is 8. Although pc_slot_of_m's H=32769 hash shift plus modulo yields the same slot values as the 15-bit formula used in the #595 PC family, the insertion bound and checked emission are material behavior differences. This is a distinct parser path, not merely a different route constant."
     },
     "public595_and_combo": {
       "route": "route: input.len()==12000 -> 23; bulk_parse k==23 -> p125_row12",
@@ -101,9 +105,12 @@
         "references/round21-public-595/parse.rs:302",
         "references/round21-public-595/parse.rs:9725",
         "references/round21-public-595/parse.rs:9836",
-        "references/round21-public-595/parse.rs:10113"
+        "references/round21-public-595/parse.rs:10113",
+        "candidates/r22-595-chain-halfhead/parse.rs:6892",
+        "candidates/r22-595-chain-halfhead/parse.rs:7579",
+        "candidates/r22-595-chain-halfhead/parse.rs:9725"
       ],
-      "matching_and_emission": "ETINY builds a 4096-slot one-way table from 4-byte hashes, performs candidate lookups on an approximately 8-byte stride (q starts at 7 and advances by 8 on misses), verifies and extends matches in 8-byte steps, folds earlier tokens up to 16, and emits pieces limited by the length-code mask. A residual too short for any allowed piece remains literal/pending. Combo uses the same tiny-config output bytes and token hashes as public595."
+      "matching_and_emission": "ETINY builds a 4096-slot one-way table from 4-byte hashes, performs candidate lookups on an approximately 8-byte stride (q starts at 7 and advances by 8 on misses), verifies and extends matches in 8-byte steps, folds earlier tokens up to 16, and emits pieces limited by the length-code mask. A residual too short for any allowed piece remains literal/pending. The source's PC family has pc_INS_MAX=2 and pc_run1 calls pc_put_match directly; the 12 KB dispatch itself selects ETINY, not pc_run1. Combo and public595 have the same tiny-config output bytes and token hashes."
     },
     "r25_tiny_tail": {
       "route_and_engine_unchanged_from_combo": true,
@@ -132,27 +139,62 @@
     "scope_note": "The linked R18 exact-price DP repeat check was a separate Z308 dynamic-programming cache path and is not the ETINY tail-split mechanism either."
   },
   "standard_total_time": {
-    "status": "UNKNOWN_NO_SAME_RUNNER_STANDARD_TIMING_FOR_TINY_TAIL",
-    "native_feedback_path": "evidence/round25/feedback-b-native.json",
-    "native_feedback_sha256": "3ac996a91ecafb61c13014379c328c1f41b06c544894afa2346e479e96b31f8b",
-    "timing_field": "NOT_MEASURED",
-    "full_gate_field": "NOT_RUN",
-    "round25_jsonl_files_scanned": 56,
-    "standard_jsonl_name_hits_for_tiny_tail": 0,
-    "standard_jsonl_rust_hash_hits_for_tiny_tail": 0,
-    "control_timing_exists": true,
-    "control_examples": [
-      "evidence/round25/38124524718/screen-a/gate/round1-combo.jsonl",
-      "evidence/round25/38124524718/screen-a/gate/round1-public595.jsonl",
-      "evidence/round25/38126675905/screen-d/gate/round1-combo.jsonl",
-      "evidence/round25/38126675905/screen-d/gate/round1-public595.jsonl"
-    ],
-    "interpretation": "The raw original-encoder quality receipt has bytes and hashes, not repeated total compression times. Existing combo/#595 time JSONLs cannot identify tiny-tail's incremental cost because the tiny-tail source is not a measured method in those runs. Do not transfer time from another runner, batch, or source."
+    "status": "VERIFIED_PUBLIC595_COMBO_SAME_RUNNER_UNKNOWN_PUBLIC584",
+    "scope": "Existing standard JSONL receipts only; no new run or cross-runner comparison.",
+    "public584_source_sha256": "82297feee16db3fe6af50fe07f034b81d73d7189a40a829b78b44db167410cf2",
+    "public584_named_jsonl_matches": 0,
+    "public584_source_hash_jsonl_matches": 0,
+    "public584_tiny_config_standard_cost": "UNKNOWN",
+    "search_scope": "rg --files evidence | rg -i 'public584.*jsonl' returned no paths; source-hash search covered evidence/round*/**/*.jsonl and returned no matches.",
+    "same_runner_batch": {
+      "directory": "evidence/round25/38124524718/screen-a/gate/",
+      "input": "tiny-config.json.txt",
+      "input_sha256": "4ecee10b0b6b41ba5d1693b70ac95cb03de1a05712739e4bc6641b3af6cb0a73",
+      "round_files": 2,
+      "measured_repetitions_per_file": 11,
+      "combined_measured_repetitions": 22,
+      "cpu_model": "AMD EPYC 9V45 96-Core Processor",
+      "cpu_governor": null,
+      "host_sha256": "2b32344a74bca6b42edebf4f499412873c9bc3de9561a681587513913177b357",
+      "engine_sha256": "ab202460691492f48d5c632375f5df2a74fc3769a81337e876607e9326a46fac",
+      "template_sha256": "584b01793667c5257da4e76da919fbb3bb73c72fa434866622fe3905884d33f0"
+    },
+    "metrics_definition": "Medians and min/max over the 22 measured repetitions from round1 and round2; time_s is parse time, encode_s is encoding time, total_s is the raw standard total-compression time.",
+    "method_times": {
+      "public595_main": {
+        "source_sha256": "5295c241169fb2f3b88c22ff05f4aaa3f342e37069363b5deca43f2ed75f4754",
+        "output_bytes": 2487,
+        "parse_median_us": 6.84,
+        "encode_median_us": 138.681,
+        "total_median_us": 145.5865,
+        "total_range_us": [141.44, 154.759],
+        "receipts": ["round1-public595.jsonl", "round2-public595.jsonl"]
+      },
+      "public595_shadow": {
+        "source_sha256": "5295c241169fb2f3b88c22ff05f4aaa3f342e37069363b5deca43f2ed75f4754",
+        "output_bytes": 2487,
+        "parse_median_us": 6.725,
+        "encode_median_us": 138.8415,
+        "total_median_us": 145.7165,
+        "total_range_us": [142.862, 164.514],
+        "receipts": ["round1-public595-shadow.jsonl", "round2-public595-shadow.jsonl"]
+      },
+      "combo": {
+        "source_sha256": "57a8fb4feffa52d6d966899c4a56bc4754f6fc967a05cf52d5b02a574d037275",
+        "output_bytes": 2487,
+        "parse_median_us": 6.785,
+        "encode_median_us": 139.137,
+        "total_median_us": 146.2525,
+        "total_range_us": [141.611, 164.815],
+        "receipts": ["round1-combo.jsonl", "round2-combo.jsonl"]
+      }
+    },
+    "interpretation": "The public595 main/shadow and combo tiny-config costs are directly measured on this same runner and batch. They do not estimate public584 because no receipt carries the public584 source hash; its 2155-byte result is an archived encoder-byte comparison only. Do not transfer these timing values to public584 or infer a cross-source speed ranking."
   },
   "decision": {
-    "minimal_same_runner_standard_timing_screen": "WORTH_ONE_ISOLATED_SCREEN_ONLY",
-    "reason": "The repair has an actual original-encoder 8-byte/22-token result on the target file and changes only that file in the saved quality comparison. The direct time cost remains unknown. Eight bytes corresponds to only 0.0023809524 percentage points on the 28-file equal-weight axis, so this supports at most a paired combo-versus-tiny-tail standard screen before any full gate allocation.",
-    "alternate_public584_path": "A 332-byte size advantage over combo is recorded for the same file, but it comes from a different parser engine. Its time and port/proof cost are unknown and should be assessed as a separate route, not credited to tiny-tail."
+    "reuse_classification": "PUBLIC584_IS_A_DIFFERENT_PC_ENGINE_CONFIGURATION_NOT_A_ROUTE_ONLY_CHANGE",
+    "verified_source_differences": "The 12000-byte path has a separate PC run-one parser, pc_INS_MAX=8, an H=32769 hash table instantiation and checked match emission selected by pc_put_match_h. The #595 PC family's pc_INS_MAX=2 and direct base match emission differ; its actual 12000-byte route calls ETINY. Slot index arithmetic itself matches the #595 15-bit formula for H=32769, so table-index equivalence alone does not make parser behavior equivalent.",
+    "cost_boundary": "Public595/combo same-runner file costs are measured above; public584 runtime and port/proof cost remain UNKNOWN."
   },
   "limits": [
     "The byte comparison is for the fixed public 28-file encoder path and does not establish held-out stage2 performance.",
