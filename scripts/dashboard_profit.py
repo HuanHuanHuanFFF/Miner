@@ -26,12 +26,16 @@ def calculate(rows, ledger, price):
         ratio = Decimal(pool['subnetTAO']) / Decimal(pool['subnetAlphaIn'])
     marked = alpha * ratio if ratio is not None and rewards_known else None
     net = marked - total_cost if marked is not None and not missing else None
+    cost_alpha = total_cost / ratio if ratio is not None else None
+    net_alpha = alpha - cost_alpha if net is not None else None
     return {'status': 'INFERRED_SPOT_MARK_TO_MARKET' if net is not None else 'UNKNOWN',
             'registration_cost_tao': str(total_cost), 'missing_cost_submission_ids': missing,
             'reward_records_complete': rewards_known, 'alpha_reward': str(alpha),
             'tao_per_alpha': str(ratio) if ratio is not None else None,
             'marked_reward_tao': str(marked) if marked is not None else None,
             'net_after_registration_tao': str(net) if net is not None else None,
+            'registration_cost_alpha_at_current_price': str(cost_alpha) if cost_alpha is not None else None,
+            'net_after_registration_alpha': str(net_alpha) if net_alpha is not None else None,
             'price_finalized_block': price.get('finalized_block') if price else None,
             'price_checked_at_utc': price.get('checked_at_utc') if price else None,
             'scope': ledger['scope'], 'limits': 'Spot valuation, not realized withdrawal proceeds; no slippage, withdrawal fee, or wallet receipt claim.'}

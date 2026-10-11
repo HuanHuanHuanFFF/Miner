@@ -164,11 +164,13 @@ def refresh(snapshot_id=None):
               '初始记录计算时间（北京）：', '']
     marked = profit['marked_reward_tao']
     net = profit['net_after_registration_tao']
+    cost_alpha = profit['registration_cost_alpha_at_current_price']
+    net_alpha = profit['net_after_registration_alpha']
     cost = Decimal(profit['registration_cost_tao'])
     profit_lines = ['', '## 扣除注册费用后的累计收益', '',
         f"- 已核实注册成本：**{cost:.9f} TAO**，包括对应提交的注册扣款及成功／失败交易手续费；同一交易只计一次。",
-        f"- 累计奖励当前折算：**{number(Decimal(marked) if marked is not None else None)} TAO**。",
-        f"- 扣除注册成本的累计净收益估算：**{number(Decimal(net) if net is not None else None)} TAO**（{profit['status']}）。"]
+        f"- 注册成本按当前价格折算：**{number(Decimal(cost_alpha) if cost_alpha is not None else None)} α**。",
+        f"- 扣除注册成本的累计净收益估算：**{number(Decimal(net_alpha) if net_alpha is not None else None)} α**（{profit['status']}；约 {number(Decimal(net) if net is not None else None)} TAO）。"]
     if profit['tao_per_alpha'] is not None:
         profit_lines += [f"- 兑换口径：SN66 池储备 `subnetTAO / subnetAlphaIn`，1 α ≈ {Decimal(profit['tao_per_alpha']):.9f} TAO；finalized 区块 **{profit['price_finalized_block']}**，查询北京时间 **{beijing(profit['price_checked_at_utc'])}**。"]
     if profit['missing_cost_submission_ids']:
