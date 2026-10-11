@@ -8,9 +8,9 @@
 
 ## 活动路线
 
-- route_a，Astra/xhigh：既有快速端路线内持续循环。已冻结token规则重放，scripts/r26-a-replay.py；CI **38175528006**，replay-a1-native，12分钟timeout。未计时诊断，不是可提交候选。后续查真实匹配覆盖机会。
-- route_b，Sol/xhigh：不同高压缩端起点public628的E/RF二因素消融。三个Rust已准备，Lean草稿；CI **38175512162**，quality-b1-native，20分钟timeout；原encoder+inclusive函数成本观察，非正式计时。
-- score_verification，Sol/xhigh：按需独立重放29785及5/10/联合目标几何，有限任务结束后停等。不是第三条持续候选路线。
+- route_a，Astra/xhigh：A1 token规则、A2边界移动、A3精确641表尾裁剪native均已收齐。A3进入screen-a3两块原协议计时，含真实641父版/父版影子/候选影子，原Lean尚未通过新gate。继续比较新641起点与A2质量组件，不将收益相加。
+- route_b，Sol/xhigh：B1 public628 E/RF消融已收齐。RF DP份额较小，暂停后向DP原型的大投入；B2 **38176424063**，sharing-b2-native，20min cap，观测基础阶段与SF消费的真实供需，非性能成绩。
+- score_verification，Sol/xhigh：已完成独立29785 API/代数/历史逐块重放及单独/联合规划，已停等。Root已核对22项交付哈希；说明早版手抄坐标错误已更正，机器计算原本正确。
 
 ## 官方依据
 

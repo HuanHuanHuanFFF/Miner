@@ -12,6 +12,9 @@ def main():
     if spec.get('r26_a_boundary'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-boundary.py')],check=True)
         return
+    if spec.get('r26_a_boundary641'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-boundary641.py')],check=True)
+        return
     if spec.get('r26_b_match_sharing'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-match-sharing.py')],check=True)
         return
