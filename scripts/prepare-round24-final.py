@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1];E=ROOT/'evidence/round24'
 def read(p):return json.loads(p.read_bytes())
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--base',required=True);ap.add_argument('--candidate',action='append',required=True);ap.add_argument('--prefix',default='confirm-final');a=ap.parse_args();assert len(a.candidate)==len(set(a.candidate))==2
-    s=read(E/(a.base+'.json'));assert s['r24_mode']=='standard';source_entries=s['entries'];chosen=[];certificates={};needed={'probe3','r3-432-fast3','public432','public607'}
+    s=read(E/(a.base+'.json'));assert s['r24_mode']=='standard';s.pop('preflight_only',None);source_entries=s['entries'];chosen=[];certificates={};needed={'probe3','r3-432-fast3','public432','public607'}
     for name in a.candidate:
         path=ROOT/'candidates'/name;m=read(path/'manifest.json');c=read(path/'VERIFICATION.json');assert c['status']=='VERIFIED_EXACT_ORIGINAL_PUBLIC_GATE_PASSED' and c['files']==m['hashes'];assert all(hashlib.sha256((path/f).read_bytes()).hexdigest()==h for f,h in c['files'].items())
         rows=[e for e in source_entries if not e['control'] and e['hashes']['parse.rs']==m['hashes']['parse.rs']];assert len(rows)==1,'Selected exactRust must match one declared candidate in the chosen discovery batch'
