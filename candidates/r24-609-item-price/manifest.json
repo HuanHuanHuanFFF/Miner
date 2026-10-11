@@ -1,0 +1,18 @@
+{
+  "candidate": "r24-609-item-price",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "8dfea972cf6c2f1ccfd58527bbafb625d69965e60f0f9cd93f26feacf66a1b4f",
+    "Parse.lean": "2d20d999d4a238c891d51e0d5ef484ac4509fc2738016a3cda0fed96aa15fa47"
+  },
+  "mechanism": "Store the fixed SF distance cost in five unused high bits of each retained match item, in integer bits. Unpack the original token before length/distance use. The ordinary, seed and repeatedprefix solvers consume the storedprice instead of recomputing distancecode and loading its cost each time.",
+  "difference_from_old_work": "The SFtable producer uses16-unit prices andatmost15Huffman+13extra bits; the encoding carries0..31bit costs. This is immutable per-block edge metadata, not anotherlookupcache or changedprice objective. Actual runtime range and priceidentity are checked before timing.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "query_count_evidence": "evidence/round24/38085691541/groups-n-native/diagnostics/r24-groups/receipt.json",
+    "proof": "DRAFT: newtotalhelpers and exactsolver/builder interfaces must pass originalgate; finite parity doesnotprove universalheuristic equivalence."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}
