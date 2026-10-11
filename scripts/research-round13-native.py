@@ -30,6 +30,8 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-records.py')],check=True)
     if spec.get('r24_heavy_fixed_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-heavy-fixed.py')],check=True)
+    if spec.get('r24_a_packed_check'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-a-packed.py')],check=True)
     if spec.get('r20_secondary_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round20-secondary.py')],check=True);return
     if spec.get('r19_cache_prefix'):

@@ -1,0 +1,24 @@
+{
+  "candidate": "r24-609-a-packed",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "e1eb9a3385f65fdb327c7b604c6d3574b1f489491b9656e29fe63345d5a13cc6",
+    "Parse.lean": "2d20d999d4a238c891d51e0d5ef484ac4509fc2738016a3cda0fed96aa15fa47"
+  },
+  "mechanism": "Pack the internal cost vector, per-pass length costs and per-record distance base before A full and bounded-tail reductions; preserve original 9bit tie ordering and all function inline attributes.",
+  "difference_from_old_work": "R21 had a small signal but accidentally moved inline(never) from the DP to its helper. This source preserves the actual609 boundaries, extends the representation to both A kernels, and requires real-Rust differential tests including wrapped costs before timing.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "prior": "candidates/r21-a-packed-cost/manifest.json",
+    "inline_boundary_identity": true,
+    "changed_functions": [
+      "Z184",
+      "Z307",
+      "Z314"
+    ],
+    "proof": "DRAFT; shifted arithmetic identity is not a universal kernel proof or fullgate."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}
