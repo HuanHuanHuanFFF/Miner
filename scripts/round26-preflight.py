@@ -55,6 +55,9 @@ def main():
         pairs = module.equivalence_pairs(spec)
         assert pairs and all(e.get('expected_equivalent_to') for e in spec['entries'] if not e.get('control'))
         module.build_harness(pairs)
+    if spec.get('r26_native_decode'):
+        assert mode == 'native' and not spec.get('r26_finite_equivalence')
+        importlib.import_module('research-round12-decode').harness(spec)
     if mode == 'standard' and any(e.get('native_decode_reference') for e in spec['entries']):
         importlib.import_module('research-round12-decode').harness(spec)
     if mode == 'diagnostic':

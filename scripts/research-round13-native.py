@@ -6,6 +6,10 @@ from round4 import ROOT,validate
 def main():
     assert os.environ.get('GITHUB_ACTIONS')=='true'and os.environ.get('RUNNER_OS')=='Linux'
     spec=validate(os.environ['ROUND4_SPEC']);out=Path(os.environ['RUNNER_TEMP'])/'round4-receipts';out.mkdir(exist_ok=True)
+    (out/'execution-start.json').write_text(json.dumps({'run_id':os.environ['GITHUB_RUN_ID'],
+        'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],
+        'status':'NATIVE_EXECUTION_STARTED_NOT_A_RESULT','source_hashes':{e['name']:e['hashes']for e in spec['entries']},
+        'scope':'Early identity binding, including later compile failures; no correctness, timing or proof assertion.'},indent=2)+'\n')
     if spec.get('r26_a_replay'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-replay.py')],check=True)
         return
@@ -36,6 +40,8 @@ def main():
     if spec.get('r25_dual8_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-dual8-counts.py')],check=True)
         return
+    if spec.get('r26_native_decode'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round12-decode.py')],check=True)
     if spec.get('r25_finite_equivalence') or spec.get('r26_finite_equivalence'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round4.py')],check=True)
         eq=json.loads((out/'equivalence-research.json').read_bytes())
