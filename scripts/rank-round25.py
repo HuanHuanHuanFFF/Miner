@@ -33,10 +33,11 @@ def main():
         value=100*comp['policy']['pareto_share']*w.get(n,0)
         assert abs(value-o['single_pool_share_pct'])<1e-9
         rivals=sorted([(p.name,100*comp['policy']['pareto_share']*w.get(p.name,0)) for p in f if p.name!=n],key=lambda x:x[1],reverse=True)
+        leading_rival=rivals[0] if rivals else (None,0.0)
         return {k:o[k] for k in ['run_id','block','role','entry_role','entry_name','calibration','projected_time','projected_size_pct']} | {
-            'share_pct':value,'strict_geometric_first':value>0 and value>rivals[0][1],
+            'share_pct':value,'strict_geometric_first':value>0 and value>leading_rival[1],
             'geometric_rank':1+sum(s>value for _,s in rivals) if value>0 else None,
-            'first_rival_id':rivals[0][0],'first_rival_geometric_share_pct':rivals[0][1],
+            'first_rival_id':leading_rival[0],'first_rival_geometric_share_pct':leading_rival[1],
             'current_payable_top_id':str(top['id']),'current_top_after_geometric_share_pct':100*comp['policy']['pareto_share']*w.get(str(top['id']),0)}
     candidates=[]
     for g in analysis['candidates']:
