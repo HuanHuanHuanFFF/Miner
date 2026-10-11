@@ -21,6 +21,8 @@ def main():
     spec=importlib.import_module('verify-round25-exact').validate(args.batch) if mode=='gate' else validate(args.batch)
     assert not spec.get('preflight_only'), 'Preflight fixtures cannot be dispatched as research results'
     assert spec['r25_mode']==mode and bool(spec.get('native_only'))==(mode=='native')
+    if mode not in ('gate', 'extract') and spec.get('r18_role') != 'independent_confirmation':
+        assert datetime.now(timezone.utc) < datetime.fromisoformat(budget['latest_new_research_dispatch_utc']), 'Final confirmation/collection reserve has begun; do not launch a new research batch'
     if spec.get('r25_dispatch_after_gate_pair_known'):
         for entry in spec['entries']:
             if entry.get('control'):continue

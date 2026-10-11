@@ -28,12 +28,13 @@ def main():
     # including unpaid ones. Registration/payment changes are not predicted.
     def score(x, y):
         if any(p.time_s <= x and p.ratio_pct <= y for p in front):
-            return {'time_ratio': x, 'share_pct': 0.0, 'geometric_rank': None}
+            return {'time_ratio': x, 'share_pct': 0.0, 'geometric_rank': None, 'strict_geometric_first': False}
         f = sc.pareto_front(front + [sc.Point('__new__', x, y)])
         w = sc.local_global_improvement_space_log_weights(f, bounds)
         value = w.get('__new__', 0)
         return {'time_ratio': x, 'share_pct': 100*comp['policy']['pareto_share']*value,
                 'geometric_rank': 1+sum(v > value for k,v in w.items() if k != '__new__'),
+                'strict_geometric_first': value > 0 and all(value > v for k,v in w.items() if k != '__new__'),
                 'current_top_after_pct': 100*comp['policy']['pareto_share']*w.get(str(top['id']),0)}
     xs = [0.38+i*0.00005 for i in range(2401)]
     ys = [35.5,35.8,36.0,36.1,36.15,36.2,36.25,36.3,36.35,36.4,36.45,36.48,36.5,36.52,36.54,36.6]
@@ -44,7 +45,7 @@ def main():
         for target in ['top1',10,15]:
             groups, active = [], []
             for row in grid:
-                good = row['geometric_rank'] == 1 if target == 'top1' else row['share_pct'] >= target
+                good = row['strict_geometric_first'] if target == 'top1' else row['share_pct'] >= target
                 if good: active.append(row)
                 elif active: groups.append(active); active = []
             if active: groups.append(active)
