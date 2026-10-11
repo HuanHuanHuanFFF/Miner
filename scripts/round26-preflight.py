@@ -40,6 +40,12 @@ def main():
     if mode == 'native' and spec.get('native_encoder'):
         names = {'public514'} | set(spec.get('native_encoder_references', [])) | {e['name'] for e in spec['entries'] if not e.get('control')}
         assert len(names) <= 6 and names <= set(by)
+    if spec.get('r26_finite_equivalence'):
+        assert mode == 'native' and spec.get('native_encoder') is True
+        module = importlib.import_module('research-round4')
+        pairs = module.equivalence_pairs(spec)
+        assert pairs and all(e.get('expected_equivalent_to') for e in spec['entries'] if not e.get('control'))
+        module.build_harness(pairs)
     if mode == 'standard' and any(e.get('native_decode_reference') for e in spec['entries']):
         importlib.import_module('research-round12-decode').harness(spec)
     if mode == 'diagnostic':

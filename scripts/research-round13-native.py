@@ -30,7 +30,7 @@ def main():
     if spec.get('r25_dual8_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-dual8-counts.py')],check=True)
         return
-    if spec.get('r25_finite_equivalence'):
+    if spec.get('r25_finite_equivalence') or spec.get('r26_finite_equivalence'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round4.py')],check=True)
         eq=json.loads((out/'equivalence-research.json').read_bytes())
         assert eq.get('returncode')==0 and eq.get('cases') and all(r['cases']==444 and r['different_or_failed']==0 for r in eq['cases']), 'R25 requested actual finite equivalence must complete, including compilation'
