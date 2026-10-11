@@ -1,0 +1,21 @@
+{
+  "candidate": "r24-609-chain-lcp8",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "bb8b714ad8f252b46b88087abc775a7bd7da29d6f645d3b7d398b3864fc0bc0a",
+    "Parse.lean": "2d20d999d4a238c891d51e0d5ef484ac4509fc2738016a3cda0fed96aa15fa47"
+  },
+  "mechanism": "Store a16bitbackwarddistance and capped8byte LCP in the existing32bitSFpredecessor entry. Along achain, unequal knownLCPs belowthecap give the next exactlength; otherwise theirminimum is a verifiedprefix for the originalmatcher. Decode tinytoken consumers too; expiredlinks becomeabsent because no latercurrentposition can use them.",
+  "difference_from_old_work": "R21relative16storage andR24per-distancecache didnotconfirmgains. Herethe representation enablesa different LCPtransitivity mechanism, withoutlarger cache or globalstate. Precompute costs onunusedpositions may erasequerysavings, so actualper-query equality/counts andtotal-time decide.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "prior_negative": [
+      "docs/rounds/round21.md",
+      "evidence/round24/analysis-u.json"
+    ],
+    "proof": "DRAFT: newhelpers, SFprev dependency order andcapturedchainstate requireactualextraction andfreshfullgate. Finitemodel isnotuniversalRust equivalence."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}

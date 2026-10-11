@@ -1,11 +1,15 @@
 """Refresh the root submission dashboard from read-only official API snapshots."""
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
+import argparse
 import hashlib
 import json
 from pathlib import Path
+import shutil
+import subprocess
 
 import requests
+from dashboard_profit import calculate, read_ledger
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'https://conjectures.io/v1/competitions/deflate'
@@ -24,7 +28,7 @@ def number(value, suffix=''):
     return 'UNKNOWN' if value is None else f'{value:.6f}{suffix}'
 
 
-def refresh():
+def refresh(snapshot_id=None):
     registry_path = ROOT / 'docs/submissions.json'
     registry = json.loads(registry_path.read_bytes())
     entries = registry['submissions']
@@ -52,10 +56,14 @@ def refresh():
     rows = []
     try:
         with requests.Session() as session:
-            latest = get(session, 'latest', f'{BASE}/submissions/{ids[-1]}')
+            latest_url = f'{BASE}/submissions/{ids[-1]}'
+            if snapshot_id is not None:
+                latest_url += f'?snapshot_id={snapshot_id}'
+            latest = get(session, 'latest', latest_url)
             context = latest['context']
             snapshot = context['snapshot_id']
             assert snapshot and context['status'] == 'ready'
+            assert snapshot_id is None or str(snapshot) == snapshot_id, 'Requested snapshot must be preserved'
             for entry in entries:
                 sid = entry['submission_id']
                 body = get(session, sid, f'{BASE}/submissions/{sid}?snapshot_id={snapshot}', True)
@@ -86,7 +94,43 @@ def refresh():
                                          'dashboard_preserved': True})
         raise
 
-    summary = {'checked_at_utc': datetime.now(timezone.utc).isoformat(), 'context': context, 'submissions': rows}
+    ledger = read_ledger(ROOT)
+    for cost_entry in ledger['costs']:
+        for sid in set(cost_entry['submission_ids']).intersection(ids):
+            evidence_path = dest / f'{sid}.response.json'
+            if not evidence_path.exists():
+                evidence_path = dest / f'{sid}-pending.response.json'
+            payload = json.loads(evidence_path.read_bytes())
+            if payload is None:
+                payload = json.loads((dest / f'{sid}-pending.response.json').read_bytes())
+            assert payload['submission']['hotkey'] == cost_entry['hotkey'], 'Registration identity mismatch'
+    price = None
+    dependency_roots = [ROOT / '.registration-private/registration-watch/node_modules',
+                        ROOT.parent.parent / '.registration-private/registration-watch/node_modules']
+    dependencies = next((p for p in dependency_roots if (p / '@polkadot/api/index.js').exists()), None)
+    node = shutil.which('node')
+    if node is None:
+        fallback = Path.home() / '.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe'
+        node = str(fallback) if fallback.exists() else None
+    try:
+        if dependencies is None or node is None:
+            raise RuntimeError('Existing local Node/Polkadot read-only dependencies unavailable')
+        result = subprocess.run([node, str(ROOT / 'scripts/read-dashboard-costs.mjs'), str(dependencies),
+                                 '--price-only', str(dest / 'chain-price'), 'wss://archive.chain.opentensor.ai:443'],
+                                capture_output=True, timeout=120)
+        (dest / 'chain-price-command.json').write_text(json.dumps({'exit_code': result.returncode,
+             'stdout': result.stdout.decode('utf-8', errors='replace'),
+             'stderr': result.stderr.decode('utf-8', errors='replace')}, indent=2) + '\n', encoding='utf-8')
+        result.check_returncode()
+        price_path = dest / 'chain-price/chain-read.json'
+        price = json.loads(price_path.read_bytes())
+        save_json(dest / 'chain-price-receipt.json', {'file': 'chain-price/chain-read.json',
+                  'sha256': hashlib.sha256(price_path.read_bytes()).hexdigest()})
+    except Exception as exc:
+        save_json(dest / 'price-failure.json', {'error': str(exc), 'net_profit_status': 'UNKNOWN'})
+    profit = calculate(rows, ledger, price)
+    summary = {'checked_at_utc': datetime.now(timezone.utc).isoformat(), 'context': context,
+               'submissions': rows, 'registration_profit': profit}
     save_json(dest / 'summary.json', summary)
     save_json(registry_path, registry)
     rel = dest.relative_to(ROOT).as_posix()
@@ -118,6 +162,24 @@ def refresh():
     lines += ['', f'已知累计奖励合计：**{total:.6f} α**（{len(known)}/{len(rows)} 条具有官方数值；VERIFIED API 记录，非钱包余额或净利润）。', '',
               f'[本次完整数据]({rel}/summary.json) · [原始响应 SHA-256 与查询时间]({rel}/receipts.json) · [提交登记表](docs/submissions.json)', '',
               '初始记录计算时间（北京）：', '']
+    marked = profit['marked_reward_tao']
+    net = profit['net_after_registration_tao']
+    cost_alpha = profit['registration_cost_alpha_at_current_price']
+    net_alpha = profit['net_after_registration_alpha']
+    cost = Decimal(profit['registration_cost_tao'])
+    profit_lines = ['', '## 扣除注册费用后的累计收益', '',
+        f"- 已核实注册成本：**{cost:.9f} TAO**，包括对应提交的注册扣款及成功／失败交易手续费；同一交易只计一次。",
+        f"- 注册成本按当前价格折算：**{number(Decimal(cost_alpha) if cost_alpha is not None else None)} α**。",
+        f"- 扣除注册成本的累计净收益估算：**{number(Decimal(net_alpha) if net_alpha is not None else None)} α**（{profit['status']}；约 {number(Decimal(net) if net is not None else None)} TAO）。"]
+    if profit['tao_per_alpha'] is not None:
+        profit_lines += [f"- 兑换口径：SN66 池储备 `subnetTAO / subnetAlphaIn`，1 α ≈ {Decimal(profit['tao_per_alpha']):.9f} TAO；finalized 区块 **{profit['price_finalized_block']}**，查询北京时间 **{beijing(profit['price_checked_at_utc'])}**。"]
+    if profit['missing_cost_submission_ids']:
+        profit_lines += ['- 注册成本缺失：' + '、'.join('#' + sid for sid in profit['missing_cost_submission_ids']) + '；完整累计净收益保留 UNKNOWN。']
+    failed_count = sum(c['type'] == 'failed_registration_fee' for c in ledger['costs'])
+    profit_lines += ['', f'范围：本看板 {len(rows)} 笔已提交记录的注册成本，含 {failed_count} 次失败注册手续费；未使用注册额度、模型／CI成本不计入本项。净收益采用当前价格估值，不代表已经卖出或钱包已到账，未计兑换滑点及提现费用。未来新增提交若缺少成本记录，净收益显示 UNKNOWN。',
+        '[注册成本登记与交易证据](docs/registration-costs.json) · ' + f'[折算储备与原始回执]({rel}/summary.json)', '']
+    insert = lines.index('初始记录计算时间（北京）：')
+    lines[insert:insert] = profit_lines
     for row in rows:
         first = row.get('first_observed')
         lines.append(f"- #{row['submission_id']}：{beijing(first['computed_at']) if first else 'UNKNOWN'}。")
@@ -127,4 +189,9 @@ def refresh():
 
 
 if __name__ == '__main__':
-    refresh()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--snapshot-id', help='Use this official snapshot for every row; default queries the latest snapshot.')
+    args = parser.parse_args()
+    if args.snapshot_id is not None and not args.snapshot_id.isdecimal():
+        parser.error('--snapshot-id must contain only decimal digits')
+    refresh(args.snapshot_id)

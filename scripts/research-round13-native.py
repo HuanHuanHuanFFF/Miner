@@ -6,6 +6,38 @@ from round4 import ROOT,validate
 def main():
     assert os.environ.get('GITHUB_ACTIONS')=='true'and os.environ.get('RUNNER_OS')=='Linux'
     spec=validate(os.environ['ROUND4_SPEC']);out=Path(os.environ['RUNNER_TEMP'])/'round4-receipts';out.mkdir(exist_ok=True)
+    if spec.get('r24_output_state_entry'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-output-state.py')],check=True)
+    if spec.get('r24_tiny_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-tiny-counts.py')],check=True)
+    if spec.get('r24_buffer_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-buffer.py')],check=True)
+    if spec.get('r24_cap_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-cap-counts.py')],check=True)
+    if spec.get('r24_group_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-groups.py')],check=True)
+    if spec.get('r24_match_cache_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-match-cache.py')],check=True)
+    if spec.get('r24_word_reuse_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-word-reuse.py')],check=True)
+    if spec.get('r24_compile_identity'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-compile.py')],check=True)
+    if spec.get('r24_root_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-root.py')],check=True)
+    if spec.get('r24_sf32_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-sf32.py')],check=True)
+    if spec.get('r24_record_merge_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-records.py')],check=True)
+    if spec.get('r24_heavy_fixed_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-heavy-fixed.py')],check=True)
+    if spec.get('r24_a_packed_check'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-a-packed.py')],check=True)
+    if spec.get('r24_item_price_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-item-price.py')],check=True)
+    if spec.get('r24_span_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-span.py')],check=True)
+    if spec.get('r24_chain_prefix_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-chain-prefix.py')],check=True)
     if spec.get('r20_secondary_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round20-secondary.py')],check=True);return
     if spec.get('r19_cache_prefix'):

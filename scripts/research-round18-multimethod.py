@@ -24,6 +24,12 @@ def save(p, value):
 def main():
     assert os.environ.get('GITHUB_ACTIONS') == 'true' and os.environ.get('RUNNER_OS') == 'Linux'
     spec = validate(os.environ['ROUND4_SPEC']); assert spec['r18_mode'] == 'diagnostic'
+    if spec.get('r24_layout_diagnostic'):
+        assert os.environ.get('ROUND4_SPEC_DIR')=='evidence/round24'
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-layout.py')],check=True);return
+    if spec.get('r24_affinity_diagnostic'):
+        assert os.environ.get('ROUND4_SPEC_DIR')=='evidence/round24'
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-affinity.py')],check=True);return
     if spec.get('r20_library_diagnostic'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round20-library.py')],check=True);return
     if spec.get('r18_order_diagnostic'):

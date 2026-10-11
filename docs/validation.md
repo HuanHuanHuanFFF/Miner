@@ -17,7 +17,7 @@
 | 第十八轮字节审计 | `scripts/audit-round18-evidence.py`核对原始artifact清单、官方快照、已提交Git字节与两文件审阅ZIP；`scripts/summarize-round18-cost.py`从已收齐作业统计资源 |
 | 文档和路径自检 | `python scripts/project.py check` |
 
-所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；近期每批均重新核实公开状态。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至23轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
+所有 workflow 现为 `workflow_dispatch`，都提供默认 false 的 `allow_private`。每次派发前通过 GitHub 元数据检查仓库当前可见性；近期每批均重新核实公开状态。源码 push 不产生自动实验。`deflate-round9.yml` 当前支持第9至24轮，复现以原始回执绑定的精确 source_commit 和批次JSON为准，不依赖已清理的实验分支。
 
 ## 实际执行版本
 
@@ -40,3 +40,5 @@ Windows 的换行转换曾破坏原始 receipt 的字节哈希；`evidence/.gita
 第22轮通过`dispatch-round22.py`固定追加一小时；`round22-preflight.py`绑定实际候选数量及原始文件。`verify-round22-exact.py`与`bind-round22-gate.py`绑定新精确验收，确认批次按通过的文件对派发。独立确认、同源码／分母分解、单独／联合重放及诊断协议边界见[第22轮](rounds/round22.md)。后续顺序诊断保留fixed11／fixed20／balanced20三组；本轮已冻结F实际只有fixed11／balanced20，不能按新准备器补写历史。
 
 第23轮固定50分钟，`check-round23-route.py`跨工作流与派发器实际参数预检；首次旧轮次路由失败另列。`verify-round23-exact.py`、`bind-round23-gate.py`分别绑定原组合及新链三精确gate；冻结确认与等20次顺序诊断见[第23轮](rounds/round23.md)。收集器的平均坐标输出明确标为非逐块份额结论；控制缺少同块实际父参照时记录UNKNOWN，候选本身仍要求实际父参照齐全。
+
+第24轮为固定10小时窗口：`dispatch-round24.py`及`round24-preflight.py`绑定截止、公开runner和真实批次；`verify-round24-exact.py`／`bind-round24-gate.py`绑定原版完整gate。最终候选冻结后3个新runner各3块原协议确认，主候选、副本和参照视图分层；使用`analyze-round24.py`、`analyze-round24-anchors.py`、`summarize-round24-final.py`与`check-round24-joint.py`复算。`audit-round24.py`核对原始字节和实际作业时长；最新快照看板可用`update-dashboard.py --snapshot-id N`对齐。实际结果与精确文件见[第24轮](rounds/round24.md)。

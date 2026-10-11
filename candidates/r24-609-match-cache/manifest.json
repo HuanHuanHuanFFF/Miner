@@ -1,0 +1,18 @@
+{
+  "candidate": "r24-609-match-cache",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "a697153c14bca02f86f5ee4debc53e7e97d6a97b26a7d9a2e744bd12b41ed276",
+    "Parse.lean": "2d20d999d4a238c891d51e0d5ef484ac4509fc2738016a3cda0fed96aa15fa47"
+  },
+  "mechanism": "Cache the end of a previously verified match at the same distance. Because each SF collector visits increasing positions, its overlap is already known; extend only the remaining suffix with the original matcher. A256-slot direct map stores distance and end, with fallback on misses and bounds.",
+  "difference_from_old_work": "R19 transferred base-engine candidate prefixes across stages and added large cache plumbing; this cache is local to each SF collector and reuses exact prior SF comparisons. It never replaces the search or changes candidate admission. Extra read/write cost is measured.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "related": "docs/rounds/round19.md",
+    "proof": "DRAFT: new bounded helper and loop cache state need actual extraction. General correctness still enforced by original final emission; finite equivalence does not establish all-input equivalence."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}

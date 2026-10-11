@@ -1,0 +1,19 @@
+{
+  "candidate": "r24-609-child16",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "8d4c0ad5d3c3c3486cc3a5806ff255f440454c65169e1a28bb7e6d73f925104d",
+    "Parse.lean": "2d20d999d4a238c891d51e0d5ef484ac4509fc2738016a3cda0fed96aa15fa47"
+  },
+  "mechanism": "Store A binary-tree children as positive parent-relative distances below32768, zero for absent/expired edges; retain all full32bit root/near/short timestamps. Decode relative to the actual live parent, not the query position, to avoid stale-window aliasing. This halves the65536-entry child array.",
+  "difference_from_old_work": "Prior compact heads/predecessors in fast and SF families did not guarantee speed. This targets a different large child working set and preserves root age checks/hash/search depth. Links outside the window are only discarded when already unusable in all later queries; finite/public parity and measured timing must test the implementation.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "profile": "evidence/round24/weighted-stage-priority.json",
+    "prior_compact_negative": "docs/research/optimization-methods.md",
+    "proof": "DRAFT: child array types and two new total helpers require fresh extraction and complete gate. No all-input equivalence claimed from finite model."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}

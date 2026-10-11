@@ -1,0 +1,24 @@
+--- r24-609-root-word-price-proof1/parse.rs
++++ r24-609-fast-adaptive-proof1/parse.rs
+@@ -12967,8 +12967,8 @@
+  let depth=SFdepth(input);let mut p=a;
+  while p<e {
+   Z430(starts,items.len() as u32);let mut best=[0u32;8];let ot=Z168(orig,p.wrapping_sub(a));let mut count=0usize;if ot!=0{count=SFsmalladd(&mut best,count,ot);}
+-  let mut q=SFlookup(prev,p,ot) as usize;let mut k=0usize;
+-  while k<depth&&q>0 {let j=q.wrapping_sub(1);let d=p.wrapping_sub(j);if j>=p||d>32768{break;}let cap=Z248(258,e.saturating_sub(p));let known=SFknown(ot,d,cap);let l=SFmatchlen(input,j,p,cap,known);if l>=3{count=SFsmalladd(&mut best,count,SFmt(d,l));}q=Z168(prev,j) as usize;k+=1;}
++  let mut q=SFlookup(prev,p,ot) as usize;let mut k=0usize;let limit=depth.saturating_add(depth);let mut longest=if ot==0{0}else{SFlen(ot)};
++  while k<limit&&(k<depth||longest<8)&&q>0 {let j=q.wrapping_sub(1);let d=p.wrapping_sub(j);if j>=p||d>32768{break;}let cap=Z248(258,e.saturating_sub(p));let known=SFknown(ot,d,cap);let l=SFmatchlen(input,j,p,cap,known);if l>longest{longest=l;}if l>=3{count=SFsmalladd(&mut best,count,SFmt(d,l));}q=Z168(prev,j) as usize;k+=1;}
+   let mut c=0usize;while c<count&&c<4{if SFsmallkeep(&best,count,c,ct){Z430(items,best[c%8]);}c+=1;}p+=1;
+  }Z430(starts,items.len() as u32);
+ }
+@@ -13092,8 +13092,8 @@
+  let level=ZLEVEL[Z469(input)%32];let depth=if level==2{16usize}else if level==1{8usize}else if input.len()>=1000000{3usize}else{SFMDEPTH};let mut p=a;
+  while p<e {
+   Z430(starts,items.len() as u32);let mut best=[0u32;4];let mut codes=[0usize;4];let ot=Z168(orig,p.wrapping_sub(a));let mut count=0usize;if ot!=0{count=SFfastadd(&mut best,&mut codes,count,ot);}
+-  let mut q=SFshortlookup(prev,p,ot,input.len()) as usize;let mut k=0usize;
+-  while k<depth&&q>0 {let j=q.wrapping_sub(1);let d=p.wrapping_sub(j);if j>=p||d>32768{break;}let cap=Z248(258,e.saturating_sub(p));let known=SFknown(ot,d,cap);let l=SFmatchlen(input,j,p,cap,known);if l>=3{count=SFfastadd(&mut best,&mut codes,count,SFmt(d,l));}q=Z168(prev,j) as usize;k+=1;}
++  let mut q=SFshortlookup(prev,p,ot,input.len()) as usize;let mut k=0usize;let limit=depth.saturating_add(depth);let mut longest=if ot==0{0}else{SFlen(ot)};
++  while k<limit&&(k<depth||longest<8)&&q>0 {let j=q.wrapping_sub(1);let d=p.wrapping_sub(j);if j>=p||d>32768{break;}let cap=Z248(258,e.saturating_sub(p));let known=SFknown(ot,d,cap);let l=SFmatchlen(input,j,p,cap,known);if l>longest{longest=l;}if l>=3{count=SFfastadd(&mut best,&mut codes,count,SFmt(d,l));}q=Z168(prev,j) as usize;k+=1;}
+   let mut c=0usize;while c<count&&c<4{if SFfastkeep(&best,&codes,count,c,ct){Z430(items,best[c%4]);}c+=1;}p+=1;
+  }Z430(starts,items.len() as u32);
+ }

@@ -1,0 +1,21 @@
+{
+  "candidate": "r24-609-heavy-fixedpoint",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "af7f07a2f7f063eb4a81ed5e7de55c7c59fb40eff5fccfda2ccdac7a070b2dfc",
+    "Parse.lean": "2d20d999d4a238c891d51e0d5ef484ac4509fc2738016a3cda0fed96aa15fa47"
+  },
+  "mechanism": "Skip only a following full SFheavy invocation after a prior SFheavy returned the identical token vector, with the same input and prev. Equality is checked only when a following heavy call exists. Batch-to-heavy is never assumed to share a fixed point.",
+  "difference_from_old_work": "R24 tiny convergence and R18 exact-price DP repeats found no saved work; this is the distinct SFweak-to-heavy transition, which can call the same full transformation twice. First measure actual equal-state coverage; zero coverage stops timing.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "prior_different_negative": [
+      "evidence/round24/38082319463/refine-f-native/diagnostics/r24-tiny-counts/receipt.json",
+      "evidence/round18/repeat-e-decision.json"
+    ],
+    "proof": "DRAFT; finite parity and fixed-state reasoning do not replace original obligation."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}

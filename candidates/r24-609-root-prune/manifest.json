@@ -1,0 +1,18 @@
+{
+  "candidate": "r24-609-root-prune",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "329d3c9cf637f3bc356761b1fbc5ef9eca33cb843335c69766c78e8146b575c3",
+    "Parse.lean": "2d20d999d4a238c891d51e0d5ef484ac4509fc2738016a3cda0fed96aa15fa47"
+  },
+  "mechanism": "For skip>=258, select a dedicated A finder with one root table instead of separate root/recent tables, no unreachable continuation skip branch, and no unused continuation bookkeeping. Keep the original finder unchanged under a renamed fallback for skip<258.",
+  "difference_from_old_work": "This removes proven-condition dead work, unlike changing hash keys or merely shrinking a used table. Original best match is bounded258 and decremented at each iteration, so entry continuation stays<=257. No modified configuration or search-depth parameter. Native token parity must still validate the implementation.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "profile": "evidence/round24/weighted-stage-priority.json",
+    "proof": "DRAFT: new loop states and renamed fallback interfaces require exact extraction/migration/fullgate. The structural argument is not a completed Lean equivalence proof."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}
