@@ -22,6 +22,11 @@ def main():
     if spec.get('r26_b_match_sharing'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-match-sharing.py')],check=True)
         return
+    if spec.get('r26_b_cache_integrity'):
+        module=spec['r26_b_cache_integrity_module']
+        assert module=='r26-b-cache-integrity-fix1'
+        subprocess.run([sys.executable,str(ROOT/'scripts'/(module+'.py'))],check=True)
+        return
     if spec.get('r25_heldout_quality'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-heldout-quality.py')],check=True)
         return

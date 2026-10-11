@@ -16,7 +16,12 @@ def main():
     assert bool(spec.get('native_only')) == (mode == 'native')
     assert sum(not e.get('control', False) for e in spec['entries']) == spec['r26_expected_candidates']
     by = {e['name']: e for e in spec['entries']}
-    assert sum(bool(spec.get(k)) for k in ('r26_a_replay', 'r26_a_boundary', 'r26_a_boundary641', 'r26_b_match_sharing', 'r18_function_profile')) <= 1
+    if mode == 'standard':
+        for e in spec['entries']:
+            anchor = e.get('anchor', 'public432')
+            assert anchor in by, f"Missing summary anchor {anchor} for {e['name']}"
+            assert by[anchor].get('formal_id'), f"Summary anchor {anchor} needs a formal reference ID"
+    assert sum(bool(spec.get(k)) for k in ('r26_a_replay', 'r26_a_boundary', 'r26_a_boundary641', 'r26_b_match_sharing', 'r26_b_cache_integrity', 'r18_function_profile')) <= 1
     if spec.get('r26_a_replay'):
         assert mode == 'native' and spec.get('native_encoder') is False
         assert all(e.get('control') for e in spec['entries'])
@@ -36,6 +41,10 @@ def main():
         assert mode == 'native' and spec.get('native_encoder') is False
         assert all(e.get('control') for e in spec['entries'])
         importlib.import_module('r26-b-match-sharing').preflight(spec)
+    if spec.get('r26_b_cache_integrity'):
+        assert mode == 'native' and spec.get('native_encoder') is False
+        assert spec['r26_b_cache_integrity_module'] == 'r26-b-cache-integrity-fix1'
+        importlib.import_module(spec['r26_b_cache_integrity_module']).preflight(spec)
     if spec.get('r18_function_profile'):
         assert mode == 'native' and spec.get('native_encoder') is True
         from round4 import ROOT
