@@ -1,10 +1,38 @@
 """Dispatch one frozen R25 batch within the currently authorized fixed deadline."""
 from pathlib import Path
 from datetime import datetime, timezone
-import argparse, importlib.util, json, os, subprocess, time
+import argparse, hashlib, importlib.util, json, os, subprocess, time
 
 ROOT=Path(__file__).resolve().parents[1]
 REPO='HuanHuanHuanFFF/Miner'
+
+def verify_committed_inputs(spec, sha):
+    """Require the local frozen inputs to exist with exact bytes in that Git tree."""
+    checked={}
+    def check(path, expected=None):
+        local=(ROOT/path).resolve()
+        assert local.is_relative_to(ROOT.resolve()) and local.is_file(), f'Missing local input: {path}'
+        blob=subprocess.run(['git','show',sha+':'+Path(path).as_posix()],cwd=ROOT,capture_output=True)
+        assert blob.returncode==0, f'Required input absent from dispatched commit: {path}'
+        digest=hashlib.sha256(blob.stdout).hexdigest()
+        assert digest==hashlib.sha256(local.read_bytes()).hexdigest(), f'Local/commit input mismatch: {path}'
+        assert expected is None or digest==expected, f'Frozen hash/commit mismatch: {path}'
+        checked[Path(path).as_posix()]=digest
+    if spec['r25_mode']=='gate':
+        for name,digest in spec['files'].items():check(str(Path(spec['path'])/name),digest)
+    else:
+        for entry in spec['entries']:
+            for name,digest in entry['hashes'].items():check(str(Path(entry['path'])/name),digest)
+        check(spec['snapshot_pages'])
+        if spec.get('r25_dispatch_after_gate_pair_known'):
+            for entry in spec['entries']:
+                if entry.get('control'):continue
+                certpath=str(Path(entry['path'])/'VERIFICATION.json')
+                check(certpath)
+                cert=json.loads((ROOT/certpath).read_bytes())
+                check(cert['receipt'])
+    return checked
+
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
@@ -39,6 +67,7 @@ def main():
     assert subprocess.run(['git','merge-base','--is-ancestor',budget['baseline_main_sha'],sha],capture_output=True).returncode==0
     remote=json.loads(helper.run(['api',f'repos/{REPO}/commits/{args.ref}'],env))['sha'];assert remote==sha
     frozen=json.loads(subprocess.check_output(['git','show',sha+f':evidence/round25/{args.batch}.json']));assert frozen==spec
+    committed_inputs=verify_committed_inputs(spec,sha)
     listing=['run','list','--repo',REPO,'--branch',args.ref,'--workflow','deflate-round9.yml','--limit','25','--json','databaseId,headSha,status,createdAt,url']
     seen={r['databaseId'] for r in json.loads(helper.run(listing,env))}
     inputs={'experiment_round':'25','specification':args.batch,'allow_private':'false','job_minutes':str(minutes)}
@@ -49,9 +78,9 @@ def main():
         matches=[r for r in json.loads(helper.run(listing,env)) if r['headSha']==sha and r['databaseId'] not in seen]
         if matches:
             assert len(matches)==1
-            record={'round':25,'batch':args.batch,'mode':mode,'git_sha':sha,'inputs':inputs,'dispatch_utc':started,'repository_visibility_verified':'public','authorization':'Current user research budget including explicit extensions, necessary cloud verification and experiment-branch push scope; no submission, registration or wallet actions.','job_timeout_minutes':minutes,'collection_reserve_minutes':10,'fixed_deadline_utc':budget['deadline_utc'],'run':matches[0]}
+            record={'round':25,'batch':args.batch,'mode':mode,'git_sha':sha,'inputs':inputs,'committed_input_sha256':committed_inputs,'dispatch_utc':started,'repository_visibility_verified':'public','authorization':'Current user research budget including explicit extensions, necessary cloud verification and experiment-branch push scope; no submission, registration or wallet actions.','job_timeout_minutes':minutes,'collection_reserve_minutes':10,'fixed_deadline_utc':budget['deadline_utc'],'run':matches[0]}
             p=ROOT/f'evidence/round25/dispatch-{matches[0]["databaseId"]}.json';assert not p.exists();p.write_text(json.dumps(record,indent=2)+'\n')
-            print(json.dumps(record));return
+            print(json.dumps({k:v for k,v in record.items() if k!='committed_input_sha256'} | {'committed_input_count':len(committed_inputs)}));return
         time.sleep(2)
     raise RuntimeError('Dispatch accepted; discovery pending. Inspect existing runs before any retry.')
 

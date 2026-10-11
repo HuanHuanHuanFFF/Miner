@@ -1,0 +1,34 @@
+{
+  "status": "VERIFIED_PACKAGING_FAILURE_NOT_ALGORITHM_OR_TIMING_RESULT",
+  "observed_utc": "2026-10-11T11:27:54.452945+00:00",
+  "cause": "Root omitted the locally captured official-score-m directory from commits while three frozen batch specs referenced it. Dispatcher checked local files and the spec, but did not verify the dependent snapshot existed in that commit.",
+  "runs": [
+    {
+      "batch": "screen-nt",
+      "run_id": "38134540554",
+      "commit": "9f0bfd5904549c4348c5572dced4c05e0676763e",
+      "preflight_reproduces_root_cause": "Required input absent from dispatched commit: evidence/round25/official-score-m/pareto-pages.json",
+      "paired_processes": 0,
+      "raw_receipt": "evidence/round25/38134540554/screen-nt/gate/ci.log"
+    },
+    {
+      "batch": "confirm-components-a",
+      "run_id": "38134827293",
+      "commit": "e231b5c6956601b751807ae6b8223c40d12432c6",
+      "preflight_reproduces_root_cause": "Required input absent from dispatched commit: evidence/round25/official-score-m/pareto-pages.json",
+      "paired_processes": 0,
+      "raw_receipt": "evidence/round25/38134827293/confirm-components-a/gate/ci.log"
+    },
+    {
+      "batch": "confirm-components-b",
+      "run_id": "38134842459",
+      "commit": "e231b5c6956601b751807ae6b8223c40d12432c6",
+      "preflight_reproduces_root_cause": "Required input absent from dispatched commit: evidence/round25/official-score-m/pareto-pages.json",
+      "paired_processes": 0,
+      "raw_receipt": "evidence/round25/38134842459/confirm-components-b/gate/ci.log"
+    }
+  ],
+  "finite_decode": "All declared candidate pairs completed540 cases withzero decode/panic failures before the missing-file exception. No official timing state was produced.",
+  "repair": "Commit fullrawsnapshot; require everyRust/Lean, referenced snapshot, and requiredexactgatecertificate/receipt to exist and match bytes in dispatchedGit tree before workflowdispatch. Preserve oldfailure receipts and use newretrylabels.",
+  "scope": "No candidatefile, originalbenchmark, gate, pin, sourcecorpus or comparison order changed."
+}
