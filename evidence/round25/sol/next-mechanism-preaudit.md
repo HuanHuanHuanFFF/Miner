@@ -36,7 +36,7 @@ public578 对 combo 的 133 行 unified diff 只包含来源注释、`format_id`
 
 以 bundle 为例：combo 使用 `pc_run1c::<32768>(skip5,lazy0,km=0xFFFFFF00,dp2,min3)`，public578 改为 `pc_run1c::<32768>(skip6,lazy0,km=0xFFFFFFFF,dp1,min4)`。完整四字节键阻止三字节主匹配，也改变槽碰撞与旧链；skip、dp 同时改变。**INFERRED**：避免某些短匹配可能参与 −4,984 B / +41,975 tokens 的交换。它没有证实“最后三字节改 literal”是原因，更没有证实全域 min4 值得迁移。
 
-public584 的同一 bundle 路径为 `pim_run1c::<65536>(skip6,lazy0,km=0xFFFFFF00,dp2,min3)`：仍允许三字节；实际 hash shift 为 48 而非 combo 的 49，头表有真实新增索引位；`pim_INS_MAX=1` 而 combo `pc_INS_MAX=2`。`pc_f_try`、主 probe 与折叠算法相同，record 的头部次数、实际头表和 skip 同时改变。它获得更大字节改善并不需要最短四字节规则。不能将其全部收益归因于少一笔插入或短匹配经济条件，也不能在没有父轨迹证据时盲试 2→1。
+**10:36 UTC 根据 L 的真实路由更正：此处原先把 public584 的 bundle 误归因到 `pim_run1c::<65536>(skip6,lazy0,km=0xFFFFFF00,dp2,min3)`；这是静态审阅错误，不是实际观测。** 显式 `n==1000000` 的 bulk 入口覆盖 fallback，bundle 实际走 `p135_row10` → `pc_run1c::<131072>(skip4,lazy258,full4,dp2,min4)`，在真实 token 中没有 len3。`pim_run1c` 的 row7 在本语料实际只有 binary.db；它的真实16-bit表、头插入1、skip6仍与 combo 同文件父路径有多项变化，不能免费归因或盲试2→1。原错误已在 `len3-price-feedback.json` 保留原说法与修正；原始来源/回执不改。
 
 其他 584 主要文本路径把实际 head 从 15 位改为 17 位，启用 lazy258 / dp2；prose 更换 `o_a_main_part::<10,256,8,5,32>`。这些是更多覆盖/规划或不同引擎。双表类属于本次排除的 dual8 邻近类别；全域 lazy、扩表、深度和插入密度不是这里提出的新机制。
 
@@ -76,3 +76,13 @@ R13 是 EF32/浮点输入，不能据此证明所有 PC 文本三字节都划算
 **INFERRED**：三字节经济损失可能参与 bundle 的字节/token 反差；当前来源变化的可分离性和迁移成本判断。
 
 **UNKNOWN**：当前 PC len3 实际 block 价格/亏损覆盖、固定低成本谓词、真实 parser 改写后的质量/总成本、实际 Lean 接口/完整 gate。结论为**暂不建议新增实现**，不是该机制类别的全输入不可能性结论。
+
+## L 原生观察后的停止决定
+
+本节补充后续结果，不改写上文提出诊断时的 UNKNOWN。run `38132209168` 的原生观察已通过84组归档 token/output/input 身份、frozen/observed parse、原 encoder/追加观察副本以及独立 decode。机器可读完整分路由/距离码反馈见 `len3-price-feedback.json`，原 receipt SHA `e2bb08daad976dccbc6ff29c9868f5f5b1a260eb923983040d641f29d4c6e1d0`。
+
+combo 的真实 PC len3 只有 row0 的 binary.db、bundle、machine-code：77,647个，其中76,172 match便宜、456 literal便宜、961同价、58 literal码价缺失。原块已知价下 match获益626,968bit、局部亏损627bit；全部引擎2,441bit亏损中的另1,758bit来自BFRAW、56bit来自EF32。后两者不是PC，未混入本假设。
+
+每个有样本的标准距离码都保留大量 match更便宜的反例，整码域的已知原表 literal替代成本均为正；code29（24,577–32,768）也有2,280个获益match对184个亏损match、385同价、3缺失，原表已知获益5,509bit对亏损264bit。public578的PC、public584的PC和单列PIM也没有整码域能独立分隔正负。检查的是原30个码域，没有阈值搜索。
+
+**关闭 H 当前便宜距离域规则的实现投入，不做 token改写、候选、参数或阈值扫描。** 627bit只表示父原块表下的局部差，不是实际输出收益、实际收益上界或可复现速度。缺失码价保持UNKNOWN；尚未试图证明其他廉价谓词、未来输入或改写后的Huffman表不可能受益。
