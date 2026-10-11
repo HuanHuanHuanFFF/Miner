@@ -1,5 +1,29 @@
 # R25 续跑状态
 
+## 当前有效状态（20:31北京时间）
+
+固定窗口仍为2026-10-11 **16:06:21–21:06:21**（UTC08:06:21–13:06:21），压缩上下文不重启。目标稳定榜首未完成；仍在原窗口内核验交付。12:06 UTC后不启动新普通发现实验，当前无CI等待。早期阶段记录保留在下方，不能覆盖本节最新状态。
+
+34作业已全部收齐，30成功/4失败/0取消；9个成功standard批180原协议配对进程。实际runner累计201.25分钟、排队1.90分钟，包含setup而非账单。三个子线程均结束：Astra精确pair独立审计、Sol域外质量/后续路线、LunaCI消耗/报告事实检查。使用一个worktree；最近已推送`298b1f4f`，分支`codex/round25-fast-quality`；main起点48baf622未改。最新官方重算及看板尚待下一次提交，保留当前工作区。
+
+12种不同Rust（14份含证明版本的目录）。两个通过完整原gate的保留组件：end4(03ec0aa4/4ff09d16，gate38125243582)和tinyPC proof1(5c20b99c/3bd53694，gate38130996700)。固定精确pair见confirm-components-plan.json，UTC11:12:41冻结。新确认38135739022(AMD7763)、38135751559(Intel6973P-C)，各2块；每源4个主块，595主/影子/578校准均全0，联合也0。ZIP仅两源文件，review-packages/packages.json保留完整SHA；正确性组件不推荐当收益候选上传。
+
+M proof1 Rust84ccbc/Lean36cb549仍DRAFT未编译。N/T最新38135725985已成功收齐：N比combo慢0.943%/1.031%且多1271B；T主更慢、副本有快值但所有份额视图均0，保留同源码分歧，不重复盲测或扩完整gate。tiny-tail未计时，不赋零分。其余新实现主块当前份额均0；I发现期有微小正值，独立确认没有复现。完整数据与负例见outcome-29700.json及报告。
+
+最新完整官方捕获**official-delivery，快照29700**，计算11:59:05 UTC，查询12:26附近，freshness unknown；629已评分，leaderboard588条。official-rules-delivery的commit仍6bf303f，五个评分/说明文件原字节与起点一致，rules-recheck-delivery.json。新候选analysis/rank/anchors/outcome-29700与score-algebra-29700已完成，独立公式核对128视图/56联合案例。
+
+旧父版combo单列在parent-context/rank/algebra/summary/anchors-29700：本轮18个incidental control块，595主最高26.256758%、中位0、零13/18、严格第一5/18；影子最高21.297964%、中位0、零14/18；578相关参照8块零7/8。HI块1换同源码参照会由约26.26%降为0.046%，已证明是邻居/端点切换与归一化。旧R23三批42配对另作历史重放，**不算R25新消耗或确认**。保留高潜力父版与全部零值，不选峰值宣布稳定。
+
+O诊断27固定合成输入/81原编码双解码通过；tiny12active全小，end4三小四同体积五大。相关seed不是独立抽样，不计时、不算份额。只读tiny-symbol-coverage重构K原输入并核对全部频率，活码覆盖不能当边际收益。后续两条未实现机制及停止条件在sol/next-route-assessment.md。
+
+看板已刷新29700：7笔正式提交累计11.124526237α，#625当前0.163908%、#5730.255494%；按finalized9259920公开池价扣注册成本约净2.967245α，非到账/已实现收益，未扣模型CI。回执evidence/dashboard/20261011T122736657679Z。无新增submission登记、上传、注册、签名或钱包读取。
+
+12:28:43 UTC账户实读used19%/剩81%，secondary unavailable；0重置/0购买，差值不当本任务独占成本。报告、methods、TASK_INDEX/tasks已更新，project.py check通过32tasks/1298aliases/759链接/10手动workflow/349pair。Git字节审计已核864声明文件/112,920,798B（最新capture尚待加入下一次审计）；完整pair独立审计在astra/final-pair-audit，二进制实物/gate score JSONL未归档的局限保留。
+
+剩余：核对最新看板、回执、全部Git字节并提交/推送；临近截止再查官方snapshot/policy身份，变化则整套重算并同快照刷新看板。**13:04:21 UTC后**最后两分钟写closure、writer --closed、最终check/push/report，13:06:21不延长。研究goal是限定5小时执行并诚实交付，不把关闭研究窗口说成达成稳定榜首。final须保留memory citation，报告未达目标及正式UNKNOWN。无未收齐CI或权限阻断。
+
+## 早期阶段记录（历史观察）
+
 固定北京时间窗口：2026-10-11 16:06:21–21:06:21；main基线48baf622，分支codex/round25-fast-quality，一个worktree。执行规则见[AGENTS.md](../../AGENTS.md)。目标为快速端低成本改善压缩、争取稳定竞赛池份额榜首；截至18:23尚未建立稳定正份额，更未达成榜首。
 
 截止不重算。19:36:21拟冻结，最后90分钟保留完整原版gate、精确文件对独立确认与交付；20:06后不派新普通发现实验。已启动CI自然完成或既定超时，不主动取消。

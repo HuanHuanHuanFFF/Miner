@@ -18,6 +18,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--capture', required=True, type=Path)
     ap.add_argument('--outcome', required=True, type=Path)
+    ap.add_argument('--audit', type=Path, default=E / 'git-byte-audit-checkpoint.json')
+    ap.add_argument('--geometry', type=Path, default=E / 'target-map-delivery.json')
     ap.add_argument('--closed', action='store_true')
     a = ap.parse_args()
     if a.closed:
@@ -28,6 +30,12 @@ def main():
     competition, context, rows = load_flat_rows(a.capture)
     assert data['snapshot'] == context
     sid = context['snapshot_id']
+    geometry = read(a.geometry)
+    assert geometry['snapshot'] == context
+    geometry_rel = a.geometry.relative_to(ROOT) if a.geometry.is_absolute() else a.geometry
+    def intervals(quality):
+        groups = next(r for r in geometry['survey'] if r['quality_pct'] == quality)['intervals']['top1']
+        return '；'.join(f'{r["min_time"]:.5f}–{r["max_time"]:.5f}' for r in groups) or '网格未命中'
     parent = read(E / f'parent-summary-{sid}.json')
     assert parent['snapshot'] == context
     parent_views = {s['calibration']: s for s in parent['summary'] if s['era'] == 'r25_incidental_control'}
@@ -37,6 +45,10 @@ def main():
     related_parent = next(s for s in parent_anchors['summary'] if s['anchor'] == 'public578')
     capture = read(a.capture / 'receipt.json')
     costs = read(E / 'luna/ci-cost-final.json')
+    byte_audit = read(a.audit)
+    audit_rel = a.audit.relative_to(ROOT) if a.audit.is_absolute() else a.audit
+    usage_path = E / ('usage-final.json' if (E / 'usage-final.json').exists() else 'usage-delivery-checkpoint.json')
+    usage = read(usage_path)
     packages = read(E / 'review-packages/packages.json')
     by_id = {str(r['id']): r for r in rows}
     top = max(rows, key=lambda r: (r.get('score') or {}).get('payable_weight') or 0)
@@ -93,7 +105,7 @@ def main():
 
 本轮保留的是两个已验证正确性的质量组件，不是建议立即提交的收益候选。全部份额为公共测量迁移到正式坐标后的条件估算；正式admission、私有结果和可支付收益为 **UNKNOWN**。没有正式上传、注册、签名或资金操作。
 
-执行规则见 [AGENTS.md](../../AGENTS.md)。[固定预算](../../evidence/round25/budget.json)、[逐块汇总](../../{outcome_rel.as_posix()})、[原始证据审计](../../evidence/round25/git-byte-audit-checkpoint.json)、[阶段决策](../../evidence/round25/feedback-nt-confirmation-decision.json)保留完整边界。
+执行规则见 [AGENTS.md](../../AGENTS.md)。[固定预算](../../evidence/round25/budget.json)、[逐块汇总](../../{outcome_rel.as_posix()})、[原始证据审计](../../{audit_rel.as_posix()})、[阶段决策](../../evidence/round25/feedback-nt-confirmation-decision.json)保留完整边界。
 
 ## 最新官方依据与目标缺口
 
@@ -103,7 +115,7 @@ def main():
 
 [独立代数复算](../../evidence/round25/score-algebra-{sid}.json)从前沿扫描、局部／全局系数、增量对数轴预算和统一归一化重新计算，不调用原scorer实现。128个单独观测视图及56组对齐联合案例与原重放一致；这些视图包含校准和控制，不能当独立样本数。
 
-逆向网格用于判断投入空间：[晚期几何及坐标纠正](../../evidence/round25/luna/late-target-note.md)。在其明示的29690快照中，平均压缩比例36.5%的取样榜首速度区间只有0.42860–0.43045；降到35.5%时取样区间才扩展到0.42860–0.43750。它既不是连续边界，也不是实现成绩。最终保留版投影大小约36.519%和36.452%，且新确认速度仍落在这些区域之外。不能把原始public坐标直接与正式前沿比较，也不能把极窄窗口当稳定收益。
+逆向网格用于判断投入空间：[同快照几何](../../{geometry_rel.as_posix()})。在快照{sid}中，平均压缩比例36.5%的取样榜首速度区间为{intervals(36.5)}；降到35.5%时为{intervals(35.5)}。它既不是连续边界，也不是实现成绩。最终保留版投影大小约36.519%和36.452%，且新确认速度仍落在这些区域之外。不能把原始public坐标直接与正式前沿比较，也不能把极窄窗口当稳定收益；[早期坐标误用的更正](../../evidence/round25/luna/late-target-note.md)另行保留。
 
 ## 12种实现的真实结果
 
@@ -162,6 +174,8 @@ H比dual8快，但仍比combo慢1.120%–1.155%；M比I快，却仍比combo慢0.
 四个CI失败全部保留：K首轮依赖本机未跟踪的sources阅读副本；另外三轮漏提交评分快照，在540有限decode后、原计时前失败。修复分别加严准备后身份核验和派发前Git树内依赖字节核验；旧失败不覆盖，不计性能样本。[回归复现](../../evidence/round25/snapshot-dependency-repair-check.json)。报告阶段也更正了原始public坐标／正式投影坐标混用，以及旧CI检查点派生UTC端点误减8小时；原始回执均未改写。
 
 [实际CI消耗](../../evidence/round25/luna/ci-cost-final.md)：{costs['totals']['runner_cumulative_minutes']:.2f} runner分钟，排队累计{costs['totals']['queue_minutes_sum']:.2f}分钟；计入setup／checkout，剔除所有skipped job，失败作业计入消耗。它们是并发作业之和，不等于5小时研究墙钟或现金账单。账户共享用量单独记录；未重置、未购买，任务独占token／金额成本UNKNOWN。
+
+[账户实时读数](../../{usage_path.relative_to(ROOT).as_posix()})：UTC `{usage['queried_utc']}`，共享主窗口已用{usage['primary_used_percent']}%、剩余{usage['primary_remaining_percent']}%；次窗口未提供。共享读数不能归为本任务独占消耗。Git对象核验{byte_audit['checked_file_count']}份声明文件、{byte_audit['checked_total_bytes']:,}B；原始输入与源码保持字节一致，详见上述审计。重置0次、购买0次；链上支出及正式上传0次。
 
 用户授权最多4子线程，工具实际支持root加3子线程，因此使用Astra/xhigh、Sol/xhigh、Luna/max三个角色并行，根线程负责CI、Git和最终复核；无嵌套、无额外worktree。起点main／origin/main均为`48baf622466792f4d505c5c06d5696f784e27b7a`；成果留在`codex/round25-fast-quality`，不自动合并或清分支。普通提交跳过CI。
 

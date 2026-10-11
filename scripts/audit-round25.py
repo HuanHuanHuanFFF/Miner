@@ -21,6 +21,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--output', type=Path, required=True)
     ap.add_argument('--git-ref', help='Also verify every audited file against this committed tree')
+    ap.add_argument('--dashboard', type=Path, help='Audit this round-close public dashboard summary and receipts')
     args = ap.parse_args()
     assert not args.output.exists(), 'Preserve earlier audit observations'
     checked = {}
@@ -127,6 +128,20 @@ def main():
                 assert hashlib.sha256(z.read(name)).hexdigest() == expected
                 assert z.read(name) == (ROOT / package['source_path'] / name).read_bytes()
     verify(package_file.parent, package_file.name, {})
+    dashboard = None
+    if args.dashboard:
+        summary_path = args.dashboard.resolve()
+        assert summary_path.is_relative_to((ROOT / 'evidence/dashboard').resolve())
+        for receipt in json.loads((summary_path.parent / 'receipts.json').read_bytes()):
+            verify(summary_path.parent, receipt['raw_file'], receipt)
+        for path in sorted(summary_path.parent.rglob('*')):
+            if path.is_file():
+                verify(path.parent, path.name, {})
+        summary = json.loads(summary_path.read_bytes())
+        dashboard = {'summary': summary_path.relative_to(ROOT).as_posix(),
+                     'snapshot_id': summary['context']['snapshot_id'],
+                     'submissions': len(summary['submissions']),
+                     'status': 'VERIFIED_PUBLIC_API_RECEIPTS_AND_RETAINED_CHAIN_READ_BYTES'}
     committed = None
     if args.git_ref:
         revision = subprocess.check_output(['git', 'rev-parse', args.git_ref], cwd=ROOT, text=True).strip()
@@ -157,6 +172,7 @@ def main():
            'checked_files': checked, 'source_pairs': sources,
            'distinct_rust_count': len({s['files']['parse.rs'] for s in sources}),
            'source_only_packages': len(packages['packages']), 'committed_bytes': committed,
+           'dashboard': dashboard,
            'run_count': len(runs), 'ci_conclusions': dict(Counter(r['conclusion'] for r in runs)),
            'runs': runs,
            'limits': ['Hash agreement proves retained bytes and provenance, not private acceptance or reward.',
