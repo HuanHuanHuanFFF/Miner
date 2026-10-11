@@ -6,6 +6,9 @@ from round4 import ROOT,validate
 def main():
     assert os.environ.get('GITHUB_ACTIONS')=='true'and os.environ.get('RUNNER_OS')=='Linux'
     spec=validate(os.environ['ROUND4_SPEC']);out=Path(os.environ['RUNNER_TEMP'])/'round4-receipts';out.mkdir(exist_ok=True)
+    if spec.get('r26_a_replay'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-replay.py')],check=True)
+        return
     if spec.get('r25_heldout_quality'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-heldout-quality.py')],check=True)
         return
