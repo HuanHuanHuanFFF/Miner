@@ -16,6 +16,9 @@ def main():
     assert bool(spec.get('native_only')) == (mode == 'native')
     assert sum(not e.get('control', False) for e in spec['entries']) == spec['r26_expected_candidates']
     by = {e['name']: e for e in spec['entries']}
+    if spec.get('r26_a_boundary_helper_check'):
+        assert mode == 'standard'
+        importlib.import_module('r26-a-boundary-helper-check').preflight(spec)
     if mode == 'standard':
         for e in spec['entries']:
             anchor = e.get('anchor', 'public432')
