@@ -1,0 +1,19 @@
+{
+  "candidate": "r24-609-record-merge",
+  "parent": "r24-609-once",
+  "hashes": {
+    "parse.rs": "f618e780fd0b5b67da305dbaec7c79f67c5a3e100c0169774d3825976a6fa73a",
+    "Parse.lean": "2d20d999d4a238c891d51e0d5ef484ac4509fc2738016a3cda0fed96aa15fa47"
+  },
+  "mechanism": "Within Z189 only, merge adjacent plain extent records when distance is exactly equal and the later extent is at least as long. The consuming Z184/Z187 path enumerates all lengths, so represented length/distance offers remain identical. Never cross a position boundary or an exact-only record.",
+  "difference_from_old_work": "Do not apply this to bounded-tail Z314: merging there can remove earlier retained lengths. This normalizes cached records once before repeated DP passes, unlike prior per-length packedcost or RFspan pruning. One native test determines actual reductions and fulltoken parity.",
+  "attribution": {
+    "parent": "r24-609-once",
+    "consumer": "Z186 -> Z185 -> Z184 or Z187 (unlimited length enumeration)",
+    "prior_different_negative": "docs/rounds/round18.md",
+    "proof": "DRAFT: new guarded Vec helper and captured record_start in tree loop require actual extraction/fullgate."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}
