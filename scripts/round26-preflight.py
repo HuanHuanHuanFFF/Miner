@@ -16,11 +16,17 @@ def main():
     assert bool(spec.get('native_only')) == (mode == 'native')
     assert sum(not e.get('control', False) for e in spec['entries']) == spec['r26_expected_candidates']
     by = {e['name']: e for e in spec['entries']}
+    assert sum(bool(spec.get(k)) for k in ('r26_a_replay', 'r26_a_boundary', 'r18_function_profile')) <= 1
     if spec.get('r26_a_replay'):
         assert mode == 'native' and spec.get('native_encoder') is False
         assert all(e.get('control') for e in spec['entries'])
         assert spec.get('gate_candidates') == [] and spec.get('extract_candidates') == []
         importlib.import_module('r26-a-replay').preflight(spec)
+    if spec.get('r26_a_boundary'):
+        assert mode == 'native' and spec.get('native_encoder') is False
+        assert all(e.get('control') for e in spec['entries'])
+        assert spec.get('gate_candidates') == [] and spec.get('extract_candidates') == []
+        importlib.import_module('r26-a-boundary').preflight()
     if spec.get('r18_function_profile'):
         assert mode == 'native' and spec.get('native_encoder') is True
         from round4 import ROOT

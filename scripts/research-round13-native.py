@@ -9,6 +9,9 @@ def main():
     if spec.get('r26_a_replay'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-replay.py')],check=True)
         return
+    if spec.get('r26_a_boundary'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-boundary.py')],check=True)
+        return
     if spec.get('r25_heldout_quality'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-heldout-quality.py')],check=True)
         return
