@@ -40,9 +40,9 @@ def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('batch');ap.add_argument('--ref',default='codex/round26-stable-pair')
     ap.add_argument('--max-minutes',type=int,default=45)
-    ap.add_argument('--budget', choices=['original', 'extension4h'], default='original')
+    ap.add_argument('--budget', choices=['original', 'extension4h', 'extension1h'], default='original')
     args=ap.parse_args()
-    budget_path='evidence/round26/budget.json' if args.budget=='original' else 'evidence/round26/extension4h/budget.json'
+    budget_path='evidence/round26/budget.json' if args.budget=='original' else f'evidence/round26/{args.budget}/budget.json'
     budget=json.loads((ROOT/budget_path).read_bytes())
     assert datetime.now(timezone.utc) >= datetime.fromisoformat(budget['start_utc']), 'Research window has not started'
     left=int((datetime.fromisoformat(budget['deadline_utc'])-datetime.now(timezone.utc)).total_seconds()//60)-10
