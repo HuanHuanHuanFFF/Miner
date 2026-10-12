@@ -112,6 +112,9 @@ def main():
     if spec.get('r26_b_tag_graph_integrity'):
         assert mode == 'native' and spec.get('native_encoder') is True and spec.get('r18_function_profile') is True
         importlib.import_module('r26-b-tag-graph-integrity').preflight(spec)
+    if spec.get('r26_b_tree_packed_counts'):
+        assert mode == 'native' and spec.get('native_encoder') is True and spec.get('r18_function_profile') is True
+        importlib.import_module('r26-b-tree-packed-counts').preflight(spec)
     if spec.get('r18_function_profile'):
         assert mode == 'native' and spec.get('native_encoder') is True
         from round4 import ROOT

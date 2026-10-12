@@ -166,6 +166,8 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-functions.py')],check=True)
         if spec.get('r26_b_tag_graph_integrity'):
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-tag-graph-integrity.py')],check=True)
+        if spec.get('r26_b_tree_packed_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-tree-packed-counts.py')],check=True)
         return
     if spec.get('r16_transfer_candidates'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round16-transfer.py')],check=True);return
