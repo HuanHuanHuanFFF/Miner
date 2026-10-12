@@ -387,3 +387,12 @@ CI整体状态与阶段原始证据分别检查：I及价格打包复现显示ca
 **已有证明的结论强度决定复用边界。** 父版本某个DP定理只给出totality，即使函数签名相同，也不能把它说成最优性或赢家来源等价证明。删除数组会改变提取后的循环状态，新helper还可能被提取成多个循环。实际提取接口、有限完整状态对照、最终parse义务和原版gate各自回答不同问题；文件体积可容纳迁移仅排除一个工程阻断，不说明证明已完成。[no-owner证明接口预审](../../evidence/round26/route-b/b38-no-owner-proof-preaudit.md)。
 
 **运行期状态和因果解释仍需分开。** 后续V1复制原engine，在原timers外记录CPU端点，并保持两过程同一DSO、原28文件及11次协议结构；所有结果仍只属诊断。内核状态直接定位到user.slice未向下启用cpuset，解释了本次用户scope缺少对应控制接口；但端点相等不能排除中途迁移，CPU与进程顺序也可能混杂。按file、method、stage、进程、CPU端点分层后，一组同CPU端点的两过程计时范围仍不交叠。它不能变成CPU校正系数，也不追认历史根因；约束落实与测量稳定性应分别检验。[V1原始绑定分析](../../evidence/round26/extension4h/v1-analysis.json)、[有界验证调整](../../evidence/round26/extension4h/verification-reserve-adjustment.json)。
+
+
+### 第26轮追加一小时：重复工作与小份额验证
+
+**先计实际执行的重复工作，再决定怎样消除。** C2 的末字节必要过滤能拒绝约40%的原扫描，但这些扫描平均只做1.014次字比较，新增检查反而覆盖所有调用；C3 延迟长后缀扩展保持公共输出，实际能减少的读取集中在极少数长匹配。逻辑冗余、匹配长度和可回收耗时是不同量，源级计数只能决定是否值得计时，不能证明更慢或换算收益。[C2实测与停止](../../evidence/round26/extension1h/c2-decision.json)、[C3实测与停止](../../evidence/round26/extension1h/c3-decision.json)。
+
+**跨阶段复用应保留实际正确性责任。** 现有搜索规格只证明返回过程总性，不能据“搜索已经看过字节”直接删除发射验证。C4 将完整验证保留在局部可信发射器，同时删除整个延迟选择阶段，真实支付压缩质量代价；完整gate状态与计时结果仍分别报告。这与在整个搜索链中传递已匹配事实有不同的证明成本，不能靠复制父Lean称为已验证。[固定方案与边界](../../evidence/round26/extension1h/route-c/c4-predeclaration.md)、[本窗报告](../rounds/round26-extension1h.md)。
+
+**小信号要按实际对照的分辨率解释。** C4单块中两份改变输出的文件有更快贡献，但全体份额仍为零，同二进制副本差异又足以翻转判断。逐文件总时间中位数对应的同一rep可以分解为解析、编码和配对分母的加法恒等式；它帮助定位分歧，不能将其他文件的变化全归因于噪声，也不能抹去它们制造“校正成绩”。保留局部有益证据和整体反例，同时把稳定性写为未确认。[原始分解](../../evidence/round26/extension1h/c4-cost-feedback.json)、[独立核对](../../evidence/round26/extension1h/audit/c4-final-timing-review.md)。
