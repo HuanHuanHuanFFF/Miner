@@ -87,6 +87,11 @@ def main():
             for name, expected in row['source_and_proof_unchanged'].items():
                 verify((ROOT / row['path']).parent, name, {'sha256': expected})
         verify(metadata_path.parent, metadata_path.name, {})
+    live_path = BASE / 'extension4h/ci-live-close.json'
+    if live_path.exists():
+        live = json.loads(live_path.read_bytes())
+        verify(live_path.parent, live['raw_file'], {'sha256': live['raw_sha256']})
+        verify(live_path.parent, live_path.name, {})
     public_receipts = list(BASE.glob('public-*/receipt.json')) + list(BASE.glob('extension4h/public-*/receipt.json'))
     for p in sorted(public_receipts):
         records = json.loads(p.read_bytes())
