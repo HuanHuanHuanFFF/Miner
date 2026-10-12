@@ -38,7 +38,9 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-discarded-diagnostic.py')],check=True)
         return
     if spec.get('r26_b_tree_edge_counts'):
-        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-tree-edge-diagnostic.py')],check=True)
+        module=spec.get('r26_b_tree_edge_module', 'r26-b-tree-edge-diagnostic')
+        assert module in ('r26-b-tree-edge-diagnostic', 'r26-b-tree-seed-diagnostic')
+        subprocess.run([sys.executable,str(ROOT/'scripts'/(module+'.py'))],check=True)
         return
     if spec.get('r26_a_distance12_observer_only'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-distance12-counts.py')],check=True)
