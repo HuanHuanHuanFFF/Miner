@@ -1,0 +1,20 @@
+{
+  "candidate": "r26-c-658-fold-tail",
+  "parent": "references/round26-public-658",
+  "hashes": {
+    "parse.rs": "305f6089dc6f4210e9c6041e69f16e1727cba22b191e8f4a8c9c427380227d24",
+    "Parse.lean": "354d56aa9f58536efdb410f3d5ecdf1945bded607965fe8a48161f96b035c494"
+  },
+  "attribution": {
+    "source_receipt": "references/round26-public-658/source-receipt.json",
+    "author_hotkey": "5G3YLL7PuDhRBoVoDBYKhAfTxFM4EouSDiYuFXeeWciNRzyK",
+    "ownership": "Derivative of public658; published ancestry and all parent comments retained."
+  },
+  "mechanism": "Only U118 whole-token backward fold: after all original range guards, reject a previous match whose last byte fails at current distance, before scanning that entire previous token from its beginning. Tail-pass still executes original u118_same.",
+  "difference": "PC already has fold_w prefilter; U118 does not. Not A18 forward best-window filtering, not R20 removal of fold, not a same-distance cache. No new table, retained state, search parameter, route, encoder, or timing change.",
+  "equivalence": "INFERRED from necessity of the final-byte equality for every successful original same; requires actual native and complete gate.",
+  "guard_safety": "Original loop has d<p, p<=input length from valid parse; guarded w>=3 and d<=p-w imply p>=w>=3 and p-1-d is valid. All original bounds and same fallback retained.",
+  "proof_status": "DRAFT_PARENT_SCAFFOLD_ONLY. Parent Lean copied unchanged. Exact extraction, Lean build, original obligations, axiom whitelist and full gate NOT_RUN. Existing BackInv.match remains relevant on success; new failure path uses existing part_merge_spec. No equivalence or gate claim.",
+  "performance": "UNKNOWN. Count avoided actual original scans and added endpoint checks; meaningful coverage only earns original-protocol timing.",
+  "formal_submission_sent": false
+}
