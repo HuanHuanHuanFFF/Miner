@@ -202,6 +202,8 @@ def main():
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-tagged-counts.py')],check=True)
         if spec.get('r26_a_lastlink_lowering'):
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-lastlink-lowering.py')],check=True)
+        if spec.get('r26_c_deferred_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-c-deferred-counts.py')],check=True)
         if spec.get('r26_c_fold_tail_counts'):
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-c-fold-tail-counts.py')],check=True)
         if spec.get('r26_a_window_counts'):

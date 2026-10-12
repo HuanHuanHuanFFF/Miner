@@ -9,3 +9,9 @@
 官方29907（计算UTC11:44:41）664条；规则commit6bf303f14e6c7bccc63e9a557e4ac83e032fa9e8。原始字节与独立公式audit通过。R26旧13已计时主候选只有A19单块正0.780667%，另一块0，副本0；旧R24/R25确认也不能直接复用为稳定成绩。份额均条件估算。C1同距离fold shortcut被最长前缀/258上限可达性反例阻断，尚未生产。C2先检末byte必要条件后保留原u118_same：缺口是真实扫描覆盖；一份native固定语料/有限相等+完整扫描机会统计决定是否进入原协议。
 
 初次git diff --check将保留CRLF的evidence判为尾空白；未修改原始字节，使用core.whitespace=cr-at-eol重新检查通过。PC精确区别：pc_fold本体无guard，实际pc_run的pc_fold_w外层已有tail word预过滤，不能漏掉wrapper。
+
+## C2反馈与第二圈
+
+run38246156539 native通过：444有限相等、28公共token/原encoder/双解码一致。256144原same调用，tail拒绝102854（40.15%），但只省104330 word pairs（每拒绝1.014）；加256144 byte-pair checks，触发既定thin/首word停止条件，不进行原协议。C1同距0。新公开662已按官方source端点取得，初审主要旧内核/路由参数，Lean仅807B余量，不因“新提交”就当新机制。
+
+C3调查发现o_a_eval/n_eval长匹配扫描后o_a_emit_step又verified同span。候选提案延迟超过直接接受阈值的扩展至既有可信emit，必须先核对lazy/距离/cap/末尾溢读差异。少量质量变化仍按真实输出记录。当前尚无C3实现或性能证据。
