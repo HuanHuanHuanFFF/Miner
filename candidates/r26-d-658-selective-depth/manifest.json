@@ -1,0 +1,23 @@
+{
+  "candidate": "r26-d-658-selective-depth",
+  "parent": "references/round26-public-658",
+  "hashes": {
+    "parse.rs": "f6c7f97f9fb275d5a27ff4a52d02f065bb9c4cfd39e73e311c5a7f5a3ea8e0a8",
+    "Parse.lean": "354d56aa9f58536efdb410f3d5ecdf1945bded607965fe8a48161f96b035c494"
+  },
+  "attribution": {
+    "source_receipt": "references/round26-public-658/source-receipt.json",
+    "author_hotkey": "5G3YLL7PuDhRBoVoDBYKhAfTxFM4EouSDiYuFXeeWciNRzyK"
+  },
+  "mechanism": "U118 row9 only: first probe current head; before residual search, read-only peek next-position head using original lazy gain. If next head wins, defer current remainder; original lazy winner then receives residual depth11. Otherwise finish current depth11. No persistent metadata or table-write change.",
+  "difference": "A8 added lazy search after full current search. D1 avoids full current search on a shallow-next-head win, reallocating that budget to the selected next start. Unlike A21 proposed one-shot choice, continuous original lazy loop remains. Unlike C4, lazy decisions and exact matching remain.",
+  "risks": [
+    "Shallow comparison can discard a uniquely valuable deeper current match.",
+    "Extra peek and repeated shallow-next search can outweigh saved current search.",
+    "New lazy winner deepening may itself be superseded by later lazy iterations.",
+    "Longer remaining match does not guarantee better whole-stream compression."
+  ],
+  "proof_status": "PARENT_SCAFFOLD_ONLY. Three new helper specs must return existing FoundAt/bounds. Main/lazy loop state shape intentionally unchanged. Exact extraction and full gate NOT_RUN.",
+  "measurement_status": "Rust native compile, finite decode, public originalencoder and originalprotocol timing UNKNOWN. One actual originalprotocol screen required before route promotion or pause; counts are explanatory only.",
+  "formal_submission_sent": false
+}
