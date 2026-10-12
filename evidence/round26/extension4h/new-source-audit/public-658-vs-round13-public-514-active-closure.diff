@@ -1,0 +1,3044 @@
+--- #receipt-round13-public-514/parse.rs
++++ #658/parse.rs
+@@ -1,3 +1,5 @@
++// Generic balanced-parser research derived from officially released #527.
++// Published classifier and routing predicates retained; source/proof edits reverse-audited.
+ // mA: a content-adaptive LZ77 parser for the fixed DEFLATE encoder (mid speed band).
+ //
+ // Lineage: fastX fx17 (fast band, Package 2 base) with per-class settings and four search additions.
+@@ -37,7 +39,7 @@
+ pub const STRIDE: usize = 4;
+ pub const BACKTOK: usize = 16;
+ pub const LDEPTH: usize = 1;
+-pub const SAMPLE: usize = 128;
++pub const SAMPLE: usize = 4096;
+ pub const VERIFY: usize = 0;
+ /// Lazy step: a candidate at p+1 needs length >= l + 1 - LSLACK (LSLACK = 1: at least as long
+ /// as the current match l) and must win on estimated saving (literal worth HLIT/16 bits,
+@@ -251,7 +253,7 @@
+ 
+ 
+ #[inline(never)]
+-pub fn fallback(input:&[u8],out:&mut[u32])->usize{q4_lit_all(input,out)}
++pub fn fallback(input:&[u8],out:&mut[u32])->usize{fx0_run::<1,1,2,258>(input,out,0)}
+ 
+ 
+ 
+@@ -284,23 +286,22 @@
+ 
+ #[inline(never)]
+ pub fn bulk_parse(input:&[u8],out:&mut[u32])->usize{let k=route(input);
+-if k==0 || k==1 || k==10{p125_row0(input,out)}
+-else if k==2 || k==4 || k==5 || k==12 || k==14 || k==15 || k==17 || k==18 || k==19 || k==20{p125_row1(input,out)}
+-else if k==3{p125_row2(input,out)}
+-else if k==6{p125_row3(input,out)}
+-else if k==7{p125_row4(input,out)}
+-else if k==8{p125_row5(input,out)}
+-else if k==9{p125_row6(input,out)}
+-else if k==11{p125_row7(input,out)}
+-else if k==13{p125_row8(input,out)}
+-else if k==16{p125_row9(input,out)}
+-else if k==21{p125_row10(input,out)}
+-else if k==22{p125_row11(input,out)}
++if k==0 || k==15{p125_row0(input,out)}
++else if k==1{p125_row1(input,out)}
++else if k==2{p125_row2(input,out)}
++else if k==3 || k==13 || k==18{p125_row3(input,out)}
++else if k==4{p125_row4(input,out)}
++else if k==5{p125_row5(input,out)}
++else if k==6 || k==11 || k==16 || k==22{p125_row6(input,out)}
++else if k==7{p125_row7(input,out)}
++else if k==8 || k==10{p125_row8(input,out)}
++else if k==9 || k==12 || k==17 || k==19 || k==20{p125_row9(input,out)}
++else if k==14{p125_row10(input,out)}
++else if k==21{p125_row11(input,out)}
+ else if k==23{p125_row12(input,out)}
+ else if k==24{p125_row13(input,out)}
+-else if k==25{p125_row14(input,out)}
++else if k==25 || k==27{p125_row14(input,out)}
+ else if k==26{p125_row15(input,out)}
+-else if k==27{p125_row16(input,out)}
+ else{fallback(input,out)}}
+ 
+ 
+@@ -478,90 +479,331 @@
+ /// Common prefix of positions `a < b` beyond the first 8 bytes, up to `cap` (search only; never trusted).
+ 
+ 
+-
++#[inline(always)]
++pub fn o_a_fast_len2(input: &[u8], a: usize, b: usize, cap: usize) -> usize {
++    let mut l = 8usize;
++    let mut go = 1usize;
++    let mut it = 0usize;
++    while go == 1 && it < 40 {
++        if l < cap {
++            let x = o_a_ld8(input, a.wrapping_add(l)) ^ o_a_ld8(input, b.wrapping_add(l));
++            let k = if x == 0 { 8 } else { o_a_first_diff(x) };
++            l = l.wrapping_add(k);
++            go = if x == 0 { 1 } else { 0 };
++        } else {
++            go = 0;
++        }
++        it += 1;
++    }
++    if l > cap {
++        cap
++    } else {
++        l
++    }
++}
+ 
+ /// Copy of `fast_len` for the lazy chain.
+ /// Common prefix of positions `a < b` beyond the first 8 bytes, up to `cap` (search only; never trusted).
+ 
+ 
+-
++#[inline(always)]
++pub fn o_a_fast_len3(input: &[u8], a: usize, b: usize, cap: usize) -> usize {
++    let mut l = 8usize;
++    let mut go = 1usize;
++    let mut it = 0usize;
++    while go == 1 && it < 40 {
++        if l < cap {
++            let x = o_a_ld8(input, a.wrapping_add(l)) ^ o_a_ld8(input, b.wrapping_add(l));
++            let k = if x == 0 { 8 } else { o_a_first_diff(x) };
++            l = l.wrapping_add(k);
++            go = if x == 0 { 1 } else { 0 };
++        } else {
++            go = 0;
++        }
++        it += 1;
++    }
++    if l > cap {
++        cap
++    } else {
++        l
++    }
++}
+ 
+ /// Hash of the word at `p` with multiplier `mk` (= the golden-ratio constant shifted left by 32: first 4 bytes, by
+ /// 40: first 3 bytes), 64 - O_A_HSR bits.
+ 
+ 
+-
++pub fn o_a_hashp(input: &[u8], p: usize) -> usize {
++    let v = o_a_ld8(input, p);
++    ((v.wrapping_mul(O_A_HM4) >> (O_A_HSR % 64)) as usize) % 65536
++}
+ 
+ /// Hash of the 8 bytes at `p` (long table), 16 bits.
+ 
+ 
+-
++pub fn o_a_hashl(input: &[u8], p: usize) -> usize {
++    let v = o_a_ld8(input, p);
++    ((v.wrapping_mul(0xCF1BBCDCB7A56463) >> (O_A_HSR % 64)) as usize) % 65536
++}
+ 
+ /// The candidate `(cs, cl)` (short / long table entries, pos+1 encoded, 0 = none) at `p`: the long one when its
+ /// first 8 bytes agree, else the short one. Returns `len | dist << 9` (len >= O_A_MINL), or 0.
+ 
+ 
+-
++#[inline(always)]
++pub fn o_a_eval(input: &[u8], p: usize, cs: usize, cl: usize) -> usize {
++    let n = input.len();
++    if n < 16 || p > n - 16 {
++        return 0;
++    }
++    let v = o_a_ld8(input, p);
++    let lim = if p < 32768 { p } else { 32768 };
++    let okl = if p.wrapping_sub(cl) < lim { 1usize } else { 0usize };
++    let xl = if okl == 1 { o_a_ld8(input, cl.wrapping_sub(1)) ^ v } else { 1 };
++    let oks = if p.wrapping_sub(cs) < lim { 1usize } else { 0usize };
++    let xs = if xl == 0 { 0 } else if oks == 1 { o_a_ld8(input, cs.wrapping_sub(1)) ^ v } else { 1 };
++    if xl != 0 && xs & O_A_MM4 != 0 {
++        return 0;
++    }
++    let usel = if xl == 0 { 1usize } else { 0usize };
++    let c = if usel == 1 { cl } else { cs };
++    let x = if usel == 1 { xl } else { xs };
++    let rem = n - p - 8;
++    let cap = if rem < 258 { rem } else { 258 };
++    let l = if x == 0 { o_a_fast_len(input, c.wrapping_sub(1), p, cap) } else { o_a_first_diff(x) };
++    let d = p.wrapping_sub(c.wrapping_sub(1));
++    let ok = if l >= O_A_MINL { if l > 3 { 1usize } else if d <= O_A_MAX3 { 1 } else { 0 } } else { 0 };
++    if ok == 1 {
++        l | d.wrapping_mul(512)
++    } else {
++        0
++    }
++}
+ 
+ /// Lazy-site copy of `eval` (keeps both inlined).
+ /// The candidate `(cs, cl)` (short / long table entries, pos+1 encoded, 0 = none) at `p`: the long one when its
+ /// first 8 bytes agree, else the short one. Returns `len | dist << 9` (len >= O_A_MINL), or 0.
+ 
+ 
+-
++#[inline(always)]
++pub fn o_a_eval2(input: &[u8], p: usize, cs: usize, cl: usize, floor: usize) -> usize {
++    let n = input.len();
++    if n < 16 || p > n - 16 {
++        return 0;
++    }
++    let v = o_a_ld8(input, p);
++    let tag = cl / 16777216;
++    let cl = cl % 16777216;
++    let ht = o_a_hashp(input, p) % 256;
++    let lim = if p < 32768 { p } else { 32768 };
++    let okl = if p.wrapping_sub(cl) < lim { 1usize } else { 0usize };
++    let xl = if okl == 1 && tag == ht { o_a_ld8(input, cl.wrapping_sub(1)) ^ v } else { 1 };
++    if xl == 0 && floor > 8 && floor <= 258 {
++        let at = p.wrapping_add(floor.wrapping_sub(1));
++        let ac = cl.wrapping_sub(1).wrapping_add(floor.wrapping_sub(1));
++        if at >= n || ac >= n { return 0; }
++        if input[at] != input[ac] { return 0; }
++    }
++    let oks = if p.wrapping_sub(cs) < lim { 1usize } else { 0usize };
++    let tail = if floor >= 4 && floor <= 258 && oks == 1 {
++        let at = p.wrapping_add(floor.wrapping_sub(1));
++        let ac = cs.wrapping_sub(1).wrapping_add(floor.wrapping_sub(1));
++        if at < n && ac < n { if input[at] == input[ac] { 1usize } else { 0usize } } else { 0usize }
++    } else { 1usize };
++    let xs = if xl == 0 { 0 } else if oks == 1 && tail == 1 { o_a_ld8(input, cs.wrapping_sub(1)) ^ v } else { 1 };
++    if xl != 0 && xs & O_A_MM4 != 0 { return 0; }
++    let usel = if xl == 0 { 1usize } else { 0usize };
++    let c = if usel == 1 { cl } else { cs };
++    let x = if usel == 1 { xl } else { xs };
++    let rem = n - p - 8;
++    let cap = if rem < 258 { rem } else { 258 };
++    let l = if x == 0 { o_a_fast_len2(input, c.wrapping_sub(1), p, cap) } else { o_a_first_diff(x) };
++    let d = p.wrapping_sub(c.wrapping_sub(1));
++    let ok = if l >= O_A_MINL { if l > 3 { 1usize } else if d <= O_A_MAX3 { 1 } else { 0 } } else { 0 };
++    if ok == 1 {
++        l | d.wrapping_mul(512)
++    } else {
++        0
++    }
++}
+ 
+ /// Lazy-chain copy of `eval` (keeps both inlined).
+ /// The candidate `(cs, cl)` (short / long table entries, pos+1 encoded, 0 = none) at `p`: the long one when its
+ /// first 8 bytes agree, else the short one. Returns `len | dist << 9` (len >= O_A_MINL), or 0.
+ 
+ 
+-
++#[inline(always)]
++pub fn o_a_eval3(input: &[u8], p: usize, cs: usize, cl: usize, floor: usize) -> usize {
++    let n = input.len();
++    if n < 16 || p > n - 16 {
++        return 0;
++    }
++    let v = o_a_ld8(input, p);
++    let tag = cl / 16777216;
++    let cl = cl % 16777216;
++    let ht = o_a_hashp(input, p) % 256;
++    let lim = if p < 32768 { p } else { 32768 };
++    let okl = if p.wrapping_sub(cl) < lim { 1usize } else { 0usize };
++    let xl = if okl == 1 && tag == ht { o_a_ld8(input, cl.wrapping_sub(1)) ^ v } else { 1 };
++    if xl == 0 && floor > 8 && floor <= 258 {
++        let at = p.wrapping_add(floor.wrapping_sub(1));
++        let ac = cl.wrapping_sub(1).wrapping_add(floor.wrapping_sub(1));
++        if at >= n || ac >= n { return 0; }
++        if input[at] != input[ac] { return 0; }
++    }
++    let oks = if p.wrapping_sub(cs) < lim { 1usize } else { 0usize };
++    let tail = if floor >= 4 && floor <= 258 && oks == 1 {
++        let at = p.wrapping_add(floor.wrapping_sub(1));
++        let ac = cs.wrapping_sub(1).wrapping_add(floor.wrapping_sub(1));
++        if at < n && ac < n { if input[at] == input[ac] { 1usize } else { 0usize } } else { 0usize }
++    } else { 1usize };
++    let xs = if xl == 0 { 0 } else if oks == 1 && tail == 1 { o_a_ld8(input, cs.wrapping_sub(1)) ^ v } else { 1 };
++    if xl != 0 && xs & O_A_MM4 != 0 { return 0; }
++    let usel = if xl == 0 { 1usize } else { 0usize };
++    let c = if usel == 1 { cl } else { cs };
++    let x = if usel == 1 { xl } else { xs };
++    let rem = n - p - 8;
++    let cap = if rem < 258 { rem } else { 258 };
++    let l = if x == 0 { o_a_fast_len3(input, c.wrapping_sub(1), p, cap) } else { o_a_first_diff(x) };
++    let d = p.wrapping_sub(c.wrapping_sub(1));
++    let ok = if l >= O_A_MINL { if l > 3 { 1usize } else if d <= O_A_MAX3 { 1 } else { 0 } } else { 0 };
++    if ok == 1 {
++        l | d.wrapping_mul(512)
++    } else {
++        0
++    }
++}
+ 
+ /// Insert positions `from .. to` into both tables.
+ 
+ 
+-
++pub fn o_a_insert_range(input: &[u8], head: &mut [u32; 131072], from: usize, to: usize) {
++    let n = input.len();
++    let mut p = from;
++    while p < to && 16 <= n && p <= n - 16 {
++        let hs = o_a_hashp(input, p);
++        let hl = o_a_hashl(input, p);
++        head[hs] = (p as u32).wrapping_add(1);
++        head[(65536 + hl) % 131072] = ((p as u32).wrapping_add(1) % 16777216) | (((hs % 256) as u32) << 24);
++        p += 1;
++    }
++}
+ 
+ /// Insert every O_A_TS-th position of `from .. to` into both tables (O_A_TL == 1: the long table only).
+ 
+ 
+-
++pub fn o_a_insert_range2<const TS_: usize>(input: &[u8], head: &mut [u32; 131072], from: usize, to: usize) {
++    let n = input.len();
++    let mut p = from;
++    let mut c = 0usize;
++    while c < to && p < to && 16 <= n && p <= n - 16 {
++        let hs = o_a_hashp(input, p);
++        let hl = o_a_hashl(input, p);
++        if O_A_TL == 0 {
++            head[hs] = (p as u32).wrapping_add(1);
++        }
++        head[(65536 + hl) % 131072] = ((p as u32).wrapping_add(1) % 16777216) | (((hs % 256) as u32) << 24);
++        p = p.wrapping_add(TS_);
++        c += 1;
++    }
++}
+ 
+ /// Insert the inside `from .. to` of an emitted match: its first O_A_IH and last O_A_IT positions.
+ 
+ 
+-
++pub fn o_a_insert_match<const IH_: usize, const IT_: usize, const TS_: usize>(input: &[u8], head: &mut [u32; 131072], from: usize, to: usize) {
++    let a = from.wrapping_add(IH_);
++    let a2 = if a < to { a } else { to };
++    let b = to.wrapping_sub(IT_);
++    let b2 = if b > a2 { if b < to { b } else { a2 } } else { a2 };
++    o_a_insert_range(input, head, from.wrapping_add(1), a2);
++    o_a_insert_range2::<TS_>(input, head, b2, to);
++}
+ 
+ /// Literal-scan step after `k` probes: 1 + (k >> O_A_ACC), at most O_A_AMAX.
+ 
+ 
+-
++pub fn o_a_run_len<const ACC_: u64>(k: usize) -> usize {
++    let over = ((k as u64) >> (ACC_ % 64)) as usize;
++    if over < O_A_AMAX {
++        over + 1
++    } else {
++        O_A_AMAX
++    }
++}
+ 
+ /// How far the match `(d, l)` found at `p` extends backwards, staying at or after `lo` (8-byte word steps).
+ 
+ 
+-
++pub fn o_a_bext(input: &[u8], lo: usize, p: usize, d: usize, l: usize) -> usize {
++    let l0 = if p > lo { p - lo } else { 0 };
++    let l1 = if p > d { if d > 0 { p - d } else { 0 } } else { 0 };
++    let l2 = if l < 258 { 258 - l } else { 0 };
++    let m0 = if l0 < l1 { l0 } else { l1 };
++    let lim = if m0 < l2 { m0 } else { l2 };
++    let mut e = 0usize;
++    let mut go = 1usize;
++    let mut it = 0usize;
++    while go == 1 && it < 40 {
++        let q = p.wrapping_sub(e);
++        let ok = if e < lim { o_a_q8ok(q, d) } else { 0 };
++        if ok == 1 {
++            let x = o_a_ld8(input, q.wrapping_sub(8)) ^ o_a_ld8(input, q.wrapping_sub(8).wrapping_sub(d));
++            let k = if x == 0 { 8 } else { (x.leading_zeros() / 8) as usize };
++            e = e.wrapping_add(k);
++            go = if x == 0 { 1 } else { 0 };
++        } else {
++            go = 0;
++        }
++        it += 1;
++    }
++    if e > lim {
++        lim
++    } else {
++        e
++    }
++}
+ 
+ /// 1 iff the 8-byte windows ending at `q` and at `q - d` are both in range (`q >= d + 8`).
+ 
+ 
+-
++pub fn o_a_q8ok(q: usize, d: usize) -> usize {
++    if q >= d.wrapping_add(8) { 1 } else { 0 }
++}
+ 
+ /// 1 iff the byte before `q` repeats at distance `d` (so a match found at `q` also starts at `q - 1`).
+ 
+ 
+-
++pub fn o_a_back1(input: &[u8], q: usize, d: usize) -> usize {
++    let n = input.len();
++    if d == 0 || q <= d || q > n {
++        return 0;
++    }
++    if input[q - 1] == input[q - 1 - d] { 1 } else { 0 }
++}
+ 
+ /// Insert `p` at short / long buckets `hs`, `hl` and read the entries at `hs1`, `hl1` (before the insertion):
+ /// `cs1 << 32 | cl1`.
+ 
+ 
+-
++pub fn o_a_tab_step(head: &mut [u32; 131072], hs: usize, hl: usize, hs1: usize, hl1: usize, p: usize) -> u64 {
++    let cs1 = head[hs1 % 131072];
++    let cl1 = head[65536usize.wrapping_add(hl1) % 131072];
++    head[hs % 131072] = (p as u32).wrapping_add(1);
++    head[65536usize.wrapping_add(hl) % 131072] = ((p as u32).wrapping_add(1) % 16777216) | (((hs % 256) as u32) << 24);
++    ((cs1 as u64) << 32) | (cl1 as u64)
++}
+ 
+ /// Read the entries at short / long buckets `hs`, `hl` and insert `q` there: `cs << 32 | cl`.
+ 
+ 
+-
++pub fn o_a_tab_step2(head: &mut [u32; 131072], hs: usize, hl: usize, q: usize) -> u64 {
++    let cs = head[hs % 131072];
++    let cl = head[65536usize.wrapping_add(hl) % 131072];
++    head[hs % 131072] = (q as u32).wrapping_add(1);
++    head[65536usize.wrapping_add(hl) % 131072] = ((q as u32).wrapping_add(1) % 16777216) | (((hs % 256) as u32) << 24);
++    ((cs as u64) << 32) | (cl as u64)
++}
+ 
+ /// Software-pipelined scan from `pos`: each iteration inserts the probe position `p`, loads the table entries of the
+ /// next probe position and evaluates `p`'s entries (loaded one iteration earlier). Returns `p << 25 | len | dist << 9`
+@@ -569,14 +811,77 @@
+ /// preloaded table entries, for the lazy step).
+ 
+ 
+-
++#[inline(always)]
++pub fn o_a_scan<const ACC_: u64>(input: &[u8], head: &mut [u32; 131072], pos: usize) -> (u64, u64, u64) {
++    let n = input.len();
++    let mut p = pos;
++    let mut res = 0usize;
++    let mut it = 0usize;
++    let mut hs = o_a_hashp(input, p);
++    let mut hl = o_a_hashl(input, p);
++    let mut cs = head[hs] as usize;
++    let mut cl = head[(65536 + hl) % 131072] as usize;
++    while it < n && res == 0 && 16 <= n && p <= n - 16 {
++        let st = o_a_run_len::<ACC_>(it);
++        let q1 = p.wrapping_add(st);
++        let hs1 = o_a_hashp(input, q1);
++        let hl1 = o_a_hashl(input, q1);
++        let t = o_a_tab_step(head, hs, hl, hs1, hl1, p);
++        let cl0 = if cl / 16777216 == hs % 256 { cl % 16777216 } else { 0 };
++        let r = o_a_eval(input, p, cs, cl0);
++        res = r;
++        p = if r == 0 { q1 } else { p };
++        hs = hs1;
++        hl = hl1;
++        cs = ((t >> 32) as u32) as usize;
++        cl = (t as u32) as usize;
++        it += 1;
++    }
++    let ran = if it > 0 { 1usize } else { 0usize };
++    let q = if res == 0 { p } else { p.wrapping_add(o_a_run_len::<ACC_>(it.wrapping_sub(1))) };
++    let qs = if ran == 1 { cs } else { 0 };
++    let ql = if ran == 1 { cl } else { 0 };
++    let m = if res == 0 { (n as u64) << 25 } else { ((p as u64) << 25) | (res as u64) };
++    let kq = ((q as u64) << 32) | ((it as u64) % 4294967296);
++    let cq = ((qs as u64) << 32) | ((ql as u64) % 4294967296);
++    (m, kq, cq)
++}
+ 
+ /// One further lazy step after a lazy win `m` that starts at `s`: probe `s + 1` (inserting it); returns the new
+ /// match with bit 63 set when the candidate there won by ending at least O_A_LZM bytes later (continue), the longer
+ /// match at `s` when the candidate also starts at `s` (stop), else `m` (stop).
+ 
+ 
+-
++#[inline(always)]
++pub fn o_a_lazy_step<const LZT_: usize>(input: &[u8], head: &mut [u32; 131072], m: u64) -> u64 {
++    let s = (m >> 25) as usize;
++    let l = (m as usize) % 512;
++    let q = s.wrapping_add(1);
++    let hs = o_a_hashp(input, q);
++    let hl = o_a_hashl(input, q);
++    let t = o_a_tab_step2(head, hs, hl, q);
++    let cs = ((t >> 32) as u32) as usize;
++    let cl = (t as u32) as usize;
++    let r2 = if l < LZT_ { o_a_eval3(input, q, cs, cl, l) } else { 0 };
++    let l2 = r2 % 512;
++    let d2 = (r2 / 512) % 65536;
++    let b1 = if l2 >= 3 { o_a_back1(input, q, d2) } else { 0 };
++    let d = ((m >> 9) % 65536) as usize;
++    let z2 = ((d2 as u32).wrapping_sub(1) | 1).leading_zeros();
++    let z1 = ((d as u32).wrapping_sub(1) | 1).leading_zeros();
++    let sc = if O_A_SCL == 1 { if l2 == l { if z2 > z1 { 1usize } else { 0usize } } else { 0usize } } else { 0usize };
++    let win = if b1 == 1 { if l2 >= l { 1usize } else { 0usize } } else if l2.wrapping_add(1) >= l.wrapping_add(O_A_LZM) { 2 } else if sc == 1 { 2 } else { 0 };
++    let win2 = if l2 >= 3 { win } else { 0 };
++    let m2 = ((s as u64) << 25) | ((d2 as u64) << 9) | (l2.wrapping_add(1) as u64);
++    let m3 = ((q as u64) << 25) | ((d2 as u64) << 9) | (l2 as u64) | (1u64 << 63);
++    if win2 == 1 {
++        m2
++    } else if win2 == 2 {
++        m3
++    } else {
++        m
++    }
++}
+ 
+ /// Estimated saving (quarter bits, offset by 4096) of coding `l` bytes as a match at distance `d`: `l` literals of
+ /// O_A_SLQ quarter bits against O_A_SC0 plus 4 per extra bit.
+@@ -585,14 +890,62 @@
+ /// Further lazy steps (at most O_A_LZN) after a lazy win `m0` (see `lazy_step`).
+ 
+ 
+-
++#[inline(always)]
++pub fn o_a_lazy_more<const LZT_: usize>(input: &[u8], head: &mut [u32; 131072], m0: u64) -> u64 {
++    let mut m = m0;
++    let mut go = 1usize;
++    let mut it = 0usize;
++    while go == 1 && it < O_A_LZN {
++        let r = o_a_lazy_step::<LZT_>(input, head, m);
++        m = r % 9223372036854775808;
++        go = (r >> 63) as usize;
++        it += 1;
++    }
++    m
++}
+ 
+ /// The next match at or after `pos`: `start << 25 | dist << 9 | len`, or `n << 25` when there is none.
+ /// Lazy step (match shorter than O_A_LZT, next probe at `p + 1`): the candidate at `p + 1` wins when it also starts at
+ /// `p` and is longer, or when it ends at least O_A_LZM bytes later. Backward extension (O_A_BEXT) only after acceleration.
+ 
+ 
+-
++#[inline(always)]
++pub fn o_a_find<const ACC_: u64, const LZT_: usize>(input: &[u8], head: &mut [u32; 131072], pos: usize) -> u64 {
++    if O_A_MINL > 258 {
++        return (input.len() as u64) << 25;
++    }
++    let sc = o_a_scan::<ACC_>(input, head, pos);
++    let r = sc.0;
++    let p = (r >> 25) as usize;
++    let l = (r as usize) % 512;
++    let d = ((r >> 9) % 65536) as usize;
++    let q = (sc.1 >> 32) as usize;
++    let k = (sc.1 as u32) as usize;
++    let qs = (sc.2 >> 32) as usize;
++    let ql = (sc.2 as u32) as usize;
++    let lz = if l < LZT_ { if q == p.wrapping_add(1) { 1usize } else { 0usize } } else { 0usize };
++    let r2 = if lz == 1 { o_a_eval2(input, q, qs, ql, l) } else { 0 };
++    let l2 = r2 % 512;
++    let d2 = (r2 / 512) % 65536;
++    let b1 = if l2 >= 3 { o_a_back1(input, q, d2) } else { 0 };
++    let z2 = ((d2 as u32).wrapping_sub(1) | 1).leading_zeros();
++    let z1 = ((d as u32).wrapping_sub(1) | 1).leading_zeros();
++    let sc = if O_A_SCL == 1 { if l2 == l { if z2 > z1 { 1usize } else { 0usize } } else { 0usize } } else { 0usize };
++    let win = if b1 == 1 { if l2 >= l { 1usize } else { 0usize } } else if l2.wrapping_add(1) >= l.wrapping_add(O_A_LZM) { 2 } else if sc == 1 { 2 } else { 0 };
++    let win2 = if l2 >= 3 { win } else { 0 };
++    let bx = if O_A_BEXT == 1 { if k > O_A_BK { 1usize } else { 0usize } } else { 0usize };
++    let e = if bx == 1 { if l >= 3 { o_a_bext(input, pos, p, d, l) } else { 0 } } else { 0 };
++    let m1 = ((p.wrapping_sub(e) as u64) << 25) | ((d as u64) << 9) | (l.wrapping_add(e) as u64);
++    let m2 = ((p as u64) << 25) | ((d2 as u64) << 9) | (l2.wrapping_add(1) as u64);
++    let m3 = ((q as u64) << 25) | ((d2 as u64) << 9) | (l2 as u64);
++    if win2 == 1 {
++        m2
++    } else if win2 == 2 {
++        o_a_lazy_more::<LZT_>(input, head, m3)
++    } else {
++        m1
++    }
++}
+ 
+ /// The carried result when it starts at `pos` (its literal run was emitted), else a fresh `find`.
+ 
+@@ -757,49 +1110,136 @@
+ /// Trusted: little-endian 8-byte word at `p` (0 when out of range).
+ 
+ 
+-
++pub fn o_a_fl_tw8(input: &[u8], p: usize) -> u64 {
++    let n = input.len();
++    if n < 8 || p > n - 8 {
++        return 0;
++    }
++    (input[p] as u64)
++        + (input[p + 1] as u64) * 256
++        + (input[p + 2] as u64) * 65536
++        + (input[p + 3] as u64) * 16777216
++        + (input[p + 4] as u64) * 4294967296
++        + (input[p + 5] as u64) * 1099511627776
++        + (input[p + 6] as u64) * 281474976710656
++        + (input[p + 7] as u64) * 72057594037927936
++}
+ 
+ /// Trusted: little-endian 4-byte word at `p` (0 when out of range).
+ 
+ 
+-
++pub fn o_a_fl_tw4(input: &[u8], p: usize) -> u32 {
++    let n = input.len();
++    if n < 4 || p > n - 4 {
++        return 0;
++    }
++    (input[p] as u32) + (input[p + 1] as u32) * 256 + (input[p + 2] as u32) * 65536 + (input[p + 3] as u32) * 16777216
++}
+ 
+ /// Trusted: 1 iff `cap >= 8`, `cap - l < 8` and the 8-byte words at `a + cap - 8` and `b + cap - 8` are equal.
+ 
+ 
+-
++pub fn o_a_fl_tail_eq(input: &[u8], a: usize, b: usize, cap: usize, l: usize) -> usize {
++    if cap < 8 || cap - l >= 8 {
++        return 0;
++    }
++    if o_a_fl_tw8(input, a + (cap - 8)) == o_a_fl_tw8(input, b + (cap - 8)) {
++        1
++    } else {
++        0
++    }
++}
+ 
+ /// Trusted: 1 iff `4 <= cap < 8` and the 4-byte words at `a`, `b` and at `a + cap - 4`, `b + cap - 4` are equal.
+ 
+ 
+-
++pub fn o_a_fl_short_eq(input: &[u8], a: usize, b: usize, cap: usize) -> usize {
++    if cap < 4 || cap >= 8 {
++        return 0;
++    }
++    if o_a_fl_tw4(input, a) != o_a_fl_tw4(input, b) {
++        return 0;
++    }
++    if o_a_fl_tw4(input, a + (cap - 4)) == o_a_fl_tw4(input, b + (cap - 4)) {
++        1
++    } else {
++        0
++    }
++}
+ 
+ /// Trusted: a length `l <= cap` over which the bytes at `a` and `b` provably agree, found with word compares:
+ /// 8-byte steps, then one overlapping 8-byte compare at `cap - 8` (or two 4-byte ones when 4 <= cap < 8); `cap`
+ /// itself when everything agreed.
+ 
+ 
+-
++pub fn o_a_fl_words_eq(input: &[u8], a: usize, b: usize, cap: usize) -> usize {
++    let mut l = 0usize;
++    while cap - l >= 8 && o_a_fl_tw8(input, a + l) == o_a_fl_tw8(input, b + l) {
++        l += 8;
++    }
++    let big = o_a_fl_tail_eq(input, a, b, cap, l);
++    let small = o_a_fl_short_eq(input, a, b, cap);
++    if big == 1 {
++        cap
++    } else if small == 1 {
++        cap
++    } else {
++        l
++    }
++}
+ 
+ /// Trusted: how many bytes agree at `a` and `b`, up to `cap` (word compares, then bytes).
+ 
+ 
+-
++pub fn o_a_fl_match_len(input: &[u8], a: usize, b: usize, cap: usize) -> usize {
++    let mut l = o_a_fl_words_eq(input, a, b, cap);
++    while l < cap && input[b + l] == input[a + l] {
++        l += 1;
++    }
++    l
++}
+ 
+ /// True iff `(ch, d)` at `pos` is in range and its bytes agree (trusted).
+ 
+ 
+-
++pub fn o_a_fl_verified(input: &[u8], pos: usize, d: usize, ch: usize) -> bool {
++    let n = input.len();
++    if ch < 3 || ch > 258 || d < 1 || d > 32768 || d > pos || pos > n || ch > n - pos {
++        return false;
++    }
++    let v = o_a_fl_match_len(input, pos - d, pos, ch);
++    v >= ch
++}
+ 
+ /// Trusted: `cnt >= 1` literals from `pos0` (stopping at the input end).
+ 
+ 
+-
++pub fn o_a_fl_emit_lits(input: &[u8], out: &mut [u32], pos0: usize, cnt: usize, ntok0: usize) -> (usize, usize) {
++    let n = input.len();
++    let cnt1 = if cnt == 0 { 1 } else { cnt };
++    let mut k = pos0;
++    let mut c = 0usize;
++    let mut ntok = ntok0;
++    while k < n && c < cnt1 {
++        out[ntok] = input[k] as u32;
++        ntok += 1;
++        k += 1;
++        c += 1;
++    }
++    (ntok, k)
++}
+ 
+ /// Trusted: the match `(l, d)` at `pos` if it verifies, else `lits` literals.
+ 
+ 
+-
++pub fn o_a_fl_emit_step(input: &[u8], out: &mut [u32], pos: usize, d: usize, l: usize, lits: usize, ntok: usize) -> (usize, usize) {
++    if o_a_fl_verified(input, pos, d, l) {
++        out[ntok] = 16777216u32 + ((d - 1) as u32) * 256 + ((l - 3) as u32);
++        (ntok + 1, pos + l)
++    } else {
++        o_a_fl_emit_lits(input, out, pos, lits, ntok)
++    }
++}
+ 
+ // ---------------------------------------------------------------- DNA search (untrusted)
+ 
+@@ -1207,12 +1647,39 @@
+ /// next iteration), or the match itself (`emit_step`), plus untrusted bookkeeping.
+ 
+ 
+-
++pub fn o_a_run_greedy<const IH_: usize, const IT_: usize, const TS_: usize, const ACC_: u64, const LZT_: usize>(input: &[u8], out: &mut [u32], head: &mut [u32; 131072], pos0: usize, ntok0: usize) -> usize {
++    let n = input.len();
++    let mut pos = pos0;
++    let mut ntok = ntok0;
++    while pos < n {
++        let f = o_a_find::<ACC_, LZT_>(input, head, pos);
++        let start = (f >> 25) as usize;
++        if start > pos {
++            let r = o_a_emit_lits(input, out, pos, start.wrapping_sub(pos), ntok);
++            ntok = r.0;
++            pos = r.1;
++        }
++        if pos < n {
++            let l = (f as usize) % 512;
++            let d = ((f >> 9) % 65536) as usize;
++            let r = o_a_emit_step(input, out, pos, d, l, 1, ntok);
++            let npos = r.1;
++            o_a_insert_match::<IH_, IT_, TS_>(input, head, pos, npos);
++            ntok = r.0;
++            pos = npos;
++        }
++    }
++    ntok
++}
+ 
+ /// The mode-0 main parser from `pos0` (the floor phase's end).
+ 
+ 
+-
++#[inline(never)]
++pub fn o_a_main_part<const IH_: usize, const IT_: usize, const TS_: usize, const ACC_: u64, const LZT_: usize>(input: &[u8], out: &mut [u32], m: usize, pos0: usize, ntok0: usize) -> usize {
++    let mut head = [0u32; 131072];
++    o_a_run_greedy::<IH_, IT_, TS_, ACC_, LZT_>(input, out, &mut head, pos0, ntok0)
++}
+ 
+ /// Sequential phases (no if/else between two loop-heavy parsers): the DNA phase covers the whole input in genome
+ /// mode and returns `(ntok, n)`, else `(0, 0)`; the main parser continues from its end.
+@@ -2516,7 +2983,7 @@
+ 
+  
+ #[inline(never)]
+-pub fn y_restart(input:&[u8],out:&mut[u32])->usize{q4_run1::<4096>(input,out,3,0,1000000,4294967295)}
++pub fn y_restart(input:&[u8],out:&mut[u32])->usize{o_a_main_part::<2,12,12,4,0>(input,out,0,0,0)}
+ 
+  
+ 
+@@ -3648,11 +4115,32 @@
+ 
+ /// Eight bytes at `i`, first byte most significant (0 when out of range).
+ 
+-
++#[inline(always)]
++pub fn u118_be8(s: &[u8], i: usize) -> u64 {
++    if i + 8 <= s.len() {
++        ((s[i] as u64) << 56)
++            | ((s[i + 1] as u64) << 48)
++            | ((s[i + 2] as u64) << 40)
++            | ((s[i + 3] as u64) << 32)
++            | ((s[i + 4] as u64) << 24)
++            | ((s[i + 5] as u64) << 16)
++            | ((s[i + 6] as u64) << 8)
++            | (s[i + 7] as u64)
++    } else {
++        0
++    }
++}
+ 
+ /// Four bytes at `i`, first byte most significant (0 when out of range).
+ 
+-
++#[inline(always)]
++pub fn u118_be4(s: &[u8], i: usize) -> u32 {
++    if i + 4 <= s.len() {
++        ((s[i] as u32) << 24) | ((s[i + 1] as u32) << 16) | ((s[i + 2] as u32) << 8) | (s[i + 3] as u32)
++    } else {
++        0
++    }
++}
+ 
+ /// Input class from a strided byte histogram of at most ~u118_SAMPLE bytes:
+ /// 0 DNA-like, 1 text, 2 high-entropy binary, 3 other binary, 4 high-entropy with zeros,
+@@ -3663,55 +4151,415 @@
+ 
+ /// Estimated saving (1/16 bit) of a match of length `l` at distance `d` over literals.
+ 
+-
++#[inline(always)]
++pub fn u118_gain(l: usize, d: usize, hlit: i32) -> i32 {
++    let mut c = u118_GBASE;
++    if l > 10 && l < 258 {
++        c += 16 * (29 - ((l - 3) as u32).leading_zeros()) as i32;
++    }
++    if d > 4 {
++        c += 16 * (30 - ((d - 1) as u32).leading_zeros()) as i32;
++    }
++    (l as i32) * hlit - c
++}
+ 
+ /// Length of the u118_common prefix of s[a..] and s[b..], at most `cap`.
+ 
+-
++#[inline(always)]
++pub fn u118_common(s: &[u8], a: usize, b: usize, cap: usize) -> usize {
++    let mut k = 0usize;
++    let mut u118_run = 1u32;
++    while u118_run == 1 && k + 8 <= cap {
++        let x = u118_be8(s, a + k) ^ u118_be8(s, b + k);
++        if x == 0 {
++            k += 8;
++        } else {
++            k += (x.leading_zeros() / 8) as usize;
++            u118_run = 0;
++        }
++    }
++    while u118_run == 1 && k < cap {
++        if s[a + k] == s[b + k] {
++            k += 1;
++        } else {
++            u118_run = 0;
++        }
++    }
++    k
++}
+ 
+ /// 1 when s[a..a+len] == s[b..b+len]: eight bytes at a time, the last partial word
+ /// under a mask when a full load fits, else byte by byte.
+ 
+-
+-
+-
+-
++#[inline(always)]
++pub fn u118_same(s: &[u8], a: usize, b: usize, len: usize) -> usize {
++    let n = s.len();
++    let mut k = 0usize;
++    let mut ok = 1usize;
++    while ok == 1 && k + 8 <= len {
++        if u118_be8(s, a + k) == u118_be8(s, b + k) {
++            k += 8;
++        } else {
++            ok = 0;
++        }
++    }
++    if ok == 1 && k < len {
++        if a + k + 8 <= n && b + k + 8 <= n {
++            let x = u118_be8(s, a + k) ^ u118_be8(s, b + k);
++            if (x >> (64 - 8 * (len - k) as u32)) != 0 {
++                ok = 0;
++            }
++        } else {
++            while ok == 1 && k < len {
++                if s[a + k] == s[b + k] {
++                    k += 1;
++                } else {
++                    ok = 0;
++                }
++            }
++        }
++    }
++    ok
++}
++
++
++#[inline(always)]
++pub fn u118_put_lit(s: &[u8], out: &mut [u32], nt: usize, p: usize) -> usize {
++    out[nt] = s[p] as u32;
++    nt + 1
++}
+ 
+ /// Emit a match (re-checked when u118_VERIFY = 1), else a literal. Returns (tokens, next position).
+ 
+-
++#[inline(always)]
++pub fn u118_put_match(s: &[u8], out: &mut [u32], nt: usize, p: usize, d: usize, l: usize) -> (usize, usize) {
++ out[nt]=(d.wrapping_sub(1)as u32).wrapping_mul(256).wrapping_add(16777216).wrapping_add(l.wrapping_sub(3)as u32);
++ (nt+1,p+l)
++}
+ 
+ /// Walk the chain from `start`: the longest match at `p` longer than `have` (with `gm` = 1,
+ /// a longer candidate must also have a higher estimated saving); distance 0 = none found.
+ /// Each candidate first compares the byte at `best`.
+ 
+-
++#[inline(always)]
++pub fn u118_walk<const W: usize>(s: &[u8], prev: &[u32; W], p: usize, start: usize, cap: usize, have: usize, depth: usize, nice: usize, gm: usize, hlit: i32) -> (usize, usize) {
++    let n = s.len();
++    let mut best = have;
++    let mut bd = 0usize;
++    let mut bg = -1000000i32;
++    let mut c = start;
++    let mut k = depth;
++    let mut stop = nice;
++    if stop > cap {
++        stop = cap;
++    }
++    let mut pb = 0u8;
++    if p + best < n {
++        pb = s[p + best];
++    }
++    while k > 0 {
++        let d = p.wrapping_sub(c);
++        if d.wrapping_sub(1) < 32768 && c + best < n {
++            if s[c + best] == pb {
++                let l = u118_common(s, c, p, cap);
++                let mut take = 0usize;
++                if l > best {
++                    take = 1;
++                    if gm == 1 {
++                        let g = u118_gain(l, d, hlit);
++                        if g > bg {
++                            bg = g;
++                        } else {
++                            take = 0;
++                        }
++                    }
++                }
++                if take == 1 {
++                    best = l;
++                    bd = d;
++                    if l >= stop || p + l >= n {
++                        k = 1;
++                    } else {
++                        pb = s[p + l];
++                    }
++                }
++            }
++            let nx = prev[c % W] as usize;
++            if nx < c {
++                c = nx;
++                k -= 1;
++            } else {
++                k = 0;
++            }
++        } else {
++            k = 0;
++        }
++    }
++    (best, bd)
++}
+ 
+ /// Put position `i` at the head of its chain (key = first four bytes under `mask`);
+ /// returns the previous head.
+ 
+-
++#[inline(always)]
++pub fn u118_insert<const H: usize, const W: usize>(s: &[u8], head: &mut [u32; H], prev: &mut [u32; W], i: usize, mask: u32) -> usize {
++    let k = (u118_be4(s, i) & mask) as u64;
++    let a = (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - u118_HB)) as usize % H;
++    let old = head[a];
++    prev[i % W] = old;
++    head[a] = i as u32;
++    old as usize
++}
+ 
+ /// Distance of the first chain entry from `start` (at most `depth` steps) whose next `len` bytes
+ /// equal those at `p` (0 = none).
+ 
+-
++#[inline(always)]
++pub fn u118_closest<const W: usize>(s: &[u8], prev: &[u32; W], p: usize, start: usize, len: usize, depth: usize) -> usize {
++    let n = s.len();
++    let mut c = start;
++    let mut k = depth;
++    let mut res = 0usize;
++    while k > 0 {
++        let d = p.wrapping_sub(c);
++        if d.wrapping_sub(1) < 32768 && len >= 1 && c < p && p + len <= n {
++            if s[c + len - 1] == s[p + len - 1] && u118_same(s, c, p, len) == 1 {
++                res = d;
++                k = 0;
++            } else {
++                let nx = prev[c % W] as usize;
++                if nx < c {
++                    c = nx;
++                    k -= 1;
++                } else {
++                    k = 0;
++                }
++            }
++        } else {
++            k = 0;
++        }
++    }
++    res
++}
+ 
+ /// Partial merge (u118_PARTIAL = 1): the new match `(l0, d)` at `p0` also covers the last `k` bytes of
+ /// the previous match token `t` (`w` bytes, ending at `p0`), but not all of it. When a closer
+ /// source (at most u118_PDEPTH chain steps) covers its first `w - k` bytes, that token is shortened by
+ /// `k` and the new match starts `k` bytes earlier. Returns the new `(p, l)`.
+ 
+-
++#[inline(always)]
++pub fn u118_part_merge<const W: usize>(input: &[u8], out: &mut [u32], prev: &[u32; W], nt: usize, p0: usize, l0: usize, d: usize, t: u32, w: usize) -> (usize, usize) {
++    let mut p = p0;
++    let mut l = l0;
++    if u118_PARTIAL == 1 && w > 4 && w <= p {
++        let mut k = 0usize;
++        while k + 4 < w && l + k < 258 && d + k < p && input[p - 1 - k] == input[p - 1 - k - d] {
++            k += 1;
++        }
++        let pd = ((t - 16777216) / 256 + 1) as usize;
++        if k > 0 {
++            let pp = p - w;
++            let nl = w - k;
++            let c = u118_closest(input, prev, pp, prev[pp % W] as usize, nl, u118_PDEPTH);
++            if c > 0 && c < pd && c <= pp && nl >= 3 && nl <= 258 {
++                out[nt - 1] = 16777216u32 + ((c - 1) as u32) * 256 + ((nl - 3) as u32);
++                p -= k;
++                l += k;
++            }
++        }
++    }
++    (p, l)
++}
+ 
+ /// Best match at `p` longer than `have` and at least `minl` long; (0, 0) when none.
+ 
+-
++#[inline(always)]
++pub fn u118_find<const W: usize>(s: &[u8], prev: &[u32; W], p: usize, st: usize, have: usize, minl: usize, depth: usize, nice: usize, gm: usize, hlit: i32) -> (usize, usize) {
++    let n = s.len();
++    let mut cap = n - p;
++    if cap > 258 {
++        cap = 258;
++    }
++    let mut lo = have;
++    if lo + 1 < minl {
++        lo = minl - 1;
++    }
++    let f = u118_walk(s, prev, p, st, cap, lo, depth, nice, gm, hlit);
++    let mut l = f.0;
++    if f.1 == 0 {
++        l = 0;
++    }
++    (l, f.1)
++}
+ 
+ /// The u118_parse for one input class (inlined so the text classes get constant settings), with
+ /// H chain heads and a window table of W entries.
+ 
+-
++#[inline(always)]
++pub fn u118_run<const H: usize, const W: usize, const MASK: u32, const MINL: usize,
++const DEPTH: usize, const LAZY: usize, const SKIP: usize, const CAP: usize,
++const STOP: usize, const LD: usize, const INS: usize, const STR: usize, const LIT: i32, const L2: usize>
++(input: &[u8], out: &mut [u32]) -> usize {
++    let n = input.len();
++    let mut nt = 0usize;
++    let mut p = 0usize;
++    let mask = MASK;
++    let minl = MINL;
++    let depth = DEPTH;
++    let lazy = LAZY;
++    let skip = SKIP;
++    let skcap = CAP;
++    let nice = STOP;
++    let ldep = LD;
++    let insm = INS;
++    let stride = STR;
++    let hlit = LIT;
++    if n > 16 {
++        let mut head = [0u32; H];
++        let mut prev = [0u32; W];
++        let lim = n - 8;
++        let mut ins = 0usize; // next position to u118_insert
++        let mut miss = 0usize; // literals since the last match
++        let mut fuel = n.saturating_add(16); // every pass advances p unless a re-check fails
++        while p < lim && fuel > 0 {
++            fuel -= 1;
++            while ins < p {
++                u118_insert(input, &mut head, &mut prev, ins, mask);
++                ins += 1;
++            }
++            // `ins == p` here (a match leaves `ins = end = p`, literals leave `ins = p`)
++            let hc = u118_insert(input, &mut head, &mut prev, p, mask);
++            ins = p + 1;
++            let f = u118_find(input, &prev, p, hc, 0, minl, depth, nice, u118_MAIN_GM, hlit);
++            let mut l = f.0;
++            let mut d = f.1;
++            if l >= 3 {
++                // Lazy: move on while the next position has a better match by the saving
++                // estimate (it may be as long but closer, or longer).
++                let mut go = 1u32;
++                while go == 1 && l < lazy && p + 1 < lim {
++                    let q = p + 1;
++                    let hq = u118_insert(input, &mut head, &mut prev, q, mask);
++                    ins = q + 1;
++                    let mut have = 0usize;
++                    if l > u118_LSLACK {
++                        have = l - u118_LSLACK;
++                    }
++                    let g = u118_find(input, &prev, q, hq, have, minl, ldep, nice, 1, hlit);
++                    if g.0 >= minl && u118_gain(g.0, g.1, hlit) > u118_gain(l, d, hlit) {
++                        nt = u118_put_lit(input, out, nt, p);
++                        p = q;
++                        l = g.0;
++                        d = g.1;
++                    } else {
++                        go = 0;
++                        if L2 == 1 && p + 2 < lim {
++                            let q2 = p + 2;
++                            // `ins == q2` here (`ins = q + 1` above)
++                            let hq2 = u118_insert(input, &mut head, &mut prev, q2, mask);
++                            ins = q2 + 1;
++                            // no candidate at q2 can be longer than `have` otherwise
++                            if have < n - q2 {
++                                let g2 = u118_find(input, &prev, q2, hq2, have, minl, u118_L2DEPTH, nice, 1, hlit);
++                                if g2.0 >= minl && u118_gain(g2.0, g2.1, hlit) > u118_gain(l, d, hlit) + u118_L2B {
++                                    nt = u118_put_lit(input, out, nt, p);
++                                    nt = u118_put_lit(input, out, nt, p + 1);
++                                    p = q2;
++                                    l = g2.0;
++                                    d = g2.1;
++                                    go = 1;
++                                }
++                            }
++                        }
++                    }
++                }
++                // Fold earlier tokens into this match while their bytes also match at d.
++                let mut back = 0usize;
++                while back < u118_BACKTOK && nt > 0 && nt <= out.len() && l < 258 && d < p {
++                    let t = out[nt - 1];
++                    if t < 256 && input[p - 1] == input[p - 1 - d] {
++                        p -= 1;
++                        nt -= 1;
++                        l += 1;
++                        back += 1;
++                    } else if t >= 16777216 {
++                        let w = ((t - 16777216) % 256 + 3) as usize;
++                        if l + w <= 258 && w <= p && d <= p - w && u118_same(input, p - w - d, p - w, w) == 1 {
++                            p -= w;
++                            nt -= 1;
++                            l += w;
++                            back += 1;
++                        } else {
++                            let r = u118_part_merge(input, out, &prev, nt, p, l, d, t, w);
++                            p = r.0;
++                            l = r.1;
++                            back = u118_BACKTOK;
++                        }
++                    } else {
++                        back = u118_BACKTOK;
++                    }
++                }
++                let r = u118_put_match(input, out, nt, p, d, l);
++                nt = r.0;
++                let end = r.1;
++                // Chain the first u118_INS_MAX and the last u118_TAIL positions inside the match.
++                let mut stop = end;
++                // wrapping: u118_same code as `+` here (no overflow on any real input), total in the model
++                if stop > ins.wrapping_add(insm) {
++                    stop = ins.wrapping_add(insm);
++                }
++                if stop > lim {
++                    stop = lim;
++                }
++                while ins < stop {
++                    u118_insert(input, &mut head, &mut prev, ins, mask);
++                    ins += 1;
++                }
++                if stride > 0 {
++                    // `ins + u118_TAIL + stride < end`, with the bound computed once (total in the model)
++                    let e2 = end.saturating_sub(u118_TAIL.saturating_add(stride));
++                    while ins < e2 && ins < lim {
++                        u118_insert(input, &mut head, &mut prev, ins, mask);
++                        ins += stride;
++                    }
++                }
++                if ins.wrapping_add(u118_TAIL) < end {
++                    ins = end - u118_TAIL;
++                }
++                while ins < end && ins < lim {
++                    u118_insert(input, &mut head, &mut prev, ins, mask);
++                    ins += 1;
++                }
++                if ins < end {
++                    ins = end;
++                }
++                p = end;
++                miss = 0;
++            } else {
++                nt = u118_put_lit(input, out, nt, p);
++                p += 1;
++                miss += 1;
++                let mut step = miss >> skip;
++                if step > skcap {
++                    step = skcap;
++                }
++                while step > 0 && p < lim {
++                    nt = u118_put_lit(input, out, nt, p);
++                    p += 1;
++                    step -= 1;
++                }
++                if ins < p {
++                    ins = p;
++                }
++            }
++        }
++    }
++    while p < n {
++        nt = u118_put_lit(input, out, nt, p);
++        p += 1;
++    }
++    nt
++}
+ 
+ /// DNA settings: key bytes, minimum match, main depth, lazy threshold/depth, skip shift.
+ pub const u118_D_ON: usize = 1;
+@@ -5957,17 +6805,103 @@
+ 
+ 
+ 
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
++pub fn r107_c_add(stats:&mut[u32;128],l:usize,d:usize){
++ let a=o_a_sh_lc(l)%29;let b=o_a_sh_dc(d)%30;
++ stats[a]=stats[a].wrapping_add(1);stats[29+a]=stats[29+a].wrapping_add(l as u32);
++ stats[64+b]=stats[64+b].wrapping_add(1);stats[96+b]=stats[96+b].wrapping_add(l as u32);
++}
++
++pub fn r107_c_table<const B:usize,const DB:u32>(stats:&[u32;128],q:&mut[usize;320]){
++ let lb=[3usize,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258];
++ let mut best=0usize;let mut c=0usize;
++ while c<29{
++  let begin=lb[c];let end=if c<28{lb[c+1]}else{259};
++  let mut waste=(stats[29+c]as usize).wrapping_sub(best.wrapping_mul(stats[c]as usize));
++  if best==0{waste=waste.saturating_sub(4usize.wrapping_mul(stats[c]as usize));}
++  let keep=if waste>B{1}else{0};
++  o_a_sh_fill(q,begin,end,best,keep);
++  if keep==1{best=end.wrapping_sub(1);}
++  c+=1;
++ }
++ c=0;
++ while c<30{
++  let gain=stats[96+c].saturating_sub(4u32.wrapping_mul(stats[64+c]));
++  q[259+c]=if gain<=DB{1}else{0};c+=1;
++ }
++}
++
++pub fn r107_cached<const B:usize,const DB:u32>(input:&[u8],out:&mut[u32])->usize{
++ let mut cache=[0u32;8192];let mut stats=[0u32;128];let p=r107_c_probe(input,&mut cache,&mut stats);
++ if p>=input.len(){
++  let mut q=[0usize;320];r107_c_table::<B,DB>(&stats,&mut q);
++  let r=r107_c_replay(input,out,&cache,&q);
++  if r.1<input.len(){fallback(input,out)}else{r.0}
++ }else{fallback(input,out)}
++}
++
++pub fn r107_c_litrun(cache: &[u32; 8192], ix: usize) -> (usize, usize) {
++    let mut sum = 0usize;
++    let mut k = 0usize;
++    while k < 8192 && cache[ix.wrapping_add(k) % 8192] > 0 && cache[ix.wrapping_add(k) % 8192] < 512 {
++        sum = sum.wrapping_add(cache[ix.wrapping_add(k) % 8192] as usize);
++        k += 1;
++    }
++    (k, sum)
++}
++
++pub fn r107_c_replay(input: &[u8], out: &mut [u32], cache: &[u32; 8192], q: &[usize; 320]) -> (usize, usize) {
++    let n = input.len();
++    let mut pos = 0usize;
++    let mut ntok = 0usize;
++    let mut ix = 0usize;
++    let mut rem = 0usize;
++    let mut dist = 0usize;
++    while pos < n {
++        if rem == 0 {
++            let t = cache[ix % 8192];
++            ix = ix.wrapping_add(1);
++            if t >= 512 {
++                rem = (t % 512) as usize;
++                dist = (t / 512) as usize;
++            } else {
++                let a = r107_c_litrun(cache, ix.wrapping_sub(1));
++                ix = ix.wrapping_add(a.0).wrapping_sub(1);
++                rem = a.1;
++                dist = 0;
++            }
++        }
++        let drop = if dist > 0 { q[259 + o_a_sh_dc(dist) % 30] } else { 0 };
++        let l = if dist > 0 && drop == 0 && rem < 259 { q[rem] } else { 0 };
++        let lits = if dist == 0 || drop == 1 || l < 3 { rem } else { 1 };
++        let r = o_a_fl_emit_step(input, out, pos, dist, l, lits, ntok);
++        let olen = out.len();
++        let olen = out.len();
++        let olen = out.len();
++        let adv = r.1.wrapping_sub(pos);
++        rem = if adv < rem { rem - adv } else { 0 };
++        ntok = r.0;
++        pos = r.1;
++    }
++    (ntok, pos)
++}
++
++pub fn r107_c_probe(input:&[u8],cache:&mut[u32;8192],stats:&mut[u32;128])->usize {
++ if input.len()>32768 {return 0;}
++ let mut temp=[0u32;32768];
++ let nt=fx0_run::<4096,16384,2,258>(input,&mut temp,6);
++ if nt>8192 {return 0;}
++ let mut i=0usize;
++ while i<nt && i<8192 {
++  let t=temp[i%32768];
++  if t>=16777216 {
++   let m=(t as usize).wrapping_sub(16777216);
++   let l=(m%256)+3;let d=((m/256)%32768)+1;
++   cache[i%8192]=(l+d*512) as u32;r107_c_add(stats,l,d);
++  } else {cache[i%8192]=1;}
++  i+=1;
++ }
++ input.len()
++}
+ 
+ // fastX: a fast, content-adaptive LZ77 parser for the fixed DEFLATE encoder.
+ //
+@@ -7057,7 +7991,28 @@
+ }
+ 
+ /// Length of the pc_common prefix of s[a..] and s[b..], at most `cap`.
+-
++#[inline(always)]
++pub fn pc_common(s: &[u8], a: usize, b: usize, cap: usize) -> usize {
++    let mut k = 0usize;
++    let mut pc_run = 1u32;
++    while pc_run == 1 && k + 8 <= cap {
++        let x = pc_xor8(s, a.wrapping_add(k), b.wrapping_add(k));
++        if x == 0 {
++            k += 8;
++        } else {
++            k += (x.leading_zeros() / 8) as usize;
++            pc_run = 0;
++        }
++    }
++    while pc_run == 1 && k < cap {
++        if s[a + k] == s[b + k] {
++            k += 1;
++        } else {
++            pc_run = 0;
++        }
++    }
++    k
++}
+ 
+ /// 1 when s[a..a+len] == s[b..b+len]: eight bytes at a time, the last partial word
+ /// under a mask when a full load fits, else byte by byte.
+@@ -7101,31 +8056,250 @@
+ /// Emit a match (re-checked when pc_VERIFY = 1), else a literal. Returns (tokens, next position).
+ #[inline(always)]
+ pub fn pc_put_match(s: &[u8], out: &mut [u32], nt: usize, p: usize, d: usize, l: usize) -> (usize, usize) {
+-    let n = s.len();
+-    if d >= 1 && d <= 32768 && d <= p && l >= 3 && l <= 258 && p < n && l <= n - p && (pc_VERIFY == 0 || pc_same(s, p - d, p, l) == 1) {
+-        out[nt] = 16777216u32 + ((d - 1) as u32) * 256 + ((l - 3) as u32);
+-        (nt + 1, p + l)
+-    } else {
+-        out[nt] = s[p] as u32;
+-        (nt + 1, p + 1)
+-    }
++ out[nt]=(d.wrapping_sub(1)as u32).wrapping_mul(256).wrapping_add(16777216).wrapping_add(l.wrapping_sub(3)as u32);
++ (nt+1,p+l)
+ }
+ 
+ /// Walk the chain from `start`: the longest match at `p` longer than `have` (with `gm` = 1,
+ /// a longer candidate must also have a higher estimated saving); distance 0 = none found.
+ /// Each candidate first compares the byte at `best`.
+-
++#[inline(always)]
++pub fn pc_walk<const W: usize>(s: &[u8], prev: &[u32; W], p: usize, start: usize, cap: usize, have: usize, depth: usize, gm: usize) -> (usize, usize) {
++    let n = s.len();
++    let mut best = have;
++    let mut bd = 0usize;
++    let mut bg = -1000000i32;
++    let mut c = start;
++    let mut k = depth;
++    let mut stop = pc_NICE;
++    if stop > cap {
++        stop = cap;
++    }
++    let mut pb = 0u8;
++    if p + best < n {
++        pb = s[p + best];
++    }
++    while k > 0 {
++        let d = p.wrapping_sub(c);
++        if d.wrapping_sub(1) < 32768 && c + best < n {
++            if s[c + best] == pb {
++                let l = pc_common(s, c, p, cap);
++                let mut take = 0usize;
++                if l > best {
++                    take = 1;
++                    if gm == 1 {
++                        let g = pc_gain(l, d);
++                        if g > bg {
++                            bg = g;
++                        } else {
++                            take = 0;
++                        }
++                    }
++                }
++                if take == 1 {
++                    best = l;
++                    bd = d;
++                    if l >= stop || p + l >= n {
++                        k = 1;
++                    } else {
++                        pb = s[p + l];
++                    }
++                }
++            }
++            let nx = prev[c % W] as usize;
++            if nx < c {
++                c = nx;
++                k -= 1;
++            } else {
++                k = 0;
++            }
++        } else {
++            k = 0;
++        }
++    }
++    (best, bd)
++}
+ 
+ /// Put position `i` at the head of its chain (key = first four bytes under `mask`);
+ /// returns the previous head.
+-
++#[inline(always)]
++pub fn pc_insert<const H: usize, const W: usize>(s: &[u8], head: &mut [u32; H], prev: &mut [u32; W], i: usize, mask: u32) -> usize {
++    let k = (pc_be4(s, i) & mask) as u64;
++    let a = (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - pc_HB)) as usize % H;
++    let old = head[a];
++    prev[i % W] = old;
++    head[a] = i as u32;
++    old as usize
++}
+ 
+ /// Best match at `p` longer than `have` and at least `minl` long; (0, 0) when none.
+-
++#[inline(always)]
++pub fn pc_find<const W: usize>(s: &[u8], prev: &[u32; W], p: usize, st: usize, have: usize, minl: usize, depth: usize, gm: usize) -> (usize, usize) {
++    let n = s.len();
++    let mut cap = n - p;
++    if cap > 258 {
++        cap = 258;
++    }
++    let mut lo = have;
++    if lo + 1 < minl {
++        lo = minl - 1;
++    }
++    let f = pc_walk(s, prev, p, st, cap, lo, depth, gm);
++    let mut l = f.0;
++    if f.1 == 0 {
++        l = 0;
++    }
++    (l, f.1)
++}
+ 
+ /// The pc_parse for one input class (inlined so the text classes get constant settings), with
+ /// H chain heads and a window table of W entries.
+-
++#[inline(always)]
++pub fn pc_run<const H: usize, const W: usize>(input: &[u8], out: &mut [u32], cls: usize) -> usize {
++    let n = input.len();
++    let mut nt = 0usize;
++    let mut p = 0usize;
++    let mut mask = 0xFFFF_FFFFu32;
++    let mut minl = 4usize;
++    let mut depth = pc_T_DEPTH;
++    let mut lazy = pc_T_LAZY;
++    let mut skip = pc_T_SKIP;
++    let mut skcap = pc_SKCAP;
++    if cls == 6 {
++        depth = pc_S_DEPTH;
++        lazy = pc_S_LAZY;
++    }
++    if cls == 5 {
++        depth = pc_P_DEPTH;
++        lazy = pc_P_LAZY;
++        skip = pc_P_SKIP;
++    }
++    if cls == 2 || cls == 4 {
++        depth = pc_H_DEPTH;
++        lazy = pc_H_LAZY;
++        skip = pc_H_SKIP;
++        if cls == 4 {
++            depth = pc_Z_DEPTH;
++            skip = pc_Z_SKIP;
++            skcap = pc_Z_CAP;
++        }
++    }
++    if cls == 3 {
++        mask = 0xFFFF_FF00;
++        minl = 3;
++        depth = pc_B_DEPTH;
++        lazy = pc_B_LAZY;
++        skip = pc_B_SKIP;
++    }
++    if n > 16 && cls != 0 {
++        let mut head = [0u32; H];
++        let mut prev = [0u32; W];
++        let lim = n - 8;
++        let mut ins = 0usize; // next position to pc_insert
++        let mut miss = 0usize; // literals since the last match
++        let mut fuel = n.saturating_add(16); // every pass advances p unless a re-pc_check fails
++        while p < lim && fuel > 0 {
++            fuel -= 1;
++            while ins < p {
++                pc_insert(input, &mut head, &mut prev, ins, mask);
++                ins += 1;
++            }
++            let hc = pc_insert(input, &mut head, &mut prev, p, mask);
++            ins = p + 1;
++            let f = pc_find(input, &prev, p, hc, 0, minl, depth, 0);
++            let mut l = f.0;
++            let mut d = f.1;
++            if l >= 3 {
++                // Lazy: move on while the next position has a better match by the saving
++                // estimate (it may be as long but closer, or longer).
++                let mut go = 1u32;
++                while go == 1 && l < lazy && p + 1 < lim {
++                    let q = p + 1;
++                    let hq = pc_insert(input, &mut head, &mut prev, q, mask);
++                    ins = q + 1;
++                    let mut have = 0usize;
++                    if l > pc_LSLACK {
++                        have = l - pc_LSLACK;
++                    }
++                    let mut ldep = pc_LDEPTH;
++                    if cls == 6 {
++                        ldep = pc_S_LDEPTH;
++                    }
++                    let g = pc_find(input, &prev, q, hq, have, minl, ldep, 1);
++                    if g.0 >= minl && pc_gain(g.0, g.1) > pc_gain(l, d) {
++                        nt = pc_put_lit(input, out, nt, p);
++                        p = q;
++                        l = g.0;
++                        d = g.1;
++                    } else {
++                        go = 0;
++                    }
++                }
++                // Fold earlier tokens into this match while their bytes also match at d.
++                let b = pc_fold_w(input, out, nt, p, l, d);
++                nt = b.0;
++                p = b.1;
++                l = b.2;
++                let r = pc_put_match(input, out, nt, p, d, l);
++                nt = r.0;
++                let end = r.1;
++                // Chain the first pc_INS_MAX and the last pc_TAIL positions inside the match.
++                let mut stop = end;
++                // wrapping: pc_same code as `+` here (no overflow on any real input), total in the model
++                if stop > ins.wrapping_add(pc_INS_MAX) {
++                    stop = ins.wrapping_add(pc_INS_MAX);
++                }
++                if stop > lim {
++                    stop = lim;
++                }
++                while ins < stop {
++                    pc_insert(input, &mut head, &mut prev, ins, mask);
++                    ins += 1;
++                }
++                if pc_STRIDE > 0 {
++                    // `ins + pc_TAIL + pc_STRIDE < end` (ins <= end here): no sum that could overflow
++                    while end - ins > pc_TAIL + pc_STRIDE && ins < lim {
++                        pc_insert(input, &mut head, &mut prev, ins, mask);
++                        ins += pc_STRIDE;
++                    }
++                }
++                if ins + pc_TAIL < end {
++                    ins = end - pc_TAIL;
++                }
++                while ins < end && ins < lim {
++                    pc_insert(input, &mut head, &mut prev, ins, mask);
++                    ins += 1;
++                }
++                if ins < end {
++                    ins = end;
++                }
++                p = end;
++                miss = 0;
++            } else {
++                nt = pc_put_lit(input, out, nt, p);
++                p += 1;
++                miss += 1;
++                let mut step = miss >> skip;
++                if step > skcap {
++                    step = skcap;
++                }
++                while step > 0 && p < lim {
++                    nt = pc_put_lit(input, out, nt, p);
++                    p += 1;
++                    step -= 1;
++                }
++                if ins < p {
++                    ins = p;
++                }
++            }
++        }
++    }
++    while p < n {
++        nt = pc_put_lit(input, out, nt, p);
++        p += 1;
++    }
++    nt
++}
+ 
+ // ─────────────── the stride path: pair-structured binaries (16-bit floats and the like) ───────────────
+ 
+@@ -7410,6 +8584,7 @@
+ /// overwritten by the next tokens); the loop otherwise.
+ #[inline(always)]
+ pub fn pc_flush4(input: &[u8], out: &mut [u32], nt0: usize, from: usize, to: usize) -> usize {
++ if from == to { return nt0; }
+     if from <= to && to - from <= 4 && from + 4 <= input.len() && nt0 + 4 <= out.len() {
+         out[nt0] = input[from] as u32;
+         out[nt0 + 1] = input[from + 1] as u32;
+@@ -8199,181 +9374,214 @@
+ pub const pc_TF_LBASE: [u16; 32] = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0, 0];
+ pub const pc_TF_LTOP: [u16; 32] = [3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 22, 26, 30, 34, 42, 50, 58, 66, 82, 98, 114, 130, 162, 194, 226, 257, 258, 0, 0, 0];
+ 
+-// fastX: a fast, content-adaptive LZ77 parser for the fixed DEFLATE encoder.
+-//
+-// * Content class from a small strided byte histogram: DNA-like inputs, prose (letters and
+-//   spaces, almost no code symbols), other text, high-entropy binaries (with a zero-rich
+-//   variant) and structured binaries each get their own settings.
+-// * Search: hash chains keyed by the first 4 bytes (3 for structured binaries), a main q4_walk and
+-//   a lazy q4_walk, both with a one-byte quick reject; the lazy step compares candidates by an
+-//   estimated bit saving. Text looks one byte q4_ahead only after short matches, prose walks
+-//   deeper without looking q4_ahead, structured text walks one step and looks q4_ahead deeply.
+-// * Every new match first extends backwards over the tokens just written: literals that
+-//   match at its distance, and whole earlier matches whose bytes also match there, are
+-//   folded into it (fewer, longer matches). Inside long matches the first q4_INS_MAX, every
+-//   q4_STRIDE-th and the last q4_TAIL positions are recorded.
+-// * Skip acceleration through stretches without matches (capped for zero-rich data).
+-// * Tables are sized by the input: small inputs clear and touch less memory.
+-// * Emission optionally re-checks each match (q4_VERIFY = 1); a failed q4_check writes a literal.
+-// * Tiny inputs (at most q4_TF_N bytes; binaries, optionally plain text) take a separate path: a
+-//   planner (`q4_tf_plan`, search only) that spends few distinct length and distance codes (the
+-//   encoder's cost per tiny block is mostly per live symbol) writes a plan, and `q4_emit` writes each
+-//   planned match only after `q4_check` has re-compared its bytes (anything else becomes literals),
+-//   so only the emission carries the decode invariant.
+-// * A class whose search is a single chain step (here text, prose, structured text and the
+-//   zero-rich binaries) is parsed by `q4_run1` instead of `q4_run`: the q4_same tokens, but the head slot,
+-//   the candidate and the candidate's first eight bytes of the next position are read one step
+-//   early, so the loads overlap the branches of the current position, and the literals are
+-//   written in one go when the next match is known (`q4_r1_kind` decides from constants alone).
+-// * Pair-structured binaries (16-bit floats: one byte of each pair nearly constant) take the
+-//   stride path `q4_run_st`: only every second position is searched, with 3-byte keys.
+-// * DNA-like inputs (q4_DN_ON = 1) take `q4_run_dna`: a greedy q4_parse with 3-byte keys whose table keeps the
+-//   oldest occurrence in the window (far matches, at most q4_DN_CAP bytes long).
+-//
+-// Tokens: t < 256 literal, else 2^24 + (dist-1)*256 + (len-3).
+-
++#[inline(never)] pub fn p125_row0(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,5,258,1000000,4294967295,4,4)}
++
++#[inline(never)] pub fn p125_row1(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,5,16,1000000,4294967295,2,4)}
++
++#[inline(never)] pub fn p125_row2(input:&[u8],out:&mut[u32])->usize{u118_run::<65536,32768,4294967295,4,6,32,5,1000000,64,1,16,4,64,1>(input,out)}
++
++#[inline(never)] pub fn p125_row3(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,5,16,1000000,4294967295,3,4)}
++
++#[inline(never)] pub fn p125_row4(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,4,32,1000000,4294967295,2,4)}
++
++#[inline(never)] pub fn p125_row5(input:&[u8],out:&mut[u32])->usize{o_a_main_part::<16,256,4,6,64>(input,out,0,0,0)}
++
++#[inline(never)] pub fn p125_row6(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row7(input:&[u8],out:&mut[u32])->usize{n_run::<65536,6,0,0,0,16,0,8,1>(input,out)}
++
++#[inline(never)] pub fn p125_row8(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,6,0,1000000,4294967040,2,3)}
++
++#[inline(never)] pub fn p125_row9(input:&[u8],out:&mut[u32])->usize{u118_run::<65536,32768,4294967295,4,12,64,6,1000000,128,1,16,4,64,0>(input,out)}
++
++#[inline(never)] pub fn p125_row10(input:&[u8],out:&mut[u32])->usize{o_a_main_part::<10,256,8,5,32>(input,out,0,0,0)}
++
++#[inline(never)] pub fn p125_row11(input:&[u8],out:&mut[u32])->usize{y_sparse(input,out)}
++
++#[inline(never)] pub fn p125_row12(input:&[u8],out:&mut[u32])->usize{et_tiny(input,out,536870911)}
++
++#[inline(never)] pub fn p125_row13(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,5,16,1000000,4294967295)}
++
++#[inline(never)] pub fn p125_row14(input:&[u8],out:&mut[u32])->usize{fx0_run::<1,1,2,258>(input,out,0)}
++#[inline(never)] pub fn p125_row15(input:&[u8],out:&mut[u32])->usize{ef32_run(input,out)}
++
++
++
++// Exact officially released #595 engine declarations.
+ pub const q4_HB: u32 = 15;
++
+ pub const q4_HN: usize = 32768;
++
+ pub const q4_WN: usize = 32768;
+-/// Inputs of at most q4_SMALL bytes use q4_HS chain heads and a q4_WS window table.
++
+ pub const q4_SMALL: usize = 65536;
++
+ pub const q4_HS: usize = 4096;
++
+ pub const q4_WS: usize = 16384;
++
+ pub const q4_NICE: usize = 32;
++
+ pub const q4_INS_MAX: usize = 0;
++
+ pub const q4_TAIL: usize = 0;
+-/// Inside long matches, every q4_STRIDE-th position between the head and the tail is chained
+-/// too (q4_STRIDE = 0: none).
++
+ pub const q4_STRIDE: usize = 0;
++
+ pub const q4_BACKTOK: usize = 16;
++
+ pub const q4_LDEPTH: usize = 1;
++
+ pub const q4_SAMPLE: usize = 2048;
++
+ pub const q4_VERIFY: usize = 0;
+-/// Lazy step: a candidate at p+1 needs length >= l + 1 - q4_LSLACK (q4_LSLACK = 1: at least as long
+-/// as the current match l) and must win on estimated saving (literal worth q4_HLIT/16 bits,
+-/// match base cost q4_GBASE/16 bits plus extra bits).
++
+ pub const q4_LSLACK: usize = 1;
++
+ pub const q4_HLIT: u32 = 80;
++
+ pub const q4_GBASE: i32 = 168;
+-/// Per class: main chain depth, lazy threshold, skip shift, skip cap (T text, P prose,
+-/// H high-entropy binary, Z high-entropy binary rich in zero bytes, B other binary,
+-/// DNA-like input is sent as literals).
++
+ pub const q4_T_DEPTH: usize = 1;
++
+ pub const q4_T_LAZY: usize = 0;
++
+ pub const q4_T_SKIP: usize = 4;
++
+ pub const q4_P_DEPTH: usize = 4;
++
+ pub const q4_P_LAZY: usize = 0;
++
+ pub const q4_P_SKIP: usize = 5;
+-/// Key mask of prose searched with one chain step (0xFFFF_FFFF: four-byte keys; 0xFFFF_FF00: three-byte keys).
++
+ pub const q4_P_KM: u32 = 4294967295;
++
+ pub const q4_H_DEPTH: usize = 1;
++
+ pub const q4_H_LAZY: usize = 0;
++
+ pub const q4_H_SKIP: usize = 3;
++
+ pub const q4_Z_DEPTH: usize = 1;
++
+ pub const q4_Z_SKIP: usize = 4;
++
+ pub const q4_Z_CAP: usize = 8;
++
+ pub const q4_B_DEPTH: usize = 1;
++
+ pub const q4_B_LAZY: usize = 0;
++
+ pub const q4_B_SKIP: usize = 4;
+-/// Structured text (class 6: text with at least 1/q4_SDIG of the sample in digits): main depth
+-/// q4_S_DEPTH, lazy q4_walk depth q4_S_LDEPTH, lazy threshold q4_S_LAZY.
++
+ pub const q4_SDIG: u32 = 6;
++
+ pub const q4_S_DEPTH: usize = 1;
++
+ pub const q4_S_LDEPTH: usize = 1;
++
+ pub const q4_S_LAZY: usize = 258;
+-/// Largest skip step (extra literals per miss) outside the Z class.
++
+ pub const q4_SKCAP: usize = 1000000;
+-/// 1: a class whose search is one chain step (main q4_walk and lazy q4_walk) is parsed by the read-q4_ahead
+-/// loop `q4_run1` (the q4_same tokens as `q4_run`); 0: `q4_run` for every class.
++
+ pub const q4_R1_ON: usize = 1;
+-/// Stride path (q4_ST_ON 1): a high-entropy input (class 2 or 4) of more than q4_ST_MIN bytes whose bytes
+-/// at one parity take at most q4_ST_FEW distinct values while the other parity takes at least q4_ST_MANY
+-/// (in at most q4_ST_SAMPLE sampled byte pairs) is parsed by `q4_run_st`: only the positions of the
+-/// low-entropy parity are searched, with 3-byte keys in a direct-mapped table of q4_ST_HN slots
+-/// (2^q4_ST_HB); a match is at most q4_ST_DMAX back.
++
+ pub const q4_ST_ON: usize = 1;
++
+ pub const q4_ST_MIN: usize = 65536;
++
+ pub const q4_ST_SAMPLE: usize = 4096;
++
+ pub const q4_ST_FEW: usize = 32;
++
+ pub const q4_ST_MANY: usize = 160;
++
+ pub const q4_ST_HB: u32 = 17;
++
+ pub const q4_ST_HN: usize = 131072;
++
+ pub const q4_ST_DMAX: usize = 32768;
+-/// Stride path: after a match, at most q4_ST_INS positions of the searched parity inside it are recorded in the table
+-/// (0: none); a candidate less than q4_ST_DMIN back is not taken (129: distance codes 14..29 only, so a block keeps at
+-/// most 16 live distance codes).
++
+ pub const q4_ST_INS: usize = 258;
++
+ pub const q4_ST_DMIN: usize = 129;
+-/// DNA-like inputs (class 0) with q4_DN_ON = 1 are parsed by `q4_run_dna` (else they stay literals): every position is
+-/// searched with one entry of a direct-mapped table of q4_DN_HN slots (2^q4_DN_HB) keyed by its three bytes; a slot keeps
+-/// its position while that is at most q4_DN_FAR back (the oldest occurrence in the window, so matches come from far
+-/// back); a match is at most q4_DN_CAP bytes long.
++
+ pub const q4_DN_ON: usize = 0;
++
+ pub const q4_DN_HB: u32 = 16;
++
+ pub const q4_DN_HN: usize = 65536;
++
+ pub const q4_DN_FAR: usize = 32768;
++
+ pub const q4_DN_CAP: usize = 3;
+-/// Tiny inputs (at most q4_TF_N bytes) that `q4_tf_class` calls binary, and with q4_TF_TEXT = 1 also text
+-/// inputs of a `q4_tf_class` kind below q4_TF_TKIND (0 text, 1 structured text), take the plan +
+-/// re-verify path (`q4_tf_plan`, then `q4_emit`); every other input takes the engine above. q4_TF_N = 0
+-/// leaves only the empty input there (no tokens either way): `q4_parse` is then the engine alone.
++
+ pub const q4_TF_N: usize = 65536;
++
+ pub const q4_TF_TEXT: usize = 0;
++
+ pub const q4_TF_TKIND: usize = 1;
+-/// `q4_tf_class`: about q4_TF_SAMPLE strided bytes (>= 1); structured text has at least 1/q4_TF_SDIG
+-/// (>= 1) digits.
++
+ pub const q4_TF_SAMPLE: usize = 256;
++
+ pub const q4_TF_SDIG: u32 = 6;
+-/// Chain heads (q4_TF_HN = 2^q4_TF_HB slots, 1 <= q4_TF_HB <= 64) and the window table (q4_TF_WN >= 1);
+-/// positions are kept as u16 (q4_TF_N <= 65536 keeps them exact). Binaries alone (q4_TF_TEXT = 0,
+-/// q4_TF_BDEPTH = 0) q4_find only distance-1 matches, so the chains never change their plan (a chain
+-/// candidate can only repeat distance 1, the one kept code): minimal tables skip clearing 72 KB.
+-/// The text planner (q4_TF_TEXT = 1) walks the chains: q4_TF_HB 12, q4_TF_HN 4096, q4_TF_WN 32768 there.
++
+ pub const q4_TF_HB: u32 = 12;
++
+ pub const q4_TF_HN: usize = 4096;
++
+ pub const q4_TF_WN: usize = 16384;
+-/// Per kind: chain steps, lazy steps below this match length, skip shift (after m literals in a
+-/// row, m >> skip positions are not searched; a shift of 32 or more never skips). T text, S
+-/// structured text, B binaries (3-byte keys; q4_TF_BDEPTH 0 = distance 1 only).
++
+ pub const q4_TF_TDEPTH: usize = 1;
++
+ pub const q4_TF_TLAZY: usize = 0;
++
+ pub const q4_TF_TSKIP: usize = 3;
++
+ pub const q4_TF_SDEPTH: usize = 1;
++
+ pub const q4_TF_SLAZY: usize = 258;
++
+ pub const q4_TF_SSKIP: usize = 3;
++
+ pub const q4_TF_BDEPTH: usize = 0;
++
+ pub const q4_TF_BLAZY: usize = 0;
++
+ pub const q4_TF_BSKIP: usize = 4;
+-/// A q4_walk stops at a match of q4_TF_NICE bytes; skip steps are at most q4_TF_SKCAP.
++
+ pub const q4_TF_NICE: usize = 64;
++
+ pub const q4_TF_SKCAP: usize = 1000000;
+-/// 1: distance 1 is tried before the chain on text too (always on binaries).
++
+ pub const q4_TF_TRLE: usize = 1;
+-/// 1: a new match extends backwards over pending literals; 1: the pending match is folded into
+-/// a new one when its bytes also match at the new distance.
++
+ pub const q4_TF_BACK: usize = 1;
++
+ pub const q4_TF_FOLD: usize = 1;
+-/// The previous match distance is tried before the chain (1), after it (2) or not at all (0).
++
+ pub const q4_TF_REP: usize = 0;
+-/// 1: no search where a q4_run of four equal bytes starts (the next position takes distance 1).
++
+ pub const q4_TF_RUNSKIP: usize = 1;
+-/// Positions chained at the head and at the tail of a match.
++
+ pub const q4_TF_INS: usize = 2;
++
+ pub const q4_TF_TAIL: usize = 1;
+-/// Keep thresholds (uses per code): text q4_TF_KL / q4_TF_KD, binaries q4_TF_BKL / q4_TF_BKD (0 or 1: keep
+-/// every code used).
++
+ pub const q4_TF_KL: u32 = 5;
++
+ pub const q4_TF_KD: u32 = 5;
++
+ pub const q4_TF_BKL: u32 = 3;
++
+ pub const q4_TF_BKD: u32 = 3;
+-/// Re-q4_find: chain steps, single literals tried before giving up; a dropped-distance match that
+-/// cannot be re-found becomes literals when at most q4_TF_DLIT bytes long, else keeps its distance
+-/// (its code re-admitted).
++
+ pub const q4_TF_RDEPTH: usize = 8;
++
+ pub const q4_TF_SHIFT: usize = 1;
++
+ pub const q4_TF_DLIT: usize = 8;
+ 
+-/// Eight bytes at `i`, first byte most significant (0 when out of range).
+ #[inline(always)]
+ pub fn q4_be8(s: &[u8], i: usize) -> u64 {
+     if i + 8 <= s.len() {
+@@ -8390,7 +9598,6 @@
+     }
+ }
+ 
+-/// Four bytes at `i`, first byte most significant (0 when out of range).
+ #[inline(always)]
+ pub fn q4_be4(s: &[u8], i: usize) -> u32 {
+     if i + 4 <= s.len() {
+@@ -8400,13 +9607,6 @@
+     }
+ }
+ 
+-/// Input class from a strided byte histogram of at most ~q4_SAMPLE bytes:
+-/// 0 DNA-like, 1 text, 2 high-entropy binary, 3 other binary, 4 high-entropy with zeros,
+-/// 5 prose (text of letters and spaces with almost no code symbols), 6 structured text (many
+-/// digits: tables, logs, dumps).
+-
+-
+-/// Estimated saving (1/16 bit) of a match of length `l` at distance `d` over literals.
+ #[inline(always)]
+ pub fn q4_gain(l: usize, d: usize) -> i32 {
+     let mut c = q4_GBASE;
+@@ -8419,11 +9619,6 @@
+     (l as i32) * (q4_HLIT as i32) - c
+ }
+ 
+-/// Length of the q4_common prefix of s[a..] and s[b..], at most `cap`.
+-
+-
+-/// 1 when s[a..a+len] == s[b..b+len]: eight bytes at a time, the last partial word
+-/// under a mask when a full load fits, else byte by byte.
+ #[inline(always)]
+ pub fn q4_same(s: &[u8], a: usize, b: usize, len: usize) -> usize {
+     let n = s.len();
+@@ -8461,7 +9656,6 @@
+     nt + 1
+ }
+ 
+-/// Emit a match (re-checked when q4_VERIFY = 1), else a literal. Returns (tokens, next position).
+ #[inline(always)]
+ pub fn q4_put_match(s: &[u8], out: &mut [u32], nt: usize, p: usize, d: usize, l: usize) -> (usize, usize) {
+     let n = s.len();
+@@ -8474,63 +9668,12 @@
+     }
+ }
+ 
+-/// Walk the chain from `start`: the longest match at `p` longer than `have` (with `gm` = 1,
+-/// a longer candidate must also have a higher estimated saving); distance 0 = none found.
+-/// Each candidate first compares the byte at `best`.
+-
+-
+-/// Put position `i` at the head of its chain (key = first four bytes under `mask`);
+-/// returns the previous head.
+-
+-
+-/// Best match at `p` longer than `have` and at least `minl` long; (0, 0) when none.
+-
+-
+-/// The q4_parse for one input class (inlined so the text classes get constant settings), with
+-/// H chain heads and a window table of W entries.
+-
+-
+-// ─────────────── the stride path: pair-structured binaries (16-bit floats and the like) ───────────────
+-
+-/// Parity of the low-entropy bytes of pair-structured data (0 even, 1 odd), or 2 when the input is
+-/// not such data: in at most q4_ST_SAMPLE sampled byte pairs one parity takes at most q4_ST_FEW distinct
+-/// values and the other at least q4_ST_MANY.
+-
+-
+-/// The stride path's parity for an input of class `cls` that takes it (0 or 1), else 2.
+-
+-
+-/// Table slot of the three bytes at `p` (low-entropy, other, low-entropy).
+-
+-
+-/// Put position `p` in slot `a` of the stride table; returns the position it replaces.
+-
+-
+-/// The match at `p` from the table entry `c`: (length, distance) when `c` is at most q4_ST_DMAX before
+-/// `p` and the three key bytes agree (compared one by one, then extended byte by byte), else (0, 0).
+-
+-
+-/// Record position `q` in its slot of the stride table.
+-
+-
+-/// Record the positions of parity `ph` in `from..end` (at most q4_ST_INS of them, all below `lim`) in the stride table.
+-
+-
+-/// Stride-2 greedy q4_parse: only positions of parity `ph` are searched; the table keeps the most
+-/// recent position per key slot (searched positions and, through `q4_st_fill`, those inside matches); a failed search writes the pair (p, p + 1) as literals, and a
+-/// match that ends on the other parity is followed by one literal.
+-
+-
+-// ─────────────── DNA-like inputs (class 0): greedy, far table, three-byte keys ───────────────
+-
+-/// Table slot of the three bytes at `p`.
+ #[inline(always)]
+ pub fn q4_dn_slot(s: &[u8], p: usize) -> usize {
+     let k = ((s[p] as u64) << 16) | ((s[p + 1] as u64) << 8) | (s[p + 2] as u64);
+     (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - q4_DN_HB)) as usize % q4_DN_HN
+ }
+ 
+-/// The entry of slot `a`; the slot takes `p` only when its entry is more than q4_DN_FAR back.
+ #[inline(always)]
+ pub fn q4_dn_swap(tab: &mut [u32; q4_DN_HN], a: usize, p: usize) -> usize {
+     let c = tab[a] as usize;
+@@ -8540,8 +9683,6 @@
+     c
+ }
+ 
+-/// The match at `p` from the entry `c`: (length, distance) when `c` is before `p`, at most 32768 back, and the
+-/// three key bytes agree (compared one by one, then extended byte by byte up to q4_DN_CAP), else (0, 0).
+ #[inline(always)]
+ pub fn q4_dn_find(s: &[u8], c: usize, p: usize) -> (usize, usize) {
+     let n = s.len();
+@@ -8560,7 +9701,6 @@
+     }
+ }
+ 
+-/// Greedy q4_parse for DNA-like inputs: every position is searched with its table entry.
+ #[inline(never)]
+ pub fn q4_run_dna(input: &[u8], out: &mut [u32]) -> usize {
+     let n = input.len();
+@@ -8590,28 +9730,20 @@
+     nt
+ }
+ 
+-// ─────────────── E: symbol-frugal paths for one-block inputs, and dispatch helpers ───────────────
+-//
+-// The validator encoder builds Huffman codes per block of 16384 tokens; package-merge costs about 1 us per live
+-// literal/length or distance symbol, so a one-block input is encoded mostly at that per-symbol price. These paths
+-// spend few distinct length codes there:
+-//  * `q4_run1t` (small text inputs, at most q4_TM_MAX bytes): `q4_run1` whose matches are written as pieces whose lengths
+-//    have a code in q4_TM_LM (a match is split at its distance; a rest that no allowed length fits is written as literals).
+-//  * `q4_run_z` (tiny binaries): each byte, then the q4_run of the q4_same byte after it as distance-1 pieces whose lengths
+-//    have a code in q4_TZ_LM (a rest that no allowed length fits is written as literals).
+-/// Inputs of a text class of at most q4_TM_MAX bytes take `q4_run1t` (needs q4_TF_TEXT = 0 for the ones at most q4_TF_N).
+ pub const q4_TM_ON: usize = 1;
++
+ pub const q4_TM_MAX: usize = 65536;
+-/// Allowed length codes (bit c = length code 257 + c): 12, 18, 25, 28 = lengths 19-22, 51-58, 163-194, 258.
++
+ pub const q4_TM_LM: u32 = 302_256_128;
+-/// Lazy threshold and backward-merge depth of `q4_run1t`.
++
+ pub const q4_TM_LAZY: usize = 258;
++
+ pub const q4_TM_BACK: usize = 16;
+-/// Tiny binaries (`q4_tf_class` kind 2) take `q4_run_z` when q4_TZ_ON = 1; allowed length codes q4_TZ_LM.
++
+ pub const q4_TZ_ON: usize = 1;
++
+ pub const q4_TZ_LM: u32 = 302_256_128;
+ 
+-/// lens[x] = the largest length <= x whose code (q4_TF_LSYM) has its bit set in `m` (0 when none), x in 3..=258.
+ #[inline(always)]
+ pub fn q4_e_lens(lens: &mut [u16; 260], m: u32) {
+     let mut cur = 0u16;
+@@ -8626,7 +9758,6 @@
+     }
+ }
+ 
+-/// The allowed piece for `rem` bytes left: lens[min(rem, 258)] when it is at least 3 and at most `rem`, else 0.
+ #[inline(always)]
+ pub fn q4_e_piece(lens: &[u16; 260], rem: usize) -> usize {
+     let mut r = rem;
+@@ -8641,7 +9772,6 @@
+     }
+ }
+ 
+-/// `q4_fold` with its own depth `bt`.
+ #[inline(always)]
+ pub fn q4_fold_bt(input: &[u8], out: &[u32], nt0: usize, p0: usize, l0: usize, d: usize, bt: usize) -> (usize, usize, usize) {
+     let mut nt = nt0;
+@@ -8672,7 +9802,6 @@
+     (nt, p, l)
+ }
+ 
+-/// Write the match (l, d) at `p` as pieces of allowed lengths, then the rest as literals. Returns (tokens, end).
+ #[inline(always)]
+ pub fn q4_e_pieces(input: &[u8], out: &mut [u32], nt0: usize, p: usize, l: usize, d: usize, lens: &[u16; 260]) -> (usize, usize) {
+     let n = input.len();
+@@ -8700,7 +9829,6 @@
+     (nt, q)
+ }
+ 
+-/// `q4_run1` for small text inputs with the length codes limited to `lm` (see the section head).
+ #[inline(never)]
+ pub fn q4_run1t<const H: usize>(input: &[u8], out: &mut [u32], skip: usize, lazy: usize, skcap: usize, lm: u32) -> usize {
+     let n = input.len();
+@@ -8786,31 +9914,17 @@
+     nt
+ }
+ 
+-/// Tiny binaries: each byte, then the bytes after it that repeat it (the distance-1 match `q4_mlen` confirms) as
+-/// pieces of allowed lengths; a rest that no allowed length fits is written as literals.
+-
+-
+-/// Which E path `q4_parse` gives an input of length `n` and class `cls` (0: the engine's own choice; 1: q4_run1t).
+-/// Single-condition `if`s only (no short-circuit chains).
+-
+-
+-// ─────────────── the read-q4_ahead loop for classes searched with one chain step ───────────────
+-
+-/// Slot of position `i` in a head table of H entries (the slot `q4_insert` uses for 4-byte keys).
+ #[inline(always)]
+ pub fn q4_slot_of<const H: usize>(s: &[u8], i: usize) -> usize {
+     let k = q4_be4(s, i) as u64;
+     (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - q4_HB)) as usize % H
+ }
+ 
+-/// Record position `i` in slot `a`.
+ #[inline(always)]
+ pub fn q4_head_set<const H: usize>(head: &mut [u32; H], a: usize, i: usize) {
+     head[a] = i as u32;
+ }
+ 
+-/// What the search at position `i` will need, read before it gets there: its slot, the head entry
+-/// there (the candidate) and the candidate's first eight bytes.
+ #[inline(always)]
+ pub fn q4_ahead<const H: usize>(s: &[u8], head: &[u32; H], i: usize) -> (usize, usize, u64) {
+     let a = q4_slot_of::<H>(s, i);
+@@ -8818,9 +9932,6 @@
+     (a, c, q4_be8(s, c))
+ }
+ 
+-/// `q4_ahead` for position `i` when it is below `lim` (it will be searched), else the values given.
+-/// (The test also keeps these loads apart from the eight-byte load of the search at `i - 1`,
+-/// which shares bytes with them: each stays a single load.)
+ #[inline(always)]
+ pub fn q4_ahead_if<const H: usize>(s: &[u8], head: &[u32; H], i: usize, lim: usize, a: usize, c: usize, w: u64) -> (usize, usize, u64) {
+     if i < lim {
+@@ -8830,7 +9941,6 @@
+     }
+ }
+ 
+-/// `q4_common` continued after `k0` bytes already known to agree.
+ #[inline(always)]
+ pub fn q4_common_from(s: &[u8], a: usize, b: usize, cap: usize, k0: usize) -> usize {
+     let mut k = k0;
+@@ -8854,8 +9964,6 @@
+     k
+ }
+ 
+-/// How many bytes agree at `c` and `p`, given the xor `x` of their first eight bytes taken as
+-/// words: the leading zero bytes of `x`, or what `q4_common_from` finds past eight equal bytes.
+ #[inline(always)]
+ pub fn q4_xlen(s: &[u8], c: usize, p: usize, x: u64) -> usize {
+     if x != 0 {
+@@ -8869,8 +9977,6 @@
+     }
+ }
+ 
+-/// The xor of the eight-byte big-endian words at `a` and `b` (0 when either is out of range): both or-trees in one
+-/// block, so each stays a single load.
+ #[inline(always)]
+ pub fn q4_xor8(s: &[u8], a: usize, b: usize) -> u64 {
+     let n = s.len();
+@@ -8897,9 +10003,6 @@
+     }
+ }
+ 
+-/// `q4_xlen` reading sixteen bytes with one branch: l1 = leading zero bytes of `x` (4..=8); when l1 is 8 the leading zero
+-/// bytes of the next words' xor are added (`l1 >> 3` is 1 exactly then); `q4_common_from` continues only past sixteen
+-/// equal bytes. Inputs with fewer than sixteen bytes left at `p` take `q4_xlen`.
+ #[inline(always)]
+ pub fn q4_xlen16(s: &[u8], c: usize, p: usize, x: u64) -> usize {
+     let n = s.len();
+@@ -8926,9 +10029,6 @@
+     }
+ }
+ 
+-/// The match at `p` from the candidate `c` whose first eight bytes are the word `cw`: (length,
+-/// distance) when at least four bytes agree at a distance in 1..=32768, else (0, 0). One xor of
+-/// the two words decides.
+ #[inline(always)]
+ pub fn q4_probe(s: &[u8], c: usize, cw: u64, p: usize) -> (usize, usize) {
+     let d = p.wrapping_sub(c);
+@@ -8940,8 +10040,6 @@
+     }
+ }
+ 
+-/// The length a match at the lazy position has to beat after a match of length `l`:
+-/// max(3, l - q4_LSLACK).
+ #[inline(always)]
+ pub fn q4_lazy_lo(l: usize) -> usize {
+     if l > q4_LSLACK && l - q4_LSLACK > 3 {
+@@ -8951,8 +10049,6 @@
+     }
+ }
+ 
+-/// `q4_probe` for the lazy step at `q`, one after a match of length `l`: only a match longer than
+-/// `q4_lazy_lo(l)` counts, and the byte at that offset is compared first.
+ #[inline(always)]
+ pub fn q4_probe_lazy(s: &[u8], c: usize, cw: u64, q: usize, l: usize) -> (usize, usize) {
+     let n = s.len();
+@@ -8971,7 +10067,6 @@
+     }
+ }
+ 
+-/// Literals skipped without a search after `miss` misses in a row: min(miss >> skip, skcap).
+ #[inline(always)]
+ pub fn q4_skip_len(miss: usize, skip: usize, skcap: usize) -> usize {
+     let step = miss >> skip;
+@@ -8982,7 +10077,6 @@
+     }
+ }
+ 
+-/// `p` moved on by `step` positions, at most to `lim` (needs p <= lim).
+ #[inline(always)]
+ pub fn q4_skip_to(p: usize, step: usize, lim: usize) -> usize {
+     if step > lim - p {
+@@ -8992,7 +10086,6 @@
+     }
+ }
+ 
+-/// Write the literals of the positions `from..to` (the ones passed since the last match).
+ #[inline(always)]
+ pub fn q4_flush(input: &[u8], out: &mut [u32], nt0: usize, from: usize, to: usize) -> usize {
+     let mut nt = nt0;
+@@ -9004,8 +10097,6 @@
+     nt
+ }
+ 
+-/// The backward merge of `q4_run` for the match (l0, d) at `p0`: earlier tokens whose bytes also match
+-/// at distance `d` are folded into it. Returns (tokens kept, start, length).
+ #[inline(always)]
+ pub fn q4_fold(input: &[u8], out: &[u32], nt0: usize, p0: usize, l0: usize, d: usize) -> (usize, usize, usize) {
+     let mut nt = nt0;
+@@ -9036,8 +10127,6 @@
+     (nt, p, l)
+ }
+ 
+-/// Record, as `q4_run` does, the first q4_INS_MAX and the last q4_TAIL positions inside the match that
+-/// ends at `end`, starting at `ins0` (positions from `lim` on have no full key).
+ #[inline(always)]
+ pub fn q4_record<const H: usize>(s: &[u8], head: &mut [u32; H], ins0: usize, end: usize, lim: usize) {
+     let mut ins = ins0;
+@@ -9064,10 +10153,6 @@
+     }
+ }
+ 
+-/// `q4_fold` after a word test: the token before the match (a literal, or a match of `w` bytes) can be folded into it
+-/// only if its last byte (literal) or its last min(w, 8) bytes (match) agree at distance `d`; one xor of the eight
+-/// bytes before `p0` and before `p0 - d` tests that, and when it fails the inputs come back unchanged (`q4_fold` would
+-/// stop at its first token).
+ #[inline(always)]
+ pub fn q4_fold_w(input: &[u8], out: &[u32], nt0: usize, p0: usize, l0: usize, d: usize) -> (usize, usize, usize) {
+     let mut m = 1u32;
+@@ -9091,8 +10176,6 @@
+     }
+ }
+ 
+-/// `q4_flush` writing four literals without a loop when at most four are due and four fit (the ones past `to` are
+-/// overwritten by the next tokens); the loop otherwise.
+ #[inline(always)]
+ pub fn q4_flush4(input: &[u8], out: &mut [u32], nt0: usize, from: usize, to: usize) -> usize {
+     if from <= to && to - from <= 4 && from + 4 <= input.len() && nt0 + 4 <= out.len() {
+@@ -9106,15 +10189,12 @@
+     }
+ }
+ 
+-/// Slot of position `i` for keys of the bytes `km` keeps of the first four (km = 0xFFFF_FFFF: four bytes, the slot
+-/// `q4_slot_of` gives; 0xFFFF_FF00: three bytes, the slot `q4_insert` gives class 3).
+ #[inline(always)]
+ pub fn q4_slot_of_m<const H: usize>(s: &[u8], i: usize, km: u32) -> usize {
+     let k = (q4_be4(s, i) & km) as u64;
+     (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - q4_HB)) as usize % H
+ }
+ 
+-/// `q4_ahead` with keys under `km`.
+ #[inline(always)]
+ pub fn q4_ahead_m<const H: usize>(s: &[u8], head: &[u32; H], i: usize, km: u32) -> (usize, usize, u64) {
+     let a = q4_slot_of_m::<H>(s, i, km);
+@@ -9122,7 +10202,6 @@
+     (a, c, q4_be8(s, c))
+ }
+ 
+-/// `q4_ahead_if` with keys under `km`.
+ #[inline(always)]
+ pub fn q4_ahead_if_m<const H: usize>(s: &[u8], head: &[u32; H], i: usize, lim: usize, a: usize, c: usize, w: u64, km: u32) -> (usize, usize, u64) {
+     if i < lim {
+@@ -9132,7 +10211,6 @@
+     }
+ }
+ 
+-/// `ahead_fix` with keys under `km`.
+ #[inline(always)]
+ pub fn q4_ahead_fix_m<const H: usize>(s: &[u8], head: &[u32; H], i: usize, lim: usize, e: usize, a: usize, c: usize, w: u64, a0: usize, c0: usize, w0: u64, km: u32) -> (usize, usize, u64) {
+     if i == e && i < lim && a < H && head[a] as usize == c {
+@@ -9142,7 +10220,6 @@
+     }
+ }
+ 
+-/// `q4_probe` for keys under `km`: a match needs the key bytes to agree (four, or three for km = 0xFFFF_FF00).
+ #[inline(always)]
+ pub fn q4_probe_m(s: &[u8], c: usize, cw: u64, p: usize, km: u32) -> (usize, usize) {
+     let d = p.wrapping_sub(c);
+@@ -9154,7 +10231,6 @@
+     }
+ }
+ 
+-/// `record3` with keys under `km`.
+ #[inline(always)]
+ pub fn q4_record3_m<const H: usize>(s: &[u8], head: &mut [u32; H], ins0: usize, a0: usize, end: usize, lim: usize, km: u32) {
+     let mut ins = ins0;
+@@ -9195,15 +10271,6 @@
+     }
+ }
+ 
+-/// `q4_run` for a class searched with one chain step (4-byte keys; main q4_walk and lazy q4_walk): the q4_same
+-/// tokens, without the window table, and with the search state of the next position (`q4_ahead`: its
+-/// slot, its candidate and the candidate's first eight bytes) read one step early, before the
+-/// branches of the current position are decided. `pre_slot`, `pre_c`, `pre_w` always describe the
+-/// position searched next: `p` at the top of the loop, `p + 1` once `p` is recorded (`q4_ahead_if`
+-/// leaves them alone when that position is past the last one searched).
+-/// The literals are not written while scanning: `ls` is the start of the positions passed since
+-/// the last match, and `q4_flush` writes them when the next match is known (or at the end), so the
+-/// scan itself only loads: the word at `p`, the head entry and the candidate's word.
+ #[inline(always)]
+ pub fn q4_run1<const H: usize>(input: &[u8], out: &mut [u32], skip: usize, lazy: usize, skcap: usize, km: u32) -> usize {
+     let n = input.len();
+@@ -9290,365 +10357,6 @@
+     nt
+ }
+ 
+-
+-/// The class itself when `q4_parse` gives class `cls` to `q4_run1` (q4_R1_ON, no stride recording, and one
+-/// chain step for both walks of the class), else 0. Constant conditions only: any other constant
+-/// set leaves the class with `q4_run`.
+-
+-
+-/// Every input except larger text and prose: smaller tables for small inputs.
+-
+-
+-/// Inputs that `q4_tf_route` sends to the tiny path: plan, then q4_emit with re-verification; all others:
+-/// the engine (the stride path for pair-structured binaries, `q4_run1` for the classes `q4_r1_kind`
+-/// names, `q4_run` for the rest).
+-
+-
+-// ─────────────── tiny inputs: plan + re-verify (`q4_parse` sends inputs of at most q4_TF_N bytes here) ───────────────
+-//
+-// Phase 2, the emission (`q4_emit` with `q4_check`, `q4_mlen`, `q4_load8`, `q4_first_diff`, `q4_get0`), carries the
+-// whole decode invariant of this path: a planned match is written only if `q4_check` finds it in range
+-// and `q4_mlen` confirms every byte; anything else becomes literals. Phase 1, the planner (`q4_tf_plan` and
+-// everything it calls), is search: it only has to be total (no panic, terminates) and may return a
+-// plan of any length and contents (`q4_get0` reads 0 past its end).
+-// Plan format: a token list; entry k describes the k-th planned token: `len + 512 * dist` for a
+-// match, and any entry that `q4_check` rejects stands for `max(1, len)` literals (`len = v % 512`), so
+-// `q4_run` (dist 0, 1 <= q4_run <= 511) is a q4_run of `q4_run` literals and 0 a single literal. A rejected
+-// match therefore costs literals over its planned length and the plan stays aligned.
+-
+-/// The eight bytes at `p` as one big-endian number (byte `p` most significant), or 0 when fewer
+-/// than eight remain (Horner form; one load plus `bswap` once inlined).
+-
+-
+-/// How many leading (most significant) bytes the words `x` and `y` share: 8 when equal.
+-
+-
+-/// How many bytes agree at `a` and `b`, up to `cap` (needs `a + cap <= n` and `b + cap <= n`):
+-/// eight at a time, the first mismatching word resolved by `q4_first_diff`, the last `cap % 8` bytes
+-/// one at a time. The only function whose result the emission trusts (through `q4_check`).
+-
+-
+-/// True only if `(len, dist)` is a legal match at `p` whose bytes all agree.
+-
+-
+-/// `v[i]`, or 0 when `i` is out of range: a read that cannot panic.
+-
+-
+-/// `v[i] = x` when `i` is in range, nothing otherwise: a write that cannot panic.
+-
+-
+-/// Phase 2: q4_walk the plan from 0 (entry `k` for the `k`-th planned token); a planned match is
+-/// written only if `q4_check` accepts it, else its bytes become literals (`owed`), so the plan stays aligned.
+-
+-
+-// ═══════════════ tiny inputs: the symbol-frugal planner (search only) ═══════════════
+-//
+-// The validator's encoder pays per block about 1.3 us for every live literal/length symbol and about
+-// 1 us for every live distance code (two or more live; a single live distance code costs nothing), on
+-// top of a few ns per token. A tiny input is one block, so its encode time is mostly this per-symbol
+-// overhead. The literal alphabet is fixed by the input (every distinct byte is a literal once), so the
+-// planner works on the length and distance codes:
+-//  1. `q4_tf_class`: binary (a zero byte or many control bytes in ~q4_TF_SAMPLE strided bytes), structured
+-//     text (>= 1/q4_TF_SDIG digits) or text.
+-//  2. `q4_tf_stage1`: a lazy hash-chain q4_parse into a token list (u16 position chains; distance 1, then the
+-//     previous distance, then the chain; backward extension over pending literals; the pending match is
+-//     folded into a new one when its bytes also match at the new distance; the engine's bit-saving
+-//     estimate for the lazy step) and a histogram of length codes and distance codes. Binaries
+-//     (q4_TF_BDEPTH 0): distance 1 only, so zero runs are one literal plus distance-1 matches and a single
+-//     distance code is live.
+-//  3. `q4_tf_keep`: a length code is kept when used >= q4_TF_KL (binaries q4_TF_BKL) times, a distance code
+-//     >= q4_TF_KD (q4_TF_BKD) times.
+-//  4. `q4_tf_rewrite`: consecutive matches at one distance are one span, re-split into kept lengths
+-//     (`q4_tf_piece`: one kept length, many maximal ones, or two kept lengths summing to the rest); a match
+-//     whose distance code was dropped is re-found at a kept distance (its chain, the two most recent
+-//     distances, distance 1; after up to q4_TF_SHIFT single literals), else written as literals when at
+-//     most q4_TF_DLIT bytes. Online re-admission: a span the kept lengths would leave >= 3 bytes uncovered
+-//     re-admits its own codes; a longer unfindable match keeps its distance and re-admits that code.
+-// The plan is a token list: `len + 512 * dist` for a match, `q4_run` (dist 0, q4_run <= 511) for a literal
+-// q4_run. Nothing here is trusted: `q4_emit` re-checks every planned match, so these functions only have to
+-// be total. Each function keeps its decisions in one place at its end (larger steps are chains of
+-// small helpers); arithmetic that a guard does not bound wraps.
+-
+-/// Byte `i` of `s` (0 when out of range).
+-
+-
+-/// Eight bytes at `i`, first byte most significant (0 unless all eight are in range).
+-
+-
+-/// Four bytes at `i`, first byte most significant (0 unless all four are in range).
+-
+-
+-/// The smaller of `a` and `b`.
+-
+-
+-/// The larger of `a` and `b`.
+-
+-
+-/// `x >> sh`, and 0 for `sh` >= 32 (the counts shifted here stay below 2^32).
+-
+-
+-/// Chain slot of the key at `p` (four bytes; three with mask 0xFFFF_FF00).
+-
+-
+-/// Slot (0..=28) of the length code of `l` in `hist`/`keep` (lengths 3..=258; any `l` is allowed).
+-
+-
+-/// Slot (32..=61) of the distance code of `d` in `hist`/`keep` (distances 1..=32768; any `d`).
+-
+-
+-/// How many bytes agree at `a` and `b` (a < b), at most `cap` (search only: any arguments are allowed;
+-/// the shape of the proven `q4_mlen`, so the word loads compile to one load each).
+-
+-
+-/// Append `x` (guarded push).
+-
+-
+-/// Chain position `p` (u16 positions); returns the previous head of its slot (where the search at `p`
+-/// starts).
+-
+-
+-/// Chain the positions `from..to` (none when `from >= to`); returns the larger of the two.
+-
+-
+-/// Is `c` a possible source for `p` (before it and at most 32768 back)?
+-
+-
+-/// The length of the match at `p` from `c` (at most `cap`) when it beats `best`, else `best`; the byte
+-/// where it would beat `best` is compared first.
+-
+-
+-/// Longest match at `p` longer than `have` on the chain from position `start` (at most `depth` steps,
+-/// within 32768 bytes): (length, distance); distance 0 when none is longer.
+-
+-
+-/// The longest match `p` allows: min(n - p, 258), 0 at or past the end.
+-
+-
+-/// The length a match has to beat: `have`, raised to `minl - 1`.
+-
+-
+-/// Distance 1 at `p` (when `rle` = 1 and the byte before `p` repeats there): (best, bd) of the longer.
+-
+-
+-/// The previous distance `rep` (> 1) at `p`, when `on`: (best, bd) of the longer.
+-
+-
+-/// The chain from `ci` (`depth` steps) when `best` is below `cap` and q4_TF_NICE: (best, bd) of the longer.
+-
+-
+-/// Best match at `p` longer than `have` and at least `minl` long: distance 1, the previous distance
+-/// `rep`, then the chain from `ci` (each must be longer than the best so far, so on equal length the
+-/// earlier and cheaper distance stays). (0, 0) when none.
+-
+-
+-/// Append `q4_run` literals as entries of at most 511.
+-
+-
+-/// Append `q4_run` literals, then the match (l, d).
+-
+-
+-/// 1 for a zero byte.
+-
+-
+-/// 1 for a control byte (below 9, or 14..=31).
+-
+-
+-/// 1 for a decimal digit.
+-
+-
+-/// Input kind from at most ~q4_TF_SAMPLE strided bytes: 2 binary (a zero byte, or more than 1/32 control
+-/// bytes), 1 structured text (at least 1/q4_TF_SDIG digits), 0 other text.
+-
+-
+-/// Stage-1 settings of kind `cls`: (key mask, shortest match, chain steps, lazy limit, skip shift,
+-/// distance 1 first).
+-
+-
+-/// Does a q4_run of four equal bytes start at `p` (the byte before `p` differs)?
+-
+-
+-/// The first candidate at `p`: none where a q4_run starts (q4_TF_RUNSKIP, distance-1-first kinds; the next
+-/// position takes distance 1), else `q4_tf_find`.
+-
+-
+-/// Is the match of length `l` found at `p` taken (at least `minl` long, inside the input)?
+-
+-
+-/// Estimated saving (1/16 bit) of a match (l, d) over literals: the engine's `q4_gain` (identical for
+-/// 3 <= l <= 258, 1 <= d <= 32768), with wrapping arithmetic.
+-
+-
+-/// Does the match (g0, g1) found at `q` (one after the current match's position) beat (l, d)?
+-
+-
+-/// Lazy steps while the match is shorter than `lazy` and q4_TF_NICE: a better match one position later
+-/// replaces it (one more pending literal). The state m = [p, l, d, q4_run, ins] is read and written back
+-/// (a function that changes tables returns no tuple: the proof's `step*` takes flat results).
+-
+-
+-/// Extend the match (l, d) at `p` backwards over the pending literals (q4_TF_BACK): (p, l, q4_run).
+-
+-
+-/// Fold the pending match (pl, pd) into the match (l, d) at `p` when no literal is between them, the
+-/// sum is a legal length and its bytes also match at `d` (q4_TF_FOLD): (p, l, pd).
+-
+-
+-/// Write the pending match (pl, pd) when there is one (pd != 0) and count its codes.
+-
+-
+-/// Where the chained tail of a match ending at `end` starts: end - q4_TF_TAIL when that is after `ins`.
+-
+-
+-/// Chain the positions of a match ending at `end`: q4_TF_INS from `ins` on and the last q4_TF_TAIL (never at
+-/// or past `lim`); returns the next position to chain (at least `end`).
+-
+-
+-/// A match (l, d) taken at `p`: lazy steps, backward extension, the q4_fold of the pending match (pl, pd);
+-/// then the pending match and the literals before the new one are written and the new match's
+-/// positions chained. Writes o = [end, l, d, ins]: the new match is the pending one now.
+-
+-
+-/// Positions skipped after `miss` misses in a row (`p` the next position): miss >> skip, at most
+-/// q4_TF_SKCAP and lim - p, none at `lim`.
+-
+-
+-/// The literals pending at the end: `q4_run` plus everything from `p` on.
+-
+-
+-/// The lazy q4_parse proper (lim = n - 8), then the pending match and the literals left at the end.
+-
+-
+-/// Phase 1a: the lazy q4_parse into `tk` (chains left in `head`/`prev` for the rewrite), length codes
+-/// counted in hist[0..29], distance codes in hist[32..62].
+-
+-
+-/// Threshold of slot `c`: `kl` for length codes (c < 32), `kd` for distance codes.
+-
+-
+-/// 1 when a code used `h` times is kept under threshold `k`.
+-
+-
+-/// Phase 1b: kept codes (keep[0..29] lengths used at least `kl` times, keep[32..62] distances used at
+-/// least `kd` times).
+-
+-
+-/// `x` if it is the first kept length (`kx` and none before), else `kmin`.
+-
+-
+-/// Is the length `x` (>= 3) of a kept code?
+-
+-
+-/// `x` when `kx`, else `cur`.
+-
+-
+-/// lle[x] = the largest length <= x whose code is kept (0 when none); returns the smallest kept length
+-/// (0 when none).
+-
+-
+-/// Length code `c`, when kept: the first of two kept lengths summing to `x` whose first piece has code
+-/// `c` (3 <= each <= 258), else 0.
+-
+-
+-/// Two kept lengths summing to `x` (3 <= each <= 258): the first one, or 0 when there is none.
+-
+-
+-/// The largest kept length that leaves at least the smallest one (when rem > kmin + 3), else the
+-/// largest kept length <= rem (lengths above 258 count as 258).
+-
+-
+-/// `q4_tf_piece` before its range q4_check.
+-
+-
+-/// The next piece when `rem` bytes are written in kept lengths (0 when no kept length fits): `rem`
+-/// when kept, the largest kept length while more than two of them remain, a kept pair, else the
+-/// largest kept length leaving at least the smallest one.
+-
+-
+-/// Bytes of `l` that no kept piece would cover (dry q4_run of `q4_tf_split`).
+-
+-
+-/// Write `l` bytes at distance d as pieces of kept lengths; `q4_run` literals are pending before it;
+-/// returns the literals pending after it (bytes no piece covers become literals).
+-
+-
+-/// Re-admit the code of a remainder `r` (>= 3).
+-
+-
+-/// Re-admit the codes of `l` bytes written as 258-byte pieces and a remainder (when the kept codes
+-/// would leave bytes uncovered); returns the new smallest kept length.
+-
+-
+-/// `q4_tf_split` with its state in st (st[0] = pending literals, in and out; st[1] = smallest kept length).
+-
+-
+-/// Before writing `l` bytes in kept lengths: re-admit their own codes when the kept lengths would leave
+-/// at least 3 bytes uncovered (st[1] = the new smallest kept length).
+-
+-
+-/// Distance `d` at `p` when it is in reach and its code is kept: (best, bd) of the longer (<= cap).
+-
+-
+-/// The chain candidate `c` (before `p`, in reach) when its distance code is kept: (best, bd) of the
+-/// longer.
+-
+-
+-/// q4_TF_RDEPTH steps on the chain of `p` for a longer match at a kept distance: (best, bd).
+-
+-
+-/// The chain step of `q4_tf_refind` (when `chain` = 1).
+-
+-
+-/// Longest match at `p` (at most `cap` bytes) at a kept distance: the distances `r1`, `r2`, 1, then
+-/// (when `chain` = 1) the chain of `p` (q4_TF_RDEPTH steps): (length, distance), (0, 0) when none.
+-
+-
+-/// Remember distance `d` as the most recent one (rd[0..4]).
+-
+-
+-/// Write the span of `l` bytes at kept distance d: one kept length as is, else kept pieces (re-admitting
+-/// the span's own codes first when the kept lengths would leave bytes uncovered).
+-
+-
+-/// What `q4_tf_redo` does with a re-q4_find of length `fl` when `rem` bytes remain (`shift` literal tries
+-/// left): 0 take it, 1 one literal, 2 the original distance, 3 literals.
+-
+-
+-/// One step of `q4_tf_redo` (see `q4_tf_act`).
+-
+-
+-/// The `l` bytes at `p` whose distance code (of d) was dropped: re-found at kept distances (the chain of
+-/// `p` first, the recent distances, distance 1), after up to q4_TF_SHIFT single literals; else literals when
+-/// at most q4_TF_DLIT bytes remain, else at distance d with its code re-admitted. Returns the next position.
+-
+-
+-/// What `q4_tf_rewrite` does with the stage-1 token (l, d) (`room` bytes left): 0 literals, 1 a span at a
+-/// kept distance, 2 a re-q4_find (the distance code was dropped).
+-
+-
+-/// Literals for a token that is no match: min(l, room), at least 1.
+-
+-
+-/// The span of consecutive stage-1 matches at distance `d` from token `k0` on (`l0` bytes so far, at most
+-/// `room`): (next token, span length).
+-
+-
+-/// Phase 1c: the plan from the stage-1 tokens under the kept codes. Consecutive matches at one distance
+-/// are taken as one span and re-split into kept lengths; a match whose distance code was dropped is
+-/// re-found at a kept distance (its chain, the recent distances, distance 1; after at most q4_TF_SHIFT
+-/// single literals), else its bytes become literals.
+-
+-
+-/// Keep thresholds (length codes, distance codes) of kind `cls`.
+-
+-
+-/// The plan for a tiny input of kind `cls` (`q4_tf_class`).
+-
+-
+-/// The kind (`q4_tf_class`) of an input that takes the plan + re-verify path: binaries, and text of a kind
+-/// below q4_TF_TKIND when q4_TF_TEXT = 1, all of at most q4_TF_N bytes; 3 for every other input.
+-
+-
+-/// Length code (0..28) of a match length (0..511; lengths below 3 map to 0, above 258 to 28).
+ pub const q4_TF_LSYM: [u8; 512] = [
+     0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 12, 12, 13, 13, 13, 13, 14, 14, 14, 14, 15,
+     15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19,
+@@ -9667,7 +10375,7 @@
+     28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28,
+     28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28,
+ ];
+-/// Distance code (0..29) of d (index d - 1 for d <= 256, else 256 + (d - 1) / 128).
++
+ pub const q4_TF_DSYM: [u8; 512] = [
+     0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9,
+     10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
+@@ -9686,51 +10394,11 @@
+     29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29,
+     29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29,
+ ];
+-/// Smallest and largest length of each length code (entries 29..31 unused).
++
+ pub const q4_TF_LBASE: [u16; 32] = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0, 0];
++
+ pub const q4_TF_LTOP: [u16; 32] = [3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 22, 26, 30, 34, 42, 50, 58, 66, 82, 98, 114, 130, 162, 194, 226, 257, 258, 0, 0, 0];
+ 
+-#[inline(always)] pub fn q4_lit_all(input:&[u8],out:&mut[u32])->usize{
+- let n=input.len();let mut nt=0usize;let mut p=0usize;
+- while p<n {nt=q4_put_lit(input,out,nt,p);p+=1;}nt
+-}
+-
+-#[inline(never)] pub fn p125_row0(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,5,0,1000000,4294967040,2,3)}
+-
+-#[inline(never)] pub fn p125_row1(input:&[u8],out:&mut[u32])->usize{pc_run1c::<32768>(input,out,4,0,1000000,4294967295,1,4)}
+-
+-#[inline(never)] pub fn p125_row2(input:&[u8],out:&mut[u32])->usize{q4_run1::<8192>(input,out,3,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row3(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,6,258,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row4(input:&[u8],out:&mut[u32])->usize{n_run::<65536,6,0,0,0,16,0,8,1>(input,out)}
+-
+-#[inline(never)] pub fn p125_row5(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row6(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,5,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row7(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row8(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,3,0,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row9(input:&[u8],out:&mut[u32])->usize{pc_run1::<32768>(input,out,4,258,1000000,4294967295)}
+-
+-#[inline(never)] pub fn p125_row10(input:&[u8],out:&mut[u32])->usize{esparse_rle(input,out,285278208)}
+-
+-#[inline(never)] pub fn p125_row11(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,4,0,1000000,302256128)}
+-
+-#[inline(never)] pub fn p125_row12(input:&[u8],out:&mut[u32])->usize{et_tiny(input,out,302256384)}
+-
+-#[inline(never)] pub fn p125_row13(input:&[u8],out:&mut[u32])->usize{r109_bfraw::<65536,0>(input,out)}
+-
+-#[inline(never)] pub fn p125_row14(input:&[u8],out:&mut[u32])->usize{q4_run1t::<8192>(input,out,2,258,1000000,268435456)}
+-#[inline(never)] pub fn p125_row15(input:&[u8],out:&mut[u32])->usize{ef32_run(input,out)}
+-
+-#[inline(never)] pub fn p125_row16(input:&[u8],out:&mut[u32])->usize{q4_run1::<32768>(input,out,2,0,1000000,4294967295)}
+-
+-// ───────────── EF32 engine (row 15, weights-f32): element-aligned single-probe matcher ─────────────
+-
+-/// EF32: literal tokens for input[from..to] written at out[nt0..]; returns the new token count.
+ #[inline(always)]
+ pub fn ef32_put_lits(input: &[u8], out: &mut [u32], nt0: usize, from: usize, to: usize) -> usize {
+     let mut nt = nt0;
+@@ -9743,7 +10411,6 @@
+     nt
+ }
+ 
+-/// EF32: how many bytes agree at a and b (a < b), up to cap. The only compare emitted matches rely on.
+ #[inline(always)]
+ pub fn ef32_match_len(input: &[u8], a: usize, b: usize, cap: usize) -> usize {
+     let mut l = 0usize;
+@@ -9753,14 +10420,12 @@
+     l
+ }
+ 
+-/// EF32: hash slot (14 bits) of the three bytes at p (needs p + 3 <= input.len()).
+ #[inline(always)]
+ pub fn ef32_hash(input: &[u8], p: usize) -> usize {
+     let w = (input[p] as u32) | ((input[p + 1] as u32) << 8) | ((input[p + 2] as u32) << 16);
+     (w.wrapping_mul(0x9E37_79B1) >> 18) as usize % 16384
+ }
+ 
+-/// EF32: match length at p against the candidate c (0 unless c < p within the window), at most 258.
+ #[inline(always)]
+ pub fn ef32_probe(input: &[u8], c: usize, p: usize) -> usize {
+     let n = input.len();
+@@ -9772,28 +10437,22 @@
+     }
+ }
+ 
+-/// EF32: the match token for distance dist (1..=32768) and length l (3..=258).
+ #[inline(always)]
+ pub fn ef32_tok(dist: usize, l: usize) -> u32 {
+     16777216 + ((dist - 1) as u32) * 256 + (l - 3) as u32
+ }
+ 
+-/// EF32: the first position p >= e with p = 3 (mod 4).
+ #[inline(always)]
+ pub fn ef32_align3(e: usize) -> usize {
+     e + ((3 + 4 - (e % 4)) % 4)
+ }
+ 
+-/// EF32: skip distance after `miss` probes without a match: 4 * min(1 + miss / 16, 64).
+ #[inline(always)]
+ pub fn ef32_skip(miss: usize) -> usize {
+     let st = 1 + (miss >> 4);
+     4 * if st > 64 { 64 } else { st }
+ }
+ 
+-/// EF32: f32 weights: probes only offsets p = 3 (mod 4) (key: sign/exponent byte of one element and the
+-/// two low bytes of the next), one hash head per key, no chains, skip acceleration over stretches
+-/// without matches.
+ #[inline(never)]
+ pub fn ef32_run(input: &[u8], out: &mut [u32]) -> usize {
+     let n = input.len();
+@@ -9828,19 +10487,6 @@
+     ef32_put_lits(input, out, nt, ls, n)
+ }
+ 
+-// ─────────────── ETINY: strided-lookup engine for one-block (small) inputs ───────────────
+-//
+-// `et_tiny(s, out, lm)`: the "tiny" engine (a = 1, b = 8, gate = 8, fold depth 16) under the length-code mask `lm`.
+-//  * Only the length codes in `lm` are used: a match is written as pieces of allowed lengths (`q4_e_piece`);
+-//    a rest no allowed length fits stays pending and is written later (as literals or inside the next match).
+-//  * Every position is inserted into a one-way table of 4096 entries keyed by the 4 bytes there (little-endian
+-//    word times 0x9E3779B1, top 12 bits); every 8th position is looked up. A hit whose 4 bytes agree is extended
+-//    forward (`et_fwd`, 8 bytes per step) and backward down to the first unemitted byte (`et_back`, 8 bytes per step).
+-//    A candidate whose distance code is not used yet must cover at least minl + 8 bytes.
+-//  * Earlier tokens that also match at the new distance are folded into the match (`et_fold`, at most 16).
+-//  * Positions are stored as position + 1 (0 = empty).
+-
+-/// Four bytes at `i`, first byte least significant (0 when out of range).
+ #[inline(always)]
+ pub fn et_rd4(s: &[u8], i: usize) -> u32 {
+     let n = s.len();
+@@ -9851,7 +10497,6 @@
+     }
+ }
+ 
+-/// Eight bytes at `i`, first byte least significant (0 when out of range).
+ #[inline(always)]
+ pub fn et_le8(s: &[u8], i: usize) -> u64 {
+     let n = s.len();
+@@ -9869,7 +10514,6 @@
+     }
+ }
+ 
+-/// Common prefix of s[a..] and s[b..], at most `cap` (needs a + cap <= s.len(), b + cap <= s.len()): 8 bytes at a time.
+ #[inline(always)]
+ pub fn et_fwd(s: &[u8], a: usize, b: usize, cap: usize) -> usize {
+     let mut k = 0usize;
+@@ -9886,13 +10530,11 @@
+     k
+ }
+ 
+-/// Table slot of the 4-byte word `w`.
+ #[inline(always)]
+ pub fn et_hash(w: u32) -> usize {
+     (w.wrapping_mul(0x9E37_79B1) >> 20) as usize % 4096
+ }
+ 
+-/// Smallest x in 3..=258 with lens[x] = x (0 when none).
+ #[inline(always)]
+ pub fn et_minl(lens: &[u16; 260]) -> usize {
+     let mut minl = 0usize;
+@@ -9906,7 +10548,6 @@
+     minl
+ }
+ 
+-/// Distance code of `d` (needs d >= 1).
+ #[inline(always)]
+ pub fn et_dcode(d: usize) -> u32 {
+     let x = (d - 1) as u32;
+@@ -9918,7 +10559,6 @@
+     }
+ }
+ 
+-/// Common suffix of s[..a] and s[..b], at most `maxb` (needs maxb <= a <= b <= s.len()): 8 bytes at a time.
+ #[inline(always)]
+ pub fn et_back(s: &[u8], a: usize, b: usize, maxb: usize) -> usize {
+     let mut k = 0usize;
+@@ -9942,7 +10582,6 @@
+     k
+ }
+ 
+-/// Bytes covered by the greedy pieces of allowed lengths of a match of length `l`.
+ #[inline(always)]
+ pub fn et_cover(lens: &[u16; 260], l: usize) -> usize {
+     let mut r = l;
+@@ -9960,7 +10599,6 @@
+     c
+ }
+ 
+-/// Record the positions ins0..stop (each below s.len() - 4) in the table; returns the next position to record.
+ #[inline(always)]
+ pub fn et_ins_to(s: &[u8], head: &mut [u32; 4096], ins0: usize, stop: usize) -> usize {
+     let mut ins = ins0;
+@@ -9972,7 +10610,6 @@
+     ins
+ }
+ 
+-/// After a match ending at `ls`: record at most 16 more positions below `ls`, then skip to ls - 4.
+ #[inline(always)]
+ pub fn et_ins_after(s: &[u8], head: &mut [u32; 4096], ins0: usize, ls: usize, lim: usize) -> usize {
+     let mut stop = ins0.saturating_add(16);
+@@ -9989,7 +10626,6 @@
+     ins
+ }
+ 
+-/// Backward reach for a hit at `q` from `cp`: at most q - ls, cp and 258 bytes.
+ #[inline(always)]
+ pub fn et_maxb(q: usize, ls: usize, cp: usize) -> usize {
+     let mut maxb = q - ls;
+@@ -10002,16 +10638,12 @@
+     maxb
+ }
+ 
+-/// A hit covering `cv` bytes at distance `d` is taken when cv >= minl, and cv >= minl + 8 when its
+-/// distance code is not used yet.
+ #[inline(always)]
+ pub fn et_take(cv: usize, minl: usize, used: u32, d: usize) -> bool {
+     let newc = (used >> (et_dcode(d) % 32)) & 1 == 0;
+     cv >= minl && (!newc || cv >= minl + 8)
+ }
+ 
+-/// The candidate at the looked-up position `q`: (start, distance, covered bytes, end of the agreeing bytes);
+-/// covered = 0 when there is none.
+ #[inline(always)]
+ pub fn et_cand(s: &[u8], head: &[u32; 4096], q: usize, ls: usize, lens: &[u16; 260], minl: usize, used: u32) -> (usize, usize, usize, usize) {
+     let n = s.len();
+@@ -10039,7 +10671,6 @@
+     (bs, bd, bcov, bend)
+ }
+ 
+-/// Fold earlier tokens (literals, matches) whose bytes also match at distance `d` into a match starting at `st0`.
+ #[inline(always)]
+ pub fn et_fold(s: &[u8], out: &[u32], nt0: usize, st0: usize, d: usize) -> (usize, usize) {
+     let mut nt = nt0;
+@@ -10071,7 +10702,6 @@
+     (nt, st)
+ }
+ 
+-/// Write the match at `x0` with distance `d` up to `end` as pieces of allowed lengths; returns (tokens, next position).
+ #[inline(always)]
+ pub fn et_pieces(s: &[u8], out: &mut [u32], nt0: usize, x0: usize, end: usize, d: usize, lens: &[u16; 260]) -> (usize, usize) {
+     let mut nt = nt0;
+@@ -10090,7 +10720,6 @@
+     (nt, x)
+ }
+ 
+-/// Emit the candidate (bs0, bd, bcov, bend) found while the bytes from `ls` were pending.
+ #[inline(always)]
+ pub fn et_emit(s: &[u8], out: &mut [u32], nt0: usize, ls: usize, bs0: usize, bd: usize, bcov: usize, bend: usize, lens: &[u16; 260]) -> (usize, usize) {
+     let nt1 = q4_flush(s, out, nt0, ls, bs0);
+@@ -10105,7 +10734,6 @@
+     et_pieces(s, out, r.0, bs, end, bd, lens)
+ }
+ 
+-/// The engine (see the section head). Needs out.len() >= s.len().
+ #[inline(never)]
+ pub fn et_tiny(s: &[u8], out: &mut [u32], lm: u32) -> usize {
+     let n = s.len();
+@@ -10140,58 +10768,3 @@
+     }
+     q4_flush(s, out, nt, ls, n)
+ }
+-
+-// ESPARSE (sparse inputs): run-length engine `rle_fast` with verify = false. A byte equal to the one before it
+-// starts a distance-1 match covering the whole run of that byte (8 bytes per step against the broadcast byte),
+-// written as pieces of allowed lengths (mask `lm`, `q4_e_pieces`); a rest no allowed length fits is literal.
+-
+-/// Length of the run of byte `v` at `b` continued after `k0` bytes known to be `v`, at most `cap`.
+-#[inline(always)]
+-pub fn esparse_run(s: &[u8], b: usize, v: u8, cap: usize, k0: usize) -> usize {
+-    let w = (v as u64).wrapping_mul(0x0101_0101_0101_0101);
+-    let mut k = k0;
+-    let mut go = 1u32;
+-    while go == 1 && cap - k >= 8 {
+-        let x = q4_be8(s, b + k) ^ w;
+-        if x == 0 {
+-            k += 8;
+-        } else {
+-            k += (x.leading_zeros() / 8) as usize;
+-            go = 0;
+-        }
+-    }
+-    while go == 1 && k < cap {
+-        if s[b + k] == v {
+-            k += 1;
+-        } else {
+-            go = 0;
+-        }
+-    }
+-    k
+-}
+-
+-/// The run-length parse under the length-code mask `lm` (see above).
+-#[inline(always)]
+-pub fn esparse_rle(s: &[u8], out: &mut [u32], lm: u32) -> usize {
+-    let n = s.len();
+-    let mut nt = 0usize;
+-    if n > 0 {
+-        let mut lens = [0u16; 260];
+-        q4_e_lens(&mut lens, lm);
+-        nt = q4_put_lit(s, out, nt, 0);
+-        let mut p = 1usize;
+-        while p < n {
+-            let v = s[p - 1];
+-            if s[p] == v {
+-                let r = esparse_run(s, p, v, n - p, 1);
+-                let e = q4_e_pieces(s, out, nt, p, r, 1, &lens);
+-                nt = e.0;
+-                p = e.1;
+-            } else {
+-                nt = q4_put_lit(s, out, nt, p);
+-                p += 1;
+-            }
+-        }
+-    }
+-    nt
+-}
