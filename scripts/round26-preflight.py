@@ -119,6 +119,9 @@ def main():
     if spec.get('r26_a_lastlink_lowering'):
         assert mode == 'native' and spec.get('native_encoder') is True and not spec.get('r18_function_profile')
         importlib.import_module('r26-a-lastlink-lowering').preflight(spec)
+    if spec.get('r26_c_greedy_counts'):
+        assert mode == 'native' and spec.get('native_encoder') is True
+        importlib.import_module('r26-c-greedy-counts').preflight(spec)
     if spec.get('r26_c_deferred_counts'):
         assert mode == 'native' and spec.get('native_encoder') is True
         importlib.import_module('r26-c-deferred-counts').preflight(spec)

@@ -1,0 +1,17 @@
+{
+  "candidate": "r26-c-658-greedy-once",
+  "parent": "references/round26-public-658",
+  "hashes": {
+    "parse.rs": "ae4602290cc2a0253703ab6e6ac0d2fe098e84429cc4d56314ac9326abbf0f88",
+    "Parse.lean": "354d56aa9f58536efdb410f3d5ecdf1945bded607965fe8a48161f96b035c494"
+  },
+  "attribution": {
+    "source_receipt": "references/round26-public-658/source-receipt.json",
+    "author_hotkey": "5G3YLL7PuDhRBoVoDBYKhAfTxFM4EouSDiYuFXeeWciNRzyK"
+  },
+  "mechanism": "Remove the entire O_A lazy selection stage: find returns originalscan result directly. Baseeval checks only originalfirstsourceword, with hintlength<=8. Localtrusted emitter validates distance/range and computes exact fullmatch using originalmatch_len once under originalmin258,n-pos-8 cap before emission.",
+  "difference": "C3 preservedlazy and removed only rarelongsuffixes. C4 changes the parse strategy to greedy and pays realqualityloss while removing allbase extension and lazy eval2/eval3 work. Not a cap sweep, no same-token assumption. PC,N70,sharedoriginalemitter,replay,hashes,recordpolicy and routes remain original.",
+  "proof_status": "DRAFT_PARENT_SCAFFOLD. Needc4_emit_step_spec from existingEO.EA.match_len_spec/emit_match andgreedy localstep replacement. Find/eval retainTruepostconditions; no cross-finder MatchAtstate or untrusted-search correctness proof. Actualextract/fullgate NOT_RUN.",
+  "quality_performance": "UNKNOWN untiloriginalencoder andoriginalprotocol. PublicO_Aparser priorstageweight about1.55% oftotalaxis is a historical localparser scenario, not a whole-program upperbound because changedtokens affectencoder. Usequality andscenario geometry toallocateone actualtime experiment.",
+  "formal_submission_sent": false
+}
