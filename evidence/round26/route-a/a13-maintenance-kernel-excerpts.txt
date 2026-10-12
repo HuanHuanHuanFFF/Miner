@@ -1,0 +1,351 @@
+<main::link_parent::<32768, 0>>:
+   14e80:	push   %rbp
+   14e81:	push   %r15
+   14e83:	push   %r14
+   14e85:	push   %r13
+   14e87:	push   %r12
+   14e89:	push   %rbx
+   14e8a:	mov    %rsp,%r11
+   14e8d:	sub    $0x40000,%r11
+   14e94:	sub    $0x1000,%rsp
+   14e9b:	movq   $0x0,(%rsp)
+   14ea3:	cmp    %r11,%rsp
+   14ea6:	jne    14e94 <main::link_parent::<32768, 0>+0x14>
+   14ea8:	sub    $0x38,%rsp
+   14eac:	mov    %rdx,%r13
+   14eaf:	mov    %rsi,%r14
+   14eb2:	mov    %rdi,%rbx
+   14eb5:	lea    0x38(%rsp),%rbp
+   14eba:	mov    0xc08bf(%rip),%r12        # d5780 <memset@GLIBC_2.2.5>
+   14ec1:	mov    $0x20000,%edx
+   14ec6:	mov    %rbp,%rdi
+   14ec9:	xor    %esi,%esi
+   14ecb:	call   *%r12
+   14ece:	lea    0x20038(%rsp),%r15
+   14ed6:	mov    $0x20000,%edx
+   14edb:	mov    %r15,%rdi
+   14ede:	xor    %esi,%esi
+   14ee0:	call   *%r12
+   14ee3:	mov    %rbp,(%rsp)
+   14ee7:	mov    %r15,0x8(%rsp)
+   14eec:	mov    %rsp,%rax
+   14eef:	call   cdc50 <<std::sys::pal::unix::time::Timespec>::now>
+   14ef4:	mov    %rax,%r12
+   14ef7:	mov    %edx,%ebp
+   14ef9:	mov    %r14,(%rsp)
+   14efd:	mov    %r13,0x8(%rsp)
+   14f02:	mov    %rsp,%rax
+   14f05:	mov    0x8(%rsp),%rcx
+   14f0a:	test   %rcx,%rcx
+   14f0d:	je     14ff8 <main::link_parent::<32768, 0>+0x178>
+   14f13:	mov    (%rsp),%rdx
+   14f17:	lea    0x0(,%rcx,8),%rsi
+   14f1f:	add    $0xfffffffffffffff8,%rsi
+   14f23:	mov    %rdx,%rax
+   14f26:	test   $0x8,%sil
+   14f2a:	jne    14f71 <main::link_parent::<32768, 0>+0xf1>
+   14f2c:	mov    (%rdx),%rax
+   14f2f:	mov    %rax,%rdi
+   14f32:	shr    $0x1d,%rdi
+   14f36:	and    $0x7ff8,%edi
+   14f3c:	mov    %rax,%r8
+   14f3f:	shr    $0x31,%r8
+   14f43:	and    $0x7,%r8d
+   14f47:	lea    (%rsp,%rdi,4),%rdi
+   14f4b:	add    $0x38,%rdi
+   14f4f:	mov    (%rdi,%r8,4),%r9d
+   14f53:	mov    %eax,(%rdi,%r8,4)
+   14f57:	and    $0x7fff,%eax
+   14f5c:	mov    %r9d,0x20038(%rsp,%rax,4)
+   14f64:	test   %rsi,%rsi
+   14f67:	je     14ff8 <main::link_parent::<32768, 0>+0x178>
+   14f6d:	lea    0x8(%rdx),%rax
+   14f71:	lea    (%rdx,%rcx,8),%rcx
+   14f75:	data16 cs nopw 0x0(%rax,%rax,1)
+   14f80:	mov    (%rax),%rdx
+   14f83:	mov    %rdx,%rsi
+   14f86:	shr    $0x1d,%rsi
+   14f8a:	and    $0x7ff8,%esi
+   14f90:	mov    %rdx,%rdi
+   14f93:	shr    $0x31,%rdi
+   14f97:	and    $0x7,%edi
+   14f9a:	lea    (%rsp,%rsi,4),%rsi
+   14f9e:	add    $0x38,%rsi
+   14fa2:	mov    (%rsi,%rdi,4),%r8d
+   14fa6:	mov    %edx,(%rsi,%rdi,4)
+   14fa9:	and    $0x7fff,%edx
+   14faf:	mov    %r8d,0x20038(%rsp,%rdx,4)
+   14fb7:	mov    0x8(%rax),%rdx
+   14fbb:	mov    %rdx,%rsi
+   14fbe:	shr    $0x1d,%rsi
+   14fc2:	and    $0x7ff8,%esi
+   14fc8:	mov    %rdx,%rdi
+   14fcb:	shr    $0x31,%rdi
+   14fcf:	and    $0x7,%edi
+   14fd2:	lea    (%rsp,%rsi,4),%rsi
+   14fd6:	add    $0x38,%rsi
+   14fda:	mov    (%rsi,%rdi,4),%r8d
+   14fde:	mov    %edx,(%rsi,%rdi,4)
+   14fe1:	and    $0x7fff,%edx
+   14fe7:	mov    %r8d,0x20038(%rsp,%rdx,4)
+   14fef:	add    $0x10,%rax
+   14ff3:	cmp    %rcx,%rax
+   14ff6:	jne    14f80 <main::link_parent::<32768, 0>+0x100>
+   14ff8:	movabs $0x100000001b3,%r14
+   15002:	lea    0x38(%rsp),%rax
+   15007:	mov    %rax,(%rsp)
+   1500b:	mov    %r15,0x8(%rsp)
+   15010:	movq   $0x0,0x10(%rsp)
+   15019:	mov    %rsp,%rax
+   1501c:	call   cdc50 <<std::sys::pal::unix::time::Timespec>::now>
+   15021:	mov    %rax,0x18(%rsp)
+   15026:	mov    %edx,0x20(%rsp)
+   1502a:	mov    %r12,0x28(%rsp)
+   1502f:	mov    %ebp,0x30(%rsp)
+   15033:	mov    %rsp,%rdi
+   15036:	lea    0x18(%rsp),%rsi
+   1503b:	lea    0x28(%rsp),%rdx
+   15040:	call   cdb90 <<std::sys::pal::unix::time::Timespec>::sub_timespec>
+   15045:	mov    (%rsp),%rcx
+   15049:	mov    0x8(%rsp),%rax
+   1504e:	mov    0x10(%rsp),%esi
+   15052:	movabs $0xcbf29ce484222325,%rdi
+   1505c:	xor    %edx,%edx
+   1505e:	xchg   %ax,%ax
+   15060:	mov    0x38(%rsp,%rdx,1),%r8d
+   15065:	mov    0x3c(%rsp,%rdx,1),%r9d
+   1506a:	xor    %r8,%rdi
+   1506d:	imul   %r14,%rdi
+   15071:	xor    %rdi,%r9
+   15074:	imul   %r14,%r9
+   15078:	mov    0x40(%rsp,%rdx,1),%r8d
+   1507d:	xor    %r9,%r8
+   15080:	imul   %r14,%r8
+   15084:	mov    0x44(%rsp,%rdx,1),%edi
+   15088:	add    $0x10,%rdx
+   1508c:	xor    %r8,%rdi
+   1508f:	imul   %r14,%rdi
+   15093:	cmp    $0x20000,%rdx
+   1509a:	jne    15060 <main::link_parent::<32768, 0>+0x1e0>
+   1509c:	xor    %edx,%edx
+   1509e:	xchg   %ax,%ax
+   150a0:	mov    0x20038(%rsp,%rdx,1),%r8d
+   150a8:	mov    0x2003c(%rsp,%rdx,1),%r9d
+   150b0:	xor    %r8,%rdi
+   150b3:	imul   %r14,%rdi
+   150b7:	xor    %rdi,%r9
+   150ba:	imul   %r14,%r9
+   150be:	mov    0x20040(%rsp,%rdx,1),%r8d
+   150c6:	xor    %r9,%r8
+   150c9:	imul   %r14,%r8
+   150cd:	mov    0x20044(%rsp,%rdx,1),%edi
+   150d4:	add    $0x10,%rdx
+   150d8:	xor    %r8,%rdi
+   150db:	imul   %r14,%rdi
+   150df:	cmp    $0x20000,%rdx
+   150e6:	jne    150a0 <main::link_parent::<32768, 0>+0x220>
+   150e8:	mov    $0x3b9aca00,%edx
+   150ed:	mul    %rdx
+   150f0:	mov    %esi,%esi
+   150f2:	add    %rax,%rsi
+   150f5:	adc    $0x0,%rdx
+   150f9:	xor    %eax,%eax
+   150fb:	test   %rcx,%rcx
+   150fe:	cmovne %rax,%rdx
+   15102:	cmovne %rax,%rsi
+   15106:	mov    %rsi,(%rbx)
+   15109:	mov    %rdx,0x8(%rbx)
+   1510d:	mov    %rdi,0x10(%rbx)
+   15111:	movq   $0x0,0x18(%rbx)
+   15119:	add    $0x40038,%rsp
+   15120:	pop    %rbx
+   15121:	pop    %r12
+   15123:	pop    %r13
+   15125:	pop    %r14
+   15127:	pop    %r15
+   15129:	pop    %rbp
+   1512a:	ret
+   1512b:	int3
+   1512c:	int3
+   1512d:	int3
+   1512e:	int3
+   1512f:	int3
+
+<main::link_row::<0>>:
+   16bb0:	push   %rbp
+   16bb1:	push   %r15
+   16bb3:	push   %r14
+   16bb5:	push   %r13
+   16bb7:	push   %r12
+   16bb9:	push   %rbx
+   16bba:	mov    %rsp,%r11
+   16bbd:	sub    $0x29000,%r11
+   16bc4:	sub    $0x1000,%rsp
+   16bcb:	movq   $0x0,(%rsp)
+   16bd3:	cmp    %r11,%rsp
+   16bd6:	jne    16bc4 <main::link_row::<0>+0x14>
+   16bd8:	sub    $0x48,%rsp
+   16bdc:	mov    %rdx,%r14
+   16bdf:	mov    %rsi,%r15
+   16be2:	mov    %rdi,0x20(%rsp)
+   16be7:	lea    0x9048(%rsp),%rbp
+   16bef:	mov    0xbeb8a(%rip),%r13        # d5780 <memset@GLIBC_2.2.5>
+   16bf6:	mov    $0x20000,%edx
+   16bfb:	mov    %rbp,%rdi
+   16bfe:	xor    %esi,%esi
+   16c00:	call   *%r13
+   16c03:	lea    0x1048(%rsp),%r12
+   16c0b:	mov    $0x8000,%edx
+   16c10:	mov    %r12,%rdi
+   16c13:	xor    %esi,%esi
+   16c15:	call   *%r13
+   16c18:	lea    0x48(%rsp),%rbx
+   16c1d:	mov    $0x1000,%edx
+   16c22:	mov    %rbx,%rdi
+   16c25:	xor    %esi,%esi
+   16c27:	call   *%r13
+   16c2a:	mov    %rbp,(%rsp)
+   16c2e:	mov    %r12,0x8(%rsp)
+   16c33:	mov    %rbx,0x10(%rsp)
+   16c38:	mov    %rsp,%rax
+   16c3b:	call   cdc50 <<std::sys::pal::unix::time::Timespec>::now>
+   16c40:	mov    %rax,%r13
+   16c43:	mov    %edx,%ebp
+   16c45:	mov    %r15,(%rsp)
+   16c49:	mov    %r14,0x8(%rsp)
+   16c4e:	mov    %rsp,%rax
+   16c51:	mov    0x8(%rsp),%rax
+   16c56:	test   %rax,%rax
+   16c59:	je     16cf0 <main::link_row::<0>+0x140>
+   16c5f:	mov    (%rsp),%rdx
+   16c63:	shl    $0x3,%rax
+   16c67:	xor    %esi,%esi
+   16c69:	nopl   0x0(%rax)
+   16c70:	mov    (%rdx,%rsi,1),%rdi
+   16c74:	mov    %rdi,%rcx
+   16c77:	shr    $0x20,%rcx
+   16c7b:	and    $0xfff,%ecx
+   16c81:	mov    %rdi,%r8
+   16c84:	shr    $0x2c,%r8
+   16c88:	movzbl %r8b,%r8d
+   16c8c:	movzbl 0x48(%rsp,%rcx,1),%r9d
+   16c92:	lea    0x1(%r9),%r10d
+   16c96:	and    $0x7,%r9d
+   16c9a:	mov    %ecx,%r11d
+   16c9d:	and    $0x7,%r10b
+   16ca1:	mov    %r10b,0x48(%rsp,%rcx,1)
+   16ca6:	shl    $0x5,%ecx
+   16ca9:	lea    (%rsp,%rcx,1),%r10
+   16cad:	add    $0x9048,%r10
+   16cb4:	mov    %r9d,%r14d
+   16cb7:	inc    %edi
+   16cb9:	lea    0x0(,%r9,8),%ecx
+   16cc1:	shl    %cl,%r8
+   16cc4:	mov    $0xff,%r9d
+   16cca:	shl    %cl,%r9
+   16ccd:	mov    %edi,(%r10,%r14,4)
+   16cd1:	not    %r9
+   16cd4:	and    0x1048(%rsp,%r11,8),%r9
+   16cdc:	or     %r8,%r9
+   16cdf:	mov    %r9,0x1048(%rsp,%r11,8)
+   16ce7:	add    $0x8,%rsi
+   16ceb:	cmp    %rsi,%rax
+   16cee:	jne    16c70 <main::link_row::<0>+0xc0>
+   16cf0:	movabs $0x100000001b3,%r14
+   16cfa:	lea    0x9048(%rsp),%rax
+   16d02:	mov    %rax,(%rsp)
+   16d06:	lea    0x1048(%rsp),%rax
+   16d0e:	mov    %rax,0x8(%rsp)
+   16d13:	mov    %rbx,0x10(%rsp)
+   16d18:	movq   $0x0,0x18(%rsp)
+   16d21:	mov    %rsp,%rax
+   16d24:	call   cdc50 <<std::sys::pal::unix::time::Timespec>::now>
+   16d29:	mov    %rax,0x28(%rsp)
+   16d2e:	mov    %edx,0x30(%rsp)
+   16d32:	mov    %r13,0x38(%rsp)
+   16d37:	mov    %ebp,0x40(%rsp)
+   16d3b:	mov    %rsp,%rdi
+   16d3e:	lea    0x28(%rsp),%rsi
+   16d43:	lea    0x38(%rsp),%rdx
+   16d48:	call   cdb90 <<std::sys::pal::unix::time::Timespec>::sub_timespec>
+   16d4d:	mov    (%rsp),%rcx
+   16d51:	mov    0x8(%rsp),%rax
+   16d56:	mov    0x10(%rsp),%esi
+   16d5a:	movabs $0xcbf29ce484222325,%rdi
+   16d64:	xor    %edx,%edx
+   16d66:	cs nopw 0x0(%rax,%rax,1)
+   16d70:	mov    0x9048(%rsp,%rdx,1),%r8d
+   16d78:	mov    0x904c(%rsp,%rdx,1),%r9d
+   16d80:	xor    %r8,%rdi
+   16d83:	imul   %r14,%rdi
+   16d87:	xor    %rdi,%r9
+   16d8a:	imul   %r14,%r9
+   16d8e:	mov    0x9050(%rsp,%rdx,1),%r8d
+   16d96:	xor    %r9,%r8
+   16d99:	imul   %r14,%r8
+   16d9d:	mov    0x9054(%rsp,%rdx,1),%edi
+   16da4:	add    $0x10,%rdx
+   16da8:	xor    %r8,%rdi
+   16dab:	imul   %r14,%rdi
+   16daf:	cmp    $0x20000,%rdx
+   16db6:	jne    16d70 <main::link_row::<0>+0x1c0>
+   16db8:	xor    %edx,%edx
+   16dba:	nopw   0x0(%rax,%rax,1)
+   16dc0:	xor    0x1048(%rsp,%rdx,1),%rdi
+   16dc8:	imul   %r14,%rdi
+   16dcc:	xor    0x1050(%rsp,%rdx,1),%rdi
+   16dd4:	imul   %r14,%rdi
+   16dd8:	xor    0x1058(%rsp,%rdx,1),%rdi
+   16de0:	imul   %r14,%rdi
+   16de4:	xor    0x1060(%rsp,%rdx,1),%rdi
+   16dec:	add    $0x20,%rdx
+   16df0:	imul   %r14,%rdi
+   16df4:	cmp    $0x8000,%rdx
+   16dfb:	jne    16dc0 <main::link_row::<0>+0x210>
+   16dfd:	xor    %edx,%edx
+   16dff:	nop
+   16e00:	movzbl 0x48(%rsp,%rdx,1),%r8d
+   16e06:	xor    %r8,%rdi
+   16e09:	imul   %r14,%rdi
+   16e0d:	movzbl 0x49(%rsp,%rdx,1),%r8d
+   16e13:	xor    %rdi,%r8
+   16e16:	imul   %r14,%r8
+   16e1a:	movzbl 0x4a(%rsp,%rdx,1),%r9d
+   16e20:	xor    %r8,%r9
+   16e23:	imul   %r14,%r9
+   16e27:	movzbl 0x4b(%rsp,%rdx,1),%edi
+   16e2c:	add    $0x4,%rdx
+   16e30:	xor    %r9,%rdi
+   16e33:	imul   %r14,%rdi
+   16e37:	cmp    $0x1000,%rdx
+   16e3e:	jne    16e00 <main::link_row::<0>+0x250>
+   16e40:	mov    $0x3b9aca00,%edx
+   16e45:	mul    %rdx
+   16e48:	mov    %esi,%esi
+   16e4a:	add    %rax,%rsi
+   16e4d:	adc    $0x0,%rdx
+   16e51:	xor    %eax,%eax
+   16e53:	test   %rcx,%rcx
+   16e56:	cmovne %rax,%rdx
+   16e5a:	cmovne %rax,%rsi
+   16e5e:	mov    0x20(%rsp),%rax
+   16e63:	mov    %rsi,(%rax)
+   16e66:	mov    %rdx,0x8(%rax)
+   16e6a:	mov    %rdi,0x10(%rax)
+   16e6e:	movq   $0x0,0x18(%rax)
+   16e76:	add    $0x29048,%rsp
+   16e7d:	pop    %rbx
+   16e7e:	pop    %r12
+   16e80:	pop    %r13
+   16e82:	pop    %r14
+   16e84:	pop    %r15
+   16e86:	pop    %rbp
+   16e87:	ret
+   16e88:	int3
+   16e89:	int3
+   16e8a:	int3
+   16e8b:	int3
+   16e8c:	int3
+   16e8d:	int3
+   16e8e:	int3
+   16e8f:	int3
