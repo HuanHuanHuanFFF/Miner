@@ -87,6 +87,9 @@ def main():
     if spec.get('r26_a_row_counts'):
         assert mode == 'native' and spec.get('native_encoder') is True and not spec.get('r18_function_profile')
         importlib.import_module('r26-a-row-counts').preflight(spec)
+    if spec.get('r26_b_tag_graph_integrity'):
+        assert mode == 'native' and spec.get('native_encoder') is True and spec.get('r18_function_profile') is True
+        importlib.import_module('r26-b-tag-graph-integrity').preflight(spec)
     if spec.get('r18_function_profile'):
         assert mode == 'native' and spec.get('native_encoder') is True
         from round4 import ROOT

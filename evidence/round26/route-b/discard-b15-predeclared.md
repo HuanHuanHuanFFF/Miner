@@ -1,0 +1,15 @@
+# B15 full-source discarded A prefix actual-encoder checkpoint
+
+缺口：B14 固定样本真实扣除已有同code来源后，3,188处原packedbest价改、49处tie，所有292,121新增保留前缀bytevalid；仍不能推全输入字节或速度。B13只有+9B，停止继承重选修补。本次只检验已探测discarded来源的完整实际编码结果。
+
+实质变化：对所有原A tree搜索位置保留每distancecode最长discarded prefix，仅超出同位置旧缓存同code最大有效前缀者进入新记录。复用epoch/touched-code32数组，不在每位置清64槽或遍历全30code，不增加搜索深度/位置/价格/passes。新记录bit30标记并附于原mb对应位置末尾，保旧记录意义与顺序；另一个8B/position流和dense offset矩阵不加入生产代码。
+
+消费边界：原a_find读取最后原record来更新CD/CL及prefetch状态后才appendtag。原a_dp先从top剥离tagged suffix，原普通/固定record循环、lo/prev/pd/XL/XD及uncovered extension均只见旧记录。新消费者仅对超过原同code完整前缀及原有效inherited同code前缀的新长度、严格更低dc价作完整wrapping packed归约；原finalbest优先于同价同长度新结果。bd只提取低15位，a_store_choice只接收plain len/dist，不向ch/token传播tag。原a_walk只读ch。
+
+所有mb消费者审计：原A直接下标仅a_find_all的CD-lastrecord、a_dp_pass的record读；a_tree_insert生产、a_engine分配/传递、a_sample_pass传递，a_walk无mb。新三个helper的mb读是受控生产去重/消费路径。生成器逐字撤销三原函数修改并移除helper可恢复原552，旧XL/XD写保留；这些结构检查不单独证明运行时图隔离。
+
+最小有效native20min：原28encoder与552逐文件质量/token/decode，低频完整parse/A_engine/A_find/A_dp/sample/walk/model成本；不对每helper/pair计时。同时临时观察副本在candidate每次真实finder调用depth/skip上重跑parent图，逐位置去bit30后全部原record列表、顺序、mp边界投影完全相同；新tag为suffix、len≤原max且>原同codeprefix，逐项完整原check。保存实际depth/skip/input及source/observer哈希，plaincandidate/observer28tokens/decode一致。这个graph检查的重跑/check成本不混入生产profile，不能由decode替代。
+
+新增成本：epoch维护、discarded LCP归并、touchedcode旧record扫描、追加cache/容量、tag suffix剥离、consumer旧code/继承去重、价格查询及新增长度归约都是真的成本；原拟合轮次/encoder保留。原B14样本均值不乘32当新增记录/字节/时间测量。Lean465766B保留DRAFT，余量58522B不当作已适配证明。
+
+改变选择：图隔离/prefix失败先诊断且保原失败；质量微弱/变坏而成本新增则NO_GO本轮。若实际质量与完整阶段成本有二维机会，再按root最新快照决定原协议paired、真实提取及精确gate、冻结后独立确认。一次受控机制，不扫price/length阈值/retentioncapacity/passes。正式份额与奖励仍UNKNOWN。
