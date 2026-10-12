@@ -49,6 +49,8 @@ def main():
     official_receipts = list(BASE.glob('official-*/receipt.json'))
     official_receipts += list(BASE.glob('extension4h/official-*/receipt.json'))
     official_receipts += list(BASE.glob('extension4h/rules-*/receipt.json'))
+    official_receipts += list(BASE.glob('extension1h/official-*/receipt.json'))
+    official_receipts += list(BASE.glob('extension1h/rules-*/receipt.json'))
     official_receipts += list(BASE.glob('extension4h/measurement-followup/receipt.json'))
     for p in sorted(official_receipts):
         receipt = json.loads(p.read_bytes())
@@ -92,7 +94,7 @@ def main():
         live = json.loads(live_path.read_bytes())
         verify(live_path.parent, live['raw_file'], {'sha256': live['raw_sha256']})
         verify(live_path.parent, live_path.name, {})
-    public_receipts = list(BASE.glob('public-*/receipt.json')) + list(BASE.glob('extension4h/public-*/receipt.json'))
+    public_receipts = list(BASE.glob('public-*/receipt.json')) + list(BASE.glob('extension4h/public-*/receipt.json')) + list(BASE.glob('extension1h/public-*/receipt.json'))
     for p in sorted(public_receipts):
         records = json.loads(p.read_bytes())
         for record in records:
