@@ -78,6 +78,15 @@ def main():
         for path, expected in binding['inputs'].items():
             verify(ROOT, path, {'sha256': expected})
         verify(binding_path.parent, binding_path.name, {})
+    metadata_path = BASE / 'extension4h/metadata-byte-reconciliation/receipt.json'
+    if metadata_path.exists():
+        metadata = json.loads(metadata_path.read_bytes())
+        for row in metadata['records']:
+            verify(ROOT, row['original_preserved_at'], {'sha256': row['local_sha256'], 'bytes': row['local_bytes']})
+            verify(ROOT, row['path'], {'sha256': row['git_sha256'], 'bytes': row['git_bytes']})
+            for name, expected in row['source_and_proof_unchanged'].items():
+                verify((ROOT / row['path']).parent, name, {'sha256': expected})
+        verify(metadata_path.parent, metadata_path.name, {})
     public_receipts = list(BASE.glob('public-*/receipt.json')) + list(BASE.glob('extension4h/public-*/receipt.json'))
     for p in sorted(public_receipts):
         records = json.loads(p.read_bytes())

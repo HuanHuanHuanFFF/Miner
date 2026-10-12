@@ -77,3 +77,13 @@ UTC09:46:34账户used62%／剩38%，未重置、未购买。角色：B负责人S
 48个同CPU端点跨过程分层均CPU3；只有catalog/public658/parser的11对11范围不交叠，中位相差约1.366%。异端点与两次较长耗时共现只属关联；CPU／进程／时间／频率未独立控制。同端点不能排除中途迁移，没有修正候选成绩。原始、派生和审查都保留。
 
 两路线负责人已完成最终审查。后续只做最新官方重放、看板、报告与提交字节核查；无待跑CI、无新候选或gate。截止仍10:48:52UTC。
+
+## 最终资料已重放（UTC10:30）
+
+official-close完整捕获29885，计算UTC10:12:07.803344，查询10:21:18–10:21:36；规则仍6bf303f…且5源码字节相同。全12次原协议按29885重算，all-analysis/all-roles/candidate-ledger/candidate-comparison-29885及score-audit-29885已生成；historial备选在historical-29885。份额数值与29883相同：A19主0/0.776302%，新其他已计时主全部0，未计时UNKNOWN。全轮13主候选26发现块25零、5%/10%均0，无gate/冻结后确认/正式上传。
+
+看板已刷新至同29885：evidence/dashboard/20261012T102525021888Z/summary.json，7个初始记录与此前Git一致，当前全部0，累计11.833628944α；注册成本0.024254898TAO，区块9266509池价下注册成本折8.088451663α、仅扣注册的估值净额3.745177281α，非本轮新收入/钱包到账/全部成本净利。
+
+严格Git字节审计发现4个新B候选manifest仅CRLF不同（Rust/Lean和原始回执均一致）；已先保存原本地字节，再将当前manifest对齐原Git的LF。metadata-byte-reconciliation/receipt.json提供老SHA到原件映射；旧派生台账不改写，新29885台账绑定规范字节。首次Git审计失败保留在git-byte-mismatch-inventory.json，不能宣称那次通过。audit-close已核1643文件／175508317字节；需在最终提交后重跑--git-ref核验。
+
+当前最近已推送41f286a0（V1收齐阶段）；final29885材料及看板尚待最终提交。剩余动作：临近截止重新查快照身份和账户用量；生成close-summary；完成文档入口/状态及project.py check；提交推送final材料，严格Git字节audit后再提交审计回执；最终核对远端ref/单worktree。原budget不修改，所有新研究须后续授权。截止10:48:52UTC不变。
