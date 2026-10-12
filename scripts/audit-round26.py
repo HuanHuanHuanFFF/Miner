@@ -49,6 +49,7 @@ def main():
     official_receipts = list(BASE.glob('official-*/receipt.json'))
     official_receipts += list(BASE.glob('extension4h/official-*/receipt.json'))
     official_receipts += list(BASE.glob('extension4h/rules-*/receipt.json'))
+    official_receipts += list(BASE.glob('extension4h/measurement-followup/receipt.json'))
     for p in sorted(official_receipts):
         receipt = json.loads(p.read_bytes())
         entries = receipt.get('raw_response_files', receipt.get('files', []))
@@ -69,6 +70,14 @@ def main():
         verify(p.parent, p.name, {})
         capture_receipts.append({'path': p.relative_to(ROOT).as_posix(),
                                  'sha256': digest(p), 'checked_files': n})
+    binding_path = BASE / 'extension4h/measurement-followup/source-bindings.json'
+    if binding_path.exists():
+        binding = json.loads(binding_path.read_bytes())
+        verify(binding_path.parent, 'bwrap-matching-runner.py.txt',
+               {'sha256': binding['normalized_lf_sha256']})
+        for path, expected in binding['inputs'].items():
+            verify(ROOT, path, {'sha256': expected})
+        verify(binding_path.parent, binding_path.name, {})
     public_receipts = list(BASE.glob('public-*/receipt.json')) + list(BASE.glob('extension4h/public-*/receipt.json'))
     for p in sorted(public_receipts):
         records = json.loads(p.read_bytes())

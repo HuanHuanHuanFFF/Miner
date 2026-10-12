@@ -1,4 +1,4 @@
-"""Reaudit historical raw original timings and replay them on R26 snapshot 29785.
+"""Reaudit historical raw original timings on an explicitly captured R26 snapshot.
 
 Roles are retained. Repeated analyses/calibrations/control aliases add no samples.
 """
@@ -6,6 +6,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 from collections import defaultdict
 import contextlib
+import argparse
 import importlib
 import json
 import statistics
@@ -26,9 +27,19 @@ def distribution(observations):
 
 
 def main():
-    replay = M.Replay(ROOT / 'evidence/round26/official-start-live', ROOT / 'evidence/round26/official-rules-start-live')
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--capture', type=Path, default=ROOT / 'evidence/round26/official-start-live')
+    ap.add_argument('--rules', type=Path, default=ROOT / 'evidence/round26/official-rules-start-live')
+    ap.add_argument('--output', type=Path, default=OUT)
+    args = ap.parse_args()
+    output = args.output.resolve()
+    assert output.is_relative_to((ROOT / 'evidence/round26').resolve())
+    output.mkdir(parents=True, exist_ok=True)
+    replay = M.Replay(args.capture.resolve(), args.rules.resolve())
+    snapshot = replay.context['snapshot_id']
+    assert not list(output.glob('historical-*-'+snapshot+'.*')), 'Prior replays are immutable; use a fresh output directory'
     import round10_payability
-    round10_payability.SCORER_PATH = ROOT / 'evidence/round26/official-rules-start-live/validator--scoring--pareto.py'
+    round10_payability.SCORER_PATH = args.rules / 'validator--scoring--pareto.py'
     analyzer = importlib.import_module('analyze-round18')
     sources = [('r25', ROOT / 'evidence/round25/analysis-all-29702.json'),
                ('r24-confirmation', ROOT / 'evidence/round24/analysis-confirmation-29652.json'),
@@ -41,11 +52,11 @@ def main():
             matches = list((ROOT / 'evidence').glob('round*/' + run['run_id'] + '/' + run['batch'] + '/gate/state.json'))
             assert len(matches) == 1, (name, run['run_id'], matches)
             folders.append(matches[0].parent)
-        result_path = OUT / ('historical-' + name + '-raw-replay-29785.json')
+        result_path = output / ('historical-' + name + '-raw-replay-' + snapshot + '.json')
         argv = sys.argv[:]
         sys.argv = ['analyze-round18', *map(str, folders), '--capture', str(replay.capture), '--output', str(result_path)]
         try:
-            with (OUT / ('historical-' + name + '-raw-replay-29785.log')).open('w', encoding='utf-8') as handle:
+            with (output / ('historical-' + name + '-raw-replay-' + snapshot + '.log')).open('w', encoding='utf-8') as handle:
                 with contextlib.redirect_stdout(handle):
                     analyzer.main()
         finally:
@@ -102,13 +113,15 @@ def main():
               'historical_sets': summaries, 'deduplicated_coordinate_views': len(all_measurements),
               'deduplicated_observed_candidate_or_control_measurements': len(unique_physical),
               'deduplicated_raw_paired_process_files': len(all_raw),
-              'raw_file_audit_sha256': M.digest(OUT / 'historical-r25-raw-replay-29785.json'),
+              'raw_file_audit_sha256': M.digest(output / ('historical-r25-raw-replay-' + snapshot + '.json')),
+              'capture_receipt_sha256': M.digest(args.capture / 'receipt.json'),
+              'rules_receipt_sha256': M.digest(args.rules / 'receipt.json'),
               'limits': ['All timing is historical; this creates no new independent runner measurement.',
                          'R25 parent-context repeats the same R25 jobs; counts are deduplicated globally and era reports must not be added.',
                          'Calibration views and same-source control aliases do not increase independent candidate sample count.',
                          'R24/R23 frozen confirmations were independent at their original freeze; reuse to choose R26 variants is historical selection evidence.',
                          'Formal coordinate transfer, future admission/registration/cap/payment remain conditional.']}
-    M.dump(OUT / 'historical-replay-summary-29785.json', result)
+    M.dump(output / ('historical-replay-summary-' + snapshot + '.json'), result)
 
 
 if __name__ == '__main__':
