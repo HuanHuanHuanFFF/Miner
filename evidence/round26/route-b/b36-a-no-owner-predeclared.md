@@ -1,0 +1,11 @@
+# B36: final controlled deletion of flattened owner stores
+
+Root authorized one≤8minute preparation fix after B33's full encoder results showed the real flattened version slightly slower overall. B31 measured564,136,512slotpairs written: this variant deletes dl entirely, its4KiB initialization and all per-slot owner stores, retaining the base table/fill/rounded mask costs. This is a changed actual consumer burden, not B34's query-group concept or another bit/threshold sweep.
+
+Normal winner recovery: only when packed min beats literal, if the winning length extends beyond original cachedmax and the existing extension guard is true, reuse xd−1 directly. Otherwise scan the original ordinary mb records to the first stop covering that winning length and return its original low15-bit distance. The normal branch's p.2=false guarantees valid ordinary full-prefix record domains covering3..cachedmax; odd/fixed/tail keeps exact a_dp_recs. Original prev/pd/XL/XD and min wrap/strict tie remain. Keep every real owner lookup in production; no offline rewrite or claimed free mapping.
+
+Minimum: reuse B31 independent10,000-case arbitraryU32 wrap/tie/overshoot/fixed/tail model with direct original owner recovery. Run exact28originalencoder token/output/decode against552 and the actualfullowner parent; reuse the existing everyactual-DP-call completecost/ch reference assertion without a larger graph observer. Add only actualowner calls/cached-record reads/directinherit counters. Pure production profile stays separately compiled without clone/reference/atomic costs. No new tables or matcher changes.
+
+Decision: mismatch stops immediately with the actual call. Parity earns one last actual original total-cost comparison if it can finish before the root development cutoff; keep fullowner and originalparent same-run controls. Net regression or immaterial effect stops proof/gate. Useful net effect still needs geometry/proof/frozen confirmation; a deleted-store count is not a speed or stable5%/10% result. Parent proof is DRAFT, new helper signatures/owner loop need exact extraction/gate.
+
+Cap:proposed25-minute native job; inherited240s compile/480s original corpus limits. Preserve the final90-minute gate/independentconfirmation reserve and do not add another repair. Root ownsCI/Git/clock; no financial/formal upload.

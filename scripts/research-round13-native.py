@@ -175,7 +175,9 @@ def main():
         if spec.get('r26_b_tree_packed_counts'):
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-tree-packed-counts.py')],check=True)
         if spec.get('r26_b_a_flatten_counts'):
-            subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-flatten-counts.py')],check=True)
+            module=spec.get('r26_b_a_flatten_module', 'r26-b-a-flatten-counts')
+            assert module in ('r26-b-a-flatten-counts', 'r26-b-a-no-owner-counts')
+            subprocess.run([sys.executable,str(ROOT/'scripts'/(module+'.py'))],check=True)
         return
     if spec.get('r16_transfer_candidates'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round16-transfer.py')],check=True);return
