@@ -43,6 +43,9 @@ def main():
     if spec.get('r26_a_row_shadow'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-row-shadow.py')],check=True)
         return
+    if spec.get('r26_a_link_replay'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-link-replay.py')],check=True)
+        return
     if spec.get('r26_b_cache_integrity'):
         module=spec['r26_b_cache_integrity_module']
         assert module=='r26-b-cache-integrity-fix1'
