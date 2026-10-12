@@ -37,6 +37,9 @@ def main():
     if spec.get('r26_a_distance12_observer_only'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-distance12-counts.py')],check=True)
         return
+    if spec.get('r26_a_row_shadow'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-row-shadow.py')],check=True)
+        return
     if spec.get('r26_b_cache_integrity'):
         module=spec['r26_b_cache_integrity_module']
         assert module=='r26-b-cache-integrity-fix1'
