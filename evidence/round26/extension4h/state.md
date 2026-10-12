@@ -59,3 +59,21 @@ A15固定上一距离替换在12个活跃输入上损失次数均多于改善次
 CPU端点相同仍不能排除途中迁移，本次只建立关联或记录未复现；不因端点分组而排除迁移根因。全局包装脚本只为此唯一批次提供受限验证入口，其他新研究仍受09:18:52截止控制。总截止仍10:48:52，不延长、不重计。
 
 UTC09:46:34账户used62%／剩38%，未重置、未购买。角色：B负责人Sol/xhigh实现独立v1文件，A负责人Astra/xhigh只读审查，主线程独占全局路由、Git、CI和报告。
+
+## V1已派发（UTC09:59:17）
+
+唯一验证批次verify-callcpu-v1-diagnostic，run **38233428813**，commit **9c4cfc0941cbe2007bdcc8ec12eb32ef95ae8b39**，公开runner／allow_private=false，25分钟上限。原预算SHA6660f2d9…保持不变，调整回执SHAba573e35…与19个精确输入一起绑定。A的独立静态审查见route-a/a22-v1-review.md；派发前纠正Windows CRLF阅读副本与官方LF pins的不同，运行期严格原字节断言没有放宽。最终模块scripts/r26-v-call-cpu.py SHA17c03acf…，实际Rust编译只能由runner确认。
+
+本批还在运行，收集必须用 `collect-round4.py pull 38233428813 diagnostics --round 26 --batch verify-callcpu-v1-diagnostic`。结果不得进入all-analysis／原协议份额；两次scratch过程也不是独立候选确认。完成后核对CPU端点与file/method/stage/进程分组、有效约束和祖先控制器；无复现或进程混杂都保留，最多给关联结论。
+
+最终待办：收齐V1；约10:35UTC保存最终最新完整榜单，规则已在rules-close于约10:00重查（commit仍6bf303f…）；逐块重放12次原协议和旧备选、角色分层、候选台账、组合及必要的独立公式；刷新全部7个正式提交看板；更新round26-extension4h.md、索引、方法新增结论、close-summary；原字节/Git字节审计和project.py check；按授权提交并推送codex/round26-stable-pair。main、单worktree和所有候选精确Rust／Lean保留，无正式上传。总截止仍10:48:52UTC，不重计。
+
+## V1完成及独立复核（UTC10:14）
+
+38233428813成功，11份原始文件全部收齐，job388秒。追加总计24作业全部成功，job墙钟6748秒；全R26共60作业57成功3旧失败。audit-v1-collected已核1604文件／172809615字节，28份Rust不变。V1只属measurement_verification，不加入原协议88新增配对或份额样本。
+
+根线程v1-analysis.json与A23独立审查一致：两过程每个1344总阶段事件，其中1232 measured；端点不同分别2与1次，不能解释为途中迁移概率。实际mask仍0–3。根cgroup启用cpuset，user.slice虽可用却未向下启用；下级全部缺cpuset。app.slice可用cpu却未向scope启用，说明scope无cpu.max与cpu.stat存在可同时成立。观察到的配置传递断点不追认历史A19，也没有修改runner配置。
+
+48个同CPU端点跨过程分层均CPU3；只有catalog/public658/parser的11对11范围不交叠，中位相差约1.366%。异端点与两次较长耗时共现只属关联；CPU／进程／时间／频率未独立控制。同端点不能排除中途迁移，没有修正候选成绩。原始、派生和审查都保留。
+
+两路线负责人已完成最终审查。后续只做最新官方重放、看板、报告与提交字节核查；无待跑CI、无新候选或gate。截止仍10:48:52UTC。

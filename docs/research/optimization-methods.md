@@ -385,3 +385,5 @@ CI整体状态与阶段原始证据分别检查：I及价格打包复现显示ca
 **约束请求要验证到实际执行对象。** A20用exe哈希、PID和启动时间绑定本次原engine，在运行期确认CPU0请求下实际允许0–3，采样出现CPU0与2。这补齐了原来的观察缺口，但不能反推历史A19根因；scope cpuset与频率不可见仍为UNKNOWN。已有R24显式绑核的收益不一致，不能据本次发现直接宣称修复计时。下一次若需要因果区分，应把运行期状态与实际调用关联，诊断协议和原成绩继续分列。[精确engine遥测](../../evidence/round26/route-a/a20-placement-feedback.json)、[未执行的最小区分计划](../../evidence/round26/route-a/a20-next-diagnostic-plan.md)。
 
 **已有证明的结论强度决定复用边界。** 父版本某个DP定理只给出totality，即使函数签名相同，也不能把它说成最优性或赢家来源等价证明。删除数组会改变提取后的循环状态，新helper还可能被提取成多个循环。实际提取接口、有限完整状态对照、最终parse义务和原版gate各自回答不同问题；文件体积可容纳迁移仅排除一个工程阻断，不说明证明已完成。[no-owner证明接口预审](../../evidence/round26/route-b/b38-no-owner-proof-preaudit.md)。
+
+**运行期状态和因果解释仍需分开。** 后续V1复制原engine，在原timers外记录CPU端点，并保持两过程同一DSO、原28文件及11次协议结构；所有结果仍只属诊断。内核状态直接定位到user.slice未向下启用cpuset，解释了本次用户scope缺少对应控制接口；但端点相等不能排除中途迁移，CPU与进程顺序也可能混杂。按file、method、stage、进程、CPU端点分层后，一组同CPU端点的两过程计时范围仍不交叠。它不能变成CPU校正系数，也不追认历史根因；约束落实与测量稳定性应分别检验。[V1原始绑定分析](../../evidence/round26/extension4h/v1-analysis.json)、[有界验证调整](../../evidence/round26/extension4h/verification-reserve-adjustment.json)。
