@@ -15,3 +15,9 @@
 run38246156539 native通过：444有限相等、28公共token/原encoder/双解码一致。256144原same调用，tail拒绝102854（40.15%），但只省104330 word pairs（每拒绝1.014）；加256144 byte-pair checks，触发既定thin/首word停止条件，不进行原协议。C1同距0。新公开662已按官方source端点取得，初审主要旧内核/路由参数，Lean仅807B余量，不因“新提交”就当新机制。
 
 C3调查发现o_a_eval/n_eval长匹配扫描后o_a_emit_step又verified同span。候选提案延迟超过直接接受阈值的扩展至既有可信emit，必须先核对lazy/距离/cap/末尾溢读差异。少量质量变化仍按真实输出记录。当前尚无C3实现或性能证据。
+
+## C3反馈与C4决策
+
+C3 run38247257224成功，444decode无失败/无token变化、28encoder/token同658。75920次base fast调用，仅684长>=64；移除5784/99989 wordpairs，prose仅1。按薄覆盖预声明停止标准计时；完整Lean草稿507876B保留未编译，不冒称gate。此前准备器路径拼写错误在Git预检前发现，未派发额外CI，改为核对spec required_files后再提交。
+
+C4为取消O_A整个lazy eval2/3阶段，并在emit可信fullscan一次；这改变算法及质量，区别C3同轨迹延迟长后缀，禁止扫cap。已有C3证据确认可取消全部base的99989wordpairs，仍需真实quality和lazy变化。先native判断端点，若有空间采用1个发现块保留最后两runner独立确认与完整gate时间；未满足条件就不勉强晋升。
