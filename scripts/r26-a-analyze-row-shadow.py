@@ -51,6 +51,7 @@ def main():
       'limitations':['Original parent28tokens/decode unchanged; row offers never emitted.',
         'Counterfactual query helper counts exclude extra truth telemetry and maintenance/preload work, shown separately.',
         'Parent active-PC helper totals and row query-only helper totals have different scopes; not a timing ratio.',
+        'Scalar-pair counters cover common_from tail and f_try/probe_lazy endpoint validation, not fold direct comparisons or output copying.',
         'Local longer/shorter/gain differences are not future parser quality or original encoder bytes.'],
       'totals':summarize(r['totals']),
       'files':[{'file':f['file'],'engine_calls':f['engine_calls'],**summarize(f['counts'])}for f in files]}
