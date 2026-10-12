@@ -40,8 +40,11 @@ def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('batch');ap.add_argument('--ref',default='codex/round26-stable-pair')
     ap.add_argument('--max-minutes',type=int,default=45)
+    ap.add_argument('--budget', choices=['original', 'extension4h'], default='original')
     args=ap.parse_args()
-    budget=json.loads((ROOT/'evidence/round26/budget.json').read_bytes())
+    budget_path='evidence/round26/budget.json' if args.budget=='original' else 'evidence/round26/extension4h/budget.json'
+    budget=json.loads((ROOT/budget_path).read_bytes())
+    assert datetime.now(timezone.utc) >= datetime.fromisoformat(budget['start_utc']), 'Research window has not started'
     left=int((datetime.fromisoformat(budget['deadline_utc'])-datetime.now(timezone.utc)).total_seconds()//60)-10
     minutes=min(args.max_minutes,left,75);assert 10<=minutes<=75
     os.environ['ROUND4_SPEC_DIR']='evidence/round26'
@@ -69,6 +72,7 @@ def main():
     assert subprocess.run(['git','merge-base','--is-ancestor',budget['baseline_main_sha'],sha],capture_output=True).returncode==0
     remote=json.loads(helper.run(['api',f'repos/{REPO}/commits/{args.ref}'],env))['sha'];assert remote==sha
     frozen=json.loads(subprocess.check_output(['git','show',sha+f':evidence/round26/{args.batch}.json']));assert frozen==spec
+    frozen_budget=json.loads(subprocess.check_output(['git','show',sha+':'+budget_path]));assert frozen_budget==budget
     committed_inputs=verify_committed_inputs(spec,sha)
     listing=['run','list','--repo',REPO,'--branch',args.ref,'--workflow','deflate-round9.yml','--limit','25','--json','databaseId,headSha,status,createdAt,url']
     seen={r['databaseId'] for r in json.loads(helper.run(listing,env))}
@@ -81,6 +85,8 @@ def main():
         if matches:
             assert len(matches)==1
             record={'round':26,'batch':args.batch,'mode':mode,'git_sha':sha,'inputs':inputs,'committed_input_sha256':committed_inputs,'dispatch_utc':started,'repository_visibility_verified':'public','authorization':'Current user research budget including explicit extensions, necessary cloud verification and experiment-branch push scope; no submission, registration or wallet actions.','job_timeout_minutes':minutes,'collection_reserve_minutes':10,'fixed_deadline_utc':budget['deadline_utc'],'run':matches[0]}
+            record['budget_path']=budget_path
+            record['budget_sha256']=hashlib.sha256((ROOT/budget_path).read_bytes()).hexdigest()
             p=ROOT/f'evidence/round26/dispatch-{matches[0]["databaseId"]}.json';assert not p.exists();p.write_text(json.dumps(record,indent=2)+'\n')
             print(json.dumps({k:v for k,v in record.items() if k!='committed_input_sha256'} | {'committed_input_count':len(committed_inputs)}));return
         time.sleep(2)
