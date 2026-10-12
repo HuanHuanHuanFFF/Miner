@@ -1,0 +1,84 @@
+--- public658/parse.rs
++++ D1/parse.rs
+@@ -4430,7 +4430,7 @@
+             // `ins == p` here (a match leaves `ins = end = p`, literals leave `ins = p`)
+             let hc = u118_insert(input, &mut head, &mut prev, p, mask);
+             ins = p + 1;
+-            let f = u118_find(input, &prev, p, hc, 0, minl, depth, nice, u118_MAIN_GM, hlit);
++            let f = d1_current(input, &head, &prev, p, hc, mask, minl, depth, lazy, nice, hlit, L2);
+             let mut l = f.0;
+             let mut d = f.1;
+             if l >= 3 {
+@@ -4445,7 +4445,7 @@
+                     if l > u118_LSLACK {
+                         have = l - u118_LSLACK;
+                     }
+-                    let g = u118_find(input, &prev, q, hq, have, minl, ldep, nice, 1, hlit);
++                    let g = d1_lazy(input, &prev, q, hq, have, minl, ldep, nice, hlit, l, d, lazy, L2);
+                     if g.0 >= minl && u118_gain(g.0, g.1, hlit) > u118_gain(l, d, hlit) {
+                         nt = u118_put_lit(input, out, nt, p);
+                         p = q;
+@@ -10768,3 +10768,63 @@
+     }
+     q4_flush(s, out, nt, ls, n)
+ }
++
++// D1: complete the original depth budget after its first source was inspected.
++// No state survives an insertion; current continuation happens before q is
++// inserted, and lazy continuation happens after q's normal insertion.
++#[inline(always)]
++pub fn d1_continue<const W: usize>(s: &[u8], prev: &[u32; W], p: usize,
++    st: usize, l: usize, d: usize, minl: usize, depth: usize,
++    nice: usize, hlit: i32) -> (usize, usize) {
++    if depth > 1 && l < nice && l < s.len() - p && st < p && p - st <= 32768 {
++        let nx = prev[st % W] as usize;
++        if nx < st {
++            let g = u118_find(s, prev, p, nx, l, minl, depth - 1, nice, 0, hlit);
++            if g.1 != 0 { return g; }
++        }
++    }
++    (l, d)
++}
++
++// Compare two cheap heads before assigning the residual main-search budget.
++// The q peek observes exactly the head that its next insertion will return.
++// It does not mutate either hash table and is not a retained query snapshot.
++#[inline(always)]
++pub fn d1_current<const H: usize, const W: usize>(s: &[u8], head: &[u32; H],
++    prev: &[u32; W], p: usize, st: usize, mask: u32, minl: usize,
++    depth: usize, lazy: usize, nice: usize, hlit: i32, mode: usize) -> (usize, usize) {
++    if mode != 0 || depth != 12 || lazy != 64 {
++        return u118_find(s, prev, p, st, 0, minl, depth, nice, u118_MAIN_GM, hlit);
++    }
++    let f = u118_find(s, prev, p, st, 0, minl, 1, nice, u118_MAIN_GM, hlit);
++    if f.0 >= minl && f.0 < lazy && p + 1 < s.len() - 8 {
++        let q = p + 1;
++        let k = (u118_be4(s, q) & mask) as u64;
++        let a = (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - u118_HB)) as usize % H;
++        let hq = head[a] as usize;
++        // The bound is explicit so this helper needs no table-history invariant.
++        if hq <= q {
++            let have = f.0 - 1;
++            let g = u118_find(s, prev, q, hq, have, minl, 1, nice, 1, hlit);
++            if g.0 >= minl && u118_gain(g.0, g.1, hlit) > u118_gain(f.0, f.1, hlit) {
++                return f;
++            }
++        }
++    }
++    d1_continue(s, prev, p, st, f.0, f.1, minl, depth, nice, hlit)
++}
++
++// Only a shallow lazy winner receives a residual main budget. The comparison
++// itself stays the original gain rule; a losing shallow head costs no deep walk.
++#[inline(always)]
++pub fn d1_lazy<const W: usize>(s: &[u8], prev: &[u32; W], q: usize,
++    st: usize, have: usize, minl: usize, ldep: usize, nice: usize,
++    hlit: i32, l: usize, d: usize, lazy: usize, mode: usize) -> (usize, usize) {
++    let g = u118_find(s, prev, q, st, have, minl, ldep, nice, 1, hlit);
++    if mode == 0 && lazy == 64 && ldep == 1 && g.0 >= minl &&
++       u118_gain(g.0, g.1, hlit) > u118_gain(l, d, hlit) {
++        let h = d1_continue(s, prev, q, st, g.0, g.1, minl, 12, nice, hlit);
++        if u118_gain(h.0, h.1, hlit) > u118_gain(g.0, g.1, hlit) { return h; }
++    }
++    g
++}
