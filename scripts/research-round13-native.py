@@ -31,6 +31,9 @@ def main():
     if spec.get('r26_b_a_repeat_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-repeat-diagnostic.py')],check=True)
         return
+    if spec.get('r26_b_a_overlap_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-overlap-diagnostic.py')],check=True)
+        return
     if spec.get('r26_a_distance12_observer_only'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-distance12-counts.py')],check=True)
         return

@@ -1,0 +1,42 @@
+{
+  "status": "VERIFIED_PINNED_SOURCE_METADATA_SCOPE_NOT_EFFECTIVE_CPU_PLACEMENT",
+  "checked_utc": "2026-10-11T23:57:15.182997+00:00",
+  "upstream_commit": "a356bbff18b60c4527fbcc85d5a28ef9c20214e0",
+  "source_files": [
+    {
+      "local_read_copy": "sources\\conjectures-optimisation-deflate\\validator\\bench\\driver.py",
+      "local_raw_sha256": "c17cb16c57b232b912ded74417cdc8f42ed23991491fe5b771446eb806fa8afd",
+      "normalized_copy": "bench--driver.py",
+      "normalized_sha256": "8b29e832a5849c9e97649b390496dcda12c3ed081c39c0bf4a1c94d593f827e3",
+      "matches_original_pin": true,
+      "normalization": "CRLF to LF only; original local read copy unchanged"
+    },
+    {
+      "local_read_copy": "sources\\conjectures-optimisation-deflate\\validator\\sandbox\\bwrap.py",
+      "local_raw_sha256": "ddf74d168696c1aab37f24508e4dea734bedf776cc1c1762d68c849ed05fc5e1",
+      "normalized_copy": "sandbox--bwrap.py",
+      "normalized_sha256": "ba35cd059a2d9ceda03aa7edca35370d0380d3849d14d7513f758476017470bb",
+      "matches_original_pin": true,
+      "normalization": "CRLF to LF only; original local read copy unchanged"
+    }
+  ],
+  "raw_measurement": "evidence\\round26\\38182235284\\screen-a8\\gate\\round1-public641.jsonl",
+  "raw_sha256": "870f6a3879c5e128a0972cc386b66ad55d0ca7dc0b4c29247a2d479975d6ee45",
+  "requested_cpus": "0",
+  "driver_process_affinity": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "sandbox_enabled": true,
+  "verified_call_path": [
+    "driver attaches provenance(config) after sandbox measurement returns",
+    "provenance calls os.sched_getaffinity(0) in the driver process",
+    "measure_sandbox passes config.cpus",
+    "bwrap resource wrapper requests systemd-run --user --scope -p AllowedCPUs=0"
+  ],
+  "correction": "Driver affinity [0,1,2,3] is not evidence the measured engine ran on four CPUs or migrated among them. Earlier wording did not identify this process boundary.",
+  "effective_engine_cpu_set": "UNKNOWN_NOT_RECORDED",
+  "impact": "No changed timing, coordinates, score, success probability or diagnosed environmental root cause. No new measurement or protocol change."
+}

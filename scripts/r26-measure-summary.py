@@ -64,7 +64,7 @@ def main():
                             'A67block1issolelyincumbentdenominator: encoder contributes+1.20798%, denominator-0.06107%.',
                             'A67block1encoderdifference comes only from one slow repetition or one file:23positivefiles anddisjointall11distributions acrossmanyfiles.'],
                'unresolved': ['Process lifetime/runtime address or buffer/cache layout interactions: samebinaryhashdoesnotfixruntimeaddresses.',
-                              'CPU migration, shared-host contention, frequency/cache state: actualaffinity[0,1,2,3], governorandtime-resolvedCPUcontextmissing.',
+                              'Execution context, host contention and frequency/cache state remain unresolved. process_affinity[0,1,2,3] belongs to the driver, not the measured engine; original sandbox requests AllowedCPUs=0. Effective engine CPU/cgroup placement was not recorded.',
                               'Process sequencing and long-lived drift: reversedblockchanges signs, butdifferentprocesses preventcausalidentification.',
                               'Parser versus encoder stage effect is pair-specific: hash17ownaliasblock1isparserdominated; no universal correction.'],
                'recommendation_now': 'Do not allocate another mechanicalfixed11/fixed20/balanced20/library/affinity sweep to these candidates. All declared primaryshareviews on29795arezero and none reaches5even under641shadow. Continuealgorithmicresearchandpreserveconfirmationreserve.',

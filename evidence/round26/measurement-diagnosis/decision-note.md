@@ -15,7 +15,7 @@
 
 **已排除的范围**：这些同源码pair的输入、token、输出、parser DSO、incumbent DSO及引擎／模板／host哈希相同，都是1预热／11测量。A67块1不是“只有incumbent分母漂移”：encoder项主导，而分母项抵消一小部分。也不是一个慢rep或单文件解释：encoder贡献23/28文件为正；**17个文件的shadow全部11个encoder读数高于主版本全部11个读数**。该块前5个文件仅占逐文件绝对轴差总量31.5%。A5块2更集中（前5占61.5%），且分母贡献明显。分解是数值恒等归属，不证明encoder本身存在算法或微架构故障。[聚合与93份输入哈希](diagnosis-summary-29795.json)
 
-**仍不能排除**：同binary不固定运行地址、缓冲分配或缓存状态；实际进程affinity为`[0,1,2,3]`，请求`cpus=0`没有证明单核，governor为null，未保存每次call所在CPU或频率。因此进程迁移、共享主机干扰、运行地址／buffer布局与阶段状态交互仍UNKNOWN。每块原进程顺序相反，641／shadow相隔约18–22秒；A67两块轴差变号，A5在反序块才出现大差，不能仅凭顺序相关性确定因果。
+**仍不能排除**：同binary不固定运行地址、缓冲分配或缓存状态，governor为null，未保存每次call所在CPU或频率。后续核对原pins下的调用链，确认`process_affinity=[0,1,2,3]`由外层Python驱动在测量结束后记录；被测子进程另经原sandbox请求`AllowedCPUs=0`。该字段不能证明压缩进程在四核间迁移，实际生效的engine affinity/cgroup未记录，仍UNKNOWN。[进程边界校正](affinity-scope/receipt.json)不改变任何原时间或份额。共享主机干扰、运行地址／buffer布局与阶段状态交互仍未闭合。每块原进程顺序相反，641／shadow相隔约18–22秒；A67两块轴差变号，A5在反序块才出现大差，不能仅凭顺序相关性确定因果。
 
 分歧不是统一的encoder修正：A67 hash17自己的同binary副本块1轴差+0.902196%，其中parser贡献 **+0.930110%**，encoder+0.234658%，分母−0.262572%。跨分母四角只用于定位贡献；不会把它们生成“修正成绩”、平均坐标或人为降速预测。
 
@@ -29,7 +29,7 @@
 
 ## 一个按需重开的最小云端诊断
 
-[草案](conditional-encoder-process-plan.json)目前 **未实现／未启动**。只在新的冻结候选出现接近5%／10%的原协议信号，且641副本分歧足以改变是否晋升的决定时使用；当前优先继续算法路线并保留独立确认余量。
+[修正进程边界后的草案](conditional-encoder-process-plan-v2.json)目前 **未实现／未启动**；早版保留。诊断需复用原测量sandbox的CPU请求，并另行记录engine实际CPU/cgroup，不能把驱动字段当测量进程状态。只在新的冻结候选出现接近5%／10%的原协议信号，且641副本分歧足以改变是否晋升的决定时使用；当前优先继续算法路线并保留独立确认余量。
 
 问题限定为：**固定641 token与原encoder后，差异是否仍是跨进程一致偏移，还是同进程调用顺序效应？** 一个临时Linux runner、4个新子进程、3个已定位文件（machine-code、source.c、records.json），精确641只解析一次生成并冻结token；核对原input/token/output SHA与decode。使用同一harness binary和原encoder，每文件1预热／20编码调用，A/B仅为同函数同token的标签，五组ABBA，第二／四进程BAAB；四进程文件顺序正／反／反／正。记录真实affinity、可得governor、调用前后CPU、PID、buffer地址及全部原调用读数。只看encoder绝对时长，不引入incumbent、评分或候选修改；本次不再扫绑核、ASLR、DSO条件。拟硬超时12分钟，尚未实现时不声称已经强制。
 
