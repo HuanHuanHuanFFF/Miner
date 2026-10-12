@@ -62,6 +62,9 @@ def main():
     if spec.get('r26_a_near_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-near-counts.py')],check=True)
         return
+    if spec.get('r26_a_common_lowering'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-common-wrapping-lowering.py')],check=True)
+        return
     if spec.get('r26_b_cache_integrity'):
         module=spec['r26_b_cache_integrity_module']
         assert module=='r26-b-cache-integrity-fix1'
