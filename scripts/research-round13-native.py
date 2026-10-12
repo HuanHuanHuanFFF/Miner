@@ -42,6 +42,9 @@ def main():
         assert module in ('r26-b-tree-edge-diagnostic', 'r26-b-tree-seed-diagnostic')
         subprocess.run([sys.executable,str(ROOT/'scripts'/(module+'.py'))],check=True)
         return
+    if spec.get('r26_b_a_compiler_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-compiler-diagnostic.py')],check=True)
+        return
     if spec.get('r26_a_distance12_observer_only'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-distance12-counts.py')],check=True)
         return
@@ -50,6 +53,9 @@ def main():
         return
     if spec.get('r26_a_link_replay'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-link-replay.py')],check=True)
+        return
+    if spec.get('r26_a_rep_shadow'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-rep-shadow.py')],check=True)
         return
     if spec.get('r26_b_cache_integrity'):
         module=spec['r26_b_cache_integrity_module']
