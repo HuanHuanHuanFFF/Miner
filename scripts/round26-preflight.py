@@ -12,7 +12,8 @@ def main():
         print('R26_EXACT_PAIR_PREFLIGHT', spec['candidate'], spec['files'])
         return
     spec = validate(os.environ['ROUND4_SPEC'])
-    assert sum(bool(spec.get(k)) for k in ('r26_a_lazy_chain_counts', 'r26_a_distance12_counts', 'r26_a_second_look_counts', 'r26_a_row_counts', 'r26_a_tagged_counts', 'r26_a_lastlink_lowering')) <= 1
+    assert sum(bool(spec.get(k)) for k in ('r26_b_tag_graph_integrity', 'r26_b_tree_packed_counts', 'r26_b_a_flatten_counts')) <= 1
+    assert sum(bool(spec.get(k)) for k in ('r26_a_lazy_chain_counts', 'r26_a_distance12_counts', 'r26_a_second_look_counts', 'r26_a_row_counts', 'r26_a_tagged_counts', 'r26_a_lastlink_lowering', 'r26_a_window_counts')) <= 1
     assert spec['r26_mode'] == mode
     assert bool(spec.get('native_only')) == (mode == 'native')
     assert sum(not e.get('control', False) for e in spec['entries']) == spec['r26_expected_candidates']
@@ -112,12 +113,18 @@ def main():
     if spec.get('r26_a_lastlink_lowering'):
         assert mode == 'native' and spec.get('native_encoder') is True and not spec.get('r18_function_profile')
         importlib.import_module('r26-a-lastlink-lowering').preflight(spec)
+    if spec.get('r26_a_window_counts'):
+        assert mode == 'native' and spec.get('native_encoder') is True and not spec.get('r18_function_profile')
+        importlib.import_module('r26-a-window-counts').preflight(spec)
     if spec.get('r26_b_tag_graph_integrity'):
         assert mode == 'native' and spec.get('native_encoder') is True and spec.get('r18_function_profile') is True
         importlib.import_module('r26-b-tag-graph-integrity').preflight(spec)
     if spec.get('r26_b_tree_packed_counts'):
         assert mode == 'native' and spec.get('native_encoder') is True and spec.get('r18_function_profile') is True
         importlib.import_module('r26-b-tree-packed-counts').preflight(spec)
+    if spec.get('r26_b_a_flatten_counts'):
+        assert mode == 'native' and spec.get('native_encoder') is True and spec.get('r18_function_profile') is True
+        importlib.import_module('r26-b-a-flatten-counts').preflight(spec)
     if spec.get('r18_function_profile'):
         assert mode == 'native' and spec.get('native_encoder') is True
         from round4 import ROOT

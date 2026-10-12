@@ -168,6 +168,8 @@ def main():
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-tag-graph-integrity.py')],check=True)
         if spec.get('r26_b_tree_packed_counts'):
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-tree-packed-counts.py')],check=True)
+        if spec.get('r26_b_a_flatten_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-flatten-counts.py')],check=True)
         return
     if spec.get('r16_transfer_candidates'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round16-transfer.py')],check=True);return
@@ -192,6 +194,8 @@ def main():
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-tagged-counts.py')],check=True)
         if spec.get('r26_a_lastlink_lowering'):
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-lastlink-lowering.py')],check=True)
+        if spec.get('r26_a_window_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-window-counts.py')],check=True)
         return
     record={'run_id':os.environ['GITHUB_RUN_ID'],'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],
         'status':'STARTED_NATIVE_ONLY','candidate_hashes':{e['name']:e['hashes']for e in spec['entries']if not e['control']},
