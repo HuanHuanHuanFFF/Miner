@@ -1,6 +1,6 @@
 # DEFLATE 提交看板
 
-最近查询：北京时间 **2026-10-12 18:25:53**。官方快照 **29885**，计算时间 **2026-10-12 18:12:07**；官方 freshness=`unknown`。
+最近查询：北京时间 **2026-10-12 18:46:11**。官方快照 **29888**，计算时间 **2026-10-12 18:43:57**；官方 freshness=`unknown`。
 
 汇总本项目已核验的正式提交；研究中的未提交候选见[任务索引](docs/TASK_INDEX.md)。执行与更新规则见 [AGENTS.md](AGENTS.md#提交看板维护)。
 
@@ -21,18 +21,18 @@
 
 已知累计奖励合计：**11.833629 α**（7/7 条具有官方数值；VERIFIED API 记录，非钱包余额或净利润）。
 
-[本次完整数据](evidence/dashboard/20261012T102525021888Z/summary.json) · [原始响应 SHA-256 与查询时间](evidence/dashboard/20261012T102525021888Z/receipts.json) · [提交登记表](docs/submissions.json)
+[本次完整数据](evidence/dashboard/20261012T104552996105Z/summary.json) · [原始响应 SHA-256 与查询时间](evidence/dashboard/20261012T104552996105Z/receipts.json) · [提交登记表](docs/submissions.json)
 
 
 ## 扣除注册费用后的累计收益
 
 - 已核实注册成本：**0.024254898 TAO**，包括对应提交的注册扣款及成功／失败交易手续费；同一交易只计一次。
-- 注册成本按当前价格折算：**8.088452 α**。
-- 扣除注册成本的累计净收益估算：**3.745177 α**（INFERRED_SPOT_MARK_TO_MARKET；约 0.011231 TAO）。
-- 兑换口径：SN66 池储备 `subnetTAO / subnetAlphaIn`，1 α ≈ 0.002998707 TAO；finalized 区块 **9266509**，查询北京时间 **2026-10-12 18:25:51**。
+- 注册成本按当前价格折算：**8.088446 α**。
+- 扣除注册成本的累计净收益估算：**3.745183 α**（INFERRED_SPOT_MARK_TO_MARKET；约 0.011231 TAO）。
+- 兑换口径：SN66 池储备 `subnetTAO / subnetAlphaIn`，1 α ≈ 0.002998709 TAO；finalized 区块 **9266611**，查询北京时间 **2026-10-12 18:46:09**。
 
 范围：本看板 7 笔已提交记录的注册成本，含 2 次失败注册手续费；未使用注册额度、模型／CI成本不计入本项。净收益采用当前价格估值，不代表已经卖出或钱包已到账，未计兑换滑点及提现费用。未来新增提交若缺少成本记录，净收益显示 UNKNOWN。
-[注册成本登记与交易证据](docs/registration-costs.json) · [折算储备与原始回执](evidence/dashboard/20261012T102525021888Z/summary.json)
+[注册成本登记与交易证据](docs/registration-costs.json) · [折算储备与原始回执](evidence/dashboard/20261012T104552996105Z/summary.json)
 
 初始记录计算时间（北京）：
 

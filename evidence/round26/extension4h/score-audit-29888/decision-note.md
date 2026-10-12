@@ -1,0 +1,1 @@
+Latest snapshot 29888: API and all candidate blocks independently replayed; maximum error 6.661338147750939e-16pp. Exact frontier points and policy equal 29885, so its hypothetical grid remains the same; no new measurements or stability guarantee.

@@ -8,7 +8,7 @@
 
 **截至本阶段，稳定5%／10%双目标未完成，没有推荐正式提交包。** 追加8份不同Rust，6份完成原协议发现计时、2份未计时；24次云端作业全部成功并收齐，包含16次native、6次standard和2次环境diagnostic。原协议88份配对进程不是88份独立候选确认；每份主候选仅一runner两发现块。完整Lean／原版公共gate与冻结后独立确认均未运行。
 
-最新保存的完整榜单为**29885**，官方计算UTC10:12:07.803344，查询UTC10:21:18–10:21:36，freshness=`unknown`。[原始响应与SHA](../../evidence/round26/extension4h/official-close/receipt.json)及[独立评分核验](../../evidence/round26/extension4h/score-audit-29885/decision-note.md)确认659行、104点前沿，公式与API重放一致。以下份额全是该快照的**条件公共预测**，不是正式可支付成绩。
+最新保存的完整榜单为**29888**，官方计算UTC10:43:57.085857，查询UTC10:44:25–10:44:44，freshness=`unknown`。[原始响应与SHA](../../evidence/round26/extension4h/official-last-live/receipt.json)及[独立评分核验](../../evidence/round26/extension4h/score-audit-29888/decision-note.md)确认659行、104点前沿，公式与API重放一致。以下份额全是该快照的**条件公共预测**，不是正式可支付成绩。
 
 | 追加候选 | 原协议两主块时间变化 | 主参照份额最低／中位／最高 | 零值次数 | 结论 |
 |---|---|---|---|---|
@@ -21,15 +21,15 @@
 | B31 a-flatten | 慢0.733903%／0.716664% | 0／0／0% | 2/2 | 大量填充和补齐扫描有实际代价 |
 | B36 a-no-owner | 慢1.408720%／0.154823% | 0／0／0% | 2/2 | 删除来源写入后仍有恢复来源和base维护成本 |
 
-六份已计时候选的12主块中11块为零，达到5%／10%的次数均0。A19换影子参照后为0／0.884898%，同源码候选副本在两种参照下均零；不能把参照和副本当成额外独立runner，也不能以峰值晋升。全部逐文件总压缩时间、实际父版、二进制、环境、原始回执、未计时版本及精确Rust／Lean哈希见[完整候选对比](../../evidence/round26/extension4h/candidate-comparison-29885.md)、[机器台账](../../evidence/round26/extension4h/candidate-ledger-29885.json)和[按角色分层](../../evidence/round26/extension4h/all-roles-29885.json)。
+六份已计时候选的12主块中11块为零，达到5%／10%的次数均0。A19换影子参照后为0／0.884898%，同源码候选副本在两种参照下均零；不能把参照和副本当成额外独立runner，也不能以峰值晋升。全部逐文件总压缩时间、实际父版、二进制、环境、原始回执、未计时版本及精确Rust／Lean哈希见[完整候选对比](../../evidence/round26/extension4h/candidate-comparison-29888.md)、[机器台账](../../evidence/round26/extension4h/candidate-ledger-29888.json)和[按角色分层](../../evidence/round26/extension4h/all-roles-29888.json)。
 
 原窗加追加共28份不同Rust，13份做过原协议主计时，26主块中25块为零；全轮60次作业57成功、3份原窗失败全部保留。没有将未测版本写成0%，也没有从复制的父Lean推定新版本通过gate。
 
 ## 评分与组合
 
-[按同一29885快照重放](../../evidence/round26/extension4h/all-analysis-29885.json)包括全部12次原协议运行、186份配对进程。对有共同run／块／校准的组合，重新加入两点后计算前沿和归一化：tree-prefix＋tree-packed、full-owner＋no-owner的已有同场视图全为零。hash17＋allow-near的旧主参照仍全零；第一影子块分别加入为1.529768%／0.293051%，联合变为1.528745%／0.292533%，第二块仍双零。辅助控制角色见原表，没有拼凑新独立确认。A19与其他路线没有新的共同确认，联合稳定份额UNKNOWN。
+[按同一29888快照重放](../../evidence/round26/extension4h/all-analysis-29888.json)包括全部12次原协议运行、186份配对进程。对有共同run／块／校准的组合，重新加入两点后计算前沿和归一化：tree-prefix＋tree-packed、full-owner＋no-owner的已有同场视图全为零。hash17＋allow-near的旧主参照仍全零；第一影子块分别加入为1.529768%／0.293051%，联合变为1.528745%／0.292533%，第二块仍双零。辅助控制角色见原表，没有拼凑新独立确认。A19与其他路线没有新的共同确认，联合稳定份额UNKNOWN。
 
-最新几何目标只用于决定投入，不是实测成绩。保持锚点质量时，658最近的5%／10%命中格点分别约需时间轴降低2.83%／4.73%；552相应约需15.71%／27.41%。评分非单调，不能把最近命中说成“超过该速度必定达标”；完整命中区、邻居切换和各源码单runner的观测敏感性保留在[二维取样](../../evidence/round26/extension4h/score-audit-29885/score-map-29885.json)。
+最新几何目标只用于决定投入，不是实测成绩。保持锚点质量时，658最近的5%／10%命中格点分别约需时间轴降低2.83%／4.73%；552相应约需15.71%／27.41%。评分非单调，不能把最近命中说成“超过该速度必定达标”；完整命中区、邻居切换和各源码单runner的观测敏感性保留在[二维取样](../../evidence/round26/extension4h/score-audit-29888/score-map-29888.json)。
 
 同时重算旧备选：[R24、R25及旧快速父版历史原始回执](../../evidence/round26/extension4h/historical-29885/historical-replay-summary-29885.json)覆盖去重后的330份配对文件，没有新增测量。R24与R25最终候选的旧独立确认在此快照全部为零；旧chain-halfhead的四主确认块主参照最低0、中位0.967857%、最高2.301892%，两块为零，也未到5%。历史控制峰值单列，不作为本轮稳定成果。
 
@@ -55,6 +55,10 @@ V1随后对精确658／incumbent做两份同scratch引擎、同DSO进程，原ti
 
 ## 交付核对
 
-[提交看板](../../DASHBOARD.md)已对齐29885，七份历史正式提交当前均0%，累计官方记录11.833628944α；历史初始份额逐条保留。扣注册成本的当前估值约3.745177α，仅扣已登记注册成本、按finalized区块9266509池储备换算，不是本轮新增收入或钱包到账，模型／CI成本未计。[看板核对](../../evidence/round26/extension4h/dashboard-consistency.json)。
+[提交看板](../../DASHBOARD.md)已对齐29888，七份历史正式提交当前均0%，累计官方记录11.833628944α；历史初始份额逐条保留。扣注册成本的当前估值约3.745177α，仅扣已登记注册成本、按finalized区块9266509池储备换算，不是本轮新增收入或钱包到账，模型／CI成本未计。[看板核对](../../evidence/round26/extension4h/dashboard-consistency.json)。
 
 严格Git字节核查识别四份候选manifest的CRLF差异；已保留原本地字节并将当前路径对齐现有Git的LF字节，Rust／Lean和所有原始CI响应未改。旧manifest SHA仍可按[精确映射](../../evidence/round26/extension4h/metadata-byte-reconciliation/receipt.json)找到原件，未放宽字节检查。[收尾原字节审计](../../evidence/round26/extension4h/audit-close.json)覆盖1643文件、175508317字节。
+
+[最终机器汇总](../../evidence/round26/extension4h/close-summary.json)与[严格Git字节审计](../../evidence/round26/extension4h/git-byte-audit-close.json)绑定1647份文件、175547528字节至提交9b9c222d；后续提交只收录汇总及核查回执。账户最后读取北京时间18:35:17，主窗口已用65%／剩35%，启动时已用48%；差额17个百分点属于共享账户，模型精确费用UNKNOWN。没有兑换重置卡或购买额度。
+
+截止前榜单从29885连续更新至29888；最终29888完整捕获含同快照weights，全部原协议块已重算且独立误差小于1e-15pp，数值不变。659行指标与当前前沿的重放保留在最终资料；旧29885历史备选与取样图仍按原时间标记，前沿及政策逐项相同已核对。看板最终换算以其最新原始summary为准，前文3.745177α及区块9266509保留为18:25阶段值。

@@ -87,3 +87,13 @@ official-close完整捕获29885，计算UTC10:12:07.803344，查询10:21:18–10
 严格Git字节审计发现4个新B候选manifest仅CRLF不同（Rust/Lean和原始回执均一致）；已先保存原本地字节，再将当前manifest对齐原Git的LF。metadata-byte-reconciliation/receipt.json提供老SHA到原件映射；旧派生台账不改写，新29885台账绑定规范字节。首次Git审计失败保留在git-byte-mismatch-inventory.json，不能宣称那次通过。audit-close已核1643文件／175508317字节；需在最终提交后重跑--git-ref核验。
 
 当前最近已推送41f286a0（V1收齐阶段）；final29885材料及看板尚待最终提交。剩余动作：临近截止重新查快照身份和账户用量；生成close-summary；完成文档入口/状态及project.py check；提交推送final材料，严格Git字节audit后再提交审计回执；最终核对远端ref/单worktree。原budget不修改，所有新研究须后续授权。截止10:48:52UTC不变。
+
+## 输出冻结（UTC10:40）
+
+稳定5%／10%目标未完成，所有研究／验证输出已冻结，close-summary.json记录完整结果和未知项。官方身份于10:33:59再次确认29885／policy不变；账户最后10:35:17读取used65%／剩35%（共享账户，初始used48%，不是独占模型费用），重置和购买0。全60个CI又经实时GitHub查询确认completed，无待收或运行中作业。
+
+严格Git字节审计现已通过：git-byte-audit-close.json绑定1647文件／175547528字节至已推送9b9c222d962747245085dfc7b9cdfcb49474a5a7。4个manifest换行原件已归档，源Rust/Lean完全未动；原始回执未覆盖。一次审计并行撞上新身份查询尚未提交，产生“Uncommitted audit input”拒绝；将该查询独立提交后按固定Git树重新完整核验通过，未放宽检查条件。
+
+最后动作仅为收录汇总与检查回执、核对远端／单worktree及交付；不开始任何新研究。固定截止10:48:52UTC之后，需要新的时间授权才续跑。本文件和close-summary标记输出冻结，不把未达目标改成完成，也不修改原不可变budget的派发时状态。
+
+最终更新：榜单在10:42查询时进入29886，捕获期间weights已29887，最后完整捕获为29888（计算10:43:57），同快照weights一致。全部12原协议重新按29888算，独立误差6.66e-16pp，目标仍未达；看板也对齐29888。旧查询逐份保留。最终资料已写close-summary及29888对比，未新增实验。
