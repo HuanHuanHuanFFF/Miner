@@ -24,6 +24,10 @@ def save(p, value):
 def main():
     assert os.environ.get('GITHUB_ACTIONS') == 'true' and os.environ.get('RUNNER_OS') == 'Linux'
     spec = validate(os.environ['ROUND4_SPEC']); assert spec['r18_mode'] == 'diagnostic'
+    if spec.get('r26_a_engine_placement'):
+        assert os.environ.get('ROUND4_SPEC_DIR') == 'evidence/round26'
+        subprocess.run([sys.executable, str(ROOT/'scripts/r26-a-engine-placement.py')], check=True)
+        return
     if spec.get('r24_layout_diagnostic'):
         assert os.environ.get('ROUND4_SPEC_DIR')=='evidence/round24'
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-layout.py')],check=True);return

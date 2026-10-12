@@ -158,7 +158,9 @@ def main():
     if mode == 'standard' and any(e.get('native_decode_reference') for e in spec['entries']):
         importlib.import_module('research-round12-decode').harness(spec)
     if mode == 'diagnostic':
-        raise AssertionError('A diagnostic protocol must be explicitly preflighted before enabling it')
+        assert spec.get('r26_a_engine_placement') is True and spec.get('r18_mode') == 'diagnostic'
+        assert all(e.get('control') for e in spec['entries']) and not spec.get('native_encoder')
+        importlib.import_module('r26-a-engine-placement').preflight(spec)
     print('R26_PREFLIGHT', mode, len(spec['entries']), 'hash-bound pairs')
 
 if __name__ == '__main__':
