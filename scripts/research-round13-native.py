@@ -190,6 +190,8 @@ def main():
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-row-counts.py')],check=True)
         if spec.get('r26_a_tagged_counts'):
             subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-tagged-counts.py')],check=True)
+        if spec.get('r26_a_lastlink_lowering'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-lastlink-lowering.py')],check=True)
         return
     record={'run_id':os.environ['GITHUB_RUN_ID'],'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],
         'status':'STARTED_NATIVE_ONLY','candidate_hashes':{e['name']:e['hashes']for e in spec['entries']if not e['control']},
