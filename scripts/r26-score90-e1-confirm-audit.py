@@ -30,6 +30,7 @@ RUN_GATES = {
     "38270747043": ROOT / "evidence/round26/38270747043/confirm90-e1-b/gate",
 }
 PROOF2_RECEIPT = ROOT / "evidence/round26/38270692372/gate-90-e1-proof2/exact-gate/exact-gate/gate-receipt.json"
+PROOF2_LOG = ROOT / "evidence/round26/38270692372/gate-90-e1-proof2/exact-gate/exact-gate/logs/005-lake.log"
 PROOF2_ENTRY = ROOT / "evidence/round26/extension90m/route-e/e1-proof2-entry.json"
 PROOF3_ENTRY = ROOT / "evidence/round26/extension90m/route-e/e1-proof3-entry.json"
 OUTPUT_DIR = ROOT / "evidence/round26/extension90m/score-audit"
@@ -110,11 +111,10 @@ def build_markdown(result: dict) -> str:
     lines = [
         "# E1 双 runner 确认原始审计", "",
         (f"原始确认分析引用 snapshot `{result['analysis_snapshot']['snapshot_id']}`（freshness `{result['analysis_snapshot'].get('freshness')}`）；" 
-         f"现按最新完整官方捕获 `{result['snapshot']['snapshot_id']}` 重算，identity 与 capture 均为 29966。"),
+         f"现按最新完整官方捕获 `{result['current_snapshot']['snapshot_id']}` 重算，identity 与 capture 均为 29966。"),
         (f"两 runner `{result['raw_process_count']}` 条原始流程，JSONL 哈希全部匹配分析清单；" 
          f"X 投影误差 `{result['projection_audit']['max_abs_projection_x_error']:.3g}`，Y 误差 "
-         f"`{result['projection_audit']['max_abs_projection_y_error_pp']:.3g}` pp，当前份额重算最大误差 "
-         f"`{result['projection_audit']['max_abs_share_error_pp']:.3g}` pp。"),
+         f"`{result['projection_audit']['max_abs_projection_y_error_pp']:.3g}` pp；当前份额按完整 snapshot 29966 重算。"),
         "逐流 X/Y 和哈希见机器 JSON `raw_processes` / `raw_hash_manifest`。", "",
         "## E1 主版本和副本投影", "",
         "candidate 与同 Rust/同 binary 的 shadow 分开列；primary/shadow 是两种锚点校准，不是独立样本。", "",
@@ -127,15 +127,15 @@ def build_markdown(result: dict) -> str:
               "以下每组按 runner × main/copy × 校准统计两个 block；ALL 按四个 block 汇总。", "",
               "| Runner | 流程身份 | 校准 | 行数 | Old 29957 零数 | Old 正份额范围 (%) | Current 29966 零数 | Current 正份额范围 (%) |",
               "|---|---|---|---:|---:|---:|---:|---:|"]
-    for row in result["share_summaries"]:
-        old = row["old_snapshot_29957"]
-        current = row["current_snapshot_29966"]
+    for row in result["share_summaries_by_runner_role_calibration"]:
+        old = row["stored_29957"]
+        current = row["current_29966"]
         old_range = "—" if old["positive_range_pct"] is None else f"{old['positive_range_pct'][0]:.6f}–{old['positive_range_pct'][1]:.6f}"
         current_range = "—" if current["positive_range_pct"] is None else f"{current['positive_range_pct'][0]:.6f}–{current['positive_range_pct'][1]:.6f}"
         lines.append(f"| {row['runner_id']} | {row['sample_class']} | {row['calibration']} | {row['n_views']} | {old['zero_count']} | {old_range} | {current['zero_count']} | {current_range} |")
     lines += ["", "## 同二进制控制与证明边界", "",
               f"E1 main/copy 的同 binary 时间差范围 `{result['same_binary_controls']['candidate_copy_gap_range_pct'][0]:.6f}%` 到 `{result['same_binary_controls']['candidate_copy_gap_range_pct'][1]:.6f}%`；#658 anchor main/shadow 差范围 `{result['same_binary_controls']['public658_gap_range_pct'][0]:.6f}%` 到 `{result['same_binary_controls']['public658_gap_range_pct'][1]:.6f}%`。", 
-              f"被测 Rust `{result['proof_binding']['measured_rust_sha256']}`，Lean `{result['proof_binding']['measured_lean_sha256']}`。proof2 gate 状态 `{result['proof_binding']['proof2_gate_status']}`（receipt `38270692372`）；当前 proof3 Lean `{result['proof_binding']['proof3_lean_sha256']}` 尚无其精确 pair 的最终验收回执，因此本批不是 proof3 最终确认。", "",
+              f"被测 Rust `{result['proof_binding']['measured_rust_sha256']}`，Lean `{result['proof_binding']['measured_lean_sha256']}`。proof2 gate 状态 `{result['proof_binding']['proof2_gate_receipt_status']}`（receipt `38270692372`），原始日志记录 `{result['proof_binding']['no_goals_error_count']}` 次 `No goals to be solved`；当前 proof3 Lean `{result['proof_binding']['proof3_lean_sha256']}` 尚无其精确 pair 的最终验收回执，因此本批不是 proof3 最终确认。", "",
               "保留旧 29957 记录作为历史列；29966 重算不覆盖旧报告。份额为几何单点投影，不是正式 admission 或实际奖励。", ""]
     return "\n".join(lines)
 
@@ -178,6 +178,7 @@ def main() -> None:
     replay = M.Replay(CAPTURE, RULES)
     api_audit = M.audit(replay)
     assert str(replay.context["snapshot_id"]) == "29966"
+    capture_receipt = read_json(CAPTURE / "receipt.json")
     anchor = replay.byid["658"]["metrics"]
     anchor_x = float(anchor["balanced_time_ratio"])
     anchor_y = float(anchor["mean_file_compression_pct"])
@@ -242,6 +243,11 @@ def main() -> None:
                     "analysis_relative_gap_pct": float(recorded["relative_time_gap_pct"]),
                 })
 
+    candidate_copy_gaps = [row["relative_shadow_minus_parent_time_pct"] for row in same_binary_controls
+                           if row["parent"].startswith("r26-e-")]
+    public658_gaps = [row["relative_shadow_minus_parent_time_pct"] for row in same_binary_controls
+                      if row["parent"] == "public658"]
+
     summary_groups = defaultdict(list)
     for row in projections:
         key = (row["runner_id"], row["sample_class"], row["calibration"])
@@ -259,6 +265,8 @@ def main() -> None:
     proof2_entry = read_json(PROOF2_ENTRY)
     proof3_entry = read_json(PROOF3_ENTRY)
     proof2_receipt = read_json(PROOF2_RECEIPT)
+    proof2_log = PROOF2_LOG.read_text(encoding="utf-8", errors="replace")
+    no_goals_lines = [line.strip() for line in proof2_log.splitlines() if "No goals to be solved" in line]
     assert proof2_entry["hashes"]["parse.rs"] == candidate["rust_sha256"]
     assert proof2_entry["hashes"]["Parse.lean"] == candidate["source_versions"][0]["files"]["Parse.lean"]
     proof3_manifest = read_json(ROOT / "candidates/r26-e-658-short-same-proof3/manifest.json")
@@ -297,13 +305,14 @@ def main() -> None:
             "same_binary_copy_control_views": sum(row["entry_role"] == "control" for row in projections),
             "max_abs_projection_x_error": max(x_errors, default=0),
             "max_abs_projection_y_error_pp": max(y_errors, default=0),
-            "max_abs_current_share_replay_error_pp": max(abs(row["recomputed_29966_share_pct"] -
-                                                               SCORE_AUDIT.score_one(replay, f"stored-{i}", row["projected_x"], row["projected_y_pct"]).get("share_pct", 0.0))
-                                                          for i, row in enumerate(projections)),
         },
         "projections": projections,
         "share_summaries_by_runner_role_calibration": summaries,
-        "same_binary_controls": same_binary_controls,
+        "same_binary_controls": {
+            "candidate_copy_gap_range_pct": [min(candidate_copy_gaps), max(candidate_copy_gaps)],
+            "public658_gap_range_pct": [min(public658_gaps), max(public658_gaps)],
+            "pair_observations": same_binary_controls,
+        },
         "proof_binding": {
             "measured_rust_sha256": candidate["rust_sha256"],
             "measured_lean_sha256": proof2_entry["hashes"]["Parse.lean"],
@@ -311,6 +320,10 @@ def main() -> None:
             "proof2_gate_receipt_status": proof2_receipt["status"],
             "proof2_gate_run_id": proof2_receipt["run_id"],
             "proof2_gate_receipt_sha256": digest(PROOF2_RECEIPT),
+            "proof2_gate_log_path": PROOF2_LOG.relative_to(ROOT).as_posix(),
+            "proof2_gate_log_sha256": digest(PROOF2_LOG),
+            "no_goals_error_count": len(no_goals_lines),
+            "no_goals_error_lines": no_goals_lines,
             "proof3_rust_sha256": proof3_manifest["hashes"]["parse.rs"],
             "proof3_lean_sha256": proof3_manifest["hashes"]["Parse.lean"],
             "proof3_entry_status_in_repo": proof3_entry["status"],

@@ -54,6 +54,7 @@ def main():
     official_receipts += list(BASE.glob('extension90m/official-*/receipt.json'))
     official_receipts += list(BASE.glob('extension90m/rules-*/receipt.json'))
     official_receipts += list(BASE.glob('extension90m/latest*/receipt.json'))
+    official_receipts += list(BASE.glob('extension90m/e2-gate-job-limit/receipt.json'))
     official_receipts += list(BASE.glob('extension4h/measurement-followup/receipt.json'))
     for p in sorted(official_receipts):
         receipt = json.loads(p.read_bytes())

@@ -396,3 +396,12 @@ CI整体状态与阶段原始证据分别检查：I及价格打包复现显示ca
 **跨阶段复用应保留实际正确性责任。** 现有搜索规格只证明返回过程总性，不能据“搜索已经看过字节”直接删除发射验证。C4 将完整验证保留在局部可信发射器，同时删除整个延迟选择阶段，真实支付压缩质量代价；完整gate状态与计时结果仍分别报告。这与在整个搜索链中传递已匹配事实有不同的证明成本，不能靠复制父Lean称为已验证。[固定方案与边界](../../evidence/round26/extension1h/route-c/c4-predeclaration.md)、[本窗报告](../rounds/round26-extension1h.md)。
 
 **小信号要按实际对照的分辨率解释。** C4单块中两份改变输出的文件有更快贡献，但全体份额仍为零，同二进制副本差异又足以翻转判断。逐文件总时间中位数对应的同一rep可以分解为解析、编码和配对分母的加法恒等式；它帮助定位分歧，不能将其他文件的变化全归因于噪声，也不能抹去它们制造“校正成绩”。保留局部有益证据和整体反例，同时把稳定性写为未确认。[原始分解](../../evidence/round26/extension1h/c4-cost-feedback.json)、[独立核对](../../evidence/round26/extension1h/audit/c4-final-timing-review.md)。
+
+
+### 第26轮追加90分钟：先实测与精确确认
+
+**操作计数、实际两轴和稳定份额逐层验收。** 本窗为此前只有计数的C2/C3补真实原协议时间测量，两者出现小份额线索，跨runner却仍有零；E1发现阶段四种校准/副本视图全正，独立确认主锚仍零3/4。计数不能证明版本更慢；一次正值也不能越过同源码对照的分辨率。用户要求每种选中机制先测一次时，以实际最小测试作为决策入口，不用代理指标提前宣布性能取舍。[本窗报告](../rounds/round26-extension90m.md)、[全部原始重算](../../evidence/round26/extension90m/delivery-analysis.json)。
+
+**短控制流变化也可能复制提取后的循环。** E1前置短路径使实际Funs新增12个同构循环，复制父证明没有覆盖它们。先看真实提取，再用内核检查的程序等式接回原规格；完整gate曾继续暴露“目标已关闭后仍执行tactic”的具体错误。修补只能绑定新Lean哈希，旧pair计时不能自动重标为新pair最终确认。[实际提取及修补](../../evidence/round26/extension90m/route-e/e1-real-clone-preflight.json)、[E1完整接受](../../candidates/r26-e-658-short-same-proof3/VERIFICATION.json)。
+
+**一次改进未恢复成本时，保留对解释的反例。** D2把深搜预算限制到一次后，五文件解析仍比父版慢约15%，因此“只修重复预算即可恢复”的具体预期未获支持；没有继续扫深度。组合E2另作同runner组件比较，最终也保留归零，不能相加组件的独立预测。[D2实测反馈](../../evidence/round26/extension90m/route-d/d2-feedback-and-route-pause.md)、[组合及联合重放](../../evidence/round26/extension90m/delivery.json)。
