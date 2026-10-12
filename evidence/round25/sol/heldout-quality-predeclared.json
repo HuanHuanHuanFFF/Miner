@@ -1,0 +1,56 @@
+{
+  "status": "PREDECLARED_BEFORE_INPUT_GENERATION_OR_ANY_ENCODER_OUTPUT",
+  "purpose": "One untimed synthetic quality/decode/routing diagnostic outside the fixed28 byte corpus; not official stage2, private heldout, score, success probability or a replacement for independent original-protocol confirmation.",
+  "original_proposal": {
+    "primary_lengths": [12000, 196608],
+    "primary_cases": 24,
+    "coverage_failure": "Static original route inspection shows12000 reaches row12 but196608 reaches fallback28. End4 would therefore be inactive on both original lengths. No generated sample or encoding output existed when this was found."
+  },
+  "revision_before_results": {
+    "authorized_by": "Root delegation amended after static coverage report, before any generation/encoding result",
+    "reason": "400000 makes original format_id return15 or4, both existing row1, so end4's PC chain record path is actually covered. Keep196608 as inactive controls instead of erasing the failed coverage hypothesis.",
+    "routes_unchanged": true
+  },
+  "matrix": {
+    "families": ["json-config", "markdown-log", "c-source"],
+    "primary_lengths": [12000, 400000],
+    "primary_seeds": [0, 1, 2, 3],
+    "primary_cases": 24,
+    "inactive_control_lengths": [196608],
+    "inactive_control_seeds": [0],
+    "inactive_control_cases": 3,
+    "total_cases": 27,
+    "total_raw_bytes": 5533824,
+    "case_order": "family order, then primary length order, then seed0..3; three inactive controls afterward in family order",
+    "correlation": "For eachfamily/seed, longer inputs extend the same deterministic unit stream.24 main cases are not24 statistically independent draws; controls share familyseed0 prefixes."
+  },
+  "generator": {
+    "prng": "Explicit64-bit SplitMix64; family salt xor fixed seed; masked shifts/multiplication. No random module, time, uuid, source corpus or downloads.",
+    "family_salts_hex": {"json-config": "6a09e667f3bcc909", "markdown-log": "bb67ae8584caa73b", "c-source": "3c6ef372fe94f82b"},
+    "content": "Fixed own-authored JSON configuration records, Markdown sections/log records and C-style functions. Repeated bounded vocabularies, deterministic numeric fields and UTF8 text; no officialtiny-config bytes, private files or external data.",
+    "length_rule": "Generate completeUTF8 units until targetbyte length, take byteprefix, discard only a final incomplete codepoint and pad remaining0..3bytes withASCII spaces. Exact requested byte length and strictUTF8 validity required; final syntax record may be truncated.",
+    "source_binding": "Before native outputs, preflight binds SHA256 of the marked generator sourceblock and fullscript, all27 inputs and manifest. Runtime regenerates and requires the same frozen inputSHA list.",
+    "max_units_per_input": 20000,
+    "native_generation_timeout_seconds": 60
+  },
+  "sources": {
+    "combo": {"path": "candidates/r22-595-chain-halfhead", "parse.rs": "57a8fb4feffa52d6b966899c4a56bc4754f6fc967a05cf52d5b02a574d037275", "Parse.lean": "4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6"},
+    "end4": {"path": "candidates/r25-astra-end4", "parse.rs": "03ec0aa4e617d622755e85324a9d4fbc77ef74e6572485b3170e2790681ed8e6", "Parse.lean": "4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6"},
+    "tiny-pc8": {"path": "candidates/r25-astra-tiny-pc8-proof1", "parse.rs": "5c20b99cf52ac8e2f047b4e2e83be974b1f9b1f21b23d54ccccb25c58b891f00", "Parse.lean": "3bd53694534c0114453a95c2f120d743fde3af233de88c00e1d5c30fe05ccdb8"}
+  },
+  "native_protocol": {
+    "flag": "r25_heldout_quality=true; native_only=true; native_encoder=false",
+    "entries": "Three sources namedcombo/end4/tiny-pc8 as controls, plus existingmandatory controls for shared round4 validation",
+    "routing": "Only count actual originalp125_row/fallback functionentry calls in a temporary observer. Compare entiretoken stream to independent uninstrumented parse; do not rerun classification.",
+    "expected_static_coverage": {"12000": "row12: ETINY incombo/end4, clonedPC run1 in tiny-pc8", "400000": "row1 in allthree; end4 modification active", "196608": "fallback only in allthree; inactive controls"},
+    "encoder_sha256": "172c240014f65d5e2762c1287e4982dd1cd426f2999f74e17011e05f2dc5fdec",
+    "token_sha256": "8bf5d962324b3a0890f3c75f713198be086c4b0659797c24b8b976978cea4917",
+    "compile_timeout_seconds": 300,
+    "run_timeout_seconds": 240,
+    "total_public_runner_budget_minutes": 12,
+    "checks": "27cases ×3sources=81 originalencoder outputs; frozen/observed fulltoken identity; independent nativeRust decode andzlib roundtrip; allsource/input hashes preserved. Save all byte/token regressions and separate24primary from3inactive controls.",
+    "timing": "NOT_MEASURED; no warmups, repetitions, two-axis or leaderboard calculation"
+  },
+  "decision_rule": "Record full diagnostic results without tuning generators, seeds, length choices, routes or candidates. Decode/source mismatch fails the diagnostic. Quality improvements/regressions are only these exact syntheticcases; do not promote to official reward or all-input quality claims.",
+  "formal_submission_sent": false
+}

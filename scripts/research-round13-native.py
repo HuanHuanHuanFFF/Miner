@@ -6,6 +6,28 @@ from round4 import ROOT,validate
 def main():
     assert os.environ.get('GITHUB_ACTIONS')=='true'and os.environ.get('RUNNER_OS')=='Linux'
     spec=validate(os.environ['ROUND4_SPEC']);out=Path(os.environ['RUNNER_TEMP'])/'round4-receipts';out.mkdir(exist_ok=True)
+    if spec.get('r25_heldout_quality'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-heldout-quality.py')],check=True)
+        return
+    if spec.get('r25_tiny_encoder_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-tiny-encoder.py')],check=True)
+        return
+    if spec.get('r25_len3_price'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-len3-price.py')],check=True)
+        return
+    if spec.get('r25_prefix_diversity_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-prefix-diversity-counts.py')],check=True)
+        return
+    if spec.get('r25_dual8_origins'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-dual8-origins.py')],check=True)
+        return
+    if spec.get('r25_dual8_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-dual8-counts.py')],check=True)
+        return
+    if spec.get('r25_finite_equivalence'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round4.py')],check=True)
+        eq=json.loads((out/'equivalence-research.json').read_bytes())
+        assert eq.get('returncode')==0 and eq.get('cases') and all(r['cases']==444 and r['different_or_failed']==0 for r in eq['cases']), 'R25 requested actual finite equivalence must complete, including compilation'
     if spec.get('r24_output_state_entry'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round24-output-state.py')],check=True)
     if spec.get('r24_tiny_counts'):

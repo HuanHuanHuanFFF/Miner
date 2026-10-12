@@ -1,0 +1,76 @@
+{
+  "status": "VERIFIED_FROZEN_DIFF_AND_STATIC_INTERFACE_REVIEW_NOT_N_EXTRACTION_OR_GATE",
+  "candidate": "candidates/r25-root-end4-budget",
+  "hashes": {
+    "parse.rs": "e3e7219834c702143a48c3c43630e2a789e718bd9cde11eb78b168d5c15e0782",
+    "Parse.lean": "4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6"
+  },
+  "parent_gate": {
+    "run_id": "38125243582",
+    "accepted_rust_sha256": "03ec0aa4e617d622755e85324a9d4fbc77ef74e6572485b3170e2790681ed8e6",
+    "accepted_lean_equal_to_N": true,
+    "funs_sha256": "b6a415a95f7ae9e66001c95b4a7015b0859dc6a8691a8752e82f0eef469e9e41"
+  },
+  "source_scope": {
+    "only_changed_function": "pc_f_record3",
+    "outside_function_byte_identical": true,
+    "reversible_change": "One immutable head_budget binding before stop and two wrapping_add argument substitutions",
+    "shared_constants": {
+      "pc_INS_MAX": 2,
+      "pc_TAIL": 1
+    },
+    "loops": {
+      "while ins < stop {": {
+        "body_byte_identical_to_accepted_end4": true,
+        "head_budget_referenced": false
+      },
+      "while ins < end && ins < lim {": {
+        "body_byte_identical_to_accepted_end4": true,
+        "head_budget_referenced": false
+      }
+    },
+    "public_function_signature_unchanged": true
+  },
+  "reviewed_risks": {
+    "short_match_fallback": "ADDRESSED: ineligible suffix retains two head positions; the original suffix guard cannot append a distinct suffix in that domain",
+    "same_position_case": "ADDRESSED: j=ins0+1 substitutes the same original second position, with identical position sequence",
+    "new_position_case": "ADDRESSED: j>ins0+1 replaces the second key only; j<lim and j<end",
+    "first_cached_slot_and_invalid_slot_fallback": "UNCHANGED source guards and while fallback",
+    "crossing_tail": "UNCHANGED end-1 code; eligibility implies end>=ins0+5, so both old/new tail cursors select the same end-1 when legal",
+    "ordering_and_duplicates": "ADDRESSED by first<j<end-1 and original clipped fallback; finite model additionally confirms",
+    "quality_from_dropped_second_key": "UNKNOWN until N original encoder",
+    "performance_from_equal_writes": "UNKNOWN until original total time"
+  },
+  "position_model": {
+    "receipt": "evidence/round25/n-source-preflight.json",
+    "sha256": "cb9da85c16d3862c076b12b7bb7b0689b71f4b3995cc0163bf74b61def06681d",
+    "cases": 21600,
+    "different_position_cases": 7852,
+    "equal_updates_all_cases": true,
+    "scope": "Read and audited source/receipt; finite model is not universal gate acceptance"
+  },
+  "loop_capture_assessment": {
+    "status": "INFERRED_STRONG_STATIC_BASIS_NO_N_FRESH_EXTRACTION_YET",
+    "reason": "head_budget is used only before both loops to compute stop. Both while bodies and all their referenced external variable names are byte-identical to accepted end4. New if expression introduces no loop or public helper. Expect only pc_f_record3 outer definition to change; verify against actual Funs.",
+    "accepted_loop0_signature": "@[rust_loop] def pc_f_record3_loop0 {H : Std.Usize} (s : Slice Std.U8) (head : Array Std.U32 H) (prev : Array Std.U32 32768#usize) (km : Std.U32) (ins : Std.Usize) (stop : Std.Usize) : Result ((Array Std.U32 H) \u00d7 (Array Std.U32 32768#usize) \u00d7 Std.Usize)",
+    "accepted_loop1_signature": "@[rust_loop] def pc_f_record3_loop1 {H : Std.Usize} (s : Slice Std.U8) (head : Array Std.U32 H) (prev : Array Std.U32 32768#usize) (\u00abend\u00bb : Std.Usize) (lim : Std.Usize) (km : Std.U32) (ins : Std.Usize) : Result ((Array Std.U32 H) \u00d7 (Array Std.U32 32768#usize))"
+  },
+  "proof_attempt": {
+    "decision": "SUFFICIENT_INTERFACE_BASIS_TO_TRY_INHERITED_4ff_DIRECT_ORIGINAL_GATE_IF_NATIVE_QUALITY_WARRANTS",
+    "basis": [
+      "No expected loop-argument or tuple-state change",
+      "Original f_record3_spec unfolds the outer body and repeatedly splits guards",
+      "head_budget is branchwise1 or2; inherited hlim+8=input.length and ins0<=lim+1 provide unchanged arithmetic slack",
+      "f_link and slot_of specs need only bounded positions; no match-quality or insertion-density invariant",
+      "Accepted end4 already compiled with this exact4ff proof despite its extra guarded insertion"
+    ],
+    "remaining_risks": [
+      "Aeneas could reshape control flow or generated local tuple names; actual extraction remains decisive",
+      "Original step tactics may need one local arithmetic lemma/case split for variable budget",
+      "900-second original Lean limit and axiom checks must still pass for the exact new pair"
+    ],
+    "full_gate": "NOT_RUN",
+    "no_acceptance_claim": true
+  },
+  "nonblocking_note": "The inherited suffix comment says preserve original head inserts; for N it should be read as historical parent commentary. Frozen manifest and actual conditional-swap source describe the N mechanism accurately; no edit requested during freeze."
+}

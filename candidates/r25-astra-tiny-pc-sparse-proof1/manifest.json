@@ -1,0 +1,33 @@
+{
+  "candidate": "r25-astra-tiny-pc-sparse-proof1",
+  "parent": "r25-astra-tiny-pc-sparse",
+  "hashes": {
+    "parse.rs": "84ccbcbe88c56d8459c6df0d8bad5391b0ce95209d4e2f5fb4148369c9c294e5",
+    "Parse.lean": "36cb54917d6d5b7a850a54d39d61c301342e40205fa2f73eb69ec5933e963663"
+  },
+  "mechanism": "Keep the exact tiny-PC matcher, lazy search, fold, record8, route, H and skip. Only initialize the inherited ETINY mask302256384 lens table and replace the local match emission with inherited q4_e_pieces, which emits allowed lengths plus literal remainder and consumes the complete valid match span.",
+  "difference_from_old_work": "A single fixed emission isolation after native K2 identified broader length/distance symbols and greater package-merge and lookup work. No mask search, insertion/search/H tuning, new distance admission, encoder modification or combination.",
+  "reference_differences": "Starts from exact I Rust5c20b99c, with no matcher source replacement. Sparse emitter and mask are already present in the inherited public595/combo source.",
+  "attribution": {
+    "source": "references/round21-public-595/source-receipt.json",
+    "mechanism_reference": "references/round18-public-584/source-receipt.json",
+    "evidence": "evidence/round25/luna/tiny-alternatives.json"
+  },
+  "proof_status": "ACTUAL_M_EXTRACTION_ADAPTED_DRAFT_UNCOMPILED",
+  "performance_status": "PENDING_ROOT_SCREEN_M",
+  "formal_submission_sent": false,
+  "proof_parent": "r25-astra-tiny-pc8-proof1",
+  "proof_parent_gate": "38130996700",
+  "native_encoder_status": "SAME_RUST_VERIFIED_RUN_38132623194",
+  "causal_cost_claim": "UNKNOWN: K2 logical work counts are not elapsed-time attribution; new original-encoder bytes and separate original-protocol timings are required.",
+  "risks": [
+    "Short matches below the minimum allowed length become literals.",
+    "Greedy allowed pieces can increase tokens and literal remainder.",
+    "Existing fold reads a changed historical token stream, though its full-span end invariant is retained.",
+    "Distance symbols are not directly restricted; reducing the LL alphabet may not recover the full encoder cost."
+  ],
+  "experiment_predeclaration": "evidence/round25/astra/tiny-sparse-design.md",
+  "diagnostic_evidence": "evidence/round25/38132193695/counts-k2-native/diagnostics/r25-tiny-encoder/receipt.json",
+  "proof_change": "Add PC-local full-end/Dec wrapper around the already proved Q4 sparse emitter; main loop carries immutable bounded lens after km; run initializes LensBound. All old record/lazy/tail definitions and proofs remain unchanged. Original options and final obligation tail retained.",
+  "proof_evidence": "evidence/round25/astra/tiny-sparse-proof-build-audit.json"
+}

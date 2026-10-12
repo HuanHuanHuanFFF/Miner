@@ -1,0 +1,19 @@
+{
+  "candidate": "r25-astra-tiny-tail",
+  "parent": "r22-595-chain-halfhead",
+  "hashes": {
+    "parse.rs": "283ed7bacc4df6c3bfc5c624b19412e1cd05073c89d38ed809a6aecdee917c4a",
+    "Parse.lean": "4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6"
+  },
+  "mechanism": "Repair a final shorter-than-minimum literal tail by reducing the previous greedy piece and adding a second existing allowed length at the same validated distance. Original pc_gain screens the added token cost; actual original encoder bytes decide quality. et_cover and et_pieces use the same selector.",
+  "difference_from_old_work": "No matchfinder, search-depth, mask or distance-admission threshold change. Existing q4_e_piece greedily takes the largest allowed length, whereas older TF planners had a more expensive two-piece search. This is a bounded constant-work transfer of remainder repair into current et_tiny, not R24 DNA cost40 or generic gap rescue.",
+  "attribution": {
+    "source": "references/round21-public-595/source-receipt.json",
+    "inherited_helper": "Original q4_e_piece, pc_gain and all byte-validation/emission machinery retained.",
+    "prior_mechanism": "candidates/probe3/parse.rs tf_piece0 had general two-kept-length search; current helper uses at most two extra table reads and three gain calls only at a stranded tail."
+  },
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "proof_migration": "New et_piece_tail range/decrease lemma. et_cover/et_pieces/et_emit and extracted loop captures gain minl/d parameters. Preserve original Matches/Dec and trusted emit; finite split model is not the full obligation.",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}

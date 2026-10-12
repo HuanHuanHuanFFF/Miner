@@ -1,0 +1,20 @@
+{
+  "candidate": "r25-astra-dual8-mainonly",
+  "parent": "r25-astra-dual8",
+  "hashes": {
+    "parse.rs": "b2add3ed3772713e2dfc9c46ff6af493f83d1c4974008cbd665676dcaeb12eb0",
+    "Parse.lean": "4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6"
+  },
+  "mechanism": "Delete only the independent8-byte hash/store in r25_d8_link, retaining the four-byte head store at every original record position. Main8-byte table reads/writes and all original probes remain. Only rows1/6 inherit this existingdual8 engine; otherroutes unchanged.",
+  "difference_from_old_work": "This is an explicit endpoint ablation motivated by measured source provenance, not a maintenance-density sweep. F found record updates account for61.446% of oldhash calls yet supply53017 actual accepted hints and459087 localextra-length bytes. The experiment deliberately risks that quality to measure the real cost/quality endpoint.",
+  "attribution": {
+    "source": "references/round21-public-595/source-receipt.json",
+    "code_parent": "candidates/r25-astra-dual8/manifest.json",
+    "original_headers": "Unmodified parent headers retained."
+  },
+  "coverage_risk": "Record-sourced useful hints can disappear, and older main hints become visible; future matches, insertions and encoder blocks change. Source-count fractions are not predicted retained-byte fractions. Primary>=8 may now have an older viable long hint, so no such domain is pruned.",
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "proof_migration": "Parentdual8 proof itself is uncompiled; fresh extraction may change recordloop captures because long is no longer mutated there. Match validators remain byte-identical. No oldgate inherited.",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}

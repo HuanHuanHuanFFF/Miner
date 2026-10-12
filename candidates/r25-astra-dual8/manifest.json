@@ -1,0 +1,27 @@
+{
+  "candidate": "r25-astra-dual8",
+  "parent": "r22-595-chain-halfhead",
+  "hashes": {
+    "parse.rs": "4bfe5d2973ed553922eca1d451912bda5d8ad2d6f16c0ccb83419c5086f20f88",
+    "Parse.lean": "4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6"
+  },
+  "mechanism": "For four-byte PC rows1/6, replace the32768-entry predecessor ring by an independently indexed32768-entry eight-byte latest-position head. Preserve the32768 short head, original insertion positions, skip, lazy0 and fold/emission. Compare at most the short head and one fully byte-validated >=8-byte long hint; all three-byte row0 paths retain the original chain.",
+  "difference_from_old_work": "R13 pair64 retained exactly the latest two positions of one short key and tested physical layout. R10 hash5 added a cache outside existing deep4/7-byte chains and paid extra storage/updates. Here the same second-table budget retains a different prefix neighborhood instead of a predecessor; no array or depth is added. Old R3 dense385 used a whole dual-hash engine on all inputs with different routing/insertion; this is a fixed retention change in current595 four-byte PC routes.",
+  "attribution": {
+    "source": "references/round21-public-595/source-receipt.json",
+    "code_parent": "candidates/r22-595-chain-halfhead",
+    "idea_reference": "references/round3-public-385/parse.rs o_a_hashp/o_a_hashl and paired-table maintenance; concept only, no385 code copied into this new helper implementation.",
+    "original_headers": "Retained byte-identically."
+  },
+  "table_bytes_per_changed_route": {
+    "parent_short_head": 131072,
+    "parent_predecessor": 131072,
+    "new_short_head": 131072,
+    "new_long_head": 131072
+  },
+  "coverage_risk": "Loses the old immediate predecessor when that candidate is not retained by the long hash. Original deeper4..7-byte opportunities may be lost; far long-head match can cost more, and different subsequent parse states make quality nonmonotone.",
+  "proof_status": "DRAFT_UNCOMPILED_FOR_NEW_EXACT_PAIR",
+  "proof_migration": "New slot/link/probe and cloned run1/record loops require actual extraction. Probe guards c8<c<=p/window and tests all8 bytes before pc_xlen16. Existing FoundAt/Matches/HeadBound/Dec proofs are reusable; long-head contents can be treated as untrusted hints. New source never inherits parent gate.",
+  "performance_status": "UNKNOWN",
+  "formal_submission_sent": false
+}

@@ -1,0 +1,29 @@
+{
+  "candidate": "r25-sol-end4-wordtail",
+  "parent": "r25-astra-end4",
+  "parent_hashes": {
+    "parse.rs": "03ec0aa4e617d622755e85324a9d4fbc77ef74e6572485b3170e2790681ed8e6",
+    "Parse.lean": "4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6"
+  },
+  "hashes": {
+    "parse.rs": "3bafdc0ce0155e545a542392336c4700f94cc642696b76d2208b81c71e638c5f",
+    "Parse.lean": "4ff09d168269ae8d9c93e602496b01078d2d0ec80f27d6cd16041d91a76c70a6"
+  },
+  "mechanism": "On the existing eligible end4 insertion, read one local big-endian8 word. Derive end4 key with >>32 and end1 key with >>8, using the identical masked multiply/shift/mod hash. Preserve both original link operations in end4-before-end1 order and every existing insertion guard. Reuse a bounded cached tail slot only in TAIL=1; all other paths retain the original slot load.",
+  "difference_from_old_work": "The end4 parent introduces a new adjacent pair of4-byte insertion keys at offset3. This shares their one local overlapping byte load, without persistent main-loop word state, changed search, removed updates, compact tables or match-prefix cache maintenance. R12 wordhead carried a word across hash/probe iterations and regressed; R13 matched-ahead skipped a different load and regressed; R24 prefix/range caches added different maintenance work. Those negative results remain retained.",
+  "attribution": {
+    "parent": "candidates/r25-astra-end4/manifest.json",
+    "original_source": "references/round21-public-595/source-receipt.json",
+    "ownership": "Public595 matcher and original headers retained; end4 mechanism inherited from Astra's R25 candidate. This Sol derivative changes local input-word reuse only."
+  },
+  "semantic_status": "INFERRED token/byte equality with exact end4. Native28-file token/original-encoder/decode parity is required; finite key/index models are not a Rust equivalence certificate.",
+  "proof_status": "DRAFT_PARENT_LEAN_COPIED_UNADAPTED_FOR_WORD_HASH_HELPER",
+  "proof_migration": "New r25_pc_slot_word needs only0<H and returns slot<H. Actual pc_f_record3 extraction must check the local tail_a cached slot/sentinel branch. No main-loop state, source obligation, table type or recording loop changes intended; original fresh gate required.",
+  "performance_status": "UNKNOWN; fewer source loads do not establish CPU or total-time improvement",
+  "comparison_baseline": "end4",
+  "native_decode_reference": "end4",
+  "expected_equivalent_to": "end4",
+  "formal_submission_sent": false,
+  "source_reversal": "Remove one word-hash helper and reverse the isolated record3 body replacement to recover exact end4 Rust bytes. Lean is an exact parent copy.",
+  "stop_condition": "Any actual token/encoder/decode mismatch stops or diagnoses this exact implementation. Only preserved end4 quality and useful original paired total time can justify new proof migration or confirmation. Leaf code size, counters and instruction count never substitute for total-time evidence."
+}
