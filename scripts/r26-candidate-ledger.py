@@ -20,7 +20,8 @@ def main():
     analysis = json.loads(a.analysis.read_bytes())
     by_rust = {x['rust_sha256']: x for x in analysis['candidates']}
     quality = {}; sources = {}; used = {str(a.analysis): sha(a.analysis)}
-    for path in sorted(BASE.glob('quality-*-summary.json')):
+    quality_receipts = set(BASE.glob('quality-*-summary.json')) | set(BASE.glob('*-native-quality.json'))
+    for path in sorted(quality_receipts):
         value = json.loads(path.read_bytes())
         if value.get('status') != 'VERIFIED_ORIGINAL_ENCODER_BYTES_ONLY': continue
         used[str(path.relative_to(ROOT))] = sha(path)
