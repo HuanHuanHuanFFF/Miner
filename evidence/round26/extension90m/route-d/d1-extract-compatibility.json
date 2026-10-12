@@ -1,0 +1,24 @@
+{
+  "status": "VERIFIED_SIGNATURE_AND_LOOP_SHAPE_REVIEW_ONLY",
+  "utc": "2026-10-12T15:21:02.308897+00:00",
+  "actual_Funs": "evidence/round26/38267276245/screen90-d1/gate/research5/r26-d-658-selective-depth/Funs.lean",
+  "actual_Funs_sha256": "ce1166c704521082004182c00f28b0b1d88ce3951db9dc70675de5d9d87f7741",
+  "proof1_sha256": "66e8a6acc45d4eb35501d9811525a8f1e397cad956b9c7424b4e3e7d950c69a1",
+  "headers": {
+    "d1_continue": "def d1_continue\n  {W : Std.Usize} (s : Slice Std.U8) (prev : Array Std.U32 W) (p : Std.Usize)\n  (st : Std.Usize) (l : Std.Usize) (d : Std.Usize) (minl : Std.Usize)\n  (depth : Std.Usize) (nice : Std.Usize) (hlit : Std.I32) :\n  Result (Std.Usize × Std.Usize)\n  := do",
+    "d1_current": "def d1_current\n  {H : Std.Usize} {W : Std.Usize} (s : Slice Std.U8) (head : Array Std.U32 H)\n  (prev : Array Std.U32 W) (p : Std.Usize) (st : Std.Usize) (mask : Std.U32)\n  (minl : Std.Usize) (depth : Std.Usize) (lazy : Std.Usize) (nice : Std.Usize)\n  (hlit : Std.I32) (mode : Std.Usize) :\n  Result (Std.Usize × Std.Usize)\n  := do",
+    "d1_lazy": "def d1_lazy\n  {W : Std.Usize} (s : Slice Std.U8) (prev : Array Std.U32 W) (q : Std.Usize)\n  (st : Std.Usize) («have» : Std.Usize) (minl : Std.Usize) (ldep : Std.Usize)\n  (nice : Std.Usize) (hlit : Std.I32) (l : Std.Usize) (d : Std.Usize)\n  (lazy : Std.Usize) (mode : Std.Usize) :\n  Result (Std.Usize × Std.Usize)\n  := do",
+    "u118_run_loop0_loop1": "def u118_run_loop0_loop1\n  {H : Std.Usize} {W : Std.Usize} (L2 : Std.Usize) (input : Slice Std.U8)\n  (out : Slice Std.U32) (n : Std.Usize) (nt : Std.Usize) (p : Std.Usize)\n  (mask : Std.U32) (minl : Std.Usize) (lazy : Std.Usize) (nice : Std.Usize)\n  (ldep : Std.Usize) (hlit : Std.I32) (head : Array Std.U32 H)\n  (prev : Array Std.U32 W) (lim : Std.Usize) (ins : Std.Usize) (l : Std.Usize)\n  (d : Std.Usize) (go : Std.U32) :\n  Result ((Slice Std.U32) × Std.Usize × Std.Usize × (Array Std.U32 H) ×\n    (Array Std.U32 W) × Std.Usize × Std.Usize × Std.Usize)\n  := do",
+    "u118_run_loop0": "def u118_run_loop0\n  {H : Std.Usize} {W : Std.Usize} (L2 : Std.Usize) (input : Slice Std.U8)\n  (out : Slice Std.U32) (n : Std.Usize) (nt : Std.Usize) (p : Std.Usize)\n  (mask : Std.U32) (minl : Std.Usize) (depth : Std.Usize) (lazy : Std.Usize)\n  (skip : Std.Usize) (skcap : Std.Usize) (nice : Std.Usize) (ldep : Std.Usize)\n  (insm : Std.Usize) (stride : Std.Usize) (hlit : Std.I32)\n  (head : Array Std.U32 H) (prev : Array Std.U32 W) (lim : Std.Usize)\n  (ins : Std.Usize) (miss : Std.Usize) (fuel : Std.Usize) :\n  Result ((Slice Std.U32) × Std.Usize × Std.Usize)\n  := do"
+  },
+  "review": [
+    "All three D1 helper argument orders and result pairs match proof1 declarations.",
+    "u118_run main andlazy still carry original tuples; helper changes didnot add loop state.",
+    "No added D1 loop definitions exist; helper continuations call original u118_find/walk.",
+    "Tactic elaboration, local attribute handling, arithmetic discharge and original obligation acceptance remain untested.",
+    "D2 changes current return toUsize*Usize*U32 and appendsbudgetU32 tolazy; its actual extraction muststillbechecked."
+  ],
+  "Lean_compilation": "NOT_RUN",
+  "original_gate": "NOT_RUN",
+  "decision": "Do not prioritize D1 gate after negative real screen; retain proof1 as uncompiled interface-compatible draft."
+}
