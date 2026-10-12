@@ -40,7 +40,7 @@ def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('batch');ap.add_argument('--ref',default='codex/round26-stable-pair')
     ap.add_argument('--max-minutes',type=int,default=45)
-    ap.add_argument('--budget', choices=['original', 'extension4h', 'extension1h'], default='original')
+    ap.add_argument('--budget', choices=['original', 'extension4h', 'extension1h', 'extension90m'], default='original')
     args=ap.parse_args()
     budget_path='evidence/round26/budget.json' if args.budget=='original' else f'evidence/round26/{args.budget}/budget.json'
     budget=json.loads((ROOT/budget_path).read_bytes())
