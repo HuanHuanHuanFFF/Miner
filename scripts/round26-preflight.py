@@ -74,7 +74,9 @@ def main():
         importlib.import_module(module).preflight(spec)
     if spec.get('r26_b_a_compiler_counts'):
         assert mode == 'native' and spec.get('native_encoder') is False and all(e.get('control') for e in spec['entries'])
-        importlib.import_module('r26-b-a-compiler-diagnostic').preflight(spec)
+        module=spec.get('r26_b_a_compiler_module', 'r26-b-a-compiler-diagnostic')
+        assert module in ('r26-b-a-compiler-diagnostic', 'r26-b-a-checked-lowering')
+        importlib.import_module(module).preflight(spec)
     if spec.get('r26_a_lazy_chain_counts'):
         assert mode == 'native' and spec.get('native_encoder') is True and not spec.get('r18_function_profile')
         importlib.import_module('r26-a-lazy-chain-counts').preflight(spec)

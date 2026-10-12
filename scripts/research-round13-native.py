@@ -43,7 +43,9 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts'/(module+'.py'))],check=True)
         return
     if spec.get('r26_b_a_compiler_counts'):
-        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-compiler-diagnostic.py')],check=True)
+        module=spec.get('r26_b_a_compiler_module', 'r26-b-a-compiler-diagnostic')
+        assert module in ('r26-b-a-compiler-diagnostic', 'r26-b-a-checked-lowering')
+        subprocess.run([sys.executable,str(ROOT/'scripts'/(module+'.py'))],check=True)
         return
     if spec.get('r26_a_distance12_observer_only'):
         subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-distance12-counts.py')],check=True)
