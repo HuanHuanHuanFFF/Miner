@@ -46,7 +46,10 @@ def main():
             if (p.parent / name).is_file():
                 verify(p.parent, name, {})
     capture_receipts = []
-    for p in sorted(BASE.glob('official-*/receipt.json')):
+    official_receipts = list(BASE.glob('official-*/receipt.json'))
+    official_receipts += list(BASE.glob('extension4h/official-*/receipt.json'))
+    official_receipts += list(BASE.glob('extension4h/rules-*/receipt.json'))
+    for p in sorted(official_receipts):
         receipt = json.loads(p.read_bytes())
         entries = receipt.get('raw_response_files', receipt.get('files', []))
         if isinstance(entries, dict):
@@ -66,7 +69,8 @@ def main():
         verify(p.parent, p.name, {})
         capture_receipts.append({'path': p.relative_to(ROOT).as_posix(),
                                  'sha256': digest(p), 'checked_files': n})
-    for p in sorted(BASE.glob('public-*/receipt.json')):
+    public_receipts = list(BASE.glob('public-*/receipt.json')) + list(BASE.glob('extension4h/public-*/receipt.json'))
+    for p in sorted(public_receipts):
         records = json.loads(p.read_bytes())
         for record in records:
             if 'sha256' not in record:
@@ -122,6 +126,8 @@ def main():
         runs[-1]['runner_time_scope'] = 'Sum completed non-skipped job wall time; not billing or model cost'
         verify(p.parent, p.name, {})
         verify(cp.parent, cp.name, {})
+        if dispatch.get('budget_path'):
+            verify(ROOT, dispatch['budget_path'], {'sha256': dispatch['budget_sha256']})
     assert len(runs) == len(ci_by_id)
     package_file = BASE / 'review-packages/packages.json'
     packages = {'packages': []}
