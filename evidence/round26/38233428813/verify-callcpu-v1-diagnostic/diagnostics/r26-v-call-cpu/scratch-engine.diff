@@ -1,0 +1,121 @@
+--- original/src/method.rs
++++ scratch/src/method.rs
+@@ -81,9 +81,11 @@
+     pub fn run_once(&self, input: &[u8], toks: &mut [u32], retain_output: bool) -> Once {
+         match &self.kind {
+             Kind::Slot(p) => {
++                let cpu_parse_before = crate::callcpu::before();
+                 let t0 = Instant::now();
+                 let n = p.parse(input, toks);
+                 let parse_s = t0.elapsed().as_secs_f64();
++                crate::callcpu::after(cpu_parse_before, "parser", parse_s);
+                 if n == PANICKED {
+                     return Once::failed(parse_s, "parse panicked".to_string());
+                 }
+@@ -93,9 +95,11 @@
+                         format!("parse reported {n} tokens into a buffer of {}", toks.len()),
+                     );
+                 }
++                let cpu_encode_before = crate::callcpu::before();
+                 let t1 = Instant::now();
+                 let encoded = std::hint::black_box(deflate::encode(&toks[..n], input.len()));
+                 let encode_s = Some(t1.elapsed().as_secs_f64());
++                crate::callcpu::after(cpu_encode_before, "encoder", encode_s.unwrap());
+                 let compressed = match encoded {
+                     Ok(v) => retain_output.then_some(v),
+                     Err(e) => return Once::failed(parse_s, format!("encode: {e}")),
+--- original/src/main.rs
++++ scratch/src/main.rs
+@@ -13,6 +13,7 @@
+ //! as each file finishes. Progress and errors go to stderr. The exit code says
+ //! whether the measurement ran, never whether a candidate passed.
+ 
++mod callcpu;
+ mod deflate;
+ mod loader;
+ mod method;
+@@ -189,14 +190,16 @@
+     let mut toks = vec![0u32; input.len()];
+     let mut built: BTreeMap<String, MethodOut> = BTreeMap::new();
+ 
++    let cpu_file = crate::callcpu::file_index(&name);
+     for round in 0..(warmup + reps) {
+         let phase = if round < warmup { "warmup" } else { "measured" };
+-        for m in methods {
++        for (cpu_method, m) in methods.iter().enumerate() {
+             let first = !built.contains_key(&m.name);
+             if !first && !built[&m.name].errors.is_empty() {
+                 continue;
+             }
+             toks.fill(0);
++            crate::callcpu::context(cpu_file, cpu_method, round, phase, *order + 1);
+             let once = m.run_once(&input, &mut toks, first);
+             *order += 1;
+ 
+@@ -281,6 +284,8 @@
+         methods.push(Method::external("libdeflate-12", Kind::LibDeflate));
+     }
+ 
++    crate::callcpu::init(files.iter().map(|f| f.file_name().unwrap().to_string_lossy().to_string()).collect(),
++        methods.iter().map(|m| m.name.clone()).collect(), files.len() * (args.warmup + args.reps) * methods.len() * 2);
+     let meta = Meta {
+         kind: "meta",
+         schema_version: SCHEMA_VERSION,
+@@ -321,6 +326,7 @@
+         )
+         .map_err(|e| format!("writing results: {e}"))?;
+     }
++    crate::callcpu::flush();
+     Ok(())
+ }
+ 
+--- /dev/null
++++ scratch/src/callcpu.rs
+@@ -0,0 +1,47 @@
++use serde::Serialize;
++use std::cell::RefCell;
++use std::time::Instant;
++extern "C" { fn sched_getcpu() -> std::os::raw::c_int; }
++#[derive(Clone, Copy, Serialize)]
++struct Context { file: usize, method: usize, round: usize, phase: &'static str, order_index: u64 }
++#[derive(Serialize)]
++struct Event { context: Context, stage: &'static str, cpu_before: i32, cpu_after: i32,
++    cpu_endpoint_changed: Option<bool>, before_mono_ns: u64, after_mono_ns: u64, original_elapsed_s: f64 }
++#[derive(Serialize)]
++struct Trace { status: &'static str, files: Vec<String>, methods: Vec<String>, capacity: usize,
++    #[serde(skip)] origin: Instant, #[serde(skip)] context: Context, events: Vec<Event> }
++thread_local! { static TRACE: RefCell<Option<Trace>> = RefCell::new(None); }
++pub struct Stamp { cpu: i32, mono_ns: u64 }
++pub fn init(files: Vec<String>, methods: Vec<String>, capacity: usize) {
++    TRACE.with(|t| *t.borrow_mut() = Some(Trace { status: "measurement_verification", files, methods,
++        capacity, origin: Instant::now(), context: Context { file: 0, method: 0, round: 0,
++        phase: "unset", order_index: 0 }, events: Vec::with_capacity(capacity) }));
++}
++pub fn file_index(name: &str) -> usize {
++    TRACE.with(|t| t.borrow().as_ref().unwrap().files.iter().position(|f| f == name).unwrap())
++}
++pub fn context(file: usize, method: usize, round: usize, phase: &'static str, order_index: u64) {
++    TRACE.with(|t| t.borrow_mut().as_mut().unwrap().context = Context { file, method, round, phase, order_index });
++}
++pub fn before() -> Stamp {
++    let cpu = unsafe { sched_getcpu() };
++    let mono_ns = TRACE.with(|t| t.borrow().as_ref().unwrap().origin.elapsed().as_nanos() as u64);
++    Stamp { cpu, mono_ns }
++}
++pub fn after(before: Stamp, stage: &'static str, original_elapsed_s: f64) {
++    let cpu_after = unsafe { sched_getcpu() };
++    TRACE.with(|t| { let mut state = t.borrow_mut(); let trace = state.as_mut().unwrap();
++        let after_mono_ns = trace.origin.elapsed().as_nanos() as u64;
++        assert!(trace.events.len() < trace.capacity);
++        assert!(trace.events.capacity() >= trace.capacity);
++        trace.events.push(Event { context: trace.context, stage, cpu_before: before.cpu, cpu_after,
++            cpu_endpoint_changed: if before.cpu >= 0 && cpu_after >= 0 { Some(before.cpu != cpu_after) } else { None },
++            before_mono_ns: before.mono_ns, after_mono_ns, original_elapsed_s });
++    });
++}
++pub fn flush() {
++    TRACE.with(|t| { let state = t.borrow(); let trace = state.as_ref().unwrap();
++        assert_eq!(trace.events.len(), trace.capacity);
++        eprintln!("R26_CALL_CPU_DIAGNOSTIC {}", serde_json::to_string(trace).unwrap());
++    });
++}

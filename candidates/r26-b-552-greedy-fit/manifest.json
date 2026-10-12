@@ -1,0 +1,41 @@
+{
+  "candidate": "r26-b-552-greedy-fit",
+  "parent": "references/round24-public-552",
+  "formal_parent_id": "552",
+  "parent_hashes": {
+    "parse.rs": "5adaaeac471b86128778bf6b67f786542f5c8e079adbf1160f0502309f7befb9",
+    "Parse.lean": "51b5ea83cbad026c044b5c7812c9189231f5273cc0902342c850af02a1c0b592"
+  },
+  "hashes": {
+    "parse.rs": "d483514a06a7a614aa1e8ffe15120eddb3b03e2b6ef56c4763bb8a2b26ef08b5",
+    "Parse.lean": "51b5ea83cbad026c044b5c7812c9189231f5273cc0902342c850af02a1c0b592"
+  },
+  "bytes": {
+    "parse.rs": 271625,
+    "Parse.lean": 465766
+  },
+  "attribution": {
+    "source": "Original public552 source and original author attribution retained verbatim outside A engine; reference provenance remains at parent.",
+    "original_cache_and_final_dp": [
+      "a_find_all",
+      "a_dp_pass",
+      "a_walk",
+      "a_set_costs_huff",
+      "a_set_costs",
+      "emit_pos"
+    ]
+  },
+  "mechanism": "Fresh per-block greedy longest-match histogram over complete unchanged A cache replaces sampled DP and entropy full-fit iterations. Original smoothed-Huffman cost constructor then original full A DP; actual final counts retain complete encoder-block bl/bd context and next-block model.",
+  "scope": "Only a_engine body and one statistical helper. All routes/tables/other engines/matcher/final DP/emitter retain exact bytes. Token/quality changes expected.",
+  "guard_cost": "New token-start cache scan, fresh512/32hist initialization, one cost fit per block and original final DP/walk; no claimed free statistic or 11percent time gain.",
+  "source_reversal": "Remove exact appended helper and restore original a_engine function to recover pinned source bytes.",
+  "proof_status": "UNADAPTED_PARENT_DRAFT; fresh extraction/new helper and A loop proof/full original gate NOT_RUN",
+  "performance_status": "NOT_RUN: native original encoder quality and coarse complete work checkpoint first; no paired total gain yet",
+  "formal_status": "NOT_SUBMITTED; admission/private metrics/payment UNKNOWN",
+  "negative_predecessors": [
+    "evidence/round18/model-aa-native-decision.json",
+    "evidence/round18/shared-aj-decision.json",
+    "evidence/round18/repeat-e-decision.json"
+  ],
+  "predeclared": "evidence/round26/route-b/greedy-b10-predeclared.md"
+}

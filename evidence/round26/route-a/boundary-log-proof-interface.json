@@ -1,0 +1,45 @@
+{
+  "status": "VERIFIED_EARLY_PROOF_INTERFACE_AUDIT_NOT_FORMAL_BUILD",
+  "source": "references/round26-public-641/Parse.lean",
+  "lean_sha256": "7a30722b3a337918422e3af277bf33f48073594483b9df7a7ae3c43cbf81412e",
+  "source_bytes": 487015,
+  "remaining_bytes_under_524288": 37273,
+  "candidate": "candidates/r26-a-641-boundary-log",
+  "existing_reusable_interfaces": [
+    {
+      "namespace": "PC",
+      "names": [
+        "Dec",
+        "Dec.pop_match",
+        "Dec.match",
+        "MatchAt"
+      ],
+      "purpose": "Decoded prefix, remove/reemit previous match under exact token bounds."
+    },
+    {
+      "namespace": "DSLIM.U118_MAIN",
+      "names": [
+        "MatchAt.back_part",
+        "Matches.back_step",
+        "part_post",
+        "part_merge_spec"
+      ],
+      "purpose": "Existing mathematical suffix-transfer skeleton. Definitions from this namespace must be bridged toPC, not assumed identical by name."
+    }
+  ],
+  "new_lemmas_required": [
+    "Legal token length/distance arithmetic after subtracting shift from previous token and adding it to current; no low-byte carry and both lengths remain3..258.",
+    "Extract current token validity and its matched bytes from whole-stream validity plus decoded-prefix position.",
+    "Shortening the previous valid match preserves its prefix; checked backwards bytes extend the current match at unchanged distance.",
+    "Two adjacent rewritten tokens decode the same combined span; the unmodified later token suffix therefore remains valid.",
+    "Histogram/price loops total and bounded; their optimization claims are irrelevant to correctness.",
+    "Outer16384token block and innerpair scan maintain cumulative byteposition using pre-change currentlength, same token count, fulloutlength, and changed-prefix/untouched-suffix relation."
+  ],
+  "critical_position_invariant": "At iterationi, p is the decoded length of the current prefixi before its pair rewrite. After movingk bytes left, prefixi has lengthp-k, but prefixi+1 has lengthp+old_current_length. Therefore p must advance by the captured oldtoken length, not the rewritten currentlength. Python model checks this; no Lean lemma yet.",
+  "extraction_pending": [
+    "Real helper loop capture order",
+    "Mutatedout borrow return tuple shape",
+    "Whether compiler extracts additional helper loops for short-circuit branches"
+  ],
+  "state": "No new Lean source written; original proof copy is unadapted. Require actual Rust performance/quality signal before expensive proof and original complete gate."
+}

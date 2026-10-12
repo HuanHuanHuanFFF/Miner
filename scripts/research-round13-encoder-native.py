@@ -33,6 +33,11 @@ def main():
         assert text.count(needle)==1
         text=text.replace(needle,f'println!("CONTENT_CLASS {{}} {{}} {{}}",name,source{index}::classify(&s),source{index}::route_class(&s));'+needle)
     source=build/'encoder.rs';source.write_text(text);binary=build/'encoder'
+    progress={'run_id':os.environ['GITHUB_RUN_ID'],'git_sha':os.environ['GITHUB_SHA'],
+              'batch':os.environ['ROUND4_SPEC'],'status':'NATIVE_COMPILE_STARTED',
+              'source_hashes':{e['name']:e['hashes']for e in entries},'harness_sha256':sha(text.encode()),
+              'scope':'Execution identity only; not a successful encoding, performance or correctness result.'}
+    (out/'execution-progress.json').write_text(json.dumps(progress,indent=2)+'\n')
     c=subprocess.run(['rustc','+nightly-2026-08-18','--edition=2021','-O','-C','overflow-checks=yes',str(source),'-o',str(binary)],capture_output=True,text=True,timeout=180);(out/'compile.log').write_text(c.stdout+c.stderr);assert c.returncode==0
     corpus=upstream/'data/benchmark/corpus-stage1';r=subprocess.run([str(binary),str(corpus),str(spool)],capture_output=True,text=True,timeout=240);(out/'run.log').write_text(r.stdout+r.stderr);assert r.returncode==0
     fixture=ROOT/'evidence/round13/37845275650/ef32-short-e/gate/round1-public514.jsonl';raw_fixture=[json.loads(v)for v in fixture.read_text().splitlines()];assert raw_fixture[0]['methods']['public514']['source_sha256']==by['public514']['hashes']['parse.rs'];expected={r['file']:r for r in raw_fixture if r['kind']=='file'}

@@ -1,0 +1,30 @@
+{
+  "candidate": "r26-b-552-dense-forward",
+  "parent": "references/round24-public-552",
+  "formal_parent_id": "552",
+  "parent_hashes": {
+    "parse.rs": "5adaaeac471b86128778bf6b67f786542f5c8e079adbf1160f0502309f7befb9",
+    "Parse.lean": "51b5ea83cbad026c044b5c7812c9189231f5273cc0902342c850af02a1c0b592"
+  },
+  "hashes": {
+    "parse.rs": "01bc288459303be392ed19f026443835a8c69aec5fa525eec40316aa4bd7beca",
+    "Parse.lean": "51b5ea83cbad026c044b5c7812c9189231f5273cc0902342c850af02a1c0b592"
+  },
+  "bytes": {
+    "parse.rs": 271081,
+    "Parse.lean": 465766
+  },
+  "source_author_hotkey": "5FnYJUitGUNdNyWAB7YnjoYoacLsd7TKxeAND4eYyiFVBP8q",
+  "source_receipt": "references/round24-public-552/source-receipt.json",
+  "source_receipt_sha256": "5cdf8485abfba4e9f2213d86119d2eb8ab9f4f747bfab11a587f7d83f9f18657",
+  "mechanism": "D forward nextl becomes l+1 for all table entries: each existing candidate-provided lo..hi interval visits every length, rather than sparse code endpoints above flen8/16. This intentionally expands the graph and may change paths/prices/statistics/encoder quality.",
+  "scope": "Only d_fill_nextl body. No new matcher/candidate/search/record format, no array/ring/chunk/price rule/route/budget/secondDP/encoder changes. Original fback/backward-endpoint logic and directskip paths retained.",
+  "bounds": "Recovered l in original lo..hi with3<=l<=hi<=258, prefix of a byte-matched forward candidate or its original byte-checked backward extension at the same distance. fback100 truncated ranges also use nextl and become dense, while their full-endpoint relax_one stays unchanged. nextl[l]=l+1 progresses; lc modulo512, arrival modulo8192; livewindow258/CHUNK4096 reset rules unchanged.",
+  "cost": "All added per-length ring comparisons/stores paid. OldB8 6.62M omitted terms is prior-trajectory workload context, not actualcandidate count, speed bound or output prediction. ActualfullD profile first.",
+  "history": "R10routecfg explicitly retainedflen16/notfullreconstruction; R7seed1 endpoint frontend losesquality vsblock1 full frontend and totalcost tradeoff. No reuse claim of their measuredgain. Long-domain event proposal remainsNO_GO.",
+  "quality_status": "UNKNOWN_UNTIL_ORIGINAL28ENCODER; expectedtokens differ, notequivalent optimization",
+  "proof_status": "UNADAPTED_PARENT_DRAFT; DpNextl strictlyincreasing invariant still targeted, actualextractedloop signature/fullgate pending ifvaluable",
+  "performance_status": "NOT_RUN; nativepureDphase costs first, no originalpaired performance",
+  "formal_status": "NOT_SUBMITTED; formal/private/reward UNKNOWN",
+  "source_reversal": "Restore one functionbody -> byte-exact pinned552, checked locally."
+}

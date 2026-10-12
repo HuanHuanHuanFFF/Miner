@@ -1,0 +1,31 @@
+{
+  "candidate": "r26-c-658-greedy-once-proof2",
+  "parent": "references/round26-public-658",
+  "hashes": {
+    "parse.rs": "ae4602290cc2a0253703ab6e6ac0d2fe098e84429cc4d56314ac9326abbf0f88",
+    "Parse.lean": "1182e84949bf7e1003af878ff9253ea39d9238147c9e138c374610f104cf53c1"
+  },
+  "attribution": {
+    "source_receipt": "references/round26-public-658/source-receipt.json",
+    "author_hotkey": "5G3YLL7PuDhRBoVoDBYKhAfTxFM4EouSDiYuFXeeWciNRzyK"
+  },
+  "mechanism": "Remove the entire O_A lazy selection stage: find returns originalscan result directly. Baseeval checks only originalfirstsourceword, with hintlength<=8. Localtrusted emitter validates distance/range and computes exact fullmatch using originalmatch_len once under originalmin258,n-pos-8 cap before emission.",
+  "difference": "C3 preservedlazy and removed only rarelongsuffixes. C4 changes the parse strategy to greedy and pays realqualityloss while removing allbase extension and lazy eval2/eval3 work. Not a cap sweep, no same-token assumption. PC,N70,sharedoriginalemitter,replay,hashes,recordpolicy and routes remain original.",
+  "proof_status": "UNCOMPILED_ORIGINAL_GATE_NOT_RUN",
+  "quality_performance": "UNKNOWN untiloriginalencoder andoriginalprotocol. PublicO_Aparser priorstageweight about1.55% oftotalaxis is a historical localparser scenario, not a whole-program upperbound because changedtokens affectencoder. Usequality andscenario geometry toallocateone actualtime experiment.",
+  "formal_submission_sent": false,
+  "implementation_parent": "candidates/r26-c-658-greedy-once-proof1",
+  "draft_origin": "evidence/round26/extension1h/audit/C4-Parse-draft.lean",
+  "performance_status": "One original discovery runner,main0inbothcalibrations at29919; copy/shadowonly0.0264193%,samebinarydisagreement; no independent confirmation",
+  "implementation_parent_hashes": {
+    "parse.rs": "ae4602290cc2a0253703ab6e6ac0d2fe098e84429cc4d56314ac9326abbf0f88",
+    "Parse.lean": "11426ab441c65b37949eff9de9840310d9192fd797870433d90d5e06463fb105"
+  },
+  "proof_origin": {
+    "path": "evidence/round26/extension1h/audit/C4-Parse-proof2-UNCOMPILED.lean",
+    "sha256": "1182e84949bf7e1003af878ff9253ea39d9238147c9e138c374610f104cf53c1"
+  },
+  "proof_adaptation": "Exact bytes of prior UNCOMPILED proof2 draft, addressing observed cap if/bind failure. No claim about later casts/writer/fallback or original full gate acceptance.",
+  "proof_static_scope": "Byte-preserving Rust copy, complete parent proof with local adaptations, no sorry/admit/new axiom; static checks are not Lean acceptance.",
+  "proof_freeze_time_utc": "2026-10-12T14:59:42.100402+00:00"
+}

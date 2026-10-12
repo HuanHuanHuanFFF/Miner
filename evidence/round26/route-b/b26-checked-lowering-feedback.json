@@ -1,0 +1,92 @@
+{
+  "status": "VERIFIED_TWO_ORIGINAL_CHECKED_A_REDUCTIONS_ALREADY_VECTORIZE",
+  "computed_utc": "2026-10-12T07:42:16.923420+00:00",
+  "run_id": "38218734487",
+  "source_hashes": {
+    "parse.rs": "5adaaeac471b86128778bf6b67f786542f5c8e079adbf1160f0502309f7befb9",
+    "Parse.lean": "51b5ea83cbad026c044b5c7812c9189231f5273cc0902342c850af02a1c0b592"
+  },
+  "release_settings": {
+    "opt-level": 3,
+    "lto": "fat",
+    "codegen-units": 1,
+    "debug-assertions": false,
+    "overflow-checks": true,
+    "panic": "unwind"
+  },
+  "source_variants": {
+    "original_checked": "5adaaeac471b86128778bf6b67f786542f5c8e079adbf1160f0502309f7befb9",
+    "safe_wrapping_increment": "ee06b0e6a3354b17fc089a22f6d01eeb878755af3a56276f31f661c4fe8a3c70"
+  },
+  "exact_reductions": {
+    "original_checked": {
+      "IR_reduction_calls": [
+        {
+          "line": 290,
+          "text": "%57 = call i32 @llvm.vector.reduce.umin.v4i32(<4 x i32> %rdx.minmax)"
+        },
+        {
+          "line": 439,
+          "text": "%101 = call i32 @llvm.vector.reduce.umin.v4i32(<4 x i32> %rdx.minmax133)"
+        }
+      ],
+      "vector_body_starts": [
+        255,
+        404
+      ]
+    },
+    "safe_wrapping_increment": {
+      "IR_reduction_calls": [
+        {
+          "line": 290,
+          "text": "%57 = call i32 @llvm.vector.reduce.umin.v4i32(<4 x i32> %rdx.minmax)"
+        },
+        {
+          "line": 439,
+          "text": "%101 = call i32 @llvm.vector.reduce.umin.v4i32(<4 x i32> %rdx.minmax133)"
+        }
+      ],
+      "vector_body_starts": [
+        255,
+        404
+      ]
+    }
+  },
+  "assembly_comparison": {
+    "all_instruction_and_label_text_equal_after_bijective_alloc_symbol_rename": true,
+    "differing_symbols": 5,
+    "normalization": "Only .Lalloc_<32hex> symbols, first-use bijection; no registers/opcodes/labels/operands otherwise normalized.",
+    "symbol_correspondence": [
+      [
+        ".Lalloc_667468cd33cd001ba36f461d0afddb9d",
+        ".Lalloc_5ce7282cbabeff8a909b17ceb689887f"
+      ],
+      [
+        ".Lalloc_435c27114c72307c82cb1103ffa5b8de",
+        ".Lalloc_143e858c0f3e81b761eb10899f23ffb6"
+      ],
+      [
+        ".Lalloc_adca51cd0f56de19797d3a5f631d3ddd",
+        ".Lalloc_ecf206be5026724161d74befad16e1b2"
+      ],
+      [
+        ".Lalloc_c7584029baf529d89ee19b9f222ce7d9",
+        ".Lalloc_342a6fd54e4ec8cc5e52841abb4248ca"
+      ],
+      [
+        ".Lalloc_17c6631b50621382366421f98c86995c",
+        ".Lalloc_785c9a5d740deca6cd49439c41a9c39f"
+      ]
+    ]
+  },
+  "decision": "STOP_CHECKED_INCREMENT_VECTOR_UNLOCK: original official-settings cdylib already has both 8-term/two4lane unsigned reductions, and safe wrapping emits same instruction text except five panic-location constant symbols. Do not create a production variant or hand-unroll using this invalidated premise.",
+  "limits": [
+    "Assembly text equality excluding five named panic-location constants is not literal ELF byte equality or a benchmark-library identity.",
+    "Actual official shim/release settings matched, but source paths/metadata differ between generated crates.",
+    "No changed parser executed, original encoder/paired total-time/fullgate not run for the two-increment diagnostic.",
+    "This rejects a specific vectorization barrier; other proven mechanisms may revisit current A DP without claiming this barrier persists."
+  ],
+  "input_hashes": {
+    "evidence/round26/38218734487/lowering-b25-native/diagnostics/r26-b-a-checked-lowering/receipt.json": "3a8c38b7b75501b56165ff0b8cb74cf72eb35742a26ebb25b785e68cb87c9eb6"
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "status": "VERIFIED_B8_RAW_WORK_AND_PHASE_ACCOUNTING_WITH_INFERRED_PRIORITY_MODEL",
+  "computed_utc": "2026-10-11T22:54:17.579513+00:00",
+  "run_id": "38181703981",
+  "git_sha": "d124fa612a7d4510a916f109cadcb367242f5e7b",
+  "source_hashes": {
+    "parse.rs": "5adaaeac471b86128778bf6b67f786542f5c8e079adbf1160f0502309f7befb9",
+    "Parse.lean": "51b5ea83cbad026c044b5c7812c9189231f5273cc0902342c850af02a1c0b592"
+  },
+  "counts": {
+    "relax_calls": 2953130,
+    "nonempty_calls": 2946100,
+    "actual_sampled_writes": 12821521,
+    "actual_improving_writes": 5711954,
+    "same_cost_choice_improving_writes": 106569,
+    "offered_length_span": 19445428,
+    "omitted_length_positions": 6623907,
+    "long_sampled_writes": 153462,
+    "long_omitted_positions": 2015740,
+    "full_long_code_intervals": 95123,
+    "partial_long_code_intervals": 53329,
+    "full_long_dense_intervals": 0,
+    "constant_long_code_parts": 148452,
+    "nonconstant_long_code_parts": 0,
+    "full_long_code_sampled_writes": 95334,
+    "partial_long_code_sampled_writes": 58128,
+    "constant_long_dense_event_groups": 0,
+    "dense_event_floor_covered_lengths": 0,
+    "main_loop_arrival_queries": 5347777,
+    "backward_arrival_reads": 1801553,
+    "chunk_resets": 3217,
+    "price_rebuilds": 2870,
+    "actual_non_long_writes": 12668059,
+    "empty_calls": 7030
+  },
+  "nonempty_mean_actual_sampled_writes": 4.352031838702013,
+  "long_share_of_actual_writes_pct": 1.1969094774325137,
+  "phases": {
+    "parse": {
+      "calls": 28,
+      "inclusive_s": 1.199167794,
+      "percent_of_observed_parse_seconds": 100.0
+    },
+    "d_plan": {
+      "calls": 12,
+      "inclusive_s": 0.294988464,
+      "percent_of_observed_parse_seconds": 24.599431828970552
+    },
+    "d_parse": {
+      "calls": 12,
+      "inclusive_s": 0.198664274,
+      "percent_of_observed_parse_seconds": 16.566845356755802
+    },
+    "d_dp": {
+      "calls": 20,
+      "inclusive_s": 0.085756116,
+      "percent_of_observed_parse_seconds": 7.151302464015307
+    },
+    "s_plan": {
+      "calls": 10,
+      "inclusive_s": 0.797984862,
+      "percent_of_observed_parse_seconds": 66.54488771235296
+    },
+    "a_engine": {
+      "calls": 7,
+      "inclusive_s": 0.711672534,
+      "percent_of_observed_parse_seconds": 59.34720208137945
+    },
+    "e_parse": {
+      "calls": 1,
+      "inclusive_s": 0.005918992,
+      "percent_of_observed_parse_seconds": 0.49359164160474445
+    },
+    "q9_parse": {
+      "calls": 1,
+      "inclusive_s": 0.00253822,
+      "percent_of_observed_parse_seconds": 0.21166512415526062
+    },
+    "refine": {
+      "calls": 1,
+      "inclusive_s": 0.014288083,
+      "percent_of_observed_parse_seconds": 1.191499894467646
+    }
+  },
+  "historical_paired_weight_priority_models": [
+    {
+      "source_control": "public552",
+      "block": 1,
+      "historical_axis": 2.3566229229459768,
+      "relative_parent_axis_percent_proxy": {
+        "d_parse": 22.778451647326126,
+        "d_dp": 11.933915119015094,
+        "a_engine": 35.38865677102467,
+        "s_plan": 38.837993251891646,
+        "e_parse": 0.6044483114959484,
+        "q9_parse": 0.3160925184582852,
+        "refine": 1.4591010840805267
+      }
+    },
+    {
+      "source_control": "public552",
+      "block": 2,
+      "historical_axis": 2.3626849362316182,
+      "relative_parent_axis_percent_proxy": {
+        "d_parse": 22.633318774472187,
+        "d_dp": 11.819442577981478,
+        "a_engine": 35.39808042819072,
+        "s_plan": 38.84449673485623,
+        "e_parse": 0.6004038505961063,
+        "q9_parse": 0.35144765043966303,
+        "refine": 1.4493380039771582
+      }
+    },
+    {
+      "source_control": "public552-shadow",
+      "block": 1,
+      "historical_axis": 2.363916379169983,
+      "relative_parent_axis_percent_proxy": {
+        "d_parse": 22.757960867436186,
+        "d_dp": 11.952872333068253,
+        "a_engine": 35.42540961635522,
+        "s_plan": 38.90045322679815,
+        "e_parse": 0.5922158113770082,
+        "q9_parse": 0.35670747196068575,
+        "refine": 1.4295725804101505
+      }
+    },
+    {
+      "source_control": "public552-shadow",
+      "block": 2,
+      "historical_axis": 2.3593079229919343,
+      "relative_parent_axis_percent_proxy": {
+        "d_parse": 22.820213507296184,
+        "d_dp": 11.9158432525081,
+        "a_engine": 35.23963794376233,
+        "s_plan": 38.72800284651732,
+        "e_parse": 0.6097153097988609,
+        "q9_parse": 0.3415841568543325,
+        "refine": 1.4718152943570184
+      }
+    }
+  ],
+  "decision": "No generic long-domain event implementation: actual dense-long coverage is zero. D-backend same-quality phase model alone shows limited target space; it does not exclude controlled algorithm changes with a different quality/time tradeoff. Investigate distinct smoothed-Huffman A full-state repeat after nearest R18/R24 negative-case exclusion.",
+  "input_hashes": {
+    "evidence/round26/38181703981/dfront-b8-native/diagnostics/r26-b-d-front/receipt.json": "38fff2dce49fa4cd909966e238d082dc786ea9124ef475155ef4775acdd705a3",
+    "evidence/round26/38181703981/dfront-b8-native/diagnostics/r18-functions/functions.json": "d551286ba6d6acaadf845f70810bebb5e7c86c0187467c1d54a82e98a293525a",
+    "evidence/round24/38082906439/screen-h/gate/round1-public552.jsonl": "9038b78dd8be451ad32cb25b1b51f5fc51679bed872f1eb4311bf8a477efff67",
+    "evidence/round24/38082906439/screen-h/gate/round2-public552.jsonl": "4131d7e89344f6d874b600ef7fec5cf1461d55c8219e52af4eb95c930f0d55a5",
+    "evidence/round24/38082906439/screen-h/gate/round1-public552-shadow.jsonl": "343b8577a0bf944e5c305ce869ca2245d64c555d7681d2d6c23b7dd4de2dbc31",
+    "evidence/round24/38082906439/screen-h/gate/round2-public552-shadow.jsonl": "51f1532bc829872e95382a80f1deaa024312b66609f4bcc010fb5450f7093e09"
+  },
+  "limits": [
+    "Counter and coarse phase sources are separately compiled; clocks are not attached to hot pair/relax operations. No original paired performance measurement was added.",
+    "s_plan contains a_engine, d_plan contains d_parse/d_dp. Inclusive parent and child phases are not independent savings.",
+    "Historical R24 paired weights times B8 observer fractions are priority proxies, not current candidate scores, causal estimates, valid upper bounds or achievable gains.",
+    "Public observation/token/decode identity does not prove universal equivalence, original obligation/gate, formal admission or reward."
+  ]
+}

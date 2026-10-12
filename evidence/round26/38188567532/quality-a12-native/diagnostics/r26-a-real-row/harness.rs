@@ -1,0 +1,11 @@
+
+#![allow(dead_code)]
+#[path="/home/runner/work/Miner/Miner/candidates/r26-a-641-row8/parse.rs"]mod frozen;
+#[path="/home/runner/work/_temp/r26-a-real-row-build/observed.rs"]mod observed;
+fn tokens(s:&[u8],f:fn(&[u8],&mut[u32])->usize)->Vec<u32>{let mut v=vec![0;s.len()];let n=f(s,&mut v);assert!(n<=s.len());v.truncate(n);v}
+fn decode(s:&[u8],ts:&[u32])->bool{let mut out=Vec::with_capacity(s.len());for&t in ts{if t<256{out.push(t as u8)}else{if !(16777216..25165824).contains(&t){return false}let v=t-16777216;let d=(v/256+1)as usize;let l=(v%256+3)as usize;if d>out.len()||out.len()+l>s.len(){return false}for _ in 0..l{let b=out[out.len()-d];out.push(b)}}}out==s}
+fn direct(s:&[u8],km:u32)->Vec<u32>{let mut a=vec![0;s.len()];let mut b=vec![0;s.len()];let na=frozen::ar_run1c::<32768>(s,&mut a,4,258,1000000,km,2,3);let nb=observed::ar_run1c::<32768>(s,&mut b,4,258,1000000,km,2,3);assert_eq!(na,nb);a.truncate(na);b.truncate(nb);assert_eq!(a,b);assert!(decode(s,&a));observed::r26_ar_take();a}
+fn main(){let mut cases=0;for n in 0..65{let s:Vec<u8>=(0..n).map(|i|(i%7)as u8).collect();for km in [0xFFFF_FFFF,0xFFFF_FF00]{direct(&s,km);cases+=1;}}
+for period in [1,2,7,17,251]{for n in [257,1024,32784]{let s:Vec<u8>=(0..n).map(|i|(i%period)as u8).collect();for km in [0xFFFF_FFFF,0xFFFF_FF00]{direct(&s,km);cases+=1;}}}
+let mut x=7u32;let mut s=Vec::new();for _ in 0..66000{x=x.wrapping_mul(1664525).wrapping_add(1013904223);s.push((x>>24)as u8);}for i in 0..258{s[33040+i]=s[272+i];}for km in [0xFFFF_FFFF,0xFFFF_FF00]{direct(&s,km);cases+=1;}println!("R26_DIRECT {}",cases);
+let args:Vec<_>=std::env::args().collect();let mut files:Vec<_>=std::fs::read_dir(&args[1]).unwrap().map(|p|p.unwrap().path()).filter(|p|p.is_file()).collect();files.sort();for p in files{let s=std::fs::read(&p).unwrap();let a=tokens(&s,frozen::parse);let b=tokens(&s,observed::parse);assert_eq!(a,b,"{}",p.display());assert!(decode(&s,&b));let counts=observed::r26_ar_take();let name=p.file_name().unwrap().to_str().unwrap();let raw:Vec<u8>=b.iter().flat_map(|t|t.to_le_bytes()).collect();std::fs::write(std::path::Path::new(&args[2]).join(format!("{}.tokens",name)),raw).unwrap();print!("R26_REAL_ROW {} {} {}",name,s.len(),b.len());for x in counts{print!(" {}",x)}println!();}}

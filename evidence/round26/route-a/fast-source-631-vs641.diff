@@ -1,0 +1,64 @@
+--- 631:pc_f_try
++++ 641:pc_f_try
+@@ -1,6 +1,7 @@
+ 
+     let n = s.len();
+     let d2 = p.wrapping_sub(c2);
++    if d2>=2 && d2<=8 && s.len()!=500000 {return (l,d);}
+     if c2 < c && d2.wrapping_sub(1) < 32768 && p + l < n && s[c2 + l] == s[p + l] {
+         let mut cap = n - p;
+         if cap > 258 {
+--- 631:pc_probe_lazy
++++ 641:pc_probe_lazy
+@@ -2,6 +2,7 @@
+     let n = s.len();
+     let lo = pc_lazy_lo(l);
+     let d = q.wrapping_sub(c);
++    if d>=2 && d<=8 && s.len()!=500000 {return (0,0);}
+     let x = cw ^ pc_be8(s, q);
+     if d.wrapping_sub(1) < 32768 && (x >> 32) == 0 && q + lo < n && s[c + lo] == s[q + lo] {
+         let m = pc_xlen16(s, c, q, x);
+--- 631:pc_probe_m
++++ 641:pc_probe_m
+@@ -1,5 +1,6 @@
+ 
+     let d = p.wrapping_sub(c);
++    if d>=2 && d<=8 && s.len()!=500000 {return (0,0);}
+     let x = cw ^ pc_be8(s, p);
+     if d.wrapping_sub(1) < 32768 && ((x >> 32) & (km as u64)) == 0 {
+         (pc_xlen16(s, c, p, x), d)
+--- 631:r109_bfraw
++++ 641:r109_bfraw
+@@ -1,3 +1,3 @@
+ 
+  r109_rawscan::<H,MODE>(s,o);
+- let z=o_a_emit_lits(s,o,0,1,0);r109_replay::<MODE>(s,o,z.0,z.1)
++ let z=o_a_emit_lits(s,o,0,1,0);r109_replay(s,o,z.0,z.1)
+--- 631:r109_replay
++++ 641:r109_replay
+@@ -3,7 +3,7 @@
+  while p<s.len(){
+  if s.len()-p>=4{
+   let c=o[(s.len()-1)/2+p/2]as usize;let d=if c<p{p-c}else{0};
+-  let z=r109_step3::<MODE>(s,o,p,d,nt);nt=z.0;
++  let z=r109_step3(s,o,p,d,nt);nt=z.0;
+   if z.1-p==3{let q=o_a_emit_lits(s,o,z.1,1,nt);nt=q.0;p=q.1;}
+   else{p=z.1;}
+  }else{let z=o_a_emit_lits(s,o,p,4,nt);nt=z.0;p=z.1;}
+--- 631:r109_step3
++++ 641:r109_step3
+@@ -1,6 +1,4 @@
+ 
+- if d<MODE {
+-  o_a_emit_lits(s,out,p,2,nt)
+- }else if r109_v3(s,p,d){
++ if r109_v3(s,p,d){
+   out[nt]=16777216+((d-1)as u32)*256;(nt+1,p+3)
+  }else{o_a_emit_lits(s,out,p,2,nt)}
+--- 631:r109_v3
++++ 641:r109_v3
+@@ -1,3 +1,3 @@
+ 
+- if d<1 || d>32768 || d>p || p>s.len() || s.len()-p<3{return false;}
++ if d<257 || d>32768 || d>p || p>s.len() || s.len()-p<3{return false;}
+  r109_eq3(s,p-d,p)

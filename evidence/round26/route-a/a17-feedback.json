@@ -1,0 +1,74 @@
+{
+  "status": "VERIFIED_PARTIAL_EXISTING_DCE_AND_REMAINING_DEPTH_EXHAUSTION_LOAD_NOT_PERFORMANCE",
+  "source_run": "38221365787",
+  "source_commit": "535c29491817286f3832a46853acb5f139b8ef16",
+  "source_hashes": {
+    "status": "VERIFIED_ORIGINAL658_OFFICIAL_FLAGS_TEMPLATE_AND_OBSERVER_NOT_NATIVE",
+    "rust_sha256": "1185749453a5abe100106f2e15082eca84521292b7233784a9c2f4562367f3ad",
+    "scratch_variant_sha256": "968ca768bbecbf80beafd2ac9484fdfeb7d9052e0499631b2c3684582bb65b1e",
+    "observer_sha256": "2de77b2f75ef9ab3d9123f82ef9e7445ae8e10217c67ba3dd362374ea62851af",
+    "harness_sha256": "ed722c31350ff21a4cc9fdbfe5687442fdf9e6110f8feb5be5c27f8227ebed25",
+    "release": {
+      "opt-level": 3,
+      "lto": "fat",
+      "codegen-units": 1,
+      "debug-assertions": false,
+      "overflow-checks": true,
+      "panic": "unwind"
+    },
+    "template_canonical_sha256": {
+      "Cargo.toml": "062702ac6e786954b2f91574cef3d0591166b52e7b2395953f7539d62bbbea53",
+      "lib.rs": "4f7d61a39d28d52001c5578fd1f1aaaab6f4a3dce815da7af46709a3d5e3c015"
+    }
+  },
+  "receipt_sha256": "e3ba3741684714ee9b57f88a27ceb4a0859fc10302fcfb1673bc136fd2493713",
+  "artifacts_sha256": {
+    "original-p125_row2.ll": "2b709a67e57fa4fc238d004fc4b1b4a13150875f8ba927c814c7c1820b83381e",
+    "original-p125_row9.ll": "49b77a4679d8cbd7095be0e745188fb71ac929a790bf4fe615c1df8443e0d7a7",
+    "lastlink_control-p125_row2.ll": "c61d59342d4191582fb2d53abae408d5320c37e13241316bf0071547edcc51d8",
+    "lastlink_control-p125_row9.ll": "f6d83064c8f6552bcf301e4dc8b09d7a9b3ba6ade3c2a58e03d40d90589223a4",
+    "original-p125_row9.s": "c7d9d33518abf2f892a9c6a56f4db7e41549f526991691af367bb67f912b2e4d",
+    "lastlink_control-p125_row9.s": "527ced9c26029f32091fd8611e7d3fc295ec31d8fd0ad9ef8e70203b3bb7e587"
+  },
+  "totals": {
+    "walk_calls": 1093753,
+    "walk_iterations": 3482032,
+    "valid_candidates": 2923392,
+    "common_calls": 614598,
+    "better_matches": 553748,
+    "length_stop_events": 3405,
+    "next_link_loads": 2923392,
+    "final_next_link_loads": 499847,
+    "depth1_calls": 408513,
+    "depth6_calls": 38984,
+    "depth12_calls": 646256,
+    "other_depth_calls": 0
+  },
+  "actual_lowering_observations": [
+    {
+      "function": "p125_row9 main depth12 walk",
+      "original_IR": "lines364-376: prev GEP/load at369/370 precedes depth-1 andeq0 at373/374",
+      "changed_IR": "lines351-356 branch depth==1 toexit; onlynonfinalpath reaches prevload384",
+      "meaning": "Original stillloads onnormalbudget exhaustion; scratchshifts guard beforeload."
+    },
+    {
+      "function": "p125_row9 nice/end stop",
+      "original_IR": "lines341-352 branchdirectly towalk.exit atacceptedlength stop/end",
+      "meaning": "Alreadyeliminated inoriginal, source-level final-link countoverstatesremovablework."
+    },
+    {
+      "function": "p125_row2 andp125_row9 lazy LD1",
+      "original_IR": "Each function hasonlyone prev-array load site, inmainwalk; lazywalk isfullyconstantdepth1 anddoesnotreadnext.",
+      "meaning": "Alreadyeliminated inoriginal. Rawdepth1call count408513 isnot removableload count."
+    }
+  ],
+  "remaining_removable_dynamic_count": "UNKNOWN: A17rawcounters do notsplit valid depth1 versusnormalbudget versuslengthstop; finerrealcounter included inA18observer with no separate diagnostic rerun.",
+  "decision": "No productionA17candidate orpairedtimingyet. Prefer A18windowtransfer; iflowering residualcoverage islarge andpairedbudget permits, one exactunchanged-semantic lastlinkcontrol maybetested. Do notuse499847source-level finalreads ascompiledsavings.",
+  "a18_common_cancellation_upper_count": 60850,
+  "a18_common_cancellation_upper_pct": 9.900780672895127,
+  "limits": [
+    "Official flags/shim retained; exactoriginalCargo binaryidentity notclaimed.",
+    "IR andASM do notpredict elapsedtime.",
+    "No scratchvariant parse/nativeequivalence/fullgate/timing yet."
+  ]
+}

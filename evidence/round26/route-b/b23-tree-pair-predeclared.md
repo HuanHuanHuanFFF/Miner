@@ -1,0 +1,9 @@
+# B23: real tree prefix total cost and extracted interface, no full proof yet
+
+B21 run38216961738 produced exact candidate Rust4924b7919c73d39ebd14397da566b47cf3bc6c2f66b80a9547ad803a3d336c2c and inherited draft Lean51b5ea83cbad026c044b5c7812c9189231f5273cc0902342c850af02a1c0b592. All28 original encoder tokens/output hashes/bytes match public552 (4,868,050bytes; public size33.850296868%). Native candidate coarse clocks have no same-run parent profile and therefore do not establish savings relative to old diagnostic runners.
+
+Minimum next action: exact original extraction first to expose added U16/helper/loop state interfaces, then the official original11-repetition total encoder protocol for two reversed blocks, retaining public552 primary/shadow and candidate same-source shadow. Standard finite equivalence/decode checks are required by the existing entry before measurement. The latest29870 capture is bound for scoring. No full Lean proof gate is requested.
+
+Decision: any equality/extraction failure remains separate from measured speed and pauses acceptance. Two-block discovery verifies only observed net costs; same-source divergences remain evidence. Strong regression stops this exact U16 representation; useful isolated savings may justify a low-cost AE composition, otherwise keep exact negative results and move to independently diagnosed DP. Neither component benefit nor discovery peak establishes stable5%/10%; actual frozen independent runners and a complete gate are still needed for a final candidate.
+
+Cost cap:45-minute proposed job timeout, exact extraction has inherited1100s subprocess cap; observed recent full standard setup/measurement suggests materially less, queue/cost UNKNOWN. Actual extraction happens before timing; full proof not run. No source mutation, wallet/signature/formal upload.

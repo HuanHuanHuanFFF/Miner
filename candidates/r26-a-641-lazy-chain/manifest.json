@@ -1,0 +1,21 @@
+{
+  "candidate": "r26-a-641-lazy-chain",
+  "parent": "references/round26-public-641",
+  "hashes": {
+    "parse.rs": "29eeab8a83b7c22d56d5c28986198b735ced2ee3199aebf71164b5198eb71ec4",
+    "Parse.lean": "7a30722b3a337918422e3af277bf33f48073594483b9df7a7ae3c43cbf81412e"
+  },
+  "attribution": {
+    "source_receipt": "references/round26-public-641/source-receipt.json",
+    "author_hotkey": "5FYhJSAu4q86E2Yn8UjNvpbUQVZGzq5wB7W7YFqnmvz288yo",
+    "ownership": "Derivative of public641; original author/source preserved."
+  },
+  "mechanism": "One helper and one pc_run1c call replacement. Preserve original head offer, probe one older hint plus a second only when original dp>=2, using unchanged pc_probe_lazy/window/byte checks. Choose strict greater original pc_gain, retaining head then nearer predecessor on ties. Final existing comparison against current match remains unchanged.",
+  "cost": "Every actual chain lazy iteration adds one prev read; each live strictly older hint adds one source word and an original lazy validation, which can extend to258. dp>=2 may add a second of each. No new persistent arrays, hashing, insertion, postpass or route. Runtime cost remains UNKNOWN.",
+  "proof_status": "COPIED_ORIGINAL_LEAN_UNADAPTED_DRAFT",
+  "quality_status": "UNKNOWN",
+  "time_status": "UNKNOWN",
+  "gate_status": "NOT_RUN",
+  "formal_submission_sent": false,
+  "preserved": "All route/classifier/H/hash/normal-chain/record/fold/emitter code and existing near-distance guards; no A3/A5/A6/A7 combination."
+}

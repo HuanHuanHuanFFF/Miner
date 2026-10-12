@@ -6,6 +6,73 @@ from round4 import ROOT,validate
 def main():
     assert os.environ.get('GITHUB_ACTIONS')=='true'and os.environ.get('RUNNER_OS')=='Linux'
     spec=validate(os.environ['ROUND4_SPEC']);out=Path(os.environ['RUNNER_TEMP'])/'round4-receipts';out.mkdir(exist_ok=True)
+    (out/'execution-start.json').write_text(json.dumps({'run_id':os.environ['GITHUB_RUN_ID'],
+        'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],
+        'status':'NATIVE_EXECUTION_STARTED_NOT_A_RESULT','source_hashes':{e['name']:e['hashes']for e in spec['entries']},
+        'scope':'Early identity binding, including later compile failures; no correctness, timing or proof assertion.'},indent=2)+'\n')
+    if spec.get('r26_a_replay'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-replay.py')],check=True)
+        return
+    if spec.get('r26_a_boundary'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-boundary.py')],check=True)
+        return
+    if spec.get('r26_a_boundary641'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-boundary641.py')],check=True)
+        return
+    if spec.get('r26_b_match_sharing'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-match-sharing.py')],check=True)
+        return
+    if spec.get('r26_b_cache_phases'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-cache-phases.py')],check=True)
+        return
+    if spec.get('r26_b_d_front_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-d-front-diagnostic.py')],check=True)
+        return
+    if spec.get('r26_b_a_repeat_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-repeat-diagnostic.py')],check=True)
+        return
+    if spec.get('r26_b_a_overlap_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-overlap-diagnostic.py')],check=True)
+        return
+    if spec.get('r26_b_a_discarded_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-discarded-diagnostic.py')],check=True)
+        return
+    if spec.get('r26_b_tree_edge_counts'):
+        module=spec.get('r26_b_tree_edge_module', 'r26-b-tree-edge-diagnostic')
+        assert module in ('r26-b-tree-edge-diagnostic', 'r26-b-tree-seed-diagnostic')
+        subprocess.run([sys.executable,str(ROOT/'scripts'/(module+'.py'))],check=True)
+        return
+    if spec.get('r26_b_a_compiler_counts'):
+        module=spec.get('r26_b_a_compiler_module', 'r26-b-a-compiler-diagnostic')
+        assert module in ('r26-b-a-compiler-diagnostic', 'r26-b-a-checked-lowering')
+        subprocess.run([sys.executable,str(ROOT/'scripts'/(module+'.py'))],check=True)
+        return
+    if spec.get('r26_b_a_price_group_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-a-price-group-counts.py')],check=True)
+        return
+    if spec.get('r26_a_distance12_observer_only'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-distance12-counts.py')],check=True)
+        return
+    if spec.get('r26_a_row_shadow'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-row-shadow.py')],check=True)
+        return
+    if spec.get('r26_a_link_replay'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-link-replay.py')],check=True)
+        return
+    if spec.get('r26_a_rep_shadow'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-rep-shadow.py')],check=True)
+        return
+    if spec.get('r26_a_near_counts'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-near-counts.py')],check=True)
+        return
+    if spec.get('r26_a_common_lowering'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-common-wrapping-lowering.py')],check=True)
+        return
+    if spec.get('r26_b_cache_integrity'):
+        module=spec['r26_b_cache_integrity_module']
+        assert module=='r26-b-cache-integrity-fix1'
+        subprocess.run([sys.executable,str(ROOT/'scripts'/(module+'.py'))],check=True)
+        return
     if spec.get('r25_heldout_quality'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-heldout-quality.py')],check=True)
         return
@@ -24,7 +91,9 @@ def main():
     if spec.get('r25_dual8_counts'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round25-dual8-counts.py')],check=True)
         return
-    if spec.get('r25_finite_equivalence'):
+    if spec.get('r26_native_decode'):
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round12-decode.py')],check=True)
+    if spec.get('r25_finite_equivalence') or spec.get('r26_finite_equivalence'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round4.py')],check=True)
         eq=json.loads((out/'equivalence-research.json').read_bytes())
         assert eq.get('returncode')==0 and eq.get('cases') and all(r['cases']==444 and r['different_or_failed']==0 for r in eq['cases']), 'R25 requested actual finite equivalence must complete, including compilation'
@@ -100,7 +169,16 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-a-block.py')],check=True);return
     if spec.get('r18_function_profile'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round13-encoder-native.py')],check=True)
-        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-functions.py')],check=True);return
+        subprocess.run([sys.executable,str(ROOT/'scripts/research-round18-functions.py')],check=True)
+        if spec.get('r26_b_tag_graph_integrity'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-tag-graph-integrity.py')],check=True)
+        if spec.get('r26_b_tree_packed_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-b-tree-packed-counts.py')],check=True)
+        if spec.get('r26_b_a_flatten_counts'):
+            module=spec.get('r26_b_a_flatten_module', 'r26-b-a-flatten-counts')
+            assert module in ('r26-b-a-flatten-counts', 'r26-b-a-no-owner-counts')
+            subprocess.run([sys.executable,str(ROOT/'scripts'/(module+'.py'))],check=True)
+        return
     if spec.get('r16_transfer_candidates'):
         subprocess.run([sys.executable,str(ROOT/'scripts/research-round16-transfer.py')],check=True);return
     if spec.get('pc_rescue_counts'):
@@ -111,7 +189,28 @@ def main():
         module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main();return
     if spec.get('native_encoder'):
         loader=importlib.util.spec_from_file_location('r13_native_encoder',ROOT/'scripts/research-round13-encoder-native.py')
-        module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main();return
+        module=importlib.util.module_from_spec(loader);loader.loader.exec_module(module);module.main()
+        if spec.get('r26_a_lazy_chain_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-lazy-chain-counts.py')],check=True)
+        if spec.get('r26_a_distance12_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-distance12-counts.py')],check=True)
+        if spec.get('r26_a_second_look_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-second-look-counts.py')],check=True)
+        if spec.get('r26_a_row_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-row-counts.py')],check=True)
+        if spec.get('r26_a_tagged_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-tagged-counts.py')],check=True)
+        if spec.get('r26_a_lastlink_lowering'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-lastlink-lowering.py')],check=True)
+        if spec.get('r26_c_greedy_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-c-greedy-counts.py')],check=True)
+        if spec.get('r26_c_deferred_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-c-deferred-counts.py')],check=True)
+        if spec.get('r26_c_fold_tail_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-c-fold-tail-counts.py')],check=True)
+        if spec.get('r26_a_window_counts'):
+            subprocess.run([sys.executable,str(ROOT/'scripts/r26-a-window-counts.py')],check=True)
+        return
     record={'run_id':os.environ['GITHUB_RUN_ID'],'git_sha':os.environ['GITHUB_SHA'],'batch':os.environ['ROUND4_SPEC'],
         'status':'STARTED_NATIVE_ONLY','candidate_hashes':{e['name']:e['hashes']for e in spec['entries']if not e['control']},
         'scope':'R13 native token/decode diagnostic only. Official extraction, paired two axes, full gate and ranking NOT_RUN.'}

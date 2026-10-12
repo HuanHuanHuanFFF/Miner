@@ -1,0 +1,48 @@
+{
+  "status": "VERIFIED_ISOLATED_MAINTENANCE_PENALTY_STOP_ROW_BRANCH",
+  "run_id": "38191031404",
+  "source_commit": "9bb441eb293e72bfc893cd011ab0a8d4ebfca422",
+  "trace_events": 3917583,
+  "query_events": 2073185,
+  "record_events": 1844398,
+  "raw_timings": 1872,
+  "isolated_extra_ns_per_event": {
+    "discard_all": [
+      1.3835916175866598,
+      1.3921645055127103
+    ],
+    "consume_all": [
+      1.5063412823672147,
+      1.510518858183732
+    ],
+    "actual_mixed": [
+      1.3818601928791299,
+      1.3844931938902123
+    ]
+  },
+  "other_runner_production_parser_delta_ns_per_A12_event": [
+    7.628851513803281,
+    7.577868292771334
+  ],
+  "assembly_observations": [
+    {
+      "scope": "diagnostic link_parent<32768,0>, notoriginalcdylib",
+      "loop": "0x14f80..0x14ff6",
+      "observation": "Twoeventsperbackedge; oldheadload and head/prev writes visible; nohelpercall orbounds-panic branch insideeventloop."
+    },
+    {
+      "scope": "diagnostic link_row<0>, notoriginalcdylib",
+      "loop": "0x16c70..0x16cee",
+      "observation": "Oneeventperbackedge; cursorload/increment/store, variabletagshifts andtagRMW, positionstore visible. Victimpositionload eliminatedindiscardmode. Nohelpercall orbounds-panic branch insideeventloop."
+    }
+  ],
+  "decision": "Do notattempt packedcursor/capacity/depth rescue. Isolatedmaintenanceispayablebutdoesnotsupportsingle-cause sufficiency forfullregression. Genericquery/compilerlayout remainUNKNOWN. Stoprowbranchandcompare newlyavailablepublic598.",
+  "limits": [
+    "Sameeventidentity/count inside replay; actualoldproductiontrajectory isdifferent.",
+    "Eventarraybandwidth, noqueryinterleaving, resetcache, checksum andmixedflagbranch affectcost.",
+    "Productionreferencecomesfromdifferentrunner; blocknumbersarenotpairedacrossexperiments.",
+    "Smallisolateddifferenceonlyrejectsisolatedmaintenance-single-cause sufficiency; actualmaintenanceisnotprovedfree.",
+    "Largeisolateddifference isnotcausal attribution orrecoverableoveralltimeupperbound."
+  ],
+  "proof_status": "NoA12fullLean, keeporiginalunadapteddraft; exactextraction preserved."
+}

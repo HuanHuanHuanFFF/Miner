@@ -1,0 +1,99 @@
+--- 613:fx0_put_match
++++ 641:fx0_put_match
+@@ -1,9 +1 @@
+-
+-    let n = s.len();
+-    if d >= 1 && d <= 32768 && d <= p && l >= 3 && l <= 258 && p < n && l <= n - p && (FX0_VERIFY == 0 || fx0_same(s, p - d, p, l) == 1) {
+-        out[nt] = 16777216u32 + ((d - 1) as u32) * 256 + ((l - 3) as u32);
+-        (nt + 1, p + l)
+-    } else {
+-        out[nt] = s[p] as u32;
+-        (nt + 1, p + 1)
+-    }
++out[nt]=((d-1)as u32).wrapping_mul(256).wrapping_add(16777216).wrapping_add((l-3)as u32);(nt+1,p+l)
+--- 613:pc_f_record3
++++ 641:pc_f_record3
+@@ -1,8 +1,8 @@
+ 
+     let mut ins = ins0;
+     let mut stop = end;
+-    if stop > ins.wrapping_add((if km == 4294967040 {1} else {2})) {
+-        stop = ins.wrapping_add((if km == 4294967040 {1} else {2}));
++    if stop > ins.wrapping_add(pc_INS_MAX) {
++        stop = ins.wrapping_add(pc_INS_MAX);
+     }
+     if stop > lim {
+         stop = lim;
+--- 613:pc_put_match
++++ 641:pc_put_match
+@@ -1,3 +1,3 @@
+ 
+- out[nt]=((d-1)as u32).wrapping_mul(256).wrapping_add(16777216).wrapping_add((l-3)as u32);
++ out[nt]=(d.wrapping_sub(1)as u32).wrapping_mul(256).wrapping_add(16777216).wrapping_add(l.wrapping_sub(3)as u32);
+  (nt+1,p+l)
+--- 613:pc_record3_m
++++ 641:pc_record3_m
+@@ -1,9 +1,8 @@
+ 
+     let mut ins = ins0;
+     let mut stop = end;
+-    
+-    if stop > ins.wrapping_add((if km == 4294967040 {1} else {2})) {
+-        stop = ins.wrapping_add((if km == 4294967040 {1} else {2}));
++    if stop > ins.wrapping_add(pc_INS_MAX) {
++        stop = ins.wrapping_add(pc_INS_MAX);
+     }
+     if stop > lim {
+         stop = lim;
+--- 613:pc_run1
++++ 641:pc_run1
+@@ -1,12 +1,12 @@
+ 
+     let n = input.len();
+     let mut nt = 0usize;
+-    let mut ls = 0usize; 
++    let mut ls = 0usize;                                                   
+     if n > 16 {
+         let mut p = 0usize;
+         let mut head = [0u32; H];
+         let lim = n - 8;
+-        let mut miss = 0usize; 
++        let mut miss = 0usize;                                 
+         let mut fuel = n.saturating_add(16);
+         let a0 = pc_ahead_m::<H>(input, &head, 0, km);
+         let mut pre_slot = a0.0;
+@@ -26,7 +26,6 @@
+                 let mut l = f.0;
+                 let mut d = f.1;
+                 let mut ins = p + 1;
+-                
+                 let mut go = 1u32;
+                 while go == 1 && l < lazy && p + 1 < lim {
+                     let q = p + 1;
+@@ -51,7 +50,7 @@
+                 let ae = pc_ahead_if_m::<H>(input, &head, e, lim, pre_slot, pre_c, pre_w, km);
+                 nt = pc_flush4(input, out, nt, ls, p);
+                 let b = pc_fold_w(input, out, nt, p, l, d);
+-                let r = pc_put_match(input, out, b.0, b.1, d, b.2);
++                let r = pc_put_match_h::<H>(input, out, b.0, b.1, d, b.2);
+                 nt = r.0;
+                 let end = r.1;
+                 pc_record3_m::<H>(input, &mut head, ins, pre_slot, end, lim, km);
+--- 613:pc_run1c
++++ 641:pc_run1c
+@@ -53,7 +53,7 @@
+                 let ae = pc_ahead_if_m::<H>(input, &head, e, lim, pre_slot, pre_c, pre_w, km);
+                 nt = pc_flush4(input, out, nt, ls, p);
+                 let b = pc_fold_w(input, out, nt, p, l, d);
+-                let r = pc_put_match(input, out, b.0, b.1, d, b.2);
++                let r = pc_put_match_h::<H>(input, out, b.0, b.1, d, b.2);
+                 nt = r.0;
+                 let end = r.1;
+                 pc_f_record3::<H>(input, &mut head, &mut prev, ins, pre_slot, end, lim, km);
+--- 613:r109_v3
++++ 641:r109_v3
+@@ -1,3 +1,3 @@
+ 
+- if d<65 || d>32768 || d>p || p>s.len() || s.len()-p<3{return false;}
++ if d<257 || d>32768 || d>p || p>s.len() || s.len()-p<3{return false;}
+  r109_eq3(s,p-d,p)

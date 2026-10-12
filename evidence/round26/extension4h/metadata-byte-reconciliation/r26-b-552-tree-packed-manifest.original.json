@@ -1,0 +1,29 @@
+{
+  "candidate": "r26-b-552-tree-packed",
+  "parent": "public552",
+  "different_representation_parent": "r26-b-552-tree-prefix",
+  "written_utc": "2026-10-12T07:47:41.132782+00:00",
+  "hashes": {
+    "parse.rs": "8d048a0797943c307501c7fb14eb92822668875d39c0e531e0c0f7396c99d682",
+    "Parse.lean": "51b5ea83cbad026c044b5c7812c9189231f5273cc0902342c850af02a1c0b592"
+  },
+  "mechanism": "Existing U32 kid stores complete low26timestamp plus capped31 prefix/exact in high6bits. Removes whole additional U16table and all of its clearing/reads/writes; one original child load/write carries both. Exact flags degrade only for prefix>31; original probe recovers all longer prefixes.",
+  "domain": "s_plan returns empty for n>=2^26; tree insert caller closure is unique A finder inside guarded plan_cfg. Active pos+1 timestamp strictly below2^26. Full32bit head/recent timestamps retained. Original a_find_all byte-preserved.",
+  "source_audit": {
+    "only_original_function_changed": "a_tree_insert",
+    "a_find_all_byte_identity": true,
+    "full_source_reversal": true,
+    "fixed_timestamp_bits": 26,
+    "fixed_prefix_bits": 5,
+    "fixed_exact_bits": 1,
+    "additional_table_bytes": 0
+  },
+  "attribution": {
+    "original_receipt": "references/round24-public-552/source-receipt.json",
+    "original_author_hotkey": "5FnYJUitGUNdNyWAB7YnjoYoacLsd7TKxeAND4eYyiFVBP8q"
+  },
+  "proof_status": "DRAFT_PARENT_PROOF_UNCHANGED; newhelpers/tree scalar loop state require exact extraction/gate.",
+  "semantic_status": "Finite fixed-bit model only; actual original encoder/tokens and per-probe consumption audit still required.",
+  "performance_status": "UNKNOWN; U16 original total cost was slower, this different zero-extra-table representation is not assumed better.",
+  "formal_submission_sent": false
+}

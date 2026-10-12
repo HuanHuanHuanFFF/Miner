@@ -353,3 +353,55 @@ CI整体状态与阶段原始证据分别检查：I及价格打包复现显示ca
 **实验输入是否在提交中，是可复核性的一部分。** 本地已有快照不代表runner checkout能读到。本轮三次作业因此在正式计时前失败；派发前核对Git对象里的源码、快照及gate证据字节，可以在消耗runner前暴露这种缺口。完整失败回执和修复后的新运行分开保存，不把有限decode或名为gate的artifact目录当作完整验收。[真实失败与提交依赖回归](../../evidence/round25/snapshot-dependency-repair-check.json)。
 
 **移到更快坐标也可能失去邻居贡献。** R25保留父版的18个原协议对照块，中位数为零却有高峰。同一候选只替换同源码参照，投影跨过最快邻居并将其支配后，候选从前沿内部变成端点，增量质量轴贡献消失；独立代数复算确认了大幅掉分。先看邻居、局部／全局项与共同分母，才能区分计时分歧及评分放大；不能通过选择校准或人为延时宣称稳定优化。旧父版高峰和大量零值分别保留为后续起点的证据，而不是用新候选失败把它抹去。[当前快照的父版分层重放与公式](../rounds/round25.md#旧快速父版仍需保留但峰值不代表稳定)。
+
+## 第26轮补充：机会计数、真实消费成本与中断边界
+
+依据[第26轮](../rounds/round26.md)及原始回执。本轮因用户确认的电脑断电关机而中断，没有完成连续八小时或稳定5%／10%双目标；36次云端作业已收齐，20份Rust实验版本中七份做过原协议发现测量，截止后快照29864的14主块均为0%。没有以负例数量或记录完整度宣称研究成功率提高。
+
+**局部价格改善还要经过完整选择与编码。** 保留已探测却被丢弃的匹配时，先扣除旧缓存同距离码完整前缀及已有继承来源，才能区分真正新信息与已有信息的另一种表达。固定子集确有局部packed-best改善，但完整实现新增约931万份有效记录，最后只少21字节。原图逐位置投影一致排除了这一项图污染，仍未证明收益被哪个后续步骤抵消。价格重建、分块、回溯选择与原编码器不能由局部位价差代替，局部差额不直接换算成输出字节。[B14原机会](../../evidence/round26/route-b/b14-discarded-feedback.json)、[B15原图与最终反馈](../../evidence/round26/route-b/b15-discarded-feedback.json)。
+
+**读取减少和数组缩小要与完整维护、查询成本一起验收。** 固定行索引减少了第一来源预取，公共质量也略改善，但原协议总时间慢约9.18%／9.61%。孤立同事件重放测到了维护差额，却缺少生产查询交错，并使用另一runner；不能用两个计时相减给出因果比例或可回收速度上界。它没有支持仅修改维护就能救回整个版本，因此停止该表示，而不是继续扫容量。[真实解析器反馈](../../evidence/round26/route-a/cycle-a12-screen-feedback.json)、[隔离诊断及边界](../../evidence/round26/route-a/cycle-a13-feedback.json)。
+
+**环境字段要先确认记录者。** 原回执的process_affinity来自外层Python driver，原sandbox另请求AllowedCPUs=0；外层可用四核不能证明测量engine发生四核迁移。实际engine有效CPU／cgroup缺少直接记录时，原因仍为UNKNOWN，不能据字段名套校正。[精确源码归属核对](../../evidence/round26/measurement-diagnosis/affinity-scope/receipt.json)。
+
+**自模块预检与完整入口预检覆盖不同故障。** A12自模块模型和源码哈希通过，真实入口仍发现已启用decode却没有reference配对。修复发生在派发前，没有为该配置错误消耗CI。派发后的文字澄清另存addendum，冻结预声明及所绑定字节保持可复核。[入口修复](../../evidence/round26/a12-dispatch-preflight-repair.json)、[预声明恢复记录](../../evidence/round26/route-a/row-shadow-declaration-recovery.json)。
+
+**更近的直接先例比宽泛新颖性比较更有约束力。** 相对16位树链接一度被与更早浅链对比；随后找到R24 AD，并核对当前六个A树函数与其核心闭包相同，因而停止重复模型和云端试验。新的公开提交也可能只是既有内核的路由或预算组合，应按函数与实际调用条件辨认差异。[直接先例更正](../../evidence/round26/route-b/b18-tree-reuse-decision.md)、[601静态比较](../../evidence/round26/route-b/b17-public601-decision.md)、[598比较](../../evidence/round26/route-a/source598-investment-review.md)。
+
+**恢复记录不能补造持续执行。** 固定窗口、最后可核验活动、恢复时钟与实际作业状态分别记录；用户确认的关机解释了中断，却不证明缺口内执行了工作。本轮保留设计和有限模型阶段的短标签起点，未把它记成已实现或已验证候选，也未重起时钟。[中断与收尾范围](../../evidence/round26/shutdown-status-report.json)。
+
+### 追加窗口的新证据
+
+以下结论来自追加四小时中的已收齐实验，不改写原八小时中断时的观察；目标完成状态及当前份额见[轮次报告](../rounds/round26.md)。
+
+**编译优化机会要检查真实调用特化与实际构建配置。** 源码有检查算术、循环或末端读取，不等于热机器码仍支付这些成本。B25按官方shim和release配置核对后，原DP归约已经向量化；去掉两处检查增量后只有panic位置符号不同。A17的大部分源级末读也已被编译器消除。A19仅某个lazy分支保留真实变化，原协议未建立净收益。先查实际路径的lowering，可避免给不存在的机会写完整实现或证明；机器码差异本身仍不证明提速。[B25反馈](../../evidence/round26/route-b/b26-checked-lowering-feedback.json)、[A路线逐阶段依据](../../evidence/round26/route-a/a14-a20-route-summary.md)。
+
+**表示优化必须把信息维护、查询和恢复一起计入。** 树边前缀确实少做字节比较，但独立表与原字段打包两种真实版本都增加了总时间。把动态规划的来源数组删除，又需要在赢家确定后恢复原来源；大量省写不能直接换算成收益。最小实验证明机会后，应实现一份真正消费该信息的版本，并与原版、同源码副本和直接父实现同场比较。失败只排除这些确切表示，不证明所有前缀或延迟恢复方案无效。[树前缀真实成本](../../evidence/round26/route-b/b28-tree-pair-cost-feedback.json)、[no-owner预审与语义边界](../../evidence/round26/route-b/b38-no-owner-proof-preaudit.md)。
+
+**新机会先扣除历史机制已经覆盖的部分。** B34把相邻同价区间的合并机会拆成已有同距离覆盖与真正新增的不同距离覆盖，大部分表面收益属于前者。只用总合并数会把旧负例再次包装为新空间。反过来，公开652的逐长度base/owner填充与R18的未来成本范围缓存并不相同，不能仅因都叫“DP区间复用”就排除。比较对象应落到数据表示、消费语义和实际调用域。[同价组拆分](../../evidence/round26/route-b/b35-price-group-feedback.md)、[公开源码逐函数核验](../../evidence/round26/extension4h/new-source-audit/summary.md)。
+
+**源码可得性、文本相似和活跃机制是三层证据。** 榜单列表缺少源码字段，不说明官方source端点也不可用；本轮652／658按官方可公开规则取得了原始文件。静态调用图若漏掉Rust泛型调用，会误判可达函数；修复后，一些看似新增的活跃内核实际来自旧公开实现。保留作者、原始响应、精确哈希、泛型调用回归和实际路由证据，才能决定是复用新起点还是重复旧机制。静态接近程度不证明作者传承关系，也不代替实际运行覆盖。[原始公开读取](../../evidence/round26/extension4h/public-new-0735/receipt.json)、[静态核验与局限](../../evidence/round26/extension4h/new-source-audit/audit.json)。
+
+**约束请求要验证到实际执行对象。** A20用exe哈希、PID和启动时间绑定本次原engine，在运行期确认CPU0请求下实际允许0–3，采样出现CPU0与2。这补齐了原来的观察缺口，但不能反推历史A19根因；scope cpuset与频率不可见仍为UNKNOWN。已有R24显式绑核的收益不一致，不能据本次发现直接宣称修复计时。下一次若需要因果区分，应把运行期状态与实际调用关联，诊断协议和原成绩继续分列。[精确engine遥测](../../evidence/round26/route-a/a20-placement-feedback.json)、[未执行的最小区分计划](../../evidence/round26/route-a/a20-next-diagnostic-plan.md)。
+
+**已有证明的结论强度决定复用边界。** 父版本某个DP定理只给出totality，即使函数签名相同，也不能把它说成最优性或赢家来源等价证明。删除数组会改变提取后的循环状态，新helper还可能被提取成多个循环。实际提取接口、有限完整状态对照、最终parse义务和原版gate各自回答不同问题；文件体积可容纳迁移仅排除一个工程阻断，不说明证明已完成。[no-owner证明接口预审](../../evidence/round26/route-b/b38-no-owner-proof-preaudit.md)。
+
+**运行期状态和因果解释仍需分开。** 后续V1复制原engine，在原timers外记录CPU端点，并保持两过程同一DSO、原28文件及11次协议结构；所有结果仍只属诊断。内核状态直接定位到user.slice未向下启用cpuset，解释了本次用户scope缺少对应控制接口；但端点相等不能排除中途迁移，CPU与进程顺序也可能混杂。按file、method、stage、进程、CPU端点分层后，一组同CPU端点的两过程计时范围仍不交叠。它不能变成CPU校正系数，也不追认历史根因；约束落实与测量稳定性应分别检验。[V1原始绑定分析](../../evidence/round26/extension4h/v1-analysis.json)、[有界验证调整](../../evidence/round26/extension4h/verification-reserve-adjustment.json)。
+
+
+### 第26轮追加一小时：重复工作与小份额验证
+
+**先计实际执行的重复工作，再决定怎样消除。** C2 的末字节必要过滤能拒绝约40%的原扫描，但这些扫描平均只做1.014次字比较，新增检查反而覆盖所有调用；C3 延迟长后缀扩展保持公共输出，实际能减少的读取集中在极少数长匹配。逻辑冗余、匹配长度和可回收耗时是不同量，源级计数只能决定是否值得计时，不能证明更慢或换算收益。[C2实测与停止](../../evidence/round26/extension1h/c2-decision.json)、[C3实测与停止](../../evidence/round26/extension1h/c3-decision.json)。
+
+**跨阶段复用应保留实际正确性责任。** 现有搜索规格只证明返回过程总性，不能据“搜索已经看过字节”直接删除发射验证。C4 将完整验证保留在局部可信发射器，同时删除整个延迟选择阶段，真实支付压缩质量代价；完整gate状态与计时结果仍分别报告。这与在整个搜索链中传递已匹配事实有不同的证明成本，不能靠复制父Lean称为已验证。[固定方案与边界](../../evidence/round26/extension1h/route-c/c4-predeclaration.md)、[本窗报告](../rounds/round26-extension1h.md)。
+
+**小信号要按实际对照的分辨率解释。** C4单块中两份改变输出的文件有更快贡献，但全体份额仍为零，同二进制副本差异又足以翻转判断。逐文件总时间中位数对应的同一rep可以分解为解析、编码和配对分母的加法恒等式；它帮助定位分歧，不能将其他文件的变化全归因于噪声，也不能抹去它们制造“校正成绩”。保留局部有益证据和整体反例，同时把稳定性写为未确认。[原始分解](../../evidence/round26/extension1h/c4-cost-feedback.json)、[独立核对](../../evidence/round26/extension1h/audit/c4-final-timing-review.md)。
+
+
+### 第26轮追加90分钟：先实测与精确确认
+
+**操作计数、实际两轴和稳定份额逐层验收。** 本窗为此前只有计数的C2/C3补真实原协议时间测量，两者出现小份额线索，跨runner却仍有零；E1发现阶段四种校准/副本视图全正，独立确认主锚仍零3/4。计数不能证明版本更慢；一次正值也不能越过同源码对照的分辨率。用户要求每种选中机制先测一次时，以实际最小测试作为决策入口，不用代理指标提前宣布性能取舍。[本窗报告](../rounds/round26-extension90m.md)、[全部原始重算](../../evidence/round26/extension90m/delivery-analysis.json)。
+
+**短控制流变化也可能复制提取后的循环。** E1前置短路径使实际Funs新增12个同构循环，复制父证明没有覆盖它们。先看真实提取，再用内核检查的程序等式接回原规格；完整gate曾继续暴露“目标已关闭后仍执行tactic”的具体错误。修补只能绑定新Lean哈希，旧pair计时不能自动重标为新pair最终确认。[实际提取及修补](../../evidence/round26/extension90m/route-e/e1-real-clone-preflight.json)、[E1完整接受](../../candidates/r26-e-658-short-same-proof3/VERIFICATION.json)。
+
+**一次改进未恢复成本时，保留对解释的反例。** D2把深搜预算限制到一次后，五文件解析仍比父版慢约15%，因此“只修重复预算即可恢复”的具体预期未获支持；没有继续扫深度。组合E2另作同runner组件比较，最终也保留归零，不能相加组件的独立预测。[D2实测反馈](../../evidence/round26/extension90m/route-d/d2-feedback-and-route-pause.md)、[组合及联合重放](../../evidence/round26/extension90m/delivery.json)。

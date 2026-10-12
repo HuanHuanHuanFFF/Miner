@@ -1,0 +1,403 @@
+--- #receipt-614/parse.rs
++++ #652/parse.rs
+@@ -52,12 +52,12 @@
+ 
+ /// Routing class -> [engine, knob row]. Engine 6: the binary-tree parse of #109 (`x32b_parse`). Engine 2: engine D (row of D_KNOBS), 1: the forward dynamic program
+ /// (row of DP_KNOBS), anything else: S's planners (row of CFG; engine A or C as the row says).
+-pub const CLASS_TAB: [[usize; 2]; 32] = [[2, 0], [0, 0], [3, 1], [0, 1], [0, 2], [0, 3], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [0, 4], [0, 5], [0, 6], [2, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 8], [0, 13], [0, 14], [5, 0], [4, 0], [0, 15], [3, 0], [3, 0], [6, 0], [0, 5], [0, 5]];
++pub const CLASS_TAB: [[usize; 2]; 32] = [[2, 0], [0, 0], [3, 1], [0, 1], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [2, 7], [0, 2], [0, 3], [0, 4], [2, 8], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 6], [0, 11], [0, 12], [5, 0], [4, 0], [0, 13], [3, 0], [3, 0], [6, 0], [0, 3], [0, 3]];
+ 
+ /// S's engine configurations: [engine, knobs...]. Engine 0 = A (depth, skip, first passes, first
+ /// sampled, passes, sampled), anything else = C (depth, lower-case depth, weights DP, weights passes,
+ /// tree passes, DNA passes, DNA min passes, chain4 passes).
+-pub const CFG: [[usize; 9]; 16] = [[2, 32, 32, 1, 3, 2, 20, 12, 3], [2, 32, 32, 1, 3, 2, 21, 12, 3], [0, 48, 260, 6, 4, 5, 274, 0, 0], [0, 64, 260, 10, 8, 7, 21, 0, 0], [0, 16, 260, 8, 6, 4, 2, 0, 0], [0, 48, 256, 10, 8, 5, 19, 0, 0], [0, 64, 260, 8, 6, 6, 21, 0, 0], [0, 32, 260, 10, 8, 7, 21, 0, 0], [0, 48, 260, 8, 6, 6, 20, 0, 0], [0, 48, 260, 10, 8, 6, 20, 0, 0], [0, 32, 1024, 8, 6, 4, 530, 0, 0], [0, 12, 256, 10, 8, 5, 19, 0, 0], [0, 18, 260, 12, 10, 6, 20, 0, 0], [0, 64, 260, 8, 6, 7, 21, 0, 0], [0, 96, 260, 6, 4, 6, 20, 0, 0], [2, 4, 24, 1, 4, 2, 12, 7, 4]];
++pub const CFG: [[usize; 9]; 16] = [[2, 32, 32, 1, 3, 2, 20, 12, 3], [2, 32, 32, 1, 3, 2, 21, 12, 3], [0, 16, 260, 8, 6, 4, 2, 0, 0], [0, 48, 256, 10, 8, 5, 19, 0, 0], [0, 64, 260, 8, 6, 6, 21, 0, 0], [0, 32, 260, 10, 8, 7, 21, 0, 0], [0, 48, 260, 8, 6, 6, 20, 0, 0], [0, 48, 260, 10, 8, 6, 20, 0, 0], [0, 32, 1024, 8, 6, 4, 530, 0, 0], [0, 12, 256, 10, 8, 5, 19, 0, 0], [0, 18, 260, 12, 10, 6, 20, 0, 0], [0, 64, 260, 8, 6, 7, 21, 0, 0], [0, 96, 260, 6, 4, 6, 20, 0, 0], [2, 4, 24, 1, 4, 2, 12, 7, 4], [2, 32, 32, 1, 3, 2, 20, 12, 3], [2, 32, 32, 1, 3, 2, 20, 12, 3]];
+ 
+ /// Knob rows of the forward dynamic program: [ct (continuation threshold), lazy positions searched, d4 and d7
+ /// (chain depths), skip (take-as-is length), h3 distance, huff (1 = Huffman-length costs)].
+@@ -82,7 +82,7 @@
+ 
+ /// Knob rows of engine D: [ct, lazyn, d4, d7, skip, h3d, passes, pmode, flen, tbmax, lz2max, dupmode, fback (100 =
+ /// the dynamic program's relax_cands), d7 at lazy nodes, d7 at end-zone nodes, nice, cost kind].
+-pub const D_KNOBS: [[usize; 17]; 16] = [[4, 0, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 24, 48, 258, 0], [4, 3, 6, 72, 258, 32768, 2, 1, 16, 255, 258, 1, 0, 72, 96, 258, 2], [7, 7, 6, 96, 258, 32768, 2, 1, 16, 255, 258, 1, 16, 96, 96, 258, 2], [4, 3, 4, 32, 258, 32768, 3, 1, 16, 255, 64, 1, 16, 32, 32, 258, 0], [4, 4, 2, 96, 258, 32768, 2, 1, 16, 255, 258, 1, 100, 48, 48, 258, 0], [3, 3, 4, 144, 258, 32768, 2, 1, 16, 255, 258, 1, 16, 144, 144, 258, 2], [4, 3, 4, 32, 64, 32768, 3, 3, 16, 255, 64, 1, 100, 32, 32, 258, 0], [4, 0, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 24, 48, 258, 0], [4, 0, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 24, 48, 258, 0], [4, 0, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 24, 48, 258, 0], [4, 0, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 24, 48, 258, 0], [4, 0, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 24, 48, 258, 0], [4, 0, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 24, 48, 258, 0], [4, 0, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 24, 48, 258, 0], [4, 0, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 24, 48, 258, 0], [4, 0, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 24, 48, 258, 0]];
++pub const D_KNOBS: [[usize; 17]; 16] = [[4, 3, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 48, 48, 258, 0], [4, 3, 4, 72, 258, 32768, 2, 1, 16, 255, 258, 1, 16, 72, 96, 258, 2], [4, 4, 4, 96, 258, 32768, 3, 1, 8, 255, 258, 1, 100, 96, 96, 258, 0], [4, 3, 6, 72, 258, 32768, 2, 1, 16, 255, 258, 1, 0, 72, 96, 258, 2], [7, 2, 6, 96, 258, 32768, 2, 1, 16, 255, 258, 1, 16, 48, 96, 128, 2], [4, 3, 4, 32, 258, 32768, 3, 1, 16, 255, 64, 1, 16, 32, 32, 258, 0], [4, 4, 2, 96, 258, 32768, 2, 1, 16, 255, 258, 1, 100, 48, 48, 258, 0], [3, 3, 4, 144, 258, 32768, 2, 1, 16, 255, 258, 1, 16, 144, 144, 258, 2], [4, 3, 4, 32, 64, 32768, 3, 3, 16, 255, 64, 1, 100, 32, 32, 258, 0], [4, 3, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 48, 48, 258, 0], [4, 3, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 48, 48, 258, 0], [4, 3, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 48, 48, 258, 0], [4, 3, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 48, 48, 258, 0], [4, 3, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 48, 48, 258, 0], [4, 3, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 48, 48, 258, 0], [4, 3, 2, 48, 160, 32768, 2, 1, 16, 255, 258, 1, 100, 48, 48, 258, 0]];
+ // ════════════════════ tables: END ════════════════════
+ 
+ /// Rows of DP_KNOBS and of D_KNOBS (the tables' sizes: `dp_plan` and `d_plan` index them modulo these).
+@@ -1636,16 +1636,30 @@
+ /// cost, packed as value << 9 | l (the value is below 2^40).
+ #[inline(always)]
+ pub fn d_best_len(lc: &[u32; 512], ring: &[u64; D_RING], p: usize, lo: usize, e: usize) -> u64 {
+-    let mut bv = 0xFFFF_FFFF_FFFF_FFFFu64;
+-    let mut l = lo;
+-    while l < e {
+-        let v = (((ring[p.wrapping_add(l) % D_RING] >> 32).wrapping_add(lc[l % 512] as u64)) << 9) | (l as u64);
+-        if v < bv {
+-            bv = v;
++    let e1 = d_min(e, 259);
++    let l1 = lo.wrapping_add(1);
++    let c0 = if lo < e1 { (ring[p.wrapping_add(lo) % D_RING] >> 32).wrapping_add(lc[lo % 512] as u64) } else { 0xFFFF_FFFF_FFFF_FFFFu64 };
++    let c1 = if l1 < e1 { (ring[p.wrapping_add(l1) % D_RING] >> 32).wrapping_add(lc[l1 % 512] as u64) } else { 0xFFFF_FFFF_FFFF_FFFFu64 };
++    let mut bc = c0;
++    let mut bl = lo;
++    if c1 < bc {
++        bc = c1;
++        bl = l1;
++    }
++    let mut l = lo.wrapping_add(2);
++    while l < e1 {
++        let c = (ring[p.wrapping_add(l) % D_RING] >> 32).wrapping_add(lc[l] as u64);
++        if c < bc {
++            bc = c;
++            bl = l;
+         }
+         l += 1;
+     }
+-    bv
++    if bc == 0xFFFF_FFFF_FFFF_FFFFu64 {
++        bc
++    } else {
++        (bc << 9) | (bl as u64)
++    }
+ }
+ 
+ /// Push a candidate's end `p + el` back over `t` earlier starts (each start p - x pays the length el + x <= 258).
+@@ -1987,6 +2001,21 @@
+     d_push32(rs, cnt);
+ }
+ 
++/// The exact pre-filter of `d_walk` for the current best length: (offset w, word, bound) such that a candidate c can
++/// give a match longer than `best` only if (be8(s, c + w) ^ word) < bound (best < 7: the first best + 1 bytes agree;
++/// best = 7: the first 8 bytes agree; best >= 8: the 8 bytes ending at offset best agree).
++#[inline(always)]
++pub fn d_filt(s: &[u8], i: usize, b8: u64, best: usize) -> (usize, u64, u64) {
++    if best < 7 {
++        (0, b8, 1u64 << ((56 - 8 * best) % 64))
++    } else if best < 8 {
++        (0, b8, 1)
++    } else {
++        let w = best - 7;
++        (w, be8(s, i + w), 1)
++    }
++}
++
+ /// `walk` with a stop once a match of at least `nice` bytes is known.
+ #[inline(always)]
+ pub fn d_walk(
+@@ -2005,15 +2034,22 @@
+     let mut nc = nc0;
+     let mut best = best0;
+     let mut c = start;
+-    let mut k = depth;
++    let mut k = if best < cap && best < nice && nc < 15 { depth } else { 0 };
++    let mut f = d_filt(s, i, b8, best);
+     while k > 0 {
+         let d = i.wrapping_sub(c);
+-        if d.wrapping_sub(1) < 32768 && best < cap && best < nice && nc < 15 {
+-            let l = probe(s, c, i, b8, cap, best);
+-            if l > 0 && nc < 15 {
+-                cands[nc % 16] = (l as u32) | ((d as u32) << 9);
+-                nc += 1;
+-                best = l;
++        if d.wrapping_sub(1) < 32768 {
++            if (be8(s, c + f.0) ^ f.1) < f.2 {
++                let l = probe(s, c, i, b8, cap, best);
++                if l > 0 {
++                    cands[nc % 16] = (l as u32) | ((d as u32) << 9);
++                    nc += 1;
++                    best = l;
++                    f = d_filt(s, i, b8, best);
++                    if !(best < cap && best < nice && nc < 15) {
++                        k = 1;
++                    }
++                }
+             }
+             let nx = prev[c % WN] as usize;
+             if nx < c {
+@@ -2424,7 +2460,7 @@
+     head[h % 65536] = (pos + 1) as u32;
+     let mut best = 2usize;
+     if c3 > oldest && c3 <= pos {
+-        if (a_word_at(s, c3 - 1) ^ q) >> 40 == 0 {
++        if (a_word4_at(s, c3 - 1) ^ q) >> 40 == 0 {
+             let x = (pos - c3) as u32;
+             if mb.len() < mb.len().saturating_add(1) {
+                 mb.push(x | (a_slot_of(x) << 23));
+@@ -2513,7 +2549,7 @@
+     let mut i = 0usize;
+     let mut cl = 0usize;
+     let mut cd = 1usize;
+-    let mut nq = a_word_at(s, 0);
++    let mut nq = a_word4_at(s, 0);
+     let mut nt = (((nq >> 40) as u32).wrapping_mul(0x9E3779B1) >> 17) as usize;
+     let mut nh = (((nq >> 32) as u32).wrapping_mul(0x9E3779B1) >> (32 - A_HB)) as usize;
+     let mut n3 = h3[nt % 32768] as usize;
+@@ -2523,7 +2559,7 @@
+     while i < n {
+         if a_has_room(n, i, 266) {
+             let pre = (nq, nt, nh, n3, nr, nc);
+-            nq = a_word_at(s, i + 1);
++            nq = a_word4_at(s, i + 1);
+             nt = (((nq >> 40) as u32).wrapping_mul(0x9E3779B1) >> 17) as usize;
+             nh = (((nq >> 32) as u32).wrapping_mul(0x9E3779B1) >> (32 - A_HB)) as usize;
+             n3 = h3[nt % 32768] as usize;
+@@ -2809,6 +2845,123 @@
+     if i < ch.len() { ch[i] = tok; }
+ }
+ 
++/// The four bytes at `i` as the high half of a big-endian word (0 when fewer than 4 bytes remain): the
++/// top 32 bits of `a_word_at` wherever that is non-zero.
++pub fn a_word4_at(s: &[u8], i: usize) -> u64 {
++    if i < s.len() && s.len() - i >= 4 {
++        let w = ((s[i] as u32) << 24) | ((s[i + 1] as u32) << 16) | ((s[i + 2] as u32) << 8) | (s[i + 3] as u32);
++        (w as u64) << 32
++    } else {
++        0
++    }
++}
++
++/// Fills bl[l] = lx[l] + base and dl[l] = d for l = from..=to in chunks of eight (overshooting by up to seven
++/// entries, which later chunks or the lane masks of `a_lanes` make harmless).
++#[inline(always)]
++pub fn a_fill(bl: &mut [u32; 1024], dl: &mut [u32; 1024], from: usize, to: usize, base: u32, d: u32) {
++    let mut a = from;
++    while a <= to {
++        let b = a % 512;
++        let mut k = 0usize;
++        while k < 8 {
++            bl[b + k] = base;
++            dl[b + k] = d;
++            k += 1;
++        }
++        a += 8;
++    }
++}
++
++/// Pass 1 of a position: the cached records of i fill their length ranges (cheapest-so-far candidates are
++/// formed later); returns (prev, pd, odd) with prev/pd as the record loop computes them and odd = a record
++/// that the fill cannot express (bit 31 flag or a stop beyond the cost table) or a position near the end.
++#[inline(always)]
++pub fn a_dp_fill(mb: &Vec<u32>, dc: &[u32; 32], bl: &mut [u32; 1024], dl: &mut [u32; 1024],
++    cl: usize, i: usize, bias: u32, j0: usize, top: usize) -> (usize, usize, bool) {
++    let mut prev = i + 2;
++    let mut pd = 0usize;
++    let mut odd = i + 267 > cl;
++    let mut j = j0;
++    while j < top {
++        let m = mb[j];
++        let stop = i + ((((m >> 15) & 255) + 3) as usize);
++        if stop >= cl || m >= 0x80000000 {
++            odd = true;
++        } else if stop > prev {
++            let base = dc[((m >> 23) % 32) as usize].wrapping_add(bias);
++            a_fill(bl, dl, prev + 1 - i, stop - i, base, m & 32767);
++        }
++        if stop > prev {
++            prev = stop;
++            pd = ((m & 32767) + 1) as usize;
++        }
++        j += 1;
++    }
++    (prev, pd, odd)
++}
++
++/// Cheapest candidate over lengths 3..=hi of position i under the filled ranges (all ones if none): lanes are
++/// formed in a multiple of eight lengths, those above hi masked to all ones.
++#[inline(always)]
++pub fn a_dp_min(cost: &Vec<u32>, lc: &[u32; 512], bl: &[u32; 1024], i: usize, hi: usize) -> u32 {
++    let mut mbest = 4294967295u32;
++    if hi >= 3 && hi <= 258 {
++        let end = 3 + ((hi - 3) / 8 + 1) * 8;
++        if i + end <= cost.len() {
++            let stop = i + end - 1;
++            let h = hi as u32;
++            let mut at = i + 3;
++            let mut l = 3u32;
++            while at <= stop {
++                let c = (cost[at].wrapping_add(lc[(l % 512) as usize]).wrapping_add(bl[(l % 1024) as usize]) << 9) | l | 0u32.wrapping_sub(h.wrapping_sub(l) >> 31);
++                mbest = if c < mbest { c } else { mbest };
++                at += 1;
++                l = l.wrapping_add(1);
++            }
++        }
++    }
++    mbest
++}
++
++/// The record loop of the reference dynamic program (positions where the fill cannot be used).
++#[inline(never)]
++pub fn a_dp_recs(mb: &Vec<u32>, lc: &[u32; 512], dc: &[u32; 32], cost: &Vec<u32>, cl: usize, i: usize,
++    bias: u32, best0: u32, j0: usize, top: usize) -> (u32, u32) {
++    let mut best = best0;
++    let mut bd = 0u32;
++    let mut prev = i + 2;
++    let mut j = j0;
++    while j < top {
++        let m = mb[j];
++        let stop = i + ((((m >> 15) & 255) + 3) as usize);
++        let base = dc[((m >> 23) % 32) as usize].wrapping_add(bias);
++        let mut mbest = 4294967295u32;
++        if stop < cl && m >= 0x80000000 {
++            let l = stop.wrapping_sub(i) as u32;
++            mbest = (cost[stop].wrapping_add(lc[(l % 512) as usize]).wrapping_add(base) << 9) | l;
++        } else if stop < cl {
++            let mut at = prev + 1;
++            let mut l = at.wrapping_sub(i) as u32;
++            while at <= stop {
++                let c = (cost[at].wrapping_add(lc[(l % 512) as usize]).wrapping_add(base) << 9) | l;
++                mbest = if c < mbest { c } else { mbest };
++                at += 1;
++                l = l.wrapping_add(1);
++            }
++        }
++        if mbest < best {
++            best = mbest;
++            bd = m & 32767;
++        }
++        if stop > prev {
++            prev = stop;
++        }
++        j += 1;
++    }
++    (best, bd)
++}
++
+ #[inline(never)]
+ pub fn a_dp_pass(
+     s: &[u8],
+@@ -2829,6 +2982,8 @@
+             cost[z] = 0;
+             z += 1;
+         }
++        let mut bl = [0u32; 1024];
++        let mut dl = [0u32; 1024];
+         let mut i = pe;
+         let mut e = mp[pe] as usize;
+         let mut xl = 0usize;
+@@ -2838,64 +2993,57 @@
+             let j0 = mp[i] as usize;
+             let nxt = cost[i + 1];
+             let bias = 1048576u32.wrapping_sub(nxt);
+-            let mut best = (1048576u32.wrapping_add(lit[s[i] as usize])) << 9;
++            let lit_c = (1048576u32.wrapping_add(lit[s[i] as usize])) << 9;
++            let top = if e < mb.len() { e } else { mb.len() };
++            let p = a_dp_fill(mb, dc, &mut bl, &mut dl, cl, i, bias, j0, top);
++            let prev = p.0;
++            let el = if xl + 1 > 258 { 258 } else { xl + 1 };
++            let ext = xl >= 3 && xd >= 1 && xd <= i && i + el > prev && s[i] == s[i - xd];
++            let mut best = lit_c;
+             let mut bd = 0u32;
+-            let mut prev = i + 2;
+-            let mut pd = 0usize;
+-            let mut j = j0;
+-            let top = if e < mb.len() { e } else { mb.len() };
+-            while j < top {
+-                let m = mb[j];
+-                let stop = i + ((((m >> 15) & 255) + 3) as usize);
+-                let base = dc[((m >> 23) % 32) as usize].wrapping_add(bias);
+-                let mut mbest = 4294967295u32;
+-                if stop < cl && m >= 0x80000000 {
+-                    let l = stop.wrapping_sub(i) as u32;
+-                    mbest = (cost[stop].wrapping_add(lc[(l % 512) as usize]).wrapping_add(base) << 9) | l;
+-                } else if stop < cl {
+-                    let mut at = prev + 1;
+-                    let mut l = at.wrapping_sub(i) as u32;
+-                    while at <= stop {
+-                        let c = (cost[at].wrapping_add(lc[(l % 512) as usize]).wrapping_add(base) << 9) | l;
+-                        mbest = if c < mbest { c } else { mbest };
+-                        at += 1;
+-                        l = l.wrapping_add(1);
++            if p.2 {
++                let r = a_dp_recs(mb, lc, dc, cost, cl, i, bias, lit_c, j0, top);
++                best = r.0;
++                bd = r.1;
++                if ext {
++                    let stop = i + el;
++                    let x = (xd - 1) as u32;
++                    let base = dc[(a_slot_of(x) % 32) as usize].wrapping_add(bias);
++                    let mut mbest = 4294967295u32;
++                    if stop < cl {
++                        let mut at = prev + 1;
++                        let mut l = at.wrapping_sub(i) as u32;
++                        while at <= stop {
++                            let c = (cost[at].wrapping_add(lc[(l % 512) as usize]).wrapping_add(base) << 9) | l;
++                            mbest = if c < mbest { c } else { mbest };
++                            at += 1;
++                            l = l.wrapping_add(1);
++                        }
++                    }
++                    if mbest < best {
++                        best = mbest;
++                        bd = x;
+                     }
+                 }
+-                if mbest < best {
+-                    best = mbest;
+-                    bd = m & 32767;
++            } else {
++                let mut hi = prev - i;
++                if ext {
++                    let x = (xd - 1) as u32;
++                    let base = dc[(a_slot_of(x) % 32) as usize].wrapping_add(bias);
++                    a_fill(&mut bl, &mut dl, prev + 1 - i, el, base, x);
++                    hi = el;
+                 }
+-                if stop > prev {
+-                    prev = stop;
+-                    pd = ((m & 32767) + 1) as usize;
++                let r = a_dp_min(cost, lc, &bl, i, hi);
++                if r < best {
++                    best = r;
++                    bd = dl[((r & 511) % 1024) as usize];
+                 }
+-                j += 1;
+             }
+-            let el = if xl + 1 > 258 { 258 } else { xl + 1 };
+-            if xl >= 3 && xd >= 1 && xd <= i && i + el > prev && s[i] == s[i - xd] {
+-                let stop = i + el;
+-                let x = (xd - 1) as u32;
+-                let base = dc[(a_slot_of(x) % 32) as usize].wrapping_add(bias);
+-                let mut mbest = 4294967295u32;
+-                if stop < cl {
+-                    let mut at = prev + 1;
+-                    let mut l = at.wrapping_sub(i) as u32;
+-                    while at <= stop {
+-                        let c = (cost[at].wrapping_add(lc[(l % 512) as usize]).wrapping_add(base) << 9) | l;
+-                        mbest = if c < mbest { c } else { mbest };
+-                        at += 1;
+-                        l = l.wrapping_add(1);
+-                    }
+-                }
+-                if mbest < best {
+-                    best = mbest;
+-                    bd = x;
+-                }
++            if ext {
+                 xl = el;
+             } else {
+                 xl = prev - i;
+-                xd = pd;
++                xd = p.1;
+             }
+             e = j0;
+             a_store_choice(cost, ch, i, best, bd, nxt);
+@@ -7242,8 +7390,8 @@
+ // ═══ r17 refine: BEGIN ═══
+ // Seeded global refiner; pasted after #459 or included in a module importing its helpers.
+ // Exact model 0, lambda=0, unused=15. cfg rows: visits, iterations, repeat stride, perturb.
+-pub const RF_CONFIG: [[usize; 7]; 64] = [[0, 0, 1, 0, 0, 0, 16], [16, 2, 16, 4, 1, 0, 16], [4, 2, 1, 4, 2, 0, 16], [16, 2, 16, 4, 1, 2, 20], [64, 2, 1, 0, 1, 2, 12], [4, 2, 1, 4, 2, 0, 20], [64, 2, 16, 4, 1, 0, 16], [16, 4, 4, 4, 0, 0, 16], [16, 4, 8, 4, 0, 0, 16], [64, 2, 1, 4, 0, 0, 16], [128, 4, 1, 4, 0, 0, 16], [256, 4, 1, 4, 0, 0, 16], [16, 2, 1, 0, 0, 0, 16], [64, 2, 1, 0, 0, 0, 16], [8, 2, 1, 0, 0, 0, 16], [6, 2, 1, 4, 2, 0, 16], [4, 3, 1, 4, 2, 0, 16], [16, 4, 1, 4, 1, 0, 16], [8, 4, 1, 4, 1, 0, 16], [16, 2, 1, 4, 1, 0, 16], [8, 2, 1, 4, 1, 0, 16], [64, 4, 1, 4, 1, 0, 16], [32768, 4, 1, 4, 1, 0, 16], [16, 4, 4, 4, 1, 0, 16], [16, 4, 8, 4, 1, 0, 16], [64, 2, 1, 4, 1, 0, 16], [128, 4, 1, 4, 1, 0, 16], [256, 4, 1, 4, 1, 0, 16], [16, 2, 1, 0, 1, 0, 16], [64, 2, 1, 0, 1, 0, 16], [8, 2, 1, 0, 1, 0, 16], [32768, 2, 1, 4, 1, 0, 16], [8, 3, 1, 4, 1, 0, 16], [16, 3, 1, 4, 1, 0, 16], [32, 2, 1, 0, 1, 0, 16], [32, 2, 1, 4, 1, 0, 16], [32, 3, 1, 4, 1, 0, 16], [32, 4, 1, 4, 1, 0, 16], [64, 3, 1, 4, 1, 0, 16], [128, 3, 1, 4, 1, 0, 16], [256, 3, 1, 4, 1, 0, 16], [8, 3, 1, 4, 2, 0, 16], [16, 3, 1, 4, 2, 0, 16], [32, 2, 1, 0, 2, 0, 16], [32, 2, 1, 4, 2, 0, 16], [32, 3, 1, 4, 2, 0, 16], [32, 4, 1, 4, 2, 0, 16], [64, 3, 1, 4, 2, 0, 16], [32, 2, 16, 4, 1, 0, 16], [16, 4, 1, 4, 2, 0, 16], [8, 4, 1, 4, 2, 0, 16], [16, 2, 1, 4, 2, 0, 16], [8, 2, 1, 4, 2, 0, 16], [64, 4, 1, 4, 2, 0, 16], [32768, 4, 1, 4, 2, 0, 16], [16, 4, 4, 4, 2, 0, 16], [16, 4, 8, 4, 2, 0, 16], [64, 2, 1, 4, 2, 0, 16], [128, 4, 1, 4, 2, 0, 16], [256, 4, 1, 4, 2, 0, 16], [16, 2, 1, 0, 2, 0, 16], [64, 2, 1, 0, 2, 0, 16], [8, 2, 1, 0, 2, 0, 16], [32768, 2, 1, 4, 2, 0, 16]];
+-pub const REFINE: [usize; 32] = [34, 49, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 48, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 4, 0, 0, 0, 0, 0];
++pub const RF_CONFIG: [[usize; 7]; 64] = [[0, 0, 1, 0, 0, 0, 16], [1, 2, 1, 4, 2, 0, 16], [4, 2, 1, 4, 2, 0, 16], [4, 2, 1, 4, 2, 0, 20], [64, 2, 1, 0, 1, 2, 12], [64, 4, 1, 4, 0, 0, 16], [64, 2, 16, 4, 1, 0, 16], [16, 4, 4, 4, 0, 0, 16], [16, 4, 8, 4, 0, 0, 16], [64, 2, 1, 4, 0, 0, 16], [128, 4, 1, 4, 0, 0, 16], [256, 4, 1, 4, 0, 0, 16], [16, 2, 1, 0, 0, 0, 16], [64, 2, 1, 0, 0, 0, 16], [8, 2, 1, 0, 0, 0, 16], [6, 2, 1, 4, 2, 0, 16], [4, 3, 1, 4, 2, 0, 16], [16, 4, 1, 4, 1, 0, 16], [8, 4, 1, 4, 1, 0, 16], [16, 2, 1, 4, 1, 0, 16], [8, 2, 1, 4, 1, 0, 16], [64, 4, 1, 4, 1, 0, 16], [32768, 4, 1, 4, 1, 0, 16], [16, 4, 4, 4, 1, 0, 16], [16, 4, 8, 4, 1, 0, 16], [64, 2, 1, 4, 1, 0, 16], [128, 4, 1, 4, 1, 0, 16], [256, 4, 1, 4, 1, 0, 16], [16, 2, 1, 0, 1, 0, 16], [64, 2, 1, 0, 1, 0, 16], [8, 2, 1, 0, 1, 0, 16], [32768, 2, 1, 4, 1, 0, 16], [8, 3, 1, 4, 1, 0, 16], [16, 3, 1, 4, 1, 0, 16], [32, 2, 1, 0, 1, 0, 16], [32, 2, 1, 4, 1, 0, 16], [32, 3, 1, 4, 1, 0, 16], [32, 4, 1, 4, 1, 0, 16], [64, 3, 1, 4, 1, 0, 16], [128, 3, 1, 4, 1, 0, 16], [256, 3, 1, 4, 1, 0, 16], [8, 3, 1, 4, 2, 0, 16], [16, 3, 1, 4, 2, 0, 16], [32, 2, 1, 0, 2, 0, 16], [32, 2, 1, 4, 2, 0, 16], [32, 3, 1, 4, 2, 0, 16], [32, 4, 1, 4, 2, 0, 16], [64, 3, 1, 4, 2, 0, 16], [32, 2, 16, 4, 1, 0, 16], [16, 4, 1, 4, 2, 0, 16], [8, 4, 1, 4, 2, 0, 16], [16, 2, 1, 4, 2, 0, 16], [8, 2, 1, 4, 2, 0, 16], [64, 4, 1, 4, 2, 0, 16], [32768, 4, 1, 4, 2, 0, 16], [16, 4, 4, 4, 2, 0, 16], [16, 4, 8, 4, 2, 0, 16], [64, 2, 1, 4, 2, 0, 16], [128, 4, 1, 4, 2, 0, 16], [256, 4, 1, 4, 2, 0, 16], [16, 2, 1, 0, 2, 0, 16], [64, 2, 1, 0, 2, 0, 16], [8, 2, 1, 0, 2, 0, 16], [32768, 2, 1, 4, 2, 0, 16]];
++pub const REFINE: [usize; 32] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 0, 0, 0, 0, 0];
+ 
+ pub fn rf_zeros64(n: usize) -> Vec<u64> {
+     let mut v = Vec::with_capacity(n);
+@@ -8098,7 +8246,7 @@
+  }if SFcost(&ts)<SFcost(&original){SFplan(&ts,input.len())}else{SFplan(&original,input.len())}
+ }
+ 
+-pub const SF_TAB: [usize; 32] = [0, 0, 0, 4, 4, 0, 2, 4, 4, 0, 0, 0, 0, 0, 0, 4, 2, 2, 0, 4, 2, 2, 2, 2, 2, 4, 0, 0, 0, 4, 0, 0];
++pub const SF_TAB: [usize; 32] = [0, 0, 0, 0, 4, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0];
+ 
+ pub fn parse(input: &[u8], out: &mut [u32]) -> usize {
+     let nt = r18_base(input, out);

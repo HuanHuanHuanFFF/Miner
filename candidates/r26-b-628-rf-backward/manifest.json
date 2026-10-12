@@ -1,0 +1,27 @@
+{
+  "candidate": "r26-b-628-rf-backward",
+  "parent": "public628",
+  "parent_hashes": {
+    "parse.rs": "784e02703c98a32f85753cae4f3b62aea3f505d91088869f327e0ad646629c14",
+    "Parse.lean": "7c909191f2801e76ac5080966d6df5339191ce48a97a16a3e66ee2a0ca4c636e"
+  },
+  "hashes": {
+    "parse.rs": "9ae98b2c71b3bea0a3a386fcb3d1e9a0bb4bd3335d5ed0e808955b742e0b304c",
+    "Parse.lean": "7c909191f2801e76ac5080966d6df5339191ce48a97a16a3e66ee2a0ca4c636e"
+  },
+  "mechanism": "Replace RF forward per-length relaxation with suffix DP over unchanged cached match offers, using existing SF range minima on constant-price length-code domains. Original RF token-block model, candidate discovery, two iteration budget and internal estimate acceptance remain unchanged. Existing validating Z271 emits the resulting plan.",
+  "difference_from_old_work": "R18 span/prefix/ring/previous-position dominance retained forward transition relaxation and either changed layout or skipped covered offers. This changes the DAG recurrence direction and performs range-minimum queries instead of all-length writes. Existing SF solver/RMQ machinery is reused with attribution; this is not a new RMQ invention.",
+  "attribution": {
+    "source_receipt": "references/round25-public-628/source-receipt.json",
+    "author_hotkey": "5DM8HSJ17XPGKYTERQUbQuhqWJm3RtpJqTSUH7Dn8m5MVuJ6",
+    "SF_base_source": "references/round24-public-609/source-receipt.json",
+    "SF_base_author_hotkey": "5DPo51y7zmk2WfnkvU4MxAqw66ouW9KonrUGguLRWtPqiP9t",
+    "prior_counterexamples": "docs/rounds/round18.md RF optimization table"
+  },
+  "proof_status": "INHERITED_PROOF_UNCHANGED_DRAFT_MISSING_NEW_HELPER_SPECS",
+  "proof_dependency": "Need new helper-loop totality and return nt<=input.length; no optimality proof needed for LZ77 correctness because original Z271 revalidates final matches. Existing rf_dp remains defined, so its proof declarations remain valid. The 523018-byte Lean file has only1270B headroom; replace unreferenced original rf_dp proof declarations after real extraction to make room for the new helper specifications. Do not raise official size/recursion/time limits.",
+  "semantic_status": "Intentional equal-cost tie differences and altered iterative final token plans possible. No real Rust/encoder/decode run yet. No claim of equivalence with original forward DP on cost-wrapping inputs.",
+  "performance_status": "UNKNOWN; SF min structure needs five updates per position and queries per candidate, which may lose to shallow RF despite fewer theoretical length writes.",
+  "source_reversal": "Remove exact HELPER bytes and reverse the single refine rf_dp call; complete public628 source restored.",
+  "formal_submission_sent": false
+}

@@ -1,0 +1,31 @@
+{
+  "candidate": "r26-d-658-selective-depth-proof1",
+  "parent": "references/round26-public-658",
+  "hashes": {
+    "parse.rs": "f6c7f97f9fb275d5a27ff4a52d02f065bb9c4cfd39e73e311c5a7f5a3ea8e0a8",
+    "Parse.lean": "66e8a6acc45d4eb35501d9811525a8f1e397cad956b9c7424b4e3e7d950c69a1"
+  },
+  "attribution": {
+    "source_receipt": "references/round26-public-658/source-receipt.json",
+    "author_hotkey": "5G3YLL7PuDhRBoVoDBYKhAfTxFM4EouSDiYuFXeeWciNRzyK"
+  },
+  "mechanism": "U118 row9 only: first probe current head; before residual search, read-only peek next-position head using original lazy gain. If next head wins, defer current remainder; original lazy winner then receives residual depth11. Otherwise finish current depth11. No persistent metadata or table-write change.",
+  "difference": "A8 added lazy search after full current search. D1 avoids full current search on a shallow-next-head win, reallocating that budget to the selected next start. Unlike A21 proposed one-shot choice, continuous original lazy loop remains. Unlike C4, lazy decisions and exact matching remain.",
+  "risks": [
+    "Shallow comparison can discard a uniquely valuable deeper current match.",
+    "Extra peek and repeated shallow-next search can outweigh saved current search.",
+    "New lazy winner deepening may itself be superseded by later lazy iterations.",
+    "Longer remaining match does not guarantee better whole-stream compression."
+  ],
+  "proof_status": "UNCOMPILED_DRAFT_FULL_GATE_NOT_RUN",
+  "measurement_status": "Rust native compile, finite decode, public originalencoder and originalprotocol timing UNKNOWN. One actual originalprotocol screen required before route promotion or pause; counts are explanatory only.",
+  "formal_submission_sent": false,
+  "proof_parent": "candidates/r26-d-658-selective-depth",
+  "byte_sizes": {
+    "parse.rs": 370328,
+    "Parse.lean": 509695
+  },
+  "helper_fragment_sha256": "1a7c9cc74f46eae1d0866ef18a130da24595c7a22a73ddd5341e9eb34a880b22",
+  "actual_source_extraction": "evidence/round26/38267276245/screen90-d1/gate/research5",
+  "extraction_scope": "Actual original extraction passed for identical Rust; static interface compatibility is not full Lean/gate acceptance."
+}

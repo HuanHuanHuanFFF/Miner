@@ -1,0 +1,18 @@
+{
+  "status": "VERIFIED_FINITE_INTEGER_GAIN_DOMAIN_ONLY_NOT_RUST_OR_LEAN",
+  "source_sha256": "97254225b7a7a5c67a749b9fed7b58c94a9612b816c233581db6d7401d502181",
+  "source_function_sha256": "b464232059dfc605d568d3d26fbac58fc39c540331feac77ff0a27c08462c0f9",
+  "legal_length_steps_checked": 255,
+  "minimum_gain_increase_per_extra_byte": 64,
+  "distance_steps_checked": 163835,
+  "separable_distance_samples": 2304,
+  "inferred_dominance": "For legal offers with older source (distance no smaller), an equal or shorter match cannot have greater original pc_gain. Thus an exact future cost-pruning implementation may refuse older candidates until they can exceed the current best offer length. This would preserve score selection if all original candidate validation/selection order and no-offer cases remain.",
+  "potential_followup_only": "The frozen A8 source remains unchanged. Wait for actual quality and counters before considering exact pruning; this note does not authorize a depth/threshold sweep.",
+  "proof_and_boundary_requirements": [
+    "Current best must be a valid offered match; original0/0 no-offer needs original fallback.",
+    "A cap258 best can return without older probes because no longer match is allowed.",
+    "Tail-byte rejection based on best length needs q+bestlen<n, or explicit cap/end rejection.",
+    "Using pc_probe_lazy with l=bestlen+1 would change helper preconditions/captures and must be re-extracted; do not silently replace the frozen source.",
+    "Python arithmetic checks finite legal gain domain only; not Rust whole-parse equivalence, actual lookup savings or a complete Lean proof."
+  ]
+}

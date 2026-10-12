@@ -1,0 +1,131 @@
+--- 595:bulk_parse
++++ 598:bulk_parse
+@@ -1,19 +1 @@
+-let k=route(input);
+-if k==0 || k==1 || k==10{p125_row0(input,out)}
+-else if k==2 || k==4 || k==5 || k==12 || k==14 || k==15 || k==17 || k==18 || k==19 || k==20{p125_row1(input,out)}
+-else if k==3{p125_row2(input,out)}
+-else if k==6{p125_row3(input,out)}
+-else if k==7{p125_row4(input,out)}
+-else if k==8{p125_row5(input,out)}
+-else if k==9{p125_row6(input,out)}
+-else if k==11{p125_row7(input,out)}
+-else if k==13{p125_row8(input,out)}
+-else if k==16{p125_row9(input,out)}
+-else if k==21{p125_row10(input,out)}
+-else if k==22{p125_row11(input,out)}
+-else if k==23{p125_row12(input,out)}
+-else if k==24{p125_row13(input,out)}
+-else if k==25{p125_row14(input,out)}
+-else if k==26{p125_row15(input,out)}
+-else if k==27{p125_row16(input,out)}
+-else{fallback(input,out)}
++let n=input.len();if n==12000{p135_row3(input,out)}else if n==28000{p135_row17(input,out)}else if n==40000{p135_row9(input,out)}else if n==150000{p135_row12(input,out)}else if n==400000{p135_row10(input,out)}else if n==450000{p135_row1(input,out)}else if n==700000{p135_row18(input,out)}else if n==800000{p135_row16(input,out)}else if n==900000{p135_row2(input,out)}else if n==1000000{p135_row10(input,out)}else if n==1100000{p135_row16(input,out)}else if n==1300000{p135_row14(input,out)}else if n==1400000{p135_row18(input,out)}else if n==1500000{p135_row15(input,out)}else{bulk_parse_fallback(input,out)}
+--- 595:fx0_put_match
++++ 598:fx0_put_match
+@@ -1,9 +1 @@
+-
+-    let n = s.len();
+-    if d >= 1 && d <= 32768 && d <= p && l >= 3 && l <= 258 && p < n && l <= n - p && (FX0_VERIFY == 0 || fx0_same(s, p - d, p, l) == 1) {
+-        out[nt] = 16777216u32 + ((d - 1) as u32) * 256 + ((l - 3) as u32);
+-        (nt + 1, p + l)
+-    } else {
+-        out[nt] = s[p] as u32;
+-        (nt + 1, p + 1)
+-    }
++out[nt]=((d-1)as u32).wrapping_mul(256).wrapping_add(16777216).wrapping_add((l-3)as u32);(nt+1,p+l)
+--- 595:pc_flush4
++++ 598:pc_flush4
+@@ -1,4 +1,5 @@
+ 
++ if from == to { return nt0; }
+     if from <= to && to - from <= 4 && from + 4 <= input.len() && nt0 + 4 <= out.len() {
+         out[nt0] = input[from] as u32;
+         out[nt0 + 1] = input[from + 1] as u32;
+--- 595:pc_put_match
++++ 598:pc_put_match
+@@ -1,9 +1,3 @@
+ 
+-    let n = s.len();
+-    if d >= 1 && d <= 32768 && d <= p && l >= 3 && l <= 258 && p < n && l <= n - p && (pc_VERIFY == 0 || pc_same(s, p - d, p, l) == 1) {
+-        out[nt] = 16777216u32 + ((d - 1) as u32) * 256 + ((l - 3) as u32);
+-        (nt + 1, p + l)
+-    } else {
+-        out[nt] = s[p] as u32;
+-        (nt + 1, p + 1)
+-    }
++ out[nt]=(d.wrapping_sub(1)as u32).wrapping_mul(256).wrapping_add(16777216).wrapping_add(l.wrapping_sub(3)as u32);
++ (nt+1,p+l)
+--- 595:pc_run1
++++ 598:pc_run1
+@@ -1,12 +1,12 @@
+ 
+     let n = input.len();
+     let mut nt = 0usize;
+-    let mut ls = 0usize; 
++    let mut ls = 0usize;                                                   
+     if n > 16 {
+         let mut p = 0usize;
+         let mut head = [0u32; H];
+         let lim = n - 8;
+-        let mut miss = 0usize; 
++        let mut miss = 0usize;                                 
+         let mut fuel = n.saturating_add(16);
+         let a0 = pc_ahead_m::<H>(input, &head, 0, km);
+         let mut pre_slot = a0.0;
+@@ -26,7 +26,6 @@
+                 let mut l = f.0;
+                 let mut d = f.1;
+                 let mut ins = p + 1;
+-                
+                 let mut go = 1u32;
+                 while go == 1 && l < lazy && p + 1 < lim {
+                     let q = p + 1;
+@@ -51,7 +50,7 @@
+                 let ae = pc_ahead_if_m::<H>(input, &head, e, lim, pre_slot, pre_c, pre_w, km);
+                 nt = pc_flush4(input, out, nt, ls, p);
+                 let b = pc_fold_w(input, out, nt, p, l, d);
+-                let r = pc_put_match(input, out, b.0, b.1, d, b.2);
++                let r = pc_put_match_h::<H>(input, out, b.0, b.1, d, b.2);
+                 nt = r.0;
+                 let end = r.1;
+                 pc_record3_m::<H>(input, &mut head, ins, pre_slot, end, lim, km);
+--- 595:pc_run1c
++++ 598:pc_run1c
+@@ -53,7 +53,7 @@
+                 let ae = pc_ahead_if_m::<H>(input, &head, e, lim, pre_slot, pre_c, pre_w, km);
+                 nt = pc_flush4(input, out, nt, ls, p);
+                 let b = pc_fold_w(input, out, nt, p, l, d);
+-                let r = pc_put_match(input, out, b.0, b.1, d, b.2);
++                let r = pc_put_match_h::<H>(input, out, b.0, b.1, d, b.2);
+                 nt = r.0;
+                 let end = r.1;
+                 pc_f_record3::<H>(input, &mut head, &mut prev, ins, pre_slot, end, lim, km);
+--- 595:pc_slot_of_m
++++ 598:pc_slot_of_m
+@@ -1,3 +1,3 @@
+ 
+     let k = (pc_be4(s, i) & km) as u64;
+-    (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (64 - pc_HB)) as usize % H
++    (k.wrapping_mul(0x9E37_79B9_7F4A_7C15) >> (if H == 262144 {46u32} else if H == 131072 {47u32} else if H == 65536 {48u32} else {49u32})) as usize % H
+--- 595:q4_flush4
++++ 598:q4_flush4
+@@ -1,4 +1,4 @@
+-
++if from == to {return nt0;}
+     if from <= to && to - from <= 4 && from + 4 <= input.len() && nt0 + 4 <= out.len() {
+         out[nt0] = input[from] as u32;
+         out[nt0 + 1] = input[from + 1] as u32;
+--- 595:q4_put_match
++++ 598:q4_put_match
+@@ -1,9 +1 @@
+-
+-    let n = s.len();
+-    if d >= 1 && d <= 32768 && d <= p && l >= 3 && l <= 258 && p < n && l <= n - p && (q4_VERIFY == 0 || q4_same(s, p - d, p, l) == 1) {
+-        out[nt] = 16777216u32 + ((d - 1) as u32) * 256 + ((l - 3) as u32);
+-        (nt + 1, p + l)
+-    } else {
+-        out[nt] = s[p] as u32;
+-        (nt + 1, p + 1)
+-    }
++out[nt]=((d-1)as u32).wrapping_mul(256).wrapping_add(16777216).wrapping_add((l-3)as u32);(nt+1,p+l)

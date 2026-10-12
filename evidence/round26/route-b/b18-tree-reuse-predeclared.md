@@ -1,0 +1,5 @@
+# B18 static tree-implementation precedent check
+
+Gap: after public601 supplied no new core, an A-tree U16 child representation was considered. Root then identified the closer R24 AD/AG negative precedent and AE conditional-state removal. This note corrects the initial novelty assumption before generating a model/candidate/trace.
+
+Change: compare current552 `a_tree_insert` and its helper closure to R24 `Z189`, and isolate actual differences in the parent finder rather than relying on a broad R12 shallow-chain analogy. Inspect frozen B9 real parent contexts for the unchanged skip>=258 condition. Minimum operation is a lightweight source/receipt census; matching AD kernel stops the child16 direction, while AE eligibility identifies only a reusable component and does not establish a current speed/target claim. Cap: the remainder of the original20-minute recovery checkpoint, no added CI or restarted clock. Evidence: `b18-tree-reuse-audit.json` and decision note; prior source/receipts remain frozen.

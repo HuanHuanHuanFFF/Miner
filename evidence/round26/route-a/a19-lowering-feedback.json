@@ -1,0 +1,62 @@
+{
+  "status": "VERIFIED_NARROW_LAZY_BRANCH_LOWERING_AND_FINITE_IDENTITY_ONE_PAIRED_SCREEN_PREPARED",
+  "run_id": "38223589692",
+  "source_commit": "9da21411bcf5310e6412b4d9d16c6cbcc66edc39",
+  "parent_rust_sha256": "1185749453a5abe100106f2e15082eca84521292b7233784a9c2f4562367f3ad",
+  "derived_rust_sha256": "10b2e02e230df8a2225e94db15a50eadf2d5d2abaabfa193936e885dd97a8e64",
+  "raw_files_sha256": {
+    "original_checked-p125_row2.s": "46d99c7388b96b6c8dd5b91f6163ffd5d62a9cf3f1419e38bc6b02e480512469",
+    "safe_wrapping_words-p125_row2.s": "d71c6d80ed0767fafc2963f1d0c81c536e5c45701a74e12f958d7115d5a5a8e4",
+    "original_checked-p125_row9.s": "fd21ccafd51ae9b367194a34d7a767711e0a50ba9e71fe646868f66ce1c3d109",
+    "safe_wrapping_words-p125_row9.s": "91b58c1da492d0c060687fad7b8d765c43e9f96fd653bcc055c5c32c7f2d5287",
+    "original_checked-p125_row9.ll": "841a6940e4379513cf36d41c01dff15a973dcfe4142562e80455d85d157cb9e1",
+    "safe_wrapping_words-p125_row9.ll": "d7321c2027ed6583149a3a6675162caa7bc523992ef36ced609347d8f9132ae4"
+  },
+  "helper_cases": 1548,
+  "public_token_identity_files": 28,
+  "row2_ASM_equal_except_panic_data_symbols": true,
+  "row9_main_wordloop_opcode_sequence": [
+    "movq",
+    "bswapq",
+    "addq",
+    "cmpq",
+    "jne",
+    "leaq",
+    "cmpq",
+    "ja",
+    "leaq",
+    "addq",
+    "cmpq",
+    "jbe",
+    "xorl",
+    "jmp",
+    "movq",
+    "bswapq",
+    "leaq",
+    "addq",
+    "cmpq",
+    "ja",
+    "leaq",
+    "addq",
+    "cmpq",
+    "jbe",
+    "xorl",
+    "addq",
+    "cmpq",
+    "je"
+  ],
+  "row9_function_opcode_counts": {
+    "original_checked": 998,
+    "safe_wrapping_words": 994
+  },
+  "machine_findings": [
+    "Both parentandchanged mainwordloop alreadyuse64bit movq andbswapq. IRload_i64count0 doesnotmean scalarbyteassembly.",
+    "Row2wholeASM differs only panicdata labels; no workinginstructionimprovement.",
+    "Row9lazy wordloop original.LBB24_51 cmpq %r15,%rcx / jbe panic disappearsbefore new.LBB24_49. Remainingbe8 cmp$-9guard persists.",
+    "Whole row9register/stacklayout alsochanges. Opcodecount998->994 isnotdynamicinstructioncount orspeed."
+  ],
+  "correction": "Earlier broadreading of mainwordloop p+kchecks was too broad: mainwordloop instructionsequence remains identical. The surviving actionablechange is narrowlazywordloop, notallcommon calls ornewwordload merging.",
+  "decision": "Freeze exactalreadyexecuted two-sum variant andrunatmostone original totalscreen with658/candidate same-sourcecontrols, plus precedingextraction. No additional combination/parameter orfullgate onassembly alone.",
+  "time": "UNKNOWN_PENDING_SCREEN",
+  "full_gate": "NOT_RUN"
+}

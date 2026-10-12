@@ -1,0 +1,39 @@
+{
+  "candidate": "r26-c-658-deferred-extension-proof2",
+  "parent": "references/round26-public-658",
+  "hashes": {
+    "parse.rs": "58324f244b6deb669e4a4af523a09e5900a016d027b32cc90c785363a19b8da7",
+    "Parse.lean": "e193b0c34200c4177395e7b0502b8ee51a12de2995052ffc457185764f376300"
+  },
+  "attribution": {
+    "source_receipt": "references/round26-public-658/source-receipt.json",
+    "author_hotkey": "5G3YLL7PuDhRBoVoDBYKhAfTxFM4EouSDiYuFXeeWciNRzyK"
+  },
+  "mechanism": "Only O_A base eval caps discovery at64, the largest active O_A lazy threshold. Immediate-accept matches are finished by the original trusted o_a_match_len during emission, whose verified length is then emitted directly. Short/lazy suggestions use original emitter; N70, replay and all other emitters unchanged.",
+  "actual_scope": "O_A greedy paths (docs/prose and any existing sparse restart). All routing/classifiers unchanged. No file identity, search budget or table modification.",
+  "safety": "New emitter validates source/window/range, caps to min258,n-pos-8 and uses original proven match_len; emits only full>=64, otherwise original literal fallback. It never emits unverified hinted bytes.",
+  "equivalence": "INFERRED for active O_A thresholds<=64 and BEXT=0. Near-tail source cap remains n-pos-8. Real native output may change and must be measured; no all-input equality claim.",
+  "proof_status": "FAILED_ORIGINAL_PUBLIC_GATE_STAGE4_SYNTAX",
+  "performance": "UNKNOWN. Save discovery reads beyond64 for accepted longmatches; extra conditional/entry overhead and trusted fullscan remain.",
+  "formal_submission_sent": false,
+  "native_evidence": "evidence/round26/38247257224/quality-c3-native/diagnostics/r26-c-deferred/receipt.json",
+  "native_evidence_sha256": "ccf20ac1030e83bb45b8813f9badc415372df9383bc4ed2c56e463cc71737246",
+  "native_scope": "Finite native correctness/quality and originaltrajectory counts only; not full Lean or independent timeconfirmation",
+  "implementation_parent": "candidates/r26-c-658-deferred-extension",
+  "implementation_parent_hashes": {
+    "parse.rs": "58324f244b6deb669e4a4af523a09e5900a016d027b32cc90c785363a19b8da7",
+    "Parse.lean": "354d56aa9f58536efdb410f3d5ecdf1945bded607965fe8a48161f96b035c494"
+  },
+  "proof_origin": {
+    "path": "candidates/r26-c-658-deferred-extension-proof1/Parse.lean",
+    "sha256": "dc80e9ddc7464f2f4233dc928f0059dc0709da67bd3d075618e4927b5af84232"
+  },
+  "proof_adaptation": "Explicit standalone cap spec and unconditional spec_bind after first step*. No direct generated rem reference or try around cap handling. Writer full becomes Nat and is captured from the actual Matches hypothesis, avoiding an inaccessible generated full name.",
+  "proof_static_scope": "Byte-preserving Rust copy, complete parent proof with local adaptations, no sorry/admit/new axiom; static checks are not Lean acceptance.",
+  "proof_freeze_time_utc": "2026-10-12T15:24:05.538369+00:00",
+  "prior_failure_receipt": "evidence/round26/38267162180/gate-90-c3-proof1/exact-gate/exact-gate/gate-receipt.json",
+  "prior_failure_receipt_sha256": "1a9f9f9ac96a38fcc1bf36ee52e67ccbfdf0c1b145623a9bba5d06638fbb9a72",
+  "prior_failure_log_sha256": "671fb89273e1cf8a2e40d62b47d1965da07990ee3cec53980699e3ab5f851bf6",
+  "confirmation_status": "No post-freeze confirmation of this exact pair. Prior Rust-identical proof1 measurements remain separately bound.",
+  "gate_failure_receipt": "evidence/round26/38270325708/gate-90-c3-proof2/exact-gate/exact-gate/gate-receipt.json"
+}

@@ -1,0 +1,33 @@
+{
+  "candidate": "r26-e-658-short-same-proof2",
+  "parent": "references/round26-public-658",
+  "hashes": {
+    "parse.rs": "bc1b3fec788a0d58d220efb84505e26f83a7045129c724f43095704c6097adc0",
+    "Parse.lean": "b0d67036601c00bd7cb9831f26693e70d08ab9d529a0b2c5ac5a7562b60c8275"
+  },
+  "attribution": {
+    "source_receipt": "references/round26-public-658/source-receipt.json",
+    "author_hotkey": "5G3YLL7PuDhRBoVoDBYKhAfTxFM4EouSDiYuFXeeWciNRzyK",
+    "ownership": "Derivative of public658; all parent source and proof comments retained."
+  },
+  "mechanism": "Before original U118 same loop, len1..8 with both full8 loads in bounds returns prefix equality from the same big-endian xor/shift rule as the original tail; len8 uses shift0. Generic loop/tail remains unchanged for len0, len>8 and insufficient load bounds.",
+  "difference": "Existing U118/PC masked tail already handles len<8 after generic loop state; this is a dispatch/control-flow change, not a new matching primitive. No equivalent measured historical front-dispatch found in the checked reports/manifests/Rust search.",
+  "equivalence": "INFERRED exact return semantics for valid U118 calls: len1..7 original masked tail at k0, len8 original first word equality. No all-input machine execution proof or finite native check yet.",
+  "guard_safety": "len>=1 excludes shift64; len<=8 bounds shift to0..56. n>=8 and a,b<=n-8 make full loads safe and a+8/b+8 nonoverflowing. Old fallback retained byte for byte.",
+  "proof_status": "FAILED_ORIGINAL_PUBLIC_GATE_STAGE4_STATEMENT",
+  "performance": "UNKNOWN. Compiler may already lower the original short case equivalently; added dispatch may cost more. Must receive one original-protocol paired measurement, with all negative results retained.",
+  "formal_submission_sent": false,
+  "prepared_utc": "2026-10-12T15:12:47.321349+00:00",
+  "implementation_parent": "candidates/r26-e-658-short-same",
+  "proof_adaptation": "Add12 rfl equalities for actual Aeneas fallback clones3..14 and normalize them to original loop0/1/2 before step*. Original loop invariants and complete same_spec obligations remain unchanged. Actual kernel checking and fast-prefix branch matching remain untested.",
+  "proof_origin": {
+    "path": "candidates/r26-e-658-short-same-proof1/Parse.lean",
+    "sha256": "f89c185a339c499c4b07deb7e25eb94a66c7b3bd6f28e51a6e36e64f997cee12"
+  },
+  "extraction_reference": "evidence/round26/38268487485/screen90-e1/gate/research5/r26-e-658-short-same/Funs.lean",
+  "extraction_reference_sha256": "f781f91c9a723b06c8f07c69d65de72754f9b4a53f2b9942b3eb46cc6c3a58c9",
+  "proof_freeze_time_utc": "2026-10-12T15:28:16.819329+00:00",
+  "confirmation_status": "No post-freeze measurement or full gate for this exact proof2 pair. Prior Rust-identical measurements are discovery only.",
+  "gate_failure_receipt": "evidence/round26/38270692372/gate-90-e1-proof2/exact-gate/exact-gate/gate-receipt.json",
+  "gate_failure_receipt_sha256": "5ed99ffb62372f9aea2f60e6fa7a88cc01492f81cdbc52a359b6e189b667b6e7"
+}

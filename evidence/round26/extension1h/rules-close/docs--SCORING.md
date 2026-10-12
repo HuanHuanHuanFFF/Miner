@@ -1,0 +1,387 @@
+# Scoring and admission
+
+This page describes the repository's scoring implementation. The
+[competition page](https://conjectures.io/competitions/deflate) is the source
+for current published rules and official metrics. Defaults and policy may
+change; check `validator/scoring/` and `.env.example` when operating a validator.
+
+The validator's weight is split first: the treasury (uid 121) takes 80% and this
+competition 20% (`validator/scoring/split.py`, code constants on netuid 66). Everything below
+describes how the competition's 20% is shared out; "burns" means *is unpaid* within that
+share, and the unpaid part goes to the treasury, not the burn uid (see "Treasury and
+competition budget" at the end). If scoring fails the treasury is paid everything for that
+epoch rather than the epoch being skipped.
+
+The competition's share is paid by one component: position on the Pareto frontier,
+weighted by how much that position actually buys (`SCORING_PARETO_SHARE=1.0`). A second
+component, recent improvement on the record, is implemented but switched off
+(`SCORING_IMPROVEMENT_SHARE=0.0`); it is described at the end of this page. Both are set in
+`.env.example`, and the defaults in `validator/scoring/config.py` are the same.
+
+The published policy (`api_snapshot["policy"]`, which the platform serves at
+`/v1/competitions/deflate`) records the shares each scoring pass used, so the competition
+page follows what was actually paid.
+
+What the frontier does not claim burns. So does the share of a hotkey that has since deregistered:
+redistributing it would quietly pay everyone else for someone else's work.
+
+`just weights-preview` reads the database without chain writes. Without a supplied
+metagraph, miner payouts are labeled provisional; use `--metagraph hotkeys.json` with a
+hotkey-to-UID map for eligibility-aware results.
+
+## The frontier
+
+Each verified, accepted submission with a valid published aggregation is a point.
+All points are scored before checking payout eligibility. Baselines and deregistered
+hotkeys retain their positions. If a hotkey has several frontier points, only its
+oldest frontier submission is payable (lowest submission ID breaks timestamp ties).
+The other Pareto allocations burn; miner shares are never renormalized afterward.
+Exact coordinate duplicates retain the oldest point. This is defensive handling;
+registration requirements still apply at intake.
+
+Each competitor is a point on two axes, both "lower is better":
+
+- **time** — total compression seconds (LZ77 + shared DEFLATE encoding)
+- **ratio** — compressed bytes as a percentage of raw, *not* absolute bytes, because the
+  corpus changes between rounds and absolute bytes are not comparable across it
+
+The Pareto frontier is the set of points nothing else beats on both axes at once. A
+dominated point — something both slower and larger than another submission — earns nothing
+from this component. There is no sense in which it bought anything, and with the
+improvement component off it earns nothing at all.
+
+### Which weight function, and why
+
+Weight functions live in `validator/scoring/pareto.py`. The comparison script
+`scripts/pareto-weights.py` can be used to explore alternatives; its example
+measurements are not official competition results.
+
+**local-global-improvement-space-log** is the default. For a point between faster/worse A and slower/better B,
+normalize its time and compression ratio within their rectangle to t and r. The default
+coefficient is `2 - t - r`: 1 on the straight trade-off, greater on the better side.
+The local coefficient uses immediate neighbours (endpoints get 1); the global coefficient
+uses the frontier extremes. Multiply both coefficients by the logarithmic improvement
+space factor, then normalize across frontier points and multiply by the Pareto share.
+For points sorted by increasing time, the factor is the mean of:
+
+- `log(t_next / t_i) / log(t_max / t_min)`, zero for the slowest point;
+- `log(r_previous / r_i) / log(r_max / r_min)`, zero for the worst compression ratio.
+
+This splits a fixed improvement budget on each axis. Equal proportional gains receive
+equal credit; a fixed absolute gain receives more credit at lower values. Local-global
+coefficients themselves remain linear. Both axes must be positive and finite. A singleton receives the entire Pareto share.
+Other methods, including elbow-sweetspot, remain selectable for comparisons.
+
+Local-global does not use the external speed limit in its formula. Scoring eligibility requires balanced slowdown no greater than 10 times the paired incumbent
+and balanced compressed/original size no greater than 40%. The Pareto time coordinate is now the arithmetic mean of per-file
+candidate/incumbent median total-time ratios within each corpus, then the equal-weight
+mean across corpora. Total time means paired LZ77 + encoding time, excluding warmups.
+A coordinate of 1 means incumbent performance; lower is better. Nonempty files count
+equally regardless of size. Empty files are excluded from both balanced metrics but
+remain in absolute telemetry. Positive per-file median times are required.
+The absolute sum of per-file medians remains telemetry only. The dimensionless Pareto coordinate has its own paired bootstrap
+interval (`balanced_time_ratio`); it is not the ratio of summed times.
+Recalculation reuses retained evidence; preview automatically applies the new formula. Stage medians are kept for telemetry, but their sum is not the scored statistic. The scored compression ratio is the arithmetic mean of per-file compressed/raw
+ratios within each corpus, then the equally weighted mean across corpora. Empty
+files are excluded from this ratio (an all-empty corpus is rejected), but their
+bytes and timings remain in telemetry. Total compressed/raw bytes is retained
+as byte-weighted telemetry. Recency improvements use the same balanced ratio. Recorded
+corpus and environment identities remain available for audit; completed results are
+compared by default when those identities differ.
+
+Baseline allocations burn explicitly. With only baselines and no miner improvement,
+all emission burns. These controls do not by themselves solve near-duplicate frontier
+manipulation; novelty thresholds remain a separate policy decision.
+
+## Recent improvement (off)
+
+Paid only when `SCORING_IMPROVEMENT_SHARE` is above zero; the competition runs with it at 0.
+With it on, the Pareto share and this one split the competition's share between them.
+
+An accepted submission is an **improvement** when it beats the record by at least
+0.25%, relative.
+
+- The record starts at the smaller of the **incumbent and active baseline sizes**, not at infinity. Beating nothing is not
+  an advance, and a first submission worse than the baseline every miner is given has not
+  moved anything.
+- It then follows whichever is smaller, the best accepted submission so far or the
+  incumbent. Promoting a new incumbent mid-round therefore raises the bar rather than
+  handing a free improvement to whoever submits next.
+- Current normalized evidence compares balanced compressed/raw ratios. Legacy evidence
+  can retain a byte record for historical inspection.
+  A submission that is merely faster at the same compression ratio has not moved
+  the record; it may still be a frontier point.
+- The threshold is a policy setting in `.env.example`.
+
+The last **ten** improvements share `SCORING_IMPROVEMENT_SHARE`, decaying geometrically at 0.6, newest first.
+
+A hotkey holding several of the last ten accumulates their shares: shipping three of the
+last ten advances is worth three slots, not one. Past ten, an improvement has been
+superseded often enough that rewarding it is the frontier's job, not recency's.
+
+If nothing has beaten the reference record yet, this share burns. There is no recent progress to
+reward, and spreading it over the frontier would quietly change the split.
+
+## Cadence
+
+Once per epoch, a margin of 12 blocks before the boundary, and only when the chain's
+weights rate limit allows. Setting late means the vector lands just before consensus reads
+it, so it reflects the newest scores; setting early wastes the window and risks the rate
+limit blocking the one that would have mattered. The boundary is the chain's own: the
+subnet's last epoch block (`LastMechansimStepBlock`) plus the tempo, read every tick, not a
+formula from the netuid, which on finney ran 85-91 blocks late (`validator/chain/schedule.py`).
+
+Every attempt — set, skipped, or refused by the chain — writes a `weight_sets` row with a
+`score_snapshots` row per competitor beside it, in one transaction. `just db-weights`
+prints the last few. A vector whose reasoning went missing is not an audit trail.
+
+## Tuning
+
+Every number above is an environment variable (`SCORING_*` in `.env.example`), including
+the choice of weight function — all eight stay selectable, so a live round can be retuned
+without a deploy. A misspelt method name stops the worker at startup rather than quietly
+paying a round with the wrong function.
+
+`just weights-preview --method diagonal-sweep-k1.0` shows what a different one would pay
+before you set it.
+
+## Database evidence and reproducibility
+
+The scorer consumes published aggregations, not local JSONL files or legacy summary-only
+submission rows. `SCORING_CORPORA` remains an explicit operator filter for a JSON map of
+corpus names to content hashes. Without that override, recorded corpus and environment
+differences do not remove published points or stop scoring. Live scoring uses each
+aggregation's published values; a later calculator or harness change does not silently
+recalculate historical points.
+
+Aggregations retain exact run IDs, source hash, calculator version, environment/build
+provenance and timing statistics. Per-file sample standard deviation describes repetition
+spread. A deterministic paired per-file bootstrap provides percentile 95% intervals for
+summed median times, their ratio, and the balanced per-file time-ratio coordinate. Intervals with fewer than ten measured rounds are
+flagged sparse; fewer than two means no interval. These telemetry intervals do not capture systematic bias or
+between-run host drift. Admission uses a separate candidate/reference comparison described below.
+
+`just weights-preview --out-dir data/benchmark-reports/baselines` writes an operator-only
+aggregate report and plot. `--aggregation-id ID` may be repeated to inspect selected
+stored evidence for previously verified, accepted submission identities. Reports include exact
+inputs and scoring configuration; historical weight-set snapshots remain unchanged.
+
+Current aggregation version is `compression-relative-time-v5`, using schema-v4 measurements.
+Encoding runs on every repetition, and hashing/decompression checks remain outside
+both stage timers. Per-file LZ77, encoding and total timing statistics are retained;
+bootstrap intervals apply to total compression time, the total-time ratio, and the
+balanced per-file time ratio used on the Pareto axis. Historical snapshot `time_s`
+columns retain absolute seconds; the relative coordinate is derived from the linked
+aggregation evidence and is exported explicitly as `normalized_time_ratio` in previews.
+Legacy LZ77-only aggregations cannot enter the current frontier; they require new
+measurements. No synthetic totals are backfilled from the old single encoding sample.
+
+Preview automatically recalculates from stored schema-v4 evidence with the current
+formula, including after an aggregation version change. It uses the runs linked to
+each submission's published aggregation (or explicit aggregation IDs), preserving
+the original records. It validates corpus/source identities, measurement compatibility
+and invalidation status. Completed static/Lean verification remains valid across
+operator code changes. Neither verification nor benchmarks are executed by preview.
+The report records the published calculator version and can recalculate raw evidence
+for inspection without changing live published values.
+
+To update published evidence for live scoring after an aggregation version change,
+reaggregate retained schema-v4 runs with
+`just bench-aggregate --submission-id ID --corpus NAME:SHA256 --publish`
+(repeat --corpus for each corpus, optionally select --run-id). This does not
+rerun benchmarks. Old aggregations remain immutable and usable until an operator
+explicitly replaces or invalidates them. A changed verifier fingerprint does not require
+refreshing completed static/Lean verification. Incremental baseline seeding reuses
+completed verification of unchanged submitted files.
+
+
+## Statistical speed admission
+
+Aggregation publishes measurements; admission decides whether they may participate in
+rewards. A candidate that appears faster with equal or worse compression must establish
+its speed advantage against **one** point. An equal-compression point it would replace
+is the reference; otherwise the reference is the immediate slower, better-compressing
+neighbor on the hypothetical updated frontier. Exact duplicates and dominated candidates
+do not qualify. A new best compression ratio has no such neighbor and requires no speed
+test. Comparisons use full-precision balanced compression ratios, without a minimum
+compression improvement.
+
+The speed coordinate remains the equal-corpus mean of equal-file candidate/incumbent
+median total-compression time ratios. Positive gain is
+`100 * (1 - candidate_coordinate / reference_coordinate)`. Admission holds corpus files
+and weights fixed and resamples repetitions within each nonempty file, recomputing both
+complete coordinates per draw. It does not resample files or count per-file wins.
+Content hashes and corpus manifests must match; duplicate contents retain their manifest
+membership and existing weights. Three measured repetitions per file are the minimum;
+normal benchmarks use eleven.
+
+The reproducible comparison uses 2,000 bootstrap draws and a seed derived from immutable
+run evidence. Within a run, submission/incumbent repetitions are paired only when recorded
+execution-order indices establish interleaved round blocks. Separate runs are resampled
+independently; shared run observations reuse draws. LZ77 and encoding remain paired in
+each total-time observation. Quantiles use linear interpolation at `(n-1)*p`.
+
+The **5th percentile gain must be strictly positive**: a one-sided nominal 95% confidence
+rule. Plots show the central **90%** interval (5th–95th percentiles), whose lower endpoint
+is that decision boundary. This is not a 95% probability that the algorithm is faster,
+and does not control false acceptances across repeated submissions. Small-sample
+bootstrap coverage is approximate. Cross-file dependence, host drift between runs and
+corpus-composition uncertainty are not estimated. Fresh interleaved candidate/reference
+confirmation benchmarks remain a future improvement.
+
+Outcomes are `passed`, `not_required`, `inconclusive`, or `dominated`. Missing or invalid
+evidence is an evaluation error; missing predecessors or explicitly changed admission
+evidence may be pending. A change in recorded corpus or environment identity alone does
+not stop a statistical comparison.
+Inconclusive, dominated, pending and invalid points receive zero allocation and do not
+change frontier geometry or recency record history. Admitted baselines participate in
+weighting and burn their allocations; registration and oldest-submission duplicate-hotkey
+payment rules apply after allocation as before.
+
+### Commands and replay
+
+```sh
+just db-migrate
+just admission-run                         # admit newly published evidence
+just admission-replay --preview            # inspect a changed context without writes
+just admission-replay                      # explicitly publish revised decisions
+just admission-replay --historical         # backfill historically verified evidence
+just weights-preview                       # read-only recalculation and plots
+```
+
+`--historical` reads existing successful verification and retained runs. It does not
+refresh verification or republish aggregations. Both admission commands accept
+`--out PATH` for decision JSON;
+relative paths are relative to `validator/`. `--preview` never writes decisions.
+
+`submission_admission_checks` is append-only, including database-enforced immutability.
+Each row stores candidate/reference aggregation IDs, policy, outcome and reason, plus
+JSONB statistics, historical frontier coordinates/membership, ordered decision-prefix
+keys and evidence hashes. `submissions.admission_check_id` selects the current decision;
+score snapshots retain the exact decision ID used. Decisions are reused only when the
+candidate, complete preceding context, policy and ordering agree. Ordinary weight
+recalculation reads these decisions and never chooses a new reference. A changed context
+requires explicit replay; there is no automatic admission of legacy rows. All older
+checks remain available after replay. Publication serializes pointer and evidence access
+in one transaction.
+
+Baselines use the versioned order in `validator/scoring/admission.py`.
+Baseline seeding benchmarks the selected names, then explicitly replays
+admission in this order. `--only` does not alter ordering; missing predecessors leave
+later entries pending. `--overwrite` appends benchmark evidence and replays affected
+successors while retaining earlier decisions. Adding/removing baseline names requires a
+manifest/version change and replay. Miner batches use submission timestamp then ID.
+Miner-only deployments are supported when no baseline set is active.
+
+### Miner-facing explanations
+
+Default output is `data/benchmark-reports/current/`. `scores.json` includes per-point
+admission status, reason, evidence IDs, policy and full statistical metadata. It labels
+read-only preview decisions separately from persisted results. `speed-admission.png`
+shows measured gain and uncertainty against zero. `admission/submission-ID.png` shows
+that interval, a zoomed historical Pareto comparison and per-file gains. Excluded points
+are hollow and never join the admitted frontier line. The horizontal comparison range
+is anchored to the reference, not a marginal timing interval for the candidate.
+
+The per-file panel reports faster-on-X-of-Y files and ties. This is descriptive: a
+legitimate aggregate win may include regressions, and aggregate gain is not the mean of
+per-file gain percentages. File hashes, corpus identities and run IDs in JSON support
+an API implementing the same views without requiring local benchmark files.
+
+Admission detail plots use stacked gain, normalized-time and Pareto panels. Per-file
+diagnostics are written separately as `admission/submission-<id>-files.png`.
+The competition page publishes the current miner-facing metrics.
+
+
+## Treasury and competition budget
+
+The weight setter is the validator's only `set_weights` caller and sets the whole vector
+(`validator/scoring/split.py`): the treasury takes 80% and the competition allocates up to
+20% by score. On netuid 66 the treasury uid (121) and the 20% are code constants; a
+`WEIGHT_TREASURY_UID` or `WEIGHT_COMPETITION_SHARE` that disagrees refuses to start. Off
+mainnet both are configurable (`WEIGHT_TREASURY_UID` defaults to `WEIGHT_BURN_UID`, itself
+121 by default; `WEIGHT_COMPETITION_SHARE` to 0.20). `WEIGHT_COLLECTOR_UID` and
+`WEIGHT_COLLECTOR_HOTKEY` are accepted as older names for `WEIGHT_TREASURY_UID` and
+`WEIGHT_TREASURY_HOTKEY`.
+
+Setting `WEIGHT_TREASURY_HOTKEY` to the treasury's registered SS58 hotkey guards against uid
+reassignment: an absent hotkey causes a recorded skip, with no fallback to a different
+recipient. Off mainnet it also locates the treasury uid and follows it if it changes; on
+netuid 66 it must sit at uid 121, or the epoch is skipped. A treasury uid absent from the
+metagraph is likewise a recorded skip.
+
+Scoring and speed admission still include baselines in the frontier. Miner scores are
+multiplied by the competition's share without renormalization. Baseline, deregistered,
+duplicate-hotkey and otherwise unpaid allocations go to the treasury. For example, a miner
+allocated 25% of the competition budget receives 5% overall; the treasury receives 95% if
+there are no other payable miners. An empty or baseline-only round, or one whose scoring
+raises, sends 100% to the treasury. The burn uid is never eligible for miner payment.
+
+`SCORING_PARETO_SHARE` and `SCORING_IMPROVEMENT_SHARE` remain fractions **within** the
+competition budget: 1/0 (Pareto only) by default. Score
+snapshots and weights-preview report competition-local fractions; the weight-set audit
+vector contains actual subnet fractions and its summary records the budget and treasury
+allocation. Historical `burn` labels in score reports mean unpaid competition allocation;
+normal weight setting routes it to the treasury. No schema migration is required.
+
+`WEIGHT_DRY_RUN=1` remains the default. `WEIGHT_BURN_MODE=1` pauses the competition: its
+share goes to `WEIGHT_BURN_UID` (default 121, the treasury itself; the treasury too if that
+uid is absent) and the treasury's share is paid as usual. Restart the weight setter after
+configuration changes. Run only one weight-setting worker for a validator wallet, and do not
+also run conjectures-validator's retired emissions worker: this worker constructs the
+complete subnet vector.
+
+
+### The submission bounty
+
+Each (hotkey, submission) pair is paid at most `ALPHA_TOTAL_SUBMISSION_BOUNTY` alpha over
+its lifetime (default 3600, half a day of the subnet's total alpha), whatever its frontier
+position or incentive. Past that, its weight is 0 and its share goes to the treasury like
+any other unpaid allocation (`validator/scoring/bounty.py`).
+
+What a pair has received is read from the chain. Once per epoch the weight setter reads each
+uid's `Emission` (with its hotkey and coldkey) and credits it to the submissions this
+validator's accepted vector paid that hotkey for. It prefers the vector consensus actually
+read: the one set `RevealPeriodEpochs` before the epoch, under commit-reveal. A hotkey
+paid for several submissions splits by their weights. Emission to a hotkey this competition
+did not pay is not counted. Each epoch is recorded once (`bounty_epochs`), with its credits
+(`bounty_accruals`), so a restart never counts one twice. Only the latest epoch is readable,
+so while the weight setter is down the epochs that pass are not counted, and it logs the
+gap.
+
+At every scoring pass a payable pair is capped when what it has received plus its projected
+pay would exceed the bounty. The projection is the larger of its last credited epoch and
+what the new vector would pay it (its weight x the competition's share x the last epoch's
+miner pool), over one epoch plus the reveal delay, because a vector set now keeps paying
+until a later one is revealed. So a pair stops slightly short of the bounty rather than
+past it. A cap is permanent (`bounty_caps`): the pair's burn reason is `bounty-cap` in
+`score_snapshots`, and it stays capped after its observed rate falls to zero.
+
+Each pass publishes the totals in `weight_sets.api_snapshot["bounty"]`: the limit, and each
+pair's `earned_rao`/`earned_alpha` and `capped`. The platform API's submissions, Pareto and
+leaderboard endpoints read them from there; `/submissions/{id}` and `/leaderboard` on this
+service read the ledger directly. None of this touches a pinned file, so the verifier
+fingerprint is unchanged. Counting starts when migration 0012 is applied; alpha received
+before then is not in any total.
+
+### Scoring boundaries and benchmark timeouts
+
+`SCORING_MAX_TIME_RATIO=10` and `SCORING_MAX_RATIO_PCT=40` are inclusive reward
+eligibility limits. Both use equal-corpus averages of per-file ratios. Points
+outside either limit remain stored but are excluded before Pareto construction,
+statistical neighbor selection, and both Pareto and improvement rewards. Admission
+records contain outcome `excluded`, reason `outside-scoring-bounds`, and structured
+`scoring_bounds` values, limits, and violations. Baselines use the same policy.
+
+Successful benchmarks and aggregations are retained regardless of scoring
+bounds. `VERIFY_BENCH_TIMEOUT=300`
+remains the wall-clock cap per build/measurement process; a measurement includes
+one corpus and all repetitions. `VERIFY_TOTAL_TIMEOUT=2700` caps the worker gate.
+The deprecated benchmark `--speed-floor` option is metadata only.
+
+Apply migration 0010 with `just db-migrate`. Changed scoring bounds invalidate old
+admission decisions: use `just admission-replay` for current verified evidence, or
+`just admission-replay --historical` for an operator's historical baseline replay.
+`just weights-preview` recalculates historical decisions without rebenchmarking.
+Restart workers after changing environment settings. `SCORING_SPEED_FLOOR` remains
+an alias for the scoring time limit; the new setting takes precedence.

@@ -1,0 +1,9 @@
+# B33: complete flattened consumer net total cost after all-call parity
+
+B31 run38222796160 passed28 originalencoder token/output hashes/bytes/decode versus552, and1,376actual sampled/full DPcalls compared completecost/ch arrays equal to original552 under same arguments/prices/cache and cloned initialvectors. The real consumer handled19,573,439normal positions; it filled564,136,512slot pairs and scanned379,797,088rounded slots versus305,270,500valid slots. All overshoot/base/dist writes and extra masked reads are material work, not free vectorization. Different-run pure profiles do not decide net speed.
+
+Minimum next operation: one original11rep full encoder paired discovery with two reversed blocks, retaining exact parent and flattened same-source controls; extract actual flat Rust first to expose proof interface, existing finite equivalence/decode before measurement. Current complete official capture is bound explicitly. No fullproof gate requested.
+
+Decision: parity/extraction failure stays distinct from net performance. Recompute every block and both calibration views using the same latest capture; retain all controls/negative rows. Regression or immaterial savings pause this exact public652-style closure, with its real fill/rounded work recorded. Positive whole-program savings may justify one measured composition or proof/gate/frozen confirmation if it changes current target geometry; a SIMD marker or discovery peak never establishes stable5%/10%. The no-scratch equal-price run concept has only a finite model and must first obtain true different-distance current-price coverage before production.
+
+Proposed45-minute job cap, inherited extractor1100s cap; all actual queue/collection counted within root's budget. Source frozen atRust e609a1aee215165a8df155ab124dbaa538fbd5111d956098cce4154431cd72f9, parent proof stillDRAFT. Original official encoder/flags/checkers remain; no financial or formal upload.

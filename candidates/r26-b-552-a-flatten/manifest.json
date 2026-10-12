@@ -1,0 +1,35 @@
+{
+  "candidate": "r26-b-552-a-flatten",
+  "parent": "public552",
+  "source_component": "public652 A DP helper closure",
+  "written_utc": "2026-10-12T08:12:23.105579+00:00",
+  "hashes": {
+    "parse.rs": "e609a1aee215165a8df155ab124dbaa538fbd5111d956098cce4154431cd72f9",
+    "Parse.lean": "51b5ea83cbad026c044b5c7812c9189231f5273cc0902342c850af02a1c0b592"
+  },
+  "source_audit": {
+    "original_function_changed": "a_dp_pass",
+    "new_helpers": [
+      "a_fill",
+      "a_dp_fill",
+      "a_dp_min",
+      "a_dp_recs"
+    ],
+    "preserved": "All matcher/tree/word8/D/route/config/fitter/emitter source bytes unchanged.",
+    "full_source_reversal_restores_parent_bytes": true,
+    "component_exact_function_bytes_equal_652": true
+  },
+  "mechanism": "Actual per-position base/dist fill into two1024U32 scratch arrays, overshoot at most7 and mask final lanes, one complete packed scan with winner-length owner lookup. Odd records/near tail retain original record reducer. No block extrema/RMQ or new search edges.",
+  "different_from_R18_AW": "AW kept future cost min/max/position block cache and segmented constant lc queries. This uses no cost extrema cache: flatten distance bases and owners per current position, preserving differing prices in one scan.",
+  "costs_retained": "8192byte scratch initialization, every fill including odd fallback work, overshoot stores, rounded masked reads, map lookup, original sampled/full fitting and original encoder.",
+  "attribution": {
+    "original_parent_receipt": "references/round24-public-552/source-receipt.json",
+    "parent_author_hotkey": "5FnYJUitGUNdNyWAB7YnjoYoacLsd7TKxeAND4eYyiFVBP8q",
+    "component_receipt": "references/round26-public-652/source-receipt.json",
+    "component_author_hotkey": "5EZCsCZ3rxSS5wkhmeZvCULREPMvC99gvhuoYAFN4Hv2PPzL"
+  },
+  "proof_status": "DRAFT_PARENT_PROOF_UNCHANGED; source652 proof is reference only, new exact extraction/migration/fullgate required.",
+  "semantic_status": "UNKNOWN: original28 encoder and actual-call full cost/ch equality observer first.",
+  "performance_status": "UNKNOWN: whole652 formal metrics do not isolate this component; no assumed gain.",
+  "formal_submission_sent": false
+}
