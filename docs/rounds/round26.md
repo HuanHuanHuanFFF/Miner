@@ -63,3 +63,15 @@ B12原轨迹中12257237个继承前缀均通过字节检查，普通低价重叠
 测量诊断另有[归属校正](../../evidence/round26/measurement-diagnosis/affinity-scope/receipt.json)：原回执的process_affinity来自外层Python driver，而原sandbox另请求AllowedCPUs=0。该字段不能证明实际engine在四核迁移；engine生效CPU／cgroup仍UNKNOWN。此校正未改变任何计时或份额，也未运行新的诊断协议。
 
 [阶段审计](../../evidence/round26/audit-checkpoint-0330.json)核对713份文件、75.62MB、17份不同Rust和30次自然结束CI（27成功、3失败）。[候选台账](../../evidence/round26/candidate-ledger-0330.json)按实际测量与证明身份区分，未计时版本的份额保留UNKNOWN。本轮仍没有完整gate或冻结独立确认。账户UTC00:06真实剩60%，未重置、购买、正式上传或签名。固定截止与两小时确认预留保持不变。
+
+## 半程检查：两个完整机制的实际反馈
+
+UTC01:05:59再次[查询官方身份](../../evidence/round26/official-check-halfway/receipt.json)，最新可用快照仍为[29807](../../evidence/round26/official-a12-live/receipt.json)，政策不变、freshness为unknown。[六次标准运行的逐块重算](../../evidence/round26/all-with-a12-analysis-29807.json)共98份配对进程；[主角色统计](../../evidence/round26/all-with-a12-roles-29807.json)中七份候选各一runner两发现块，共14主块全部0%，5%／10%达标次数均0。副本及校准视图不增加独立样本数。
+
+A12实际4096×8行索引的[原生检查](../../evidence/round26/route-a/cycle-a12-native-feedback.json)通过162个直接core有限case及2073185次真实缓存／插入前offer一致性检查；原28编码少4762B／0.020442pp，12文件更小、1更大、15保持身份。随后[原协议运行](../../evidence/round26/38188959659/screen-a12/gate/state.json)两主块却慢9.176233%／9.610965%，同源码候选副本有相近回退，两种641参照下全部0%。精确Rust提取成功，只说明接口可提取，复制的父Lean未适配，目录名gate不代表完整验收。停止这个版本的完整证明投入。
+
+该回退主要落在13个变化文件的parser阶段；编码与配对分母不足以解释它。数组更小、第一来源预取更少，都未变成总时间收益。A11的“预取之后残余行变化454次”与A12的“record阶段任意被观察行写入8804次”口径不同，不能直接说失效增加20倍。下一次诊断仅比较冻结事件序列中的维护成本，孤立重放的缓存、事件读取与查询交错差异保留，不能换算成生产性能或因果定论。
+
+B14固定子集去掉旧同码完整前缀与继承来源后，有3188次真实价格改善、49次同价tie，全部292121新增前缀字节有效；这些数仍未外推到全输入输出。B15据此实现完整新来源，独立检查[原匹配图隔离](../../evidence/round26/38189769824/discard-b15-native/diagnostics/r26-b-tag-graph/receipt.json)：逐位置滤除新增tag后，15442529份原记录顺序和值完全相同，9314028份新记录全部通过原字节检查。最终[原编码器](../../evidence/round26/quality-b15-summary.json)只少21B／0.000203301pp，并有bundle、C及Python文件变大；纯生产版本的完整阶段成本也保留。停止配对和证明，不继续在该稀薄价格域加门槛。下一圈直接检验不同D前向长度图的质量／时间交换，若更慢也依据实际二维位置判断。
+
+[半程审计](../../evidence/round26/audit-checkpoint-halfway.json)核对818份文件、85.45MB、19份不同Rust和34次自然结束CI（31成功、3失败）；[台账](../../evidence/round26/candidate-ledger-halfway.json)保留未计时、未证明和未正式提交状态。仍无稳定正份额新候选，没有R26完整gate或冻结独立确认。UTC00:54:26账户真实剩56%，共享窗口，重置及购买均0；目标工具累计5248489 tokens只作工具计数，缓存分类和实际账单费用UNKNOWN。
