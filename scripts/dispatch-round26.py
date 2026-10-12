@@ -54,7 +54,23 @@ def main():
     spec=importlib.import_module('verify-round26-exact').validate(args.batch) if mode=='gate' else validate(args.batch)
     assert not spec.get('preflight_only'), 'Preflight fixtures cannot be dispatched as research results'
     assert spec['r26_mode']==mode and bool(spec.get('native_only'))==(mode=='native')
-    if mode not in ('gate', 'extract') and spec.get('r18_role') != 'independent_confirmation':
+    adjustment = None
+    if spec.get('r26_v_call_cpu'):
+        # A single explicit reallocation of the unused verification reserve.
+        # This remains diagnostic; it never becomes candidate confirmation.
+        path = 'evidence/round26/extension4h/verification-reserve-adjustment.json'
+        adjustment = json.loads((ROOT/path).read_bytes())
+        assert args.budget == 'extension4h' and mode == 'diagnostic'
+        assert args.batch == adjustment['batch'] == 'verify-callcpu-v1-diagnostic'
+        assert spec['r18_role'] == adjustment['role'] == 'measurement_verification'
+        assert spec['r26_expected_candidates'] == 0 and all(e.get('control') for e in spec['entries'])
+        assert adjustment['original_budget_sha256'] == hashlib.sha256((ROOT/budget_path).read_bytes()).hexdigest()
+        assert adjustment['unchanged_deadline_utc'] == budget['deadline_utc']
+        assert datetime.now(timezone.utc) < datetime.fromisoformat(adjustment['latest_dispatch_utc'])
+        assert args.max_minutes <= adjustment['job_cap_minutes'] == 25
+        assert not any(json.loads(p.read_bytes())['batch'] == args.batch for p in (ROOT/'evidence/round26').glob('dispatch-*.json')), 'Only one V1 launch is authorized by this allocation'
+        assert spec['r26_required_files'][path] == hashlib.sha256((ROOT/path).read_bytes()).hexdigest()
+    elif mode not in ('gate', 'extract') and spec.get('r18_role') != 'independent_confirmation':
         assert datetime.now(timezone.utc) < datetime.fromisoformat(budget['latest_new_research_dispatch_utc']), 'Final confirmation/collection reserve has begun; do not launch a new research batch'
     if spec.get('r26_dispatch_after_gate_pair_known'):
         for entry in spec['entries']:
@@ -79,6 +95,10 @@ def main():
     inputs={'experiment_round':'26','specification':args.batch,'allow_private':'false','job_minutes':str(minutes)}
     cmd=['workflow','run','deflate-round9.yml','--repo',REPO,'--ref',args.ref]
     for key,value in inputs.items():cmd+=['-f',f'{key}={value}']
+    if adjustment is not None:
+        now = datetime.now(timezone.utc)
+        assert now < datetime.fromisoformat(adjustment['latest_dispatch_utc'])
+        assert (datetime.fromisoformat(budget['deadline_utc'])-now).total_seconds() >= 60*(minutes+adjustment['minimum_post_cap_collection_and_report_minutes'])
     started=datetime.now(timezone.utc).isoformat();helper.run(cmd,env)
     for _ in range(10):
         matches=[r for r in json.loads(helper.run(listing,env)) if r['headSha']==sha and r['databaseId'] not in seen]
@@ -87,6 +107,9 @@ def main():
             record={'round':26,'batch':args.batch,'mode':mode,'git_sha':sha,'inputs':inputs,'committed_input_sha256':committed_inputs,'dispatch_utc':started,'repository_visibility_verified':'public','authorization':'Current user research budget including explicit extensions, necessary cloud verification and experiment-branch push scope; no submission, registration or wallet actions.','job_timeout_minutes':minutes,'collection_reserve_minutes':10,'fixed_deadline_utc':budget['deadline_utc'],'run':matches[0]}
             record['budget_path']=budget_path
             record['budget_sha256']=hashlib.sha256((ROOT/budget_path).read_bytes()).hexdigest()
+            if adjustment is not None:
+                record['verification_adjustment_path'] = 'evidence/round26/extension4h/verification-reserve-adjustment.json'
+                record['verification_adjustment_sha256'] = hashlib.sha256((ROOT/record['verification_adjustment_path']).read_bytes()).hexdigest()
             p=ROOT/f'evidence/round26/dispatch-{matches[0]["databaseId"]}.json';assert not p.exists();p.write_text(json.dumps(record,indent=2)+'\n')
             print(json.dumps({k:v for k,v in record.items() if k!='committed_input_sha256'} | {'committed_input_count':len(committed_inputs)}));return
         time.sleep(2)

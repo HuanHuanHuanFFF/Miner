@@ -158,9 +158,11 @@ def main():
     if mode == 'standard' and any(e.get('native_decode_reference') for e in spec['entries']):
         importlib.import_module('research-round12-decode').harness(spec)
     if mode == 'diagnostic':
-        assert spec.get('r26_a_engine_placement') is True and spec.get('r18_mode') == 'diagnostic'
+        assert sum(bool(spec.get(k)) for k in ('r26_a_engine_placement', 'r26_v_call_cpu')) == 1
+        assert spec.get('r18_mode') == 'diagnostic'
         assert all(e.get('control') for e in spec['entries']) and not spec.get('native_encoder')
-        importlib.import_module('r26-a-engine-placement').preflight(spec)
+        module = 'r26-v-call-cpu' if spec.get('r26_v_call_cpu') else 'r26-a-engine-placement'
+        importlib.import_module(module).preflight(spec)
     print('R26_PREFLIGHT', mode, len(spec['entries']), 'hash-bound pairs')
 
 if __name__ == '__main__':

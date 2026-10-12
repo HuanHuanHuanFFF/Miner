@@ -137,6 +137,8 @@ def main():
         verify(cp.parent, cp.name, {})
         if dispatch.get('budget_path'):
             verify(ROOT, dispatch['budget_path'], {'sha256': dispatch['budget_sha256']})
+        if dispatch.get('verification_adjustment_path'):
+            verify(ROOT, dispatch['verification_adjustment_path'], {'sha256': dispatch['verification_adjustment_sha256']})
     assert len(runs) == len(ci_by_id)
     package_file = BASE / 'review-packages/packages.json'
     packages = {'packages': []}
