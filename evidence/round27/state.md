@@ -1,11 +1,9 @@
-# R27 状态
+# R27收尾
 
-固定起止：北京时间2026-10-13 15:50:55—17:20:55。目标：最新官方榜单下稳定至少5%竞赛池份额。
+固定窗口北京时间2026-10-13 15:50:55—17:20:55。稳定5%目标未完成；没有正式上传。
 
-当前快照30183；五新公开源全部取得并保留作者/精确双文件哈希。尚无冻结后独立复测或新完整gate。第一圈三个候选、第二圈两个候选，各在原版公共测量中；初次新增路由被跳过的回执保留并已修复，不计有效实验。
+五份新公开源、八份Rust均实际测试。10手动CI（9成功、1路由跳过）、90原协议配对；两份原版完整gate（B1/C2）。B1两runner四块冻结确认仍有零；C2发现较高线索在另runner反向两块诊断中归零，未做最终确认。
 
-证据入口：source-learning.json、search-plan.md、c-route-predeclaration.md、opportunity-scan.json、qualifying-grid-regions.json、dispatch-*.json。
+最新快照与全部逐块单独/联合条件重放见delivery.json/final-analysis.json；原始字节、精确源码和评分复核见audit-final.json。报告入口docs/rounds/round27.md，两文件包review-packages/manifest.json。
 
-关键缺口：新源码的历史高份额/持续性仍UNKNOWN；原始测量未收齐；校准视图与同源码复制需分列。全局单调二分曾给出不适用阈值，已保存反例并以有限区间扫描替代。
-
-下一步：收齐实际13+9原协议配对发现、最新快照逐块重算；按收益空间和对照分歧选最小区分实验或gate。冻结精确文件之后在两台新runner确认，最后35分钟预留验证/确认/收集。无正式上传/注册/签名授权。
+原始规则、encoder、pins及sources保持原版；唯一工作区仍在codex/round27-public-frontier。等待用户后续授权；预算结束不自动续跑或正式上传。

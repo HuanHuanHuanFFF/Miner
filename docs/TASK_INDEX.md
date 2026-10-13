@@ -34,6 +34,7 @@
 | round24 | [第二十四轮：十小时稳定双候选](rounds/round24.md) | 窗口结束，双目标未完成：两份原版完整gate通过，各3runner共9主块；快照29652下均未达10%／15%。后续获授权提交B：[正式#625](rounds/round24-formal-b.md)通过gate及准入，快照29668可支付份额0.383037%，#624的新成绩挤占其收益区间。[组合分析](research/portfolio-20261011.md)未建立稳定10%，快速端仍需确认。 |
 | round25 | [第二十五轮：五小时快速端压缩研究](rounds/round25.md) | 窗口结束，稳定榜首未完成；12种Rust／34作业／180原协议配对，两份完整gate及各2runner四主块确认；快照29702独立确认单独及联合均0，无正式上传。 |
 | round26 | [第二十六轮：八小时稳定双候选研究](rounds/round26.md) | 原窗断电中断；[追加4h](rounds/round26-extension4h.md)新增8份Rust、24作业收齐，稳定5%／10%未达。全轮原阶段28份Rust、60作业；[追加1h](rounds/round26-extension1h.md)完成3种Rust／5CI，主发现份额0%、完整gate失败，可靠小份额未达；[追加90分钟](rounds/round26-extension90m.md)完成6种Rust原协议实测／19CI，C2和E1完整gate通过，独立结果仍有零。份额分层与未完成确认单列，无正式上传。 |
+| round27 | [第27轮：90分钟新公开源码优化](rounds/round27.md) | 五份新公开源、八种Rust原协议实测；两份完整gate、B1两runner四块确认有零，稳定5%未达，C2独立诊断归零。 |
 | maintenance-20261013-local-cleanup | [主工作区与本地重复资料清理](history/maintenance-2026-10-13-local-cleanup.md) | 保留唯一 main worktree；删除重复备份及缓存，重复证据共享存储并保留全部路径，原始证据哈希全部核对。 |
 | maintenance-20261008 | [合并、去重与竞赛环境整理](history/maintenance-2026-10-08.md) | 实验历史合入 main；回执去重、文档分层、规则统一，CI 手动启动。 |
 | maintenance-20261010 | [第十四至十七轮合并与分支整理](history/maintenance-2026-10-10.md) | 65个独有提交合入main；近期正式结果、验证入口及复用结论整理，已合并分支清理。 |
