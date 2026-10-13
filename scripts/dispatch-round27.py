@@ -29,6 +29,14 @@ def main():
             path=entry['path']+'/'+name;paths.add(path)
             assert hashlib.sha256((ROOT/path).read_bytes()).hexdigest()==h
     if spec.get('snapshot_pages'):paths.add(spec['snapshot_pages'])
+    if spec.get('r27_dispatch_after_gate_pair_known'):
+        assert spec.get('r18_role')=='independent_confirmation'
+        for entry in spec['entries']:
+            if entry.get('control'):continue
+            cert_path=entry['path']+'/VERIFICATION.json'
+            cert=json.loads((ROOT/cert_path).read_bytes())
+            assert cert['status']=='VERIFIED_EXACT_ORIGINAL_PUBLIC_GATE_PASSED' and cert['files']==entry['hashes']
+            paths.update([cert_path,cert['receipt']])
     checked={}
     for path in paths:
         blob=subprocess.check_output(['git','show',sha+':'+path]);assert blob==(ROOT/path).read_bytes();checked[path]=hashlib.sha256(blob).hexdigest()

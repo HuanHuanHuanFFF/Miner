@@ -49,11 +49,14 @@ def main():
         'formal_submission_sent': False, 'formal_admission': 'UNKNOWN', 'formal_reward_pool_share_pct': None,
     }
     path = source / 'VERIFICATION.json'
-    assert not path.exists()
-    path.write_bytes((json.dumps(certificate, indent=2) + '\n').encode())
-    manifest_path = source / 'manifest.json'
+    manifest_path = source / 'MANIFEST.json'
     manifest = json.loads(manifest_path.read_bytes())
-    assert manifest['hashes'] == certificate['files']
+    frozen_files = manifest.get('hashes', manifest.get('files'))
+    assert frozen_files == certificate['files']
+    if path.exists():
+        assert json.loads(path.read_bytes()) == certificate, 'Preserve a different prior certificate'
+    else:
+        path.write_bytes((json.dumps(certificate, indent=2) + '\n').encode())
     manifest['proof_status'] = certificate['status']
     manifest['verification_certificate'] = path.relative_to(ROOT).as_posix()
     manifest_path.write_bytes((json.dumps(manifest, indent=2) + '\n').encode())
