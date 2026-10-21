@@ -56,3 +56,5 @@ proof1 是保留的未执行预检包，没有 CI 成绩。早先关于多余 rf
 - 首次冷安装约1904秒；固定环境缓存保存成功。后两次复用缓存，未在本机安装大型 Linux 工具链。
 
 本窗交付为一份完整公开验收通过且有单 runner 速度信号的冻结候选。独立新 runner／新种子确认、线上冠军对比及正式成绩仍为 UNKNOWN／NOT_RUN；未正式上传或执行资金操作。后续若另有研究预算，先对 proof3 做独立确认；舍入路线先在 runner 保存完整 Lean stdout，再修字转换与依赖型重写，避免只依赖官方压缩错误摘要。
+
+交付字节核验：[final-byte-audit.json](../candidates/f01-mul-log2-proof1/analyses/final-byte-audit.json) 已逐一核对三次运行的60份原始 artifact 工件及5份 Kernel，本地、提交后的 Git 内容与所记 SHA-256 一致；未删除或改写任何原始失败工件。
