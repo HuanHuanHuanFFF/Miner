@@ -1,6 +1,6 @@
 {
   "state": "COLLAB1H_ACTIVE",
-  "updated_at_utc": "2026-10-21T10:34:16.510103+00:00",
+  "updated_at_utc": "2026-10-21T10:41:12.107254+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-21T17:40:19+08:00",
@@ -390,11 +390,40 @@
     "research_status": "competitions/floatlib/research/astra-collab-20261021/research-status.json",
     "research_thread": "01a15e06-b75c-7811-b0a0-194d8877365d",
     "development_thread": "01a15ce7-bf54-74b2-8a2b-4a1e2f3828d7",
-    "active_ci": [],
-    "research_handoffs_processed": [],
+    "active_ci": [
+      {
+        "run": 39585884968,
+        "candidates": [
+          "f01-d1-inline-all",
+          "f01-d1-force-tensors"
+        ],
+        "seed": 211,
+        "commit": "f9ed855983114c764805ca67a5d9fb8e140eae74",
+        "state": "in_progress"
+      },
+      {
+        "run": 39586252775,
+        "candidates": [
+          "f01-d1-product-buffer"
+        ],
+        "seed": 212,
+        "commit": "60c5be2aa2d0b4798730a4d775559d18f39e9193",
+        "state": "in_progress"
+      }
+    ],
+    "research_handoffs_processed": [
+      {
+        "id": "R-01",
+        "candidate_sha256": "cb09e9c6913100097f21ebdc5059345885bce090894f53f8f876377edad8fcab",
+        "decision": "Adopt for controlled full-gate experiment; copied to D-owned candidate without changing source.",
+        "candidate": "competitions\\floatlib\\candidates\\f01-d1-direct-dot-loop",
+        "processed_at_utc": "2026-10-21T10:41:12.107239+00:00"
+      }
+    ],
     "git_ci_coordinator": "development",
     "new_long_experiment_cutoff_utc": "2026-10-21T11:15:00Z",
     "research_dispatch_verified": "Tool wait snapshot confirms active turn and initial read commentary.",
-    "development_experiment": "D1 compiler-boundary diagnostic: expose scalar arithmetic wrappers and tensor bodies together, versus the previous sum/bmm-only inline diagnostic; inspect generated C and paired full score. R should pursue independent mechanisms."
+    "development_experiment": "CI 39585884968: scalar/tensor compiler exposure. Next independent D hypothesis: Fin.foldl generic closure/boxing overhead; evaluate product-vector plus array fold with exact order.",
+    "feedback_to_research": "R-01 read and adopted for full-gate test. D has copied cb09e9c6 into f01-d1-direct-dot-loop; original R package remains unchanged. Current other hypotheses already in CI: all-scalar+tensor compiler exposure and product-vector array fold. Continue zero-fallback frequency / independent sum direct-loop bridge while these run; do not add more unmeasured bmm variants."
   }
 }
