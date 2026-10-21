@@ -2,7 +2,10 @@
 
 共同约束见根 [AGENTS.md](../../AGENTS.md)，赛道技术要求见 [track-rules.md](docs/track-rules.md)。官方固定版本见 [pins.json](pins.json)。
 
-正式包是一个 `Kernel.lean`，包含 add、mul、sum、bmm 及四个全输入等价证明。当前阶段只配置环境并运行公开验证，不正式上传。
+正式包是一个 `Kernel.lean`，包含 add、mul、sum、bmm 及四个全输入等价证明。开发比较统一以评测时的现任冠军为基准；当前尚未正式上传。
+
+- [冲冠看板](../../dashboard.md)：现任冠军、我方首选与能否取代冠军。
+- [当前开发状态](coordination/development-status.json)：当前比较口径、候选选择及证据入口。
 
 - [首次双会话交接](coordination/HANDOFF.md)：环境与开发文件所有权、状态、自然检查点和本窗预算。
 - [环境状态](coordination/environment-status.json)：CONFIGURING、CI_READY、BASELINE_VERIFIED 分开记录。

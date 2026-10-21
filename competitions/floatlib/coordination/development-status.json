@@ -1,6 +1,6 @@
 {
   "state": "WINDOW90_CLOSED_TARGET_UNACHIEVED",
-  "updated_at_utc": "2026-10-21T09:42:39.472264+00:00",
+  "updated_at_utc": "2026-10-21T10:03:35.597324+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-21T17:40:19+08:00",
@@ -47,7 +47,7 @@
   "candidate_readiness": "PASS_PUBLIC_FULL_GATE_SINGLE_RUN_SIGNAL",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "No further experiments in this window. Future focus: unified whole-word addition including zero/special paths, screened for full-harness gain before major proof investment; retain verified mul/index components. Current-champion direct comparison UNKNOWN.",
+  "next_action": "Research window remains closed. Future focus: unified whole-word addition including zero/special paths; retain verified mul/index components. All user-facing performance comparisons use the live champion current at evaluation as denominator.",
   "research_decision": "First diagnose tensor execution; explore raw-bit tensor loops and a rebuilt normal multiplication pipeline independently, then a guarded GRS adder. Old helper edits are controls or later polish.",
   "execution_state": "ALL_12_CI_JOBS_TERMINAL_AND_COLLECTED",
   "local_project_check": {
@@ -181,13 +181,15 @@
   "current_champion_comparison": {
     "submission": 174,
     "source_digest": "67e44fd4b17186dbe6b1728dea49611288bb16d2586ebbb3a8a2f93aea74c009",
-    "policy_snapshot": "506",
+    "policy_snapshot": "512",
+    "queried_at_utc": "2026-10-21T10:02:21.385989+00:00",
+    "candidate": "f01-rebuilt-mul-proof1",
     "official_displayed_speedup_vs_start": 8.7,
-    "candidate_over_champion_time_inferred": 8.418789686901912,
-    "inference_limit": "Cross-run estimate from official displayed cumulative speedup, not a direct paired measurement or official rank",
-    "source_endpoint_status": "HTTP 404",
+    "candidate_over_champion_time_inferred": 8.421854471411672,
     "direct_paired_ratio": "UNKNOWN",
-    "assessment": "competitions/floatlib/candidates/f01-mul-log2-proof3/champion-comparison-20261021T074308Z/assessment.md"
+    "comparison_kind": "INFERRED_FROM_OFFICIAL_CUMULATIVE_SPEEDUP",
+    "evidence": "competitions/floatlib/evidence/dashboard-20261021T100221Z/comparison.json",
+    "source_status": "Exact champion source not obtained"
   },
   "previous_window_state": "WINDOW_DELIVERED_PUBLIC_FULL_GATE_VERIFIED",
   "candidate_role": "Frozen reference/control only; no longer the primary development route",
@@ -303,5 +305,20 @@
     "public_reference_bar_passes": 1,
     "independent_confirmation": "Two frozen-source runs with distinct seeds/runners"
   },
-  "closing_official_snapshot": "512"
+  "closing_official_snapshot": "512",
+  "dashboard": "dashboard.md",
+  "comparison_policy": {
+    "primary_reference": "Current live champion at the time of each comparison; refresh submission and exact digest before measuring.",
+    "headline": "Candidate time / current champion time; champion is normalized to 1.00.",
+    "shipped_reference_role": "Internal control and historical evidence only; not the dashboard comparison denominator.",
+    "dashboard_scope": "Only the current champion and the strongest supported own candidate, plus one sentence on replacement readiness.",
+    "estimates": "Render approximate converted comparisons with 约; preserve method and exact inputs in evidence rather than adding long dashboard disclaimers.",
+    "user_request": "以后以当前冠军为基准比较；看板只放最有希望的候选、现任冠军与一句能否取代的结论。"
+  },
+  "dashboard_selection": {
+    "candidate": "f01-rebuilt-mul-proof1",
+    "role": "Strongest supported new component: same frozen source passed two independent full gates.",
+    "full_gate_runs": 2,
+    "champion_comparison_evidence": "competitions/floatlib/evidence/dashboard-20261021T100221Z/comparison.json"
+  }
 }
