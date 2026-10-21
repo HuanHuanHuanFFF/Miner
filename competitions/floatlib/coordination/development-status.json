@@ -1,6 +1,6 @@
 {
   "state": "COLLAB10H_ACTIVE",
-  "updated_at_utc": "2026-10-21T18:42:04.871190+00:00",
+  "updated_at_utc": "2026-10-21T18:52:03.480923+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T12:16:11+08:00",
@@ -46,9 +46,9 @@
   "candidate_readiness": "PASS_FULL_GATE_AND_INDEPENDENT_CONFIRMATION",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "Dispatch full timing batch and independent final-finite feasibility batch; no more than two concurrent CI jobs.",
+  "next_action": "Run full gate for frozen86312a37, then use timing and generated C to choose USize/bounds and multioutput integration.",
   "research_decision": "Prioritize bmm native accumulator/guard removal next; current native package and public bridge fully validated. No new experiment started after independent confirmation.",
-  "execution_state": "TWO_PROOFS_COMPILE_PASSED_PREPARING_FULL_GATES_AND_FINAL_FINITE_FEASIBILITY",
+  "execution_state": "FINAL_FINITE_COMPLETE_PROOF_COMPILED_ENTERING_FULL_GATE",
   "local_project_check": {
     "status": "PASS",
     "scope": "Root project check after candidate manifests, helper and dashboard changes. Exact full gates and committed-byte audits recorded separately.",
@@ -439,6 +439,37 @@
         "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T183522Z/dispatch.json",
         "conclusion": "success",
         "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39654101400"
+      },
+      {
+        "commit": "46a9f085db7634a22324d25623f715829f7074f9",
+        "state": "in_progress",
+        "run": 39655361399,
+        "candidates": [
+          "f01-d1-native-both-proof1",
+          "f01-d2-native-bmm-proof1",
+          "f01-d2-no-raw-guards-proof1"
+        ],
+        "seed": 303,
+        "mode": "full-gate",
+        "created_at_utc": "2026-10-21T18:43:59Z",
+        "purpose": "Full gates and 12-class25-pair timing with same-run previous native-both control",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T184351Z/dispatch.json"
+      },
+      {
+        "commit": "46a9f085db7634a22324d25623f715829f7074f9",
+        "state": "completed",
+        "run": 39655412696,
+        "candidates": [
+          "f01-d2-final-finite-preimage",
+          "f01-d2-final-finite"
+        ],
+        "seed": 304,
+        "mode": "statement-only",
+        "created_at_utc": "2026-10-21T18:44:19Z",
+        "purpose": "Key finite-preimage proof and integrated final-only finite guard in sum/bmm",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T184411Z/dispatch.json",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39655412696"
       }
     ],
     "research_handoffs_processed": [
@@ -460,7 +491,7 @@
     "previous_state": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/previous-state.json",
     "formal_goal": "Actual current-champion promotion must be verified; no goal completion from public-reference results alone.",
     "research_dispatch_verified": "wait_threads confirms existing Astra research chat active on new turn",
-    "feedback_to_research": "CI39654101400 collected SUCCESS: D native-bmm-proof1 and no-raw-guards-proof1 both exact obligations and bench compiled. Generic modelCanonicalOfFinite + fully-qualified unpack repaired finiteRoundtrip. C under ci-runs/39654101400/download folder diagnostics. D now requests full gate+paired timing of both, with native-both same-run control. D integrated R2-02 preimage lemmas into f01-d2-final-finite (sum and bmm only final finite check; full backward induction). It and lemma-only D package both pass exact local policy and will receive separate statement feasibility. R focus layout/USize/multi-output lanes after finite-lemma feedback; no need duplicate current proof integration.",
+    "feedback_to_research": "Major checkpoint: CI39655412696 SUCCESS, both standalone finite-result preimage and full production f01-d2-final-finite compiled exact four obligations+bench. R2-02 proof works without mathematics changes; D only replaced banned word in comment. Final-finite production SHA86312a37 now advances to full gate/axioms/checksums/performance. Existing full comparison39655361399 still running. C available under39655412696 diagnostics/f01-d2-final-finite; D owns USize+unchecked-with-proved-bounds indexing next. R can use finiteRoundtrip and final preimage as real compiled building blocks for independent multioutput/layout work.",
     "research_requests": [
       {
         "id": "D2-FINAL-FINITE",
@@ -532,7 +563,12 @@
     },
     "candidate_role": "Frozen reference/control only; no longer the primary development route"
   },
-  "active_jobs": [],
+  "active_jobs": [
+    {
+      "kind": "github_ci",
+      "run": 39655361399
+    }
+  ],
   "active_goal": "继续协作推进优化10h；目标是拿下新的冠军",
   "pending_candidates": [
     {
