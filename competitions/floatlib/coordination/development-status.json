@@ -1,6 +1,6 @@
 {
   "state": "COLLAB10H_ACTIVE_MAJOR_NATIVE_REDUCTION_PASS",
-  "updated_at_utc": "2026-10-21T20:28:47.786569+00:00",
+  "updated_at_utc": "2026-10-21T20:35:42.138592+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T12:16:11+08:00",
@@ -46,9 +46,9 @@
   "candidate_readiness": "FULL_GATE_PASS_DISCOVERY",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "Dispatch Packed4 statement; collect existing combined-layout full39669275685. Use just-collected scalar/fold full311 evidence for next integrated package.",
+  "next_action": "Statement-check exact word/layout/hybrid integrations; collect live Packed4 proof run; require same-run layout controls because latest combo used Intel rather than earlier AMD.",
   "research_decision": "Final-only-finite backward proof is now full-gated and materially faster. Continue largest-gap bmm through USize/proved bounds, conversion amortization and multi-output scheduling. Keep scalar word-predicate route as independent follow-up.",
-  "execution_state": "SCALAR_FOLD_FULL_PASS_PACKED4_STATEMENT_READY",
+  "execution_state": "COMBINED_LAYOUT_FULL_PASS_NEW_INTEL_TINY_REGRESSION",
   "local_project_check": {
     "status": "PASS",
     "scope": "Root project check after four new candidate manifests and updated four-operation dashboard;49 candidates. Separate from actual Lean/full gate results.",
@@ -610,10 +610,25 @@
         "seed": 313,
         "commit": "8d2b5650704c9cfa7d6129bc54a1f9c281b63652",
         "created_at_utc": "2026-10-21T20:19:18Z",
-        "state": "in_progress",
+        "state": "completed",
         "mode": "full-gate",
         "purpose": "Full proof replay, allowed axioms, checksums and paired timing of exact first preconverted+USize combination",
-        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T201911Z/dispatch.json"
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T201911Z/dispatch.json",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39669275685"
+      },
+      {
+        "run": 39670733380,
+        "candidates": [
+          "f01-d2-web-packed4"
+        ],
+        "seed": 314,
+        "commit": "7e6f84532da37bb1187a03ccfa74eace8286f39e",
+        "created_at_utc": "2026-10-21T20:29:23Z",
+        "state": "in_progress",
+        "mode": "statement-only",
+        "purpose": "Full four-output packet/builder/order proof feasibility",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T202915Z/dispatch.json"
       }
     ],
     "research_handoffs_processed": [
@@ -674,7 +689,7 @@
     "previous_state": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/previous-state.json",
     "formal_goal": "Actual current-champion promotion must be verified; no goal completion from public-reference results alone.",
     "research_dispatch_verified": "wait_threads confirms existing Astra research chat active on new turn",
-    "feedback_to_research": "Full311 collected SUCCESS. Word guard640400c3: overall0.3067307843, add0.481602262,mul0.700730503,sum0.136377699,bmm0.116146611 vs shipped; only three allowed axioms. RETAIN scalar component. Standard fold48e42d5f: overall0.368615, sum0.239368 versus parent~0.136; PARK current fold implementation, do not assume native std fold improves codegen. D copied Packed4be7f9469 byte-exact after original ZIP CRC/SHA, member and protected prefix audit; local exact policy passes and next statement batch ready. Existing combo e876 full39669275685 still pending. Hot-loop C audit corrected wrapper selection to reduced-argument arithmetic body; machine-word/preconverted actual body has direct uget, float mul/add, no per-step bit calls, Nat arithmetic or constructor. No assembly/vectorization claim yet.",
+    "feedback_to_research": "Full combo39669275685 PASS on Intel Xeon Platinum8370C: overall0.316133275, bmm0.038210531 (~1.99ns), sum0.094303496, add0.394041355, mul1.128797662. Fresh mul:tiny51.250562ns vs reference21.82131ns, ratio2.348647; this is NEW Intel evidence that changes the earlier hybrid priority. D created integrated word+combo f4790ae3 and hybrid38823264: raw exponent sum<128 routes to previously full-gated RebuiltMul517030e9, otherwise exact nativeMul; unconditional branch specs preserve correctness. No timing claims before own gate. Plan same-run parent/preconverted/combo/integrated/hybrid controls after statement. Packed4 exactbe7f9469 is actually in statement39670733380 seed314. R focus Packed4 real errors and numeric decoder proof; avoid duplicate hybrid implementation.",
     "research_requests": [
       {
         "id": "D2-FINAL-FINITE",
@@ -729,15 +744,20 @@
   "active_jobs": [
     {
       "kind": "github_ci",
-      "run": 39669275685
+      "run": 39670733380
     }
   ],
   "active_goal": "继续协作推进优化10h；目标是拿下新的冠军",
   "pending_candidates": [
     {
-      "candidate": "f01-d2-web-packed4",
+      "candidate": "f01-d2-word-preconverted-usize",
       "state": "READY_STATEMENT",
-      "kernel_sha256": "be7f94691e8a93eeb6f6f704869a280714f01d9f0efca21989d3a7b6eb7136a0"
+      "kernel_sha256": "f4790ae3061a498a928b75f78785f919618b899fed7a2a5155037731726f914e"
+    },
+    {
+      "candidate": "f01-d2-hybrid-preconverted-usize",
+      "state": "READY_STATEMENT",
+      "kernel_sha256": "3882326431b8f8be8164fd22e70ddaf40c35d3b04980e4f80e07d8023cbbc4fd"
     }
   ],
   "current_official_refresh": {
