@@ -7,14 +7,11 @@ from pathlib import Path
 import argparse,json,os,signal,subprocess,sys,time
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--upstream',type=Path,required=True);ap.add_argument('--kernel',type=Path,required=True);ap.add_argument('--reports',type=Path,required=True);ap.add_argument('--name',required=True);ap.add_argument('--verdict',type=Path,required=True);a=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--upstream',type=Path,required=True);ap.add_argument('--kernel',type=Path,required=True);ap.add_argument('--reports',type=Path,required=True);ap.add_argument('--name',required=True);ap.add_argument('--verdict',type=Path,required=True);ap.add_argument('--compile-only',action='store_true');a=ap.parse_args()
     out=a.reports/'diagnostics'/a.name;out.mkdir(parents=True,exist_ok=True)
     original=json.loads(a.verdict.read_bytes()) if a.verdict.exists() else {}
     report={'diagnostic_only':True,'original_stage':original.get('stage'),'original_verdict_unchanged':True,'generated_c':[]}
-    for p in a.upstream.rglob('Submission.c'):
-        if p.is_file() and p.stat().st_size<8_000_000:
-            target=out/('generated-'+str(len(report['generated_c']))+'.c');target.write_bytes(p.read_bytes());report['generated_c'].append({'source':str(p),'file':target.name})
-    if original.get('stage')=='statement' and not original.get('passed'):
+    if a.compile_only or (original.get('stage')=='statement' and not original.get('passed')):
         code=r'''
 import importlib.util,sys
 from pathlib import Path
@@ -38,6 +35,16 @@ g.main()
             except subprocess.TimeoutExpired:
                 os.killpg(p.pid,signal.SIGKILL);p.wait();report['replay']='diagnostic-only replay process group timed out at 120s'
         report['replay_seconds']=round(time.monotonic()-start,3)
+    for p in a.upstream.rglob('Submission.c'):
+        if p.is_file() and p.stat().st_size<8_000_000:
+            target=out/('generated-'+str(len(report['generated_c']))+'.c');target.write_bytes(p.read_bytes());report['generated_c'].append({'source':str(p),'file':target.name})
     (out/'index.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+    if a.compile_only:
+        p=out/'diagnostic-only-verdict.json'
+        result=json.loads(p.read_bytes()) if p.exists() else {'passed':False,'stage':'diagnostic-timeout'}
+        result['mode']='diagnostic-statement-only';result['diagnostic_only']=True
+        a.verdict.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
+        return 0 if result.get('passed') else 1
+    return 0
 
-if __name__=='__main__':main()
+if __name__=='__main__':raise SystemExit(main())

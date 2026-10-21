@@ -18,12 +18,17 @@ def main():
     assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=UPSTREAM,text=True).strip()==pins['official_commit']
     supplied=os.environ.get('FLOATLIB_CANDIDATES','baseline')
     assert re.fullmatch(r'(?:baseline|f01-[a-z0-9-]+)(?:,(?:baseline|f01-[a-z0-9-]+))*',supplied),supplied
-    names=list(dict.fromkeys(['baseline',*supplied.split(',')]))
+    requested=list(dict.fromkeys(supplied.split(',')))
+    def compile_only(name):
+        p=TRACK/'candidates'/name/'manifest.json'
+        return name!='baseline' and p.is_file() and json.loads(p.read_text()).get('validation_mode')=='statement-only'
+    diagnostic_batch=all(compile_only(name) for name in requested)
+    names=list(dict.fromkeys(([] if diagnostic_batch else ['baseline'])+requested))
     assert 1<=len(names)<=5
     seed=os.environ.get('FLOATLIB_SEED','42');assert seed.isdecimal() and 0<=int(seed)<2**32
     env=os.environ.copy();env['BENCH_SEED']=seed
     official_kernel=UPSTREAM/'kernels/full/incumbent/Kernel.lean'
-    save(REPORTS/'plan.json',{'candidates':names,'seed':int(seed),'mode':'full official gate','rounds':25,'reference_sha256':sha(official_kernel),'scope':'Public shipped-reference comparison; no current-champion, official admission or reward claim.'})
+    save(REPORTS/'plan.json',{'candidates':names,'seed':int(seed),'mode':'diagnostic statement-only' if diagnostic_batch else 'full official gate','rounds':0 if diagnostic_batch else 25,'reference_sha256':sha(official_kernel),'scope':'Compilation-only is not acceptance. Public shipped-reference comparison is not current-champion or online admission.'})
     spec=importlib.util.spec_from_file_location('floatlib_official_admission',UPSTREAM/'validator/admission.py')
     admission=importlib.util.module_from_spec(spec);sys.modules[spec.name]=admission;spec.loader.exec_module(admission)
     rows=[]
@@ -37,21 +42,26 @@ def main():
         shutil.copyfile(source,candidate/'Kernel.lean')
         digest=sha(source);verdict=REPORTS/(name+'-verdict.json');log=REPORTS/(name+'-gate.log')
         command=[str(UPSTREAM/'.venv/bin/python'),'gate.py','--slot','full',str(candidate),'--verdict',str(verdict)]
+        is_probe=compile_only(name)
+        diagnostic=TRACK/'candidates/f01-word-tensors/ci-diagnostics.py'
+        if is_probe:
+            command=[sys.executable,str(diagnostic),'--upstream',str(UPSTREAM),'--kernel',str(candidate/'Kernel.lean'),'--reports',str(REPORTS),'--name',name,'--verdict',str(verdict),'--compile-only']
         started=time.monotonic()
         with log.open('wb') as stream:
             process=subprocess.Popen(command,cwd=UPSTREAM,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
             for line in process.stdout:
                 stream.write(line);stream.flush();sys.stdout.buffer.write(line);sys.stdout.flush()
             code=process.wait()
+        gate_wall_seconds=round(time.monotonic()-started,3)
         # Preserve the authoritative gate; debugging artifacts have their own label.
         diagnostic=TRACK/'candidates/f01-word-tensors/ci-diagnostics.py'
-        if name!='baseline' and diagnostic.is_file():
+        if name!='baseline' and not is_probe and diagnostic.is_file():
             try:
                 subprocess.run([sys.executable,str(diagnostic),'--upstream',str(UPSTREAM),'--kernel',str(candidate/'Kernel.lean'),'--reports',str(REPORTS),'--name',name,'--verdict',str(verdict)],check=False,timeout=150)
             except subprocess.TimeoutExpired:
                 save(REPORTS/(name+'-diagnostic-timeout.json'),{'diagnostic_only':True,'timeout_seconds':150,'original_verdict_unchanged':True})
         original=json.loads(verdict.read_bytes()) if verdict.exists() else None
-        row={'candidate':name,'kernel_sha256':digest,'reference_sha256':sha(official_kernel),'exit_code':code,'wall_seconds':round(time.monotonic()-started,3),'full_gate':bool(code==0 and original and original.get('passed') and original.get('mode')=='gate' and original.get('stage')=='score'),'verdict':verdict.name,'seed':int(seed),'formal_online_result':'UNKNOWN'}
+        row={'candidate':name,'kernel_sha256':digest,'reference_sha256':sha(official_kernel),'exit_code':code,'wall_seconds':gate_wall_seconds,'full_gate':bool(not is_probe and code==0 and original and original.get('passed') and original.get('mode')=='gate' and original.get('stage')=='score'),'validation_mode':'statement-only' if is_probe else 'full-gate','compile_pass':bool(is_probe and code==0 and original and original.get('passed')),'verdict':verdict.name,'seed':int(seed),'formal_online_result':'UNKNOWN'}
         if row['full_gate']:
             assert original['verifier_fingerprint']==original['verifier_fingerprint_end']
             assert len(original['classes'])==12 and len(original['rounds'])==25
@@ -61,7 +71,8 @@ def main():
             decision=admission.assess(evidence,.97)
             row.update(ratio=ratio,paired_gain_p05=decision.gain_p05,public_statistical_check=decision.outcome,classes=original['classes'],paired_rounds=original['rounds'])
         assert sha(source)==digest,'Candidate changed while validating'
-        rows.append(row);save(REPORTS/'summary.json',{'run_id':os.environ['GITHUB_RUN_ID'],'source_commit':os.environ['GITHUB_SHA'],'official_commit':pins['official_commit'],'results':rows,'complete':len(rows)==len(names),'scope':'Full public official gate and paired performance; runner-specific, not formal online admission.'})
+        scope='Diagnostic statement compilation only; not full verification or performance.' if diagnostic_batch else 'Full public official gate and paired performance; runner-specific, not formal online admission.'
+        rows.append(row);save(REPORTS/'summary.json',{'run_id':os.environ['GITHUB_RUN_ID'],'source_commit':os.environ['GITHUB_SHA'],'official_commit':pins['official_commit'],'results':rows,'complete':len(rows)==len(names),'scope':scope})
     for folder,pattern in [('logs','*.log'),('results','*.json')]:
         out=REPORTS/'official'/folder;out.mkdir(parents=True,exist_ok=True)
         for p in (UPSTREAM/folder).glob(pattern):shutil.copyfile(p,out/p.name)
@@ -70,6 +81,6 @@ def main():
         out.write('| Candidate | Full gate | Ratio vs shipped | Paired p05 gain | Public statistical check |\n|---|---|---:|---:|---|\n')
         for row in rows:out.write(f"| {row['candidate']} | {row['full_gate']} | {row.get('ratio','UNKNOWN')} | {row.get('paired_gain_p05','UNKNOWN')} | {row.get('public_statistical_check','UNKNOWN')} |\n")
         out.write('\nExact original verdicts and logs are in the artifact. No official competition submission was made.\n')
-    return 0 if all(r['full_gate'] for r in rows) else 1
+    return 0 if all(r['full_gate'] or (r['validation_mode']=='statement-only' and r['compile_pass']) for r in rows) else 1
 
 if __name__=='__main__':raise SystemExit(main())
