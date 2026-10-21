@@ -16,7 +16,7 @@
 
 各会话在自然检查点读取对方状态与 `git log -5 --oneline -- competitions/floatlib/coordination`：开始下一候选、证明告一段落、CI前后或需要对方环境时。无需持续轮询，也不把文件出现当作工作已执行。
 
-环境状态：`CONFIGURING` → `CI_READY`（脚本及工作流可派发）→ `BASELINE_VERIFIED`（完整官方基线gate有成功回执）。失败用 `FAILED` 并附原始run、原因及剩余缺项。`CI_READY` 不代表Lean或计时已通过。
+环境状态：`CONFIGURING` → `CI_READY`（脚本及工作流可派发）→ `CI_RUNNING`（已识别精确run，执行尚未结束）→ `BASELINE_VERIFIED`（完整官方基线gate有成功回执）。失败用 `FAILED` 并附原始run、原因及剩余缺项。`CI_READY` 不代表Lean或计时已通过。
 
 开发状态应绑定候选路径、Kernel SHA-256、变化机制、证明状态、最小检查和缺项。未在官方环境执行的证明／速度均写 `NOT_RUN`。候选冻结后，环境会话使用精确提交与文件哈希运行 gate 和原版配对测量，再把原始回执位置写回环境状态；开发会话读取反馈后决定修复、保留或换路。
 
