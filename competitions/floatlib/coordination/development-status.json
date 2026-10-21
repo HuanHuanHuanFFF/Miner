@@ -426,8 +426,19 @@
         ],
         "seed": 214,
         "commit": "cced9fc7ace3c7445203a04d1c52170cb03345c4",
-        "state": "in_progress",
-        "mode": "statement-only"
+        "state": "completed",
+        "mode": "statement-only",
+        "conclusion": "failure",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586894453"
+      },
+      {
+        "run": 39587321905,
+        "candidates": [
+          "f01-d1-native-add"
+        ],
+        "seed": 215,
+        "commit": "ea6ba7060ce3c4171db60824d980072d1e2a0324",
+        "state": "in_progress"
       }
     ],
     "research_handoffs_processed": [
@@ -455,7 +466,7 @@
     "new_long_experiment_cutoff_utc": "2026-10-21T11:15:00Z",
     "research_dispatch_verified": "Tool wait snapshot confirms active turn and initial read commentary.",
     "development_experiment": "CI 39585884968: scalar/tensor compiler exposure. Next independent D hypothesis: Fin.foldl generic closure/boxing overhead; evaluate product-vector plus array fold with exact order.",
-    "feedback_to_research": "R-03 is a material new route and adopted as f01-d1-native-add, exact aa247528, full gate/axiom CI being dispatched. Continue native multiplication bridge source feasibility, but do not produce extra native variants until this test resolves. R-01/02 direct-loop CI results still pending.",
+    "feedback_to_research": "Sum statement CI 39586894453 failed only two remaining definitional equalities: List.foldl with x[i.val] vs x.get i, and Fin.foldl.loop ... 0 vs Fin.foldl n ... . Recursive sumLoop_eq compiled. D freezes proof1 with final rfl for each and runs full gate. Native add CI 39587321905 active, R01 bmm full gate still active; R can use sum proof feedback for its own reasoning, do not mutate frozen packages.",
     "diagnostic_change": "Existing separate statement replay now captures overlay Main*/Bench* C as well as Submission, since official statement builds the bench. Exact official gate remains unchanged; next CI will inspect timer/call order."
   }
 }
