@@ -18,10 +18,10 @@ from pathlib import Path
 upstream,kernel,out=map(Path,sys.argv[1:]);sys.path.insert(0,str(upstream))
 spec=importlib.util.spec_from_file_location('floatlib_gate_diagnostic',upstream/'gate.py');g=importlib.util.module_from_spec(spec);sys.modules[spec.name]=g;spec.loader.exec_module(g)
 old_errors=g.errors
-def full_errors(text):
+def full_errors(text,*args,**kwargs):
     with (out/'full-build-output.txt').open('a',encoding='utf-8') as stream: stream.write(text+'\n')
     print('DIAGNOSTIC COMPLETE BUILD OUTPUT\n'+text,flush=True)
-    return old_errors(text)
+    return old_errors(text,*args,**kwargs)
 g.errors=full_errors
 g.STAGES=[pair for pair in g.STAGES if pair[0] in {'intake','policy','statement'}]
 sys.argv=['gate.py','--slot','full',str(kernel.parent),'--verdict',str(out/'diagnostic-only-verdict.json')]

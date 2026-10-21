@@ -1,0 +1,41 @@
+[32m2026-10-21 08:35:58.131[0m | [1mINFO    [0m | [36mfloatlib_gate_diagnostic[0m:[36mpin[0m:[36m459[0m - [1m[pin] full incumbent /home/runner/work/_temp/floatlib-upstream/pinned/full/bench_incumbent sha256=e0273a66e27fc649[0m
+[32m2026-10-21 08:35:58.132[0m | [1mINFO    [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m735[0m - [1m[intake] ok[0m
+[32m2026-10-21 08:35:58.138[0m | [1mINFO    [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m735[0m - [1m[policy] ok[0m
+[32m2026-10-21 08:36:04.468[0m | [31m[1mERROR   [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m729[0m - [31m[1m[statement] crashed[0m
+[33m[1mTraceback (most recent call last):[0m
+
+  File "<string>", line 14, in <module>
+
+  File "[32m/home/runner/work/_temp/floatlib-upstream/[0m[32m[1mgate.py[0m", line [33m807[0m, in [35mmain[0m
+    [1mv[0m [35m[1m=[0m [1mgate[0m[1m([0m[1mPath[0m[1m([0m[1marg[0m[1m)[0m[35m[1m.[0m[1mresolve[0m[1m([0m[1m)[0m[1m,[0m [1mdigest[0m[1m,[0m [1mmode[0m[1m,[0m [1mslot[0m[1m)[0m
+    [36m    │    │    │               │       │     └ [0m[36m[1m'full'[0m
+    [36m    │    │    │               │       └ [0m[36m[1m'gate'[0m
+    [36m    │    │    │               └ [0m[36m[1m'e0273a66e27fc6492258a8867675330a6b47fe9b06c1939af732fe8bf2ffa59a'[0m
+    [36m    │    │    └ [0m[36m[1m'/home/runner/work/_temp/floatlib-reports/inputs/f01-word-tensors'[0m
+    [36m    │    └ [0m[36m[1m<class 'pathlib.Path'>[0m
+    [36m    └ [0m[36m[1m<function gate at 0x7f5e2cd68cc0>[0m
+
+  File "[32m/home/runner/work/_temp/floatlib-upstream/[0m[32m[1mgate.py[0m", line [33m707[0m, in [35mgate[0m
+    [1mrun_stages[0m[1m([0m[1msrc[0m[1m,[0m [1mv[0m[1m,[0m [1mBENCH_STAGES[0m [35m[1mif[0m [1mmode[0m [35m[1m==[0m [36m"bench"[0m [35m[1melse[0m [1mSTAGES[0m[1m)[0m
+    [36m│          │    │  │               │                    └ [0m[36m[1m[('intake', <function intake at 0x7f5e2cd68720>), ('policy', <function policy at 0x7f5e2cd687c0>), ('statement', <function st...[0m
+    [36m│          │    │  │               └ [0m[36m[1m'gate'[0m
+    [36m│          │    │  └ [0m[36m[1m[('intake', <function intake at 0x7f5e2cd68720>), ('statement', <function statement at 0x7f5e2cd68900>), ('score', <function ...[0m
+    [36m│          │    └ [0m[36m[1mVerdict(submission='f01-word-tensors', slot='full', mode='gate', stage='statement', passed=False, reason='', seed=0, ratio=No...[0m
+    [36m│          └ [0m[36m[1mPosixPath('/home/runner/work/_temp/floatlib-reports/inputs/f01-word-tensors/Kernel.lean')[0m
+    [36m└ [0m[36m[1m<function run_stages at 0x7f5e2cd68d60>[0m
+
+> File "[32m/home/runner/work/_temp/floatlib-upstream/[0m[32m[1mgate.py[0m", line [33m727[0m, in [35mrun_stages[0m
+    [1mreason[0m [35m[1m=[0m [1mstage[0m[1m([0m[1msrc[0m[1m,[0m [1mv[0m[1m)[0m
+    [36m         │     │    └ [0m[36m[1mVerdict(submission='f01-word-tensors', slot='full', mode='gate', stage='statement', passed=False, reason='', seed=0, ratio=No...[0m
+    [36m         │     └ [0m[36m[1mPosixPath('/home/runner/work/_temp/floatlib-reports/inputs/f01-word-tensors/Kernel.lean')[0m
+    [36m         └ [0m[36m[1m<function statement at 0x7f5e2cd68900>[0m
+
+  File "[32m/home/runner/work/_temp/floatlib-upstream/[0m[32m[1mgate.py[0m", line [33m542[0m, in [35mstatement[0m
+    [35m[1mreturn[0m [36mf"[0m[36mthe obligation does not typecheck: [0m[1m{[0m[1merrors[0m[1m([0m[1mout[0m[1m,[0m [1mcode[0m[1m)[0m[1m}[0m[36m"[0m
+    [36m                                             │      │    └ [0m[36m[1m1[0m
+    [36m                                             │      └ [0m[36m[1m'✖ [4114/4116] Building Submission (3.1s)\ntrace: .> LEAN_PATH=/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/...[0m
+    [36m                                             └ [0m[36m[1m<function full_errors at 0x7f5e2d86a2a0>[0m
+
+[31m[1mTypeError[0m:[1m full_errors() takes 1 positional argument but 2 were given[0m
+[32m2026-10-21 08:36:04.469[0m | [33m[1mWARNING [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m733[0m - [33m[1m[statement] REJECTED f01-word-tensors: gate error: full_errors() takes 1 positional argument but 2 were given[0m
+[32m2026-10-21 08:36:04.471[0m | [1mINFO    [0m | [36mfloatlib_gate_diagnostic[0m:[36mmain[0m:[36m812[0m - [1m[gate] f01-word-tensors slot=full passed=False stage=statement ratio=None[0m

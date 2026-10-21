@@ -1,0 +1,42 @@
+2026-10-21 08:35:58.131 | INFO     | floatlib_gate_diagnostic:pin:459 - [pin] full incumbent /home/runner/work/_temp/floatlib-upstream/pinned/full/bench_incumbent sha256=e0273a66e27fc649
+2026-10-21 08:35:58.132 | INFO     | floatlib_gate_diagnostic:run_stages:735 - [intake] ok
+2026-10-21 08:35:58.138 | INFO     | floatlib_gate_diagnostic:run_stages:735 - [policy] ok
+2026-10-21 08:36:04.468 | DEBUG    | floatlib_gate_diagnostic:run:348 - [run] /home/runner/.elan/bin/lake build VerifyFull exit=1 in 6.3s
+2026-10-21 08:36:04.468 | ERROR    | floatlib_gate_diagnostic:run_stages:729 - [statement] crashed
+Traceback (most recent call last):
+
+  File "<string>", line 14, in <module>
+
+  File "/home/runner/work/_temp/floatlib-upstream/gate.py", line 807, in main
+    v = gate(Path(arg).resolve(), digest, mode, slot)
+        │    │    │               │       │     └ 'full'
+        │    │    │               │       └ 'gate'
+        │    │    │               └ 'e0273a66e27fc6492258a8867675330a6b47fe9b06c1939af732fe8bf2ffa59a'
+        │    │    └ '/home/runner/work/_temp/floatlib-reports/inputs/f01-word-tensors'
+        │    └ <class 'pathlib.Path'>
+        └ <function gate at 0x7f5e2cd68cc0>
+
+  File "/home/runner/work/_temp/floatlib-upstream/gate.py", line 707, in gate
+    run_stages(src, v, BENCH_STAGES if mode == "bench" else STAGES)
+    │          │    │  │               │                    └ [('intake', <function intake at 0x7f5e2cd68720>), ('policy', <function policy at 0x7f5e2cd687c0>), ('statement', <function st...
+    │          │    │  │               └ 'gate'
+    │          │    │  └ [('intake', <function intake at 0x7f5e2cd68720>), ('statement', <function statement at 0x7f5e2cd68900>), ('score', <function ...
+    │          │    └ Verdict(submission='f01-word-tensors', slot='full', mode='gate', stage='statement', passed=False, reason='', seed=0, ratio=No...
+    │          └ PosixPath('/home/runner/work/_temp/floatlib-reports/inputs/f01-word-tensors/Kernel.lean')
+    └ <function run_stages at 0x7f5e2cd68d60>
+
+> File "/home/runner/work/_temp/floatlib-upstream/gate.py", line 727, in run_stages
+    reason = stage(src, v)
+             │     │    └ Verdict(submission='f01-word-tensors', slot='full', mode='gate', stage='statement', passed=False, reason='', seed=0, ratio=No...
+             │     └ PosixPath('/home/runner/work/_temp/floatlib-reports/inputs/f01-word-tensors/Kernel.lean')
+             └ <function statement at 0x7f5e2cd68900>
+
+  File "/home/runner/work/_temp/floatlib-upstream/gate.py", line 542, in statement
+    return f"the obligation does not typecheck: {errors(out, code)}"
+                                                 │      │    └ 1
+                                                 │      └ '✖ [4114/4116] Building Submission (3.1s)\ntrace: .> LEAN_PATH=/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/...
+                                                 └ <function full_errors at 0x7f5e2d86a2a0>
+
+TypeError: full_errors() takes 1 positional argument but 2 were given
+2026-10-21 08:36:04.469 | WARNING  | floatlib_gate_diagnostic:run_stages:733 - [statement] REJECTED f01-word-tensors: gate error: full_errors() takes 1 positional argument but 2 were given
+2026-10-21 08:36:04.471 | INFO     | floatlib_gate_diagnostic:main:812 - [gate] f01-word-tensors slot=full passed=False stage=statement ratio=None

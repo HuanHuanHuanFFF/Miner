@@ -34,6 +34,7 @@ def main():
         checked={}
         paths=['competitions/floatlib/pins.json','.github/workflows/'+args.workflow,'competitions/floatlib/scripts/ci-prepare.sh','competitions/floatlib/scripts/ci-setup.sh','competitions/floatlib/scripts/ci-validate.sh','competitions/floatlib/scripts/run-gates.py']
         paths += ['competitions/floatlib/candidates/'+n+'/Kernel.lean' for n in args.candidates.split(',') if n!='baseline']
+        paths += ['competitions/floatlib/candidates/'+n+'/manifest.json' for n in args.candidates.split(',') if n!='baseline' and (ROOT/'competitions/floatlib/candidates'/n/'manifest.json').is_file()]
         diagnostic='competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py'
         if (ROOT/diagnostic).is_file(): paths.append(diagnostic)
         for path in paths:
