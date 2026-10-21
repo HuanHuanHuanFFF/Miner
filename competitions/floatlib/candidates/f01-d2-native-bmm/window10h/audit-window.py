@@ -14,7 +14,7 @@ for rid in ids:
  ix=json.loads(index.read_bytes());a=p/ix['directory'];meta=json.loads((p/'ci-run.json').read_bytes());assert meta['status']=='completed'
  for name,row in ix['files'].items():
   file=a/name;data=file.read_bytes();assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256'];payloads.append((file,row['sha256']))
- batch=json.loads((a/'summary.json').read_bytes());assert batch['complete'];assert batch['source_commit']==meta['headSha']
+ batch=json.loads((a/'summary.json').read_bytes());assert batch['complete'];assert batch['source_commit']==meta['headSha'];assert batch['official_commit']==state['official_commit']
  provenance=json.loads((a/'provenance.json').read_bytes());environment=json.loads((a/'environment.json').read_bytes());assert environment['official_source_diff']=='CLEAN'
  cpu=next(x.split(':',1)[1].strip() for x in provenance['lscpu'].splitlines() if x.startswith('Model name:'))
  jobs.append({'run':rid,'collected':True,'conclusion':meta['conclusion'],'commit':meta['headSha'],'artifact':a.relative_to(ROOT).as_posix(),'cpu':cpu,'cpu_affinity':provenance['cpu_affinity'],'environment_path':(a/'environment.json').relative_to(ROOT).as_posix(),'provenance_path':(a/'provenance.json').relative_to(ROOT).as_posix()})
@@ -24,7 +24,7 @@ for rid in ids:
   v=json.loads((a/row['verdict']).read_bytes());rec={'run':rid,'candidate':row['candidate'],'kernel_sha256':row['kernel_sha256'],'validation_mode':row.get('validation_mode'),'full_gate':row['full_gate'],'compile_pass':row.get('compile_pass',False),'stage':v['stage'],'passed':v['passed'],'reason':v.get('reason'),'seed':row['seed'],'ratio_vs_shipped':None,'direct_champion_ratio':'UNKNOWN','formal_submission':'NOT_SUBMITTED','verdict_path':(a/row['verdict']).relative_to(ROOT).as_posix()}
   if row['full_gate']:
    assert v['passed'] and v['mode']=='gate' and v['stage']=='score';assert len(v['classes'])==12 and len(v['rounds'])==25;assert v['verifier_fingerprint']==v['verifier_fingerprint_end']
-   assert v['champion_sha256']==state['baseline_sha256']
+   assert v['champion_sha256']==row['reference_sha256']==state['baseline_sha256'];assert v['seed']==row['seed']
    log=re.sub(r'\x1b\[[0-9;]*m','',(a/(row['candidate']+'-gate.log')).read_text(encoding='utf-8'))
    axioms=ast.literal_eval(re.search(r'\[axioms\] (\[[^\n]*?\])',log).group(1));assert set(axioms)<=set(provenance['pins']['allowed_axioms'])
    assert 'Submission replays cleanly' in log and 'VerifyFull replays cleanly' in log

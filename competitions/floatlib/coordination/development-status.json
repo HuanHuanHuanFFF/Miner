@@ -1,21 +1,21 @@
 {
-  "state": "COLLAB10H_ACTIVE_FULL_GATES_RUNNING",
-  "updated_at_utc": "2026-10-21T19:03:05.676872+00:00",
+  "state": "COLLAB10H_ACTIVE_MAJOR_NATIVE_REDUCTION_PASS",
+  "updated_at_utc": "2026-10-21T19:18:50.376324+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T12:16:11+08:00",
   "official_commit": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
-  "candidate": "competitions/floatlib/candidates/f01-d1-native-both-proof1",
-  "kernel": "competitions/floatlib/candidates/f01-d1-native-both-proof1/Kernel.lean",
-  "kernel_sha256": "707d22fed8443d883a183983397496492f9a09e071ffcf2715ef818384e44b85",
-  "kernel_bytes": 44976,
+  "candidate": "competitions/floatlib/candidates/f01-d2-final-finite",
+  "kernel": "competitions/floatlib/candidates/f01-d2-final-finite/Kernel.lean",
+  "kernel_sha256": "86312a3759286cb207f946af9db95546777fdb16f1bd147f7892c0f9e1d79217",
+  "kernel_bytes": 58079,
   "baseline_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
-  "manifest": "competitions/floatlib/candidates/f01-d1-native-both-proof1/manifest.json",
-  "mechanism": "Guarded native Float32 addition/multiplication with exact raw round-trip guards and proven software fallback; unchanged sequential tensor folds.",
-  "proof_status": "PASS_FULL_GATE: exact four obligations, kernel replay, three allowed axioms",
+  "manifest": "competitions/floatlib/candidates/f01-d2-final-finite/manifest.json",
+  "mechanism": "Scalar native add/mul with proven raw-guard elimination; native sum/bmm loops check final finiteness only and use exact fallback otherwise.",
+  "proof_status": "PASS_FULL_OFFICIAL_GATE_PUBLIC",
   "local_model": "Exact Lean proof and full gate; previous finite Python model belongs to previous_current_candidate.",
   "lean_gate": "PASS_FULL_OFFICIAL_GATE_PUBLIC",
-  "benchmark": "VERIFIED_TWO_FROZEN_SOURCE_PUBLIC_RUNS",
+  "benchmark": "VERIFIED_DISCOVERY_RUN; INDEPENDENT_CONFIRMATION_NEXT",
   "requested_environment_action": "NONE: environment handoff finished",
   "remaining": [
     "Develop and prove a materially stronger full package, starting with bmm native accumulation",
@@ -43,12 +43,12 @@
   ],
   "environment_feedback_read_at_utc": "2026-10-21T06:23:33.060938+00:00",
   "environment_state_seen": "BASELINE_VERIFIED; environment owner STOPPED_AFTER_ENVIRONMENT_CONFIGURATION at committed 6ed35056",
-  "candidate_readiness": "PASS_FULL_GATE_AND_INDEPENDENT_CONFIRMATION",
+  "candidate_readiness": "FULL_GATE_PASS_DISCOVERY",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "Collect both full gates; dispatch frozen USize statement feasibility when a CI slot is free; update dashboard only from full-gate results.",
-  "research_decision": "Prioritize bmm native accumulator/guard removal next; current native package and public bridge fully validated. No new experiment started after independent confirmation.",
-  "execution_state": "TWO_FULL_GATES_RUNNING_USIZE_INDEX_READY",
+  "next_action": "Dispatch frozen final-finite independent full confirmation and four-candidate statement batch; consume real results before further layout variants.",
+  "research_decision": "Final-only-finite backward proof is now full-gated and materially faster. Continue largest-gap bmm through USize/proved bounds, conversion amortization and multi-output scheduling. Keep scalar word-predicate route as independent follow-up.",
+  "execution_state": "QUEUING_FROZEN_CONFIRMATION_AND_LAYOUT_PROOF_BATCH",
   "local_project_check": {
     "status": "PASS",
     "scope": "Root project check after candidate manifests, helper and dashboard changes. Exact full gates and committed-byte audits recorded separately.",
@@ -76,7 +76,7 @@
     "git_rule": "Commit only explicit owned paths; never stage/commit environment files. Keep shared branch.",
     "receipt_root": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs",
     "existing_run": "39554146703",
-    "new_run_state": "TWO_FULL_GATES_RUNNING",
+    "new_run_state": "ALL6_PREVIOUS_JOBS_COLLECTED; NEXT_TWO_BATCHES_READY",
     "takeover_condition": "Wait for environment_owner_state=STOPPED_AFTER_ENVIRONMENT_CONFIGURATION before shared Git or new CI dispatch, as updated HANDOFF.md explicitly requires.",
     "helper_checks": "Candidate-local CI helper syntax/help and root project checks PASS; no new CI dispatched.",
     "environment_stop_verified_commit": "6ed35056",
@@ -138,61 +138,61 @@
   ],
   "research_window_status": "ACTIVE_TEN_HOUR_WINDOW",
   "performance": {
+    "run": 39656662501,
+    "candidate": "f01-d2-final-finite",
+    "kernel_sha256": "86312a3759286cb207f946af9db95546777fdb16f1bd147f7892c0f9e1d79217",
+    "validation_mode": "full-gate",
+    "full_gate": true,
+    "compile_pass": false,
+    "stage": "score",
+    "passed": true,
+    "reason": "",
+    "seed": 305,
+    "ratio_vs_shipped": 0.3454501832950915,
+    "direct_champion_ratio": "UNKNOWN",
+    "formal_submission": "NOT_SUBMITTED",
+    "verdict_path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39656662501/download-f90ce41a124b4c0ea7b04eebcf5da2a4/f01-d2-final-finite-verdict.json",
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
     "reference_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
-    "full_gate_runs": [
-      39590684208,
-      39593447390
-    ],
-    "ratio_median": 0.5579752688781556,
-    "ratio_min": 0.5574667102398078,
-    "ratio_max": 0.5584838275165036,
-    "kernels_median": {
-      "add": 0.605526608165063,
-      "mul": 0.9132002155846786,
-      "sum": 0.36520050840358126,
-      "bmm": 0.4710286055595884
-    },
-    "paired_gain_p05": [
-      0.42850180316637754,
-      0.44570428554666797
-    ],
-    "cpus": [
-      "AMD EPYC 7763 64-Core Processor",
-      "AMD EPYC 9V45 96-Core Processor"
-    ],
-    "rounds": 25,
-    "seeds": [
-      220,
-      221
-    ],
-    "scope": "Same exact whole-entry package. Shipped-reference paired evidence, separate from current-champion conversion."
+    "cpu": "AMD EPYC 7763 64-Core Processor",
+    "cpu_affinity": "0",
+    "paired_gain_p05": 0.6492566639699402,
+    "kernels_vs_shipped": {
+      "add": 0.5469141448548521,
+      "mul": 0.8203671449312773,
+      "sum": 0.13502179980382017,
+      "bmm": 0.11637467429627818
+    }
   },
   "formal_submission": "NOT_SUBMITTED",
-  "current_window_completion": "ACTIVE: first proof failures repaired; guarded native-bmm, scalar raw-guard elimination and final-only-finite sum/bmm now compile; two full gates are running. Championship target unachieved.",
+  "current_window_completion": "ACTIVE: final-only-finite full package passed exact gate, three allowed axioms and12-class25-round timing; bmm0.1164 andsum0.1350 of shipped. USize candidate is in statement CI. Independent confirmation and championship goal remain open.",
   "payload_integrity": {
-    "status": "LATEST_AUDIT_3_OF_4_RECORDED_RUNS_COLLECTED; NEW_FULL_RUN_PENDING_AUDIT",
-    "verified_payloads": 76,
-    "evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/summary.json",
-    "previous_window_evidence": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/summary.json"
+    "verified_payloads": 148,
+    "status": "PASS_ORIGINAL_PAYLOADS; COMMITTED_FINAL_AUDIT_PENDING",
+    "evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/summary.json"
   },
   "acceptance_target": "Attempt to produce the next live champion: full four-kernel candidate, exact proof gate, and significant >=3% gain against the champion current at evaluation. Improvement over the shipped reference alone does not satisfy the goal.",
   "acceptance_target_status": "UNACHIEVED: no competitive current-champion result or formal promotion",
   "current_champion_comparison": {
     "submission": 174,
     "source_digest": "67e44fd4b17186dbe6b1728dea49611288bb16d2586ebbb3a8a2f93aea74c009",
-    "policy_snapshot": "537",
-    "queried_at_utc": "2026-10-21T11:43:59.616075+00:00",
-    "candidate": "f01-d1-native-both-proof1",
-    "candidate_over_champion_time_inferred": 4.024009173382129,
+    "policy_snapshot": "591",
+    "queried_at_utc": "2026-10-21T19:07:59.349952+00:00",
+    "candidate": "f01-d2-final-finite",
+    "candidate_over_champion_time_inferred": 2.6845372629668423,
     "direct_paired_ratio": "UNKNOWN",
     "comparison_kind": "INFERRED: per-class exact-digest historical chain, current champion timing weights, candidate/reference paired class ratios, median over frozen-source full gates. Same-digest promotions excluded; no shared overall multiplier used.",
     "source_status": "Exact champion source not obtained",
-    "evidence": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/operation-comparisons.json",
-    "by_operation_evidence": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/operation-comparisons.json",
-    "snapshot_receipts": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/official-completion/receipts.json"
+    "evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/operation-comparisons.json",
+    "by_operation_evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/operation-comparisons.json",
+    "snapshot_receipts": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/official-20261021T190758Z/receipts.json"
   },
   "previous_window_state": "WINDOW_DELIVERED_PUBLIC_FULL_GATE_VERIFIED",
-  "candidate_role": "Best verified whole-entry candidate; no performance claims composed across candidates",
+  "candidate_role": "Best full-package discovery result; exact source frozen for independent confirmation",
   "next_research_plan": "competitions/floatlib/coordination/astra-handoff-10h.md",
   "planning_scope": "Current user authorized10h collaborative optimization targeting actual next champion, through2026-10-22T04:16:11Z.",
   "planning_verification": {
@@ -294,17 +294,15 @@
   },
   "research_result_report": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/README.md",
   "research_result_summary": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/summary.json",
-  "current_candidate_role": "Frozen whole-entry native arithmetic package; not yet able to replace current champion",
+  "current_candidate_role": "Best full-package final-only-finite native reduction; current-champion goal still unmet",
   "best_checked_new_component": {
-    "candidate": "f01-d1-native-both-proof1",
-    "kernel_sha256": "707d22fed8443d883a183983397496492f9a09e071ffcf2715ef818384e44b85",
-    "full_gate_runs": 2,
-    "ratio_min": 0.5574667102398078,
-    "ratio_median": 0.5579752688781556,
-    "ratio_max": 0.5584838275165036,
-    "independent_confirmation": "Exact frozen source on seed220/EPYC7763 and seed221/EPYC9V45"
+    "candidate": "f01-d2-final-finite",
+    "kernel_sha256": "86312a3759286cb207f946af9db95546777fdb16f1bd147f7892c0f9e1d79217",
+    "full_gate_runs": 1,
+    "ratio_vs_shipped": 0.3454501832950915,
+    "independent_confirmation": "READY_TO_DISPATCH"
   },
-  "closing_official_snapshot": "537",
+  "closing_official_snapshot": "591",
   "dashboard": "dashboard.md",
   "comparison_policy": {
     "primary_reference": "Current live champion at the time of each comparison; refresh submission and exact digest before measuring.",
@@ -317,52 +315,48 @@
   "dashboard_selection": {
     "by_operation": {
       "add": {
-        "candidate": "f01-d1-native-both-proof1",
-        "label": "已证原生加乘",
-        "relative_to_champion_inferred": 2.132819580915929,
-        "full_gate_runs": 2,
-        "kernel_sha256": "707d22fed8443d883a183983397496492f9a09e071ffcf2715ef818384e44b85",
+        "candidate": "f01-d2-no-raw-guards-proof1",
+        "label": "精简原生加乘",
+        "relative_to_champion_inferred": 1.8833351597949208,
+        "full_gate_runs": 1,
+        "kernel_sha256": "8cc62aab15004c78c9eba144ecde8f6f87627ca1c6be209f919ce53e5d3deeeb",
         "runs": [
-          39590684208,
-          39593447390
+          39655361399
         ]
       },
       "mul": {
-        "candidate": "f01-rebuilt-mul-proof1",
-        "label": "固定宽度乘法",
-        "relative_to_champion_inferred": 3.1121053279890294,
-        "full_gate_runs": 2,
-        "kernel_sha256": "517030e9729783a45f1a2dc604d38a6b3cbcfdc542b674e22135edf50e03bc83",
+        "candidate": "f01-d2-no-raw-guards-proof1",
+        "label": "精简原生加乘",
+        "relative_to_champion_inferred": 2.745948423734004,
+        "full_gate_runs": 1,
+        "kernel_sha256": "8cc62aab15004c78c9eba144ecde8f6f87627ca1c6be209f919ce53e5d3deeeb",
         "runs": [
-          39571489959,
-          39575944885
+          39655361399
         ]
       },
       "sum": {
-        "candidate": "f01-d1-native-sum-acc",
-        "label": "原生累加器求和",
-        "relative_to_champion_inferred": 7.965080230496366,
-        "full_gate_runs": 2,
-        "kernel_sha256": "75524a316b846ccfbbba3fabe0f9ac4941c1c126ef6b4fd370573b0e84b09fdd",
+        "candidate": "f01-d2-final-finite",
+        "label": "最终检查原生归约",
+        "relative_to_champion_inferred": 4.501287577908301,
+        "full_gate_runs": 1,
+        "kernel_sha256": "86312a3759286cb207f946af9db95546777fdb16f1bd147f7892c0f9e1d79217",
         "runs": [
-          39590684208,
-          39593447390
+          39656662501
         ]
       },
       "bmm": {
-        "candidate": "f01-d1-native-both-proof1",
-        "label": "已证原生加乘",
-        "relative_to_champion_inferred": 139.07488202262607,
-        "full_gate_runs": 2,
-        "kernel_sha256": "707d22fed8443d883a183983397496492f9a09e071ffcf2715ef818384e44b85",
+        "candidate": "f01-d2-final-finite",
+        "label": "最终检查原生归约",
+        "relative_to_champion_inferred": 34.32620103630906,
+        "full_gate_runs": 1,
+        "kernel_sha256": "86312a3759286cb207f946af9db95546777fdb16f1bd147f7892c0f9e1d79217",
         "runs": [
-          39590684208,
-          39593447390
+          39656662501
         ]
       }
     },
-    "evidence": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/operation-comparisons.json",
-    "conclusion": "差距已明显缩小，当前仍不能取代冠军。",
+    "evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/operation-comparisons.json",
+    "conclusion": "差距进一步缩小，当前仍不能取代冠军。",
     "largest_gap": "bmm"
   },
   "public_source_reuse": {
@@ -441,7 +435,7 @@
       },
       {
         "commit": "46a9f085db7634a22324d25623f715829f7074f9",
-        "state": "in_progress",
+        "state": "completed",
         "run": 39655361399,
         "candidates": [
           "f01-d1-native-both-proof1",
@@ -452,7 +446,9 @@
         "mode": "full-gate",
         "created_at_utc": "2026-10-21T18:43:59Z",
         "purpose": "Full gates and 12-class25-pair timing with same-run previous native-both control",
-        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T184351Z/dispatch.json"
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T184351Z/dispatch.json",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39655361399"
       },
       {
         "commit": "46a9f085db7634a22324d25623f715829f7074f9",
@@ -478,10 +474,28 @@
         "seed": 305,
         "commit": "fe6320509ce91d641bfb99a11486d744ff81e670",
         "created_at_utc": "2026-10-21T18:52:45Z",
-        "state": "in_progress",
+        "state": "completed",
         "mode": "full-gate",
         "purpose": "Full kernel/axiom/checksum/performance acceptance for compiled final-only finite sum+bmm",
-        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T185237Z/dispatch.json"
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T185237Z/dispatch.json",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39656662501"
+      },
+      {
+        "run": 39658646878,
+        "candidates": [
+          "f01-d2-usize-bmm"
+        ],
+        "seed": 306,
+        "commit": "269c0ae76c2a154798cb3f388601c3b324a8de21",
+        "created_at_utc": "2026-10-21T19:06:06Z",
+        "state": "completed",
+        "mode": "statement-only",
+        "purpose": "Prove machine-word address/counter implementation and once-per-output bounds/no-wrap guard",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T190558Z/dispatch.json",
+        "conclusion": "failure",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39658646878",
+        "reason": "Two proof-plumbing errors: USize.size versus2^numBits normalization and tactic-local hk name in termination proof; repaired in1207045e."
       }
     ],
     "research_handoffs_processed": [
@@ -496,6 +510,24 @@
         "source_sha256": "0ca59ff7806b5cdc10c82c88aa88a7372d1e92a9e756eb742935851f84d5fd65",
         "candidate": "competitions/floatlib/candidates/f01-d2-final-finite-preimage",
         "decision": "Adopt proof feasibility. Original comment included banned word axiom; D replaced that comment wording before CI, exact proof text unchanged."
+      },
+      {
+        "id": "R2-04",
+        "decision": "Adopt two byte-identical independent candidates for next statement-only batch",
+        "candidates": [
+          "f01-d2-preconverted-bmm",
+          "f01-d2-native-fold-sum"
+        ],
+        "source_sha256": [
+          "da9a9fab1f88bcc0d696fb263f8417cdd4c7da8223b7bb434901b23f6f7f3e07",
+          "8e37506086715f0d0b13e21b46b0dfc8d32b99348658a0b1ed5822ddd5a5d8c0"
+        ]
+      },
+      {
+        "id": "R2-05",
+        "decision": "Adopt checked numeric FloatArray as distinct layout feasibility experiment; full gate/axiom audit required before timing claim",
+        "candidate": "f01-d2-checked-floatarray",
+        "source_sha256": "5be0735a90d58d9efb8ee2c6d666c11029bca66665dca03b6b5eff5baf6cbfc4"
       }
     ],
     "confirmation_start_utc": "2026-10-22T03:15:00Z",
@@ -503,7 +535,7 @@
     "previous_state": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/previous-state.json",
     "formal_goal": "Actual current-champion promotion must be verified; no goal completion from public-reference results alone.",
     "research_dispatch_verified": "wait_threads confirms existing Astra research chat active on new turn",
-    "feedback_to_research": "Major checkpoint: CI39655412696 SUCCESS, both standalone finite-result preimage and full production f01-d2-final-finite compiled exact four obligations+bench. R2-02 proof works without mathematics changes; D only replaced banned word in comment. Final-finite production SHA86312a37 now advances to full gate/axioms/checksums/performance. Existing full comparison39655361399 still running. C available under39655412696 diagnostics/f01-d2-final-finite; D owns USize+unchecked-with-proved-bounds indexing next. R can use finiteRoundtrip and final preimage as real compiled building blocks for independent multioutput/layout work. Final-only finite full run39656662501 seed305 actually started18:52:45, while previous full39655361399 still live. D prepared USize index candidate4690116c (local policy only, no Lean yet), targeting Nat arithmetic/getD checks visible in C. R retain multi-output/layout scope. Direct Float32<->Float numeric casts opaque: check actual bridge before FloatArray numeric approach; bit-container encoding remains alternative hypothesis.",
+    "feedback_to_research": "All initial full results audited: final-finite86312a37 full PASS, ratio0.345450, sum0.135022,bmm0.116375 of shipped. No-raw full0.464583; native-bmm full0.486567; same-run native-both control0.563515. NativeIndex original4690116c failed ONLY stepNat size alias normalization and termination hk name; D fixed1207045e without runtime change. R2-04 two candidates andR2-05 copied byte-exact to D scope; all exact lexical policy pass. Next batch combines those3 plus D index repair, statement only. Also independently confirm frozen final-finite on new seed/runner. R can freeze raw-word finite predicate follow-up as a small next component while awaiting current set; avoid adding more layout variants before these real errors/timings. Three web6Pro tasks remain R-owned, archive original downloads when actually complete.",
     "research_requests": [
       {
         "id": "D2-FINAL-FINITE",
@@ -555,23 +587,24 @@
     },
     "candidate_role": "Frozen reference/control only; no longer the primary development route"
   },
-  "active_jobs": [
-    {
-      "kind": "github_ci",
-      "run": 39655361399
-    },
-    {
-      "kind": "github_ci",
-      "run": 39656662501
-    }
-  ],
+  "active_jobs": [],
   "active_goal": "继续协作推进优化10h；目标是拿下新的冠军",
   "pending_candidates": [
     {
-      "candidate": "f01-d2-usize-bmm",
-      "kernel_sha256": "4690116cbaae3203b30ff4f48aa1462c978fbcdba07ec9dc2ab1ce9cf09b4624",
-      "state": "LOCAL_POLICY_PASS_STATEMENT_PENDING",
-      "mechanism": "USize loop/address arithmetic; once-per-output no-wrap/bounds guard; proof-backed Array.uget; final-finite fallback"
+      "candidate": "f01-d2-usize-bmm-proof1",
+      "state": "READY_STATEMENT_ONLY"
+    },
+    {
+      "candidate": "f01-d2-preconverted-bmm",
+      "state": "READY_STATEMENT_ONLY"
+    },
+    {
+      "candidate": "f01-d2-native-fold-sum",
+      "state": "READY_STATEMENT_ONLY"
+    },
+    {
+      "candidate": "f01-d2-checked-floatarray",
+      "state": "READY_STATEMENT_ONLY"
     }
   ],
   "current_official_refresh": {

@@ -6,7 +6,7 @@
   "parent": "f01-d2-no-raw-guards",
   "parent_sha256": "923dfef502735784a9750b768d9c9de5c44c7c7b740318fe632c3ecf335fea13",
   "validation_mode": "full-gate",
-  "proof_status": "PASS_STATEMENT_AND_BENCH_COMPILE_RUN39654101400; full gate pending",
+  "proof_status": "PASS_FULL_OFFICIAL_GATE_PUBLIC",
   "mechanism": "Remove the two raw round-trip runtime comparisons from each native scalar wrapper. Retain native finite tests, original software fallbacks, all tensor loops and rounding order.",
   "created_at_utc": "2026-10-21T18:33:34.020776+00:00",
   "minimal_request": "D copies exact source to f01-d2 scope; statement/axiom check then full gate with C capture. Expected C change: two fewer lean_float32_to_bits calls per scalar fast path. No performance claim before measurement.",
@@ -14,5 +14,22 @@
   "research_source": "competitions/floatlib/candidates/f01-r2-no-raw-guards/Kernel.lean",
   "repair": "Use full UnpackedFloat.unpack namespace and prove generic Model canonicality before specializing ExecFloat binary32, avoiding the instance-normalization rewrite failure. Add applicable original MIT notices. Runtime unchanged.",
   "compile_evidence": "../f01-mul-log2-proof1/ci-runs/39654101400",
-  "full_gate_requested_at_utc": "2026-10-21T18:42:04.871190+00:00"
+  "full_gate_requested_at_utc": "2026-10-21T18:42:04.871190+00:00",
+  "performance_status": "DISCOVERY_RUN; INDEPENDENT_CONFIRMATION_PENDING",
+  "full_gate_run": 39655361399,
+  "full_gate_evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39655361399/download-55d7148dafd34890bf11677b7155ae9b/f01-d2-no-raw-guards-proof1-verdict.json",
+  "ratio_vs_shipped": 0.4645832320254525,
+  "kernels_vs_shipped": {
+    "add": 0.5416171443459783,
+    "mul": 0.7921446034396263,
+    "sum": 0.28154135544814796,
+    "bmm": 0.3691166960984203
+  },
+  "paired_gain_p05": 0.5243757772197645,
+  "allowed_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "updated_at_utc": "2026-10-21T19:10:49.502888+00:00"
 }
