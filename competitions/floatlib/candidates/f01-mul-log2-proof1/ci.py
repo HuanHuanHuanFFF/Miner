@@ -38,7 +38,10 @@ def main():
         diagnostic='competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py'
         if (ROOT/diagnostic).is_file(): paths.append(diagnostic)
         for path in paths:
-            blob=subprocess.check_output(['git','show',sha+':'+path],cwd=ROOT);assert blob==(ROOT/path).read_bytes();checked[path]=hashlib.sha256(blob).hexdigest()
+            blob=subprocess.check_output(['git','show',sha+':'+path],cwd=ROOT);local=(ROOT/path).read_bytes()
+            # Git canonicalizes JSON metadata line endings; Lean source stays byte exact.
+            assert blob==local or (path.endswith('/manifest.json') and blob==local.replace(b'\r\n',b'\n')),path
+            checked[path]=hashlib.sha256(blob).hexdigest()
         listing=['run','list','--repo',REPO,'--branch',branch,'--workflow',args.workflow,'--limit','25','--json','databaseId,headSha,status,createdAt,url']
         seen={x['databaseId'] for x in json.loads(gh(listing,e))}
         inputs={'candidates':args.candidates,'seed':args.seed,'allow_private':'false'}
