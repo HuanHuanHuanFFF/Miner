@@ -7,6 +7,7 @@
 - [首次双会话交接](coordination/HANDOFF.md)：环境与开发文件所有权、状态、自然检查点和本窗预算。
 - [环境状态](coordination/environment-status.json)：CONFIGURING、CI_READY、BASELINE_VERIFIED 分开记录。
 - [环境使用说明](docs/environment.md)：固定工具链、当前手动入口、回执收集及验收边界。
+- [首次环境验收](docs/environment-validation-20261021.md)：环境与完整基线通过；原始候选证明失败，保留原始回执。
 - `candidates/f01-*/`：开发会话负责的首轮候选；目录名与文件存在不代表已通过 gate。
 - `references/official-incumbent/`：精确官方参考和来源；正式现任冠军源码尚未取得，不能把旧参考提速当作夺冠。
 - `scripts/`：在临时 Linux GitHub runner 准备环境、运行官方完整 gate 和配对计时。

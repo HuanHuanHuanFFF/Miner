@@ -1,6 +1,6 @@
 {
-  "state": "CI_RUNNING",
-  "updated_at_utc": "2026-10-21T06:21:17.836756+00:00",
+  "state": "BASELINE_VERIFIED",
+  "updated_at_utc": "2026-10-21T06:55:20.480579+00:00",
   "owner": "environment chat",
   "branch": "codex/multi-track-floatlib",
   "official_commit": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
@@ -8,7 +8,7 @@
   "script": "competitions/floatlib/scripts/ci-validate.sh",
   "candidate_layout": "competitions/floatlib/candidates/<name>/Kernel.lean",
   "local_linux_toolchain": "NOT_INSTALLED_BY_DESIGN",
-  "baseline_gate": "NOT_RUN",
+  "baseline_gate": "PASS_FULL_OFFICIAL_GATE",
   "ci_runs": [
     {
       "run_id": 39554146703,
@@ -19,8 +19,12 @@
         "f01-mul-log2"
       ],
       "seed": 42,
-      "status": "queued",
-      "receipt": "competitions/floatlib/evidence/dispatch-20261021T061349Z/dispatch.json"
+      "status": "completed",
+      "conclusion": "failure",
+      "failure_scope": "Candidate f01-mul-log2 rejected at statement; environment and full baseline gate passed.",
+      "receipt": "competitions/floatlib/evidence/dispatch-20261021T061349Z/dispatch.json",
+      "collected_receipts": "competitions/floatlib/evidence/39554146703/",
+      "finished_at_utc": "2026-10-21T06:51:12Z"
     }
   ],
   "handoff": "HANDOFF.md",
@@ -51,5 +55,38 @@
   "job_timeout_minutes": 45,
   "checkout": "sparse: competitions/floatlib",
   "scope_update": "User requested environment chat to stop once environment configuration is complete. Finish the already-started run naturally and collect its environment evidence; do not dispatch further candidates or confirmation runs.",
-  "new_ci_dispatch_allowed_by_environment_chat": false
+  "new_ci_dispatch_allowed_by_environment_chat": false,
+  "environment_owner_state": "STOPPED_AFTER_ENVIRONMENT_CONFIGURATION",
+  "handoff_effective_when": "The commit containing this final state has been pushed to origin/codex/multi-track-floatlib. Development chat may then take over Git and CI only within its own user authorization; environment chat performs no further work.",
+  "environment_verified": {
+    "setup": "PASS",
+    "setup_check": "PASS",
+    "lean": "4.34.0",
+    "python": "3.12.3",
+    "bubblewrap": "0.11.2",
+    "systemd_memory_caps": "ENABLED",
+    "official_source_diff": "CLEAN",
+    "runner_cpu": "AMD EPYC 9V74 80-Core Processor; 4 logical CPUs available; benchmark pinned to CPU 0",
+    "cold_install_seconds": 1904,
+    "cache_save": "PASS",
+    "full_baseline_gate_seconds": 231.551,
+    "baseline_classes": 12,
+    "paired_rounds": 25,
+    "baseline_ratio_vs_identical_shipped_reference": 1.0009522412862044,
+    "artifact_sha256_index": "competitions/floatlib/evidence/39554146703/original-artifact-hashes.json"
+  },
+  "candidate_result": {
+    "name": "f01-mul-log2",
+    "sha256": "ac4f32a610e1e4b66141d8cb8d099411cda476ffe6c5cd821df0ede41c8158d7",
+    "full_gate": "FAIL_STATEMENT_TYPECHECK",
+    "source_error_lines": [
+      645,
+      657
+    ],
+    "error": "Type mismatch: After simplification, term",
+    "performance": "NOT_RUN",
+    "formal_competition_submission": "NOT_SUBMITTED",
+    "note": "This is an executed rejection of the original frozen candidate. The uncommitted proof1 revision belongs to development chat and was not tested by this run; its correctness remains UNKNOWN."
+  },
+  "final_report": "competitions/floatlib/docs/environment-validation-20261021.md"
 }
