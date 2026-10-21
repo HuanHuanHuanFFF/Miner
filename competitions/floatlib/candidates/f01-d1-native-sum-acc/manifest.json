@@ -6,12 +6,46 @@
   "baseline_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
   "created_at_utc": "2026-10-21T11:03:42.245925+00:00",
   "mechanism": "Only sum: direct Option Float32 accumulator loop; finite guards and input raw round-trip check at each step; failure invokes unchanged referenceSum. Success proof follows same Fin.foldl.loop, final native overflow allowed. Scalar add/mul and bmm remain unchanged.",
-  "proof_status": "PASS_STATEMENT_COMPILE: CI39589987380; kernel/axiom/score pending",
-  "performance": "NOT_RUN",
+  "proof_status": "PASS_FULL_OFFICIAL_GATE_AND_INDEPENDENT_CONFIRMATION",
+  "performance": "VERIFIED_PAIRED_12_CLASSES_25_ROUNDS_ON_TWO_FROZEN_SOURCE_RUNS",
   "validation_mode": "full-gate",
   "requested_by_D": "Development feedback at 11:02 UTC requested native sum package, keep unqueued until native-add passes.",
   "minimal_request": "D copy/freeze; first native-add feasibility then statement/full gate; inspect sumTry C for float accumulator and Option allocation only at exit/failure; collect full 12-class25-pair timing.",
   "candidate_file": "Kernel.lean",
   "candidate_bytes": 35312,
-  "research_source": "competitions/floatlib/candidates/f01-r1-native-sum-acc/Kernel.lean"
+  "research_source": "competitions/floatlib/candidates/f01-r1-native-sum-acc/Kernel.lean",
+  "validation_runs": [
+    {
+      "run": 39590684208,
+      "seed": 220,
+      "kernel_sha256": "75524a316b846ccfbbba3fabe0f9ac4941c1c126ef6b4fd370573b0e84b09fdd",
+      "verdict_path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39590684208/download-292754a158e2431ca73cd4d23bcb7e2f/f01-d1-native-sum-acc-verdict.json",
+      "ratio_vs_shipped": 0.838004090359548,
+      "paired_gain_p05": 0.1549303249172964,
+      "cpu": "AMD EPYC 7763 64-Core Processor",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "run": 39593447390,
+      "seed": 221,
+      "kernel_sha256": "75524a316b846ccfbbba3fabe0f9ac4941c1c126ef6b4fd370573b0e84b09fdd",
+      "verdict_path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39593447390/download-1d8b6dec66364120a62b867654c11f70/f01-d1-native-sum-acc-verdict.json",
+      "ratio_vs_shipped": 0.8448976651535678,
+      "paired_gain_p05": 0.1527560512081766,
+      "cpu": "AMD EPYC 9V45 96-Core Processor",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    }
+  ],
+  "validation_reference_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
+  "validation_evidence": "../f01-d1-inline-all/window1h/summary.json",
+  "metadata_updated_at_utc": "2026-10-21T11:52:15.892278+00:00",
+  "initial_manifest_preserved": "Original per-dispatch metadata retained byte-exact in each CI receipt; Kernel.lean remains unchanged."
 }

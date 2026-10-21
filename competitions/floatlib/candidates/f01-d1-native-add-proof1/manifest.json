@@ -5,8 +5,8 @@
   "kernel_bytes": 33959,
   "baseline_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
   "mechanism": "Public Lean 4.34 Float32.add logical-model definition plus pinned FloatLib ofFloat32_add_of_isFinite theorem. Finite and exact bit round-trip guards; all other cases use original TunedAdd. No new external declarations or native assumptions.",
-  "proof_status": "PASS_STATEMENT_COMPILE: CI 39588316068; kernel replay and axiom audit pending",
-  "performance": "NOT_RUN",
+  "proof_status": "PASS_FULL_OFFICIAL_GATE_AND_INDEPENDENT_CONFIRMATION",
+  "performance": "VERIFIED_PAIRED_12_CLASSES_25_ROUNDS_ON_TWO_FROZEN_SOURCE_RUNS",
   "validation_mode": "full-gate",
   "created_at_utc": "2026-10-21T10:45:45.367097+00:00",
   "minimal_request": "Priority feasibility gate: confirm four statements, replay and allowed axioms before performance adoption. Inspect C for lean_float32_add and exact fallback. Do not assume source theorem has permissible axioms without gate.",
@@ -14,5 +14,39 @@
   "candidate_bytes": 33973,
   "research_source": "competitions/floatlib/candidates/f01-r1-guarded-native-add/Kernel.lean",
   "parent": "f01-d1-native-add",
-  "proof_repair": "Original native-add CI failed because split did not reduce let-bound fx/fy; add dsimp only before splitting. Runtime unchanged."
+  "proof_repair": "Original native-add CI failed because split did not reduce let-bound fx/fy; add dsimp only before splitting. Runtime unchanged.",
+  "validation_runs": [
+    {
+      "run": 39589111347,
+      "seed": 218,
+      "kernel_sha256": "7f51b43399c212936038798c763b1fdb0f900fed185c83051b63dbcf08b3d608",
+      "verdict_path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39589111347/download-983325114f2e4c5e8c0de8dec824de33/f01-d1-native-add-proof1-verdict.json",
+      "ratio_vs_shipped": 0.6232473474921005,
+      "paired_gain_p05": 0.3753938592587369,
+      "cpu": "AMD EPYC 9V74 80-Core Processor",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    },
+    {
+      "run": 39590684208,
+      "seed": 220,
+      "kernel_sha256": "7f51b43399c212936038798c763b1fdb0f900fed185c83051b63dbcf08b3d608",
+      "verdict_path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39590684208/download-292754a158e2431ca73cd4d23bcb7e2f/f01-d1-native-add-proof1-verdict.json",
+      "ratio_vs_shipped": 0.6010482690269268,
+      "paired_gain_p05": 0.39128729745143287,
+      "cpu": "AMD EPYC 7763 64-Core Processor",
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    }
+  ],
+  "validation_reference_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
+  "validation_evidence": "../f01-d1-inline-all/window1h/summary.json",
+  "metadata_updated_at_utc": "2026-10-21T11:52:15.886363+00:00",
+  "initial_manifest_preserved": "Original per-dispatch metadata retained byte-exact in each CI receipt; Kernel.lean remains unchanged."
 }

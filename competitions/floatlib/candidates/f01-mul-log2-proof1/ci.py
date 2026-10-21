@@ -21,7 +21,7 @@ def gh(args,e):
 def save(p,value):p.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('mode',choices=['dispatch','status','collect']);ap.add_argument('--run');ap.add_argument('--workflow',default='floatlib-validate.yml');ap.add_argument('--candidates',default='baseline');ap.add_argument('--seed',default='42');args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('mode',choices=['dispatch','status','collect']);ap.add_argument('--run');ap.add_argument('--workflow',default='deflate-baseline.yml');ap.add_argument('--candidates',default='baseline');ap.add_argument('--seed',default='42');args=ap.parse_args()
     e=env();evidence=Path(__file__).resolve().parent/'ci-runs';evidence.mkdir(exist_ok=True)
     if args.mode=='dispatch':
         assert re.fullmatch(r'(?:baseline|f01-[a-z0-9-]+)(?:,(?:baseline|f01-[a-z0-9-]+))*',args.candidates)

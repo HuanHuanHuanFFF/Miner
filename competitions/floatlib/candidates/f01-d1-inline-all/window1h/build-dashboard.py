@@ -4,7 +4,11 @@ from statistics import median
 import datetime,hashlib,json,os
 ROOT=Path.cwd();OWN=Path(__file__).resolve().parent
 HISTORY=ROOT/'competitions/floatlib/evidence/public-source-survey-20261021T101011Z'
-CLOSING=OWN/'official-closing';champ=json.loads((CLOSING/'champion-detail.raw').read_bytes())
+CLOSING=OWN/('official-completion' if (OWN/'official-completion/receipts.json').exists() else 'official-closing')
+snapshot=json.loads((CLOSING/'receipts.json').read_bytes())
+for row in snapshot['responses'].values():
+ data=(CLOSING/row['file']).read_bytes();assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256']
+champ=json.loads((CLOSING/'champion-detail.raw').read_bytes())
 chain=json.loads((HISTORY/'findings.json').read_bytes())['champion_hash_chain'];assert chain[0]['digest']==champ['digest']
 factors={n:1. for n in champ['classes']}
 for edge in chain:
@@ -34,13 +38,14 @@ for k,names in eligible.items():
   xs=[r for r in records if r['candidate']==name]
   if xs:options.append({'candidate':name,'label':labels[name],'relative_to_champion_inferred':median(r['values'][k] for r in xs),'full_gate_runs':len(xs),'kernel_sha256':xs[0]['kernel_sha256'],'runs':[r['run'] for r in xs]})
  selected[k]=min(options,key=lambda x:x['relative_to_champion_inferred'])
-result={'champion_submission':champ['id'],'champion_sha256':champ['digest'],'policy_snapshot':json.loads((CLOSING/'competition.raw').read_bytes())['current_snapshot_id'],'method':'INFERRED: per-class exact-digest historical chain, current champion timing weights, candidate/reference paired class ratios, median over frozen-source full gates. Same-digest promotions excluded; no shared overall multiplier used.','direct_champion_ratio':'UNKNOWN','records':records,'selected_by_operation':selected,'factors_champion_over_shipped':factors,'formal_submission':'NOT_SUBMITTED'}
+result={'champion_submission':champ['id'],'champion_sha256':champ['digest'],'policy_snapshot':json.loads((CLOSING/'competition.raw').read_bytes())['current_snapshot_id'],'snapshot_receipts':(CLOSING/'receipts.json').relative_to(ROOT).as_posix(),'queried_at_utc':snapshot['responses']['champion-detail']['queried_at_utc'],'method':'INFERRED: per-class exact-digest historical chain, current champion timing weights, candidate/reference paired class ratios, median over frozen-source full gates. Same-digest promotions excluded; no shared overall multiplier used.','direct_champion_ratio':'UNKNOWN','records':records,'selected_by_operation':selected,'factors_champion_over_shipped':factors,'formal_submission':'NOT_SUBMITTED'}
 def save(path,data):
  tmp=path.with_name(path.name+'.update-tmp');tmp.write_bytes((json.dumps(data,ensure_ascii=False,indent=2)+'\n').encode());os.replace(tmp,path)
 save(OWN/'operation-comparisons.json',result)
 def display(x):
  return f'{x:.2f}' if x<1 else (f'{x:.1f}' if x<10 else f'{x:.0f}' if x<100 else f'{round(x,-1):.0f}')
-text='# FloatLib 冲冠看板\n\n更新：[2026-10-21 19:22 北京时间](competitions/floatlib/candidates/f01-d1-inline-all/window1h/operation-comparisons.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。\n\n| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时 | 验证 |\n| --- | --- | --- | ---: | --- |\n'
+stamp=datetime.datetime.fromisoformat(result['queried_at_utc']).astimezone(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y-%m-%d %H:%M')
+text=f'# FloatLib 冲冠看板\n\n冠军核对：[{stamp} 北京时间](competitions/floatlib/candidates/f01-d1-inline-all/window1h/operation-comparisons.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。\n\n| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时 | 验证 |\n| --- | --- | --- | ---: | --- |\n'
 for k,title in [('add','加法'),('mul','乘法'),('sum','求和'),('bmm','矩阵乘法')]:
  s=selected[k];cid=champ['id'];reference=f'[#{cid}](https://conjectures.io/v1/competitions/floatlib/submissions/{cid})' if k=='add' else f'#{cid}';count='两次' if s['full_gate_runs']==2 else '一次' if s['full_gate_runs']==1 else str(s['full_gate_runs'])+'次';text+=f'| {title} {k} | {reference} | [{s["label"]}](competitions/floatlib/candidates/{s["candidate"]}/Kernel.lean) | **约 {display(s["relative_to_champion_inferred"])}×** | 通过{count} |\n'
 text+='\n**结论：差距已明显缩小，当前仍不能取代冠军。**\n';p=ROOT/'dashboard.md';tmp=p.with_name(p.name+'.update-tmp');tmp.write_bytes(text.encode());os.replace(tmp,p)
