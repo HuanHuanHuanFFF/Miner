@@ -19,9 +19,12 @@ def check():
         if set(events or {})!={'workflow_dispatch'}:failures.append(path.name+': nonmanual trigger')
         if doc.get('concurrency',{}).get('cancel-in-progress') is not False:failures.append(path.name+': cancellation enabled')
         if events['workflow_dispatch']['inputs']['allow_private'].get('default') is not False:failures.append(path.name+': private runner default')
-        workdir=(doc.get('defaults') or {}).get('run',{}).get('working-directory','.')
-        for script in re.findall(r'\b(?:competitions/[a-z0-9-]+/)?scripts/[A-Za-z0-9._/-]+',path.read_text()):
-            if not (ROOT/workdir/script).is_file():failures.append(path.name+': missing '+script)
+        base=(doc.get('defaults') or {}).get('run',{}).get('working-directory','.')
+        for job in doc.get('jobs',{}).values():
+            workdir=(job.get('defaults') or {}).get('run',{}).get('working-directory',base)
+            for step in job.get('steps',[]):
+                for script in re.findall(r'\b(?:competitions/[a-z0-9-]+/)?scripts/[A-Za-z0-9._/-]+',step.get('run','')):
+                    if not (ROOT/workdir/script).is_file():failures.append(path.name+': missing '+script)
     old=subprocess.run([sys.executable,str(ROOT/'competitions/deflate/scripts/project.py'),'check'],cwd=ROOT/'competitions/deflate')
     if old.returncode:failures.append('DEFLATE local check failed')
     result={'status':'PASS' if not failures else 'FAIL','tracks':['deflate','floatlib'],'manual_workflows':len(workflows),'root_links':links,'failures':failures,'scope':'Local links, syntax, manifests and workflow configuration. No CI or chain operation.'}

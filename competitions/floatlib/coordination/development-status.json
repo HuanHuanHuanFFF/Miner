@@ -1,0 +1,46 @@
+{
+  "state": "CANDIDATE_READY",
+  "updated_at_utc": "2026-10-21T05:32:09.679833+00:00",
+  "owner": "development chat",
+  "branch": "codex/multi-track-floatlib",
+  "deadline_beijing": "2026-10-21T15:16:00+08:00",
+  "official_commit": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
+  "candidate": "competitions/floatlib/candidates/f01-mul-log2",
+  "kernel": "competitions/floatlib/candidates/f01-mul-log2/Kernel.lean",
+  "kernel_sha256": "ac4f32a610e1e4b66141d8cb8d099411cda476ffe6c5cd821df0ede41c8158d7",
+  "kernel_bytes": 34641,
+  "baseline_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
+  "manifest": "competitions/floatlib/candidates/f01-mul-log2/manifest.json",
+  "mechanism": "FastMul.fastLog2 checks x >>> 47 == 1, then x >>> 46 == 1, otherwise reuses the six-step binary-search helper. No rounding, scalar fallback, add or tensor-loop change.",
+  "proof_status": "Written kernel-checked Lean proof terms using existing log2_shift; NOT_RUN in Lean",
+  "local_model": "PASS_FINITE_PYTHON_MODEL: 600313 values; zero mismatches",
+  "lean_gate": "NOT_RUN",
+  "benchmark": "NOT_RUN",
+  "requested_environment_action": "Validate frozen exact Kernel.lean with the pinned full gate and paired shipped-reference benchmark. Preserve per-class and paired-round timings and all failures.",
+  "remaining": [
+    "Official Lean compilation and fixed conjunction",
+    "Kernel replay and dependency audit",
+    "Official checksum and full-harness paired measurement",
+    "Independent confirmation if a signal justifies it"
+  ],
+  "edit_scope": "Only f01-* candidates, docs/first-candidate.md, development-status.json",
+  "baseline_bytes": 33043,
+  "baseline_reference": "competitions/floatlib/references/official-incumbent/Kernel.lean",
+  "reading_copy_sha256": "46cbe66d7c14ffbead19c6fbb7d47b1b8d161f6f2793fd7ff0442ecdb585636b",
+  "baseline_note": "Exact pinned reference is 33043 bytes; the earlier reading copy has exactly one extra trailing LF. Kernel candidates remain frozen at their existing hashes.",
+  "secondary_candidates": [
+    {
+      "candidate": "competitions/floatlib/candidates/f01-mul-rse-threshold",
+      "kernel_sha256": "28a60458bc2e8a1a69d1d65f18a1d35d15542aeddc38e7744f12d70690bee3ed",
+      "kernel_bytes": 35983,
+      "state": "CANDIDATE_READY",
+      "mechanism": "Standalone from baseline: FastMul nearest-even threshold becomes remainder > half - (quotient & 1); add and log2 unchanged.",
+      "local_model": "PASS_FINITE_PYTHON_MODEL: 924800 decisions; zero mismatches",
+      "lean_gate": "NOT_RUN",
+      "benchmark": "NOT_RUN",
+      "priority": "After first candidate; do not combine before separate gate and performance evidence"
+    }
+  ],
+  "environment_feedback_read_at_utc": "2026-10-21T05:32:09.680245+00:00",
+  "environment_state_seen": "CI_READY, baseline NOT_RUN, no run IDs yet"
+}

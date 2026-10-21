@@ -9,6 +9,22 @@ env:
 on:
   workflow_dispatch:
     inputs:
+      competition:
+        description: 'Track for this manual validation; FloatLib bridge works before its dedicated workflow reaches main'
+        required: true
+        type: choice
+        options: [deflate, floatlib]
+        default: deflate
+      candidates:
+        description: 'FloatLib frozen f01-* directories, comma separated; ignored for DEFLATE'
+        required: true
+        type: string
+        default: baseline
+      seed:
+        description: 'FloatLib benchmark seed; ignored for DEFLATE'
+        required: true
+        type: string
+        default: '42'
       allow_private:
         description: 'Authorize standard private-repository Actions minutes for this manual run'
         required: true
@@ -24,7 +40,7 @@ concurrency:
 jobs:
   baseline:
     # Public standard runners are free; do not silently run against private billing.
-    if: github.event_name == 'workflow_dispatch' && (github.event.repository.private == false || inputs.allow_private == true)
+    if: github.event_name == 'workflow_dispatch' && inputs.competition != 'floatlib' && (github.event.repository.private == false || inputs.allow_private == true)
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     steps:
@@ -60,3 +76,49 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
           df -h /
+
+  floatlib:
+    defaults:
+      run:
+        working-directory: .
+    if: github.event_name == 'workflow_dispatch' && inputs.competition == 'floatlib' && (github.event.repository.private == false || inputs.allow_private == true)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      FLOATLIB_CANDIDATES: ${{ inputs.candidates }}
+      FLOATLIB_SEED: ${{ inputs.seed }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Prepare exact source and capped sandbox
+        run: bash competitions/floatlib/scripts/ci-prepare.sh
+      - name: Restore pinned toolchain and dependency cache
+        id: toolchain
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684
+        with:
+          path: |
+            ~/.elan
+            ${{ runner.temp }}/floatlib-upstream/lean/.lake
+          key: floatlib-${{ runner.os }}-978cc5b445edb9943fd9953b0a9037d97a9f33a8
+      - name: Install official environment
+        run: bash competitions/floatlib/scripts/ci-setup.sh
+      - name: Save successfully prepared pinned dependencies
+        if: steps.toolchain.outputs.cache-hit != 'true'
+        uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684
+        with:
+          path: |
+            ~/.elan
+            ${{ runner.temp }}/floatlib-upstream/lean/.lake
+          key: floatlib-${{ runner.os }}-978cc5b445edb9943fd9953b0a9037d97a9f33a8
+      - name: Run exact full gate and original paired benchmark
+        run: bash competitions/floatlib/scripts/ci-validate.sh
+      - name: Preserve source and original receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: floatlib-${{ github.run_id }}-receipts
+          path: ${{ runner.temp }}/floatlib-reports/
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 9
