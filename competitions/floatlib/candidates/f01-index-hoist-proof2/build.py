@@ -41,5 +41,5 @@ theorem bmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
 end Submission
 '''
 source=head+tail+new;(OWN/'Kernel.lean').write_bytes(source.encode())
-(OWN/'manifest.json').write_bytes((json.dumps({'candidate':OWN.name,'kernel_sha256':hashlib.sha256(source.encode()).hexdigest(),'kernel_bytes':len(source.encode()),'parent':'official-incumbent','mechanism':'Hoist A/B base addresses out of the k-fold; same Binary32 scalar algorithms and exact reduction order','proof_status':'NOT_RUN','validation_mode':'full-gate'},indent=2)+'\n').encode())
+(OWN/'manifest.json').write_bytes((json.dumps({'candidate':OWN.name,'candidate_file':'Kernel.lean','candidate_sha256':hashlib.sha256(source.encode()).hexdigest(),'candidate_bytes':len(source.encode()),'kernel_sha256':hashlib.sha256(source.encode()).hexdigest(),'kernel_bytes':len(source.encode()),'parent':'official-incumbent','mechanism':'Hoist A/B base addresses out of the k-fold; same Binary32 scalar algorithms and exact reduction order','proof_status':'NOT_RUN','validation_mode':'full-gate'},indent=2)+'\n').encode())
 print(OWN.name,hashlib.sha256(source.encode()).hexdigest(),len(source.encode()))

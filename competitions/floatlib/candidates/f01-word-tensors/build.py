@@ -92,5 +92,5 @@ end Submission
 '''
 source=head+tail+new
 (OWN/'Kernel.lean').write_bytes(source.encode())
-(OWN/'manifest.json').write_text(json.dumps({'candidate':OWN.name,'parent':'official-incumbent','kernel_sha256':hashlib.sha256(source.encode()).hexdigest(),'kernel_bytes':len(source.encode()),'mechanism':'Same scalar algorithms; UInt32 accumulator and intermediate product in tensor loops, full fold-order bridge','proof_status':'NOT_RUN','benchmark':'NOT_RUN','source_attribution':'Official incumbent authors retained in source; raw tensor composition newly authored'},indent=2)+'\n',encoding='utf-8')
+(OWN/'manifest.json').write_text(json.dumps({'candidate':OWN.name,'parent':'official-incumbent','candidate_file':'Kernel.lean','candidate_sha256':hashlib.sha256(source.encode()).hexdigest(),'candidate_bytes':len(source.encode()),'kernel_sha256':hashlib.sha256(source.encode()).hexdigest(),'kernel_bytes':len(source.encode()),'mechanism':'Same scalar algorithms; UInt32 accumulator and intermediate product in tensor loops, full fold-order bridge','proof_status':'NOT_RUN','benchmark':'NOT_RUN','source_attribution':'Official incumbent authors retained in source; raw tensor composition newly authored'},indent=2)+'\n',encoding='utf-8')
 print(OWN.name,hashlib.sha256(source.encode()).hexdigest(),len(source.encode()))
