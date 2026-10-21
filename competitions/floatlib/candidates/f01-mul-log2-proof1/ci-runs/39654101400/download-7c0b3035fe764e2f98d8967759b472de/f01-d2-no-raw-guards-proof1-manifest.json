@@ -1,0 +1,16 @@
+{
+  "candidate": "f01-d2-no-raw-guards-proof1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "8cc62aab15004c78c9eba144ecde8f6f87627ca1c6be209f919ce53e5d3deeeb",
+  "candidate_bytes": 50117,
+  "parent": "f01-d2-no-raw-guards",
+  "parent_sha256": "923dfef502735784a9750b768d9c9de5c44c7c7b740318fe632c3ecf335fea13",
+  "validation_mode": "statement-only",
+  "proof_status": "NOT_RUN_REPAIR_FROM_CI39652488518",
+  "mechanism": "Remove the two raw round-trip runtime comparisons from each native scalar wrapper. Retain native finite tests, original software fallbacks, all tensor loops and rounding order.",
+  "created_at_utc": "2026-10-21T18:33:34.020776+00:00",
+  "minimal_request": "D copies exact source to f01-d2 scope; statement/axiom check then full gate with C capture. Expected C change: two fewer lean_float32_to_bits calls per scalar fast path. No performance claim before measurement.",
+  "formal_submission": "NOT_SUBMITTED",
+  "research_source": "competitions/floatlib/candidates/f01-r2-no-raw-guards/Kernel.lean",
+  "repair": "Use full UnpackedFloat.unpack namespace and prove generic Model canonicality before specializing ExecFloat binary32, avoiding the instance-normalization rewrite failure. Add applicable original MIT notices. Runtime unchanged."
+}

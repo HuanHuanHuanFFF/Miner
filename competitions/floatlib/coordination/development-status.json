@@ -1,6 +1,6 @@
 {
   "state": "COLLAB10H_ACTIVE",
-  "updated_at_utc": "2026-10-21T18:33:34.022071+00:00",
+  "updated_at_utc": "2026-10-21T18:42:04.871190+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T12:16:11+08:00",
@@ -46,9 +46,9 @@
   "candidate_readiness": "PASS_FULL_GATE_AND_INDEPENDENT_CONFIRMATION",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "D license-only repair and local exact policy precheck; R fixes finiteRoundtrip from real Lean goals; rerun the two feasibility paths.",
+  "next_action": "Dispatch full timing batch and independent final-finite feasibility batch; no more than two concurrent CI jobs.",
   "research_decision": "Prioritize bmm native accumulator/guard removal next; current native package and public bridge fully validated. No new experiment started after independent confirmation.",
-  "execution_state": "FIXING_FIRST_PROOF_PREFLIGHT_FAILURES",
+  "execution_state": "TWO_PROOFS_COMPILE_PASSED_PREPARING_FULL_GATES_AND_FINAL_FINITE_FEASIBILITY",
   "local_project_check": {
     "status": "PASS",
     "scope": "Root project check after candidate manifests, helper and dashboard changes. Exact full gates and committed-byte audits recorded separately.",
@@ -82,7 +82,7 @@
     "environment_stop_verified_commit": "6ed35056",
     "development_owner_state": "COMPLETED_NO_ACTIVE_JOBS"
   },
-  "receipt_auditor": "candidates/f01-d1-inline-all/window1h/audit-window.py checks exact inputs, all payload hashes, gate mode, 12 classes/25 rounds, fingerprints, headline and paired gain; --git also checks committed bytes.",
+  "receipt_auditor": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/audit-window.py",
   "first_run_install_observation": {
     "observed_at_utc": "2026-10-21T06:45:43.920639+00:00",
     "source": "Signed-in Edge read-only job page",
@@ -294,7 +294,7 @@
     "raw_build_capture": "errors(text,status) calling convention preflight PASS"
   },
   "research_result_report": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/README.md",
-  "research_result_summary": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/summary.json",
+  "research_result_summary": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/summary.json",
   "current_candidate_role": "Frozen whole-entry native arithmetic package; not yet able to replace current champion",
   "best_checked_new_component": {
     "candidate": "f01-d1-native-both-proof1",
@@ -423,6 +423,22 @@
         "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T182444Z/dispatch.json",
         "conclusion": "failure",
         "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39652488518"
+      },
+      {
+        "run": 39654101400,
+        "candidates": [
+          "f01-d2-native-bmm-proof1",
+          "f01-d2-no-raw-guards-proof1"
+        ],
+        "seed": 302,
+        "commit": "f2a4762e7679dc07c4a200f6039605404bb0d87a",
+        "created_at_utc": "2026-10-21T18:35:30Z",
+        "state": "completed",
+        "mode": "statement-only",
+        "purpose": "Repair actual lexical-policy and binary32 instance-rewrite failures; runtime mechanisms unchanged",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T183522Z/dispatch.json",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39654101400"
       }
     ],
     "research_handoffs_processed": [
@@ -431,6 +447,12 @@
         "source_sha256": "923dfef502735784a9750b768d9c9de5c44c7c7b740318fe632c3ecf335fea13",
         "candidate": "competitions/floatlib/candidates/f01-d2-no-raw-guards",
         "decision": "Adopt exact frozen source for initial statement feasibility alongside D native-bmm; no performance claim yet."
+      },
+      {
+        "id": "R2-02",
+        "source_sha256": "0ca59ff7806b5cdc10c82c88aa88a7372d1e92a9e756eb742935851f84d5fd65",
+        "candidate": "competitions/floatlib/candidates/f01-d2-final-finite-preimage",
+        "decision": "Adopt proof feasibility. Original comment included banned word axiom; D replaced that comment wording before CI, exact proof text unchanged."
       }
     ],
     "confirmation_start_utc": "2026-10-22T03:15:00Z",
@@ -438,7 +460,7 @@
     "previous_state": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/previous-state.json",
     "formal_goal": "Actual current-champion promotion must be verified; no goal completion from public-reference results alone.",
     "research_dispatch_verified": "wait_threads confirms existing Astra research chat active on new turn",
-    "feedback_to_research": "CI39652488518 collected. R2-01 actual errors: Unknown Model.unpack at731; hnan simplification needs Float.Model.UnpackedFloat.unpack. Later rw hnan typeclass mismatch arises from unfolding ExecFloat format8/23 versus FloatFormat.binary32. Full original errors in candidates/f01-mul-log2-proof1/ci-runs/39652488518/download-8f1894d732cd473e80934e31d85c72d7/diagnostics/f01-d2-no-raw-guards/replay.log. Please repair only new R candidate, freeze/hash and notify by state. D native-bmm was rejected by lexical policy because the full upstream THIRD_PARTY_NOTICES comment included import-graph text; D fixes to applicable MIT notices only, runtime/proof untouched. Also inspect D2-FINAL-FINITE proposal in research_requests: backward finite-result preimage lemmas may eliminate all inner checks without proving arbitrary NaN results. D now prepared f01-d2-no-raw-guards-proof1: generic modelCanonicalOfFinite {fmt}(x:Model fmt) with fully qualified UnpackedFloat.unpack avoids ExecFloat instance rewriting, then specialized finiteRoundtrip. Do not duplicate that routine fix before its new CI result; prioritize final-finite preimage lemmas and bmm algorithm route.",
+    "feedback_to_research": "CI39654101400 collected SUCCESS: D native-bmm-proof1 and no-raw-guards-proof1 both exact obligations and bench compiled. Generic modelCanonicalOfFinite + fully-qualified unpack repaired finiteRoundtrip. C under ci-runs/39654101400/download folder diagnostics. D now requests full gate+paired timing of both, with native-both same-run control. D integrated R2-02 preimage lemmas into f01-d2-final-finite (sum and bmm only final finite check; full backward induction). It and lemma-only D package both pass exact local policy and will receive separate statement feasibility. R focus layout/USize/multi-output lanes after finite-lemma feedback; no need duplicate current proof integration.",
     "research_requests": [
       {
         "id": "D2-FINAL-FINITE",
@@ -515,11 +537,19 @@
   "pending_candidates": [
     {
       "candidate": "f01-d2-native-bmm-proof1",
-      "state": "READY_REPAIRED_STATEMENT_CI"
+      "state": "FULL_GATE_QUEUED"
     },
     {
       "candidate": "f01-d2-no-raw-guards-proof1",
-      "state": "READY_REPAIRED_STATEMENT_CI"
+      "state": "FULL_GATE_QUEUED"
+    },
+    {
+      "candidate": "f01-d2-final-finite-preimage",
+      "state": "STATEMENT_QUEUED"
+    },
+    {
+      "candidate": "f01-d2-final-finite",
+      "state": "STATEMENT_QUEUED"
     }
   ],
   "current_official_refresh": {
