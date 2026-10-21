@@ -1,17 +1,124 @@
 {
-  "state": "RUNNING",
+  "state": "ALL_QUEUED_CANDIDATE_EXPERIMENTS_FINISHED",
   "start_utc": "2026-10-21T20:57:37Z",
   "deadline_utc": "2026-10-21T21:27:37Z",
-  "scope": "Finish existing new experiments, necessary confirmation and original evidence recovery",
-  "active_runs": [
-    39675095662,
+  "completed_at_utc": "2026-10-21T21:21:35.766052+00:00",
+  "within_budget": true,
+  "active_ci": [],
+  "runs": [
+    {
+      "run": 39672753487,
+      "candidates": [
+        "f01-d2-preconverted-bmm",
+        "f01-d2-preconverted-usize",
+        "f01-d2-word-preconverted-usize",
+        "f01-d2-hybrid-preconverted-usize"
+      ],
+      "seed": 316,
+      "commit": "f23d764cae903206823536a382fd0a0e8860ac39",
+      "created_at_utc": "2026-10-21T20:43:23Z",
+      "state": "completed",
+      "mode": "full-gate",
+      "purpose": "Same-run control ladder; each exact candidate paired to pinned shipped reference. Diagnose layout benefit and native tiny penalty without cross-CPU attribution.",
+      "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T204315Z/dispatch.json",
+      "conclusion": "success",
+      "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39672753487"
+    },
+    {
+      "run": 39673654220,
+      "candidates": [
+        "f01-d2-web-packed4-proof1",
+        "f01-d2-decoder-helpers"
+      ],
+      "seed": 317,
+      "commit": "668973d61b45480d155940304f016c2b076dd53f",
+      "created_at_utc": "2026-10-21T20:49:38Z",
+      "state": "completed",
+      "mode": "statement-only",
+      "purpose": "Packed4 repaired recursive proof and nine numeric decoder helper lemmas; runtime decoder not implemented",
+      "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T204930Z/dispatch.json",
+      "conclusion": "success",
+      "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39673654220"
+    },
+    {
+      "run": 39675095662,
+      "candidates": [
+        "baseline",
+        "f01-d2-final-finite",
+        "f01-d2-web-packed4-proof1",
+        "f01-d2-low-scale-rounding-proof"
+      ],
+      "seed": 318,
+      "commit": "b394ec349e6d6d6831360af12d64d963a7820122",
+      "created_at_utc": "2026-10-21T20:59:53Z",
+      "state": "completed",
+      "mode": "mixed-full-and-statement",
+      "purpose": "Packed4 full gate with same-run final-finite parent; existing low-scale rounder helper compilation",
+      "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T205945Z/dispatch.json",
+      "conclusion": "failure",
+      "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39675095662",
+      "reason": "baseline, final-finite and Packed4 all full PASS. Only proof-only low-scale helper fails two constant toNat simplifications."
+    },
+    {
+      "run": 39675598833,
+      "candidates": [
+        "baseline",
+        "f01-d2-word-preconverted-usize",
+        "f01-d2-hybrid-preconverted-usize"
+      ],
+      "seed": 319,
+      "commit": "3e8741bd9d2400cd126f0f91139ebce55dfa8bfa",
+      "created_at_utc": "2026-10-21T21:03:20Z",
+      "state": "completed",
+      "mode": "full-gate",
+      "purpose": "Independent frozen confirmation of word integration and software/native hybrid; no source edits after discovery316",
+      "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T210311Z/dispatch.json",
+      "conclusion": "success",
+      "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39675598833"
+    },
+    {
+      "run": 39677462482,
+      "candidates": [
+        "f01-d2-low-scale-rounding-proof1"
+      ],
+      "seed": 320,
+      "commit": "ac680609fbfbf9150052864efe0a00e68b788ac9",
+      "created_at_utc": "2026-10-21T21:16:42Z",
+      "state": "completed",
+      "mode": "statement-only",
+      "purpose": "Finish existing low-scale helper by fixing two definitional constants from real318 errors; no runtime change",
+      "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T211634Z/dispatch.json",
+      "conclusion": "success",
+      "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39677462482"
+    }
+  ],
+  "best_confirmed_whole_candidate": "competitions/floatlib/candidates/f01-d2-word-preconverted-usize",
+  "best_confirmed_whole_sha256": "f4790ae3061a498a928b75f78785f919618b899fed7a2a5155037731726f914e",
+  "best_confirmed_runs": [
+    39672753487,
     39675598833
   ],
+  "strongest_bmm_candidate": "f01-d2-web-packed4-proof1",
+  "strongest_bmm_sha256": "bb1f783fd3103fba89e1e072459d7fdcff9ffdb5edc3e2983b39f1eafced2f18",
+  "strongest_bmm_full_gate_runs": [
+    39675095662
+  ],
+  "packed4_bmm_vs_parent_same_run": 0.23881089501437036,
+  "candidate_decisions": {
+    "word_preconverted_usize": "RETAIN_BEST_INDEPENDENTLY_CONFIRMED_WHOLE_PACKAGE",
+    "hybrid_preconverted_usize": "CORRECT_BUT_REPEATED_AMD_TINY_REGRESSION; INTEL_PERFORMANCE_UNCONFIRMED",
+    "packed4": "FULL_GATE_PASS_AND_FASTEST_BMM_DISCOVERY; INDEPENDENT_CONFIRMATION_AND_SCALAR_INTEGRATION_REMAIN",
+    "low_scale_helper": "REPAIRED_STATEMENT_PASS_ONLY; NOT_INTEGRATED_RUNTIME",
+    "decoder_helpers": "NINE_HELPERS_STATEMENT_PASS; TOTAL_DECODER_PROOF_NOT_ESTABLISHED"
+  },
   "champion": 174,
   "champion_snapshot": "601",
   "champion_goal": "NOT_ACHIEVED",
-  "completed_runs": [
-    39672753487,
-    39673654220
-  ]
+  "dashboard_evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/operation-comparisons.json",
+  "full_gate_evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/summary.json",
+  "pending_research_artifacts": {
+    "W01c_W04": "Originals and137 members matched; retained research output without new experiment",
+    "W03b": "Existing web generation still pending at last R checkpoint; R owns recovery, no cancellation or new request"
+  },
+  "formal_submission": "NOT_SUBMITTED"
 }
