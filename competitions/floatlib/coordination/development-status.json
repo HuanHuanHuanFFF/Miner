@@ -1,6 +1,6 @@
 {
   "state": "COLLAB10H_ACTIVE_MAJOR_NATIVE_REDUCTION_PASS",
-  "updated_at_utc": "2026-10-21T20:35:42.138592+00:00",
+  "updated_at_utc": "2026-10-21T20:42:47.393430+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T12:16:11+08:00",
@@ -46,9 +46,9 @@
   "candidate_readiness": "FULL_GATE_PASS_DISCOVERY",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "Statement-check exact word/layout/hybrid integrations; collect live Packed4 proof run; require same-run layout controls because latest combo used Intel rather than earlier AMD.",
+  "next_action": "Dispatch same-run full control ladder baseline/preconverted/preconverted-USize/word-integration/hybrid; use spare slot for R Packed4 repaired statement when ready.",
   "research_decision": "Final-only-finite backward proof is now full-gated and materially faster. Continue largest-gap bmm through USize/proved bounds, conversion amortization and multi-output scheduling. Keep scalar word-predicate route as independent follow-up.",
-  "execution_state": "COMBINED_LAYOUT_FULL_PASS_NEW_INTEL_TINY_REGRESSION",
+  "execution_state": "INTEGRATED_AND_HYBRID_PROOFS_PASS_CONTROLLED_FULL_BATCH_READY",
   "local_project_check": {
     "status": "PASS",
     "scope": "Root project check after four new candidate manifests and updated four-operation dashboard;49 candidates. Separate from actual Lean/full gate results.",
@@ -625,10 +625,29 @@
         "seed": 314,
         "commit": "7e6f84532da37bb1187a03ccfa74eace8286f39e",
         "created_at_utc": "2026-10-21T20:29:23Z",
-        "state": "in_progress",
+        "state": "completed",
         "mode": "statement-only",
         "purpose": "Full four-output packet/builder/order proof feasibility",
-        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T202915Z/dispatch.json"
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T202915Z/dispatch.json",
+        "conclusion": "failure",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39670733380",
+        "reason": "nativeA_getD getInternal/map simplification goal at1397; dsimp made no progress at1425 stops recursive dot4_lane proof"
+      },
+      {
+        "run": 39671773057,
+        "candidates": [
+          "f01-d2-word-preconverted-usize",
+          "f01-d2-hybrid-preconverted-usize"
+        ],
+        "seed": 315,
+        "commit": "dddf4463b2dbf3cd20c76a69f8a4cd583615654e",
+        "created_at_utc": "2026-10-21T20:36:31Z",
+        "state": "completed",
+        "mode": "statement-only",
+        "purpose": "Exact scalar/layout integration and software/native underflow-region multiplication fallback",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T203624Z/dispatch.json",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39671773057"
       }
     ],
     "research_handoffs_processed": [
@@ -689,7 +708,7 @@
     "previous_state": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/previous-state.json",
     "formal_goal": "Actual current-champion promotion must be verified; no goal completion from public-reference results alone.",
     "research_dispatch_verified": "wait_threads confirms existing Astra research chat active on new turn",
-    "feedback_to_research": "Full combo39669275685 PASS on Intel Xeon Platinum8370C: overall0.316133275, bmm0.038210531 (~1.99ns), sum0.094303496, add0.394041355, mul1.128797662. Fresh mul:tiny51.250562ns vs reference21.82131ns, ratio2.348647; this is NEW Intel evidence that changes the earlier hybrid priority. D created integrated word+combo f4790ae3 and hybrid38823264: raw exponent sum<128 routes to previously full-gated RebuiltMul517030e9, otherwise exact nativeMul; unconditional branch specs preserve correctness. No timing claims before own gate. Plan same-run parent/preconverted/combo/integrated/hybrid controls after statement. Packed4 exactbe7f9469 is actually in statement39670733380 seed314. R focus Packed4 real errors and numeric decoder proof; avoid duplicate hybrid implementation.",
+    "feedback_to_research": "Packed4be7f9469 actual statement314 FAILED, original log: candidates/f01-mul-log2-proof1/ci-runs/39670733380/download-a04b3a9bd49c431bbb12b0c42ce227cb/diagnostics/f01-d2-web-packed4/replay.log. Only reported errors:1397 nativeA_getD pos branch goal (Array.map toFloat32 Araw).getInternal i _ = toFloat32(Araw.getInternal i hi), simp only Array.getElem_map unused;1425 dsimp made no progress, so later recursive dot4_lane proof not checked and termination_by marked unused. R owns a NEW frozen repair; do not edit original. Already-full-gated Preconverted.getD_floats uses full simp[floats,Array.getD,h] and out-of-bounds rfl, may guide map transport. Remove/try redundant dsimp then inspect next actual goals. D integrated+hybrid statement315 is live39671773057; new Intel tiny regression and hybrid rationale remain in prior checkpoint. Main will consume your exact repair at next available batch. Integration/hybrid315 actual compile PASS39671773057: f4790ae3 word+preconverted/USize and38823264 hybrid(Rebuilt software for raw exponent sum<128). Both now advance full gates with same-run parent/preconverted/combo controls, each paired to original shipped reference. R owns new Packed4 repair from real1397/1425 errors; no original files overwritten.",
     "research_requests": [
       {
         "id": "D2-FINAL-FINITE",
@@ -741,12 +760,7 @@
     },
     "candidate_role": "Frozen reference/control only; no longer the primary development route"
   },
-  "active_jobs": [
-    {
-      "kind": "github_ci",
-      "run": 39670733380
-    }
-  ],
+  "active_jobs": [],
   "active_goal": "继续协作推进优化10h；目标是拿下新的冠军",
   "pending_candidates": [
     {
