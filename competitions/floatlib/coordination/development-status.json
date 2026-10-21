@@ -1,6 +1,6 @@
 {
   "state": "COLLAB10H_ACTIVE",
-  "updated_at_utc": "2026-10-21T18:24:00.590717+00:00",
+  "updated_at_utc": "2026-10-21T18:33:34.022071+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T12:16:11+08:00",
@@ -46,9 +46,9 @@
   "candidate_readiness": "PASS_FULL_GATE_AND_INDEPENDENT_CONFIRMATION",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "Dispatch statement-only exact first native-bmm candidate; use real errors for repair, then full gate and benchmark.",
+  "next_action": "D license-only repair and local exact policy precheck; R fixes finiteRoundtrip from real Lean goals; rerun the two feasibility paths.",
   "research_decision": "Prioritize bmm native accumulator/guard removal next; current native package and public bridge fully validated. No new experiment started after independent confirmation.",
-  "execution_state": "RESTORING_AND_STARTING_FIRST_NATIVE_BMM_EXPERIMENT",
+  "execution_state": "FIXING_FIRST_PROOF_PREFLIGHT_FAILURES",
   "local_project_check": {
     "status": "PASS",
     "scope": "Root project check after candidate manifests, helper and dashboard changes. Exact full gates and committed-byte audits recorded separately.",
@@ -407,7 +407,24 @@
     "research_status": "competitions/floatlib/research/astra-collab-20261022/research-status.json",
     "development_thread": "01a15ce7-bf54-74b2-8a2b-4a1e2f3828d7",
     "git_ci_coordinator": "development",
-    "active_ci": [],
+    "active_ci": [
+      {
+        "run": 39652488518,
+        "candidates": [
+          "f01-d2-native-bmm",
+          "f01-d2-no-raw-guards"
+        ],
+        "seed": 301,
+        "commit": "b278c3bb3f7d46661d14789cfa67f88921f577f2",
+        "created_at_utc": "2026-10-21T18:24:52Z",
+        "state": "completed",
+        "mode": "statement-only",
+        "purpose": "Initial proof feasibility for independent native accumulator and guard-removal mechanisms",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T182444Z/dispatch.json",
+        "conclusion": "failure",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39652488518"
+      }
+    ],
     "research_handoffs_processed": [
       {
         "id": "R2-01",
@@ -421,7 +438,16 @@
     "previous_state": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/previous-state.json",
     "formal_goal": "Actual current-champion promotion must be verified; no goal completion from public-reference results alone.",
     "research_dispatch_verified": "wait_threads confirms existing Astra research chat active on new turn",
-    "feedback_to_research": "R2-01 copied byte-exact to f01-d2-no-raw-guards; queued with guarded native-bmm for statement-only feasibility. Kernel hashes923dfef5/d4e83b31. Fresh official champion174, verifier fingerprint unchanged; latest upstream licence/docs only. D will return actual Lean errors or pass and C evidence."
+    "feedback_to_research": "CI39652488518 collected. R2-01 actual errors: Unknown Model.unpack at731; hnan simplification needs Float.Model.UnpackedFloat.unpack. Later rw hnan typeclass mismatch arises from unfolding ExecFloat format8/23 versus FloatFormat.binary32. Full original errors in candidates/f01-mul-log2-proof1/ci-runs/39652488518/download-8f1894d732cd473e80934e31d85c72d7/diagnostics/f01-d2-no-raw-guards/replay.log. Please repair only new R candidate, freeze/hash and notify by state. D native-bmm was rejected by lexical policy because the full upstream THIRD_PARTY_NOTICES comment included import-graph text; D fixes to applicable MIT notices only, runtime/proof untouched. Also inspect D2-FINAL-FINITE proposal in research_requests: backward finite-result preimage lemmas may eliminate all inner checks without proving arbitrary NaN results. D now prepared f01-d2-no-raw-guards-proof1: generic modelCanonicalOfFinite {fmt}(x:Model fmt) with fully qualified UnpackedFloat.unpack avoids ExecFloat instance rewriting, then specialized finiteRoundtrip. Do not duplicate that routine fix before its new CI result; prioritize final-finite preimage lemmas and bmm algorithm route.",
+    "research_requests": [
+      {
+        "id": "D2-FINAL-FINITE",
+        "path": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/final-finite-route.md",
+        "sha256": "b19748339791412df613a2da0594a54cd9cab7ee1d1c1ba2106364af74e2fea7",
+        "status": "NEW_FOR_NEXT_CHECKPOINT",
+        "question": "Can finite final Float32 add/mul imply finite operands? Prove these preimage lemmas to remove all per-step finite/raw guards in exact ordered bmm/sum while falling back on nonfinite final result."
+      }
+    ]
   },
   "completion_window": {
     "start_utc": "2026-10-21T11:34:07.663758+00:00",
@@ -488,17 +514,12 @@
   "active_goal": "继续协作推进优化10h；目标是拿下新的冠军",
   "pending_candidates": [
     {
-      "candidate": "f01-d2-native-bmm",
-      "sha256": "d4e83b3134f6230c17d4b4f05e705233fdb81c8ab14dc124e324facaaf480108",
-      "validation_mode": "statement-only",
-      "state": "READY_FOR_STATEMENT_CI",
-      "mechanism": "Only bmm: direct Float32 accumulator dot products with finite, raw round-trip and finite-product guards; exact original ordered fold fallback per output; base addresses hoisted. add/mul/sum inherit validated native-both."
+      "candidate": "f01-d2-native-bmm-proof1",
+      "state": "READY_REPAIRED_STATEMENT_CI"
     },
     {
-      "candidate": "f01-d2-no-raw-guards",
-      "sha256": "923dfef502735784a9750b768d9c9de5c44c7c7b740318fe632c3ecf335fea13",
-      "state": "READY_FOR_STATEMENT_CI",
-      "validation_mode": "statement-only"
+      "candidate": "f01-d2-no-raw-guards-proof1",
+      "state": "READY_REPAIRED_STATEMENT_CI"
     }
   ],
   "current_official_refresh": {
