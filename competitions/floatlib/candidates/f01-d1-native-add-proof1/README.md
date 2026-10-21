@@ -1,0 +1,5 @@
+# 已证原生加法
+
+有限输入且raw往返逐位一致时调用现有Float32.add，否则精确回退。
+
+冻结源码与manifest保留最初派发版本；最新验收、逐项计时及独立复测见[本轮结果](../f01-d1-inline-all/window1h/README.md)和[当前状态](../../coordination/development-status.json)。完整包均按四义务验收，不把不同候选的最佳分项拼成已集成成绩。

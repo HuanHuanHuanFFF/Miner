@@ -1,0 +1,42 @@
+{
+  "checked_at_utc": "2026-10-21T11:02:47.131026+00:00",
+  "script_sha256": "9daad96b7b049ba8c36be198ec4f49cfdf1ea08f06e91bd0a866773c9c199b2c",
+  "model_sha256": "bda8e2a4856e3270c67e6a3d33417225c8742a680c49df5130bfa69465e5ec84",
+  "scope": "Exact finite integer model counterexamples, not Lean proof or official target execution",
+  "rows": [
+    {
+      "claim": "Reordering the k reduction is harmless",
+      "input_bits": [
+        "0x4b800000",
+        "0x3f800000",
+        "0xcb800000"
+      ],
+      "sequential_bits": "0x00000000",
+      "order_0_2_1_bits": "0x3f800000",
+      "bmm_embedding": "batch=1,m=1,n=3,p=1; A=input_bits, B=[1,1,1]"
+    },
+    {
+      "claim": "FMA can replace separately rounded multiplication and addition",
+      "a": "0x3f800001",
+      "b": "0x3f7ffffe",
+      "c": "0xbf800000",
+      "rounded_product": "0x3f800000",
+      "separate": "0x00000000",
+      "fused": "0xa8800000"
+    },
+    {
+      "claim": "Return rhs whenever lhs is zero",
+      "a": "0x00000000",
+      "b": "0x80000000",
+      "correct": "0x00000000",
+      "wrong": "0x80000000"
+    },
+    {
+      "claim": "Skip every zero rhs for an arbitrary accumulator",
+      "a": "0x80000000",
+      "b": "0x00000000",
+      "correct": "0x00000000",
+      "wrong": "0x80000000"
+    }
+  ]
+}

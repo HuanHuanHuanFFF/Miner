@@ -1,27 +1,26 @@
 {
-  "state": "COLLAB1H_ACTIVE",
-  "updated_at_utc": "2026-10-21T11:17:28.744877+00:00",
+  "state": "FINAL_EXPERIMENT_COMPLETION_30M",
+  "updated_at_utc": "2026-10-21T11:39:52.368747+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
-  "deadline_beijing": "2026-10-21T17:40:19+08:00",
+  "deadline_beijing": "2026-10-21T20:04:07+08:00",
   "official_commit": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
-  "candidate": "competitions/floatlib/candidates/f01-mul-log2-proof3",
-  "kernel": "competitions/floatlib/candidates/f01-mul-log2-proof3/Kernel.lean",
-  "kernel_sha256": "0f4c999aa1c5375cfb2533550017189a51b5de8d8733be37765b8f38606ad8fd",
-  "kernel_bytes": 34737,
+  "candidate": "competitions/floatlib/candidates/f01-d1-native-both-proof1",
+  "kernel": "competitions/floatlib/candidates/f01-d1-native-both-proof1/Kernel.lean",
+  "kernel_sha256": "707d22fed8443d883a183983397496492f9a09e071ffcf2715ef818384e44b85",
+  "kernel_bytes": 44976,
   "baseline_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
-  "manifest": "competitions/floatlib/candidates/f01-mul-log2-proof3/manifest.json",
-  "mechanism": "FastMul.fastLog2 checks x >>> 47 == 1, then x >>> 46 == 1, otherwise reuses the six-step binary-search helper. No rounding, scalar fallback, add or tensor-loop change.",
-  "proof_status": "PASS: exact four obligations, kernel replay, allowed axioms",
-  "local_model": "PASS_FINITE_PYTHON_MODEL: 600313 values; zero mismatches",
+  "manifest": "competitions/floatlib/candidates/f01-d1-native-both-proof1/manifest.json",
+  "mechanism": "Guarded native Float32 addition/multiplication with exact raw round-trip guards and proven software fallback; unchanged sequential tensor folds.",
+  "proof_status": "PASS_FULL_GATE: exact four obligations, kernel replay, three allowed axioms",
+  "local_model": "Exact Lean proof and full gate; previous finite Python model belongs to previous_current_candidate.",
   "lean_gate": "PASS_FULL_OFFICIAL_GATE_PUBLIC",
-  "benchmark": "VERIFIED_SINGLE_PUBLIC_RUN",
+  "benchmark": "VERIFIED_ONE_NEW_RUN_INDEPENDENT_CONFIRMATION_RUNNING",
   "requested_environment_action": "NONE: environment handoff finished",
   "remaining": [
-    "Rebuild and validate candidates with substantial mechanisms targeting the next champion",
-    "Resolve exact current-champion comparison access; direct comparison UNKNOWN",
-    "Freeze a competitive full candidate and independently confirm it",
-    "Formal promotion is not yet attempted; no competition upload"
+    "Finish frozen-source independent confirmation and evidence collection",
+    "Native bmm remains the furthest behind; next research must remove inner-loop conversions/guards while preserving exact order",
+    "No formal promotion attempted; current champion replacement remains unachieved"
   ],
   "edit_scope": "Only f01-* candidates, docs/first-candidate.md, development-status.json",
   "baseline_bytes": 33043,
@@ -47,9 +46,9 @@
   "candidate_readiness": "PASS_PUBLIC_FULL_GATE_SINGLE_RUN_SIGNAL",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "Create Astra research thread and diagnose largest bmm/sum gaps; implement and validate controlled alternatives.",
+  "next_action": "Finish independent run39593447390 within the added 30-minute window; collect, audit and finalize dashboard/evidence. No new candidate research.",
   "research_decision": "First diagnose tensor execution; explore raw-bit tensor loops and a rebuilt normal multiplication pipeline independently, then a guarded GRS adder. Old helper edits are controls or later polish.",
-  "execution_state": "ALL_12_CI_JOBS_TERMINAL_AND_COLLECTED",
+  "execution_state": "ONE_FROZEN_CONFIRMATION_RUNNING",
   "local_project_check": {
     "status": "PASS",
     "scope": "Manifest hashes, links, syntax and workflow configuration; separate from Lean/score acceptance."
@@ -82,7 +81,7 @@
     "environment_stop_verified_commit": "6ed35056",
     "development_owner_state": "BOUNDED_WINDOW_DELIVERED_NO_ACTIVE_JOBS"
   },
-  "receipt_auditor": "f01-mul-log2-proof1/analyze.py audits exact hashes, original verdict, fingerprints, 12 classes, 25 rounds, headline ratio and bootstrap after real data arrives; NOT_RUN against real receipts yet.",
+  "receipt_auditor": "candidates/f01-d1-inline-all/window1h/audit-window.py checks exact inputs, all payload hashes, gate mode, 12 classes/25 rounds, fingerprints, headline and paired gain; --git also checks committed bytes.",
   "first_run_install_observation": {
     "observed_at_utc": "2026-10-21T06:45:43.920639+00:00",
     "source": "Signed-in Edge read-only job page",
@@ -138,35 +137,27 @@
   ],
   "research_window_status": "ENDED: 2026-10-21T15:07:40+08:00",
   "performance": {
-    "ratio": 0.967676975505967,
-    "paired_ratio_median": 0.9672345977255845,
-    "paired_ratio_min": 0.9427701116038623,
-    "paired_ratio_max": 0.9780358651303453,
-    "paired_gain_p05": 0.031751296392923956,
-    "rounds": 25,
-    "kernels": {
-      "add": {
-        "incumbent_ns": 84.35992999999999,
-        "submission_ns": 84.546414,
-        "ratio": 1.0022105755659114
-      },
-      "mul": {
-        "incumbent_ns": 64.88204999999999,
-        "submission_ns": 57.716024,
-        "ratio": 0.8895530273781423
-      },
-      "sum": {
-        "incumbent_ns": 76.206098,
-        "submission_ns": 76.233652,
-        "ratio": 1.0003615721146097
-      },
-      "bmm": {
-        "incumbent_ns": 142.919678,
-        "submission_ns": 137.964906,
-        "ratio": 0.9653317718781875
-      }
-    },
-    "public_statistical_check": "qualifies"
+    "run": 39590684208,
+    "candidate": "f01-d1-native-both-proof1",
+    "kernel_sha256": "707d22fed8443d883a183983397496492f9a09e071ffcf2715ef818384e44b85",
+    "validation_mode": "full-gate",
+    "full_gate": true,
+    "compile_pass": false,
+    "stage": "score",
+    "passed": true,
+    "reason": "",
+    "seed": 220,
+    "ratio_vs_shipped": 0.5574667102398078,
+    "direct_champion_ratio": "UNKNOWN",
+    "formal_submission": "NOT_SUBMITTED",
+    "verdict_path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39590684208/download-292754a158e2431ca73cd4d23bcb7e2f/f01-d1-native-both-proof1-verdict.json",
+    "paired_gain_p05": 0.42850180316637754,
+    "kernels_vs_shipped": {
+      "add": 0.6173355368847642,
+      "mul": 0.9203247398715345,
+      "sum": 0.34379623746815086,
+      "bmm": 0.47402273062442585
+    }
   },
   "formal_submission": "NOT_SUBMITTED",
   "current_window_completion": "All 12 started jobs collected; 90-minute research goal remains unachieved; no formal upload or funds action.",
@@ -193,9 +184,9 @@
     "by_operation_evidence": "competitions/floatlib/evidence/dashboard-operations-20261021T102009Z/operation-comparisons.json"
   },
   "previous_window_state": "WINDOW_DELIVERED_PUBLIC_FULL_GATE_VERIFIED",
-  "candidate_role": "Frozen reference/control only; no longer the primary development route",
+  "candidate_role": "Best verified whole-entry candidate; no performance claims composed across candidates",
   "next_research_plan": "competitions/floatlib/candidates/f01-mul-log2-proof3/next-research/README.md",
-  "planning_scope": "Current request reorganizes future exploration; earlier 1h research window remains ended.",
+  "planning_scope": "User authorized one-hour Astra/development collaboration, then an additional <=30 minutes to finish the already-developed experiments.",
   "planning_verification": {
     "status": "PASS",
     "checked_at_utc": "2026-10-21T08:08:19.946091+00:00",
@@ -293,9 +284,9 @@
     "statement_only": "Explicitly separate mode; never sets full_gate true",
     "raw_build_capture": "errors(text,status) calling convention preflight PASS"
   },
-  "research_result_report": "competitions/floatlib/candidates/f01-rebuilt-mul-proof1/window90/README.md",
-  "research_result_summary": "competitions/floatlib/candidates/f01-rebuilt-mul-proof1/window90/summary.json",
-  "current_candidate_role": "Verified optimization components only; not a championship candidate",
+  "research_result_report": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/README.md",
+  "research_result_summary": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/summary.json",
+  "current_candidate_role": "Frozen whole-entry native arithmetic package; not yet able to replace current champion",
   "best_checked_new_component": {
     "candidate": "f01-rebuilt-mul-proof1",
     "kernel_sha256": "517030e9729783a45f1a2dc604d38a6b3cbcfdc542b674e22135edf50e03bc83",
@@ -359,7 +350,7 @@
     "user_preference": "Prefer public historical champions or other implementations with substantial demonstrated advantage as future optimization starting points.",
     "survey": "competitions/floatlib/evidence/public-source-survey-20261021T101011Z/README.md",
     "findings": "competitions/floatlib/evidence/public-source-survey-20261021T101011Z/findings.json",
-    "status": "NO_REUSABLE_HISTORICAL_CHAMPION_SOURCE_FOUND_IN_CHECKED_SURFACES",
+    "status": "PUBLIC_LOGICAL_MODEL_ROUTE_ADOPTED_AND_FULL_GATE_PASSED; HISTORICAL_CHAMPION_SOURCE_STILL_UNKNOWN",
     "targets_in_order": [
       [
         165,
@@ -372,14 +363,19 @@
         93
       ]
     ],
-    "new_implementation_adopted": false,
-    "next_step": "Check a specific legitimate public source link or newly published FloatLib source interface; match exact digest and licence, then validate unchanged source before modifying it."
+    "new_implementation_adopted": true,
+    "next_step": "Check a specific legitimate public source link or newly published FloatLib source interface; match exact digest and licence, then validate unchanged source before modifying it.",
+    "adopted_sources": [
+      "Pinned FloatLib native finite-add theorem",
+      "Three FloatLib Team/MIT targetExponent lemmas from 1f5771b3e36a98f17fcac2c6d76aaa024b36aa37"
+    ],
+    "adoption_evidence": "competitions/floatlib/research/astra-collab-20261021/newer-mul-source-receipt.json"
   },
   "collaboration": {
     "window_id": "collab1h-20261021T103209Z",
     "start_utc": "2026-10-21T10:32:09Z",
     "end_utc": "2026-10-21T11:32:09Z",
-    "status": "ACTIVE",
+    "status": "RESEARCH_CLOSED_NEW_EXPERIMENTS_PASSED_CONFIRMING",
     "priority": [
       "bmm",
       "sum",
@@ -509,7 +505,23 @@
         "seed": 220,
         "commit": "91b23d2460a6b92f09a7e67021075f2cd140c81b",
         "created_at_utc": "2026-10-21T11:16:07Z",
-        "state": "in_progress"
+        "state": "completed",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39590684208"
+      },
+      {
+        "run": 39593447390,
+        "candidates": [
+          "f01-d1-native-both-proof1",
+          "f01-d1-native-sum-acc"
+        ],
+        "seed": 221,
+        "commit": "5f71fd17e9c00152ed53f7c8179edb8d26a8aeed",
+        "created_at_utc": "2026-10-21T11:38:28Z",
+        "state": "in_progress",
+        "phase": "USER_ADDED_30M_COMPLETION",
+        "purpose": "Independent frozen-source confirmation; no new mechanism or source edit",
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T113820Z/dispatch.json"
       }
     ],
     "research_handoffs_processed": [
@@ -612,7 +624,62 @@
         "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586444651/download-f7491e72c5fd4d2aac0e6c0eeff0fbd8/f01-d1-direct-dot-loop-verdict.json"
       }
     ],
-    "phase": "FINAL_GATE_RUNNING_NO_MORE_CANDIDATES",
-    "final_dispatch_note": "Final frozen validation batch was identified at11:16:07, 67s after the internal11:15 scheduling checkpoint. User window end remains11:32:09. No additional candidates or long experiments will be started; complete already-started CI and collect original evidence."
+    "phase": "FROZEN_SOURCE_CONFIRMATION_30M",
+    "final_dispatch_note": "Final frozen validation batch was identified at11:16:07, 67s after the internal11:15 scheduling checkpoint. User window end remains11:32:09. No additional candidates or long experiments will be started; complete already-started CI and collect original evidence.",
+    "new_research_stopped_at_utc": "2026-10-21T11:32:09Z"
+  },
+  "completion_window": {
+    "start_utc": "2026-10-21T11:34:07.663758+00:00",
+    "end_utc": "2026-10-21T12:04:07.663758+00:00",
+    "user_request": "把新增实验做完，半小时内",
+    "scope": "Complete existing native add confirmation, native multiplication and native accumulator sum experiments; repair actual failures and finish necessary validation. Do not expand unrelated directions.",
+    "research_thread_state": "R closed after original one-hour window; D handles final validation and any concrete repairs.",
+    "confirmation_run": 39593447390,
+    "status": "CONFIRMING_FROZEN_CANDIDATES",
+    "dispatch_preflight_failure": {
+      "at_utc": "2026-10-21T11:38:00Z",
+      "reason": "Default workflow floatlib-validate.yml absent on remote default branch; failed while listing before POST. No duplicate run. Retried using existing deflate-baseline.yml."
+    }
+  },
+  "previous_current_candidate": {
+    "candidate": "competitions/floatlib/candidates/f01-mul-log2-proof3",
+    "kernel": "competitions/floatlib/candidates/f01-mul-log2-proof3/Kernel.lean",
+    "kernel_sha256": "0f4c999aa1c5375cfb2533550017189a51b5de8d8733be37765b8f38606ad8fd",
+    "kernel_bytes": 34737,
+    "manifest": "competitions/floatlib/candidates/f01-mul-log2-proof3/manifest.json",
+    "mechanism": "FastMul.fastLog2 checks x >>> 47 == 1, then x >>> 46 == 1, otherwise reuses the six-step binary-search helper. No rounding, scalar fallback, add or tensor-loop change.",
+    "local_model": "PASS_FINITE_PYTHON_MODEL: 600313 values; zero mismatches",
+    "performance": {
+      "ratio": 0.967676975505967,
+      "paired_ratio_median": 0.9672345977255845,
+      "paired_ratio_min": 0.9427701116038623,
+      "paired_ratio_max": 0.9780358651303453,
+      "paired_gain_p05": 0.031751296392923956,
+      "rounds": 25,
+      "kernels": {
+        "add": {
+          "incumbent_ns": 84.35992999999999,
+          "submission_ns": 84.546414,
+          "ratio": 1.0022105755659114
+        },
+        "mul": {
+          "incumbent_ns": 64.88204999999999,
+          "submission_ns": 57.716024,
+          "ratio": 0.8895530273781423
+        },
+        "sum": {
+          "incumbent_ns": 76.206098,
+          "submission_ns": 76.233652,
+          "ratio": 1.0003615721146097
+        },
+        "bmm": {
+          "incumbent_ns": 142.919678,
+          "submission_ns": 137.964906,
+          "ratio": 0.9653317718781875
+        }
+      },
+      "public_statistical_check": "qualifies"
+    },
+    "candidate_role": "Frozen reference/control only; no longer the primary development route"
   }
 }
