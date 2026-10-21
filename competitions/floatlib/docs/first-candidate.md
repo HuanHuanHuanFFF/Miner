@@ -1,6 +1,6 @@
 # FloatLib 首轮开发与公开验收
 
-后续研究与当前路线见 [Astra／开发一小时协作](../candidates/f01-d1-inline-all/window1h/README.md)；本页保留首轮原始结果。
+后续研究与当前路线见 [十小时冲冠续跑](../candidates/f01-d2-native-bmm/window10h/README.md)；本页保留首轮原始结果。
 
 已得到一份通过完整官方公开 gate 的候选：[f01-mul-log2-proof3](../candidates/f01-mul-log2-proof3/Kernel.lean)。本次 headline 为 **0.967676976**，相对精确官方内置基准耗时降低 **3.2323%**。这是一次公开 runner 的观测，未做跨 runner 独立确认，未取得线上现任冠军源码或正式参赛成绩。
 
