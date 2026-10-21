@@ -1,6 +1,6 @@
 {
-  "state": "COLLAB10H_ACTIVE",
-  "updated_at_utc": "2026-10-21T18:52:03.480923+00:00",
+  "state": "COLLAB10H_ACTIVE_FULL_GATES_RUNNING",
+  "updated_at_utc": "2026-10-21T19:03:05.676872+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T12:16:11+08:00",
@@ -46,9 +46,9 @@
   "candidate_readiness": "PASS_FULL_GATE_AND_INDEPENDENT_CONFIRMATION",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "Run full gate for frozen86312a37, then use timing and generated C to choose USize/bounds and multioutput integration.",
+  "next_action": "Collect both full gates; dispatch frozen USize statement feasibility when a CI slot is free; update dashboard only from full-gate results.",
   "research_decision": "Prioritize bmm native accumulator/guard removal next; current native package and public bridge fully validated. No new experiment started after independent confirmation.",
-  "execution_state": "FINAL_FINITE_COMPLETE_PROOF_COMPILED_ENTERING_FULL_GATE",
+  "execution_state": "TWO_FULL_GATES_RUNNING_USIZE_INDEX_READY",
   "local_project_check": {
     "status": "PASS",
     "scope": "Root project check after candidate manifests, helper and dashboard changes. Exact full gates and committed-byte audits recorded separately.",
@@ -72,15 +72,15 @@
   "ci_responsibility": {
     "environment_scope_seen": "Environment chat stops after configuration, finishes and collects already-started run 39554146703; no further candidate dispatch by environment chat.",
     "development_scope": "Current human request authorizes all development/verification operations. Development continues candidate CI after collecting the current run; do not duplicate/cancel existing jobs.",
-    "source_edit_scope": "Owned f01-* candidates, first-candidate.md, development-status.json only. Shared configuration is read-only.",
+    "source_edit_scope": "D: f01-d2 candidates, development state, dashboard and research evidence; R: f01-r2 and astra-collab-20261022. D is sole Git/CI coordinator.",
     "git_rule": "Commit only explicit owned paths; never stage/commit environment files. Keep shared branch.",
     "receipt_root": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs",
     "existing_run": "39554146703",
-    "new_run_state": "ALL_CURRENT_WINDOW_JOBS_TERMINAL_AND_COLLECTED",
+    "new_run_state": "TWO_FULL_GATES_RUNNING",
     "takeover_condition": "Wait for environment_owner_state=STOPPED_AFTER_ENVIRONMENT_CONFIGURATION before shared Git or new CI dispatch, as updated HANDOFF.md explicitly requires.",
     "helper_checks": "Candidate-local CI helper syntax/help and root project checks PASS; no new CI dispatched.",
     "environment_stop_verified_commit": "6ed35056",
-    "development_owner_state": "COMPLETED_NO_ACTIVE_JOBS"
+    "development_owner_state": "ACTIVE_GIT_CI_COORDINATOR"
   },
   "receipt_auditor": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/audit-window.py",
   "first_run_install_observation": {
@@ -136,7 +136,7 @@
       "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39559796985/original-artifact-hashes.json"
     }
   ],
-  "research_window_status": "ONE_HOUR_RESEARCH_CLOSED; USER_ADDED_30M_COMPLETION_FINISHED_EXPERIMENTS",
+  "research_window_status": "ACTIVE_TEN_HOUR_WINDOW",
   "performance": {
     "reference_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
     "full_gate_runs": [
@@ -168,13 +168,12 @@
     "scope": "Same exact whole-entry package. Shipped-reference paired evidence, separate from current-champion conversion."
   },
   "formal_submission": "NOT_SUBMITTED",
-  "current_window_completion": "All three new native routes passed full gates twice. All 11 jobs collected. No active jobs. Championship target remains unachieved.",
+  "current_window_completion": "ACTIVE: first proof failures repaired; guarded native-bmm, scalar raw-guard elimination and final-only-finite sum/bmm now compile; two full gates are running. Championship target unachieved.",
   "payload_integrity": {
-    "verified_payloads": 299,
-    "status": "PASS_DISK_AND_COMMITTED_BYTES",
-    "evidence": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/summary.json",
-    "commit": "101e5ce46bfc9115b6920138c7f63771626d998b",
-    "official_snapshot_responses_verified_in_git": 4
+    "status": "LATEST_AUDIT_3_OF_4_RECORDED_RUNS_COLLECTED; NEW_FULL_RUN_PENDING_AUDIT",
+    "verified_payloads": 76,
+    "evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/summary.json",
+    "previous_window_evidence": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/summary.json"
   },
   "acceptance_target": "Attempt to produce the next live champion: full four-kernel candidate, exact proof gate, and significant >=3% gain against the champion current at evaluation. Improvement over the shipped reference alone does not satisfy the goal.",
   "acceptance_target_status": "UNACHIEVED: no competitive current-champion result or formal promotion",
@@ -194,8 +193,8 @@
   },
   "previous_window_state": "WINDOW_DELIVERED_PUBLIC_FULL_GATE_VERIFIED",
   "candidate_role": "Best verified whole-entry candidate; no performance claims composed across candidates",
-  "next_research_plan": "competitions/floatlib/candidates/f01-mul-log2-proof3/next-research/README.md",
-  "planning_scope": "User authorized one-hour Astra/development collaboration, then an additional <=30 minutes to finish the already-developed experiments.",
+  "next_research_plan": "competitions/floatlib/coordination/astra-handoff-10h.md",
+  "planning_scope": "Current user authorized10h collaborative optimization targeting actual next champion, through2026-10-22T04:16:11Z.",
   "planning_verification": {
     "status": "PASS",
     "checked_at_utc": "2026-10-21T08:08:19.946091+00:00",
@@ -470,6 +469,19 @@
         "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T184411Z/dispatch.json",
         "conclusion": "success",
         "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39655412696"
+      },
+      {
+        "run": 39656662501,
+        "candidates": [
+          "f01-d2-final-finite"
+        ],
+        "seed": 305,
+        "commit": "fe6320509ce91d641bfb99a11486d744ff81e670",
+        "created_at_utc": "2026-10-21T18:52:45Z",
+        "state": "in_progress",
+        "mode": "full-gate",
+        "purpose": "Full kernel/axiom/checksum/performance acceptance for compiled final-only finite sum+bmm",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T185237Z/dispatch.json"
       }
     ],
     "research_handoffs_processed": [
@@ -491,7 +503,7 @@
     "previous_state": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/previous-state.json",
     "formal_goal": "Actual current-champion promotion must be verified; no goal completion from public-reference results alone.",
     "research_dispatch_verified": "wait_threads confirms existing Astra research chat active on new turn",
-    "feedback_to_research": "Major checkpoint: CI39655412696 SUCCESS, both standalone finite-result preimage and full production f01-d2-final-finite compiled exact four obligations+bench. R2-02 proof works without mathematics changes; D only replaced banned word in comment. Final-finite production SHA86312a37 now advances to full gate/axioms/checksums/performance. Existing full comparison39655361399 still running. C available under39655412696 diagnostics/f01-d2-final-finite; D owns USize+unchecked-with-proved-bounds indexing next. R can use finiteRoundtrip and final preimage as real compiled building blocks for independent multioutput/layout work.",
+    "feedback_to_research": "Major checkpoint: CI39655412696 SUCCESS, both standalone finite-result preimage and full production f01-d2-final-finite compiled exact four obligations+bench. R2-02 proof works without mathematics changes; D only replaced banned word in comment. Final-finite production SHA86312a37 now advances to full gate/axioms/checksums/performance. Existing full comparison39655361399 still running. C available under39655412696 diagnostics/f01-d2-final-finite; D owns USize+unchecked-with-proved-bounds indexing next. R can use finiteRoundtrip and final preimage as real compiled building blocks for independent multioutput/layout work. Final-only finite full run39656662501 seed305 actually started18:52:45, while previous full39655361399 still live. D prepared USize index candidate4690116c (local policy only, no Lean yet), targeting Nat arithmetic/getD checks visible in C. R retain multi-output/layout scope. Direct Float32<->Float numeric casts opaque: check actual bridge before FloatArray numeric approach; bit-container encoding remains alternative hypothesis.",
     "research_requests": [
       {
         "id": "D2-FINAL-FINITE",
@@ -501,26 +513,6 @@
         "question": "Can finite final Float32 add/mul imply finite operands? Prove these preimage lemmas to remove all per-step finite/raw guards in exact ordered bmm/sum while falling back on nonfinite final result."
       }
     ]
-  },
-  "completion_window": {
-    "start_utc": "2026-10-21T11:34:07.663758+00:00",
-    "end_utc": "2026-10-21T12:04:07.663758+00:00",
-    "user_request": "把新增实验做完，半小时内",
-    "scope": "Complete existing native add confirmation, native multiplication and native accumulator sum experiments; repair actual failures and finish necessary validation. Do not expand unrelated directions.",
-    "research_thread_state": "R closed after original one-hour window; D handles final validation and any concrete repairs.",
-    "confirmation_run": 39593447390,
-    "status": "COMPLETED_WITHIN_30M",
-    "dispatch_preflight_failure": {
-      "at_utc": "2026-10-21T11:38:00Z",
-      "reason": "Default workflow floatlib-validate.yml absent on remote default branch; failed while listing before POST. No duplicate run. Retried using existing deflate-baseline.yml.",
-      "repair": "Candidate-local ci.py now defaults to documented existing deflate-baseline.yml; official workflows unchanged."
-    },
-    "experiments_completed_at_utc": "2026-10-21T11:51:46.588048+00:00",
-    "all_started_jobs_collected": true,
-    "all_new_native_candidates_confirmed": true,
-    "actual_candidate_count": 3,
-    "completed_at_utc": "2026-10-21T11:53:37.200700+00:00",
-    "elapsed_minutes": 19.49
   },
   "previous_current_candidate": {
     "candidate": "competitions/floatlib/candidates/f01-mul-log2-proof3",
@@ -567,25 +559,19 @@
     {
       "kind": "github_ci",
       "run": 39655361399
+    },
+    {
+      "kind": "github_ci",
+      "run": 39656662501
     }
   ],
   "active_goal": "继续协作推进优化10h；目标是拿下新的冠军",
   "pending_candidates": [
     {
-      "candidate": "f01-d2-native-bmm-proof1",
-      "state": "FULL_GATE_QUEUED"
-    },
-    {
-      "candidate": "f01-d2-no-raw-guards-proof1",
-      "state": "FULL_GATE_QUEUED"
-    },
-    {
-      "candidate": "f01-d2-final-finite-preimage",
-      "state": "STATEMENT_QUEUED"
-    },
-    {
-      "candidate": "f01-d2-final-finite",
-      "state": "STATEMENT_QUEUED"
+      "candidate": "f01-d2-usize-bmm",
+      "kernel_sha256": "4690116cbaae3203b30ff4f48aa1462c978fbcdba07ec9dc2ab1ce9cf09b4624",
+      "state": "LOCAL_POLICY_PASS_STATEMENT_PENDING",
+      "mechanism": "USize loop/address arithmetic; once-per-output no-wrap/bounds guard; proof-backed Array.uget; final-finite fallback"
     }
   ],
   "current_official_refresh": {
@@ -597,5 +583,25 @@
     "source_commit_observed": "21e42d8f93cd3ecdf5dc4a84c7951ad4c17b185c",
     "pin_unchanged_reason": "Compare from978cc5b4 changes only licensing/docs and upstream CI lint; gate/contracts/bench/pins byte paths unchanged.",
     "evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/official-opening"
+  },
+  "previous_completion_window": {
+    "start_utc": "2026-10-21T11:34:07.663758+00:00",
+    "end_utc": "2026-10-21T12:04:07.663758+00:00",
+    "user_request": "把新增实验做完，半小时内",
+    "scope": "Complete existing native add confirmation, native multiplication and native accumulator sum experiments; repair actual failures and finish necessary validation. Do not expand unrelated directions.",
+    "research_thread_state": "R closed after original one-hour window; D handles final validation and any concrete repairs.",
+    "confirmation_run": 39593447390,
+    "status": "COMPLETED_WITHIN_30M",
+    "dispatch_preflight_failure": {
+      "at_utc": "2026-10-21T11:38:00Z",
+      "reason": "Default workflow floatlib-validate.yml absent on remote default branch; failed while listing before POST. No duplicate run. Retried using existing deflate-baseline.yml.",
+      "repair": "Candidate-local ci.py now defaults to documented existing deflate-baseline.yml; official workflows unchanged."
+    },
+    "experiments_completed_at_utc": "2026-10-21T11:51:46.588048+00:00",
+    "all_started_jobs_collected": true,
+    "all_new_native_candidates_confirmed": true,
+    "actual_candidate_count": 3,
+    "completed_at_utc": "2026-10-21T11:53:37.200700+00:00",
+    "elapsed_minutes": 19.49
   }
 }
