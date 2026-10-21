@@ -1,22 +1,22 @@
 {
   "state": "CANDIDATE_READY",
-  "updated_at_utc": "2026-10-21T05:39:23.394734+00:00",
+  "updated_at_utc": "2026-10-21T06:57:16.547248+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
-  "deadline_beijing": "2026-10-21T15:16:00+08:00",
+  "deadline_beijing": "2026-10-21T15:07:40+08:00",
   "official_commit": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
-  "candidate": "competitions/floatlib/candidates/f01-mul-log2",
-  "kernel": "competitions/floatlib/candidates/f01-mul-log2/Kernel.lean",
-  "kernel_sha256": "ac4f32a610e1e4b66141d8cb8d099411cda476ffe6c5cd821df0ede41c8158d7",
-  "kernel_bytes": 34641,
+  "candidate": "competitions/floatlib/candidates/f01-mul-log2-proof2",
+  "kernel": "competitions/floatlib/candidates/f01-mul-log2-proof2/Kernel.lean",
+  "kernel_sha256": "2e2effc2719f30bb8c1784d421d7683a183b78699712873756aac2a99463a490",
+  "kernel_bytes": 34619,
   "baseline_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
-  "manifest": "competitions/floatlib/candidates/f01-mul-log2/manifest.json",
+  "manifest": "competitions/floatlib/candidates/f01-mul-log2-proof2/manifest.json",
   "mechanism": "FastMul.fastLog2 checks x >>> 47 == 1, then x >>> 46 == 1, otherwise reuses the six-step binary-search helper. No rounding, scalar fallback, add or tensor-loop change.",
   "proof_status": "Lean equivalence proof source written using existing log2_shift; not compiled or replayed",
   "local_model": "PASS_FINITE_PYTHON_MODEL: 600313 values; zero mismatches",
   "lean_gate": "NOT_RUN",
   "benchmark": "NOT_RUN",
-  "requested_environment_action": "Validate frozen exact Kernel.lean with the pinned full gate and paired shipped-reference benchmark. Preserve per-class and paired-round timings and all failures.",
+  "requested_environment_action": "Environment owner collects existing run and marks STOPPED_AFTER_ENVIRONMENT_CONFIGURATION. No request for another environment-owned dispatch. Development will then test proof2 and standalone rse-threshold under its current authorization.",
   "remaining": [
     "Official Lean compilation and fixed conjunction",
     "Kernel replay and dependency audit",
@@ -41,17 +41,63 @@
       "priority": "After first candidate; do not combine before separate gate and performance evidence"
     }
   ],
-  "environment_feedback_read_at_utc": "2026-10-21T05:38:15.440398+00:00",
-  "environment_state_seen": "CI_READY; publication_approval=PENDING_USER_CONFIRMATION; baseline NOT_RUN; ci_runs empty",
+  "environment_feedback_read_at_utc": "2026-10-21T06:23:33.060938+00:00",
+  "environment_state_seen": "CI_RUNNING; first run installs official environment. Environment scope updated to no new dispatch after configuration.",
   "candidate_readiness": "CANDIDATE_READY",
-  "environment_commit_seen": "62392732",
-  "blocker": "Environment status records automatic approval review rejecting public publication of new candidate/CI files without explicit authorization. Environment chat owns publication and CI; development chat cannot dispatch or bypass it.",
-  "next_action": "Environment owner resolves its required publication authorization, then validates primary frozen f01-mul-log2 followed by standalone f01-mul-rse-threshold as runner capacity permits. Development reads exact failure logs before modifying any frozen artifact.",
+  "environment_commit_seen": "6ed35056",
+  "blocker": null,
+  "next_action": "After explicit environment-owner stop marker, commit/push only owned paths and dispatch proof2 plus rse-threshold through existing public standard manual workflow. Preserve first negative gate and all NOT_RUN statuses.",
   "research_decision": "Two independent local mechanisms are ready. Defer further variants and combination until official Lean and full-harness evidence arrives; no performance claim.",
-  "execution_state": "WAITING_ENVIRONMENT_PUBLICATION_APPROVAL",
+  "execution_state": "PREPARING_PROOF2_AND_RSE_FULL_GATES",
   "local_project_check": {
     "status": "PASS",
     "executed_at_utc": "2026-10-21T05:37:00Z",
     "scope": "Root project check: local links, syntax, manifests and workflows only; no Lean, CI or chain operation."
+  },
+  "previous_deadline_beijing": "2026-10-21T15:16:00+08:00",
+  "continuation_window": {
+    "start_utc": "2026-10-21T06:07:40+00:00",
+    "end_utc": "2026-10-21T07:07:40+00:00",
+    "user_request": "授权为了开发验证的全部操作；继续开发验证持续1h；最后在CI/验收要求跑完，不中断",
+    "started_ci_policy": "Collect successful/failed/timed-out terminal results even after the research cutoff; do not cancel at cutoff.",
+    "publication_authorization": "Explicitly authorized by user in this development chat; environment also records USER_APPROVED_PUBLIC_BRANCH_AND_FREE_STANDARD_CI.",
+    "coordination": "Environment owner retains shared commit/push/CI role; no messages or duplicate dispatch."
+  },
+  "original_candidate": {
+    "candidate": "competitions/floatlib/candidates/f01-mul-log2",
+    "kernel_sha256": "ac4f32a610e1e4b66141d8cb8d099411cda476ffe6c5cd821df0ede41c8158d7",
+    "status": "PRESERVED_FIRST_FREEZE; potential redundant proof tactic identified before compiler feedback"
+  },
+  "proof_preflight_note": "Actual CI did not report redundant-tactic failures; instead original final simpa using hl.symm statements fail. Proof1 leaves those failing lines unchanged and stays NOT_RUN. Proof2 explicitly reduces log2(1)=0 and +0, then exact hl.symm. All runtime definitions unchanged.",
+  "ci_responsibility": {
+    "environment_scope_seen": "Environment chat stops after configuration, finishes and collects already-started run 39554146703; no further candidate dispatch by environment chat.",
+    "development_scope": "Current human request authorizes all development/verification operations. Development continues candidate CI after collecting the current run; do not duplicate/cancel existing jobs.",
+    "source_edit_scope": "Owned f01-* candidates, first-candidate.md, development-status.json only. Shared configuration is read-only.",
+    "git_rule": "Commit only explicit owned paths; never stage/commit environment files. Keep shared branch.",
+    "receipt_root": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs",
+    "existing_run": "39554146703",
+    "new_run_state": "PREPARING_EXACT_COMMIT",
+    "takeover_condition": "Wait for environment_owner_state=STOPPED_AFTER_ENVIRONMENT_CONFIGURATION before shared Git or new CI dispatch, as updated HANDOFF.md explicitly requires.",
+    "helper_checks": "Candidate-local CI helper syntax/help and root project checks PASS; no new CI dispatched.",
+    "environment_stop_verified_commit": "6ed35056",
+    "development_owner_state": "ACTIVE_GIT_PUSH_AND_CI_OWNER"
+  },
+  "receipt_auditor": "f01-mul-log2-proof1/analyze.py audits exact hashes, original verdict, fingerprints, 12 classes, 25 rounds, headline ratio and bootstrap after real data arrives; NOT_RUN against real receipts yet.",
+  "first_run_install_observation": {
+    "observed_at_utc": "2026-10-21T06:45:43.920639+00:00",
+    "source": "Signed-in Edge read-only job page",
+    "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39554146703/job/119069861703",
+    "mathlib_cache": "8908 files downloaded and decompressed",
+    "build_start_log": "[setup] 06:16:37 building FloatLib, the contract and the bench against the incumbent",
+    "official_setup_command": "lake build Contract Verify bench 2>&1 | tail -3",
+    "interpretation": "Install is currently in the FloatLib/contract/bench build. The official tail -3 pipeline suppresses intermediate output. Completion and cause of long duration remain UNKNOWN; no candidate failure observed."
+  },
+  "first_actual_ci": {
+    "run_id": 39554146703,
+    "baseline_full_gate": "PASS",
+    "baseline_ratio": 1.0009522412862042,
+    "original_candidate_gate": "FAIL_STATEMENT",
+    "original_candidate_performance": "NOT_RUN",
+    "audit": "competitions/floatlib/candidates/f01-mul-log2-proof1/analyses/39554146703.json"
   }
 }

@@ -1,0 +1,69 @@
+{
+  "candidate": "f01-mul-log2-proof2",
+  "created_at_utc": "2026-10-21T06:55:41.460708+00:00",
+  "official_source": {
+    "repository": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels",
+    "commit": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
+    "path": "kernels/full/incumbent/Kernel.lean",
+    "attribution": "Conjectures.io repository authors; original TunedAdd/FastMul and proofs preserved",
+    "local_reference": "competitions/floatlib/references/official-incumbent/Kernel.lean",
+    "sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
+    "bytes": 33043
+  },
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "2e2effc2719f30bb8c1784d421d7683a183b78699712873756aac2a99463a490",
+  "candidate_bytes": 34619,
+  "mechanism": "Same executable definitions as original f01-mul-log2. Only the log2 helper proof reduces log2(1) and addition explicitly instead of broad simp.",
+  "expected_domain": "The product of two normal 24-bit significands lies in [2^46,2^48), so its highest set bit is 46 or 47. Guarded equivalence is intended for every UInt64, including zero and larger words.",
+  "equivalence_reason": "The reference log2_shift lemma gives log2(x)=k+log2(x>>>k). Each guard makes the shifted value one; otherwise the original fallback theorem applies. Existing roundP_eq, impl_eq, mul_spec and tensor proofs are reused.",
+  "falsification_conditions": [
+    "Lean compilation or fixed full obligation fails",
+    "Kernel replay or allowed-dependency audit fails",
+    "Any official checksum differs",
+    "Paired full-harness measurements fail to show a reproducible reduction against the exact shipped reference"
+  ],
+  "validation": {
+    "local_model": "PASS_FINITE_PYTHON_MODEL: 600313 values; zero mismatches",
+    "official_lean_build": "NOT_RUN",
+    "official_full_gate": "NOT_RUN",
+    "paired_benchmark": "NOT_RUN",
+    "independent_confirmation": "NOT_RUN",
+    "formal_submission": "NOT_RUN",
+    "local_model_evidence": "probe-result.json"
+  },
+  "performance_claim": "UNKNOWN; no timing or championship claim",
+  "mutable_after_freeze": false,
+  "frozen_at_utc": "2026-10-21T06:55:41.460721+00:00",
+  "source_survey": {
+    "receipts": "source-survey/network-receipts.json",
+    "queried_at_utc": "2026-10-21T05:25:59Z",
+    "official_champions": "HTTP 200, raw SHA-256 fc7d2d0510d4b5932fb4382ab7c82767a83fa177bae0cde370fe586ce1bdd283",
+    "source174": "HTTP 404",
+    "source165": "HTTP 404",
+    "source147": "HTTP 404",
+    "conclusion": "No submitted source retrieved; source endpoints answer no competition served here. Do not infer any implementation or current speed from this response."
+  },
+  "reading_copy": {
+    "path": ".runtime/floatlib-survey-20261021/official-reference-Kernel.lean",
+    "sha256": "46cbe66d7c14ffbead19c6fbb7d47b1b8d161f6f2793fd7ff0442ecdb585636b",
+    "bytes": 33044,
+    "difference_from_official": "Exactly one extra terminal LF; candidate was derived from this semantic-equivalent reading copy."
+  },
+  "parent": {
+    "candidate": "f01-mul-log2-proof1",
+    "kernel_sha256": "6ece8fde82981400536a6d1f106c80ea9bd6a16d711485b96928d5acc8f67b3d",
+    "reason": "First actual CI rejects the final simpa using hl.symm steps in original log2 helper. Proof2 explicitly reduces Nat.log2 1 with a checked decide proof and Nat.add_zero, then uses exact equality symmetry. Runtime definitions unchanged."
+  },
+  "status": "CANDIDATE_READY",
+  "freeze_note": "Final proof-only hash is bound to the completed finite diagnostic timestamp; earlier provisional proof edits were never dispatched.",
+  "actual_failure_evidence": {
+    "run_id": 39554146703,
+    "original_candidate": "f01-mul-log2",
+    "kernel_sha256": "ac4f32a610e1e4b66141d8cb8d099411cda476ffe6c5cd821df0ede41c8158d7",
+    "stage": "statement",
+    "reason": "Two Type mismatch errors at final simpa using hl.symm, lines 645 and 657",
+    "verdict": "competitions/floatlib/evidence/39554146703/download-6d09073267f64a12be780cf296192bb8/f01-mul-log2-verdict.json",
+    "verdict_sha256": "2c8320b2ed04b4468cdea52ee03fed56b5eefb683338122ac73d1f5862d16d11",
+    "full_expected_and_actual_types": "UNKNOWN: original gate publishes compact error lines only"
+  }
+}

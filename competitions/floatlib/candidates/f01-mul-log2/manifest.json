@@ -24,13 +24,13 @@
   ],
   "validation": {
     "local_model": "PASS_FINITE_PYTHON_MODEL: 600313 values; zero mismatches",
-    "official_lean_build": "NOT_RUN",
-    "official_full_gate": "NOT_RUN",
-    "paired_benchmark": "NOT_RUN",
+    "official_lean_build": "FAIL_STATEMENT_TYPECHECK: run 39554146703",
+    "official_full_gate": "FAIL_STATEMENT_TYPECHECK",
+    "paired_benchmark": "NOT_RUN: rejected before score",
     "independent_confirmation": "NOT_RUN",
     "formal_submission": "NOT_RUN",
     "local_model_evidence": "probe-result.json",
-    "official_source_policy": "NOT_RUN; local lexical sanity only",
+    "official_source_policy": "PASS: run 39554146703",
     "local_lexical_sanity": "PASS: official banned-pattern regex, sole import, four spec names and size; not the official gate",
     "local_source_audit": "PASS_LOCAL_SOURCE_AUDIT",
     "local_source_audit_evidence": "source-audit.json"
@@ -52,5 +52,19 @@
     "sha256": "46cbe66d7c14ffbead19c6fbb7d47b1b8d161f6f2793fd7ff0442ecdb585636b",
     "bytes": 33044,
     "difference_from_official": "Exactly one extra terminal LF; candidate was derived from this semantic-equivalent reading copy."
-  }
+  },
+  "actual_run": {
+    "run_id": 39554146703,
+    "source_commit": "cd2229f47e57f2ccadbbfb94c67fc8f05b2d25c1",
+    "kernel_sha256": "ac4f32a610e1e4b66141d8cb8d099411cda476ffe6c5cd821df0ede41c8158d7",
+    "stage": "statement",
+    "error_lines": [
+      645,
+      657
+    ],
+    "error": "Type mismatch after simplification at final simpa using hl.symm",
+    "verdict": "competitions/floatlib/evidence/39554146703/download-6d09073267f64a12be780cf296192bb8/f01-mul-log2-verdict.json",
+    "verdict_sha256": "2c8320b2ed04b4468cdea52ee03fed56b5eefb683338122ac73d1f5862d16d11"
+  },
+  "status": "REJECTED_FIRST_FREEZE_PRESERVED"
 }
