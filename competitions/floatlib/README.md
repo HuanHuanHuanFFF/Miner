@@ -4,7 +4,7 @@
 
 正式包是一个 `Kernel.lean`，包含 add、mul、sum、bmm 及四个全输入等价证明。开发比较统一以评测时的现任冠军为基准；当前尚未正式上传。
 
-- [冲冠看板](../../dashboard.md)：现任冠军、我方首选与能否取代冠军。
+- [冲冠看板](../../dashboard.md)：按 add、mul、sum、bmm 四项查看现任冠军与我方首选。
 - [当前开发状态](coordination/development-status.json)：当前比较口径、候选选择及证据入口。
 
 - [首次双会话交接](coordination/HANDOFF.md)：环境与开发文件所有权、状态、自然检查点和本窗预算。
