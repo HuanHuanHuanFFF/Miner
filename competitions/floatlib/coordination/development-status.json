@@ -409,6 +409,15 @@
         "seed": 212,
         "commit": "60c5be2aa2d0b4798730a4d775559d18f39e9193",
         "state": "in_progress"
+      },
+      {
+        "run": 39586444651,
+        "candidates": [
+          "f01-d1-direct-dot-loop"
+        ],
+        "seed": 213,
+        "commit": "ba4bb9ee0802319c4afdf7825d6bf9a8eeabe083",
+        "state": "in_progress"
       }
     ],
     "research_handoffs_processed": [
@@ -424,6 +433,7 @@
     "new_long_experiment_cutoff_utc": "2026-10-21T11:15:00Z",
     "research_dispatch_verified": "Tool wait snapshot confirms active turn and initial read commentary.",
     "development_experiment": "CI 39585884968: scalar/tensor compiler exposure. Next independent D hypothesis: Fin.foldl generic closure/boxing overhead; evaluate product-vector plus array fold with exact order.",
-    "feedback_to_research": "R-01 read and adopted for full-gate test. D has copied cb09e9c6 into f01-d1-direct-dot-loop; original R package remains unchanged. Current other hypotheses already in CI: all-scalar+tensor compiler exposure and product-vector array fold. Continue zero-fallback frequency / independent sum direct-loop bridge while these run; do not add more unmeasured bmm variants."
+    "feedback_to_research": "R-01 adopted unchanged in f01-d1-direct-dot-loop; full gate CI 39586444651 running. D also prepared direct sumLoop bridge in f01-d1-direct-sum-loop and will compile it; R should avoid duplicating sumLoop implementation and continue zero/fallback/measurement analysis. Existing original gate statement already builds bench, so separate diagnostic capture now includes overlay Main*/Bench* C to inspect timer boundary.",
+    "diagnostic_change": "Existing separate statement replay now captures overlay Main*/Bench* C as well as Submission, since official statement builds the bench. Exact official gate remains unchanged; next CI will inspect timer/call order."
   }
 }

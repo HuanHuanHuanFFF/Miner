@@ -29,10 +29,13 @@ def statement(src,verdict):
     reason=original_statement(src,verdict)
     if not reason:
         rows=[]
-        for path in (g.LAYER/'upper').rglob('Submission.c'):
+        paths = [path for path in (g.LAYER/'upper').rglob('*.c')
+                 if path.name == 'Submission.c' or path.name.startswith(('Main', 'Bench'))]
+        paths.sort(key=lambda path: (path.name != 'Submission.c', str(path)))
+        for path in paths:
             if path.is_file() and path.stat().st_size<8_000_000:
                 name='candidate-generated-'+str(len(rows))+'.c';data=path.read_bytes();(out/name).write_bytes(data)
-                rows.append({'source':str(path),'file':name,'sha256':hashlib.sha256(data).hexdigest(),'kernel_sha256':hashlib.sha256(kernel.read_bytes()).hexdigest(),'scope':'Successful statement layer captured before gate cleanup'})
+                rows.append({'source':str(path),'module':path.stem,'file':name,'sha256':hashlib.sha256(data).hexdigest(),'kernel_sha256':hashlib.sha256(kernel.read_bytes()).hexdigest(),'scope':'Successful statement and bench-build layer captured before gate cleanup'})
         (out/'candidate-c-index.json').write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8')
     return reason
 g.STAGES=[('intake',g.intake),('policy',g.policy),('statement',statement)]
