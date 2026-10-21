@@ -1,6 +1,6 @@
 {
   "state": "COLLAB10H_ACTIVE_MAJOR_NATIVE_REDUCTION_PASS",
-  "updated_at_utc": "2026-10-21T19:34:18.463982+00:00",
+  "updated_at_utc": "2026-10-21T19:49:51.111055+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T12:16:11+08:00",
@@ -15,7 +15,7 @@
   "proof_status": "PASS_FULL_OFFICIAL_GATE_PUBLIC",
   "local_model": "Exact Lean proof and full gate; previous finite Python model belongs to previous_current_candidate.",
   "lean_gate": "PASS_FULL_OFFICIAL_GATE_PUBLIC",
-  "benchmark": "VERIFIED_DISCOVERY_RUN; INDEPENDENT_CONFIRMATION_NEXT",
+  "benchmark": "VERIFIED_FROZEN_SOURCE_INDEPENDENT_CONFIRMATION",
   "requested_environment_action": "NONE: environment handoff finished",
   "remaining": [
     "Develop and prove a materially stronger full package, starting with bmm native accumulation",
@@ -46,9 +46,9 @@
   "candidate_readiness": "FULL_GATE_PASS_DISCOVERY",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "Full-gate three passing layout/index candidates; keep frozen confirmation39661038366 running. D prepared fold proof1 zero rewrite for next small batch with R word-finite route.",
+  "next_action": "Run word-finite + fold proof1 statement batch; collect live full layout39663131701; combine only passing and measured exact components.",
   "research_decision": "Final-only-finite backward proof is now full-gated and materially faster. Continue largest-gap bmm through USize/proved bounds, conversion amortization and multi-output scheduling. Keep scalar word-predicate route as independent follow-up.",
-  "execution_state": "THREE_LAYOUT_PROOFS_PASS_ENTERING_FULL_GATES",
+  "execution_state": "BASE_CONFIRMED_LAYOUT_FULL_GATES_RUNNING_SCALAR_FOLD_PROOFS_READY",
   "local_project_check": {
     "status": "PASS",
     "scope": "Root project check after four new candidate manifests and updated four-operation dashboard;49 candidates. Separate from actual Lean/full gate results.",
@@ -138,35 +138,34 @@
   ],
   "research_window_status": "ACTIVE_TEN_HOUR_WINDOW",
   "performance": {
-    "run": 39656662501,
-    "candidate": "f01-d2-final-finite",
-    "kernel_sha256": "86312a3759286cb207f946af9db95546777fdb16f1bd147f7892c0f9e1d79217",
-    "validation_mode": "full-gate",
-    "full_gate": true,
-    "compile_pass": false,
-    "stage": "score",
-    "passed": true,
-    "reason": "",
-    "seed": 305,
-    "ratio_vs_shipped": 0.3454501832950915,
-    "direct_champion_ratio": "UNKNOWN",
-    "formal_submission": "NOT_SUBMITTED",
-    "verdict_path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39656662501/download-f90ce41a124b4c0ea7b04eebcf5da2a4/f01-d2-final-finite-verdict.json",
-    "axioms": [
-      "Classical.choice",
-      "Quot.sound",
-      "propext"
-    ],
     "reference_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
-    "cpu": "AMD EPYC 7763 64-Core Processor",
-    "cpu_affinity": "0",
-    "paired_gain_p05": 0.6492566639699402,
-    "kernels_vs_shipped": {
-      "add": 0.5469141448548521,
-      "mul": 0.8203671449312773,
-      "sum": 0.13502179980382017,
-      "bmm": 0.11637467429627818
-    }
+    "full_gate_runs": [
+      39656662501,
+      39661038366
+    ],
+    "ratio_median": 0.3456430534401657,
+    "ratio_min": 0.3454501832950915,
+    "ratio_max": 0.34583592358523996,
+    "kernels_median": {
+      "add": 0.5549402360020891,
+      "mul": 0.8208838638419391,
+      "sum": 0.13576970039980227,
+      "bmm": 0.11636660116332095
+    },
+    "paired_gain_p05": [
+      0.6492566639699402,
+      0.6480316963864661
+    ],
+    "cpus": [
+      "AMD EPYC 7763 64-Core Processor",
+      "AMD EPYC 7763 64-Core Processor"
+    ],
+    "seeds": [
+      305,
+      307
+    ],
+    "rounds": 25,
+    "scope": "Same exact whole-entry source; shipped-reference paired evidence separate from champion comparison."
   },
   "formal_submission": "NOT_SUBMITTED",
   "current_window_completion": "ACTIVE: final-only-finite full package passed exact gate, three allowed axioms and12-class25-round timing; bmm0.1164 andsum0.1350 of shipped. USize candidate is in statement CI. Independent confirmation and championship goal remain open.",
@@ -188,7 +187,7 @@
     "policy_snapshot": "591",
     "queried_at_utc": "2026-10-21T19:07:59.349952+00:00",
     "candidate": "f01-d2-final-finite",
-    "candidate_over_champion_time_inferred": 2.6845372629668423,
+    "candidate_over_champion_time_inferred": 2.704446309917904,
     "direct_paired_ratio": "UNKNOWN",
     "comparison_kind": "INFERRED: per-class exact-digest historical chain, current champion timing weights, candidate/reference paired class ratios, median over frozen-source full gates. Same-digest promotions excluded; no shared overall multiplier used.",
     "source_status": "Exact champion source not obtained",
@@ -303,9 +302,11 @@
   "best_checked_new_component": {
     "candidate": "f01-d2-final-finite",
     "kernel_sha256": "86312a3759286cb207f946af9db95546777fdb16f1bd147f7892c0f9e1d79217",
-    "full_gate_runs": 1,
+    "full_gate_runs": 2,
     "ratio_vs_shipped": 0.3454501832950915,
-    "independent_confirmation": "READY_TO_DISPATCH"
+    "independent_confirmation": "Discovery39656662501 seed305 and independent39661038366 seed307; exact86312a37 source unchanged",
+    "ratio_min": 0.3454501832950915,
+    "ratio_max": 0.34583592358523996
   },
   "closing_official_snapshot": "591",
   "dashboard": "dashboard.md",
@@ -342,21 +343,23 @@
       "sum": {
         "candidate": "f01-d2-final-finite",
         "label": "最终检查原生归约",
-        "relative_to_champion_inferred": 4.501287577908301,
-        "full_gate_runs": 1,
+        "relative_to_champion_inferred": 4.523123807864678,
+        "full_gate_runs": 2,
         "kernel_sha256": "86312a3759286cb207f946af9db95546777fdb16f1bd147f7892c0f9e1d79217",
         "runs": [
-          39656662501
+          39656662501,
+          39661038366
         ]
       },
       "bmm": {
         "candidate": "f01-d2-final-finite",
         "label": "最终检查原生归约",
-        "relative_to_champion_inferred": 34.32620103630906,
-        "full_gate_runs": 1,
+        "relative_to_champion_inferred": 34.32146488639033,
+        "full_gate_runs": 2,
         "kernel_sha256": "86312a3759286cb207f946af9db95546777fdb16f1bd147f7892c0f9e1d79217",
         "runs": [
-          39656662501
+          39656662501,
+          39661038366
         ]
       }
     },
@@ -510,10 +513,12 @@
         "seed": 307,
         "commit": "039993a071a1dbba4c7b9fa8030e29900b5a5fe0",
         "created_at_utc": "2026-10-21T19:22:19Z",
-        "state": "in_progress",
+        "state": "completed",
         "mode": "full-gate",
         "purpose": "Frozen-source independent confirmation after discovery run39656662501",
-        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T192211Z/dispatch.json"
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T192211Z/dispatch.json",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39661038366"
       },
       {
         "run": 39661096034,
@@ -533,6 +538,21 @@
         "conclusion": "failure",
         "partial_success": "USize-proof1, preconverted-bmm and checked-floatarray compile PASS; native-fold-sum only zero-identity normalization failed",
         "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39661096034"
+      },
+      {
+        "run": 39663131701,
+        "candidates": [
+          "f01-d2-usize-bmm-proof1",
+          "f01-d2-preconverted-bmm",
+          "f01-d2-checked-floatarray"
+        ],
+        "seed": 309,
+        "commit": "b71b9e4d0591d8efa379697a21f5b6d4797fcd2e",
+        "created_at_utc": "2026-10-21T19:36:34Z",
+        "state": "in_progress",
+        "mode": "full-gate",
+        "purpose": "Full gates and timing for three compiled index/layout mechanisms; checked FloatArray axiom audit required",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T193626Z/dispatch.json"
       }
     ],
     "research_handoffs_processed": [
@@ -565,6 +585,12 @@
         "decision": "Adopt checked numeric FloatArray as distinct layout feasibility experiment; full gate/axiom audit required before timing claim",
         "candidate": "f01-d2-checked-floatarray",
         "source_sha256": "5be0735a90d58d9efb8ee2c6d666c11029bca66665dca03b6b5eff5baf6cbfc4"
+      },
+      {
+        "id": "R2-07",
+        "decision": "Adopt exact byte-identical raw-word finite guard candidate for next statement batch",
+        "candidate": "competitions/floatlib/candidates/f01-d2-word-finite-guards",
+        "source_sha256": "1c0f8496c85fb3a4e84494ac1708576b048a183e90eb8bbc1b62eb5375d5ab6e"
       }
     ],
     "confirmation_start_utc": "2026-10-22T03:15:00Z",
@@ -572,7 +598,7 @@
     "previous_state": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/previous-state.json",
     "formal_goal": "Actual current-champion promotion must be verified; no goal completion from public-reference results alone.",
     "research_dispatch_verified": "wait_threads confirms existing Astra research chat active on new turn",
-    "feedback_to_research": "CI39661096034 collected: USize repair1207045e PASS, preconverted-bmm da9a9fab PASS, checked-floatarray5be0735a PASS exact obligations+bench. Native-fold-sum only failed final transport at1310: folded initial ofFloat32(ofBits0) versusposZero. D created native-fold-sum-proof1 with explicit hz : ofFloat32(ofBits0)=posZero by rfl, rw[hz]at h; runtime unchanged. D advances passing3 to full gates now (especially accepted-theorem axioms for checked opaque casts). Word-finite candidate can join next statement batch after confirmation slot frees. Exact original errors in39661096034/download-3aecd6b983f24eada0a9c6bca013ceb3/diagnostics/f01-d2-native-fold-sum/replay.log. Please do not duplicate D zero repair.",
+    "feedback_to_research": "CI39661096034 collected: USize repair1207045e PASS, preconverted-bmm da9a9fab PASS, checked-floatarray5be0735a PASS exact obligations+bench. Native-fold-sum only failed final transport at1310: folded initial ofFloat32(ofBits0) versusposZero. D created native-fold-sum-proof1 with explicit hz : ofFloat32(ofBits0)=posZero by rfl, rw[hz]at h; runtime unchanged. D advances passing3 to full gates now (especially accepted-theorem axioms for checked opaque casts). Word-finite candidate can join next statement batch after confirmation slot frees. Exact original errors in39661096034/download-3aecd6b983f24eada0a9c6bca013ceb3/diagnostics/f01-d2-native-fold-sum/replay.log. Please do not duplicate D zero repair. Independent final-finite confirmation39661038366 full PASS ratio0.3458359236 vs discovery0.3454501833. Full layout/index batch39663131701 seed309 started19:36:34. D copied R2-07 word-finite1c0f8496 byte-exact, local original policy PASS; next statement batch combines it with D fold-zero repair48e42d5f. R2-W03 ZIP remains research evidence; D has not adopted its unproved conversion theorem.",
     "research_requests": [
       {
         "id": "D2-FINAL-FINITE",
@@ -627,26 +653,18 @@
   "active_jobs": [
     {
       "kind": "github_ci",
-      "run": 39661038366
+      "run": 39663131701
     }
   ],
   "active_goal": "继续协作推进优化10h；目标是拿下新的冠军",
   "pending_candidates": [
     {
-      "candidate": "f01-d2-usize-bmm-proof1",
-      "state": "READY_STATEMENT_ONLY"
+      "candidate": "f01-d2-native-fold-sum-proof1",
+      "state": "READY_STATEMENT"
     },
     {
-      "candidate": "f01-d2-preconverted-bmm",
-      "state": "READY_STATEMENT_ONLY"
-    },
-    {
-      "candidate": "f01-d2-native-fold-sum",
-      "state": "READY_STATEMENT_ONLY"
-    },
-    {
-      "candidate": "f01-d2-checked-floatarray",
-      "state": "READY_STATEMENT_ONLY"
+      "candidate": "f01-d2-word-finite-guards",
+      "state": "READY_STATEMENT"
     }
   ],
   "current_official_refresh": {

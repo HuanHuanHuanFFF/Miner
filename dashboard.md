@@ -6,7 +6,7 @@
 | --- | --- | --- | ---: | --- |
 | 加法 add | [#174](https://conjectures.io/v1/competitions/floatlib/submissions/174) | [精简原生加乘](competitions/floatlib/candidates/f01-d2-no-raw-guards-proof1/Kernel.lean) | **约 1.9×** | 通过一次 |
 | 乘法 mul | #174 | [精简原生加乘](competitions/floatlib/candidates/f01-d2-no-raw-guards-proof1/Kernel.lean) | **约 2.7×** | 通过一次 |
-| 求和 sum | #174 | [最终检查原生归约](competitions/floatlib/candidates/f01-d2-final-finite/Kernel.lean) | **约 4.5×** | 通过一次 |
-| 矩阵乘法 bmm | #174 | [最终检查原生归约](competitions/floatlib/candidates/f01-d2-final-finite/Kernel.lean) | **约 34×** | 通过一次 |
+| 求和 sum | #174 | [最终检查原生归约](competitions/floatlib/candidates/f01-d2-final-finite/Kernel.lean) | **约 4.5×** | 通过两次 |
+| 矩阵乘法 bmm | #174 | [最终检查原生归约](competitions/floatlib/candidates/f01-d2-final-finite/Kernel.lean) | **约 34×** | 通过两次 |
 
 **结论：差距进一步缩小，当前仍不能取代冠军。**
