@@ -43,6 +43,13 @@ def main():
             for line in process.stdout:
                 stream.write(line);stream.flush();sys.stdout.buffer.write(line);sys.stdout.flush()
             code=process.wait()
+        # Preserve the authoritative gate; debugging artifacts have their own label.
+        diagnostic=TRACK/'candidates/f01-word-tensors/ci-diagnostics.py'
+        if name!='baseline' and diagnostic.is_file():
+            try:
+                subprocess.run([sys.executable,str(diagnostic),'--upstream',str(UPSTREAM),'--kernel',str(candidate/'Kernel.lean'),'--reports',str(REPORTS),'--name',name,'--verdict',str(verdict)],check=False,timeout=150)
+            except subprocess.TimeoutExpired:
+                save(REPORTS/(name+'-diagnostic-timeout.json'),{'diagnostic_only':True,'timeout_seconds':150,'original_verdict_unchanged':True})
         original=json.loads(verdict.read_bytes()) if verdict.exists() else None
         row={'candidate':name,'kernel_sha256':digest,'reference_sha256':sha(official_kernel),'exit_code':code,'wall_seconds':round(time.monotonic()-started,3),'full_gate':bool(code==0 and original and original.get('passed') and original.get('mode')=='gate' and original.get('stage')=='score'),'verdict':verdict.name,'seed':int(seed),'formal_online_result':'UNKNOWN'}
         if row['full_gate']:
