@@ -37,6 +37,9 @@ eligible['bmm'].extend(['f01-d2-native-bmm-proof1','f01-d2-usize-bmm'])
 eligible['bmm'].extend(['f01-d2-usize-bmm-proof1','f01-d2-preconverted-bmm','f01-d2-checked-floatarray'])
 eligible['sum'].append('f01-d2-native-fold-sum-proof1')
 for k in ['add','mul']:eligible[k].append('f01-d2-word-finite-guards-proof1')
+labels.update({'f01-d2-preconverted-usize':'预转换与机器字索引','f01-d2-word-preconverted-usize':'整数判断组合优化','f01-d2-hybrid-preconverted-usize':'混合乘法组合优化','f01-d2-web-packed4-proof1':'四输出矩阵累加'})
+eligible['bmm'].extend(['f01-d2-preconverted-usize','f01-d2-word-preconverted-usize','f01-d2-hybrid-preconverted-usize','f01-d2-web-packed4-proof1'])
+for k in ['add','mul']:eligible[k].extend(['f01-d2-word-preconverted-usize','f01-d2-hybrid-preconverted-usize'])
 selected={}
 for k,names in eligible.items():
  options=[]
