@@ -1,6 +1,6 @@
 {
   "state": "COLLAB10H_ACTIVE_MAJOR_NATIVE_REDUCTION_PASS",
-  "updated_at_utc": "2026-10-21T19:49:51.111055+00:00",
+  "updated_at_utc": "2026-10-21T20:09:10.871373+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T12:16:11+08:00",
@@ -46,9 +46,9 @@
   "candidate_readiness": "FULL_GATE_PASS_DISCOVERY",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "Run word-finite + fold proof1 statement batch; collect live full layout39663131701; combine only passing and measured exact components.",
+  "next_action": "Run full scalar/fold batch and statement preconverted-USize combo, at most2 CI; preserve standalone USize regression and avoid composing isolated gains.",
   "research_decision": "Final-only-finite backward proof is now full-gated and materially faster. Continue largest-gap bmm through USize/proved bounds, conversion amortization and multi-output scheduling. Keep scalar word-predicate route as independent follow-up.",
-  "execution_state": "BASE_CONFIRMED_LAYOUT_FULL_GATES_RUNNING_SCALAR_FOLD_PROOFS_READY",
+  "execution_state": "LAYOUT_GATES_MEASURED_PREPARING_FIRST_INTEGRATION",
   "local_project_check": {
     "status": "PASS",
     "scope": "Root project check after four new candidate manifests and updated four-operation dashboard;49 candidates. Separate from actual Lean/full gate results.",
@@ -549,10 +549,28 @@
         "seed": 309,
         "commit": "b71b9e4d0591d8efa379697a21f5b6d4797fcd2e",
         "created_at_utc": "2026-10-21T19:36:34Z",
-        "state": "in_progress",
+        "state": "completed",
         "mode": "full-gate",
         "purpose": "Full gates and timing for three compiled index/layout mechanisms; checked FloatArray axiom audit required",
-        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T193626Z/dispatch.json"
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T193626Z/dispatch.json",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39663131701"
+      },
+      {
+        "run": 39665122377,
+        "candidates": [
+          "f01-d2-native-fold-sum-proof1",
+          "f01-d2-word-finite-guards"
+        ],
+        "seed": 310,
+        "commit": "5e84c851faf78398f916879e2bdcceacabdff46b",
+        "created_at_utc": "2026-10-21T19:50:30Z",
+        "state": "completed",
+        "mode": "statement-only",
+        "purpose": "Exact fold-zero proof repair and scalar raw-word finite predicate proof",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T195022Z/dispatch.json",
+        "conclusion": "failure",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39665122377"
       }
     ],
     "research_handoffs_processed": [
@@ -591,6 +609,15 @@
         "decision": "Adopt exact byte-identical raw-word finite guard candidate for next statement batch",
         "candidate": "competitions/floatlib/candidates/f01-d2-word-finite-guards",
         "source_sha256": "1c0f8496c85fb3a4e84494ac1708576b048a183e90eb8bbc1b62eb5375d5ab6e"
+      },
+      {
+        "id": "R2-06",
+        "decision": "Original W03 ZIP independently SHA/CRC checked by D; numeric conversion retained as research only, full theorem not adopted"
+      },
+      {
+        "id": "R2-08",
+        "decision": "All3 original web ZIPs independently SHA/CRC checked; retain Packed4 and decoder proof routes, park reported slower scalar sum variant; no downloaded code executed by D",
+        "evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/web-original-audit.json"
       }
     ],
     "confirmation_start_utc": "2026-10-22T03:15:00Z",
@@ -598,7 +625,7 @@
     "previous_state": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/previous-state.json",
     "formal_goal": "Actual current-champion promotion must be verified; no goal completion from public-reference results alone.",
     "research_dispatch_verified": "wait_threads confirms existing Astra research chat active on new turn",
-    "feedback_to_research": "CI39661096034 collected: USize repair1207045e PASS, preconverted-bmm da9a9fab PASS, checked-floatarray5be0735a PASS exact obligations+bench. Native-fold-sum only failed final transport at1310: folded initial ofFloat32(ofBits0) versusposZero. D created native-fold-sum-proof1 with explicit hz : ofFloat32(ofBits0)=posZero by rfl, rw[hz]at h; runtime unchanged. D advances passing3 to full gates now (especially accepted-theorem axioms for checked opaque casts). Word-finite candidate can join next statement batch after confirmation slot frees. Exact original errors in39661096034/download-3aecd6b983f24eada0a9c6bca013ceb3/diagnostics/f01-d2-native-fold-sum/replay.log. Please do not duplicate D zero repair. Independent final-finite confirmation39661038366 full PASS ratio0.3458359236 vs discovery0.3454501833. Full layout/index batch39663131701 seed309 started19:36:34. D copied R2-07 word-finite1c0f8496 byte-exact, local original policy PASS; next statement batch combines it with D fold-zero repair48e42d5f. R2-W03 ZIP remains research evidence; D has not adopted its unproved conversion theorem.",
+    "feedback_to_research": "Full309 collected, all3 pass exact replay/checksums and ONLY3 allowed axioms, including checked FloatArray. USize-alone bmm0.13978458 vs parent0.1164 REGRESSION (do not adopt standalone); preconverted bmm0.09598754 and checked FloatArray0.09633361 effectively tied; their overall0.328059/0.322128 includes unchanged scalar timing differences, do not attribute that gap to layout. Scalar/fold310: fold-zero repair48e42d5f compile PASS; word1c0f8496 failed only four scalar wrapper unresolved Model.NativeBinary32.expField identifiers; D fully qualified in640400c3, proof mathematics unchanged, will run full gate. D first measured-mechanism integration is preconverted+USize e87603f9: no per-MAC bit calls now, so index cost/optimizer situation differs from negative standalone. This exact combo still needs statement/full measurement. R focus Packed4/multi-output and complete signed-table conversion proof; do not duplicate D namespace repair or combo. D independently SHA/CRC checked all three original E:/Download web ZIPs without executing code.",
     "research_requests": [
       {
         "id": "D2-FINAL-FINITE",
@@ -650,21 +677,22 @@
     },
     "candidate_role": "Frozen reference/control only; no longer the primary development route"
   },
-  "active_jobs": [
-    {
-      "kind": "github_ci",
-      "run": 39663131701
-    }
-  ],
+  "active_jobs": [],
   "active_goal": "继续协作推进优化10h；目标是拿下新的冠军",
   "pending_candidates": [
     {
-      "candidate": "f01-d2-native-fold-sum-proof1",
-      "state": "READY_STATEMENT"
+      "candidate": "f01-d2-preconverted-usize",
+      "state": "READY_STATEMENT",
+      "kernel_sha256": "e87603f97a7aed580e43c952a34cfccd4706fbf48410573b8824661516ba8fb2"
     },
     {
-      "candidate": "f01-d2-word-finite-guards",
-      "state": "READY_STATEMENT"
+      "candidate": "f01-d2-word-finite-guards-proof1",
+      "state": "READY_FULL_GATE_WITH_NAMESPACE_REPAIR",
+      "kernel_sha256": "640400c3843cca047f9bcef712f969c857916ed480ce266177232d46e5ebcf50"
+    },
+    {
+      "candidate": "f01-d2-native-fold-sum-proof1",
+      "state": "READY_FULL_GATE_AFTER_COMPILE"
     }
   ],
   "current_official_refresh": {

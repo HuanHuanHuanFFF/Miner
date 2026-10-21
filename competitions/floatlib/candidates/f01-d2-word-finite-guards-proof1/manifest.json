@@ -1,0 +1,15 @@
+{
+  "candidate": "f01-d2-word-finite-guards-proof1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "640400c3843cca047f9bcef712f969c857916ed480ce266177232d46e5ebcf50",
+  "candidate_bytes": 59726,
+  "parent": "f01-d2-word-finite-guards",
+  "parent_sha256": "1c0f8496c85fb3a4e84494ac1708576b048a183e90eb8bbc1b62eb5375d5ab6e",
+  "validation_mode": "full-gate",
+  "proof_status": "NAMESPACE_REPAIR_NOT_RUN; full gate includes statement",
+  "mechanism": "Scalar add/mul use raw UInt32 exponent guards before conversion instead of two native isFinite calls. Finite input overflow remains on proven native path. Production sum/bmm final-finite loops unchanged; their slow scalar fallback shares the new exact wrappers.",
+  "created_at_utc": "2026-10-21T20:06:57.870318+00:00",
+  "formal_submission": "NOT_SUBMITTED",
+  "research_source": "competitions/floatlib/candidates/f01-r2-word-finite-guards/Kernel.lean",
+  "repair": "CI39665122377 reports only four wrapper uses of unresolved Model.NativeBinary32.expField; qualify all uses. Mathematical bridge already elaborated without reported error. Runtime expression unchanged."
+}
