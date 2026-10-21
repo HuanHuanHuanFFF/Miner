@@ -6,10 +6,25 @@
   "parent": "f01-d2-word-finite-guards",
   "parent_sha256": "1c0f8496c85fb3a4e84494ac1708576b048a183e90eb8bbc1b62eb5375d5ab6e",
   "validation_mode": "full-gate",
-  "proof_status": "NAMESPACE_REPAIR_NOT_RUN; full gate includes statement",
+  "proof_status": "PASS_FULL_OFFICIAL_GATE_PUBLIC",
   "mechanism": "Scalar add/mul use raw UInt32 exponent guards before conversion instead of two native isFinite calls. Finite input overflow remains on proven native path. Production sum/bmm final-finite loops unchanged; their slow scalar fallback shares the new exact wrappers.",
   "created_at_utc": "2026-10-21T20:06:57.870318+00:00",
   "formal_submission": "NOT_SUBMITTED",
   "research_source": "competitions/floatlib/candidates/f01-r2-word-finite-guards/Kernel.lean",
-  "repair": "CI39665122377 reports only four wrapper uses of unresolved Model.NativeBinary32.expField; qualify all uses. Mathematical bridge already elaborated without reported error. Runtime expression unchanged."
+  "repair": "CI39665122377 reports only four wrapper uses of unresolved Model.NativeBinary32.expField; qualify all uses. Mathematical bridge already elaborated without reported error. Runtime expression unchanged.",
+  "full_gate_run": 39668103926,
+  "full_gate_evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39668103926/download-26ce86e4a87f461daff0642f2b223fa3/f01-d2-word-finite-guards-proof1-verdict.json",
+  "ratio_vs_shipped": 0.3067307843098292,
+  "kernels_vs_shipped": {
+    "add": 0.4816022619379939,
+    "mul": 0.7007305025193449,
+    "sum": 0.13637769868585733,
+    "bmm": 0.11614661122921906
+  },
+  "allowed_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "adoption": "RETAIN_SCALAR_COMPONENT_FOR_EXACT_INTEGRATION"
 }
