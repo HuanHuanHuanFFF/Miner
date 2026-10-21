@@ -1,6 +1,6 @@
 {
-  "state": "CANDIDATE_READY",
-  "updated_at_utc": "2026-10-21T07:06:10.135857+00:00",
+  "state": "PUBLIC_FULL_GATE_VERIFIED",
+  "updated_at_utc": "2026-10-21T07:26:31.972495+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-21T15:07:40+08:00",
@@ -12,16 +12,15 @@
   "baseline_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
   "manifest": "competitions/floatlib/candidates/f01-mul-log2-proof3/manifest.json",
   "mechanism": "FastMul.fastLog2 checks x >>> 47 == 1, then x >>> 46 == 1, otherwise reuses the six-step binary-search helper. No rounding, scalar fallback, add or tensor-loop change.",
-  "proof_status": "Lean equivalence proof source written using existing log2_shift; not compiled or replayed",
+  "proof_status": "PASS: exact four obligations, kernel replay, allowed axioms",
   "local_model": "PASS_FINITE_PYTHON_MODEL: 600313 values; zero mismatches",
-  "lean_gate": "NOT_RUN",
-  "benchmark": "NOT_RUN",
-  "requested_environment_action": "Environment owner collects existing run and marks STOPPED_AFTER_ENVIRONMENT_CONFIGURATION. No request for another environment-owned dispatch. Development will then test proof2 and standalone rse-threshold under its current authorization.",
+  "lean_gate": "PASS_FULL_OFFICIAL_GATE_PUBLIC",
+  "benchmark": "VERIFIED_SINGLE_PUBLIC_RUN",
+  "requested_environment_action": "NONE: environment handoff finished",
   "remaining": [
-    "Official Lean compilation and fixed conjunction",
-    "Kernel replay and dependency audit",
-    "Official checksum and full-harness paired measurement",
-    "Independent confirmation if a signal justifies it"
+    "Independent fresh-runner/seed confirmation NOT_RUN",
+    "Current live-champion comparison and formal online admission UNKNOWN; no submission",
+    "RSE proof repair incomplete; its observed statement failures preserved"
   ],
   "edit_scope": "Only f01-* candidates, docs/first-candidate.md, development-status.json",
   "baseline_bytes": 33043,
@@ -33,26 +32,27 @@
       "candidate": "competitions/floatlib/candidates/f01-mul-rse-threshold",
       "kernel_sha256": "28a60458bc2e8a1a69d1d65f18a1d35d15542aeddc38e7744f12d70690bee3ed",
       "kernel_bytes": 35983,
-      "state": "CANDIDATE_READY",
+      "state": "FAIL_STATEMENT_TYPECHECK",
       "mechanism": "Standalone from baseline: FastMul nearest-even threshold becomes remainder > half - (quotient & 1); add and log2 unchanged.",
       "local_model": "PASS_FINITE_PYTHON_MODEL: 924800 decisions; zero mismatches",
-      "lean_gate": "NOT_RUN",
-      "benchmark": "NOT_RUN",
-      "priority": "After first candidate; do not combine before separate gate and performance evidence"
+      "lean_gate": "FAIL_STATEMENT: run 39558841465",
+      "benchmark": "NOT_RUN: rejected before timing",
+      "priority": "After first candidate; do not combine before separate gate and performance evidence",
+      "actual_run_id": 39558841465
     }
   ],
   "environment_feedback_read_at_utc": "2026-10-21T06:23:33.060938+00:00",
-  "environment_state_seen": "CI_RUNNING; first run installs official environment. Environment scope updated to no new dispatch after configuration.",
-  "candidate_readiness": "CANDIDATE_READY",
+  "environment_state_seen": "BASELINE_VERIFIED; environment owner STOPPED_AFTER_ENVIRONMENT_CONFIGURATION at committed 6ed35056",
+  "candidate_readiness": "PASS_PUBLIC_FULL_GATE_SINGLE_RUN_SIGNAL",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "Dispatch one final exact proof3 full-gate acceptance before research cutoff; retain two actual failed versions and the rse failure, no more algorithm variants.",
+  "next_action": "No new research or CI under the ended window. Preserve and publish exact artifacts/report; future authorized work starts from frozen proof3 and independent confirmation.",
   "research_decision": "Two independent local mechanisms are ready. Defer further variants and combination until official Lean and full-harness evidence arrives; no performance claim.",
-  "execution_state": "PREPARING_FINAL_PROOF3_ACCEPTANCE",
+  "execution_state": "ACCEPTANCE_COMPLETE_REPORTING",
   "local_project_check": {
     "status": "PASS",
-    "executed_at_utc": "2026-10-21T05:37:00Z",
-    "scope": "Root project check: local links, syntax, manifests and workflows only; no Lean, CI or chain operation."
+    "checked_at_utc": "2026-10-21T07:26:31.972495+00:00",
+    "scope": "Root project check: local links, syntax, manifests and workflows, 5 FloatLib candidate folders. Actual Lean/score acceptance is bound separately to CI 39559796985."
   },
   "previous_deadline_beijing": "2026-10-21T15:16:00+08:00",
   "continuation_window": {
@@ -66,9 +66,9 @@
   "original_candidate": {
     "candidate": "competitions/floatlib/candidates/f01-mul-log2",
     "kernel_sha256": "ac4f32a610e1e4b66141d8cb8d099411cda476ffe6c5cd821df0ede41c8158d7",
-    "status": "PRESERVED_FIRST_FREEZE; potential redundant proof tactic identified before compiler feedback"
+    "status": "FAIL_STATEMENT: run 39554146703, lines 645/657"
   },
-  "proof_preflight_note": "Actual CI did not report redundant-tactic failures; instead original final simpa using hl.symm statements fail. Proof1 leaves those failing lines unchanged and stays NOT_RUN. Proof2 explicitly reduces log2(1)=0 and +0, then exact hl.symm. All runtime definitions unchanged.",
+  "proof_preflight_note": "The redundant-rfl hypothesis was not observed. Proof2 introduced failed conversion steps. Proof3 retains the original conversions and explicitly reduces Nat.log2(1) and +0; actual full gate passed.",
   "ci_responsibility": {
     "environment_scope_seen": "Environment chat stops after configuration, finishes and collects already-started run 39554146703; no further candidate dispatch by environment chat.",
     "development_scope": "Current human request authorizes all development/verification operations. Development continues candidate CI after collecting the current run; do not duplicate/cancel existing jobs.",
@@ -76,11 +76,11 @@
     "git_rule": "Commit only explicit owned paths; never stage/commit environment files. Keep shared branch.",
     "receipt_root": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs",
     "existing_run": "39554146703",
-    "new_run_state": "DISPATCHED_EXACT_COMMIT",
+    "new_run_state": "ALL_DISPATCHED_RUNS_TERMINAL_AND_COLLECTED",
     "takeover_condition": "Wait for environment_owner_state=STOPPED_AFTER_ENVIRONMENT_CONFIGURATION before shared Git or new CI dispatch, as updated HANDOFF.md explicitly requires.",
     "helper_checks": "Candidate-local CI helper syntax/help and root project checks PASS; no new CI dispatched.",
     "environment_stop_verified_commit": "6ed35056",
-    "development_owner_state": "ACTIVE_GIT_PUSH_AND_CI_OWNER"
+    "development_owner_state": "FINISHING_BOUNDED_WINDOW_DELIVERY"
   },
   "receipt_auditor": "f01-mul-log2-proof1/analyze.py audits exact hashes, original verdict, fingerprints, 12 classes, 25 rounds, headline ratio and bootstrap after real data arrives; NOT_RUN against real receipts yet.",
   "first_run_install_observation": {
@@ -111,10 +111,63 @@
         "f01-mul-rse-threshold"
       ],
       "seed": 43,
-      "status": "in_progress",
+      "status": "completed",
       "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T065847Z/dispatch.json",
       "research_cutoff_beijing": "2026-10-21T15:07:40+08:00",
-      "finish_rule": "Collect this run to terminal success/failure/existing timeout even after research cutoff."
+      "finish_rule": "Collect this run to terminal success/failure/existing timeout even after research cutoff.",
+      "conclusion": "failure",
+      "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39558841465/original-artifact-hashes.json"
+    },
+    {
+      "run_id": 39559796985,
+      "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39559796985",
+      "source_commit": "4c291af2d7967f0d1119a5228a58830830ee7e26",
+      "candidates": [
+        "baseline",
+        "f01-mul-log2-proof3"
+      ],
+      "seed": 44,
+      "created_at_utc": "2026-10-21T07:07:18Z",
+      "created_before_cutoff": true,
+      "status": "completed",
+      "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T070711Z/dispatch.json",
+      "conclusion": "success",
+      "completed_at_utc": "2026-10-21T07:16:00Z",
+      "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39559796985/original-artifact-hashes.json"
     }
-  ]
+  ],
+  "research_window_status": "ENDED: 2026-10-21T15:07:40+08:00",
+  "performance": {
+    "ratio": 0.967676975505967,
+    "paired_ratio_median": 0.9672345977255845,
+    "paired_ratio_min": 0.9427701116038623,
+    "paired_ratio_max": 0.9780358651303453,
+    "paired_gain_p05": 0.031751296392923956,
+    "rounds": 25,
+    "kernels": {
+      "add": {
+        "incumbent_ns": 84.35992999999999,
+        "submission_ns": 84.546414,
+        "ratio": 1.0022105755659114
+      },
+      "mul": {
+        "incumbent_ns": 64.88204999999999,
+        "submission_ns": 57.716024,
+        "ratio": 0.8895530273781423
+      },
+      "sum": {
+        "incumbent_ns": 76.206098,
+        "submission_ns": 76.233652,
+        "ratio": 1.0003615721146097
+      },
+      "bmm": {
+        "incumbent_ns": 142.919678,
+        "submission_ns": 137.964906,
+        "ratio": 0.9653317718781875
+      }
+    },
+    "public_statistical_check": "qualifies"
+  },
+  "formal_submission": "NOT_SUBMITTED",
+  "current_window_completion": "Research window closed and all three started CI jobs collected; one exact candidate fully validated publicly. Broader stability/live-champion goals remain unverified."
 }

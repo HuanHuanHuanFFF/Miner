@@ -30,7 +30,7 @@ def main():
         raw=gh(['api',f'repos/{REPO}'],e);repository=json.loads(raw);assert repository['private'] is False
         remote=json.loads(gh(['api',f'repos/{REPO}/commits/{branch}'],e));assert remote['sha']==sha,'Push precise commit before dispatch'
         stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ');receipt=evidence/('dispatch-'+stamp);receipt.mkdir()
-        (receipt/'repository.response.json').write_text(raw,encoding='utf-8')
+        (receipt/'repository.response.json').write_bytes(raw.encode('utf-8'))
         checked={}
         paths=['competitions/floatlib/pins.json','.github/workflows/'+args.workflow,'competitions/floatlib/scripts/ci-prepare.sh','competitions/floatlib/scripts/ci-setup.sh','competitions/floatlib/scripts/ci-validate.sh','competitions/floatlib/scripts/run-gates.py']
         paths += ['competitions/floatlib/candidates/'+n+'/Kernel.lean' for n in args.candidates.split(',') if n!='baseline']
@@ -65,6 +65,6 @@ def main():
             save(target/'original-artifact-hashes.json',{'artifact':artifact,'directory':stage.name,'files':hashes})
             for s in stage.rglob('summary.json'):
                 summary=json.loads(s.read_text());assert summary['source_commit']==meta['headSha'];print(json.dumps(summary,ensure_ascii=False)[:12000])
-        (target/'ci.log').write_text(gh(['run','view',args.run,'--repo',REPO,'--log'],e),encoding='utf-8')
+        (target/'ci.log').write_bytes(gh(['run','view',args.run,'--repo',REPO,'--log'],e).encode('utf-8'))
 
 if __name__=='__main__':main()
