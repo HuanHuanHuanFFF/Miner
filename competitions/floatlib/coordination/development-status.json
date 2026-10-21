@@ -1,9 +1,9 @@
 {
-  "state": "COMPLETED_NEW_EXPERIMENTS_AND_INDEPENDENT_VALIDATION",
-  "updated_at_utc": "2026-10-21T11:53:37.200700+00:00",
+  "state": "COLLAB10H_ACTIVE",
+  "updated_at_utc": "2026-10-21T18:24:00.590717+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
-  "deadline_beijing": "2026-10-21T20:04:07+08:00",
+  "deadline_beijing": "2026-10-22T12:16:11+08:00",
   "official_commit": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
   "candidate": "competitions/floatlib/candidates/f01-d1-native-both-proof1",
   "kernel": "competitions/floatlib/candidates/f01-d1-native-both-proof1/Kernel.lean",
@@ -18,9 +18,9 @@
   "benchmark": "VERIFIED_TWO_FROZEN_SOURCE_PUBLIC_RUNS",
   "requested_environment_action": "NONE: environment handoff finished",
   "remaining": [
-    "Project goal: reduce bmm inner-loop conversion/guard overhead while preserving exact separate mul/add order",
-    "Project goal: integrate promising independently validated components into one exact frozen package and validate that package",
-    "Formal championship comparison/promotion has not been attempted; no formal upload authorized by this work"
+    "Develop and prove a materially stronger full package, starting with bmm native accumulation",
+    "Freeze and independently confirm competitive performance against refreshed champion evidence",
+    "Inspect current official submission conditions and exact artifact before any formal action; actual champion promotion remains required"
   ],
   "edit_scope": "Only f01-* candidates, docs/first-candidate.md, development-status.json",
   "baseline_bytes": 33043,
@@ -46,9 +46,9 @@
   "candidate_readiness": "PASS_FULL_GATE_AND_INDEPENDENT_CONFIRMATION",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "No active work in this window. Next authorized research should prioritize bmm native accumulator/guard overhead.",
+  "next_action": "Dispatch statement-only exact first native-bmm candidate; use real errors for repair, then full gate and benchmark.",
   "research_decision": "Prioritize bmm native accumulator/guard removal next; current native package and public bridge fully validated. No new experiment started after independent confirmation.",
-  "execution_state": "ALL_11_CURRENT_WINDOW_CI_TERMINAL_AND_COLLECTED",
+  "execution_state": "RESTORING_AND_STARTING_FIRST_NATIVE_BMM_EXPERIMENT",
   "local_project_check": {
     "status": "PASS",
     "scope": "Root project check after candidate manifests, helper and dashboard changes. Exact full gates and committed-byte audits recorded separately.",
@@ -293,7 +293,7 @@
     "statement_only": "Explicitly separate mode; never sets full_gate true",
     "raw_build_capture": "errors(text,status) calling convention preflight PASS"
   },
-  "research_result_report": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/README.md",
+  "research_result_report": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/README.md",
   "research_result_summary": "competitions/floatlib/candidates/f01-d1-inline-all/window1h/summary.json",
   "current_candidate_role": "Frozen whole-entry native arithmetic package; not yet able to replace current champion",
   "best_checked_new_component": {
@@ -392,266 +392,36 @@
     "adoption_evidence": "competitions/floatlib/research/astra-collab-20261021/newer-mul-source-receipt.json"
   },
   "collaboration": {
-    "window_id": "collab1h-20261021T103209Z",
-    "start_utc": "2026-10-21T10:32:09Z",
-    "end_utc": "2026-10-21T11:32:09Z",
-    "status": "CLOSED_ALL_STARTED_JOBS_COLLECTED",
+    "window_id": "collab10h-20261021T181611Z",
+    "start_utc": "2026-10-21T18:16:11+00:00",
+    "end_utc": "2026-10-22T04:16:11+00:00",
+    "status": "ACTIVE",
     "priority": [
       "bmm",
       "sum",
       "add",
       "mul"
     ],
-    "handoff": "competitions/floatlib/coordination/astra-handoff.md",
-    "research_status": "competitions/floatlib/research/astra-collab-20261021/research-status.json",
+    "handoff": "competitions/floatlib/coordination/astra-handoff-10h.md",
     "research_thread": "01a15e06-b75c-7811-b0a0-194d8877365d",
+    "research_status": "competitions/floatlib/research/astra-collab-20261022/research-status.json",
     "development_thread": "01a15ce7-bf54-74b2-8a2b-4a1e2f3828d7",
-    "active_ci": [
-      {
-        "run": 39585884968,
-        "candidates": [
-          "f01-d1-inline-all",
-          "f01-d1-force-tensors"
-        ],
-        "seed": 211,
-        "commit": "f9ed855983114c764805ca67a5d9fb8e140eae74",
-        "state": "completed",
-        "conclusion": "success",
-        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39585884968"
-      },
-      {
-        "run": 39586252775,
-        "candidates": [
-          "f01-d1-product-buffer"
-        ],
-        "seed": 212,
-        "commit": "60c5be2aa2d0b4798730a4d775559d18f39e9193",
-        "state": "completed",
-        "conclusion": "success",
-        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586252775"
-      },
-      {
-        "run": 39586444651,
-        "candidates": [
-          "f01-d1-direct-dot-loop"
-        ],
-        "seed": 213,
-        "commit": "ba4bb9ee0802319c4afdf7825d6bf9a8eeabe083",
-        "state": "completed",
-        "conclusion": "success",
-        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586444651"
-      },
-      {
-        "run": 39586894453,
-        "candidates": [
-          "f01-d1-direct-sum-loop"
-        ],
-        "seed": 214,
-        "commit": "cced9fc7ace3c7445203a04d1c52170cb03345c4",
-        "state": "completed",
-        "mode": "statement-only",
-        "conclusion": "failure",
-        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586894453"
-      },
-      {
-        "run": 39587321905,
-        "candidates": [
-          "f01-d1-native-add"
-        ],
-        "seed": 215,
-        "commit": "ea6ba7060ce3c4171db60824d980072d1e2a0324",
-        "state": "completed",
-        "conclusion": "failure",
-        "reason": "statement: let-bound guard not reduced before split",
-        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39587321905"
-      },
-      {
-        "run": 39587598294,
-        "candidates": [
-          "f01-d1-direct-sum-proof1"
-        ],
-        "seed": 216,
-        "commit": "77dc71c4d13609d1dce51021dd3edcb99bf2cf29",
-        "state": "completed",
-        "conclusion": "success",
-        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39587598294"
-      },
-      {
-        "run": 39588316068,
-        "candidates": [
-          "f01-d1-native-add-proof1",
-          "f01-d1-native-mul-bridge"
-        ],
-        "seed": 217,
-        "commit": "4673df52aa989b77d2e077b9948e4b2f02bda89d",
-        "state": "completed",
-        "mode": "statement-only",
-        "conclusion": "failure",
-        "partial_success": "Native add proof1 compile PASS, mul bridge compile FAIL",
-        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39588316068"
-      },
-      {
-        "run": 39589111347,
-        "candidates": [
-          "f01-d1-native-add-proof1"
-        ],
-        "seed": 218,
-        "commit": "522435725c33d7af5530b4734e5a9ed676580286",
-        "state": "completed",
-        "conclusion": "success",
-        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39589111347"
-      },
-      {
-        "run": 39589987380,
-        "candidates": [
-          "f01-d1-native-both",
-          "f01-d1-native-sum-acc"
-        ],
-        "seed": 219,
-        "commit": "cb62c2196bea820fb2c86ca0d97fa67adf1bc96a",
-        "state": "completed",
-        "mode": "statement-only",
-        "conclusion": "failure",
-        "partial_success": "Native sum acc compile PASS; native both namespace errors",
-        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39589987380"
-      },
-      {
-        "run": 39590684208,
-        "candidates": [
-          "f01-d1-native-add-proof1",
-          "f01-d1-native-both-proof1",
-          "f01-d1-native-sum-acc"
-        ],
-        "seed": 220,
-        "commit": "91b23d2460a6b92f09a7e67021075f2cd140c81b",
-        "created_at_utc": "2026-10-21T11:16:07Z",
-        "state": "completed",
-        "conclusion": "success",
-        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39590684208"
-      },
-      {
-        "run": 39593447390,
-        "candidates": [
-          "f01-d1-native-both-proof1",
-          "f01-d1-native-sum-acc"
-        ],
-        "seed": 221,
-        "commit": "5f71fd17e9c00152ed53f7c8179edb8d26a8aeed",
-        "created_at_utc": "2026-10-21T11:38:28Z",
-        "state": "completed",
-        "phase": "USER_ADDED_30M_COMPLETION",
-        "purpose": "Independent frozen-source confirmation; no new mechanism or source edit",
-        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T113820Z/dispatch.json",
-        "conclusion": "success",
-        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39593447390"
-      }
-    ],
+    "git_ci_coordinator": "development",
+    "active_ci": [],
     "research_handoffs_processed": [
       {
-        "id": "R-01",
-        "candidate_sha256": "cb09e9c6913100097f21ebdc5059345885bce090894f53f8f876377edad8fcab",
-        "decision": "Adopt for controlled full-gate experiment; copied to D-owned candidate without changing source.",
-        "candidate": "competitions\\floatlib\\candidates\\f01-d1-direct-dot-loop",
-        "processed_at_utc": "2026-10-21T10:41:12.107239+00:00"
-      },
-      {
-        "id": "R-02",
-        "decision": "Read sum bridge and zero-frequency analysis. D sumLoop candidate is already in statement CI; compare proof errors before creating another variant.",
-        "processed_at_utc": "2026-10-21T10:45:51.307510+00:00"
-      },
-      {
-        "id": "R-03",
-        "candidate_sha256": "aa24752887de02da3bf89871afbf9a7e2cae2e821bef4ca1023642e603cc8177",
-        "decision": "Priority feasibility experiment: existing pinned public logical-model theorem may permit native finite addition and directly accelerates sum/bmm; full gate and axiom audit required.",
-        "candidate": "competitions/floatlib/candidates/f01-d1-native-add",
-        "processed_at_utc": "2026-10-21T10:48:23.366018+00:00"
-      },
-      {
-        "id": "R-04",
-        "decision": "Adopt only theorem feasibility checkpoint; no native mul runtime integrated.",
-        "processed_at_utc": "2026-10-21T10:56:29.231253+00:00"
-      },
-      {
-        "id": "R-05",
-        "decision": "Read parent-C attribution correction; no full gain attributed to removal of callbacks. Roundtrip theorem draft reserved after native-add succeeds.",
-        "processed_at_utc": "2026-10-21T10:58:00.432432+00:00"
-      },
-      {
-        "id": "R-06",
-        "decision": "Adopt repaired multiplication bridge into guarded native-both candidate; copy exact Option-native-sum package. Compile-only first.",
-        "processed_at_utc": "2026-10-21T11:09:58.909699+00:00"
+        "id": "R2-01",
+        "source_sha256": "923dfef502735784a9750b768d9c9de5c44c7c7b740318fe632c3ecf335fea13",
+        "candidate": "competitions/floatlib/candidates/f01-d2-no-raw-guards",
+        "decision": "Adopt exact frozen source for initial statement feasibility alongside D native-bmm; no performance claim yet."
       }
     ],
-    "git_ci_coordinator": "development",
-    "new_long_experiment_cutoff_utc": "2026-10-21T11:15:00Z",
-    "research_dispatch_verified": "Tool wait snapshot confirms active turn and initial read commentary.",
-    "development_experiment": "CI 39585884968: scalar/tensor compiler exposure. Next independent D hypothesis: Fin.foldl generic closure/boxing overhead; evaluate product-vector plus array fold with exact order.",
-    "feedback_to_research": "Native-add FULL PASS confirmed original verdict, C has real native instruction; sum .378/bmm .584 of shipped in seed218. Final CI39590684208 created11:16:07: native add independent confirmation + native both proof1 + native sum acc exact75524a31. No further candidate queue. Please focus on source/axiom/rounding review and closing your evidence/status by11:32:09; original R files remain frozen. Namespace fix in native-both-proof1: remove docstring before namespace and fully qualify FloatLib.Numerics.Dyadic.mk.injEq.",
-    "diagnostic_change": "Existing separate statement replay now captures overlay Main*/Bench* C as well as Submission, since official statement builds the bench. Exact official gate remains unchanged; next CI will inspect timer/call order.",
-    "intermediate_results": [
-      {
-        "run": 39585884968,
-        "candidate": "f01-d1-inline-all",
-        "kernel_sha256": "c875e6b10c38631f96bc63256fefa51de41310e8c56afa640439f172f791fccd",
-        "full_gate": true,
-        "ratio_vs_shipped": 0.961764952298339,
-        "kernels_vs_shipped": {
-          "add": 0.9957193065205868,
-          "mul": 0.9920425821970831,
-          "sum": 0.9301899733003214,
-          "bmm": 0.9446806646769584
-        },
-        "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39585884968/download-35cc87e943c24db9bf0fb99981b72537/f01-d1-inline-all-verdict.json"
-      },
-      {
-        "run": 39585884968,
-        "candidate": "f01-d1-force-tensors",
-        "kernel_sha256": "6428ddb3a4f13d8986fb7b65ca0a8e4d6b053995d07b3e82812bbf81cfaf7326",
-        "full_gate": true,
-        "ratio_vs_shipped": 0.9995826660750579,
-        "kernels_vs_shipped": {
-          "add": 1.013315047131964,
-          "mul": 0.9937036512293752,
-          "sum": 1.010981240474474,
-          "bmm": 0.9876079404980933
-        },
-        "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39585884968/download-35cc87e943c24db9bf0fb99981b72537/f01-d1-force-tensors-verdict.json"
-      },
-      {
-        "run": 39586252775,
-        "candidate": "f01-d1-product-buffer",
-        "kernel_sha256": "c2300c95736a4fdc3d2101c408ed65e386ceae191c339daa098d4c37f8b73b6d",
-        "full_gate": true,
-        "ratio_vs_shipped": 1.050402576946855,
-        "kernels_vs_shipped": {
-          "add": 1.00610316941678,
-          "mul": 1.0126901973873979,
-          "sum": 0.9898566286870594,
-          "bmm": 1.1268466779916833
-        },
-        "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586252775/download-5dbabe35c6a44ae3acffb0918ed28dbd/f01-d1-product-buffer-verdict.json"
-      },
-      {
-        "run": 39586444651,
-        "candidate": "f01-d1-direct-dot-loop",
-        "kernel_sha256": "cb09e9c6913100097f21ebdc5059345885bce090894f53f8f876377edad8fcab",
-        "full_gate": true,
-        "ratio_vs_shipped": 0.9733279986220069,
-        "kernels_vs_shipped": {
-          "add": 0.9991409408946794,
-          "mul": 0.9965677691563282,
-          "sum": 0.9992615764870877,
-          "bmm": 0.9336324446325669
-        },
-        "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586444651/download-f7491e72c5fd4d2aac0e6c0eeff0fbd8/f01-d1-direct-dot-loop-verdict.json"
-      }
-    ],
-    "phase": "CLOSED",
-    "final_dispatch_note": "Final frozen validation batch was identified at11:16:07, 67s after the internal11:15 scheduling checkpoint. User window end remains11:32:09. No additional candidates or long experiments will be started; complete already-started CI and collect original evidence.",
-    "new_research_stopped_at_utc": "2026-10-21T11:32:09Z",
-    "research_window_job_count": 10,
-    "added_completion_job_count": 1,
-    "closed_at_utc": "2026-10-21T11:51:46.588048+00:00"
+    "confirmation_start_utc": "2026-10-22T03:15:00Z",
+    "new_long_experiment_cutoff_utc": "2026-10-22T03:40:00Z",
+    "previous_state": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/previous-state.json",
+    "formal_goal": "Actual current-champion promotion must be verified; no goal completion from public-reference results alone.",
+    "research_dispatch_verified": "wait_threads confirms existing Astra research chat active on new turn",
+    "feedback_to_research": "R2-01 copied byte-exact to f01-d2-no-raw-guards; queued with guarded native-bmm for statement-only feasibility. Kernel hashes923dfef5/d4e83b31. Fresh official champion174, verifier fingerprint unchanged; latest upstream licence/docs only. D will return actual Lean errors or pass and C evidence."
   },
   "completion_window": {
     "start_utc": "2026-10-21T11:34:07.663758+00:00",
@@ -714,5 +484,31 @@
     },
     "candidate_role": "Frozen reference/control only; no longer the primary development route"
   },
-  "active_jobs": []
+  "active_jobs": [],
+  "active_goal": "继续协作推进优化10h；目标是拿下新的冠军",
+  "pending_candidates": [
+    {
+      "candidate": "f01-d2-native-bmm",
+      "sha256": "d4e83b3134f6230c17d4b4f05e705233fdb81c8ab14dc124e324facaaf480108",
+      "validation_mode": "statement-only",
+      "state": "READY_FOR_STATEMENT_CI",
+      "mechanism": "Only bmm: direct Float32 accumulator dot products with finite, raw round-trip and finite-product guards; exact original ordered fold fallback per output; base addresses hoisted. add/mul/sum inherit validated native-both."
+    },
+    {
+      "candidate": "f01-d2-no-raw-guards",
+      "sha256": "923dfef502735784a9750b768d9c9de5c44c7c7b740318fe632c3ecf335fea13",
+      "state": "READY_FOR_STATEMENT_CI",
+      "validation_mode": "statement-only"
+    }
+  ],
+  "current_official_refresh": {
+    "champion": 174,
+    "digest": "67e44fd4b17186dbe6b1728dea49611288bb16d2586ebbb3a8a2f93aea74c009",
+    "verification_current": true,
+    "verifier_fingerprint": "c78c0073afb74116f0159e7b8c7f5c05561ce556bbce9d94a35facc08467da2d",
+    "policy_snapshot": "589",
+    "source_commit_observed": "21e42d8f93cd3ecdf5dc4a84c7951ad4c17b185c",
+    "pin_unchanged_reason": "Compare from978cc5b4 changes only licensing/docs and upstream CI lint; gate/contracts/bench/pins byte paths unchanged.",
+    "evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/official-opening"
+  }
 }
