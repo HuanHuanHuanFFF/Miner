@@ -30,10 +30,13 @@ for source,rows in [('old',old['records']),('previous',previous['records']),('ne
    weights={n:x['submission_ns'] for n,x in champ['classes'].items() if n.startswith(k+':')};values[k]=sum(w*v['classes'][n]['ratio']/factors[n] for n,w in weights.items())/sum(weights.values())
   overall=sum(x['submission_ns']*v['classes'][n]['ratio']/factors[n] for n,x in champ['classes'].items())/sum(x['submission_ns'] for x in champ['classes'].values())
   records.append({'candidate':r['candidate'],'kernel_sha256':r['kernel_sha256'],'run':r['run'],'values':values,'whole_entry_inferred':overall,'verdict_path':path.relative_to(ROOT).as_posix(),'verdict_sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
-labels={'f01-rebuilt-mul-proof1':'固定宽度乘法','f01-index-hoist-proof2':'地址基址外提','f01-tensor-specialization':'调用边界特化','f01-d1-inline-all':'标量与张量展开','f01-d1-direct-dot-loop':'直接点积循环','f01-d1-native-add-proof1':'已证原生加法','f01-d1-native-both-proof1':'已证原生加乘','f01-d1-native-sum-acc':'原生累加器求和','f01-d2-native-bmm-proof1':'原生矩阵累加器','f01-d2-no-raw-guards-proof1':'精简原生加乘','f01-d2-final-finite':'最终检查原生归约','f01-d2-usize-bmm':'机器字索引矩阵'}
+labels={'f01-rebuilt-mul-proof1':'固定宽度乘法','f01-index-hoist-proof2':'地址基址外提','f01-tensor-specialization':'调用边界特化','f01-d1-inline-all':'标量与张量展开','f01-d1-direct-dot-loop':'直接点积循环','f01-d1-native-add-proof1':'已证原生加法','f01-d1-native-both-proof1':'已证原生加乘','f01-d1-native-sum-acc':'原生累加器求和','f01-d2-native-bmm-proof1':'原生矩阵累加器','f01-d2-no-raw-guards-proof1':'精简原生加乘','f01-d2-final-finite':'最终检查原生归约','f01-d2-usize-bmm':'机器字索引矩阵','f01-d2-usize-bmm-proof1':'机器字索引矩阵','f01-d2-preconverted-bmm':'预转换原生矩阵','f01-d2-checked-floatarray':'连续浮点数组矩阵','f01-d2-native-fold-sum-proof1':'标准循环原生求和','f01-d2-word-finite-guards-proof1':'整数判断原生加乘'}
 eligible={'add':['f01-d1-native-add-proof1','f01-d1-native-both-proof1','f01-rebuilt-mul-proof1'],'mul':['f01-rebuilt-mul-proof1','f01-d1-native-both-proof1'],'sum':['f01-tensor-specialization','f01-d1-inline-all','f01-d1-native-add-proof1','f01-d1-native-both-proof1','f01-d1-native-sum-acc'],'bmm':['f01-index-hoist-proof2','f01-d1-direct-dot-loop','f01-d1-inline-all','f01-d1-native-add-proof1','f01-d1-native-both-proof1']}
 for names in eligible.values():names.extend(['f01-d2-no-raw-guards-proof1','f01-d2-final-finite'])
 eligible['bmm'].extend(['f01-d2-native-bmm-proof1','f01-d2-usize-bmm'])
+eligible['bmm'].extend(['f01-d2-usize-bmm-proof1','f01-d2-preconverted-bmm','f01-d2-checked-floatarray'])
+eligible['sum'].append('f01-d2-native-fold-sum-proof1')
+for k in ['add','mul']:eligible[k].append('f01-d2-word-finite-guards-proof1')
 selected={}
 for k,names in eligible.items():
  options=[]
