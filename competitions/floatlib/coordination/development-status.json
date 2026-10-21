@@ -1,6 +1,6 @@
 {
   "state": "COLLAB1H_ACTIVE",
-  "updated_at_utc": "2026-10-21T11:04:16.869899+00:00",
+  "updated_at_utc": "2026-10-21T11:15:32.924334+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-21T17:40:19+08:00",
@@ -481,7 +481,23 @@
         ],
         "seed": 218,
         "commit": "522435725c33d7af5530b4734e5a9ed676580286",
-        "state": "in_progress"
+        "state": "completed",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39589111347"
+      },
+      {
+        "run": 39589987380,
+        "candidates": [
+          "f01-d1-native-both",
+          "f01-d1-native-sum-acc"
+        ],
+        "seed": 219,
+        "commit": "cb62c2196bea820fb2c86ca0d97fa67adf1bc96a",
+        "state": "completed",
+        "mode": "statement-only",
+        "conclusion": "failure",
+        "partial_success": "Native sum acc compile PASS; native both namespace errors",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39589987380"
       }
     ],
     "research_handoffs_processed": [
@@ -524,7 +540,7 @@
     "new_long_experiment_cutoff_utc": "2026-10-21T11:15:00Z",
     "research_dispatch_verified": "Tool wait snapshot confirms active turn and initial read commentary.",
     "development_experiment": "CI 39585884968: scalar/tensor compiler exposure. Next independent D hypothesis: Fin.foldl generic closure/boxing overhead; evaluate product-vector plus array fold with exact order.",
-    "feedback_to_research": "R-06 adopted: native sum75524a31 copied to f01-d1-native-sum-acc and repaired bridge b9ee20a7 into f01-d1-native-both with guarded mul runtime. Both compile-only now for rapid feedback. Native-add full gate39589111347 still in progress. Original R packages unchanged.",
+    "feedback_to_research": "Native add proof1 FULL GATE PASS CI39589111347; ratio vs shipped .623247, kernels add .619428/sum .378156/bmm .584480. Native sum acc75524a31 COMPILE PASS CI39589987380. Native both failed only parser docstring before namespace and missing FloatLib prefix on Numerics.Dyadic.mk.injEq (full errors in run39589987380). D fixes these as native-both-proof1 and freezes final FULL batch: independent native add proof1 + native-both-proof1 + native-sum-acc, seed220. No new long experiments after11:15; focus actual failures and closing evidence.",
     "diagnostic_change": "Existing separate statement replay now captures overlay Main*/Bench* C as well as Submission, since official statement builds the bench. Exact official gate remains unchanged; next CI will inspect timer/call order.",
     "intermediate_results": [
       {
@@ -583,6 +599,7 @@
         },
         "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586444651/download-f7491e72c5fd4d2aac0e6c0eeff0fbd8/f01-d1-direct-dot-loop-verdict.json"
       }
-    ]
+    ],
+    "phase": "FINAL_FROZEN_CONFIRMATION"
   }
 }
