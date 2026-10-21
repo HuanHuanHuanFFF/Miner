@@ -83,7 +83,7 @@ jobs:
         working-directory: .
     if: github.event_name == 'workflow_dispatch' && inputs.competition == 'floatlib' && (github.event.repository.private == false || inputs.allow_private == true)
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 45
     env:
       FLOATLIB_CANDIDATES: ${{ inputs.candidates }}
       FLOATLIB_SEED: ${{ inputs.seed }}
@@ -91,6 +91,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
+          sparse-checkout: competitions/floatlib
       - name: Prepare exact source and capped sandbox
         run: bash competitions/floatlib/scripts/ci-prepare.sh
       - name: Restore pinned toolchain and dependency cache
