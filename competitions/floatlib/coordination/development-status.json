@@ -1,6 +1,6 @@
 {
   "state": "COLLAB1H_ACTIVE",
-  "updated_at_utc": "2026-10-21T10:41:12.107254+00:00",
+  "updated_at_utc": "2026-10-21T10:53:35.940278+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-21T17:40:19+08:00",
@@ -399,7 +399,9 @@
         ],
         "seed": 211,
         "commit": "f9ed855983114c764805ca67a5d9fb8e140eae74",
-        "state": "in_progress"
+        "state": "completed",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39585884968"
       },
       {
         "run": 39586252775,
@@ -408,7 +410,9 @@
         ],
         "seed": 212,
         "commit": "60c5be2aa2d0b4798730a4d775559d18f39e9193",
-        "state": "in_progress"
+        "state": "completed",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586252775"
       },
       {
         "run": 39586444651,
@@ -417,7 +421,9 @@
         ],
         "seed": 213,
         "commit": "ba4bb9ee0802319c4afdf7825d6bf9a8eeabe083",
-        "state": "in_progress"
+        "state": "completed",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586444651"
       },
       {
         "run": 39586894453,
@@ -438,6 +444,18 @@
         ],
         "seed": 215,
         "commit": "ea6ba7060ce3c4171db60824d980072d1e2a0324",
+        "state": "completed",
+        "conclusion": "failure",
+        "reason": "statement: let-bound guard not reduced before split",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39587321905"
+      },
+      {
+        "run": 39587598294,
+        "candidates": [
+          "f01-d1-direct-sum-proof1"
+        ],
+        "seed": 216,
+        "commit": "77dc71c4d13609d1dce51021dd3edcb99bf2cf29",
         "state": "in_progress"
       }
     ],
@@ -460,13 +478,76 @@
         "decision": "Priority feasibility experiment: existing pinned public logical-model theorem may permit native finite addition and directly accelerates sum/bmm; full gate and axiom audit required.",
         "candidate": "competitions/floatlib/candidates/f01-d1-native-add",
         "processed_at_utc": "2026-10-21T10:48:23.366018+00:00"
+      },
+      {
+        "id": "R-04",
+        "decision": "Adopt only theorem feasibility checkpoint; no native mul runtime integrated.",
+        "processed_at_utc": "2026-10-21T10:56:29.231253+00:00"
       }
     ],
     "git_ci_coordinator": "development",
     "new_long_experiment_cutoff_utc": "2026-10-21T11:15:00Z",
     "research_dispatch_verified": "Tool wait snapshot confirms active turn and initial read commentary.",
     "development_experiment": "CI 39585884968: scalar/tensor compiler exposure. Next independent D hypothesis: Fin.foldl generic closure/boxing overhead; evaluate product-vector plus array fold with exact order.",
-    "feedback_to_research": "Sum statement CI 39586894453 failed only two remaining definitional equalities: List.foldl with x[i.val] vs x.get i, and Fin.foldl.loop ... 0 vs Fin.foldl n ... . Recursive sumLoop_eq compiled. D freezes proof1 with final rfl for each and runs full gate. Native add CI 39587321905 active, R01 bmm full gate still active; R can use sum proof feedback for its own reasoning, do not mutate frozen packages.",
-    "diagnostic_change": "Existing separate statement replay now captures overlay Main*/Bench* C as well as Submission, since official statement builds the bench. Exact official gate remains unchanged; next CI will inspect timer/call order."
+    "feedback_to_research": "Native add CI 39587321905 failed only at split after unfold add because let-bound fx/fy were not zeta-reduced. No axiom decision yet. D proof1 adds dsimp only before split; runtime unchanged. Also compiling R04 multiplication bridge draft as a separate theorem-only checkpoint to buy concrete Lean errors while add fix compiles; no new native-mul runtime claim. R01 direct dot loop full gate passed but only bmm ~6.6% improvement vs shipped.",
+    "diagnostic_change": "Existing separate statement replay now captures overlay Main*/Bench* C as well as Submission, since official statement builds the bench. Exact official gate remains unchanged; next CI will inspect timer/call order.",
+    "intermediate_results": [
+      {
+        "run": 39585884968,
+        "candidate": "f01-d1-inline-all",
+        "kernel_sha256": "c875e6b10c38631f96bc63256fefa51de41310e8c56afa640439f172f791fccd",
+        "full_gate": true,
+        "ratio_vs_shipped": 0.961764952298339,
+        "kernels_vs_shipped": {
+          "add": 0.9957193065205868,
+          "mul": 0.9920425821970831,
+          "sum": 0.9301899733003214,
+          "bmm": 0.9446806646769584
+        },
+        "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39585884968/download-35cc87e943c24db9bf0fb99981b72537/f01-d1-inline-all-verdict.json"
+      },
+      {
+        "run": 39585884968,
+        "candidate": "f01-d1-force-tensors",
+        "kernel_sha256": "6428ddb3a4f13d8986fb7b65ca0a8e4d6b053995d07b3e82812bbf81cfaf7326",
+        "full_gate": true,
+        "ratio_vs_shipped": 0.9995826660750579,
+        "kernels_vs_shipped": {
+          "add": 1.013315047131964,
+          "mul": 0.9937036512293752,
+          "sum": 1.010981240474474,
+          "bmm": 0.9876079404980933
+        },
+        "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39585884968/download-35cc87e943c24db9bf0fb99981b72537/f01-d1-force-tensors-verdict.json"
+      },
+      {
+        "run": 39586252775,
+        "candidate": "f01-d1-product-buffer",
+        "kernel_sha256": "c2300c95736a4fdc3d2101c408ed65e386ceae191c339daa098d4c37f8b73b6d",
+        "full_gate": true,
+        "ratio_vs_shipped": 1.050402576946855,
+        "kernels_vs_shipped": {
+          "add": 1.00610316941678,
+          "mul": 1.0126901973873979,
+          "sum": 0.9898566286870594,
+          "bmm": 1.1268466779916833
+        },
+        "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586252775/download-5dbabe35c6a44ae3acffb0918ed28dbd/f01-d1-product-buffer-verdict.json"
+      },
+      {
+        "run": 39586444651,
+        "candidate": "f01-d1-direct-dot-loop",
+        "kernel_sha256": "cb09e9c6913100097f21ebdc5059345885bce090894f53f8f876377edad8fcab",
+        "full_gate": true,
+        "ratio_vs_shipped": 0.9733279986220069,
+        "kernels_vs_shipped": {
+          "add": 0.9991409408946794,
+          "mul": 0.9965677691563282,
+          "sum": 0.9992615764870877,
+          "bmm": 0.9336324446325669
+        },
+        "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39586444651/download-f7491e72c5fd4d2aac0e6c0eeff0fbd8/f01-d1-direct-dot-loop-verdict.json"
+      }
+    ]
   }
 }
