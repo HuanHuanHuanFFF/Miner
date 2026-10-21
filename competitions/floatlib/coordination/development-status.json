@@ -1,6 +1,6 @@
 {
   "state": "COLLAB1H_ACTIVE",
-  "updated_at_utc": "2026-10-21T10:53:35.940278+00:00",
+  "updated_at_utc": "2026-10-21T11:02:57.786386+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-21T17:40:19+08:00",
@@ -456,7 +456,23 @@
         ],
         "seed": 216,
         "commit": "77dc71c4d13609d1dce51021dd3edcb99bf2cf29",
-        "state": "in_progress"
+        "state": "completed",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39587598294"
+      },
+      {
+        "run": 39588316068,
+        "candidates": [
+          "f01-d1-native-add-proof1",
+          "f01-d1-native-mul-bridge"
+        ],
+        "seed": 217,
+        "commit": "4673df52aa989b77d2e077b9948e4b2f02bda89d",
+        "state": "completed",
+        "mode": "statement-only",
+        "conclusion": "failure",
+        "partial_success": "Native add proof1 compile PASS, mul bridge compile FAIL",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39588316068"
       }
     ],
     "research_handoffs_processed": [
@@ -483,13 +499,18 @@
         "id": "R-04",
         "decision": "Adopt only theorem feasibility checkpoint; no native mul runtime integrated.",
         "processed_at_utc": "2026-10-21T10:56:29.231253+00:00"
+      },
+      {
+        "id": "R-05",
+        "decision": "Read parent-C attribution correction; no full gain attributed to removal of callbacks. Roundtrip theorem draft reserved after native-add succeeds.",
+        "processed_at_utc": "2026-10-21T10:58:00.432432+00:00"
       }
     ],
     "git_ci_coordinator": "development",
     "new_long_experiment_cutoff_utc": "2026-10-21T11:15:00Z",
     "research_dispatch_verified": "Tool wait snapshot confirms active turn and initial read commentary.",
     "development_experiment": "CI 39585884968: scalar/tensor compiler exposure. Next independent D hypothesis: Fin.foldl generic closure/boxing overhead; evaluate product-vector plus array fold with exact order.",
-    "feedback_to_research": "Native add CI 39587321905 failed only at split after unfold add because let-bound fx/fy were not zeta-reduced. No axiom decision yet. D proof1 adds dsimp only before split; runtime unchanged. Also compiling R04 multiplication bridge draft as a separate theorem-only checkpoint to buy concrete Lean errors while add fix compiles; no new native-mul runtime claim. R01 direct dot loop full gate passed but only bmm ~6.6% improvement vs shipped.",
+    "feedback_to_research": "IMPORTANT: native-add proof1 7f51b433 statement/bench compile PASS in CI39588316068. D promoting exact same Kernel to full gate now; no axiom verdict yet. R04 mul bridge failed ONLY four branches with unsolved goals: Sign multiplication not reduced; IEEE signed-zero flag unknown in general fmt; roundWithAccuracy pre-decreaseExponent vs direct call. Full errors in CI39588316068/download-31cedcbd2c9646bca6ea68af4a09b28d/diagnostics/f01-d1-native-mul-bridge/full-build-output.txt. Please repair R04 with existing round/decreaseExponent lemmas, possibly add supportsSignedZero=true parameter or specialize binary32, and publish a proof-only repair soon for 11:15 cutoff. D sumLoop full gate PASS but sum ~3.94% slower, not adopted.",
     "diagnostic_change": "Existing separate statement replay now captures overlay Main*/Bench* C as well as Submission, since official statement builds the bench. Exact official gate remains unchanged; next CI will inspect timer/call order.",
     "intermediate_results": [
       {
