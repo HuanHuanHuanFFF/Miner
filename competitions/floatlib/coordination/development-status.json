@@ -1,6 +1,6 @@
 {
   "state": "COLLAB1H_ACTIVE",
-  "updated_at_utc": "2026-10-21T11:02:57.786386+00:00",
+  "updated_at_utc": "2026-10-21T11:04:16.869899+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-21T17:40:19+08:00",
@@ -473,6 +473,15 @@
         "conclusion": "failure",
         "partial_success": "Native add proof1 compile PASS, mul bridge compile FAIL",
         "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39588316068"
+      },
+      {
+        "run": 39589111347,
+        "candidates": [
+          "f01-d1-native-add-proof1"
+        ],
+        "seed": 218,
+        "commit": "522435725c33d7af5530b4734e5a9ed676580286",
+        "state": "in_progress"
       }
     ],
     "research_handoffs_processed": [
@@ -504,13 +513,18 @@
         "id": "R-05",
         "decision": "Read parent-C attribution correction; no full gain attributed to removal of callbacks. Roundtrip theorem draft reserved after native-add succeeds.",
         "processed_at_utc": "2026-10-21T10:58:00.432432+00:00"
+      },
+      {
+        "id": "R-06",
+        "decision": "Adopt repaired multiplication bridge into guarded native-both candidate; copy exact Option-native-sum package. Compile-only first.",
+        "processed_at_utc": "2026-10-21T11:09:58.909699+00:00"
       }
     ],
     "git_ci_coordinator": "development",
     "new_long_experiment_cutoff_utc": "2026-10-21T11:15:00Z",
     "research_dispatch_verified": "Tool wait snapshot confirms active turn and initial read commentary.",
     "development_experiment": "CI 39585884968: scalar/tensor compiler exposure. Next independent D hypothesis: Fin.foldl generic closure/boxing overhead; evaluate product-vector plus array fold with exact order.",
-    "feedback_to_research": "IMPORTANT: native-add proof1 7f51b433 statement/bench compile PASS in CI39588316068. D promoting exact same Kernel to full gate now; no axiom verdict yet. R04 mul bridge failed ONLY four branches with unsolved goals: Sign multiplication not reduced; IEEE signed-zero flag unknown in general fmt; roundWithAccuracy pre-decreaseExponent vs direct call. Full errors in CI39588316068/download-31cedcbd2c9646bca6ea68af4a09b28d/diagnostics/f01-d1-native-mul-bridge/full-build-output.txt. Please repair R04 with existing round/decreaseExponent lemmas, possibly add supportsSignedZero=true parameter or specialize binary32, and publish a proof-only repair soon for 11:15 cutoff. D sumLoop full gate PASS but sum ~3.94% slower, not adopted.",
+    "feedback_to_research": "R-06 adopted: native sum75524a31 copied to f01-d1-native-sum-acc and repaired bridge b9ee20a7 into f01-d1-native-both with guarded mul runtime. Both compile-only now for rapid feedback. Native-add full gate39589111347 still in progress. Original R packages unchanged.",
     "diagnostic_change": "Existing separate statement replay now captures overlay Main*/Bench* C as well as Submission, since official statement builds the bench. Exact official gate remains unchanged; next CI will inspect timer/call order.",
     "intermediate_results": [
       {
