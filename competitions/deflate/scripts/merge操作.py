@@ -180,7 +180,7 @@ class Merge:
 def main():
     p = argparse.ArgumentParser(description="merge操作：默认只预检；执行按需合并、检查、推送、清理。")
     p.add_argument("branches", nargs="*", help="指定codex/分支；省略时选取全部本地及tracking实验分支")
-    p.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
+    p.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[3])
     p.add_argument("--execute", action="store_true", help="实际执行，先fetch origin；冲突或检查失败立即停止")
     p.add_argument("--push", action="store_true", help="合并检查后推送main并核对远端")
     p.add_argument("--cleanup", action="store_true", help="推送成功后安全删除所选已合并分支；需要--push")
