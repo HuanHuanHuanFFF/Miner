@@ -19,9 +19,10 @@ def main():
     supplied=os.environ.get('FLOATLIB_CANDIDATES','baseline')
     assert re.fullmatch(r'(?:baseline|f01-[a-z0-9-]+)(?:,(?:baseline|f01-[a-z0-9-]+))*',supplied),supplied
     requested=list(dict.fromkeys(supplied.split(',')))
-    def compile_only(name):
+    def validation_mode(name):
         p=TRACK/'candidates'/name/'manifest.json'
-        return name!='baseline' and p.is_file() and json.loads(p.read_text()).get('validation_mode')=='statement-only'
+        return json.loads(p.read_text()).get('validation_mode','full-gate') if name!='baseline' and p.is_file() else 'full-gate'
+    def compile_only(name):return validation_mode(name)=='statement-only'
     diagnostic_batch=all(compile_only(name) for name in requested)
     names=list(dict.fromkeys(([] if diagnostic_batch else ['baseline'])+requested))
     assert 1<=len(names)<=5
@@ -43,6 +44,8 @@ def main():
         digest=sha(source);verdict=REPORTS/(name+'-verdict.json');log=REPORTS/(name+'-gate.log')
         command=[str(UPSTREAM/'.venv/bin/python'),'gate.py','--slot','full',str(candidate),'--verdict',str(verdict)]
         is_probe=compile_only(name)
+        is_bench=validation_mode(name)=='benchmark-only'
+        if is_bench:command.insert(2,'--bench')
         diagnostic=TRACK/'candidates/f01-word-tensors/ci-diagnostics.py'
         if is_probe:
             command=[sys.executable,str(diagnostic),'--upstream',str(UPSTREAM),'--kernel',str(candidate/'Kernel.lean'),'--reports',str(REPORTS),'--name',name,'--verdict',str(verdict),'--compile-only']
@@ -55,23 +58,23 @@ def main():
         gate_wall_seconds=round(time.monotonic()-started,3)
         # Preserve the authoritative gate; debugging artifacts have their own label.
         diagnostic=TRACK/'candidates/f01-word-tensors/ci-diagnostics.py'
-        if name!='baseline' and not is_probe and diagnostic.is_file():
+        if name!='baseline' and not is_probe and not is_bench and diagnostic.is_file():
             try:
                 subprocess.run([sys.executable,str(diagnostic),'--upstream',str(UPSTREAM),'--kernel',str(candidate/'Kernel.lean'),'--reports',str(REPORTS),'--name',name,'--verdict',str(verdict)],check=False,timeout=150)
             except subprocess.TimeoutExpired:
                 save(REPORTS/(name+'-diagnostic-timeout.json'),{'diagnostic_only':True,'timeout_seconds':150,'original_verdict_unchanged':True})
         original=json.loads(verdict.read_bytes()) if verdict.exists() else None
-        row={'candidate':name,'kernel_sha256':digest,'reference_sha256':sha(official_kernel),'exit_code':code,'wall_seconds':gate_wall_seconds,'full_gate':bool(not is_probe and code==0 and original and original.get('passed') and original.get('mode')=='gate' and original.get('stage')=='score'),'validation_mode':'statement-only' if is_probe else 'full-gate','compile_pass':bool(is_probe and code==0 and original and original.get('passed')),'verdict':verdict.name,'seed':int(seed),'formal_online_result':'UNKNOWN'}
-        if row['full_gate']:
+        row={'candidate':name,'kernel_sha256':digest,'reference_sha256':sha(official_kernel),'exit_code':code,'wall_seconds':gate_wall_seconds,'full_gate':bool(not is_probe and not is_bench and code==0 and original and original.get('passed') and original.get('mode')=='gate' and original.get('stage')=='score'),'validation_mode':validation_mode(name),'compile_pass':bool(is_probe and code==0 and original and original.get('passed')),'benchmark_only_pass':bool(is_bench and code==0 and original and original.get('passed') and original.get('mode')=='bench' and original.get('stage')=='score'),'verdict':verdict.name,'seed':int(seed),'formal_online_result':'UNKNOWN'}
+        if row['full_gate'] or row['benchmark_only_pass']:
             assert original['verifier_fingerprint']==original['verifier_fingerprint_end']
             assert len(original['classes'])==12 and len(original['rounds'])==25
             ratio=sum(c['submission_ns'] for c in original['classes'].values())/sum(c['incumbent_ns'] for c in original['classes'].values())
             assert abs(ratio-original['ratio'])<1e-10
             evidence=admission.Evidence(1,'public-runner',ratio,datetime.datetime(2026,10,21,tzinfo=datetime.timezone.utc),tuple(tuple(r) for r in original['rounds']))
             decision=admission.assess(evidence,.97)
-            row.update(ratio=ratio,paired_gain_p05=decision.gain_p05,public_statistical_check=decision.outcome,classes=original['classes'],paired_rounds=original['rounds'])
+            row.update(ratio=ratio,paired_gain_p05=decision.gain_p05,public_statistical_check=('UNPROVED_SCREEN:'+decision.outcome if is_bench else decision.outcome),classes=original['classes'],paired_rounds=original['rounds'])
         assert sha(source)==digest,'Candidate changed while validating'
-        scope='Diagnostic statement compilation only; not full verification or performance.' if diagnostic_batch else 'Full public official gate and paired performance; runner-specific, not formal online admission.'
+        scope='Diagnostic statement compilation only; not full verification or performance.' if diagnostic_batch else 'Per-row modes are explicit: only full_gate=true is full acceptance. Benchmark-only is unproved screening. All scores are public shipped-reference measurements, not online admission.'
         rows.append(row);save(REPORTS/'summary.json',{'run_id':os.environ['GITHUB_RUN_ID'],'source_commit':os.environ['GITHUB_SHA'],'official_commit':pins['official_commit'],'results':rows,'complete':len(rows)==len(names),'scope':scope})
     for folder,pattern in [('logs','*.log'),('results','*.json')]:
         out=REPORTS/'official'/folder;out.mkdir(parents=True,exist_ok=True)
@@ -81,6 +84,6 @@ def main():
         out.write('| Candidate | Full gate | Ratio vs shipped | Paired p05 gain | Public statistical check |\n|---|---|---:|---:|---|\n')
         for row in rows:out.write(f"| {row['candidate']} | {row['full_gate']} | {row.get('ratio','UNKNOWN')} | {row.get('paired_gain_p05','UNKNOWN')} | {row.get('public_statistical_check','UNKNOWN')} |\n")
         out.write('\nExact original verdicts and logs are in the artifact. No official competition submission was made.\n')
-    return 0 if all(r['full_gate'] or (r['validation_mode']=='statement-only' and r['compile_pass']) for r in rows) else 1
+    return 0 if all(r['full_gate'] or r['benchmark_only_pass'] or (r['validation_mode']=='statement-only' and r['compile_pass']) for r in rows) else 1
 
 if __name__=='__main__':raise SystemExit(main())
