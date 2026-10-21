@@ -1,6 +1,6 @@
 {
   "state": "CHAMPION_RESEARCH_RUNNING",
-  "updated_at_utc": "2026-10-21T08:12:06.495951+00:00",
+  "updated_at_utc": "2026-10-21T08:48:03.169407+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-21T15:07:40+08:00",
@@ -47,9 +47,9 @@
   "candidate_readiness": "PASS_PUBLIC_FULL_GATE_SINGLE_RUN_SIGNAL",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "Prepare independent raw-bit tensor and rebuilt multiplication candidates and their smallest proof bridges, then run public full gate; preserve reference distinction.",
+  "next_action": "Read the current proof probes, repair concrete goals, measure rebuilt multiplication fully, and test loop-index hoisting after raw-word accumulation appears already unboxed in cached baseline C.",
   "research_decision": "First diagnose tensor execution; explore raw-bit tensor loops and a rebuilt normal multiplication pipeline independently, then a guarded GRS adder. Old helper edits are controls or later polish.",
-  "execution_state": "IMPLEMENTATION_PREPARATION_NO_ACTIVE_CI",
+  "execution_state": "TWO_CI_JOBS_ACTIVE",
   "local_project_check": {
     "status": "PASS",
     "checked_at_utc": "2026-10-21T07:26:31.972495+00:00",
@@ -207,5 +207,52 @@
     "user_request": "OK 研究推进1.5h",
     "ci_finish_rule": "All jobs started within the window finish naturally; collect complete results.",
     "reserve": "Start integration/confirmation by 09:20 UTC; last new substantial experiment by 09:25 UTC unless a shorter verified cycle fits."
+  },
+  "research_runs": [
+    {
+      "run": 39568030328,
+      "mode": "full-gate",
+      "candidate": "f01-word-tensors",
+      "result": "FAIL_STATEMENT bmm proof; no timing"
+    },
+    {
+      "run": 39568673167,
+      "mode": "full-gate",
+      "candidate": "f01-rebuilt-mul",
+      "result": "FAIL_STATEMENT word inequality and namespace; no timing"
+    },
+    {
+      "run": 39569856174,
+      "mode": "full-gate plus diagnostic",
+      "result": "Both original proofs rejected; diagnostic callback arity mismatch recorded, now corrected"
+    },
+    {
+      "run": 39570515461,
+      "mode": "statement-only",
+      "candidate": "f01-rebuilt-mul-proof1",
+      "result": "PASS_COMPILATION_ONLY; no complete gate or timing"
+    },
+    {
+      "run": 39571438465,
+      "mode": "statement-only",
+      "candidates": [
+        "f01-word-tensors",
+        "f01-word-tensors-proof1",
+        "f01-same-scale-add"
+      ],
+      "state": "IN_PROGRESS"
+    },
+    {
+      "run": 39571489959,
+      "mode": "full-gate",
+      "candidate": "f01-rebuilt-mul-proof1",
+      "state": "IN_PROGRESS"
+    }
+  ],
+  "ci_adapter_change": {
+    "authorization": "Current user authorized development/verification operations and new 1.5h window; environment owner had stopped. Minimal local runner wrapper extended for diagnostics.",
+    "official_gate_source": "UNCHANGED",
+    "statement_only": "Explicitly separate mode; never sets full_gate true",
+    "raw_build_capture": "errors(text,status) calling convention preflight PASS"
   }
 }

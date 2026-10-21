@@ -11,9 +11,10 @@ def main():
     out=a.reports/'diagnostics'/a.name;out.mkdir(parents=True,exist_ok=True)
     original=json.loads(a.verdict.read_bytes()) if a.verdict.exists() else {}
     report={'diagnostic_only':True,'original_stage':original.get('stage'),'original_verdict_unchanged':True,'generated_c':[]}
-    if a.compile_only or (original.get('stage')=='statement' and not original.get('passed')):
+    if a.compile_only or original.get('stage') in {'statement','score'}:
         code=r'''
-import importlib.util,sys
+import importlib.util,sys,json,hashlib,fcntl
+from dataclasses import asdict
 from pathlib import Path
 upstream,kernel,out=map(Path,sys.argv[1:]);sys.path.insert(0,str(upstream))
 spec=importlib.util.spec_from_file_location('floatlib_gate_diagnostic',upstream/'gate.py');g=importlib.util.module_from_spec(spec);sys.modules[spec.name]=g;spec.loader.exec_module(g)
@@ -23,9 +24,26 @@ def full_errors(text,*args,**kwargs):
     print('DIAGNOSTIC COMPLETE BUILD OUTPUT\n'+text,flush=True)
     return old_errors(text,*args,**kwargs)
 g.errors=full_errors
-g.STAGES=[pair for pair in g.STAGES if pair[0] in {'intake','policy','statement'}]
-sys.argv=['gate.py','--slot','full',str(kernel.parent),'--verdict',str(out/'diagnostic-only-verdict.json')]
-g.main()
+original_statement=g.statement
+def statement(src,verdict):
+    reason=original_statement(src,verdict)
+    if not reason:
+        rows=[]
+        for path in (g.LAYER/'upper').rglob('Submission.c'):
+            if path.is_file() and path.stat().st_size<8_000_000:
+                name='candidate-generated-'+str(len(rows))+'.c';data=path.read_bytes();(out/name).write_bytes(data)
+                rows.append({'source':str(path),'file':name,'sha256':hashlib.sha256(data).hexdigest(),'kernel_sha256':hashlib.sha256(kernel.read_bytes()).hexdigest(),'scope':'Successful statement layer captured before gate cleanup'})
+        (out/'candidate-c-index.json').write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8')
+    return reason
+g.STAGES=[('intake',g.intake),('policy',g.policy),('statement',statement)]
+with (g.HERE/'gate.lock').open('w') as lock:
+    fcntl.flock(lock,fcntl.LOCK_EX)
+    g.check_limits()
+    digest=g.pin(g.SLOTS['full'])
+    verdict=g.gate(kernel.parent,digest,'gate','full')
+result=asdict(verdict);result['mode']='diagnostic-statement-only';result['diagnostic_only']=True
+(out/'diagnostic-only-verdict.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
+sys.exit(0 if verdict.passed else 1)
 '''
         start=time.monotonic()
         with (out/'replay.log').open('wb') as stream:
@@ -35,9 +53,9 @@ g.main()
             except subprocess.TimeoutExpired:
                 os.killpg(p.pid,signal.SIGKILL);p.wait();report['replay']='diagnostic-only replay process group timed out at 120s'
         report['replay_seconds']=round(time.monotonic()-start,3)
-    for p in a.upstream.rglob('Submission.c'):
-        if p.is_file() and p.stat().st_size<8_000_000:
-            target=out/('generated-'+str(len(report['generated_c']))+'.c');target.write_bytes(p.read_bytes());report['generated_c'].append({'source':str(p),'file':target.name})
+    candidate_c=out/'candidate-c-index.json'
+    report['generated_c']=json.loads(candidate_c.read_bytes()) if candidate_c.exists() else []
+    report['generated_c_scope']='Only successful candidate statement-layer C; never the cached shipped baseline outside that layer.'
     (out/'index.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
     if a.compile_only:
         p=out/'diagnostic-only-verdict.json'
