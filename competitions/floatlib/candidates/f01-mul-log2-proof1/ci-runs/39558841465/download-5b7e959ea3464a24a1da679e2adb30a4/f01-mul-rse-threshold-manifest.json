@@ -1,0 +1,41 @@
+{
+  "candidate": "f01-mul-rse-threshold",
+  "created_at_utc": "2026-10-21T05:30:47.328404+00:00",
+  "official_source": {
+    "repository": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels",
+    "commit": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
+    "path": "kernels/full/incumbent/Kernel.lean",
+    "attribution": "Conjectures.io repository authors; scalar kernels, tensor loops and original proofs retained",
+    "sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
+    "bytes": 33043,
+    "local_reference": "competitions/floatlib/references/official-incumbent/Kernel.lean"
+  },
+  "candidate_sha256": "28a60458bc2e8a1a69d1d65f18a1d35d15542aeddc38e7744f12d70690bee3ed",
+  "candidate_bytes": 35983,
+  "mechanism": "Only FastMul.rse replaces the three-way nearest-even decision by remainder > half - (quotient & 1). Add and log2 remain the original baseline.",
+  "equivalence_reason": "The half threshold is always positive under UInt64 modulo-width shift semantics. Quotient parity is zero or one, so subtracting it includes exactly odd ties and never underflows. Proof reduces comparisons to natural numbers and reuses rseAny_eq and all full-entry proofs.",
+  "falsification_conditions": [
+    "Any Lean proof, replay, dependency audit or checksum fails",
+    "Compiled decision does not reduce representative full-harness time reproducibly"
+  ],
+  "validation": {
+    "local_model": "PASS_FINITE_PYTHON_MODEL: 924800 decisions; zero mismatches",
+    "official_lean_build": "NOT_RUN",
+    "official_full_gate": "NOT_RUN",
+    "paired_benchmark": "NOT_RUN",
+    "independent_confirmation": "NOT_RUN",
+    "formal_submission": "NOT_RUN",
+    "local_model_evidence": "probe-result.json",
+    "local_source_audit": "PASS_LOCAL_SOURCE_AUDIT",
+    "local_source_audit_evidence": "source-audit.json"
+  },
+  "status": "CANDIDATE_READY",
+  "performance_claim": "UNKNOWN; no timing or championship claim",
+  "reading_copy": {
+    "path": ".runtime/floatlib-survey-20261021/official-reference-Kernel.lean",
+    "sha256": "46cbe66d7c14ffbead19c6fbb7d47b1b8d161f6f2793fd7ff0442ecdb585636b",
+    "bytes": 33044,
+    "difference_from_official": "Exactly one extra terminal LF; candidate was derived from this semantic-equivalent reading copy."
+  },
+  "frozen_at_utc": "2026-10-21T05:32:09.679061+00:00"
+}

@@ -24,9 +24,9 @@
   ],
   "validation": {
     "local_model": "PASS_FINITE_PYTHON_MODEL: 600313 values; zero mismatches",
-    "official_lean_build": "NOT_RUN",
-    "official_full_gate": "NOT_RUN",
-    "paired_benchmark": "NOT_RUN",
+    "official_lean_build": "FAIL_STATEMENT_TYPECHECK: run 39558841465",
+    "official_full_gate": "FAIL_STATEMENT_TYPECHECK",
+    "paired_benchmark": "NOT_RUN: rejected before score",
     "independent_confirmation": "NOT_RUN",
     "formal_submission": "NOT_RUN",
     "local_model_evidence": "probe-result.json"
@@ -54,7 +54,7 @@
     "kernel_sha256": "6ece8fde82981400536a6d1f106c80ea9bd6a16d711485b96928d5acc8f67b3d",
     "reason": "First actual CI rejects the final simpa using hl.symm steps in original log2 helper. Proof2 explicitly reduces Nat.log2 1 with a checked decide proof and Nat.add_zero, then uses exact equality symmetry. Runtime definitions unchanged."
   },
-  "status": "CANDIDATE_READY",
+  "status": "REJECTED_FROZEN_SOURCE_PRESERVED",
   "freeze_note": "Final proof-only hash is bound to the completed finite diagnostic timestamp; earlier provisional proof edits were never dispatched.",
   "actual_failure_evidence": {
     "run_id": 39554146703,
@@ -65,5 +65,13 @@
     "verdict": "competitions/floatlib/evidence/39554146703/download-6d09073267f64a12be780cf296192bb8/f01-mul-log2-verdict.json",
     "verdict_sha256": "2c8320b2ed04b4468cdea52ee03fed56b5eefb683338122ac73d1f5862d16d11",
     "full_expected_and_actual_types": "UNKNOWN: original gate publishes compact error lines only"
+  },
+  "actual_run": {
+    "run_id": 39558841465,
+    "stage": "statement",
+    "error_lines": [
+      638,
+      648
+    ]
   }
 }
