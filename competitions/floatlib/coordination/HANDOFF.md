@@ -8,7 +8,7 @@
 - 官方版本及公理：`../pins.json`。候选：`../candidates/f01-*/Kernel.lean`，单文件含四函数与四个规格证明。
 - 环境会话拥有根目录迁移、根 AGENTS.md、`.github/`、本赛道 scripts、pins、references、README、environment-status.json 和本文件。
 - 开发会话拥有本赛道 `candidates/f01-*/`、`docs/first-candidate.md`、`coordination/development-status.json`。其他路径只读；不操作钱包，不正式参赛上传，不安装大型本地 Linux 工具链。
-- 环境会话汇总提交、推送与派发 CI。开发会话不提交、推送、切分支或独立派发 CI，以免共享索引与实验相互干扰。
+- 环境会话工作期间汇总提交、推送与派发 CI；此时开发会话不提交、推送、切分支或独立派发 CI，以免共享索引与实验相互干扰。环境会话在 `environment-status.json` 标记 `environment_owner_state=STOPPED_AFTER_ENVIRONMENT_CONFIGURATION` 后，停止 Git 和 CI 操作；后续开发会话可依据其自身已有授权接管提交、推送和 CI，不需等待本会话继续，不扩大授权范围。
 
 ## 无打断交接
 
@@ -25,3 +25,5 @@
 准备、迁移、排队、执行、修复和收尾均计入本轮两小时窗口：北京时间2026-10-21 13:16—15:16。窗口到期前预留回执回收与交付；已启动CI按成功、失败或既定超时收齐，不因预算临近随意取消。
 
 首轮目标是多赛道结构可查、官方环境可复现、基线gate和首个候选实际CI结果可复核；不承诺3%提速或夺冠。正式竞赛上传、后续注册、签名与资金动作不在本次范围。GitHub仓库当前为公开仓库，只用标准runner；私有运行需另有对应授权。
+
+用户随后将环境会话范围收紧为“配置完环境就可以停下”。本会话收齐已启动的 `39554146703` 后记录安装与基线验证结果、发布交接并停止；不启动 proof1、第二候选或新的确认运行。原始候选失败时保留负面回执，开发会话按自身授权处理。环境使用和结果定位见 [environment.md](../docs/environment.md)。
