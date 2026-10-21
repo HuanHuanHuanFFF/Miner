@@ -82,3 +82,5 @@
 推荐验收 [f01-mul-log2-proof2](../candidates/f01-mul-log2-proof2/manifest.json)：先显式将 Nat.log2 1 归约为 0 并去掉 +0，再 exact hl.symm。所有运行定义与原冻结候选相同，Kernel SHA-256 `2e2effc2719f30bb8c1784d421d7683a183b78699712873756aac2a99463a490`，34619 字节。模型重新绑定此哈希并通过；Lean／gate／性能仍待实际 CI。
 
 环境停止标记已在提交 6ed35056 核对，后续 Git／CI 由开发会话按本次授权接管。准备对 proof2 和独立 rse-threshold 运行官方全 gate；研究截止仍为 15:07:40，已启动的验收运行收齐后再结束。
+
+14:58:53 已由开发会话启动后续验收运行 39558841465，精确提交 d058ebd508a012c8d1552e6581119eb543a2b4c7，种子43；包含原版同源码参照、proof2 和 rse-threshold。该作业尚无结论；原始派发与逐文件哈希在 f01-mul-log2-proof1/ci-runs/dispatch-20261021T065847Z。15:07:40 后不新增研究，按用户要求收齐这个已启动的 CI／验收后交付。

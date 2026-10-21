@@ -1,6 +1,6 @@
 {
-  "state": "CANDIDATE_READY",
-  "updated_at_utc": "2026-10-21T06:57:16.547248+00:00",
+  "state": "CI_RUNNING",
+  "updated_at_utc": "2026-10-21T07:00:48.843334+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-21T15:07:40+08:00",
@@ -46,9 +46,9 @@
   "candidate_readiness": "CANDIDATE_READY",
   "environment_commit_seen": "6ed35056",
   "blocker": null,
-  "next_action": "After explicit environment-owner stop marker, commit/push only owned paths and dispatch proof2 plus rse-threshold through existing public standard manual workflow. Preserve first negative gate and all NOT_RUN statuses.",
+  "next_action": "Wait for actual full gate/paired timings of run 39558841465; collect its original artifact and replay summary with analyze.py. No additional algorithm variants planned before the cutoff.",
   "research_decision": "Two independent local mechanisms are ready. Defer further variants and combination until official Lean and full-harness evidence arrives; no performance claim.",
-  "execution_state": "PREPARING_PROOF2_AND_RSE_FULL_GATES",
+  "execution_state": "FULL_ACCEPTANCE_RUNNING",
   "local_project_check": {
     "status": "PASS",
     "executed_at_utc": "2026-10-21T05:37:00Z",
@@ -76,7 +76,7 @@
     "git_rule": "Commit only explicit owned paths; never stage/commit environment files. Keep shared branch.",
     "receipt_root": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs",
     "existing_run": "39554146703",
-    "new_run_state": "PREPARING_EXACT_COMMIT",
+    "new_run_state": "DISPATCHED_EXACT_COMMIT",
     "takeover_condition": "Wait for environment_owner_state=STOPPED_AFTER_ENVIRONMENT_CONFIGURATION before shared Git or new CI dispatch, as updated HANDOFF.md explicitly requires.",
     "helper_checks": "Candidate-local CI helper syntax/help and root project checks PASS; no new CI dispatched.",
     "environment_stop_verified_commit": "6ed35056",
@@ -99,5 +99,22 @@
     "original_candidate_gate": "FAIL_STATEMENT",
     "original_candidate_performance": "NOT_RUN",
     "audit": "competitions/floatlib/candidates/f01-mul-log2-proof1/analyses/39554146703.json"
-  }
+  },
+  "ci_runs": [
+    {
+      "run_id": 39558841465,
+      "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39558841465",
+      "source_commit": "d058ebd508a012c8d1552e6581119eb543a2b4c7",
+      "candidates": [
+        "baseline",
+        "f01-mul-log2-proof2",
+        "f01-mul-rse-threshold"
+      ],
+      "seed": 43,
+      "status": "in_progress",
+      "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261021T065847Z/dispatch.json",
+      "research_cutoff_beijing": "2026-10-21T15:07:40+08:00",
+      "finish_rule": "Collect this run to terminal success/failure/existing timeout even after research cutoff."
+    }
+  ]
 }
