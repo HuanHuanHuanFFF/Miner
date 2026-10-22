@@ -7,6 +7,8 @@ STATE=ROOT/'competitions/floatlib/coordination/development-status.json'
 RUNS=ROOT/'competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs'
 spec=importlib.util.spec_from_file_location('floatlib_gain_support',RUNS.parent/'analyze.py');support=importlib.util.module_from_spec(spec);spec.loader.exec_module(support)
 state=json.loads(STATE.read_bytes());ids=list(dict.fromkeys(x['run'] for x in state['collaboration']['active_ci']))
+public_dir=OWN/json.loads((OWN/'current-official-snapshot.json').read_bytes())['directory']
+public_champion=json.loads((public_dir/'champion-detail.raw').read_bytes());public_fp=public_champion['verifier_fingerprint']
 records=[];jobs=[];payloads=[]
 for rid in ids:
  p=RUNS/str(rid);index=p/'original-artifact-hashes.json'
@@ -28,7 +30,7 @@ for rid in ids:
    log=re.sub(r'\x1b\[[0-9;]*m','',(a/(row['candidate']+'-gate.log')).read_text(encoding='utf-8'))
    axioms=ast.literal_eval(re.search(r'\[axioms\] (\[[^\n]*?\])',log).group(1));assert set(axioms)<=set(provenance['pins']['allowed_axioms'])
    assert 'Submission replays cleanly' in log and 'VerifyFull replays cleanly' in log
-   rec.update(axioms=axioms,reference_sha256=v['champion_sha256'],cpu=cpu,cpu_affinity=provenance['cpu_affinity'])
+   rec.update(axioms=axioms,reference_sha256=v['champion_sha256'],cpu=cpu,cpu_affinity=provenance['cpu_affinity'],verifier_fingerprint=v['verifier_fingerprint'],matches_current_official_fingerprint=v['verifier_fingerprint']==public_fp)
    ratio=sum(x['submission_ns'] for x in v['classes'].values())/sum(x['incumbent_ns'] for x in v['classes'].values());assert abs(ratio-v['ratio'])<1e-10
    rec.update(ratio_vs_shipped=ratio,paired_gain_p05=support.gain_p05(v['rounds']),kernels_vs_shipped={k:sum(x['submission_ns'] for n,x in v['classes'].items() if n.startswith(k+':'))/sum(x['incumbent_ns'] for n,x in v['classes'].items() if n.startswith(k+':')) for k in ['add','mul','sum','bmm']})
   records.append(rec)

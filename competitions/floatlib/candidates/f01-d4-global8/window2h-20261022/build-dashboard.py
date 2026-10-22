@@ -53,13 +53,14 @@ for k in eligible:eligible[k].append('f01-d3-final-package')
 labels.update({'f01-d4-global8':'八路全局界矩阵','f01-d4-scalar-decode':'标量内联解码','f01-d4-unroll2':'双步八路矩阵','f01-d4-sum-word':'机器字重构求和'})
 for k in eligible:eligible[k].extend(['f01-d4-global8','f01-d4-scalar-decode','f01-d4-unroll2','f01-d4-sum-word'])
 labels.update({'f01-d4-packed10':'十列矩阵微块','f01-d4-tile2x4-full':'双行四列矩阵','f01-d4-balanced-package':'低位舍入组合优化','f01-d4-add-sum-word':'内联加法与机器字求和'})
-for k in eligible:eligible[k].extend(['f01-d4-packed10','f01-d4-tile2x4-full','f01-d4-balanced-package','f01-d4-add-sum-word'])
+for k in eligible:eligible[k].extend(['f01-d4-packed10','f01-d4-tile2x4-full','f01-d4-balanced-package','f01-d4-add-sum-word','f01-d4-balanced-proof1','f01-d4-add-sum-word-proof1'])
+labels.update({'f01-d4-balanced-proof1':'低位舍入组合优化','f01-d4-add-sum-word-proof1':'内联加法与机器字求和'})
 # Route selection is restricted to operations actually changed; do not promote
 # unrelated identical code merely because a different runner yielded a lower sample.
 d4_by_operation={
- 'add':['f01-d4-scalar-decode','f01-d4-balanced-package','f01-d4-add-sum-word'],
- 'mul':['f01-d4-scalar-decode','f01-d4-balanced-package'],
- 'sum':['f01-d4-sum-word','f01-d4-balanced-package','f01-d4-add-sum-word'],
+ 'add':['f01-d4-scalar-decode','f01-d4-balanced-package','f01-d4-add-sum-word','f01-d4-balanced-proof1','f01-d4-add-sum-word-proof1'],
+ 'mul':['f01-d4-scalar-decode','f01-d4-balanced-package','f01-d4-balanced-proof1'],
+ 'sum':['f01-d4-sum-word','f01-d4-balanced-package','f01-d4-add-sum-word','f01-d4-balanced-proof1','f01-d4-add-sum-word-proof1'],
  'bmm':['f01-d4-global8','f01-d4-packed10','f01-d4-tile2x4-full']}
 for k in eligible:
  eligible[k]=[n for n in eligible[k] if not n.startswith('f01-d4-')]+d4_by_operation[k]
