@@ -7,6 +7,6 @@
 | 加法 add | [#174](https://conjectures.io/v1/competitions/floatlib/submissions/174) | [混合乘法组合优化](competitions/floatlib/candidates/f01-d2-hybrid-preconverted-usize/Kernel.lean) | **约 1.5×** | 通过两次 |
 | 乘法 mul | #174 | [整数判断组合优化](competitions/floatlib/candidates/f01-d2-word-preconverted-usize/Kernel.lean) | **约 2.3×** | 通过两次 |
 | 求和 sum | #174 | [最终检查原生归约](competitions/floatlib/candidates/f01-d2-final-finite/Kernel.lean) | **约 4.5×** | 通过3次 |
-| 矩阵乘法 bmm | #174 | [四输出矩阵累加](competitions/floatlib/candidates/f01-d2-web-packed4-proof1/Kernel.lean) | **约 8.3×** | 通过一次 |
+| 矩阵乘法 bmm | #174 | [四输出矩阵累加](competitions/floatlib/candidates/f01-d2-web-packed4-proof1/Kernel.lean) | **约 8.2×** | 通过两次 |
 
 **结论：差距进一步缩小，当前仍不能取代冠军。**
