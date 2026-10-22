@@ -44,6 +44,9 @@ for k in ['add','mul']:eligible[k].extend(['f01-d2-word-preconverted-usize','f01
 labels.update({'f01-d3-word-packed4':'整数判断与四输出矩阵','f01-d3-fused-floatarray':'单遍连续数组矩阵'})
 for k in eligible:eligible[k].append('f01-d3-word-packed4')
 eligible['bmm'].append('f01-d3-fused-floatarray')
+labels.update({'f01-d3-word-packed4-usize-proof1':'四路机器字矩阵','f01-d3-word-packed8-proof1':'八输出矩阵累加','f01-d3-word-packed8-usize-proof1':'八路机器字矩阵','f01-d3-inline-decode-sum':'数值重构有序求和'})
+for k in eligible:eligible[k].extend(['f01-d3-word-packed4-usize-proof1','f01-d3-word-packed8-proof1','f01-d3-word-packed8-usize-proof1'])
+eligible['sum'].append('f01-d3-inline-decode-sum')
 selected={}
 for k,names in eligible.items():
  options=[]
