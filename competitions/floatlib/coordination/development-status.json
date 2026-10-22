@@ -1,6 +1,6 @@
 {
   "state": "R4_RESEARCH_ACTIVE",
-  "updated_at_utc": "2026-10-22T09:24:33.082975+00:00",
+  "updated_at_utc": "2026-10-22T09:38:35.559285+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T17:52:04+08:00",
@@ -48,7 +48,7 @@
   "blocker": null,
   "next_action": "R:2x4 matrix microtile; D:8lane whole-call bounds and controlled k unrolling. Verify new exact packages.",
   "research_decision": "Adopt word/preconverted/USize as best independently confirmed whole package. Keep Packed4 as strongest bmm prospect; repeated AMD hybrid tiny regression prevents prioritizing it. Helpers stay separate from runtime results.",
-  "execution_state": "R4_FROZEN_FINAL_INTEGRATION_AND_CONFIRMATION",
+  "execution_state": "R4_SELECTED_NATIVE_FROZEN_INDEPENDENT_CONFIRMATION",
   "local_project_check": {
     "status": "PASS",
     "checked_at_utc": "2026-10-22T05:51:17.728445+00:00",
@@ -574,6 +574,36 @@
         "conclusion": "success",
         "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39753518740",
         "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39753518740/original-artifact-hashes.json"
+      },
+      {
+        "run": 39755371552,
+        "seed": 513,
+        "candidates": [
+          "f01-d3-final-package",
+          "f01-d4-final-native",
+          "f01-d4-final-lowmul"
+        ],
+        "source_commit": "e5b144bf77d477919f4787e36311cf65d2a23c15",
+        "status": "in_progress",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T092555Z/dispatch.json",
+        "created_at_utc": "2026-10-22T09:25:59Z",
+        "conclusion": "",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39755371552"
+      },
+      {
+        "run": 39755431113,
+        "seed": 514,
+        "candidates": [
+          "f01-d4-final-native",
+          "f01-d4-final-lowmul"
+        ],
+        "source_commit": "e5b144bf77d477919f4787e36311cf65d2a23c15",
+        "status": "completed",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T092623Z/dispatch.json",
+        "created_at_utc": "2026-10-22T09:26:27Z",
+        "conclusion": "success",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39755431113",
+        "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39755431113/original-artifact-hashes.json"
       }
     ],
     "max_parallel_ci": 2,
@@ -612,7 +642,15 @@
       "f01-d4-final-native",
       "f01-d4-final-lowmul"
     ],
-    "confirmation_plan": "Two frozen full packages compared on new runners, then selected exactsource independently confirmed; expected finalconfirmation09:40-09:50Z. All started jobs drain naturally."
+    "confirmation_plan": "Two frozen full packages compared on new runners, then selected exactsource independently confirmed; expected finalconfirmation09:40-09:50Z. All started jobs drain naturally.",
+    "provisional_selection": {
+      "candidate": "f01-d4-final-native",
+      "kernel_sha256": "f572210f9506153101c41f9a8fdc147afa2c8a01e4e1ced2e3d917e4e124974a",
+      "selected_at_utc": "2026-10-22T09:40:01.123659+00:00",
+      "basis": "Full514 native.195404 vslowmul.202212 on9V45, consistent with508 conservative advantage.513 comparison still pending and not used for this selection.",
+      "confirmation_seed": 515,
+      "rule": "If pending513 materially changes architecture decision, require fresh confirmation for any changed final choice; all started jobs drain."
+    }
   },
   "previous_current_candidate": {
     "candidate": "competitions/floatlib/candidates/f01-mul-log2-proof3",
@@ -655,7 +693,18 @@
     },
     "candidate_role": "Frozen reference/control only; no longer the primary development route"
   },
-  "active_jobs": [],
+  "active_jobs": [
+    {
+      "run": 39755371552,
+      "status": "in_progress",
+      "candidates": [
+        "f01-d3-final-package",
+        "f01-d4-final-native",
+        "f01-d4-final-lowmul"
+      ],
+      "source_commit": "e5b144bf77d477919f4787e36311cf65d2a23c15"
+    }
+  ],
   "active_goal": "新一轮协作推进1h，继续冲击新冠军",
   "pending_candidates": [],
   "current_official_refresh": {
