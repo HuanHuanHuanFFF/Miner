@@ -1,6 +1,6 @@
 {
   "state": "R4_RESEARCH_ACTIVE",
-  "updated_at_utc": "2026-10-22T09:10:23.895942+00:00",
+  "updated_at_utc": "2026-10-22T09:24:33.082975+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T17:52:04+08:00",
@@ -48,7 +48,7 @@
   "blocker": null,
   "next_action": "R:2x4 matrix microtile; D:8lane whole-call bounds and controlled k unrolling. Verify new exact packages.",
   "research_decision": "Adopt word/preconverted/USize as best independently confirmed whole package. Keep Packed4 as strongest bmm prospect; repeated AMD hybrid tiny regression prevents prioritizing it. Helpers stay separate from runtime results.",
-  "execution_state": "R4_MATRIX_DISCOVERY_AND_COMPOSITION_REPAIR",
+  "execution_state": "R4_FROZEN_FINAL_INTEGRATION_AND_CONFIRMATION",
   "local_project_check": {
     "status": "PASS",
     "checked_at_utc": "2026-10-22T05:51:17.728445+00:00",
@@ -553,11 +553,27 @@
           "f01-d4-decode-inline10"
         ],
         "source_commit": "45d6bb7097e04198e767d40dddd626f7194ab9af",
-        "status": "in_progress",
+        "status": "completed",
         "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T090843Z/dispatch.json",
         "created_at_utc": "2026-10-22T09:08:47Z",
-        "conclusion": "",
-        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39753144947"
+        "conclusion": "success",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39753144947",
+        "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39753144947/original-artifact-hashes.json"
+      },
+      {
+        "run": 39753518740,
+        "seed": 512,
+        "candidates": [
+          "f01-d3-final-package",
+          "f01-d4-tile2x8-full"
+        ],
+        "source_commit": "095ec9118524cbc00b081ddfa1b4c9498056a943",
+        "status": "completed",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T091137Z/dispatch.json",
+        "created_at_utc": "2026-10-22T09:11:41Z",
+        "conclusion": "success",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39753518740",
+        "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39753518740/original-artifact-hashes.json"
       }
     ],
     "max_parallel_ci": 2,
@@ -565,7 +581,7 @@
     "window_id": "R4_TWO_HOURS_20261022",
     "end_utc": "2026-10-22T09:52:04Z",
     "research_dispatch_verified": "wait_threads actual active R4 turn; research-status.json created08:11Z",
-    "feedback_to_research": "51039752752375 exact2x8 SHA8c0c1954 STATEMENT PASS first try. D sameKernel full f01-d4-tile2x8-full goes512 with parent.509samebatch:10col4.4%faster,repeats4.2%;2x4about9%slower.508add+sum conservative fullPASS whole.198891 vsparent.220698 on9V45; newLowScale balancedmul4.3%slower, not selected. D51110col identical coordinatebodyinline running, sourceonlybyte-identical functioncopy+rflproof. Please inspect16acc actualC/asm whenavailable; finishexistingweboriginal recovery, no newroutes after09:20, finalRhandoff09:30. D integratesbestmatrixwith conservativeadd/sum then independent frozen confirmation.",
+    "feedback_to_research": "512exact2x8 FULLPASS9V74 butbmm/reference.02261401 vsparent.02247789 (~0.6%slower), not adopted.511exact10coldecodeinline FULLPASS7763, bmm.01978582 vs10col.02257963 (~12.4%faster);10colprevious2samples~4.3%gain. D freezes final-native and final-lowmul with10col+decode, wordSum, decodedadd; all parent full accepted. Comparebothfrozennewrunners thenselectedheldoutconfirmation. Please finalizeR report/existingwebrecovery09:30, no morecandidates; D continues through09:52 anddrainsCI. D independentlyverifiedR4W01ZIP CRC/17hashes/extracted/Ereport.",
     "pending_candidates": [],
     "research_requests": [
       {
@@ -589,7 +605,14 @@
         "kernel_sha256": "8c0c195472f191d54c649d3c2dc9c4ad3ab68ef3c248249234ac20b6448cb2b5",
         "run": 39752752375
       }
-    ]
+    ],
+    "new_research_stopped_at_utc": "2026-10-22T09:20:00Z",
+    "final_candidates_frozen_at_utc": "2026-10-22T09:25:44.345460+00:00",
+    "final_candidates": [
+      "f01-d4-final-native",
+      "f01-d4-final-lowmul"
+    ],
+    "confirmation_plan": "Two frozen full packages compared on new runners, then selected exactsource independently confirmed; expected finalconfirmation09:40-09:50Z. All started jobs drain naturally."
   },
   "previous_current_candidate": {
     "candidate": "competitions/floatlib/candidates/f01-mul-log2-proof3",
@@ -632,17 +655,7 @@
     },
     "candidate_role": "Frozen reference/control only; no longer the primary development route"
   },
-  "active_jobs": [
-    {
-      "run": 39753144947,
-      "status": "in_progress",
-      "candidates": [
-        "f01-d4-packed10",
-        "f01-d4-decode-inline10"
-      ],
-      "source_commit": "45d6bb7097e04198e767d40dddd626f7194ab9af"
-    }
-  ],
+  "active_jobs": [],
   "active_goal": "新一轮协作推进1h，继续冲击新冠军",
   "pending_candidates": [],
   "current_official_refresh": {
