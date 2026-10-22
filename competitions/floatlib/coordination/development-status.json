@@ -1,6 +1,6 @@
 {
   "state": "R7_TEN_HOUR_RESEARCH_ACTIVE",
-  "updated_at_utc": "2026-10-22T18:24:52.646853+00:00",
+  "updated_at_utc": "2026-10-22T18:56:40.882262+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "candidate": "competitions/floatlib/candidates/f01-d5-stream-pack",
@@ -29,7 +29,50 @@
     "handoff": "competitions/floatlib/coordination/astra-handoff-r7.md",
     "research_thread": "01a15e06-b75c-7811-b0a0-194d8877365d",
     "max_parallel_ci": 2,
-    "active_ci": [],
+    "active_ci": [
+      {
+        "run": 39832394805,
+        "seed": 801,
+        "wrapper": "f01-d7-public-suite",
+        "candidates": [
+          "f01-d5-stream-pack",
+          "f01-d7-width4",
+          "f01-d7-width8"
+        ],
+        "source_commit": "bd153d724ab8b0e6ecf4116c15c80da57ab4d0b2",
+        "status": "completed",
+        "collected": true,
+        "purpose": "Shape/padding width comparison at current original public-v2, all25paired rounds",
+        "conclusion": "failure",
+        "scope": "Parent full gate PASS; both width candidates only constructor-arity statement FAIL"
+      },
+      {
+        "run": 39833363659,
+        "seed": 802,
+        "wrapper": "f01-d7-public-suite",
+        "candidates": [
+          "f01-d5-stream-pack",
+          "f01-d7-direct-small"
+        ],
+        "source_commit": "91b31432acf009fe937fc01cfc41d8ee02bcc869",
+        "status": "completed",
+        "collected": true,
+        "purpose": "Direct-small complete-cost comparison, original current public-v2 and25paired rounds",
+        "conclusion": "success"
+      },
+      {
+        "run": 39834631426,
+        "seed": 803,
+        "candidates": [
+          "f01-r7-nonnan-bridge-probe"
+        ],
+        "source_commit": "9dab4ebcc57d12b5a430e5bc2417b8be2578d504",
+        "status": "completed",
+        "collected": true,
+        "purpose": "Only statement probe for key non-NaN operation bridge; current contract/FloatLib unchanged from pinned proof environment",
+        "conclusion": "success"
+      }
+    ],
     "started_ci_policy": "Finish naturally and recover exact evidence even if final started work outlives deadline; no new research after deadline",
     "research_agent_state": "ACTIVE_CONFIRMED_BY_THREAD_SNAPSHOT"
   },
@@ -194,5 +237,15 @@
     ],
     "champion_official_historical_speedup_vs_shipped": 579.2637814253798,
     "cross_suite_gap": "UNKNOWN; do not divide historical champion and current public-suite speedups"
-  }
+  },
+  "pending_candidates": [
+    {
+      "candidate": "f01-d7-direct-small",
+      "sha256": "d9a808479dd6a7c7da345ce680773105b638cc6c9e8145e34d10f59751411fb3",
+      "status": "DISCOVERY_FULL_GATE_PASS_PENDING_FROZEN_INDEPENDENT_CONFIRMATION",
+      "run": 39833363659,
+      "whole_time_over_parent_normalized": 0.8757222035731369,
+      "bmm_time_over_parent_normalized": 0.740242428999211
+    }
+  ]
 }

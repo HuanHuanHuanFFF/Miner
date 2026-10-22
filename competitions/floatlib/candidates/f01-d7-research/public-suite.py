@@ -50,11 +50,18 @@ def run(g,kernel,out):
         raw=src.read_bytes();digest=hashlib.sha256(raw).hexdigest();assert digest==entry['sha256']
         dst=stage/'inputs'/name;dst.mkdir(parents=True,exist_ok=True);(dst/'Kernel.lean').write_bytes(raw)
         verdict=stage/(name+'-verdict.json'); logname=name+'-gate.log'
+        validation_mode=entry.get('validation_mode','full-gate')
+        assert validation_mode in ('full-gate','statement-only')
+        argv=[str(upstream/'.venv/bin/python'),'gate.py','--slot','full',str(dst),'--verdict',str(verdict)]
+        if validation_mode=='statement-only':
+            diagnostic=repo/'competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py'
+            argv=[str(upstream/'.venv/bin/python'),str(diagnostic),'--upstream',str(upstream),'--kernel',str(dst/'Kernel.lean'),'--reports',str(stage),'--name',name,'--verdict',str(verdict),'--compile-only']
         with (stage/logname).open('wb') as log:
-            p=subprocess.run([str(upstream/'.venv/bin/python'),'gate.py','--slot','full',str(dst),'--verdict',str(verdict)],cwd=upstream,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=960)
+            p=subprocess.run(argv,cwd=upstream,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=960 if validation_mode=='full-gate' else 180)
         v=json.loads(verdict.read_bytes()) if verdict.exists() else {}
         full=bool(p.returncode==0 and v.get('passed') and v.get('mode')=='gate' and v.get('stage')=='score')
-        row={'candidate':name,'kernel_sha256':digest,'full_gate':full,'exit_code':p.returncode,'stage':v.get('stage','UNKNOWN'),'reason':v.get('reason',''),'verdict':verdict.name,'verdict_sha256':hashlib.sha256(verdict.read_bytes()).hexdigest() if verdict.exists() else None}
+        statement_pass=bool(validation_mode=='statement-only' and p.returncode==0 and v.get('passed') and v.get('mode')=='diagnostic-statement-only')
+        row={'candidate':name,'kernel_sha256':digest,'validation_mode':validation_mode,'full_gate':full,'statement_pass':statement_pass,'exit_code':p.returncode,'stage':v.get('stage','UNKNOWN'),'reason':v.get('reason',''),'verdict':verdict.name,'verdict_sha256':hashlib.sha256(verdict.read_bytes()).hexdigest() if verdict.exists() else None}
         if full:
             assert v['suite']['sha256']==provenance['suite_sha256'] and len(v['rounds'])==25
             assert v['verifier_fingerprint']==v['verifier_fingerprint_end']
@@ -67,4 +74,4 @@ def run(g,kernel,out):
         (stage/'summary.json').write_text(json.dumps({**provenance,'results':rows,'complete':len(rows)==len(plan['candidates']),'elapsed_seconds':time.monotonic()-started},indent=2)+'\n')
         if name=='baseline' and not full:break
     command(['git','diff','--exit-code'],'official-source-clean.log',upstream,20)
-    if not rows or len(rows)!=len(plan['candidates']) or not all(r['full_gate'] for r in rows):raise RuntimeError('Public suite acceptance incomplete or failed; original receipts retained')
+    if not rows or len(rows)!=len(plan['candidates']) or not all(r['full_gate'] or r['statement_pass'] for r in rows):raise RuntimeError('Requested full gates or separately labeled statement probes incomplete/failed; original receipts retained')
