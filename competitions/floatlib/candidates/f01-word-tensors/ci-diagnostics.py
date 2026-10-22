@@ -60,9 +60,10 @@ def statement(src,verdict):
                 name='native-loop-'+str(len(objects))+'.asm.txt';(out/name).write_bytes(result.stdout)
                 objects.append({'kind':'actual-built-object-disassembly','source':str(path),'object_sha256':hashlib.sha256(data).hexdigest(),'symbol':symbol,'file':name,'sha256':hashlib.sha256(result.stdout).hexdigest(),'exit_code':result.returncode,'kernel_sha256':hashlib.sha256(kernel.read_bytes()).hexdigest(),'scope':'Diagnostic statement replay using the unchanged pinned build; this is not the cleaned-up timed gate object.'})
         (out/'native-assembly-index.json').write_text(json.dumps(objects,indent=2)+'\n',encoding='utf-8')
-        if kernel.parent.name == 'f01-d5-costsplit':
+        if kernel.parent.name in ('f01-d5-costsplit', 'f01-d6-costsplit'):
             try:
-                ps=importlib.util.spec_from_file_location('candidate_cost_profile',profiler)
+                profile_path = profiler if kernel.parent.name == 'f01-d5-costsplit' else profiler.parent.parent/'f01-d6-research/profile-scored.py'
+                ps=importlib.util.spec_from_file_location('candidate_cost_profile',profile_path)
                 pm=importlib.util.module_from_spec(ps);ps.loader.exec_module(pm)
                 pm.run(g,kernel,out)
             except Exception as error:
