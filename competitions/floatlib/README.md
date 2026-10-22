@@ -6,7 +6,7 @@
 
 - [冲冠看板](../../dashboard.md)：按 add、mul、sum、bmm 四项查看现任冠军与我方首选。
 - [当前开发状态](coordination/development-status.json)：当前比较口径、候选选择及证据入口。
-- [当前一小时协作](candidates/f01-d3-word-packed4/window1h-20261022/README.md)：当前数学、实现、完整计时与独立确认。
+- [当前两小时协作](candidates/f01-d4-global8/window2h-20261022/README.md)：当前数学、实现、完整计时与独立确认。
 - [前轮Astra／开发一小时协作](candidates/f01-d1-inline-all/window1h/README.md)：原生算术证明起点、逐项验收与原始回执。
 
 - [首次双会话交接](coordination/HANDOFF.md)：环境与开发文件所有权、状态、自然检查点和本窗预算。

@@ -13,7 +13,7 @@ def main():
     report={'diagnostic_only':True,'original_stage':original.get('stage'),'original_verdict_unchanged':True,'generated_c':[]}
     if a.compile_only or original.get('stage') in {'statement','score'}:
         code=r'''
-import importlib.util,sys,json,hashlib,fcntl
+import importlib.util,sys,json,hashlib,fcntl,re,subprocess
 from dataclasses import asdict
 from pathlib import Path
 upstream,kernel,out=map(Path,sys.argv[1:]);sys.path.insert(0,str(upstream))
@@ -37,6 +37,29 @@ def statement(src,verdict):
                 name='candidate-generated-'+str(len(rows))+'.c';data=path.read_bytes();(out/name).write_bytes(data)
                 rows.append({'source':str(path),'module':path.stem,'file':name,'sha256':hashlib.sha256(data).hexdigest(),'kernel_sha256':hashlib.sha256(kernel.read_bytes()).hexdigest(),'scope':'Successful statement and bench-build layer captured before gate cleanup'})
         (out/'candidate-c-index.json').write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8')
+        # Inspect the object the unchanged official build actually produced.
+        # No recompilation, flags, gate inputs or measured binary are changed.
+        objects=[]
+        for path in (g.LAYER/'upper').rglob('*'):
+            if not path.is_file() or 'Submission' not in path.name:
+                continue
+            if path.suffix == '.trace' and path.stat().st_size < 1_000_000:
+                data=path.read_bytes();name='build-trace-'+str(len(objects))+'.txt'
+                (out/name).write_bytes(data)
+                objects.append({'kind':'trace','source':str(path),'file':name,'sha256':hashlib.sha256(data).hexdigest()})
+            if '.o' not in path.name or path.stat().st_size > 8_000_000:
+                continue
+            data=path.read_bytes()
+            if not data.startswith(b'\x7fELF'):
+                continue
+            symbols=subprocess.run(['nm','--defined-only',str(path)],capture_output=True,text=True,timeout=15)
+            names=[line.split()[-1] for line in symbols.stdout.splitlines() if line.split()]
+            names=[name for name in names if name.startswith('lp_competition_Submission_') and 'loop' in name and 'boxed' not in name and ('Packed' in name or 'NativeDecodeSum' in name)]
+            for symbol in names:
+                result=subprocess.run(['objdump','-d','--no-show-raw-insn','-Mintel','--disassemble='+symbol,str(path)],capture_output=True,timeout=15)
+                name='native-loop-'+str(len(objects))+'.asm.txt';(out/name).write_bytes(result.stdout)
+                objects.append({'kind':'actual-built-object-disassembly','source':str(path),'object_sha256':hashlib.sha256(data).hexdigest(),'symbol':symbol,'file':name,'sha256':hashlib.sha256(result.stdout).hexdigest(),'exit_code':result.returncode,'kernel_sha256':hashlib.sha256(kernel.read_bytes()).hexdigest()})
+        (out/'native-assembly-index.json').write_text(json.dumps(objects,indent=2)+'\n',encoding='utf-8')
     return reason
 g.STAGES=[('intake',g.intake),('policy',g.policy),('statement',statement)]
 with (g.HERE/'gate.lock').open('w') as lock:

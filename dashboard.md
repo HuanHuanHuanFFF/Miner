@@ -1,6 +1,6 @@
 # FloatLib 冲冠看板
 
-冠军核对：[2026-10-22 13:47 北京时间](competitions/floatlib/candidates/f01-d3-word-packed4/window1h-20261022/operation-comparisons.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。
+冠军核对：[2026-10-22 15:57 北京时间](competitions/floatlib/candidates/f01-d4-global8/window2h-20261022/operation-comparisons.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。
 
 | 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时 | 验证 |
 | --- | --- | --- | ---: | --- |
