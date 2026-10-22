@@ -50,12 +50,12 @@ static unsigned long long fl_now(void) { struct fl_timespec t; clock_gettime(1, 
 __attribute__((destructor)) static void fl_report(void) { printf("FL_PROFILE calls=%llu nativeA_ns=%llu packB_ns=%llu tiles_ns=%llu output_ns=%llu\\n",fl_calls,fl_ns[0],fl_ns[1],fl_ns[2],fl_ns[3]); }
 '''
     changed = (prelude+text[:match.start()]+body+text[match.end():]).encode()
-    plan = {'diagnostic_only': True, 'kernel_sha256':hashlib.sha256(kernel.read_bytes()).hexdigest(), 'original_c_sha256':hashlib.sha256(original).hexdigest(), 'instrumented_c_sha256':hashlib.sha256(changed).hexdigest(), 'scope':'Four monotonic clock boundaries around nativeA conversion, B packing, tile computation and output assembly. Includes allocation/refcount cost within boundaries. Instrumented copy of diagnostic statement object; not timed official gate object. No ranking claim.'}
+    plan = {'diagnostic_only': True, 'benchmark_seed':601,'benchmark_pairs':g._PAIRS,'kernel_sha256':hashlib.sha256(kernel.read_bytes()).hexdigest(), 'original_c_sha256':hashlib.sha256(original).hexdigest(), 'instrumented_c_sha256':hashlib.sha256(changed).hexdigest(), 'scope':'Four monotonic clock boundaries around nativeA conversion, B packing, tile computation and output assembly. Includes allocation/refcount cost within boundaries. Instrumented copy of diagnostic statement object; not timed official gate object. No ranking claim.'}
     (out/'profile-plan.json').write_text(json.dumps(plan, indent=2)+'\n')
     (out/'profile-instrumented.c').write_bytes(changed)
     def command(argv, name, build, cap=40):
         memory = g._BUILD_MEMORY_MB if build == 'write' else g._BENCH_MEMORY_MB
-        code, log = g.run(argv, cap, build=build, env_extra={'BENCH_SEED':'601','BENCH_PAIRS':'4','LEAN_ABORT_ON_PANIC':'1'}, memory_mb=memory)
+        code, log = g.run(argv, cap, build=build, env_extra={'BENCH_SEED':'601','BENCH_PAIRS':str(g._PAIRS),'LEAN_ABORT_ON_PANIC':'1'}, memory_mb=memory)
         (out/name).write_text(log)
         assert code == 0, (name, code, log[-1000:])
         return log
@@ -72,5 +72,7 @@ __attribute__((destructor)) static void fl_report(void) { printf("FL_PROFILE cal
         assert checksums(log) == checksums(control) and checksums(control)
         m=re.search(r'FL_PROFILE calls=(\d+) nativeA_ns=(\d+) packB_ns=(\d+) tiles_ns=(\d+) output_ns=(\d+)',log)
         assert m
-        vals=list(map(int,m.groups()));rows.append(dict(zip(['calls','nativeA_ns','packB_ns','tiles_ns','output_ns'],vals)))
+        vals=list(map(int,m.groups()))
+        assert all(v>0 for v in vals), 'Invalid zero-workload profile: BENCH_PAIRS determines tensor batch size'
+        rows.append(dict(zip(['calls','nativeA_ns','packB_ns','tiles_ns','output_ns'],vals)))
     (out/'profile-result.json').write_text(json.dumps({**plan,'checksum_matches_control':True,'measurements':rows},indent=2)+'\n')

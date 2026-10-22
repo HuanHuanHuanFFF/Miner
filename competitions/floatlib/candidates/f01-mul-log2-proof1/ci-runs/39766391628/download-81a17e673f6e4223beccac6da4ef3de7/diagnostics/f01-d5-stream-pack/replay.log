@@ -1,0 +1,54 @@
+[32m2026-10-22 11:01:35.823[0m | [1mINFO    [0m | [36mfloatlib_gate_diagnostic[0m:[36mpin[0m:[36m459[0m - [1m[pin] full incumbent /home/runner/work/_temp/floatlib-upstream/pinned/full/bench_incumbent sha256=e0273a66e27fc649[0m
+[32m2026-10-22 11:01:35.825[0m | [1mINFO    [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m735[0m - [1m[intake] ok[0m
+[32m2026-10-22 11:01:35.867[0m | [1mINFO    [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m735[0m - [1m[policy] ok[0m
+[32m2026-10-22 11:01:52.694[0m | [34m[1mDEBUG   [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun[0m:[36m348[0m - [34m[1m[run] /home/runner/.elan/bin/lake build VerifyFull exit=0 in 16.8s[0m
+[32m2026-10-22 11:02:01.207[0m | [34m[1mDEBUG   [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun[0m:[36m348[0m - [34m[1m[run] /home/runner/.elan/bin/lake build benchFull exit=0 in 8.5s[0m
+[32m2026-10-22 11:02:01.209[0m | [34m[1mDEBUG   [0m | [36mfloatlib_gate_diagnostic[0m:[36mstatement[0m:[36m548[0m - [34m[1m[statement] layer holds 38 entries[0m
+[32m2026-10-22 11:02:16.268[0m | [31m[1mERROR   [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m729[0m - [31m[1m[statement] crashed[0m
+[33m[1mTraceback (most recent call last):[0m
+
+  File "<string>", line 63, in <module>
+
+  File "[32m/home/runner/work/_temp/floatlib-upstream/[0m[32m[1mgate.py[0m", line [33m707[0m, in [35mgate[0m
+    [1mrun_stages[0m[1m([0m[1msrc[0m[1m,[0m [1mv[0m[1m,[0m [1mBENCH_STAGES[0m [35m[1mif[0m [1mmode[0m [35m[1m==[0m [36m"bench"[0m [35m[1melse[0m [1mSTAGES[0m[1m)[0m
+    [36m│          │    │  │               │                    └ [0m[36m[1m[('intake', <function intake at 0x7f1d23c9c7c0>), ('policy', <function policy at 0x7f1d23c9c860>), ('statement', <function st...[0m
+    [36m│          │    │  │               └ [0m[36m[1m'gate'[0m
+    [36m│          │    │  └ [0m[36m[1m[('intake', <function intake at 0x7f1d23c9c7c0>), ('statement', <function statement at 0x7f1d23c9c9a0>), ('score', <function ...[0m
+    [36m│          │    └ [0m[36m[1mVerdict(submission='f01-d5-stream-pack', slot='full', mode='gate', stage='statement', passed=False, reason='', seed=0, ratio=...[0m
+    [36m│          └ [0m[36m[1mPosixPath('/home/runner/work/_temp/floatlib-reports/inputs/f01-d5-stream-pack/Kernel.lean')[0m
+    [36m└ [0m[36m[1m<function run_stages at 0x7f1d23c9ce00>[0m
+
+> File "[32m/home/runner/work/_temp/floatlib-upstream/[0m[32m[1mgate.py[0m", line [33m727[0m, in [35mrun_stages[0m
+    [1mreason[0m [35m[1m=[0m [1mstage[0m[1m([0m[1msrc[0m[1m,[0m [1mv[0m[1m)[0m
+    [36m         │     │    └ [0m[36m[1mVerdict(submission='f01-d5-stream-pack', slot='full', mode='gate', stage='statement', passed=False, reason='', seed=0, ratio=...[0m
+    [36m         │     └ [0m[36m[1mPosixPath('/home/runner/work/_temp/floatlib-reports/inputs/f01-d5-stream-pack/Kernel.lean')[0m
+    [36m         └ [0m[36m[1m<function statement at 0x7f1d23c9cfe0>[0m
+
+  File "<string>", line 41, in statement
+  File "/usr/lib/python3.12/subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     │       │           │              └ 15
+                     │       │           └ None
+                     │       └ <function Popen.communicate at 0x7f1d24839760>
+                     └ <Popen: returncode: -9 args: ['nm', '--defined-only', '/home/runner/work/_te...>
+  File "/usr/lib/python3.12/subprocess.py", line 1209, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     │    │            │      │        └ 15
+                     │    │            │      └ 590.487387593
+                     │    │            └ None
+                     │    └ <function Popen._communicate at 0x7f1d2483a0c0>
+                     └ <Popen: returncode: -9 args: ['nm', '--defined-only', '/home/runner/work/_te...>
+  File "/usr/lib/python3.12/subprocess.py", line 2116, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+    │    │              │        │             │       └ []
+    │    │              │        │             └ []
+    │    │              │        └ 15
+    │    │              └ 590.487387593
+    │    └ <function Popen._check_timeout at 0x7f1d24839940>
+    └ <Popen: returncode: -9 args: ['nm', '--defined-only', '/home/runner/work/_te...>
+  File "/usr/lib/python3.12/subprocess.py", line 1253, in _check_timeout
+    raise TimeoutExpired(
+          └ <class 'subprocess.TimeoutExpired'>
+
+[31m[1msubprocess.TimeoutExpired[0m:[1m Command '['nm', '--defined-only', '/home/runner/work/_temp/floatlib-upstream/.sandbox/layer/upper/ir/Submission.c.o.export']' timed out after 15 seconds[0m
+[32m2026-10-22 11:02:16.271[0m | [33m[1mWARNING [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m733[0m - [33m[1m[statement] REJECTED f01-d5-stream-pack: gate error: Command '['nm', '--defined-only', '/home/runner/work/_temp/floatlib-upstream/.sandbox/layer/upper/ir/Submission.c.o.export']' timed out after 15 seconds[0m
