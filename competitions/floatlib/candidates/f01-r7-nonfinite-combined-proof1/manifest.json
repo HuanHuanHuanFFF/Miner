@@ -1,0 +1,25 @@
+{
+  "candidate": "f01-r7-nonfinite-combined-proof1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "39a99b3213adf8ef40734c62b420f09a127b385d7129fb89b1467f0ad7c52e2b",
+  "candidate_bytes": 173096,
+  "parents": [
+    {
+      "candidate": "f01-r7-nan-replay-fullpath",
+      "sha256": "9a2a05cd8e033d3cc079744ade77dd42464926d04ef5c9a8e7c050a1605ec854"
+    },
+    {
+      "candidate": "f01-r7-nonnan-runtime",
+      "sha256": "c76056882d69a1122da44b4bc0bb3ab5274251826f0677af2aec5771926d7435"
+    }
+  ],
+  "created_at_utc": "2026-10-22T20:31:45.069481+00:00",
+  "proof_status": "NOT_RUN_PROOF_REPAIR_AFTER_ACTUAL_808_FAILURE",
+  "validation_mode": "full-gate",
+  "mechanism": "Combine exact non-NaN terminal acceptance for sum/dot with selected quiet-NaN dot suffix replay. Common8eb ancestor; no layout change. Both actual NativeFinal.dot/Packed10.finish call replayEarly directly after the non-NaN guard, removing the now-redundant second endpoint classifier by the full replayEarly_eq theorem.",
+  "expected_gain": "UNKNOWN; original combined source did not reach timing. Full original gate required.",
+  "formal_submission": "NOT_SUBMITTED",
+  "parent": "f01-r7-nonfinite-combined",
+  "parent_sha256": "b1696ff9a51a112c5e34e1a86ef2634c58548492e452199ee041927c6cb5a18d",
+  "repair": "808 exactb169 failed only NativeFinal.dot_eq line3262 simp made no progress. Use direct simpa of the concrete replayEarly_eq theorem with fully qualified scalar equivalences instead of rewriting the goal then requiring a simplifier progress step. Runtime definitions unchanged; original failure preserved."
+}

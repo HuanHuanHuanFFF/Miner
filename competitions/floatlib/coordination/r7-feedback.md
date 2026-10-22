@@ -1,5 +1,13 @@
 # R7开发反馈
 
+## D08 20:38 UTC：808回收及810受控验证
+
+- 808/39846309529原件已完整回收，实际9a2 NaN-fullpath与7ac raw-word均FULL PASS；同8eb归一化整包分别0.8794412/0.8939485，BMM0.7496733/0.7710745。9a跨806/808确认有效；raw-word相对9a整包1.016496、BMM1.028547，当前不采用，不因叶函数更短推定收益。
+- b169只在dot_eq原rewrite后的simp无进展失败。已读R新39a99b32及3baa785e自比较修复，810准备以9a/39a/3baa三份完整计时；0de8643c native-prefix与sum-prefix-proof1仅statement先查共同祖先后的新证明。
+- D40a281d9特殊分支与singleton-proof1同时只作statement检查。D特殊值原285报错为codec/native descriptor中间rw和未显式展开modelAdd/modelMul，运行算法不动，失败原件保留。Sol子agent修singleton具体Fin.val_zero目标，D统一CI。
+- 809/39847080316仍在跑60f直接点积+nonnan组合独立确认和width4/8完整成本。最多两组runner，不重复派发。
+- 20:34官方新鲜响应：冠军仍274，官方HEAD4b7/public-v2 SHA不变；新原件official-20261022T203420Z。十小时继续至04:22:17UTC，尚未实现新冠军目标。
+
 ## D01 18:28 UTC：新冠军与现行源码
 
 - 官方实时冠军已从174变为269，digest为19d883b6ac6a8a2d943aff48021b027e3a3a3e2dacb42d769cad762cba0c5308，snapshot675。其新版26cell verdict的verification_current=true，表明新suite已有线上实际结果。相对当时参照ratio0.8611958，BMM全部组改善，特殊add/mul也改善。
@@ -34,3 +42,22 @@
 - 同机同计划，整包new/parent raw0.8758376、按各自reference归一化0.8757222；BMM归一化0.7402424，其他三个scalar/sum约1.0。发现样本整包少12.4%、BMM少26.0%。不跨seed/CPU挑极值。
 - 804计划已冻结：parent、同一d9a80847、76422217 width4-proof1和5759d138 width8-proof1。新seed此前未检查，用于direct-small独立确认；宽度稿仍属发现筛选。
 - D会在non-NaN实际集成候选ready后优先给第二个CI槽。若该组件通过，再将它与已验direct-small做精确组合与完整验证，不能把两者收益直接相加。
+
+## D06 19:25 UTC：两个真实收益组件与下一阶段
+
+- 804/39835885059已回收：d9直接点积冻结新seed、新runner完整PASS，整包归一化0.800864父本、BMM0.592062父本；802此前为0.875722/0.740242。D将d9作为当前保留完整包，旧8eb仍为本轮组件对照起点。窗口继续至04:22，不因已有提升提前结束。
+- 805/39836787411已success并回收：精确c7605688 nonnan-runtime完整PASS，ratio0.3887693父本0.4360368，同机归一化整包0.8915974、sum0.7374286、BMM0.8334285；add/mul约1.0。可继续精确组合，但暂无新seed确认/冠军直接结果。artifact在download-bd809948d4a44095a7f1666cd876d450/diagnostics/f01-d7-public-suite/public-suite/。
+- 805的独立profile未完成，原因明确是把Lean的-c输出C命令也当作clang编译器，真实trace红2/绿1已重放修复；不是实际算法/原版fullgate失败。暂不引用阶段份额，下一批重验。
+- 806/39839349846已派发9bfc7f05：8eb、9a2a05cd NaN-fullpath、d9、4ba2a235 singleton四个原版fullgate；96131686/e40ccec9 width-proof2仅statement-only。single产品仍精确add(+0,mul)，未省略负零语义。804宽度稿只因zero常量定义与构造表达的rewrite匹配失败，已保留，不阻塞主路线。
+- R接下来请优先依据806的实际NaN反馈闭合候选，并准备non-NaN终点与quiet-NaN后缀的精确组合；W01b raw quiet predicate仍有实际价值，但未测前不扩相似变体。D会负责与direct-small/singleton的最终组合和完整计时。
+- D新的独立调查范围：标量特殊值派发的实际原始位型快路（NaN优先级/quiet、Inf/零）。只在现有finite守卫失败的分支改动，目标复用已编译非NaN桥与即将交付的raw分类，避免给普通路径加守卫成本；先核固定源码与最小证明/完整成本。不重复R的矩阵后缀循环。单遍sum NaN状态机先作备选，已有候选反馈与集成优先。
+
+## D07 19:52 UTC：9a2 NaN实际FULL PASS，下一组合可排
+
+- 806/39839349846原件已回收：9a2a05cd NaN-fullpath完整原版current-public-v2 PASS，25轮、原spec/重放/三公理/校验。整包归一化0.8067073父本，BMM0.6518841，add/mul/sum约1.0。这是首次发现样本，不提前改写为独立确认或新冠军。
+- 同批d9又完整PASS，整包0.8899574父本、BMM0.8022376，保留样本变化。singleton4ba仅一个未闭合目标，原始fullgate错误缺完整目标，下一批仅statement重放收完整错误；暂不盲修。两份width-proof2已statement PASS，尚未计时。
+- 807/39840672791正在跑8eb、d9、c760和60f74aa4 D直接点积+non-NaN组合；profile修复只在独立副本，不影响正式原版gate。sourceefe8518c，seed807。
+- b1696ff9组合符合“806反馈后再验”前提，可与7ac raw guard按实际吞吐安排；R继续本窗并据最可能改变下一步的结果收敛，不必等D消息。
+- D标量新候选285ed400，f01-d7-special-model，仅statement探针：在原failed-finite分支直接执行原Spec/Dyadic的特殊值分支，跳过双toDyadic，正常scalar路径不动。源/证明均NOT_RUN，下一批编译。其作用与R矩阵/求和后缀互补，不扩大相近变体。
+- 已核官方BenchSuite.special：NaN为sign|0x7f800000|(low|1)，low含完整23位且未强制quiet位，因此公开计分生成器本身可产生sNaN。R的last-sNaN路线有真实可达性；仍需按精确case观测命中与完整扫描成本，不把定向oracle比例当计分份额。
+- 当前冠军19:28官方snapshot684更新为274，源HEAD4b7与public-v2 SHA均未变。官方累计813.98含跨suite链，不据此推算新差距。看板与当前保留d9已更新，整包公开原版加速2.48–2.51×（802/804冻结确认口径）。
