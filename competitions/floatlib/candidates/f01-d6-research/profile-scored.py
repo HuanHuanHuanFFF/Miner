@@ -21,7 +21,7 @@ def instrument(text):
         lines.insert(positions[0]+1, mark+'=fl_now();')
     value = '\n'.join(lines)
     report = 'fl_calls++; printf("FL_CALL call=%llu total_ns=%llu nativeA_ns=%llu packB_ns=%llu tile_ns=%llu output_ns=%llu rows=%llu\\n",fl_calls,fl_now()-fl_start,fl_a-fl_start,fl_b-fl_a,fl_tile_ns,fl_output_ns,fl_row_calls);'
-    value, n = re.subn(r'(return v_[^;]+;)', report+r'\n\1', value)
+    value, n = re.subn(r'(return v_[^;]+;)', lambda m: report+'\n'+m.group(1), value)
     assert n >= 1
     text = text[:core.start()]+value+text[core.end():]
     row_name = 'lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_RowStream_core_spec__0___redArg'
@@ -36,7 +36,7 @@ def instrument(text):
         lines.insert(i, '{ unsigned long long fl_local_t=fl_now();')
         lines.insert(i+2, counter+' += fl_now()-fl_local_t; }')
     # The output allocation result is declared at the enclosing scope.
-    value='\n'.join(lines).replace('v_rowTiles_', 'v_rowTiles_')
+    value='\n'.join(lines)
     value, n = re.subn(r'(fl_output_ns \+= fl_now\(\)-fl_local_t; })', r'\1 fl_row_calls++;', value)
     assert n==1
     text=text[:m.start()]+value+text[m.end():]
