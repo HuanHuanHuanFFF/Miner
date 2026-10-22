@@ -69,8 +69,9 @@ def statement(src,verdict):
             except Exception as error:
                 import traceback
                 (out/'profile-error.txt').write_text(traceback.format_exc(),encoding='utf-8')
-        if kernel.parent.name == 'f01-d6-public-suite':
-            ps=importlib.util.spec_from_file_location('current_public_suite',profiler.parent.parent/'f01-d6-research/public-suite.py')
+        if kernel.parent.name in ('f01-d6-public-suite','f01-d7-public-suite'):
+            research_dir='f01-d6-research' if kernel.parent.name=='f01-d6-public-suite' else 'f01-d7-research'
+            ps=importlib.util.spec_from_file_location('current_public_suite',profiler.parent.parent/research_dir/'public-suite.py')
             pm=importlib.util.module_from_spec(ps);ps.loader.exec_module(pm)
             pm.run(g,kernel,out)
     return reason
@@ -89,7 +90,7 @@ sys.exit(0 if verdict.passed else 1)
             try:
                 profiler=Path(__file__).resolve().parent.parent/'f01-d5-costsplit/profile-native.py'
                 p=subprocess.Popen([str(a.upstream/'.venv/bin/python'),'-c',code,str(a.upstream),str(a.kernel),str(out),str(profiler)],cwd=a.upstream,env=os.environ.copy(),stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
-                report['replay_exit_code']=p.wait(timeout=2400 if a.name == 'f01-d6-public-suite' else 120)
+                report['replay_exit_code']=p.wait(timeout=2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 120)
             except subprocess.TimeoutExpired:
                 os.killpg(p.pid,signal.SIGKILL);p.wait();report['replay']='diagnostic-only replay process group timed out at 120s'
         report['replay_seconds']=round(time.monotonic()-start,3)
