@@ -1,0 +1,20 @@
+{
+  "observed_run": 39763957746,
+  "observed_error": "link -15 after 1.1s; compile and original benchmark succeeded",
+  "ranked_hypotheses": [
+    {
+      "hypothesis": "Linker was given benchmark512MiB instead of pinned build4096MiB cap",
+      "prediction": "Same captured link command succeeds under unchanged official build cap; benchmark remains512MiB",
+      "test": "Change only g.run memory selection by build mode"
+    },
+    {
+      "hypothesis": "Captured link response-file paths unavailable in overlay",
+      "prediction": "Would normally emit missing file error; check if cap fix fails"
+    },
+    {
+      "hypothesis": "Timeout",
+      "prediction": "Would take60s and return124; observed1.1s makes this inconsistent"
+    }
+  ],
+  "scope": "Candidate-local diagnostic, not official gate configuration. Original three failures retained."
+}

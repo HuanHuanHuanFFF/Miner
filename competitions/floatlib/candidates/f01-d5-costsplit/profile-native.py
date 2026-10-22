@@ -54,7 +54,8 @@ __attribute__((destructor)) static void fl_report(void) { printf("FL_PROFILE cal
     (out/'profile-plan.json').write_text(json.dumps(plan, indent=2)+'\n')
     (out/'profile-instrumented.c').write_bytes(changed)
     def command(argv, name, build, cap=40):
-        code, log = g.run(argv, cap, build=build, env_extra={'BENCH_SEED':'601','BENCH_PAIRS':'4','LEAN_ABORT_ON_PANIC':'1'}, memory_mb=g._BENCH_MEMORY_MB)
+        memory = g._BUILD_MEMORY_MB if build == 'write' else g._BENCH_MEMORY_MB
+        code, log = g.run(argv, cap, build=build, env_extra={'BENCH_SEED':'601','BENCH_PAIRS':'4','LEAN_ABORT_ON_PANIC':'1'}, memory_mb=memory)
         (out/name).write_text(log)
         assert code == 0, (name, code, log[-1000:])
         return log
