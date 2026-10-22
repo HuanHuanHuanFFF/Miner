@@ -8,6 +8,8 @@ state=json.loads(STATE.read_bytes());ledger=state['collaboration']['active_ci']
 def save_state():
     state['updated_at_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat()
     state['active_jobs']=[{k:r.get(k) for k in ['run','status','candidates','source_commit']} for r in ledger if r.get('status')!='completed']
+    dispatched={n for r in ledger for n in r['candidates']}
+    state['collaboration']['pending_candidates']=[r for r in state['collaboration'].get('pending_candidates',[]) if r['candidate'] not in dispatched]
     tmp=STATE.with_name(STATE.name+'.update-tmp');tmp.write_bytes((json.dumps(state,ensure_ascii=False,indent=2)+'\n').encode());os.replace(tmp,STATE)
 
 if len(sys.argv)==3 and sys.argv[1]=='--register-seed':
