@@ -1,53 +1,24 @@
 {
   "state": "R7_TEN_HOUR_RESEARCH_ACTIVE",
-  "updated_at_utc": "2026-10-22T19:05:56.500065+00:00",
+  "updated_at_utc": "2026-10-22T20:41:01.115460+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
-  "candidate": "competitions/floatlib/candidates/f01-d5-stream-pack",
-  "kernel": "competitions/floatlib/candidates/f01-d5-stream-pack/Kernel.lean",
-  "kernel_sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045",
-  "kernel_bytes": 139972,
-  "manifest": "competitions/floatlib/candidates/f01-d5-stream-pack/manifest.json",
-  "official_commit": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
+  "candidate": "competitions/floatlib/candidates/f01-d7-direct-nonnan",
+  "kernel": "competitions/floatlib/candidates/f01-d7-direct-nonnan/Kernel.lean",
+  "kernel_sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+  "kernel_bytes": 155103,
+  "manifest": "competitions/floatlib/candidates/f01-d7-direct-nonnan/manifest.json",
+  "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
   "lean_toolchain": "leanprover/lean4:v4.34.0",
   "floatlib_commit": "0d91825727839f597fd06b22fdd038ea21480f0c",
   "baseline_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
   "baseline_reference": "competitions/floatlib/references/official-incumbent/Kernel.lean",
-  "proof_status": "PASS_FULL_OFFICIAL_GATE_WITH_FROZEN_INDEPENDENT_CONFIRMATION",
-  "benchmark": "VERIFIED_PUBLIC_FIXED_REFERENCE",
+  "proof_status": "PASS_FULL_CURRENT_PUBLIC_SUITE_DISCOVERY_AND_FROZEN_NEW_SEED_RUNNER_CONFIRMATION",
+  "benchmark": "VERIFIED_PUBLIC_V2_SHIPPED_REFERENCE",
   "formal_submission": "NOT_SUBMITTED",
   "acceptance_target": "Attempt to produce the next live champion: full four-kernel candidate, exact proof gate, and significant >=3% gain against the champion current at evaluation. Improvement over the shipped reference alone does not satisfy the goal.",
   "acceptance_target_status": "UNACHIEVED",
-  "active_jobs": [
-    {
-      "run": 39835885059,
-      "seed": 804,
-      "wrapper": "f01-d7-public-suite",
-      "candidates": [
-        "f01-d5-stream-pack",
-        "f01-d7-direct-small",
-        "f01-d7-width4-proof1",
-        "f01-d7-width8-proof1"
-      ],
-      "source_commit": "9ff02cb82d38a00e1c4c26004bc8334ee429c117",
-      "status": "in_progress",
-      "collected": false,
-      "purpose": "Frozen independent direct-small confirmation and separately scoped width repair discovery"
-    },
-    {
-      "run": 39836787411,
-      "seed": 805,
-      "wrapper": "f01-d7-public-suite",
-      "candidates": [
-        "f01-d5-stream-pack",
-        "f01-r7-nonnan-runtime"
-      ],
-      "source_commit": "3e80aab1382d43e737341f37bf620cbc29ef5df2",
-      "status": "in_progress",
-      "collected": false,
-      "purpose": "First integrated non-NaN terminal fullgate and separate corrected original-public-plan diagnostic"
-    }
-  ],
+  "active_jobs": [],
   "collaboration": {
     "round": "R7",
     "start_utc": "2026-10-22T18:22:17Z",
@@ -112,9 +83,10 @@
           "f01-d7-width8-proof1"
         ],
         "source_commit": "9ff02cb82d38a00e1c4c26004bc8334ee429c117",
-        "status": "in_progress",
-        "collected": false,
-        "purpose": "Frozen independent direct-small confirmation and separately scoped width repair discovery"
+        "status": "completed",
+        "collected": true,
+        "purpose": "Frozen independent direct-small confirmation and separately scoped width repair discovery",
+        "conclusion": "failure"
       },
       {
         "run": 39836787411,
@@ -125,89 +97,149 @@
           "f01-r7-nonnan-runtime"
         ],
         "source_commit": "3e80aab1382d43e737341f37bf620cbc29ef5df2",
-        "status": "in_progress",
-        "collected": false,
-        "purpose": "First integrated non-NaN terminal fullgate and separate corrected original-public-plan diagnostic"
+        "status": "completed",
+        "collected": true,
+        "purpose": "First integrated non-NaN terminal fullgate and separate corrected original-public-plan diagnostic",
+        "conclusion": "success"
+      },
+      {
+        "run": 39839349846,
+        "seed": 806,
+        "wrapper": "f01-d7-public-suite",
+        "candidates": [
+          "f01-d5-stream-pack",
+          "f01-r7-nan-replay-fullpath",
+          "f01-d7-direct-small",
+          "f01-d7-singleton",
+          "f01-d7-width4-proof2",
+          "f01-d7-width8-proof2"
+        ],
+        "source_commit": "9bfc7f058c52ad55593a17b8b909ad509bdecb99",
+        "status": "completed",
+        "collected": true,
+        "purpose": "Quiet-NaN runtime andsingleton original fullgates; widths only separately labeled statement probes",
+        "conclusion": "failure"
+      },
+      {
+        "run": 39840672791,
+        "seed": 807,
+        "wrapper": "f01-d7-public-suite",
+        "candidates": [
+          "f01-d5-stream-pack",
+          "f01-d7-direct-small",
+          "f01-r7-nonnan-runtime",
+          "f01-d7-direct-nonnan"
+        ],
+        "source_commit": "efe8518cd34d9777ff5395f9a9c0841dfd5b783b",
+        "status": "completed",
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T193015Z/dispatch.json",
+        "conclusion": "success"
+      },
+      {
+        "run": 39846309529,
+        "seed": 808,
+        "wrapper": "f01-d7-public-suite",
+        "candidates": [
+          "f01-d5-stream-pack",
+          "f01-r7-nan-replay-fullpath",
+          "f01-r7-nan-replay-word",
+          "f01-r7-nonfinite-combined",
+          "f01-d7-special-model",
+          "f01-d7-singleton"
+        ],
+        "source_commit": "8fc6a7ea80fcbf292620afba6c3fe8b692bc78d9",
+        "status": "completed",
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T200855Z/dispatch.json",
+        "conclusion": "failure"
+      },
+      {
+        "run": 39847080316,
+        "seed": 809,
+        "wrapper": "f01-d7-public-suite",
+        "candidates": [
+          "f01-d7-direct-small",
+          "f01-r7-nonnan-runtime",
+          "f01-d7-direct-nonnan",
+          "f01-d7-width4-proof2",
+          "f01-d7-width8-proof2"
+        ],
+        "source_commit": "f69da28963f2a68cf9232818b4facf74de161d5b",
+        "status": "completed",
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T201410Z/dispatch.json",
+        "conclusion": "success"
       }
     ],
     "started_ci_policy": "Finish naturally and recover exact evidence even if final started work outlives deadline; no new research after deadline",
-    "research_agent_state": "ACTIVE_CONFIRMED_BY_THREAD_SNAPSHOT"
+    "research_agent_state": "ACTIVE_CONFIRMED_BY_THREAD_SNAPSHOT",
+    "publication": {
+      "state": "AWAITING_EXPLICIT_PUBLIC_PUSH_AUTHORIZATION",
+      "prepared_commit": "ce3c0c07",
+      "repository": "HuanHuanHuanFFF/Miner",
+      "branch": "codex/multi-track-floatlib",
+      "reason": "Automatic approval review rejected public source upload because authorization for this destination and payload was insufficient. User asked asynchronously; no bypass.",
+      "ci_810": "NOT_PUSHED_NOT_DISPATCHED"
+    }
   },
   "current_report": "competitions/floatlib/candidates/f01-d7-research/README.md",
   "receipt_auditor": "competitions/floatlib/candidates/f01-d5-costsplit/window90m-20261022/audit-window.py",
   "performance": {
+    "protocol": "Original official4b7e838 public-v2;152scored cases,26cells,25rounds; public shipped reference",
     "full_gate_runs": [
-      39766391628,
-      39767698381,
-      39769247640,
-      39770153343
+      39840672791,
+      39847080316
     ],
     "seeds": [
-      607,
-      608,
-      610,
-      611
-    ],
-    "cpus": [
-      "AMD EPYC 7763 64-Core Processor",
-      "AMD EPYC 7763 64-Core Processor",
-      "AMD EPYC 7763 64-Core Processor",
-      "AMD EPYC 9V74 80-Core Processor"
+      807,
+      809
     ],
     "ratio_vs_shipped": [
-      0.23918549157323532,
-      0.2425575679148799,
-      0.2390236366222721,
-      0.22122315994910738
+      0.3516430740685974,
+      0.33981065809450917
     ],
     "kernels_vs_shipped": [
       {
-        "add": 0.41393500381434156,
-        "mul": 0.7187293204387925,
-        "sum": 0.05615151102045345,
-        "bmm": 0.015195342835071613
+        "add": 0.3884322160590094,
+        "mul": 0.7116980866016152,
+        "sum": 0.21910137364846904,
+        "bmm": 0.2822364383931984
       },
       {
-        "add": 0.4184654571579188,
-        "mul": 0.737182520005677,
-        "sum": 0.055829046170232766,
-        "bmm": 0.015159855265689907
-      },
-      {
-        "add": 0.40290687343515436,
-        "mul": 0.729433462349214,
-        "sum": 0.05547507602064215,
-        "bmm": 0.015089567808022647
-      },
-      {
-        "add": 0.3717052838424509,
-        "mul": 0.6558593415138466,
-        "sum": 0.06189073159587644,
-        "bmm": 0.015110296514673605
+        "add": 0.3553731519550245,
+        "mul": 0.6727972235387251,
+        "sum": 0.22295092741633574,
+        "bmm": 0.291504877612891
       }
     ],
-    "paired_gain_p05": [
-      0.7534313927348119,
-      0.7494620247764285,
-      0.7511601737542045,
-      0.7757797023367701
-    ]
+    "confirmation_phase": [
+      "discovery",
+      "frozen_new_seed_new_runner"
+    ],
+    "previous_package": "f01-d7-direct-small",
+    "time_over_previous_package_reference_normalized": [
+      0.9070099218225419,
+      0.8617567155999797
+    ],
+    "evidence": "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json"
   },
   "history": {
     "previous_round_state": "competitions/floatlib/candidates/f01-d5-costsplit/window90m-20261022/previous-state.json",
-    "preclose_state": "competitions/floatlib/candidates/f01-d5-costsplit/window90m-20261022/preclose-state.json"
+    "preclose_state": "competitions/floatlib/candidates/f01-d5-costsplit/window90m-20261022/preclose-state.json",
+    "previous_candidate_state": "competitions/floatlib/candidates/f01-d7-research/previous-state.json"
   },
   "remaining": [
     "Current-champion replacement unachieved",
-    "Next authorized window: matrix specials/layout and sum infinity bridges by current public-v2 complete costs",
+    "Continue authorized ten-hour research through 2026-10-23T04:22:17Z",
     "Formal submission, registration and funds outside scope"
   ],
   "current_champion_comparison": {
-    "submission": 269,
-    "source_digest": "19d883b6ac6a8a2d943aff48021b027e3a3a3e2dacb42d769cad762cba0c5308",
-    "policy_snapshot": "675",
-    "queried_at_utc": "2026-10-22T18:26:59Z",
-    "candidate": "f01-d5-stream-pack",
+    "submission": 274,
+    "source_digest": "51ee11a2bc8aed5e47a9848d59d1f20182b91aa5517d808a08cea059e83f276a",
+    "policy_snapshot": "685",
+    "queried_at_utc": "2026-10-22T20:34:26.447231+00:00",
+    "candidate": "f01-d7-direct-nonnan",
     "direct_paired_ratio": "UNKNOWN",
     "method": "Only exact same-suite paired current-champion result supports a direct gap; no cross-suite chain inference",
     "evidence": "competitions/floatlib/candidates/f01-d7-research/current-official-snapshot.json"
@@ -222,8 +254,8 @@
     "checked_at_utc": "2026-10-22T11:36:02.744469+00:00",
     "scope": "Root and both-track checks;118FloatLibcandidatehashpairs, local links, syntax and manual workflow configuration. Full Lean/gate acceptance separately bound to exact source."
   },
-  "research_resources": "R6 Astra handoff complete;4web jobs fully recovered, no active web/local runner tasks, all11publicCI terminal",
-  "selection_scope": "Retain8eb complete package after two full current public-v2 gates; guard microchanges lacked material gain, integer multiplier regressed, bias proof failed, gap26 passed but regressed. No promotion or formal submission.",
+  "research_resources": "R7 Astra research active; latest CI state is in active_jobs; local analysis and evidence recovery continue",
+  "selection_scope": "Retain exact 60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15 after discovery and frozen confirmation; ten-hour champion research remains active",
   "last_research_branch": "codex/multi-track-floatlib",
   "repository_maintenance": {
     "verified_at_utc": "2026-10-22T11:51:44.110398+00:00",
@@ -246,54 +278,43 @@
   "optimization_priority": {
     "user_instruction_date": "2026-10-22",
     "rule": "Rank concrete routes by scored-time share times credible achievable time reduction; then weigh development, proof and full-validation cost. No fixed operator order.",
-    "basis": "competitions/floatlib/research/results/optimization-priority.json",
-    "median_scored_time_share_percent": {
-      "add": 39.69332288307295,
-      "mul": 52.723479050991415,
-      "sum": 4.876706706393252,
-      "bmm": 2.427490158191026
-    },
+    "basis": "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json",
     "screening": "Run the smallest useful complete-cost diagnostic first. Park negligible-gain variants; do not repeat negative routes without a changed mechanism or condition. Preserve proportionate final full-gate confirmation time.",
-    "research_authorization": "User resumed 90-minute champion research 2026-10-22T13:17:45Z; ends14:47:45Z; CI and started experiments finish and collect naturally.",
+    "research_authorization": "R7 ten-hour collaboration 2026-10-22T18:22:17Z through 2026-10-23T04:22:17Z",
     "user_confirmed_criterion": "耗时占比 × 可实现的降耗幅度，再考虑开发和验证成本",
     "route_order": "Compare matrix fallback/layout and sum nonfinite bridges by measured current suite shares and achievable reductions; branch-guard microchanges have little observed whole gain. No permanent operator order.",
     "gain_formula": "For affected scored classes c: expected whole-entry time reduction = sum(w_c * r_c); r_c = 1 - 1/s_c for a local speedup factor s_c. Account for actual hit coverage; avoid double-counting it.",
     "evidence_requirement": "Record measured time share, achievable reduction range and supporting mechanism/diagnostic, coverage, total development/proof/queue/collection/confirmation cost, and next falsifiable check for each route. Unknown gain remains UNKNOWN and gets a bounded diagnostic.",
     "cost_rule": "Compare credible whole-entry gain with total cost and reusable value; no fabricated success probability or mandatory single gain-per-hour score.",
-    "basis_applicability": "Legacy12 exposure only; remeasure current public-v2 whole-call shares and fallback costs before adopting routes",
+    "basis_applicability": "Exact f01-d7-direct-nonnan discovery and frozen new-seed/new-runner complete gates",
     "current_public_suite_share_percent": {
-      "add": 18.7443195489739,
-      "mul": 20.746610697346675,
-      "sum": 10.924158302886958,
-      "bmm": 49.58491145079247
+      "add": 25.235862202436415,
+      "mul": 26.327569659740934,
+      "sum": 14.090979205883128,
+      "bmm": 34.34558893193952
     },
-    "current_suite_basis": "competitions/floatlib/candidates/f01-d6-research/public-suite-results.json"
+    "current_suite_basis": "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json"
   },
   "current_protocol": {
     "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
-    "scope": "Current original source paid private suite; current champion269 verification_current=true and26cell report verified; public-v2 SHA unchanged",
+    "scope": "Current original paid private suite; current champion274 verification_current=true and26cell report verified; public-v2 SHA unchanged",
     "public_tuning_suite": "public-v2",
     "transition": "competitions/floatlib/docs/suite-transition-20261022.md",
-    "new_suite_time_shares": {
-      "add": 18.7443195489739,
-      "mul": 20.746610697346675,
-      "sum": 10.924158302886958,
-      "bmm": 49.58491145079247
-    },
-    "new_suite_evidence": "competitions/floatlib/candidates/f01-d6-research/public-suite-results.json"
+    "new_suite_evidence": "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json"
   },
   "current_multiplier_view": {
-    "evidence": "competitions/floatlib/candidates/f01-d7-research/current-official-snapshot.json",
-    "official_champion": 269,
-    "snapshot": "675",
+    "evidence": "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json",
+    "official_champion": 274,
+    "snapshot": "685",
     "official_time_ratio": "candidate / current champion; champion self = 1.0; lower is better",
     "candidate_time_over_current_champion": "UNKNOWN",
     "candidate_current_public_suite_speedup_range": [
-      2.1389622056505235,
-      2.474069440355994
+      2.843792679974477,
+      2.942815288983305
     ],
-    "champion_official_historical_speedup_vs_shipped": 579.2637814253798,
-    "cross_suite_gap": "UNKNOWN; do not divide historical champion and current public-suite speedups"
+    "champion_official_historical_speedup_vs_shipped": 813.9839863782523,
+    "cross_suite_gap": "UNKNOWN; do not divide historical champion and current public-suite speedups",
+    "candidate": "f01-d7-direct-nonnan"
   },
   "pending_candidates": [
     {
@@ -303,6 +324,57 @@
       "run": 39833363659,
       "whole_time_over_parent_normalized": 0.8757222035731369,
       "bmm_time_over_parent_normalized": 0.740242428999211
+    }
+  ],
+  "r7_adoptions": [
+    {
+      "adopted_at_utc": "2026-10-22T20:40:23.722052+00:00",
+      "previous": {
+        "candidate": "competitions/floatlib/candidates/f01-d7-direct-small",
+        "kernel_sha256": "d9a808479dd6a7c7da345ce680773105b638cc6c9e8145e34d10f59751411fb3",
+        "performance": {
+          "protocol": "Current original4b7 public-v2 SHAa16494e9,152timed cases26cells25rounds; public shipped reference, not private champion",
+          "full_gate_runs": [
+            39833363659,
+            39835885059
+          ],
+          "seeds": [
+            802,
+            804
+          ],
+          "ratio_vs_shipped": [
+            0.39835388629567337,
+            0.40260204449350423
+          ],
+          "kernels_vs_shipped": [
+            {
+              "add": 0.41161526064115544,
+              "mul": 0.6916492479283924,
+              "sum": 0.22053165916727663,
+              "bmm": 0.3795313415558559
+            },
+            {
+              "add": 0.3732089326321682,
+              "mul": 0.6873613818323085,
+              "sum": 0.3226106610424447,
+              "bmm": 0.3636879600002757
+            }
+          ],
+          "confirmation_phase": [
+            "discovery",
+            "frozen_new_seed_new_runner"
+          ],
+          "time_over_previous_package_reference_normalized": [
+            0.8757222035731369,
+            0.8008640580979535
+          ],
+          "evidence": "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json"
+        }
+      },
+      "new_candidate": "f01-d7-direct-nonnan",
+      "new_sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+      "discovery": 39840672791,
+      "confirmation": 39847080316
     }
   ]
 }

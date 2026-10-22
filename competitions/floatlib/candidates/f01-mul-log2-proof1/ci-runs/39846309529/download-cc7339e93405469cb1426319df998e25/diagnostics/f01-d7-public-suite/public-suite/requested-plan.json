@@ -1,0 +1,45 @@
+{
+  "seed": 808,
+  "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+  "suite": "suites/public-v2.json",
+  "candidates": [
+    {
+      "candidate": "f01-d5-stream-pack",
+      "sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045"
+    },
+    {
+      "candidate": "f01-r7-nan-replay-fullpath",
+      "sha256": "9a2a05cd8e033d3cc079744ade77dd42464926d04ef5c9a8e7c050a1605ec854"
+    },
+    {
+      "candidate": "f01-r7-nan-replay-word",
+      "sha256": "7acff965a610f759cf9b5b8ff1422ee5f70de1b1cdc413a6847b392e7ae9f368"
+    },
+    {
+      "candidate": "f01-r7-nonfinite-combined",
+      "sha256": "b1696ff9a51a112c5e34e1a86ef2634c58548492e452199ee041927c6cb5a18d"
+    },
+    {
+      "candidate": "f01-d7-special-model",
+      "sha256": "285ed400c999e0d1e5c227607550905bd0d98156170cb1122ee483f4359437af",
+      "validation_mode": "statement-only"
+    },
+    {
+      "candidate": "f01-d7-singleton",
+      "sha256": "4ba2a23548e5df7f3c379b4734e6653c0546b8346d6d567eb397c1245f725d43",
+      "validation_mode": "statement-only"
+    }
+  ],
+  "purpose": "Controlled raw-vs-model quiet guard comparison and first actual Inf-plus-NaN runtime composition; exact original fullgates. Special scalar dispatcher and unchanged singleton error replay are statement-only with complete build diagnostics, never performance claims",
+  "expected_cost": "807 four full gates plus diagnostic took1182s nested; this four-full/two-probe batch expected about20-24minutes plus setup, within40minute replay/45minute workflow",
+  "supplementary_comparisons": [
+    {
+      "candidate": "f01-r7-nan-replay-word",
+      "baseline": "f01-r7-nan-replay-fullpath"
+    },
+    {
+      "candidate": "f01-r7-nonfinite-combined",
+      "baseline": "f01-r7-nan-replay-fullpath"
+    }
+  ]
+}

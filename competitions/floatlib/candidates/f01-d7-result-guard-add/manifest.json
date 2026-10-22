@@ -1,0 +1,21 @@
+{
+  "candidate": "f01-d7-result-guard-add",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "fb365daa6ff957b34c9e6f4b5e339a2f9bb5f529526e5ce3ca571a2837a6747d",
+  "candidate_bytes": 156619,
+  "parent": "f01-d7-direct-nonnan",
+  "parent_sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+  "validation_mode": "statement-only",
+  "proof_status": "NOT_RUN",
+  "mechanism": "Classify actual native scalar add result by IEEE self-BEq instead of two exponent-field input classifiers. Accept infinity. A native NaN result takes the exact previous raw TunedAdd/FastMul fallback. Keep numeric add conversion, multiplication low-exponent route, tensor shapes/order and every unchanged proof.",
+  "proof_route": "Move exact closed NativeBridge/NotNaNProbe/R7Native namespaces earlier without edits; reuse nonNaN result inversion, concrete operation bridge and raw roundtrip. Copy exact W04 self-BEq theorem block; newly integrated full source still NOT_RUN.",
+  "source_attribution": "FloatLib Team MIT fixed0d918; R7W04 public Lean4.34 self-BEq proof from R researcher; all source hashes in parent manifest and R handoff.",
+  "guard_source_sha256": "3baa785ee05745d2929af7208c6105d7e2f645a8c46b87e6e631e2165aaa9a6c",
+  "moved_proof_blocks_sha256": {
+    "NativeBridge": "03b626fbaf4e5ac0cc3c9bd6a0009eeaa00eb4d508b0f9b64d867fee2682d3fc",
+    "NotNaNProbe": "6440cc47ffac4bbfc9c5a42f48d3a4ef7b455d2f7f6792a341b2d0e2630061a1",
+    "R7Native": "1f60d2bac8219bc597768fc77bd54a71ddf5a4c1bcadacb61ef56fa39856bf2b"
+  },
+  "expected_gain": "UNKNOWN; normal scalar guards may be cheaper, Inf needs less fallback, NaN now pays initial native work. Measure affected full costs and keep losing families. Not a numeric-mul decoder retry.",
+  "formal_submission": "NOT_SUBMITTED"
+}

@@ -2,7 +2,7 @@
 
 截至 2026-10-22，统一整理 R1–R6 已有结论、12份历史归档与R6新增4份研究交付。四项性能与冠军见[看板](../../../dashboard.md)，当前候选选择见[开发状态](../coordination/development-status.json)。
 
-**已建立原生算术、精确解码、有序累加、机器字索引及矩阵按行输出的证明链；后续按“耗时占比 × 可实现降耗”，结合开发和验证成本选择具体路线。** 当前完整包为 [f01-d5-stream-pack][K]，已多轮完整验收通过；仍未取代冠军。新版公开／付费私有suite适用范围见[套件变更](../docs/suite-transition-20261022.md)，旧份额与冠军倍数不跨suite继承。
+**已建立原生算术、精确解码、有序累加、机器字索引及矩阵按行输出的证明链；后续按“耗时占比 × 可实现降耗”，结合开发和验证成本选择具体路线。** R7当前保留[直接点积＋非NaN完整包](../candidates/f01-d7-direct-nonnan/Kernel.lean)，冻结后独立确认通过；Inf、NaN及组合成果见[R7](../candidates/f01-d7-research/README.md)。下表K仍固定指8eb原件，历史证明与失败保持原版。尚未取代冠军，旧份额与冠军倍数不跨suite继承；适用范围见[套件变更](../docs/suite-transition-20261022.md)。
 
 | 运算 | 已可复用的结论 | 当前使用方式 |
 |---|---|---|
@@ -45,6 +45,17 @@
 | M20 | 对有限normal操作数，指数差≥26可精确返回较大操作数；保留异号二次幂边界和原fallback，TunedAdd规格桥连接原obligation | [absorption26-proof2](../candidates/f01-r6-web-absorption26-proof2/Kernel.lean)，65cd1338；720新版public-v2完整PASS；该样本add约慢7.7%、整包约慢0.4%，保留证明、停放运行路径 |
 
 全输入义务仍包括 NaN payload、Inf、次正规数、±0 与指定舍入顺序。**FMA、重排浮点求和、忽略零符号、仅比较实数值均不能替代这些等式。** 原生解码等于 `Float32.ofBits`，也不等于保留所有原始 NaN payload；精确回退须保留原始字。
+
+### R7：当前原版公开套件实际验证的新增组件
+
+| 编号 | 数学结论与范围 | 精确源与验收 |
+|---|---|---|
+| M21 | 非NaN原生add/mul连接实际Model/ExecFloat规格，包含Inf；终点非NaN反推各步所需条件，原顺序sum/dot可接受Inf终点而不重算，NaN仍回到原始字 | [nonnan-runtime](../candidates/f01-r7-nonnan-runtime/Kernel.lean)，c7605688；805、807完整PASS；首次运算桥bb199701仅编译阶段，集成接受另计 |
+| M22 | binary32乘法结果不会是signaling NaN；quiet NaN可吸收后续所有先乘后加项。因此实际Nat点积回放在quiet NaN时停止，仍逐位等于原fold，涵盖sign/payload及任意长度/地址默认值 | [nan-replay-fullpath](../candidates/f01-r7-nan-replay-fullpath/Kernel.lean)，9a2a05cd；806/808原版public-v2完整PASS；不能套用于含后续原始sNaN的一般sum |
+| M23 | 按一般shape n≤4或p≤2选择直接有序点积，旁路全矩阵准备/打包；其余采用原逐行路径。两分支均对全部输入与维度满足同一bmmSpec | [direct-small](../candidates/f01-d7-direct-small/Kernel.lean)，d9a80847；802发现、804冻结新seed新runner确认，806/807再次完整PASS |
+| M24 | M21实际终点实现与M23直接点积接口可精确组合；直接分支同样接受Inf，原生/软件顺序与NaN回退均由该组合源码的原obligation重新验收 | [direct-nonnan](../candidates/f01-d7-direct-nonnan/Kernel.lean)，60f74aa4；807发现、809冻结新seed新runner完整确认PASS；性能不由组件成绩相加 |
+
+原始逐项数据与精确verdict从[R7结果](../candidates/f01-d7-research/public-suite-results.json)定位；仅statement或网页自述的后续稿未列作完整组件。R7阶段诊断137次BMM调用已逐一核对，计时/校验/raw分离；[诊断范围与投入决定](../candidates/f01-d7-research/profile-summary.json)保留探针开销异常，不能将finish/回退时间写成纯输出分配或官方阶段份额。
 
 ## 2. 已提取、尚未形成正式验证组件的数学储备
 

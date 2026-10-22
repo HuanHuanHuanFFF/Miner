@@ -1,6 +1,7 @@
 """Build a source-bound catalogue from saved FloatLib candidates and CI receipts."""
 import hashlib
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 import re
 from collections import Counter, defaultdict
@@ -41,14 +42,16 @@ def main():
         })
     # Current official public-suite gates have a separate original checkout and
     # bind each nested source through the frozen requested plan plus input bytes.
-    for path in sorted(runs.glob("[0-9]*/download-*/diagnostics/f01-d6-public-suite/public-suite/*-verdict.json")):
+    for path in sorted(runs.glob("[0-9]*/download-*/diagnostics/f01-d[67]-public-suite/public-suite/*-verdict.json")):
         candidate = path.name.removesuffix("-verdict.json")
         plan_path = path.parent / "requested-plan.json"
         source_path = path.parent / "inputs" / candidate / "Kernel.lean"
         if not plan_path.exists() or not source_path.exists():
             continue
         plan = json.loads(plan_path.read_bytes())
-        expected = next((r["sha256"] for r in plan["candidates"] if r["candidate"] == candidate), None)
+        requested = next((r for r in plan["candidates"] if r["candidate"] == candidate), None)
+        assert requested is not None, (candidate, plan_path)
+        expected = requested["sha256"]
         source_sha = sha(source_path.read_bytes())
         assert source_sha == expected, source_path
         verdict = json.loads(path.read_bytes())
@@ -58,6 +61,8 @@ def main():
             "passed": verdict.get("passed"), "reason": verdict.get("reason"),
             "classes": len(verdict.get("classes", {})), "rounds": len(verdict.get("rounds", [])),
             "suite": verdict.get("suite", {}), "protocol": "current official public-v2",
+            "official_commit": plan["official_commit"],
+            "requested_validation_mode": requested.get("validation_mode", "full-gate"),
             "verdict": rel(path), "verdict_sha256": sha(path.read_bytes()),
             "source_manifest": rel(plan_path), "source_manifest_sha256": sha(plan_path.read_bytes()),
         })
@@ -68,6 +73,7 @@ def main():
         receipts = by_sha[source_sha]
         full = [r for r in receipts if r["mode"] == "gate" and r["stage"] == "score"
                 and r["passed"] is True and r["rounds"] == 25
+                and r.get("requested_validation_mode", "full-gate") == "full-gate"
                 and (r["classes"] == 12 or (r["classes"] == 26
                      and r.get("suite", {}).get("version") == "public-v2"
                      and r["suite"].get("sha256") == "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a"))]
@@ -91,7 +97,7 @@ def main():
                       "theorems": declarations, "receipts": receipts})
     OUT.mkdir(parents=True, exist_ok=True)
     counts = dict(Counter(i["evidence_state"] for i in items))
-    payload = {"as_of": "2026-10-22", "candidate_count": len(items), "counts": counts,
+    payload = {"as_of": datetime.now(timezone.utc).isoformat(), "candidate_count": len(items), "counts": counts,
                "method": "Legacy verdicts bind archived manifest SHA256; nested current-official public-v2 gates bind the exact requested plan and saved input bytes. Aliases with identical source bytes share receipts. Protocol/suite fields stay separate; this catalogue does not rerun Lean or replace complete gate audit or private champion evaluation.",
                "items": items}
     (OUT / "candidate-catalog.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

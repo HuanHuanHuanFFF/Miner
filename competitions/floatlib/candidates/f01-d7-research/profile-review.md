@@ -87,3 +87,5 @@ FL_CALL sites before / after: 3 4
 - [旧精确 gate.py：overlay 写入与读取](https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/978cc5b445edb9943fd9953b0a9037d97a9f33a8/gate.py#L295)
 
 未运行修复后的 Linux binary，没有新的 gate/排名或阶段份额结论。原始失败回执保持原字节。
+
+R7后续实际回收：807/39840672791已完成Linux未插桩控制与三份插桩binary，137次BMM调用逐一对齐，所有checksum一致。完整产物与开销异常见[profile-summary.json](profile-summary.json)，不改写本诊断时的未运行状态，也不把finish/raw fallback算作纯分配。805单独诊断的编译命令筛选失败原件保留。
