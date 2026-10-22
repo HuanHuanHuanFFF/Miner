@@ -20,6 +20,19 @@ def gh(args,e):
 
 def save(p,value):p.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
+def validate_suite_plan(plan,seed):
+    assert plan.get('dispatch_state','READY')=='READY','Suite plan is held; do not dispatch obsolete or incomplete sources'
+    assert plan['seed']==int(seed),'Seed must match the exact frozen nested plan'
+    rows=plan['candidates'];assert rows and len({r['candidate'] for r in rows})==len(rows)
+    for row in rows:
+        assert re.fullmatch(r'(?:baseline|f01-[a-z0-9-]+)',row['candidate'])
+        assert re.fullmatch(r'[0-9a-f]{64}',row['sha256'])
+        assert row.get('validation_mode','full-gate') in ['full-gate','statement-only']
+        assert not row.get('capture_codegen',False) or row.get('validation_mode','full-gate')=='full-gate'
+    if plan.get('confirmation_candidates'):
+        assert not any(r.get('capture_codegen',False) for r in rows),'Independent confirmation must disable all observers'
+    return rows
+
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('mode',choices=['dispatch','status','collect']);ap.add_argument('--run');ap.add_argument('--workflow',default='deflate-baseline.yml');ap.add_argument('--candidates',default='baseline');ap.add_argument('--seed',default='42');args=ap.parse_args()
     e=env();evidence=Path(__file__).resolve().parent/'ci-runs';evidence.mkdir(exist_ok=True)
@@ -27,12 +40,29 @@ def main():
         assert re.fullmatch(r'(?:baseline|f01-[a-z0-9-]+)(?:,(?:baseline|f01-[a-z0-9-]+))*',args.candidates)
         assert args.seed.isdecimal();assert args.workflow in ['floatlib-validate.yml','deflate-baseline.yml']
         branch=subprocess.check_output(['git','branch','--show-current'],cwd=ROOT,text=True).strip();sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip();assert branch=='codex/multi-track-floatlib'
+        nested=[]
+        for wrapper in args.candidates.split(','):
+            if wrapper not in ['f01-d6-public-suite','f01-d7-public-suite']:continue
+            plan_path=f'competitions/floatlib/candidates/{wrapper}/suite-plan.json'
+            frozen=subprocess.check_output(['git','show',sha+':'+plan_path],cwd=ROOT)
+            local_plan=(ROOT/plan_path).read_bytes()
+            assert frozen==local_plan or frozen==local_plan.replace(b'\r\n',b'\n'),'Commit the exact nested plan before dispatch'
+            plan=json.loads(frozen);entries=validate_suite_plan(plan,args.seed)
+            generation='d7' if wrapper.startswith('f01-d7') else 'd6'
+            nested += [plan_path,f'competitions/floatlib/candidates/f01-{generation}-research/public-suite.py']
+            if any(r.get('capture_codegen',False) for r in entries):nested.append('competitions/floatlib/candidates/f01-d7-research/capture-codegen.py')
+            for entry in entries:
+                if entry['candidate']=='baseline':continue
+                path=f"competitions/floatlib/candidates/{entry['candidate']}/Kernel.lean"
+                assert hashlib.sha256(subprocess.check_output(['git','show',sha+':'+path],cwd=ROOT)).hexdigest()==entry['sha256'],path
+                nested += [path,path.replace('Kernel.lean','manifest.json')]
         raw=gh(['api',f'repos/{REPO}'],e);repository=json.loads(raw);assert repository['private'] is False
         remote=json.loads(gh(['api',f'repos/{REPO}/commits/{branch}'],e));assert remote['sha']==sha,'Push precise commit before dispatch'
         stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ');receipt=evidence/('dispatch-'+stamp);receipt.mkdir()
         (receipt/'repository.response.json').write_bytes(raw.encode('utf-8'))
         checked={}
         paths=['competitions/floatlib/pins.json','.github/workflows/'+args.workflow,'competitions/floatlib/scripts/ci-prepare.sh','competitions/floatlib/scripts/ci-setup.sh','competitions/floatlib/scripts/ci-validate.sh','competitions/floatlib/scripts/run-gates.py']
+        paths += nested
         paths += ['competitions/floatlib/candidates/'+n+'/Kernel.lean' for n in args.candidates.split(',') if n!='baseline']
         paths += ['competitions/floatlib/candidates/'+n+'/manifest.json' for n in args.candidates.split(',') if n!='baseline' and (ROOT/'competitions/floatlib/candidates'/n/'manifest.json').is_file()]
         diagnostic='competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py'
@@ -40,7 +70,7 @@ def main():
         for path in paths:
             blob=subprocess.check_output(['git','show',sha+':'+path],cwd=ROOT);local=(ROOT/path).read_bytes()
             # Git canonicalizes JSON metadata line endings; Lean source stays byte exact.
-            assert blob==local or (path.endswith('/manifest.json') and blob==local.replace(b'\r\n',b'\n')),path
+            assert blob==local or (path.endswith(('/manifest.json','/suite-plan.json')) and blob==local.replace(b'\r\n',b'\n')),path
             checked[path]=hashlib.sha256(blob).hexdigest()
         listing=['run','list','--repo',REPO,'--branch',branch,'--workflow',args.workflow,'--limit','25','--json','databaseId,headSha,status,createdAt,url']
         seen={x['databaseId'] for x in json.loads(gh(listing,e))}

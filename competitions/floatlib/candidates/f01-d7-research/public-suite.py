@@ -29,7 +29,10 @@ def run(g,kernel,out):
     requested=(repo/'competitions/floatlib/candidates/f01-d7-public-suite/suite-plan.json').read_bytes()
     (stage/'requested-plan.json').write_bytes(requested)
     plan=json.loads(requested)
+    assert plan.get('dispatch_state','READY')=='READY', 'Known incomplete/obsolete plan is held; do not run'
     assert plan['official_commit']==HEAD and plan['suite']=='suites/public-v2.json'
+    if plan.get('confirmation_candidates'):
+        assert not any(e.get('capture_codegen',False) for e in plan['candidates']), 'Frozen confirmation batch must disable all observers'
     assert int(os.environ['FLOATLIB_SEED'])==plan['seed']
     env.update(GATE_FULL_SUITE=str(upstream/'suites/public-v2.json'),BENCH_SEED=str(plan['seed']),BENCH_ROUNDS='25',BENCH_PAIRS='500000',GATE_BUDGET_SECONDS='900',VERIFY_TOTAL_TIMEOUT='2700')
     suite=(upstream/'suites/public-v2.json').read_bytes()
@@ -56,12 +59,25 @@ def run(g,kernel,out):
         if validation_mode=='statement-only':
             diagnostic=repo/'competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py'
             argv=[str(upstream/'.venv/bin/python'),str(diagnostic),'--upstream',str(upstream),'--kernel',str(dst/'Kernel.lean'),'--reports',str(stage),'--name',name,'--verdict',str(verdict),'--compile-only']
-        with (stage/logname).open('wb') as log:
-            p=subprocess.run(argv,cwd=upstream,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=960 if validation_mode=='full-gate' else 180)
+        codegen=None
+        if entry.get('capture_codegen',False):
+            assert validation_mode=='full-gate'
+            assert not any(c['candidate']==name for c in plan.get('confirmation_candidates',[])), 'Frozen confirmation must disable observer capture'
+            capture_path=Path(__file__).with_name('capture-codegen.py')
+            cs=importlib.util.spec_from_file_location('r7_original_statement_capture',capture_path)
+            capture=importlib.util.module_from_spec(cs);cs.loader.exec_module(capture)
+            p,record=capture.run_gate(argv,upstream,env,stage/logname,960,stage/'codegen'/name,dst/'Kernel.lean')
+            directory=Path(record['artifact_directory']) if record.get('artifact_directory') else None
+            metadata=directory/'capture-record.json' if directory else None
+            codegen={'requested':True,'state':record['state'],'kernel_sha256':record['kernel_sha256'],'capture_module_sha256':hashlib.sha256(capture_path.read_bytes()).hexdigest(),'errors':record.get('errors',[]),'directory':directory.relative_to(stage).as_posix() if directory else None,'metadata':metadata.relative_to(stage).as_posix() if metadata and metadata.exists() else None,'metadata_sha256':hashlib.sha256(metadata.read_bytes()).hexdigest() if metadata and metadata.exists() else None,'original_stage_log':record.get('original_stage_log'),'performance_observer_overhead':record.get('performance_observer_overhead'),'private_objects_outside_artifacts':record.get('private_objects_outside_artifact_output'),'private_objects_removed':record.get('private_objects_removed'),'scope':'Original gate actual statement output, read-only observer; discovery only, independent confirmation must disable capture. Capture status never replaces original verdict.'}
+        else:
+            with (stage/logname).open('wb') as log:
+                p=subprocess.run(argv,cwd=upstream,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=960 if validation_mode=='full-gate' else 180)
         v=json.loads(verdict.read_bytes()) if verdict.exists() else {}
         full=bool(p.returncode==0 and v.get('passed') and v.get('mode')=='gate' and v.get('stage')=='score')
         statement_pass=bool(validation_mode=='statement-only' and p.returncode==0 and v.get('passed') and v.get('mode')=='diagnostic-statement-only')
         row={'candidate':name,'kernel_sha256':digest,'validation_mode':validation_mode,'full_gate':full,'statement_pass':statement_pass,'exit_code':p.returncode,'stage':v.get('stage','UNKNOWN'),'reason':v.get('reason',''),'verdict':verdict.name,'verdict_sha256':hashlib.sha256(verdict.read_bytes()).hexdigest() if verdict.exists() else None}
+        if codegen is not None:row['codegen']=codegen
         if full:
             assert v['suite']['sha256']==provenance['suite_sha256'] and len(v['rounds'])==25
             assert v['verifier_fingerprint']==v['verifier_fingerprint_end']

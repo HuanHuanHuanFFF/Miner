@@ -24,7 +24,9 @@ for rid in [a.discovery,a.confirmation]:
 assert records[0]['seed']!=records[1]['seed'] and a.discovery!=a.confirmation
 frozen=read(root/comparisons[1]['requested_plan'])
 assert any(r['candidate']==a.candidate and r['sha256']==h and r['prior_discovery_run']==a.discovery for r in frozen['confirmation_candidates'])
+assert not any(r.get('capture_codegen',False) for r in frozen['candidates']), 'Confirmation cannot use any optional observer'
 snapshot=read(own/'current-official-snapshot.json');official=own/snapshot['directory']
+assert snapshot['official_commit']==records[0]['official_commit'], 'Upstream changed: review the new protocol before a current adoption'
 receipt=read(official/'receipts.json')
 for info in receipt['responses'].values():
     if 'file' in info:

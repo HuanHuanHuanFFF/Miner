@@ -1,0 +1,60 @@
+{
+  "candidate": "f01-d7-low-zero",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "e139093ac7f8fc6133bba266d1f2dee25e282d185996e72f2cd91dd073630d24",
+  "candidate_bytes": 158120,
+  "parent": "competitions/floatlib/candidates/f01-d7-direct-nonnan/Kernel.lean",
+  "parent_sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+  "parent_bytes": 155103,
+  "validation_mode": "full-gate",
+  "proof_status": "NOT_RUN",
+  "compile_status": "NOT_RUN",
+  "full_gate_status": "NOT_RUN",
+  "performance_status": "NOT_RUN",
+  "gain": "UNKNOWN",
+  "mechanism": "Inside the unchanged ex+ey<128 branch only, zero magnitude of either operand returns FastMul.ofBits signedZero with the exact original Bool.xor signBit. A miss executes unchanged LowScale.mul; high/native/add/sum/bmm runtime source is unchanged.",
+  "scope": "Proposed all-input exact equality. Outer low exponent sum excludes NaN/Inf, including zero-times-Inf/NaN. No seed, data-distribution or benchmark dispatch.",
+  "proof_route": "Reuse accepted outer_finite/outer_special_false proof bytes only; magnitude_zero_iff reduces each zero word to +/-0; finiteMantissa=0, UInt64 product=0, original FastMul.roundP zero branch, LowScale.mul_eq and existing full specs.",
+  "domain_proof_source": {
+    "candidate": "f01-r6-web-lowguards",
+    "kernel_sha256": "75ddbcff076c7fe17ba3d38616025eec9b74d647fe711ed6d77459454d3fbdbf",
+    "accepted_theorems_sha256": "7a9a6f3b4920c1f4e8d702a35eecd4ed083755ec3234a414d63d6291230288cb",
+    "theorems": [
+      "outer_finite",
+      "outer_special_false"
+    ],
+    "copied_byte_identically_inside_new_namespace": true,
+    "runtime_core_or_guard_deletion_copied": false,
+    "accepted_source_full_gate_run": "39791810276"
+  },
+  "local_static_validation": {
+    "status": "PASS_STATIC_ONLY",
+    "imports": [
+      "import ContractTensor"
+    ],
+    "set_options": [],
+    "banned_matches": [],
+    "policy_source_sha256": "2d2e97dcbe7e4a131a5655c915e63ffc05c3c34c3f6977534bf4bfd337434ff8",
+    "parent_prefix_unchanged_bytes": 97694,
+    "parent_suffix_unchanged_bytes": 56932,
+    "parent_prefix_sha256": "ba5f311df848125155d688cbf9fea61fc4ed203b98d4a4add407ba1d1439a71f",
+    "parent_suffix_sha256": "8e7514fad7a6da2c67e9afd7234d366f70b680bd4e338a5b9fe8b93e569e330d",
+    "exact_reverse_patch_check": true,
+    "old_low_miss_and_native_high_paths_preserved": true
+  },
+  "discovery_evidence": {
+    "file": "competitions/floatlib/candidates/f01-d7-research/scalar-opportunity-807.json",
+    "sha256": "f4ea316f6279eafe0148d79819c176a8a02680364a6bf317d31566ee77403633",
+    "timed_low_zero_pairs": 387516,
+    "timed_low_pairs": 805803,
+    "warning": "Finite Python model with 86 actual per-case checksums matched against 4 repeated records; not Lean proof or measured gain. No future confirmation sample used."
+  },
+  "potential_lean_targets": [
+    "decide reduction of finiteMantissa for literal +/-0",
+    "product-zero rewrite under FastMul.core lets",
+    "Bool special guard and signedZero unfolding in zero_eq_low",
+    "nested low/zero split transports exact root mul_spec"
+  ],
+  "validation_gap": "New theorem elaboration, kernel replay, axiom audit, checksum suite and complete paired timing remain NOT_RUN.",
+  "formal_submission": "NOT_SUBMITTED"
+}

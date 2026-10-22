@@ -23,6 +23,18 @@ for rid in sorted(int(p.parent.name) for p in RUNS.glob('[0-9]*/ci-run.json') if
     for entry in summary['results']:
         vp=stage/entry['verdict'];v=json.loads(vp.read_bytes());k=stage/'inputs'/entry['candidate']/'Kernel.lean';digest=hashlib.sha256(k.read_bytes()).hexdigest();assert digest==entry['kernel_sha256']
         row={'run':rid,'candidate':entry['candidate'],'kernel_sha256':digest,'official_commit':summary['official_commit'],'suite_sha256':summary['suite_sha256'],'seed':summary['seed'],'full_gate':entry['full_gate'],'statement_pass':entry.get('statement_pass',False),'stage':v['stage'],'reason':v.get('reason',''),'verdict':vp.relative_to(ROOT).as_posix(),'verdict_sha256':hashlib.sha256(vp.read_bytes()).hexdigest()}
+        if entry.get('codegen') is not None:
+            cg=entry['codegen']
+            original_helper=subprocess.check_output(['git','show',summary['source_commit']+':competitions/floatlib/candidates/f01-d7-research/capture-codegen.py'])
+            assert hashlib.sha256(original_helper).hexdigest()==cg['capture_module_sha256']
+            if cg.get('metadata'):
+                metadata=(stage/cg['metadata']).resolve();assert metadata.is_relative_to(stage.resolve())
+                assert hashlib.sha256(metadata.read_bytes()).hexdigest()==cg['metadata_sha256']
+                captured=json.loads(metadata.read_bytes())
+                if cg['state']=='CAPTURED':
+                    assert captured['kernel_sha256']==digest and captured['snapshot']['compiled_source']['sha256']==digest
+                    assert captured['private_objects_outside_artifact_output'] is True
+            row['codegen']=cg
         if entry['full_gate']:
             assert v['passed'] and v['mode']=='gate' and v['stage']=='score' and len(v['rounds'])==25
             assert v['verifier_fingerprint']==v['verifier_fingerprint_end'] and v['suite']['sha256']==summary['suite_sha256']
@@ -41,6 +53,6 @@ for rid in sorted(int(p.parent.name) for p in RUNS.glob('[0-9]*/ci-run.json') if
         if candidate_name not in lookup or baseline_name not in lookup:continue
         r=lookup[candidate_name];parent=lookup[baseline_name]
         comparisons.append({'run':rid,'seed':r['seed'],'candidate':candidate_name,'kernel_sha256':r['kernel_sha256'],'baseline_candidate':baseline_name,'parent_sha256':parent['kernel_sha256'],'whole_entry_raw_candidate_over_parent':sum(r['operation_total_ns'].values())/sum(parent['operation_total_ns'].values()),'whole_entry_headline_ratio_normalized_candidate_over_parent':r['ratio']/parent['ratio'],'operations_raw_candidate_over_parent':{op:r['operation_total_ns'][op]/parent['operation_total_ns'][op] for op in parent['operation_total_ns']},'operations_reference_normalized_candidate_over_parent':{op:(r['operation_total_ns'][op]/r['operation_reference_total_ns'][op])/(parent['operation_total_ns'][op]/parent['operation_reference_total_ns'][op]) for op in parent['operation_total_ns']},'requested_plan':(stage/'requested-plan.json').relative_to(ROOT).as_posix(),'scope':'Same runner and exact public plan; sample role and frozen confirmation intent are in requested-plan. No private champion comparison.'})
-out={'as_of_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'protocol':'Original official4b7e838 public-v2;152scored cases,26cells,25rounds','records':rows,'comparisons':comparisons,'baseline_environment_validation':'Exact parent8eb current original public-v2 complete gate control in every comparison batch; shipped reference measured by each unchanged gate','champion_direct_ratio':'UNKNOWN_PRIVATE_SUITE_AND_SOURCE_UNAVAILABLE','champion_replacement':'UNACHIEVED'}
+out={'as_of_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'protocol':'Original official4b7e838 public-v2;152scored cases,26cells,25rounds','records':rows,'comparisons':comparisons,'baseline_environment_validation':'Each unchanged gate measures its exact candidate against the shipped reference. Same-batch component/package comparisons follow the frozen requested-plan baseline (8eb in early batches, retainedd9 in809); baseline identity is recorded on every comparison.','champion_direct_ratio':'UNKNOWN_PRIVATE_SUITE_AND_SOURCE_UNAVAILABLE','champion_replacement':'UNACHIEVED'}
 (OWN/'public-suite-results.json').write_bytes((json.dumps(out,ensure_ascii=False,indent=2)+'\n').encode())
 print(json.dumps({'records':[{k:r.get(k) for k in ['run','candidate','full_gate','statement_pass','stage','reason','ratio','time_share_percent']} for r in rows],'comparisons':comparisons},ensure_ascii=False,indent=2))

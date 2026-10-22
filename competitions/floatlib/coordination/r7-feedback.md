@@ -1,11 +1,38 @@
 # R7开发反馈
 
+## D13 21:42 UTC：收到W09实际复现，旧810共有证明暂停派发
+
+- 已读urgent_proof_notice与精确0e8bc05c新证明；39a原两行simpa与W09失败尝试同词，已在主状态将四份proof1标为不要派发。不是新的官方CI失败，旧已验60f不受影响。
+- 810从未推送/派发，仍等公开授权，当前计划中的四份proof1将在R完成ready/hash/static原子交接后统一换proof2。暂不暂存R半包；0e的新congrArg/funext使step饱和后再化简，运行定义与失败稿保持相同。
+- D采集模块最终9fe62953及六组本地自测再次PASS，已opt-in接入public-suite；仅discovery启用，整个独立确认批次强制禁用。临时ELF在artifact外的专用RUNNER_TEMP中，失败清理也不会被上传。真实Linux/实际fullgate集成仍NOT_RUN，不影响已有原始回执。
+- 21:33新鲜官方冠军仍274、HEAD4b7/source与public-v2未变。继续原十小时到04:22:17UTC。
+
+## D12 21:33 UTC：按真实计数降低block运行优化优先级
+
+- 807-profile的sum共5046844有序步，NaN输出324个，相关完整向量14939步；可跳过native尾部上限11076步，仅全部sum步的0.2195%。而每32块分类会覆盖普通有限向量；现阶段没有足够完整成本依据把它列为高收益运行路线。BMM之前实际阶段诊断也已显示poisoned案例native tile占比极小。
+- 请完整收齐已启动W07/W08及公开祖先证明复核，保存其可复用数学与失败，不取消、不丢弃；完成后暂不扩block运行参数或新近似变体。先回到39a/3baa/0de/cff实际gate队列和已有源码边界审查，待授权恢复CI。新机会需能改变投入选择，未知收益保持UNKNOWN。
+- rawsum suffix forward扫描11076words，对应reverse suffix扫描5549，步数约0.501；这个只是后续受控选择，不是收益。当前cff已经消掉昂贵软件加法，比省native首遍更贴合成本；D原始wordNaN分类桥将来可供suffix用，但NOT_RUN不能提前采用。详见D checkpoint-cost-screening.json与opportunity-ledger.json；不能把调用比例当时间比例或私有suite分布。
+
+## D11 21:21 UTC：标量NaN与求和回放成本有重叠
+
+- 精确60f的referenceSum是x.foldl Submission.add posZero，originalSum的NaN分支调用它；D特殊值model/原始word NaN快路因此也会覆盖rawsum尾部，不只独立scalar计分类。机会在opportunity-ledger.json追加，不能与R的raw signaling suffix扫描收益相加。
+- D原始NaN桥已含selected_model_add/mul及实际carrier selected_add/mul，新probe ad014e0b仍NOT_RUN；独立静态审查未找到确定错误。对应rawSNaN布尔桥将来也可能复用于R扫描，等真实编译后再谈采用。
+- W07/W08继续收齐既有数学/C上下文证据；公开推送授权到达前不扩相近参数网格。R可闭合已有检查点集成与边界审查，保留现有39a/3baa/prefix先验次序。
+
+## D10 21:15 UTC：新增精确标量暴露与原件复核
+
+- scalar-opportunity-807.json已将全部86个scalar case对真实控制与三份instrumented输出做344个checksum核对，全部匹配；156总case=152timed+4raw，不能误称152口径错误。timed mul低指数零快返387516命中，新nonNaN guard新增Inf接受2000；这些是调用次数，不是时间份额。相关完整cell曝光上限8.75%/4.82%，收益仍UNKNOWN。
+- Sol已生成唯一e139093a low-zero探针，仅旧expSum<128分支内处理signed zero，其他路径保留60f；复用75ddbcff的两个已验域证明，新增identity仍NOT_RUN。
+- D原始word NaN选择数学探针ad014e0b（162660字节）准备；signal-first/tie-left/quiet bit以及Model.Spec和实际carrier桥，新源码全NOT_RUN。fb365daa/9be05b60/d0279229 result-guard三稿及NaN探针独立静态审查未见确定错误；同名早期namespace实际是R2W01c.NativeBridge，已纠正分工措辞。
+- 7份R7-W01—W06原ZIP/report/1038manifest项/1045payload逐项CRC、SHA及解压字节相等独立PASS，web-delivery-integrity.json为D入口，不继承网页fullgate声明，不删除原ZIP。
+- 源码公开推送仍等用户明确授权，所有原CI已terminal+collected，810未派发。D在实现可选实际gate对象旁路捕获：statement日志事件时只复制/hash、gate结束后再反汇编；不修改gate/计分或把独立诊断重编译冒充timed对象。R按现有检查点继续分块sum研究；新私有候选仍不向外部上传。
+
 ## D09 20:46 UTC：809独立确认成功与新保留包
 
 - 809/39847080316已success完整回收，d9/c760/60f/width4-proof2/width8-proof2全部FULL PASS。60f相对d9归一化整包0.8617567、BMM0.7708604；配合807的0.9070099/0.8073555，采用精确60f为保留包。源码未变，公开原版加速2.84379—2.94282×，四项份额add25.24%、mul26.33%、sum14.09%、bmm34.35%。
 - width4/8虽完整通过，实际相对d9整包1.15596/1.17617、BMM1.45707/1.50598，停止投入。不要把同组5%左右scalar变化归因于未改scalar的layout机制。
 - 所有已启动CI已结束回收，810公开推送仍等用户明确授权，未派发。当前不是等待CI，不因无任务而冒称在跑；本地证据整理、C分析和新证明继续。
-- D新本地路线：f01-d7-result-guard-add/mul/both。复用已完整通过c760的NotNaNProbe逆推和R7Native操作桥，将相应公开标量的双输入exp守卫换为原生结果的W04 self-BEq守卫；非NaN包括Inf直接返回，NaN保留原TunedAdd/FastMul逐位回退。保留numeric-add与低指数mul快路；不重复numeric-mul失败方向。仅新增标量路径，其余tensor维持60f；三份源均NOT_RUN，先编译再测。数学命名空间原字节提前移动，R2W01b的同名NativeBridge绝不混入Submission命名空间。
+- D新本地路线：f01-d7-result-guard-add/mul/both。复用已完整通过c760的NotNaNProbe逆推和R7Native操作桥，将相应公开标量的双输入exp守卫换为原生结果的W04 self-BEq守卫；非NaN包括Inf直接返回，NaN保留原TunedAdd/FastMul逐位回退。保留numeric-add与低指数mul快路；不重复numeric-mul失败方向。仅新增标量路径，其余tensor维持60f；三份源均NOT_RUN，先编译再测。数学命名空间原字节提前移动，R2W01c的同名NativeBridge绝不混入Submission命名空间。
 - R的W05 canonical probe已阅读，可在授权后空槽编译；不改变现有prefix/810优先级。D不重复R的canonical/prefix开发。R继续以已有公开源/库作外部研究，新私有候选不外传。
 
 ## D08 20:38 UTC：808回收及810受控验证

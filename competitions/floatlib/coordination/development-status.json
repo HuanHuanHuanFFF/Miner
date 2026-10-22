@@ -1,6 +1,6 @@
 {
   "state": "R7_TEN_HOUR_RESEARCH_ACTIVE",
-  "updated_at_utc": "2026-10-22T20:41:01.115460+00:00",
+  "updated_at_utc": "2026-10-22T21:42:28.408995+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "candidate": "competitions/floatlib/candidates/f01-d7-direct-nonnan",
@@ -176,11 +176,15 @@
     "research_agent_state": "ACTIVE_CONFIRMED_BY_THREAD_SNAPSHOT",
     "publication": {
       "state": "AWAITING_EXPLICIT_PUBLIC_PUSH_AUTHORIZATION",
-      "prepared_commit": "ce3c0c07",
       "repository": "HuanHuanHuanFFF/Miner",
       "branch": "codex/multi-track-floatlib",
       "reason": "Automatic approval review rejected public source upload because authorization for this destination and payload was insufficient. User asked asynchronously; no bypass.",
-      "ci_810": "NOT_PUSHED_NOT_DISPATCHED"
+      "ci_810": "NOT_DISPATCHED_ON_HOLD_FOR_R_PROOF2_AND_PUBLIC_PUSH_AUTHORIZATION",
+      "prepared_plan_seed": 810,
+      "local_checkpoint_commit": "8c5137b9",
+      "original_prepared_commit": "ce3c0c07",
+      "prepared_commit": null,
+      "reason_current_plan_not_dispatchable": "Four proof1 derivatives are independently known to fail; await R proof2 ready handoff and exact replacement."
     }
   },
   "current_report": "competitions/floatlib/candidates/f01-d7-research/README.md",
@@ -237,24 +241,28 @@
   "current_champion_comparison": {
     "submission": 274,
     "source_digest": "51ee11a2bc8aed5e47a9848d59d1f20182b91aa5517d808a08cea059e83f276a",
-    "policy_snapshot": "685",
-    "queried_at_utc": "2026-10-22T20:34:26.447231+00:00",
+    "policy_snapshot": "686",
+    "queried_at_utc": "2026-10-22T21:33:34.781059+00:00",
     "candidate": "f01-d7-direct-nonnan",
     "direct_paired_ratio": "UNKNOWN",
     "method": "Only exact same-suite paired current-champion result supports a direct gap; no cross-suite chain inference",
     "evidence": "competitions/floatlib/candidates/f01-d7-research/current-official-snapshot.json"
   },
   "payload_integrity": {
-    "status": "PASS_DISK_AND_COMMITTED_RAW_BYTES",
-    "verified_payloads": 639,
-    "evidence": "competitions/floatlib/candidates/f01-d5-costsplit/window90m-20261022/summary.json"
+    "status": "PASS_LOCAL_DISK_AND_COMMITTED_ORIGINAL_BYTES",
+    "r7_runs_through_seed": 809,
+    "original_artifact_payloads_checked_latest_batch": 376,
+    "original_files_checked_latest_batch": 400,
+    "latest_batch_bytes": 17148582,
+    "local_receipt": ".local-maintenance/r7-20261023/ci-publication-804-809-integrity.json",
+    "web_integrity": "competitions/floatlib/candidates/f01-d7-research/web-delivery-integrity.json"
   },
   "local_project_check": {
     "status": "PASS",
-    "checked_at_utc": "2026-10-22T11:36:02.744469+00:00",
-    "scope": "Root and both-track checks;118FloatLibcandidatehashpairs, local links, syntax and manual workflow configuration. Full Lean/gate acceptance separately bound to exact source."
+    "checked_at_utc": "2026-10-22T21:44:16.281424+00:00",
+    "scope": "Root/track links, Python syntax,176candidatehashpairs and11manualworkflows; no Lean compilation."
   },
-  "research_resources": "R7 Astra research active; latest CI state is in active_jobs; local analysis and evidence recovery continue",
+  "research_resources": "R7 Astra research and original delivery recovery active; optional original-object capture implemented and local6case selftest passed. No running/queued CI; new public source push awaits explicit authorization.",
   "selection_scope": "Retain exact 60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15 after discovery and frozen confirmation; ten-hour champion research remains active",
   "last_research_branch": "codex/multi-track-floatlib",
   "repository_maintenance": {
@@ -305,25 +313,89 @@
   "current_multiplier_view": {
     "evidence": "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json",
     "official_champion": 274,
-    "snapshot": "685",
+    "snapshot": "686",
     "official_time_ratio": "candidate / current champion; champion self = 1.0; lower is better",
     "candidate_time_over_current_champion": "UNKNOWN",
     "candidate_current_public_suite_speedup_range": [
       2.843792679974477,
       2.942815288983305
     ],
-    "champion_official_historical_speedup_vs_shipped": 813.9839863782523,
+    "champion_official_historical_speedup_vs_shipped": 6.381731887108535,
     "cross_suite_gap": "UNKNOWN; do not divide historical champion and current public-suite speedups",
     "candidate": "f01-d7-direct-nonnan"
   },
   "pending_candidates": [
     {
-      "candidate": "f01-d7-direct-small",
-      "sha256": "d9a808479dd6a7c7da345ce680773105b638cc6c9e8145e34d10f59751411fb3",
-      "status": "DISCOVERY_FULL_GATE_PASS_PENDING_FROZEN_INDEPENDENT_CONFIRMATION",
-      "run": 39833363659,
-      "whole_time_over_parent_normalized": 0.8757222035731369,
-      "bmm_time_over_parent_normalized": 0.740242428999211
+      "candidate": "f01-r7-nonfinite-combined-proof1",
+      "kernel_sha256": "39a99b3213adf8ef40734c62b420f09a127b385d7129fb89b1467f0ad7c52e2b",
+      "status": "KNOWN_SHARED_PROOF_FAILURE_IN_INDEPENDENT_PUBLIC_FIXED_LEAN_REPRO; DO_NOT_DISPATCH; WAIT_R_PROOF2",
+      "mode": "full-gate"
+    },
+    {
+      "candidate": "f01-r7-self-nonnan-guard-proof1",
+      "kernel_sha256": "3baa785ee05745d2929af7208c6105d7e2f645a8c46b87e6e631e2165aaa9a6c",
+      "status": "KNOWN_SHARED_PROOF_FAILURE_IN_INDEPENDENT_PUBLIC_FIXED_LEAN_REPRO; DO_NOT_DISPATCH; WAIT_R_PROOF2",
+      "mode": "full-gate"
+    },
+    {
+      "candidate": "f01-r7-native-repair-proof1",
+      "kernel_sha256": "0de8643c8992cdbff0242fe59bdbf97ba1dac10725351eb89c446aa463367a55",
+      "status": "KNOWN_SHARED_PROOF_FAILURE_IN_INDEPENDENT_PUBLIC_FIXED_LEAN_REPRO; DO_NOT_DISPATCH; WAIT_R_PROOF2",
+      "mode": "full-gate"
+    },
+    {
+      "candidate": "f01-r7-sum-native-repair-proof1",
+      "kernel_sha256": "cff840b1ace5c20cdc3b905c28aabeb716f8b9468d238e1b18f4ce8c58286a80",
+      "status": "KNOWN_SHARED_PROOF_FAILURE_IN_INDEPENDENT_PUBLIC_FIXED_LEAN_REPRO; DO_NOT_DISPATCH; WAIT_R_PROOF2",
+      "mode": "full-gate"
+    },
+    {
+      "candidate": "f01-r7-canonical-bridge-probe-policy1",
+      "kernel_sha256": "a4f26514082e3d35738d253207db9f3127ca16de20e55fc6ac54d075710297a9",
+      "status": "PREPARED_NOT_RUN_PUBLICATION_AUTH_PENDING",
+      "mode": "statement-only"
+    },
+    {
+      "candidate": "f01-d7-special-model-proof1",
+      "kernel_sha256": "40a281d9c94dbe56ef9b5e9209fcbfc9b51e9a6acfabac70d9ed99364f500baf",
+      "status": "PREPARED_NOT_RUN_PUBLICATION_AUTH_PENDING",
+      "mode": "statement-only"
+    },
+    {
+      "candidate": "f01-d7-singleton-proof1",
+      "kernel_sha256": "dab15a44f753c1e8d4654d15ffc54eaa770702eeb42cf0cc601c91809418b21a",
+      "status": "PREPARED_NOT_RUN_PUBLICATION_AUTH_PENDING",
+      "mode": "full-gate"
+    },
+    {
+      "candidate": "f01-d7-result-guard-add",
+      "kernel_sha256": "fb365daa6ff957b34c9e6f4b5e339a2f9bb5f529526e5ce3ca571a2837a6747d",
+      "status": "PREPARED_NOT_RUN_PUBLICATION_AUTH_PENDING",
+      "mode": "statement-only"
+    },
+    {
+      "candidate": "f01-d7-result-guard-mul",
+      "kernel_sha256": "9be05b601de849131d823a95f98dcc083aafb2d0c4679fabe089be205ae3e497",
+      "status": "PREPARED_NOT_RUN_PUBLICATION_AUTH_PENDING",
+      "mode": "statement-only"
+    },
+    {
+      "candidate": "f01-d7-result-guard-both",
+      "kernel_sha256": "d0279229968ba66440efbfcf55abb64a29f313df68ba22d72df70a28aa0a855c",
+      "status": "PREPARED_NOT_RUN_PUBLICATION_AUTH_PENDING",
+      "mode": "statement-only"
+    },
+    {
+      "candidate": "f01-d7-nan-choice-probe",
+      "kernel_sha256": "ad014e0b1cdc6e42d3a9bd9437e32762d840b8047be740dca8894b0108aa3cb9",
+      "status": "PREPARED_NOT_RUN_PUBLICATION_AUTH_PENDING",
+      "mode": "statement-only"
+    },
+    {
+      "candidate": "f01-d7-low-zero",
+      "kernel_sha256": "e139093ac7f8fc6133bba266d1f2dee25e282d185996e72f2cd91dd073630d24",
+      "status": "PREPARED_NOT_RUN_PUBLICATION_AUTH_PENDING",
+      "mode": "full-gate"
     }
   ],
   "r7_adoptions": [
