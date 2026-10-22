@@ -1,5 +1,7 @@
 # FloatLib 十小时冲冠续跑
 
+> 勘误：下方“用户将本轮改为半小时”的说法源于D误套历史消息，并非该轮用户新指令。用户原定十小时目标未被撤销；前轮提前结束属于执行错误。原始回执与错误决策记录保留。当前已按用户新授权进入[新一小时协作](../../f01-d3-word-packed4/window1h-20261022/README.md)。
+
 窗口：2026-10-21 18:16:11—2026-10-22 04:16:11 UTC，北京时间10月22日02:16:11—12:16:11。目标是实际新冠军；准备、修复、CI、复测和交付计入。03:15 UTC前进入最终确认，03:40后不启动长实验。
 
 唯一当前入口：[development-status.json](../../../coordination/development-status.json)。[协作交接](../../../coordination/astra-handoff-10h.md)规定D/R独立范围；D负责Git与CI，R为现有GPT-6 Astra/xhigh研究会话。上一窗口已验证起点见[前轮报告](../../f01-d1-inline-all/window1h/README.md)。

@@ -48,7 +48,7 @@
   "blocker": null,
   "next_action": "Full gate scalar/Packed4 integration plus independent Packed4 confirmation; research USize Packed4 loop",
   "research_decision": "Adopt word/preconverted/USize as best independently confirmed whole package. Keep Packed4 as strongest bmm prospect; repeated AMD hybrid tiny regression prevents prioritizing it. Helpers stay separate from runtime results.",
-  "execution_state": "ALL_STARTED_CI_TERMINAL_AND_COLLECTED",
+  "execution_state": "R3_INITIAL_FULL_AND_STATEMENT_RUNNING",
   "local_project_check": {
     "status": "PASS",
     "checked_at_utc": "2026-10-21T21:22:35.402519+00:00",
@@ -72,17 +72,17 @@
   "ci_responsibility": {
     "environment_scope_seen": "Environment chat stops after configuration, finishes and collects already-started run 39554146703; no further candidate dispatch by environment chat.",
     "development_scope": "Current human request authorizes all development/verification operations. Development continues candidate CI after collecting the current run; do not duplicate/cancel existing jobs.",
-    "source_edit_scope": "D: f01-d2 candidates, development state, dashboard and research evidence; R: f01-r2 and astra-collab-20261022. D is sole Git/CI coordinator.",
+    "source_edit_scope": "D: f01-d3 candidates, current state, dashboard and window evidence; R: f01-r3 and astra-collab-20261022-r3. D sole Git/CI coordinator.",
     "git_rule": "Commit only explicit owned paths; never stage/commit environment files. Keep shared branch.",
     "receipt_root": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs",
     "existing_run": "39554146703",
-    "new_run_state": "ALL_STARTED_CI_TERMINAL",
+    "new_run_state": "TWO_ACTUAL_JOBS_RUNNING",
     "takeover_condition": "Wait for environment_owner_state=STOPPED_AFTER_ENVIRONMENT_CONFIGURATION before shared Git or new CI dispatch, as updated HANDOFF.md explicitly requires.",
     "helper_checks": "Candidate-local CI helper syntax/help and root project checks PASS; no new CI dispatched.",
     "environment_stop_verified_commit": "6ed35056",
-    "development_owner_state": "STOPPED_AFTER_EXPERIMENT_CLOSEOUT"
+    "development_owner_state": "ACTIVE_GIT_CI_COORDINATOR"
   },
-  "receipt_auditor": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/audit-window.py",
+  "receipt_auditor": "competitions/floatlib/candidates/f01-d3-word-packed4/window1h-20261022/audit-window.py",
   "first_run_install_observation": {
     "observed_at_utc": "2026-10-21T06:45:43.920639+00:00",
     "source": "Signed-in Edge read-only job page",
@@ -168,13 +168,14 @@
     "scope": "Same exact whole-entry source; shipped-reference paired evidence separate from champion comparison."
   },
   "formal_submission": "NOT_SUBMITTED",
-  "current_window_completion": "ACTIVE",
+  "current_window_completion": "ACTIVE: new one-hour collaboration; initial integration and existing mathematical proof probes executing",
   "payload_integrity": {
-    "verified_payloads": 608,
-    "status": "PASS_DISK_AND_COMMITTED_BYTES_FOR_ALL_RUNS",
-    "commit": "a409712742f68431023eb4676d5d4b6af358a168",
-    "evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/summary.json",
-    "pending_runs": []
+    "status": "PENDING_CURRENT_WINDOW_RESULTS",
+    "evidence": "competitions/floatlib/candidates/f01-d3-word-packed4/window1h-20261022/summary.json",
+    "pending_runs": [
+      39723695793,
+      39723717484
+    ]
   },
   "acceptance_target": "Attempt to produce the next live champion: full four-kernel candidate, exact proof gate, and significant >=3% gain against the champion current at evaluation. Improvement over the shipped reference alone does not satisfy the goal.",
   "acceptance_target_status": "UNACHIEVED: no competitive current-champion result or formal promotion",
@@ -400,8 +401,41 @@
     "research_status": "competitions/floatlib/research/astra-collab-20261022-r3/research-status.json",
     "handoff": "competitions/floatlib/coordination/astra-handoff-r3-1h.md",
     "git_ci_coordinator": "D",
-    "active_ci": [],
-    "feedback_to_research": "New1h window; D integrates word scalar + Packed4 and confirms old Packed4. R owns proof-backed Packed4 USize hot loop; no duplicate D integration."
+    "active_ci": [
+      {
+        "run": 39723695793,
+        "candidates": [
+          "baseline",
+          "f01-d2-web-packed4-proof1",
+          "f01-d3-word-packed4"
+        ],
+        "seed": 401,
+        "commit": "9fa0c60d8d5589d58b3152202adac2df444ec5e2",
+        "created_at_utc": "2026-10-22T04:40:36Z",
+        "state": "in_progress",
+        "mode": "full-gate",
+        "purpose": "Scalar/Packed4 integration and frozen Packed4 confirmation",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T044033Z/dispatch.json"
+      },
+      {
+        "run": 39723717484,
+        "candidates": [
+          "f01-d3-fused-floatarray",
+          "f01-d3-normal-decoder-proof"
+        ],
+        "seed": 402,
+        "commit": "9fa0c60d8d5589d58b3152202adac2df444ec5e2",
+        "created_at_utc": "2026-10-22T04:40:50Z",
+        "state": "completed",
+        "mode": "statement-only",
+        "purpose": "Existing normal reconstruction and fused FloatArray proof feasibility",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T044046Z/dispatch.json",
+        "conclusion": "failure",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39723717484",
+        "reason": "Fused FloatArray statementPASS; normal decoder proof has concrete elaboration failures, preserved separately."
+      }
+    ],
+    "feedback_to_research": "402 collected: W04 fusedFloatArray statementPASS98cef0f2. Normal decoder bad4cf54 fails10 elaboration points; D froze repair1. R retains Packed4 USize priority. D checks one eight-lanewidthvariant f01-d3-word-packed8; no duplicate."
   },
   "previous_current_candidate": {
     "candidate": "competitions/floatlib/candidates/f01-mul-log2-proof3",
@@ -444,18 +478,19 @@
     },
     "candidate_role": "Frozen reference/control only; no longer the primary development route"
   },
-  "active_jobs": [],
+  "active_jobs": [
+    {
+      "kind": "github_ci",
+      "run": 39723695793
+    }
+  ],
   "active_goal": "新一轮协作推进1h，继续冲击新冠军",
   "pending_candidates": [],
   "current_official_refresh": {
     "champion": 174,
     "digest": "67e44fd4b17186dbe6b1728dea49611288bb16d2586ebbb3a8a2f93aea74c009",
-    "verification_current": true,
-    "verifier_fingerprint": "c78c0073afb74116f0159e7b8c7f5c05561ce556bbce9d94a35facc08467da2d",
-    "policy_snapshot": "589",
-    "source_commit_observed": "21e42d8f93cd3ecdf5dc4a84c7951ad4c17b185c",
-    "pin_unchanged_reason": "Compare from978cc5b4 changes only licensing/docs and upstream CI lint; gate/contracts/bench/pins byte paths unchanged.",
-    "evidence": "competitions/floatlib/candidates/f01-d2-native-bmm/window10h/official-opening"
+    "policy_snapshot": "620",
+    "evidence": "competitions/floatlib/candidates/f01-d3-word-packed4/window1h-20261022/official-20261022T044210Z"
   },
   "previous_completion_window": {
     "start_utc": "2026-10-21T11:34:07.663758+00:00",
@@ -922,5 +957,25 @@
     "old_records": "Preserved as observations of the erroneous decision; not current authorization.",
     "current_authorization": "开始新一轮 协作推进1h",
     "finish_policy": "Prioritize continued progress of authorized long tasks; complete new closeout experiments andCI before stopping."
+  },
+  "previous_window_completion_record": {
+    "start_utc": "2026-10-21T11:34:07.663758+00:00",
+    "end_utc": "2026-10-21T12:04:07.663758+00:00",
+    "user_request": "把新增实验做完，半小时内",
+    "scope": "Complete existing native add confirmation, native multiplication and native accumulator sum experiments; repair actual failures and finish necessary validation. Do not expand unrelated directions.",
+    "research_thread_state": "R closed after original one-hour window; D handles final validation and any concrete repairs.",
+    "confirmation_run": 39593447390,
+    "status": "COMPLETED_WITHIN_30M",
+    "dispatch_preflight_failure": {
+      "at_utc": "2026-10-21T11:38:00Z",
+      "reason": "Default workflow floatlib-validate.yml absent on remote default branch; failed while listing before POST. No duplicate run. Retried using existing deflate-baseline.yml.",
+      "repair": "Candidate-local ci.py now defaults to documented existing deflate-baseline.yml; official workflows unchanged."
+    },
+    "experiments_completed_at_utc": "2026-10-21T11:51:46.588048+00:00",
+    "all_started_jobs_collected": true,
+    "all_new_native_candidates_confirmed": true,
+    "actual_candidate_count": 3,
+    "completed_at_utc": "2026-10-21T11:53:37.200700+00:00",
+    "elapsed_minutes": 19.49
   }
 }
