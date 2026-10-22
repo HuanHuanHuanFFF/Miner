@@ -308,7 +308,7 @@
   },
   "remaining": [
     "Current-champion replacement unachieved",
-    "Prioritize credible whole-entry gain: investigate mul/add first under measured class-time shares; retain BMM preparation/timed-class profiling when it can change allocation",
+    "Rank concrete routes across add/mul/sum/bmm by measured time share times achievable reduction, then development/proof/full-validation cost; no fixed operator order",
     "Single bit conversion bridge remains unaccepted; next minimum fix must use policy-safe allOnes constructor and a fresh full gate",
     "Formal submission, registration and funds outside this window"
   ],
@@ -356,13 +356,7 @@
   },
   "optimization_priority": {
     "user_instruction_date": "2026-10-22",
-    "rule": "Prioritize the largest credible whole-entry gain; account for scored-time share, mechanism opportunity, frequency and implementation/proof/verification cost. Champion-relative lag is context, not the primary ranking.",
-    "initial_order": [
-      "mul",
-      "add",
-      "sum",
-      "bmm"
-    ],
+    "rule": "Rank concrete routes by scored-time share times credible achievable time reduction; then weigh development, proof and full-validation cost. No fixed operator order.",
     "basis": "competitions/floatlib/research/results/optimization-priority.json",
     "median_scored_time_share_percent": {
       "add": 39.69332288307295,
@@ -371,6 +365,11 @@
       "bmm": 2.427490158191026
     },
     "screening": "Run the smallest useful complete-cost diagnostic first. Park negligible-gain variants; do not repeat negative routes without a changed mechanism or condition. Preserve proportionate final full-gate confirmation time.",
-    "research_authorization": "Priority update only; no new research window, CI, formal submission or funds action started."
+    "research_authorization": "Priority update only; no new research window, CI, formal submission or funds action started.",
+    "user_confirmed_criterion": "耗时占比 × 可实现的降耗幅度，再考虑开发和验证成本",
+    "route_order": "UNRANKED_PENDING_MECHANISM_DIAGNOSTICS",
+    "gain_formula": "For affected scored classes c: expected whole-entry time reduction = sum(w_c * r_c); r_c = 1 - 1/s_c for a local speedup factor s_c. Account for actual hit coverage; avoid double-counting it.",
+    "evidence_requirement": "Record measured time share, achievable reduction range and supporting mechanism/diagnostic, coverage, total development/proof/queue/collection/confirmation cost, and next falsifiable check for each route. Unknown gain remains UNKNOWN and gets a bounded diagnostic.",
+    "cost_rule": "Compare credible whole-entry gain with total cost and reusable value; no fabricated success probability or mandatory single gain-per-hour score."
   }
 }

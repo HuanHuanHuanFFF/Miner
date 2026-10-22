@@ -1,6 +1,6 @@
 {
   "as_of": "2026-10-22",
-  "source": "User: 后续优化方向优先选收益更大的",
+  "source": "User confirmed: 耗时占比 × 可实现的降耗幅度，再考虑开发和验证成本",
   "candidate": "f01-d5-stream-pack",
   "candidate_sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045",
   "metric": "Sum of official twelve per-class minima; validated against each saved headline ratio",
@@ -11,13 +11,7 @@
     "sum": 4.876706706393252,
     "bmm": 2.427490158191026
   },
-  "working_order": [
-    "mul",
-    "add",
-    "sum",
-    "bmm"
-  ],
-  "order_scope": "Initial investigation allocation; actual mechanism gain and cost decide the next experiment, not operation name or champion gap alone",
+  "order_scope": "No fixed operation order; compare concrete mechanisms across all four operations by credible whole-entry reduction and total development/proof/validation cost",
   "expected_route_gain": "UNKNOWN until mechanism-specific bounded diagnostics",
   "conditional_ten_percent_local_gain_whole_entry_percent": {
     "add": 3.9693322883072955,
@@ -107,5 +101,22 @@
         "bmm": 2.616482277050389
       }
     }
-  ]
+  ],
+  "decision_rule": {
+    "formula": "sum over affected scored classes of w_c * r_c, with r_c = 1 - 1/s_c for local speedup s_c",
+    "required_route_fields": [
+      "mechanism and changed condition",
+      "measured scored-time share and hit coverage",
+      "achievable reduction range and evidence or UNKNOWN",
+      "estimated complete development/proof/validation cost",
+      "smallest experiment that can change allocation"
+    ],
+    "current_route_ranking": "UNRANKED_PENDING_MECHANISM_DIAGNOSTICS",
+    "example_only_whole_entry_reduction_percent": {
+      "bmm_speedup_2x": 1.213745079095513,
+      "mul_time_reduction_1_percent": 0.5272347905099142,
+      "mul_time_reduction_10_percent": 5.272347905099142
+    },
+    "example_scope": "Arithmetic scenarios only; these achievable gains have not been established."
+  }
 }
