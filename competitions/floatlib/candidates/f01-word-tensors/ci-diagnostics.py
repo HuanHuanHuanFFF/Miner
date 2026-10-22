@@ -54,7 +54,7 @@ def statement(src,verdict):
                 continue
             symbols=subprocess.run(['nm','--defined-only',str(path)],capture_output=True,text=True,timeout=15)
             names=[line.split()[-1] for line in symbols.stdout.splitlines() if line.split()]
-            names=[name for name in names if name.startswith('lp_competition_Submission_') and 'loop' in name and 'boxed' not in name and ('Packed' in name or 'NativeDecodeSum' in name)]
+            names=[name for name in names if name.startswith('lp_competition_Submission_') and 'loop' in name and 'boxed' not in name and ('Packed' in name or 'NativeDecodeSum' in name or 'Tile' in name)]
             for symbol in names:
                 result=subprocess.run(['objdump','-d','--no-show-raw-insn','-Mintel','--disassemble='+symbol,str(path)],capture_output=True,timeout=15)
                 name='native-loop-'+str(len(objects))+'.asm.txt';(out/name).write_bytes(result.stdout)
