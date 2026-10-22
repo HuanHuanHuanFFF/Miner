@@ -1,8 +1,8 @@
 # FloatLib 数学结论
 
-截至 2026-10-22，统一整理 R1–R5 已有结论及 E 盘 12 份研究交付。四项性能与冠军见[看板](../../../dashboard.md)，当前候选选择见[开发状态](../coordination/development-status.json)。
+截至 2026-10-22，统一整理 R1–R6 已有结论、12份历史归档与R6新增4份研究交付。四项性能与冠军见[看板](../../../dashboard.md)，当前候选选择见[开发状态](../coordination/development-status.json)。
 
-**已建立原生算术、精确解码、有序累加、机器字索引及矩阵按行输出的证明链；后续按“耗时占比 × 可实现降耗”，结合开发和验证成本选择具体路线。** 当前完整包为 [f01-d5-stream-pack][K]，四次完整验收通过；仍未取代冠军。
+**已建立原生算术、精确解码、有序累加、机器字索引及矩阵按行输出的证明链；后续按“耗时占比 × 可实现降耗”，结合开发和验证成本选择具体路线。** 当前完整包为 [f01-d5-stream-pack][K]，已多轮完整验收通过；仍未取代冠军。新版公开／付费私有suite适用范围见[套件变更](../docs/suite-transition-20261022.md)，旧份额与冠军倍数不跨suite继承。
 
 | 运算 | 已可复用的结论 | 当前使用方式 |
 |---|---|---|
@@ -11,11 +11,11 @@
 | 求和 | 最终结果有限可反推各步所需有限性；原序累加与软件 fold 相等；机器字循环与 Nat 循环等价 | 原生累加器＋精确转换＋USize 索引 |
 | 矩阵乘法 | 多 lane 投影等于各自原序点积；合法地址与机器字边界可证明；行序展平与原平坦输出相等 | 十列打包＋有界读取＋逐行计算和输出 |
 
-资料入口：[12 包原文与源码](materials/20261022/README.md) · [118 份候选及实际回执](results/CANDIDATES.md) · [逐定理行号与哈希](results/candidate-catalog.json)。原包中的历史 NOT_RUN、失败和作者判断保持原文；以下状态依据后续回执归并。
+资料入口：[12 包原文与源码](materials/20261022/README.md) · [137 份候选及实际回执](results/CANDIDATES.md) · [逐定理行号与哈希](results/candidate-catalog.json)。原包中的历史 NOT_RUN、失败和作者判断保持原文；以下状态依据后续回执归并。
 
 ## 1. 已通过完整候选验证的证明组件
 
-以下 K 指当前完整包，SHA-256 为 `8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045`。其四次完整回执为 39766391628、39767698381、39769247640、39770153343，后者为冻结后的独立确认。固定 Lean、FloatLib、官方源及审计入口见[本轮汇总][R5]。这里只整理已有证据，本次未重跑 Lean。
+以下 K 指当前完整包，SHA-256 为 `8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045`。其四次完整回执为 39766391628、39767698381、39769247640、39770153343，后者为冻结后的独立确认。固定 Lean、FloatLib、官方源及审计入口见[本轮汇总][R5]。R6新增实际验证见[R6汇总](../candidates/f01-d6-research/summary.json)；旧回执保持原版。
 
 | 编号 | 数学结论与必要条件 | 可复用声明／精确源码 |
 |---|---|---|
@@ -35,6 +35,13 @@
 | M14 | 两行四列／两行八列的低高投影、地址映射及各 lane 回退可分别连接原点积，不改变每条链的舍入顺序 | [2×4 源码](../candidates/f01-r4-tile2x4/Kernel.lean)、[2×8 源码](../candidates/f01-r4-tile2x8/Kernel.lean)，[完整验证与负结果][R4] |
 | M15 | Float32→Float→Float32 可用逐元素 raw-word 运行时比较建立本次存储读取等式，无须假设 opaque 转换的一般数值往返定理 | [checked FloatArray](../candidates/f01-d2-checked-floatarray/Kernel.lean)、[39663131701 验收索引](../candidates/f01-d2-checked-floatarray/manifest.json)。单遍 prepare 是另一个尚未完成验收的版本 |
 
+
+| M16 | 对binary32闭宽指数，`v.isFinite = finiteBits(v.toBits)`；一次toBits可同时判断finite和构造返回字，等于原finish | [bits-proof2](../candidates/f01-d6-bits-proof2/Kernel.lean)，fbf2d0c7；705/39789494626完整PASS。通用allOnes及早期policy/statement失败保留；同机BMM约慢0.6%，数学桥保留、运行候选停放 |
+| M17 | 单次UInt32回卷区间判断恰好识别指数24..254域，蕴含finite和旧fastOK，可把数值解码与finite守卫融合 | [normal-add-proof1](../candidates/f01-r6-normal-add-proof1/Kernel.lean)，8a0e40fb；706/39791810276完整PASS。旧版完整调用未建立稳定整包优势，新suite待验 |
+| M18 | 从原finiteMantissa定义可证乘积<2^48；外层ex+ey<128排除特殊输入，因此可证明删去两处重复运行时守卫 | [web-lowguards](../candidates/f01-r6-web-lowguards/Kernel.lean)，75ddbcff；706完整PASS。逻辑上的乘积/尺度条件仍需证明，不能无条件删除；旧版整包未见稳定收益 |
+
+| M19 | 对product∈[2^46,2^48)，log2只可能为46或47，可按2^47阈值选择；域外回到原搜索，故新整数roundP/core与原规格相等 | [normal-mul-proof1](../candidates/f01-r6-normal-mul-proof1/Kernel.lean)，96865cba；707完整PASS，但整包约慢14%，停放该运行替换 |
+
 全输入义务仍包括 NaN payload、Inf、次正规数、±0 与指定舍入顺序。**FMA、重排浮点求和、忽略零符号、仅比较实数值均不能替代这些等式。** 原生解码等于 `Float32.ofBits`，也不等于保留所有原始 NaN payload；精确回退须保留原始字。
 
 ## 2. 已提取、尚未形成正式验证组件的数学储备
@@ -49,7 +56,9 @@
 | T06 | normal 精确值为 `(-1)^s (2^23+f)·2^(E−150)`；E=1..23 的因子虽为次正规数，乘积也可精确恢复 normal | [R2-W03 报告][W03]是更广数学推导；当前已验转换只对 24..254 走快路，其余回退；不能把扩大域当成已验优化 |
 | T07 | 单遍 checked prepare 的 `out.size=k`、已处理内容等价、终止长度与越界正零不变量可支持去除重复 encode | [R2-W04][W04]有完整证明尝试；原包 Lean 未运行，后续不能继承双遍父本通过状态 |
 | T08 | 奇数 m 的最后 batch 第二行起点恰为 A.size；两行完整 span 准入必须拒绝该 tile。跨到下一 batch 的未观察 lane 仅在独立链、有效输出映射和独立回退条件下不污染有效值 | [R4-W01][W4]的地址引理／17 个解析见证；网页辅助稿自身 NOT_RUN，与 M14 的实际候选验收分开 |
-| T09 | 可用一次 `toBits` 同时判断 finite 并构造结果，目标为 `v.isFinite = finiteBits(v.toBits)` | [R5-W02][W52]原稿及首次修复实际 statement 失败；组合修复又被 `#spec` 策略拒绝。尚无通过的该桥 |
+| T09 | 一次toBits判断finite并构造结果 | R5历史失败保持原版；R6闭宽修复已完整通过，现归入M16 |
+| T10 | 非NaN原始字包含Inf，可精确往返；native add/mul结果非NaN可推出两个输入非NaN | [notnan-probe](../candidates/f01-d6-notnan-probe/Kernel.lean)，dfef26d5；706 statement PASS。仅数学桥，无新finish集成、独立公理/全gate或性能结论；仍缺允许Inf的操作规格桥 |
+| T11 | quiet NaN并非一般sum的吸收元；后续signaling NaN可优先替换它。dot各乘积已quiet时才有潜在后缀吸收 | [R6原文交接](astra-collab-20261022-r6/checkpoint-09-web-complete.md)：四个原件包已校验。NaN decode、quiet幂等及五类mul输出无signaling桥仍未闭合；抽象OrderedFold定理不能替代这些条件 |
 
 R2-W03b 另有 34 条定理组成的 [unpacked-rounding 替代证明草稿][W03b]，保持 `WRITTEN_NOT_RUN`；已有 M06 的 Model 见证路线完成集成，不重复把两稿算成两项已验证成果。
 
@@ -75,7 +84,7 @@ R2-W03b 另有 34 条定理组成的 [unpacked-rounding 替代证明草稿][W03b
 
 对实际受影响的计分类，整包降耗估计为 `Σ(该类耗时占比 × 可实现降耗)`；局部快 s 倍，对应降耗 `1−1/s`。只覆盖部分输入时计入真实命中范围，不重复计算命中率。每条路线先列机制、预期降耗范围及依据、开发／证明／完整验收成本和最小证伪实验；未知收益先做有上限的诊断，不编造成功概率。
 
-当前同源码四次完整结果中，各运算占官方十二类最小耗时之和的中位份额如下；每批都已复算并匹配原 headline ratio。[原始回执及计算](results/optimization-priority.json)。
+以下仅为旧十二类的同源码四次完整结果；新版public-v2须按cell_work加权重测，不沿用此份额。各运算占官方十二类最小耗时之和的中位份额如下；每批都已复算并匹配原 headline ratio。[原始回执及计算](results/optimization-priority.json)。
 
 | 运算 | 当前整包计分耗时占比 | 假设该项单独减少 10% 耗时，对整包的影响 |
 |---|---:|---:|
@@ -88,7 +97,7 @@ R2-W03b 另有 34 条定理组成的 [unpacked-rounding 替代证明草稿][W03b
 
 1. **先比较具体路线**：同时允许乘法／加法的算术与转换、求和的有序结构及矩阵的准备／点积／输出方案参与比较；用已有成本、机制和小实验建立可实现降耗，再分配主要预算。当前不预设“乘法→加法”顺序。
 2. **收益和成本共同决定投入**：较低占比但可大幅优化的路线可以优先；完整开发、证明、排队、回收与独立确认均计入成本，并考虑可复用成果。0.13%／0.38% 等既有微调继续停放，除非新条件改变收益判断。
-3. **单次位转换桥作为备选**：最小未运行修复是使用 `BitVec.allOnes spec.exponentBits`；须先评估命中频率与整包收益，再验证小引理及 policy，接入实际 finish 并完整验收。[精确失败与修复线索](astra-collab-20261022-r5/checkpoint-10-policy-alert.md)。
+3. **新suite成本优先**：M16单转换桥已完整通过但未提速，不再无证据重试。先从新版public-v2真实计分工作量、特殊值/溢出回退及多shape结果选路；T10/T11提供后续精确桥接入口，缺项保持显式。
 4. **直接复用既有证明**：转换、机器字循环及行布局使用 M05–M13；全局边界与 checked prepare 按实际收益选择。没有新条件不重复已否定路线；完整 gate 与独立确认保留足够时间。
 
 ## 5. 资料完整性

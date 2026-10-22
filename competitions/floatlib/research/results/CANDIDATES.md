@@ -2,7 +2,7 @@
 
 [返回数学结论](../RESULTS.md)。按源码 SHA-256 关联已保存的实际 CI 回执；同字节别名共享证据。完整通过、仅编译、失败及无匹配回执分列。这里不重新运行 Lean。
 
-共 118 份候选。机器可读的定理行号、源码哈希与全部成功/失败回执见 [candidate-catalog.json](candidate-catalog.json)。
+共 139 份候选。机器可读的定理行号、源码哈希与全部成功/失败回执见 [candidate-catalog.json](candidate-catalog.json)。
 
 `无匹配回执`表示本目录没有找到对应源码的回执，不表示数学不成立。完整通过仍须结合原回执中的内核、公理和计时审计。
 
@@ -88,7 +88,15 @@
 | [f01-d5-row-stream-full](../../candidates/f01-d5-row-stream-full/Kernel.lean) | 完整通过 | 1 | [39763957746](../../candidates/f01-mul-log2-proof1/ci-runs/39763957746/download-1ae1fd9f848a43a7859928c7c0e224a0/f01-d5-row-stream-full-verdict.json) |
 | [f01-d5-rows-pack](../../candidates/f01-d5-rows-pack/Kernel.lean) | 完整通过 | 1 | [39767698381](../../candidates/f01-mul-log2-proof1/ci-runs/39767698381/download-32ae89957cfa4e0bb4235f025a013e92/f01-d5-rows-pack-verdict.json) |
 | [f01-d5-stream-bits](../../candidates/f01-d5-stream-bits/Kernel.lean) | 已失败 | 0 | [39770153343](../../candidates/f01-mul-log2-proof1/ci-runs/39770153343/download-14232f6b13c940f1965ceb6edf5c5fe1/f01-d5-stream-bits-verdict.json) |
-| [f01-d5-stream-pack](../../candidates/f01-d5-stream-pack/Kernel.lean) | 完整通过 | 4 | [39770153343](../../candidates/f01-mul-log2-proof1/ci-runs/39770153343/download-14232f6b13c940f1965ceb6edf5c5fe1/f01-d5-stream-pack-verdict.json) |
+| [f01-d5-stream-pack](../../candidates/f01-d5-stream-pack/Kernel.lean) | 完整通过 | 10 | [39793280952](../../candidates/f01-mul-log2-proof1/ci-runs/39793280952/download-ee29d23604144525bb4a144a8603ba38/f01-d5-stream-pack-verdict.json) |
+| [f01-d6-bits-fix](../../candidates/f01-d6-bits-fix/Kernel.lean) | 已失败 | 0 | [39786224271](../../candidates/f01-mul-log2-proof1/ci-runs/39786224271/download-0b2295da540f4dab8aa8a2557a7a871d/f01-d6-bits-fix-verdict.json) |
+| [f01-d6-bits-proof2](../../candidates/f01-d6-bits-proof2/Kernel.lean) | 完整通过 | 1 | [39789494626](../../candidates/f01-mul-log2-proof1/ci-runs/39789494626/download-1355dba2673f427a90994d7eab3b7f9e/f01-d6-bits-proof2-verdict.json) |
+| [f01-d6-costsplit](../../candidates/f01-d6-costsplit/Kernel.lean) | 完整通过 | 10 | [39793280952](../../candidates/f01-mul-log2-proof1/ci-runs/39793280952/download-ee29d23604144525bb4a144a8603ba38/f01-d5-stream-pack-verdict.json) |
+| [f01-d6-finite-decode](../../candidates/f01-d6-finite-decode/Kernel.lean) | 已失败 | 0 | [39787534036](../../candidates/f01-mul-log2-proof1/ci-runs/39787534036/download-9ad3351464164201a93e15c14041e954/f01-d6-finite-decode-verdict.json) |
+| [f01-d6-finite-decode-proof1](../../candidates/f01-d6-finite-decode-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-d6-fused-package](../../candidates/f01-d6-fused-package/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-d6-notnan-probe](../../candidates/f01-d6-notnan-probe/Kernel.lean) | 仅编译通过 | 0 | [39791810276](../../candidates/f01-mul-log2-proof1/ci-runs/39791810276/download-dd3c4f84aa2d4f8b8fafc403712fa593/f01-d6-notnan-probe-verdict.json) |
+| [f01-d6-public-suite](../../candidates/f01-d6-public-suite/Kernel.lean) | 完整通过 | 10 | [39793280952](../../candidates/f01-mul-log2-proof1/ci-runs/39793280952/download-ee29d23604144525bb4a144a8603ba38/f01-d5-stream-pack-verdict.json) |
 | [f01-grs-normal-add-prototype](../../candidates/f01-grs-normal-add-prototype/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-index-hoist](../../candidates/f01-index-hoist/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-index-hoist-proof1](../../candidates/f01-index-hoist-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
@@ -119,6 +127,19 @@
 | [f01-r5-lazy-finish](../../candidates/f01-r5-lazy-finish/Kernel.lean) | 完整通过 | 1 | [39765604967](../../candidates/f01-mul-log2-proof1/ci-runs/39765604967/download-a0d1a3c038a74fc680e269bba5e2dc2e/f01-d5-lazy-finish-full-verdict.json) |
 | [f01-r5-row-output](../../candidates/f01-r5-row-output/Kernel.lean) | 完整通过 | 1 | [39763228504](../../candidates/f01-mul-log2-proof1/ci-runs/39763228504/download-c110247d8e5d4dfe970b4afc9f353bc8/f01-d5-row-output-full-verdict.json) |
 | [f01-r5-row-stream](../../candidates/f01-r5-row-stream/Kernel.lean) | 完整通过 | 1 | [39763957746](../../candidates/f01-mul-log2-proof1/ci-runs/39763957746/download-1ae1fd9f848a43a7859928c7c0e224a0/f01-d5-row-stream-full-verdict.json) |
+| [f01-r6-active-bias](../../candidates/f01-r6-active-bias/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-r6-active-bias-proof1](../../candidates/f01-r6-active-bias-proof1/Kernel.lean) | 已失败 | 0 | [39793280952](../../candidates/f01-mul-log2-proof1/ci-runs/39793280952/download-ee29d23604144525bb4a144a8603ba38/f01-r6-active-bias-proof1-verdict.json) |
+| [f01-r6-active-bias-proof2](../../candidates/f01-r6-active-bias-proof2/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-r6-fused-add](../../candidates/f01-r6-fused-add/Kernel.lean) | 已失败 | 0 | [39787815831](../../candidates/f01-mul-log2-proof1/ci-runs/39787815831/download-19527fc77a9e4cc2a95451cc61c3c592/f01-r6-fused-add-verdict.json) |
+| [f01-r6-fused-add-proof1](../../candidates/f01-r6-fused-add-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-r6-normal-add](../../candidates/f01-r6-normal-add/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-r6-normal-add-proof1](../../candidates/f01-r6-normal-add-proof1/Kernel.lean) | 完整通过 | 1 | [39791810276](../../candidates/f01-mul-log2-proof1/ci-runs/39791810276/download-dd3c4f84aa2d4f8b8fafc403712fa593/f01-r6-normal-add-proof1-verdict.json) |
+| [f01-r6-normal-mul](../../candidates/f01-r6-normal-mul/Kernel.lean) | 已失败 | 0 | [39789494626](../../candidates/f01-mul-log2-proof1/ci-runs/39789494626/download-1355dba2673f427a90994d7eab3b7f9e/f01-r6-normal-mul-verdict.json) |
+| [f01-r6-normal-mul-proof1](../../candidates/f01-r6-normal-mul-proof1/Kernel.lean) | 完整通过 | 1 | [39793280952](../../candidates/f01-mul-log2-proof1/ci-runs/39793280952/download-ee29d23604144525bb4a144a8603ba38/f01-r6-normal-mul-proof1-verdict.json) |
+| [f01-r6-web-absorption26](../../candidates/f01-r6-web-absorption26/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-r6-web-absorption26-proof1](../../candidates/f01-r6-web-absorption26-proof1/Kernel.lean) | 已失败 | 0 | [39793280952](../../candidates/f01-mul-log2-proof1/ci-runs/39793280952/download-ee29d23604144525bb4a144a8603ba38/f01-r6-web-absorption26-proof1-verdict.json) |
+| [f01-r6-web-absorption26-proof2](../../candidates/f01-r6-web-absorption26-proof2/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-r6-web-lowguards](../../candidates/f01-r6-web-lowguards/Kernel.lean) | 完整通过 | 1 | [39791810276](../../candidates/f01-mul-log2-proof1/ci-runs/39791810276/download-dd3c4f84aa2d4f8b8fafc403712fa593/f01-r6-web-lowguards-verdict.json) |
 | [f01-rebuilt-mul](../../candidates/f01-rebuilt-mul/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-rebuilt-mul-proof1](../../candidates/f01-rebuilt-mul-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-same-scale-add](../../candidates/f01-same-scale-add/Kernel.lean) | 无匹配回执 | 0 | — |
