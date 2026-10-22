@@ -17,7 +17,7 @@ def run(g,kernel,out):
     command(['git','fetch','--depth','1','origin',HEAD],'fetch.log',old,90)
     command(['git','worktree','add','--detach',str(upstream),HEAD],'checkout.log',old,30)
     # Reuse only the exact same pinned Lean/FloatLib dependency cache; official source is clean.
-    command(['cp','-a',str(old/'lean/.lake'),str(upstream/'lean/.lake')],'copy-dependencies.log',old,60)
+    command(['cp','-al',str(old/'lean/.lake'),str(upstream/'lean/.lake')],'copy-dependencies.log',old,180)
     assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=upstream,text=True).strip()==HEAD
     assert (old/'lean/lean-toolchain').read_bytes()==(upstream/'lean/lean-toolchain').read_bytes()
     assert (old/'lean/lake-manifest.json').read_bytes()==(upstream/'lean/lake-manifest.json').read_bytes()
