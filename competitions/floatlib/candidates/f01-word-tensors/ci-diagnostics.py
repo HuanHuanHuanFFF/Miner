@@ -16,7 +16,7 @@ def main():
 import importlib.util,sys,json,hashlib,fcntl,re,subprocess
 from dataclasses import asdict
 from pathlib import Path
-upstream,kernel,out=map(Path,sys.argv[1:]);sys.path.insert(0,str(upstream))
+upstream,kernel,out,profiler=map(Path,sys.argv[1:]);sys.path.insert(0,str(upstream))
 spec=importlib.util.spec_from_file_location('floatlib_gate_diagnostic',upstream/'gate.py');g=importlib.util.module_from_spec(spec);sys.modules[spec.name]=g;spec.loader.exec_module(g)
 old_errors=g.errors
 def full_errors(text,*args,**kwargs):
@@ -60,6 +60,14 @@ def statement(src,verdict):
                 name='native-loop-'+str(len(objects))+'.asm.txt';(out/name).write_bytes(result.stdout)
                 objects.append({'kind':'actual-built-object-disassembly','source':str(path),'object_sha256':hashlib.sha256(data).hexdigest(),'symbol':symbol,'file':name,'sha256':hashlib.sha256(result.stdout).hexdigest(),'exit_code':result.returncode,'kernel_sha256':hashlib.sha256(kernel.read_bytes()).hexdigest(),'scope':'Diagnostic statement replay using the unchanged pinned build; this is not the cleaned-up timed gate object.'})
         (out/'native-assembly-index.json').write_text(json.dumps(objects,indent=2)+'\n',encoding='utf-8')
+        if kernel.parent.name == 'f01-d5-costsplit':
+            try:
+                ps=importlib.util.spec_from_file_location('candidate_cost_profile',profiler)
+                pm=importlib.util.module_from_spec(ps);ps.loader.exec_module(pm)
+                pm.run(g,kernel,out)
+            except Exception as error:
+                import traceback
+                (out/'profile-error.txt').write_text(traceback.format_exc(),encoding='utf-8')
     return reason
 g.STAGES=[('intake',g.intake),('policy',g.policy),('statement',statement)]
 with (g.HERE/'gate.lock').open('w') as lock:
@@ -74,7 +82,8 @@ sys.exit(0 if verdict.passed else 1)
         start=time.monotonic()
         with (out/'replay.log').open('wb') as stream:
             try:
-                p=subprocess.Popen([str(a.upstream/'.venv/bin/python'),'-c',code,str(a.upstream),str(a.kernel),str(out)],cwd=a.upstream,env=os.environ.copy(),stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
+                profiler=Path(__file__).resolve().parent.parent/'f01-d5-costsplit/profile-native.py'
+                p=subprocess.Popen([str(a.upstream/'.venv/bin/python'),'-c',code,str(a.upstream),str(a.kernel),str(out),str(profiler)],cwd=a.upstream,env=os.environ.copy(),stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
                 report['replay_exit_code']=p.wait(timeout=120)
             except subprocess.TimeoutExpired:
                 os.killpg(p.pid,signal.SIGKILL);p.wait();report['replay']='diagnostic-only replay process group timed out at 120s'
