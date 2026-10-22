@@ -67,6 +67,8 @@ d4_by_operation={
 for k in eligible:d4_by_operation[k].extend(['f01-d4-final-native','f01-d4-final-lowmul'])
 for k in eligible:
  eligible[k]=[n for n in eligible[k] if not n.startswith('f01-d4-')]+d4_by_operation[k]
+labels.update({'f01-d5-stream-pack':'流式输出＋打包直读','f01-d5-rows-pack':'逐行输出＋打包直读','f01-d5-stream-bits':'流式输出＋单次位转换','f01-d5-rows-bits':'逐行输出＋单次位转换'})
+eligible['bmm'].extend(['f01-d5-stream-pack','f01-d5-rows-pack','f01-d5-stream-bits','f01-d5-rows-bits'])
 selected={}
 for k,names in eligible.items():
  options=[]
@@ -78,10 +80,11 @@ best_observed_by_operation=json.loads(json.dumps(selected))
 # Prefer the confirmed robust multiplication route after the Intel comparison.
 current=json.loads((ROOT/'competitions/floatlib/coordination/development-status.json').read_bytes())
 confirmed=current.get('collaboration',{}).get('confirmed_candidate')
-if confirmed=='f01-d4-final-lowmul':
- xs=[r for r in records if r['candidate']==confirmed]
+if confirmed=='f01-d4-final-lowmul' or (confirmed and confirmed.startswith('f01-d5-')):
+ confirmed_mul='f01-d4-final-lowmul'
+ xs=[r for r in records if r['candidate']==confirmed_mul]
  assert len(xs)>=3
- selected['mul']={'candidate':confirmed,'label':'低位软件回退','relative_to_champion_inferred':median(r['values']['mul'] for r in xs),'full_gate_runs':len(xs),'kernel_sha256':xs[0]['kernel_sha256'],'runs':[r['run'] for r in xs]}
+ selected['mul']={'candidate':confirmed_mul,'label':'低位软件回退','relative_to_champion_inferred':median(r['values']['mul'] for r in xs),'full_gate_runs':len(xs),'kernel_sha256':xs[0]['kernel_sha256'],'runs':[r['run'] for r in xs]}
 result={'champion_submission':champ['id'],'champion_sha256':champ['digest'],'policy_snapshot':json.loads((CLOSING/'competition.raw').read_bytes())['current_snapshot_id'],'snapshot_receipts':(CLOSING/'receipts.json').relative_to(ROOT).as_posix(),'queried_at_utc':snapshot['responses']['champion-detail']['queried_at_utc'],'method':'INFERRED: per-class exact-digest historical chain, current champion timing weights, candidate/reference paired class ratios, median over frozen-source full gates. Same-digest promotions excluded; no shared overall multiplier used.','direct_champion_ratio':'UNKNOWN','records':records,'selected_by_operation':selected,'best_observed_by_operation':best_observed_by_operation,'mul_selection_policy':'Confirmed low-exponent software fallback after measured Intel regression; retain faster AMD native samples separately','factors_champion_over_shipped':factors,'formal_submission':'NOT_SUBMITTED'}
 def save(path,data):
  tmp=path.with_name(path.name+'.update-tmp');tmp.write_bytes((json.dumps(data,ensure_ascii=False,indent=2)+'\n').encode());os.replace(tmp,path)

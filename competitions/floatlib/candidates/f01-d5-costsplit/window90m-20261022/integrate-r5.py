@@ -14,6 +14,8 @@ ap.add_argument('--pack')
 ap.add_argument('--byte-lane',action='store_true')
 ap.add_argument('--lazy-finish',action='store_true')
 ap.add_argument('--finite-bits',action='store_true')
+ap.add_argument('--finite-source',default='f01-d5-finitebits-proof1')
+ap.add_argument('--repair-allones',action='store_true')
 ap.add_argument('--name',required=True)
 a=ap.parse_args()
 assert re.fullmatch('f01-d5-[a-z0-9-]+',a.name)
@@ -56,12 +58,17 @@ if a.lazy_finish:
     assert s.count(needle)==1
     s=s.replace(needle,'R5Finish.finishAt m n p b.val i.val j.val A.toArray B.toArray')
 if a.finite_bits:
-    name='f01-d5-finitebits-check'
+    name=a.finite_source
     p=ROOT/'competitions/floatlib/candidates'/name/'Kernel.lean'
     donor=p.read_text();digest=hashlib.sha256(p.read_bytes()).hexdigest()
     runs=[r['run'] for r in records if r['candidate']==name and r.get('compile_pass') and r.get('passed') and r['kernel_sha256']==digest]
-    assert runs, 'The new proof bridge must first pass exact statement compilation'
-    parents[name]={'kernel_sha256':digest,'kernel_bytes':p.stat().st_size,'statement_runs':runs,'scope':'Compile-only proof bridge; integrated source needs its own full kernel replay, axiom check and performance comparison.'}
+    failures=[r['run'] for r in records if r['candidate']==name and not r.get('passed') and r['kernel_sha256']==digest]
+    assert runs or (a.repair_allones and failures), 'Use exact compiled bridge or explicitly repair the recorded all-ones failure'
+    parents[name]={'kernel_sha256':digest,'kernel_bytes':p.stat().st_size,'statement_runs':runs,'failed_statement_runs':failures,'repair_allones':a.repair_allones,'scope':'A repaired proof bridge is NOT_RUN until the integrated full gate. No compile or performance acceptance is inferred from source review.'}
+    if a.repair_allones:
+        old='(-1 : BitVec spec.exponentBits)'
+        assert donor.count(old)==1
+        donor=donor.replace(old,'(-1#spec.exponentBits)')
     i=donor.index('namespace R5W02');j=donor.index('end R5W02',i)+len('end R5W02')
     s=s.replace('import ContractTensor\n','import ContractTensor\n\n'+donor[i:j]+'\n',1)
     i=donor.index('def finish (n baseA baseB p');j=donor.index('theorem finish_eq_dot',i)
