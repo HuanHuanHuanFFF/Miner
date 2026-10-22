@@ -73,5 +73,20 @@ def run(g,kernel,out):
         rows.append(row)
         (stage/'summary.json').write_text(json.dumps({**provenance,'results':rows,'complete':len(rows)==len(plan['candidates']),'elapsed_seconds':time.monotonic()-started},indent=2)+'\n')
         if name=='baseline' and not full:break
+    if plan.get('profile_parent',False):
+        assert any(r['candidate']=='f01-d5-stream-pack' and r['full_gate'] for r in rows)
+        profile_out=stage/'parent-stage-profile';profile_out.mkdir(exist_ok=True)
+        helper=repo/'competitions/floatlib/candidates/f01-d7-research/profile-entry.py'
+        argv=[str(upstream/'.venv/bin/python'),str(helper),'--upstream',str(upstream),'--kernel',str(stage/'inputs/f01-d5-stream-pack/Kernel.lean'),'--out',str(profile_out),'--plan',str(stage/'public-drawn-plan.json')]
+        with (stage/'parent-stage-profile.log').open('wb') as log:
+            try:
+                diagnostic=subprocess.run(argv,cwd=upstream,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=660)
+                diagnostic_code=diagnostic.returncode
+            except subprocess.TimeoutExpired:
+                diagnostic_code=124
+        result_path=profile_out/'profile-current-result.json'
+        diagnostic_result=json.loads(result_path.read_bytes()) if result_path.exists() else {}
+        profile_record={'diagnostic_only':True,'exit_code':diagnostic_code,'complete':bool(diagnostic_code==0 and diagnostic_result.get('complete')),'result_sha256':hashlib.sha256(result_path.read_bytes()).hexdigest() if result_path.exists() else None,'scope':'Separate instrumented statement replay after original complete gates; does not change their verdicts or scores'}
+        (stage/'summary.json').write_text(json.dumps({**provenance,'results':rows,'complete':len(rows)==len(plan['candidates']),'elapsed_seconds':time.monotonic()-started,'parent_stage_profile':profile_record},indent=2)+'\n')
     command(['git','diff','--exit-code'],'official-source-clean.log',upstream,20)
     if not rows or len(rows)!=len(plan['candidates']) or not all(r['full_gate'] or r['statement_pass'] for r in rows):raise RuntimeError('Requested full gates or separately labeled statement probes incomplete/failed; original receipts retained')
