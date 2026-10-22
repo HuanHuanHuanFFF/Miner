@@ -25,7 +25,7 @@ def run(g, kernel, out):
     cpath = next(p for p in upper.rglob('Submission.c'))
     original = cpath.read_bytes()
     text = original.decode()
-    pattern = r'LEAN_EXPORT lean_object\* lp_competition_Submission_Packed10_core\([^;]*?\n}\n}'
+    pattern = r'LEAN_EXPORT lean_object\* lp_competition_Submission_Packed10_core\([^;{]*?\)\s*\{.*?\n}\n}'
     match = re.search(pattern, text, re.S)
     assert match
     body = match.group()
