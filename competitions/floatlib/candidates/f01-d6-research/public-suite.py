@@ -26,7 +26,9 @@ def run(g,kernel,out):
     assert old_contracts==new_contracts,'Contract changed; stop before claiming compatibility'
     command(['bash','./setup.sh'],'setup.log',upstream,360)
     command(['bash','./setup.sh','--check'],'setup-check.log',upstream,60)
-    plan=json.loads((repo/'competitions/floatlib/candidates/f01-d6-public-suite/suite-plan.json').read_bytes())
+    requested=(repo/'competitions/floatlib/candidates/f01-d6-public-suite/suite-plan.json').read_bytes()
+    (stage/'requested-plan.json').write_bytes(requested)
+    plan=json.loads(requested)
     env.update(GATE_FULL_SUITE=str(upstream/'suites/public-v2.json'),BENCH_SEED=str(plan['seed']),BENCH_ROUNDS='25',BENCH_PAIRS='500000',GATE_BUDGET_SECONDS='900',VERIFY_TOTAL_TIMEOUT='2700')
     suite=(upstream/'suites/public-v2.json').read_bytes()
     module_spec=importlib.util.spec_from_file_location('official_public_suite_plan',upstream/'benchmark_suite.py')
@@ -36,7 +38,7 @@ def run(g,kernel,out):
     cell_work={cell:sum(c['work'] for c in public_plan['cases'] if c['timed'] and c['name'].rsplit(':',1)[0]==cell) for cell in module.cells(spec)}
     assert all(w>0 for w in cell_work.values())
     (stage/'public-cell-work.json').write_text(json.dumps(cell_work,indent=2)+'\n')
-    provenance={'diagnostic_current_official_public_suite':True,'official_commit':HEAD,'source_commit':os.environ['GITHUB_SHA'],'old_pinned_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=old,text=True).strip(),'suite_sha256':hashlib.sha256(suite).hexdigest(),'seed':plan['seed'],'rounds':25,'pairs':500000,'same_contracts_sha256':new_contracts,'scope':'New official unchanged public suite full gate. Separate from legacy12 and unavailable private paid suite. No formal competition submission.'}
+    provenance={'diagnostic_current_official_public_suite':True,'official_commit':HEAD,'source_commit':os.environ['GITHUB_SHA'],'old_pinned_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=old,text=True).strip(),'suite_sha256':hashlib.sha256(suite).hexdigest(),'requested_plan_sha256':hashlib.sha256(requested).hexdigest(),'adapter_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'official_generator_sha256':hashlib.sha256((upstream/'benchmark_suite.py').read_bytes()).hexdigest(),'seed':plan['seed'],'rounds':25,'pairs':500000,'same_contracts_sha256':new_contracts,'scope':'New official unchanged public suite full gate. Separate from legacy12 and unavailable private paid suite. No formal competition submission.'}
     (stage/'provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
     (stage/'public-v2.json').write_bytes(suite)
     rows=[]
