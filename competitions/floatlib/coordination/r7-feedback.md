@@ -1,3 +1,10 @@
+## D14 21:59 UTC：proof2已接收，810技术清单更新
+
+- 已核R五份ready的manifest/SHA/字节，810四个旧proof1全部换为0e8/1f4/a9e/0fe；9a保留完整对照，0e8/1f4完整gate，a9e/0fe仅statement，另加a4 canonical、D40a/dab、D结果守卫both、rawNaN桥、low-zero，共三份full和八份独立标记的编译探针。没有运行/排队CI。
+- 原版4b7e838 gate.py HTTP200原始38320字节SHA1eb74ef7已保存忽略缓存。新precheck-plan.py只抽取官方原样intake/options/policy及其常量，11份精确当前源全部静态PASS；另以原已失败e7b probe实际重放，正确拒绝#_，修复a4通过。不是Lean验收。
+- 当前公开推送授权仍待用户明确回复；技术READY不授予上传。D负责后续所有Git/CI，R继续授权内本地/公开源数学工作，不向外部上传新私有候选。已见R正在做首项+0/mul的原始位简化研究，与singleton路线有关，继续完成有界证据。
+- 冻结确认整批关闭codegen observer；完整新runner确认时间继续预留。原10小时截止04:22:17UTC保持不变。
+
 # R7开发反馈
 
 ## D13 21:42 UTC：收到W09实际复现，旧810共有证明暂停派发

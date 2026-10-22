@@ -20,16 +20,16 @@
 | Inf终点免重算 | bb199701桥803仅编译；c7605688实际805/807/809完整PASS | 包括Inf终点，NaN精确回放；单组件与direct组合分列，不相加收益 |
 | direct＋nonNaN当前保留 | 60f74aa4；807/809完整PASS | 新seed/新runner确认整包耗时为d9的0.90701/0.86176，BMM0.80736/0.77086 |
 | quiet-NaN点积后缀 | 9a2a05cd；806/808完整PASS | 相对8eb整包0.80671/0.87944；raw位guard7ac在808更慢，暂不采用 |
-| 两种非有限值组合、自比较guard | b169在808只有一处证明失败；修复39a99b32/3baa785e | 810计划已冻结本地提交ce3c0c07，等待公开推送明确授权；尚未派发 |
-| 原生前缀、sum后缀、单项内积、标量特殊分支 | 810四个statement探针 | 精确候选已冻结，原失败保留；尚未编译/计时，不列为完整成果 |
+| 两种非有限值组合、自比较guard | b169在808只有一处证明失败；修复0e8bc05c/1f4d31aa | 固定Lean原四spec证明有精确0e8成功证据；810现行静态规则PASS，完整gate等待公开推送授权 |
+| 原生前缀、sum后缀、单项内积、标量特殊分支 | 810八个statement探针 | 精确候选已冻结，原失败保留；尚未编译/计时，不列为完整成果 |
 | 完整调用阶段成本 | [实际C缺失返回诊断](profile-review.md)、[修复模块](profile-current.py) | 805辅助编译选择失败已修复；807实际四份binary/137次调用逐一核对通过，见[诊断及投入决定](profile-summary.json) |
 
-所有逐项数据从[精确新suite结果](public-suite-results.json)进入；失败、慢样本和原件保持原字节。20:34UTC官方核对冠军274，累计乘数含跨suite历史链；四运算看板见根dashboard.md。原CI均已自然结束并回收，研究窗口继续。
+所有逐项数据从[精确新suite结果](public-suite-results.json)进入；失败、慢样本和原件保持原字节。21:33UTC官方核对冠军274，累计乘数含跨suite历史链；四运算看板见根dashboard.md。原CI均已自然结束并回收，研究窗口继续。
 
 ## 下一验证顺序
 
-[投入依据](opportunity-ledger.json)绑定当前60f两轮逐cell时间与807实际命中，UNKNOWN收益只做最小探针；cell曝光上限不当作可回收时间。810已冻结三份完整gate和四份statement，等具体公开推送授权；目前没有CI排队。后续依反馈优先处理原生前缀、标量special/raw NaN、结果守卫与低零快返，避免无反馈扩网格；分块检查点先回收数学，按实际命中计数暂缓运行优化。
+[投入依据](opportunity-ledger.json)绑定当前60f两轮逐cell时间与807实际命中，UNKNOWN收益只做最小探针；cell曝光上限不当作可回收时间。810已更新为proof2三份完整gate和八份statement，等具体公开推送授权；目前没有CI排队。后续依反馈优先处理原生前缀、标量special/raw NaN、结果守卫与低零快返，避免无反馈扩网格；分块检查点先回收数学，按实际命中计数暂缓运行优化。
 
 [标量实际C审查](scalar-codegen-review.md)、[344项实际输出校验](scalar-opportunity-807.json)、[新桥独立静态审查](nan-probe-review.md)和[研究原件独立完整性](web-delivery-integrity.json)仅提供各自范围的证据；新增源码编译/完整gate仍待真实执行。
 
-原版gate的可选[实际对象采集](capture-codegen-notes.md)已通过六组本地基础行为自测，仅供discovery；810的39a/3baa按需启用，任何冻结独立确认整批禁用。实际Linux/Lean工具及完整集成仍NOT_RUN。
+原版gate的可选[实际对象采集](capture-codegen-notes.md)已通过六组本地基础行为自测，仅供discovery；810的0e8/1f4按需启用，任何冻结独立确认整批禁用。实际Linux/Lean工具及完整集成仍NOT_RUN。
