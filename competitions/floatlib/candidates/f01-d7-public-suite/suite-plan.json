@@ -1,5 +1,5 @@
 {
-  "seed": 801,
+  "seed": 802,
   "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
   "suite": "suites/public-v2.json",
   "candidates": [
@@ -8,14 +8,10 @@
       "sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045"
     },
     {
-      "candidate": "f01-d7-width4",
-      "sha256": "d9526a34d6626a7417e5f3c61a02e8d840f9b1fbcaed2df7f3f558c751d6a959"
-    },
-    {
-      "candidate": "f01-d7-width8",
-      "sha256": "f36c6cab0a4f14fc9be838297f0dd8700c25e8669aa112f5419c0bf3dffd175b"
+      "candidate": "f01-d7-direct-small",
+      "sha256": "d9a808479dd6a7c7da345ce680773105b638cc6c9e8145e34d10f59751411fb3"
     }
   ],
-  "purpose": "R7 first distinct mechanism: compare ten, four and eight lanes on the same fresh public-v2 plan including all preparation, fallback and output costs; no scalar arithmetic changes",
-  "expected_cost": "R6 two complete candidate gates took approximately8minutes after setup; this three-entry batch has about12minutes nested expectation plus queue/setup; 40minute replay cap and45minute workflow bound; all started work collected naturally"
+  "purpose": "Independent second mechanism: avoid nativeA/B packing and tile allocations for n<=4 or p<=2; pair exact unchanged parent and direct-small on a fresh full public-v2 draw",
+  "expected_cost": "Two full original public-v2 gates approximately8minutes nested plus setup/queue; within R7 budget and public-runner cap"
 }
