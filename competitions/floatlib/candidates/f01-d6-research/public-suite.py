@@ -1,6 +1,6 @@
 """Run the unchanged new official gate on its public suite in a separate checkout."""
 from pathlib import Path
-import datetime, hashlib, json, os, subprocess, sys, time
+import datetime, hashlib, importlib.util, json, os, subprocess, sys, time
 
 HEAD='a0e80de64aa5394a42b1c9a237c15047ec766f73'
 
@@ -29,6 +29,13 @@ def run(g,kernel,out):
     plan=json.loads((repo/'competitions/floatlib/candidates/f01-d6-public-suite/suite-plan.json').read_bytes())
     env.update(GATE_FULL_SUITE=str(upstream/'suites/public-v2.json'),BENCH_SEED=str(plan['seed']),BENCH_ROUNDS='25',BENCH_PAIRS='500000',GATE_BUDGET_SECONDS='900',VERIFY_TOTAL_TIMEOUT='2700')
     suite=(upstream/'suites/public-v2.json').read_bytes()
+    module_spec=importlib.util.spec_from_file_location('official_public_suite_plan',upstream/'benchmark_suite.py')
+    module=importlib.util.module_from_spec(module_spec);module_spec.loader.exec_module(module)
+    spec=module.load(upstream/'suites/public-v2.json')
+    public_plan=module.make_plan(spec,plan['seed'],500000)
+    cell_work={cell:sum(c['work'] for c in public_plan['cases'] if c['timed'] and c['name'].rsplit(':',1)[0]==cell) for cell in module.cells(spec)}
+    assert all(w>0 for w in cell_work.values())
+    (stage/'public-cell-work.json').write_text(json.dumps(cell_work,indent=2)+'\n')
     provenance={'diagnostic_current_official_public_suite':True,'official_commit':HEAD,'source_commit':os.environ['GITHUB_SHA'],'old_pinned_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=old,text=True).strip(),'suite_sha256':hashlib.sha256(suite).hexdigest(),'seed':plan['seed'],'rounds':25,'pairs':500000,'same_contracts_sha256':new_contracts,'scope':'New official unchanged public suite full gate. Separate from legacy12 and unavailable private paid suite. No formal competition submission.'}
     (stage/'provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
     (stage/'public-v2.json').write_bytes(suite)
@@ -46,8 +53,11 @@ def run(g,kernel,out):
         if full:
             assert v['suite']['sha256']==provenance['suite_sha256'] and len(v['rounds'])==25
             assert v['verifier_fingerprint']==v['verifier_fingerprint_end']
-            ratio=sum(c['submission_ns'] for c in v['classes'].values())/sum(c['incumbent_ns'] for c in v['classes'].values());assert abs(ratio-v['ratio'])<1e-10
-            row.update(ratio=ratio,classes=v['classes'],rounds=v['rounds'],suite=v['suite'])
+            assert set(v['classes'])==set(cell_work)
+            total_s=sum(c['submission_ns']*cell_work[n] for n,c in v['classes'].items())
+            total_i=sum(c['incumbent_ns']*cell_work[n] for n,c in v['classes'].items())
+            ratio=total_s/total_i;assert abs(ratio-v['ratio'])<1e-10
+            row.update(ratio=ratio,classes=v['classes'],rounds=v['rounds'],suite=v['suite'],cell_work=cell_work,scored_submission_total_ns=total_s,scored_reference_total_ns=total_i)
         rows.append(row)
         (stage/'summary.json').write_text(json.dumps({**provenance,'results':rows,'complete':len(rows)==len(plan['candidates']),'elapsed_seconds':time.monotonic()-started},indent=2)+'\n')
         if name=='baseline' and not full:break
