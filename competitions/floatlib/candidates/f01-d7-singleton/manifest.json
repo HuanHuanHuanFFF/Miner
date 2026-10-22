@@ -1,0 +1,40 @@
+{
+  "candidate": "f01-d7-singleton",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "4ba2a23548e5df7f3c379b4734e6653c0546b8346d6d567eb397c1245f725d43",
+  "candidate_bytes": 143253,
+  "parent": "competitions/floatlib/candidates/f01-d7-direct-small/Kernel.lean",
+  "parent_sha256": "d9a808479dd6a7c7da345ce680773105b638cc6c9e8145e34d10f59751411fb3",
+  "parent_bytes": 141685,
+  "validation_mode": "full-gate",
+  "proof_status": "NOT_RUN",
+  "compile_status": "NOT_RUN",
+  "full_gate_status": "NOT_RUN",
+  "performance_status": "NOT_RUN",
+  "gain": "UNKNOWN",
+  "mechanism": "Only n=1 uses one Submission.mul followed by Submission.add posZero at the exact reference k=0 addresses; bypasses NativeFinal.dot recursion, final-result guard and fallback replay. All other dimensions use the unchanged renamed direct-small dispatcher.",
+  "scope": "Shape-only n=1 branch; all input bit patterns and all batch/m/p including empty output. No seed, data or workload dispatch.",
+  "proof_route": "Substitute n=1 and reduce the reference ordered fold with Fin.foldl_succ and Fin.foldl_zero; reuse referenceBmm_spec and exact prior dispatcher spec.",
+  "proof_source": "https://github.com/leanprover/lean4/blob/v4.34.0/src/Init/Data/Fin/Fold.lean",
+  "semantic_review": {
+    "signed_zero": "Keeps the initial positive-zero add; never returns raw product alone.",
+    "nan": "Uses unchanged Submission.mul and Submission.add, preserving their established exact semantics.",
+    "addresses": "Original bmmDecodeC and exact k=0 getD address expressions/defaults.",
+    "empty_output": "Vector.ofFn over Fin(batch*m*p); no nonemptiness assumption.",
+    "non_singleton_path": "Exact reversible rename to bmmBeforeSingleton and bmmBeforeSingleton_spec."
+  },
+  "local_static_validation": {
+    "status": "PASS_STATIC_ONLY",
+    "imports": [
+      "import ContractTensor"
+    ],
+    "set_options": [],
+    "banned_matches": [],
+    "policy_source": "competitions/floatlib/research/materials/20261022/R2-W01c/FloatLib_R2-W01c/public_sources/official/gate.py",
+    "policy_sha256": "2d2e97dcbe7e4a131a5655c915e63ffc05c3c34c3f6977534bf4bfd337434ff8",
+    "parent_prefix_unchanged_bytes": 141054,
+    "prior_dispatcher_reverse_rename": true
+  },
+  "validation_gap": "Lean elaboration, kernel replay, axiom audit, all checksums and full current public-v2 paired timing remain NOT_RUN; static review is not proof acceptance.",
+  "formal_submission": "NOT_SUBMITTED"
+}
