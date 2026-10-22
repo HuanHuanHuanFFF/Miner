@@ -48,7 +48,7 @@
   "blocker": null,
   "next_action": "Independently confirm8USize; fastcompile scoped sum and exact final package, then full gate/paired timing on frozen package if statementpasses",
   "research_decision": "Adopt word/preconverted/USize as best independently confirmed whole package. Keep Packed4 as strongest bmm prospect; repeated AMD hybrid tiny regression prevents prioritizing it. Helpers stay separate from runtime results.",
-  "execution_state": "R3_INITIAL_FULL_AND_STATEMENT_RUNNING",
+  "execution_state": "FROZEN_CONFIRMATION_AND_FINAL_PACKAGE_PREFLIGHT",
   "local_project_check": {
     "status": "PASS",
     "checked_at_utc": "2026-10-21T21:22:35.402519+00:00",
@@ -522,9 +522,39 @@
         "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T050841Z/dispatch.json",
         "conclusion": "failure",
         "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39726342678"
+      },
+      {
+        "run": 39727625634,
+        "candidates": [
+          "baseline",
+          "f01-d3-word-packed8-usize-proof1"
+        ],
+        "seed": 408,
+        "commit": "b26f780ca31cb315d6a4da7de111b175edcaec85",
+        "created_at_utc": "2026-10-22T05:22:11Z",
+        "state": "in_progress",
+        "mode": "full-gate",
+        "purpose": "Frozen8USize independent full confirmation",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T052207Z/dispatch.json"
+      },
+      {
+        "run": 39727658622,
+        "candidates": [
+          "f01-d3-inline-decode-sum-proof1",
+          "f01-d3-final-package-proof"
+        ],
+        "seed": 409,
+        "commit": "b26f780ca31cb315d6a4da7de111b175edcaec85",
+        "created_at_utc": "2026-10-22T05:22:32Z",
+        "state": "completed",
+        "mode": "statement-only",
+        "purpose": "Actual scope-corrected sum and frozen finalpackage fast preflight",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T052228Z/dispatch.json",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39727658622"
       }
     ],
-    "feedback_to_research": "Actual405allFULLPASS:4USizee54f bmm.0248756 (~1.251ns),8Nat6dc5 .0263265(~1.324),8USize9a4b .0235857(~1.188). Allsources3axioms/timing tobeaudited next. D choosesfrozen8USize forindependentconfirm.407sum96ff FAILonlymissingopens Binary32/ExecFloat/sumSpec inreopenednamespaces; scopefixfe03prepared and actualfinalpackage8USize+decodeSum 6744be2bd784bea7a7e347d68f813bc865d2d18abab87f19fa37aec8a8c2c1f7 nowshortpreflightnext. Keep optionalglobalguard asfutureunlessnecessary; reservefinalconfirmationtime. No moreopenendedbranches."
+    "feedback_to_research": "Actual405allFULLPASS:4USizee54f bmm.0248756 (~1.251ns),8Nat6dc5 .0263265(~1.324),8USize9a4b .0235857(~1.188). Allsources3axioms/timing tobeaudited next. D choosesfrozen8USize forindependentconfirm.407sum96ff FAILonlymissingopens Binary32/ExecFloat/sumSpec inreopenednamespaces; scopefixfe03prepared and actualfinalpackage8USize+decodeSum 6744be2bd784bea7a7e347d68f813bc865d2d18abab87f19fa37aec8a8c2c1f7 nowshortpreflightnext. Keep optionalglobalguard asfutureunlessnecessary; reservefinalconfirmationtime. No moreopenendedbranches. ActualC405 confirmed4/8 Index loops both0Nat_add,0Nat_mul,0array_size,2uget,4or8mul/add, onlyexitctor. 408indep8index39727625634 and409scopedSum/finalpackage39727658622 actualrunning. Please freezeRfinalhandoff by05:30 with originalsources/hashes, measuredboundaries, optionalglobalguardmarkedNOT_RUN unlessalreadyDscheduled. No newdirections; D completes any startedCI beyond05:36:27 naturally thenreports. This is localfinalphase, not earlierwholewindowtermination. 409 actualPASS scopefixedSumfe03 andexactfinalpackage6744be2b. Fullfinalpackagenowwillgateandfreezeconfirm, no furtheralgorithmchangesplanned. R finalhandoff cancloseownresearch; D recovers all CI naturally."
   },
   "previous_current_candidate": {
     "candidate": "competitions/floatlib/candidates/f01-mul-log2-proof3",
@@ -567,7 +597,12 @@
     },
     "candidate_role": "Frozen reference/control only; no longer the primary development route"
   },
-  "active_jobs": [],
+  "active_jobs": [
+    {
+      "kind": "github_ci",
+      "run": 39727625634
+    }
+  ],
   "active_goal": "新一轮协作推进1h，继续冲击新冠军",
   "pending_candidates": [],
   "current_official_refresh": {
