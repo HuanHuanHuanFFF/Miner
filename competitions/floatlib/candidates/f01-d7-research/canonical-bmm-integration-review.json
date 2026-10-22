@@ -1,0 +1,798 @@
+{
+  "status": "READ_ONLY_INTEGRATION_REVIEW_NEW_COMPOSITION_NOT_RUN",
+  "started_at_utc": "2026-10-22T23:10:49Z",
+  "budget_minutes": 45,
+  "subtask_deadline_utc": "2026-10-22T23:55:49Z",
+  "overall_deadline_utc": "2026-10-23T04:22:17Z",
+  "audited_at_utc": "2026-10-22 23:25:01 UTC",
+  "scope": {
+    "writes_only": [
+      "competitions/floatlib/candidates/f01-d7-research/canonical-bmm-integration-review.md",
+      "competitions/floatlib/candidates/f01-d7-research/canonical-bmm-integration-review.json"
+    ],
+    "candidate_mutations": false,
+    "R_mutations": false,
+    "Git_mutations": false,
+    "CI": false,
+    "uploads": false,
+    "toolchain_installation": false,
+    "new_integration_Lean": "NOT_RUN",
+    "new_integration_gate": "NOT_RUN",
+    "C_asm": "NOT_RUN",
+    "performance": "UNKNOWN"
+  },
+  "target": {
+    "candidate": {
+      "path": "competitions/floatlib/candidates/f01-d7-direct-nonfinite/Kernel.lean",
+      "bytes": 174925,
+      "sha256": "97f77e2ce3f53dc3625349d5d2a7bc761570f9428c0b547070e37254c4960d26",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "manifest": {
+      "path": "competitions/floatlib/candidates/f01-d7-direct-nonfinite/manifest.json",
+      "bytes": 1559,
+      "sha256": "607422755757016ce1a0be9e85fa91d30a305374a930e55323d0558940ad3184",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "proof_status": "NOT_RUN_NEW_COMPOSITION",
+    "scanner": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/dot-nonnan-scan-block.lean",
+      "bytes": 3526,
+      "sha256": "5e46e932fb8483792c42a79d59e887e32af15e236100cbb8253ca82d3212ea8f",
+      "status": "LOCAL_WORKSPACE"
+    }
+  },
+  "conclusion": {
+    "answer": "Existing W12 raw import equality is sufficient; the missing interface is concrete native dotLoop execution equivalence plus the actual raw carrier codec mapping. The new branch can return ofFloat32 result under scanner=true. Calling it only after endpoint NaN is a cost choice; claiming the raw word isC additionally requires endpoint NaN.",
+    "counterexample_to_scanner_implies_C": "A=[0x3f800000],B=[0x3f800000],seed+0: scanner=true, raw result0x3f800000. Empty input similarly returns0.",
+    "no_new_canonical_math_requested": true,
+    "uniform_hooks": "Keep the same three-branch finishing expression in both dot and finish if preserving finish_eq_dot by rfl.",
+    "new_status": "All mapped helpers and exact integration remain NOT_RUN; W12 acceptance is only fixed web source compilation/axiom checking."
+  },
+  "interfaces": {
+    "existing_R_math": {
+      "status": "VERIFIED_FIXED_WEB_SOURCE_SIGNATURE; POLICY_READY_MAPPING_NOT_DELIVERED_IN_THIS_AUDIT",
+      "source": "W12 Increment L577-L587",
+      "signature": "theorem R7W12.dotFin_eq_native_of_model_not_nan {n : Nat}\n    (a b : Fin n → Competition.Binary32)\n    (ha : ∀ i, Model.isNaN (ExecFloat.Binary.toModel (a i)) = false)\n    (hb : ∀ i, Model.isNaN (ExecFloat.Binary.toModel (b i)) = false) :\n    Fin.foldl n (fun acc i => ExecFloat.add acc (ExecFloat.mul (a i) (b i)))\n        Competition.posZero =\n      ExecFloat.Binary.ofFloat32\n        (R7W12.nativeDotFin a b\n          (ExecFloat.Binary.toFloat32 Competition.posZero))"
+    },
+    "existing_codec": {
+      "status": "VERIFIED_FIXED_WEB_SOURCE_SIGNATURE; ABSENT_IN_97f",
+      "source": "W12 main L483-L490",
+      "signature": "theorem R7W05Cached.R7W02.exec_toModel_eq_rawModel (q : Competition.Binary32) :\n    ExecFloat.Binary.toModel q = Model.NativeBinary32.ofUInt32 q.raw.1"
+    },
+    "D_operational_adapter": {
+      "status": "PROPOSED_SIGNATURE_NOT_RUN_NOT_A_DECLARATION_CREATED",
+      "signature": "theorem dotLoop_eq_nativeFold\n    (n baseA baseB p : Nat) (A B : Array Competition.Binary32)\n    (k : Nat) (acc : Float32) :\n    Submission.NativeFinal.dotLoop n baseA baseB p A B k acc =\n      Fin.foldl.loop n\n        (fun (s : Float32) (i : Fin n) =>\n          s + ExecFloat.Binary.toFloat32 (A.getD (baseA + i.val) Competition.posZero) *\n            ExecFloat.Binary.toFloat32 (B.getD (baseB + i.val * p) Competition.posZero))\n        acc k",
+      "proof_route": "Unfold dotLoop and Fin.foldl.loop at k. Split k<n, reduce the two raw reads and Float32 step, recurse at k+1 with the updated native accumulator. This is an execution equality for arbitrary native acc, not an arbitrary raw-seed canonical theorem."
+    },
+    "derived_D_branch_goal": {
+      "status": "PROPOSED_SIGNATURE_NOT_RUN_NOT_A_DECLARATION_CREATED",
+      "signature": "theorem dotCold_accept\n    (n baseA baseB p : Nat) (A B : Array Competition.Binary32)\n    (result : Float32)\n    (hresult : result =\n      Submission.NativeFinal.dotLoop n baseA baseB p A B 0 (Float32.ofBits 0))\n    (hscan : DDotNonNaNScan.whole n baseA baseB p A B = true) :\n    ExecFloat.Binary.ofFloat32 result =\n      Fin.foldl n\n        (fun acc i => ExecFloat.add acc\n          (ExecFloat.mul (A.getD (baseA + i.val) Competition.posZero)\n            (B.getD (baseB + i.val * p) Competition.posZero)))\n        Competition.posZero",
+      "composition": [
+        "Read raw pair facts from scanner.whole_model_nonNaN.",
+        "Rewrite actual carrier classifiers with the mapped existing codec equality.",
+        "Instantiate the existing W12 dotFin theorem with exact getD functions.",
+        "Rewrite nativeDotFin to the concrete dotLoop using the operational adapter at0 and the actual +0 seed.",
+        "Take symmetry to match import=result rawfold; endpoint NaN is not needed for this equality and therefore does not implyC by itself."
+      ]
+    },
+    "uniform_runtime_body": {
+      "status": "DESIGN_TEXT_ONLY_NOT_APPLIED",
+      "body": "if hf : result.isNaN = false then ExecFloat.Binary.ofFloat32 result\nelse if hs : DDotNonNaNScan.whole n baseA baseB p A B = true then\n  ExecFloat.Binary.ofFloat32 result\nelse R7NaNReplay.replayEarly n baseA baseB p A B",
+      "position": "dot:L3247-L3248 and finish:L3497-L3498, after the original endpoint guard.",
+      "false_fallback": "Exactly the existing R7NaNReplay.replayEarly call; not the older replay wrapper or complete raw fold."
+    },
+    "hardcoded_C_optional_condition": {
+      "status": "EXTRA_OBLIGATION_ONLY_IF_RETURNING_LITERAL_C",
+      "needed": "result.isNaN=true and W05.native_eq_nan_of_isNaN plus W12.ofFloat32_nan_raw / carrier codec. Scanner=true alone is insufficient."
+    }
+  },
+  "findings": [
+    {
+      "id": "B1",
+      "priority": 1,
+      "status": "CONFIRMED_MISSING_ADAPTER",
+      "source": "97f:L3200-L3243; W12 Increment:L307-L333,L577-L587",
+      "finding": "The current dotLoop_eq requires result.isNaN=false. It cannot justify the new endpoint-NaN branch. W12 proves nativeDotFin raw equality, not equality to this concrete NativeFinal.dotLoop.",
+      "action": "R should deliver the existing W12 dotFin theorem plus exact mapped names/dependencies. D should add only the unconditional operational Nat loop-to-Fin.foldl adapter; do not duplicate canonical mathematics."
+    },
+    {
+      "id": "B2",
+      "priority": 1,
+      "status": "CONFIRMED_INTERFACE_GAP",
+      "source": "scanner:L95-L104; W12 main:L483-L490; W12 Increment:L577-L584",
+      "finding": "Scanner model postcondition targets Model.NativeBinary32.ofUInt32 raw.1. W12 ha/hb target ExecFloat.Binary.toModel. The exact general codec equality is absent in97f.",
+      "action": "Use the actual W12 cached codec theorem, explicitly mapped by R. Do not assume a missing Submission.R7W02 name or an unproved definitional change; original codec proof uses BitVec equality."
+    },
+    {
+      "id": "B3",
+      "priority": 1,
+      "status": "CONFIRMED_TWO_HOOK_DEPENDENCE",
+      "source": "97f:L3245-L3264,L3495-L3505,L3965-L3966,L4115-L4129",
+      "finding": "DirectSmall calls NativeFinal.dot; actual packed RowOutput calls Packed10.finish. finish_eq_dot is currently rw[hs];rfl because the two finishing expressions are definitionally identical, with zero32=Float32.ofBits0.",
+      "action": "For a uniform integration preserving existing proofs, replace both cold tails with the same scanner/return/fallback expression. Keep NativeFinal.dot_eq statement unchanged. A deliberately packed-only design would need a semantic finish_eq_dot proof instead of rfl and would be a different explicit scope."
+    },
+    {
+      "id": "B4",
+      "priority": 1,
+      "status": "CONFIRMED_DECLARATION_ORDER_GAP",
+      "source": "97f:L1605,L3082-L3084,L3164-L3166,L3852; DWordNaN:L155-L172",
+      "finding": "97f currently has no DWordNaN or DDotNonNaNScan. Appending them after the complete file cannot satisfy references in earlier dot definitions. The full DWord block also depends on Submission.R7Native and Submission.NativeBridge.",
+      "action": "A valid global insertion point is after L3164: close Submission, insert required global blocks, reopen Submission before NativeFinal. The namespace stack there contains exactly Submission. Place R mapped semantic prerequisites before the new dot proof; do not accidentally nest global D helpers or rename R2W01c.NativeBridge."
+    },
+    {
+      "id": "B5",
+      "priority": 1,
+      "status": "CONFIRMED_POLICY_REJECTION_IF_COPIED_UNCHANGED",
+      "source": "W12 Increment:L189; official gate:L207-L212",
+      "finding": "The exact official BANNED regex finds export in the W12 Increment comment 'native import/export pair'. Scanner and DWord fragments have no matches.",
+      "action": "Keep recovered source unchanged. Adapt only the explanatory word in the policy-ready mapped copy and rebind its hash; then run exact whole-candidate policy. Original web compile success does not cover policy."
+    },
+    {
+      "id": "B6",
+      "priority": 1,
+      "status": "CONFIRMED_SIZE_BOUNDARY_IF_FULL_SOURCE_COPIED",
+      "source": "source byte sizes in registry",
+      "finding": "97f174925 + full W12 source139292 + scanner3526 =317743 bytes, already above256000 before classifier/runtime edits.",
+      "action": "Use R's mapped minimal declarations/dependency closure, reusing existing native bridges. Do not append the entire cached W12 file. The scanner only needs DWordNaN.rawNaN/rawNaN_eq; carrying unused selection proofs adds avoidable dependencies."
+    },
+    {
+      "id": "C1",
+      "priority": 2,
+      "status": "COST_RISK_NOT_BENEFIT_EVIDENCE",
+      "source": "97f:L3114-L3120,L3248,L3498; cold-scan-cost-807.json",
+      "finding": "97f already stops raw replay at quiet NaN. For eligible timed outputs the relevant replay is2412prefix steps, not7551full steps. A whole scan adds15102logical word reads on eligible outputs and9533on rejected outputs.",
+      "action": "Measure complete-call cost against exact97f and retained60f; do not turn logical reads or event counts into time. Preserve the NaN-only call placement."
+    },
+    {
+      "id": "C2",
+      "priority": 2,
+      "status": "REQUIRED_ADDRESS_AND_DIMENSION_BOUNDARY",
+      "source": "97f:L3457-L3463,L3681-L3710,L3732-L3747,L3954-L3966,L4088-L4092,L4143-L4146",
+      "finding": "The raw scan must use that output's A row and strided B column; packed/native buffers and padding lanes are not raw evidence. Generic Nat/getD helpers cover any base/stride/default; BMM outputs only expose valid j/lane.",
+      "action": "Reuse existing packB_lane, dot10_lane, runDot_eq, tile_finish and row output equalities without changing native loops, packing, dispatch or USize guards."
+    },
+    {
+      "id": "C3",
+      "priority": 2,
+      "status": "NO_CONFIRMED_SCANNER_ERROR_ELABORATION_NOT_RUN",
+      "source": "scanner:L18-L66,L73-L104",
+      "finding": "The interval invariant and n-k decrease are mathematically correct for all Nat k. Actual split contexts, recursive theorem rewriting and dependency elaboration remain unexecuted.",
+      "action": "If first compilation fails, make the branches explicit with by_cases/rw[dif_pos/if_pos], isolate the recursive call in have ih, and replace broad simp_all Bool conversions by a fresh two-case Bool lemma. Do not add artificial n<USize or k<=n assumptions."
+    }
+  ],
+  "proof_preservation": {
+    "NativeFinal_dotLoop": "Unchanged native order, reads, seed and body.",
+    "NativeFinal_dotLoop_eq": "Existing endpoint-nonNaN theorem unchanged and only used in its original branch.",
+    "NativeFinal_dot_eq": "Preserve statement. Keep original nonNaN proof; split scanner in old cold branch; true uses new composed import/raw equality, false keeps existing replayEarly_eq proof.",
+    "Packed10_finish_eq_dot": "For identical runtime body and seed, existing rw[hs];rfl should remain definitionally valid; new exact source still must be compiled.",
+    "Packed10_downstream": [
+      "finish_eq_fold",
+      "finish_eq_kernel_fold",
+      "finish_dot10_lane",
+      "finish_dot10_lane_fold",
+      "tile_finish",
+      "outputFromTiles_eq",
+      "core_eq_reference"
+    ],
+    "DirectSmall": "core and core_eq_reference retain existing NativeFinal.dot call and dot_eq rewrite; dispatcher n<=4 or p<=2 unchanged.",
+    "RowStream": "Actual runtime uses RowOutput.row -> Packed10.finish, not NativeFinal.dot directly.",
+    "route_choice_boundary": "Two synchronized hooks are required to preserve the existing rfl bridge for a uniform route. A consciously packed-only change could keep dot untouched but would require a new semantic finish_eq_dot proof; no such variant was created or recommended as measured faster."
+  },
+  "W12_original_proof_binding": {
+    "source_sha256": "6baa0a8007e85c24633d540a9f6687ddd5da1381da8aa93b1a29d166345fc288",
+    "increment_sha256": "d907d96bd44159ba1b85569d7ff6d2d2b04fac0ef18a659665fc35dfd28aa26e",
+    "increment_is_exact_tail_of_full_source": true,
+    "compile_exit": 0,
+    "source_hash_matches_compile_metadata": true,
+    "success_snapshot_equals_source": true,
+    "diagnostic_exit": 0,
+    "diagnostic_snapshot_hash_matches_metadata": true,
+    "diagnostic_starts_with_main_source": true,
+    "raw_axiom_lines": {
+      "R7W12.ofFloat32_add": [
+        "'R7W12.ofFloat32_add' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W12.ofFloat32_mul": [
+        "'R7W12.ofFloat32_mul' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W12.nativeDotFin_eq_raw": [
+        "'R7W12.nativeDotFin_eq_raw' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W12.dotFin_eq_native_of_model_not_nan": [
+        "'R7W12.dotFin_eq_native_of_model_not_nan' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W12.canonicalImage_nan_raw": [
+        "'R7W12.canonicalImage_nan_raw' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W12.rawNotNaN_exec_true_iff": [
+        "'R7W12.rawNotNaN_exec_true_iff' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W05Cached.R7W02.exec_toModel_eq_rawModel": [
+        "'R7W05Cached.R7W02.exec_toModel_eq_rawModel' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W12.ofFloat32_nan_raw": [
+        "'R7W12.ofFloat32_nan_raw' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    "new_integration": "NOT_RUN"
+  },
+  "fragment_policy": {
+    "W12_increment": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12/original-extracted/R7-W12/R7W12Increment.lean",
+      "sha256": "d907d96bd44159ba1b85569d7ff6d2d2b04fac0ef18a659665fc35dfd28aa26e",
+      "banned_matches": [
+        {
+          "token": "export",
+          "line": 189,
+          "line_text": "/-- Exact image of the real native import/export pair, including canonical NaN. -/"
+        }
+      ]
+    },
+    "scanner": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/dot-nonnan-scan-block.lean",
+      "sha256": "5e46e932fb8483792c42a79d59e887e32af15e236100cbb8253ca82d3212ea8f",
+      "banned_matches": []
+    },
+    "DWordNaN_block": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/nan-choice-block.lean",
+      "sha256": "584ace5443838454b3687f7a93cfca07be4f9cce2c889c7196b171b7cfd4c93c",
+      "banned_matches": []
+    },
+    "base97f": {
+      "banned_matches": [],
+      "only_loading_line": "import ContractTensor",
+      "scope": "Regex/import-line read only; not a whole-candidate gate run."
+    }
+  },
+  "cost_summary": {
+    "cases": 35,
+    "all_stored_checksum_anchor_match": true,
+    "timed_totals": {
+      "nan_outputs": 2860,
+      "eligible_outputs": 671,
+      "eligible_full_old_steps": 7551,
+      "eligible_quiet_prefix_steps": 2412,
+      "eligible_scan_words": 15102,
+      "rejected_outputs": 2189,
+      "rejected_extra_scan_words": 9533,
+      "rejected_existing_quiet_prefix_steps": 4953
+    },
+    "nonzero": [
+      {
+        "name": "bmm:specials:0",
+        "n": 47,
+        "eligible": 0,
+        "quiet_prefix_steps": 0,
+        "scan_words": 0,
+        "rejected_outputs": 78,
+        "rejected_scan_words": 1304
+      },
+      {
+        "name": "bmm:specials:1",
+        "n": 1,
+        "eligible": 39,
+        "quiet_prefix_steps": 39,
+        "scan_words": 78,
+        "rejected_outputs": 872,
+        "rejected_scan_words": 1216
+      },
+      {
+        "name": "bmm:specials:2",
+        "n": 5,
+        "eligible": 166,
+        "quiet_prefix_steps": 568,
+        "scan_words": 1660,
+        "rejected_outputs": 1212,
+        "rejected_scan_words": 6328
+      },
+      {
+        "name": "bmm:specials:4",
+        "n": 24,
+        "eligible": 0,
+        "quiet_prefix_steps": 0,
+        "scan_words": 0,
+        "rejected_outputs": 27,
+        "rejected_scan_words": 685
+      },
+      {
+        "name": "bmm:extremes:0",
+        "n": 12,
+        "eligible": 77,
+        "quiet_prefix_steps": 593,
+        "scan_words": 1848,
+        "rejected_outputs": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:extremes:1",
+        "n": 8,
+        "eligible": 11,
+        "quiet_prefix_steps": 62,
+        "scan_words": 176,
+        "rejected_outputs": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:extremes:2",
+        "n": 15,
+        "eligible": 378,
+        "quiet_prefix_steps": 1150,
+        "scan_words": 11340,
+        "rejected_outputs": 0,
+        "rejected_scan_words": 0
+      }
+    ]
+  },
+  "route_costs": {
+    "plan_path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39840672791/download-81e3479e9e2b47249bf76c8d44eb2e62/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+    "plan_sha256": "9cc5d7368749c369172b019d66bc4cd8455ae4323d0b9a175bd031f936e78622",
+    "cases": [
+      {
+        "name": "bmm:specials:0",
+        "shape": {
+          "batch": 26,
+          "m": 3,
+          "n": 47,
+          "p": 1
+        },
+        "route": "DirectSmall",
+        "eligible_outputs": 0,
+        "eligible_quiet_prefix_steps": 0,
+        "eligible_scan_words": 0,
+        "rejected_outputs": 78,
+        "rejected_extra_scan_words": 1304
+      },
+      {
+        "name": "bmm:specials:1",
+        "shape": {
+          "batch": 226,
+          "m": 21,
+          "n": 1,
+          "p": 3
+        },
+        "route": "DirectSmall",
+        "eligible_outputs": 39,
+        "eligible_quiet_prefix_steps": 39,
+        "eligible_scan_words": 78,
+        "rejected_outputs": 872,
+        "rejected_extra_scan_words": 1216
+      },
+      {
+        "name": "bmm:specials:2",
+        "shape": {
+          "batch": 29,
+          "m": 114,
+          "n": 5,
+          "p": 1
+        },
+        "route": "DirectSmall",
+        "eligible_outputs": 166,
+        "eligible_quiet_prefix_steps": 568,
+        "eligible_scan_words": 1660,
+        "rejected_outputs": 1212,
+        "rejected_extra_scan_words": 6328
+      },
+      {
+        "name": "bmm:specials:4",
+        "shape": {
+          "batch": 314,
+          "m": 2,
+          "n": 24,
+          "p": 9
+        },
+        "route": "PackedBase",
+        "eligible_outputs": 0,
+        "eligible_quiet_prefix_steps": 0,
+        "eligible_scan_words": 0,
+        "rejected_outputs": 27,
+        "rejected_extra_scan_words": 685
+      },
+      {
+        "name": "bmm:extremes:0",
+        "shape": {
+          "batch": 1,
+          "m": 14,
+          "n": 12,
+          "p": 23
+        },
+        "route": "PackedBase",
+        "eligible_outputs": 77,
+        "eligible_quiet_prefix_steps": 593,
+        "eligible_scan_words": 1848,
+        "rejected_outputs": 0,
+        "rejected_extra_scan_words": 0
+      },
+      {
+        "name": "bmm:extremes:1",
+        "shape": {
+          "batch": 219,
+          "m": 12,
+          "n": 8,
+          "p": 3
+        },
+        "route": "PackedBase",
+        "eligible_outputs": 11,
+        "eligible_quiet_prefix_steps": 62,
+        "eligible_scan_words": 176,
+        "rejected_outputs": 0,
+        "rejected_extra_scan_words": 0
+      },
+      {
+        "name": "bmm:extremes:2",
+        "shape": {
+          "batch": 1,
+          "m": 14,
+          "n": 15,
+          "p": 27
+        },
+        "route": "PackedBase",
+        "eligible_outputs": 378,
+        "eligible_quiet_prefix_steps": 1150,
+        "eligible_scan_words": 11340,
+        "rejected_outputs": 0,
+        "rejected_extra_scan_words": 0
+      }
+    ],
+    "route_totals": {
+      "DirectSmall": {
+        "eligible_outputs": 205,
+        "eligible_quiet_prefix_steps": 607,
+        "eligible_scan_words": 1738,
+        "rejected_outputs": 2162,
+        "rejected_extra_scan_words": 8848
+      },
+      "PackedBase": {
+        "eligible_outputs": 466,
+        "eligible_quiet_prefix_steps": 1805,
+        "eligible_scan_words": 13364,
+        "rejected_outputs": 27,
+        "rejected_extra_scan_words": 685
+      }
+    },
+    "source": "existing counted model receipt, recomputed aggregation only; no performance inference"
+  },
+  "directed_model": {
+    "status": "FINITE_MODEL_ONLY",
+    "source": "competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py",
+    "source_sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+    "cases": [
+      {
+        "name": "scanner_true_finite_endpoint",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "raw_seed": "0x00000000",
+        "whole_scan": true,
+        "raw_result": "0x3f800000",
+        "projected_native_result": "0x3f800000",
+        "native_endpoint_NaN": false,
+        "raw_is_C": false,
+        "raw_equals_import_of_projected_native": true
+      },
+      {
+        "name": "empty_true_nonNaN_endpoint",
+        "n": 0,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [],
+        "B": [],
+        "raw_seed": "0x00000000",
+        "whole_scan": true,
+        "raw_result": "0x00000000",
+        "projected_native_result": "0x00000000",
+        "native_endpoint_NaN": false,
+        "raw_is_C": false,
+        "raw_equals_import_of_projected_native": true
+      },
+      {
+        "name": "invalid_product",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x00000000"
+        ],
+        "B": [
+          "0x7f800000"
+        ],
+        "raw_seed": "0x00000000",
+        "whole_scan": true,
+        "raw_result": "0x7fc00000",
+        "projected_native_result": "0x7fc00000",
+        "native_endpoint_NaN": true,
+        "raw_is_C": true,
+        "raw_equals_import_of_projected_native": true
+      },
+      {
+        "name": "opposite_overflow_products",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x7f7fffff",
+          "0xff7fffff"
+        ],
+        "B": [
+          "0x40000000",
+          "0x40000000"
+        ],
+        "raw_seed": "0x00000000",
+        "whole_scan": true,
+        "raw_result": "0x7fc00000",
+        "projected_native_result": "0x7fc00000",
+        "native_endpoint_NaN": true,
+        "raw_is_C": true,
+        "raw_equals_import_of_projected_native": true
+      },
+      {
+        "name": "raw_payload_must_reject",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x7fc00001"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "raw_seed": "0x00000000",
+        "whole_scan": false,
+        "raw_result": "0x7fc00001",
+        "projected_native_result": "0x7fc00000",
+        "native_endpoint_NaN": true,
+        "raw_is_C": false,
+        "raw_equals_import_of_projected_native": false
+      },
+      {
+        "name": "arbitrary_noncanonical_raw_seed",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "raw_seed": "0x7fc00001",
+        "whole_scan": true,
+        "raw_result": "0x7fc00001",
+        "projected_native_result": "0x7fc00000",
+        "native_endpoint_NaN": true,
+        "raw_is_C": false,
+        "raw_equals_import_of_projected_native": false
+      },
+      {
+        "name": "strided_B_payload",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 2,
+        "A": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x00000000",
+          "0x00000000",
+          "0x7fc00001",
+          "0x3f800000"
+        ],
+        "raw_seed": "0x00000000",
+        "whole_scan": false,
+        "raw_result": "0x7fc00001",
+        "projected_native_result": "0x7fc00000",
+        "native_endpoint_NaN": true,
+        "raw_is_C": false,
+        "raw_equals_import_of_projected_native": false
+      },
+      {
+        "name": "default_zero_times_Inf",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [],
+        "B": [
+          "0x7f800000"
+        ],
+        "raw_seed": "0x00000000",
+        "whole_scan": true,
+        "raw_result": "0x7fc00000",
+        "projected_native_result": "0x7fc00000",
+        "native_endpoint_NaN": true,
+        "raw_is_C": true,
+        "raw_equals_import_of_projected_native": true
+      }
+    ],
+    "case_count": 8,
+    "scope": "Same exact integer transcription and its canonical projection; no Lean, native hardware, new scanner execution or performance measurement."
+  },
+  "size_check": {
+    "max_bytes": 256000,
+    "full_W12_plus_97f_plus_scanner": 317743,
+    "status": "EXCEEDS_CAP_IF_FULL_SOURCE_COPIED",
+    "note": "Arithmetic on existing source sizes only; no combined candidate bytes or new digest generated."
+  },
+  "evidence_registry": {
+    "candidate_97f": {
+      "path": "competitions/floatlib/candidates/f01-d7-direct-nonfinite/Kernel.lean",
+      "bytes": 174925,
+      "sha256": "97f77e2ce3f53dc3625349d5d2a7bc761570f9428c0b547070e37254c4960d26",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "candidate_manifest": {
+      "path": "competitions/floatlib/candidates/f01-d7-direct-nonfinite/manifest.json",
+      "bytes": 1559,
+      "sha256": "607422755757016ce1a0be9e85fa91d30a305374a930e55323d0558940ad3184",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "scanner_block": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/dot-nonnan-scan-block.lean",
+      "bytes": 3526,
+      "sha256": "5e46e932fb8483792c42a79d59e887e32af15e236100cbb8253ca82d3212ea8f",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "scanner_design_receipt": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/dot-nonnan-scan-design.json",
+      "bytes": 30818,
+      "sha256": "598951d327aa00fed2c3645d5ae36527c73c054e00df30c0a1e954bcbfed4132",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "DWordNaN_block": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/nan-choice-block.lean",
+      "bytes": 7555,
+      "sha256": "584ace5443838454b3687f7a93cfca07be4f9cce2c889c7196b171b7cfd4c93c",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "W12_main": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12/original-extracted/R7-W12/R7W12.lean",
+      "bytes": 139292,
+      "sha256": "6baa0a8007e85c24633d540a9f6687ddd5da1381da8aa93b1a29d166345fc288",
+      "status": "LOCAL_ONLY_WEB_ORIGINAL"
+    },
+    "W12_increment": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12/original-extracted/R7-W12/R7W12Increment.lean",
+      "bytes": 33001,
+      "sha256": "d907d96bd44159ba1b85569d7ff6d2d2b04fac0ef18a659665fc35dfd28aa26e",
+      "status": "LOCAL_ONLY_WEB_ORIGINAL"
+    },
+    "W12_compile_metadata": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12/original-extracted/R7-W12/logs/R7W12-attempt3.json",
+      "bytes": 682,
+      "sha256": "d9a95307a60321d705f4d7f3a0f38ec3e67ad8363ab0c4f1d0f415c475f52984",
+      "status": "LOCAL_ONLY_WEB_ORIGINAL"
+    },
+    "W12_compile_snapshot": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12/original-extracted/R7-W12/logs/R7W12-attempt3.lean",
+      "bytes": 139292,
+      "sha256": "6baa0a8007e85c24633d540a9f6687ddd5da1381da8aa93b1a29d166345fc288",
+      "status": "LOCAL_ONLY_WEB_ORIGINAL"
+    },
+    "W12_compile_log": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12/original-extracted/R7-W12/logs/R7W12-attempt3.log",
+      "bytes": 3010,
+      "sha256": "c858469abc2f9bbd1ff4d71df407977726d5afc96894f266655f0889b0222eca",
+      "status": "LOCAL_ONLY_WEB_ORIGINAL"
+    },
+    "W12_diagnostic_metadata": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12/original-extracted/R7-W12/logs/R7W12Diagnostics-attempt2.json",
+      "bytes": 737,
+      "sha256": "5ca56289a1f2b7e3003c58692f6bef7aaf0d90448cbd26d9a7ca8e354b225249",
+      "status": "LOCAL_ONLY_WEB_ORIGINAL"
+    },
+    "W12_diagnostic_snapshot": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12/original-extracted/R7-W12/logs/R7W12Diagnostics-attempt2.lean",
+      "bytes": 171733,
+      "sha256": "00132890541cff173a406e2e1129d89f8f04eba65812cdae161984bfabd7841d",
+      "status": "LOCAL_ONLY_WEB_ORIGINAL"
+    },
+    "W12_diagnostic_log": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12/original-extracted/R7-W12/logs/R7W12Diagnostics-attempt2.log",
+      "bytes": 102782,
+      "sha256": "aa6b15a8fcebfb48a0bc068e76c95c71e99b304b5f8a823885f75111c36c9154",
+      "status": "LOCAL_ONLY_WEB_ORIGINAL"
+    },
+    "W12_Lean_version": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12/original-extracted/R7-W12/logs/fixed-lean-version.log",
+      "bytes": 106,
+      "sha256": "cf6e65bfc214882b1c13717aae89d383a03f6bcf5c96dfbae13368cd3e07ff9d",
+      "status": "LOCAL_ONLY_WEB_ORIGINAL"
+    },
+    "cost_receipt": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/cold-scan-cost-807.json",
+      "bytes": 24949,
+      "sha256": "aa251334465a3d52ef9b2ad01bcd771b39ae7f06bf19b928ca75c1caecad002f",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "cost_source": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/cold-scan-cost-807.py",
+      "bytes": 4373,
+      "sha256": "220fc46e7fbfdd99268613691d7f41c7b9bdaa826eee12d6dc66a94d4e53de80",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "model_oracle": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py",
+      "bytes": 4908,
+      "sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "official_policy": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+      "bytes": 38320,
+      "sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "W05_mapped_source": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/canonical-native-block.lean",
+      "bytes": 21262,
+      "sha256": "63f7d87b14bca8aa0c6dac59343e35709cf375f850de301bfb844a21db350604",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "W03_mapped_source": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/add-nonsignaling-block.lean",
+      "bytes": 3555,
+      "sha256": "e5ad4d3bad7ec8272aa6cf740089d7ca5b176ea13ff8a2411e07cabbd86cf672",
+      "status": "LOCAL_WORKSPACE"
+    },
+    "plan_807": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39840672791/download-81e3479e9e2b47249bf76c8d44eb2e62/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+      "bytes": 99920,
+      "sha256": "9cc5d7368749c369172b019d66bc4cd8455ae4323d0b9a175bd031f936e78622",
+      "status": "LOCAL_WORKSPACE"
+    }
+  },
+  "actual_checked_items": [
+    "Rehashed97f and bound its174925-byte source to manifest97f77e2c and NOT_RUN_NEW_COMPOSITION status.",
+    "Read exact dotLoop, endpoint-nonNaN dotLoop_eq, dot/dot_eq, replayEarly loop, Packed10.finish/finish_eq_dot and downstream fold/lane proofs.",
+    "Traced exported bmm to DirectSmall versus RowStream/RowOutput/Packed10.finish, including valid lane and zero-shape branches.",
+    "Confirmed zero32 is definitionally Float32.ofBits0 and both current cold tails are replayEarly.",
+    "Read actual W12 generic dot/nativeFin/codec/canonical-output signatures; rehashed source and exact successful compile/diagnostic snapshots, verified metadata exit0 and quoted original allowed-axiom lines.",
+    "Applied saved official BANNED regex to immutable W12 increment, DWord and scanner fragments; identified comment export hit only in W12.",
+    "Recomputed existing807 cost totals and joined exact public plan shapes to current97f dispatcher; no original tensors or timings rerun.",
+    "Ran8 bounded integer-model witnesses for endpoint qualification, raw payload, arbitrary seed, stride and default; no Lean/native hardware execution.",
+    "Inspected scanner proof and declaration order; no candidate, R source or original evidence edits."
+  ],
+  "unperformed": [
+    "No Lean executable/toolchain execution for scanner or new integration.",
+    "No candidate policy/full gate or original obligations rerun.",
+    "No new C/asm, timing or independent runner confirmation.",
+    "No broad archive integrity scan or finite search beyond8 directed witnesses."
+  ],
+  "first_external_falsification": [
+    "Freeze the exact mapped R proof graph and semantic/codec names; change only the W12 explanatory comment that triggers policy, preserving recovered original evidence.",
+    "Compile concrete Nat-loop/Fin-fold execution adapter and scanner with exact97f context and audit all new proof dependencies.",
+    "Check the two finishing definitions remain alpha-identical after substituting actual result/array names; verify all four original obligations under the original gate.",
+    "Check generated C/asm proves the scanner stays behind the NaN endpoint guard and old packed/native prefix remains structurally unchanged; inspect classifier, Nat/getD calls and normalization.",
+    "Measure full-cost paired results against exact97f and retained60f, reporting DirectSmall specials and PackedBase extremes separately; raw word reads and prefix steps are not cycle estimates."
+  ],
+  "finished_at_utc": "2026-10-22T23:28:00.760723+00:00",
+  "elapsed_seconds": 1031.760723,
+  "verification": {
+    "verified_at_utc": "2026-10-22T23:28:00.760723+00:00",
+    "source_files_rehashed": 21,
+    "all_sources_unchanged": true,
+    "W12_exact_success_snapshot_exit_and_quoted_axiom_lines": true,
+    "cost_route_sums_match": true,
+    "model_cases": 8,
+    "markdown_links_resolve": true,
+    "within_45_minutes": true,
+    "new_Lean": "NOT_RUN",
+    "new_candidate_gate": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "markdown_sha256": "81da169fed19c2b8ba7f7949862a49823e0baf080fc1f293e362e1e211338b10"
+  }
+}

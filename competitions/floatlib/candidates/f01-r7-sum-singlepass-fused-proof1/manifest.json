@@ -1,0 +1,24 @@
+{
+  "candidate": "f01-r7-sum-singlepass-fused-proof1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "3d9b1ea94ec105073334b793adcb5a9fecc4eda37dd2a5809e715b5584a54576",
+  "candidate_bytes": 230650,
+  "parent": "f01-r7-sum-singlepass-fused",
+  "parent_sha256": "8ec342ec4bb9f7f72629ee219931fd0f8212c998de92876a2ab413a5466f5ef6",
+  "created_at_utc": "2026-10-22T23:34:02.793397+00:00",
+  "proof_status": "NOT_RUN_PROOF_REVIEWED_SINGLE_RUNTIME",
+  "validation_mode": "statement-only-first",
+  "mechanism": "Single native USize ordered prefix from +0; reuse original decoder low/high conditions; only high nonfinite cold branch tests Inf versus NaN. First original rawNaN executes one exact Submission.add and then W02 quiet-sum raw signaling suffix scan. Nativeacc may already be canonicalNaN; all-nonNaN raw input terminates by unconditional native import. Oversized logical vectors use Nat fallback. Other exported kernels unchanged from exact0e8.",
+  "proof_derivation": {
+    "W02_append_sha256": "7f2ebdf61b60cc51bbb0a9d27eff5447dedc304cc43c2fd4f64f8511aaa710f4",
+    "W12_increment_sha256": "d907d96bd44159ba1b85569d7ff6d2d2b04fac0ef18a659665fc35dfd28aa26e",
+    "W05_widths": "Exact format field expressions as actually compiled in W12; numeric8/23 mismatch avoided",
+    "new_proofs": "Decoder branch classification, actual native/raw mixed step, first rawNaN quietness, Nat fold equality and USize=Nat, full sumSpec. All exact candidate integration NOT_RUN.",
+    "W12b_increment_sha256": "415bc6b9c6af184f0746181ae577eae4f96611b07e12cb21818d37a9ea8eb0ca"
+  },
+  "finite_model": "singlepass-sum-oracle.json:9200traces/100020branchwords plus35publicsum output wordSHAs andactualchecksumanchors; notfullproof/hardware/performance.",
+  "expected_gain": "UNKNOWN. Ordinary input conditions intended reused; generatedC/branchcounts/allocation not yet verified. Source counts807:5035572nativeadds,320repairadds,10952rawsuffixwords,683additional coldInfvsNaN decisions. No speed claimed and no additive gain with earlier sum-prefix mechanism.",
+  "formal_submission": "NOT_SUBMITTED",
+  "ready_for_D": true,
+  "repair": "Adopt exactW12b low-guard wrap proof, use explicitUInt32 order lemmas, use actualconvert if_pos rewrite. Allruntime declaration bytes unchanged. Exactcandidate integration stillNOT_RUN; no claim originaldraftactuallyfailed."
+}

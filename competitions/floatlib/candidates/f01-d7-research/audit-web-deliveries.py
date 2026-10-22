@@ -28,17 +28,36 @@ for d in index['deliveries']:
             assert len(content)==f['bytes'] and h==f['sha256'],name
             assert target.is_file() and target.read_bytes()==content,target
             payloads[name]=h;size+=len(content)
-        manifests=[n for n in names if n.endswith('/MANIFEST.sha256')]
+        manifests=[n for n in names if PurePosixPath(n).name in ('MANIFEST.sha256','SHA256SUMS')]
         assert len(manifests)==1,manifests
         m=manifests[0];prefix=PurePosixPath(m).parent
-        checks=0
+        checks=0;covered=set();secondary=None
         for line in z.read(m).decode('utf-8-sig').splitlines():
             if not line.strip():continue
             h,name=line.split(maxsplit=1);name=name.lstrip('*')
             key=(prefix/name).as_posix();assert payloads[key]==h,(d['job'],key)
+            assert key not in covered,(d['job'],'duplicate manifest entry',key)
+            covered.add(key)
             checks+=1
-        assert checks==r['manifest_entries_verified']==len(names)-1
-    rows.append({'job':d['job'],'archive_sha256':r['archive_sha256'],'report_sha256':r['report_sha256'],'receipt_sha256':sha(receipt_raw),'payload_files':len(payloads),'manifest_entries':checks,'extracted_bytes':size,'crc_and_exact_bytes':'PASS'})
+        excluded={m}
+        if PurePosixPath(m).name=='SHA256SUMS':
+            metadata_member=(prefix/'manifest.json').as_posix()
+            metadata=json.loads(z.read(metadata_member))
+            assert metadata['algorithm']=='SHA256'
+            assert set(metadata['excluded_self_references'])=={'manifest.json','SHA256SUMS'}
+            excluded.add(metadata_member)
+            metadata_entries=metadata['files'];metadata_paths=set()
+            for item in metadata_entries:
+                key=(prefix/item['path']).as_posix()
+                assert key not in metadata_paths
+                metadata_paths.add(key)
+                assert payloads[key]==item['sha256'],(d['job'],key)
+                assert expected[key]['bytes']==item['bytes'],(d['job'],key)
+            assert metadata_paths==covered and len(metadata_entries)==checks
+            secondary={'member':metadata_member,'sha256':payloads[metadata_member],'entries':len(metadata_entries)}
+        assert covered==set(names)-excluded,(d['job'],'uncovered or extra members')
+        assert checks==r['manifest_entries_verified']==len(names)-len(excluded)
+    rows.append({'job':d['job'],'archive_sha256':r['archive_sha256'],'report_sha256':r['report_sha256'],'receipt_sha256':sha(receipt_raw),'payload_files':len(payloads),'manifest_member':m,'secondary_manifest':secondary,'self_reference_exclusions':sorted(excluded),'manifest_entries':checks,'extracted_bytes':size,'crc_and_exact_bytes':'PASS'})
 out={'verified_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS_ORIGINAL_ARCHIVE_CRC_MANIFEST_AND_EXTRACTED_BYTES','delivery_index_sha256':sha(index_raw),'deliveries':rows,'scope':'Read-only independent integrity audit. External compiler claims are retained evidence, not inherited full candidate gate acceptance. No archive deleted, source uploaded or code executed.'}
 (own/'web-delivery-integrity.json').write_text(json.dumps(out,indent=2)+'\n',encoding='utf8')
 print(json.dumps({'deliveries':len(rows),'payload_files':sum(x['payload_files'] for x in rows),'manifest_entries':sum(x['manifest_entries'] for x in rows),'extracted_bytes':sum(x['extracted_bytes'] for x in rows),'status':out['status']}))

@@ -1,3 +1,21 @@
+## D20 23:46 UTC：实际scope修复、16原件与单遍sum静态验收
+
+- 703首次静态独立审查确认：暂闭Submission会结束原open；重开后R7W05/R7W12子namespace的open不外泄，旧NativeFinal后续源码缺名字上下文。D已仅补`open FloatLib.Floats Competition`，当前f01-d7-canonical-dot-scan SHA4792e9679c9607efd84a461a9d1ad7ca0e6bcb59d657fccacde8b96bf075f43c/195683bytes，原policy PASS。原703完整Kernel/manifest/builder在D7-research/negative-sources/canonical-dot-scan-scope0精确冻结；这是静态确定缺口，不写成实际Lean/官方CI失败。最小61d块不改。
+- n1受控修正版f01-d7-singleton-native-normalize SHA47d429fe3a351a5e002f98c1f4cb95dfdc04368c268275508be758d176f3a347/188335bytes已交付。有限结果先native product，NaN才scalar修复，随后同一raw -0 normalizer；n!=1 dispatcher/所有地址保留。原53d保留作成本偏离对照。新Lean/fullgate/C/性能NOT_RUN，不与矩阵scan合并未测收益。
+- 已读R检查点18和3d9单遍sum proof1实际循环/证明，纳入D本地精确原版policy预检，当前9份local drafts全部静态PASS。3d9尚未加入810，不因普通编译可用性晋升fullgate。当前810仍3full+8statement，只换旧a4为ec36。
+- W11/W12/W12b已完成独立原包CRC、所有提取字节、manifest双向覆盖审查：16份交付、2859payload、2842manifest项、163001019解压字节。W11为SHA256SUMS+manifest.json双自引用排除格式，D审计器原先单manifest假设两次失败已存原日志，再严格兼容并交叉核两份清单；前13份原payload哈希/计数与b088逐项完全一致，未改任何R原件/ZIP。
+- D另有只读实际W11标量汇编审查进行中，初见mul普通热入口仅89bytes/26指令位点、跳过LowScale，3个codec外调用仍在；不因C1403行再开noinline候选，boxed ABI不等于每次堆分配。完整结论等原命令/对象/调用处绑定。
+- 当前冠军仍最近23:31核279，所有9个旧CI已终态/收齐，新公开推送授权未到，810未派发；10h截止04:22:17保持。请继续单遍sum和已经启动的公共最小闭包编译，不发送本地私有新候选。
+
+## D19 23:35 UTC：冠军279、W12最小映射与实际矩阵冷扫描
+
+- 23:31:32 UTC官方现任冠军变为279，digest7693cd4d6d1ca55a69a3a6cc9f46ef42f66426198cf2e4a4a71801142108dfb8；HEAD4b7、public-v2/shipped字节不变，正式scoring-v2 suite2e32904d不变，source仍HTTP404。官方这次headline ratio0.938328（自身参照），add/mul分类约1，sum0.7783—0.9166、BMM0.3793—0.9221。看板及当前对比已以279为基准，不能据此推算我方差距或猜实现。
+- 已取R交付61d49494最小block，D生成f01-d7-canonical-dot-scan：70386323c2a91b053f91f5312f3eeee0e477219771f09189fdb89d6353af10f8，195649bytes，当前原版静态policy PASS；新Lean/fullgate/性能NOT_RUN。两处dot/finish冷分支同形，既有finish_eq_dot与所有后续地址/lane/layout证明未改；普通非NaN终点不扫描，拒绝后旧quiet replay。
+- D没有搬完整Fin/fold数学：canonical-dot-block.lean直接以无条件R7W12.ofFloat32_add/mul、W05分类、既有roundtrip归纳当前真实Nat dotLoop，hscan只约束原始输入，native seed/中间/终点都允许NaN（raw seed明确为ofFloat32 acc）。另补W02实际wordModel/ExecModel codec；原+0最终对齐。逆变换逐字节还原97f，所有新证明仍NOT_RUN。
+- 810已只替换a4为ec36b4da policy2 statement探针，其余control/seed/完整运行候选/observer不改，11份静态PASS。旧a4和99冻结计划由Git保留。D已读真实位宽失败来源，不再派发旧稿。源码/manifest尚待本地下一检查点，不能称CI已运行。
+- 本地最新检查点b088889e（31文件），包括最小seed probe a1325da5及53d1c2c4 singleton-normalize，均未推送。独立53d审查指出普通/次正规n1会重新走scalar守卫，故D子agent只修这一成本偏离：优先native乘积，非NaN直接接受，NaN才精确scalar修复，最后raw负零归一化。一个受控后续稿，保留53d，不扩参数网格。
+- 十小时继续到04:22:17 UTC，约半程；所有9个已启动CI完整回收，公开上传授权仍无回复，未尝试绕过。
+
 ## D18 23:17 UTC：canonical矩阵接口与修正机会基线
 
 - 已读R检查点17、W12Increment真实接口及cold-scan-cost-807.json。D不再把7551步旧完整回放当成相对quiet-stop的可省成本：671个可接受输出在9a/0e的真实quiet-stop只走2412个软件前缀步；全扫描另有15102原word读取，2189个拒绝输出还多9533word读取。扫描是否值得仍须精确对照，收益UNKNOWN，不据整cell曝光直接晋升。

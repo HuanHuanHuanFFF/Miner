@@ -1,8 +1,8 @@
 # R7 可复用数学与证据入口
 
-初次审查范围为 W01、W01b、W02–W09、W08b 共 11 份交付，22:12:04 UTC 开始、22:57:04 UTC 预算上限，当时按分工排除 W10。随后独立审查 W10/W10b，当前覆盖 **13 份交付、10 项结论**；新增 92 个来源/日志/审查文件逐项重哈希，当前索引共 270 个文件。只读原件，没有本地运行 Lean；原 11 份完整性回执的冻结哈希仍由 `8b016d66` 定位，13 份回执另列，未覆盖历史字节。
+初次审查范围为 W01、W01b、W02–W09、W08b 共 11 份交付，22:12:04 UTC 开始、22:57:04 UTC 预算上限，当时按分工排除 W10。随后独立审查 W10/W10b 与 W12，当前覆盖 **14 份交付、11 项结论**；两次补充分别重核 92、37 个来源/日志/审查文件，当前索引共 306 个文件。原包完整性已覆盖 16 份，W11/W12b 的专项结论仍在审查。没有本地运行 Lean；11、13 份完整性回执的冻结字节分别由 `8b016d66`、`b088889e` 定位，16 份新回执另列。
 
-以下 **10 项**分为 1 项已用组件、7 项数学储备、1 项具体证明修复、1 项代码生成证据。网页固定 Lean 4.34 的普通编译/规格/公理日志，与精确候选原版 full gate 分列；新整合与性能不继承网页结果。原件均为 **LOCAL_ONLY**，精确相对路径、source/log SHA-256、退出码与 `E:/Download` 原包恢复位置保存在同名 JSON；本页只链接已核对本地 Git 字节的候选。
+以下 **11 项**分为 1 项已用组件、8 项数学储备、1 项具体证明修复、1 项代码生成证据。网页固定 Lean 4.34 的普通编译/规格/公理日志，与精确候选原版 full gate 分列；新整合与性能不继承网页结果。原件均为 **LOCAL_ONLY**，精确相对路径、source/log SHA-256、退出码与 `E:/Download` 原包恢复位置保存在同名 JSON；本页只链接已核对本地 Git 字节的候选。
 
 当前 [c760 非NaN基座](../f01-r7-nonnan-runtime/Kernel.lean)（`c7605688…`）已有 805/807/809 原版 gate；[60f 保留包](../f01-d7-direct-nonnan/Kernel.lean)使用该基座。W05 复制的既有 NativeBridge/NotNaNProbe/R7Native 不重复计为新储备，也不把 W01/W01b 误记为这些既有非NaN证明的原创来源。
 
@@ -18,6 +18,7 @@
 | MR08 · W08/W08b · **后续闭合的数学储备** | `R7W08.nat_segment_comp`、`usize_blocked_eq`；W08b 的 `flat_eq_natBlocked`、`flat_eq_usizeBlocked`、`all_three_eq` 对 **K=32、Array Float32、相同任意 UInt32 fallback** 成立，含空数组/任意初值。 | 原 W08 的 flat gap 保持历史 **NOT_PROVED**；后续 W08b `96e99343…`/`e9e7eace…` 与 6 份原依赖哈希吻合，8 模块 final-recheck 明确 exit 0，新增 10 项公理打印仅三允许公理。这是 native wrapper 等价，**不是 raw sumSpec 整合**。LOCAL_ONLY。 | 以当前原始 decode/fallback 实例化并证明 sumSpec。内部 `nat_blocks_eq_final` 保留“非空后缀或前态非NaN”条件；不能推广成任意 K、任意 raw payload 吸收。 |
 | MR09 · W09 · **完整源码证明修复储备** | `Submission.NativeFinal.dot_eq` 对部分应用 step 先 `congrArg` 到 Fin.foldl，再 `funext acc i`，逐点改写，运行定义不变。 | 原 `b1696ff9…`、同 token simpa 稿 `3b7b8744…` 原日志均 exit 1；[0e8 精确修复](../f01-r7-nonfinite-combined-proof2/Kernel.lean)（`0e8bc05c…`）整源编译 exit 0，另有四个原始全输入 spec 类型断言与 5 项公理审计 exit 0。**不是原版 full gate**。 | 验证精确 0e8 的完整 gate；各 proof2 派生稿单独编译，不继承 0e8 结果。源码运行定义不变也不等于机器码身份已证。 |
 | MR10 · W10/W10b · **数学储备** | 实际逐步 `ExecFloat.mul` 输出永非 sNaN，故 `add +0 (mul a b)` 可替换为：只将该乘积 raw `80000000` 改为 `00000000`，其他 word 原样保留。一般 q 版本仍要求 q 非 sNaN。 | 精确源/成功快照/退出码均闭合，W10/W10b 原始公理日志各 218/26 个声明仅三允许公理。[独立审查](zero-seed-proof-review.md)记录完整单位的 policy 禁用词与朴素拼接超 256000 字节；W10b 原始字 helper 的 C 消除了旧 once 分支，但尚非整包 C/计时。 | 提取最小允许依赖，编译实际 Submission 桥及 n=1 分支。全部新适配、leanchecker、原版 full gate、收益仍 NOT_RUN/UNKNOWN；不能直接删除初项 +0，负零反例仍须处理。 |
+| MR11 · W12 · **数学储备** | 对任意两个 native Float32，`ofFloat32` 无条件保持实际 add/mul，含 NaN。原始 seed/各读入字在精确 native image 时，原序 sum/dot/BMM 与导入 native 结果为完整载体等式；原始非NaN（含Inf）是足够条件，+0是合法 seed。 | [独立原件审查](canonical-closure-proof-review.md)：完整 `6baa0a80…`/成功 compile3、diag2 快照一致且 exit0；269项原公理声明精确匹配，只有三允许公理。`61d49494…` 最小30条映射重建相同，但映射、新4792矩阵/3d9单遍sum未实际编译或完整gate。 | 任意 raw seed 的 image 条件不能删：空 fold 的 `ffc01234` 保留原字，native import 为 `7fc00000`。实际 namespace、Nat/USize 循环、codec、输出与完整成本分别验收，不从投影相等恢复任意 NaN 元数据。 |
 
 关键原始公理日志已直接解析并与机器审计交叉核对：W02/W03/W04/W05/W07 分别为 **52/115/38/206/273 个声明**，不是报告自述。对应成功 source 快照均与本次引用整源逐字节一致；W09 的 SpecAudit 也包含精确修复源码完整前缀和四原规格类型断言。原版 gate 则另核到 9a、7ac、c760 的 `mode=gate, passed=true, stage=score`、kernel replay、允许公理、26 cell/25 轮原始记录。
 
