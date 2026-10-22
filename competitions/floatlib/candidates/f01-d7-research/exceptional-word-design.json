@@ -1,0 +1,1222 @@
+{
+  "schema": 1,
+  "title": "Exceptional raw-word dispatch proof preparation",
+  "started_at_utc": "2026-10-22T22:09:05Z",
+  "prepared_at_utc": "2026-10-22 22:23:37 UTC",
+  "status": "PREPARED_NOT_RUN",
+  "primary_roundtrip_source": {
+    "request": {
+      "repository_full_name": "lean-dojo/FloatLib",
+      "ref": "0d91825727839f597fd06b22fdd038ea21480f0c",
+      "path": "FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Base/Proof.lean"
+    },
+    "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Base/Proof.lean",
+    "git_blob_sha1": "e469f73d5fa8e5c3dc10dc91c402322aebf4db4a",
+    "content": "/-\nCopyright (c) 2026 FloatLib\nReleased under MIT license as described in the file LICENSE.\nAuthors: FloatLib Team\n-/\n\nmodule\n\npublic import FloatLib.Floats.ExecFloat.Backends.Word.Narrow.Base.Runtime\n\n/-!\n# Correctness of native binary32 storage operations\n\nThe `UInt32` storage conversions are mutual inverses, and native sign-bit negation agrees with\nthe generic binary32 model. Runtime clients can import `Base.Runtime` without these proofs.\n-/\n\n@[expose] public section\n\nnamespace FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32\n\n/-- Word negation is the model sign flip. -/\n@[simp] theorem negate_eq (x : Value) :\n    negate x = Model.neg x := by\n  cases x\n  rfl\n\n/-- Repacking the stored word returns the value. -/\n@[simp] theorem ofUInt32_toUInt32 (x : Value) :\n    ofUInt32 (toUInt32 x) = x := by\n  cases x\n  rfl\n\n/-- Unpacking a freshly packed word returns the word. -/\n@[simp] theorem toUInt32_ofUInt32 (bits : UInt32) :\n    toUInt32 (ofUInt32 bits) = bits :=\n  rfl\n\nend FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32\n",
+    "utf8_sha256": "b6b013f5f2e0e11cdbcc4524580c5d648492945141e05ed460307fcae0e9a87e"
+  },
+  "claim_boundary": {
+    "new_theorems": "NOT_RUN",
+    "lean_elaboration": "NOT_RUN",
+    "kernel_replay": "NOT_RUN",
+    "axiom_audit": "NOT_RUN",
+    "generated_C_assembly": "NOT_RUN",
+    "full_gate": "NOT_RUN",
+    "gain": "UNKNOWN",
+    "new_candidate_generated": false,
+    "git_ci_upload": false
+  },
+  "inputs": {
+    "nan_block": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/nan-choice-block.lean",
+      "sha256": "584ace5443838454b3687f7a93cfca07be4f9cce2c889c7196b171b7cfd4c93c",
+      "bytes": 7555,
+      "git_blob_sha1": "8338b80f4c5a39d9dfe1a55f088696843febd8c5"
+    },
+    "nan_probe_kernel": {
+      "path": "competitions/floatlib/candidates/f01-d7-nan-choice-probe/Kernel.lean",
+      "sha256": "ad014e0b1cdc6e42d3a9bd9437e32762d840b8047be740dca8894b0108aa3cb9",
+      "bytes": 162660,
+      "git_blob_sha1": "9cffffaf69927ddc4d39919630f15d2bd0de3455"
+    },
+    "retained60f_kernel": {
+      "path": "competitions/floatlib/candidates/f01-d7-direct-nonnan/Kernel.lean",
+      "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+      "bytes": 155103,
+      "git_blob_sha1": "82ccbe5ed9dfd725a1e380b672a55b454b78166a"
+    },
+    "D40a_kernel": {
+      "path": "competitions/floatlib/candidates/f01-d7-special-model-proof1/Kernel.lean",
+      "sha256": "40a281d9c94dbe56ef9b5e9209fcbfc9b51e9a6acfabac70d9ed99364f500baf",
+      "bytes": 144155,
+      "git_blob_sha1": "4bb1edc039a29b06a69fee00a35e925fbb42a78f"
+    },
+    "D4a30_kernel": {
+      "path": "competitions/floatlib/candidates/f01-d7-scalar-nan-select/Kernel.lean",
+      "sha256": "4a30c99f8230aae6d1b0cd238d1a6b1c9ac0aac0c448ca67d3005d3a6d00d528",
+      "bytes": 163399,
+      "git_blob_sha1": "06dfe04b812f132532231db4b228f80ff0d0c03e"
+    },
+    "R_quiet_suffix_kernel": {
+      "path": "competitions/floatlib/candidates/f01-r7-nan-replay-fullpath/Kernel.lean",
+      "sha256": "9a2a05cd8e033d3cc079744ade77dd42464926d04ef5c9a8e7c050a1605ec854",
+      "bytes": 159605,
+      "git_blob_sha1": "f5ed7b77f5e83c325513bb71552041733c4f1e94"
+    },
+    "R_combined_kernel": {
+      "path": "competitions/floatlib/candidates/f01-r7-nonfinite-combined-proof2/Kernel.lean",
+      "sha256": "0e8bc05ce954e3e8213fbef05ac6041f8f882673c88c1071a3c9d4254a3064cd",
+      "bytes": 173212,
+      "git_blob_sha1": "d26ae8caaf1b7e2bebc534296b063d5ba7d48842"
+    },
+    "R_W01b_codec": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01b/original-extracted/R7-W01b/proofs/Codec.lean",
+      "sha256": "1aeed20fc16114df174e67cba76aa314a9abcd88c0f5604a004480a38a903ff4",
+      "bytes": 2597,
+      "git_blob_sha1": "2ff0f7a210ed28a81827cb8d04d2c185a01049b4"
+    },
+    "R_W01b_verification": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01b/original-extracted/R7-W01b/verification.json",
+      "sha256": "58e3e3ae7e7c595efc657bcb8f7f1883962d44591c87b71a6153ab355a8caf4b",
+      "bytes": 1075,
+      "git_blob_sha1": "51ce44c3068a81502d786b87850cf192461ac255"
+    },
+    "R_W02_raw_proof": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W02/original-extracted/R7-W02/proofs/Raw.lean",
+      "sha256": "81991b352e16d7765c21979410c2e079bc1cc64d1fcd8a76f4292738a4bc9744",
+      "bytes": 6564,
+      "git_blob_sha1": "469180ca02231c0086066b6fb5519a19b5a685f2"
+    },
+    "R_W02_step_proof": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W02/original-extracted/R7-W02/proofs/Step.lean",
+      "sha256": "d63c970b4d2295db8158ded6bb1afe63e600effd9fd3aee4fe2573abfee8cba7",
+      "bytes": 4982,
+      "git_blob_sha1": "c6600316f462a83f1ab6a15f004153d730b0d101"
+    },
+    "scalar807_counts": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/scalar-opportunity-807.json",
+      "sha256": "f4ea316f6279eafe0148d79819c176a8a02680364a6bf317d31566ee77403633",
+      "bytes": 250754,
+      "git_blob_sha1": "c91d9265fe3f13dd32c86f0257562aa0a3daa044"
+    },
+    "replay807_counts": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/scalar-nan-fallback-807.json",
+      "sha256": "dc0b3af910cfdd67cfb47415ca7a912b836512df3bb06a183f1da49467a09f0f",
+      "bytes": 67622,
+      "git_blob_sha1": "c908e9b6a283a91dc06a8bfba3f35c55c7cbcc40"
+    },
+    "R_integer_oracle": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py",
+      "sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+      "bytes": 4908,
+      "git_blob_sha1": "2c32a8b475f204e46d3b713520a04572aaa8db55"
+    },
+    "fixed_Spec_Dyadic": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01/original-extracted/R7-W01/upstream/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Spec/Dyadic.lean",
+      "sha256": "932ee9d22d6241cda8c38dd22df4ecaffa934cdd1aa2922a0681afd1669ffb67",
+      "bytes": 4842,
+      "git_blob_sha1": "2204e7bd34af9f7d82469ecae247eb2942d78e73"
+    },
+    "fixed_Model_Carrier": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01/original-extracted/R7-W01/upstream/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Model/Carrier.lean",
+      "sha256": "ff74af867a84c3b88eaaf337f6cbd1e9b65f801d0643f663593154ba7671338b",
+      "bytes": 26809,
+      "git_blob_sha1": "8849d6b29facd7ccff8d1f32e2b15626d0771023"
+    },
+    "fixed_Dyadic_Rounding": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01/original-extracted/R7-W01/upstream/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Dyadic/Rounding.lean",
+      "sha256": "cbc4f0a6a43562e8144a007835cea18c7004869e63b36a25f5052c1044c504c1",
+      "bytes": 8850,
+      "git_blob_sha1": "18a7aa16b6403d1dd227771259fd4f6daf152c97"
+    },
+    "fixed_ExecFloat_Carrier": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01/original-extracted/R7-W01/upstream/FloatLib/FloatLib/Floats/ExecFloat/Carrier.lean",
+      "sha256": "40c83855123500a740dcef751a4c356a222533180af6ccf896cf745983c1c70f",
+      "bytes": 15488,
+      "git_blob_sha1": "14d6be7512fa80f46aead11fbd8c8b9bbdc6c8b3"
+    },
+    "fixed_Native_Runtime": {
+      "path": "competitions/floatlib/research/materials/20261022/R2-W01c/FloatLib_R2-W01c/public_sources/floatlib_fixed/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Base/Runtime.lean",
+      "sha256": "1a00aeab50520759e90e3af0cbcea0e61a03ec1b2648907409f4da9d6c73ef67",
+      "bytes": 6683,
+      "git_blob_sha1": "dc080c68fa47df803354e28654c3973c6d2b48a2"
+    }
+  },
+  "primary_local_fragments": [
+    {
+      "input": "fixed_Spec_Dyadic",
+      "first_line": 36,
+      "last_line": 107,
+      "utf8_sha256": "7e9391b7430e740119f955659147855867e4773cb26b5af2ecf6a8be5b8abf0f",
+      "content": "/-- Exact dyadic addition followed by nearest-even rounding in the destination descriptor. -/\n@[inline] def add {fmt : FloatFormat} (x y : Model fmt) : Model fmt :=\n  match toDyadic? x, toDyadic? y with\n  | some dx, some dy => roundDyadic fmt (addDyadic dx dy)\n  | _, _ =>\n      match chooseNaN2 x y with\n      | some nan => nan\n      | none =>\n          if isInf x then\n            if isInf y then\n              if signBit x == signBit y then x else invalidResult fmt\n            else\n              x\n          else if isInf y then\n            y\n          else\n            invalidResult fmt\n\n/--\nSubtraction as addition of the negated right operand.\n\n`neg` toggles the stored sign bit of every word in a signed-zero format, so a NaN propagated from\n`y` is returned with its sign bit flipped relative to `y`. IEEE 754-2019 Section 6.3 leaves the\nsign of a NaN result unspecified, so this sign choice is allowed. Callers comparing NaN words\nbit for bit should not expect `sub x y` to return `y`'s NaN unchanged. In the finite-unsigned-zero\nencoding `neg` leaves the NaN word unchanged, so no flip occurs there. The dispatched `Model.sub`\nand its backends are proved equal to this definition, so the convention is shared by every format.\n-/\n@[inline] def sub {fmt : FloatFormat} (x y : Model fmt) : Model fmt :=\n  add x (neg y)\n\n/-! ## Multiplication -/\n\n/-- Exact dyadic multiplication followed by nearest-even rounding in the destination descriptor. -/\n@[inline] def mul {fmt : FloatFormat} (x y : Model fmt) : Model fmt :=\n  match toDyadic? x, toDyadic? y with\n  | some dx, some dy =>\n      let sign := Bool.xor dx.negative dy.negative\n      if dx.significand == 0 || dy.significand == 0 then\n        zero fmt sign\n      else\n        roundDyadic fmt\n          { negative := sign\n            significand := dx.significand * dy.significand\n            exponent := dx.exponent + dy.exponent }\n  | _, _ =>\n      match chooseNaN2 x y with\n      | some nan => nan\n      | none =>\n          if isInf x then\n            if isZero y then invalidResult fmt\n            else nativeOverflow fmt (signBit x != signBit y)\n          else if isInf y then\n            if isZero x then invalidResult fmt\n            else nativeOverflow fmt (signBit x != signBit y)\n          else\n            invalidResult fmt\n\n/-! ## Fused multiply-add -/\n\n/-- Exact `(x * y) + z` followed by one nearest-even destination rounding. -/\n@[inline] def fma {fmt : FloatFormat} (x y z : Model fmt) : Model fmt :=\n  match chooseNaN3 x y z with\n  | some nan => nan\n  | none =>\n      if isInf x || isInf y then\n        if isZero x || isZero y then\n          invalidResult fmt\n        else\n          let prodSign := Bool.xor (signBit x) (signBit y)\n          let prodInf := nativeOverflow fmt prodSign\n          if isInf z then\n"
+    },
+    {
+      "input": "fixed_Model_Carrier",
+      "first_line": 104,
+      "last_line": 106,
+      "utf8_sha256": "6efef694d5896c7cb8baf277fdcf2e93b25d74a86bc9ed847f2fbeb9a0586c8a",
+      "content": "@[inline] def signBit {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  (x.bits &&& FloatFormat.signMask fmt) != 0\n\n"
+    },
+    {
+      "input": "fixed_Model_Carrier",
+      "first_line": 130,
+      "last_line": 153,
+      "utf8_sha256": "abfe632b51cc227c73f601861e23cbe8223a7580629a355e905f27a53fadaf70",
+      "content": "\n/-- The low `fracWidth` bits of the fraction field. -/\n@[inline] def fracField {fmt : FloatFormat} (x : Model fmt) : Nat :=\n  (x.bits &&& FloatFormat.fracMask fmt).toNat\n\n/-- Whether `x` has an IEEE NaN bit pattern. -/\n@[inline] def IEEE.isNaN {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  expField x == FloatFormat.expAllOnesNat fmt && fracField x != 0\n\n/-- Whether `x` has an IEEE quiet-NaN bit pattern. -/\n@[inline] def IEEE.isQNaN {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  IEEE.isNaN x && (x.bits &&& FloatFormat.quietBit fmt) != 0\n\n/-- Whether `x` has an IEEE signaling-NaN bit pattern. -/\n@[inline] def IEEE.isSNaN {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  IEEE.isNaN x && (x.bits &&& FloatFormat.quietBit fmt) == 0\n\n/-- Whether `x` has an IEEE infinity bit pattern. -/\n@[inline] def IEEE.isInf {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  expField x == FloatFormat.expAllOnesNat fmt && fracField x == 0\n\n/-- Whether `x` has an IEEE signed-zero bit pattern. -/\n@[inline] def IEEE.isZero {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  expField x == 0 && fracField x == 0\n"
+    },
+    {
+      "input": "fixed_Model_Carrier",
+      "first_line": 196,
+      "last_line": 207,
+      "utf8_sha256": "327710031a91ca015355f165c6cec8bd8606681a7f57d1ec658f40d1d51ff76a",
+      "content": "@[inline] def isInf {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  match fmt.encoding with\n  | .ieee => IEEE.isInf x\n  | .finiteMaxNaN | .finiteUnsignedZero | .finite => false\n\n/-- Whether `x` denotes zero under its complete format. -/\n@[inline] def isZero {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  match fmt.encoding with\n  | .finiteUnsignedZero => x.bits == 0\n  | .ieee | .finiteMaxNaN | .finite => IEEE.isZero x\n\n/-- Whether `x` denotes a finite value under its complete format. -/\n"
+    },
+    {
+      "input": "fixed_Model_Carrier",
+      "first_line": 252,
+      "last_line": 307,
+      "utf8_sha256": "a19a6f1cba0d9f6907f62c606fa2ee3d6653be697c3a4d286960e91b839844a1",
+      "content": "@[inline] def posInf (fmt : FloatFormat) : Model fmt :=\n  ofBits (FloatFormat.expMask fmt)\n\n/-- The negative-infinity IEEE bit pattern; use `infinity?` for policy-aware construction. -/\n@[inline] def negInf (fmt : FloatFormat) : Model fmt :=\n  ofBits (FloatFormat.signMask fmt ||| FloatFormat.expMask fmt)\n\n/-- Finite value of greatest magnitude with the requested sign. -/\n@[inline] def maxFinite (fmt : FloatFormat) (sign : Bool) : Model fmt :=\n  ofFields fmt sign fmt.maxFiniteExpField fmt.maxFiniteFracField\n\n/-- Largest finite positive value. -/\n@[inline] def posMaxFinite (fmt : FloatFormat) : Model fmt :=\n  maxFinite fmt false\n\n/-- Finite value with the largest negative magnitude. -/\n@[inline] def negMaxFinite (fmt : FloatFormat) : Model fmt :=\n  maxFinite fmt true\n\n/-- The canonical IEEE quiet-NaN bit pattern; use `canonicalNaN?` for other encodings. -/\n@[inline] def canonicalNaN (fmt : FloatFormat) : Model fmt :=\n  ofBits (FloatFormat.expMask fmt ||| FloatFormat.quietBit fmt)\n\n/-! ## Policy-aware constants -/\n\n/-- Signed zero, canonicalizing negative zero when the format has only one zero. -/\n@[inline] def zero (fmt : FloatFormat) (sign : Bool) : Model fmt :=\n  if sign && fmt.supportsSignedZero then negZero fmt else posZero fmt\n\n/-- Signed infinity when the format supports it. -/\n@[inline] def infinity? (fmt : FloatFormat) (sign : Bool) : Option (Model fmt) :=\n  if fmt.supportsInfinity then some (if sign then negInf fmt else posInf fmt) else none\n\n/-- A canonical NaN when the format has a NaN encoding. -/\n@[inline] def canonicalNaN? (fmt : FloatFormat) : Option (Model fmt) :=\n  match fmt.encoding with\n  | .ieee => some (canonicalNaN fmt)\n  | .finiteMaxNaN =>\n      some (ofFields fmt false fmt.expAllOnesNat fmt.fracMaskNat)\n  | .finiteUnsignedZero => some (negZero fmt)\n  | .finite => none\n\n/--\nTotal result for an invalid operation in the complete format descriptor.\n\nFormats with a NaN encoding use their canonical NaN. A format whose every bit pattern is numeric\nuses positive zero because it has no exceptional result to encode.\n-/\n@[inline] def invalidResult (fmt : FloatFormat) : Model fmt :=\n  match fmt.encoding with\n  | .ieee => canonicalNaN fmt\n  | .finiteMaxNaN =>\n      ofFields fmt false fmt.expAllOnesNat fmt.fracMaskNat\n  | .finiteUnsignedZero => negZero fmt\n  | .finite => posZero fmt\n\n"
+    },
+    {
+      "input": "fixed_Model_Carrier",
+      "first_line": 338,
+      "last_line": 355,
+      "utf8_sha256": "2198cf59a6dbf08f59ddef85450bd9d593a3cfe24783646eb843e11d02b29298",
+      "content": "@[inline] def quietNaN {fmt : FloatFormat} (x : Model fmt) : Model fmt :=\n  match fmt.encoding with\n  | .ieee =>\n      if IEEE.isNaN x then ofBits (x.bits ||| FloatFormat.quietBit fmt) else x\n  | .finiteMaxNaN | .finiteUnsignedZero | .finite => x\n\n/-- Return `x` quieted when it is a NaN. -/\n@[inline] def chooseNaN1 {fmt : FloatFormat} (x : Model fmt) : Option (Model fmt) :=\n  if isNaN x then some (quietNaN x) else none\n\n/-- Select signaling NaNs before quiet NaNs, breaking ties from left to right. -/\n@[inline] def chooseNaN2 {fmt : FloatFormat} (x y : Model fmt) : Option (Model fmt) :=\n  if isSNaN x then some (quietNaN x)\n  else if isSNaN y then some (quietNaN y)\n  else if isNaN x then some (quietNaN x)\n  else if isNaN y then some (quietNaN y)\n  else none\n\n"
+    },
+    {
+      "input": "fixed_Dyadic_Rounding",
+      "first_line": 80,
+      "last_line": 93,
+      "utf8_sha256": "7f5fc61c61dd43c0e8fe83ec41954a4511d8cd2ac94b94439020fc29f87f4c35",
+      "content": "/-- Default overflow result: infinity, NaN, or saturation according to the encoding. -/\n@[inline] def nativeOverflow (fmt : FloatFormat) (sign : Bool) : Model fmt :=\n  match fmt.encoding with\n  | .ieee => if sign then negInf fmt else posInf fmt\n  | .finiteMaxNaN | .finiteUnsignedZero => invalidResult fmt\n  | .finite => maxFinite fmt sign\n\n/-- Conventional IEEE native overflow is the usual signed infinity. -/\n@[simp] theorem nativeOverflow_eq_signedInf_of_isIEEE\n    (fmt : FloatFormat) (hfmt : fmt.isIEEE = true) (sign : Bool) :\n    nativeOverflow fmt sign = if sign then negInf fmt else posInf fmt := by\n  have hencoding := ((FloatFormat.isIEEE_eq_true_iff fmt).mp hfmt).1\n  cases sign <;> simp [nativeOverflow, hencoding]\n\n"
+    },
+    {
+      "input": "fixed_ExecFloat_Carrier",
+      "first_line": 137,
+      "last_line": 163,
+      "utf8_sha256": "12d2d0b778f10a1460b6e2678eededa9858f290683534b5ee95df6741942bf0b",
+      "content": "variable {Plan : Type v} {plan : Plan} {Model : Type w}\n    [codec : ModelCodec plan Model (FormatCode F)]\n\n/-- Decode an executable value through its lossless proof-model codec. -/\n@[always_inline, inline] def decode (value : ExecFloat F) : Model :=\n  codec.toModel value.raw\n\n/-- Encode a proof-model value through its lossless runtime codec. -/\n@[always_inline, inline] def encode (value : Model) : ExecFloat F :=\n  ofRaw (codec.ofModel value)\n\n/-- Lift a unary proof-model operation to the executable carrier. -/\n@[always_inline, inline] def liftUnary\n    (operation : Model → Model) (value : ExecFloat F) : ExecFloat F :=\n  encode (Model := Model) (plan := plan)\n    (operation (decode (Model := Model) (plan := plan) value))\n\n/-- Lift a binary proof-model operation to the executable carrier. -/\n@[always_inline, inline] def liftBinary\n    (operation : Model → Model → Model)\n    (left right : ExecFloat F) : ExecFloat F :=\n  encode (Model := Model) (plan := plan)\n    (operation\n      (decode (Model := Model) (plan := plan) left)\n      (decode (Model := Model) (plan := plan) right))\n\n/-- Lift a ternary proof-model operation to the executable carrier. -/\n"
+    },
+    {
+      "input": "fixed_Native_Runtime",
+      "first_line": 35,
+      "last_line": 83,
+      "utf8_sha256": "3748d685cf44833f3a7cef1cdc70ea27e1622d1a0cb28e659152919c1863e34c",
+      "content": "namespace FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32\n\n/-- The generic binary32 carrier. -/\nabbrev Value := Model FloatFormat.binary32\n\n/-- View generic binary32 storage as a native word. -/\n@[inline] def toUInt32 (x : Value) : UInt32 :=\n  UInt32.ofBitVec x.bits\n\n/-- Rewrap a native binary32 word in the generic carrier. -/\n@[inline] def ofUInt32 (bits : UInt32) : Value :=\n  Model.ofBits bits.toBitVec\n\n/-! Native storage operations -/\n\n/-- Toggle the binary32 sign bit without passing through generic `BitVec` arithmetic. -/\n@[inline] def negate (x : Value) : Value :=\n  ofUInt32 (toUInt32 x ^^^ 0x80000000)\n\n/-- Extract the binary32 sign from a native word. -/\n@[inline] def signBit (bits : UInt32) : Bool :=\n  (bits &&& 0x80000000) != 0\n\n/-- Extract the binary32 biased exponent from a native word. -/\n@[inline] def expField (bits : UInt32) : UInt32 :=\n  (bits >>> 23) &&& 0xff\n\n/-- Extract the binary32 fraction from a native word. -/\n@[inline] def fracField (bits : UInt32) : UInt32 :=\n  bits &&& 0x007fffff\n\n/-- Decode a finite binary32 native word to the generic exact dyadic representation. -/\n@[inline] def toDyadic? (bits : UInt32) : Option Numerics.Dyadic :=\n  let exponent := expField bits\n  let fraction := fracField bits\n  if exponent == 0xff then\n    none\n  else\n    let sign := signBit bits\n    if exponent == 0 then\n      if fraction == 0 then\n        some { negative := sign, significand := 0, exponent := 0 }\n      else\n        some { negative := sign, significand := fraction.toNat, exponent := -149 }\n    else\n      some {\n        negative := sign\n        significand := Model.pow2 23 + fraction.toNat\n        exponent := Int.ofNat exponent.toNat - 150 }\n"
+    },
+    {
+      "input": "R_W01b_codec",
+      "first_line": 7,
+      "last_line": 25,
+      "utf8_sha256": "c22edcf78e451a5c14d0dc4b068a618e5f1266366fb40db2d0d7e9c91d516a3c",
+      "content": "\n/-- Exact conversion from the actual Competition.Binary32 UInt32 carrier.\n    Proof fields are irrelevant; every stored bit is retained. -/\ntheorem exec_toModel_eq_rawModel (q : Competition.Binary32) :\n    ExecFloat.Binary.toModel q = Model.NativeBinary32.ofUInt32 q.raw.1 := by\n  change Model.ofBits (fmt := FloatFormat.binary32)\n      (BitVec.ofNatLT q.raw.1.toNat q.raw.2) =\n    Model.ofBits (fmt := FloatFormat.binary32) q.raw.1.toBitVec\n  apply congrArg (Model.ofBits (fmt := FloatFormat.binary32))\n  apply BitVec.eq_of_toNat_eq\n  rfl\n\n/-- The complete model word equals the raw UInt32 word, including NaN sign/payload. -/\ntheorem exec_toModel_bits_eq_raw (q : Competition.Binary32) :\n    (ExecFloat.Binary.toModel q).bits = q.raw.1.toBitVec := by\n  rw [exec_toModel_eq_rawModel]\n  rfl\n\n/-- One UInt32 mask-and-equality guard on the existing carrier. -/\n"
+    }
+  ],
+  "existing_807_context": {
+    "seed": 807,
+    "basis": "disclosed discovery samples only; no confirmation-plan access",
+    "scalar_checksum_comparisons": 344,
+    "tensor_checksum_comparisons": 280,
+    "scalar_timed_only": {
+      "add": {
+        "pairs": 5596210,
+        "nonfinite_pairs": 6689,
+        "input_nan_pairs": 3412
+      },
+      "mul": {
+        "pairs": 5539810,
+        "nonfinite_pairs": 4004,
+        "input_nan_pairs": 1962
+      }
+    },
+    "timed_tensor_replay_only": {
+      "sum": {
+        "timed_cases": 34,
+        "raw_replay_outputs": 324,
+        "counts": {
+          "ordered_steps": 14939,
+          "scalar_add_calls": 14939,
+          "scalar_mul_calls": 0,
+          "add_nonfinite_cold_calls": 11512,
+          "mul_nonfinite_cold_calls": 0,
+          "add_raw_nan_selected": 11393,
+          "mul_raw_nan_selected": 0,
+          "add_no_nan_exceptional_misses": 119,
+          "mul_no_nan_exceptional_misses": 0
+        }
+      },
+      "bmm": {
+        "timed_cases": 34,
+        "raw_replay_outputs": 2860,
+        "counts": {
+          "ordered_steps": 18797,
+          "scalar_add_calls": 18797,
+          "scalar_mul_calls": 18797,
+          "add_nonfinite_cold_calls": 16204,
+          "mul_nonfinite_cold_calls": 4113,
+          "add_raw_nan_selected": 13659,
+          "mul_raw_nan_selected": 2940,
+          "add_no_nan_exceptional_misses": 2545,
+          "mul_no_nan_exceptional_misses": 1173
+        }
+      }
+    },
+    "whole_tensor_cell_exposure_only": {
+      "cells": [
+        "bmm:extremes",
+        "bmm:specials",
+        "sum:specials"
+      ],
+      "ns": 77685750,
+      "whole_timed_share": 0.2636864057900489
+    },
+    "scope_warning": "Scalar work counts and tensor one-output-replay counts are separate units, not aggregate runtime call weights or time shares. Whole-cell exposure is not speedup."
+  },
+  "draft": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/exceptional-word-block.lean",
+    "sha256": "b884fff04a3353c02d37a824e57aa43ea3b79834569b47601b225441023c79f1",
+    "bytes": 12596,
+    "lines": 296,
+    "declaration_lines": {
+      "rawInf": 25,
+      "rawZero": 29,
+      "rawSign": 33,
+      "invalidWord": 36,
+      "infinityWord": 39,
+      "rawInf_eq": 42,
+      "rawZero_eq": 56,
+      "rawSign_eq": 70,
+      "invalidWord_eq": 76,
+      "infinityWord_eq": 83,
+      "addNoNaN": 91,
+      "mulNoNaN": 99,
+      "addWord": 112,
+      "mulWord": 119,
+      "addWord_eq_choice": 126,
+      "mulWord_eq_choice": 141,
+      "addNoNaN_model": 156,
+      "mulNoNaN_model": 171,
+      "special_of_rejected": 190,
+      "addWord_model": 201,
+      "mulWord_model": 225,
+      "carrier_model": 250,
+      "ofBits_model": 259,
+      "addCold": 264,
+      "mulCold": 267,
+      "addCold_spec": 270,
+      "mulCold_spec": 283
+    },
+    "runtime_source_status": "STATIC_ONLY",
+    "lean_compile": "NOT_RUN"
+  },
+  "dependency_context": {
+    "target_append_after": "Exact global DWordNaN block in ad014e0b1cdc6e42d3a9bd9437e32762d840b8047be740dca8894b0108aa3cb9; this new fragment alone is not a candidate.",
+    "prepared_Dnan_status": "NOT_RUN_UNLESS_SEPARATELY_ACCEPTED_BY_ACTUAL_COMPILER",
+    "source_prefix_verified": "nan probe == retained60f bytes + two newlines + exact nan-choice-block bytes",
+    "no_new_imports_options_or_exports": true
+  },
+  "primary_remote_sources": [
+    {
+      "request": {
+        "repository_full_name": "lean-dojo/FloatLib",
+        "ref": "0d91825727839f597fd06b22fdd038ea21480f0c",
+        "path": "FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Agreement.lean"
+      },
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Agreement.lean",
+      "git_blob_sha1": "f319e0d19a7aa8f421a169c0c4f8bf6d2497722a",
+      "source_fragments": [
+        {
+          "first_line": 37,
+          "last_line": 101,
+          "content": "/-- Native and generic binary32 field packing produce the same storage word. -/\ntheorem toUInt32_ofFields (sign : Bool) (exponent fraction : Nat) :\n    toUInt32 (Model.ofFields FloatFormat.binary32 sign exponent fraction) =\n      mkBits sign exponent fraction := by\n  apply UInt32.toBitVec_inj.1\n  cases sign <;> rfl\n\n/-- Rewrapping native field packing equals generic `Model.ofFields`. -/\ntheorem ofUInt32_mkBits (sign : Bool) (exponent fraction : Nat) :\n    ofUInt32 (mkBits sign exponent fraction) =\n      Model.ofFields FloatFormat.binary32 sign exponent fraction := by\n  rw [← toUInt32_ofFields]\n  exact ofUInt32_toUInt32 _\n\n/-- Native and generic binary32 exponent extraction have the same natural-number value. -/\ntheorem expField_toNat (x : Value) :\n    (expField (toUInt32 x)).toNat = Model.expField x := by\n  rfl\n\n/-- Native and generic binary32 fraction extraction have the same natural-number value. -/\ntheorem fracField_toNat (x : Value) :\n    (fracField (toUInt32 x)).toNat = Model.fracField x := by\n  rfl\n\n/-- Native and generic binary32 sign extraction agree. -/\ntheorem signBit_eq (x : Value) :\n    signBit (toUInt32 x) = Model.signBit x := by\n  unfold signBit toUInt32 Model.signBit\n  have hbits :\n      (UInt32.ofBitVec x.bits &&& 0x80000000).toBitVec =\n        x.bits &&& FloatFormat.binary32.signMask := by\n    rfl\n  apply Bool.eq_iff_iff.mpr\n  rw [bne_iff_ne, bne_iff_ne]\n  constructor\n  · intro hNative hGeneric\n    apply hNative\n    apply UInt32.toBitVec_inj.mp\n    rw [hbits, hGeneric, UInt32.toBitVec_zero]\n    rfl\n  · intro hGeneric hNative\n    apply hGeneric\n    rw [← hbits, hNative, UInt32.toBitVec_zero]\n    rfl\n\n/-- Native and generic binary32 exponent zero tests agree. -/\ntheorem expField_beq_zero (x : Value) :\n    (expField (toUInt32 x) == 0) = (Model.expField x == 0) := by\n  apply Bool.eq_iff_iff.mpr\n  rw [beq_iff_eq, beq_iff_eq, ← expField_toNat x]\n  exact UInt32.toNat_inj.symm\n\n/-- Native and generic binary32 exceptional-exponent tests agree. -/\ntheorem expField_beq_allOnes (x : Value) :\n    (expField (toUInt32 x) == 0xff) = (Model.expField x == 255) := by\n  apply Bool.eq_iff_iff.mpr\n  rw [beq_iff_eq, beq_iff_eq, ← expField_toNat x]\n  exact UInt32.toNat_inj.symm\n\n/-- Native and generic binary32 fraction zero tests agree. -/\ntheorem fracField_beq_zero (x : Value) :\n    (fracField (toUInt32 x) == 0) = (Model.fracField x == 0) := by\n  apply Bool.eq_iff_iff.mpr\n  rw [beq_iff_eq, beq_iff_eq, ← fracField_toNat x]\n  exact UInt32.toNat_inj.symm",
+          "utf8_sha256": "304050d9d3453f238a0efe3c54bf1af973cb70fe6e82e724a95071190ce43f41"
+        },
+        {
+          "first_line": 123,
+          "last_line": 128,
+          "content": "/-- Native field extraction decodes the same exact dyadic as generic binary32. -/\ntheorem toDyadic_eq (x : Value) :\n    toDyadic? (toUInt32 x) = Model.toDyadic? x := by\n  unfold toDyadic? Model.toDyadic?\n  simp only [show FloatFormat.binary32.isIEEE = true by decide]\n  unfold Model.ieeeToDyadic?",
+          "utf8_sha256": "96a2986864bdbfa6748aed25b0cc17ebb998440ca683cbcc8aac2a8fbb341d28"
+        },
+        {
+          "first_line": 174,
+          "last_line": 204,
+          "content": "private theorem ofUInt32_posZero :\n    ofUInt32 0 = Model.posZero FloatFormat.binary32 :=\n  rfl\n\nprivate theorem ofUInt32_negZero :\n    ofUInt32 0x80000000 = Model.negZero FloatFormat.binary32 := by\n  decide\n\nprivate theorem ofUInt32_posInf :\n    ofUInt32 0x7f800000 = Model.posInf FloatFormat.binary32 := by\n  decide\n\nprivate theorem ofUInt32_negInf :\n    ofUInt32 0xff800000 = Model.negInf FloatFormat.binary32 := by\n  decide\n\nprivate theorem ofUInt32_canonicalNaN :\n    ofUInt32 0x7fc00000 = Model.canonicalNaN FloatFormat.binary32 := by\n  decide\n\nprivate theorem ofUInt32_signedZero (sign : Bool) :\n    ofUInt32 (if sign then 0x80000000 else 0) =\n      if sign then Model.negZero FloatFormat.binary32\n      else Model.posZero FloatFormat.binary32 := by\n  cases sign <;> simp [ofUInt32_posZero, ofUInt32_negZero]\n\nprivate theorem ofUInt32_signedInf (sign : Bool) :\n    ofUInt32 (if sign then 0xff800000 else 0x7f800000) =\n      if sign then Model.negInf FloatFormat.binary32\n      else Model.posInf FloatFormat.binary32 := by\n  cases sign <;> simp [ofUInt32_posInf, ofUInt32_negInf]",
+          "utf8_sha256": "1dc3f2d5b07b2358bdb1624fb9a516c53b67a988266c68525568bbbd0472e42e"
+        }
+      ]
+    },
+    {
+      "request": {
+        "repository_full_name": "lean-dojo/FloatLib",
+        "ref": "0d91825727839f597fd06b22fdd038ea21480f0c",
+        "path": "FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Packing.lean"
+      },
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Packing.lean",
+      "git_blob_sha1": "d2a05e54fbd16b7f008aa295b986764ca71bb91e",
+      "source_fragments": [
+        {
+          "first_line": 56,
+          "last_line": 58,
+          "content": "/-- Repacking the fields extracted from a native binary32 word returns the original word. -/\ntheorem mkBits_fields (bits : UInt32) :\n    mkBits (signBit bits) (expField bits).toNat (fracField bits).toNat = bits := by",
+          "utf8_sha256": "4ad8b5d89c7c53c383bb581ff0d8175c9e091d3a28fffbcae8b8646edcf7bc8e"
+        },
+        {
+          "first_line": 148,
+          "last_line": 156,
+          "content": "/-- Setting the native quiet-NaN bit agrees with setting the generic binary32 quiet bit. -/\ntheorem ofUInt32_or_quietBit (x : Value) :\n    ofUInt32 (toUInt32 x ||| 0x00400000) =\n      Model.ofBits (x.bits ||| FloatFormat.quietBit FloatFormat.binary32) := by\n  cases x\n  rfl\n\nend FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32\n",
+          "utf8_sha256": "e9fe7206f619a469985a7097cc47a2153895f70f6427420f1f63d418a83dd005"
+        }
+      ]
+    },
+    {
+      "request": {
+        "repository_full_name": "lean-dojo/FloatLib",
+        "ref": "0d91825727839f597fd06b22fdd038ea21480f0c",
+        "path": "FloatLib/Floats/Formats/BinaryInterchange/Model/Carrier.lean",
+        "start_line": 95,
+        "end_line": 210
+      },
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/Formats/BinaryInterchange/Model/Carrier.lean",
+      "git_blob_sha1": "8849d6b29facd7ccff8d1f32e2b15626d0771023",
+      "content": "  cases x\n  rfl\n\ninstance {fmt : FloatFormat} : Inhabited (Model fmt) where\n  default := ofNatBits 0\n\n/-! ## Field extraction and classification -/\n\n/-- Whether the sign bit is set. -/\n@[inline] def signBit {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  (x.bits &&& FloatFormat.signMask fmt) != 0\n\n/-- The executable sign test is the most significant bit of the storage word. -/\ntheorem signBit_eq_msb {fmt : FloatFormat} (x : Model fmt) :\n    signBit x = x.bits.msb := by\n  unfold signBit FloatFormat.signMask FloatFormat.ofWordNat FloatFormat.signMaskNat\n    FloatFormat.signBitIndex\n  apply Bool.eq_iff_iff.mpr\n  simp only [bne_iff_ne]\n  rw [BitVec.toNat_ne, BitVec.toNat_and, BitVec.toNat_ofNat]\n  have hwidth : 0 < fmt.bitWidth := by\n    unfold FloatFormat.bitWidth\n    omega\n  have hexponent : fmt.bitWidth - 1 < fmt.bitWidth :=\n    Nat.sub_one_lt (Nat.ne_of_gt hwidth)\n  rw [Nat.mod_eq_of_lt (Nat.pow_lt_pow_right (by decide) hexponent)]\n  rw [Nat.and_two_pow]\n  have htestBit : x.bits.toNat.testBit (fmt.bitWidth - 1) = x.bits.msb := by\n    simpa [BitVec.getLsbD] using (BitVec.msb_eq_getLsbD_last x.bits).symm\n  rw [htestBit]\n  cases x.bits.msb <;> simp\n\n/-- The biased exponent field as a natural number. -/\n@[inline] def expField {fmt : FloatFormat} (x : Model fmt) : Nat :=\n  ((x.bits >>> fmt.fracWidth) &&& FloatFormat.expAllOnes fmt).toNat\n\n/-- The low `fracWidth` bits of the fraction field. -/\n@[inline] def fracField {fmt : FloatFormat} (x : Model fmt) : Nat :=\n  (x.bits &&& FloatFormat.fracMask fmt).toNat\n\n/-- Whether `x` has an IEEE NaN bit pattern. -/\n@[inline] def IEEE.isNaN {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  expField x == FloatFormat.expAllOnesNat fmt && fracField x != 0\n\n/-- Whether `x` has an IEEE quiet-NaN bit pattern. -/\n@[inline] def IEEE.isQNaN {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  IEEE.isNaN x && (x.bits &&& FloatFormat.quietBit fmt) != 0\n\n/-- Whether `x` has an IEEE signaling-NaN bit pattern. -/\n@[inline] def IEEE.isSNaN {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  IEEE.isNaN x && (x.bits &&& FloatFormat.quietBit fmt) == 0\n\n/-- Whether `x` has an IEEE infinity bit pattern. -/\n@[inline] def IEEE.isInf {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  expField x == FloatFormat.expAllOnesNat fmt && fracField x == 0\n\n/-- Whether `x` has an IEEE signed-zero bit pattern. -/\n@[inline] def IEEE.isZero {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  expField x == 0 && fracField x == 0\n\n/-- Whether `x` has an IEEE finite bit pattern. -/\n@[inline] def IEEE.isFinite {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  expField x != FloatFormat.expAllOnesNat fmt\n\n/-! ## Policy-aware classification -/\n\n/-- Whether `x` is one of the NaN encodings selected by its complete format. -/\n@[inline] def isNaN {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  match fmt.encoding with\n  | .ieee => IEEE.isNaN x\n  | .finiteMaxNaN =>\n      expField x == fmt.expAllOnesNat && fracField x == fmt.fracMaskNat\n  | .finiteUnsignedZero => x.bits == fmt.signMask\n  | .finite => false\n\n/--\nWhether `x` is a quiet NaN.\n\nThe non-IEEE policies represented by `FloatFormat.Encoding` do not distinguish signaling from\nquiet NaNs, so every NaN in those formats is classified as quiet.\n-/\n@[inline] def isQNaN {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  match fmt.encoding with\n  | .ieee => IEEE.isQNaN x\n  | .finiteMaxNaN | .finiteUnsignedZero => isNaN x\n  | .finite => false\n\n/-- Whether `x` is a signaling NaN. Only the IEEE encoding has signaling NaNs. -/\n@[inline] def isSNaN {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  match fmt.encoding with\n  | .ieee => IEEE.isSNaN x\n  | .finiteMaxNaN | .finiteUnsignedZero | .finite => false\n\n/-- A value that is not a NaN cannot be a signaling NaN. -/\ntheorem isSNaN_eq_false_of_isNaN_eq_false {fmt : FloatFormat}\n    (x : Model fmt) (hx : isNaN x = false) :\n    isSNaN x = false := by\n  cases hencoding : fmt.encoding <;>\n    simp_all [isSNaN, isNaN, IEEE.isSNaN]\n\n/-- Whether `x` is an infinity. Only the IEEE encoding contains infinities. -/\n@[inline] def isInf {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  match fmt.encoding with\n  | .ieee => IEEE.isInf x\n  | .finiteMaxNaN | .finiteUnsignedZero | .finite => false\n\n/-- Whether `x` denotes zero under its complete format. -/\n@[inline] def isZero {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  match fmt.encoding with\n  | .finiteUnsignedZero => x.bits == 0\n  | .ieee | .finiteMaxNaN | .finite => IEEE.isZero x\n\n/-- Whether `x` denotes a finite value under its complete format. -/\n@[inline] def isFinite {fmt : FloatFormat} (x : Model fmt) : Bool :=\n  match fmt.encoding with\n  | .ieee => IEEE.isFinite x",
+      "scope": "Exact requested line range; full source hash is in local input metadata.",
+      "range_utf8_sha256": "3e6b378a4502dce84519849dce598d8c8a1e66c9f8a900d6cc3f768d3d9d70df"
+    },
+    {
+      "request": {
+        "repository_full_name": "lean-dojo/FloatLib",
+        "ref": "0d91825727839f597fd06b22fdd038ea21480f0c",
+        "path": "FloatLib/Floats/Formats/BinaryInterchange/Model/Carrier.lean",
+        "start_line": 245,
+        "end_line": 362
+      },
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/Formats/BinaryInterchange/Model/Carrier.lean",
+      "git_blob_sha1": "8849d6b29facd7ccff8d1f32e2b15626d0771023",
+      "content": "  ofFields fmt false fmt.exponentBias 0\n\n/-- Negative one. -/\n@[inline] def negOne (fmt : FloatFormat) : Model fmt :=\n  ofFields fmt true fmt.exponentBias 0\n\n/-- The positive-infinity IEEE bit pattern; use `infinity?` for policy-aware construction. -/\n@[inline] def posInf (fmt : FloatFormat) : Model fmt :=\n  ofBits (FloatFormat.expMask fmt)\n\n/-- The negative-infinity IEEE bit pattern; use `infinity?` for policy-aware construction. -/\n@[inline] def negInf (fmt : FloatFormat) : Model fmt :=\n  ofBits (FloatFormat.signMask fmt ||| FloatFormat.expMask fmt)\n\n/-- Finite value of greatest magnitude with the requested sign. -/\n@[inline] def maxFinite (fmt : FloatFormat) (sign : Bool) : Model fmt :=\n  ofFields fmt sign fmt.maxFiniteExpField fmt.maxFiniteFracField\n\n/-- Largest finite positive value. -/\n@[inline] def posMaxFinite (fmt : FloatFormat) : Model fmt :=\n  maxFinite fmt false\n\n/-- Finite value with the largest negative magnitude. -/\n@[inline] def negMaxFinite (fmt : FloatFormat) : Model fmt :=\n  maxFinite fmt true\n\n/-- The canonical IEEE quiet-NaN bit pattern; use `canonicalNaN?` for other encodings. -/\n@[inline] def canonicalNaN (fmt : FloatFormat) : Model fmt :=\n  ofBits (FloatFormat.expMask fmt ||| FloatFormat.quietBit fmt)\n\n/-! ## Policy-aware constants -/\n\n/-- Signed zero, canonicalizing negative zero when the format has only one zero. -/\n@[inline] def zero (fmt : FloatFormat) (sign : Bool) : Model fmt :=\n  if sign && fmt.supportsSignedZero then negZero fmt else posZero fmt\n\n/-- Signed infinity when the format supports it. -/\n@[inline] def infinity? (fmt : FloatFormat) (sign : Bool) : Option (Model fmt) :=\n  if fmt.supportsInfinity then some (if sign then negInf fmt else posInf fmt) else none\n\n/-- A canonical NaN when the format has a NaN encoding. -/\n@[inline] def canonicalNaN? (fmt : FloatFormat) : Option (Model fmt) :=\n  match fmt.encoding with\n  | .ieee => some (canonicalNaN fmt)\n  | .finiteMaxNaN =>\n      some (ofFields fmt false fmt.expAllOnesNat fmt.fracMaskNat)\n  | .finiteUnsignedZero => some (negZero fmt)\n  | .finite => none\n\n/--\nTotal result for an invalid operation in the complete format descriptor.\n\nFormats with a NaN encoding use their canonical NaN. A format whose every bit pattern is numeric\nuses positive zero because it has no exceptional result to encode.\n-/\n@[inline] def invalidResult (fmt : FloatFormat) : Model fmt :=\n  match fmt.encoding with\n  | .ieee => canonicalNaN fmt\n  | .finiteMaxNaN =>\n      ofFields fmt false fmt.expAllOnesNat fmt.fracMaskNat\n  | .finiteUnsignedZero => negZero fmt\n  | .finite => posZero fmt\n\n/--\nSigned infinity when the format supports it, otherwise the same-sign largest finite value.\n\nThis constructs a range boundary for saturation and interval endpoints. Nonsaturating\nconversion, arithmetic, and exact reductions use `nativeOverflow`, which may return NaN\nwhen the format reserves an exceptional encoding.\n-/\n@[inline] def infinityOrMaxFinite (fmt : FloatFormat) (sign : Bool) : Model fmt :=\n  match fmt.encoding with\n  | .ieee => if sign then negInf fmt else posInf fmt\n  | .finiteMaxNaN | .finiteUnsignedZero | .finite => maxFinite fmt sign\n\n/-- Conventional IEEE policy zero is the usual signed zero. -/\n@[simp] theorem zero_eq_signedZero_of_isIEEE\n    (fmt : FloatFormat) (hfmt : fmt.isIEEE = true) (sign : Bool) :\n    zero fmt sign = if sign then negZero fmt else posZero fmt := by\n  have hencoding := ((FloatFormat.isIEEE_eq_true_iff fmt).mp hfmt).1\n  cases sign <;>\n    simp [zero, FloatFormat.supportsSignedZero, hencoding]\n\n/-- Conventional IEEE invalid operations return the canonical NaN. -/\n@[simp] theorem invalidResult_eq_canonicalNaN_of_isIEEE\n    (fmt : FloatFormat) (hfmt : fmt.isIEEE = true) :\n    invalidResult fmt = canonicalNaN fmt := by\n  have hencoding := ((FloatFormat.isIEEE_eq_true_iff fmt).mp hfmt).1\n  simp [invalidResult, hencoding]\n\n/-! ## NaN propagation -/\n\n/-- Set the quiet bit of a NaN, leaving non-NaN values unchanged. -/\n@[inline] def quietNaN {fmt : FloatFormat} (x : Model fmt) : Model fmt :=\n  match fmt.encoding with\n  | .ieee =>\n      if IEEE.isNaN x then ofBits (x.bits ||| FloatFormat.quietBit fmt) else x\n  | .finiteMaxNaN | .finiteUnsignedZero | .finite => x\n\n/-- Return `x` quieted when it is a NaN. -/\n@[inline] def chooseNaN1 {fmt : FloatFormat} (x : Model fmt) : Option (Model fmt) :=\n  if isNaN x then some (quietNaN x) else none\n\n/-- Select signaling NaNs before quiet NaNs, breaking ties from left to right. -/\n@[inline] def chooseNaN2 {fmt : FloatFormat} (x y : Model fmt) : Option (Model fmt) :=\n  if isSNaN x then some (quietNaN x)\n  else if isSNaN y then some (quietNaN y)\n  else if isNaN x then some (quietNaN x)\n  else if isNaN y then some (quietNaN y)\n  else none\n\n/-- Ternary NaN selection used by fused multiply-add. -/\n@[inline] def chooseNaN3 {fmt : FloatFormat} (x y z : Model fmt) : Option (Model fmt) :=\n  if isSNaN x then some (quietNaN x)\n  else if isSNaN y then some (quietNaN y)\n  else if isSNaN z then some (quietNaN z)\n  else if isNaN x then some (quietNaN x)\n  else if isNaN y then some (quietNaN y)",
+      "scope": "Exact requested line range; full source hash is in local input metadata.",
+      "range_utf8_sha256": "c520feb2adc76e5a711a52f53127ba2a82b2ac757f68f94ecfe49bdf12a57cb4"
+    },
+    {
+      "request": {
+        "repository_full_name": "lean-dojo/FloatLib",
+        "ref": "0d91825727839f597fd06b22fdd038ea21480f0c",
+        "path": "FloatLib/Floats/Formats/BinaryInterchange/Dyadic/Rounding.lean",
+        "start_line": 78,
+        "end_line": 94
+      },
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/Formats/BinaryInterchange/Dyadic/Rounding.lean",
+      "git_blob_sha1": "18a7aa16b6403d1dd227771259fd4f6daf152c97",
+      "content": "  simp [ieeeRoundDyadic]\n\n/-- Default overflow result: infinity, NaN, or saturation according to the encoding. -/\n@[inline] def nativeOverflow (fmt : FloatFormat) (sign : Bool) : Model fmt :=\n  match fmt.encoding with\n  | .ieee => if sign then negInf fmt else posInf fmt\n  | .finiteMaxNaN | .finiteUnsignedZero => invalidResult fmt\n  | .finite => maxFinite fmt sign\n\n/-- Conventional IEEE native overflow is the usual signed infinity. -/\n@[simp] theorem nativeOverflow_eq_signedInf_of_isIEEE\n    (fmt : FloatFormat) (hfmt : fmt.isIEEE = true) (sign : Bool) :\n    nativeOverflow fmt sign = if sign then negInf fmt else posInf fmt := by\n  have hencoding := ((FloatFormat.isIEEE_eq_true_iff fmt).mp hfmt).1\n  cases sign <;> simp [nativeOverflow, hencoding]\n\n/--",
+      "scope": "Exact requested line range; full source hash is in local input metadata.",
+      "range_utf8_sha256": "32ca665cd7d5dbb665a954adae0ca8ee475d5166d142207d9782c23ee84e610b"
+    }
+  ],
+  "design": {
+    "domain": "Exactly at least one expField=255, obtained from the existing rejected finite-input guard. All 2^32 input words are covered under that proposition; no finite-input arithmetic is implemented.",
+    "runtime": "Fused signaling-a, signaling-b, NaN-a, NaN-b, then UInt32 Inf/zero/sign exceptional dispatch. One final existing FastMul.ofBits carrier construction.",
+    "NaN_priority": "signaling-first, left-before-right within signaling and then within quiet NaN; preserve complete sign/payload and only set bit22.",
+    "add_no_nan": "If a is Inf: if b is Inf return a only for equal signs, otherwise canonical invalid; otherwise a. Else if b is Inf return b; otherwise invalid.",
+    "mul_no_nan": "If a is Inf: reject either sign of zero b to canonical invalid; otherwise signed Inf from Bool sign inequality. Else if b is Inf symmetric zero check on a; otherwise invalid.",
+    "constants": {
+      "invalid": "0x7fc00000",
+      "positive_inf": "0x7f800000",
+      "negative_inf": "0xff800000"
+    },
+    "classifier_choice": "UInt32 exp/frac predicates chosen to reuse exact public native field bridge lemmas; this is still word-only. Single magnitude-mask tests are deferred rather than introducing another uncompiled bit-decomposition proof now.",
+    "Option_boundary": "Runtime definitions do not call rawChoose or use Option. Option form appears only in equality theorems, without csimp attributes. Compiler/native-code properties still NOT_RUN.",
+    "existing_paths": "No ordinary scalar add, native multiplication, low-exponent multiply, sum or bmm implementation is changed."
+  },
+  "proof_steps": [
+    {
+      "name": "rawInf_eq/rawZero_eq",
+      "status": "NOT_RUN",
+      "basis": "Public NativeBinary32 expField_beq_allOnes/expField_beq_zero/fracField_beq_zero at fixed Agreement lines83-101 plus toUInt32_ofUInt32."
+    },
+    {
+      "name": "rawSign_eq",
+      "status": "NOT_RUN",
+      "basis": "Public NativeBinary32.signBit_eq with exact packed-word roundtrip."
+    },
+    {
+      "name": "invalidWord_eq/infinityWord_eq",
+      "status": "NOT_RUN",
+      "basis": "Local closed constant proofs; do not call private ofUInt32_* lemmas. Public nativeOverflow_eq_signedInf_of_isIEEE handles the two signs."
+    },
+    {
+      "name": "addWord_eq_choice/mulWord_eq_choice",
+      "status": "NOT_RUN",
+      "basis": "Four Bool branches equate fused runtime words to the already prepared DWordNaN rawChoose proof form."
+    },
+    {
+      "name": "addNoNaN_model/mulNoNaN_model",
+      "status": "NOT_RUN",
+      "basis": "Rewrite classifiers/constants and split only finite Bool control branches; no raw-input enumeration."
+    },
+    {
+      "name": "addWord_model/mulWord_model",
+      "status": "NOT_RUN",
+      "basis": "some branch uses prepared Dnan selected_model theorem; none branch obtains actual chooseNaN2=none, then at-least-exp255 gives an actual dyadic none before unfolding the real Spec."
+    },
+    {
+      "name": "carrier_model/ofBits_model/addCold_spec/mulCold_spec",
+      "status": "NOT_RUN",
+      "basis": "Concrete UInt32 carrier projection copied in shape from supplied R7-W01b Codec, existing Configured.Family.toModel_injective, and existing parent unconditional toModelExecAdd/toModelExecMul."
+    }
+  ],
+  "known_api_trap": {
+    "state": "VERIFIED_SOURCE_FACT",
+    "detail": "ofUInt32_posInf, ofUInt32_negInf, ofUInt32_canonicalNaN and signedInf in fixed NativeBinary32 Agreement are private. The new fragment declares its own small constants proofs instead of assuming those names are exported."
+  },
+  "finite_local_check": {
+    "status": "PASS_TARGETED_INTEGER_MODEL_AND_STATIC_DEFS_ONLY",
+    "pairs": 30,
+    "operation_checks": 60,
+    "witnesses": [
+      {
+        "label": "quiet_left_signaling_right",
+        "a": "0x7fc00111",
+        "b": "0xff800002",
+        "outputs": {
+          "add": "0xffc00002",
+          "mul": "0xffc00002"
+        }
+      },
+      {
+        "label": "signaling_left_quiet_right",
+        "a": "0xff800003",
+        "b": "0x7fc00222",
+        "outputs": {
+          "add": "0xffc00003",
+          "mul": "0xffc00003"
+        }
+      },
+      {
+        "label": "both_signaling_left_priority",
+        "a": "0x7f800011",
+        "b": "0xff800022",
+        "outputs": {
+          "add": "0x7fc00011",
+          "mul": "0x7fc00011"
+        }
+      },
+      {
+        "label": "both_quiet_left_priority",
+        "a": "0xffc00111",
+        "b": "0x7fc00222",
+        "outputs": {
+          "add": "0xffc00111",
+          "mul": "0xffc00111"
+        }
+      },
+      {
+        "label": "positive_inf_right_nan",
+        "a": "0x7f800000",
+        "b": "0xffc00234",
+        "outputs": {
+          "add": "0xffc00234",
+          "mul": "0xffc00234"
+        }
+      },
+      {
+        "label": "left_nan_negative_inf",
+        "a": "0x7f800345",
+        "b": "0xff800000",
+        "outputs": {
+          "add": "0x7fc00345",
+          "mul": "0x7fc00345"
+        }
+      },
+      {
+        "label": "negative_zero_right_signaling",
+        "a": "0x80000000",
+        "b": "0x7f800067",
+        "outputs": {
+          "add": "0x7fc00067",
+          "mul": "0x7fc00067"
+        }
+      },
+      {
+        "label": "negative_quiet_positive_zero",
+        "a": "0xffc00456",
+        "b": "0x00000000",
+        "outputs": {
+          "add": "0xffc00456",
+          "mul": "0xffc00456"
+        }
+      },
+      {
+        "label": "inf_inf_signs",
+        "a": "0x7f800000",
+        "b": "0x7f800000",
+        "outputs": {
+          "add": "0x7f800000",
+          "mul": "0x7f800000"
+        }
+      },
+      {
+        "label": "inf_signed_zero",
+        "a": "0x7f800000",
+        "b": "0x00000000",
+        "outputs": {
+          "add": "0x7f800000",
+          "mul": "0x7fc00000"
+        }
+      },
+      {
+        "label": "signed_zero_inf",
+        "a": "0x00000000",
+        "b": "0x7f800000",
+        "outputs": {
+          "add": "0x7f800000",
+          "mul": "0x7fc00000"
+        }
+      },
+      {
+        "label": "inf_signed_one",
+        "a": "0x7f800000",
+        "b": "0x3f800000",
+        "outputs": {
+          "add": "0x7f800000",
+          "mul": "0x7f800000"
+        }
+      },
+      {
+        "label": "signed_one_inf",
+        "a": "0x3f800000",
+        "b": "0x7f800000",
+        "outputs": {
+          "add": "0x7f800000",
+          "mul": "0x7f800000"
+        }
+      },
+      {
+        "label": "inf_inf_signs",
+        "a": "0x7f800000",
+        "b": "0xff800000",
+        "outputs": {
+          "add": "0x7fc00000",
+          "mul": "0xff800000"
+        }
+      },
+      {
+        "label": "inf_signed_zero",
+        "a": "0x7f800000",
+        "b": "0x80000000",
+        "outputs": {
+          "add": "0x7f800000",
+          "mul": "0x7fc00000"
+        }
+      },
+      {
+        "label": "signed_zero_inf",
+        "a": "0x80000000",
+        "b": "0x7f800000",
+        "outputs": {
+          "add": "0x7f800000",
+          "mul": "0x7fc00000"
+        }
+      },
+      {
+        "label": "inf_signed_one",
+        "a": "0x7f800000",
+        "b": "0xbf800000",
+        "outputs": {
+          "add": "0x7f800000",
+          "mul": "0xff800000"
+        }
+      },
+      {
+        "label": "signed_one_inf",
+        "a": "0xbf800000",
+        "b": "0x7f800000",
+        "outputs": {
+          "add": "0x7f800000",
+          "mul": "0xff800000"
+        }
+      },
+      {
+        "label": "inf_inf_signs",
+        "a": "0xff800000",
+        "b": "0x7f800000",
+        "outputs": {
+          "add": "0x7fc00000",
+          "mul": "0xff800000"
+        }
+      },
+      {
+        "label": "inf_signed_zero",
+        "a": "0xff800000",
+        "b": "0x00000000",
+        "outputs": {
+          "add": "0xff800000",
+          "mul": "0x7fc00000"
+        }
+      },
+      {
+        "label": "signed_zero_inf",
+        "a": "0x00000000",
+        "b": "0xff800000",
+        "outputs": {
+          "add": "0xff800000",
+          "mul": "0x7fc00000"
+        }
+      },
+      {
+        "label": "inf_signed_one",
+        "a": "0xff800000",
+        "b": "0x3f800000",
+        "outputs": {
+          "add": "0xff800000",
+          "mul": "0xff800000"
+        }
+      },
+      {
+        "label": "signed_one_inf",
+        "a": "0x3f800000",
+        "b": "0xff800000",
+        "outputs": {
+          "add": "0xff800000",
+          "mul": "0xff800000"
+        }
+      },
+      {
+        "label": "inf_inf_signs",
+        "a": "0xff800000",
+        "b": "0xff800000",
+        "outputs": {
+          "add": "0xff800000",
+          "mul": "0x7f800000"
+        }
+      },
+      {
+        "label": "inf_signed_zero",
+        "a": "0xff800000",
+        "b": "0x80000000",
+        "outputs": {
+          "add": "0xff800000",
+          "mul": "0x7fc00000"
+        }
+      },
+      {
+        "label": "signed_zero_inf",
+        "a": "0x80000000",
+        "b": "0xff800000",
+        "outputs": {
+          "add": "0xff800000",
+          "mul": "0x7fc00000"
+        }
+      },
+      {
+        "label": "inf_signed_one",
+        "a": "0xff800000",
+        "b": "0xbf800000",
+        "outputs": {
+          "add": "0xff800000",
+          "mul": "0x7f800000"
+        }
+      },
+      {
+        "label": "signed_one_inf",
+        "a": "0xbf800000",
+        "b": "0xff800000",
+        "outputs": {
+          "add": "0xff800000",
+          "mul": "0x7f800000"
+        }
+      },
+      {
+        "label": "positive_inf_negative_min_subnormal",
+        "a": "0x7f800000",
+        "b": "0x80000001",
+        "outputs": {
+          "add": "0x7f800000",
+          "mul": "0xff800000"
+        }
+      },
+      {
+        "label": "negative_min_subnormal_negative_inf",
+        "a": "0x80000001",
+        "b": "0xff800000",
+        "outputs": {
+          "add": "0xff800000",
+          "mul": "0x7f800000"
+        }
+      }
+    ],
+    "counterexamples_to_wrong_rules": [
+      {
+        "bad_rule": "quiet_before_signaling",
+        "op": "add",
+        "a": "0x7fc00111",
+        "b": "0xff800002",
+        "wrong_word": "0x7fc00111",
+        "reference_word": "0xffc00002"
+      },
+      {
+        "bad_rule": "canonicalize_selected_nan",
+        "op": "add",
+        "a": "0xffc00111",
+        "b": "0x7fc00222",
+        "wrong_word": "0x7fc00000",
+        "reference_word": "0xffc00111"
+      },
+      {
+        "bad_rule": "infinity_before_nan",
+        "op": "add",
+        "a": "0x7f800000",
+        "b": "0xffc00234",
+        "wrong_word": "0x7f800000",
+        "reference_word": "0xffc00234"
+      },
+      {
+        "bad_rule": "ignore_opposite_inf_signs",
+        "op": "add",
+        "a": "0x7f800000",
+        "b": "0xff800000",
+        "wrong_word": "0x7f800000",
+        "reference_word": "0x7fc00000"
+      },
+      {
+        "bad_rule": "omit_zero_times_inf_invalid",
+        "op": "mul",
+        "a": "0x7f800000",
+        "b": "0x0",
+        "wrong_word": "0x7f800000",
+        "reference_word": "0x7fc00000"
+      },
+      {
+        "bad_rule": "recognize_only_positive_zero",
+        "op": "mul",
+        "a": "0x7f800000",
+        "b": "0x80000000",
+        "wrong_word": "0xff800000",
+        "reference_word": "0x7fc00000"
+      },
+      {
+        "bad_rule": "ignore_rhs_product_sign",
+        "op": "mul",
+        "a": "0x7f800000",
+        "b": "0xbf800000",
+        "wrong_word": "0x7f800000",
+        "reference_word": "0xff800000"
+      }
+    ],
+    "outside_domain_witnesses": [
+      {
+        "a": "0x0",
+        "b": "0x80000000",
+        "status": "OUTSIDE_DOMAIN_MUST_NOT_DISPATCH",
+        "outputs": {
+          "add": {
+            "cold_word": "0x7fc00000",
+            "reference": "0x0"
+          },
+          "mul": {
+            "cold_word": "0x7fc00000",
+            "reference": "0x80000000"
+          }
+        }
+      },
+      {
+        "a": "0x80000000",
+        "b": "0x0",
+        "status": "OUTSIDE_DOMAIN_MUST_NOT_DISPATCH",
+        "outputs": {
+          "add": {
+            "cold_word": "0x7fc00000",
+            "reference": "0x0"
+          },
+          "mul": {
+            "cold_word": "0x7fc00000",
+            "reference": "0x80000000"
+          }
+        }
+      },
+      {
+        "a": "0x80000000",
+        "b": "0x80000000",
+        "status": "OUTSIDE_DOMAIN_MUST_NOT_DISPATCH",
+        "outputs": {
+          "add": {
+            "cold_word": "0x7fc00000",
+            "reference": "0x80000000"
+          },
+          "mul": {
+            "cold_word": "0x7fc00000",
+            "reference": "0x0"
+          }
+        }
+      },
+      {
+        "a": "0x7f7fffff",
+        "b": "0x7f7fffff",
+        "status": "OUTSIDE_DOMAIN_MUST_NOT_DISPATCH",
+        "outputs": {
+          "add": {
+            "cold_word": "0x7fc00000",
+            "reference": "0x7f800000"
+          },
+          "mul": {
+            "cold_word": "0x7fc00000",
+            "reference": "0x7f800000"
+          }
+        }
+      }
+    ],
+    "trace_sha256": "cf5be09579eb5a1419e2d96ed2c7f28e242ed96f97ffa54926444cf0e41a04d4",
+    "oracle_sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+    "oracle_unchanged": true,
+    "runtime_definitions": [
+      "rawInf",
+      "rawZero",
+      "rawSign",
+      "invalidWord",
+      "infinityWord",
+      "addNoNaN",
+      "mulNoNaN",
+      "addWord",
+      "mulWord",
+      "addCold",
+      "mulCold"
+    ],
+    "runtime_no_generic_dyadic_or_option_reference": true,
+    "lean_compile": "NOT_RUN",
+    "performance": "UNKNOWN"
+  },
+  "local_checker_source": "from pathlib import Path\nimport ast,hashlib,json,re\noracle_path=Path('competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py')\noriginal=oracle_path.read_bytes()\nwanted={'exp','frac','nan','snan','inf','zero','choose','unpack','rounded','add','mul'}\nnodes=[n for n in ast.parse(original.decode()).body if isinstance(n,ast.FunctionDef) and n.name in wanted]\nassert {n.name for n in nodes}==wanted\no={};exec(compile(ast.Module(body=nodes,type_ignores=[]),str(oracle_path),'exec'),o)\nexp=o['exp'];frac=o['frac']\ndef raw_inf(x):return exp(x)==255 and frac(x)==0\ndef raw_zero(x):return exp(x)==0 and frac(x)==0\ndef raw_sign(x):return bool(x&0x80000000)\ndef word(op,a,b):\n    if o['snan'](a):return a|0x400000\n    if o['snan'](b):return b|0x400000\n    if o['nan'](a):return a|0x400000\n    if o['nan'](b):return b|0x400000\n    if op=='add':\n        if raw_inf(a):return (a if raw_sign(a)==raw_sign(b) else 0x7fc00000) if raw_inf(b) else a\n        return b if raw_inf(b) else 0x7fc00000\n    if raw_inf(a):return 0x7fc00000 if raw_zero(b) else (0xff800000 if raw_sign(a)!=raw_sign(b) else 0x7f800000)\n    if raw_inf(b):return 0x7fc00000 if raw_zero(a) else (0xff800000 if raw_sign(a)!=raw_sign(b) else 0x7f800000)\n    return 0x7fc00000\nfixtures=json.loads(FIXTURES_JSON)\ntrace=hashlib.sha256();results=[]\nfor p in fixtures:\n    a,b=p['a'],p['b'];assert exp(a)==255 or exp(b)==255\n    row={'label':p['label'],'a':f'0x{a:08x}','b':f'0x{b:08x}','outputs':{}}\n    for op in ('add','mul'):\n        got=word(op,a,b);ref=o[op](a,b);assert got==ref==p['expected'][op]\n        row['outputs'][op]=f'0x{got:08x}'\n        trace.update(a.to_bytes(4,'little')+b.to_bytes(4,'little')+got.to_bytes(4,'little'))\n    for v in (a,b):assert raw_inf(v)==o['inf'](v) and raw_zero(v)==o['zero'](v)\n    results.append(row)\noutside=[]\nfor a,b in [(0,0x80000000),(0x80000000,0),(0x80000000,0x80000000),(0x7f7fffff,0x7f7fffff)]:\n    assert exp(a)!=255 and exp(b)!=255\n    values={op:{'cold_word':hex(word(op,a,b)),'reference':hex(o[op](a,b))} for op in ('add','mul')}\n    assert all(v['cold_word']!=v['reference'] for v in values.values())\n    outside.append({'a':hex(a),'b':hex(b),'status':'OUTSIDE_DOMAIN_MUST_NOT_DISPATCH','outputs':values})\n# Small explicit wrong-policy counterexamples, no large random enumeration.\nmutants=[\n('quiet_before_signaling','add',0x7fc00111,0xff800002,0x7fc00111),\n('canonicalize_selected_nan','add',0xffc00111,0x7fc00222,0x7fc00000),\n('infinity_before_nan','add',0x7f800000,0xffc00234,0x7f800000),\n('ignore_opposite_inf_signs','add',0x7f800000,0xff800000,0x7f800000),\n('omit_zero_times_inf_invalid','mul',0x7f800000,0,0x7f800000),\n('recognize_only_positive_zero','mul',0x7f800000,0x80000000,0xff800000),\n('ignore_rhs_product_sign','mul',0x7f800000,0xbf800000,0x7f800000)]\ncounterexamples=[]\nfor label,op,a,b,bad in mutants:\n    expected=o[op](a,b);assert expected!=bad\n    counterexamples.append({'bad_rule':label,'op':op,'a':hex(a),'b':hex(b),'wrong_word':hex(bad),'reference_word':hex(expected)})\ndraft=Path('competitions/floatlib/candidates/f01-d7-research/exceptional-word-block.lean').read_text()\ndefs={}\nfor match in re.finditer(r'^@\\[inline\\] def (\\w+).*?(?=^theorem |^@\\[inline\\] def |^/-|\\Z)',draft,re.M|re.S):\n    defs[match[1]]=match[0]\nassert len(defs)==11,defs.keys()\nfor name,body in defs.items():\n    assert not any(token in body for token in ('Option','rawChoose','Model.toDyadic?','Model.Spec.','Model.chooseNaN2','Model.invalidResult','Model.nativeOverflow')),name\nassert not re.search(r'\\b(sorry|axiom|unsafe|native_decide|extern|implemented_by|set_option|import)\\b',re.sub(r'/-.*?-/', '',draft,flags=re.S))\nassert hashlib.sha256(oracle_path.read_bytes()).digest()==hashlib.sha256(original).digest()\nprint(json.dumps({'status':'PASS_TARGETED_INTEGER_MODEL_AND_STATIC_DEFS_ONLY','pairs':len(results),'operation_checks':2*len(results),'witnesses':results,'counterexamples_to_wrong_rules':counterexamples,'outside_domain_witnesses':outside,'trace_sha256':trace.hexdigest(),'oracle_sha256':hashlib.sha256(original).hexdigest(),'oracle_unchanged':True,'runtime_definitions':list(defs),'runtime_no_generic_dyadic_or_option_reference':True,'lean_compile':'NOT_RUN','performance':'UNKNOWN'}))\n",
+  "local_checker_fixtures": [
+    {
+      "label": "quiet_left_signaling_right",
+      "a": 2143289617,
+      "b": 4286578690,
+      "expected": {
+        "add": 4290772994,
+        "mul": 4290772994
+      }
+    },
+    {
+      "label": "signaling_left_quiet_right",
+      "a": 4286578691,
+      "b": 2143289890,
+      "expected": {
+        "add": 4290772995,
+        "mul": 4290772995
+      }
+    },
+    {
+      "label": "both_signaling_left_priority",
+      "a": 2139095057,
+      "b": 4286578722,
+      "expected": {
+        "add": 2143289361,
+        "mul": 2143289361
+      }
+    },
+    {
+      "label": "both_quiet_left_priority",
+      "a": 4290773265,
+      "b": 2143289890,
+      "expected": {
+        "add": 4290773265,
+        "mul": 4290773265
+      }
+    },
+    {
+      "label": "positive_inf_right_nan",
+      "a": 2139095040,
+      "b": 4290773556,
+      "expected": {
+        "add": 4290773556,
+        "mul": 4290773556
+      }
+    },
+    {
+      "label": "left_nan_negative_inf",
+      "a": 2139095877,
+      "b": 4286578688,
+      "expected": {
+        "add": 2143290181,
+        "mul": 2143290181
+      }
+    },
+    {
+      "label": "negative_zero_right_signaling",
+      "a": 2147483648,
+      "b": 2139095143,
+      "expected": {
+        "add": 2143289447,
+        "mul": 2143289447
+      }
+    },
+    {
+      "label": "negative_quiet_positive_zero",
+      "a": 4290774102,
+      "b": 0,
+      "expected": {
+        "add": 4290774102,
+        "mul": 4290774102
+      }
+    },
+    {
+      "label": "inf_inf_signs",
+      "a": 2139095040,
+      "b": 2139095040,
+      "expected": {
+        "add": 2139095040,
+        "mul": 2139095040
+      }
+    },
+    {
+      "label": "inf_signed_zero",
+      "a": 2139095040,
+      "b": 0,
+      "expected": {
+        "add": 2139095040,
+        "mul": 2143289344
+      }
+    },
+    {
+      "label": "signed_zero_inf",
+      "a": 0,
+      "b": 2139095040,
+      "expected": {
+        "add": 2139095040,
+        "mul": 2143289344
+      }
+    },
+    {
+      "label": "inf_signed_one",
+      "a": 2139095040,
+      "b": 1065353216,
+      "expected": {
+        "add": 2139095040,
+        "mul": 2139095040
+      }
+    },
+    {
+      "label": "signed_one_inf",
+      "a": 1065353216,
+      "b": 2139095040,
+      "expected": {
+        "add": 2139095040,
+        "mul": 2139095040
+      }
+    },
+    {
+      "label": "inf_inf_signs",
+      "a": 2139095040,
+      "b": 4286578688,
+      "expected": {
+        "add": 2143289344,
+        "mul": 4286578688
+      }
+    },
+    {
+      "label": "inf_signed_zero",
+      "a": 2139095040,
+      "b": 2147483648,
+      "expected": {
+        "add": 2139095040,
+        "mul": 2143289344
+      }
+    },
+    {
+      "label": "signed_zero_inf",
+      "a": 2147483648,
+      "b": 2139095040,
+      "expected": {
+        "add": 2139095040,
+        "mul": 2143289344
+      }
+    },
+    {
+      "label": "inf_signed_one",
+      "a": 2139095040,
+      "b": 3212836864,
+      "expected": {
+        "add": 2139095040,
+        "mul": 4286578688
+      }
+    },
+    {
+      "label": "signed_one_inf",
+      "a": 3212836864,
+      "b": 2139095040,
+      "expected": {
+        "add": 2139095040,
+        "mul": 4286578688
+      }
+    },
+    {
+      "label": "inf_inf_signs",
+      "a": 4286578688,
+      "b": 2139095040,
+      "expected": {
+        "add": 2143289344,
+        "mul": 4286578688
+      }
+    },
+    {
+      "label": "inf_signed_zero",
+      "a": 4286578688,
+      "b": 0,
+      "expected": {
+        "add": 4286578688,
+        "mul": 2143289344
+      }
+    },
+    {
+      "label": "signed_zero_inf",
+      "a": 0,
+      "b": 4286578688,
+      "expected": {
+        "add": 4286578688,
+        "mul": 2143289344
+      }
+    },
+    {
+      "label": "inf_signed_one",
+      "a": 4286578688,
+      "b": 1065353216,
+      "expected": {
+        "add": 4286578688,
+        "mul": 4286578688
+      }
+    },
+    {
+      "label": "signed_one_inf",
+      "a": 1065353216,
+      "b": 4286578688,
+      "expected": {
+        "add": 4286578688,
+        "mul": 4286578688
+      }
+    },
+    {
+      "label": "inf_inf_signs",
+      "a": 4286578688,
+      "b": 4286578688,
+      "expected": {
+        "add": 4286578688,
+        "mul": 2139095040
+      }
+    },
+    {
+      "label": "inf_signed_zero",
+      "a": 4286578688,
+      "b": 2147483648,
+      "expected": {
+        "add": 4286578688,
+        "mul": 2143289344
+      }
+    },
+    {
+      "label": "signed_zero_inf",
+      "a": 2147483648,
+      "b": 4286578688,
+      "expected": {
+        "add": 4286578688,
+        "mul": 2143289344
+      }
+    },
+    {
+      "label": "inf_signed_one",
+      "a": 4286578688,
+      "b": 3212836864,
+      "expected": {
+        "add": 4286578688,
+        "mul": 2139095040
+      }
+    },
+    {
+      "label": "signed_one_inf",
+      "a": 3212836864,
+      "b": 4286578688,
+      "expected": {
+        "add": 4286578688,
+        "mul": 2139095040
+      }
+    },
+    {
+      "label": "positive_inf_negative_min_subnormal",
+      "a": 2139095040,
+      "b": 2147483649,
+      "expected": {
+        "add": 2139095040,
+        "mul": 4286578688
+      }
+    },
+    {
+      "label": "negative_min_subnormal_negative_inf",
+      "a": 2147483649,
+      "b": 4286578688,
+      "expected": {
+        "add": 4286578688,
+        "mul": 2139095040
+      }
+    }
+  ],
+  "overlap": [
+    {
+      "route": "D40a special-model-proof1",
+      "sha256": "40a281d9c94dbe56ef9b5e9209fcbfc9b51e9a6acfabac70d9ed99364f500baf",
+      "comparison": "Same semantic cold branch and dyadic-hoisting goal. D40a still expresses classification/results as generic Model; this design keeps decision and returned word in UInt32. Not an additive independent gain."
+    },
+    {
+      "route": "D4a30 scalar-nan-select",
+      "sha256": "4a30c99f8230aae6d1b0cd238d1a6b1c9ac0aac0c448ca67d3005d3a6d00d528",
+      "comparison": "NaN branches intentionally duplicate the same prepared exact priority. Incremental scope is the no-NaN Inf/invalid miss, plus avoiding a runtime Option-valued selection stage by source construction. No claim that D4a30 actually allocates Option after inlining."
+    },
+    {
+      "route": "R quiet suffix and nonNaN endpoint replay",
+      "shas": [
+        "9a2a05cd8e033d3cc079744ade77dd42464926d04ef5c9a8e7c050a1605ec854",
+        "0e8bc05ce954e3e8213fbef05ac6041f8f882673c88c1071a3c9d4254a3064cd"
+      ],
+      "comparison": "R removes/replaces many scalar calls in quiet suffixes or skips replay at accepted Inf endpoints; this design changes the remaining scalar call cost. Effects overlap and must be measured as an exact composition, never multiplied or added."
+    }
+  ],
+  "cost_and_exposure": {
+    "gain": "UNKNOWN",
+    "direct_scalar_807_no_nan_increment_vs_4a30": {
+      "add_pairs": 3277,
+      "mul_pairs": 2042,
+      "note": "Per exact scalar case work; not time shares and not combined with tensor one-replay counts."
+    },
+    "tensor_807_no_nan_increment_vs_4a30": {
+      "sum_add": 119,
+      "bmm_add": 2545,
+      "bmm_mul": 1173,
+      "note": "One logical raw replay basis from the existing count artifact; benchmark iteration scaling not applied."
+    },
+    "risk": [
+      "Extra classifiers and code size can cost more than saved generic decode on narrow cases.",
+      "Source field tests can duplicate work already done by raw NaN selection or outer guards; actual compiler CSE/inlining is unknown.",
+      "D4a30 Option constructor may already disappear after inlining, so Option avoidance alone has no measured benefit.",
+      "No ordinary numeric-mul rewrite is attempted; the historical slow numeric conversion experiment is not retried."
+    ],
+    "time_upper_bound_policy": "Only reuse complete affected-cell exposure ceilings from the exact 807 retained60f timing artifact, not operation-count fractions as cycle shares. Existing tensor ceiling 77685750 ns/0.2636864057900489 covers whole sum:specials,bmm:specials,bmm:extremes cells and is NOT predicted speedup."
+  },
+  "next_discriminating_checks": [
+    "First ensure the exact prepared DWordNaN dependency actually elaborates; this fragment does not assume an uncompiled prerequisite has passed.",
+    "Append this fragment only in a disposable exact fixed-environment statement context; first observe rawInf_eq/rawZero_eq, the closed constants, then addNoNaN_model and carrier_model. Save the exact first Lean goal on failure.",
+    "Only after statement/kernel/axiom correctness, inspect live original statement C/assembly for actual word helpers, generic dyadic calls and any allocations. Use capture only in discovery, never frozen independent confirmation.",
+    "Future runtime integration must stay on the existing rejected finite-input branch. Retarget the helper spec to its explicit cold-domain premise and pass the existing branch hypothesis. A result-based guard is not automatically the same premise.",
+    "For early declaration placement, reuse the already reviewed 4a30 proof-namespace layout pattern; a global append-only proof probe is not itself a runtime candidate.",
+    "If a full exact composition shows no improvement or codegen still routes through generic decoding, park it; do not expand into ordinary paths or add more variants."
+  ],
+  "final_static_checks": {
+    "all_19_existing_inputs_sha256_unchanged": true,
+    "embedded_primary_fragment_hashes_match": true,
+    "new_block_forbidden_tokens_or_imports_options": [],
+    "candidate_created": false,
+    "compiler_run": false,
+    "embedded_checker_replay_exact_match": true,
+    "all_DWordNaN_names_exist_in_exact_dependency": true,
+    "namespace_balance": true,
+    "all_new_lean_acceptance": "NOT_RUN"
+  },
+  "completed_at_utc": "2026-10-22T22:29:16.217379+00:00"
+}

@@ -70,8 +70,21 @@
 | T07 | 单遍 checked prepare 的 `out.size=k`、已处理内容等价、终止长度与越界正零不变量可支持去除重复 encode | [R2-W04][W04]有完整证明尝试；原包 Lean 未运行，后续不能继承双遍父本通过状态 |
 | T08 | 奇数 m 的最后 batch 第二行起点恰为 A.size；两行完整 span 准入必须拒绝该 tile。跨到下一 batch 的未观察 lane 仅在独立链、有效输出映射和独立回退条件下不污染有效值 | [R4-W01][W4]的地址引理／17 个解析见证；网页辅助稿自身 NOT_RUN，与 M14 的实际候选验收分开 |
 | T09 | 一次toBits判断finite并构造结果 | R5历史失败保持原版；R6闭宽修复已完整通过，现归入M16 |
-| T10 | 非NaN原始字包含Inf，可精确往返；native add/mul结果非NaN可推出两个输入非NaN | [notnan-probe](../candidates/f01-d6-notnan-probe/Kernel.lean)，dfef26d5；706 statement PASS。仅数学桥，无新finish集成、独立公理/全gate或性能结论；仍缺允许Inf的操作规格桥 |
-| T11 | quiet NaN并非一般sum的吸收元；后续signaling NaN可优先替换它。dot各乘积已quiet时才有潜在后缀吸收 | [R6原文交接](astra-collab-20261022-r6/checkpoint-09-web-complete.md)：四个原件包已校验。NaN decode、quiet幂等及五类mul输出无signaling桥仍未闭合；抽象OrderedFold定理不能替代这些条件 |
+| T10 | 非NaN原始字包含Inf，可精确往返；native add/mul结果非NaN可推出两个输入非NaN | [notnan-probe](../candidates/f01-d6-notnan-probe/Kernel.lean)，dfef26d5；706 statement PASS。该R6探针自身仅数学桥；当时缺的允许Inf操作规格桥已由R7 M21实际完整闭合，不回写R6原件 |
+| T11 | quiet NaN并非一般sum的吸收元；后续signaling NaN可优先替换它。dot各乘积已quiet时才有潜在后缀吸收 | [R6原文交接](astra-collab-20261022-r6/checkpoint-09-web-complete.md)：四个原件包已校验。R6当时NaN decode、quiet幂等及mul无signaling桥未闭合；R7 M22已由真实完整gate闭合，R6原始记录仍保留 |
+
+R7新回收的11份原件按实际源码/成功快照/退出码及公理日志整理为[数学储备索引](../candidates/f01-d7-research/math-reserve-index.md)，精确路径及哈希在同名JSON；原件均标LOCAL_ONLY，不因网页编译而晋升为本候选完整gate。主要新增承接点如下：
+
+| 编号 | 数学储备及条件 | 现行验收边界 |
+|---|---|---|
+| T12 | 已有quiet NaN的原始sum前缀之后，只需按原序扫描后续sNaN并取最后quieted word | MR02/W02精确源编译及公理日志闭合；新Nat适配0fe仍NOT_RUN |
+| T13 | +0起点的一般sum只要含原始sNaN，完整结果等于最后原始sNaN quiet后的word | MR03/W03；none分支只排除原始sNaN，不能由此决定求和值 |
+| T14 | 实际Float32 IEEE BEq中x==x恰好识别非NaN，含Inf/±0/次正规数 | MR04/W04；1f4实际整合尚未完整gate，叶函数codegen不代表整包收益 |
+| T15 | add/mul到native的全输入canonical同态及首次NaN事件的实际raw修复 | MR05/W05；不能由投影相等直接恢复原NaN符号/payload，a4映射探针NOT_RUN |
+| T16 | 对任意正K，保存真实块起点与前态的失败块完整raw后缀重放满足原sumSpec | MR07/W07源码/日志闭合；不是块和重关联，当前无运行候选或完整成本结果 |
+| T17 | 固定K=32的Array Float32 flat/Nat/USize wrappers，对相同任意UInt32 fallback等价 | MR08/W08b后续闭合原gap；仍缺与原raw sumSpec的组合桥，给定fallback值也未证明惰性冷路计算 |
+
+MR09另保存了部分应用step在funext补齐参数后再simp的具体修复：精确0e8已普通编译/四原spec/公理PASS，原版fullgate仍待验证。上述数学储备的性能均不由证明存在推出。
 
 R2-W03b 另有 34 条定理组成的 [unpacked-rounding 替代证明草稿][W03b]，保持 `WRITTEN_NOT_RUN`；已有 M06 的 Model 见证路线完成集成，不重复把两稿算成两项已验证成果。
 

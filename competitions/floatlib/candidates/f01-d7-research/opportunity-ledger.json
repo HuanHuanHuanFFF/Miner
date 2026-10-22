@@ -1,5 +1,5 @@
 {
-  "at_utc": "2026-10-22T21:05:59.092522+00:00",
+  "at_utc": "2026-10-22T22:33:50.798730+00:00",
   "rule": "耗时占比 × 可实现的降耗幅度，再考虑开发和验证成本",
   "retained_candidate": "f01-d7-direct-nonnan",
   "retained_sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
@@ -12,7 +12,7 @@
   "routes": [
     {
       "route": "nonfinite_combination_then_direct_layout",
-      "candidate": "f01-r7-nonfinite-combined-proof1",
+      "candidate": "f01-r7-nonfinite-combined-proof2",
       "scope": "Combination of accepted nonNaN endpoint and quietNaN suffix, then exact retained layout if verified",
       "affected_cell_time_share_percent_ceiling_range": [
         18.098727595459398,
@@ -23,8 +23,14 @@
         0.8067072504144339,
         0.8794412168439634
       ],
-      "next_falsifiable_check": "810 exact39a fullgate vs9a and3baa; then compose with retained60f and measure actual source. Do not add component gains.",
-      "cost": "Existing proofs; one actual shared proof repair pending full check. Three complete gates in pending810."
+      "next_falsifiable_check": "810 exact0e8 fullgate versus9a and1f4; then exact97f direct composition fullgate against retained60f, followed by independent newseed/newrunner confirmation if worthwhile.",
+      "cost": "Exact0e8 supplied fixedLean/four-spec/axiom proof passed. New fullgates await explicit public upload authorization; all composition gain unknown.",
+      "sha256": "0e8bc05ce954e3e8213fbef05ac6041f8f882673c88c1071a3c9d4254a3064cd",
+      "prepared_direct_composition": {
+        "candidate": "f01-d7-direct-nonfinite",
+        "sha256": "97f77e2ce3f53dc3625349d5d2a7bc761570f9428c0b547070e37254c4960d26",
+        "status": "NOT_RUN"
+      }
     },
     {
       "route": "sum_native_block_checkpoint",
@@ -44,15 +50,16 @@
       "route": "scalar_special_model_and_raw_nan_selection",
       "candidates": [
         "f01-d7-special-model-proof1",
-        "f01-d7-nan-choice-probe"
+        "f01-d7-nan-choice-probe",
+        "f01-d7-scalar-nan-select"
       ],
       "affected_cell_time_share_percent_ceiling_range": [
         9.993336314123653,
         11.35760465338659
       ],
       "achievable_whole_time_reduction": "UNKNOWN",
-      "next_falsifiable_check": "Compile model branch hoist and raw word selected-NaN bridge; only then integrate native cold branch and measure whole calls. Preserve signaling priority and raw payload.",
-      "cost": "Prepared statement probes; no additional main finite-path guard. All new proof integrations NOT_RUN.",
+      "next_falsifiable_check": "Compile exact bridge and4a30 cold runtime; inspect whether actual Lean C/object eliminates Option construction; measure complete cost including no-NaN exceptional misses and whole tensor fallback. Do not attribute cell exposure to recovery.",
+      "cost": "Existing Dword proof is new integration still NOT_RUN; independent static review complete. First original statement; only then full timing and independent confirmation.",
       "additional_tensor_exposure": "VERIFIED source referenceSum calls x.foldl Submission.add posZero; changing scalar rejected-finite NaN handling also affects full raw sum fallback. Dot raw replay calls scalar add/mul too. Actual time attributable to each call is UNKNOWN.",
       "overlap": "Raw NaN scalar dispatch and R quiet suffix scan target overlapping sum fallback work. Measure complete compositions; never add standalone gains.",
       "source_references": [
@@ -65,7 +72,20 @@
             "Submission.NativeFinal.dot"
           ]
         }
-      ]
+      ],
+      "selected_nan_runtime_candidate": {
+        "candidate": "f01-d7-scalar-nan-select",
+        "sha256": "4a30c99f8230aae6d1b0cd238d1a6b1c9ac0aac0c448ca67d3005d3a6d00d528",
+        "proof_status": "NOT_RUN_NEW_INTEGRATION"
+      },
+      "tensor_fallback_discovery_evidence": "competitions/floatlib/candidates/f01-d7-research/scalar-nan-fallback-807.json",
+      "tensor_fallback_evidence_sha256": "dc0b3af910cfdd67cfb47415ca7a912b836512df3bb06a183f1da49467a09f0f",
+      "tensor_whole_cell_exposure_ceiling_discovery807": 0.2636864057900489,
+      "counted_selectable_calls_in_retained60f_tensor_replay": {
+        "sum_add": 11393,
+        "bmm_add": 13659,
+        "bmm_mul": 2940
+      }
     },
     {
       "route": "scalar_native_result_guard",
@@ -111,6 +131,31 @@
       "decision": "PARK",
       "actual_previous_mul_normalized_ratio": 1.037478064,
       "reason": "Prior complete paired test slower; no changed mechanism/condition."
+    },
+    {
+      "route": "cold_raw_nonnan_input_accept_canonical_nan_endpoint",
+      "owner": "R mathematical closure; D countscreen",
+      "current_retained_nan_replay_output_count_without_any_raw_nan_operand_discovery807": {
+        "sum": 4,
+        "bmm": 671
+      },
+      "current_full_raw_replay_steps_on_those_outputs": {
+        "sum": 188,
+        "bmm": 7551
+      },
+      "evidence": "competitions/floatlib/candidates/f01-d7-research/nonnan-input-nan-output-807.json",
+      "mechanism": "Only on a native NaN endpoint scan usedraw operands for anyNaN. If all nonNaN inclInf, prove exact fold output equals canonical native NaN before accepting. Otherwise preserve exact fallback. No scan on normal endpoints.",
+      "gain": "UNKNOWN",
+      "proof_gap": "All-input toFloat32 homomorphism alone does not recover rawNaN word. Need canonical-image closure for actual full ordered sum/dot and the original raw arrays/defaults.",
+      "cost": "Existing W05/M21/M22 may reduce proof cost; first bounded exact proposition and original statement, then full complete-cost timing and confirmation.",
+      "overlap": "Overlaps R nativeprefix/quiet replay and D scalar special dispatch. Do not add gains."
+    },
+    {
+      "route": "contiguous_storage_or_raw_A_without_prepare",
+      "decision": "PARK_IMPLEMENTATION",
+      "evidence": "competitions/floatlib/candidates/f01-d7-research/storage-cost-screening.json",
+      "gain": "UNKNOWN",
+      "reason": "B already packs10 Float32 in40 scalarbytes perpacket. FloatArray isdouble andhasexistingcheckedhistory; coreFloat32Arraynotfound. AvoidAmap foronegroup would moveexternalofbits intomultiaccumulatorloop; actualspill costunknown. Lower priority than proven nonfinitecomponentfeedback."
     }
   ],
   "source_results_sha256_at_snapshot": "4c00546ba8c62a825827cb618a089e80cae4830c8baa74f0d692bcf2430ca131",

@@ -1,6 +1,6 @@
 # FloatLib 冲冠看板
 
-冠军 [#274](https://conjectures.io/v1/competitions/floatlib/submissions/274)｜2026-10-23 05:33核对。**我方/冠军耗时越低越好；公开原版/我方加速越高越好。**
+冠军 [#274](https://conjectures.io/v1/competitions/floatlib/submissions/274)｜2026-10-23 06:32核对。**我方/冠军耗时越低越好；公开原版/我方加速越高越好。**
 
 当前保留[直接点积＋非NaN完整包](competitions/floatlib/candidates/f01-d7-direct-nonnan/Kernel.lean)，两轮新版公开套件完整通过。
 

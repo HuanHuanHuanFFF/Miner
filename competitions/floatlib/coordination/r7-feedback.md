@@ -1,3 +1,23 @@
+## D16 22:28 UTC：新高价值判别——输入无rawNaN但native终点NaN
+
+- 22:43 UTC反方补充：完整实际读取范围、原始+0 seed时命题纸面归纳看起来成立；若泛化为任意中间acc或只扫后缀则必须另证该起点也在canonical image。最小反例是seed=0x7fc00001、suffix=[1]（原输入无NaN仍保留非canonical payload），所以不能直接推广NativeFinal.dotLoop任意raw seed。正式Lean仍待R闭合。671/7551是计分BMM；含raw check才为747/9451，两者分列。
+
+- 新独立统计nonnan-input-nan-output-807.json：同一已暴露807，70tensor×4实际Lean checksum再核全部相符。当前60f的NaN回退中，sum4个输出/188步、BMM671个输出/7551步的全部原始操作数均无NaN；BMMextremes0/1/2分别77/11/378个NaN输出全部无rawNaN，另specials1/2为39/166。计数不是时间分摊或收益。
+- 具体候选机制先数学判别：只在native终点NaN时，便宜扫描该dot的原始A/B是否都非NaN（含Inf），若全非NaN则尝试直接返回native canonical NaN；否则保留既有精确回退。普通快路不加扫描。目标是避开finite/Inf输入中途invalid造成的重算，尤其当前BMMextremes整cell5.47%及实际旧profile99%以上回退，和R nativeprefix/quiet尾缀重叠不能相加。
+- R请优先判断这条全原始位命题是否成立/证明代价，复用M21/M22及W05。W05的toFloat32同态本身不够：必须补全“raw输入非NaN⇒exact fold输出在canonical image”或等价ofFloat32操作闭包，并处理invalid后canonical qNaN及随后所有项。不要把canonicalized相等当raw相等。dot乘积永不sNaN，sum原始输入此处已排除NaN，可能有直接桥。先交具体命题/反例/最小证明，不扩一堆变体；若成立有益，可准备一个冷扫描statement探针，D拥有后续CI。
+- 公共材料边界照旧：仅已匿名核对可公开的60f/9a/固定FloatLib与原spec；不把D新私有源发到网页。W10/+0和公开标量codegen原件照常完整回收。原10小时截至04:22:17，当前仍未派发810。
+- 同时独立数学原件审查提示W08b只直接验了native Float32的3个K=32 wrapper等价；不能不加组合桥就写成整个原raw sumSpec已验。D等精确签名复核后更新全局储备索引，保留R/W08的历史叙述不回写。
+
+## D15 22:06 UTC：raw NaN冷支路真实机会与公开代码生成缺项
+
+- 22:14 UTC补充：D已匿名HTTP200核f69da289公开60f完整155103字节与SHA一致；原件/收据在忽略目录.local-maintenance/r7-20261023/public-candidate-codegen-reference/。公开可得身份已实时核对，不携带本地新97f/4a30或未公开helper。
+
+- 810技术计划已本地提交99d242fd，四份proof2及canonical源字节精确；公开推送仍待用户授权，未派发。
+- D新scalar-nan-select 4a30c99f仅把原非有限值分支换为raw signaling-first选择，无NaN仍原fallback。三闭proof和原nan-choice-block仅移位，普通/低指数/布局不变；新两helper match证明NOT_RUN，独立静态审查中，不添加近邻变体。
+- scalar-nan-fallback-807.py对已暴露807的70tensorcase完整原始位模型与四份实际Lean记录280checksum全部相符。60f原完整NaN回退：sum14939步中11393次加法可选NaN；BMM18797步中13659次add/2940次mul可选NaN。涉及sum:specials、BMM:specials/extremes整cell26.37%仅曝光上限，非收益。与R quiet suffix/prefix高度重叠，不能相加。
+- D另准备97f77e2c direct-nonfinite：精确0e8不改运行/证明，只改末bmm名称并逐字节接入已完整通过60f的DirectSmall后缀。原四spec新组合NOT_RUN；下一步待原组合完整gate后按真实反馈决定是否计时，暂不挤810。
+- 后续有价值公开研究缺口：已公开60f在f69da28963f2a68cf9232818b4facf74de161d5b，可按现有公开材料研究授权核实际scalar add/mul的clang -O3符号大小/反汇编/relocation。此前807仅保留C与循环asm，scalar asm缺失；不上传新私有候选、不改官方编译参数、不用微基准替代整包计时。如公开web研究环境/审批不支持，保留UNKNOWN，勿绕过边界。D的codegenhelper等公开授权后才集成真实CI。
+
 ## D14 21:59 UTC：proof2已接收，810技术清单更新
 
 - 已核R五份ready的manifest/SHA/字节，810四个旧proof1全部换为0e8/1f4/a9e/0fe；9a保留完整对照，0e8/1f4完整gate，a9e/0fe仅statement，另加a4 canonical、D40a/dab、D结果守卫both、rawNaN桥、low-zero，共三份full和八份独立标记的编译探针。没有运行/排队CI。

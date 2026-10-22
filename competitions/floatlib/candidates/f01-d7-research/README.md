@@ -33,3 +33,5 @@
 [标量实际C审查](scalar-codegen-review.md)、[344项实际输出校验](scalar-opportunity-807.json)、[新桥独立静态审查](nan-probe-review.md)和[研究原件独立完整性](web-delivery-integrity.json)仅提供各自范围的证据；新增源码编译/完整gate仍待真实执行。
 
 原版gate的可选[实际对象采集](capture-codegen-notes.md)已通过六组本地基础行为自测，仅供discovery；810的0e8/1f4按需启用，任何冻结独立确认整批禁用。实际Linux/Lean工具及完整集成仍NOT_RUN。
+
+新增本地路线：`4a30c99f`原始位NaN冷支路已完成独立静态审查，普通路径不变；[807回退机会](scalar-nan-fallback-807.json)的70个tensor案例与四份实际Lean输出校验一致，所涉整cell26.37%仅为曝光上限。`97f77e2c`把原direct后缀接入修复后的非有限值组合；两份均静态policy通过，Lean/fullgate/性能NOT_RUN，不替换当前60f。

@@ -1,0 +1,439 @@
+{
+  "status": "NO_DEFINITE_STATIC_DEFECT_FOUND_COMPILATION_NOT_RUN",
+  "started_at_utc": "2026-10-22T22:02:17Z",
+  "budget_minutes": 25,
+  "budget_deadline_utc": "2026-10-22T22:27:17Z",
+  "scope": "Read-only independent source review. Only scalar-nan-select-review.md/.json written. No candidate changes, builder execution, Git mutations, CI, toolchain installation or source upload.",
+  "candidate_file": "competitions\\floatlib\\candidates\\f01-d7-scalar-nan-select\\Kernel.lean",
+  "candidate_sha256": "4a30c99f8230aae6d1b0cd238d1a6b1c9ac0aac0c448ca67d3005d3a6d00d528",
+  "candidate_bytes": 163399,
+  "builder_sha256": "71257fd35cd1fd403f806af37fdb221d1072dbaac50cb1372e6fdd5c036e916c",
+  "source_blocks": {
+    "NativeBridge": {
+      "start_line": 2044,
+      "end_line": 2234,
+      "sha256": "03b626fbaf4e5ac0cc3c9bd6a0009eeaa00eb4d508b0f9b64d867fee2682d3fc"
+    },
+    "NotNaNProbe": {
+      "start_line": 2236,
+      "end_line": 2291,
+      "sha256": "6440cc47ffac4bbfc9c5a42f48d3a4ef7b455d2f7f6792a341b2d0e2630061a1"
+    },
+    "R7Native": {
+      "start_line": 2293,
+      "end_line": 2516,
+      "sha256": "1f60d2bac8219bc597768fc77bd54a71ddf5a4c1bcadacb61ef56fa39856bf2b"
+    },
+    "DWordNaN": {
+      "start_line": 2520,
+      "end_line": 2692,
+      "sha256": "0f70cda6a0f072bef666b0a4623bfb0cc7441c34de143b4bf6702b38afc43cb4"
+    },
+    "ScalarNaN": {
+      "start_line": 2694,
+      "end_line": 2720,
+      "sha256": "ecc54009929df70aac4223528dc414308db462ce443b789b62d13294a4a47c3d"
+    }
+  },
+  "imports": [
+    "import ContractTensor"
+  ],
+  "stats_context": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\scalar-nan-fallback-807.json",
+    "sha256": "dc0b3af910cfdd67cfb47415ca7a912b836512df3bb06a183f1da49467a09f0f",
+    "cases": 70,
+    "checksum_comparisons": 280,
+    "all_reported_actual_checksum_matches": true,
+    "totals_recomputed_from_case_rows": true,
+    "timed_tensor_totals": {
+      "sum": {
+        "timed_cases": 34,
+        "raw_replay_outputs": 324,
+        "counts": {
+          "ordered_steps": 14939,
+          "scalar_add_calls": 14939,
+          "scalar_mul_calls": 0,
+          "add_nonfinite_cold_calls": 11512,
+          "mul_nonfinite_cold_calls": 0,
+          "add_raw_nan_selected": 11393,
+          "mul_raw_nan_selected": 0,
+          "add_no_nan_exceptional_misses": 119,
+          "mul_no_nan_exceptional_misses": 0
+        }
+      },
+      "bmm": {
+        "timed_cases": 34,
+        "raw_replay_outputs": 2860,
+        "counts": {
+          "ordered_steps": 18797,
+          "scalar_add_calls": 18797,
+          "scalar_mul_calls": 18797,
+          "add_nonfinite_cold_calls": 16204,
+          "mul_nonfinite_cold_calls": 4113,
+          "add_raw_nan_selected": 13659,
+          "mul_raw_nan_selected": 2940,
+          "add_no_nan_exceptional_misses": 2545,
+          "mul_no_nan_exceptional_misses": 1173
+        }
+      }
+    },
+    "affected_whole_cell_time_exposure_ceiling": {
+      "cells": [
+        "bmm:extremes",
+        "bmm:specials",
+        "sum:specials"
+      ],
+      "ns": 77685750,
+      "whole_timed_share": 0.2636864057900489
+    },
+    "scope": "Counts only scalar operations in complete raw sum/dot replay reached by retained60f NaN endpoints. Original first native passes, allocation/preparation and replay normal calls remain costs; no exposure-to-cycle attribution. Checksums compare finite source model to actual earlier Lean outputs, not execution of the new candidate. Quiet-suffix/prefix optimizations overlap these counts. No future confirmation inputs.",
+    "gain": "UNKNOWN",
+    "new_candidate_lean_and_full_gate": "NOT_RUN_BY_THIS_ANALYSIS"
+  },
+  "parent": {
+    "path": "competitions/floatlib/candidates/f01-d7-direct-nonnan/Kernel.lean",
+    "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+    "gate_context": "807/809 full gate supplied by coordinator; not rerun here"
+  },
+  "new_nan_block": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/nan-choice-block.lean",
+    "sha256": "584ace5443838454b3687f7a93cfca07be4f9cce2c889c7196b171b7cfd4c93c",
+    "full_raw_bytes_present_exactly_once": true,
+    "namespace_now": "Submission.DWordNaN",
+    "region_hash_note": "source_blocks.DWordNaN.sha256 excludes the preceding two-line comment and boundary whitespace; it is a namespace-region hash, not full block hash."
+  },
+  "static_checks": {
+    "independent_full_reconstruction_matches_candidate": true,
+    "reverse_removed_insert_and_cold_substitutions_matches_parent_with_only_proof_blocks_removed": true,
+    "entire_prefix_before_first_submission_namespace_byte_equal": true,
+    "three_proof_blocks_byte_equal": true,
+    "namespace_structure_balanced": true,
+    "protected_earlier_namespace": "R2W01c.NativeBridge at474-645",
+    "ordinary_add_definition_change": "Only else TunedAdd.add x y -> else ScalarNaN.add x y; corresponding false-branch proof call changed. Finite guard and body unchanged.",
+    "ordinary_native_mul_definition_change": "Only else FastMul.mul x y -> else ScalarNaN.mul x y; corresponding false-branch proof call changed. Finite guard and body unchanged.",
+    "low_exponent_multiplication": "Unchanged exponent-sum<128, LowScale.mul and proofs",
+    "tensor_text_order_layout": "All unchanged outside explicit moved proofs and scalar cold substitutions",
+    "new_imports": false,
+    "new_prohibited_token_matches": [],
+    "moved_dependency_order": [
+      "FastMul.ofBits and earlier imported/word proofs",
+      "Submission.NativeBridge",
+      "Submission.NotNaNProbe",
+      "Submission.R7Native",
+      "Submission.DWordNaN",
+      "Submission.ScalarNaN",
+      "exported add/nativeMul/mul and tensors"
+    ],
+    "new_match_equation_direction": "discriminant=some w; statically consistent with selected_add/mul premise. Actual rename_i binder elaboration NOT_RUN.",
+    "no_nan_exceptional_path": "rawChoose returns none; exact previous TunedAdd.add/FastMul.mul calls and their all-input specs are retained. Additional classification cost is new and unmeasured."
+  },
+  "findings": [],
+  "first_compiler_targets": [
+    {
+      "lines": "2520-2692",
+      "target": "Nested original DWordNaN block: verify fixed descriptor/codec definitional equality and Bool/BitVec rewrites in the actual integration."
+    },
+    {
+      "lines": "2703-2705,2715-2717",
+      "target": "Verify split exposes some branch first, rename_i w hw, and exact selected theorem interface; fixed Lean source supports discr=constructor orientation."
+    },
+    {
+      "lines": "2723-2761",
+      "target": "Verify the two exported cold-call substitutions close original all-input specs."
+    }
+  ],
+  "split_source": {
+    "url": "https://github.com/leanprover/lean4/blob/v4.34.0/src/Lean/Meta/Tactic/Split.lean",
+    "git_blob_sha": "926a29ced11c22889cd09f9306b3e4f9a7fe054d",
+    "interpretation": "Fixed Lean4.34 split generalization constructs original discriminant=generalized value and branch discriminant=constructor; supports the expected hw orientation without a symm change. This is source review, not compilation."
+  },
+  "finite_counterexample_domain": {
+    "scope": "16 directed word-model checks; independent magnitude-order oracle vs transcription; no Lean compile or candidate execution",
+    "words": {
+      "Z+": "0x00000000",
+      "Z-": "0x80000000",
+      "F1": "0x3f800000",
+      "F2": "0x40000000",
+      "I+": "0x7f800000",
+      "I-": "0xff800000",
+      "S+": "0x7f800001",
+      "S-": "0xff800002",
+      "Q+": "0x7fc00003",
+      "Q-": "0xffc00004"
+    },
+    "cases": [
+      {
+        "id": "P1",
+        "a_label": "S+",
+        "b_label": "S-",
+        "a": "0x7f800001",
+        "b": "0xff800002",
+        "rawChoose": "0x7fc00001",
+        "purpose": "left signaling tie",
+        "expected_exported_add_path": "ScalarNaN.some",
+        "expected_exported_mul_path": "ScalarNaN.some"
+      },
+      {
+        "id": "P2",
+        "a_label": "S-",
+        "b_label": "S+",
+        "a": "0xff800002",
+        "b": "0x7f800001",
+        "rawChoose": "0xffc00002",
+        "purpose": "left signaling tie;negative sign",
+        "expected_exported_add_path": "ScalarNaN.some",
+        "expected_exported_mul_path": "ScalarNaN.some"
+      },
+      {
+        "id": "P3",
+        "a_label": "Q+",
+        "b_label": "Q-",
+        "a": "0x7fc00003",
+        "b": "0xffc00004",
+        "rawChoose": "0x7fc00003",
+        "purpose": "left quiet tie",
+        "expected_exported_add_path": "ScalarNaN.some",
+        "expected_exported_mul_path": "ScalarNaN.some"
+      },
+      {
+        "id": "P4",
+        "a_label": "Q-",
+        "b_label": "Q+",
+        "a": "0xffc00004",
+        "b": "0x7fc00003",
+        "rawChoose": "0xffc00004",
+        "purpose": "left quiet tie;negative sign",
+        "expected_exported_add_path": "ScalarNaN.some",
+        "expected_exported_mul_path": "ScalarNaN.some"
+      },
+      {
+        "id": "P5",
+        "a_label": "Q+",
+        "b_label": "S-",
+        "a": "0x7fc00003",
+        "b": "0xff800002",
+        "rawChoose": "0xffc00002",
+        "purpose": "right signaling precedes left quiet",
+        "expected_exported_add_path": "ScalarNaN.some",
+        "expected_exported_mul_path": "ScalarNaN.some"
+      },
+      {
+        "id": "P6",
+        "a_label": "Q-",
+        "b_label": "S+",
+        "a": "0xffc00004",
+        "b": "0x7f800001",
+        "rawChoose": "0x7fc00001",
+        "purpose": "right signaling precedes left quiet;opposite signs",
+        "expected_exported_add_path": "ScalarNaN.some",
+        "expected_exported_mul_path": "ScalarNaN.some"
+      },
+      {
+        "id": "P7",
+        "a_label": "S+",
+        "b_label": "Q-",
+        "a": "0x7f800001",
+        "b": "0xffc00004",
+        "rawChoose": "0x7fc00001",
+        "purpose": "left signaling precedes right quiet",
+        "expected_exported_add_path": "ScalarNaN.some",
+        "expected_exported_mul_path": "ScalarNaN.some"
+      },
+      {
+        "id": "P8",
+        "a_label": "S-",
+        "b_label": "Q+",
+        "a": "0xff800002",
+        "b": "0x7fc00003",
+        "rawChoose": "0xffc00002",
+        "purpose": "left signaling precedes right quiet;negative sign",
+        "expected_exported_add_path": "ScalarNaN.some",
+        "expected_exported_mul_path": "ScalarNaN.some"
+      },
+      {
+        "id": "N1",
+        "a_label": "F1",
+        "b_label": "Q-",
+        "a": "0x3f800000",
+        "b": "0xffc00004",
+        "rawChoose": "0xffc00004",
+        "purpose": "only right operand is NaN",
+        "expected_exported_add_path": "ScalarNaN.some",
+        "expected_exported_mul_path": "ScalarNaN.some"
+      },
+      {
+        "id": "N2",
+        "a_label": "Q+",
+        "b_label": "F2",
+        "a": "0x7fc00003",
+        "b": "0x40000000",
+        "rawChoose": "0x7fc00003",
+        "purpose": "only left operand is NaN",
+        "expected_exported_add_path": "ScalarNaN.some",
+        "expected_exported_mul_path": "ScalarNaN.some"
+      },
+      {
+        "id": "I1",
+        "a_label": "I+",
+        "b_label": "I-",
+        "a": "0x7f800000",
+        "b": "0xff800000",
+        "rawChoose": null,
+        "purpose": "add opposite infinity invalid;preserve original fallback",
+        "expected_exported_add_path": "TunedAdd.add original fallback",
+        "expected_exported_mul_path": "FastMul.mul original fallback"
+      },
+      {
+        "id": "I2",
+        "a_label": "I-",
+        "b_label": "I+",
+        "a": "0xff800000",
+        "b": "0x7f800000",
+        "rawChoose": null,
+        "purpose": "add opposite infinity invalid;reverse signs",
+        "expected_exported_add_path": "TunedAdd.add original fallback",
+        "expected_exported_mul_path": "FastMul.mul original fallback"
+      },
+      {
+        "id": "I3",
+        "a_label": "I+",
+        "b_label": "Z+",
+        "a": "0x7f800000",
+        "b": "0x00000000",
+        "rawChoose": null,
+        "purpose": "mul infinity times positive zero invalid",
+        "expected_exported_add_path": "TunedAdd.add original fallback",
+        "expected_exported_mul_path": "FastMul.mul original fallback"
+      },
+      {
+        "id": "I4",
+        "a_label": "Z-",
+        "b_label": "I-",
+        "a": "0x80000000",
+        "b": "0xff800000",
+        "rawChoose": null,
+        "purpose": "mul negative zero times negative infinity invalid",
+        "expected_exported_add_path": "TunedAdd.add original fallback",
+        "expected_exported_mul_path": "FastMul.mul original fallback"
+      },
+      {
+        "id": "C1",
+        "a_label": "Z+",
+        "b_label": "F2",
+        "a": "0x00000000",
+        "b": "0x40000000",
+        "rawChoose": null,
+        "purpose": "finite guard control;mul exponent sum128 native branch",
+        "expected_exported_add_path": "ordinary finite native add",
+        "expected_exported_mul_path": "ordinary finite native mul"
+      },
+      {
+        "id": "C2",
+        "a_label": "Z-",
+        "b_label": "F1",
+        "a": "0x80000000",
+        "b": "0x3f800000",
+        "rawChoose": null,
+        "purpose": "finite guard control;mul exponent sum127 LowScale branch",
+        "expected_exported_add_path": "ordinary finite native add",
+        "expected_exported_mul_path": "LowScale.mul unchanged"
+      }
+    ],
+    "result": "PASS_16_DIRECTED_WORD_MODEL_CHECKS",
+    "mutation_discrimination": {
+      "left_nan_before_signaling": [
+        "P5",
+        "P6"
+      ],
+      "right_tie_priority": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "canonicalize_all_nan": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8",
+        "N1",
+        "N2"
+      ],
+      "clear_nan_sign": [
+        "P2",
+        "P4",
+        "P5",
+        "P8",
+        "N1"
+      ],
+      "drop_payload_keep_sign": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8",
+        "N1",
+        "N2"
+      ],
+      "do_not_quiet_signaling": [
+        "P1",
+        "P2",
+        "P5",
+        "P6",
+        "P7",
+        "P8"
+      ],
+      "ignore_right_nan": [
+        "P5",
+        "P6",
+        "N1"
+      ],
+      "classify_infinity_as_nan": [
+        "I1",
+        "I2",
+        "I3",
+        "I4"
+      ]
+    },
+    "proves_all_inputs": false,
+    "candidate_execution": "NOT_RUN",
+    "lean_compilation": "NOT_RUN"
+  },
+  "first_real_codegen_checks": {
+    "status": "UNKNOWN",
+    "exact_candidate_sha256": "4a30c99f8230aae6d1b0cd238d1a6b1c9ac0aac0c448ca67d3005d3a6d00d528",
+    "required_artifact": "Actual complete-candidate generated C and final optimized assembly from pinned environment, with toolchain/compiler flags and source hashes",
+    "inspect": [
+      "Find actual ScalarNaN.add/mul and rawChoose caller bodies even when helpers have been inlined away.",
+      "Determine whether some/none materialization, boxing/unboxing or constructor allocation survives on selected-NaN paths; @[inline] alone does not prove elimination.",
+      "Confirm ordinary finite branches bypass rawChoose and no-NaN exceptional branches reach unchanged fallback calls.",
+      "Inspect complete compiled caller/control flow and then complete costs; tiny isolated probe assembly is insufficient."
+    ],
+    "do_not_expand_optionless_variant": true
+  },
+  "performance_interpretation": {
+    "gain": "UNKNOWN",
+    "exposure_whole_timed_share": 0.2636864057900489,
+    "exposure_is_gain": false,
+    "counts_overlap_r_suffix_routes": true,
+    "source_unchanged_ordinary_path_does_not_prove_timing_unchanged": true,
+    "no_nan_exceptional_classifier_overhead": "UNKNOWN"
+  },
+  "validation": {
+    "lean_compilation": "NOT_RUN",
+    "new_candidate_execution": "NOT_RUN",
+    "official_obligations_replay_axiom_audit": "NOT_RUN",
+    "complete_paired_timing": "NOT_RUN",
+    "formal_submission": "NOT_SUBMITTED"
+  },
+  "finished_at_utc": "2026-10-22T22:11:01.305417+00:00",
+  "final_verified_at_utc": "2026-10-22T22:11:01.305417+00:00",
+  "elapsed_seconds": 524.305417
+}
