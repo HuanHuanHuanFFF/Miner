@@ -1,5 +1,5 @@
 {
-  "seed": 806,
+  "seed": 807,
   "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
   "suite": "suites/public-v2.json",
   "candidates": [
@@ -8,34 +8,29 @@
       "sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045"
     },
     {
-      "candidate": "f01-r7-nan-replay-fullpath",
-      "sha256": "9a2a05cd8e033d3cc079744ade77dd42464926d04ef5c9a8e7c050a1605ec854"
-    },
-    {
       "candidate": "f01-d7-direct-small",
       "sha256": "d9a808479dd6a7c7da345ce680773105b638cc6c9e8145e34d10f59751411fb3"
     },
     {
-      "candidate": "f01-d7-singleton",
-      "sha256": "4ba2a23548e5df7f3c379b4734e6653c0546b8346d6d567eb397c1245f725d43"
+      "candidate": "f01-r7-nonnan-runtime",
+      "sha256": "c76056882d69a1122da44b4bc0bb3ab5274251826f0677af2aec5771926d7435"
     },
     {
-      "candidate": "f01-d7-width4-proof2",
-      "sha256": "9613168637d24b6aa59c41fb184a70c714c87402c93f22e621275843e7674f7e",
-      "validation_mode": "statement-only"
-    },
-    {
-      "candidate": "f01-d7-width8-proof2",
-      "sha256": "e40ccec9f767151bae2fae86c35262a288e69bf045fab733fb5f733e9ebcb1d2",
-      "validation_mode": "statement-only"
+      "candidate": "f01-d7-direct-nonnan",
+      "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15"
     }
   ],
-  "purpose": "First exact quiet-NaN suffix fullpath fullgate against original8eb; independently compare one-product specialization with frozen direct-small; repaired-width drafts are statement-only probes, not performance entries",
-  "expected_cost": "Four full gates approximately12-16minutes nested and two statement probes capped180seconds each, within40minute replay/45minute workflow; ready source queue inspected first",
+  "purpose": "Measure the exact direct-small plus non-NaN terminal composition against both separately verified components and original8eb; corrected stage profiler runs only in a separate statement replay afterwards",
+  "expected_cost": "Four full original gates approximately12-16minutes nested plus bounded isolated parent diagnostic; observed805 build command ambiguity fixed by requiring actual clang rather than Lean -c;40minute wrapper/45minute workflow",
   "supplementary_comparisons": [
     {
-      "candidate": "f01-d7-singleton",
+      "candidate": "f01-d7-direct-nonnan",
       "baseline": "f01-d7-direct-small"
+    },
+    {
+      "candidate": "f01-d7-direct-nonnan",
+      "baseline": "f01-r7-nonnan-runtime"
     }
-  ]
+  ],
+  "profile_parent": true
 }

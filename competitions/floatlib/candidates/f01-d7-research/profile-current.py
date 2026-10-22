@@ -259,8 +259,8 @@ def run(g, kernel: Path, out: Path, public_plan: dict, seed: int):
         save_json('build-commands.json', commands)
         parsed = [shlex.split(command) for command in commands]
         bench = g.BUILD / 'bin/benchFull'
-        compiles = [a for a in parsed if '-c' in a and str(g.BUILD / 'ir/Submission.c') in a]
-        links = [a for a in parsed if '-c' not in a and '-o' in a and a[a.index('-o') + 1] == str(bench)]
+        compiles = [a for a in parsed if Path(a[0]).name == 'clang' and '-c' in a and str(g.BUILD / 'ir/Submission.c') in a]
+        links = [a for a in parsed if Path(a[0]).name == 'clang' and '-c' not in a and '-o' in a and a[a.index('-o') + 1] == str(bench)]
         require(len(compiles) == len(links) == 1, 'ambiguous/missing Submission compile or benchFull link trace')
         compile_argv, link_argv = compiles[0], links[0]
         obj = Path(compile_argv[compile_argv.index('-o') + 1])
