@@ -47,6 +47,8 @@ eligible['bmm'].append('f01-d3-fused-floatarray')
 labels.update({'f01-d3-word-packed4-usize-proof1':'四路机器字矩阵','f01-d3-word-packed8-proof1':'八输出矩阵累加','f01-d3-word-packed8-usize-proof1':'八路机器字矩阵','f01-d3-inline-decode-sum':'数值重构有序求和'})
 for k in eligible:eligible[k].extend(['f01-d3-word-packed4-usize-proof1','f01-d3-word-packed8-proof1','f01-d3-word-packed8-usize-proof1'])
 eligible['sum'].append('f01-d3-inline-decode-sum')
+labels['f01-d3-final-package']='八路矩阵与重构求和'
+for k in eligible:eligible[k].append('f01-d3-final-package')
 selected={}
 for k,names in eligible.items():
  options=[]

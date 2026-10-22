@@ -1,21 +1,21 @@
 {
   "state": "R3_ONE_HOUR_ACTIVE",
-  "updated_at_utc": "2026-10-22T04:38:43.423219+00:00",
+  "updated_at_utc": "2026-10-22T05:35:42.916072+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T13:36:27+08:00",
   "official_commit": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
-  "candidate": "competitions/floatlib/candidates/f01-d2-word-preconverted-usize",
-  "kernel": "competitions/floatlib/candidates/f01-d2-word-preconverted-usize/Kernel.lean",
-  "kernel_sha256": "f4790ae3061a498a928b75f78785f919618b899fed7a2a5155037731726f914e",
-  "kernel_bytes": 67507,
+  "candidate": "competitions/floatlib/candidates/f01-d3-word-packed8-usize-proof1",
+  "kernel": "competitions/floatlib/candidates/f01-d3-word-packed8-usize-proof1/Kernel.lean",
+  "kernel_sha256": "9a4b1ddab0da0b2c798440eca62a2039096a0669d2fa638b6a6bc041a534cc54",
+  "kernel_bytes": 80160,
   "baseline_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
-  "manifest": "competitions/floatlib/candidates/f01-d2-word-preconverted-usize/manifest.json",
-  "mechanism": "Integer exponent finite guards for scalar native arithmetic; preconverted Float32 arrays and USize/proven indexing for bmm; original ordered final-finite sum",
+  "manifest": "competitions/floatlib/candidates/f01-d3-word-packed8-usize-proof1/manifest.json",
+  "mechanism": "Word scalar guards, eight independent ordered native bmm lanes and USize/proven uget indexing; original final-finite ordered sum. Final numeric-decoder sum combo still under full evaluation.",
   "proof_status": "PASS_FULL_OFFICIAL_GATE_PUBLIC",
   "local_model": "Exact Lean proof and full gate; previous finite Python model belongs to previous_current_candidate.",
   "lean_gate": "PASS_FULL_OFFICIAL_GATE_PUBLIC",
-  "benchmark": "VERIFIED_FROZEN_SOURCE_INDEPENDENT_CONFIRMATION",
+  "benchmark": "VERIFIED_DISCOVERY_AND_NEW_RUNNER_CONFIRMATION",
   "requested_environment_action": "NONE: environment handoff finished",
   "remaining": [
     "Develop and prove a materially stronger full package, starting with bmm native accumulation",
@@ -48,7 +48,7 @@
   "blocker": null,
   "next_action": "Independently confirm8USize; fastcompile scoped sum and exact final package, then full gate/paired timing on frozen package if statementpasses",
   "research_decision": "Adopt word/preconverted/USize as best independently confirmed whole package. Keep Packed4 as strongest bmm prospect; repeated AMD hybrid tiny regression prevents prioritizing it. Helpers stay separate from runtime results.",
-  "execution_state": "FROZEN_CONFIRMATION_AND_FINAL_PACKAGE_PREFLIGHT",
+  "execution_state": "FINAL_FROZEN_COMPLETE_GATE_AND_INDEPENDENT_CONFIRMATION_RUNNING",
   "local_project_check": {
     "status": "PASS",
     "checked_at_utc": "2026-10-21T21:22:35.402519+00:00",
@@ -170,12 +170,13 @@
   "formal_submission": "NOT_SUBMITTED",
   "current_window_completion": "ACTIVE: new one-hour collaboration; initial integration and existing mathematical proof probes executing",
   "payload_integrity": {
-    "status": "PENDING_CURRENT_WINDOW_RESULTS",
-    "evidence": "competitions/floatlib/candidates/f01-d3-word-packed4/window1h-20261022/summary.json",
+    "status": "CURRENT_COLLECTED_RESULTS_AUDIT_READY",
+    "verified_payloads": 283,
     "pending_runs": [
-      39723695793,
-      39723717484
-    ]
+      39728217328,
+      39728536358
+    ],
+    "evidence": "competitions/floatlib/candidates/f01-d3-word-packed4/window1h-20261022/summary.json"
   },
   "acceptance_target": "Attempt to produce the next live champion: full four-kernel candidate, exact proof gate, and significant >=3% gain against the champion current at evaluation. Improvement over the shipped reference alone does not satisfy the goal.",
   "acceptance_target_status": "UNACHIEVED: no competitive current-champion result or formal promotion",
@@ -532,10 +533,12 @@
         "seed": 408,
         "commit": "b26f780ca31cb315d6a4da7de111b175edcaec85",
         "created_at_utc": "2026-10-22T05:22:11Z",
-        "state": "in_progress",
+        "state": "completed",
         "mode": "full-gate",
         "purpose": "Frozen8USize independent full confirmation",
-        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T052207Z/dispatch.json"
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T052207Z/dispatch.json",
+        "conclusion": "success",
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39727625634"
       },
       {
         "run": 39727658622,
@@ -552,9 +555,43 @@
         "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T052228Z/dispatch.json",
         "conclusion": "success",
         "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39727658622"
+      },
+      {
+        "run": 39728217328,
+        "candidates": [
+          "baseline",
+          "f01-d3-final-package"
+        ],
+        "seed": 410,
+        "commit": "965f86a12a19768ca218b794f5d8e3bd00a47a44",
+        "created_at_utc": "2026-10-22T05:28:26Z",
+        "state": "in_progress",
+        "mode": "full-gate",
+        "purpose": "Frozen full final package first complete gate and accepted proof dependency audit",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T052822Z/dispatch.json"
+      },
+      {
+        "run": 39728536358,
+        "candidates": [
+          "baseline",
+          "f01-d3-final-package"
+        ],
+        "seed": 411,
+        "commit": "965f86a12a19768ca218b794f5d8e3bd00a47a44",
+        "created_at_utc": "2026-10-22T05:31:42Z",
+        "state": "in_progress",
+        "mode": "full-gate",
+        "purpose": "Independent frozen same-source final package complete confirmation",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T053139Z/dispatch.json"
       }
     ],
-    "feedback_to_research": "Actual405allFULLPASS:4USizee54f bmm.0248756 (~1.251ns),8Nat6dc5 .0263265(~1.324),8USize9a4b .0235857(~1.188). Allsources3axioms/timing tobeaudited next. D choosesfrozen8USize forindependentconfirm.407sum96ff FAILonlymissingopens Binary32/ExecFloat/sumSpec inreopenednamespaces; scopefixfe03prepared and actualfinalpackage8USize+decodeSum 6744be2bd784bea7a7e347d68f813bc865d2d18abab87f19fa37aec8a8c2c1f7 nowshortpreflightnext. Keep optionalglobalguard asfutureunlessnecessary; reservefinalconfirmationtime. No moreopenendedbranches. ActualC405 confirmed4/8 Index loops both0Nat_add,0Nat_mul,0array_size,2uget,4or8mul/add, onlyexitctor. 408indep8index39727625634 and409scopedSum/finalpackage39727658622 actualrunning. Please freezeRfinalhandoff by05:30 with originalsources/hashes, measuredboundaries, optionalglobalguardmarkedNOT_RUN unlessalreadyDscheduled. No newdirections; D completes any startedCI beyond05:36:27 naturally thenreports. This is localfinalphase, not earlierwholewindowtermination. 409 actualPASS scopefixedSumfe03 andexactfinalpackage6744be2b. Fullfinalpackagenowwillgateandfreezeconfirm, no furtheralgorithmchangesplanned. R finalhandoff cancloseownresearch; D recovers all CI naturally."
+    "feedback_to_research": "Actual405allFULLPASS:4USizee54f bmm.0248756 (~1.251ns),8Nat6dc5 .0263265(~1.324),8USize9a4b .0235857(~1.188). Allsources3axioms/timing tobeaudited next. D choosesfrozen8USize forindependentconfirm.407sum96ff FAILonlymissingopens Binary32/ExecFloat/sumSpec inreopenednamespaces; scopefixfe03prepared and actualfinalpackage8USize+decodeSum 6744be2bd784bea7a7e347d68f813bc865d2d18abab87f19fa37aec8a8c2c1f7 nowshortpreflightnext. Keep optionalglobalguard asfutureunlessnecessary; reservefinalconfirmationtime. No moreopenendedbranches. ActualC405 confirmed4/8 Index loops both0Nat_add,0Nat_mul,0array_size,2uget,4or8mul/add, onlyexitctor. 408indep8index39727625634 and409scopedSum/finalpackage39727658622 actualrunning. Please freezeRfinalhandoff by05:30 with originalsources/hashes, measuredboundaries, optionalglobalguardmarkedNOT_RUN unlessalreadyDscheduled. No newdirections; D completes any startedCI beyond05:36:27 naturally thenreports. This is localfinalphase, not earlierwholewindowtermination. 409 actualPASS scopefixedSumfe03 andexactfinalpackage6744be2b. Fullfinalpackagenowwillgateandfreezeconfirm, no furtheralgorithmchangesplanned. R finalhandoff cancloseownresearch; D recovers all CI naturally.",
+    "research_thread_terminal": {
+      "thread": "01a15e06-b75c-7811-b0a0-194d8877365d",
+      "state": "idle",
+      "turn": "completed",
+      "cursor": "7303e13f-b37b-46ba-ab65-74ebb7c5d3cb:16"
+    }
   },
   "previous_current_candidate": {
     "candidate": "competitions/floatlib/candidates/f01-mul-log2-proof3",
@@ -600,7 +637,11 @@
   "active_jobs": [
     {
       "kind": "github_ci",
-      "run": 39727625634
+      "run": 39728217328
+    },
+    {
+      "kind": "github_ci",
+      "run": 39728536358
     }
   ],
   "active_goal": "新一轮协作推进1h，继续冲击新冠军",
@@ -1096,5 +1137,11 @@
     "actual_candidate_count": 3,
     "completed_at_utc": "2026-10-21T11:53:37.200700+00:00",
     "elapsed_minutes": 19.49
+  },
+  "previous_primary_candidate": {
+    "candidate": "competitions/floatlib/candidates/f01-d2-word-preconverted-usize",
+    "kernel": "competitions/floatlib/candidates/f01-d2-word-preconverted-usize/Kernel.lean",
+    "kernel_sha256": "f4790ae3061a498a928b75f78785f919618b899fed7a2a5155037731726f914e",
+    "manifest": "competitions/floatlib/candidates/f01-d2-word-preconverted-usize/manifest.json"
   }
 }
