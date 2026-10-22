@@ -13,7 +13,7 @@ for dp in sorted(RUNS.glob('dispatch-*/dispatch.json')):
     d=load(dp)
     if not (d.get('checked_at_utc','')>=window['start_utc'] and d.get('inputs',{}).get('seed','').isdigit() and 701<=int(d['inputs']['seed'])<=799 and d.get('run')): continue
     rid=d['run']['databaseId']; rp=RUNS/str(rid)
-    j={'run':rid,'seed':int(d['inputs']['seed']),'candidates':d['inputs']['candidates'].split(','),'source_commit':d['source_commit'],'dispatch':dp.relative_to(ROOT).as_posix(),'status':d['run']['status'],'collected':False}
+    j={'run':rid,'seed':int(d['inputs']['seed']),'candidates':d['inputs']['candidates'].split(','),'source_commit':d['source_commit'],'dispatch':dp.relative_to(ROOT).as_posix(),'status':'dispatched_awaiting_terminal_collection','collected':False}
     if (rp/'ci-run.json').exists():
         meta=load(rp/'ci-run.json'); assert meta['headSha']==d['source_commit'];j.update(status=meta['status'],conclusion=meta['conclusion'])
     if not (rp/'original-artifact-hashes.json').exists():jobs.append(j);continue

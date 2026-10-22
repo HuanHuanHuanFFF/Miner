@@ -2,12 +2,14 @@
 
 共同约束见根 [AGENTS.md](../../AGENTS.md)，赛道技术要求见 [track-rules.md](docs/track-rules.md)。官方固定版本见 [pins.json](pins.json)。
 
+新公开／付费私有套件适用范围先看[套件变更](docs/suite-transition-20261022.md)。
+
 正式包是一个 `Kernel.lean`，包含 add、mul、sum、bmm 及四个全输入等价证明。开发比较统一以评测时的现任冠军为基准；当前尚未正式上传。
 
 - [冲冠看板](../../dashboard.md)：按 add、mul、sum、bmm 四项查看现任冠军与我方首选。
 - [当前开发状态](coordination/development-status.json)：当前比较口径、候选选择及证据入口。
 - [数学结论与可复用证明](research/RESULTS.md)：按四项运算整理已验结论、数学储备、反例，以及 E 盘 12 包原文和全部候选的证据索引。
-- [当前九十分钟协作](candidates/f01-d5-costsplit/window90m-20261022/README.md)：当前数学、实现、完整计时与独立确认。
+- [当前九十分钟协作](candidates/f01-d6-research/README.md)：当前数学、实现、完整计时与独立确认。
 - [前轮Astra／开发一小时协作](candidates/f01-d1-inline-all/window1h/README.md)：原生算术证明起点、逐项验收与原始回执。
 
 - [首次双会话交接](coordination/HANDOFF.md)：环境与开发文件所有权、状态、自然检查点和本窗预算。
