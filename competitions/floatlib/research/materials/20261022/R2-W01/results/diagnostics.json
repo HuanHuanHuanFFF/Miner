@@ -1,0 +1,669 @@
+{
+  "status": "FINITE_DIAGNOSTIC_EXECUTED_NOT_LEAN_OR_TARGET_PERFORMANCE",
+  "source": "Fresh synthetic words, official word transformations, independent Python RNG",
+  "seed": 927401,
+  "counterexamples": [
+    {
+      "name": "odd_positive_relu_reassociation_and_exact_total",
+      "inputs": [
+        "0x41000001",
+        "0x3f800003",
+        "0x3f800003"
+      ],
+      "ordered": "0x41200001",
+      "reordered": "0x41200002",
+      "one_final_round": "0x41200002",
+      "sound_anchor": "0x41200001"
+    },
+    {
+      "name": "exact_total_does_not_determine_ordered_sum",
+      "inputs": [
+        "0x4b800000",
+        "0x3f800000",
+        "0xcb800000"
+      ],
+      "ordered": [
+        "0x00000000",
+        "0x4b800000",
+        "0x4b800000",
+        "0x00000000"
+      ],
+      "one_final_round": "0x3f800000"
+    },
+    {
+      "name": "dense_domain_reassociation",
+      "inputs": [
+        "0x41000000",
+        "0xc1000000",
+        "0x3e000001"
+      ],
+      "left": "0x3e000001",
+      "right": "0x3e000000"
+    },
+    {
+      "name": "tie_requires_start_parity",
+      "start": "0x3f800001",
+      "input": "0x33800000",
+      "ordered": "0x3f800002",
+      "independent_rounded_increment": "0x3f800001"
+    },
+    {
+      "name": "lower_binade_boundary_endpoint_test_unsound",
+      "start": "0x3f800001",
+      "inputs": [
+        "0xb4400000",
+        "0x34000000"
+      ],
+      "ordered": [
+        "0x3f800001",
+        "0x3f7fffff",
+        "0x3f800000"
+      ],
+      "predicted_final": "0x3f800001",
+      "predicted_min": 8388608,
+      "predicted_max": 8388609,
+      "sound_guard": "prefix_range"
+    },
+    {
+      "name": "intermediate_overflow_hidden_by_exact_total",
+      "inputs": [
+        "0x7f7fffff",
+        "0x7f7fffff",
+        "0xff7fffff"
+      ],
+      "first_overflow": "0x7f800000",
+      "exact_total": "0x7f7fffff",
+      "fast_path": "entry",
+      "final_ordered": "+Inf (IEEE finite-input overflow; NaN payload irrelevant)"
+    },
+    {
+      "name": "signed_zero_is_not_real_equality",
+      "input": "0x80000000",
+      "ordered_from_poszero": "0x00000000",
+      "return_input_wrong": "0x80000000"
+    },
+    {
+      "name": "gradual_subnormal_cancellation",
+      "inputs": [
+        "0x00800000",
+        "0x807fffff"
+      ],
+      "ordered": "0x00000001",
+      "odd_guard": "opposite_sign"
+    },
+    {
+      "name": "anchor_Es2_subnormal_tie_requires_rejection",
+      "start": "0x01000001",
+      "input": "0x00000001",
+      "true_result": "0x01000002",
+      "wrong_without_Es3_guard": "0x01000001",
+      "actual_guard": "entry_or_capacity"
+    }
+  ],
+  "oracle_sanity": {
+    "finite_pairs": 49582,
+    "integer_vs_host_add_mismatches": 0,
+    "note": "Independent sanity check, not a formal floating-point theorem"
+  },
+  "summary_checks": {
+    "composition_trials": 5000,
+    "integer_start_values_per_trial": 6,
+    "associativity_or_prefix_mismatches": 0
+  },
+  "finite_checks": {
+    "blocks": 20000,
+    "accepted": {
+      "general": 11541,
+      "monotone": 2225,
+      "odd": 689,
+      "anchor": 727
+    },
+    "accepted_mismatches": 0,
+    "nonfinite_rejection_examples": [
+      "0x7f800000",
+      "0xff800000",
+      "0x7fc00001",
+      "0x7fa00001",
+      "0xffc12345",
+      "0xff800001"
+    ]
+  },
+  "coverage": {
+    "dense": {
+      "vectors": 100,
+      "length": 1000,
+      "words_sha256": "f3a0e3b8981722c01d0188dc75664dc06127e99ea790335bdd9c87a1dc32cf99",
+      "blocks": {
+        "8": {
+          "general": {
+            "attempted": 12500,
+            "accepted": 6471,
+            "accepted_elements": 51697,
+            "rejected": {
+              "prefix_range": 6029
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 12500,
+            "accepted": 22,
+            "accepted_elements": 175,
+            "rejected": {
+              "midpoint": 744,
+              "opposite_sign": 11718,
+              "end_range": 16
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 12500,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "odd_exponent_guard": 4397,
+              "opposite_sign": 8103
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 12500,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "domain": 12500
+            },
+            "mismatches": 0
+          }
+        },
+        "16": {
+          "general": {
+            "attempted": 6300,
+            "accepted": 2455,
+            "accepted_elements": 38641,
+            "rejected": {
+              "prefix_range": 3845
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 6300,
+            "accepted": 1,
+            "accepted_elements": 7,
+            "rejected": {
+              "midpoint": 391,
+              "opposite_sign": 5907,
+              "end_range": 1
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 6300,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "odd_exponent_guard": 2228,
+              "opposite_sign": 4072
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 6300,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "domain": 6300
+            },
+            "mismatches": 0
+          }
+        },
+        "32": {
+          "general": {
+            "attempted": 3200,
+            "accepted": 863,
+            "accepted_elements": 25841,
+            "rejected": {
+              "prefix_range": 2337
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 3200,
+            "accepted": 1,
+            "accepted_elements": 7,
+            "rejected": {
+              "midpoint": 198,
+              "opposite_sign": 3000,
+              "end_range": 1
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 3200,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "odd_exponent_guard": 1160,
+              "opposite_sign": 2040
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 3200,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "domain": 3200
+            },
+            "mismatches": 0
+          }
+        },
+        "64": {
+          "general": {
+            "attempted": 1600,
+            "accepted": 262,
+            "accepted_elements": 15793,
+            "rejected": {
+              "prefix_range": 1338
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 1600,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "midpoint": 95,
+              "opposite_sign": 1505
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 1600,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "odd_exponent_guard": 590,
+              "opposite_sign": 1010
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 1600,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "domain": 1600
+            },
+            "mismatches": 0
+          }
+        }
+      }
+    },
+    "relu": {
+      "vectors": 100,
+      "length": 1000,
+      "words_sha256": "354ea9b109ebea6b6a242cc468a1db8028adf43b805ba0e6fd9afde89b72f80f",
+      "blocks": {
+        "8": {
+          "general": {
+            "attempted": 12500,
+            "accepted": 11727,
+            "accepted_elements": 93716,
+            "rejected": {
+              "domain": 50,
+              "prefix_range": 723
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 12500,
+            "accepted": 11720,
+            "accepted_elements": 93660,
+            "rejected": {
+              "entry": 50,
+              "end_range": 619,
+              "midpoint": 111
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 12500,
+            "accepted": 11720,
+            "accepted_elements": 93660,
+            "rejected": {
+              "entry": 50,
+              "odd_exponent_guard": 177,
+              "end_range": 553
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 12500,
+            "accepted": 11720,
+            "accepted_elements": 93660,
+            "rejected": {
+              "entry_or_capacity": 50,
+              "domain": 177,
+              "end_range": 553
+            },
+            "mismatches": 0
+          }
+        },
+        "16": {
+          "general": {
+            "attempted": 6300,
+            "accepted": 5627,
+            "accepted_elements": 89132,
+            "rejected": {
+              "domain": 50,
+              "prefix_range": 623
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 6300,
+            "accepted": 5627,
+            "accepted_elements": 89132,
+            "rejected": {
+              "entry": 50,
+              "end_range": 534,
+              "midpoint": 89
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 6300,
+            "accepted": 5627,
+            "accepted_elements": 89132,
+            "rejected": {
+              "entry": 50,
+              "end_range": 506,
+              "odd_exponent_guard": 117
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 6300,
+            "accepted": 5627,
+            "accepted_elements": 89132,
+            "rejected": {
+              "entry_or_capacity": 50,
+              "end_range": 506,
+              "domain": 117
+            },
+            "mismatches": 0
+          }
+        },
+        "32": {
+          "general": {
+            "attempted": 3200,
+            "accepted": 2634,
+            "accepted_elements": 81788,
+            "rejected": {
+              "domain": 50,
+              "prefix_range": 516
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 3200,
+            "accepted": 2634,
+            "accepted_elements": 81788,
+            "rejected": {
+              "entry": 50,
+              "end_range": 461,
+              "midpoint": 55
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 3200,
+            "accepted": 2634,
+            "accepted_elements": 81788,
+            "rejected": {
+              "entry": 50,
+              "end_range": 448,
+              "odd_exponent_guard": 68
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 3200,
+            "accepted": 2634,
+            "accepted_elements": 81788,
+            "rejected": {
+              "entry_or_capacity": 50,
+              "end_range": 448,
+              "domain": 68
+            },
+            "mismatches": 0
+          }
+        },
+        "64": {
+          "general": {
+            "attempted": 1600,
+            "accepted": 1123,
+            "accepted_elements": 69372,
+            "rejected": {
+              "domain": 50,
+              "prefix_range": 427
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 1600,
+            "accepted": 1123,
+            "accepted_elements": 69372,
+            "rejected": {
+              "entry": 50,
+              "end_range": 383,
+              "midpoint": 44
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 1600,
+            "accepted": 1123,
+            "accepted_elements": 69372,
+            "rejected": {
+              "entry": 50,
+              "end_range": 377,
+              "odd_exponent_guard": 50
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 1600,
+            "accepted": 1123,
+            "accepted_elements": 69372,
+            "rejected": {
+              "entry_or_capacity": 50,
+              "end_range": 377,
+              "domain": 50
+            },
+            "mismatches": 0
+          }
+        }
+      },
+      "first_prefix_at_least_32": {
+        "min": 6,
+        "max": 58,
+        "mean": 24.11
+      }
+    },
+    "wide": {
+      "vectors": 100,
+      "length": 1000,
+      "words_sha256": "a83a189e613012dbdcc01717e4a292f6f0c5f47cf18dd417515bd3f314c2a2c8",
+      "blocks": {
+        "8": {
+          "general": {
+            "attempted": 12500,
+            "accepted": 9553,
+            "accepted_elements": 76332,
+            "rejected": {
+              "prefix_range": 2947
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 12500,
+            "accepted": 29,
+            "accepted_elements": 232,
+            "rejected": {
+              "opposite_sign": 12301,
+              "midpoint": 161,
+              "end_range": 9
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 12500,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "odd_exponent_guard": 4194,
+              "opposite_sign": 8306
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 12500,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "domain": 12500
+            },
+            "mismatches": 0
+          }
+        },
+        "16": {
+          "general": {
+            "attempted": 6300,
+            "accepted": 3881,
+            "accepted_elements": 61268,
+            "rejected": {
+              "prefix_range": 2419
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 6300,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "opposite_sign": 6221,
+              "midpoint": 79
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 6300,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "odd_exponent_guard": 2146,
+              "opposite_sign": 4154
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 6300,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "domain": 6300
+            },
+            "mismatches": 0
+          }
+        },
+        "32": {
+          "general": {
+            "attempted": 3200,
+            "accepted": 1416,
+            "accepted_elements": 43012,
+            "rejected": {
+              "prefix_range": 1784
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 3200,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "opposite_sign": 3156,
+              "midpoint": 44
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 3200,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "odd_exponent_guard": 1117,
+              "opposite_sign": 2083
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 3200,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "domain": 3200
+            },
+            "mismatches": 0
+          }
+        },
+        "64": {
+          "general": {
+            "attempted": 1600,
+            "accepted": 426,
+            "accepted_elements": 25839,
+            "rejected": {
+              "prefix_range": 1174
+            },
+            "mismatches": 0
+          },
+          "monotone": {
+            "attempted": 1600,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "opposite_sign": 1576,
+              "midpoint": 24
+            },
+            "mismatches": 0
+          },
+          "odd": {
+            "attempted": 1600,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "odd_exponent_guard": 561,
+              "opposite_sign": 1039
+            },
+            "mismatches": 0
+          },
+          "anchor": {
+            "attempted": 1600,
+            "accepted": 0,
+            "accepted_elements": 0,
+            "rejected": {
+              "domain": 1600
+            },
+            "mismatches": 0
+          }
+        }
+      }
+    }
+  },
+  "limitations": [
+    "Not an exhaustive binary32 proof",
+    "No NaN payload reference implementation; fast path rejection only",
+    "No official LCG inputs, no saved answers, no Lean compilation",
+    "No target performance or predicted speedup"
+  ]
+}

@@ -4,6 +4,8 @@
 
 **先看 [冲冠看板 dashboard.md](dashboard.md)**：按加法、乘法、求和、矩阵乘法查看冠军与我方首选。
 
+FloatLib 的数学成果统一从[数学结论与可复用证明](competitions/floatlib/research/RESULTS.md)进入；包含 E 盘研究资料、失败路线和源码／验收对应关系。
+
 | 赛道 | 状态与入口 | 验证与证据 |
 |---|---|---|
 | [FloatLib 浮点内核](competitions/floatlib/README.md) | 冲冠研究与 Astra 协作；[开发状态](competitions/floatlib/coordination/development-status.json) | [当前九十分钟协作](competitions/floatlib/candidates/f01-d5-costsplit/window90m-20261022/README.md)、候选与官方 gate 回执均在本赛道目录 |

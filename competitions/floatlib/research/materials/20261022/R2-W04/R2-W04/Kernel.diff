@@ -1,0 +1,248 @@
+--- parent/Kernel.lean
++++ candidate/Kernel.lean
+@@ -1319,16 +1319,11 @@
+ @[inline] def encode (x : Binary32) : Float :=
+   (ExecFloat.Binary.toFloat32 x).toFloat
+ 
+-def prepare (xs : Array Binary32) : FloatArray :=
+-  ⟨xs.map encode⟩
+-
+-@[inline] def checkOne (x : Binary32) : Bool :=
+-  (ExecFloat.Binary.ofFloat32 (encode x).toFloat32).raw.1 == x.raw.1
+-
+-def check (xs : Array Binary32) : Bool := xs.all checkOne
+-
+-theorem checkOne_eq (x : Binary32) (h : checkOne x = true) :
+-    ExecFloat.Binary.ofFloat32 (encode x).toFloat32 = x := by
++@[inline] def checkOne (x : Binary32) (d : Float) : Bool :=
++  (ExecFloat.Binary.ofFloat32 d.toFloat32).raw.1 == x.raw.1
++
++theorem checkOne_eq (x : Binary32) (d : Float) (h : checkOne x d = true) :
++    ExecFloat.Binary.ofFloat32 d.toFloat32 = x := by
+   apply ExecFloat.ext
+   apply Subtype.ext
+   simpa only [checkOne, beq_iff_eq] using h
+@@ -1337,14 +1332,130 @@
+   if hi : i < xs.size then (xs.get i hi).toFloat32
+   else Float32.ofBits 0
+ 
+-theorem read_prepare_eq (xs : Array Binary32) (h : check xs = true) (i : Nat) :
+-    ExecFloat.Binary.ofFloat32 (read (prepare xs) i) = xs.getD i posZero := by
+-  have hall : xs.all checkOne = true := h
+-  by_cases hi : i < xs.size
+-  · have hone := (Array.all_eq_true.mp hall) i hi
+-    have heq := checkOne_eq xs[i] hone
+-    simpa [read, prepare, FloatArray.size, FloatArray.get, Array.getD, hi] using heq
+-  · simp [read, prepare, FloatArray.size, FloatArray.get, Array.getD, hi] <;> rfl
++/-- The accumulated storage agrees with every input position already processed. -/
++def Prefix (xs : Array Binary32) (k : Nat) (out : FloatArray) : Prop :=
++  out.size = k ∧ k ≤ xs.size ∧
++    ∀ i, i < k → ExecFloat.Binary.ofFloat32 (read out i) = xs.getD i posZero
++
++theorem push_size (out : FloatArray) (d : Float) :
++    (out.push d).size = out.size + 1 := by
++  cases out with
++  | mk ds => simp only [FloatArray.push, FloatArray.size, Array.size_push]
++
++theorem get_push_lt (out : FloatArray) (d : Float) (i : Nat)
++    (hi : i < out.size) :
++    (out.push d).get i (by rw [push_size]; omega) = out.get i hi := by
++  cases out with
++  | mk ds =>
++    simpa only [FloatArray.push, FloatArray.get, FloatArray.size] using
++      (Array.getElem_push_lt (xs := ds) (x := d) hi)
++
++theorem get_push_eq (out : FloatArray) (d : Float) :
++    (out.push d).get out.size (by rw [push_size]; omega) = d := by
++  cases out with
++  | mk ds =>
++    simpa only [FloatArray.push, FloatArray.get, FloatArray.size] using
++      (Array.getElem_push_eq (xs := ds) (x := d))
++
++theorem read_push_lt (out : FloatArray) (d : Float) (i : Nat)
++    (hi : i < out.size) : read (out.push d) i = read out i := by
++  have hp : i < (out.push d).size := by rw [push_size]; omega
++  simp only [read, dif_pos hi, dif_pos hp]
++  exact congrArg Float.toFloat32 (get_push_lt out d i hi)
++
++theorem read_push_eq (out : FloatArray) (d : Float) :
++    read (out.push d) out.size = d.toFloat32 := by
++  have hp : out.size < (out.push d).size := by rw [push_size]; omega
++  simp only [read, dif_pos hp]
++  exact congrArg Float.toFloat32 (get_push_eq out d)
++
++theorem prefix_empty (xs : Array Binary32) :
++    Prefix xs 0 (FloatArray.emptyWithCapacity xs.size) := by
++  refine ⟨rfl, Nat.zero_le _, ?_⟩
++  intro i hi
++  omega
++
++theorem prefix_push (xs : Array Binary32) (k : Nat) (out : FloatArray)
++    (d : Float) (hpre : Prefix xs k out) (hk : k < xs.size)
++    (hcheck : checkOne xs[k] d = true) :
++    Prefix xs (k + 1) (out.push d) := by
++  refine ⟨?_, ?_, ?_⟩
++  · rw [push_size, hpre.1]
++  · omega
++  · intro i hi
++    by_cases hik : i < k
++    · rw [read_push_lt out d i (by simpa only [hpre.1] using hik)]
++      exact hpre.2.2 i hik
++    · have hieq : i = k := by omega
++      subst i
++      have hnew : read (out.push d) k = d.toFloat32 := by
++        simpa only [hpre.1] using read_push_eq out d
++      rw [hnew]
++      exact (checkOne_eq xs[k] d hcheck).trans (Array.getElem_eq_getD posZero)
++
++/-- Each successful step checks and stores the very same encoded value. -/
++def prepareLoop (xs : Array Binary32) (k : Nat) (out : FloatArray) :
++    Option FloatArray :=
++  if hk : k < xs.size then
++    let x := xs[k]
++    let d := encode x
++    if hcheck : checkOne x d = true then
++      prepareLoop xs (k + 1) (out.push d)
++    else none
++  else some out
++termination_by xs.size - k
++
++def prepare (xs : Array Binary32) : Option FloatArray :=
++  prepareLoop xs 0 (FloatArray.emptyWithCapacity xs.size)
++
++theorem prepareLoop_sound (xs : Array Binary32) (k : Nat)
++    (out prepared : FloatArray) (hpre : Prefix xs k out)
++    (hresult : prepareLoop xs k out = some prepared) :
++    prepared.size = xs.size ∧
++      ∀ i, ExecFloat.Binary.ofFloat32 (read prepared i) = xs.getD i posZero := by
++  rw [prepareLoop] at hresult
++  split at hresult
++  · rename_i hk
++    dsimp only at hresult
++    split at hresult
++    · rename_i hcheck
++      exact prepareLoop_sound xs (k + 1) (out.push (encode xs[k])) prepared
++        (prefix_push xs k out (encode xs[k]) hpre hk hcheck) hresult
++    · cases hresult
++  · rename_i hk
++    have hkeq : k = xs.size := by
++      have hle := hpre.2.1
++      omega
++    have hout : out = prepared := Option.some.inj hresult
++    subst prepared
++    refine ⟨hpre.1.trans hkeq, ?_⟩
++    intro i
++    by_cases hi : i < k
++    · exact hpre.2.2 i hi
++    · have hio : ¬ i < out.size := by
++        rw [hpre.1]
++        exact hi
++      have hix : ¬ i < xs.size := by
++        rw [← hkeq]
++        exact hi
++      simp [read, Array.getD, hio, hix] <;> rfl
++termination_by xs.size - k
++
++theorem prepare_sound (xs : Array Binary32) (prepared : FloatArray)
++    (h : prepare xs = some prepared) :
++    prepared.size = xs.size ∧
++      ∀ i, ExecFloat.Binary.ofFloat32 (read prepared i) = xs.getD i posZero := by
++  exact prepareLoop_sound xs 0 (FloatArray.emptyWithCapacity xs.size) prepared
++    (prefix_empty xs) h
++
++theorem prepare_size_eq (xs : Array Binary32) (prepared : FloatArray)
++    (h : prepare xs = some prepared) : prepared.size = xs.size :=
++  (prepare_sound xs prepared h).1
++
++theorem read_prepare_eq (xs : Array Binary32) (prepared : FloatArray)
++    (h : prepare xs = some prepared) (i : Nat) :
++    ExecFloat.Binary.ofFloat32 (read prepared i) = xs.getD i posZero :=
++  (prepare_sound xs prepared h).2 i
+ 
+ def dotLoop (n baseA baseB p : Nat) (AF BF : FloatArray)
+     (k : Nat) (acc : Float32) : Float32 :=
+@@ -1419,43 +1530,52 @@
+ 
+ def bmm (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+     (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+-  if hValid : CheckedFloatArray.check A.toArray = true ∧
+-      CheckedFloatArray.check B.toArray = true then
+-    let AF := CheckedFloatArray.prepare A.toArray
+-    let BF := CheckedFloatArray.prepare B.toArray
+-    Vector.ofFn fun q =>
+-      let (b, i, j) := bmmDecodeC m p q.val
+-      CheckedFloatArray.dot n ((b * m + i) * n) (b * n * p + j) p
+-        A.toArray B.toArray AF BF
+-  else originalBmm batch m n p A B
++  match CheckedFloatArray.prepare A.toArray with
++  | none => originalBmm batch m n p A B
++  | some AF =>
++    match CheckedFloatArray.prepare B.toArray with
++    | none => originalBmm batch m n p A B
++    | some BF =>
++      Vector.ofFn fun q =>
++        let (b, i, j) := bmmDecodeC m p q.val
++        CheckedFloatArray.dot n ((b * m + i) * n) (b * n * p + j) p
++          A.toArray B.toArray AF BF
+ 
+ theorem bmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+     (B : Vector Binary32 (batch * n * p)),
+     (bmm batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+   intro batch m n p A B
+   unfold bmm
+-  split
+-  · rename_i hValid
+-    have hA := CheckedFloatArray.read_prepare_eq A.toArray hValid.1
+-    have hB := CheckedFloatArray.read_prepare_eq B.toArray hValid.2
+-    have heq : (Vector.ofFn fun q : Fin (batch * m * p) =>
+-        let (b, i, j) := bmmDecodeC m p q.val
+-        CheckedFloatArray.dot n ((b * m + i) * n) (b * n * p + j) p
+-          A.toArray B.toArray (CheckedFloatArray.prepare A.toArray)
+-            (CheckedFloatArray.prepare B.toArray)) = referenceBmm batch m n p A B := by
+-      unfold referenceBmm
+-      apply congrArg (fun (f : Fin (batch * m * p) → Binary32) => Vector.ofFn f)
+-      funext q
+-      dsimp only
+-      rw [CheckedFloatArray.dot_eq _ _ _ _ _ _ _ _ hA hB]
+-      simp only [add_eq, mul_eq]
+-      apply congrArg (fun (f : Binary32 → Fin n → Binary32) => Fin.foldl n f posZero)
+-      funext acc k
+-      have hi := index_address ((bmmDecodeC m p q.val).1 * n) k.val p
+-        (bmmDecodeC m p q.val).2.2
+-      rw [hi]
+-    exact (congrArg (fun v : Vector Binary32 (batch * m * p) => v.get) heq).trans
+-      (referenceBmm_spec batch m n p A B)
+-  · exact originalBmm_spec batch m n p A B
++  cases hAF : CheckedFloatArray.prepare A.toArray with
++  | none =>
++    simp only [hAF]
++    exact originalBmm_spec batch m n p A B
++  | some AF =>
++    simp only [hAF]
++    cases hBF : CheckedFloatArray.prepare B.toArray with
++    | none =>
++      simp only [hBF]
++      exact originalBmm_spec batch m n p A B
++    | some BF =>
++      simp only [hBF]
++      have hA := CheckedFloatArray.read_prepare_eq A.toArray AF hAF
++      have hB := CheckedFloatArray.read_prepare_eq B.toArray BF hBF
++      have heq : (Vector.ofFn fun q : Fin (batch * m * p) =>
++          let (b, i, j) := bmmDecodeC m p q.val
++          CheckedFloatArray.dot n ((b * m + i) * n) (b * n * p + j) p
++            A.toArray B.toArray AF BF) = referenceBmm batch m n p A B := by
++        unfold referenceBmm
++        apply congrArg (fun (f : Fin (batch * m * p) → Binary32) => Vector.ofFn f)
++        funext q
++        dsimp only
++        rw [CheckedFloatArray.dot_eq _ _ _ _ _ _ _ _ hA hB]
++        simp only [add_eq, mul_eq]
++        apply congrArg (fun (f : Binary32 → Fin n → Binary32) => Fin.foldl n f posZero)
++        funext acc k
++        have hi := index_address ((bmmDecodeC m p q.val).1 * n) k.val p
++          (bmmDecodeC m p q.val).2.2
++        rw [hi]
++      exact (congrArg (fun v : Vector Binary32 (batch * m * p) => v.get) heq).trans
++        (referenceBmm_spec batch m n p A B)
+ 
+ end Submission

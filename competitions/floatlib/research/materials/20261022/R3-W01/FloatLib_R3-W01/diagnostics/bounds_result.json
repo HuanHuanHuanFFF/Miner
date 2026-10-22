@@ -1,0 +1,150 @@
+{
+  "status": "PASSED_INTEGER_BOUNDARY_DIAGNOSTIC_ONLY",
+  "shape_range": "batch,m=0..8; n=0..16",
+  "valid_rows_checked": 22032,
+  "valid_points_checked": 176256,
+  "large_integer_positive_cases": [
+    {
+      "word_bits": 32,
+      "shape": [
+        1,
+        1,
+        4294967295
+      ],
+      "size": 4294967295,
+      "last_address": 4294967294
+    },
+    {
+      "word_bits": 32,
+      "shape": [
+        1,
+        2,
+        2147483647
+      ],
+      "size": 4294967294,
+      "last_address": 4294967293
+    },
+    {
+      "word_bits": 32,
+      "shape": [
+        3,
+        5,
+        268435456
+      ],
+      "size": 4026531840,
+      "last_address": 4026531839
+    },
+    {
+      "word_bits": 64,
+      "shape": [
+        1,
+        1,
+        18446744073709551615
+      ],
+      "size": 18446744073709551615,
+      "last_address": 18446744073709551614
+    },
+    {
+      "word_bits": 64,
+      "shape": [
+        1,
+        2,
+        9223372036854775807
+      ],
+      "size": 18446744073709551614,
+      "last_address": 18446744073709551613
+    },
+    {
+      "word_bits": 64,
+      "shape": [
+        3,
+        5,
+        1152921504606846976
+      ],
+      "size": 17293822569102704640,
+      "last_address": 17293822569102704639
+    }
+  ],
+  "counterexamples_and_rejected_cases": [
+    {
+      "kind": "empty_shape_hAS_does_not_bound_n",
+      "word_bits": 32,
+      "shape": [
+        0,
+        1,
+        4294967296
+      ],
+      "hAS": true,
+      "hn": false
+    },
+    {
+      "kind": "empty_shape_hAS_does_not_bound_n",
+      "word_bits": 32,
+      "shape": [
+        1,
+        0,
+        4294967296
+      ],
+      "hAS": true,
+      "hn": false
+    },
+    {
+      "kind": "strict_size_boundary_rejected",
+      "word_bits": 32,
+      "size": 4294967296,
+      "hAS": false
+    },
+    {
+      "kind": "empty_shape_hAS_does_not_bound_n",
+      "word_bits": 64,
+      "shape": [
+        0,
+        1,
+        18446744073709551616
+      ],
+      "hAS": true,
+      "hn": false
+    },
+    {
+      "kind": "empty_shape_hAS_does_not_bound_n",
+      "word_bits": 64,
+      "shape": [
+        1,
+        0,
+        18446744073709551616
+      ],
+      "hAS": true,
+      "hn": false
+    },
+    {
+      "kind": "strict_size_boundary_rejected",
+      "word_bits": 64,
+      "size": 18446744073709551616,
+      "hAS": false
+    },
+    {
+      "kind": "n_zero_row_span_false",
+      "shape": [
+        1,
+        1,
+        0
+      ],
+      "left": 0,
+      "right": 0
+    },
+    {
+      "kind": "empty_shape_arbitrary_Nat_n",
+      "shape": [
+        0,
+        1,
+        340282366920938463463374607431768211579
+      ],
+      "output_count": 0,
+      "word_conversion_required": false
+    }
+  ],
+  "lean_elaboration": "NOT_RUN",
+  "native_word_loop_execution": "NOT_RUN",
+  "timing": "NOT_RUN",
+  "scope": "Checks finite integer examples and concrete misuse counterexamples, not universal Lean acceptance."
+}

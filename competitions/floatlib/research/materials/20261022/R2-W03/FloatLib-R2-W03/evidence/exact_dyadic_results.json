@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "proof_status": "NOT_A_LEAN_PROOF",
+  "fractions_per_exponent": 187,
+  "normal_cases": 94996,
+  "all_finite_cases": 95370,
+  "shifted_integer_cases": 3366,
+  "dense_shift32_cases": 2618,
+  "block_shift32_cases": 86394,
+  "block_shift64_cases": 86394,
+  "checked_normal_exponents": [
+    1,
+    254
+  ],
+  "checked_finite_exponents": [
+    0,
+    254
+  ],
+  "counterexamples": [
+    {
+      "name": "hidden_bit_on_subnormal",
+      "input": "00000001",
+      "expected": "00000001",
+      "got": "00800001"
+    },
+    {
+      "name": "normal_formula_on_E0",
+      "input": "00000001",
+      "expected": "00000001",
+      "got": "00000000"
+    },
+    {
+      "name": "wrapped_factor_encoding",
+      "input": "00800000",
+      "expected": "00800000",
+      "scale": "f5000000",
+      "got": "ff800000"
+    },
+    {
+      "name": "wrong_two_stage_order",
+      "input": "7f000000",
+      "expected": "7f000000",
+      "intermediate": "7f800000",
+      "got": "7f800000"
+    },
+    {
+      "name": "DAZ_on_scale",
+      "input": "00800000",
+      "expected": "00800000",
+      "scale": "00000001",
+      "got": "00000000",
+      "note": "Outside the gradual-subnormal contract"
+    },
+    {
+      "name": "zero_minus_magnitude",
+      "input": "80000000",
+      "expected": "80000000",
+      "got": "00000000",
+      "note": "RN-even: +0 - +0 = +0; use native negation for -0"
+    },
+    {
+      "name": "dense_shift32_overflow_at_E133",
+      "input": "42800000",
+      "expected": "42800000",
+      "got": "00000000"
+    }
+  ],
+  "limitations": [
+    "Structured finite diagnostics, not exhaustive over all 2^32 bit patterns",
+    "No NaN payload model is used; nonfinite values require exact original fallback",
+    "No performance measurements are made by this script"
+  ]
+}

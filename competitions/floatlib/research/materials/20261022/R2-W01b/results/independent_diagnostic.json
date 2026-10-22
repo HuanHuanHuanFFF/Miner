@@ -1,0 +1,604 @@
+{
+  "scope": "finite diagnostic, not Lean proof, not native-runtime validation, not a C benchmark",
+  "arithmetic": "pure integer binary32 round-to-nearest ties-to-even; Lean-observable canonical NaN",
+  "distinct_point_cases": 136705,
+  "covered_table_indices": 512,
+  "class_counts": {
+    "admitted_normal": 123290,
+    "infinity": 2,
+    "nan": 512,
+    "negative_zero": 1,
+    "positive_zero": 1,
+    "small_normal": 12341,
+    "subnormal": 558
+  },
+  "signed_table_zeros": 50,
+  "normal_table_entries": 462,
+  "pointwise_route_and_bit_mismatches": 0,
+  "full_sum_vectors": 96,
+  "full_sum_vector_length": 1000,
+  "full_sum_vectors_and_outputs_all_finite": true,
+  "full_sum_distinct_outputs": 96,
+  "full_sum_additions_per_arm": 96000,
+  "full_sum_output_sha256": "a2dacc1a36669e9534cdf387c9b41abaf610bd7367ab8d15b1d590dd59ff8d6b",
+  "routing_mutation_witnesses": [
+    {
+      "mutation": "unsigned_wrap_replaced_with_saturating_subtraction",
+      "witness": "0x00000000",
+      "expected_route": true,
+      "mutated_route": false
+    },
+    {
+      "mutation": "lower_comparison_strict",
+      "witness": "0x0c000000",
+      "expected_route": true,
+      "mutated_route": false
+    }
+  ],
+  "output_mutation_witnesses": [
+    {
+      "mutation": "threshold_one_unit_too_low",
+      "witness": "0x0bffffff",
+      "expected": "0x0bffffff",
+      "mutated": "0x00000000"
+    },
+    {
+      "mutation": "finite_upper_guard_removed_infinity",
+      "witness": "0x7f800000",
+      "expected": "0x7f800000",
+      "mutated": "0x00000000"
+    },
+    {
+      "mutation": "finite_upper_guard_removed_nan",
+      "witness": "0xffa12345",
+      "expected": "0x7fc00000",
+      "mutated": "0x80000000"
+    },
+    {
+      "mutation": "sign_not_removed_in_lower_test",
+      "witness": "0x80000001",
+      "expected": "0x80000001",
+      "mutated": "0x80000000"
+    },
+    {
+      "mutation": "negative_zero_table_entry_cleared",
+      "witness": "0x80000000",
+      "expected": "0x80000000",
+      "mutated": "0x00000000",
+      "same_full_sum": "0x00000000"
+    }
+  ],
+  "sum_can_hide_negative_zero_error": true,
+  "sum_can_hide_later_error_after_nan": true,
+  "ordered_sum_witness": {
+    "original": [
+      "0x4b800000",
+      "0x3f800000",
+      "0xcb800000"
+    ],
+    "sum": "0x00000000",
+    "reordered_sum": "0x3f800000"
+  },
+  "boundary_rows": [
+    {
+      "input": "0x00000000",
+      "class": "positive_zero",
+      "j": 0,
+      "wrapped_a_minus_one": "0xffffffff",
+      "admitted": true,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x00000000",
+      "merged_toBits": "0x00000000"
+    },
+    {
+      "input": "0x80000000",
+      "class": "negative_zero",
+      "j": 256,
+      "wrapped_a_minus_one": "0xffffffff",
+      "admitted": true,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x80000000",
+      "merged_toBits": "0x80000000"
+    },
+    {
+      "input": "0x00000001",
+      "class": "subnormal",
+      "j": 0,
+      "wrapped_a_minus_one": "0x00000000",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x00000001",
+      "merged_toBits": "0x00000001"
+    },
+    {
+      "input": "0x80000001",
+      "class": "subnormal",
+      "j": 256,
+      "wrapped_a_minus_one": "0x00000000",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x80000001",
+      "merged_toBits": "0x80000001"
+    },
+    {
+      "input": "0x00000002",
+      "class": "subnormal",
+      "j": 0,
+      "wrapped_a_minus_one": "0x00000001",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x00000002",
+      "merged_toBits": "0x00000002"
+    },
+    {
+      "input": "0x80000002",
+      "class": "subnormal",
+      "j": 256,
+      "wrapped_a_minus_one": "0x00000001",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x80000002",
+      "merged_toBits": "0x80000002"
+    },
+    {
+      "input": "0x007ffffe",
+      "class": "subnormal",
+      "j": 0,
+      "wrapped_a_minus_one": "0x007ffffd",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x007ffffe",
+      "merged_toBits": "0x007ffffe"
+    },
+    {
+      "input": "0x807ffffe",
+      "class": "subnormal",
+      "j": 256,
+      "wrapped_a_minus_one": "0x007ffffd",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x807ffffe",
+      "merged_toBits": "0x807ffffe"
+    },
+    {
+      "input": "0x007fffff",
+      "class": "subnormal",
+      "j": 0,
+      "wrapped_a_minus_one": "0x007ffffe",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x007fffff",
+      "merged_toBits": "0x007fffff"
+    },
+    {
+      "input": "0x807fffff",
+      "class": "subnormal",
+      "j": 256,
+      "wrapped_a_minus_one": "0x007ffffe",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x807fffff",
+      "merged_toBits": "0x807fffff"
+    },
+    {
+      "input": "0x00800000",
+      "class": "small_normal",
+      "j": 1,
+      "wrapped_a_minus_one": "0x007fffff",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x00800000",
+      "merged_toBits": "0x00800000"
+    },
+    {
+      "input": "0x80800000",
+      "class": "small_normal",
+      "j": 257,
+      "wrapped_a_minus_one": "0x007fffff",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x80800000",
+      "merged_toBits": "0x80800000"
+    },
+    {
+      "input": "0x00800001",
+      "class": "small_normal",
+      "j": 1,
+      "wrapped_a_minus_one": "0x00800000",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x00800001",
+      "merged_toBits": "0x00800001"
+    },
+    {
+      "input": "0x80800001",
+      "class": "small_normal",
+      "j": 257,
+      "wrapped_a_minus_one": "0x00800000",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x80800001",
+      "merged_toBits": "0x80800001"
+    },
+    {
+      "input": "0x0b7fffff",
+      "class": "small_normal",
+      "j": 22,
+      "wrapped_a_minus_one": "0x0b7ffffe",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x0b7fffff",
+      "merged_toBits": "0x0b7fffff"
+    },
+    {
+      "input": "0x8b7fffff",
+      "class": "small_normal",
+      "j": 278,
+      "wrapped_a_minus_one": "0x0b7ffffe",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x8b7fffff",
+      "merged_toBits": "0x8b7fffff"
+    },
+    {
+      "input": "0x0b800000",
+      "class": "small_normal",
+      "j": 23,
+      "wrapped_a_minus_one": "0x0b7fffff",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x0b800000",
+      "merged_toBits": "0x0b800000"
+    },
+    {
+      "input": "0x8b800000",
+      "class": "small_normal",
+      "j": 279,
+      "wrapped_a_minus_one": "0x0b7fffff",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x8b800000",
+      "merged_toBits": "0x8b800000"
+    },
+    {
+      "input": "0x0b800001",
+      "class": "small_normal",
+      "j": 23,
+      "wrapped_a_minus_one": "0x0b800000",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x0b800001",
+      "merged_toBits": "0x0b800001"
+    },
+    {
+      "input": "0x8b800001",
+      "class": "small_normal",
+      "j": 279,
+      "wrapped_a_minus_one": "0x0b800000",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x8b800001",
+      "merged_toBits": "0x8b800001"
+    },
+    {
+      "input": "0x0bfffffe",
+      "class": "small_normal",
+      "j": 23,
+      "wrapped_a_minus_one": "0x0bfffffd",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x0bfffffe",
+      "merged_toBits": "0x0bfffffe"
+    },
+    {
+      "input": "0x8bfffffe",
+      "class": "small_normal",
+      "j": 279,
+      "wrapped_a_minus_one": "0x0bfffffd",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x8bfffffe",
+      "merged_toBits": "0x8bfffffe"
+    },
+    {
+      "input": "0x0bffffff",
+      "class": "small_normal",
+      "j": 23,
+      "wrapped_a_minus_one": "0x0bfffffe",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x0bffffff",
+      "merged_toBits": "0x0bffffff"
+    },
+    {
+      "input": "0x8bffffff",
+      "class": "small_normal",
+      "j": 279,
+      "wrapped_a_minus_one": "0x0bfffffe",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x8bffffff",
+      "merged_toBits": "0x8bffffff"
+    },
+    {
+      "input": "0x0c000000",
+      "class": "admitted_normal",
+      "j": 24,
+      "wrapped_a_minus_one": "0x0bffffff",
+      "admitted": true,
+      "scale_bits": "0x00800000",
+      "baseline_toBits": "0x0c000000",
+      "merged_toBits": "0x0c000000"
+    },
+    {
+      "input": "0x8c000000",
+      "class": "admitted_normal",
+      "j": 280,
+      "wrapped_a_minus_one": "0x0bffffff",
+      "admitted": true,
+      "scale_bits": "0x80800000",
+      "baseline_toBits": "0x8c000000",
+      "merged_toBits": "0x8c000000"
+    },
+    {
+      "input": "0x0c000001",
+      "class": "admitted_normal",
+      "j": 24,
+      "wrapped_a_minus_one": "0x0c000000",
+      "admitted": true,
+      "scale_bits": "0x00800000",
+      "baseline_toBits": "0x0c000001",
+      "merged_toBits": "0x0c000001"
+    },
+    {
+      "input": "0x8c000001",
+      "class": "admitted_normal",
+      "j": 280,
+      "wrapped_a_minus_one": "0x0c000000",
+      "admitted": true,
+      "scale_bits": "0x80800000",
+      "baseline_toBits": "0x8c000001",
+      "merged_toBits": "0x8c000001"
+    },
+    {
+      "input": "0x0c7fffff",
+      "class": "admitted_normal",
+      "j": 24,
+      "wrapped_a_minus_one": "0x0c7ffffe",
+      "admitted": true,
+      "scale_bits": "0x00800000",
+      "baseline_toBits": "0x0c7fffff",
+      "merged_toBits": "0x0c7fffff"
+    },
+    {
+      "input": "0x8c7fffff",
+      "class": "admitted_normal",
+      "j": 280,
+      "wrapped_a_minus_one": "0x0c7ffffe",
+      "admitted": true,
+      "scale_bits": "0x80800000",
+      "baseline_toBits": "0x8c7fffff",
+      "merged_toBits": "0x8c7fffff"
+    },
+    {
+      "input": "0x0c800000",
+      "class": "admitted_normal",
+      "j": 25,
+      "wrapped_a_minus_one": "0x0c7fffff",
+      "admitted": true,
+      "scale_bits": "0x01000000",
+      "baseline_toBits": "0x0c800000",
+      "merged_toBits": "0x0c800000"
+    },
+    {
+      "input": "0x8c800000",
+      "class": "admitted_normal",
+      "j": 281,
+      "wrapped_a_minus_one": "0x0c7fffff",
+      "admitted": true,
+      "scale_bits": "0x81000000",
+      "baseline_toBits": "0x8c800000",
+      "merged_toBits": "0x8c800000"
+    },
+    {
+      "input": "0x7f000000",
+      "class": "admitted_normal",
+      "j": 254,
+      "wrapped_a_minus_one": "0x7effffff",
+      "admitted": true,
+      "scale_bits": "0x73800000",
+      "baseline_toBits": "0x7f000000",
+      "merged_toBits": "0x7f000000"
+    },
+    {
+      "input": "0xff000000",
+      "class": "admitted_normal",
+      "j": 510,
+      "wrapped_a_minus_one": "0x7effffff",
+      "admitted": true,
+      "scale_bits": "0xf3800000",
+      "baseline_toBits": "0xff000000",
+      "merged_toBits": "0xff000000"
+    },
+    {
+      "input": "0x7f7ffffe",
+      "class": "admitted_normal",
+      "j": 254,
+      "wrapped_a_minus_one": "0x7f7ffffd",
+      "admitted": true,
+      "scale_bits": "0x73800000",
+      "baseline_toBits": "0x7f7ffffe",
+      "merged_toBits": "0x7f7ffffe"
+    },
+    {
+      "input": "0xff7ffffe",
+      "class": "admitted_normal",
+      "j": 510,
+      "wrapped_a_minus_one": "0x7f7ffffd",
+      "admitted": true,
+      "scale_bits": "0xf3800000",
+      "baseline_toBits": "0xff7ffffe",
+      "merged_toBits": "0xff7ffffe"
+    },
+    {
+      "input": "0x7f7fffff",
+      "class": "admitted_normal",
+      "j": 254,
+      "wrapped_a_minus_one": "0x7f7ffffe",
+      "admitted": true,
+      "scale_bits": "0x73800000",
+      "baseline_toBits": "0x7f7fffff",
+      "merged_toBits": "0x7f7fffff"
+    },
+    {
+      "input": "0xff7fffff",
+      "class": "admitted_normal",
+      "j": 510,
+      "wrapped_a_minus_one": "0x7f7ffffe",
+      "admitted": true,
+      "scale_bits": "0xf3800000",
+      "baseline_toBits": "0xff7fffff",
+      "merged_toBits": "0xff7fffff"
+    },
+    {
+      "input": "0x7f800000",
+      "class": "infinity",
+      "j": 255,
+      "wrapped_a_minus_one": "0x7f7fffff",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x7f800000",
+      "merged_toBits": "0x7f800000"
+    },
+    {
+      "input": "0xff800000",
+      "class": "infinity",
+      "j": 511,
+      "wrapped_a_minus_one": "0x7f7fffff",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0xff800000",
+      "merged_toBits": "0xff800000"
+    },
+    {
+      "input": "0x7f800001",
+      "class": "nan",
+      "j": 255,
+      "wrapped_a_minus_one": "0x7f800000",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    },
+    {
+      "input": "0xff800001",
+      "class": "nan",
+      "j": 511,
+      "wrapped_a_minus_one": "0x7f800000",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    },
+    {
+      "input": "0x7fbfffff",
+      "class": "nan",
+      "j": 255,
+      "wrapped_a_minus_one": "0x7fbffffe",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    },
+    {
+      "input": "0xffbfffff",
+      "class": "nan",
+      "j": 511,
+      "wrapped_a_minus_one": "0x7fbffffe",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    },
+    {
+      "input": "0x7fc00000",
+      "class": "nan",
+      "j": 255,
+      "wrapped_a_minus_one": "0x7fbfffff",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    },
+    {
+      "input": "0xffc00000",
+      "class": "nan",
+      "j": 511,
+      "wrapped_a_minus_one": "0x7fbfffff",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    },
+    {
+      "input": "0x7fc00001",
+      "class": "nan",
+      "j": 255,
+      "wrapped_a_minus_one": "0x7fc00000",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    },
+    {
+      "input": "0xffc00001",
+      "class": "nan",
+      "j": 511,
+      "wrapped_a_minus_one": "0x7fc00000",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    },
+    {
+      "input": "0x7ffffffe",
+      "class": "nan",
+      "j": 255,
+      "wrapped_a_minus_one": "0x7ffffffd",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    },
+    {
+      "input": "0xfffffffe",
+      "class": "nan",
+      "j": 511,
+      "wrapped_a_minus_one": "0x7ffffffd",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    },
+    {
+      "input": "0x7fffffff",
+      "class": "nan",
+      "j": 255,
+      "wrapped_a_minus_one": "0x7ffffffe",
+      "admitted": false,
+      "scale_bits": "0x00000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    },
+    {
+      "input": "0xffffffff",
+      "class": "nan",
+      "j": 511,
+      "wrapped_a_minus_one": "0x7ffffffe",
+      "admitted": false,
+      "scale_bits": "0x80000000",
+      "baseline_toBits": "0x7fc00000",
+      "merged_toBits": "0x7fc00000"
+    }
+  ]
+}

@@ -1,0 +1,414 @@
+--- parent/Kernel.lean
++++ Kernel.lean
+@@ -1288,29 +1288,397 @@
+   rw [Nat.add_mul]
+   omega
+ 
++namespace Packed4
++
++structure F4 where
++  s0 : Float32
++  s1 : Float32
++  s2 : Float32
++  s3 : Float32
++
++@[inline] def zero32 : Float32 := Float32.ofBits 0
++
++@[inline] def zero4 : F4 := ⟨zero32, zero32, zero32, zero32⟩
++
++@[inline] def lane (v : F4) (l : Fin 4) : Float32 :=
++  match l.val with
++  | 0 => v.s0
++  | 1 => v.s1
++  | 2 => v.s2
++  | _ => v.s3
++
++@[inline] def packet (read : Nat → Float32) (col : Nat) : F4 :=
++  ⟨read col, read (col + 1), read (col + 2), read (col + 3)⟩
++
++@[inline] def update (acc : F4) (a : Float32) (v : F4) : F4 :=
++  ⟨acc.s0 + a * v.s0, acc.s1 + a * v.s1,
++    acc.s2 + a * v.s2, acc.s3 + a * v.s3⟩
++
++theorem lane_packet (read : Nat → Float32) (col : Nat) (l : Fin 4) :
++    lane (packet read col) l = read (col + l.val) := by
++  rcases l with ⟨l, hl⟩
++  have h : l = 0 ∨ l = 1 ∨ l = 2 ∨ l = 3 := by omega
++  rcases h with rfl | rfl | rfl | rfl <;> rfl
++
++theorem lane_zero4 (l : Fin 4) : lane zero4 l = zero32 := by
++  rcases l with ⟨l, hl⟩
++  have h : l = 0 ∨ l = 1 ∨ l = 2 ∨ l = 3 := by omega
++  rcases h with rfl | rfl | rfl | rfl <;> rfl
++
++theorem lane_zero (l : Fin 4) : lane zero4 l = zero32 :=
++  lane_zero4 l
++
++theorem lane_update (acc : F4) (a : Float32) (v : F4) (l : Fin 4) :
++    lane (update acc a v) l = lane acc l + a * lane v l := by
++  rcases l with ⟨l, hl⟩
++  have h : l = 0 ∨ l = 1 ∨ l = 2 ∨ l = 3 := by omega
++  rcases h with rfl | rfl | rfl | rfl <;> rfl
++
++@[inline] def groups (p : Nat) : Nat := (p + 3) / 4
++
++theorem groups_pos_of_col (p j : Nat) (hj : j < p) :
++    j / 4 < groups p := by
++  unfold groups
++  omega
++
++theorem column_decomposition (j : Nat) :
++    4 * (j / 4) + j % 4 = j := by
++  omega
++
++theorem vector_get_ofFn {α : Type} {n : Nat}
++    (f : Fin n → α) (i : Fin n) : (Vector.ofFn f).get i = f i := by
++  change (Vector.ofFn f)[i.val]'i.isLt = f i
++  exact Vector.getElem_ofFn i.isLt
++
++def packB (batch n p : Nat) (B : Vector Binary32 (batch * n * p)) :
++    Vector (Vector (Vector F4 n) (groups p)) batch :=
++  Vector.ofFn fun b =>
++    Vector.ofFn fun g =>
++      Vector.ofFn fun k =>
++        packet (fun j =>
++          if j < p then
++            ExecFloat.Binary.toFloat32
++              (B.toArray.getD ((b.val * n + k.val) * p + j) posZero)
++          else zero32) (4 * g.val)
++
++theorem packB_get (batch n p : Nat)
++    (B : Vector Binary32 (batch * n * p))
++    (b : Fin batch) (g : Fin (groups p)) (k : Fin n) :
++    (((packB batch n p B).get b).get g).get k =
++      packet (fun j =>
++        if j < p then
++          ExecFloat.Binary.toFloat32
++            (B.toArray.getD ((b.val * n + k.val) * p + j) posZero)
++        else zero32) (4 * g.val) := by
++  simp only [packB, vector_get_ofFn]
++
++theorem packB_lane (batch n p : Nat)
++    (B : Vector Binary32 (batch * n * p))
++    (b : Fin batch) (g : Fin (groups p)) (k : Fin n) (l : Fin 4)
++    (hcol : 4 * g.val + l.val < p) :
++    lane ((((packB batch n p B).get b).get g).get k) l =
++      ExecFloat.Binary.toFloat32
++        (B.toArray.getD
++          ((b.val * n + k.val) * p + (4 * g.val + l.val)) posZero) := by
++  rw [packB_get, lane_packet, if_pos hcol]
++
++end Packed4
++
++
++namespace Packed4
++
++open FloatLib.Floats Competition
++
++/-- Mapping the input preserves the total read, including the positive-zero default. -/
++theorem nativeA_getD (Araw : Array Binary32) (i : Nat) :
++    (Araw.map ExecFloat.Binary.toFloat32).getD i zero32 =
++      ExecFloat.Binary.toFloat32 (Araw.getD i posZero) := by
++  by_cases hi : i < Araw.size
++  · simp only [Array.getD, Array.size_map, dif_pos hi, Array.getElem_map]
++  · simp only [Array.getD, Array.size_map, dif_neg hi] <;> rfl
++
++/-- Four independent left folds share each input load from the left operand. -/
++def dot4 (n baseA : Nat) (A : Array Float32) (B : Vector F4 n)
++    (k : Nat) (s0 s1 s2 s3 : Float32) : F4 :=
++  if hk : k < n then
++    let sharedA := A.getD (baseA + k) zero32
++    let v := B.get ⟨k, hk⟩
++    dot4 n baseA A B (k + 1)
++      (s0 + sharedA * v.s0)
++      (s1 + sharedA * v.s1)
++      (s2 + sharedA * v.s2)
++      (s3 + sharedA * v.s3)
++  else ⟨s0, s1, s2, s3⟩
++termination_by n - k
++
++/-- Each packed lane follows the corresponding scalar recurrence at every starting index. -/
++theorem dot4_lane (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
++    (B : Vector F4 n) (l : Fin 4)
++    (hb : ∀ i : Fin n, lane (B.get i) l =
++      ExecFloat.Binary.toFloat32 (Braw.getD (baseB + i.val * p) posZero))
++    (k : Nat) (s0 s1 s2 s3 : Float32) :
++    lane (dot4 n baseA (Araw.map ExecFloat.Binary.toFloat32) B k s0 s1 s2 s3) l =
++      NativeFinal.dotLoop n baseA baseB p Araw Braw k (lane ⟨s0, s1, s2, s3⟩ l) := by
++  by_cases hk : k < n
++  · rw [dot4, NativeFinal.dotLoop]
++    simp only [dif_pos hk, if_pos hk]
++    dsimp only
++    have ih := dot4_lane n baseA baseB p Araw Braw B l hb (k + 1)
++      (s0 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 *
++        (B.get ⟨k, hk⟩).s0)
++      (s1 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 *
++        (B.get ⟨k, hk⟩).s1)
++      (s2 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 *
++        (B.get ⟨k, hk⟩).s2)
++      (s3 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 *
++        (B.get ⟨k, hk⟩).s3)
++    have hacc :
++        lane
++          ⟨s0 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 *
++              (B.get ⟨k, hk⟩).s0,
++            s1 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 *
++              (B.get ⟨k, hk⟩).s1,
++            s2 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 *
++              (B.get ⟨k, hk⟩).s2,
++            s3 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 *
++              (B.get ⟨k, hk⟩).s3⟩ l =
++          lane ⟨s0, s1, s2, s3⟩ l +
++            ExecFloat.Binary.toFloat32 (Araw.getD (baseA + k) posZero) *
++              ExecFloat.Binary.toFloat32 (Braw.getD (baseB + k * p) posZero) := by
++      change lane
++        (update ⟨s0, s1, s2, s3⟩
++          ((Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32)
++          (B.get ⟨k, hk⟩)) l = _
++      rw [lane_update, nativeA_getD, hb ⟨k, hk⟩]
++    rw [hacc] at ih
++    exact ih
++  · rw [dot4, NativeFinal.dotLoop]
++    simp only [dif_neg hk, if_neg hk]
++termination_by n - k
++
++/-- The result guard and exact fallback are the same as in the scalar implementation. -/
++def finish (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
++    (result : Float32) : Binary32 :=
++  if hf : result.isFinite = true then ExecFloat.Binary.ofFloat32 result
++  else Fin.foldl n
++    (fun a i => Submission.add a
++      (Submission.mul (Araw.getD (baseA + i.val) posZero)
++        (Braw.getD (baseB + i.val * p) posZero))) posZero
++
++theorem finish_eq_dot (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
++    (result : Float32)
++    (hs : result = NativeFinal.dotLoop n baseA baseB p Araw Braw 0 zero32) :
++    finish n baseA baseB p Araw Braw result =
++      NativeFinal.dot n baseA baseB p Araw Braw := by
++  rw [hs] <;> rfl
++
++theorem finish_eq_fold (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
++    (result : Float32)
++    (hs : result = NativeFinal.dotLoop n baseA baseB p Araw Braw 0 zero32) :
++    finish n baseA baseB p Araw Braw result =
++      Fin.foldl n
++        (fun a i => ExecFloat.add a
++          (ExecFloat.mul (Araw.getD (baseA + i.val) posZero)
++            (Braw.getD (baseB + i.val * p) posZero))) posZero := by
++  rw [finish_eq_dot n baseA baseB p Araw Braw result hs, NativeFinal.dot_eq]
++
++theorem finish_eq_kernel_fold (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
++    (result : Float32)
++    (hs : result = NativeFinal.dotLoop n baseA baseB p Araw Braw 0 zero32) :
++    finish n baseA baseB p Araw Braw result =
++      Fin.foldl n
++        (fun a i => Submission.add a
++          (Submission.mul (Araw.getD (baseA + i.val) posZero)
++            (Braw.getD (baseB + i.val * p) posZero))) posZero := by
++  rw [finish_eq_fold n baseA baseB p Araw Braw result hs]
++  simp only [Submission.add_eq, Submission.mul_eq]
++
++theorem finish_dot4_lane (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
++    (B : Vector F4 n) (l : Fin 4)
++    (hb : ∀ i : Fin n, lane (B.get i) l =
++      ExecFloat.Binary.toFloat32 (Braw.getD (baseB + i.val * p) posZero)) :
++    finish n baseA baseB p Araw Braw
++        (lane (dot4 n baseA (Araw.map ExecFloat.Binary.toFloat32) B 0
++          zero32 zero32 zero32 zero32) l) =
++      NativeFinal.dot n baseA baseB p Araw Braw := by
++  have hs := dot4_lane n baseA baseB p Araw Braw B l hb 0
++    zero32 zero32 zero32 zero32
++  have hz : lane (⟨zero32, zero32, zero32, zero32⟩ : F4) l = zero32 :=
++    lane_zero4 l
++  rw [hz] at hs
++  exact finish_eq_dot n baseA baseB p Araw Braw _ hs
++
++theorem finish_dot4_lane_fold (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
++    (B : Vector F4 n) (l : Fin 4)
++    (hb : ∀ i : Fin n, lane (B.get i) l =
++      ExecFloat.Binary.toFloat32 (Braw.getD (baseB + i.val * p) posZero)) :
++    finish n baseA baseB p Araw Braw
++        (lane (dot4 n baseA (Araw.map ExecFloat.Binary.toFloat32) B 0
++          zero32 zero32 zero32 zero32) l) =
++      Fin.foldl n
++        (fun a i => ExecFloat.add a
++          (ExecFloat.mul (Araw.getD (baseA + i.val) posZero)
++            (Braw.getD (baseB + i.val * p) posZero))) posZero := by
++  rw [finish_dot4_lane n baseA baseB p Araw Braw B l hb, NativeFinal.dot_eq]
++
++end Packed4
++
++
++namespace Packed4
++
++open Competition
++
++/-- Every inhabited row-major output index decodes to valid tensor coordinates. -/
++theorem decode_bounds (batch m p : Nat) (q : Fin (batch * m * p)) :
++    (bmmDecodeC m p q.val).1 < batch ∧
++      (bmmDecodeC m p q.val).2.1 < m ∧
++      (bmmDecodeC m p q.val).2.2 < p := by
++  have hq : q.val < batch * (m * p) := by
++    simpa only [Nat.mul_assoc] using q.isLt
++  have hmp : m * p ≠ 0 := by
++    intro h
++    rw [h, Nat.mul_zero] at hq
++    omega
++  have hp : p ≠ 0 := by
++    intro h
++    apply hmp
++    simp only [h, Nat.mul_zero]
++  have hmpPos : 0 < m * p := by omega
++  have hpPos : 0 < p := by omega
++  simp only [bmmDecodeC, hmp, hp, if_false]
++  refine ⟨?_, ?_, ?_⟩
++  · exact (Nat.div_lt_iff_lt_mul hmpPos).2 hq
++  · exact (Nat.div_lt_iff_lt_mul hpPos).2 (Nat.mod_lt q.val hmpPos)
++  · exact Nat.mod_lt _ hpPos
++
++end Packed4
++
++
++namespace Packed4
++
++def tileResults (batch m n p : Nat) (A : Array Float32)
++    (B : Vector (Vector (Vector F4 n) (groups p)) batch) :
++    Vector (Vector (Vector F4 (groups p)) m) batch :=
++  Vector.ofFn fun b =>
++    Vector.ofFn fun i =>
++      Vector.ofFn fun g =>
++        dot4 n ((b.val * m + i.val) * n) A ((B.get b).get g) 0
++          zero32 zero32 zero32 zero32
++
++theorem tileResults_get (batch m n p : Nat) (A : Array Float32)
++    (B : Vector (Vector (Vector F4 n) (groups p)) batch)
++    (b : Fin batch) (i : Fin m) (g : Fin (groups p)) :
++    (((tileResults batch m n p A B).get b).get i).get g =
++      dot4 n ((b.val * m + i.val) * n) A ((B.get b).get g) 0
++        zero32 zero32 zero32 zero32 := by
++  simp only [tileResults, vector_get_ofFn]
++
++theorem tile_finish (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p))
++    (b : Fin batch) (i : Fin m) (g : Fin (groups p)) (l : Fin 4)
++    (hcol : 4 * g.val + l.val < p) :
++    finish n ((b.val * m + i.val) * n)
++        (b.val * n * p + (4 * g.val + l.val)) p A.toArray B.toArray
++        (lane ((((tileResults batch m n p
++          (A.toArray.map ExecFloat.Binary.toFloat32) (packB batch n p B)).get b).get i).get g) l) =
++      NativeFinal.dot n ((b.val * m + i.val) * n)
++        (b.val * n * p + (4 * g.val + l.val)) p A.toArray B.toArray := by
++  rw [tileResults_get]
++  apply finish_dot4_lane
++  intro k
++  rw [packB_lane batch n p B b g k l hcol]
++  rw [index_address (b.val * n) k.val p (4 * g.val + l.val)]
++
++def outputFromTiles (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p))
++    (tiles : Vector (Vector (Vector F4 (groups p)) m) batch)
++    (q : Fin (batch * m * p)) : Binary32 :=
++  let d := bmmDecodeC m p q.val
++  let b : Fin batch := ⟨d.1, (decode_bounds batch m p q).1⟩
++  let i : Fin m := ⟨d.2.1, (decode_bounds batch m p q).2.1⟩
++  let g : Fin (groups p) :=
++    ⟨d.2.2 / 4, groups_pos_of_col p d.2.2 (decode_bounds batch m p q).2.2⟩
++  let l : Fin 4 := ⟨d.2.2 % 4, Nat.mod_lt _ (by decide)⟩
++  finish n ((d.1 * m + d.2.1) * n) (d.1 * n * p + d.2.2) p A.toArray B.toArray
++    (lane (((tiles.get b).get i).get g) l)
++
++theorem outputFromTiles_eq (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p))
++    (q : Fin (batch * m * p)) :
++    outputFromTiles batch m n p A B
++        (tileResults batch m n p (A.toArray.map ExecFloat.Binary.toFloat32)
++          (packB batch n p B)) q =
++      let (b, i, j) := bmmDecodeC m p q.val
++      NativeFinal.dot n ((b * m + i) * n) (b * n * p + j) p A.toArray B.toArray := by
++  let d := bmmDecodeC m p q.val
++  let b : Fin batch := ⟨d.1, (decode_bounds batch m p q).1⟩
++  let i : Fin m := ⟨d.2.1, (decode_bounds batch m p q).2.1⟩
++  let g : Fin (groups p) :=
++    ⟨d.2.2 / 4, groups_pos_of_col p d.2.2 (decode_bounds batch m p q).2.2⟩
++  let l : Fin 4 := ⟨d.2.2 % 4, Nat.mod_lt _ (by decide)⟩
++  have hc : 4 * g.val + l.val = d.2.2 := column_decomposition d.2.2
++  have hcol : 4 * g.val + l.val < p := by
++    rw [hc]
++    exact (decode_bounds batch m p q).2.2
++  have ht := tile_finish batch m n p A B b i g l hcol
++  change finish n ((b.val * m + i.val) * n) (b.val * n * p + d.2.2) p
++      A.toArray B.toArray
++      (lane ((((tileResults batch m n p
++        (A.toArray.map ExecFloat.Binary.toFloat32) (packB batch n p B)).get b).get i).get g) l) =
++    NativeFinal.dot n ((b.val * m + i.val) * n) (b.val * n * p + d.2.2) p
++      A.toArray B.toArray
++  simpa only [hc] using ht
++
++def core (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
++  let nativeA := A.toArray.map ExecFloat.Binary.toFloat32
++  let packedB := packB batch n p B
++  let tiles := tileResults batch m n p nativeA packedB
++  Vector.ofFn (outputFromTiles batch m n p A B tiles)
++
++theorem core_eq_reference (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p)) :
++    core batch m n p A B = referenceBmm batch m n p A B := by
++  unfold core referenceBmm
++  dsimp only
++  apply congrArg (fun (f : Fin (batch * m * p) → Binary32) => Vector.ofFn f)
++  funext q
++  rw [outputFromTiles_eq]
++  dsimp only
++  rw [NativeFinal.dot_eq]
++  simp only [add_eq, mul_eq]
++  apply congrArg (fun (f : Binary32 → Fin n → Binary32) => Fin.foldl n f posZero)
++  funext acc k
++  have hi := index_address ((bmmDecodeC m p q.val).1 * n) k.val p
++    (bmmDecodeC m p q.val).2.2
++  rw [hi]
++
++end Packed4
++
+ def bmm (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+     (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+-  Vector.ofFn fun q =>
+-    let (b, i, j) := bmmDecodeC m p q.val
+-    NativeFinal.dot n ((b * m + i) * n) (b * n * p + j) p A.toArray B.toArray
++  if batch * m * p = 0 then referenceBmm batch m n p A B
++  else if n = 0 then referenceBmm batch m n p A B
++  else Packed4.core batch m n p A B
+ 
+ theorem bmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+     (B : Vector Binary32 (batch * n * p)),
+     (bmm batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+   intro batch m n p A B
+   have h : bmm batch m n p A B = referenceBmm batch m n p A B := by
+-    unfold bmm referenceBmm
+-    apply congrArg (fun (f : Fin (batch * m * p) → Binary32) => Vector.ofFn f)
+-    funext q
+-    dsimp only
+-    rw [NativeFinal.dot_eq]
+-    simp only [add_eq, mul_eq]
+-    apply congrArg (fun (f : Binary32 → Fin n → Binary32) => Fin.foldl n f posZero)
+-    funext acc k
+-    have hi := index_address ((bmmDecodeC m p q.val).1 * n) k.val p
+-      (bmmDecodeC m p q.val).2.2
+-    rw [hi]
++    unfold bmm
++    split
++    · rfl
++    · split
++      · rfl
++      · exact Packed4.core_eq_reference batch m n p A B
+   exact (congrArg (fun v : Vector Binary32 (batch * m * p) => v.get) h).trans
+     (referenceBmm_spec batch m n p A B)
+ 
++
+ end Submission

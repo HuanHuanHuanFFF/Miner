@@ -1,0 +1,139 @@
+00000000000025e0 <sum_external>:
+    25e0:	endbr64
+    25e4:	push   %rbp
+    25e5:	lea    0xfa0(%rdi),%rbp
+    25ec:	push   %rbx
+    25ed:	mov    %rdi,%rbx
+    25f0:	sub    $0x18,%rsp
+    25f4:	movl   $0x0,0xc(%rsp)
+    25fc:	nopl   0x0(%rax)
+    2600:	mov    (%rbx),%edi
+    2602:	add    $0x4,%rbx
+    2606:	call   2930 <external_of_bits>
+    260b:	addss  0xc(%rsp),%xmm0
+    2611:	movss  %xmm0,0xc(%rsp)
+    2617:	cmp    %rbp,%rbx
+    261a:	jne    2600 <sum_external+0x20>
+    261c:	mov    0xc(%rsp),%eax
+    2620:	mov    %eax,%edx
+    2622:	not    %edx
+    2624:	and    $0x7f800000,%edx
+    262a:	je     2633 <sum_external+0x53>
+    262c:	add    $0x18,%rsp
+    2630:	pop    %rbx
+    2631:	pop    %rbp
+    2632:	ret
+    2633:	call   25b0 <finish_finite.part.0>
+    2638:	nopl   0x0(%rax,%rax,1)
+
+0000000000002730 <sum_old>:
+    2730:	endbr64
+    2734:	push   %r12
+    2736:	pxor   %xmm1,%xmm1
+    273a:	lea    0xfa0(%rdi),%r12
+    2741:	push   %rbp
+    2742:	lea    0x2917(%rip),%rbp        # 5060 <scale_table>
+    2749:	push   %rbx
+    274a:	mov    %rdi,%rbx
+    274d:	sub    $0x10,%rsp
+    2751:	jmp    277f <sum_old+0x4f>
+    2753:	nopl   0x0(%rax,%rax,1)
+    2758:	and    $0x7fffff,%edi
+    275e:	pxor   %xmm0,%xmm0
+    2762:	or     $0x800000,%edi
+    2768:	cvtsi2ss %edi,%xmm0
+    276c:	mulss  0x0(%rbp,%rdx,4),%xmm0
+    2772:	add    $0x4,%rbx
+    2776:	addss  %xmm0,%xmm1
+    277a:	cmp    %rbx,%r12
+    277d:	je     27b9 <sum_old+0x89>
+    277f:	mov    (%rbx),%edi
+    2781:	pxor   %xmm0,%xmm0
+    2785:	test   %edi,%edi
+    2787:	je     2772 <sum_old+0x42>
+    2789:	mov    %edi,%edx
+    278b:	shr    $0x17,%edx
+    278e:	movzbl %dl,%eax
+    2791:	sub    $0x18,%eax
+    2794:	cmp    $0xe6,%eax
+    2799:	jbe    2758 <sum_old+0x28>
+    279b:	movss  %xmm1,0xc(%rsp)
+    27a1:	add    $0x4,%rbx
+    27a5:	call   2930 <external_of_bits>
+    27aa:	movss  0xc(%rsp),%xmm1
+    27b0:	addss  %xmm0,%xmm1
+    27b4:	cmp    %rbx,%r12
+    27b7:	jne    277f <sum_old+0x4f>
+    27b9:	movd   %xmm1,%eax
+    27bd:	mov    %eax,%edx
+    27bf:	not    %edx
+    27c1:	and    $0x7f800000,%edx
+    27c7:	je     27d2 <sum_old+0xa2>
+    27c9:	add    $0x10,%rsp
+    27cd:	pop    %rbx
+    27ce:	pop    %rbp
+    27cf:	pop    %r12
+    27d1:	ret
+    27d2:	call   25b0 <finish_finite.part.0>
+    27d7:	nopw   0x0(%rax,%rax,1)
+
+0000000000002670 <sum_merged>:
+    2670:	endbr64
+    2674:	push   %r12
+    2676:	pxor   %xmm1,%xmm1
+    267a:	lea    0x29df(%rip),%r12        # 5060 <scale_table>
+    2681:	push   %rbp
+    2682:	lea    0xfa0(%rdi),%rbp
+    2689:	push   %rbx
+    268a:	mov    %rdi,%rbx
+    268d:	sub    $0x10,%rsp
+    2691:	nopl   0x0(%rax)
+    2698:	mov    (%rbx),%edi
+    269a:	mov    %edi,%eax
+    269c:	and    $0x7fffffff,%eax
+    26a1:	lea    -0x1(%rax),%edx
+    26a4:	cmp    $0xbfffffe,%edx
+    26aa:	jbe    2700 <sum_merged+0x90>
+    26ac:	cmp    $0x7f7fffff,%eax
+    26b1:	ja     2700 <sum_merged+0x90>
+    26b3:	mov    %edi,%eax
+    26b5:	pxor   %xmm0,%xmm0
+    26b9:	shr    $0x17,%edi
+    26bc:	add    $0x4,%rbx
+    26c0:	and    $0x7fffff,%eax
+    26c5:	or     $0x800000,%eax
+    26ca:	cvtsi2ss %eax,%xmm0
+    26ce:	mulss  (%r12,%rdi,4),%xmm0
+    26d4:	addss  %xmm0,%xmm1
+    26d8:	cmp    %rbx,%rbp
+    26db:	jne    2698 <sum_merged+0x28>
+    26dd:	movd   %xmm1,%eax
+    26e1:	mov    %eax,%edx
+    26e3:	not    %edx
+    26e5:	and    $0x7f800000,%edx
+    26eb:	je     2724 <sum_merged+0xb4>
+    26ed:	add    $0x10,%rsp
+    26f1:	pop    %rbx
+    26f2:	pop    %rbp
+    26f3:	pop    %r12
+    26f5:	ret
+    26f6:	cs nopw 0x0(%rax,%rax,1)
+    2700:	movss  %xmm1,0xc(%rsp)
+    2706:	add    $0x4,%rbx
+    270a:	call   2930 <external_of_bits>
+    270f:	movss  0xc(%rsp),%xmm1
+    2715:	addss  %xmm0,%xmm1
+    2719:	cmp    %rbx,%rbp
+    271c:	jne    2698 <sum_merged+0x28>
+    2722:	jmp    26dd <sum_merged+0x6d>
+    2724:	call   25b0 <finish_finite.part.0>
+    2729:	nopl   0x0(%rax)
+
+0000000000002930 <external_of_bits>:
+    2930:	endbr64
+    2934:	movd   %edi,%xmm0
+    2938:	mov    $0x7fc00000,%eax
+    293d:	ucomiss %xmm0,%xmm0
+    2940:	cmovnp %edi,%eax
+    2943:	movd   %eax,%xmm0
+    2947:	ret

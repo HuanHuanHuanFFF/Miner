@@ -1,0 +1,51 @@
+def bmm (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  match CheckedFloatArray.prepare A.toArray with
+  | none => originalBmm batch m n p A B
+  | some AF =>
+    match CheckedFloatArray.prepare B.toArray with
+    | none => originalBmm batch m n p A B
+    | some BF =>
+      Vector.ofFn fun q =>
+        let (b, i, j) := bmmDecodeC m p q.val
+        CheckedFloatArray.dot n ((b * m + i) * n) (b * n * p + j) p
+          A.toArray B.toArray AF BF
+
+theorem bmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)),
+    (bmm batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+  intro batch m n p A B
+  unfold bmm
+  cases hAF : CheckedFloatArray.prepare A.toArray with
+  | none =>
+    simp only [hAF]
+    exact originalBmm_spec batch m n p A B
+  | some AF =>
+    simp only [hAF]
+    cases hBF : CheckedFloatArray.prepare B.toArray with
+    | none =>
+      simp only [hBF]
+      exact originalBmm_spec batch m n p A B
+    | some BF =>
+      simp only [hBF]
+      have hA := CheckedFloatArray.read_prepare_eq A.toArray AF hAF
+      have hB := CheckedFloatArray.read_prepare_eq B.toArray BF hBF
+      have heq : (Vector.ofFn fun q : Fin (batch * m * p) =>
+          let (b, i, j) := bmmDecodeC m p q.val
+          CheckedFloatArray.dot n ((b * m + i) * n) (b * n * p + j) p
+            A.toArray B.toArray AF BF) = referenceBmm batch m n p A B := by
+        unfold referenceBmm
+        apply congrArg (fun (f : Fin (batch * m * p) → Binary32) => Vector.ofFn f)
+        funext q
+        dsimp only
+        rw [CheckedFloatArray.dot_eq _ _ _ _ _ _ _ _ hA hB]
+        simp only [add_eq, mul_eq]
+        apply congrArg (fun (f : Binary32 → Fin n → Binary32) => Fin.foldl n f posZero)
+        funext acc k
+        have hi := index_address ((bmmDecodeC m p q.val).1 * n) k.val p
+          (bmmDecodeC m p q.val).2.2
+        rw [hi]
+      exact (congrArg (fun v : Vector Binary32 (batch * m * p) => v.get) heq).trans
+        (referenceBmm_spec batch m n p A B)
+
+end Submission

@@ -1,0 +1,15 @@
+
+runtime_stub.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <runtime_of_bits>:
+   0:	f3 0f 1e fa          	endbr64
+   4:	66 0f 6e c7          	movd   xmm0,edi
+   8:	89 f8                	mov    eax,edi
+   a:	0f 2e c0             	ucomiss xmm0,xmm0
+   d:	0f 4a 05 00 00 00 00 	cmovp  eax,DWORD PTR [rip+0x0]        # 14 <runtime_of_bits+0x14>
+			10: R_X86_64_PC32	.LC0-0x4
+  14:	66 0f 6e c0          	movd   xmm0,eax
+  18:	c3                   	ret

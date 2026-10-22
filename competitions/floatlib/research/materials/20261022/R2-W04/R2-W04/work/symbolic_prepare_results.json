@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "classification": "SYMBOLIC_CONTROL_FLOW_ONLY",
+  "emulates_float_conversion": false,
+  "is_lean_compilation": false,
+  "is_runtime_or_performance_evidence": false,
+  "preparation_cases": 24992,
+  "paired_short_circuit_cases": 12800,
+  "dimension_bookkeeping_cases": 81,
+  "negative_examples": [
+    {
+      "model": "collapse_negative_zero",
+      "raw": "80000000",
+      "readback": "00000000",
+      "result": "rejected"
+    },
+    {
+      "model": "canonicalize_nan_payload",
+      "raw": "7fc00001",
+      "readback": "7fc00000",
+      "result": "rejected"
+    },
+    {
+      "model": "canonicalize_nan_payload",
+      "raw": "7fa00001",
+      "readback": "7fc00000",
+      "result": "rejected"
+    },
+    {
+      "model": "canonicalize_nan_payload",
+      "raw": "ffc00002",
+      "readback": "7fc00000",
+      "result": "rejected"
+    },
+    {
+      "model": "flush_min_subnormal",
+      "raw": "00000001",
+      "readback": "00000000",
+      "result": "rejected"
+    }
+  ],
+  "claims": [
+    "prefix length and decoded-word equality checked at each model iteration",
+    "push preserves old object identities and appends the checked object",
+    "all-index reading including positive-zero out of bounds on successful preparation",
+    "first failure terminates preparation without processing later words",
+    "A failure performs no B preparation",
+    "A or B failure selects the original input objects",
+    "one Option-like terminal event per prepare call"
+  ]
+}

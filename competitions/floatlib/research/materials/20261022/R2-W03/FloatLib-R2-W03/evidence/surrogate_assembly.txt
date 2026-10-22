@@ -1,0 +1,772 @@
+
+variants.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <init_tables>:
+   0:	f3 0f 1e fa          	endbr64
+   4:	41 56                	push   r14
+   6:	41 55                	push   r13
+   8:	4c 8d 2d 00 00 00 00 	lea    r13,[rip+0x0]        # f <init_tables+0xf>
+			b: R_X86_64_PC32	.bss+0x2ffc
+   f:	41 54                	push   r12
+  11:	4c 8d 25 00 00 00 00 	lea    r12,[rip+0x0]        # 18 <init_tables+0x18>
+			14: R_X86_64_PC32	.bss-0x4
+  18:	55                   	push   rbp
+  19:	48 8d 2d 00 00 00 00 	lea    rbp,[rip+0x0]        # 20 <init_tables+0x20>
+			1c: R_X86_64_PC32	.bss+0xffc
+  20:	53                   	push   rbx
+  21:	4c 8d b5 00 20 00 00 	lea    r14,[rbp+0x2000]
+  28:	31 db                	xor    ebx,ebx
+  2a:	66 0f 1f 44 00 00    	nop    WORD PTR [rax+rax*1+0x0]
+  30:	0f b6 c3             	movzx  eax,bl
+  33:	89 df                	mov    edi,ebx
+  35:	c1 e7 17             	shl    edi,0x17
+  38:	8d 50 e8             	lea    edx,[rax-0x18]
+  3b:	81 e7 00 00 00 80    	and    edi,0x80000000
+  41:	81 fa e6 00 00 00    	cmp    edx,0xe6
+  47:	77 3f                	ja     88 <init_tables+0x88>
+  49:	83 e8 17             	sub    eax,0x17
+  4c:	c1 e0 17             	shl    eax,0x17
+  4f:	09 c7                	or     edi,eax
+  51:	e8 00 00 00 00       	call   56 <init_tables+0x56>
+			52: R_X86_64_PLT32	runtime_of_bits-0x4
+  56:	49 89 2c dc          	mov    QWORD PTR [r12+rbx*8],rbp
+  5a:	48 83 c5 10          	add    rbp,0x10
+  5e:	f3 41 0f 11 44 9d 00 	movss  DWORD PTR [r13+rbx*4+0x0],xmm0
+  65:	48 83 c3 01          	add    rbx,0x1
+  69:	48 c7 45 f0 00 00 00 	mov    QWORD PTR [rbp-0x10],0x0
+  70:	00 
+  71:	f3 0f 11 45 f8       	movss  DWORD PTR [rbp-0x8],xmm0
+  76:	49 39 ee             	cmp    r14,rbp
+  79:	75 b5                	jne    30 <init_tables+0x30>
+  7b:	5b                   	pop    rbx
+  7c:	5d                   	pop    rbp
+  7d:	41 5c                	pop    r12
+  7f:	41 5d                	pop    r13
+  81:	41 5e                	pop    r14
+  83:	c3                   	ret
+  84:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+  88:	e8 00 00 00 00       	call   8d <init_tables+0x8d>
+			89: R_X86_64_PLT32	runtime_of_bits-0x4
+  8d:	49 89 2c dc          	mov    QWORD PTR [r12+rbx*8],rbp
+  91:	48 83 c5 10          	add    rbp,0x10
+  95:	f3 41 0f 11 44 9d 00 	movss  DWORD PTR [r13+rbx*4+0x0],xmm0
+  9c:	48 83 c3 01          	add    rbx,0x1
+  a0:	48 c7 45 f0 00 00 00 	mov    QWORD PTR [rbp-0x10],0x0
+  a7:	00 
+  a8:	f3 0f 11 45 f8       	movss  DWORD PTR [rbp-0x8],xmm0
+  ad:	4c 39 f5             	cmp    rbp,r14
+  b0:	0f 85 7a ff ff ff    	jne    30 <init_tables+0x30>
+  b6:	5b                   	pop    rbx
+  b7:	5d                   	pop    rbp
+  b8:	41 5c                	pop    r12
+  ba:	41 5d                	pop    r13
+  bc:	41 5e                	pop    r14
+  be:	c3                   	ret
+  bf:	90                   	nop
+
+00000000000000c0 <call_conv>:
+  c0:	f3 0f 1e fa          	endbr64
+  c4:	e9 00 00 00 00       	jmp    c9 <call_conv+0x9>
+			c5: R_X86_64_PLT32	runtime_of_bits-0x4
+  c9:	0f 1f 80 00 00 00 00 	nop    DWORD PTR [rax+0x0]
+
+00000000000000d0 <zero_conv>:
+  d0:	f3 0f 1e fa          	endbr64
+  d4:	85 ff                	test   edi,edi
+  d6:	75 08                	jne    e0 <zero_conv+0x10>
+  d8:	66 0f ef c0          	pxor   xmm0,xmm0
+  dc:	c3                   	ret
+  dd:	0f 1f 00             	nop    DWORD PTR [rax]
+  e0:	e9 00 00 00 00       	jmp    e5 <zero_conv+0x15>
+			e1: R_X86_64_PLT32	runtime_of_bits-0x4
+  e5:	66 66 2e 0f 1f 84 00 	data16 cs nop WORD PTR [rax+rax*1+0x0]
+  ec:	00 00 00 00 
+
+00000000000000f0 <flat_conv>:
+  f0:	f3 0f 1e fa          	endbr64
+  f4:	85 ff                	test   edi,edi
+  f6:	74 38                	je     130 <flat_conv+0x40>
+  f8:	89 f8                	mov    eax,edi
+  fa:	c1 e8 17             	shr    eax,0x17
+  fd:	0f b6 d0             	movzx  edx,al
+ 100:	83 ea 18             	sub    edx,0x18
+ 103:	81 fa e6 00 00 00    	cmp    edx,0xe6
+ 109:	77 2d                	ja     138 <flat_conv+0x48>
+ 10b:	81 e7 ff ff 7f 00    	and    edi,0x7fffff
+ 111:	48 8d 15 00 00 00 00 	lea    rdx,[rip+0x0]        # 118 <flat_conv+0x28>
+			114: R_X86_64_PC32	.bss+0x2ffc
+ 118:	66 0f ef c0          	pxor   xmm0,xmm0
+ 11c:	81 cf 00 00 80 00    	or     edi,0x800000
+ 122:	f3 0f 2a c7          	cvtsi2ss xmm0,edi
+ 126:	f3 0f 59 04 82       	mulss  xmm0,DWORD PTR [rdx+rax*4]
+ 12b:	c3                   	ret
+ 12c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+ 130:	66 0f ef c0          	pxor   xmm0,xmm0
+ 134:	c3                   	ret
+ 135:	0f 1f 00             	nop    DWORD PTR [rax]
+ 138:	e9 00 00 00 00       	jmp    13d <flat_conv+0x4d>
+			139: R_X86_64_PLT32	runtime_of_bits-0x4
+ 13d:	0f 1f 00             	nop    DWORD PTR [rax]
+
+0000000000000140 <boxed_conv>:
+ 140:	f3 0f 1e fa          	endbr64
+ 144:	85 ff                	test   edi,edi
+ 146:	74 38                	je     180 <boxed_conv+0x40>
+ 148:	89 f8                	mov    eax,edi
+ 14a:	c1 e8 17             	shr    eax,0x17
+ 14d:	0f b6 d0             	movzx  edx,al
+ 150:	83 ea 18             	sub    edx,0x18
+ 153:	81 fa e6 00 00 00    	cmp    edx,0xe6
+ 159:	77 2d                	ja     188 <boxed_conv+0x48>
+ 15b:	48 8d 15 00 00 00 00 	lea    rdx,[rip+0x0]        # 162 <boxed_conv+0x22>
+			15e: R_X86_64_PC32	.bss-0x4
+ 162:	81 e7 ff ff 7f 00    	and    edi,0x7fffff
+ 168:	66 0f ef c0          	pxor   xmm0,xmm0
+ 16c:	48 8b 04 c2          	mov    rax,QWORD PTR [rdx+rax*8]
+ 170:	81 cf 00 00 80 00    	or     edi,0x800000
+ 176:	f3 0f 2a c7          	cvtsi2ss xmm0,edi
+ 17a:	f3 0f 59 40 08       	mulss  xmm0,DWORD PTR [rax+0x8]
+ 17f:	c3                   	ret
+ 180:	66 0f ef c0          	pxor   xmm0,xmm0
+ 184:	c3                   	ret
+ 185:	0f 1f 00             	nop    DWORD PTR [rax]
+ 188:	e9 00 00 00 00       	jmp    18d <boxed_conv+0x4d>
+			189: R_X86_64_PLT32	runtime_of_bits-0x4
+ 18d:	0f 1f 00             	nop    DWORD PTR [rax]
+
+0000000000000190 <dense_conv>:
+ 190:	f3 0f 1e fa          	endbr64
+ 194:	85 ff                	test   edi,edi
+ 196:	74 48                	je     1e0 <dense_conv+0x50>
+ 198:	89 f9                	mov    ecx,edi
+ 19a:	c1 e9 17             	shr    ecx,0x17
+ 19d:	0f b6 c9             	movzx  ecx,cl
+ 1a0:	83 e9 7c             	sub    ecx,0x7c
+ 1a3:	83 f9 06             	cmp    ecx,0x6
+ 1a6:	77 40                	ja     1e8 <dense_conv+0x58>
+ 1a8:	89 f8                	mov    eax,edi
+ 1aa:	66 0f ef c0          	pxor   xmm0,xmm0
+ 1ae:	25 ff ff 7f 00       	and    eax,0x7fffff
+ 1b3:	0d 00 00 80 00       	or     eax,0x800000
+ 1b8:	d3 e0                	shl    eax,cl
+ 1ba:	f3 0f 2a c0          	cvtsi2ss xmm0,eax
+ 1be:	f3 0f 59 05 00 00 00 	mulss  xmm0,DWORD PTR [rip+0x0]        # 1c6 <dense_conv+0x36>
+ 1c5:	00 
+			1c2: R_X86_64_PC32	.LC1-0x4
+ 1c6:	85 ff                	test   edi,edi
+ 1c8:	78 06                	js     1d0 <dense_conv+0x40>
+ 1ca:	c3                   	ret
+ 1cb:	0f 1f 44 00 00       	nop    DWORD PTR [rax+rax*1+0x0]
+ 1d0:	0f 57 05 00 00 00 00 	xorps  xmm0,XMMWORD PTR [rip+0x0]        # 1d7 <dense_conv+0x47>
+			1d3: R_X86_64_PC32	.LC2-0x4
+ 1d7:	c3                   	ret
+ 1d8:	0f 1f 84 00 00 00 00 	nop    DWORD PTR [rax+rax*1+0x0]
+ 1df:	00 
+ 1e0:	66 0f ef c0          	pxor   xmm0,xmm0
+ 1e4:	c3                   	ret
+ 1e5:	0f 1f 00             	nop    DWORD PTR [rax]
+ 1e8:	e9 00 00 00 00       	jmp    1ed <dense_conv+0x5d>
+			1e9: R_X86_64_PLT32	runtime_of_bits-0x4
+ 1ed:	0f 1f 00             	nop    DWORD PTR [rax]
+
+00000000000001f0 <dense_signed_conv>:
+ 1f0:	f3 0f 1e fa          	endbr64
+ 1f4:	85 ff                	test   edi,edi
+ 1f6:	74 38                	je     230 <dense_signed_conv+0x40>
+ 1f8:	89 f9                	mov    ecx,edi
+ 1fa:	c1 e9 17             	shr    ecx,0x17
+ 1fd:	0f b6 c9             	movzx  ecx,cl
+ 200:	83 e9 7c             	sub    ecx,0x7c
+ 203:	83 f9 06             	cmp    ecx,0x6
+ 206:	77 30                	ja     238 <dense_signed_conv+0x48>
+ 208:	89 f8                	mov    eax,edi
+ 20a:	81 e7 ff ff 7f 00    	and    edi,0x7fffff
+ 210:	66 0f ef c0          	pxor   xmm0,xmm0
+ 214:	81 cf 00 00 80 00    	or     edi,0x800000
+ 21a:	c1 f8 1f             	sar    eax,0x1f
+ 21d:	d3 e7                	shl    edi,cl
+ 21f:	31 c7                	xor    edi,eax
+ 221:	29 c7                	sub    edi,eax
+ 223:	f3 0f 2a c7          	cvtsi2ss xmm0,edi
+ 227:	f3 0f 59 05 00 00 00 	mulss  xmm0,DWORD PTR [rip+0x0]        # 22f <dense_signed_conv+0x3f>
+ 22e:	00 
+			22b: R_X86_64_PC32	.LC1-0x4
+ 22f:	c3                   	ret
+ 230:	66 0f ef c0          	pxor   xmm0,xmm0
+ 234:	c3                   	ret
+ 235:	0f 1f 00             	nop    DWORD PTR [rax]
+ 238:	e9 00 00 00 00       	jmp    23d <dense_signed_conv+0x4d>
+			239: R_X86_64_PLT32	runtime_of_bits-0x4
+ 23d:	0f 1f 00             	nop    DWORD PTR [rax]
+
+0000000000000240 <wide64_conv>:
+ 240:	f3 0f 1e fa          	endbr64
+ 244:	85 ff                	test   edi,edi
+ 246:	74 78                	je     2c0 <wide64_conv+0x80>
+ 248:	89 f8                	mov    eax,edi
+ 24a:	c1 e8 17             	shr    eax,0x17
+ 24d:	0f b6 c0             	movzx  eax,al
+ 250:	8d 48 9a             	lea    ecx,[rax-0x66]
+ 253:	83 f9 31             	cmp    ecx,0x31
+ 256:	77 70                	ja     2c8 <wide64_conv+0x88>
+ 258:	89 fa                	mov    edx,edi
+ 25a:	f3 0f 10 0d 00 00 00 	movss  xmm1,DWORD PTR [rip+0x0]        # 262 <wide64_conv+0x22>
+ 261:	00 
+			25e: R_X86_64_PC32	.LC3-0x4
+ 262:	81 e2 ff ff 7f 00    	and    edx,0x7fffff
+ 268:	48 81 ca 00 00 80 00 	or     rdx,0x800000
+ 26f:	3d 85 00 00 00       	cmp    eax,0x85
+ 274:	77 1a                	ja     290 <wide64_conv+0x50>
+ 276:	48 d3 e2             	shl    rdx,cl
+ 279:	66 0f ef c0          	pxor   xmm0,xmm0
+ 27d:	f3 48 0f 2a c2       	cvtsi2ss xmm0,rdx
+ 282:	f3 0f 59 c1          	mulss  xmm0,xmm1
+ 286:	85 ff                	test   edi,edi
+ 288:	78 28                	js     2b2 <wide64_conv+0x72>
+ 28a:	c3                   	ret
+ 28b:	0f 1f 44 00 00       	nop    DWORD PTR [rax+rax*1+0x0]
+ 290:	8d 88 7a ff ff ff    	lea    ecx,[rax-0x86]
+ 296:	66 0f ef c0          	pxor   xmm0,xmm0
+ 29a:	f3 0f 10 0d 00 00 00 	movss  xmm1,DWORD PTR [rip+0x0]        # 2a2 <wide64_conv+0x62>
+ 2a1:	00 
+			29e: R_X86_64_PC32	.LC4-0x4
+ 2a2:	48 d3 e2             	shl    rdx,cl
+ 2a5:	f3 48 0f 2a c2       	cvtsi2ss xmm0,rdx
+ 2aa:	f3 0f 59 c1          	mulss  xmm0,xmm1
+ 2ae:	85 ff                	test   edi,edi
+ 2b0:	79 d8                	jns    28a <wide64_conv+0x4a>
+ 2b2:	0f 57 05 00 00 00 00 	xorps  xmm0,XMMWORD PTR [rip+0x0]        # 2b9 <wide64_conv+0x79>
+			2b5: R_X86_64_PC32	.LC2-0x4
+ 2b9:	c3                   	ret
+ 2ba:	66 0f 1f 44 00 00    	nop    WORD PTR [rax+rax*1+0x0]
+ 2c0:	66 0f ef c0          	pxor   xmm0,xmm0
+ 2c4:	c3                   	ret
+ 2c5:	0f 1f 00             	nop    DWORD PTR [rax]
+ 2c8:	e9 00 00 00 00       	jmp    2cd <wide64_conv+0x8d>
+			2c9: R_X86_64_PLT32	runtime_of_bits-0x4
+ 2cd:	0f 1f 00             	nop    DWORD PTR [rax]
+
+00000000000002d0 <wide64_signed_conv>:
+ 2d0:	f3 0f 1e fa          	endbr64
+ 2d4:	85 ff                	test   edi,edi
+ 2d6:	74 68                	je     340 <wide64_signed_conv+0x70>
+ 2d8:	89 fa                	mov    edx,edi
+ 2da:	c1 ea 17             	shr    edx,0x17
+ 2dd:	0f b6 d2             	movzx  edx,dl
+ 2e0:	8d 4a 9a             	lea    ecx,[rdx-0x66]
+ 2e3:	83 f9 31             	cmp    ecx,0x31
+ 2e6:	77 60                	ja     348 <wide64_signed_conv+0x78>
+ 2e8:	89 f8                	mov    eax,edi
+ 2ea:	f3 0f 10 0d 00 00 00 	movss  xmm1,DWORD PTR [rip+0x0]        # 2f2 <wide64_signed_conv+0x22>
+ 2f1:	00 
+			2ee: R_X86_64_PC32	.LC3-0x4
+ 2f2:	25 ff ff 7f 00       	and    eax,0x7fffff
+ 2f7:	48 0d 00 00 80 00    	or     rax,0x800000
+ 2fd:	81 fa 85 00 00 00    	cmp    edx,0x85
+ 303:	77 23                	ja     328 <wide64_signed_conv+0x58>
+ 305:	c1 ef 1f             	shr    edi,0x1f
+ 308:	48 d3 e0             	shl    rax,cl
+ 30b:	66 0f ef c0          	pxor   xmm0,xmm0
+ 30f:	48 89 fa             	mov    rdx,rdi
+ 312:	48 f7 da             	neg    rdx
+ 315:	48 31 d0             	xor    rax,rdx
+ 318:	48 01 f8             	add    rax,rdi
+ 31b:	f3 48 0f 2a c0       	cvtsi2ss xmm0,rax
+ 320:	f3 0f 59 c1          	mulss  xmm0,xmm1
+ 324:	c3                   	ret
+ 325:	0f 1f 00             	nop    DWORD PTR [rax]
+ 328:	f3 0f 10 0d 00 00 00 	movss  xmm1,DWORD PTR [rip+0x0]        # 330 <wide64_signed_conv+0x60>
+ 32f:	00 
+			32c: R_X86_64_PC32	.LC4-0x4
+ 330:	8d 8a 7a ff ff ff    	lea    ecx,[rdx-0x86]
+ 336:	eb cd                	jmp    305 <wide64_signed_conv+0x35>
+ 338:	0f 1f 84 00 00 00 00 	nop    DWORD PTR [rax+rax*1+0x0]
+ 33f:	00 
+ 340:	66 0f ef c0          	pxor   xmm0,xmm0
+ 344:	c3                   	ret
+ 345:	0f 1f 00             	nop    DWORD PTR [rax]
+ 348:	e9 00 00 00 00       	jmp    34d <wide64_signed_conv+0x7d>
+			349: R_X86_64_PLT32	runtime_of_bits-0x4
+ 34d:	0f 1f 00             	nop    DWORD PTR [rax]
+
+0000000000000350 <sum_call>:
+ 350:	f3 0f 1e fa          	endbr64
+ 354:	48 85 f6             	test   rsi,rsi
+ 357:	74 47                	je     3a0 <sum_call+0x50>
+ 359:	41 54                	push   r12
+ 35b:	66 0f ef c9          	pxor   xmm1,xmm1
+ 35f:	49 89 fc             	mov    r12,rdi
+ 362:	55                   	push   rbp
+ 363:	48 89 f5             	mov    rbp,rsi
+ 366:	53                   	push   rbx
+ 367:	31 db                	xor    ebx,ebx
+ 369:	48 83 ec 10          	sub    rsp,0x10
+ 36d:	0f 1f 00             	nop    DWORD PTR [rax]
+ 370:	41 8b 3c 9c          	mov    edi,DWORD PTR [r12+rbx*4]
+ 374:	f3 0f 11 4c 24 0c    	movss  DWORD PTR [rsp+0xc],xmm1
+ 37a:	48 83 c3 01          	add    rbx,0x1
+ 37e:	e8 00 00 00 00       	call   383 <sum_call+0x33>
+			37f: R_X86_64_PLT32	runtime_of_bits-0x4
+ 383:	f3 0f 10 4c 24 0c    	movss  xmm1,DWORD PTR [rsp+0xc]
+ 389:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 38d:	48 39 dd             	cmp    rbp,rbx
+ 390:	75 de                	jne    370 <sum_call+0x20>
+ 392:	48 83 c4 10          	add    rsp,0x10
+ 396:	0f 28 c1             	movaps xmm0,xmm1
+ 399:	5b                   	pop    rbx
+ 39a:	5d                   	pop    rbp
+ 39b:	41 5c                	pop    r12
+ 39d:	c3                   	ret
+ 39e:	66 90                	xchg   ax,ax
+ 3a0:	66 0f ef c9          	pxor   xmm1,xmm1
+ 3a4:	0f 28 c1             	movaps xmm0,xmm1
+ 3a7:	c3                   	ret
+ 3a8:	0f 1f 84 00 00 00 00 	nop    DWORD PTR [rax+rax*1+0x0]
+ 3af:	00 
+
+00000000000003b0 <sum_zero>:
+ 3b0:	f3 0f 1e fa          	endbr64
+ 3b4:	48 85 f6             	test   rsi,rsi
+ 3b7:	74 77                	je     430 <sum_zero+0x80>
+ 3b9:	41 54                	push   r12
+ 3bb:	66 0f ef c9          	pxor   xmm1,xmm1
+ 3bf:	49 89 fc             	mov    r12,rdi
+ 3c2:	55                   	push   rbp
+ 3c3:	0f 28 d1             	movaps xmm2,xmm1
+ 3c6:	48 89 f5             	mov    rbp,rsi
+ 3c9:	53                   	push   rbx
+ 3ca:	31 db                	xor    ebx,ebx
+ 3cc:	48 83 ec 10          	sub    rsp,0x10
+ 3d0:	41 8b 3c 9c          	mov    edi,DWORD PTR [r12+rbx*4]
+ 3d4:	85 ff                	test   edi,edi
+ 3d6:	75 20                	jne    3f8 <sum_zero+0x48>
+ 3d8:	48 83 c3 01          	add    rbx,0x1
+ 3dc:	f3 0f 58 ca          	addss  xmm1,xmm2
+ 3e0:	48 39 dd             	cmp    rbp,rbx
+ 3e3:	75 eb                	jne    3d0 <sum_zero+0x20>
+ 3e5:	48 83 c4 10          	add    rsp,0x10
+ 3e9:	0f 28 c1             	movaps xmm0,xmm1
+ 3ec:	5b                   	pop    rbx
+ 3ed:	5d                   	pop    rbp
+ 3ee:	41 5c                	pop    r12
+ 3f0:	c3                   	ret
+ 3f1:	0f 1f 80 00 00 00 00 	nop    DWORD PTR [rax+0x0]
+ 3f8:	f3 0f 11 4c 24 0c    	movss  DWORD PTR [rsp+0xc],xmm1
+ 3fe:	48 83 c3 01          	add    rbx,0x1
+ 402:	e8 00 00 00 00       	call   407 <sum_zero+0x57>
+			403: R_X86_64_PLT32	runtime_of_bits-0x4
+ 407:	f3 0f 10 4c 24 0c    	movss  xmm1,DWORD PTR [rsp+0xc]
+ 40d:	48 39 eb             	cmp    rbx,rbp
+ 410:	66 0f ef d2          	pxor   xmm2,xmm2
+ 414:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 418:	75 b6                	jne    3d0 <sum_zero+0x20>
+ 41a:	48 83 c4 10          	add    rsp,0x10
+ 41e:	0f 28 c1             	movaps xmm0,xmm1
+ 421:	5b                   	pop    rbx
+ 422:	5d                   	pop    rbp
+ 423:	41 5c                	pop    r12
+ 425:	c3                   	ret
+ 426:	66 2e 0f 1f 84 00 00 	cs nop WORD PTR [rax+rax*1+0x0]
+ 42d:	00 00 00 
+ 430:	66 0f ef c9          	pxor   xmm1,xmm1
+ 434:	0f 28 c1             	movaps xmm0,xmm1
+ 437:	c3                   	ret
+ 438:	0f 1f 84 00 00 00 00 	nop    DWORD PTR [rax+rax*1+0x0]
+ 43f:	00 
+
+0000000000000440 <sum_flat>:
+ 440:	f3 0f 1e fa          	endbr64
+ 444:	48 85 f6             	test   rsi,rsi
+ 447:	0f 84 9b 00 00 00    	je     4e8 <sum_flat+0xa8>
+ 44d:	41 55                	push   r13
+ 44f:	66 0f ef c9          	pxor   xmm1,xmm1
+ 453:	4c 8d 2d 00 00 00 00 	lea    r13,[rip+0x0]        # 45a <sum_flat+0x1a>
+			456: R_X86_64_PC32	.bss+0x2ffc
+ 45a:	41 54                	push   r12
+ 45c:	49 89 fc             	mov    r12,rdi
+ 45f:	55                   	push   rbp
+ 460:	48 89 f5             	mov    rbp,rsi
+ 463:	53                   	push   rbx
+ 464:	31 db                	xor    ebx,ebx
+ 466:	48 83 ec 18          	sub    rsp,0x18
+ 46a:	eb 2c                	jmp    498 <sum_flat+0x58>
+ 46c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+ 470:	81 e7 ff ff 7f 00    	and    edi,0x7fffff
+ 476:	66 0f ef c0          	pxor   xmm0,xmm0
+ 47a:	81 cf 00 00 80 00    	or     edi,0x800000
+ 480:	f3 0f 2a c7          	cvtsi2ss xmm0,edi
+ 484:	f3 41 0f 59 44 85 00 	mulss  xmm0,DWORD PTR [r13+rax*4+0x0]
+ 48b:	48 83 c3 01          	add    rbx,0x1
+ 48f:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 493:	48 39 dd             	cmp    rbp,rbx
+ 496:	74 3d                	je     4d5 <sum_flat+0x95>
+ 498:	41 8b 3c 9c          	mov    edi,DWORD PTR [r12+rbx*4]
+ 49c:	66 0f ef c0          	pxor   xmm0,xmm0
+ 4a0:	85 ff                	test   edi,edi
+ 4a2:	74 e7                	je     48b <sum_flat+0x4b>
+ 4a4:	89 f8                	mov    eax,edi
+ 4a6:	c1 e8 17             	shr    eax,0x17
+ 4a9:	0f b6 d0             	movzx  edx,al
+ 4ac:	83 ea 18             	sub    edx,0x18
+ 4af:	81 fa e6 00 00 00    	cmp    edx,0xe6
+ 4b5:	76 b9                	jbe    470 <sum_flat+0x30>
+ 4b7:	f3 0f 11 4c 24 0c    	movss  DWORD PTR [rsp+0xc],xmm1
+ 4bd:	48 83 c3 01          	add    rbx,0x1
+ 4c1:	e8 00 00 00 00       	call   4c6 <sum_flat+0x86>
+			4c2: R_X86_64_PLT32	runtime_of_bits-0x4
+ 4c6:	f3 0f 10 4c 24 0c    	movss  xmm1,DWORD PTR [rsp+0xc]
+ 4cc:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 4d0:	48 39 dd             	cmp    rbp,rbx
+ 4d3:	75 c3                	jne    498 <sum_flat+0x58>
+ 4d5:	48 83 c4 18          	add    rsp,0x18
+ 4d9:	0f 28 c1             	movaps xmm0,xmm1
+ 4dc:	5b                   	pop    rbx
+ 4dd:	5d                   	pop    rbp
+ 4de:	41 5c                	pop    r12
+ 4e0:	41 5d                	pop    r13
+ 4e2:	c3                   	ret
+ 4e3:	0f 1f 44 00 00       	nop    DWORD PTR [rax+rax*1+0x0]
+ 4e8:	66 0f ef c9          	pxor   xmm1,xmm1
+ 4ec:	0f 28 c1             	movaps xmm0,xmm1
+ 4ef:	c3                   	ret
+
+00000000000004f0 <sum_boxed>:
+ 4f0:	f3 0f 1e fa          	endbr64
+ 4f4:	48 85 f6             	test   rsi,rsi
+ 4f7:	0f 84 a3 00 00 00    	je     5a0 <sum_boxed+0xb0>
+ 4fd:	41 55                	push   r13
+ 4ff:	66 0f ef c9          	pxor   xmm1,xmm1
+ 503:	4c 8d 2d 00 00 00 00 	lea    r13,[rip+0x0]        # 50a <sum_boxed+0x1a>
+			506: R_X86_64_PC32	.bss-0x4
+ 50a:	41 54                	push   r12
+ 50c:	49 89 fc             	mov    r12,rdi
+ 50f:	55                   	push   rbp
+ 510:	48 89 f5             	mov    rbp,rsi
+ 513:	53                   	push   rbx
+ 514:	31 db                	xor    ebx,ebx
+ 516:	48 83 ec 18          	sub    rsp,0x18
+ 51a:	eb 2f                	jmp    54b <sum_boxed+0x5b>
+ 51c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+ 520:	49 8b 44 c5 00       	mov    rax,QWORD PTR [r13+rax*8+0x0]
+ 525:	81 e7 ff ff 7f 00    	and    edi,0x7fffff
+ 52b:	66 0f ef c0          	pxor   xmm0,xmm0
+ 52f:	81 cf 00 00 80 00    	or     edi,0x800000
+ 535:	f3 0f 2a c7          	cvtsi2ss xmm0,edi
+ 539:	f3 0f 59 40 08       	mulss  xmm0,DWORD PTR [rax+0x8]
+ 53e:	48 83 c3 01          	add    rbx,0x1
+ 542:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 546:	48 39 dd             	cmp    rbp,rbx
+ 549:	74 3d                	je     588 <sum_boxed+0x98>
+ 54b:	41 8b 3c 9c          	mov    edi,DWORD PTR [r12+rbx*4]
+ 54f:	66 0f ef c0          	pxor   xmm0,xmm0
+ 553:	85 ff                	test   edi,edi
+ 555:	74 e7                	je     53e <sum_boxed+0x4e>
+ 557:	89 f8                	mov    eax,edi
+ 559:	c1 e8 17             	shr    eax,0x17
+ 55c:	0f b6 d0             	movzx  edx,al
+ 55f:	83 ea 18             	sub    edx,0x18
+ 562:	81 fa e6 00 00 00    	cmp    edx,0xe6
+ 568:	76 b6                	jbe    520 <sum_boxed+0x30>
+ 56a:	f3 0f 11 4c 24 0c    	movss  DWORD PTR [rsp+0xc],xmm1
+ 570:	48 83 c3 01          	add    rbx,0x1
+ 574:	e8 00 00 00 00       	call   579 <sum_boxed+0x89>
+			575: R_X86_64_PLT32	runtime_of_bits-0x4
+ 579:	f3 0f 10 4c 24 0c    	movss  xmm1,DWORD PTR [rsp+0xc]
+ 57f:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 583:	48 39 dd             	cmp    rbp,rbx
+ 586:	75 c3                	jne    54b <sum_boxed+0x5b>
+ 588:	48 83 c4 18          	add    rsp,0x18
+ 58c:	0f 28 c1             	movaps xmm0,xmm1
+ 58f:	5b                   	pop    rbx
+ 590:	5d                   	pop    rbp
+ 591:	41 5c                	pop    r12
+ 593:	41 5d                	pop    r13
+ 595:	c3                   	ret
+ 596:	66 2e 0f 1f 84 00 00 	cs nop WORD PTR [rax+rax*1+0x0]
+ 59d:	00 00 00 
+ 5a0:	66 0f ef c9          	pxor   xmm1,xmm1
+ 5a4:	0f 28 c1             	movaps xmm0,xmm1
+ 5a7:	c3                   	ret
+ 5a8:	0f 1f 84 00 00 00 00 	nop    DWORD PTR [rax+rax*1+0x0]
+ 5af:	00 
+
+00000000000005b0 <sum_dense>:
+ 5b0:	f3 0f 1e fa          	endbr64
+ 5b4:	48 85 f6             	test   rsi,rsi
+ 5b7:	0f 84 b3 00 00 00    	je     670 <sum_dense+0xc0>
+ 5bd:	41 54                	push   r12
+ 5bf:	66 0f ef c9          	pxor   xmm1,xmm1
+ 5c3:	49 89 fc             	mov    r12,rdi
+ 5c6:	55                   	push   rbp
+ 5c7:	48 89 f5             	mov    rbp,rsi
+ 5ca:	53                   	push   rbx
+ 5cb:	31 db                	xor    ebx,ebx
+ 5cd:	48 83 ec 10          	sub    rsp,0x10
+ 5d1:	f3 0f 10 15 00 00 00 	movss  xmm2,DWORD PTR [rip+0x0]        # 5d9 <sum_dense+0x29>
+ 5d8:	00 
+			5d5: R_X86_64_PC32	.LC1-0x4
+ 5d9:	f3 0f 10 1d 00 00 00 	movss  xmm3,DWORD PTR [rip+0x0]        # 5e1 <sum_dense+0x31>
+ 5e0:	00 
+			5dd: R_X86_64_PC32	.LC2-0x4
+ 5e1:	eb 33                	jmp    616 <sum_dense+0x66>
+ 5e3:	0f 1f 44 00 00       	nop    DWORD PTR [rax+rax*1+0x0]
+ 5e8:	89 f8                	mov    eax,edi
+ 5ea:	66 0f ef c0          	pxor   xmm0,xmm0
+ 5ee:	25 ff ff 7f 00       	and    eax,0x7fffff
+ 5f3:	0d 00 00 80 00       	or     eax,0x800000
+ 5f8:	d3 e0                	shl    eax,cl
+ 5fa:	f3 0f 2a c0          	cvtsi2ss xmm0,eax
+ 5fe:	f3 0f 59 c2          	mulss  xmm0,xmm2
+ 602:	85 ff                	test   edi,edi
+ 604:	79 03                	jns    609 <sum_dense+0x59>
+ 606:	0f 57 c3             	xorps  xmm0,xmm3
+ 609:	48 83 c3 01          	add    rbx,0x1
+ 60d:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 611:	48 39 dd             	cmp    rbp,rbx
+ 614:	74 4a                	je     660 <sum_dense+0xb0>
+ 616:	41 8b 3c 9c          	mov    edi,DWORD PTR [r12+rbx*4]
+ 61a:	66 0f ef c0          	pxor   xmm0,xmm0
+ 61e:	85 ff                	test   edi,edi
+ 620:	74 e7                	je     609 <sum_dense+0x59>
+ 622:	89 f9                	mov    ecx,edi
+ 624:	c1 e9 17             	shr    ecx,0x17
+ 627:	0f b6 c9             	movzx  ecx,cl
+ 62a:	83 e9 7c             	sub    ecx,0x7c
+ 62d:	83 f9 06             	cmp    ecx,0x6
+ 630:	76 b6                	jbe    5e8 <sum_dense+0x38>
+ 632:	f3 0f 11 4c 24 0c    	movss  DWORD PTR [rsp+0xc],xmm1
+ 638:	48 83 c3 01          	add    rbx,0x1
+ 63c:	e8 00 00 00 00       	call   641 <sum_dense+0x91>
+			63d: R_X86_64_PLT32	runtime_of_bits-0x4
+ 641:	f3 0f 10 4c 24 0c    	movss  xmm1,DWORD PTR [rsp+0xc]
+ 647:	f3 0f 10 15 00 00 00 	movss  xmm2,DWORD PTR [rip+0x0]        # 64f <sum_dense+0x9f>
+ 64e:	00 
+			64b: R_X86_64_PC32	.LC1-0x4
+ 64f:	f3 0f 10 1d 00 00 00 	movss  xmm3,DWORD PTR [rip+0x0]        # 657 <sum_dense+0xa7>
+ 656:	00 
+			653: R_X86_64_PC32	.LC2-0x4
+ 657:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 65b:	48 39 dd             	cmp    rbp,rbx
+ 65e:	75 b6                	jne    616 <sum_dense+0x66>
+ 660:	48 83 c4 10          	add    rsp,0x10
+ 664:	0f 28 c1             	movaps xmm0,xmm1
+ 667:	5b                   	pop    rbx
+ 668:	5d                   	pop    rbp
+ 669:	41 5c                	pop    r12
+ 66b:	c3                   	ret
+ 66c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+ 670:	66 0f ef c9          	pxor   xmm1,xmm1
+ 674:	0f 28 c1             	movaps xmm0,xmm1
+ 677:	c3                   	ret
+ 678:	0f 1f 84 00 00 00 00 	nop    DWORD PTR [rax+rax*1+0x0]
+ 67f:	00 
+
+0000000000000680 <sum_dense_signed>:
+ 680:	f3 0f 1e fa          	endbr64
+ 684:	48 85 f6             	test   rsi,rsi
+ 687:	0f 84 a3 00 00 00    	je     730 <sum_dense_signed+0xb0>
+ 68d:	41 54                	push   r12
+ 68f:	66 0f ef c9          	pxor   xmm1,xmm1
+ 693:	49 89 f4             	mov    r12,rsi
+ 696:	55                   	push   rbp
+ 697:	48 89 fd             	mov    rbp,rdi
+ 69a:	53                   	push   rbx
+ 69b:	31 db                	xor    ebx,ebx
+ 69d:	48 83 ec 10          	sub    rsp,0x10
+ 6a1:	f3 0f 10 15 00 00 00 	movss  xmm2,DWORD PTR [rip+0x0]        # 6a9 <sum_dense_signed+0x29>
+ 6a8:	00 
+			6a5: R_X86_64_PC32	.LC1-0x4
+ 6a9:	eb 35                	jmp    6e0 <sum_dense_signed+0x60>
+ 6ab:	0f 1f 44 00 00       	nop    DWORD PTR [rax+rax*1+0x0]
+ 6b0:	89 f8                	mov    eax,edi
+ 6b2:	81 e7 ff ff 7f 00    	and    edi,0x7fffff
+ 6b8:	66 0f ef c0          	pxor   xmm0,xmm0
+ 6bc:	81 cf 00 00 80 00    	or     edi,0x800000
+ 6c2:	c1 f8 1f             	sar    eax,0x1f
+ 6c5:	d3 e7                	shl    edi,cl
+ 6c7:	31 c7                	xor    edi,eax
+ 6c9:	29 c7                	sub    edi,eax
+ 6cb:	f3 0f 2a c7          	cvtsi2ss xmm0,edi
+ 6cf:	f3 0f 59 c2          	mulss  xmm0,xmm2
+ 6d3:	48 83 c3 01          	add    rbx,0x1
+ 6d7:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 6db:	49 39 dc             	cmp    r12,rbx
+ 6de:	74 42                	je     722 <sum_dense_signed+0xa2>
+ 6e0:	8b 7c 9d 00          	mov    edi,DWORD PTR [rbp+rbx*4+0x0]
+ 6e4:	66 0f ef c0          	pxor   xmm0,xmm0
+ 6e8:	85 ff                	test   edi,edi
+ 6ea:	74 e7                	je     6d3 <sum_dense_signed+0x53>
+ 6ec:	89 f9                	mov    ecx,edi
+ 6ee:	c1 e9 17             	shr    ecx,0x17
+ 6f1:	0f b6 c9             	movzx  ecx,cl
+ 6f4:	83 e9 7c             	sub    ecx,0x7c
+ 6f7:	83 f9 06             	cmp    ecx,0x6
+ 6fa:	76 b4                	jbe    6b0 <sum_dense_signed+0x30>
+ 6fc:	f3 0f 11 4c 24 0c    	movss  DWORD PTR [rsp+0xc],xmm1
+ 702:	48 83 c3 01          	add    rbx,0x1
+ 706:	e8 00 00 00 00       	call   70b <sum_dense_signed+0x8b>
+			707: R_X86_64_PLT32	runtime_of_bits-0x4
+ 70b:	f3 0f 10 4c 24 0c    	movss  xmm1,DWORD PTR [rsp+0xc]
+ 711:	f3 0f 10 15 00 00 00 	movss  xmm2,DWORD PTR [rip+0x0]        # 719 <sum_dense_signed+0x99>
+ 718:	00 
+			715: R_X86_64_PC32	.LC1-0x4
+ 719:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 71d:	49 39 dc             	cmp    r12,rbx
+ 720:	75 be                	jne    6e0 <sum_dense_signed+0x60>
+ 722:	48 83 c4 10          	add    rsp,0x10
+ 726:	0f 28 c1             	movaps xmm0,xmm1
+ 729:	5b                   	pop    rbx
+ 72a:	5d                   	pop    rbp
+ 72b:	41 5c                	pop    r12
+ 72d:	c3                   	ret
+ 72e:	66 90                	xchg   ax,ax
+ 730:	66 0f ef c9          	pxor   xmm1,xmm1
+ 734:	0f 28 c1             	movaps xmm0,xmm1
+ 737:	c3                   	ret
+ 738:	0f 1f 84 00 00 00 00 	nop    DWORD PTR [rax+rax*1+0x0]
+ 73f:	00 
+
+0000000000000740 <sum_wide64>:
+ 740:	f3 0f 1e fa          	endbr64
+ 744:	48 85 f6             	test   rsi,rsi
+ 747:	0f 84 c3 00 00 00    	je     810 <sum_wide64+0xd0>
+ 74d:	41 54                	push   r12
+ 74f:	66 0f ef c9          	pxor   xmm1,xmm1
+ 753:	49 89 fc             	mov    r12,rdi
+ 756:	55                   	push   rbp
+ 757:	48 89 f5             	mov    rbp,rsi
+ 75a:	53                   	push   rbx
+ 75b:	31 db                	xor    ebx,ebx
+ 75d:	48 83 ec 10          	sub    rsp,0x10
+ 761:	f3 0f 10 1d 00 00 00 	movss  xmm3,DWORD PTR [rip+0x0]        # 769 <sum_wide64+0x29>
+ 768:	00 
+			765: R_X86_64_PC32	.LC2-0x4
+ 769:	eb 55                	jmp    7c0 <sum_wide64+0x80>
+ 76b:	0f 1f 44 00 00       	nop    DWORD PTR [rax+rax*1+0x0]
+ 770:	89 fa                	mov    edx,edi
+ 772:	f3 0f 10 15 00 00 00 	movss  xmm2,DWORD PTR [rip+0x0]        # 77a <sum_wide64+0x3a>
+ 779:	00 
+			776: R_X86_64_PC32	.LC3-0x4
+ 77a:	81 e2 ff ff 7f 00    	and    edx,0x7fffff
+ 780:	48 81 ca 00 00 80 00 	or     rdx,0x800000
+ 787:	3d 85 00 00 00       	cmp    eax,0x85
+ 78c:	76 0e                	jbe    79c <sum_wide64+0x5c>
+ 78e:	f3 0f 10 15 00 00 00 	movss  xmm2,DWORD PTR [rip+0x0]        # 796 <sum_wide64+0x56>
+ 795:	00 
+			792: R_X86_64_PC32	.LC4-0x4
+ 796:	8d 88 7a ff ff ff    	lea    ecx,[rax-0x86]
+ 79c:	48 d3 e2             	shl    rdx,cl
+ 79f:	66 0f ef c0          	pxor   xmm0,xmm0
+ 7a3:	f3 48 0f 2a c2       	cvtsi2ss xmm0,rdx
+ 7a8:	f3 0f 59 c2          	mulss  xmm0,xmm2
+ 7ac:	85 ff                	test   edi,edi
+ 7ae:	79 03                	jns    7b3 <sum_wide64+0x73>
+ 7b0:	0f 57 c3             	xorps  xmm0,xmm3
+ 7b3:	48 83 c3 01          	add    rbx,0x1
+ 7b7:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 7bb:	48 39 dd             	cmp    rbp,rbx
+ 7be:	74 42                	je     802 <sum_wide64+0xc2>
+ 7c0:	41 8b 3c 9c          	mov    edi,DWORD PTR [r12+rbx*4]
+ 7c4:	66 0f ef c0          	pxor   xmm0,xmm0
+ 7c8:	85 ff                	test   edi,edi
+ 7ca:	74 e7                	je     7b3 <sum_wide64+0x73>
+ 7cc:	89 f8                	mov    eax,edi
+ 7ce:	c1 e8 17             	shr    eax,0x17
+ 7d1:	0f b6 c0             	movzx  eax,al
+ 7d4:	8d 48 9a             	lea    ecx,[rax-0x66]
+ 7d7:	83 f9 31             	cmp    ecx,0x31
+ 7da:	76 94                	jbe    770 <sum_wide64+0x30>
+ 7dc:	f3 0f 11 4c 24 0c    	movss  DWORD PTR [rsp+0xc],xmm1
+ 7e2:	48 83 c3 01          	add    rbx,0x1
+ 7e6:	e8 00 00 00 00       	call   7eb <sum_wide64+0xab>
+			7e7: R_X86_64_PLT32	runtime_of_bits-0x4
+ 7eb:	f3 0f 10 4c 24 0c    	movss  xmm1,DWORD PTR [rsp+0xc]
+ 7f1:	f3 0f 10 1d 00 00 00 	movss  xmm3,DWORD PTR [rip+0x0]        # 7f9 <sum_wide64+0xb9>
+ 7f8:	00 
+			7f5: R_X86_64_PC32	.LC2-0x4
+ 7f9:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 7fd:	48 39 dd             	cmp    rbp,rbx
+ 800:	75 be                	jne    7c0 <sum_wide64+0x80>
+ 802:	48 83 c4 10          	add    rsp,0x10
+ 806:	0f 28 c1             	movaps xmm0,xmm1
+ 809:	5b                   	pop    rbx
+ 80a:	5d                   	pop    rbp
+ 80b:	41 5c                	pop    r12
+ 80d:	c3                   	ret
+ 80e:	66 90                	xchg   ax,ax
+ 810:	66 0f ef c9          	pxor   xmm1,xmm1
+ 814:	0f 28 c1             	movaps xmm0,xmm1
+ 817:	c3                   	ret
+ 818:	0f 1f 84 00 00 00 00 	nop    DWORD PTR [rax+rax*1+0x0]
+ 81f:	00 
+
+0000000000000820 <sum_wide64_signed>:
+ 820:	f3 0f 1e fa          	endbr64
+ 824:	48 85 f6             	test   rsi,rsi
+ 827:	0f 84 bb 00 00 00    	je     8e8 <sum_wide64_signed+0xc8>
+ 82d:	41 54                	push   r12
+ 82f:	66 0f ef c9          	pxor   xmm1,xmm1
+ 833:	49 89 f4             	mov    r12,rsi
+ 836:	55                   	push   rbp
+ 837:	48 89 fd             	mov    rbp,rdi
+ 83a:	53                   	push   rbx
+ 83b:	31 db                	xor    ebx,ebx
+ 83d:	48 83 ec 10          	sub    rsp,0x10
+ 841:	eb 5c                	jmp    89f <sum_wide64_signed+0x7f>
+ 843:	0f 1f 44 00 00       	nop    DWORD PTR [rax+rax*1+0x0]
+ 848:	89 f8                	mov    eax,edi
+ 84a:	f3 0f 10 15 00 00 00 	movss  xmm2,DWORD PTR [rip+0x0]        # 852 <sum_wide64_signed+0x32>
+ 851:	00 
+			84e: R_X86_64_PC32	.LC3-0x4
+ 852:	25 ff ff 7f 00       	and    eax,0x7fffff
+ 857:	48 0d 00 00 80 00    	or     rax,0x800000
+ 85d:	81 fa 85 00 00 00    	cmp    edx,0x85
+ 863:	76 0e                	jbe    873 <sum_wide64_signed+0x53>
+ 865:	f3 0f 10 15 00 00 00 	movss  xmm2,DWORD PTR [rip+0x0]        # 86d <sum_wide64_signed+0x4d>
+ 86c:	00 
+			869: R_X86_64_PC32	.LC4-0x4
+ 86d:	8d 8a 7a ff ff ff    	lea    ecx,[rdx-0x86]
+ 873:	c1 ef 1f             	shr    edi,0x1f
+ 876:	48 d3 e0             	shl    rax,cl
+ 879:	66 0f ef c0          	pxor   xmm0,xmm0
+ 87d:	48 89 fa             	mov    rdx,rdi
+ 880:	48 f7 da             	neg    rdx
+ 883:	48 31 d0             	xor    rax,rdx
+ 886:	48 01 f8             	add    rax,rdi
+ 889:	f3 48 0f 2a c0       	cvtsi2ss xmm0,rax
+ 88e:	f3 0f 59 c2          	mulss  xmm0,xmm2
+ 892:	48 83 c3 01          	add    rbx,0x1
+ 896:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 89a:	49 39 dc             	cmp    r12,rbx
+ 89d:	74 3a                	je     8d9 <sum_wide64_signed+0xb9>
+ 89f:	8b 7c 9d 00          	mov    edi,DWORD PTR [rbp+rbx*4+0x0]
+ 8a3:	66 0f ef c0          	pxor   xmm0,xmm0
+ 8a7:	85 ff                	test   edi,edi
+ 8a9:	74 e7                	je     892 <sum_wide64_signed+0x72>
+ 8ab:	89 fa                	mov    edx,edi
+ 8ad:	c1 ea 17             	shr    edx,0x17
+ 8b0:	0f b6 d2             	movzx  edx,dl
+ 8b3:	8d 4a 9a             	lea    ecx,[rdx-0x66]
+ 8b6:	83 f9 31             	cmp    ecx,0x31
+ 8b9:	76 8d                	jbe    848 <sum_wide64_signed+0x28>
+ 8bb:	f3 0f 11 4c 24 0c    	movss  DWORD PTR [rsp+0xc],xmm1
+ 8c1:	48 83 c3 01          	add    rbx,0x1
+ 8c5:	e8 00 00 00 00       	call   8ca <sum_wide64_signed+0xaa>
+			8c6: R_X86_64_PLT32	runtime_of_bits-0x4
+ 8ca:	f3 0f 10 4c 24 0c    	movss  xmm1,DWORD PTR [rsp+0xc]
+ 8d0:	f3 0f 58 c8          	addss  xmm1,xmm0
+ 8d4:	49 39 dc             	cmp    r12,rbx
+ 8d7:	75 c6                	jne    89f <sum_wide64_signed+0x7f>
+ 8d9:	48 83 c4 10          	add    rsp,0x10
+ 8dd:	0f 28 c1             	movaps xmm0,xmm1
+ 8e0:	5b                   	pop    rbx
+ 8e1:	5d                   	pop    rbp
+ 8e2:	41 5c                	pop    r12
+ 8e4:	c3                   	ret
+ 8e5:	0f 1f 00             	nop    DWORD PTR [rax]
+ 8e8:	66 0f ef c9          	pxor   xmm1,xmm1
+ 8ec:	0f 28 c1             	movaps xmm0,xmm1
+ 8ef:	c3                   	ret

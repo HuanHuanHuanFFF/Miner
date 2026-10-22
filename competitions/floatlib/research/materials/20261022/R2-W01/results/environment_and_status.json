@@ -1,0 +1,42 @@
+{
+  "status": "RESEARCH_ONLY_NOT_SUBMISSION",
+  "date_shanghai": "2026-10-22",
+  "lean_compiled": false,
+  "axiom_audit": false,
+  "official_gate_executed": false,
+  "target_benchmark_executed": false,
+  "local_cpu_probe": {
+    "architecture": "x86_64",
+    "compiler": "GCC 13.3.0",
+    "command": "cc -O3 -std=c11 -fno-fast-math -ffp-contract=off diagnostics/native_cost_probe.c",
+    "arguments": "400",
+    "rounds": 5,
+    "vectors_per_class": 100,
+    "length": 1000,
+    "block_size": 32,
+    "final_finite_guard_included": false,
+    "nonfinite_floatlib_fallback_included": false,
+    "known_limitations": [
+      "No CPU affinity/frequency lock",
+      "Not official LCG/seed",
+      "No Lean allocation/representation overhead",
+      "No target performance inference"
+    ]
+  },
+  "proof_constraints": {
+    "imports": [
+      "ContractTensor"
+    ],
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "complete_kernel_delivered": false
+  },
+  "source_audit_counts": {
+    "kernel": 6,
+    "floatlib": 73,
+    "lean4": 7
+  }
+}

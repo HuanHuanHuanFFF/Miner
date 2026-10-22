@@ -1,0 +1,465 @@
+{
+  "format": "R4-W01 analytical full-call witnesses",
+  "status": "ANALYTICAL_NOT_RUN",
+  "execution": {
+    "lean": "NOT_RUN",
+    "native_candidate": "NOT_RUN",
+    "float_simulation": "NOT_RUN"
+  },
+  "shape_order": [
+    "batch",
+    "m",
+    "n",
+    "p"
+  ],
+  "hex_format": "8 hex digits representing binary32 bits, input row-major",
+  "reference_parent": {
+    "commit": "1a2b072ef6efa83c7413624b83241e0f5fa87c00",
+    "path": "competitions/floatlib/candidates/f01-d3-final-package/Kernel.lean",
+    "sha256": "6744be2bd784bea7a7e347d68f813bc865d2d18abab87f19fa37aec8a8c2c1f7"
+  },
+  "interpretation": [
+    "The new 2x4 implementation source was not supplied; negative cases target named incorrect modifications, not observed defects.",
+    "Exact non-NaN expected bits are analytic consequences of the required round-to-nearest-ties-to-even separate multiply then add chain starting at +0.",
+    "NaN-class expectations do not specify payload. A bitwise test must run the fixed raw software reference to obtain the complete expected result.",
+    "These small inputs are finite regression witnesses; they do not replace universally quantified Lean proofs."
+  ],
+  "cases": [
+    {
+      "id": "P1",
+      "shape_batch_m_n_p": [
+        2,
+        1,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "3f800000",
+        "7f800000"
+      ],
+      "B_row_major_hex": [
+        "3f800000",
+        "3f800000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "3f800000"
+        },
+        {
+          "bits_hex": "7f800000"
+        }
+      ],
+      "targeted_change_or_obligation": "First tile unobserved row is nonfinite, including NaN padding; selected first output remains 1. Local noninterference only.",
+      "kind": "positive_noninterference_witness"
+    },
+    {
+      "id": "R1",
+      "shape_batch_m_n_p": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "3f800000",
+        "40000000"
+      ],
+      "B_row_major_hex": [
+        "40400000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "40400000"
+        },
+        {
+          "bits_hex": "40c00000"
+        }
+      ],
+      "targeted_change_or_obligation": "Using first-row lane l for r=1 gives 3 instead of 6; correct lane is 4*r+l.",
+      "kind": "negative_for_explicit_erroneous_change"
+    },
+    {
+      "id": "R2",
+      "shape_batch_m_n_p": [
+        2,
+        1,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "3f800000",
+        "40000000"
+      ],
+      "B_row_major_hex": [
+        "40400000",
+        "40a00000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "40400000"
+        },
+        {
+          "bits_hex": "41200000"
+        }
+      ],
+      "targeted_change_or_obligation": "Reusing first tile unobserved cross-batch row yields 6, but next batch uses B=5 and must yield 10.",
+      "kind": "negative_for_explicit_erroneous_change"
+    },
+    {
+      "id": "R3",
+      "shape_batch_m_n_p": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "3f800000",
+        "7f800000"
+      ],
+      "B_row_major_hex": [
+        "00000000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "00000000"
+        },
+        {
+          "class": "NaN",
+          "bits": "MUST_COMPUTE_WITH_FIXED_RAW_REFERENCE; payload not inferred"
+        }
+      ],
+      "targeted_change_or_obligation": "Fallback of row 1 incorrectly using base0 yields +0 instead of NaN.",
+      "kind": "negative_for_explicit_erroneous_change"
+    },
+    {
+      "id": "R4",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        2
+      ],
+      "A_row_major_hex": [
+        "7f800000"
+      ],
+      "B_row_major_hex": [
+        "3f800000",
+        "00000000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "7f800000"
+        },
+        {
+          "class": "NaN",
+          "bits": "MUST_COMPUTE_WITH_FIXED_RAW_REFERENCE; payload not inferred"
+        }
+      ],
+      "targeted_change_or_obligation": "Fallback of column 1 incorrectly omitting l yields +Inf instead of NaN.",
+      "kind": "negative_for_explicit_erroneous_change"
+    },
+    {
+      "id": "R5",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "00000000"
+      ],
+      "B_row_major_hex": [
+        "7f800000"
+      ],
+      "contract_output_row_major": [
+        {
+          "class": "NaN",
+          "bits": "MUST_COMPUTE_WITH_FIXED_RAW_REFERENCE; payload not inferred"
+        }
+      ],
+      "targeted_change_or_obligation": "Skipping a multiplication merely because A is zero yields +0 instead of NaN.",
+      "kind": "negative_for_explicit_erroneous_change"
+    },
+    {
+      "id": "R6",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "80000000"
+      ],
+      "B_row_major_hex": [
+        "3f800000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "00000000"
+        }
+      ],
+      "targeted_change_or_obligation": "Seeding accumulator with first product yields -0; required +0 plus -0 gives +0.",
+      "kind": "negative_for_explicit_erroneous_change"
+    },
+    {
+      "id": "R7",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        5
+      ],
+      "A_row_major_hex": [
+        "3f800000"
+      ],
+      "B_row_major_hex": [
+        "3f800000",
+        "40000000",
+        "40400000",
+        "40800000",
+        "40a00000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "3f800000"
+        },
+        {
+          "bits_hex": "40000000"
+        },
+        {
+          "bits_hex": "40400000"
+        },
+        {
+          "bits_hex": "40800000"
+        },
+        {
+          "bits_hex": "40a00000"
+        }
+      ],
+      "targeted_change_or_obligation": "Old j/8 block selection at j=4 picks block0 lane0=1 instead of block1 lane0=5.",
+      "kind": "negative_for_explicit_erroneous_change"
+    },
+    {
+      "id": "R8",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        2,
+        1
+      ],
+      "A_row_major_hex": [
+        "3f800000",
+        "3f800000"
+      ],
+      "B_row_major_hex": [
+        "3f800000",
+        "40000000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "40400000"
+        }
+      ],
+      "targeted_change_or_obligation": "Using 4 for original B k stride rather than p reads raw indices 0 and 4(default +0), yielding 1 instead of 3.",
+      "kind": "negative_for_explicit_erroneous_change"
+    },
+    {
+      "id": "R9",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        2,
+        1
+      ],
+      "A_row_major_hex": [
+        "bf800000",
+        "3f800001"
+      ],
+      "B_row_major_hex": [
+        "3f800000",
+        "3f7ffffe"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "00000000"
+        }
+      ],
+      "targeted_change_or_obligation": "Fusing the second multiply/add yields -2^-46 (a8800000); required separate product rounds to 1 and then cancels to +0.",
+      "kind": "negative_for_explicit_erroneous_change"
+    },
+    {
+      "id": "R10",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        3,
+        1
+      ],
+      "A_row_major_hex": [
+        "4b800000",
+        "3f800000",
+        "cb800000"
+      ],
+      "B_row_major_hex": [
+        "3f800000",
+        "3f800000",
+        "3f800000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "00000000"
+        }
+      ],
+      "targeted_change_or_obligation": "Reassociating 2^24 + (1 - 2^24) yields 1 instead of ordered +0.",
+      "kind": "negative_for_explicit_erroneous_change"
+    },
+    {
+      "id": "R11",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "00000001"
+      ],
+      "B_row_major_hex": [
+        "3f800000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "00000001"
+        }
+      ],
+      "targeted_change_or_obligation": "Flushing the minimum positive subnormal to zero yields +0 instead of 00000001.",
+      "kind": "negative_for_explicit_erroneous_change"
+    },
+    {
+      "id": "NQ",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "7fc12345"
+      ],
+      "B_row_major_hex": [
+        "3f800000"
+      ],
+      "contract_output_row_major": [
+        {
+          "class": "NaN",
+          "bits": "MUST_COMPUTE_WITH_FIXED_RAW_REFERENCE; payload not inferred"
+        }
+      ],
+      "targeted_change_or_obligation": "Compare all 32 output bits against the fixed raw software reference; no claim about arithmetic payload propagation or actual native payload.",
+      "kind": "oracle_required_nan_regression"
+    },
+    {
+      "id": "NS",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "7f812345"
+      ],
+      "B_row_major_hex": [
+        "3f800000"
+      ],
+      "contract_output_row_major": [
+        {
+          "class": "NaN",
+          "bits": "MUST_COMPUTE_WITH_FIXED_RAW_REFERENCE; payload not inferred"
+        }
+      ],
+      "targeted_change_or_obligation": "Compare all 32 output bits against the fixed raw software reference; no claim about arithmetic payload propagation or actual native payload.",
+      "kind": "oracle_required_nan_regression"
+    },
+    {
+      "id": "NN",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "ffc54321"
+      ],
+      "B_row_major_hex": [
+        "3f800000"
+      ],
+      "contract_output_row_major": [
+        {
+          "class": "NaN",
+          "bits": "MUST_COMPUTE_WITH_FIXED_RAW_REFERENCE; payload not inferred"
+        }
+      ],
+      "targeted_change_or_obligation": "Compare all 32 output bits against the fixed raw software reference; no claim about arithmetic payload propagation or actual native payload.",
+      "kind": "oracle_required_nan_regression"
+    },
+    {
+      "id": "P2",
+      "shape_batch_m_n_p": [
+        2,
+        1,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "3f800000",
+        "7f800000"
+      ],
+      "B_row_major_hex": [
+        "00000000",
+        "3f800000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "00000000"
+        },
+        {
+          "bits_hex": "7f800000"
+        }
+      ],
+      "targeted_change_or_obligation": "Unobserved row of the first tile computes Inf*0. The observed first output must remain +0. The final batch unobserved row is out of bounds.",
+      "kind": "positive_noninterference_witness"
+    },
+    {
+      "id": "R12",
+      "shape_batch_m_n_p": [
+        2,
+        1,
+        1,
+        1
+      ],
+      "A_row_major_hex": [
+        "3f800000",
+        "40000000"
+      ],
+      "B_row_major_hex": [
+        "40400000",
+        "40a00000"
+      ],
+      "contract_output_row_major": [
+        {
+          "bits_hex": "40400000"
+        },
+        {
+          "bits_hex": "41200000"
+        }
+      ],
+      "targeted_change_or_obligation": "Using padded row stride (b*ceil(m/2)+h)*2*n makes the second batch start at raw A index 2; getD returns +0 instead of the required value 2.",
+      "kind": "negative_for_explicit_erroneous_change"
+    }
+  ]
+}

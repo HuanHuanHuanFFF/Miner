@@ -1,0 +1,402 @@
+{
+  "status": "ANALYTICAL_NOT_RUN",
+  "candidate_execution": "NOT_RUN",
+  "float_simulation": "NOT_RUN",
+  "encoding_note": "Only exact constants are encoded with struct; no BMM arithmetic was simulated. Decimal-string dimensions denote arbitrary Nat values.",
+  "cases": [
+    {
+      "id": "order",
+      "shape_batch_m_n_p": [
+        1,
+        2,
+        1,
+        2
+      ],
+      "A_hex": [
+        "3f800000",
+        "40000000"
+      ],
+      "B_hex": [
+        "40400000",
+        "40a00000"
+      ],
+      "expected": [
+        {
+          "bits_hex": "40400000"
+        },
+        {
+          "bits_hex": "40a00000"
+        },
+        {
+          "bits_hex": "40c00000"
+        },
+        {
+          "bits_hex": "41200000"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "Column-major flatten instead of batch-row-column order."
+    },
+    {
+      "id": "row_tiles",
+      "shape_batch_m_n_p": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "A_hex": [
+        "3f800000",
+        "40000000"
+      ],
+      "B_hex": [
+        "40400000"
+      ],
+      "expected": [
+        {
+          "bits_hex": "40400000"
+        },
+        {
+          "bits_hex": "40c00000"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "A cached rowTiles value is accidentally reused for the next row."
+    },
+    {
+      "id": "fallback_row",
+      "shape_batch_m_n_p": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "A_hex": [
+        "3f800000",
+        "7f800000"
+      ],
+      "B_hex": [
+        "00000000"
+      ],
+      "expected": [
+        {
+          "bits_hex": "00000000"
+        },
+        {
+          "class": "NaN",
+          "bits_hex": "MUST_COMPUTE_FROM_FIXED_RAW_REFERENCE"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "Row 1 fallback incorrectly uses row 0 baseA."
+    },
+    {
+      "id": "fallback_A_batch",
+      "shape_batch_m_n_p": [
+        2,
+        1,
+        1,
+        1
+      ],
+      "A_hex": [
+        "3f800000",
+        "7f800000"
+      ],
+      "B_hex": [
+        "00000000",
+        "3f800000"
+      ],
+      "expected": [
+        {
+          "bits_hex": "00000000"
+        },
+        {
+          "bits_hex": "7f800000"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "Second batch fallback omits the A batch offset."
+    },
+    {
+      "id": "fallback_B_batch",
+      "shape_batch_m_n_p": [
+        2,
+        1,
+        1,
+        1
+      ],
+      "A_hex": [
+        "7f800000",
+        "7f800000"
+      ],
+      "B_hex": [
+        "3f800000",
+        "00000000"
+      ],
+      "expected": [
+        {
+          "bits_hex": "7f800000"
+        },
+        {
+          "class": "NaN",
+          "bits_hex": "MUST_COMPUTE_FROM_FIXED_RAW_REFERENCE"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "Second batch fallback omits the B batch offset."
+    },
+    {
+      "id": "fallback_column",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        2
+      ],
+      "A_hex": [
+        "7f800000"
+      ],
+      "B_hex": [
+        "3f800000",
+        "00000000"
+      ],
+      "expected": [
+        {
+          "bits_hex": "7f800000"
+        },
+        {
+          "class": "NaN",
+          "bits_hex": "MUST_COMPUTE_FROM_FIXED_RAW_REFERENCE"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "Fallback baseB omits the column offset."
+    },
+    {
+      "id": "tail_11",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        11
+      ],
+      "A_hex": [
+        "3f800000"
+      ],
+      "B_hex": [
+        "3f800000",
+        "40000000",
+        "40400000",
+        "40800000",
+        "40a00000",
+        "40c00000",
+        "40e00000",
+        "41000000",
+        "41100000",
+        "41200000",
+        "41300000"
+      ],
+      "expected": [
+        {
+          "bits_hex": "3f800000"
+        },
+        {
+          "bits_hex": "40000000"
+        },
+        {
+          "bits_hex": "40400000"
+        },
+        {
+          "bits_hex": "40800000"
+        },
+        {
+          "bits_hex": "40a00000"
+        },
+        {
+          "bits_hex": "40c00000"
+        },
+        {
+          "bits_hex": "40e00000"
+        },
+        {
+          "bits_hex": "41000000"
+        },
+        {
+          "bits_hex": "41100000"
+        },
+        {
+          "bits_hex": "41200000"
+        },
+        {
+          "bits_hex": "41300000"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "j=10 must use group 1, lane 0; do not finish padded lanes."
+    },
+    {
+      "id": "signed_zero",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "A_hex": [
+        "80000000"
+      ],
+      "B_hex": [
+        "3f800000"
+      ],
+      "expected": [
+        {
+          "bits_hex": "00000000"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "Retain the original ordered +0 accumulation through unchanged finish."
+    },
+    {
+      "id": "subnormal",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "A_hex": [
+        "00000001"
+      ],
+      "B_hex": [
+        "3f800000"
+      ],
+      "expected": [
+        {
+          "bits_hex": "00000001"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "Minimum positive subnormal must be preserved."
+    },
+    {
+      "id": "quiet_nan",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "A_hex": [
+        "7fc12345"
+      ],
+      "B_hex": [
+        "3f800000"
+      ],
+      "expected": [
+        {
+          "class": "NaN",
+          "bits_hex": "MUST_COMPUTE_FROM_FIXED_RAW_REFERENCE"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "Compare all 32 bits to the fixed raw reference; do not infer payload."
+    },
+    {
+      "id": "signaling_nan",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "A_hex": [
+        "7f812345"
+      ],
+      "B_hex": [
+        "3f800000"
+      ],
+      "expected": [
+        {
+          "class": "NaN",
+          "bits_hex": "MUST_COMPUTE_FROM_FIXED_RAW_REFERENCE"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "Compare all 32 bits to the fixed raw reference; do not infer payload."
+    },
+    {
+      "id": "negative_nan",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "A_hex": [
+        "ffc54321"
+      ],
+      "B_hex": [
+        "3f800000"
+      ],
+      "expected": [
+        {
+          "class": "NaN",
+          "bits_hex": "MUST_COMPUTE_FROM_FIXED_RAW_REFERENCE"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "Compare all 32 bits to the fixed raw reference; do not infer payload."
+    },
+    {
+      "id": "n_zero",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        0,
+        2
+      ],
+      "A_hex": [],
+      "B_hex": [],
+      "expected": [
+        {
+          "bits_hex": "00000000"
+        },
+        {
+          "bits_hex": "00000000"
+        }
+      ],
+      "targeted_erroneous_change_or_obligation": "Retain preparation-before-return exclusion for n=0."
+    },
+    {
+      "id": "m_zero",
+      "shape_batch_m_n_p": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "A_hex": [],
+      "B_hex": [
+        "3f800000"
+      ],
+      "expected": [],
+      "targeted_erroneous_change_or_obligation": "Empty output must return before all new output preparation."
+    },
+    {
+      "id": "p_zero",
+      "shape_batch_m_n_p": [
+        1,
+        1,
+        1,
+        0
+      ],
+      "A_hex": [
+        "3f800000"
+      ],
+      "B_hex": [],
+      "expected": [],
+      "targeted_erroneous_change_or_obligation": "Empty output must return before materializing many empty rows."
+    },
+    {
+      "id": "huge_n_empty_batch",
+      "shape_batch_m_n_p": [
+        0,
+        1,
+        "340282366920938463463374607431768211579",
+        1
+      ],
+      "A_hex": [],
+      "B_hex": [],
+      "expected": [],
+      "targeted_erroneous_change_or_obligation": "The decimal-string n is an arbitrary Nat; no machine-word truncation or preparation is needed."
+    }
+  ]
+}
