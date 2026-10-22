@@ -102,5 +102,5 @@ for k,title in [('add','加法'),('mul','乘法'),('sum','求和'),('bmm','矩�
  if s['candidate'] in ['f01-d4-final-native','f01-d4-final-lowmul']:
   s['label']={'add':'内联数值解码','mul':('原生乘法' if s['candidate']=='f01-d4-final-native' else '低位软件回退'),'sum':'机器字有序求和','bmm':'十列矩阵＋坐标内联'}[k]
  cid=champ['id'];reference=f'[#{cid}](https://conjectures.io/v1/competitions/floatlib/submissions/{cid})' if k=='add' else f'#{cid}';count='两次' if s['full_gate_runs']==2 else '一次' if s['full_gate_runs']==1 else str(s['full_gate_runs'])+'次';text+=f'| {title} {k} | {reference} | [{s["label"]}](competitions/floatlib/candidates/{s["candidate"]}/Kernel.lean) | **约 {display(s["relative_to_champion_inferred"])}×** | 通过{count} |\n'
-text+='\n**结论：差距进一步缩小，当前仍不能取代冠军。**\n';p=ROOT/'dashboard.md';tmp=p.with_name(p.name+'.update-tmp');tmp.write_bytes(text.encode());os.replace(tmp,p)
+text+='\n**结论：矩阵同机耗时降低22.9%，当前仍不能取代冠军。**\n';p=ROOT/'dashboard.md';tmp=p.with_name(p.name+'.update-tmp');tmp.write_bytes(text.encode());os.replace(tmp,p)
 print(json.dumps({'selected':selected,'whole_entry_inferred':{n:median(r['whole_entry_inferred'] for r in records if r['candidate']==n) for n in labels if any(r['candidate']==n for r in records)}},ensure_ascii=False,indent=2))
