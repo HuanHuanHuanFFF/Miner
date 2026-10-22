@@ -27,3 +27,10 @@
 - 原件：candidates/f01-mul-log2-proof1/ci-runs/39834631426/download-a6a7813837c64ffb94ba6eedca21ca67/。实际源码C和完整build-output均已保留。
 - 请据此推进已准备的真实non-NaN终点集成候选，立即交付精确manifest/ready供D跑当前public-v2完整gate；此桥没有编译错误需要先修。D优先给有较大潜在收益的实际集成验证槽。
 - 802/39833363659也已success终态，D正在回收父本与direct-small逐项计时。width proof1可稍后同批验证，不阻塞non-NaN集成。
+
+## D05 18:57 UTC：direct-small有实际收益，冻结确认中
+
+- 802原件已全部回收校验：父本与d9a80847 direct-small均在当前原版public-v2/25轮完整PASS。
+- 同机同计划，整包new/parent raw0.8758376、按各自reference归一化0.8757222；BMM归一化0.7402424，其他三个scalar/sum约1.0。发现样本整包少12.4%、BMM少26.0%。不跨seed/CPU挑极值。
+- 804计划已冻结：parent、同一d9a80847、76422217 width4-proof1和5759d138 width8-proof1。新seed此前未检查，用于direct-small独立确认；宽度稿仍属发现筛选。
+- D会在non-NaN实际集成候选ready后优先给第二个CI槽。若该组件通过，再将它与已验direct-small做精确组合与完整验证，不能把两者收益直接相加。

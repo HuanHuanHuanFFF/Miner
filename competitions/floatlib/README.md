@@ -9,7 +9,7 @@
 - [冲冠看板](../../dashboard.md)：按 add、mul、sum、bmm 四项查看现任冠军与我方首选。
 - [当前开发状态](coordination/development-status.json)：当前比较口径、候选选择及证据入口。
 - [数学结论与可复用证明](research/RESULTS.md)：按四项运算整理已验结论、数学储备、反例，以及 E 盘 12 包原文和全部候选的证据索引。
-- [当前九十分钟协作](candidates/f01-d6-research/README.md)：当前数学、实现、完整计时与独立确认。
+- [当前十小时协作](candidates/f01-d7-research/README.md)：当前数学、实现、完整计时与独立确认。
 - [前轮Astra／开发一小时协作](candidates/f01-d1-inline-all/window1h/README.md)：原生算术证明起点、逐项验收与原始回执。
 
 - [首次双会话交接](coordination/HANDOFF.md)：环境与开发文件所有权、状态、自然检查点和本窗预算。
