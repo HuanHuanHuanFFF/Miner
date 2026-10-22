@@ -6,7 +6,7 @@ summary=json.loads((OWN/'summary.json').read_bytes());rows=[]
 for job in summary['jobs']:
     if not job['collected']:continue
     group=[r for r in summary['records'] if r['run']==job['run'] and r['full_gate'] and r['candidate']!='baseline']
-    parent=next((r for r in group if r['candidate']=='f01-d3-final-package'),None)
+    parent=next((r for r in group if r['candidate']=='f01-d4-final-lowmul'),None)
     if parent is None:
         parent=next((r for r in group if r['candidate']=='f01-d4-packed10'),None)
     if parent is None:

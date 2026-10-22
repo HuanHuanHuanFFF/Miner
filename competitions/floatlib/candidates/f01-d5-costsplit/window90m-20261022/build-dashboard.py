@@ -19,8 +19,9 @@ new=json.loads((OWN/'summary.json').read_bytes());old=json.loads((ROOT/'competit
 previous=json.loads((ROOT/'competitions/floatlib/candidates/f01-d1-inline-all/window1h/summary.json').read_bytes())
 previous_d2=json.loads((ROOT/'competitions/floatlib/candidates/f01-d2-native-bmm/window10h/summary.json').read_bytes())
 previous_d3=json.loads((ROOT/'competitions/floatlib/candidates/f01-d3-word-packed4/window1h-20261022/summary.json').read_bytes())
+previous_d4=json.loads((ROOT/'competitions/floatlib/candidates/f01-d4-global8/window2h-20261022/summary.json').read_bytes())
 records=[]
-for source,rows in [('old',old['records']),('previous',previous['records']),('previous_d2',previous_d2['records']),('previous_d3',previous_d3['records']),('new',new['records'])]:
+for source,rows in [('old',old['records']),('previous',previous['records']),('previous_d2',previous_d2['records']),('previous_d3',previous_d3['records']),('previous_d4',previous_d4['records']),('new',new['records'])]:
  for r in rows:
   if not r.get('full_gate') or not r.get('passed') or r['candidate']=='baseline':continue
   if source!='old':path=ROOT/r['verdict_path']
@@ -88,7 +89,7 @@ save(OWN/'operation-comparisons.json',result)
 def display(x):
  return f'{x:.2f}' if x<1 else (f'{x:.1f}' if x<10 else f'{x:.0f}' if x<100 else f'{round(x,-1):.0f}')
 stamp=datetime.datetime.fromisoformat(result['queried_at_utc']).astimezone(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y-%m-%d %H:%M')
-text=f'# FloatLib 冲冠看板\n\n冠军核对：[{stamp} 北京时间](competitions/floatlib/candidates/f01-d4-global8/window2h-20261022/operation-comparisons.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。\n\n| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时 | 验证 |\n| --- | --- | --- | ---: | --- |\n'
+text=f'# FloatLib 冲冠看板\n\n冠军核对：[{stamp} 北京时间](competitions/floatlib/candidates/f01-d5-costsplit/window90m-20261022/operation-comparisons.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。\n\n| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时 | 验证 |\n| --- | --- | --- | ---: | --- |\n'
 for k,title in [('add','加法'),('mul','乘法'),('sum','求和'),('bmm','矩阵乘法')]:
  s=selected[k];
  if s['candidate'] in ['f01-d4-final-native','f01-d4-final-lowmul']:
