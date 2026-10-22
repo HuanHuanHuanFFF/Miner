@@ -13,12 +13,12 @@
 
 ## 手动验证入口
 
-当前默认分支还没有登记新的 `floatlib-validate.yml`，因此使用已有的 `deflate-baseline.yml`，在本实验分支选择 `competition=floatlib`。DEFLATE job 会跳过；没有因此合并默认分支。
+`floatlib-validate.yml` 已随研究分支并入 `main`，GitHub API 确认工作流处于 active。原有 `deflate-baseline.yml` 的 `competition=floatlib` 桥接入口仍可用。开始新轮开发时从 main 创建实验分支；现有调度脚本约定分支名为 `codex/multi-track-floatlib`。
 
 在仓库根目录执行，示例中的候选名须替换为已冻结、已提交和已推送的目录：
 
 ```powershell
-python scripts/github-ci.py dispatch --workflow deflate-baseline.yml --candidates f01-mul-log2 --seed 42
+python scripts/github-ci.py dispatch --workflow floatlib-validate.yml --candidates f01-mul-log2 --seed 42
 python scripts/github-ci.py status --run 39554146703
 python scripts/github-ci.py collect --run 39554146703
 ```
@@ -27,7 +27,7 @@ python scripts/github-ci.py collect --run 39554146703
 
 候选目录为 `competitions/floatlib/candidates/<name>/Kernel.lean`；当前入口接受 `baseline` 或 `f01-*`，一次最多四个候选，并自动先验证原版基线。每个输入须在 256000 字节以内。
 
-工作流只手动启动，常规推送不启动 CI，不取消已运行任务。新的独立工作流保留为以后默认分支登记后的入口；现阶段使用上述桥接入口。
+工作流只手动启动，常规推送不启动 CI，不取消已运行任务。独立工作流与桥接入口均可手动派发；本次合并未启动远端 CI。
 
 ## 验收与证据
 
