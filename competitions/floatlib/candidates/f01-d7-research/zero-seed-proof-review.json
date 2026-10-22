@@ -1,0 +1,1554 @@
+{
+  "schema": 1,
+  "title": "W10/W10b zero seed original evidence review",
+  "started_at_utc": "2026-10-22T22:44:03Z",
+  "reviewed_at_utc": "2026-10-22 22:56:35 UTC",
+  "scope": {
+    "writes": [
+      "competitions/floatlib/candidates/f01-d7-research/zero-seed-proof-review.md",
+      "competitions/floatlib/candidates/f01-d7-research/zero-seed-proof-review.json"
+    ],
+    "R_original_mutation": false,
+    "candidate_generated": false,
+    "git_ci_upload": false,
+    "local_lean_execution": false,
+    "archive_rescan": false,
+    "package_integrity_owner": "D independently checks all 13 deliveries; this review hashes only selected source/log/snapshot inputs."
+  },
+  "conclusions": {
+    "supplied_ordinary_compile_and_transitive_axiom_evidence": "VERIFIED_SAVED_RECEIPTS_AND_BOUND_SOURCES",
+    "mathematical_statement": "General q theorem requires actual non-sNaN. The actual separately rounded ExecFloat.mul result is proved non-sNaN for all raw inputs, yielding a premise-free product-seed identity at full carrier and raw-word levels.",
+    "W10b_difference": "Runtime implementation changes from choosing a full old carrier to choosing a UInt32 then ExecFloat.ofRaw. It is proved extensionally equal for all q, including raw NaNs. Final Proofs attempt1->2 only adds two NaN/sNaN preservation theorems.",
+    "official_policy": "W10b Core and Increment pass the fixed raw import/BANNED checks; their complete W10-based verification units inherit raw import-comment, #_ and attribute matches. The supplied PASS is not full official gate eligibility.",
+    "minimal_integration": "Feasible by replacing only singletonCore's initial add with a raw -0->+0 normalizer on the existing exact product, after porting proof dependencies and adding the Submission equality bridge. That new integration is NOT_RUN.",
+    "full_gate": "NOT_RUN",
+    "leanchecker_replay": "NOT_RUN",
+    "singleton_integration": "NOT_RUN",
+    "current_suite_checksums": "NOT_RUN",
+    "performance": "UNKNOWN"
+  },
+  "theorem_signatures": {
+    "general": "theorem R7W10b.add_posZero_of_not_snan (q : Competition.Binary32)\n  (hq : Model.isSNaN (ExecFloat.Binary.toModel q) = false) :\n  ExecFloat.add Competition.posZero q = R7W10b.normalizeProductSeedRaw q",
+    "product_non_snan": "theorem R7W10.exec_mul_not_snan (x y : Competition.Binary32) :\n  Model.isSNaN (ExecFloat.Binary.toModel (ExecFloat.mul x y)) = false",
+    "product_carrier": "theorem R7W10b.add_posZero_mul (x y : Competition.Binary32) :\n  ExecFloat.add Competition.posZero (ExecFloat.mul x y) =\n    R7W10b.normalizeProductSeedRaw (ExecFloat.mul x y)",
+    "product_raw": "theorem R7W10b.add_posZero_mul_raw_conditional (x y : Competition.Binary32) :\n  (ExecFloat.add Competition.posZero (ExecFloat.mul x y)).raw.1 =\n    if (ExecFloat.mul x y).raw.1 == (0x80000000 : UInt32)\n    then (0 : UInt32) else (ExecFloat.mul x y).raw.1",
+    "all_raw_implementation_equivalence": "theorem R7W10b.normalizeProductSeedRaw_eq (q : Competition.Binary32) :\n  R7W10b.normalizeProductSeedRaw q = R7W10.normalizeProductSeed q",
+    "proposed_submission_bridge": "-- NEW INTEGRATION: NOT_RUN. Requires a gate-compatible port of the exact W10/W10b proofs.\ntheorem normalize_mul_seed_eq_add (a b : Competition.Binary32) :\n    R7W10b.normalizeProductSeedRaw (Submission.mul a b) =\n      Submission.add Competition.posZero (Submission.mul a b) := by\n  simpa only [Submission.add_eq, Submission.mul_eq] using\n    (R7W10b.add_posZero_mul a b).symm"
+  },
+  "files": {
+    "W10_full": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\R7W10.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/R7W10.lean",
+      "sha256": "c3f9965a7f4f55d13473e5364e95173a2a36b2c1e39bcb1f07f7dce2018432cc",
+      "bytes": 116706,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_core": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\Core.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/Core.lean",
+      "sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f",
+      "bytes": 427,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_proofs": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\Proofs.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/Proofs.lean",
+      "sha256": "90a6e0461690f8220d7ecc1710d52a267eb6239ec18d50de9f164952eff6bcbd",
+      "bytes": 3636,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_increment": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\R7W10bIncrement.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/R7W10bIncrement.lean",
+      "sha256": "06cb8a1942f609d4ef0afdd85e2bfd373bc44fbf3d09dd6fc8d05f90a7bcf7d1",
+      "bytes": 4018,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_increment": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\R7W10Increment.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/R7W10Increment.lean",
+      "sha256": "2032bb83881d5db771cd95b246d52559f8bd6133c5166bd24f7b8a405d7a8b55",
+      "bytes": 10514,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_native_zero": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\proofs\\NativeZero.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/NativeZero.lean",
+      "sha256": "004c968380cb23bc165dd1a4a05c8e0cf402187f75a3d41c6fca61695882d492",
+      "bytes": 4847,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_general": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\proofs\\General.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/General.lean",
+      "sha256": "c6790e97e91474de559dc913f53c28f0bebccbeb3674fe93ee5bd94fcb5bbaaa",
+      "bytes": 2665,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_mul_classification": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\proofs\\MulClassification.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/MulClassification.lean",
+      "sha256": "adc9302f240f3ab7938ef29ed1eb66e78c005d57908e3c633f6723e0a806d3bf",
+      "bytes": 961,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_product": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\proofs\\Product.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/Product.lean",
+      "sha256": "b508427ad70785362836b1ff04577bf66969e7558ab6ba2f2a062774fa6bd29f",
+      "bytes": 2156,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_axiom_names": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\evidence\\required-axiom-declarations.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/evidence/required-axiom-declarations.json",
+      "sha256": "5682540903a11ca3e43264b8e2184a4819558ad7493953abb1a3781bfe130a53",
+      "bytes": 9059,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_diagnostics": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\R7W10Diagnostics.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/R7W10Diagnostics.lean",
+      "sha256": "8ba7df16900f2fc4bb72868dae7f08e378c9f23e9b582a5a1fbea56fb87cdfa0",
+      "bytes": 137138,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_assembly": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\assemble.py",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/assemble.py",
+      "sha256": "e92753265eb4b953fd13f7a0773f6c31a754409688247e83646234f0c18ad5ee",
+      "bytes": 2191,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_prepare": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\prepare.py",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/prepare.py",
+      "sha256": "7dd85b1ddab43691c15ad4a725b27b7c59a9be6f42869c2047280c56e1a0b08d",
+      "bytes": 1808,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_build_recipe": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\evidence\\expanded-build-recipe.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/evidence/expanded-build-recipe.json",
+      "sha256": "ba8d93cdc03600bba3b20e83c377bcfd4826634a0e21b3f89578a50c854592fb",
+      "bytes": 1590,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_C_input": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\codegen\\NormalizeCodegen.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/codegen/NormalizeCodegen.lean",
+      "sha256": "6d200a6e1656645f80bddbc376c97c5ec7b0426ab77384e737f0e202f73c0598",
+      "bytes": 298,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_C": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\codegen\\NormalizeCodegen.c",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/codegen/NormalizeCodegen.c",
+      "sha256": "d322230093747dd4ad2cfe29f86d6ce2075804c116d51cf5f993c770b743a8ec",
+      "bytes": 3354,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_C_input": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\codegen\\NormalizeRawCodegen.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/codegen/NormalizeRawCodegen.lean",
+      "sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f",
+      "bytes": 427,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_C": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\codegen\\NormalizeRawCodegen.c",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/codegen/NormalizeRawCodegen.c",
+      "sha256": "79a769542c952f3e0d42ab8a188beeb6efcd6e58c50dea91ce2dbca160bfa5af",
+      "bytes": 2147,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_lean_toolchain": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\evidence\\lean-toolchain",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/evidence/lean-toolchain",
+      "sha256": "8733782dc070a99b312039cda424f601b80f3be6f6f512627da5ba25adc27632",
+      "bytes": 25,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_lake_manifest": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\evidence\\lake-manifest.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/evidence/lake-manifest.json",
+      "sha256": "7a4c7bb55fa2e0c8d0e9ff990c706f3724fcebdbb8a6b1e8e4e0ad1f72e8b3c8",
+      "bytes": 3121,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_dependencies": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\evidence\\dependencies.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/evidence/dependencies.json",
+      "sha256": "2372288acfd028bfe8dc83a07b106b26691371eb71836742ecb71bdfeb41cf7b",
+      "bytes": 552,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_W10_review": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\evidence\\W10-dependency-review.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/evidence/W10-dependency-review.json",
+      "sha256": "ac4d02d3cdfc4b900f3c392ba4c451d2b528516604b16a2458f263752585fc9d",
+      "bytes": 5154,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_witnesses": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\evidence\\finite-witnesses.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/evidence/finite-witnesses.json",
+      "sha256": "0a581fe696a2fd7057c5b084e32aab6ef55b05d4b001cc36cbfb7a69c11284b6",
+      "bytes": 4762,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_witnesses": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\evidence\\finite-witnesses.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/evidence/finite-witnesses.json",
+      "sha256": "c1ca2614302aeb1f60e56e944308124d2f4e5db3fc982e86f2473a10b743f3a7",
+      "bytes": 3843,
+      "publication": "LOCAL_ONLY"
+    },
+    "singleton_dab": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-singleton-proof1\\Kernel.lean",
+      "repo_path": "competitions/floatlib/candidates/f01-d7-singleton-proof1/Kernel.lean",
+      "sha256": "dab15a44f753c1e8d4654d15ffc54eaa770702eeb42cf0cc601c91809418b21a",
+      "bytes": 143267,
+      "publication": "EXISTING_CANDIDATE"
+    },
+    "singleton_manifest": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-singleton-proof1\\manifest.json",
+      "repo_path": "competitions/floatlib/candidates/f01-d7-singleton-proof1/manifest.json",
+      "sha256": "199ebced483df12d34035ccae174dddf8d025d06d92fe979726eb5b245a944df",
+      "bytes": 3484,
+      "publication": "EXISTING_CANDIDATE"
+    },
+    "policy_source": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\upstream\\gate-4b7e838.py",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+      "sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+      "bytes": 38320,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_R7W10-attempt1_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10-attempt1.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.json",
+      "sha256": "f68a9de97407574ce015f853c039e4deb1ab700fa4775ddb952f17917331d722",
+      "bytes": 681,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_R7W10-attempt1_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10-attempt1.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.log",
+      "sha256": "77a7f3d9a3e129bc6c2de6791c675bb71e3496cc9f855198eb6a73ea18f53ef0",
+      "bytes": 3783,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_R7W10-attempt1_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10-attempt1.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.lean",
+      "sha256": "c3f9965a7f4f55d13473e5364e95173a2a36b2c1e39bcb1f07f7dce2018432cc",
+      "bytes": 116706,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_R7W10Diagnostics-attempt1_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Diagnostics-attempt1.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Diagnostics-attempt1.json",
+      "sha256": "42a7ebcc9fb13c1a3904723b35d8ce5b2138d1db01b9b905abac83c75c121c29",
+      "bytes": 737,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_R7W10Diagnostics-attempt1_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Diagnostics-attempt1.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Diagnostics-attempt1.log",
+      "sha256": "d46d547235aa30192e5968ef0f3728915d60de5ff3be121bc24c68af8c76a756",
+      "bytes": 24796,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_R7W10Diagnostics-attempt1_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Diagnostics-attempt1.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Diagnostics-attempt1.lean",
+      "sha256": "8ba7df16900f2fc4bb72868dae7f08e378c9f23e9b582a5a1fbea56fb87cdfa0",
+      "bytes": 137138,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_R7W10Types-attempt1_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Types-attempt1.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Types-attempt1.json",
+      "sha256": "792d6389b26b06d870649f26fe680eceac5c33498c5cdd10a7be8d8842f1f450",
+      "bytes": 707,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_R7W10Types-attempt1_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Types-attempt1.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Types-attempt1.log",
+      "sha256": "5d7dfcc84ba821bdb22c78f17bf99d16887b56a458a9c2f99607be3bad7e6e41",
+      "bytes": 5239,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_R7W10Types-attempt1_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Types-attempt1.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Types-attempt1.lean",
+      "sha256": "77092bbec32a0c8b81702ff35490dcd31e99f2a5810c5f7085a8e8dbf494931e",
+      "bytes": 117002,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_General-attempt4_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\General-attempt4.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/General-attempt4.json",
+      "sha256": "c480b649af82c51c29bbb4282689aa3f93d7172f1922a51f3af578908232f3a3",
+      "bytes": 720,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_General-attempt4_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\General-attempt4.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/General-attempt4.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_General-attempt4_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\General-attempt4.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/General-attempt4.lean",
+      "sha256": "c6790e97e91474de559dc913f53c28f0bebccbeb3674fe93ee5bd94fcb5bbaaa",
+      "bytes": 2665,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_MulClassification-attempt2_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\MulClassification-attempt2.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/MulClassification-attempt2.json",
+      "sha256": "e0aba202945029f64039302d573b7fd2ef162f4310de446937795d91aa377322",
+      "bytes": 768,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_MulClassification-attempt2_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\MulClassification-attempt2.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/MulClassification-attempt2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_MulClassification-attempt2_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\MulClassification-attempt2.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/MulClassification-attempt2.lean",
+      "sha256": "adc9302f240f3ab7938ef29ed1eb66e78c005d57908e3c633f6723e0a806d3bf",
+      "bytes": 961,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_NativeZeroAudit-attempt4_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NativeZeroAudit-attempt4.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NativeZeroAudit-attempt4.json",
+      "sha256": "23cb0df4d8cc3b9974f7f4260897100d2a5e49fb0f736c496439a004d040cb08",
+      "bytes": 768,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_NativeZeroAudit-attempt4_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NativeZeroAudit-attempt4.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NativeZeroAudit-attempt4.log",
+      "sha256": "8f5f076a0a89e3f8c0aceba5c222270b56c4bdc99ca33243f99c9c9765fe46a4",
+      "bytes": 1178,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_NativeZeroAudit-attempt4_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NativeZeroAudit-attempt4.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NativeZeroAudit-attempt4.lean",
+      "sha256": "dbbe9640bf8d2eea3e04e2c71488d4bb9dd0dc295a3338a6c8e29ef120c1f78b",
+      "bytes": 5000,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_NormalizeCodegen-C-attempt2_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NormalizeCodegen-C-attempt2.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NormalizeCodegen-C-attempt2.json",
+      "sha256": "b85716ff3e14e86dfbfa3dca4d8bfb86876f07b951164a5c1b0d48b4ed81b473",
+      "bytes": 1044,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_NormalizeCodegen-C-attempt2_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NormalizeCodegen-C-attempt2.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NormalizeCodegen-C-attempt2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_NormalizeCodegen-C-attempt2_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NormalizeCodegen-C-attempt2.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NormalizeCodegen-C-attempt2.lean",
+      "sha256": "6d200a6e1656645f80bddbc376c97c5ec7b0426ab77384e737f0e202f73c0598",
+      "bytes": 298,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_Core-attempt1_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Core-attempt1.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.json",
+      "sha256": "e72ab021e26eeb74a0ba469ad3472796601f1ad8c313c2a078510a3a7193a15c",
+      "bytes": 682,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_Core-attempt1_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Core-attempt1.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_Core-attempt1_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Core-attempt1.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.lean",
+      "sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f",
+      "bytes": 427,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_Proofs-attempt2_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Proofs-attempt2.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.json",
+      "sha256": "4b83b70babc8b09b7956aa232b720fe4ff3a1d1b488e5eeae9c06bf8d94b86b8",
+      "bytes": 692,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_Proofs-attempt2_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Proofs-attempt2.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_Proofs-attempt2_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Proofs-attempt2.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.lean",
+      "sha256": "90a6e0461690f8220d7ecc1710d52a267eb6239ec18d50de9f164952eff6bcbd",
+      "bytes": 3636,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_ProofsAxioms-attempt2_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\ProofsAxioms-attempt2.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/ProofsAxioms-attempt2.json",
+      "sha256": "6205bd3be9b08b09609803d7e6c27c124d1224c71eaa2ede53eaf0b301cb264a",
+      "bytes": 758,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_ProofsAxioms-attempt2_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\ProofsAxioms-attempt2.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/ProofsAxioms-attempt2.log",
+      "sha256": "9b0eb6251e5697713b16c277ff8d1096735dcdc997189d1201307d9e7827ecee",
+      "bytes": 1125,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_ProofsAxioms-attempt2_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\ProofsAxioms-attempt2.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/ProofsAxioms-attempt2.lean",
+      "sha256": "941dec5bb4303105742d93b30202d138160f12a8af19af094540f6dc770e5414",
+      "bytes": 576,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_W10bFull-attempt1_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bFull-attempt1.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bFull-attempt1.json",
+      "sha256": "6a6246ff4d4c52326b390e0692524364784ffb3629f6cc99e26c53488a4868c7",
+      "bytes": 726,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_W10bFull-attempt1_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bFull-attempt1.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bFull-attempt1.log",
+      "sha256": "e3b395c024c47891ec288dfb3c22bdca92b67d60c619f72eff3924c76985ee87",
+      "bytes": 3953,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_W10bWitnessFull-attempt1_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessFull-attempt1.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bWitnessFull-attempt1.json",
+      "sha256": "85c23e2841a2fa932aa1f8d7a0022753293c37e582611c0f834b22bceff57f2a",
+      "bytes": 761,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_W10bWitnessFull-attempt1_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessFull-attempt1.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bWitnessFull-attempt1.log",
+      "sha256": "bde0bf58002eec8a472d4418c22ef5658d41410cdf2e9f5b1ed3bc55132b6f69",
+      "bytes": 4072,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_W10bAuditFull-attempt1_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bAuditFull-attempt1.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bAuditFull-attempt1.json",
+      "sha256": "5f64ba8c36a04656695bd4fa7d53a628fb93b468f0a6ab5096d16309443f0a74",
+      "bytes": 751,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_W10bAuditFull-attempt1_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bAuditFull-attempt1.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bAuditFull-attempt1.log",
+      "sha256": "857c0f1c80e5363cc4018e2c6e9bd3df70b25e85b1d539df90819a870682e801",
+      "bytes": 8765,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_NormalizeRawCodegen-C-attempt1_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\NormalizeRawCodegen-C-attempt1.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/NormalizeRawCodegen-C-attempt1.json",
+      "sha256": "5fcb940a51dfc91148a1b0b5fe501991956eda9733855b210b131c9f8b1afc7f",
+      "bytes": 1072,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_NormalizeRawCodegen-C-attempt1_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\NormalizeRawCodegen-C-attempt1.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/NormalizeRawCodegen-C-attempt1.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_NormalizeRawCodegen-C-attempt1_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\NormalizeRawCodegen-C-attempt1.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/NormalizeRawCodegen-C-attempt1.lean",
+      "sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f",
+      "bytes": 427,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_W10bWitnessAxioms-attempt2_record": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessAxioms-attempt2.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bWitnessAxioms-attempt2.json",
+      "sha256": "a6cb16ec082e3aa88917b40ce890c029d71e42c903f0a3e3940e2060b68fc81d",
+      "bytes": 783,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_W10bWitnessAxioms-attempt2_log": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessAxioms-attempt2.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bWitnessAxioms-attempt2.log",
+      "sha256": "77f6f8cd572dad4aeb27b76b77d15435e6b73072c5abd0191716acf1f7f5fac2",
+      "bytes": 1350,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_W10bWitnessAxioms-attempt2_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessAxioms-attempt2.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bWitnessAxioms-attempt2.lean",
+      "sha256": "43f5e039ab3b418d206cce5a4147fb7b62e5330f948fd42cd009425ad6353e08",
+      "bytes": 717,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_Proofs_attempt1_snapshot": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Proofs-attempt1.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt1.lean",
+      "sha256": "765f9f471f78018d2e854bad614f0ddb184802a6cb1c4cb130f2761649988b21",
+      "bytes": 3002,
+      "publication": "LOCAL_ONLY"
+    },
+    "fixed_Formats/BinaryInterchange/Spec/Dyadic.lean": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\public\\FloatLib\\FloatLib\\Floats\\Formats\\BinaryInterchange\\Spec\\Dyadic.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/public/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Spec/Dyadic.lean",
+      "sha256": "932ee9d22d6241cda8c38dd22df4ecaffa934cdd1aa2922a0681afd1669ffb67",
+      "bytes": 4842,
+      "publication": "LOCAL_ONLY"
+    },
+    "fixed_Formats/BinaryInterchange/Model/Carrier.lean": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\public\\FloatLib\\FloatLib\\Floats\\Formats\\BinaryInterchange\\Model\\Carrier.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/public/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Model/Carrier.lean",
+      "sha256": "ff74af867a84c3b88eaaf337f6cbd1e9b65f801d0643f663593154ba7671338b",
+      "bytes": 26809,
+      "publication": "LOCAL_ONLY"
+    },
+    "fixed_Formats/BinaryInterchange/Dyadic/Rounding.lean": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\public\\FloatLib\\FloatLib\\Floats\\Formats\\BinaryInterchange\\Dyadic\\Rounding.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/public/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Dyadic/Rounding.lean",
+      "sha256": "cbc4f0a6a43562e8144a007835cea18c7004869e63b36a25f5052c1044c504c1",
+      "bytes": 8850,
+      "publication": "LOCAL_ONLY"
+    },
+    "fixed_ExecFloat/Carrier.lean": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\public\\FloatLib\\FloatLib\\Floats\\ExecFloat\\Carrier.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/public/FloatLib/FloatLib/Floats/ExecFloat/Carrier.lean",
+      "sha256": "40c83855123500a740dcef751a4c356a222533180af6ccf896cf745983c1c70f",
+      "bytes": 15488,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_session_recipe": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\evidence\\session-verify.py",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/evidence/session-verify.py",
+      "sha256": "21f8f66b6b04fb93516280565386b3759d85ca57ea5212608d678a65a1845cc6",
+      "bytes": 1499,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_session_recipe": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\evidence\\session-verify.py",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/evidence/session-verify.py",
+      "sha256": "2ac8d5ff88be36d853075188d813c4554a3087374f60c590a2960de20fae470b",
+      "bytes": 1534,
+      "publication": "LOCAL_ONLY"
+    },
+    "W01_saved_lean_version": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W01\\original-extracted\\R7-W01\\logs\\lean-version.log",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01/original-extracted/R7-W01/logs/lean-version.log",
+      "sha256": "cf6e65bfc214882b1c13717aae89d383a03f6bcf5c96dfbae13368cd3e07ff9d",
+      "bytes": 106,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_expected_declarations": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\evidence\\declarations.json",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/evidence/declarations.json",
+      "sha256": "26372f500b2a428f9a80167f822e1c6635b7aa46a79e6bd330ea7a1f7cddf233",
+      "bytes": 2696,
+      "publication": "LOCAL_ONLY"
+    }
+  },
+  "compile_and_codegen_attempts": [
+    {
+      "job": "W10",
+      "name": "R7W10-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10-attempt1.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.json",
+        "sha256": "f68a9de97407574ce015f853c039e4deb1ab700fa4775ddb952f17917331d722",
+        "bytes": 681,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10-attempt1.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.log",
+        "sha256": "77a7f3d9a3e129bc6c2de6791c675bb71e3496cc9f855198eb6a73ea18f53ef0",
+        "bytes": 3783,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/R7W10.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/R7W10.lean"
+      ],
+      "original_source_sha256": "c3f9965a7f4f55d13473e5364e95173a2a36b2c1e39bcb1f07f7dce2018432cc",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10-attempt1.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.lean",
+        "sha256": "c3f9965a7f4f55d13473e5364e95173a2a36b2c1e39bcb1f07f7dce2018432cc",
+        "bytes": 116706,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    },
+    {
+      "job": "W10",
+      "name": "R7W10Diagnostics-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Diagnostics-attempt1.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Diagnostics-attempt1.json",
+        "sha256": "42a7ebcc9fb13c1a3904723b35d8ce5b2138d1db01b9b905abac83c75c121c29",
+        "bytes": 737,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Diagnostics-attempt1.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Diagnostics-attempt1.log",
+        "sha256": "d46d547235aa30192e5968ef0f3728915d60de5ff3be121bc24c68af8c76a756",
+        "bytes": 24796,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/R7W10Diagnostics.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/R7W10Diagnostics.lean"
+      ],
+      "original_source_sha256": "8ba7df16900f2fc4bb72868dae7f08e378c9f23e9b582a5a1fbea56fb87cdfa0",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Diagnostics-attempt1.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Diagnostics-attempt1.lean",
+        "sha256": "8ba7df16900f2fc4bb72868dae7f08e378c9f23e9b582a5a1fbea56fb87cdfa0",
+        "bytes": 137138,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    },
+    {
+      "job": "W10",
+      "name": "R7W10Types-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Types-attempt1.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Types-attempt1.json",
+        "sha256": "792d6389b26b06d870649f26fe680eceac5c33498c5cdd10a7be8d8842f1f450",
+        "bytes": 707,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Types-attempt1.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Types-attempt1.log",
+        "sha256": "5d7dfcc84ba821bdb22c78f17bf99d16887b56a458a9c2f99607be3bad7e6e41",
+        "bytes": 5239,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/R7W10Types.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/R7W10Types.lean"
+      ],
+      "original_source_sha256": "77092bbec32a0c8b81702ff35490dcd31e99f2a5810c5f7085a8e8dbf494931e",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10Types-attempt1.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Types-attempt1.lean",
+        "sha256": "77092bbec32a0c8b81702ff35490dcd31e99f2a5810c5f7085a8e8dbf494931e",
+        "bytes": 117002,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    },
+    {
+      "job": "W10",
+      "name": "General-attempt4",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\General-attempt4.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/General-attempt4.json",
+        "sha256": "c480b649af82c51c29bbb4282689aa3f93d7172f1922a51f3af578908232f3a3",
+        "bytes": 720,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\General-attempt4.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/General-attempt4.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/proofs/General.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/proofs/General.lean"
+      ],
+      "original_source_sha256": "c6790e97e91474de559dc913f53c28f0bebccbeb3674fe93ee5bd94fcb5bbaaa",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\General-attempt4.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/General-attempt4.lean",
+        "sha256": "c6790e97e91474de559dc913f53c28f0bebccbeb3674fe93ee5bd94fcb5bbaaa",
+        "bytes": 2665,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    },
+    {
+      "job": "W10",
+      "name": "MulClassification-attempt2",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\MulClassification-attempt2.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/MulClassification-attempt2.json",
+        "sha256": "e0aba202945029f64039302d573b7fd2ef162f4310de446937795d91aa377322",
+        "bytes": 768,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\MulClassification-attempt2.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/MulClassification-attempt2.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/proofs/MulClassification.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/proofs/MulClassification.lean"
+      ],
+      "original_source_sha256": "adc9302f240f3ab7938ef29ed1eb66e78c005d57908e3c633f6723e0a806d3bf",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\MulClassification-attempt2.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/MulClassification-attempt2.lean",
+        "sha256": "adc9302f240f3ab7938ef29ed1eb66e78c005d57908e3c633f6723e0a806d3bf",
+        "bytes": 961,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    },
+    {
+      "job": "W10",
+      "name": "NativeZeroAudit-attempt4",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NativeZeroAudit-attempt4.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NativeZeroAudit-attempt4.json",
+        "sha256": "23cb0df4d8cc3b9974f7f4260897100d2a5e49fb0f736c496439a004d040cb08",
+        "bytes": 768,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NativeZeroAudit-attempt4.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NativeZeroAudit-attempt4.log",
+        "sha256": "8f5f076a0a89e3f8c0aceba5c222270b56c4bdc99ca33243f99c9c9765fe46a4",
+        "bytes": 1178,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/evidence/NativeZeroAudit.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/evidence/NativeZeroAudit.lean"
+      ],
+      "original_source_sha256": "dbbe9640bf8d2eea3e04e2c71488d4bb9dd0dc295a3338a6c8e29ef120c1f78b",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NativeZeroAudit-attempt4.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NativeZeroAudit-attempt4.lean",
+        "sha256": "dbbe9640bf8d2eea3e04e2c71488d4bb9dd0dc295a3338a6c8e29ef120c1f78b",
+        "bytes": 5000,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    },
+    {
+      "job": "W10",
+      "name": "NormalizeCodegen-C-attempt2",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NormalizeCodegen-C-attempt2.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NormalizeCodegen-C-attempt2.json",
+        "sha256": "b85716ff3e14e86dfbfa3dca4d8bfb86876f07b951164a5c1b0d48b4ed81b473",
+        "bytes": 1044,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NormalizeCodegen-C-attempt2.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NormalizeCodegen-C-attempt2.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-c",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/codegen/NormalizeCodegen.c",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/codegen/NormalizeCodegen.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10-work/codegen/NormalizeCodegen.lean"
+      ],
+      "original_source_sha256": "6d200a6e1656645f80bddbc376c97c5ec7b0426ab77384e737f0e202f73c0598",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NormalizeCodegen-C-attempt2.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/NormalizeCodegen-C-attempt2.lean",
+        "sha256": "6d200a6e1656645f80bddbc376c97c5ec7b0426ab77384e737f0e202f73c0598",
+        "bytes": 298,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    },
+    {
+      "job": "W10b",
+      "name": "Core-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Core-attempt1.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.json",
+        "sha256": "e72ab021e26eeb74a0ba469ad3472796601f1ad8c313c2a078510a3a7193a15c",
+        "bytes": 682,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Core-attempt1.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/Core.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/Core.lean"
+      ],
+      "original_source_sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Core-attempt1.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.lean",
+        "sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f",
+        "bytes": 427,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    },
+    {
+      "job": "W10b",
+      "name": "Proofs-attempt2",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Proofs-attempt2.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.json",
+        "sha256": "4b83b70babc8b09b7956aa232b720fe4ff3a1d1b488e5eeae9c06bf8d94b86b8",
+        "bytes": 692,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Proofs-attempt2.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/Proofs.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/Proofs.lean"
+      ],
+      "original_source_sha256": "90a6e0461690f8220d7ecc1710d52a267eb6239ec18d50de9f164952eff6bcbd",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Proofs-attempt2.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.lean",
+        "sha256": "90a6e0461690f8220d7ecc1710d52a267eb6239ec18d50de9f164952eff6bcbd",
+        "bytes": 3636,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    },
+    {
+      "job": "W10b",
+      "name": "ProofsAxioms-attempt2",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\ProofsAxioms-attempt2.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/ProofsAxioms-attempt2.json",
+        "sha256": "6205bd3be9b08b09609803d7e6c27c124d1224c71eaa2ede53eaf0b301cb264a",
+        "bytes": 758,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\ProofsAxioms-attempt2.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/ProofsAxioms-attempt2.log",
+        "sha256": "9b0eb6251e5697713b16c277ff8d1096735dcdc997189d1201307d9e7827ecee",
+        "bytes": 1125,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/evidence/ProofsAxioms.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/evidence/ProofsAxioms.lean"
+      ],
+      "original_source_sha256": "941dec5bb4303105742d93b30202d138160f12a8af19af094540f6dc770e5414",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\ProofsAxioms-attempt2.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/ProofsAxioms-attempt2.lean",
+        "sha256": "941dec5bb4303105742d93b30202d138160f12a8af19af094540f6dc770e5414",
+        "bytes": 576,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    },
+    {
+      "job": "W10b",
+      "name": "W10bFull-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bFull-attempt1.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bFull-attempt1.json",
+        "sha256": "6a6246ff4d4c52326b390e0692524364784ffb3629f6cc99e26c53488a4868c7",
+        "bytes": 726,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bFull-attempt1.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bFull-attempt1.log",
+        "sha256": "e3b395c024c47891ec288dfb3c22bdca92b67d60c619f72eff3924c76985ee87",
+        "bytes": 3953,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/build/W10bFull.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/build/W10bFull.lean"
+      ],
+      "original_source_sha256": "78c85fc79807e73138c00e9b505b02f8b30e426c99afb91ebdd811d35a148c65",
+      "source_snapshot_bundled": false,
+      "errors_in_raw_log": 0,
+      "source_reconstructed_in_memory_hash_matches": true
+    },
+    {
+      "job": "W10b",
+      "name": "W10bWitnessFull-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessFull-attempt1.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bWitnessFull-attempt1.json",
+        "sha256": "85c23e2841a2fa932aa1f8d7a0022753293c37e582611c0f834b22bceff57f2a",
+        "bytes": 761,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessFull-attempt1.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bWitnessFull-attempt1.log",
+        "sha256": "bde0bf58002eec8a472d4418c22ef5658d41410cdf2e9f5b1ed3bc55132b6f69",
+        "bytes": 4072,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/build/W10bWitnessFull.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/build/W10bWitnessFull.lean"
+      ],
+      "original_source_sha256": "b426b0226bb9684ffeb13263226807519d812d2ad4ef02d6ee38800fe6ae2f6c",
+      "source_snapshot_bundled": false,
+      "errors_in_raw_log": 0,
+      "source_reconstructed_in_memory_hash_matches": true
+    },
+    {
+      "job": "W10b",
+      "name": "W10bAuditFull-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bAuditFull-attempt1.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bAuditFull-attempt1.json",
+        "sha256": "5f64ba8c36a04656695bd4fa7d53a628fb93b468f0a6ab5096d16309443f0a74",
+        "bytes": 751,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bAuditFull-attempt1.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bAuditFull-attempt1.log",
+        "sha256": "857c0f1c80e5363cc4018e2c6e9bd3df70b25e85b1d539df90819a870682e801",
+        "bytes": 8765,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/build/W10bAuditFull.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/build/W10bAuditFull.lean"
+      ],
+      "original_source_sha256": "95be07ae7e4bfe335865142f9a28d6947b895458606fa650ea3182f4c842fde1",
+      "source_snapshot_bundled": false,
+      "errors_in_raw_log": 0,
+      "source_reconstructed_in_memory_hash_matches": true
+    },
+    {
+      "job": "W10b",
+      "name": "NormalizeRawCodegen-C-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\NormalizeRawCodegen-C-attempt1.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/NormalizeRawCodegen-C-attempt1.json",
+        "sha256": "5fcb940a51dfc91148a1b0b5fe501991956eda9733855b210b131c9f8b1afc7f",
+        "bytes": 1072,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\NormalizeRawCodegen-C-attempt1.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/NormalizeRawCodegen-C-attempt1.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-c",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/codegen/NormalizeRawCodegen.c",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/codegen/NormalizeRawCodegen.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/codegen/NormalizeRawCodegen.lean"
+      ],
+      "original_source_sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\NormalizeRawCodegen-C-attempt1.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/NormalizeRawCodegen-C-attempt1.lean",
+        "sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f",
+        "bytes": 427,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    },
+    {
+      "job": "W10b",
+      "name": "W10bWitnessAxioms-attempt2",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessAxioms-attempt2.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bWitnessAxioms-attempt2.json",
+        "sha256": "a6cb16ec082e3aa88917b40ce890c029d71e42c903f0a3e3940e2060b68fc81d",
+        "bytes": 783,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessAxioms-attempt2.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bWitnessAxioms-attempt2.log",
+        "sha256": "77f6f8cd572dad4aeb27b76b77d15435e6b73072c5abd0191716acf1f7f5fac2",
+        "bytes": 1350,
+        "publication": "LOCAL_ONLY"
+      },
+      "original_returncode": 0,
+      "argv": [
+        "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+        "-o",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/evidence/W10bWitnessAxioms.olean",
+        "/workspace/scratch/fd3456391d75/R7-W10b-work/evidence/W10bWitnessAxioms.lean"
+      ],
+      "original_source_sha256": "43f5e039ab3b418d206cce5a4147fb7b62e5330f948fd42cd009425ad6353e08",
+      "source_snapshot_bundled": true,
+      "errors_in_raw_log": 0,
+      "snapshot": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessAxioms-attempt2.lean",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bWitnessAxioms-attempt2.lean",
+        "sha256": "43f5e039ab3b418d206cce5a4147fb7b62e5330f948fd42cd009425ad6353e08",
+        "bytes": 717,
+        "publication": "LOCAL_ONLY"
+      },
+      "snapshot_hash_matches": true
+    }
+  ],
+  "raw_axiom_audits": {
+    "W10": {
+      "raw_log_declarations": 218,
+      "all_logged_axioms_allowed": true,
+      "critical": {
+        "R7W10.add_posZero_of_not_snan": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W10.mul32_not_snan": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W10.exec_mul_not_snan": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W10.add_posZero_mul": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W10.add_posZero_mul_raw_conditional": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      "full_expected_218_set_matches_raw_log": true
+    },
+    "W10b": {
+      "raw_log_declarations": 26,
+      "all_logged_axioms_allowed": true,
+      "critical": {
+        "R7W10b.normalizeProductSeedRaw_eq": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W10b.normalizeProductSeedRaw_of_snan": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W10b.add_posZero_of_not_snan": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W10b.add_posZero_mul": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W10b.add_posZero_mul_raw_conditional": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      "full_expected_26_set_matches_raw_log": true
+    }
+  },
+  "policy_raw_checks": {
+    "W10_full": {
+      "banned_matches": [
+        {
+          "token": "#_",
+          "line": 1685
+        },
+        {
+          "token": "#_",
+          "line": 1689
+        },
+        {
+          "token": "attribute",
+          "line": 2283
+        }
+      ],
+      "nonContract_import_lines": [
+        {
+          "line": 454,
+          "text": "/- Append after Base.lean and Raw.lean under the single import ContractTensor."
+        },
+        {
+          "line": 564,
+          "text": "   No diagnostics or extra import belongs in this integration fragment. -/"
+        },
+        {
+          "line": 718,
+          "text": "/- Append after the concrete Dependencies.lean under the sole ContractTensor import."
+        },
+        {
+          "line": 785,
+          "text": "/- Append after Dependencies.lean and ModelAdd.lean under only import ContractTensor."
+        },
+        {
+          "line": 1876,
+          "text": "Append after Dependencies.lean and Add.lean under the sole ContractTensor import. -/"
+        },
+        {
+          "line": 2159,
+          "text": "/-- At a non-NaN native sum-prefix state, its import is the exact original raw prefix. -/"
+        }
+      ],
+      "scope": "Exact fixed upstream raw-text BANNED/import checks only; not a complete official gate run."
+    },
+    "W10b_core": {
+      "banned_matches": [],
+      "nonContract_import_lines": [],
+      "scope": "Exact fixed upstream raw-text BANNED/import checks only; not a complete official gate run."
+    },
+    "W10b_proofs": {
+      "banned_matches": [],
+      "nonContract_import_lines": [
+        {
+          "line": 1,
+          "text": "import R7W10"
+        },
+        {
+          "line": 2,
+          "text": "import Core"
+        }
+      ],
+      "scope": "Exact fixed upstream raw-text BANNED/import checks only; not a complete official gate run."
+    },
+    "W10b_increment": {
+      "banned_matches": [],
+      "nonContract_import_lines": [],
+      "scope": "Exact fixed upstream raw-text BANNED/import checks only; not a complete official gate run."
+    },
+    "W10bFull_reconstructed": {
+      "banned_matches": [
+        {
+          "token": "#_",
+          "line": 1685
+        },
+        {
+          "token": "#_",
+          "line": 1689
+        },
+        {
+          "token": "attribute",
+          "line": 2283
+        }
+      ],
+      "nonContract_import_lines": [
+        {
+          "line": 454,
+          "text": "/- Append after Base.lean and Raw.lean under the single import ContractTensor."
+        },
+        {
+          "line": 564,
+          "text": "   No diagnostics or extra import belongs in this integration fragment. -/"
+        },
+        {
+          "line": 718,
+          "text": "/- Append after the concrete Dependencies.lean under the sole ContractTensor import."
+        },
+        {
+          "line": 785,
+          "text": "/- Append after Dependencies.lean and ModelAdd.lean under only import ContractTensor."
+        },
+        {
+          "line": 1876,
+          "text": "Append after Dependencies.lean and Add.lean under the sole ContractTensor import. -/"
+        },
+        {
+          "line": 2159,
+          "text": "/-- At a non-NaN native sum-prefix state, its import is the exact original raw prefix. -/"
+        }
+      ],
+      "scope": "Exact fixed upstream raw-text BANNED/import checks only; not a complete official gate run."
+    }
+  },
+  "W10b_full_reconstruction": {
+    "W10bFull.lean": {
+      "file": "build/W10bFull.lean",
+      "bytes": 120726,
+      "sha256": "78c85fc79807e73138c00e9b505b02f8b30e426c99afb91ebdd811d35a148c65",
+      "parts": [
+        "W10",
+        "R7W10bIncrement.lean"
+      ],
+      "join_between_parts_hex": "0a0a",
+      "only_import": "ContractTensor"
+    },
+    "W10bWitnessFull.lean": {
+      "file": "build/W10bWitnessFull.lean",
+      "bytes": 129160,
+      "sha256": "b426b0226bb9684ffeb13263226807519d812d2ad4ef02d6ee38800fe6ae2f6c",
+      "parts": [
+        "W10",
+        "R7W10bIncrement.lean",
+        "R7W10bWitnesses.lean"
+      ],
+      "join_between_parts_hex": "0a0a",
+      "only_import": "ContractTensor"
+    },
+    "W10bAuditFull.lean": {
+      "file": "build/W10bAuditFull.lean",
+      "bytes": 130967,
+      "sha256": "95be07ae7e4bfe335865142f9a28d6947b895458606fa650ea3182f4c842fde1",
+      "parts": [
+        "W10",
+        "R7W10bIncrement.lean",
+        "R7W10bWitnesses.lean",
+        "R7W10bDiagnostics.lean"
+      ],
+      "join_between_parts_hex": "0a0a",
+      "only_import": "ContractTensor"
+    }
+  },
+  "W10b_Core_Proofs_increment_exact": true,
+  "W10b_Proofs_final_diff_from_attempt1": "--- Proofs-attempt1\n+++ Proofs-final\n@@ -34,6 +34,18 @@\n   rw [normalizeProductSeedRaw_eq]\n   exact R7W10.normalizeProductSeed_eq_self q hq\n \n+/-- Every actual NaN retains its complete original word, including sign and payload. -/\n+theorem normalizeProductSeedRaw_of_nan (q : Competition.Binary32)\n+    (hnan : Model.isNaN (ExecFloat.Binary.toModel q) = true) :\n+    normalizeProductSeedRaw q = q :=\n+  (normalizeProductSeedRaw_eq q).trans (R7W10.normalizeProductSeed_of_nan q hnan)\n+\n+/-- In particular, normalization does not quiet a signaling NaN. -/\n+theorem normalizeProductSeedRaw_of_snan (q : Competition.Binary32)\n+    (hs : Model.isSNaN (ExecFloat.Binary.toModel q) = true) :\n+    normalizeProductSeedRaw q = q :=\n+  normalizeProductSeedRaw_of_nan q (Model.isNaN_of_isSNaN hs)\n+\n /-- The actual +0-add theorem retains its necessary non-signaling premise. -/\n theorem add_posZero_of_not_snan (q : Competition.Binary32)\n     (hq : Model.isSNaN (ExecFloat.Binary.toModel q) = false) :\n",
+  "fixed_source_matches": {
+    "Formats/BinaryInterchange/Spec/Dyadic.lean": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\public\\FloatLib\\FloatLib\\Floats\\Formats\\BinaryInterchange\\Spec\\Dyadic.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/public/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Spec/Dyadic.lean",
+      "sha256": "932ee9d22d6241cda8c38dd22df4ecaffa934cdd1aa2922a0681afd1669ffb67",
+      "bytes": 4842,
+      "publication": "LOCAL_ONLY"
+    },
+    "Formats/BinaryInterchange/Model/Carrier.lean": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\public\\FloatLib\\FloatLib\\Floats\\Formats\\BinaryInterchange\\Model\\Carrier.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/public/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Model/Carrier.lean",
+      "sha256": "ff74af867a84c3b88eaaf337f6cbd1e9b65f801d0643f663593154ba7671338b",
+      "bytes": 26809,
+      "publication": "LOCAL_ONLY"
+    },
+    "Formats/BinaryInterchange/Dyadic/Rounding.lean": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\public\\FloatLib\\FloatLib\\Floats\\Formats\\BinaryInterchange\\Dyadic\\Rounding.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/public/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Dyadic/Rounding.lean",
+      "sha256": "cbc4f0a6a43562e8144a007835cea18c7004869e63b36a25f5052c1044c504c1",
+      "bytes": 8850,
+      "publication": "LOCAL_ONLY"
+    },
+    "ExecFloat/Carrier.lean": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\public\\FloatLib\\FloatLib\\Floats\\ExecFloat\\Carrier.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/public/FloatLib/FloatLib/Floats/ExecFloat/Carrier.lean",
+      "sha256": "40c83855123500a740dcef751a4c356a222533180af6ccf896cf745983c1c70f",
+      "bytes": 15488,
+      "publication": "LOCAL_ONLY"
+    }
+  },
+  "codegen": {
+    "old_direct": "LEAN_EXPORT uint32_t l_R7W10_normalizeProductSeed(uint32_t v_q_6_){\n_start:\n{\nuint32_t v___x_7_; uint8_t v___x_8_; \nv___x_7_ = 2147483648;\nv___x_8_ = lean_uint32_dec_eq(v_q_6_, v___x_7_);\nif (v___x_8_ == 0)\n{\nreturn v_q_6_;\n}\nelse\n{\nuint32_t v___x_9_; \nv___x_9_ = lean_uint32_once(&l_R7W10_normalizeProductSeed___closed__1, &l_R7W10_normalizeProductSeed___closed__1_once, _init_l_R7W10_normalizeProductSeed___closed__1);\nreturn v___x_9_;\n}\n}\n}",
+    "new_direct": "LEAN_EXPORT uint32_t l_R7W10b_normalizeProductSeedRaw(uint32_t v_q_1_){\n_start:\n{\nuint32_t v___x_2_; uint8_t v___x_3_; \nv___x_2_ = 2147483648;\nv___x_3_ = lean_uint32_dec_eq(v_q_1_, v___x_2_);\nif (v___x_3_ == 0)\n{\nreturn v_q_1_;\n}\nelse\n{\nuint32_t v___x_4_; \nv___x_4_ = 0;\nreturn v___x_4_;\n}\n}\n}",
+    "old_C_sha256": "d322230093747dd4ad2cfe29f86d6ce2075804c116d51cf5f993c770b743a8ec",
+    "new_C_sha256": "79a769542c952f3e0d42ab8a188beeb6efcd6e58c50dea91ce2dbca160bfa5af",
+    "new_core_and_codegen_input_exact": true,
+    "machine_assembly_hardware_performance": "NOT_RUN",
+    "old_definition_equals_actual_codegen_input": true
+  },
+  "naive_full_append_bytes": 263991,
+  "failed_attempts": [
+    {
+      "job": "R7-W10",
+      "name": "General-attempt2",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\General-attempt2.json",
+        "sha256": "6bce8f21b5a8ffb4e6bd6f380bee16ec24babc6abff6f50724904dfd88f6bed4"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\General-attempt2.log",
+        "sha256": "9adc9ec114a6dd78c472467052b017411a87fcb1e6abdb7e7d16738c64156644"
+      },
+      "original_returncode": 1,
+      "source_sha256": "1d048740c261dc9ef6e2e80dfaee87c7cc78a4714e636cfe3bd7fe734a180c14",
+      "first_error": "/workspace/scratch/fd3456391d75/R7-W10-work/proofs/General.lean:38:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern"
+    },
+    {
+      "job": "R7-W10",
+      "name": "MulClassification-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\MulClassification-attempt1.json",
+        "sha256": "a5894d078061e597bcfa6a2485cf4273ad9509a2a6f7bab5a01956c401944d94"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\MulClassification-attempt1.log",
+        "sha256": "3434ed76f174334f350b1f1972583156346f504c218a0ab3bfc54e8cc1580530"
+      },
+      "original_returncode": 1,
+      "source_sha256": "9c92a1e6d8142a4bac7513d89714fa711fbb024a31cba6dfda081f1924d086ad",
+      "first_error": "/workspace/scratch/fd3456391d75/R7-W10-work/proofs/MulClassification.lean:30:18: error(lean.unknownIdentifier): Unknown identifier `ExecFloat.Binary.toModel`"
+    },
+    {
+      "job": "R7-W10",
+      "name": "NativeZeroAudit-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NativeZeroAudit-attempt1.json",
+        "sha256": "d408e4d9792d74f70ff6ecf0f1ad90aa83df43704b4b622bc21f8627a7fa740d"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NativeZeroAudit-attempt1.log",
+        "sha256": "0540c9d09ff5556aa01abd8adf40e7f79cb3784858f2ecf6831c9fbbf03c4586"
+      },
+      "original_returncode": 1,
+      "source_sha256": "ef54352b954659dd6d0a806c70c6e03ef0056ed6837b49e86d320dd1d0915241",
+      "first_error": "/workspace/scratch/fd3456391d75/R7-W10-work/evidence/NativeZeroAudit.lean:19:62: error: failed to synthesize"
+    },
+    {
+      "job": "R7-W10",
+      "name": "NativeZeroAudit-attempt2",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NativeZeroAudit-attempt2.json",
+        "sha256": "0943c0b099f7276c4a9a9c6525e808893ad4c579407a13fb1be9c5ebab0271b4"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\NativeZeroAudit-attempt2.log",
+        "sha256": "d9db8764dc060410ba94a27f765c3b6b662f65a25583062190ae3967b90f2456"
+      },
+      "original_returncode": 1,
+      "source_sha256": "e7387851b268c1941fb391151ba2b436e582176a80e3cdeed422f411b107a0c6",
+      "first_error": "/workspace/scratch/fd3456391d75/R7-W10-work/evidence/NativeZeroAudit.lean:56:4: error: Tactic `rfl` failed: The left-hand side"
+    },
+    {
+      "job": "R7-W10b",
+      "name": "W10bWitnessAxioms-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessAxioms-attempt1.json",
+        "sha256": "9a64618edd8f07db6d259e5a2beb10badaeb8835fb28c21cbcdd5bf69607f7e9"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bWitnessAxioms-attempt1.log",
+        "sha256": "7311b29b43baad46ac12b5c8ca65c33821c74dd8e315d6f3f4d7f81756101b6a"
+      },
+      "original_returncode": 1,
+      "source_sha256": "f385cf1177ab1d86af1080bf53515ffa04bd1c72302db68ff93e36bbaf285f4d",
+      "first_error": "/workspace/scratch/fd3456391d75/R7-W10b-work/evidence/W10bWitnessAxioms.lean:1:0: error: object file '/workspace/scratch/fd3456391d75/R7-W10-work/evidence/W10bWitnessAudit.olean' of module evidence.W10bWitnessAudit does not exist"
+    },
+    {
+      "job": "R7-W10b",
+      "name": "WitnessAxioms-attempt1",
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\WitnessAxioms-attempt1.json",
+        "sha256": "923c6d8ac2ebca999b2b4a61261872c5b2055c4a8b36ed6ea1ec70073027c335"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\WitnessAxioms-attempt1.log",
+        "sha256": "679d643a8c08fa8c6eb695715b027f76f01b90d2c8ef743436dd921a24483946"
+      },
+      "original_returncode": 1,
+      "source_sha256": "4c3a5ca0b234049ef26c0fdbc43daf06b874442063aa8498f522ed7593153426",
+      "first_error": "/workspace/scratch/fd3456391d75/R7-W10b-work/evidence/WitnessAxioms.lean:3:14: error(lean.unknownIdentifier): Unknown constant `R7W10bWitnesses.negativeZero`"
+    }
+  ],
+  "actual_codegen_binding": [
+    {
+      "job": "R7-W10",
+      "source_to_actual_C_record_bound": true,
+      "source_sha256": "6d200a6e1656645f80bddbc376c97c5ec7b0426ab77384e737f0e202f73c0598",
+      "C_sha256": "d322230093747dd4ad2cfe29f86d6ce2075804c116d51cf5f993c770b743a8ec"
+    },
+    {
+      "job": "R7-W10b",
+      "source_to_actual_C_record_bound": true,
+      "source_sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f",
+      "C_sha256": "79a769542c952f3e0d42ab8a188beeb6efcd6e58c50dea91ce2dbca160bfa5af"
+    }
+  ],
+  "manifest_floatlib": [],
+  "toolchain": "leanprover/lean4:v4.34.0\n",
+  "candidate_dependency_names": {
+    "add_toFloat32": false,
+    "native_acc_roundtrip": false,
+    "toFloat32_isNaN": false,
+    "quietNaN32_eq_self": false,
+    "roundDyadic32_not_snan": false,
+    "normalizeProductSeedRaw": false
+  },
+  "proof_review": {
+    "add_zero_general_path": "Split actual native isNaN. Non-NaN native branch proves +0 preserves every unpacked constructor except -0 and uses exact nonNaN carrier roundtrip. Quiet NaN branch unfolds the real Spec and uses quietNaN self preservation. The actual isSNaN=false premise is retained.",
+    "mul_classification": "Unfold actual Model.Spec.mul, covering both finite dyadics (signed zero or real rounder), selected NaN, invalid result and native overflow. Every branch ends in a concrete not-sNaN lemma. The actual ExecFloat.mul theorem is obtained via its real carrier/model refinement, not a model-only assumption.",
+    "no_arbitrary_snan_shortcut": "Raw normalizer intentionally preserves sNaN. The supplied negative witness q=0xff800011 has normalizer raw0xff800011 but real +0 addition raw0xffc00011.",
+    "signed_zero": "Raw -0 product becomes +0, including negative underflow and +0 * negative finite. +0 and every other raw word remain unchanged.",
+    "invalid_payload": "0*Inf invalid canonical qNaN remains unchanged after multiplication; signaling inputs are first quieted by the existing actual multiply with exact original priority, sign and payload. The normalizer does not canonicalize those words.",
+    "no_fusion": "The theorem concerns separately rounded actual multiply then add. It is not FMA, reassociation or real-number equality."
+  },
+  "adaptation_gaps": [
+    {
+      "kind": "CONFIRMED_POLICY_BLOCKER_FOR_UNCHANGED_W10",
+      "detail": "Official 4b7 raw policy scans comments too: six import-word comment lines, #_ at1685/1689, and attribute [local instance] Classical.propDecidable at2283 are still in W10 and therefore in reconstructed W10bFull."
+    },
+    {
+      "kind": "CONFIRMED_STANDALONE_IMPORT_GAP",
+      "detail": "Proofs.lean imports R7W10 and Core; the allowed candidate imports only ContractTensor. Increment removes its own imports but still needs W10 proof declarations."
+    },
+    {
+      "kind": "CONFIRMED_SIZE_FOR_NAIVE_COPY",
+      "bytes": 263991,
+      "limit": 256000,
+      "detail": "Naively concatenating dab + whole W10 + W10bIncrement already exceeds the byte limit, before adapting namespaces/imports. This is a size calculation, not a generated candidate."
+    },
+    {
+      "kind": "MISSING_CURRENT_DAB_DECLARATIONS",
+      "detail": "Current dab does not contain W05 add_toFloat32/native_acc_roundtrip/toFloat32_isNaN/quietNaN32_eq_self/roundDyadic32_not_snan or the W10b helper. Existing Submission.add_eq/mul_eq and operation-model refinements can be reused, but missing support must be extracted or bridged."
+    },
+    {
+      "kind": "UNTESTED_CLASSICAL_PORT",
+      "detail": "Deleting the attribute command is not proved safe. An original NativeZero failure reports missing Decidable for unpacked equalities. A candidate port can use explicit Decidable parameters in proof-only conditional helper signatures and proof-local classical where needed; this adapted source must actually elaborate and pass the exact official policy."
+    },
+    {
+      "kind": "UNTESTED_FINAL_SUBMISSION_BRIDGE",
+      "signature": "-- NEW INTEGRATION: NOT_RUN. Requires a gate-compatible port of the exact W10/W10b proofs.\ntheorem normalize_mul_seed_eq_add (a b : Competition.Binary32) :\n    R7W10b.normalizeProductSeedRaw (Submission.mul a b) =\n      Submission.add Competition.posZero (Submission.mul a b) := by\n  simpa only [Submission.add_eq, Submission.mul_eq] using\n    (R7W10b.add_posZero_mul a b).symm",
+      "detail": "The exact function equality lemmas are present at dab lines2288/2292; the proposed transport is mathematically direct but not compiled in that candidate."
+    },
+    {
+      "kind": "UNTESTED_POINTWISE_VECTOR_BRIDGE",
+      "detail": "Keep original bmmDecodeC/getD expressions and n=1 dispatch. Compute the same Submission.mul once, normalize that product; after the existing Fin.foldl_succ/zero/val_zero simplification, close the remaining pointwise goal with normalize_mul_seed_eq_add. Empty output and all batch/m/p are unchanged."
+    }
+  ],
+  "fixed_context": {
+    "Lean_release": "v4.34.0",
+    "Lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+    "FloatLib_commit": "0d91825727839f597fd06b22fdd038ea21480f0c",
+    "ContractTensor_commit_recorded": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
+    "relevant_recovered_library_source_equal_to_fixed_prior_copies": true,
+    "LEAN_PATH_recipe": "session-verify.py reads prior R7-W01-work/logs/lean-path.txt, then adds prior/public, original W10 and current work dir. This local raw lean-path.txt is absent in recovered W01; per-command environment is not in attempt JSON.",
+    "context_boundary": "Source/version/dependency records align with the fixed context. This review did not rerun compiler or independently reconstruct every loaded olean/environment path; no new full-gate claim.",
+    "saved_lean_version_log": "Lean (version 4.34.0, x86_64-unknown-linux-gnu, commit 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b, Release)",
+    "library_manifest_boundary": "The saved dependency manifest has no floatlib package entry; it does not itself establish the library commit. The commit context comes from dependency records and identical fixed primary source bytes."
+  },
+  "first_discriminating_checks": [
+    "Extract the smallest actual proof dependency closure into a ContractTensor-only bounded source, replace banned declaration commands and raw-policy tokens, and run the unchanged official intake policy on the exact bytes.",
+    "Compile that exact proof port; first inspect the explicit Decidable/Float32 conditional targets rather than assuming a deleted attribute is irrelevant.",
+    "Compile the proposed Submission product-seed bridge and the modified pointwise singleton proof, preserving all addresses and the existing n!=1 dispatcher.",
+    "Use the original complete current gate and bound actual generated statement C/object to this new candidate. Verify the product is computed once and whether the raw helper is unboxed/inlined.",
+    "Treat standalone C as a code-shape observation only. Require whole-suite same-plan comparison and frozen independent confirmation before claiming a speed gain."
+  ],
+  "final_integrity": {
+    "selected_source_record_log_hashes_unchanged": true,
+    "main_file_records": 78,
+    "failed_attempt_record_and_log_hashes_rechecked": true,
+    "only_markdown_link_is_exact_existing_dab_candidate": true,
+    "new_integration": "NOT_RUN",
+    "compiler_invoked_locally": false,
+    "archives_rescanned": false
+  },
+  "completed_at_utc": "2026-10-22T23:02:50.668308+00:00"
+}

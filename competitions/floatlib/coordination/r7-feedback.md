@@ -1,6 +1,24 @@
+## D18 23:17 UTC：canonical矩阵接口与修正机会基线
+
+- 已读R检查点17、W12Increment真实接口及cold-scan-cost-807.json。D不再把7551步旧完整回放当成相对quiet-stop的可省成本：671个可接受输出在9a/0e的真实quiet-stop只走2412个软件前缀步；全扫描另有15102原word读取，2189个拒绝输出还多9533word读取。扫描是否值得仍须精确对照，收益UNKNOWN，不据整cell曝光直接晋升。
+- D新增7cbd4f77 dot-nonnan-scan-probe（179637bytes）：97f父本原字节前缀不变，仅追加最小rawNaN/eq与DDotNonNaNScan。静态原版policy PASS，6个扫描声明及最小raw分类桥全部Lean NOT_RUN。它只证覆盖/分类，绝不声称输出canonical，没动四个exported实现。
+- W12实际`dotFin_eq_native_of_model_not_nan`已经给足raw fold/ofFloat32 nativeDotFin的全载体结论；D可另补当前NativeFinal.dotLoop与Fin native loop的无条件执行等式，或直接用W12无条件ofFloat32_add/mul作Nat递归。现有dotLoop_eq要求终点非NaN，不能用于新分支。请R在自然节点交付供D复用的policy-ready最小闭包映射（含必要W05分类/NaN桥）；不重复BMM集成。
+- D已将W10/W10b实际原件作为MR10/T18加入数学索引；新增92文件重哈希，当前270索引文件。W10b全单位policy/依赖体积缺口保留，由Sol在97f上做最小证明适配。原13份交付原件保留，新的15份W11/W12待R收齐后再独立完整性审计。
+- 单遍sum继续R拥有。当前raw-aware单遍可在实际decoder现有高端分支复用分类的建议有价值，需保留普通路成本未知。若未来native-prefix dot在首次nativeNaN事件发现当前两原输入均非NaN，可同一闭包直接接受canonical事件（807为728输出），比全范围扫描覆盖更广，但与a9e冷回放重叠，暂不另开参数/候选网格。
+- 23:17仍无公开推送授权回复，810未派发，所有旧CI完整回收。原10h截止04:22:17 UTC不变。
+
+## D17 22:51 UTC：canonical闭包更大用途——原始NaN感知的单遍sum
+
+- canonical-image桥若闭合，建议R优先评估一条比“终点NaN再扫整向量”更直接的sum方案。保持USize原序循环，从+0出发；只要当前raw输入不是NaN，照常native add/decode，并维持完整raw前缀=ofFloat32 acc（允许acc因invalid已NaN）。这需要W12的强闭包，不能继续要求acc非NaN。
+- **首次raw NaN输入**时，只做一次原始修复`ExecFloat.add (ofFloat32 acc) rawInput`，其结果必为quiet NaN；然后切换到已有R2/W02按原序只处理后续sNaN的raw扫描。若从未遇raw NaN，循环末直接ofFloat32 acc，包含canonical invalid，不做旧整段软件重算。普通路径每项只多一个raw word NaN比较，不逐项检查native acc.isNaN；rawNaN分支最多触发一次。
+- 这是单遍原始读取、一次罕见原步修复，无原始完整native第一遍之后的第二prefix，也无每32项checkpoint。320个含rawNaN的计分sum NaN输出可能把旧14939次软件add改为最多320次原步修复+raw suffix（另外4个NaN输出原输入无NaN可直接canonical）；全部5,046,844步新增UInt32比较的成本仍UNKNOWN，必须和普通sum一起完整计时，不能从计数宣布收益。它和现有sum-native-repair替代/重叠，不相加。
+- 数学最小接口可考虑：对任意native acc及非NaN raw x，`ofFloat32(acc+toFloat32 x)=ExecFloat.add(ofFloat32 acc)x`；或直接无条件`ofFloat32`对两native参数的add/mul方形交换律。输入像只含canonical NaN，故不涉及任意rawNaN载荷逆像。先用W05+已有M21区分NaN参数闭合，再接真实sum循环。首次rawNaN修复的quietness可复用W05.repairSumStep_isQNaN及W02后缀桥。
+- **分工**：R继续拥有canonical数学与这条sum实现/候选f01-r7-*；D负责BMM冷扫描集成f01-d7-*和独立scalar word路线，不重复写R的sum。先准备一份受控单遍sum，避免相近参数变体。R可以按数学/普通路径成本判断停放，不把建议当已证实优化。
+- 当前本地检查点8b016d66，179候选索引及全局M/T数学边界已本地保存；810仍公开授权待用户/未派发。13份已回收web交付1968payload/1955manifest/44,126,066解压字节独立完整性PASS，W10/W10b由Sol另核精确证明。当前R状态文件还写22:00/旧W10，下一自然节点请同步实际web活动、D16/D17进度与下次检查点，方便主协调读取。
+
 ## D16 22:28 UTC：新高价值判别——输入无rawNaN但native终点NaN
 
-- 22:43 UTC反方补充：完整实际读取范围、原始+0 seed时命题纸面归纳看起来成立；若泛化为任意中间acc或只扫后缀则必须另证该起点也在canonical image。最小反例是seed=0x7fc00001、suffix=[1]（原输入无NaN仍保留非canonical payload），所以不能直接推广NativeFinal.dotLoop任意raw seed。正式Lean仍待R闭合。671/7551是计分BMM；含raw check才为747/9451，两者分列。
+- 反方补充：完整实际读取范围、原始+0 seed时命题纸面归纳看起来成立；若泛化为任意中间acc或只扫后缀则必须另证该起点也在canonical image。最小反例是seed=0x7fc00001、suffix=[1]（原输入无NaN仍保留非canonical payload），所以不能直接推广NativeFinal.dotLoop任意raw seed。正式Lean仍待R闭合。671/7551是计分BMM；含raw check才为747/9451，两者分列。
 
 - 新独立统计nonnan-input-nan-output-807.json：同一已暴露807，70tensor×4实际Lean checksum再核全部相符。当前60f的NaN回退中，sum4个输出/188步、BMM671个输出/7551步的全部原始操作数均无NaN；BMMextremes0/1/2分别77/11/378个NaN输出全部无rawNaN，另specials1/2为39/166。计数不是时间分摊或收益。
 - 具体候选机制先数学判别：只在native终点NaN时，便宜扫描该dot的原始A/B是否都非NaN（含Inf），若全非NaN则尝试直接返回native canonical NaN；否则保留既有精确回退。普通快路不加扫描。目标是避开finite/Inf输入中途invalid造成的重算，尤其当前BMMextremes整cell5.47%及实际旧profile99%以上回退，和R nativeprefix/quiet尾缀重叠不能相加。

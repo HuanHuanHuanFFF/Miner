@@ -1,8 +1,8 @@
 # R7 可复用数学与证据入口
 
-审查范围：已回收的 W01、W01b、W02–W09、W08b 共 **11 份交付**；按要求排除 W10。只读原件，复用已有完整性回执，不重扫 ZIP、不复制源码/二进制/网页 prompt，也没有运行 Lean、Git 修改或 CI。开始于 2026-10-22 22:12:04 UTC，预算上限 22:57:04 UTC。
+初次审查范围为 W01、W01b、W02–W09、W08b 共 11 份交付，22:12:04 UTC 开始、22:57:04 UTC 预算上限，当时按分工排除 W10。随后独立审查 W10/W10b，当前覆盖 **13 份交付、10 项结论**；新增 92 个来源/日志/审查文件逐项重哈希，当前索引共 270 个文件。只读原件，没有本地运行 Lean；原 11 份完整性回执的冻结哈希仍由 `8b016d66` 定位，13 份回执另列，未覆盖历史字节。
 
-以下 **9 项**分为 1 项已用组件、6 项数学储备、1 项具体证明修复、1 项代码生成证据。网页固定 Lean 4.34 的普通编译/规格/公理日志，与精确候选原版 full gate 分列；新整合与性能不继承网页结果。原件均为 **LOCAL_ONLY**，精确相对路径、source/log SHA-256、退出码与 `E:/Download` 原包恢复位置保存在同名 JSON；本页只链接已核对本地 Git HEAD 字节的候选。
+以下 **10 项**分为 1 项已用组件、7 项数学储备、1 项具体证明修复、1 项代码生成证据。网页固定 Lean 4.34 的普通编译/规格/公理日志，与精确候选原版 full gate 分列；新整合与性能不继承网页结果。原件均为 **LOCAL_ONLY**，精确相对路径、source/log SHA-256、退出码与 `E:/Download` 原包恢复位置保存在同名 JSON；本页只链接已核对本地 Git 字节的候选。
 
 当前 [c760 非NaN基座](../f01-r7-nonnan-runtime/Kernel.lean)（`c7605688…`）已有 805/807/809 原版 gate；[60f 保留包](../f01-d7-direct-nonnan/Kernel.lean)使用该基座。W05 复制的既有 NativeBridge/NotNaNProbe/R7Native 不重复计为新储备，也不把 W01/W01b 误记为这些既有非NaN证明的原创来源。
 
@@ -17,6 +17,7 @@
 | MR07 · W07 · **数学储备** | `R7W07.checkpoint_initial/commit`、`blockedSum_eq_sumSpec`、`blockedSum_raw_eq_sumSpec`：任意正 K、任意长度/原始 Binary32 输入；失败块从保存的块起点和前态重放完整原始后缀。 | 精确 `2e39ffec…` 整源/快照、编译/公理闭合，连接真实 sumSpec。内部完整前缀结论需要真实 checkpoint；未证明运行次数/成本上界，未形成当前 full gate 候选。LOCAL_ONLY。 | 检查 0/31/32/33、跨块 Inf invalid 后出现晚 sNaN 的精确回放。不能从失败块末端或 canonical NaN 继续，也不能把块总和重关联。 |
 | MR08 · W08/W08b · **后续闭合的数学储备** | `R7W08.nat_segment_comp`、`usize_blocked_eq`；W08b 的 `flat_eq_natBlocked`、`flat_eq_usizeBlocked`、`all_three_eq` 对 **K=32、Array Float32、相同任意 UInt32 fallback** 成立，含空数组/任意初值。 | 原 W08 的 flat gap 保持历史 **NOT_PROVED**；后续 W08b `96e99343…`/`e9e7eace…` 与 6 份原依赖哈希吻合，8 模块 final-recheck 明确 exit 0，新增 10 项公理打印仅三允许公理。这是 native wrapper 等价，**不是 raw sumSpec 整合**。LOCAL_ONLY。 | 以当前原始 decode/fallback 实例化并证明 sumSpec。内部 `nat_blocks_eq_final` 保留“非空后缀或前态非NaN”条件；不能推广成任意 K、任意 raw payload 吸收。 |
 | MR09 · W09 · **完整源码证明修复储备** | `Submission.NativeFinal.dot_eq` 对部分应用 step 先 `congrArg` 到 Fin.foldl，再 `funext acc i`，逐点改写，运行定义不变。 | 原 `b1696ff9…`、同 token simpa 稿 `3b7b8744…` 原日志均 exit 1；[0e8 精确修复](../f01-r7-nonfinite-combined-proof2/Kernel.lean)（`0e8bc05c…`）整源编译 exit 0，另有四个原始全输入 spec 类型断言与 5 项公理审计 exit 0。**不是原版 full gate**。 | 验证精确 0e8 的完整 gate；各 proof2 派生稿单独编译，不继承 0e8 结果。源码运行定义不变也不等于机器码身份已证。 |
+| MR10 · W10/W10b · **数学储备** | 实际逐步 `ExecFloat.mul` 输出永非 sNaN，故 `add +0 (mul a b)` 可替换为：只将该乘积 raw `80000000` 改为 `00000000`，其他 word 原样保留。一般 q 版本仍要求 q 非 sNaN。 | 精确源/成功快照/退出码均闭合，W10/W10b 原始公理日志各 218/26 个声明仅三允许公理。[独立审查](zero-seed-proof-review.md)记录完整单位的 policy 禁用词与朴素拼接超 256000 字节；W10b 原始字 helper 的 C 消除了旧 once 分支，但尚非整包 C/计时。 | 提取最小允许依赖，编译实际 Submission 桥及 n=1 分支。全部新适配、leanchecker、原版 full gate、收益仍 NOT_RUN/UNKNOWN；不能直接删除初项 +0，负零反例仍须处理。 |
 
 关键原始公理日志已直接解析并与机器审计交叉核对：W02/W03/W04/W05/W07 分别为 **52/115/38/206/273 个声明**，不是报告自述。对应成功 source 快照均与本次引用整源逐字节一致；W09 的 SpecAudit 也包含精确修复源码完整前缀和四原规格类型断言。原版 gate 则另核到 9a、7ac、c760 的 `mode=gate, passed=true, stage=score`、kernel replay、允许公理、26 cell/25 轮原始记录。
 

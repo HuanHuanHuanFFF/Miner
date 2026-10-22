@@ -1,0 +1,1021 @@
+{
+  "status": "PREPARED_NOT_RUN",
+  "started_at_utc": "2026-10-22T22:54:38Z",
+  "budget_minutes": 40,
+  "deadline_utc": "2026-10-22T23:34:38Z",
+  "audited_at_utc": "2026-10-22 23:03:16 UTC",
+  "scope": {
+    "writes_only": [
+      "competitions/floatlib/candidates/f01-d7-research/dot-nonnan-scan-block.lean",
+      "competitions/floatlib/candidates/f01-d7-research/dot-nonnan-scan-design.md",
+      "competitions/floatlib/candidates/f01-d7-research/dot-nonnan-scan-design.json"
+    ],
+    "new_candidate": false,
+    "existing_candidate_mutations": false,
+    "R_files_touched": false,
+    "Git_mutations": false,
+    "CI": false,
+    "uploads": false,
+    "local_heavy_toolchain": false,
+    "new_Lean": "NOT_RUN",
+    "whole_candidate_policy": "NOT_RUN_NO_CANDIDATE_CREATED",
+    "generated_C_asm": "NOT_RUN",
+    "performance": "UNKNOWN"
+  },
+  "context": {
+    "namespace": "DDotNonNaNScan",
+    "placement": "Global scope after the exact existing DWordNaN block in ad014 context; not inside Submission or R2 namespaces.",
+    "dependencies": [
+      "Competition.Binary32 and Competition.posZero",
+      "Array.getD",
+      "DWordNaN.rawNaN",
+      "DWordNaN.rawNaN_eq",
+      "Nat arithmetic and omega already present in the existing context"
+    ],
+    "DWordNaN_proof_status": "NOT_RUN; new model bridge inherits this unresolved dependency acceptance.",
+    "fixed_FloatLib": "0d91825727839f597fd06b22fdd038ea21480f0c",
+    "Lean": "4.34.0 / 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+    "existing_native_address_anchor": "retained60f Kernel.lean L2690-L2697: A.getD(baseA+k)posZero, B.getD(baseB+k*p)posZero; L2735-L2745 and L2984-L3006 are later D-owned cold finishing integration points.",
+    "future_call_scope": "Only after the corresponding native endpoint is NaN. Existing ordinary paths and R single-pass sum are not modified or wired here."
+  },
+  "implementation": {
+    "loop": {
+      "line": 8,
+      "parameters": "(n baseA baseB p : Nat) (A B : Array Binary32) (k : Nat)",
+      "result": "Bool",
+      "body_order": [
+        "If k>=n, return true without reading either array.",
+        "Read A.getD(baseA+k)posZero and classify its raw UInt32. If rawNaN=true, return false without logical B read.",
+        "Read B.getD(baseB+k*p)posZero and classify its raw UInt32. If rawNaN=true, return false.",
+        "Continue with k+1."
+      ],
+      "termination": "n-k; recursive branch has k<n and strict Nat measure decrease, submitted to omega.",
+      "USize": false,
+      "arbitrary_Nat_base_stride": true,
+      "default": "Array.getD uses exactly Competition.posZero."
+    },
+    "whole": {
+      "line": 69,
+      "definition": "loop n baseA baseB p A B 0"
+    },
+    "semantic_limit": "Classifies only the original raw inputs read by the dot; neither computes nor classifies products/accumulators, nor establishes a canonical result."
+  },
+  "interfaces": [
+    {
+      "name": "DDotNonNaNScan.loop_true_iff",
+      "line": 18,
+      "status": "NOT_RUN",
+      "statement": "loop ... k = true iff forall i:Nat, k<=i -> i<n -> rawNaN(A.getD(baseA+i)posZero).raw.1=false AND rawNaN(B.getD(baseB+i*p)posZero).raw.1=false.",
+      "proof_outline": "Split k<n and the two actual classifier tests. A/B failure contradicts the proposed range property at i=k. With both false, recurse at k+1; separate i=k from i>k. At k>=n the range is empty."
+    },
+    {
+      "name": "DDotNonNaNScan.whole_true_iff",
+      "line": 73,
+      "status": "NOT_RUN",
+      "statement": "whole ... = true iff forall k:Fin n, the two actual raw classifier results are false.",
+      "proof_outline": "Specialize loop_true_iff at zero, then convert Nat interval indices to Fin n and back."
+    },
+    {
+      "name": "DDotNonNaNScan.whole_raw_nonNaN",
+      "line": 87,
+      "status": "NOT_RUN",
+      "statement": "whole ... = true -> forall k:Fin n, both raw classifier results are false.",
+      "proof_outline": "Forward direction of whole_true_iff."
+    },
+    {
+      "name": "DDotNonNaNScan.whole_model_nonNaN",
+      "line": 95,
+      "status": "NOT_RUN",
+      "statement": "whole ... = true -> forall k:Fin n, Model.isNaN(Model.NativeBinary32.ofUInt32 ((A.getD (baseA+k.val) posZero).raw.1))=false AND the analogous strided B result=false.",
+      "proof_outline": "Apply DWordNaN.rawNaN_eq symmetrically to each raw=false result, using equality transitivity."
+    }
+  ],
+  "boundaries": [
+    {
+      "condition": "n=0 or current k>=n",
+      "behavior": "true, no logical data reads; interval proposition vacuous. This is not a canonical-NaN output authorization."
+    },
+    {
+      "condition": "arbitrary baseA/baseB/stride, including p=0 and values above USize.size",
+      "behavior": "Nat addresses have no wrap; Array.getD returns posZero outside backing arrays. No USize precondition is added."
+    },
+    {
+      "condition": "NaNs in unreferenced storage or another B column",
+      "behavior": "Ignored; only actual input addresses determine the result."
+    },
+    {
+      "condition": "Inf, signed zero, subnormal, maxfinite",
+      "behavior": "All accepted when the raw exponent/fraction NaN test is false."
+    },
+    {
+      "condition": "0(default)*Inf or other invalid arithmetic",
+      "behavior": "Still accepted as input-nonNaN. Intermediate arithmetic is outside this module."
+    },
+    {
+      "condition": "arbitrary current k",
+      "behavior": "Only suffix [k,n) covered; whole starts at zero. No accumulator or seed assumption is present."
+    },
+    {
+      "condition": "scanner=true",
+      "behavior": "Provides only the two raw/model nonNaN facts. D must await and compose R's real canonical semantic bridge before any new output fast-return."
+    }
+  ],
+  "static_checks": {
+    "status": "STATIC_BLOCK_CHECK_ONLY",
+    "new_block": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/dot-nonnan-scan-block.lean",
+      "bytes": 3526,
+      "sha256": "5e46e932fb8483792c42a79d59e887e32af15e236100cbb8253ca82d3212ea8f",
+      "lines": 107
+    },
+    "declarations": [
+      {
+        "line": 8,
+        "header": "def loop (n baseA baseB p : Nat) (A B : Array Binary32) (k : Nat) : Bool :=",
+        "status": "NOT_RUN"
+      },
+      {
+        "line": 18,
+        "header": "theorem loop_true_iff (n baseA baseB p : Nat) (A B : Array Binary32) (k : Nat) :",
+        "status": "NOT_RUN"
+      },
+      {
+        "line": 69,
+        "header": "@[inline] def whole (n baseA baseB p : Nat) (A B : Array Binary32) : Bool :=",
+        "status": "NOT_RUN"
+      },
+      {
+        "line": 73,
+        "header": "theorem whole_true_iff (n baseA baseB p : Nat) (A B : Array Binary32) :",
+        "status": "NOT_RUN"
+      },
+      {
+        "line": 87,
+        "header": "theorem whole_raw_nonNaN (n baseA baseB p : Nat) (A B : Array Binary32)",
+        "status": "NOT_RUN"
+      },
+      {
+        "line": 95,
+        "header": "theorem whole_model_nonNaN (n baseA baseB p : Nat) (A B : Array Binary32)",
+        "status": "NOT_RUN"
+      }
+    ],
+    "banned_regex_matches": [],
+    "independent_load_commands": [],
+    "USize_mentions": 0,
+    "ad014_dependency_exact_bytes": true,
+    "ad014_proof_status": "NOT_RUN",
+    "evidence": {
+      "DWordNaN_block": {
+        "path": "competitions/floatlib/candidates/f01-d7-research/nan-choice-block.lean",
+        "bytes": 7555,
+        "sha256": "584ace5443838454b3687f7a93cfca07be4f9cce2c889c7196b171b7cfd4c93c"
+      },
+      "ad014_context": {
+        "path": "competitions/floatlib/candidates/f01-d7-nan-choice-probe/Kernel.lean",
+        "bytes": 162660,
+        "sha256": "ad014e0b1cdc6e42d3a9bd9437e32762d840b8047be740dca8894b0108aa3cb9"
+      },
+      "ad014_manifest": {
+        "path": "competitions/floatlib/candidates/f01-d7-nan-choice-probe/manifest.json",
+        "bytes": 939,
+        "sha256": "ec7806547a5d3836ba0b5a8deb4aee5954b1aad2f9ea08f59de679751c323f5a"
+      },
+      "retained60f": {
+        "path": "competitions/floatlib/candidates/f01-d7-direct-nonnan/Kernel.lean",
+        "bytes": 155103,
+        "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15"
+      },
+      "official_policy": {
+        "path": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+        "bytes": 38320,
+        "sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194"
+      }
+    },
+    "new_Lean": "NOT_RUN",
+    "whole_candidate_policy": "NOT_RUN_NO_CANDIDATE_CREATED"
+  },
+  "directed_address_model": {
+    "status": "PASS_DIRECTED_ADDRESS_MODEL_ONLY",
+    "case_count": 20,
+    "all_expected_and_interval_forall_match": true,
+    "classifier": "Exact expField==255 and fracField!=0 transcription; comparison with independent masked-word ordering only on encountered words. Model.NativeBinary32 bridge is not executed.",
+    "runtime_short_circuit_checked": [
+      "A NaN returns without B read",
+      "B NaN returns without next k",
+      "k>=n returns without any read"
+    ],
+    "scope": "Python Nat/list model only, no Lean proof execution, no float arithmetic, no canonical-output assertion, no native/runtime execution or performance claim. No random enumeration.",
+    "cases": [
+      {
+        "name": "empty_nan_storage",
+        "n": 0,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [
+          "0x7fc00001"
+        ],
+        "B": [
+          "0x7f800001"
+        ],
+        "start_k": 0,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": []
+      },
+      {
+        "name": "empty_huge_addresses",
+        "n": 0,
+        "baseA": "1208925819614629174706176",
+        "baseB": "1267650600228229401496703205376",
+        "stride_p": "36893488147419103232",
+        "A": [
+          "0x7fc00001"
+        ],
+        "B": [
+          "0x7f800001"
+        ],
+        "start_k": 0,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": []
+      },
+      {
+        "name": "finite_inf_allowed",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [
+          "0x3f800000",
+          "0xff800000"
+        ],
+        "B": [
+          "0x7f800000",
+          "0x80000000"
+        ],
+        "start_k": 0,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x7f800000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 1,
+            "A_index": 1,
+            "A_in_bounds": true,
+            "A_word": "0xff800000",
+            "A_rawNaN": false,
+            "B_index": 1,
+            "B_in_bounds": true,
+            "B_word": "0x80000000",
+            "B_rawNaN": false
+          }
+        ]
+      },
+      {
+        "name": "A_quiet_first",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [
+          "0x7fc00001",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "start_k": 0,
+        "expected": false,
+        "model_result": false,
+        "interval_forall_result": false,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": true,
+            "A_word": "0x7fc00001",
+            "A_rawNaN": true
+          }
+        ]
+      },
+      {
+        "name": "B_signaling_first",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x7f800001",
+          "0x3f800000"
+        ],
+        "start_k": 0,
+        "expected": false,
+        "model_result": false,
+        "interval_forall_result": false,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x7f800001",
+            "B_rawNaN": true
+          }
+        ]
+      },
+      {
+        "name": "A_negative_signaling_later",
+        "n": 3,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [
+          "0x3f800000",
+          "0xff800001",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000",
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "start_k": 0,
+        "expected": false,
+        "model_result": false,
+        "interval_forall_result": false,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x3f800000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 1,
+            "A_index": 1,
+            "A_in_bounds": true,
+            "A_word": "0xff800001",
+            "A_rawNaN": true
+          }
+        ]
+      },
+      {
+        "name": "unused_B_nan_other_column",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 2,
+        "A": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x00000000",
+          "0x7fc00001",
+          "0x00000000",
+          "0x3f800000"
+        ],
+        "start_k": 0,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 1,
+            "A_index": 1,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 2,
+            "B_in_bounds": true,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          }
+        ]
+      },
+      {
+        "name": "actual_strided_B_nan",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 2,
+        "A": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x00000000",
+          "0x00000000",
+          "0x7fc00001",
+          "0x3f800000"
+        ],
+        "start_k": 0,
+        "expected": false,
+        "model_result": false,
+        "interval_forall_result": false,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 1,
+            "A_index": 1,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 2,
+            "B_in_bounds": true,
+            "B_word": "0x7fc00001",
+            "B_rawNaN": true
+          }
+        ]
+      },
+      {
+        "name": "baseA_skips_nan_prefix",
+        "n": 2,
+        "baseA": 1,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [
+          "0x7fc00001",
+          "0x3f800000",
+          "0x7f800000"
+        ],
+        "B": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "start_k": 0,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 1,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x3f800000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 1,
+            "A_index": 2,
+            "A_in_bounds": true,
+            "A_word": "0x7f800000",
+            "A_rawNaN": false,
+            "B_index": 1,
+            "B_in_bounds": true,
+            "B_word": "0x3f800000",
+            "B_rawNaN": false
+          }
+        ]
+      },
+      {
+        "name": "nonzero_baseB_stride3",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 1,
+        "stride_p": 3,
+        "A": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x00000000",
+          "0x3f800000",
+          "0x00000000",
+          "0x00000000",
+          "0xffc00001"
+        ],
+        "start_k": 0,
+        "expected": false,
+        "model_result": false,
+        "interval_forall_result": false,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 1,
+            "B_in_bounds": true,
+            "B_word": "0x3f800000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 1,
+            "A_index": 1,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 4,
+            "B_in_bounds": true,
+            "B_word": "0xffc00001",
+            "B_rawNaN": true
+          }
+        ]
+      },
+      {
+        "name": "missing_A_default_posZero",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [],
+        "B": [
+          "0x7f800000"
+        ],
+        "start_k": 0,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": false,
+            "A_word": "0x00000000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x7f800000",
+            "B_rawNaN": false
+          }
+        ]
+      },
+      {
+        "name": "both_outside_ignore_stored_nan",
+        "n": 3,
+        "baseA": 2,
+        "baseB": 2,
+        "stride_p": 1,
+        "A": [
+          "0x7fc00001"
+        ],
+        "B": [
+          "0x7f800001"
+        ],
+        "start_k": 0,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 2,
+            "A_in_bounds": false,
+            "A_word": "0x00000000",
+            "A_rawNaN": false,
+            "B_index": 2,
+            "B_in_bounds": false,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 1,
+            "A_index": 3,
+            "A_in_bounds": false,
+            "A_word": "0x00000000",
+            "A_rawNaN": false,
+            "B_index": 3,
+            "B_in_bounds": false,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 2,
+            "A_index": 4,
+            "A_in_bounds": false,
+            "A_word": "0x00000000",
+            "A_rawNaN": false,
+            "B_index": 4,
+            "B_in_bounds": false,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          }
+        ]
+      },
+      {
+        "name": "zero_stride_repeats_Inf",
+        "n": 3,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 0,
+        "A": [
+          "0x3f800000",
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x7f800000"
+        ],
+        "start_k": 0,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x7f800000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 1,
+            "A_index": 1,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x7f800000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 2,
+            "A_index": 2,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x7f800000",
+            "B_rawNaN": false
+          }
+        ]
+      },
+      {
+        "name": "zero_stride_repeats_nan",
+        "n": 3,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 0,
+        "A": [
+          "0x3f800000",
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x7fc00001"
+        ],
+        "start_k": 0,
+        "expected": false,
+        "model_result": false,
+        "interval_forall_result": false,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x7fc00001",
+            "B_rawNaN": true
+          }
+        ]
+      },
+      {
+        "name": "short_buffers_default_tail",
+        "n": 4,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "start_k": 0,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x3f800000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 1,
+            "A_index": 1,
+            "A_in_bounds": false,
+            "A_word": "0x00000000",
+            "A_rawNaN": false,
+            "B_index": 1,
+            "B_in_bounds": false,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 2,
+            "A_index": 2,
+            "A_in_bounds": false,
+            "A_word": "0x00000000",
+            "A_rawNaN": false,
+            "B_index": 2,
+            "B_in_bounds": false,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 3,
+            "A_index": 3,
+            "A_in_bounds": false,
+            "A_word": "0x00000000",
+            "A_rawNaN": false,
+            "B_index": 3,
+            "B_in_bounds": false,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          }
+        ]
+      },
+      {
+        "name": "suffix_skips_nan_prefix",
+        "n": 3,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [
+          "0x7fc00001",
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000",
+          "0x7f800000",
+          "0x00000000"
+        ],
+        "start_k": 1,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": [
+          {
+            "k": 1,
+            "A_index": 1,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 1,
+            "B_in_bounds": true,
+            "B_word": "0x7f800000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 2,
+            "A_index": 2,
+            "A_in_bounds": true,
+            "A_word": "0x3f800000",
+            "A_rawNaN": false,
+            "B_index": 2,
+            "B_in_bounds": true,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          }
+        ]
+      },
+      {
+        "name": "suffix_at_n",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [
+          "0x7fc00001"
+        ],
+        "B": [
+          "0x7f800001"
+        ],
+        "start_k": 1,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": []
+      },
+      {
+        "name": "suffix_after_n",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [
+          "0x7fc00001"
+        ],
+        "B": [
+          "0x7f800001"
+        ],
+        "start_k": 5,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": []
+      },
+      {
+        "name": "unbounded_Nat_address_stride",
+        "n": 2,
+        "baseA": "18446744073709551617",
+        "baseB": "1208925819614629174706183",
+        "stride_p": "1180591620717411303427",
+        "A": [
+          "0x7fc00001"
+        ],
+        "B": [
+          "0x7f800001"
+        ],
+        "start_k": 0,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": "18446744073709551617",
+            "A_in_bounds": false,
+            "A_word": "0x00000000",
+            "A_rawNaN": false,
+            "B_index": "1208925819614629174706183",
+            "B_in_bounds": false,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 1,
+            "A_index": "18446744073709551618",
+            "A_in_bounds": false,
+            "A_word": "0x00000000",
+            "A_rawNaN": false,
+            "B_index": "1210106411235346586009610",
+            "B_in_bounds": false,
+            "B_word": "0x00000000",
+            "B_rawNaN": false
+          }
+        ]
+      },
+      {
+        "name": "signed_zero_subnormal_maxfinite",
+        "n": 4,
+        "baseA": 0,
+        "baseB": 0,
+        "stride_p": 1,
+        "A": [
+          "0x00000000",
+          "0x80000000",
+          "0x00000001",
+          "0x80000001"
+        ],
+        "B": [
+          "0x7f800000",
+          "0xff800000",
+          "0x7f7fffff",
+          "0xff7fffff"
+        ],
+        "start_k": 0,
+        "expected": true,
+        "model_result": true,
+        "interval_forall_result": true,
+        "trace": [
+          {
+            "k": 0,
+            "A_index": 0,
+            "A_in_bounds": true,
+            "A_word": "0x00000000",
+            "A_rawNaN": false,
+            "B_index": 0,
+            "B_in_bounds": true,
+            "B_word": "0x7f800000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 1,
+            "A_index": 1,
+            "A_in_bounds": true,
+            "A_word": "0x80000000",
+            "A_rawNaN": false,
+            "B_index": 1,
+            "B_in_bounds": true,
+            "B_word": "0xff800000",
+            "B_rawNaN": false
+          },
+          {
+            "k": 2,
+            "A_index": 2,
+            "A_in_bounds": true,
+            "A_word": "0x00000001",
+            "A_rawNaN": false,
+            "B_index": 2,
+            "B_in_bounds": true,
+            "B_word": "0x7f7fffff",
+            "B_rawNaN": false
+          },
+          {
+            "k": 3,
+            "A_index": 3,
+            "A_in_bounds": true,
+            "A_word": "0x80000001",
+            "A_rawNaN": false,
+            "B_index": 3,
+            "B_in_bounds": true,
+            "B_word": "0xff7fffff",
+            "B_rawNaN": false
+          }
+        ]
+      }
+    ],
+    "large_Nat_encoding": "Exact decimal strings for values above 2^53-1; no JSON floating-point rounding of Nat offsets."
+  },
+  "acceptance": {
+    "code_delivered": true,
+    "API_status": "NO_CONFIRMED_API_BLOCKER_FOUND_BY_STATIC_SOURCE_CHECK; new elaboration and termination obligations NOT_RUN.",
+    "unavailable_feedback": "Get-Command lean returned no executable; no toolchain installed and no local compiler execution attempted.",
+    "first_external_checks": [
+      "Compile exact global block after exact DWordNaN dependency; first targets are recursive theorem elaboration/split branch contexts and both n-k termination obligations.",
+      "Audit whole_model_nonNaN's actual dependency on DWordNaN.rawNaN_eq and fixed Model.NativeBinary32.ofUInt32; do not replace classifier with an abstract hypothesis.",
+      "Verify actual original dot address and packed-lane correspondence in D's eventual integration. Call only inside existing native-NaN cold branch, retaining old fallback on false.",
+      "Compose a separately established R semantic result; this block does not infer canonical raw output or depend on a new R declaration.",
+      "After a concrete candidate exists, original complete obligations, raw axiom logs, generated C/asm, complete-cost paired timing and independent confirmation remain separate requirements."
+    ]
+  },
+  "verified_at_utc": "2026-10-22T23:05:47.353678+00:00",
+  "verification": {
+    "all_five_dependencies_rehashed_unchanged": true,
+    "block_hash_matches_static_receipt": true,
+    "finite_model_case_count": 20,
+    "finite_model_all_expected_and_interval_match": true,
+    "large_Nat_receipt_precision": "EXACT_DECIMAL_STRINGS",
+    "new_Lean": "NOT_RUN",
+    "whole_candidate_policy": "NOT_RUN_NO_CANDIDATE",
+    "C_asm": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "all_markdown_links_resolve": true,
+    "within_40_minute_budget": true
+  },
+  "finished_at_utc": "2026-10-22T23:06:30.979637+00:00",
+  "elapsed_seconds": 712.979637
+}

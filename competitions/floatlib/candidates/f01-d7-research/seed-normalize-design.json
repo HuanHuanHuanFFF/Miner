@@ -1,0 +1,525 @@
+{
+  "schema": 1,
+  "title": "Minimal raw product seed normalization proof probe",
+  "started_at_utc": "2026-10-22T23:04:29Z",
+  "frozen_at_utc": "2026-10-22T23:23:56.997036+00:00",
+  "budget_minutes": 60,
+  "scope": {
+    "writes": [
+      "competitions/floatlib/candidates/f01-d7-research/seed-normalize-block.lean",
+      "competitions/floatlib/candidates/f01-d7-research/build-seed-normalize.py",
+      "competitions/floatlib/candidates/f01-d7-research/seed-normalize-design.md",
+      "competitions/floatlib/candidates/f01-d7-research/seed-normalize-design.json",
+      "competitions/floatlib/candidates/f01-d7-seed-normalize-probe/Kernel.lean",
+      "competitions/floatlib/candidates/f01-d7-seed-normalize-probe/manifest.json"
+    ],
+    "existing_candidates_changed": false,
+    "git_ci_upload": false,
+    "local_lean_execution": false,
+    "future_plan_access": false,
+    "new_runtime_integration": false
+  },
+  "status": {
+    "source_assembled": "VERIFIED_BYTES",
+    "current_official_static_policy": "PASS_STATIC_ONLY",
+    "bounded_directed_model": "PASS_FINITE_INTEGER_MODEL_ONLY",
+    "new_lean_compile": "NOT_RUN",
+    "kernel_replay": "NOT_RUN",
+    "new_axiom_audit": "NOT_RUN",
+    "full_gate": "NOT_RUN",
+    "new_C_or_assembly": "NOT_RUN",
+    "current_suite_checksums": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "gain": "UNKNOWN"
+  },
+  "artifacts": {
+    "parent": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-direct-nonfinite\\Kernel.lean",
+      "repo_path": "competitions/floatlib/candidates/f01-d7-direct-nonfinite/Kernel.lean",
+      "sha256": "97f77e2ce3f53dc3625349d5d2a7bc761570f9428c0b547070e37254c4960d26",
+      "bytes": 174925,
+      "publication": "EXISTING_CANDIDATE"
+    },
+    "block": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\seed-normalize-block.lean",
+      "repo_path": "competitions/floatlib/candidates/f01-d7-research/seed-normalize-block.lean",
+      "sha256": "c44c4afbbe117e97b857ac3541638f3cbee370ba86f837fc76be16c41d08ed26",
+      "bytes": 10793,
+      "publication": "NEW_LOCAL_PROBE"
+    },
+    "builder": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\build-seed-normalize.py",
+      "repo_path": "competitions/floatlib/candidates/f01-d7-research/build-seed-normalize.py",
+      "sha256": "135e8e429d8bd484fe4ec364d83947bfe9ccefeb1f8d6a39771717860f9cdf69",
+      "bytes": 12160,
+      "publication": "NEW_LOCAL_PROBE"
+    },
+    "probe": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-seed-normalize-probe\\Kernel.lean",
+      "repo_path": "competitions/floatlib/candidates/f01-d7-seed-normalize-probe/Kernel.lean",
+      "sha256": "a1325da56ec17cbc73f83acc3fe8b4e9ea0b2edd379617b7b927514513249f4c",
+      "bytes": 185720,
+      "publication": "NEW_LOCAL_PROBE"
+    },
+    "manifest": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-seed-normalize-probe\\manifest.json",
+      "repo_path": "competitions/floatlib/candidates/f01-d7-seed-normalize-probe/manifest.json",
+      "sha256": "69feadde205e6b434b6848d3048f53a8bc861c466c8a979b4cf653075cf262ca",
+      "bytes": 3136,
+      "publication": "NEW_LOCAL_PROBE"
+    }
+  },
+  "static_policy": {
+    "status": "PASS_STATIC_ONLY",
+    "reason": null,
+    "source": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+    "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+    "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+    "scope": "Unmodified policy/options bodies; exact full-slot contract extracted from upstream AST. No build/kernel/axiom/score stage.",
+    "function_source_sha256": {
+      "policy": "02b663a311285f927e48e0533fde188073ec32b84fb079639a6690f36821cce4",
+      "options": "91fdd48a992c4bc786e731e9f12ba3d975f37443e9007968f62c107effe64382"
+    }
+  },
+  "invariants": {
+    "parent_exact_sha256": "97f77e2ce3f53dc3625349d5d2a7bc761570f9428c0b547070e37254c4960d26",
+    "parent_prefix_byte_identical": true,
+    "parent_prefix_bytes": 174925,
+    "appended_separator_bytes": 2,
+    "four_exports_untouched": true,
+    "appended_runtime_definitions": [
+      "D7SeedNormalize.normalizeProductSeedRaw"
+    ],
+    "new_helper_used_by_original_exports": false,
+    "new_helper_body_exact_W10b_Core": true,
+    "extra_dependencies_or_options": false,
+    "original_helper_once_branch_copied": false
+  },
+  "source_transformations": [
+    {
+      "from": "W10b Core",
+      "to": "D7SeedNormalize.normalizeProductSeedRaw",
+      "change": "Namespace only; declaration and runtime body are byte-identical. Select original UInt32 or literal zero before ExecFloat.ofRaw."
+    },
+    {
+      "from": "W05 classifier lemmas embedded in W10 full",
+      "to": [
+        "model_toModel_isNaN",
+        "toFloat32_isNaN"
+      ],
+      "change": "Only these two classifier lemmas; replace macro literal widths with explicit BitVec 8/23 and explicitly pass binary32 to the existing exponent theorem."
+    },
+    {
+      "from": "W10 NativeZero",
+      "to": [
+        "native_pack_unpack",
+        "native_posZero_unpack",
+        "native_negZero_unpack",
+        "native_unpack_eq_negZero",
+        "unpacked_posZero_add",
+        "native_posZero_add"
+      ],
+      "change": "Keep mathematical statements and pack/unpack route. Replace scoped declaration command with explicit proof-only @ite decisions and proof-local classical."
+    },
+    {
+      "from": "W10 native negative-zero and nonNaN add bridges",
+      "to": [
+        "native_eq_negZero_iff_raw",
+        "add_posZero_of_not_nan"
+      ],
+      "change": "Use retained Submission.NotNaNProbe.roundtrip and Submission.R7Native.ofFloat32Add rather than complete W05 homomorphism/roundtrip family."
+    },
+    {
+      "from": "W10 General and product proof",
+      "to": [
+        "model_posZero_add_quiet",
+        "exec_posZero_add_quiet",
+        "exec_mul_not_snan",
+        "add_posZero_mul"
+      ],
+      "change": "Use actual existing global R7W01 quietNaN32_eq_self, exec_toModel_add/mul and mul32_not_snan. Keep general non-sNaN premise; product theorem has no x/y premise."
+    },
+    {
+      "from": "W10b raw proof",
+      "to": [
+        "normalizeProductSeedRaw_eq_conditional",
+        "normalizeProductSeedRaw_eq_self",
+        "normalizeProductSeedRaw_of_nan"
+      ],
+      "change": "Prove all-word carrier reconstruction by extensionality; use actual native negative-zero bridge to rule out raw negative zero for NaN. No old full-carrier runtime normalizer is copied."
+    },
+    {
+      "from": "New local glue",
+      "to": [
+        "submission_add_posZero_mul",
+        "normalize_submission_mul_eq_add",
+        "submission_add_posZero_mul_raw_conditional"
+      ],
+      "change": "Transport exact ExecFloat theorem using existing Submission.add_eq/mul_eq. New integration and proof elaboration NOT_RUN."
+    }
+  ],
+  "proof_signatures": {
+    "D7SeedNormalize.add_posZero_of_not_snan": {
+      "block_line": 190,
+      "declaration": "theorem add_posZero_of_not_snan (q : Competition.Binary32)\n    (hq : Model.isSNaN (ExecFloat.Binary.toModel q) = false) :\n    ExecFloat.add Competition.posZero q = normalizeProductSeedRaw q := by\n  cases hn : (ExecFloat.Binary.toFloat32 q).isNaN with\n  | false => exact add_posZero_of_not_nan q hn\n  | true =>\n      have hnan : Model.isNaN (ExecFloat.Binary.toModel q) = true :=\n        (toFloat32_isNaN q).symm.trans hn\n      exact (exec_posZero_add_quiet q hnan hq).trans\n        (normalizeProductSeedRaw_of_nan q hnan).symm",
+      "new_integration": "NOT_RUN"
+    },
+    "D7SeedNormalize.exec_mul_not_snan": {
+      "block_line": 201,
+      "declaration": "theorem exec_mul_not_snan (x y : Competition.Binary32) :\n    Model.isSNaN (ExecFloat.Binary.toModel (ExecFloat.mul x y)) = false := by\n  rw [R7W01.exec_toModel_mul]\n  exact R7W01.mul32_not_snan _ _",
+      "new_integration": "NOT_RUN"
+    },
+    "D7SeedNormalize.add_posZero_mul": {
+      "block_line": 207,
+      "declaration": "theorem add_posZero_mul (x y : Competition.Binary32) :\n    ExecFloat.add Competition.posZero (ExecFloat.mul x y) =\n      normalizeProductSeedRaw (ExecFloat.mul x y) :=\n  add_posZero_of_not_snan _ (exec_mul_not_snan x y)",
+      "new_integration": "NOT_RUN"
+    },
+    "D7SeedNormalize.add_posZero_mul_raw_conditional": {
+      "block_line": 217,
+      "declaration": "theorem add_posZero_mul_raw_conditional (x y : Competition.Binary32) :\n    (ExecFloat.add Competition.posZero (ExecFloat.mul x y)).raw.1 =\n      if (ExecFloat.mul x y).raw.1 == (0x80000000 : UInt32)\n      then (0 : UInt32) else (ExecFloat.mul x y).raw.1 := by\n  rw [add_posZero_mul, normalizeProductSeedRaw_raw]",
+      "new_integration": "NOT_RUN"
+    },
+    "D7SeedNormalize.submission_add_posZero_mul": {
+      "block_line": 223,
+      "declaration": "theorem submission_add_posZero_mul (x y : Competition.Binary32) :\n    Submission.add Competition.posZero (Submission.mul x y) =\n      normalizeProductSeedRaw (Submission.mul x y) := by\n  simpa only [Submission.add_eq, Submission.mul_eq] using add_posZero_mul x y",
+      "new_integration": "NOT_RUN"
+    },
+    "D7SeedNormalize.normalize_submission_mul_eq_add": {
+      "block_line": 228,
+      "declaration": "theorem normalize_submission_mul_eq_add (x y : Competition.Binary32) :\n    normalizeProductSeedRaw (Submission.mul x y) =\n      Submission.add Competition.posZero (Submission.mul x y) :=\n  (submission_add_posZero_mul x y).symm",
+      "new_integration": "NOT_RUN"
+    },
+    "D7SeedNormalize.submission_add_posZero_mul_raw_conditional": {
+      "block_line": 233,
+      "declaration": "theorem submission_add_posZero_mul_raw_conditional (x y : Competition.Binary32) :\n    (Submission.add Competition.posZero (Submission.mul x y)).raw.1 =\n      if (Submission.mul x y).raw.1 == (0x80000000 : UInt32)\n      then (0 : UInt32) else (Submission.mul x y).raw.1 := by\n  simpa only [Submission.add_eq, Submission.mul_eq] using\n    add_posZero_mul_raw_conditional x y",
+      "new_integration": "NOT_RUN"
+    }
+  },
+  "original_sources": {
+    "W10_full": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\R7W10.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/R7W10.lean",
+      "sha256": "c3f9965a7f4f55d13473e5364e95173a2a36b2c1e39bcb1f07f7dce2018432cc",
+      "bytes": 116706,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_core": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\Core.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/Core.lean",
+      "sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f",
+      "bytes": 427,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_proofs": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\Proofs.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/Proofs.lean",
+      "sha256": "90a6e0461690f8220d7ecc1710d52a267eb6239ec18d50de9f164952eff6bcbd",
+      "bytes": 3636,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10b_increment": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\R7W10bIncrement.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/R7W10bIncrement.lean",
+      "sha256": "06cb8a1942f609d4ef0afdd85e2bfd373bc44fbf3d09dd6fc8d05f90a7bcf7d1",
+      "bytes": 4018,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_native_zero": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\proofs\\NativeZero.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/NativeZero.lean",
+      "sha256": "004c968380cb23bc165dd1a4a05c8e0cf402187f75a3d41c6fca61695882d492",
+      "bytes": 4847,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_general": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\proofs\\General.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/General.lean",
+      "sha256": "c6790e97e91474de559dc913f53c28f0bebccbeb3674fe93ee5bd94fcb5bbaaa",
+      "bytes": 2665,
+      "publication": "LOCAL_ONLY"
+    },
+    "W10_product": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\proofs\\Product.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/Product.lean",
+      "sha256": "b508427ad70785362836b1ff04577bf66969e7558ab6ba2f2a062774fa6bd29f",
+      "bytes": 2156,
+      "publication": "LOCAL_ONLY"
+    },
+    "fixed_model_lean": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\public\\FloatLib\\FloatLib\\Floats\\Formats\\BinaryInterchange\\Model\\Lean.lean",
+      "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/public/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Model/Lean.lean",
+      "sha256": "24b1b98f7a24ce6e3c69f6c9278bfd9fe36d4a138a8231574edd620111dd6b48",
+      "bytes": 20409,
+      "publication": "LOCAL_ONLY"
+    },
+    "prior_original_review": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\zero-seed-proof-review.json",
+      "repo_path": "competitions/floatlib/candidates/f01-d7-research/zero-seed-proof-review.json",
+      "sha256": "df6e5674bac48977bf1b3f935948e043200baaf1cf99a52924cb82bb06336fb4",
+      "bytes": 98845,
+      "publication": "LOCAL_ONLY"
+    }
+  },
+  "saved_original_compile_receipts": [
+    {
+      "job": "W10",
+      "name": "R7W10-attempt1",
+      "original_returncode": 0,
+      "original_source_sha256": "c3f9965a7f4f55d13473e5364e95173a2a36b2c1e39bcb1f07f7dce2018432cc",
+      "source_snapshot_bundled": true,
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10-attempt1.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.json",
+        "sha256": "f68a9de97407574ce015f853c039e4deb1ab700fa4775ddb952f17917331d722",
+        "bytes": 681,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10\\original-extracted\\R7-W10\\logs\\R7W10-attempt1.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.log",
+        "sha256": "77a7f3d9a3e129bc6c2de6791c675bb71e3496cc9f855198eb6a73ea18f53ef0",
+        "bytes": 3783,
+        "publication": "LOCAL_ONLY"
+      },
+      "scope": "Saved supplied original execution only; not this new integration."
+    },
+    {
+      "job": "W10b",
+      "name": "Core-attempt1",
+      "original_returncode": 0,
+      "original_source_sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f",
+      "source_snapshot_bundled": true,
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Core-attempt1.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.json",
+        "sha256": "e72ab021e26eeb74a0ba469ad3472796601f1ad8c313c2a078510a3a7193a15c",
+        "bytes": 682,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Core-attempt1.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "publication": "LOCAL_ONLY"
+      },
+      "scope": "Saved supplied original execution only; not this new integration."
+    },
+    {
+      "job": "W10b",
+      "name": "Proofs-attempt2",
+      "original_returncode": 0,
+      "original_source_sha256": "90a6e0461690f8220d7ecc1710d52a267eb6239ec18d50de9f164952eff6bcbd",
+      "source_snapshot_bundled": true,
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Proofs-attempt2.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.json",
+        "sha256": "4b83b70babc8b09b7956aa232b720fe4ff3a1d1b488e5eeae9c06bf8d94b86b8",
+        "bytes": 692,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\Proofs-attempt2.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "publication": "LOCAL_ONLY"
+      },
+      "scope": "Saved supplied original execution only; not this new integration."
+    },
+    {
+      "job": "W10b",
+      "name": "W10bFull-attempt1",
+      "original_returncode": 0,
+      "original_source_sha256": "78c85fc79807e73138c00e9b505b02f8b30e426c99afb91ebdd811d35a148c65",
+      "source_snapshot_bundled": false,
+      "record": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bFull-attempt1.json",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bFull-attempt1.json",
+        "sha256": "6a6246ff4d4c52326b390e0692524364784ffb3629f6cc99e26c53488a4868c7",
+        "bytes": 726,
+        "publication": "LOCAL_ONLY"
+      },
+      "log": {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\web\\R7-W10b\\original-extracted\\R7-W10b\\logs\\W10bFull-attempt1.log",
+        "repo_path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/W10bFull-attempt1.log",
+        "sha256": "e3b395c024c47891ec288dfb3c22bdca92b67d60c619f72eff3924c76985ee87",
+        "bytes": 3953,
+        "publication": "LOCAL_ONLY"
+      },
+      "scope": "Saved supplied original execution only; not this new integration."
+    }
+  ],
+  "original_evidence_boundary": "Original successful compile/axiom/codegen evidence belongs to W10/W10b. Namespace, dependency and Classical ports in this probe have not been run through Lean. No original PASS is inherited.",
+  "fixed_context": {
+    "Lean_release": "v4.34.0",
+    "Lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+    "FloatLib_commit": "0d91825727839f597fd06b22fdd038ea21480f0c",
+    "current_gate_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+    "primary_signature": "Model.toNat_neg_one_exponentBits (fmt : FloatFormat), Model/Lean.lean:263",
+    "context_boundary": "Fixed recovered primary bytes and saved records; no new local library build or olean/environment reconstruction."
+  },
+  "directed_model": {
+    "status": "PASS_FINITE_INTEGER_MODEL_ONLY",
+    "case_count": 16,
+    "oracle_path": "competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py",
+    "oracle_sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+    "oracle_unchanged": true,
+    "cases": [
+      {
+        "kind": "product",
+        "name": "negative_zero",
+        "x": "0x80000000",
+        "y": "0x3f800000",
+        "product": "0x80000000",
+        "seed_result": "0x0"
+      },
+      {
+        "kind": "product",
+        "name": "positive_zero_negative_one",
+        "x": "0x0",
+        "y": "0xbf800000",
+        "product": "0x80000000",
+        "seed_result": "0x0"
+      },
+      {
+        "kind": "product",
+        "name": "negative_underflow",
+        "x": "0x80000001",
+        "y": "0x3f000000",
+        "product": "0x80000000",
+        "seed_result": "0x0"
+      },
+      {
+        "kind": "product",
+        "name": "positive_underflow",
+        "x": "0x1",
+        "y": "0x3f000000",
+        "product": "0x0",
+        "seed_result": "0x0"
+      },
+      {
+        "kind": "product",
+        "name": "minimum_subnormal",
+        "x": "0x1",
+        "y": "0x3f800000",
+        "product": "0x1",
+        "seed_result": "0x1"
+      },
+      {
+        "kind": "product",
+        "name": "zero_inf_invalid",
+        "x": "0x0",
+        "y": "0x7f800000",
+        "product": "0x7fc00000",
+        "seed_result": "0x7fc00000"
+      },
+      {
+        "kind": "product",
+        "name": "negative_zero_negative_inf",
+        "x": "0x80000000",
+        "y": "0xff800000",
+        "product": "0x7fc00000",
+        "seed_result": "0x7fc00000"
+      },
+      {
+        "kind": "product",
+        "name": "negative_infinity",
+        "x": "0xbf800000",
+        "y": "0x7f800000",
+        "product": "0xff800000",
+        "seed_result": "0xff800000"
+      },
+      {
+        "kind": "product",
+        "name": "negative_quiet_payload",
+        "x": "0xffc01234",
+        "y": "0x3f800000",
+        "product": "0xffc01234",
+        "seed_result": "0xffc01234"
+      },
+      {
+        "kind": "product",
+        "name": "quiet_then_signaling",
+        "x": "0x7fc00111",
+        "y": "0xff800022",
+        "product": "0xffc00022",
+        "seed_result": "0xffc00022"
+      },
+      {
+        "kind": "product",
+        "name": "both_signaling",
+        "x": "0x7f800011",
+        "y": "0xff800022",
+        "product": "0x7fc00011",
+        "seed_result": "0x7fc00011"
+      },
+      {
+        "kind": "product",
+        "name": "both_quiet",
+        "x": "0xffc00111",
+        "y": "0x7fc00222",
+        "product": "0xffc00111",
+        "seed_result": "0xffc00111"
+      },
+      {
+        "kind": "general_q",
+        "q": "0x80000000",
+        "normalized": "0x0",
+        "actual_add_model": "0x0",
+        "is_snan": false,
+        "status": "MATCH_WITH_PREMISE"
+      },
+      {
+        "kind": "general_q",
+        "q": "0x0",
+        "normalized": "0x0",
+        "actual_add_model": "0x0",
+        "is_snan": false,
+        "status": "MATCH_WITH_PREMISE"
+      },
+      {
+        "kind": "general_q",
+        "q": "0xffc01234",
+        "normalized": "0xffc01234",
+        "actual_add_model": "0xffc01234",
+        "is_snan": false,
+        "status": "MATCH_WITH_PREMISE"
+      },
+      {
+        "kind": "general_q",
+        "q": "0xff800011",
+        "normalized": "0xff800011",
+        "actual_add_model": "0xffc00011",
+        "is_snan": true,
+        "status": "COUNTEREXAMPLE_WITHOUT_PREMISE"
+      }
+    ],
+    "lean": "NOT_RUN",
+    "hardware": "NOT_RUN",
+    "performance": "UNKNOWN"
+  },
+  "proof_review": {
+    "general_q": "Requires actual Model.isSNaN=false. An arbitrary sNaN is preserved by the raw normalizer but quieted by actual +0 addition; its premise cannot be dropped.",
+    "product": "Existing actual Model.Spec.mul classification and exact ExecFloat refinement supply the non-sNaN premise for every raw x/y.",
+    "signed_zero": "Only 0x80000000 changes to 0; preserve positive zero, subnormal inputs/results and every other word. Actual separately rounded product is retained.",
+    "NaN": "Preserve multiply-selected sign/payload and signaling-first priority after actual multiplication quiets the selected signaling NaN. No native NaN roundtrip is assumed.",
+    "invalid_and_infinity": "Existing multiplication still determines 0*Inf invalid and signed Inf. Normalizer leaves those actual product words unchanged.",
+    "classical": "Classical decisions occur explicitly only inside theorem propositions; no new runtime decision or attribute command is introduced.",
+    "performance": "Original W10b code shape motivates word selection; newly appended helper C/inlining and any actual first-add replacement have not been observed."
+  },
+  "next_discriminating_checks": [
+    "Compile the exact a1325da5 ContractTensor-only statement probe in the unmodified current official build; preserve first elaboration goal and all build output.",
+    "Specifically check explicit BitVec widths/fmt rewrite, explicit @ite/Classical decisions, negative-zero roundtrip and the retained ofFloat32Add bridge. These are newly adapted proof surfaces, not confirmed errors.",
+    "Audit transitive axioms and kernel replay for this exact new theorem closure; original W10/W10b audits do not certify it.",
+    "After statement acceptance only, D may create a separate singleton runtime integration: same product once, normalize it, close the existing pointwise n=1 proof with normalize_submission_mul_eq_add. Preserve original addresses and all n!=1 paths.",
+    "For that later runtime candidate, inspect actual statement C/object then run original full current suite and a frozen independent confirmation before any gain claim."
+  ],
+  "integrity": {
+    "selected_originals_unchanged_during_record": true,
+    "oracle_unchanged_before_after_selftest": true,
+    "no_private_prompt_content": true,
+    "probe_runtime_frozen": true,
+    "preliminary_hash_superseded": "84c5fa65b2f8e788358e7253242f73c17b478a7c82584d145e343c732d428bb9"
+  }
+}

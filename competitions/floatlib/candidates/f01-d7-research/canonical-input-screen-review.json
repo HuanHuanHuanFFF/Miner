@@ -1,0 +1,1824 @@
+{
+  "status": "STATIC_CONDITIONAL_THEOREM_SUPPORTED_NEW_LEAN_NOT_RUN",
+  "started_at_utc": "2026-10-22T22:37:27Z",
+  "audited_at_utc": "2026-10-22 22:50:31 UTC",
+  "budget_minutes": 25,
+  "deadline_utc": "2026-10-22T23:02:27Z",
+  "scope": {
+    "writes_only": [
+      "competitions/floatlib/candidates/f01-d7-research/canonical-input-screen-review.md",
+      "competitions/floatlib/candidates/f01-d7-research/canonical-input-screen-review.json"
+    ],
+    "candidate_changes": false,
+    "git_mutations": false,
+    "CI": false,
+    "uploads": false,
+    "large_enumeration": false,
+    "formal_Lean": "NOT_RUN",
+    "new_fullgate": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "network": "One read-only request for nonexistent lean4 src/runtime/float.cpp returned 404; reused and rehashed already recovered fixed object.cpp and source receipt. No remote writes."
+  },
+  "fixed_versions": {
+    "FloatLib_commit": "0d91825727839f597fd06b22fdd038ea21480f0c",
+    "Lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+    "Lean_version": "4.34.0",
+    "old_web_contract_commit": "978cc5b445edb9943fd9953b0a9037d97a9f33a8",
+    "historical_fullgate_official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97"
+  },
+  "conclusion": {
+    "classification": "INFERRED_FROM_FIXED_DEFINITIONS_AND_EXISTING_PROVEN_COMPONENTS",
+    "mathematical_answer": "Yes, for the complete ordered sum/dot from posZero, when all actually read original raw inputs are nonNaN, exact raw fold NaN must be positive canonical word 0x7fc00000. This is a static proof argument; the new precise Lean theorem, scanner composition and candidate gate remain NOT_RUN.",
+    "raw_invariant": "P(w) := raw_isNaN(w)=false OR w=0x7fc00000.",
+    "proof_argument": [
+      "The initial +0 and all screened original inputs satisfy P.",
+      "Spec.add and Spec.mul preserve P: finite rounding, zeros and overflow return nonNaN; invalid returns C; NaN selection can only pick C and quiet(C)=C.",
+      "Induct in the original left-to-right order. Dot forms a separately rounded product first; that product may be C, and the accumulator may also become C.",
+      "Use W05 forward projection and exact isNaN classifier transport, composed with the actual native loop, to deduce raw endpoint NaN. Combining with P forces raw C; no arbitrary raw inverse of toFloat32 is used."
+    ],
+    "necessary_scope": [
+      "complete original +0 seed, or an explicit P initial accumulator and matching native seed",
+      "all actual raw sum reads; both actual raw A/B dot reads, with original getD defaults and addresses",
+      "same rounded mul-then-add order and actual native endpoint",
+      "endpoint NaN antecedent; empty inputs do not satisfy it",
+      "USize implementation count/address no-wrap proofs or Nat fallback; theorem itself remains all Nat",
+      "supported canonicalizing return codec"
+    ]
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "status": "REQUIRED_CONDITION",
+      "claim": "Full sum/dot begins at Competition.posZero. A suffix-only version requires its initial raw accumulator to satisfy P; arbitrary native-NaN seeds are insufficient.",
+      "evidence": [
+        "fixed_tensor_contract:L19-L25,L55-L64",
+        "W05_source:L2016-L2021,L2159-L2163"
+      ],
+      "counterexample": "seed=0x7fc00001; suffix=[0x3f800000]; raw=0x7fc00001, projected=0x7fc00000.",
+      "action": "Quantify the full original fold, or require P(seed) and matching native seed."
+    },
+    {
+      "id": "F2",
+      "status": "REQUIRED_CONDITION",
+      "claim": "Screen raw original sum values, and both raw A/B reads for each dot k. Products and accumulators are allowed to become NaN, but must remain in P.",
+      "evidence": [
+        "fixed_dyadic_spec:L37-L52,L70-L92",
+        "M22_candidate:L2811-L2827"
+      ],
+      "action": "Use canonical-image closure rather than an assertion that all intermediates are nonNaN. The predicate must allow Inf; isFinite=true or exp!=255 is a safe rejection but would miss the intended nonfinite opportunity. Even all-finite dot inputs can form opposite infinite rounded products."
+    },
+    {
+      "id": "F3",
+      "status": "REQUIRED_CONDITION",
+      "claim": "BMM scanning must cover A[(b*m+i)*n+k] and B[(b*n+k)*p+j], not a contiguous B slice or all indices in a wrong packed lane.",
+      "evidence": [
+        "fixed_tensor_contract:L33-L64",
+        "retained60f_candidate:L2690-L2697,L3020-L3027,L3607-L3611"
+      ],
+      "counterexample": "batch=1,m=1,n=2,p=2,A=[1,1],B=[0,0,0x7fc00001,1],j=0. Correct B reads [0,2], wrong contiguous reads [0,1]. Raw dot is 0x7fc00001.",
+      "action": "Prove scanner Boolean true implies all actual total reads are nonNaN for that output and lane."
+    },
+    {
+      "id": "F4",
+      "status": "REQUIRED_CONDITION",
+      "claim": "Out-of-bounds total reads are posZero, including generic dot helper cases. Unused storage may contain arbitrary NaNs; screening extra storage is a conservative rejection only.",
+      "evidence": [
+        "fixed_tensor_contract:L33-L34",
+        "retained60f_candidate:L2693-L2694,L2738-L2740,L2921-L2926"
+      ],
+      "action": "Tie the screen to getD or prove exact bounds before uget. A missing A read paired with Inf creates C through 0*Inf."
+    },
+    {
+      "id": "F5",
+      "status": "IMPLEMENTATION_PROOF_OBLIGATION",
+      "claim": "The mathematical closure theorem has no n<USize.size restriction. A USize implementation must preserve count and every address calculation, including baseB+k*p; count safety alone is insufficient.",
+      "evidence": [
+        "retained60f_candidate:L3173-L3202,L3380-L3419"
+      ],
+      "counterexample": "If n=USize.size is blindly converted, count.toNat=0. A virtual input whose first word is 0x7fc00001 and remaining words zero makes a zero-length scan incorrectly accept the full NaN fold.",
+      "action": "Preserve existing Nat fallback for n>=USize.size and prove no-wrap address bounds, or implement the screen with Nat/getD. The virtual boundary example was not allocated or executed."
+    },
+    {
+      "id": "F6",
+      "status": "FALSE_IF_WEAKENED",
+      "claim": "Allowing arbitrary qNaN or sNaN input words defeats a universal canonical-output guarantee, even for one element. Allowing only C is compatible with P and is not a counterexample.",
+      "evidence": [
+        "fixed_carrier:L338-L354",
+        "fixed_dyadic_spec:L41-L42,L82-L83"
+      ],
+      "counterexamples": [
+        "sum([0x7fc00001])=0x7fc00001",
+        "sum([0xffc00000])=0xffc00000",
+        "sum([0x7f800001])=0x7fc00001",
+        "dot([0xff800001],[0x3f800000])=0xffc00001",
+        "sum([+Inf,-Inf,0x7f800001])=0x7fc00001"
+      ],
+      "action": "Keep the raw-nonNaN predicate, or explicitly prove a stronger P-based allowance; do not generalize from isSNaN=false alone."
+    },
+    {
+      "id": "F7",
+      "status": "VACUOUS_EDGE",
+      "claim": "Empty sum/dot is posZero and its native endpoint is nonNaN; the NaN antecedent is essential. Signed zero and subnormal cancellation remain nonNaN values and need no extra exclusion.",
+      "evidence": [
+        "fixed_tensor_contract:L19-L25,L55-L64",
+        "retained60f_candidate:L2658-L2662,L2690-L2697"
+      ],
+      "action": "Do not return C solely because an all-input screen is vacuously true. No n>0 hypothesis is needed if the endpoint-NaN condition is retained."
+    },
+    {
+      "id": "F8",
+      "status": "VERIFIED_SOURCE_BOUNDARY",
+      "claim": "The supported FloatLib ofFloat32 path uses Float32.toBits. Fixed Lean toBits normalizes every runtime NaN to literal 0x7fc00000; header add/mul themselves are bare C arithmetic.",
+      "evidence": [
+        "fixed_native_conversion:L120-L122,L137-L139",
+        "fixed_native_float32:L145",
+        "lean_runtime_header:L3255-L3257",
+        "lean_runtime_object:L1995-L2003"
+      ],
+      "action": "Keep the existing ofFloat32/toBits conversion or construct the raw C word with its codec proof. Do not assume a raw hardware NaN bit-cast has the canonical sign/payload. New generated C/asm and runtime execution remain NOT_RUN."
+    },
+    {
+      "id": "F9",
+      "status": "PROOF_GAP_TO_CLOSE",
+      "claim": "W05 all-input toFloat32 homomorphism transports classification but has many raw NaN preimages. M21 nonNaN roundtrip cannot be applied at a NaN endpoint; M22 quiet absorption preserves an arbitrary quiet payload and does not make it canonical.",
+      "evidence": [
+        "M21_candidate:L2389-L2404,L2618-L2643",
+        "M22_candidate:L2811-L2827",
+        "W05_source:L1699-L1725,L1797-L1799,L1948-L1950,L2016-L2021,L2177-L2182,L2256-L2271"
+      ],
+      "action": "First prove P of the exact raw fold. Then native endpoint NaN plus the forward projection forces its P alternative to be raw C. Do not invert toFloat32 on arbitrary raw words."
+    }
+  ],
+  "required_lemmas": [
+    {
+      "id": "L1",
+      "kind": "EXISTING",
+      "names": [
+        "Submission.NotNaNProbe.modelCanonicalOfNotNaN",
+        "Submission.NotNaNProbe.roundtrip"
+      ],
+      "source": "M21_candidate:L2380-L2404",
+      "limit": "The roundtrip requires native isNaN=false; cannot close a NaN endpoint."
+    },
+    {
+      "id": "L2",
+      "kind": "EXISTING_COMPONENTS_AND_NEW_CONCRETE_FACT",
+      "names": [
+        "R7W05Cached.R7W01.roundDyadic32_not_nan",
+        "R7W05Cached.R7W01.nativeOverflow32_not_nan",
+        "Model.invalidResult_eq_canonicalNaN_of_isIEEE"
+      ],
+      "source": "W05_source:L214-L219,L278-L281; fixed_carrier:L272-L273,L300-L302,L329-L342",
+      "needed": "Concrete binary32 C is 0x7fc00000; quietNaN C=C; isSNaN C=false. These constant facts are new integration obligations, not asserted compiled here."
+    },
+    {
+      "id": "L3",
+      "kind": "NEW_REQUIRED",
+      "suggested_statement": "P(x) and P(y) imply P(Model.Spec.add x y); P(x) and P(y) imply P(Model.Spec.mul x y).",
+      "minimal_variant": "For dot, mul closure only for the two original nonNaN inputs suffices; add must accept a possibly canonical-NaN accumulator and product.",
+      "source": "fixed_dyadic_spec:L37-L52,L70-L92",
+      "proof": "Round/zero/overflow branches are nonNaN, invalid is C, chooseNaN2 can select only C and quiet(C)=C."
+    },
+    {
+      "id": "L4",
+      "kind": "EXISTING_TRANSPORT_PLUS_NEW_FOLD_INVARIANT",
+      "names": [
+        "Submission.R7Native.toModelExecAdd",
+        "Submission.NativeBridge.toModelExecMul",
+        "Configured.Family.toModel_injective"
+      ],
+      "needed": "Transfer L3 to actual Binary32 carrier; induct ordered sum and mul-then-add dot from posZero with exact getD addresses.",
+      "source": "M21_candidate:L2610-L2616; W05_source:L1853-L1857,L1958-L1964; fixed_tensor_contract:L24-L25,L55-L64"
+    },
+    {
+      "id": "L5",
+      "kind": "EXISTING_PROJECTION_PLUS_NEW_LOOP_COMPOSITION",
+      "names": [
+        "R7W05.toFloat32_isNaN",
+        "R7W05.add_toFloat32",
+        "R7W05.mul_toFloat32",
+        "R7W05.sumFold_toFloat32",
+        "R7W05.dotFold_toFloat32",
+        "R7W05.sumSpec_toFloat32",
+        "R7W05.bmmSpec_toFloat32",
+        "Submission.NativeDecodeSumWord.run_eq",
+        "Submission.NativeDecodeSum.loop_eq",
+        "Submission.Packed10.dot10_lane",
+        "Submission.Packed10Index.runDot_eq"
+      ],
+      "source": "W05_source:L1699-L1703,L1797-L1799,L1948-L1950,L2146-L2156,L2177-L2182,L2216-L2226,L2256-L2271; retained60f_candidate:L3020-L3045,L3195-L3202,L3414-L3419,L3432-L3437",
+      "needed": "Compose against the actual retained native endpoint and exact ordering. Historical web projection is not an already gated new branch."
+    },
+    {
+      "id": "L6",
+      "kind": "NEW_REQUIRED",
+      "suggested_statement": "screen=true implies all exact reads satisfy raw isNaN=false; native endpoint isNaN=true and P(raw fold) imply raw fold=C; supported returned word=C.",
+      "source": "retained60f_candidate:L2690-L2697,L2735-L2745,L2984-L3006,L3427-L3437; fixed_native_conversion:L120-L122; lean_runtime_object:L1998-L2003",
+      "needed": "Include short-circuit Boolean correctness, zero length, default reads, Nat/USize fallback, lane/address correspondence, and complete original obligations."
+    }
+  ],
+  "W05_raw_proof_binding": {
+    "compile_exit": 0,
+    "diagnostic_exit": 0,
+    "compile_metadata_hash_matches": true,
+    "compile_snapshot_equals_source": true,
+    "diagnostic_snapshot_hash_matches_metadata": true,
+    "diagnostic_snapshot_starts_with_source": true,
+    "raw_axiom_lines": {
+      "R7W05.toFloat32_isNaN": [
+        "'R7W05.toFloat32_isNaN' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W05.add_toFloat32": [
+        "'R7W05.add_toFloat32' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W05.mul_toFloat32": [
+        "'R7W05.mul_toFloat32' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W05.dotFold_toFloat32": [
+        "'R7W05.dotFold_toFloat32' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W05.sumSpec_toFloat32": [
+        "'R7W05.sumSpec_toFloat32' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W05.bmmSpec_toFloat32": [
+        "'R7W05.bmmSpec_toFloat32' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W05.native_acc_roundtrip": [
+        "'R7W05.native_acc_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W05Cached.R7W01.roundDyadic32_not_nan": [
+        "'R7W05Cached.R7W01.roundDyadic32_not_nan' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "R7W05Cached.R7W01.nativeOverflow32_not_nan": [
+        "'R7W05Cached.R7W01.nativeOverflow32_not_nan' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    "new_D16_theorem_compile": "NOT_RUN",
+    "new_D16_candidate_fullgate": "NOT_RUN"
+  },
+  "already_gated_components": [
+    {
+      "candidate": "f01-r7-nonnan-runtime",
+      "run": 39836787411,
+      "seed": 805,
+      "kernel_sha256": "c76056882d69a1122da44b4bc0bb3ab5274251826f0677af2aec5771926d7435",
+      "exit_code": 0,
+      "full_gate": true,
+      "validation_mode": "full-gate",
+      "verdict_hash_matches": true,
+      "complete": true,
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "same_contracts_sha256": {
+        "Contract.lean": "454d6ffe93f13b39e2dabdda5ead4a042dcd201bf025e79663ef711c1d63ee5b",
+        "ContractTensor.lean": "65f31bc0d7793f0208465ca554486834b572a45c21c35772789551ac8a82a26c"
+      },
+      "gate_log": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39836787411/download-bd809948d4a44095a7f1666cd876d450/diagnostics/f01-d7-public-suite/public-suite/f01-r7-nonnan-runtime-gate.log",
+      "gate_log_stage_markers": [
+        "\u001b[32m2026-10-22 19:12:40.408\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36m__main__\u001b[0m:\u001b[36mrun_stages\u001b[0m:\u001b[36m785\u001b[0m - \u001b[1m[statement] ok\u001b[0m",
+        "\u001b[32m2026-10-22 19:13:17.183\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36m__main__\u001b[0m:\u001b[36mrun_stages\u001b[0m:\u001b[36m785\u001b[0m - \u001b[1m[axioms] ok\u001b[0m",
+        "\u001b[32m2026-10-22 19:16:47.767\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36m__main__\u001b[0m:\u001b[36mmain\u001b[0m:\u001b[36m862\u001b[0m - \u001b[1m[gate] f01-r7-nonnan-runtime slot=full passed=True stage=score ratio=0.38876929506074526\u001b[0m"
+      ]
+    },
+    {
+      "candidate": "f01-r7-nan-replay-fullpath",
+      "run": 39839349846,
+      "seed": 806,
+      "kernel_sha256": "9a2a05cd8e033d3cc079744ade77dd42464926d04ef5c9a8e7c050a1605ec854",
+      "exit_code": 0,
+      "full_gate": true,
+      "validation_mode": "full-gate",
+      "verdict_hash_matches": true,
+      "complete": true,
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "same_contracts_sha256": {
+        "Contract.lean": "454d6ffe93f13b39e2dabdda5ead4a042dcd201bf025e79663ef711c1d63ee5b",
+        "ContractTensor.lean": "65f31bc0d7793f0208465ca554486834b572a45c21c35772789551ac8a82a26c"
+      },
+      "gate_log": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39839349846/download-ebea3aedaed046f19fe9a034758012cf/diagnostics/f01-d7-public-suite/public-suite/f01-r7-nan-replay-fullpath-gate.log",
+      "gate_log_stage_markers": [
+        "\u001b[32m2026-10-22 19:31:38.817\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36m__main__\u001b[0m:\u001b[36mrun_stages\u001b[0m:\u001b[36m785\u001b[0m - \u001b[1m[statement] ok\u001b[0m",
+        "\u001b[32m2026-10-22 19:32:16.762\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36m__main__\u001b[0m:\u001b[36mrun_stages\u001b[0m:\u001b[36m785\u001b[0m - \u001b[1m[axioms] ok\u001b[0m",
+        "\u001b[32m2026-10-22 19:35:53.955\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36m__main__\u001b[0m:\u001b[36mmain\u001b[0m:\u001b[36m862\u001b[0m - \u001b[1m[gate] f01-r7-nan-replay-fullpath slot=full passed=True stage=score ratio=0.413273535878438\u001b[0m"
+      ]
+    }
+  ],
+  "evidence_registry": {
+    "fixed_carrier": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01/original-extracted/R7-W01/upstream/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Model/Carrier.lean",
+      "bytes": 26809,
+      "sha256": "ff74af867a84c3b88eaaf337f6cbd1e9b65f801d0643f663593154ba7671338b",
+      "availability": "LOCAL_ONLY",
+      "git_blob_sha1": "8849d6b29facd7ccff8d1f32e2b15626d0771023"
+    },
+    "fixed_model_lean": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01/original-extracted/R7-W01/upstream/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Model/Lean.lean",
+      "bytes": 20409,
+      "sha256": "24b1b98f7a24ce6e3c69f6c9278bfd9fe36d4a138a8231574edd620111dd6b48",
+      "availability": "LOCAL_ONLY"
+    },
+    "fixed_dyadic_spec": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/public/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Spec/Dyadic.lean",
+      "bytes": 4842,
+      "sha256": "932ee9d22d6241cda8c38dd22df4ecaffa934cdd1aa2922a0681afd1669ffb67",
+      "availability": "LOCAL_ONLY",
+      "git_blob_sha1": "2204e7bd34af9f7d82469ecae247eb2942d78e73"
+    },
+    "fixed_tensor_contract": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/public/competition/lean/contract/ContractTensor.lean",
+      "bytes": 3433,
+      "sha256": "65f31bc0d7793f0208465ca554486834b572a45c21c35772789551ac8a82a26c",
+      "availability": "LOCAL_ONLY"
+    },
+    "fixed_native_conversion": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/public/FloatLib/FloatLib/Floats/Formats/IEEE754/Native.lean",
+      "bytes": 9521,
+      "sha256": "b6da171304380025f556bfc93a88d4b4b7b6c7ee8fd9e07581db90878c3ec35d",
+      "availability": "LOCAL_ONLY"
+    },
+    "fixed_native_float32": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/public/Lean4/src/Init/Data/Float/Float32.lean",
+      "bytes": 21678,
+      "sha256": "2f4b7eb845c03bd5581d70921f891798cc193f5c8c1372302a3e6064a34f7319",
+      "availability": "LOCAL_ONLY"
+    },
+    "lean_runtime_header": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/lean-lean.h",
+      "bytes": 136786,
+      "sha256": "982c731a1fbacc7688006f44f9f7af9d9e3e0247d310a728827f49e7f1466c13",
+      "availability": "LOCAL_WORKSPACE",
+      "git_blob_sha1": "910ecae72a7d1c149d4ccc8111ee438c8b4551dd"
+    },
+    "lean_runtime_object": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/lean-object.cpp",
+      "bytes": 100916,
+      "sha256": "b53499ae7db8ed722a489ae5a79a394b93f6fda2e6663a3784d886867583985a",
+      "availability": "LOCAL_WORKSPACE",
+      "git_blob_sha1": "49213d7be079e11589f1efcfe880dba44622a6e7"
+    },
+    "lean_runtime_receipt": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/lean-native-sources.json",
+      "bytes": 1075,
+      "sha256": "d22a06bf28c85206551c1ae829c53a4873619176ed9120a96fa7f032f3e2fbc4",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "W05_source": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/R7W05.lean",
+      "bytes": 106189,
+      "sha256": "7ebaf282066276bff11258d265bccf9f0d9dd8e975448f9fec24e491bbbf7382",
+      "availability": "LOCAL_ONLY"
+    },
+    "W05_compile_metadata": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/logs/R7W05-attempt1.json",
+      "bytes": 682,
+      "sha256": "a597ae0980eb625d88acd2c56b33457925da18127f7e4e868db358860ce8d7df",
+      "availability": "LOCAL_ONLY"
+    },
+    "W05_compile_log": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/logs/R7W05-attempt1.log",
+      "bytes": 3010,
+      "sha256": "20e8c98349351097ca1e444f4d61ce5be951e435d19615b4fb53cbc306ba5eb8",
+      "availability": "LOCAL_ONLY"
+    },
+    "W05_compile_snapshot": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/logs/R7W05-attempt1.lean",
+      "bytes": 106189,
+      "sha256": "7ebaf282066276bff11258d265bccf9f0d9dd8e975448f9fec24e491bbbf7382",
+      "availability": "LOCAL_ONLY"
+    },
+    "W05_diagnostic_metadata": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/logs/R7W05Diagnostics-attempt1.json",
+      "bytes": 736,
+      "sha256": "2fcbb7e102445e732cf59428d462a73752a5a6a1ba58c1a62cdbc5ec0515e6d5",
+      "availability": "LOCAL_ONLY"
+    },
+    "W05_diagnostic_log": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/logs/R7W05Diagnostics-attempt1.log",
+      "bytes": 22853,
+      "sha256": "b9aebfc501a4fdc752d65a3b99e6b3b92cef7479a88309b25508072c855e6c5a",
+      "availability": "LOCAL_ONLY"
+    },
+    "W05_diagnostic_snapshot": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/logs/R7W05Diagnostics-attempt1.lean",
+      "bytes": 126400,
+      "sha256": "b4ff8dfcdd376faeefe10c85ddac38386f7c1d1a0dc946ded8fe72c96aa0e64c",
+      "availability": "LOCAL_ONLY"
+    },
+    "W05_lean_version": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/logs/lean-version.log",
+      "bytes": 106,
+      "sha256": "cf6e65bfc214882b1c13717aae89d383a03f6bcf5c96dfbae13368cd3e07ff9d",
+      "availability": "LOCAL_ONLY"
+    },
+    "M21_candidate": {
+      "path": "competitions/floatlib/candidates/f01-r7-nonnan-runtime/Kernel.lean",
+      "bytes": 153390,
+      "sha256": "c76056882d69a1122da44b4bc0bb3ab5274251826f0677af2aec5771926d7435",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "M22_candidate": {
+      "path": "competitions/floatlib/candidates/f01-r7-nan-replay-fullpath/Kernel.lean",
+      "bytes": 159605,
+      "sha256": "9a2a05cd8e033d3cc079744ade77dd42464926d04ef5c9a8e7c050a1605ec854",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "retained60f_candidate": {
+      "path": "competitions/floatlib/candidates/f01-d7-direct-nonnan/Kernel.lean",
+      "bytes": 155103,
+      "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "model": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py",
+      "bytes": 4908,
+      "sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "opportunity_counts": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/nonnan-input-nan-output-807.json",
+      "bytes": 75496,
+      "sha256": "cc1fee5a1860b2db7508f2acec2996f44bb3299f8128da3eb0bf42c9a9e00c46",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "f01-r7-nonnan-runtime_verdict": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39836787411/download-bd809948d4a44095a7f1666cd876d450/diagnostics/f01-d7-public-suite/public-suite/f01-r7-nonnan-runtime-verdict.json",
+      "bytes": 7850,
+      "sha256": "86fe0ec481bc44e20fa270f19d1ee2f1a7b62a0937dba7a7fc188d5c5bdd19c1",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "f01-r7-nonnan-runtime_gate_log": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39836787411/download-bd809948d4a44095a7f1666cd876d450/diagnostics/f01-d7-public-suite/public-suite/f01-r7-nonnan-runtime-gate.log",
+      "bytes": 7197,
+      "sha256": "bff5aa3247ce884c67ce31522070ad4523ff324456eb5bc9c1445b3f43ee2f81",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "f01-r7-nonnan-runtime_process_exit_source": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39836787411/download-bd809948d4a44095a7f1666cd876d450/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+      "bytes": 20846,
+      "sha256": "9e73dfe69cae0c08eb24ecd6e93e6b7ac144a9c530987431236d0c438fad814a",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "f01-r7-nan-replay-fullpath_verdict": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39839349846/download-ebea3aedaed046f19fe9a034758012cf/diagnostics/f01-d7-public-suite/public-suite/f01-r7-nan-replay-fullpath-verdict.json",
+      "bytes": 7840,
+      "sha256": "96e1becb74352a2db51256b2ed2e35de78016384ab747a43d2573bd03eef11a9",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "f01-r7-nan-replay-fullpath_gate_log": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39839349846/download-ebea3aedaed046f19fe9a034758012cf/diagnostics/f01-d7-public-suite/public-suite/f01-r7-nan-replay-fullpath-gate.log",
+      "bytes": 7205,
+      "sha256": "e88b8bc7db68569b87e776efe64fc4f862acde35b1b231968f8ec00bc881bb03",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "f01-r7-nan-replay-fullpath_process_exit_source": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39839349846/download-ebea3aedaed046f19fe9a034758012cf/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+      "bytes": 31797,
+      "sha256": "e0e723b12276b3fc4239954c5a6bf87864eeec9f414c71b2f9dfd26fa2aca84d",
+      "availability": "LOCAL_WORKSPACE"
+    }
+  },
+  "directed_model": {
+    "status": "DIRECTED_MODEL_ONLY",
+    "model_source": "competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py",
+    "model_source_sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+    "case_count": 41,
+    "full_hypothesis_applicable_cases": 17,
+    "counterexamples_to_full_hypothesis": 0,
+    "all_expected_results_match": true,
+    "scope": "Integer/special-value transcription; projected endpoint is canon(op(canon(a),canon(b))). No Lean/native machine execution, random search, vector allocation or performance measurement. The same transcription underlies both sides; agreement is not independent proof.",
+    "cases": [
+      {
+        "name": "sum_empty",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [],
+        "projected_accumulators": [],
+        "raw_result": "0x00000000",
+        "projected_result": "0x00000000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": false,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x00000000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_positive_zero",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0x00000000"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x00000000"
+        ],
+        "projected_accumulators": [
+          "0x00000000"
+        ],
+        "raw_result": "0x00000000",
+        "projected_result": "0x00000000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": false,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x00000000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_negative_zero",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0x80000000"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x00000000"
+        ],
+        "projected_accumulators": [
+          "0x00000000"
+        ],
+        "raw_result": "0x00000000",
+        "projected_result": "0x00000000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": false,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x00000000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_signed_zeros",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0x00000000",
+          "0x80000000"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x00000000",
+          "0x00000000"
+        ],
+        "projected_accumulators": [
+          "0x00000000",
+          "0x00000000"
+        ],
+        "raw_result": "0x00000000",
+        "projected_result": "0x00000000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": false,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x00000000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_opposite_inf",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0x7f800000",
+          "0xff800000"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7f800000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7f800000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_reverse_opposite_inf",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0xff800000",
+          "0x7f800000"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0xff800000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0xff800000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_same_inf",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0x7f800000",
+          "0x7f800000"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7f800000",
+          "0x7f800000"
+        ],
+        "projected_accumulators": [
+          "0x7f800000",
+          "0x7f800000"
+        ],
+        "raw_result": "0x7f800000",
+        "projected_result": "0x7f800000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": false,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7f800000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_finite_overflow_then_opposite_inf",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0x7f7fffff",
+          "0x7f7fffff",
+          "0xff800000"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7f7fffff",
+          "0x7f800000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7f7fffff",
+          "0x7f800000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_negative_overflow_then_opposite_inf",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0xff7fffff",
+          "0xff7fffff",
+          "0x7f800000"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0xff7fffff",
+          "0xff800000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0xff7fffff",
+          "0xff800000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_invalid_then_finite",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0x7f800000",
+          "0xff800000",
+          "0x3f800000"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7f800000",
+          "0x7fc00000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7f800000",
+          "0x7fc00000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_subnormal_cancel",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0x00000001",
+          "0x80000001"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x00000001",
+          "0x00000000"
+        ],
+        "projected_accumulators": [
+          "0x00000001",
+          "0x00000000"
+        ],
+        "raw_result": "0x00000000",
+        "projected_result": "0x00000000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": false,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x00000000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_max_cancel",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0x7f7fffff",
+          "0xff7fffff"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7f7fffff",
+          "0x00000000"
+        ],
+        "projected_accumulators": [
+          "0x7f7fffff",
+          "0x00000000"
+        ],
+        "raw_result": "0x00000000",
+        "projected_result": "0x00000000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": false,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x00000000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_invalid_then_minus_zero",
+        "category": "positive",
+        "kind": "sum",
+        "xs": [
+          "0x7f800000",
+          "0xff800000",
+          "0x80000000"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7f800000",
+          "0x7fc00000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7f800000",
+          "0x7fc00000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_empty",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [],
+        "ys": [],
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [],
+        "projected_accumulators": [],
+        "raw_result": "0x00000000",
+        "projected_result": "0x00000000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": false,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x00000000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_zero_times_inf",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0x00000000"
+        ],
+        "ys": [
+          "0x7f800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x7fc00000"
+        ],
+        "raw_accumulators": [
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_inf_times_zero",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0x7f800000"
+        ],
+        "ys": [
+          "0x00000000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x7fc00000"
+        ],
+        "raw_accumulators": [
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_minus_zero_times_minus_inf",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0x80000000"
+        ],
+        "ys": [
+          "0xff800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x7fc00000"
+        ],
+        "raw_accumulators": [
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_zero_times_minus_inf",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0x00000000"
+        ],
+        "ys": [
+          "0xff800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x7fc00000"
+        ],
+        "raw_accumulators": [
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_opposite_inf_products",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0x7f800000",
+          "0x7f800000"
+        ],
+        "ys": [
+          "0x3f800000",
+          "0xbf800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x7f800000",
+          "0xff800000"
+        ],
+        "raw_accumulators": [
+          "0x7f800000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7f800000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_finite_product_overflow_then_opposite_inf",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0x7f7fffff",
+          "0x7f800000"
+        ],
+        "ys": [
+          "0x40000000",
+          "0xbf800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x7f800000",
+          "0xff800000"
+        ],
+        "raw_accumulators": [
+          "0x7f800000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7f800000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_negative_product_overflow_then_opposite_inf",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0xff7fffff",
+          "0xff800000"
+        ],
+        "ys": [
+          "0x40000000",
+          "0xbf800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0xff800000",
+          "0x7f800000"
+        ],
+        "raw_accumulators": [
+          "0xff800000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0xff800000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_finite_then_zero_inf",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0x3f800000",
+          "0x7f800000"
+        ],
+        "ys": [
+          "0x00000000",
+          "0x00000000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x00000000",
+          "0x7fc00000"
+        ],
+        "raw_accumulators": [
+          "0x00000000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x00000000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_subnormal_then_zero_inf",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0x00000001",
+          "0x00000000"
+        ],
+        "ys": [
+          "0x3f800000",
+          "0x7f800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x00000001",
+          "0x7fc00000"
+        ],
+        "raw_accumulators": [
+          "0x00000001",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x00000001",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_signed_zero_terms",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0x00000000",
+          "0x80000000"
+        ],
+        "ys": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x00000000",
+          "0x80000000"
+        ],
+        "raw_accumulators": [
+          "0x00000000",
+          "0x00000000"
+        ],
+        "projected_accumulators": [
+          "0x00000000",
+          "0x00000000"
+        ],
+        "raw_result": "0x00000000",
+        "projected_result": "0x00000000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": false,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x00000000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_infinite_nonNaN_endpoint",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0x7f800000"
+        ],
+        "ys": [
+          "0xbf800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0xff800000"
+        ],
+        "raw_accumulators": [
+          "0xff800000"
+        ],
+        "projected_accumulators": [
+          "0xff800000"
+        ],
+        "raw_result": "0xff800000",
+        "projected_result": "0xff800000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": false,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0xff800000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "weaken_sum_quiet_payload",
+        "category": "weakened_rawNaN_counterexample",
+        "kind": "sum",
+        "xs": [
+          "0x7fc00001"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7fc00001"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00001",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00001",
+        "expected_result_matches": true
+      },
+      {
+        "name": "weaken_sum_negative_quiet_payload",
+        "category": "weakened_rawNaN_counterexample",
+        "kind": "sum",
+        "xs": [
+          "0xffc00001"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0xffc00001"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0xffc00001",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0xffc00001",
+        "expected_result_matches": true
+      },
+      {
+        "name": "weaken_sum_negative_quiet_zero_payload",
+        "category": "weakened_rawNaN_counterexample",
+        "kind": "sum",
+        "xs": [
+          "0xffc00000"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0xffc00000"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0xffc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0xffc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "weaken_sum_signaling_payload",
+        "category": "weakened_rawNaN_counterexample",
+        "kind": "sum",
+        "xs": [
+          "0x7f800001"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7fc00001"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00001",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00001",
+        "expected_result_matches": true
+      },
+      {
+        "name": "weaken_sum_negative_signaling_payload",
+        "category": "weakened_rawNaN_counterexample",
+        "kind": "sum",
+        "xs": [
+          "0xff800001"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0xffc00001"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0xffc00001",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0xffc00001",
+        "expected_result_matches": true
+      },
+      {
+        "name": "weaken_dot_quiet_payload",
+        "category": "weakened_rawNaN_counterexample",
+        "kind": "dot",
+        "xs": [
+          "0x7fc00001"
+        ],
+        "ys": [
+          "0x3f800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x7fc00001"
+        ],
+        "raw_accumulators": [
+          "0x7fc00001"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00001",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00001",
+        "expected_result_matches": true
+      },
+      {
+        "name": "weaken_dot_signaling_payload",
+        "category": "weakened_rawNaN_counterexample",
+        "kind": "dot",
+        "xs": [
+          "0x7f800001"
+        ],
+        "ys": [
+          "0x3f800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x7fc00001"
+        ],
+        "raw_accumulators": [
+          "0x7fc00001"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00001",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00001",
+        "expected_result_matches": true
+      },
+      {
+        "name": "weaken_dot_negative_quiet_zero_payload",
+        "category": "weakened_rawNaN_counterexample",
+        "kind": "dot",
+        "xs": [
+          "0xffc00000"
+        ],
+        "ys": [
+          "0x3f800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0xffc00000"
+        ],
+        "raw_accumulators": [
+          "0xffc00000"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0xffc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0xffc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_invalid_then_snan_overrides_C",
+        "category": "weakened_rawNaN_counterexample",
+        "kind": "sum",
+        "xs": [
+          "0x7f800000",
+          "0xff800000",
+          "0x7f800001"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7f800000",
+          "0x7fc00000",
+          "0x7fc00001"
+        ],
+        "projected_accumulators": [
+          "0x7f800000",
+          "0x7fc00000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00001",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00001",
+        "expected_result_matches": true
+      },
+      {
+        "name": "sum_invalid_then_qnan_does_not_override_C",
+        "category": "safe_relaxation_example",
+        "kind": "sum",
+        "xs": [
+          "0x7f800000",
+          "0xff800000",
+          "0x7fc00001"
+        ],
+        "ys": null,
+        "seed": "0x00000000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7f800000",
+          "0x7fc00000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7f800000",
+          "0x7fc00000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "dot_invalid_then_original_snan_product_quiets",
+        "category": "safe_relaxation_example",
+        "kind": "dot",
+        "xs": [
+          "0x00000000",
+          "0x7f800001"
+        ],
+        "ys": [
+          "0x7f800000",
+          "0x3f800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x7fc00000",
+          "0x7fc00001"
+        ],
+        "raw_accumulators": [
+          "0x7fc00000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "arbitrary_quiet_seed_then_nonNaN_suffix",
+        "category": "missing_seed_condition_counterexample",
+        "kind": "sum",
+        "xs": [
+          "0x3f800000"
+        ],
+        "ys": null,
+        "seed": "0x7fc00001",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7fc00001"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00001",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00001",
+        "expected_result_matches": true
+      },
+      {
+        "name": "canonical_seed_then_nonNaN_suffix",
+        "category": "safe_relaxation_example",
+        "kind": "sum",
+        "xs": [
+          "0x3f800000"
+        ],
+        "ys": null,
+        "seed": "0x7fc00000",
+        "raw_products": [],
+        "raw_accumulators": [
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      },
+      {
+        "name": "strided_B_column_wrong_contiguous_screen",
+        "category": "wrong_read_range_counterexample",
+        "kind": "dot",
+        "xs": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "ys": [
+          "0x00000000",
+          "0x7fc00001"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x00000000",
+          "0x7fc00001"
+        ],
+        "raw_accumulators": [
+          "0x00000000",
+          "0x7fc00001"
+        ],
+        "projected_accumulators": [
+          "0x00000000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00001",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": false,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": false,
+        "conclusion_raw_is_C": false,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00001",
+        "expected_result_matches": true,
+        "actual_B_storage": [
+          "0x00000000",
+          "0x00000000",
+          "0x7fc00001",
+          "0x3f800000"
+        ],
+        "shape": {
+          "batch": 1,
+          "m": 1,
+          "n": 2,
+          "p": 2,
+          "output_j": 0
+        },
+        "correct_B_indices": [
+          0,
+          2
+        ],
+        "wrong_contiguous_B_indices": [
+          0,
+          1
+        ],
+        "wrong_screen_nonNaN": true
+      },
+      {
+        "name": "generic_dot_getD_outside_A_is_posZero",
+        "category": "default_read_boundary",
+        "kind": "dot",
+        "xs": [
+          "0x00000000"
+        ],
+        "ys": [
+          "0x7f800000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x7fc00000"
+        ],
+        "raw_accumulators": [
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true,
+        "A_storage": [],
+        "B_storage": [
+          "0x7f800000"
+        ],
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1
+      },
+      {
+        "name": "dot_all_finite_opposite_product_overflows",
+        "category": "positive",
+        "kind": "dot",
+        "xs": [
+          "0x7f7fffff",
+          "0xff7fffff"
+        ],
+        "ys": [
+          "0x40000000",
+          "0x40000000"
+        ],
+        "seed": "0x00000000",
+        "raw_products": [
+          "0x7f800000",
+          "0xff800000"
+        ],
+        "raw_accumulators": [
+          "0x7f800000",
+          "0x7fc00000"
+        ],
+        "projected_accumulators": [
+          "0x7f800000",
+          "0x7fc00000"
+        ],
+        "raw_result": "0x7fc00000",
+        "projected_result": "0x7fc00000",
+        "all_original_inputs_nonNaN": true,
+        "projected_endpoint_NaN": true,
+        "full_posZero_hypothesis_applies": true,
+        "conclusion_raw_is_C": true,
+        "canonical_projection_agrees": true,
+        "expected_raw_result": "0x7fc00000",
+        "expected_result_matches": true
+      }
+    ]
+  },
+  "opportunity_counts": {
+    "source": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/nonnan-input-nan-output-807.json",
+      "bytes": 75496,
+      "sha256": "cc1fee5a1860b2db7508f2acec2996f44bb3299f8128da3eb0bf42c9a9e00c46",
+      "availability": "LOCAL_WORKSPACE"
+    },
+    "audit_action": "Read existing result and recomputed case totals and all 280 stored checksum-match flags; did not rerun original tensors, Lean execution or checksums.",
+    "case_count": 70,
+    "stored_checksum_match_flags": 280,
+    "stored_all_true": true,
+    "timed_sum": {
+      "outputs": 4,
+      "replay_steps": 188
+    },
+    "timed_bmm": {
+      "outputs": 671,
+      "replay_steps": 7551
+    },
+    "including_untimed_check_bmm": {
+      "outputs": 747,
+      "replay_steps": 9451
+    },
+    "untimed_check_difference": {
+      "outputs": 76,
+      "replay_steps": 1900
+    },
+    "timed_bmm_nonzero": [
+      [
+        "specials:1",
+        39,
+        39
+      ],
+      [
+        "specials:2",
+        166,
+        830
+      ],
+      [
+        "extremes:0",
+        77,
+        924
+      ],
+      [
+        "extremes:1",
+        11,
+        88
+      ],
+      [
+        "extremes:2",
+        378,
+        5670
+      ]
+    ],
+    "interpretation": "Opportunity counts only; not scan savings, measured speedup, success probability, or independent confirmation. R suffix/prefix mechanisms overlap."
+  },
+  "first_external_falsification": [
+    "Compile the exact canonical-image closure plus the precise full sum/dot statement against fixed dependencies and audit actual axiom outputs.",
+    "Exercise minimal original-obligation witnesses: opposite infinities; 0*Inf; finite overflow then opposite Inf; negative/payload qNaN and sNaN rejection; empty and signed-zero inputs; strided B columns/default reads; USize fallback source/termination proof.",
+    "Verify generated C/asm keeps ordinary endpoint-nonNaN paths unchanged, cold scanner matches raw addresses and uses supported NaN-normalizing return codec. Only then measure complete-cost paired fullgate against frozen60f and retain a separate new-runner confirmation."
+  ],
+  "finished_at_utc": "2026-10-22T22:51:01.533042+00:00",
+  "elapsed_seconds": 814.533,
+  "verification": {
+    "verified_at_utc": "2026-10-22T22:51:01.533042+00:00",
+    "source_files_rehashed": 28,
+    "all_sources_unchanged": true,
+    "W05_raw_exit_and_snapshot_binding": true,
+    "old_gate_kernel_hash_and_contract_identity": true,
+    "all_markdown_links_resolve": true,
+    "model_cases": 41,
+    "model_full_hypothesis_cases": 17,
+    "new_Lean": "NOT_RUN",
+    "new_gate": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "markdown_sha256": "6a9d9dac56c65bba33a4e9f227ec00fcdbbc8a79e2e441ea17eb9871f84a31c3",
+    "within_25_minute_budget": true
+  }
+}

@@ -2,7 +2,7 @@
 
 [返回数学结论](../RESULTS.md)。按源码 SHA-256 关联已保存的实际 CI 回执；同字节别名共享证据。完整通过、仅编译、失败及无匹配回执分列。这里不重新运行 Lean。
 
-共 179 份候选。机器可读的定理行号、源码哈希与全部成功/失败回执见 [candidate-catalog.json](candidate-catalog.json)。
+共 183 份候选。机器可读的定理行号、源码哈希与全部成功/失败回执见 [candidate-catalog.json](candidate-catalog.json)。
 
 `无匹配回执`表示本目录没有找到对应源码的回执，不表示数学不成立。完整通过仍须结合原回执中的内核、公理和计时审计。仅本地或尚未冻结的源码只列名称；JSON保留路径、字节范围与SHA。
 
@@ -100,6 +100,7 @@
 | [f01-d7-direct-nonfinite](../../candidates/f01-d7-direct-nonfinite/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-direct-nonnan](../../candidates/f01-d7-direct-nonnan/Kernel.lean) | 完整通过 | 2 | [39847080316](../../candidates/f01-mul-log2-proof1/ci-runs/39847080316/download-61bf160491654012b5e910d27b81b2f6/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-nonnan-verdict.json) |
 | [f01-d7-direct-small](../../candidates/f01-d7-direct-small/Kernel.lean) | 完整通过 | 5 | [39847080316](../../candidates/f01-mul-log2-proof1/ci-runs/39847080316/download-61bf160491654012b5e910d27b81b2f6/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-small-verdict.json) |
+| [f01-d7-dot-nonnan-scan-probe](../../candidates/f01-d7-dot-nonnan-scan-probe/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-exceptional-word-probe](../../candidates/f01-d7-exceptional-word-probe/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-low-zero](../../candidates/f01-d7-low-zero/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-nan-choice-probe](../../candidates/f01-d7-nan-choice-probe/Kernel.lean) | 无匹配回执 | 0 | — |
@@ -108,7 +109,9 @@
 | [f01-d7-result-guard-both](../../candidates/f01-d7-result-guard-both/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-result-guard-mul](../../candidates/f01-d7-result-guard-mul/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-scalar-nan-select](../../candidates/f01-d7-scalar-nan-select/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-d7-seed-normalize-probe](../../candidates/f01-d7-seed-normalize-probe/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-singleton](../../candidates/f01-d7-singleton/Kernel.lean) | 已失败 | 0 | [39846309529](../../candidates/f01-mul-log2-proof1/ci-runs/39846309529/download-cc7339e93405469cb1426319df998e25/diagnostics/f01-d7-public-suite/public-suite/f01-d7-singleton-verdict.json) |
+| [f01-d7-singleton-normalize](../../candidates/f01-d7-singleton-normalize/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-singleton-proof1](../../candidates/f01-d7-singleton-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-special-model](../../candidates/f01-d7-special-model/Kernel.lean) | 已失败 | 0 | [39846309529](../../candidates/f01-mul-log2-proof1/ci-runs/39846309529/download-cc7339e93405469cb1426319df998e25/diagnostics/f01-d7-public-suite/public-suite/f01-d7-special-model-verdict.json) |
 | [f01-d7-special-model-proof1](../../candidates/f01-d7-special-model-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
@@ -163,6 +166,7 @@
 | [f01-r6-web-lowguards](../../candidates/f01-r6-web-lowguards/Kernel.lean) | 完整通过 | 1 | [39791810276](../../candidates/f01-mul-log2-proof1/ci-runs/39791810276/download-dd3c4f84aa2d4f8b8fafc403712fa593/f01-r6-web-lowguards-verdict.json) |
 | f01-r7-canonical-bridge-probe（本地字节） | 无匹配回执 | 0 | — |
 | [f01-r7-canonical-bridge-probe-policy1](../../candidates/f01-r7-canonical-bridge-probe-policy1/Kernel.lean) | 无匹配回执 | 0 | — |
+| f01-r7-canonical-bridge-probe-policy2（本地字节） | 无匹配回执 | 0 | — |
 | [f01-r7-nan-replay-fullpath](../../candidates/f01-r7-nan-replay-fullpath/Kernel.lean) | 完整通过 | 2 | [39846309529](../../candidates/f01-mul-log2-proof1/ci-runs/39846309529/download-cc7339e93405469cb1426319df998e25/diagnostics/f01-d7-public-suite/public-suite/f01-r7-nan-replay-fullpath-verdict.json) |
 | f01-r7-nan-replay-nat（本地字节） | 无匹配回执 | 0 | — |
 | [f01-r7-nan-replay-word](../../candidates/f01-r7-nan-replay-word/Kernel.lean) | 完整通过 | 1 | [39846309529](../../candidates/f01-mul-log2-proof1/ci-runs/39846309529/download-cc7339e93405469cb1426319df998e25/diagnostics/f01-d7-public-suite/public-suite/f01-r7-nan-replay-word-verdict.json) |
