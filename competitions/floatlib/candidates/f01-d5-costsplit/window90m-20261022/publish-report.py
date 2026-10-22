@@ -10,7 +10,7 @@ def atomic(p,s):
     t=p.with_name(p.name+'.update-tmp');t.write_bytes(s.encode());os.replace(t,p)
 text=f'''# R5 九十分钟协作
 
-共同窗口：2026-10-22 18:05:04—19:35:04 北京时间。实际收齐于 {done['closed_at_utc']}；用时 {done['elapsed_minutes']:.1f} 分钟，其中窗口后回收 {done['drain_minutes']:.1f} 分钟。新方向搜索11:02:48Z停止，最后数学桥修复后的完整源11:14:35Z冻结。
+共同窗口：2026-10-22 18:05:04—19:35:04 北京时间。完成收尾于 {done['closed_at_utc']}；用时 {done['elapsed_minutes']:.1f} 分钟，其中窗口后收尾 {done['drain_minutes']:.1f} 分钟。新方向搜索11:02:48Z停止，最后数学桥修复后的完整源11:14:35Z冻结。
 
 最终包：[{done['candidate']}](../{done['candidate']}/Kernel.lean)。SHA-256 `{done['kernel_sha256']}`；当前仍不能取代现任冠军。四项用户看板见[dashboard.md](../../../../../dashboard.md)。
 
