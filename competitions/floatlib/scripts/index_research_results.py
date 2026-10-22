@@ -39,13 +39,38 @@ def main():
             "verdict": rel(path), "verdict_sha256": sha(path.read_bytes()),
             "source_manifest": rel(manifest_path), "source_manifest_sha256": sha(manifest_path.read_bytes()),
         })
+    # Current official public-suite gates have a separate original checkout and
+    # bind each nested source through the frozen requested plan plus input bytes.
+    for path in sorted(runs.glob("[0-9]*/download-*/diagnostics/f01-d6-public-suite/public-suite/*-verdict.json")):
+        candidate = path.name.removesuffix("-verdict.json")
+        plan_path = path.parent / "requested-plan.json"
+        source_path = path.parent / "inputs" / candidate / "Kernel.lean"
+        if not plan_path.exists() or not source_path.exists():
+            continue
+        plan = json.loads(plan_path.read_bytes())
+        expected = next((r["sha256"] for r in plan["candidates"] if r["candidate"] == candidate), None)
+        source_sha = sha(source_path.read_bytes())
+        assert source_sha == expected, source_path
+        verdict = json.loads(path.read_bytes())
+        by_sha[source_sha].append({
+            "run": path.parents[4].name, "candidate": candidate,
+            "mode": verdict.get("mode"), "stage": verdict.get("stage"),
+            "passed": verdict.get("passed"), "reason": verdict.get("reason"),
+            "classes": len(verdict.get("classes", {})), "rounds": len(verdict.get("rounds", [])),
+            "suite": verdict.get("suite", {}), "protocol": "current official public-v2",
+            "verdict": rel(path), "verdict_sha256": sha(path.read_bytes()),
+            "source_manifest": rel(plan_path), "source_manifest_sha256": sha(plan_path.read_bytes()),
+        })
     items = []
     for source in sorted((TRACK / "candidates").glob("*/Kernel.lean")):
         data = source.read_bytes()
         source_sha = sha(data)
         receipts = by_sha[source_sha]
         full = [r for r in receipts if r["mode"] == "gate" and r["stage"] == "score"
-                and r["passed"] is True and r["classes"] == 12 and r["rounds"] == 25]
+                and r["passed"] is True and r["rounds"] == 25
+                and (r["classes"] == 12 or (r["classes"] == 26
+                     and r.get("suite", {}).get("version") == "public-v2"
+                     and r["suite"].get("sha256") == "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a"))]
         statement = [r for r in receipts if r["mode"] == "diagnostic-statement-only"
                      and r["stage"] == "statement" and r["passed"] is True]
         failed = [r for r in receipts if r["passed"] is False]
@@ -67,7 +92,7 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     counts = dict(Counter(i["evidence_state"] for i in items))
     payload = {"as_of": "2026-10-22", "candidate_count": len(items), "counts": counts,
-               "method": "Saved top-level verdicts matched by archived candidate_manifest SHA256; aliases with identical source bytes share receipts. This catalogue does not rerun Lean or replace the complete gate audit.",
+               "method": "Legacy verdicts bind archived manifest SHA256; nested current-official public-v2 gates bind the exact requested plan and saved input bytes. Aliases with identical source bytes share receipts. Protocol/suite fields stay separate; this catalogue does not rerun Lean or replace complete gate audit or private champion evaluation.",
                "items": items}
     (OUT / "candidate-catalog.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     lines = ["# 候选与证明目录", "", "[返回数学结论](../RESULTS.md)。按源码 SHA-256 关联已保存的实际 CI 回执；同字节别名共享证据。完整通过、仅编译、失败及无匹配回执分列。这里不重新运行 Lean。", "",

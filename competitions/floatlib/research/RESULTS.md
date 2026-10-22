@@ -11,11 +11,11 @@
 | 求和 | 最终结果有限可反推各步所需有限性；原序累加与软件 fold 相等；机器字循环与 Nat 循环等价 | 原生累加器＋精确转换＋USize 索引 |
 | 矩阵乘法 | 多 lane 投影等于各自原序点积；合法地址与机器字边界可证明；行序展平与原平坦输出相等 | 十列打包＋有界读取＋逐行计算和输出 |
 
-资料入口：[12 包原文与源码](materials/20261022/README.md) · [137 份候选及实际回执](results/CANDIDATES.md) · [逐定理行号与哈希](results/candidate-catalog.json)。原包中的历史 NOT_RUN、失败和作者判断保持原文；以下状态依据后续回执归并。
+资料入口：[12 包原文与源码](materials/20261022/README.md) · [全部候选及实际回执](results/CANDIDATES.md) · [逐定理行号与哈希](results/candidate-catalog.json)。原包中的历史 NOT_RUN、失败和作者判断保持原文；以下状态依据后续回执归并。
 
 ## 1. 已通过完整候选验证的证明组件
 
-以下 K 指当前完整包，SHA-256 为 `8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045`。其四次完整回执为 39766391628、39767698381、39769247640、39770153343，后者为冻结后的独立确认。固定 Lean、FloatLib、官方源及审计入口见[本轮汇总][R5]。R6新增实际验证见[R6汇总](../candidates/f01-d6-research/summary.json)；旧回执保持原版。
+以下 K 指当前完整包，SHA-256 为 `8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045`。其R5四次完整回执为 39766391628、39767698381、39769247640、39770153343，后者为冻结后的独立确认。固定 Lean、FloatLib、官方源及审计入口见[本轮汇总][R5]。R6新增实际验证见[R6汇总](../candidates/f01-d6-research/summary.json)；旧回执保持原版。
 
 | 编号 | 数学结论与必要条件 | 可复用声明／精确源码 |
 |---|---|---|
@@ -41,6 +41,8 @@
 | M18 | 从原finiteMantissa定义可证乘积<2^48；外层ex+ey<128排除特殊输入，因此可证明删去两处重复运行时守卫 | [web-lowguards](../candidates/f01-r6-web-lowguards/Kernel.lean)，75ddbcff；706完整PASS。逻辑上的乘积/尺度条件仍需证明，不能无条件删除；旧版整包未见稳定收益 |
 
 | M19 | 对product∈[2^46,2^48)，log2只可能为46或47，可按2^47阈值选择；域外回到原搜索，故新整数roundP/core与原规格相等 | [normal-mul-proof1](../candidates/f01-r6-normal-mul-proof1/Kernel.lean)，96865cba；707完整PASS，但整包约慢14%，停放该运行替换 |
+
+| M20 | 对有限normal操作数，指数差≥26可精确返回较大操作数；保留异号二次幂边界和原fallback，TunedAdd规格桥连接原obligation | [absorption26-proof2](../candidates/f01-r6-web-absorption26-proof2/Kernel.lean)，65cd1338；720新版public-v2完整PASS；该样本add约慢7.7%、整包约慢0.4%，保留证明、停放运行路径 |
 
 全输入义务仍包括 NaN payload、Inf、次正规数、±0 与指定舍入顺序。**FMA、重排浮点求和、忽略零符号、仅比较实数值均不能替代这些等式。** 原生解码等于 `Float32.ofBits`，也不等于保留所有原始 NaN payload；精确回退须保留原始字。
 
