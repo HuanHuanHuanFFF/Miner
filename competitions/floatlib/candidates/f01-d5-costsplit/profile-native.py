@@ -29,7 +29,7 @@ def run(g, kernel, out):
     match = re.search(pattern, text, re.S)
     assert match
     body = match.group()
-    body, n = re.subn(r'(_start:\s*\{)', r'\1\nuint64_t fl_t0 = fl_now(), fl_t1, fl_t2, fl_t3, fl_t4;', body, count=1)
+    body, n = re.subn(r'(_start:\s*\{)', r'\1\nunsigned long long fl_t0 = fl_now(), fl_t1, fl_t2, fl_t3, fl_t4;', body, count=1)
     assert n == 1
     for needle, mark in [('= lp_competition___private_Init_Data_Array_Basic_0__Array_mapMUnsafe_map___at___00Submission_Packed10_core_spec__0(', 'fl_t1'), ('= lp_competition_Submission_Packed10_packB(', 'fl_t2'), ('= lp_competition_Submission_Packed10_tileResults(', 'fl_t3')]:
         lines = body.splitlines()
@@ -40,12 +40,14 @@ def run(g, kernel, out):
     body, n = re.subn(r'(return v_[^;]+;)', r'fl_t4 = fl_now(); fl_calls++; fl_ns[0] += fl_t1-fl_t0; fl_ns[1] += fl_t2-fl_t1; fl_ns[2] += fl_t3-fl_t2; fl_ns[3] += fl_t4-fl_t3;\n\1', body)
     assert n == 1
     prelude = '''
-#include <time.h>
-#include <stdio.h>
-#include <stdint.h>
-static uint64_t fl_ns[4], fl_calls;
-static uint64_t fl_now(void) { struct timespec t; clock_gettime(CLOCK_MONOTONIC, &t); return (uint64_t)t.tv_sec*1000000000ULL+(uint64_t)t.tv_nsec; }
-__attribute__((destructor)) static void fl_report(void) { fprintf(stderr,"FL_PROFILE calls=%llu nativeA_ns=%llu packB_ns=%llu tiles_ns=%llu output_ns=%llu\\n",(unsigned long long)fl_calls,(unsigned long long)fl_ns[0],(unsigned long long)fl_ns[1],(unsigned long long)fl_ns[2],(unsigned long long)fl_ns[3]); }
+/* Linux x86_64 POSIX ABI: the pinned compiler sysroot omits time.h. */
+struct timespec;
+struct fl_timespec { long sec; long nsec; };
+extern int clock_gettime(int, struct timespec *);
+extern int printf(const char *, ...);
+static unsigned long long fl_ns[4], fl_calls;
+static unsigned long long fl_now(void) { struct fl_timespec t; clock_gettime(1, (struct timespec *)&t); return (unsigned long long)t.sec*1000000000ULL+(unsigned long long)t.nsec; }
+__attribute__((destructor)) static void fl_report(void) { printf("FL_PROFILE calls=%llu nativeA_ns=%llu packB_ns=%llu tiles_ns=%llu output_ns=%llu\\n",fl_calls,fl_ns[0],fl_ns[1],fl_ns[2],fl_ns[3]); }
 '''
     changed = (prelude+text[:match.start()]+body+text[match.end():]).encode()
     plan = {'diagnostic_only': True, 'kernel_sha256':hashlib.sha256(kernel.read_bytes()).hexdigest(), 'original_c_sha256':hashlib.sha256(original).hexdigest(), 'instrumented_c_sha256':hashlib.sha256(changed).hexdigest(), 'scope':'Four monotonic clock boundaries around nativeA conversion, B packing, tile computation and output assembly. Includes allocation/refcount cost within boundaries. Instrumented copy of diagnostic statement object; not timed official gate object. No ranking claim.'}
