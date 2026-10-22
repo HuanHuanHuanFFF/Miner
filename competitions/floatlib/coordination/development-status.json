@@ -1,6 +1,6 @@
 {
   "state": "R5_ACTIVE_RESEARCH_AND_DEVELOPMENT",
-  "updated_at_utc": "2026-10-22T10:50:45.442749+00:00",
+  "updated_at_utc": "2026-10-22T11:01:48.629417+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "candidate": "competitions/floatlib/candidates/f01-d4-final-lowmul",
@@ -20,13 +20,14 @@
   "acceptance_target_status": "UNACHIEVED",
   "active_jobs": [
     {
-      "run": 39765604967,
+      "run": 39766391628,
       "status": "in_progress",
       "candidates": [
-        "f01-d4-final-lowmul",
-        "f01-d5-lazy-finish-full"
+        "f01-d5-stream-pack",
+        "f01-d5-finitebits-check",
+        "f01-d5-costsplit"
       ],
-      "source_commit": "44d18fd1ed60685be583095426136b04226ad38e"
+      "source_commit": "d85b6a9a447abd26afe37c2dd70c9d9782d972fe"
     }
   ],
   "collaboration": {
@@ -126,22 +127,40 @@
           "f01-d5-lazy-finish-full"
         ],
         "source_commit": "44d18fd1ed60685be583095426136b04226ad38e",
-        "status": "in_progress",
+        "status": "completed",
         "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T104622Z/dispatch.json",
         "created_at_utc": "2026-10-22T10:46:27Z",
+        "conclusion": "success",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39765604967",
+        "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39765604967/original-artifact-hashes.json"
+      },
+      {
+        "run": 39766391628,
+        "seed": 607,
+        "candidates": [
+          "f01-d5-stream-pack",
+          "f01-d5-finitebits-check",
+          "f01-d5-costsplit"
+        ],
+        "source_commit": "d85b6a9a447abd26afe37c2dd70c9d9782d972fe",
+        "status": "in_progress",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T105243Z/dispatch.json",
+        "created_at_utc": "2026-10-22T10:52:49Z",
         "conclusion": "",
-        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39765604967"
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39766391628"
       }
     ],
     "max_parallel_ci": 2,
-    "pending_candidates": [
-      {
-        "candidate": "f01-d5-pack-native",
-        "reason": "Isolate address hoist with original decoder after matrix-decode regression"
-      }
-    ],
+    "pending_candidates": [],
     "started_ci_policy": "Finish all started experiments and CI naturally and collect terminal results even after cutoff.",
-    "confirmed_candidate": "f01-d4-final-lowmul"
+    "confirmed_candidate": "f01-d4-final-lowmul",
+    "research_frozen_decisions": {
+      "matrix_numeric_decoder": "PARK first controlled sample2.3%slower",
+      "byte_lane": "PARK full604only0.13%gain",
+      "lazy_finish": "PARK full606only0.38%gain; do not combine merely from static C counts",
+      "layout": "Compare frozen stream-pack and two-level rows-pack on same runner; both had positive separate discoveries on different CPUs",
+      "finite_bits": "Exact c09 compile-only check active607; only if statement passes form one final whole-source variant, no further direction search"
+    }
   },
   "current_report": "competitions/floatlib/candidates/f01-d5-costsplit/window90m-20261022/README.md",
   "receipt_auditor": "competitions/floatlib/candidates/f01-d5-costsplit/window90m-20261022/audit-window.py",

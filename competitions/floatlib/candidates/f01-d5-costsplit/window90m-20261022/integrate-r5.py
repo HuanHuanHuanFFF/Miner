@@ -1,4 +1,9 @@
-"""Freeze a complete package from exact, already full-gate accepted components."""
+"""Freeze a complete package from exact sourced components.
+
+Runtime components need a prior full gate. The optional small finite-bits proof
+bridge needs statement compilation first and is explicitly marked compile-only;
+the integrated source still needs its own full gate and independent confirmation.
+"""
 from pathlib import Path
 import argparse, datetime, hashlib, json, re
 
