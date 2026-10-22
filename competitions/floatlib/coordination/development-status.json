@@ -1,6 +1,6 @@
 {
   "state": "R5_ACTIVE_RESEARCH_AND_DEVELOPMENT",
-  "updated_at_utc": "2026-10-22T11:13:04.324768+00:00",
+  "updated_at_utc": "2026-10-22T11:26:54.935317+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "candidate": "competitions/floatlib/candidates/f01-d4-final-lowmul",
@@ -20,14 +20,22 @@
   "acceptance_target_status": "UNACHIEVED",
   "active_jobs": [
     {
-      "run": 39767698381,
+      "run": 39769247640,
       "status": "in_progress",
       "candidates": [
-        "f01-d4-final-lowmul",
         "f01-d5-stream-pack",
-        "f01-d5-rows-pack"
+        "f01-d5-stream-bits"
       ],
-      "source_commit": "3f89cdd67621ea0cb70a19d2f11b0b72f81088e3"
+      "source_commit": "59e0986c9b5bd109b58769db4f0b787a63f5659b"
+    },
+    {
+      "run": 39770153343,
+      "status": "in_progress",
+      "candidates": [
+        "f01-d5-stream-pack",
+        "f01-d5-stream-bits"
+      ],
+      "source_commit": "59e0986c9b5bd109b58769db4f0b787a63f5659b"
     }
   ],
   "collaboration": {
@@ -159,11 +167,12 @@
           "f01-d5-rows-pack"
         ],
         "source_commit": "3f89cdd67621ea0cb70a19d2f11b0b72f81088e3",
-        "status": "in_progress",
+        "status": "completed",
         "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T110316Z/dispatch.json",
         "created_at_utc": "2026-10-22T11:03:21Z",
-        "conclusion": "",
-        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39767698381"
+        "conclusion": "success",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39767698381",
+        "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39767698381/original-artifact-hashes.json"
       },
       {
         "run": 39768383550,
@@ -179,6 +188,34 @@
         "conclusion": "failure",
         "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39768383550",
         "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39768383550/original-artifact-hashes.json"
+      },
+      {
+        "run": 39769247640,
+        "seed": 610,
+        "candidates": [
+          "f01-d5-stream-pack",
+          "f01-d5-stream-bits"
+        ],
+        "source_commit": "59e0986c9b5bd109b58769db4f0b787a63f5659b",
+        "status": "in_progress",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T111540Z/dispatch.json",
+        "created_at_utc": "2026-10-22T11:15:44Z",
+        "conclusion": "",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39769247640"
+      },
+      {
+        "run": 39770153343,
+        "seed": 611,
+        "candidates": [
+          "f01-d5-stream-pack",
+          "f01-d5-stream-bits"
+        ],
+        "source_commit": "59e0986c9b5bd109b58769db4f0b787a63f5659b",
+        "status": "in_progress",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T112256Z/dispatch.json",
+        "created_at_utc": "2026-10-22T11:23:01Z",
+        "conclusion": "",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39770153343"
       }
     ],
     "max_parallel_ci": 2,
@@ -200,7 +237,23 @@
     "final_candidates_frozen_at_utc": "2026-10-22T11:14:35Z",
     "new_direction_search_stopped_at_utc": "2026-10-22T11:02:48Z",
     "final_proof_repair": "The same existing bit bridge has one generic all-ones literal repaired in whole-package source. Exact old failures retained; no acceptance claimed until full gate.",
-    "confirmation_plan": "Same-runner frozen layout comparison608; basic/bit whole-package610 comparison; final fresh-runner confirmation within remaining window, drain all started jobs after cutoff if necessary."
+    "confirmation_plan": "Same-runner frozen layout comparison608; basic/bit whole-package610 comparison; final fresh-runner confirmation within remaining window, drain all started jobs after cutoff if necessary.",
+    "provisional_selection": {
+      "candidate": "f01-d5-stream-pack",
+      "kernel_sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045",
+      "selected_at_utc": "2026-10-22T11:22:00Z",
+      "basis": "Controlled608 bmm22.9%less vsR4 and4.0%less vsrows. R independently identified fixed-policy rejection of03ca #spec; extension parked.610/611 finish unchanged base source on independent new runners; all started jobs collected naturally.",
+      "confirmation_seed": 611,
+      "rule": "Adopt bits only if full proof/axioms/checksums pass and controlled bmm advantage survives fresh-runner comparison; otherwise keep confirmed basic stream-pack. Complete all started CI even after cutoff."
+    },
+    "final_extension_decision": {
+      "candidate": "f01-d5-stream-bits",
+      "kernel_sha256": "03caab90f32aba7530bc7c93ccb6549da220613961bd448e4f35bb043e97032b",
+      "decision": "PARK_FIXED_POLICY_REJECTION",
+      "evidence": "competitions/floatlib/research/astra-collab-20261022-r5/checkpoint-10-policy-alert.md",
+      "root_cause": "D skipped policy precheck after generic bit literal repair; #spec matches official BANNED",
+      "next_minimal_action": "NOT_RUN: replace with exact BitVec.allOnes constructor and verify small lemma, then complete new full package gate/confirmation under a new research authorization."
+    }
   },
   "current_report": "competitions/floatlib/candidates/f01-d5-costsplit/window90m-20261022/README.md",
   "receipt_auditor": "competitions/floatlib/candidates/f01-d5-costsplit/window90m-20261022/audit-window.py",

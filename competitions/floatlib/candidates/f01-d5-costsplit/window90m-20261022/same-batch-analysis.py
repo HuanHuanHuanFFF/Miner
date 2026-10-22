@@ -8,6 +8,8 @@ for job in summary['jobs']:
     group=[r for r in summary['records'] if r['run']==job['run'] and r['full_gate'] and r['candidate']!='baseline']
     parent=next((r for r in group if r['candidate']=='f01-d4-final-lowmul'),None)
     if parent is None:
+        parent=next((r for r in group if r['candidate']=='f01-d5-stream-pack'),None)
+    if parent is None:
         parent=next((r for r in group if r['candidate']=='f01-d4-packed10'),None)
     if parent is None:
         parent=next((r for r in group if r['candidate']=='f01-d4-add-sum-word'),None)

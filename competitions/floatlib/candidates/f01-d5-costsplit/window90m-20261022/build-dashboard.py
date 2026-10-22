@@ -85,6 +85,10 @@ if confirmed=='f01-d4-final-lowmul' or (confirmed and confirmed.startswith('f01-
  xs=[r for r in records if r['candidate']==confirmed_mul]
  assert len(xs)>=3
  selected['mul']={'candidate':confirmed_mul,'label':'低位软件回退','relative_to_champion_inferred':median(r['values']['mul'] for r in xs),'full_gate_runs':len(xs),'kernel_sha256':xs[0]['kernel_sha256'],'runs':[r['run'] for r in xs]}
+if confirmed and confirmed.startswith('f01-d5-'):
+ xs=[r for r in records if r['candidate']==confirmed]
+ assert len(xs)>=2
+ selected['bmm']={'candidate':confirmed,'label':labels[confirmed],'relative_to_champion_inferred':median(r['values']['bmm'] for r in xs),'full_gate_runs':len(xs),'kernel_sha256':xs[0]['kernel_sha256'],'runs':[r['run'] for r in xs],'selection_basis':'Frozen exact source chosen by controlled same-runner BMM comparison and independently confirmed; alternate cross-CPU minima retained separately.'}
 result={'champion_submission':champ['id'],'champion_sha256':champ['digest'],'policy_snapshot':json.loads((CLOSING/'competition.raw').read_bytes())['current_snapshot_id'],'snapshot_receipts':(CLOSING/'receipts.json').relative_to(ROOT).as_posix(),'queried_at_utc':snapshot['responses']['champion-detail']['queried_at_utc'],'method':'INFERRED: per-class exact-digest historical chain, current champion timing weights, candidate/reference paired class ratios, median over frozen-source full gates. Same-digest promotions excluded; no shared overall multiplier used.','direct_champion_ratio':'UNKNOWN','records':records,'selected_by_operation':selected,'best_observed_by_operation':best_observed_by_operation,'mul_selection_policy':'Confirmed low-exponent software fallback after measured Intel regression; retain faster AMD native samples separately','factors_champion_over_shipped':factors,'formal_submission':'NOT_SUBMITTED'}
 def save(path,data):
  tmp=path.with_name(path.name+'.update-tmp');tmp.write_bytes((json.dumps(data,ensure_ascii=False,indent=2)+'\n').encode());os.replace(tmp,path)
