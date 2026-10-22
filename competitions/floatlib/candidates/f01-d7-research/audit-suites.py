@@ -31,11 +31,16 @@ for rid in sorted(int(p.parent.name) for p in RUNS.glob('[0-9]*/ci-run.json') if
             ratio=sum(times.values())/sum(ref.values());assert abs(ratio-v['ratio'])<1e-10
             row.update(ratio=ratio,operation_total_ns=times,operation_reference_total_ns=ref,time_share_percent={op:t/sum(times.values())*100 for op,t in times.items()},classes=v['classes'],cell_work=work,verifier_fingerprint=v['verifier_fingerprint'])
         rows.append(row)
-    batch=[r for r in rows if r['run']==rid and r['full_gate']];parent=next((r for r in batch if r['candidate']=='f01-d5-stream-pack'),None)
-    if parent:
-        for r in batch:
-            if r is parent:continue
-            comparisons.append({'run':rid,'seed':r['seed'],'candidate':r['candidate'],'kernel_sha256':r['kernel_sha256'],'parent_sha256':parent['kernel_sha256'],'whole_entry_raw_candidate_over_parent':sum(r['operation_total_ns'].values())/sum(parent['operation_total_ns'].values()),'whole_entry_headline_ratio_normalized_candidate_over_parent':r['ratio']/parent['ratio'],'operations_raw_candidate_over_parent':{op:r['operation_total_ns'][op]/parent['operation_total_ns'][op] for op in parent['operation_total_ns']},'operations_reference_normalized_candidate_over_parent':{op:(r['operation_total_ns'][op]/r['operation_reference_total_ns'][op])/(parent['operation_total_ns'][op]/parent['operation_reference_total_ns'][op]) for op in parent['operation_total_ns']},'scope':'Same runner and public plan; discovery sample, not independent confirmation or private champion comparison.'})
+    batch=[r for r in rows if r['run']==rid and r['full_gate']]
+    requested=json.loads((stage/'requested-plan.json').read_bytes())
+    baseline=requested.get('comparison_baseline','f01-d5-stream-pack')
+    lookup={r['candidate']:r for r in batch}
+    pairs=[(r['candidate'],baseline) for r in batch if r['candidate']!=baseline]
+    pairs += [(r['candidate'],r['baseline']) for r in requested.get('supplementary_comparisons',[])]
+    for candidate_name,baseline_name in dict.fromkeys(pairs):
+        if candidate_name not in lookup or baseline_name not in lookup:continue
+        r=lookup[candidate_name];parent=lookup[baseline_name]
+        comparisons.append({'run':rid,'seed':r['seed'],'candidate':candidate_name,'kernel_sha256':r['kernel_sha256'],'baseline_candidate':baseline_name,'parent_sha256':parent['kernel_sha256'],'whole_entry_raw_candidate_over_parent':sum(r['operation_total_ns'].values())/sum(parent['operation_total_ns'].values()),'whole_entry_headline_ratio_normalized_candidate_over_parent':r['ratio']/parent['ratio'],'operations_raw_candidate_over_parent':{op:r['operation_total_ns'][op]/parent['operation_total_ns'][op] for op in parent['operation_total_ns']},'operations_reference_normalized_candidate_over_parent':{op:(r['operation_total_ns'][op]/r['operation_reference_total_ns'][op])/(parent['operation_total_ns'][op]/parent['operation_reference_total_ns'][op]) for op in parent['operation_total_ns']},'requested_plan':(stage/'requested-plan.json').relative_to(ROOT).as_posix(),'scope':'Same runner and exact public plan; sample role and frozen confirmation intent are in requested-plan. No private champion comparison.'})
 out={'as_of_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'protocol':'Original official4b7e838 public-v2;152scored cases,26cells,25rounds','records':rows,'comparisons':comparisons,'baseline_environment_validation':'Exact parent8eb current original public-v2 complete gate control in every comparison batch; shipped reference measured by each unchanged gate','champion_direct_ratio':'UNKNOWN_PRIVATE_SUITE_AND_SOURCE_UNAVAILABLE','champion_replacement':'UNACHIEVED'}
 (OWN/'public-suite-results.json').write_bytes((json.dumps(out,ensure_ascii=False,indent=2)+'\n').encode())
 print(json.dumps({'records':[{k:r.get(k) for k in ['run','candidate','full_gate','statement_pass','stage','reason','ratio','time_share_percent']} for r in rows],'comparisons':comparisons},ensure_ascii=False,indent=2))
