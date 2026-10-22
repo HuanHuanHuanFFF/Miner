@@ -70,7 +70,7 @@ def main():
                "method": "Saved top-level verdicts matched by archived candidate_manifest SHA256; aliases with identical source bytes share receipts. This catalogue does not rerun Lean or replace the complete gate audit.",
                "items": items}
     (OUT / "candidate-catalog.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    lines = ["# 候选与证明目录", "", "[返回数学结论](../RESULTS.md)。按源码 SHA-256 关联已保存的实际 CI 回执；同字节别名共享证据。完整通过、仅编译、失败及无匹配回执分列。这里不重新运行 Lean。", "", 
+    lines = ["# 候选与证明目录", "", "[返回数学结论](../RESULTS.md)。按源码 SHA-256 关联已保存的实际 CI 回执；同字节别名共享证据。完整通过、仅编译、失败及无匹配回执分列。这里不重新运行 Lean。", "",
              f"共 {len(items)} 份候选。机器可读的定理行号、源码哈希与全部成功/失败回执见 [candidate-catalog.json](candidate-catalog.json)。", "",
              "`无匹配回执`表示本目录没有找到对应源码的回执，不表示数学不成立。完整通过仍须结合原回执中的内核、公理和计时审计。", "",
              "| 候选 | 当前证据 | 完整通过次数 | 原始回执 |", "|---|---|---:|---|"]
