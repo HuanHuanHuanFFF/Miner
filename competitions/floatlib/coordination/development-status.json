@@ -1,6 +1,6 @@
 {
   "state": "R4_RESEARCH_ACTIVE",
-  "updated_at_utc": "2026-10-22T08:09:47.232795+00:00",
+  "updated_at_utc": "2026-10-22T08:17:16.801572+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T17:52:04+08:00",
@@ -48,7 +48,7 @@
   "blocker": null,
   "next_action": "R:2x4 matrix microtile; D:8lane whole-call bounds and controlled k unrolling. Verify new exact packages.",
   "research_decision": "Adopt word/preconverted/USize as best independently confirmed whole package. Keep Packed4 as strongest bmm prospect; repeated AMD hybrid tiny regression prevents prioritizing it. Helpers stay separate from runtime results.",
-  "execution_state": "R4_PREPARING_FIRST_CANDIDATES",
+  "execution_state": "R4_TWO_CI_ACTIVE_FIRST_FULL_PASS",
   "local_project_check": {
     "status": "PASS",
     "checked_at_utc": "2026-10-22T05:51:17.728445+00:00",
@@ -419,17 +419,51 @@
           "baseline",
           "f01-d4-scalar-decode"
         ],
-        "status": "in_progress",
+        "status": "completed",
         "source_commit": "423c4b8bd5ae704732b5b692e40e8055c8c3084e",
         "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T080052Z/dispatch.json",
+        "conclusion": "success",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39744606471",
+        "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39744606471/original-artifact-hashes.json"
+      },
+      {
+        "run": 39745833588,
+        "seed": 503,
+        "candidates": [
+          "baseline",
+          "f01-d3-final-package",
+          "f01-d4-unroll2",
+          "f01-d4-sum-word"
+        ],
+        "source_commit": "6f7d9b6400dc5e802a7c4c5885f07045641ea3d5",
+        "status": "in_progress",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T081048Z/dispatch.json",
         "conclusion": "",
-        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39744606471"
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39745833588"
+      },
+      {
+        "run": 39746211363,
+        "seed": 504,
+        "candidates": [
+          "f01-d3-final-package",
+          "f01-d4-scalar-decode"
+        ],
+        "source_commit": "6f7d9b6400dc5e802a7c4c5885f07045641ea3d5",
+        "status": "in_progress",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T081352Z/dispatch.json",
+        "conclusion": "",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39746211363"
       }
     ],
     "max_parallel_ci": 2,
     "started_ci_policy": "Finish all started experiments and CI naturally, collect terminal results even after cutoff.",
     "window_id": "R4_TWO_HOURS_20261022",
-    "end_utc": "2026-10-22T09:52:04Z"
+    "end_utc": "2026-10-22T09:52:04Z",
+    "research_dispatch_verified": "wait_threads actual active R4 turn; research-status.json created08:11Z",
+    "feedback_to_research": "501global8 fullPASS CPU9V74 bmm.02228058; near previous sameCPU .022497, no stable adoption.502scalar decode fullPASS CPU7763 add12.18ns vs prior similarCPU13.7-15ns; 504same-batch parent/scalar running.503parent/unroll2/sumword running. D has one controlled10column candidate, reducing defaultp50 padding56to50 andBpack groups7to5, awaiting nextbatch withR2x4. D does not duplicate2x4. Actual object assembly diagnostics active503/504.",
+    "pending_candidates": [
+      "f01-d4-packed10"
+    ]
   },
   "previous_current_candidate": {
     "candidate": "competitions/floatlib/candidates/f01-mul-log2-proof3",
