@@ -1,6 +1,6 @@
 {
   "state": "R4_RESEARCH_ACTIVE",
-  "updated_at_utc": "2026-10-22T09:38:35.559285+00:00",
+  "updated_at_utc": "2026-10-22T09:49:36.385243+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "deadline_beijing": "2026-10-22T17:52:04+08:00",
@@ -48,7 +48,7 @@
   "blocker": null,
   "next_action": "R:2x4 matrix microtile; D:8lane whole-call bounds and controlled k unrolling. Verify new exact packages.",
   "research_decision": "Adopt word/preconverted/USize as best independently confirmed whole package. Keep Packed4 as strongest bmm prospect; repeated AMD hybrid tiny regression prevents prioritizing it. Helpers stay separate from runtime results.",
-  "execution_state": "R4_SELECTED_NATIVE_FROZEN_INDEPENDENT_CONFIRMATION",
+  "execution_state": "R4_SELECTED_LOW_MUL_AFTER_INTEL_COMPARISON_CONFIRMING",
   "local_project_check": {
     "status": "PASS",
     "checked_at_utc": "2026-10-22T05:51:17.728445+00:00",
@@ -584,11 +584,12 @@
           "f01-d4-final-lowmul"
         ],
         "source_commit": "e5b144bf77d477919f4787e36311cf65d2a23c15",
-        "status": "in_progress",
+        "status": "completed",
         "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T092555Z/dispatch.json",
         "created_at_utc": "2026-10-22T09:25:59Z",
-        "conclusion": "",
-        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39755371552"
+        "conclusion": "success",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39755371552",
+        "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39755371552/original-artifact-hashes.json"
       },
       {
         "run": 39755431113,
@@ -604,6 +605,32 @@
         "conclusion": "success",
         "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39755431113",
         "artifact_index": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39755431113/original-artifact-hashes.json"
+      },
+      {
+        "run": 39757214480,
+        "seed": 515,
+        "candidates": [
+          "f01-d4-final-native"
+        ],
+        "source_commit": "6b2959dd4b48cf843bc0d91146b8e8a09a1aaa4e",
+        "status": "in_progress",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T094013Z/dispatch.json",
+        "created_at_utc": "2026-10-22T09:40:17Z",
+        "conclusion": "",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39757214480"
+      },
+      {
+        "run": 39758085864,
+        "seed": 516,
+        "candidates": [
+          "f01-d4-final-lowmul"
+        ],
+        "source_commit": "6b2959dd4b48cf843bc0d91146b8e8a09a1aaa4e",
+        "status": "in_progress",
+        "receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261022T094702Z/dispatch.json",
+        "created_at_utc": "2026-10-22T09:47:07Z",
+        "conclusion": "",
+        "url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/39758085864"
       }
     ],
     "max_parallel_ci": 2,
@@ -644,6 +671,14 @@
     ],
     "confirmation_plan": "Two frozen full packages compared on new runners, then selected exactsource independently confirmed; expected finalconfirmation09:40-09:50Z. All started jobs drain naturally.",
     "provisional_selection": {
+      "candidate": "f01-d4-final-lowmul",
+      "kernel_sha256": "ba93c233f87935aaadb9ec697487b316d4538d014831ee8d6e00127d6c34f630",
+      "selected_at_utc": "2026-10-22T09:46:59.615962+00:00",
+      "basis": "Late513 Intel8573C:lowmul.1970635 vsnative.2723034, whole27.6%gain andmul.5836 vs1.0258. Earlier5149V45cost3.5%. Selectrobustfullbundle;515nativeconfirmationcontinuesnaturally.",
+      "confirmation_seed": 516,
+      "rule": "No source change since09:25 freeze. Necessary independent confirmation of newlyselected existingpackage, not new research. Started before commondeadline, finish naturally even beyond it."
+    },
+    "superseded_selection": {
       "candidate": "f01-d4-final-native",
       "kernel_sha256": "f572210f9506153101c41f9a8fdc147afa2c8a01e4e1ced2e3d917e4e124974a",
       "selected_at_utc": "2026-10-22T09:40:01.123659+00:00",
@@ -695,14 +730,20 @@
   },
   "active_jobs": [
     {
-      "run": 39755371552,
+      "run": 39757214480,
       "status": "in_progress",
       "candidates": [
-        "f01-d3-final-package",
-        "f01-d4-final-native",
+        "f01-d4-final-native"
+      ],
+      "source_commit": "6b2959dd4b48cf843bc0d91146b8e8a09a1aaa4e"
+    },
+    {
+      "run": 39758085864,
+      "status": "in_progress",
+      "candidates": [
         "f01-d4-final-lowmul"
       ],
-      "source_commit": "e5b144bf77d477919f4787e36311cf65d2a23c15"
+      "source_commit": "6b2959dd4b48cf843bc0d91146b8e8a09a1aaa4e"
     }
   ],
   "active_goal": "新一轮协作推进1h，继续冲击新冠军",

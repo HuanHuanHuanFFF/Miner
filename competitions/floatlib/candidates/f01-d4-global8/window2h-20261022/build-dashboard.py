@@ -55,13 +55,15 @@ for k in eligible:eligible[k].extend(['f01-d4-global8','f01-d4-scalar-decode','f
 labels.update({'f01-d4-packed10':'十列矩阵微块','f01-d4-tile2x4-full':'双行四列矩阵','f01-d4-balanced-package':'低位舍入组合优化','f01-d4-add-sum-word':'内联加法与机器字求和'})
 for k in eligible:eligible[k].extend(['f01-d4-packed10','f01-d4-tile2x4-full','f01-d4-balanced-package','f01-d4-add-sum-word','f01-d4-balanced-proof1','f01-d4-add-sum-word-proof1'])
 labels.update({'f01-d4-balanced-proof1':'低位舍入组合优化','f01-d4-add-sum-word-proof1':'内联加法与机器字求和'})
+labels.update({'f01-d4-decode-inline10':'十列矩阵与坐标内联','f01-d4-final-native':'十列矩阵与机器字求和','f01-d4-final-lowmul':'低位乘法与十列矩阵'})
 # Route selection is restricted to operations actually changed; do not promote
 # unrelated identical code merely because a different runner yielded a lower sample.
 d4_by_operation={
  'add':['f01-d4-scalar-decode','f01-d4-balanced-package','f01-d4-add-sum-word','f01-d4-balanced-proof1','f01-d4-add-sum-word-proof1'],
  'mul':['f01-d4-scalar-decode','f01-d4-balanced-package','f01-d4-balanced-proof1'],
  'sum':['f01-d4-sum-word','f01-d4-balanced-package','f01-d4-add-sum-word','f01-d4-balanced-proof1','f01-d4-add-sum-word-proof1'],
- 'bmm':['f01-d4-global8','f01-d4-packed10','f01-d4-tile2x4-full']}
+ 'bmm':['f01-d4-global8','f01-d4-packed10','f01-d4-decode-inline10']}
+for k in eligible:d4_by_operation[k].extend(['f01-d4-final-native','f01-d4-final-lowmul'])
 for k in eligible:
  eligible[k]=[n for n in eligible[k] if not n.startswith('f01-d4-')]+d4_by_operation[k]
 selected={}
@@ -69,7 +71,7 @@ for k,names in eligible.items():
  options=[]
  for name in names:
   xs=[r for r in records if r['candidate']==name]
-  if xs:options.append({'candidate':name,'label':labels[name],'relative_to_champion_inferred':median(r['values'][k] for r in xs),'full_gate_runs':len(xs),'kernel_sha256':xs[0]['kernel_sha256'],'runs':[r['run'] for r in xs]})
+  if xs and len(xs)>=2:options.append({'candidate':name,'label':labels[name],'relative_to_champion_inferred':median(r['values'][k] for r in xs),'full_gate_runs':len(xs),'kernel_sha256':xs[0]['kernel_sha256'],'runs':[r['run'] for r in xs]})
  selected[k]=min(options,key=lambda x:x['relative_to_champion_inferred'])
 result={'champion_submission':champ['id'],'champion_sha256':champ['digest'],'policy_snapshot':json.loads((CLOSING/'competition.raw').read_bytes())['current_snapshot_id'],'snapshot_receipts':(CLOSING/'receipts.json').relative_to(ROOT).as_posix(),'queried_at_utc':snapshot['responses']['champion-detail']['queried_at_utc'],'method':'INFERRED: per-class exact-digest historical chain, current champion timing weights, candidate/reference paired class ratios, median over frozen-source full gates. Same-digest promotions excluded; no shared overall multiplier used.','direct_champion_ratio':'UNKNOWN','records':records,'selected_by_operation':selected,'factors_champion_over_shipped':factors,'formal_submission':'NOT_SUBMITTED'}
 def save(path,data):
@@ -80,6 +82,9 @@ def display(x):
 stamp=datetime.datetime.fromisoformat(result['queried_at_utc']).astimezone(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y-%m-%d %H:%M')
 text=f'# FloatLib 冲冠看板\n\n冠军核对：[{stamp} 北京时间](competitions/floatlib/candidates/f01-d4-global8/window2h-20261022/operation-comparisons.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。\n\n| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时 | 验证 |\n| --- | --- | --- | ---: | --- |\n'
 for k,title in [('add','加法'),('mul','乘法'),('sum','求和'),('bmm','矩阵乘法')]:
- s=selected[k];cid=champ['id'];reference=f'[#{cid}](https://conjectures.io/v1/competitions/floatlib/submissions/{cid})' if k=='add' else f'#{cid}';count='两次' if s['full_gate_runs']==2 else '一次' if s['full_gate_runs']==1 else str(s['full_gate_runs'])+'次';text+=f'| {title} {k} | {reference} | [{s["label"]}](competitions/floatlib/candidates/{s["candidate"]}/Kernel.lean) | **约 {display(s["relative_to_champion_inferred"])}×** | 通过{count} |\n'
+ s=selected[k];
+ if s['candidate'] in ['f01-d4-final-native','f01-d4-final-lowmul']:
+  s['label']={'add':'内联数值解码','mul':('原生乘法' if s['candidate']=='f01-d4-final-native' else '低位软件回退'),'sum':'机器字有序求和','bmm':'十列矩阵＋坐标内联'}[k]
+ cid=champ['id'];reference=f'[#{cid}](https://conjectures.io/v1/competitions/floatlib/submissions/{cid})' if k=='add' else f'#{cid}';count='两次' if s['full_gate_runs']==2 else '一次' if s['full_gate_runs']==1 else str(s['full_gate_runs'])+'次';text+=f'| {title} {k} | {reference} | [{s["label"]}](competitions/floatlib/candidates/{s["candidate"]}/Kernel.lean) | **约 {display(s["relative_to_champion_inferred"])}×** | 通过{count} |\n'
 text+='\n**结论：差距进一步缩小，当前仍不能取代冠军。**\n';p=ROOT/'dashboard.md';tmp=p.with_name(p.name+'.update-tmp');tmp.write_bytes(text.encode());os.replace(tmp,p)
 print(json.dumps({'selected':selected,'whole_entry_inferred':{n:median(r['whole_entry_inferred'] for r in records if r['candidate']==n) for n in labels if any(r['candidate']==n for r in records)}},ensure_ascii=False,indent=2))

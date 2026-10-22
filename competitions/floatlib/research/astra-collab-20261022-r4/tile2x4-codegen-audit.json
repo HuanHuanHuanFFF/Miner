@@ -1,0 +1,40 @@
+{
+  "at_utc": "2026-10-22T09:21:50.119491+00:00",
+  "run": 39750647163,
+  "kernel_sha256": "7de60fa52c445fa31aad8a0b9e4143933e0c0b26cdebf07d12805c3fa72a5476",
+  "assembly_index": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\39750647163\\download-58c4007415fa4821aae6cf510f74415a\\diagnostics\\f01-d4-tile2x4-full\\native-assembly-index.json",
+  "assembly_file": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\39750647163\\download-58c4007415fa4821aae6cf510f74415a\\diagnostics\\f01-d4-tile2x4-full\\native-loop-4.asm.txt",
+  "assembly_sha256": "d5edfa957844f13b5311da94f08dab842ccdfbe7269dc6bda35c36059be0aed2",
+  "object_sha256": "b8d246efc7dcdb7f29fccdcdef01a13b93a1fe34da57195f9967f841276d5375",
+  "scope": "Diagnostic statement replay using the unchanged pinned build; this is not the cleaned-up timed gate object.",
+  "loops": [
+    {
+      "start_hex": "0x90",
+      "end_hex": "0xf9",
+      "mulps": 4,
+      "addps": 4,
+      "calls": 0,
+      "fma": 0,
+      "stack_memory_operands": [],
+      "step_instructions": [
+        [
+          206,
+          "add",
+          "r9,0x2"
+        ]
+      ],
+      "interpretation": "Two k steps per main loop, two4-float accumulators; one B vector shared by two rows per k; no hot call/FMA/stack memory observed."
+    }
+  ],
+  "c_observed": {
+    "source_sha256": "492c5067b7d0c5d995fb810c1a219c83d0681545b7e6cf52099c83d8674422e3",
+    "uget_sites": 3,
+    "B_scalar_field_sites": 4,
+    "unbox_sites": 8,
+    "mul_sites": 8,
+    "add_sites": 8,
+    "terminal_ctor_sites": 1,
+    "nat_add_sites": 0
+  },
+  "decision": "2x4 implementation achieves the intended SIMD and B reuse, but full-call509 is about9% slower thanparent; park version. Specific cause is UNKNOWN; C site counts are not machine-load counts."
+}
