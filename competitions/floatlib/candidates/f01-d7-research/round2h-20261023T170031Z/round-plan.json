@@ -1,0 +1,150 @@
+{
+  "round": "R10_BMM_2H",
+  "start_utc": "2026-10-23T17:00:31+00:00",
+  "deadline_utc": "2026-10-23T19:00:31+00:00",
+  "local_window": "2026-10-24 01:00:31—03:00:31 Asia/Shanghai",
+  "goal": "New champion, BMM priority; user requests one or two additional different input groups.",
+  "baseline": {
+    "candidate": "f01-r8-combined-result-guard",
+    "kernel": "competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean",
+    "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+  },
+  "authorization": "Continue optimization and existing collaboration2h; carry forward public branch push and free standard public CI. No formal contest submission, funds, merge or cleanup.",
+  "resources": {
+    "max_concurrent_ci": 2,
+    "allow_private": false,
+    "root_sole_git_push_ci_coordinator": true
+  },
+  "selection_policy": {
+    "method": "LOCAL_INDEPENDENT_CROSS_GATE_BOOTSTRAP",
+    "headline_normalized_ratio_max": 0.97,
+    "gain_p05_min_exclusive": 0.0,
+    "bootstrap_samples": 2000,
+    "bootstrap_seed": 90423,
+    "round_statistic": "median(submission_ns/incumbent_ns)",
+    "resampling": "independent gates with paired reference/submission rounds"
+  },
+  "additional_inputs": {
+    "groups_total_target": 3,
+    "basis": "Exact original public-v2 generator with distinct unused seeds, new hosted jobs and paired retained-source controls. Official suite untouched.",
+    "candidate_freeze": "Same exact source hash across all accepted groups; holdout seeds not inspected before freeze.",
+    "adopt_requires": "Original full gates for candidate and parent in all3 groups, every normalized whole ratio<=0.97 and local gain_p05>0; no group omitted."
+  },
+  "seeds": {
+    "low_word_discovery": 841,
+    "extra_group_A": 842,
+    "extra_group_B": 843,
+    "diagnostic": 844,
+    "repair_discovery": 845,
+    "astra_discovery": 846,
+    "reserve": 847,
+    "composition_discovery": 848
+  },
+  "estimation": {
+    "observed_two_gate_public_runs_minutes": [
+      12.4,
+      13.5
+    ],
+    "queue_minutes": "UNKNOWN",
+    "reserve_final_validation_minutes": 30,
+    "current_model_variant": "UNKNOWN; unmatched external lookup skipped"
+  },
+  "checkpoints": {
+    "R_first": "2026-10-23T17:13:00Z",
+    "R_candidate": "2026-10-23T17:25:00Z",
+    "stop_new_candidates": "2026-10-23T18:25:00Z",
+    "freeze_final_validation_by": "2026-10-23T18:30:00Z"
+  },
+  "previous_round": {
+    "id": "R9-20261023T125752Z",
+    "state": "COMPLETE_ALL_CI_COLLECTED",
+    "start_utc": "2026-10-23T12:57:52+00:00",
+    "deadline_utc": "2026-10-23T13:57:52+00:00",
+    "plan": "competitions/floatlib/candidates/f01-d7-research/round1h-20261023T125752Z/discovery-836-plan.json",
+    "active_ci": [],
+    "completed_ci": [
+      39958723767,
+      39959840945,
+      39961709177,
+      39962018518,
+      39964473950
+    ],
+    "champion_goal": "UNACHIEVED",
+    "carry_forward_publication_authorization": true,
+    "candidate": "f01-r8-combined-result-guard",
+    "candidate_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+    "discovery": {
+      "run": 39958723767,
+      "seed": 831,
+      "source_commit": "7127b5b3bce5ab8e9b9ff28dbe0ba587a7d26353",
+      "candidate": "f01-d9-bmm-direct-decode",
+      "sha256": "5480649d30bf1e0d8a219486b89b3f975847d7a5aa224cce58907978e9e77c11"
+    },
+    "astra_discovery": {
+      "run": 39959840945,
+      "seed": 833,
+      "source_commit": "e5832b4dd72c199066dac044c1721cf3bf513554",
+      "candidate": "f01-r9-bmm-native-event-replay",
+      "sha256": "0d9c2c96a4cb6c92609d8fbd1efac71852d7b75fafac5d3723935f17d5c15ee0"
+    },
+    "first_failures": {
+      "831": "Candidate548 statement type mismatch in shared Packed10.dot10_lane; control41 fullgatePASS",
+      "833": "Candidate0d9 statement type mismatch in r9_repairQuiet; control41 fullgatePASS"
+    },
+    "direct_repair_discovery": {
+      "run": 39961709177,
+      "seed": 834,
+      "source_commit": "cc77ab8abcfa479c90e49a2bbbb68f0ca3288b97",
+      "candidate": "f01-d9-bmm-direct-decode-proof2"
+    },
+    "replay_repair_discovery": {
+      "run": 39962018518,
+      "seed": 836,
+      "source_commit": "b4baad272d68808636b21d01ad31e6322e86dbd1",
+      "candidate": "f01-r9-bmm-native-event-replay-proof2"
+    },
+    "experiments": [
+      {
+        "run": 39958723767,
+        "seed": 831,
+        "candidate": "f01-d9-bmm-direct-decode",
+        "result": "STATEMENT_FAILED_SHARED_PACKED_PROOF",
+        "control_full_gate": true,
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39958723767"
+      },
+      {
+        "run": 39959840945,
+        "seed": 833,
+        "candidate": "f01-r9-bmm-native-event-replay",
+        "result": "STATEMENT_FAILED_QUIET_BRIDGE",
+        "control_full_gate": true,
+        "evidence": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39959840945"
+      },
+      {
+        "run": 39961709177,
+        "seed": 834,
+        "candidate": "f01-d9-bmm-direct-decode-proof2",
+        "result": "RUNNING_FULL_GATE"
+      },
+      {
+        "run": 39962018518,
+        "seed": 836,
+        "candidate": "f01-r9-bmm-native-event-replay-proof2",
+        "result": "RUNNING_FULL_GATE"
+      }
+    ],
+    "decisions": "Both complete corrected candidates failed pre-frozen discovery screen; retain exact41. No independent confirmation warranted.",
+    "diagnostic": {
+      "run": 39964473950,
+      "seed": 835,
+      "source_commit": "d7a39d102179e1799a5e051f09499db8780a06f9",
+      "candidate": "f01-d9-bmm-low-word-product",
+      "sha256": "d5c9eae3ef13765a22640071ccad90c220d365f48742d4b2c2007daac247adf3",
+      "mode": "statement-only compilation context; no performance"
+    },
+    "results": "competitions/floatlib/candidates/f01-d7-research/round1h-20261023T125752Z/round-results.json",
+    "selection": "RETAIN41_BOTH_DISCOVERY_SCREENS_REJECTED",
+    "window_completed_at_utc": "2026-10-23T13:59:38.954349+00:00",
+    "wall_seconds": 3706.954349
+  }
+}
