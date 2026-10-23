@@ -1,0 +1,34 @@
+{
+  "candidate": "f01-d11-bmm-underflow-zero",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "d37743d3ad6fbc0ee81007a70dc8b1795d3b1aeda4fc58ed379cbab7544feddb",
+  "candidate_bytes": 244775,
+  "created_at_utc": "2026-10-23T21:02:11.116606+00:00",
+  "parent": "f01-d10-bmm-direct-rows",
+  "parent_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+  "baseline": "f01-r8-combined-result-guard",
+  "baseline_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+  "mechanism": "Two short-circuit Array.all scans on original A/B words. If every magnitude<0x16000000, return full +0 Vector.replicate; else exact original a066 dispatcher. All scan and fill costs remain in entry.",
+  "threshold": {
+    "raw_magnitude_strict_lt": "0x16000000",
+    "max_raw_exponent": 43,
+    "max_finiteScale_each": 42,
+    "max_sum_scale": 84
+  },
+  "proof": "small_exp and scale_small derive scale sum<=84; generic 64-bit log2 bound gives roundP subnormal branch and shift149-scale>=65, so rseAny=0 even without a mantissa bound. FastMul.mul_spec/ExecFloat.Proof.mul_eq_spec connect signed zero to actual ExecFloat.mul. +0 plus either signed zero is +0. Fin.foldl fixed-zero induction and Array.all/getD default-zero connect to original referenceBmm and all four formal specs. New text is NOT_RUN.",
+  "history_difference": "R10 astra-subnormal-next proposed a broader exponent-sum<=102 whole-matrix condition without a Lean theorem or new Kernel; exposed831 had zero matching whole-matrix cases. This is the first implemented whole-array fixed-threshold path in the searched records, using a stronger domain for a simpler full proof. It differs from previously negative per-MAC low-exponent and zero-input guards.",
+  "history_evidence": [
+    "competitions/floatlib/candidates/f01-d7-research/round1h-20261023T125752Z/astra-subnormal-next.md",
+    "competitions/floatlib/candidates/f01-d7-research/round1h-20261023T125752Z/direct-low-input-scope-831.json"
+  ],
+  "edge_cases": "All Nat dimensions; empty arrays all=true, n=0 fold fixed-zero, zero output length; out-of-bounds getD uses certified small +0. Guard rejects any infinity/NaN magnitude. Original a066 unchanged on guard miss.",
+  "source_status": "FROZEN_FOR_STATEMENT",
+  "validation_mode": "statement-only first; original complete gate if accepted",
+  "proof_status": "NOT_RUN",
+  "kernel_replay": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "checksum": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "formal_submission": "NOT_SUBMITTED",
+  "attribution": "All parent provenance retained. finiteScale_toNat proof ported from FloatLib Team MIT FiniteProof.lean captured in existing R6-W01 public-source evidence; attribution comment in Kernel. Remaining new proof/runtime session-authored."
+}
