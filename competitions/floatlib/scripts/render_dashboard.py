@@ -26,24 +26,39 @@ def main():
     run_count = len(set(view["full_gate_runs"]))
     labels = policy["candidate_labels_by_operation"]
     receipt = champion["receipts"]
+    estimate = view.get("champion_time_estimate")
+    if estimate:
+        assert estimate["status"] == "INFERRED" and estimate["champion_submission"] == number
+        assert estimate["champion_digest"] == champion["digest"] and estimate["kernel_sha256"] == view["kernel_sha256"]
+        assert hashlib.sha256((ROOT / estimate["evidence"]).read_bytes()).hexdigest() == estimate["evidence_sha256"]
     lines = [
         "# FloatLib 冲冠看板", "",
         f"冠军核对：[{checked} 北京时间]({receipt})｜各项均以现任完整包冠军为 1.00×，耗时越低越好。", "",
-        "| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时 | 验证 |",
+        "| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时（预估） | 验证 |",
         "| --- | --- | --- | ---: | --- |",
     ]
     for op, name in (("add", "加法 add"), ("mul", "乘法 mul"), ("sum", "求和 sum"), ("bmm", "矩阵乘法 bmm")):
         value = champion["candidate_over_champion_time_by_operation"][op]
+        if value == "UNKNOWN" and policy.get("use_estimates_when_direct_unknown") and estimate:
+            value = estimate["operations"][op]["ratio_median"]
         if value == "UNKNOWN":
             display = policy["missing_value"]
         else:
             assert type(value) in (int, float) and math.isfinite(value) and value > 0
-            display = f"**约 {value:.1f}×**"
+            display = f"**约 {value:.2f}×**"
         champion_link = f"[#{number}](https://conjectures.io/v1/competitions/floatlib/submissions/{number})" if op == "add" else f"#{number}"
         candidate_link = f"[{labels[op]}]({source.relative_to(ROOT).as_posix()})"
         lines.append(f"| {name} | {champion_link} | {candidate_link} | {display} | 完整通过{run_count}次 |")
-    lines += ["",
-              f"**结论：尚无取代#{number}的已验方案。** [数据](competitions/floatlib/candidates/f01-d7-research/multiplier-comparison.json)", ""]
+    if estimate and policy.get("use_estimates_when_direct_unknown"):
+        whole = estimate["whole"]["ratio_median"]
+        worst = max(estimate["operations"], key=lambda op: estimate["operations"][op]["ratio_median"])
+        names = {"add": "加法", "mul": "乘法", "sum": "求和", "bmm": "矩阵乘法"}
+        gap = estimate["operations"][worst]["ratio_median"]
+        result = f"预估暂不能取代#{number}" if whole > 0.97 else f"预估达到耗时门槛，仍需与#{number}同场验收"
+        lines += ["", f"整包预估耗时：冠军的 **约 {whole:.2f}×**。",
+                  "", f"**结论：{result}；主要差距在{names[worst]}（约{gap:.2f}倍耗时）。** [计算依据]({estimate['evidence']})", ""]
+    else:
+        lines += ["", f"**结论：尚无取代#{number}的已验方案。** [数据](competitions/floatlib/candidates/f01-d7-research/multiplier-comparison.json)", ""]
     (ROOT / "dashboard.md").write_text("\n".join(lines), encoding="utf-8")
 
 
