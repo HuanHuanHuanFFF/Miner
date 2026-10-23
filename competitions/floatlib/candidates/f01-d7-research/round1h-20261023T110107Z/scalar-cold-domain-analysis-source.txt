@@ -1,0 +1,44 @@
+from pathlib import Path
+import datetime, hashlib, importlib.util, json, time, traceback
+
+root=Path(__file__).resolve().parents[2];d7=root/'competitions/floatlib/candidates/f01-d7-research';out=d7/'round1h-20261023T110107Z'
+spec=importlib.util.spec_from_file_location('old_domain',d7/'scalar-opportunity.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+rid=39944891642;rp=root/'competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs'/str(rid)
+idx=json.loads((rp/'original-artifact-hashes.json').read_bytes());stage=rp/idx['directory']/'diagnostics/f01-d7-public-suite/public-suite'
+plan_path=stage/'public-drawn-plan.json';plan=json.loads(plan_path.read_bytes());summary=json.loads((stage/'summary.json').read_bytes());assert summary['seed']==821
+row=next(r for r in summary['results'] if r['candidate']=='f01-r8-combined-result-guard');assert row['full_gate']
+v=json.loads((stage/row['verdict']).read_bytes());assert v['passed'] and v['stage']=='score' and v['seed']==821
+generator_path=m.R/'public-nonfinite-opportunity.py';genraw=generator_path.read_bytes();old=json.loads((d7/'scalar-opportunity-807.json').read_bytes())
+label=generator_path.relative_to(root).as_posix();assert hashlib.sha256(genraw).hexdigest()==old['dependencies_before'][label]
+g=m.load_functions(genraw,generator_path,('word','ctz','element'),('M64','M32'))
+started=time.monotonic();limit=150;rows=[];error=None
+keys=['pairs','new_native_nan_fallback','input_nan_pairs','input_snan_pairs','invalid_without_input_nan','inf_nonNaN_now_accepted','mul_low_path']
+try:
+    for c in plan['cases']:
+        if c['kernel'] not in ('add','mul'):continue
+        count=dict.fromkeys(keys,0);fixed=g['element'](c,0,1,31) if c['relation']==4 else None
+        witnesses={}
+        for i in range(c['work']):
+            if i%8192==0 and time.monotonic()-started>limit:raise TimeoutError('150second model cap')
+            a=g['element'](c,i,0,31);b=m.partner(c,i,a,g['element'],g['word'],fixed)
+            aa=a&0x7fffffff;bb=b&0x7fffffff
+            na=aa>0x7f800000;nb=bb>0x7f800000;ia=aa==0x7f800000;ib=bb==0x7f800000
+            is_nan=na or nb;snan=(na and a&0x400000==0) or (nb and b&0x400000==0)
+            invalid=(ia and ib and ((a^b)&0x80000000)!=0) if c['kernel']=='add' else ((ia and bb==0) or (ib and aa==0))
+            low=c['kernel']=='mul' and ((a>>23)&255)+((b>>23)&255)<128
+            cold=(is_nan or invalid) and not low
+            count['pairs']+=1;count['new_native_nan_fallback']+=cold;count['input_nan_pairs']+=is_nan;count['input_snan_pairs']+=snan
+            count['invalid_without_input_nan']+=invalid and not is_nan;count['inf_nonNaN_now_accepted']+=(ia or ib) and not is_nan and not invalid and not low;count['mul_low_path']+=low
+            if cold and len(witnesses)<2:witnesses[str(i)]={'a':hex(a),'b':hex(b),'input_nan':bool(is_nan),'invalid':bool(invalid)}
+        rows.append({'name':c['name'],'op':c['kernel'],'timed':c['timed'],'counts':count,'witnesses':witnesses})
+except Exception:
+    error=traceback.format_exc()
+complete=error is None and len(rows)==86
+work=json.loads((stage/'public-cell-work.json').read_bytes());total=sum(v['classes'][n]['submission_ns']*w for n,w in work.items())
+totals={op:{k:sum(r['counts'][k] for r in rows if r['op']==op and r['timed']) for k in keys} for op in ['add','mul']}
+cells=sorted({r['name'].rsplit(':',1)[0] for r in rows if r['timed'] and r['counts']['new_native_nan_fallback']})
+result={'status':'INFERRED_FINITE_INPUT_MODEL_COMPLETE' if complete else 'PARTIAL_MODEL_ERROR','complete':complete,'recorded_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'analysis_seconds':time.monotonic()-started,'cap_seconds':limit,'run':rid,'seed':821,'kernel_sha256':row['kernel_sha256'],'scope':'Input-derived IEEE add/mul NaN classification model on disclosed821 scalar cases only. Not observed runtime counters, per-output checksum verification, formal proof, timing allocation, private prevalence or tensor/replay counts. No confirmation822 inputs inspected.',
+        'generator':{'file':label,'sha256':hashlib.sha256(genraw).hexdigest(),'calibration':'Same cached generator AST source as original807 model whose86 scalar checksums matched four actual records; new821 inputs/counts not independently runtime-verified.'},
+        'drawn_plan':{'file':plan_path.relative_to(root).as_posix(),'sha256':hashlib.sha256(plan_path.read_bytes()).hexdigest()},'case_count':len(rows),'cases':rows,'timed_scalar_totals':totals,'affected_full_cells':cells,'affected_full_cell_time_ceiling_percent':sum(v['classes'][n]['submission_ns']*work[n] for n in cells)/total*100,'time_scope':'Completecell ceiling includes all operations/preparation/calls in those cells. Count fraction does not allocate any part of cell time to cold fallback. No net-gain conclusion.', 'error':error}
+(out/'scalar-cold-domain-821.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({k:result[k] for k in ['status','complete','analysis_seconds','case_count','timed_scalar_totals','affected_full_cell_time_ceiling_percent','error']},ensure_ascii=False))

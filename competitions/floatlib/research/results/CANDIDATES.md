@@ -101,7 +101,7 @@
 | [f01-d7-direct-nonfinite](../../candidates/f01-d7-direct-nonfinite/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-direct-nonnan](../../candidates/f01-d7-direct-nonnan/Kernel.lean) | 完整通过 | 8 | [39907016104](../../candidates/f01-mul-log2-proof1/ci-runs/39907016104/download-b10bbda208e54d74a589fff058be9eb9/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-nonnan-verdict.json) |
 | [f01-d7-direct-singlepass](../../candidates/f01-d7-direct-singlepass/Kernel.lean) | 已失败 | 0 | [39904116090](../../candidates/f01-mul-log2-proof1/ci-runs/39904116090/download-e93b4b2f375c40e091f8e5cb24c2a844/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-singlepass-verdict.json) |
-| [f01-d7-direct-singlepass-proof2](../../candidates/f01-d7-direct-singlepass-proof2/Kernel.lean) | 完整通过 | 2 | [39907016104](../../candidates/f01-mul-log2-proof1/ci-runs/39907016104/download-b10bbda208e54d74a589fff058be9eb9/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-singlepass-proof2-verdict.json) |
+| [f01-d7-direct-singlepass-proof2](../../candidates/f01-d7-direct-singlepass-proof2/Kernel.lean) | 完整通过 | 4 | [39946600549](../../candidates/f01-mul-log2-proof1/ci-runs/39946600549/download-fb3a5a3d826e4bdf9abb14c351defa29/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-singlepass-proof2-verdict.json) |
 | [f01-d7-direct-small](../../candidates/f01-d7-direct-small/Kernel.lean) | 完整通过 | 5 | [39847080316](../../candidates/f01-mul-log2-proof1/ci-runs/39847080316/download-61bf160491654012b5e910d27b81b2f6/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-small-verdict.json) |
 | [f01-d7-dot-nonnan-scan-probe](../../candidates/f01-d7-dot-nonnan-scan-probe/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-exceptional-word-probe](../../candidates/f01-d7-exceptional-word-probe/Kernel.lean) | 无匹配回执 | 0 | — |
@@ -193,7 +193,7 @@
 | [f01-r7-sum-native-repair-proof2](../../candidates/f01-r7-sum-native-repair-proof2/Kernel.lean) | 无匹配回执 | 0 | — |
 | f01-r7-sum-singlepass-fused（本地字节） | 无匹配回执 | 0 | — |
 | [f01-r7-sum-singlepass-fused-proof1](../../candidates/f01-r7-sum-singlepass-fused-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
-| [f01-r8-combined-result-guard](../../candidates/f01-r8-combined-result-guard/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-r8-combined-result-guard](../../candidates/f01-r8-combined-result-guard/Kernel.lean) | 完整通过 | 2 | [39946600549](../../candidates/f01-mul-log2-proof1/ci-runs/39946600549/download-fb3a5a3d826e4bdf9abb14c351defa29/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json) |
 | [f01-rebuilt-mul](../../candidates/f01-rebuilt-mul/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-rebuilt-mul-proof1](../../candidates/f01-rebuilt-mul-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-same-scale-add](../../candidates/f01-same-scale-add/Kernel.lean) | 无匹配回执 | 0 | — |

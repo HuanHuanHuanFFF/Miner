@@ -4,6 +4,10 @@
 
 [原始验收及失败索引](authorized-validation/continuation-results.json)与[选用门槛](authorized-validation/adoption-guard-review.md)记录精确源码、全部负面结果、独立确认和16项回归。唯一当前入口仍是[开发状态](../../coordination/development-status.json)。原13处求和证明错误经7个proof-only修复关闭，运行源码逆变换核对见[singlepass-proof2-coordinator-review.json](authorized-validation/singlepass-proof2-coordinator-review.json)。
 
+## R8后续一小时
+
+当前已升级为[41组合](../f01-r8-combined-result-guard/README.md)，相对a84再降耗7.7%–12.4%，整包对公开原版4.15–4.55×。三次新CI均已回收；[一小时研究及取舍](round1h-20261023T110107Z/README.md)保存独立确认、负结果和下一最小动作。前段a84记录是上一检查点，唯一当前状态仍为development-status.json。
+
 ## 原10小时研究窗口记录（历史）
 
 窗口：2026-10-23北京时间02:22:17—12:22:17，共10小时。**窗口已完成，冲冠目标未达成。** 9批已启动CI均终态并回收；新运行稿完整gate尚未执行。[最终证据核验](round-end-evidence.json)
