@@ -1,0 +1,30 @@
+本次修复仅改变本地保留版选用判定。两个原版gate通过不再自动晋升；正式冠军准入仍由官方另一层协议判断。候选、官方wrapper、audit脚本、计划及历史状态未修改，没有Git、上传或CI操作。
+
+TDD先以旧correctness-only判定复现6测中的5个实质失败：慢10%、baseline SHA篡改、full-verdict seed篡改、observer开启、缺少预冻结selection_policy，均未拒绝。完成后14项回归通过（最后一次0.585秒），包含真实811原件与真实adopt CLI的只读拒绝测试；四个原状态/报告文件前后SHA一致。脚本语法也已用Python compile检查。
+
+首次写盘前，adopt调用新guard重读ci-run、artifact listing/index、所有已索引字节、外层/嵌套provenance、request、summary、input与verdict。要求source_commit=runHEAD、原4b7、公有v2及固定generator、当前精确adapter、25轮/500000 pairs、156case（152 timed+4raw）及26工作量单元、baseline当前保留SHA、所有observer关闭。完整gate先检查stage，再检查plan=summary=full-verdict seed，因此statement拒绝的seed0不会被误判为篡改。不同run/job及seed为硬条件；实际runner/run_attempt缺字段保留UNKNOWN/null，使用真实hosted Ubuntu24设置日志和不同actual job作为已授权的新runner证据。
+
+两份计划必须预先包含完全相同的selection_policy。每份均要求relative-reference-normalized whole ratio≤0.97。每个样本对candidate与baseline各自25个reference/submission round对独立有放回重采样2000次，保留对内关联；固定随机种子90423。计算1−候选round ratio中位数/基线round ratio中位数的gain分布，线性插值p05必须严格>0。方法明确标为LOCAL_INDEPENDENT_CROSS_GATE_BOOTSTRAP，不是官方cc06-vs60f配对admission。
+
+真实811的60f回执链通过：run39903049887/job120248703399，source4b9f84c230ca2e26d21486568e9d09adeb60d151，seed811。cc06被完整gate检查拒绝，真实CLI未写状态。原811没有新selection_policy，不能被补写成满足新门槛的历史请求；没有重算或重写既往adoption。成功写盘的整条分支尚未运行：等待预冻结发现和独立确认的真实合格回执。新Lean、gate、C与性能均NOT_RUN。
+
+选用输出改用实际candidate标签；authorized_validation_continuation优先于旧十小时窗口文案。聚合报告需与原始回执逐项一致，优化Python会显式拒绝以免旧assert被禁用。原API冠军比较仍保持UNKNOWN，不由本地选择门槛推导正式准入。
+
+精确文件：
+
+- adoption-guard.py：4cfc1f4ba98da6791d8c7b41f8a503af411006db38fcdbc6315bfaf3aad01dcd，12417B。
+- adopt-confirmed.py：23c01dcf2cdc6a0c9b6c6d674bd649de7e50f97ad6437c78faae3d9f5501bafc，12703B；原hash e9b2e237d3316c4a65e421f2befbbfc5e24d4573579f060c13a19abb6175ae97。
+- tests/test_adoption_guard.py：bbbaaad9e92d99cca151b5075e37aeb3851c11cbd9d92c0727825b2c5a3f2b8d，6457B。
+- audit-suites.py保持60404bb6dc35b984a75d757b96eb3838ee6aefacb5c931bfdbd14d2fe8bcd660；public-suite.py保持86084d93c52022f4f4a5cfb7969e2b4a035b9a4a4f1f8c6c7e74bd412eafca24。
+
+完整字段与原件SHA见同名JSON。原件LOCAL_ONLY位于competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39903049887/；本报告核对现存原件，未新请求GitHub API。后续adapter若变更会fail closed，需要协调者重新审查精确版本；不能把本地回归当作未来真实选用成功。
+
+补强记录（2026-10-23 05:29 UTC）：上文为原版本审查，原MD SHA680ea736c8840abac8913aa8f7247e1bc02efa8148fdbab9a8b58fe4838f8420，原JSON SHAaaba1bd135b69fa9cd896cd62cc43b24461832bdfaab57adb918fa9bdd5dfc45，旧文件hash保留为前版本证据。本次获协调者明确授权，仅用固定argv git cat-file blob读取原run HEAD树，无Git变更或网络。load_run现将原suite-plan.json逐字节对上indexed requested-plan，将原public-suite.py对上当前helper/summary SHA，并将两份原Kernel对上indexed inputs；不再只接受artifact内部自洽。
+
+新增plan-vs-commit回归先RED（15测、1个ValueError未抛出），只mock原树读取，真实811 indexed gate原件保持；修复后16测PASS（1.336秒）。另分别验证run失败和job失败在verify_adoption拒绝；load_run仍允许分析811失败批里的PASS控制并保留原conclusions。新晋升要求两次原run及对应floatlib job均为success。adopt脚本本轮未再修改，成功写盘与未来确认仍NOT_RUN。
+
+当前补强文件hash：
+
+- adoption-guard.py：b009d7b2f2161d756584013ebfc8adea3d2373ddac04c08a4602eb53e4c7a0b2，14417B。
+- adopt-confirmed.py：23c01dcf2cdc6a0c9b6c6d674bd649de7e50f97ad6437c78faae3d9f5501bafc，12703B。
+- tests/test_adoption_guard.py：e973a637a054f6a1b7f86ca932d88e933da2578987ed7d37ee6ff2281550e6be，7829B。

@@ -1,0 +1,170 @@
+{
+  "completed_at_utc": "2026-10-23T05:23:07.414446+00:00",
+  "scope": "Minimal local retention guard; no official admission claim; no candidate/plan/state/CI/Git mutation",
+  "files": {
+    "adoption-guard.py": {
+      "sha256": "4cfc1f4ba98da6791d8c7b41f8a503af411006db38fcdbc6315bfaf3aad01dcd",
+      "bytes": 12417
+    },
+    "adopt-confirmed.py": {
+      "sha256": "23c01dcf2cdc6a0c9b6c6d674bd649de7e50f97ad6437c78faae3d9f5501bafc",
+      "bytes": 12703
+    },
+    "tests/test_adoption_guard.py": {
+      "sha256": "bbbaaad9e92d99cca151b5075e37aeb3851c11cbd9d92c0727825b2c5a3f2b8d",
+      "bytes": 6457
+    },
+    "audit-suites.py": {
+      "sha256": "60404bb6dc35b984a75d757b96eb3838ee6aefacb5c931bfdbd14d2fe8bcd660",
+      "bytes": 6734
+    },
+    "public-suite.py": {
+      "sha256": "86084d93c52022f4f4a5cfb7969e2b4a035b9a4a4f1f8c6c7e74bd412eafca24",
+      "bytes": 11220
+    }
+  },
+  "adopt_before_sha256": "e9b2e237d3316c4a65e421f2befbbfc5e24d4573579f060c13a19abb6175ae97",
+  "selection_policy": {
+    "method": "LOCAL_INDEPENDENT_CROSS_GATE_BOOTSTRAP",
+    "headline_normalized_ratio_max": 0.97,
+    "gain_p05_min_exclusive": 0.0,
+    "bootstrap_samples": 2000,
+    "bootstrap_seed": 90423,
+    "round_statistic": "median(submission_ns/incumbent_ns)",
+    "resampling": "independent gates with paired reference/submission rounds"
+  },
+  "red": {
+    "command": "python -B -m unittest discover -s competitions/floatlib/candidates/f01-d7-research/tests -p test_adoption_guard.py -v",
+    "exit_code": 1,
+    "tests": 6,
+    "failures": 5,
+    "reason": "ValueError not raised: slower10%, baseline SHA, verdict seed, observer, missing pre-frozen policy; positive fixture passed"
+  },
+  "green": {
+    "same_command": true,
+    "exit_code": 0,
+    "tests": 14,
+    "result": "OK",
+    "last_duration_seconds": 0.585,
+    "additional_checks": [
+      "headline passes but bootstrap adverse rejects",
+      "preserves paired reference/submission rounds",
+      "duplicate actual job rejects",
+      "exact .97 boundary accepted with positive .03 local gain",
+      "failed statement seed0 classified by stage",
+      "real CLI cc06 rejection preserves four state/report files"
+    ]
+  },
+  "real_originals": {
+    "run_id": 39903049887,
+    "job_id": 120248703399,
+    "hosted_ubuntu24": true,
+    "seed": 811,
+    "evidence": {
+      "ci_run_sha256": "60c70aafa8a41fb1d136dc7abb0fe33e7acefde2b57dcb9263e39f1db1838ac5",
+      "artifact_index_sha256": "0ab745387535074e54225f47c1ec7a991a95bdbc1f89291f64311b6297a20dd7",
+      "artifact_listing_sha256": "7938c66502d5fcebaaa187a262961a7512b48ecec12b9e7942e5ad570cd16c44",
+      "summary_sha256": "8d73d4c7b6905881035eb29d3e9f8e1ba506b5a514a1da16bfbbcf6827672f7a",
+      "plan_sha256": "7c04fd806884155d780aa9db02a96bf2ad599a372a5ba7070fa2b3cdd09b4a4f",
+      "source_commit": "4b9f84c230ca2e26d21486568e9d09adeb60d151",
+      "input_sha256": {
+        "f01-d7-direct-nonnan": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15"
+      },
+      "suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a",
+      "generator_sha256": "7198464dfc08f4bb2a3a5e31ce5a105964d1d73ad6b11ee49e682a30c04daf69",
+      "drawn_plan_sha256": "50e4556cc5920ea41fe07caa6a2f676b4beb541b0fe5926bd1755f58c9c94844",
+      "ci_log_sha256": "d451e0e1acb6e504a517e23a6e0c195153693d223c78ba3f046af90f906e38ca",
+      "run_attempt": null,
+      "runner": null,
+      "runner_basis": "Distinct actual job IDs plus raw hosted Ubuntu24 setup log; absent runner/run_attempt fields remain unknown",
+      "verdict_sha256": {
+        "f01-d7-direct-nonnan": "d1646eb2d7059b07809e9eff5f0297f7a586e802c5d8b364e98f04ac7c0d9039"
+      }
+    },
+    "baseline_sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+    "baseline_fullgate": "PASS_ORIGINAL_ONLY",
+    "cc06": "REJECTED_NOT_COMPLETE_PASSED_GATE",
+    "original_811_selection_policy": "ABSENT; not retrofitted; historical records unchanged"
+  },
+  "bindings": [
+    "artifact listing/index/run HEAD",
+    "all indexed file SHA/bytes, constrained absolute paths",
+    "outer and nested provenance/summary/source commit",
+    "current adapter exact hash, fixed4b7/public-v2/generator",
+    "25 rounds, pairs500000, 156 cases=152 timed+4 raw, 26 derived work cells",
+    "candidate and currently retained baseline input SHA and requested SHA",
+    "plan/summary/full-verdict seed, stage first for rejected seed0",
+    "two distinct run/job identities and seeds; all observers disabled",
+    "aggregate measurements checked against raw originals before first write"
+  ],
+  "bootstrap": {
+    "scope": "LOCAL_INDEPENDENT_CROSS_GATE_BOOTSTRAP; not official candidate-vs-baseline paired admission",
+    "gain": "1 - median(resampled candidate sub/inc pairs) / median(resampled baseline sub/inc pairs)",
+    "sampling": "For each run, independently draw25 paired-round indices with replacement for each gate, 2000 replicates; one Random(90423) stream discovery then confirmation",
+    "p05": "Sorted 2000 gains; linear interpolation at (n-1)*0.05",
+    "requirements": "Both headline candidate/reference divided by baseline/reference <=0.97; both gain p05>0"
+  },
+  "not_run": [
+    "Successful live adoption writing state/dashboard (no eligible frozen discovery+confirmation pair available)",
+    "Future816 discovery and its independent confirmation eligibility",
+    "New Lean/fullgate/C/performance; no official ranking or admission"
+  ],
+  "known_boundaries": [
+    "Runner identity/run_attempt absent in raw811 CI JSON; null retained; hosted Ubuntu24 raw job setup plus distinct actual job IDs is the explicitly accepted freshness basis",
+    "Adapter SHA must remain exact; future helper changes fail closed until explicitly reviewed",
+    "Local original files are rehashed and cross-bound; this is not a fresh GitHub API attestation",
+    "Existing historical adoptions and requests are untouched",
+    "Continuation resources take precedence over expired ten-hour research wording; candidate label is dynamic"
+  ],
+  "strengthening_20261023_commit_tree": {
+    "completed_at_utc": "2026-10-23T05:28:45.299005+00:00",
+    "previous_report_sha256": {
+      "md": "680ea736c8840abac8913aa8f7247e1bc02efa8148fdbab9a8b58fe4838f8420",
+      "json": "aaba1bd135b69fa9cd896cd62cc43b24461832bdfaab57adb918fa9bdd5dfc45"
+    },
+    "previous_files_field": "Retains original reviewed version hashes above; updated hashes are current_files here",
+    "current_files": {
+      "adoption-guard.py": {
+        "sha256": "b009d7b2f2161d756584013ebfc8adea3d2373ddac04c08a4602eb53e4c7a0b2",
+        "bytes": 14417
+      },
+      "adopt-confirmed.py": {
+        "sha256": "23c01dcf2cdc6a0c9b6c6d674bd649de7e50f97ad6437c78faae3d9f5501bafc",
+        "bytes": 12703
+      },
+      "tests/test_adoption_guard.py": {
+        "sha256": "e973a637a054f6a1b7f86ca932d88e933da2578987ed7d37ee6ff2281550e6be",
+        "bytes": 7829
+      }
+    },
+    "changes": [
+      "load_run reads exact ci.headSha blobs via fixed argv git cat-file blob, no shell/checkout/fetch",
+      "Original suite-plan.json bytes must equal indexed requested-plan bytes",
+      "Original public-suite.py bytes must equal current adapter bytes and summary adapter SHA",
+      "Both requested original Kernel blobs must equal indexed input bytes before their full-gate acceptance",
+      "Packet retains original run/job conclusions; verify_adoption requires both success for both runs; load_run can still inspect a PASS control in a failed batch; the selected job must be named floatlib"
+    ],
+    "red": {
+      "tests": 15,
+      "failures": 1,
+      "exit_code": 1,
+      "reason": "Mock only original-tree reader returned different plan; existing actual811 indexed PASS control was incorrectly accepted, ValueError not raised"
+    },
+    "green": {
+      "tests": 16,
+      "exit_code": 0,
+      "seconds": 1.336,
+      "result": "OK",
+      "coverage": "Real811 retained; original-plan mismatch rejects; failed run or failed job independently rejects in verify_adoption"
+    },
+    "read_git_argv": [
+      "git",
+      "cat-file",
+      "blob",
+      "<validated40hexHEAD>:<validatedrelativepath>"
+    ],
+    "git_scope": "Explicit parent authorization for immutable local object reads only; no Git mutation/network",
+    "unchanged": "adopt-confirmed.py hash unchanged from previous report; no candidates/plans/status/CI edits",
+    "not_run": "Successful live adoption and future independent fullgate confirmation remain NOT_RUN"
+  }
+}
