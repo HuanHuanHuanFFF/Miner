@@ -1,6 +1,6 @@
 # FloatLib 冲冠看板
 
-冠军 [#279](https://conjectures.io/v1/competitions/floatlib/submissions/279)｜官方倍率 **6.80×（scoring-v2-2026-10）**｜2026-10-23 10:28核对。
+冠军 [#279](https://conjectures.io/v1/competitions/floatlib/submissions/279)｜官方倍率 **6.80×（scoring-v2-2026-10）**｜2026-10-23 11:27核对。
 
 当前保留[直接点积＋非NaN完整包](competitions/floatlib/candidates/f01-d7-direct-nonnan/Kernel.lean)，整包对公开原版 **2.84–2.94×**。
 

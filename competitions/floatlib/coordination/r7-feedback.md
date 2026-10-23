@@ -213,3 +213,10 @@
 - profile另次审查（direct-singlepass-review.md/json）以独立byte-offset逆变换恢复完整3d9，四导出/spec唯一、作用域平衡。DirectSmall973B正文与60f/97f相同，但NativeFinal.dot NaN冷路继承0e8/97f而不同于60f；不能继承整路径性能。当前原policy静态PASS，精确新Lean/fullgate/C/时间全部NOT_RUN。只准备此一组件组合，不据未测稿扩近邻。
 - 02:28官方仍279/6.80117×scoring-v2，源HEAD4b7/public-v2不变；02:35只读远端20条记录0active。补充9个GitHub repo/code搜索精确工具回执在public-source-search-20261023T0227Z，返回范围未发现独立竞赛实现，不据索引限制证明全网不存在。
 - 2d48142e已本地提交97个严格证明/倍率/打包反例/完整成本证据文件，未推送。D接下来02:45冻结完整190候选源码及固定验证入口，更新全候选索引并保存后续精确本地提交；等待人类既有公开push问题，继续到04:22:17。
+
+## D27 03:24 UTC：冻结后验收收敛与容量反例
+
+- 02:45:52的source-freeze.json已记录190候选及12验证入口；6d874b1f保存44文件。03:03截止前证据预检鲜核190+12/773registry/9终态CI全部一致，window_complete=false。audit-round-end.py真实CLI在截止前拒绝生成完成回执，负面原输出留round-end-guard-evidence；最终完成仍要求04:22:17后实际时钟。
+- Nan只读939接入可行性：精确29961B旧scalar区在cc06唯一出现，新50221B区的内存投影252623B/SHA2b4dfc44，余3377B。D另用60f/939最长公共前后缀（不同29959B最小区）得到相同完整投影SHA并逆回cc06。没有写新源/manifest/CI计划，190候选不增加。
+- 明确负面：cc06若用WordFinite到NativeFinal的宽namespace锚点，会误删40743B的R7W03/NaN suffix/replayEarly等实际依赖；错误产物211880B反而满足容量。报告与D另法核验保留该反例，不能仅据字节相加或sizePASS就认定正确接线。后续仅在cc06/939各自完整gate、939净收益和普通cell无回归成立后再考虑新轮实际组合。
+- R验收顺序报告已按原字节复制D7的validation-order-review.md/json并保存映射回执。D采用60f→cc06最小完整gate主批、全观察器关闭；第二槽有预算时d027/e139两个已有statement，父组件只在真实失败定位时补验。旧810保持原计划和NOT_DISPATCHED，不静默扩批/变更标签。03:15确认派发里程碑已错过，状态文件明确记录公开push授权待答；不延长原04:22:17研究截止。03:17只读远端仍f69da289、0active。

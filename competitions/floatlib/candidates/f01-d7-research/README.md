@@ -7,7 +7,7 @@
 - 唯一当前入口：[开发状态](../../coordination/development-status.json)。
 - 研究分工与边界：[Astra交接](../../coordination/astra-handoff-r7.md)。
 - D独占Git、CI、集成与采用；R负责精确非有限值数学和独立候选。
-- 02:45 UTC冻结主要源码，03:15 UTC前派发独立确认；完整余量用于验证与证据收尾。
+- 02:45 UTC冻结主要源码已完成；03:15独立确认派发目标因公开push授权待答而未达成。研究仍按04:22:17结束，已启动CI自然完成回收。
 
 准备、等待、修复和复测均计入10小时。没有正式提交或资金操作授权；公共完整gate不冒充新冠军。
 
@@ -30,11 +30,11 @@
 | 单项内积负零归一化 | 47d429fe；a132最小seed证明、原53d成本对照 | 非NaN产品沿原生路径，NaN才精确修复；n!=1不改。静态policy PASS，新Lean/fullgate/收益NOT_RUN |
 | 完整调用阶段成本 | [实际C缺失返回诊断](profile-review.md)、[修复模块](profile-current.py) | 805辅助编译选择失败已修复；807实际四份binary/137次调用逐一核对通过，见[诊断及投入决定](profile-summary.json) |
 
-所有逐项数据从[精确新suite结果](public-suite-results.json)进入；失败、慢样本和原件保持原字节。00:30UTC官方再次核对冠军279，比较基准同步更新；原始响应由[current-official-snapshot.json](current-official-snapshot.json)定位，四运算看板见根dashboard.md。官方API现明确给279的倍率6.80117×、基准scoring-v2-2026-10；官方按hash链并在换suite时用实测anchor重启，不再用旧“跨suite历史链”说明。它不是我方public-v2直接差距。原CI均已自然结束并回收，研究窗口继续。
+所有逐项数据从[精确新suite结果](public-suite-results.json)进入；失败、慢样本和原件保持原字节。03:27UTC官方核对冠军仍279，比较基准同步更新；原始响应由[current-official-snapshot.json](current-official-snapshot.json)定位，四运算看板见根dashboard.md。官方API现明确给279的倍率6.80117×、基准scoring-v2-2026-10；官方按hash链并在换suite时用实测anchor重启，不再用旧“跨suite历史链”说明。它不是我方public-v2直接差距。原CI均已自然结束并回收，研究窗口继续。
 
 ## 下一验证顺序
 
-[投入依据](opportunity-ledger.json)绑定当前60f两轮逐cell时间与807实际命中，UNKNOWN收益只做最小探针；cell曝光上限不当作可回收时间。810为proof2三份完整gate和八份statement，其中canonical探针已按实际位宽失败换为ec36。等具体公开推送授权，目前没有CI排队。新运行接线先做精确statement；后续只有实际通过者进入完整成本和冻结确认，不扩近邻网格。分块检查点保留数学并停放运行，普通乘法热入口的noinline方向也没有新的机器码成本依据。
+[投入依据](opportunity-ledger.json)绑定当前60f两轮逐cell时间与807实际命中，UNKNOWN收益只做最小探针；cell曝光上限不当作可回收时间。原810三份完整gate和八份statement保持历史精确计划、未派发。冻结后的[验收顺序复核](validation-order-review.md)已收敛为60f与cc06同runner完整gate；原gate本身先检查statement，父组件仅在失败定位需要时补验。第二槽若有预算，只先做d027结果守卫、e139低指数零两个已有statement，之后按反馈选择完整计时。任何独立确认全批禁用观察器。实际新请求仍待公开推送授权，目前没有CI排队。分块检查点保留数学并停放运行，普通乘法热入口的noinline方向也没有新的机器码成本依据。
 
 [标量实际C审查](scalar-codegen-review.md)、[344项实际输出校验](scalar-opportunity-807.json)、[新桥独立静态审查](nan-probe-review.md)和[研究原件独立完整性](web-delivery-integrity.json)仅提供各自范围的证据；新增源码编译/完整gate仍待真实执行。
 
@@ -53,3 +53,14 @@
 [严格公共同源补验](strict-public-settings-review.json)已核主/诊断两次显式关闭autoImplicit、实际exit0及80项原公理；这只关闭公共数学宿主的设置缺项，新私有候选完整gate/计时仍NOT_RUN。
 
 [运行源码冻结](source-freeze.json)于02:45:52 UTC记录190份候选和12个验证入口的精确字节；研究窗口继续至04:22:17。cc06机械组合的[另次审查](direct-singlepass-review.md)已完成，当前无运行CI，810仍未派发。
+
+## 本轮保留的取舍
+
+- 宽度4/8虽完整通过，整包仍比d9慢约16%/18%；下一轮先验证已有收益组件的真实组合。
+- quiet-NaN点积可提早停；sum后面可能有原始sNaN，须保留正确的后缀选择。只看原生canonical NaN不能丢掉原始payload。
+- [存储原件](storage-cost-screening.json)显示十路F10每包是一个含40字节标量的结构；A数组逐元素装箱与它分开。叶函数字节数、装箱次数和整个调用耗时分别核实。
+- 旧FloatArray方案保留完整准备检查及原域证明；现行public-v2没有其新增收益证据。只读复查不重复生成变体。
+- 公共数学片段的严格编译、公理审计和新循环的原四规格/完整gate分开验收；最终确认整批关闭观察器。
+- 单文件大小工具曾实际删错来源说明，负面版本保持原件。当前cc06直接满足容量上限，未应用注释精简。
+
+[特殊值冷路接入可行性](exceptional-composition-feasibility.md)与[另法字节核对](exceptional-feasibility-coordinator-check.json)只计算了252623字节的内存投影，没有新候选。宽namespace锚点会误删40743字节关键依赖，错误结果仍能通过大小检查；后续只能以完整旧区字节及唯一匹配约束接线。先分别实测cc06/939的净收益，再决定是否值得实际组合。
