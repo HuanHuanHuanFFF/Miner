@@ -148,3 +148,9 @@ R2-W03b 另有 34 条定理组成的 [unpacked-rounding 替代证明草稿][W03b
 [W04]: materials/20261022/R2-W04/R2-W04/R2-W04.md
 [W4]: materials/20261022/R4-W01/FloatLib_R4-W01/FloatLib_R4-W01_Report_zh.md
 [W52]: materials/20261022/R5-W02/FloatLib_R5-W02_FiniteBits/FloatLib_R5-W02_Report_zh.md
+
+### R9：矩阵证明已闭合、运行替换无收益
+
+- 直接点积可复用全输入数值decoder，同时需要将共享Packed10.dot10_lane沿decoder等式运输；[d5e3512f源码](../candidates/f01-d9-bmm-direct-decode-proof2/Kernel.lean)在834原版完整gate通过，但矩阵慢17.3%、整包慢4.0%，保留证明、停放运行替换。
+- 矩阵NaN重放可维持原生前缀，首次NaN事件仅做一次精确原字修复，再利用实际quiet-NaN吸收证明结束；[9244e334源码](../candidates/f01-r9-bmm-native-event-replay-proof2/Kernel.lean)在836原版完整gate通过，但矩阵慢2.2%、整包慢0.8%，不能把证明成立提升为性能收益。
+- [R9完整证据及后续缺项](../candidates/f01-d7-research/round1h-20261023T125752Z/README.md)保存原始失败、仅proof修复、原版验收及低指数word乘积的编译诊断边界。

@@ -2,7 +2,7 @@
 
 [返回数学结论](../RESULTS.md)。按源码 SHA-256 关联已保存的实际 CI 回执；同字节别名共享证据。完整通过、仅编译、失败及无匹配回执分列。这里不重新运行 Lean。
 
-共 193 份候选。机器可读的定理行号、源码哈希与全部成功/失败回执见 [candidate-catalog.json](candidate-catalog.json)。
+共 198 份候选。机器可读的定理行号、源码哈希与全部成功/失败回执见 [candidate-catalog.json](candidate-catalog.json)。
 
 `无匹配回执`表示本目录没有找到对应源码的回执，不表示数学不成立。完整通过仍须结合原回执中的内核、公理和计时审计。仅本地或尚未冻结的源码只列名称；JSON保留路径、字节范围与SHA。
 
@@ -127,6 +127,9 @@
 | [f01-d7-width8](../../candidates/f01-d7-width8/Kernel.lean) | 已失败 | 0 | [39832394805](../../candidates/f01-mul-log2-proof1/ci-runs/39832394805/download-ce58d2e394324e2997dbc1559e667d26/diagnostics/f01-d7-public-suite/public-suite/f01-d7-width8-verdict.json) |
 | [f01-d7-width8-proof1](../../candidates/f01-d7-width8-proof1/Kernel.lean) | 已失败 | 0 | [39835885059](../../candidates/f01-mul-log2-proof1/ci-runs/39835885059/download-442eeba98d12400697e9ffdd9150acb8/diagnostics/f01-d7-public-suite/public-suite/f01-d7-width8-proof1-verdict.json) |
 | [f01-d7-width8-proof2](../../candidates/f01-d7-width8-proof2/Kernel.lean) | 完整通过 | 1 | [39847080316](../../candidates/f01-mul-log2-proof1/ci-runs/39847080316/download-61bf160491654012b5e910d27b81b2f6/diagnostics/f01-d7-public-suite/public-suite/f01-d7-width8-proof2-verdict.json) |
+| [f01-d9-bmm-direct-decode](../../candidates/f01-d9-bmm-direct-decode/Kernel.lean) | 已失败 | 0 | [39958723767](../../candidates/f01-mul-log2-proof1/ci-runs/39958723767/download-1b4b78439342465ebf917d2ae9650fc6/diagnostics/f01-d7-public-suite/public-suite/f01-d9-bmm-direct-decode-verdict.json) |
+| [f01-d9-bmm-direct-decode-proof2](../../candidates/f01-d9-bmm-direct-decode-proof2/Kernel.lean) | 完整通过 | 1 | [39961709177](../../candidates/f01-mul-log2-proof1/ci-runs/39961709177/download-9d7627f15e49459db4ba992644ff1b55/diagnostics/f01-d7-public-suite/public-suite/f01-d9-bmm-direct-decode-proof2-verdict.json) |
+| [f01-d9-bmm-low-word-product](../../candidates/f01-d9-bmm-low-word-product/Kernel.lean) | 已失败 | 0 | [39964473950](../../candidates/f01-mul-log2-proof1/ci-runs/39964473950/download-a1713b9450854c67b39e63553f7b47a1/diagnostics/f01-d7-public-suite/public-suite/f01-d9-bmm-low-word-product-verdict.json) |
 | [f01-grs-normal-add-prototype](../../candidates/f01-grs-normal-add-prototype/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-index-hoist](../../candidates/f01-index-hoist/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-index-hoist-proof1](../../candidates/f01-index-hoist-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
@@ -193,7 +196,9 @@
 | [f01-r7-sum-native-repair-proof2](../../candidates/f01-r7-sum-native-repair-proof2/Kernel.lean) | 无匹配回执 | 0 | — |
 | f01-r7-sum-singlepass-fused（本地字节） | 无匹配回执 | 0 | — |
 | [f01-r7-sum-singlepass-fused-proof1](../../candidates/f01-r7-sum-singlepass-fused-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
-| [f01-r8-combined-result-guard](../../candidates/f01-r8-combined-result-guard/Kernel.lean) | 完整通过 | 2 | [39946600549](../../candidates/f01-mul-log2-proof1/ci-runs/39946600549/download-fb3a5a3d826e4bdf9abb14c351defa29/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json) |
+| [f01-r8-combined-result-guard](../../candidates/f01-r8-combined-result-guard/Kernel.lean) | 完整通过 | 6 | [39962018518](../../candidates/f01-mul-log2-proof1/ci-runs/39962018518/download-a7ccce564f3a459e99106fb6563dfb6b/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json) |
+| [f01-r9-bmm-native-event-replay](../../candidates/f01-r9-bmm-native-event-replay/Kernel.lean) | 已失败 | 0 | [39959840945](../../candidates/f01-mul-log2-proof1/ci-runs/39959840945/download-627a556114914086b08886d4b035fde1/diagnostics/f01-d7-public-suite/public-suite/f01-r9-bmm-native-event-replay-verdict.json) |
+| [f01-r9-bmm-native-event-replay-proof2](../../candidates/f01-r9-bmm-native-event-replay-proof2/Kernel.lean) | 完整通过 | 1 | [39962018518](../../candidates/f01-mul-log2-proof1/ci-runs/39962018518/download-a7ccce564f3a459e99106fb6563dfb6b/diagnostics/f01-d7-public-suite/public-suite/f01-r9-bmm-native-event-replay-proof2-verdict.json) |
 | [f01-rebuilt-mul](../../candidates/f01-rebuilt-mul/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-rebuilt-mul-proof1](../../candidates/f01-rebuilt-mul-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-same-scale-add](../../candidates/f01-same-scale-add/Kernel.lean) | 无匹配回执 | 0 | — |
