@@ -86,7 +86,7 @@ R7数学与代码生成部分已逐项审查17份交付，按实际源码/成功
 | T18 | 实际逐步mul结果永非sNaN，初项add(+0,product)等于仅把product的raw负零改成正零；其他符号/payload原样保留 | MR10/W10/W10b精确普通编译及218/26项原公理日志已核；完整原单位有policy/依赖体积问题，最小允许适配与n=1整合仍NOT_RUN，性能UNKNOWN |
 | T19 | 对任意native参数，ofFloat32无条件保持实际add/mul；exact native image对原序运算闭合，故原始+0及各非NaN读入字允许sum/dot/BMM直接导入native结果，途中和终点可NaN | MR11/W12精确普通编译与269项原公理报告已核；W12c公共宿主另实际验原四spec及41项公理。任意raw初值须保留image条件，4792实际矩阵扫描和3d9单遍sum不继承公共宿主的新Lean或完整gate/收益 |
 | T20 | 旧decoder低分支拒绝考虑UInt32幅值减1回绕后仍蕴含finite；任意native前态可与原始非NaN逐步精确相加，首次原始NaN的实际修复必quiet | MR12/W12b成功快照及369项原公理报告已核；3d9的9条新循环/映射/spec定理仍未编译，右quiet与右signaling的原始优先级反例保留 |
-| T21 | 原始binary32指数1..23的表乘法解码逐位精确；保留原零/次正规/非有限分支后wrapper对全部UInt32等于旧convert；固定table[118]常量可消除已查局部暖循环once/外部调用/spill | MR14/W13/W13b数学及W14b/c原始普通编译/代码回执已核；指数0排除、NaN不能raw roundtrip。新353d实际USize解码接线Lean/fullgate/C/收益均NOT_RUN；T06既有数学想法不重复当发现 |
+| T21 | 原始binary32指数1..23的表乘法解码逐位精确；保留原零/次正规/非有限分支后wrapper对全部UInt32等于旧convert；固定table[118]常量可消除已查局部暖循环once/外部调用/spill | MR14/W13/W13b数学、W14b/c原始代码及W13d同公共源严格前端参数编译/80公理回执已核；指数0排除、NaN不能raw roundtrip。新353d实际USize解码接线Lean/fullgate/C/收益均NOT_RUN；T06既有数学想法不重复当发现 |
 
 MR09另保存了部分应用step在funext补齐参数后再simp的具体修复：精确0e8已普通编译/四原spec/公理PASS，原版fullgate仍待验证。上述数学储备的性能均不由证明存在推出。
 

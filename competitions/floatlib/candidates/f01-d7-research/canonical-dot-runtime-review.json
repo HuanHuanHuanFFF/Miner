@@ -1,0 +1,2197 @@
+{
+  "schema_version": 1,
+  "title": "Independent source review of canonical dot scanner runtime integration",
+  "started_at_utc": "2026-10-23T00:41:39Z",
+  "budget_deadline_utc": "2026-10-23T01:16:39Z",
+  "overall_deadline_utc": "2026-10-23T04:22:17Z",
+  "reviewed_at_utc": "2026-10-23T00:58:48Z",
+  "conclusion": {
+    "status": "NO_DETERMINISTIC_STATIC_SOURCE_BUG_FOUND",
+    "definite_bugs": [],
+    "source_inverse": "PASS",
+    "scope0_repair": "VERIFIED_SOURCE_ONLY_34_BYTE_OPEN_RESTORATION",
+    "policy": "PASS_STATIC_ONLY",
+    "new4792_Lean": "NOT_RUN",
+    "new4792_kernel_axioms_fullgate": "NOT_RUN",
+    "new4792_C_assembly": "NOT_RUN",
+    "new4792_performance": "NOT_RUN_GAIN_UNKNOWN"
+  },
+  "write_scope": [
+    "competitions/floatlib/candidates/f01-d7-research/canonical-dot-runtime-review.md",
+    "competitions/floatlib/candidates/f01-d7-research/canonical-dot-runtime-review.json"
+  ],
+  "actions": "Read-only source/log review and20 tiny hand-directed word/address models. No candidate/R/builder mutation, writing builder execution, Git, CI, upload, toolchain installation or future plan access.",
+  "candidate": {
+    "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+    "sha256": "4792e9679c9607efd84a461a9d1ad7ca0e6bcb59d657fccacde8b96bf075f43c",
+    "bytes": 195683,
+    "parent_sha256": "97f77e2ce3f53dc3625349d5d2a7bc761570f9428c0b547070e37254c4960d26",
+    "old_static_scope_gap_sha256": "70386323c2a91b053f91f5312f3eeee0e477219771f09189fdb89d6353af10f8"
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "status": "VERIFIED_SOURCE_BYTES",
+      "claim": "Independent parent97f->4792 reconstruction and4792->97f inverse match exact full bytes. Only minimal raw classifier/codec, exact Nat scan block, closure block, actual dot-loop glue, matching dot/finish cold conditionals and dot proof are introduced. Existing normal path, scalar operations, sum, addresses/layout/order and later proof text are preserved.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3166
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3172
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3206
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3314
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3673
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3724
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3979
+        }
+      ],
+      "builder_executed": false
+    },
+    {
+      "id": "F2",
+      "status": "VERIFIED_STATIC_RANGE_INTERFACE",
+      "claim": "Scanner tests the actual n original A-row/B-column reads at baseA+k and baseB+k*p with posZero getD default. whole=true gives both raw classifiers=false for every Fin n, then whole_model_nonNaN maps each through rawNaN_eq in the correct equality direction. It permits Inf and does not assert products/intermediate acc are nonNaN.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3212
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3222
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3273
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3299
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3673
+        }
+      ],
+      "conditions": "Original raw words on precisely the actual read range, not all storage globally and not merely the endpoint classifier.",
+      "boundaries": "Nat arithmetic has no USize truncation; n=0/k>=n is vacuous. Short-circuit A failure avoids B read. Missing array words are actual positive-zero defaults."
+    },
+    {
+      "id": "F3",
+      "status": "VERIFIED_STATIC_SEED_BOUNDARY",
+      "claim": "The actual-loop theorem quantifies arbitrary acc:Float32 and k, but the raw fold seed is exactly ExecFloat.Binary.ofFloat32 acc. Only original A/B nonNaN inputs are roundtripped. R7W12.ofFloat32_add/mul have no nonNaN premise and handle an already-NaN accumulator or product. The exported bridge specializes the seed to actual+0.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3681
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3694
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3700
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3711
+        }
+      ],
+      "excluded_generalization": "Arbitrary metadata-bearing raw seeds are not covered. With n=0, raw seed0xffc01234 stays0xffc01234 while native import is0x7fc00000. Nonempty raw qNaN/sNaN seed counterexamples are also retained.",
+      "formal_actual_loop_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "F4",
+      "status": "VERIFIED_STATIC_RUNTIME_HOOKS",
+      "claim": "Both NativeFinal.dot and Packed10.finish retain the old native nonNaN branch. Only a native NaN endpoint triggers whole; true imports the existing native result, false keeps original quiet-stop replay. The two conditional bodies are identical after A/B argument renaming.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3724
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3731
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3979
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3986
+        }
+      ],
+      "not_assumed": "A NaN endpoint alone does not imply canonical raw output. The scan premise is separately required on the new accept branch."
+    },
+    {
+      "id": "F5",
+      "status": "VERIFIED_STATIC_FULL_PROOF_CHAIN",
+      "claim": "dot_eq uses the original normal proof, new all-read-nonNaN theorem on hscan, and original replay proof otherwise. Packed10.finish_eq_dot is byte-identical to parent and still requires result=the exact NativeFinal.dotLoop from+0. With both finishing expressions matching, its rw[hs];rfl route and downstream lane/address/BMM refinements have the same interfaces.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3731
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3986
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3993
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4014
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4218
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4297
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4597
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4629
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4634
+        }
+      ],
+      "limitation": "No claim for arbitrary disconnected result supplied to finish; full old/new expression elaboration remains unrun."
+    },
+    {
+      "id": "F6",
+      "status": "VERIFIED_SCOPE_REPAIR_ONLY",
+      "claim": "4792 differs from frozen703 by exactly34 bytes restoring open FloatLib.Floats Competition immediately after reopening Submission. Namespace stack and active parent opens at NativeFinal match parent97f. Global DWordNaN/DDotNonNaNScan and nested Submission.R7W05/R7W12/NativeFinal are unique and ordered before use.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3166
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3168
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3206
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3314
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3316
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3318
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3409
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3591
+        }
+      ],
+      "history_boundary": "703 was a preserved static scope omission; no historical Lean compile failure is claimed. Current4792 still needs its own elaboration."
+    },
+    {
+      "id": "F7",
+      "status": "VERIFIED_SAVED_PUBLIC_HOST_LOGS_ONLY",
+      "claim": "Read actual W12c source snapshots, explicit exit0 records/logs and41 raw axiom reports. The accepted public host is exact60f plus an unused proof increment. Its increment matches the minimal61d closure after comment/whitespace normalization; compiled closure assertions require forall a b:Float32 without nonNaN hypotheses. This supplies real API/proposition evidence, not4792 acceptance.",
+      "public_host_sha256": "173a091ecfa2d6ae7c3c048459e570cbffed4098d2a5ce70af3d2da6afa5c911",
+      "compiled_increment_sha256": "e2e2ce789b087824239d2b6ae52ac6f8e4620c7d36bb1ea1fc00c0c09b40f218",
+      "raw_axiom_report_count": 41,
+      "allowed_axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "new_classifier_scanner_loop_finish_accepted_by_that_host": false
+    },
+    {
+      "id": "F8",
+      "status": "PASS_SMALL_SOURCE_MODELS_ONLY",
+      "claim": "20 directed cases check original-input/endpoint distinctions, Inf invalid operations, finite overflow then opposite Inf, +/-0, n=0, arbitrary native canonical-NaN seed, actual strided reads, out-of-bounds defaults and three false raw-seed generalizations. Independent masked-word classification and suffix interval checks agree. Fourteen actual+0 exported-dot cases match full raw-fold model outputs;16 whole=true cases match the actual seed-restricted bridge.",
+      "model_source": "Existing fixed word oracle AST functions; canonical-native model, not actual Lean/hardware.",
+      "counterexample_to_missing_stride": {
+        "wrong_scan_p": 1,
+        "actual_p": 2,
+        "wrong_scan_accepts": true,
+        "correct_raw_result": "0xffc01234",
+        "incorrect_native_import": "0x7fc00000"
+      },
+      "case_count": 20,
+      "scope": "Standalone scanner traces are labeled as if called; normal source endpoints execute zero scans."
+    }
+  ],
+  "minimal_required_signatures": {
+    "whole_model_nonNaN": "∀ (n baseA baseB p : Nat) (A B : Array Binary32), DDotNonNaNScan.whole n baseA baseB p A B = true → ∀ k : Fin n, Model.isNaN (Model.NativeBinary32.ofUInt32 (A.getD (baseA+k.val) posZero).raw.1) = false ∧ Model.isNaN (Model.NativeBinary32.ofUInt32 (B.getD (baseB+k.val*p) posZero).raw.1) = false",
+    "raw_nonNaN_native_nonNaN": "∀ q : Binary32, Model.isNaN (Model.NativeBinary32.ofUInt32 q.raw.1) = false → (ExecFloat.Binary.toFloat32 q).isNaN = false",
+    "dotLoop_eq_of_whole_nonNaN": "∀ (n baseA baseB p : Nat) (A B : Array Binary32) (k : Nat) (acc : Float32), DDotNonNaNScan.whole n baseA baseB p A B = true → ExecFloat.Binary.ofFloat32 (NativeFinal.dotLoop n baseA baseB p A B k acc) = Fin.foldl.loop n (fun a i => ExecFloat.add a (ExecFloat.mul (A.getD (baseA+i.val) posZero) (B.getD (baseB+i.val*p) posZero))) (ExecFloat.Binary.ofFloat32 acc) k",
+    "dot_eq_of_whole_nonNaN": "∀ (n baseA baseB p : Nat) (A B : Array Binary32), DDotNonNaNScan.whole n baseA baseB p A B = true → ExecFloat.Binary.ofFloat32 (NativeFinal.dotLoop n baseA baseB p A B 0 (Float32.ofBits 0)) = Fin.foldl n (fun a i => ExecFloat.add a (ExecFloat.mul (A.getD (baseA+i.val) posZero) (B.getD (baseB+i.val*p) posZero))) posZero",
+    "finish_eq_dot_premise": "result = NativeFinal.dotLoop n baseA baseB p Araw Braw 0 zero32"
+  },
+  "source_cost_boundary": {
+    "normal_native_endpoint": "Original normal branch returns before scanner;0 new scan reads.",
+    "whole_accept": "A and B each read n words:2*n classifier reads; original native pass/preparation already occurred.",
+    "rejected_scan": "At first failing A index k:2*k+1 reads; first failing B:2*k+2 reads. Original quiet-stop replay then restarts from+0.",
+    "address_dimension": "Actual Nat base/stride/default semantics; no new n<USize.size premise. Existing packed word-loop and address proofs are preserved.",
+    "actual_time_gain": "UNKNOWN; scanning can cost more than the arithmetic replay it avoids. No807 or future confirmation domain was rerun here."
+  },
+  "evidence": {
+    "files": {
+      "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean": {
+        "bytes": 195683,
+        "sha256": "4792e9679c9607efd84a461a9d1ad7ca0e6bcb59d657fccacde8b96bf075f43c"
+      },
+      "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/manifest.json": {
+        "bytes": 2963,
+        "sha256": "1cb1dff1d4d32ea734b72b48051da4d84ff91509a3d0a65681be9394966f4e09"
+      },
+      "competitions/floatlib/candidates/f01-d7-direct-nonfinite/Kernel.lean": {
+        "bytes": 174925,
+        "sha256": "97f77e2ce3f53dc3625349d5d2a7bc761570f9428c0b547070e37254c4960d26"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/build-canonical-dot-scan.py": {
+        "bytes": 7518,
+        "sha256": "d47168141ec8a9f6a3679753075d6dbce259c98509bfd840b0382295f3f0bcb9"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/dot-nonnan-scan-block.lean": {
+        "bytes": 3526,
+        "sha256": "5e46e932fb8483792c42a79d59e887e32af15e236100cbb8253ca82d3212ea8f"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/canonical-dot-block.lean": {
+        "bytes": 2489,
+        "sha256": "14937a84bcaf67ffa39d1e4fcc3adb994a812dd168f74e9dd640fd09a9540dfa"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/canonical-image-minimal-block.lean": {
+        "bytes": 12744,
+        "sha256": "61d49494b764bc433312202f3928a3dc6986eb91f4f64d2fb309ccf7370e0aed"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/nan-choice-block.lean": {
+        "bytes": 7555,
+        "sha256": "584ace5443838454b3687f7a93cfca07be4f9cce2c889c7196b171b7cfd4c93c"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/negative-sources/canonical-dot-scan-scope0/Kernel.lean": {
+        "bytes": 195649,
+        "sha256": "70386323c2a91b053f91f5312f3eeee0e477219771f09189fdb89d6353af10f8"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/negative-sources/canonical-dot-scan-scope0/receipt.json": {
+        "bytes": 1389,
+        "sha256": "6ca9ee2485311e58cb8f8bf388fdf14a870065b80293d21ad4bd492ad5a633b9"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/audit-canonical-public-host.py": {
+        "bytes": 7104,
+        "sha256": "144f123f78d7d3c6c0c6b15385cb61e96c02695a2b30de8c6ed457d4145c0819"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/original/Kernel.lean": {
+        "bytes": 155103,
+        "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/Kernel.lean": {
+        "bytes": 167297,
+        "sha256": "173a091ecfa2d6ae7c3c048459e570cbffed4098d2a5ce70af3d2da6afa5c911"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/R7W12cIncrement.lean": {
+        "bytes": 12192,
+        "sha256": "e2e2ce789b087824239d2b6ae52ac6f8e4620c7d36bb1ea1fc00c0c09b40f218"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/evidence/insertion-preservation.json": {
+        "bytes": 748,
+        "sha256": "f4ac275919ddd640a6fdae36da639cbbc49681cba46453cccb8225a17c2a99d8"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/logs/Kernel-attempt2.json": {
+        "bytes": 693,
+        "sha256": "0326022644a8efdaaada26c6060c76934657ca41aaba8a27aad2d924572779fe"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/logs/Kernel-attempt2.lean": {
+        "bytes": 167297,
+        "sha256": "173a091ecfa2d6ae7c3c048459e570cbffed4098d2a5ce70af3d2da6afa5c911"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/logs/Kernel-attempt2.log": {
+        "bytes": 10748,
+        "sha256": "7e20ce3c80c7651f19e55a07519bdbee811e6ae5b8c5256e9edcae0cbae52aa3"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/logs/KernelDiagnostics-attempt1.json": {
+        "bytes": 747,
+        "sha256": "bd905f1212c571ef5bbadb7c97936b6c529b53ac19813838456c9fc24699d531"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/logs/KernelDiagnostics-attempt1.lean": {
+        "bytes": 173455,
+        "sha256": "a4f0968df63028a4f2c5b110fbec1950b8e6b1e2e151a91d57d0c9e12c8ebafd"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/logs/KernelDiagnostics-attempt1.log": {
+        "bytes": 25267,
+        "sha256": "d46529b0a8438592ef3c88118a260c86c21b2fcbc489ef86af95e98b42afa62a"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/evidence/ClosureAssertions.lean.txt": {
+        "bytes": 949,
+        "sha256": "fbfb27b93d565db08a146609b1bb3f9aa638d90120e60849516bd402a0283263"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/evidence/SpecAssertions.lean.txt": {
+        "bytes": 1203,
+        "sha256": "3a1b9b3de721049eea9115a2d6a2738b28172146c68f8b53a0a1c61dfa4579a9"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12c/original-extracted/R7-W12c/evidence/required-axiom-declarations.json": {
+        "bytes": 1779,
+        "sha256": "f46fc43226d30c8b11fc62c6dcedc31ea14119365bb9126d549ce7367461eb79"
+      },
+      ".local-maintenance/r7-20261023/current-policy/gate.py": {
+        "bytes": 38320,
+        "sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194"
+      },
+      ".local-maintenance/r7-20261023/current-policy/receipt.json": {
+        "bytes": 330,
+        "sha256": "1284c2cb342eb9270c555d3093c82678795c45782c1c626d5b2f7130848242f1"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py": {
+        "bytes": 4908,
+        "sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72"
+      }
+    },
+    "candidate_sha256": "4792e9679c9607efd84a461a9d1ad7ca0e6bcb59d657fccacde8b96bf075f43c",
+    "candidate_bytes": 195683,
+    "forward_and_inverse_to97f": true,
+    "inserted_blocks_once": true,
+    "classifier_sha256": "15835b6f390439828dfd2a2b2fda2b26006d3dc843c3bd702fa339cabccade7d",
+    "finish_conditional_same_after_argument_rename": true,
+    "finish_eq_dot_theorem_bytes_unchanged": true,
+    "scope_repair_only34_bytes": true,
+    "policy": "PASS_STATIC_ORIGINAL_FUNCTIONS",
+    "public_W12c": {
+      "original_sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+      "host_sha256": "173a091ecfa2d6ae7c3c048459e570cbffed4098d2a5ce70af3d2da6afa5c911",
+      "increment_sha256": "e2e2ce789b087824239d2b6ae52ac6f8e4620c7d36bb1ea1fc00c0c09b40f218",
+      "exact_single_pure_insert": true,
+      "minimal_closure_normalized_proof_equal": true,
+      "attempts": [
+        {
+          "name": "Kernel-attempt2",
+          "source_sha256": "173a091ecfa2d6ae7c3c048459e570cbffed4098d2a5ce70af3d2da6afa5c911",
+          "returncode": 0,
+          "command": [
+            "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+            "-o",
+            "/workspace/scratch/fd3456391d75/R7-W12c-work/Kernel.olean",
+            "/workspace/scratch/fd3456391d75/R7-W12c-work/Kernel.lean"
+          ],
+          "log_sha256": "7e20ce3c80c7651f19e55a07519bdbee811e6ae5b8c5256e9edcae0cbae52aa3"
+        },
+        {
+          "name": "KernelDiagnostics-attempt1",
+          "source_sha256": "a4f0968df63028a4f2c5b110fbec1950b8e6b1e2e151a91d57d0c9e12c8ebafd",
+          "returncode": 0,
+          "command": [
+            "/workspace/scratch/fd3456391d75/R7-W01-work/public/lean-4.34.0-linux/bin/lean",
+            "-o",
+            "/workspace/scratch/fd3456391d75/R7-W12c-work/KernelDiagnostics.olean",
+            "/workspace/scratch/fd3456391d75/R7-W12c-work/KernelDiagnostics.lean"
+          ],
+          "log_sha256": "d46529b0a8438592ef3c88118a260c86c21b2fcbc489ef86af95e98b42afa62a"
+        }
+      ],
+      "raw_axiom_reports": {
+        "Submission.add_spec": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.mul_spec": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.sum_spec": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.bmm_spec": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W05.model_toModel_isNaN": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W05.toFloat32_isNaN": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W05.native_eq_nan_of_isNaN": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W05.native_add_nan_left": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W05.native_add_nan_right": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W05.native_mul_nan_left": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W05.native_mul_nan_right": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.ofFloat32_nan_raw": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.ofFloat32_nan_toModel": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.ofFloat32_isNaN": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.ofFloat32_not_snan": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.canonicalNaN_is_nan": [
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.canonicalNaN_not_snan": [
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.canonicalNaN_quiet_self": [
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.invalidResult_eq_canonical": [
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.chooseCanonicalNaN_left": [
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.chooseCanonicalNaN_right": [
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.model_add_canonical_left": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.model_add_canonical_right": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.model_mul_canonical_left": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.model_mul_canonical_right": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.exec_add_import_nan_left": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.exec_add_import_nan_right": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.exec_mul_import_nan_left": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.exec_mul_import_nan_right": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.ofFloat32_add": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.ofFloat32_mul": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.add_ofFloat32": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "Submission.R7W12.mul_ofFloat32": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W12cSpecAssertions.original_add_spec_type": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W12cSpecAssertions.original_mul_spec_type": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W12cSpecAssertions.original_sum_spec_type": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W12cSpecAssertions.original_bmm_spec_type": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W12cClosureAssertions.unconditional_add_type": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W12cClosureAssertions.unconditional_mul_type": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W12cClosureAssertions.unconditional_add_reverse_type": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "R7W12cClosureAssertions.unconditional_mul_reverse_type": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      "exact_required_names": true,
+      "unconditional_assertions_in_compiled_snapshot": true,
+      "accepted_scope": "public60f plus unused closure proofs only; no4792 scanner/glue/loop/finish integration acceptance"
+    },
+    "directed_models": [
+      {
+        "name": "empty",
+        "n": 0,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [],
+        "B": [],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": true,
+        "actual_bridge_native": "0x0",
+        "actual_bridge_raw_fold": "0x0",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x0",
+          "raw_fold": "0x0",
+          "candidate_model_result": "0x0",
+          "branch": "normal",
+          "actual_source_branch_scan_word_reads": 0
+        },
+        "standalone_scanner_reads_if_called": [],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": []
+        }
+      },
+      {
+        "name": "minus_zero_product",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x80000000"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": true,
+        "actual_bridge_native": "0x0",
+        "actual_bridge_raw_fold": "0x0",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x0",
+          "raw_fold": "0x0",
+          "candidate_model_result": "0x0",
+          "branch": "normal",
+          "actual_source_branch_scan_word_reads": 0
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0x80000000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0x80000000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "opposite_inf",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x7f800000",
+          "0xff800000"
+        ],
+        "B": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": true,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0x7fc00000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x7fc00000",
+          "raw_fold": "0x7fc00000",
+          "candidate_model_result": "0x7fc00000",
+          "branch": "scan_accept",
+          "actual_source_branch_scan_word_reads": 4
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0x7f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "A",
+            "index": 1,
+            "word": "0xff800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 1,
+            "word": "0x3f800000",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0x7f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "A",
+              "index": 1,
+              "word": "0xff800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 1,
+              "word": "0x3f800000",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "inf_times_poszero",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x7f800000"
+        ],
+        "B": [
+          "0x0"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": true,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0x7fc00000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x7fc00000",
+          "raw_fold": "0x7fc00000",
+          "candidate_model_result": "0x7fc00000",
+          "branch": "scan_accept",
+          "actual_source_branch_scan_word_reads": 2
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0x7f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x0",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0x7f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x0",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "neginf_times_negzero",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0xff800000"
+        ],
+        "B": [
+          "0x80000000"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": true,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0x7fc00000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x7fc00000",
+          "raw_fold": "0x7fc00000",
+          "candidate_model_result": "0x7fc00000",
+          "branch": "scan_accept",
+          "actual_source_branch_scan_word_reads": 2
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0xff800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x80000000",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0xff800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x80000000",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "overflow_then_opposite_inf",
+        "n": 3,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x7f7fffff",
+          "0x7f7fffff",
+          "0xff800000"
+        ],
+        "B": [
+          "0x3f800000",
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": true,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0x7fc00000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x7fc00000",
+          "raw_fold": "0x7fc00000",
+          "candidate_model_result": "0x7fc00000",
+          "branch": "scan_accept",
+          "actual_source_branch_scan_word_reads": 6
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0x7f7fffff",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "A",
+            "index": 1,
+            "word": "0x7f7fffff",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 1,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "A",
+            "index": 2,
+            "word": "0xff800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 2,
+            "word": "0x3f800000",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0x7f7fffff",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "A",
+              "index": 1,
+              "word": "0x7f7fffff",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 1,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "A",
+              "index": 2,
+              "word": "0xff800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 2,
+              "word": "0x3f800000",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "raw_qnan_rejected",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0xffc01234"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": false,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0xffc01234",
+        "bridge_checked": false,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x7fc00000",
+          "raw_fold": "0xffc01234",
+          "candidate_model_result": "0xffc01234",
+          "branch": "old_replay",
+          "actual_source_branch_scan_word_reads": 1
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0xffc01234",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": false,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0xffc01234",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "raw_snan_rejected",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0xff800011"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": false,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0xffc00011",
+        "bridge_checked": false,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x7fc00000",
+          "raw_fold": "0xffc00011",
+          "candidate_model_result": "0xffc00011",
+          "branch": "old_replay",
+          "actual_source_branch_scan_word_reads": 1
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0xff800011",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": false,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0xff800011",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "unused_other_column_nan",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 2,
+        "A": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000",
+          "0xffc01234",
+          "0x40000000"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": true,
+        "actual_bridge_native": "0x40400000",
+        "actual_bridge_raw_fold": "0x40400000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x40400000",
+          "raw_fold": "0x40400000",
+          "candidate_model_result": "0x40400000",
+          "branch": "normal",
+          "actual_source_branch_scan_word_reads": 0
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "A",
+            "index": 1,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 2,
+            "word": "0x40000000",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "A",
+              "index": 1,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 2,
+              "word": "0x40000000",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "actual_strided_nan",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 2,
+        "A": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000",
+          "0x3f800000",
+          "0xffc01234"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": false,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0xffc01234",
+        "bridge_checked": false,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x7fc00000",
+          "raw_fold": "0xffc01234",
+          "candidate_model_result": "0xffc01234",
+          "branch": "old_replay",
+          "actual_source_branch_scan_word_reads": 4
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "A",
+            "index": 1,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 2,
+            "word": "0xffc01234",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": false,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "A",
+              "index": 1,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 2,
+              "word": "0xffc01234",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "baseA_and_zero_stride",
+        "n": 2,
+        "baseA": 1,
+        "baseB": 0,
+        "p": 0,
+        "A": [
+          "0xffc01234",
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x7f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": true,
+        "actual_bridge_native": "0x7f800000",
+        "actual_bridge_raw_fold": "0x7f800000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x7f800000",
+          "raw_fold": "0x7f800000",
+          "candidate_model_result": "0x7f800000",
+          "branch": "normal",
+          "actual_source_branch_scan_word_reads": 0
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 1,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x7f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "A",
+            "index": 2,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x7f800000",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 1,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x7f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "A",
+              "index": 2,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x7f800000",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "default_reads",
+        "n": 3,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": true,
+        "actual_bridge_native": "0x3f800000",
+        "actual_bridge_raw_fold": "0x3f800000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x3f800000",
+          "raw_fold": "0x3f800000",
+          "candidate_model_result": "0x3f800000",
+          "branch": "normal",
+          "actual_source_branch_scan_word_reads": 0
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "A",
+            "index": 1,
+            "word": "0x0",
+            "in_bounds": false
+          },
+          {
+            "side": "B",
+            "index": 1,
+            "word": "0x0",
+            "in_bounds": false
+          },
+          {
+            "side": "A",
+            "index": 2,
+            "word": "0x0",
+            "in_bounds": false
+          },
+          {
+            "side": "B",
+            "index": 2,
+            "word": "0x0",
+            "in_bounds": false
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "A",
+              "index": 1,
+              "word": "0x0",
+              "in_bounds": false
+            },
+            {
+              "side": "B",
+              "index": 1,
+              "word": "0x0",
+              "in_bounds": false
+            },
+            {
+              "side": "A",
+              "index": 2,
+              "word": "0x0",
+              "in_bounds": false
+            },
+            {
+              "side": "B",
+              "index": 2,
+              "word": "0x0",
+              "in_bounds": false
+            }
+          ]
+        }
+      },
+      {
+        "name": "all_default_ignores_stored_nan",
+        "n": 3,
+        "baseA": 9,
+        "baseB": 8,
+        "p": 2,
+        "A": [
+          "0xffc01234"
+        ],
+        "B": [
+          "0xff800011"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": true,
+        "actual_bridge_native": "0x0",
+        "actual_bridge_raw_fold": "0x0",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x0",
+          "raw_fold": "0x0",
+          "candidate_model_result": "0x0",
+          "branch": "normal",
+          "actual_source_branch_scan_word_reads": 0
+        },
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 9,
+            "word": "0x0",
+            "in_bounds": false
+          },
+          {
+            "side": "B",
+            "index": 8,
+            "word": "0x0",
+            "in_bounds": false
+          },
+          {
+            "side": "A",
+            "index": 10,
+            "word": "0x0",
+            "in_bounds": false
+          },
+          {
+            "side": "B",
+            "index": 10,
+            "word": "0x0",
+            "in_bounds": false
+          },
+          {
+            "side": "A",
+            "index": 11,
+            "word": "0x0",
+            "in_bounds": false
+          },
+          {
+            "side": "B",
+            "index": 12,
+            "word": "0x0",
+            "in_bounds": false
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 9,
+              "word": "0x0",
+              "in_bounds": false
+            },
+            {
+              "side": "B",
+              "index": 8,
+              "word": "0x0",
+              "in_bounds": false
+            },
+            {
+              "side": "A",
+              "index": 10,
+              "word": "0x0",
+              "in_bounds": false
+            },
+            {
+              "side": "B",
+              "index": 10,
+              "word": "0x0",
+              "in_bounds": false
+            },
+            {
+              "side": "A",
+              "index": 11,
+              "word": "0x0",
+              "in_bounds": false
+            },
+            {
+              "side": "B",
+              "index": 12,
+              "word": "0x0",
+              "in_bounds": false
+            }
+          ]
+        }
+      },
+      {
+        "name": "arbitrary_native_nan_seed",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0xffc01234",
+        "whole": true,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0x7fc00000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": null,
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "arbitrary_native_inf_seed",
+        "n": 2,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0xff800000",
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000",
+          "0x3f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0x7f800000",
+        "whole": true,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0x7fc00000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": null,
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0xff800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "A",
+            "index": 1,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 1,
+            "word": "0x3f800000",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0xff800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "A",
+              "index": 1,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 1,
+              "word": "0x3f800000",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "counterexample_raw_qnan_seed_empty",
+        "n": 0,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [],
+        "B": [],
+        "k": 0,
+        "native_seed_word": "0xffc01234",
+        "whole": true,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0x7fc00000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": {
+          "raw_seed": "0xffc01234",
+          "native_import_seed": "0x7fc00000",
+          "raw_fold_result": "0xffc01234",
+          "native_import_result": "0x7fc00000"
+        },
+        "exported_dot_model": null,
+        "standalone_scanner_reads_if_called": [],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": []
+        }
+      },
+      {
+        "name": "counterexample_raw_qnan_seed_nonempty",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0xffc01234",
+        "whole": true,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0x7fc00000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": {
+          "raw_seed": "0xffc01234",
+          "native_import_seed": "0x7fc00000",
+          "raw_fold_result": "0xffc01234",
+          "native_import_result": "0x7fc00000"
+        },
+        "exported_dot_model": null,
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "counterexample_raw_snan_seed_nonempty",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0x3f800000"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0xff800011",
+        "whole": true,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0x7fc00000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": {
+          "raw_seed": "0xff800011",
+          "native_import_seed": "0x7fc00000",
+          "raw_fold_result": "0xffc00011",
+          "native_import_result": "0x7fc00000"
+        },
+        "exported_dot_model": null,
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x3f800000",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x3f800000",
+              "in_bounds": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "k_past_end_native_seed",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [
+          "0xffc01234"
+        ],
+        "B": [
+          "0x3f800000"
+        ],
+        "k": 2,
+        "native_seed_word": "0xffc01234",
+        "whole": false,
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0x7fc00000",
+        "bridge_checked": false,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": null,
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0xffc01234",
+            "in_bounds": true
+          }
+        ],
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": []
+        }
+      },
+      {
+        "name": "default_poszero_times_inf",
+        "n": 1,
+        "baseA": 0,
+        "baseB": 0,
+        "p": 1,
+        "A": [],
+        "B": [
+          "0x7f800000"
+        ],
+        "k": 0,
+        "native_seed_word": "0x0",
+        "whole": true,
+        "standalone_scanner_reads_if_called": [
+          {
+            "side": "A",
+            "index": 0,
+            "word": "0x0",
+            "in_bounds": false
+          },
+          {
+            "side": "B",
+            "index": 0,
+            "word": "0x7f800000",
+            "in_bounds": true
+          }
+        ],
+        "actual_bridge_native": "0x7fc00000",
+        "actual_bridge_raw_fold": "0x7fc00000",
+        "bridge_checked": true,
+        "broadened_raw_seed_counterexample": null,
+        "exported_dot_model": {
+          "native": "0x7fc00000",
+          "raw_fold": "0x7fc00000",
+          "candidate_model_result": "0x7fc00000",
+          "branch": "scan_accept",
+          "actual_source_branch_scan_word_reads": 2
+        },
+        "loop_from_k": {
+          "result": true,
+          "interval_forall_matches": true,
+          "standalone_reads_if_called": [
+            {
+              "side": "A",
+              "index": 0,
+              "word": "0x0",
+              "in_bounds": false
+            },
+            {
+              "side": "B",
+              "index": 0,
+              "word": "0x7f800000",
+              "in_bounds": true
+            }
+          ]
+        }
+      }
+    ],
+    "wrong_B_stride_counterexample": {
+      "wrong_scan_p": 1,
+      "actual_p": 2,
+      "wrong_scan_accepts": true,
+      "correct_raw_result": "0xffc01234",
+      "incorrect_native_import": "0x7fc00000"
+    },
+    "new_Lean_fullgate_C_timing": "NOT_RUN",
+    "gain": "UNKNOWN",
+    "independent_mask_classifier_checks": true,
+    "loop_from_k_interval_checks": true,
+    "namespace_audit": {
+      "f01-d7-direct-nonfinite": {
+        "balanced": true,
+        "selected_namespace_ranges": {
+          "Submission.NativeFinal": [
+            {
+              "start_line": 3166,
+              "end_line": 3266,
+              "own_opens": []
+            }
+          ],
+          "Submission.DirectSmall": [
+            {
+              "start_line": 4111,
+              "end_line": 4137,
+              "own_opens": [
+                {
+                  "line": 4113,
+                  "command": "open FloatLib.Floats Competition"
+                }
+              ]
+            }
+          ]
+        },
+        "target_declaration_lines": {
+          "Submission.NativeFinal.dotLoop": [
+            3200
+          ],
+          "Submission.NativeFinal.dot": [
+            3245
+          ],
+          "Submission.NativeFinal.dot_eq": [
+            3250
+          ],
+          "Submission.Packed10.finish": [
+            3495
+          ],
+          "Submission.Packed10.finish_eq_dot": [
+            3500
+          ],
+          "Submission.bmm": [
+            4143
+          ],
+          "Submission.bmm_spec": [
+            4148
+          ]
+        },
+        "active_parent_opens_at_NativeFinal": [
+          {
+            "line": 2310,
+            "command": "open FloatLib.Floats Competition"
+          }
+        ]
+      },
+      "f01-d7-canonical-dot-scan": {
+        "balanced": true,
+        "selected_namespace_ranges": {
+          "DWordNaN": [
+            {
+              "start_line": 3168,
+              "end_line": 3203,
+              "own_opens": [
+                {
+                  "line": 3170,
+                  "command": "open FloatLib.Floats.Formats.BinaryInterchange"
+                }
+              ]
+            }
+          ],
+          "DDotNonNaNScan": [
+            {
+              "start_line": 3206,
+              "end_line": 3311,
+              "own_opens": [
+                {
+                  "line": 3208,
+                  "command": "open FloatLib.Floats Competition"
+                },
+                {
+                  "line": 3209,
+                  "command": "open FloatLib.Floats.Formats.BinaryInterchange"
+                }
+              ]
+            }
+          ],
+          "Submission.R7W05": [
+            {
+              "start_line": 3318,
+              "end_line": 3405,
+              "own_opens": [
+                {
+                  "line": 3319,
+                  "command": "open FloatLib.Floats Competition"
+                },
+                {
+                  "line": 3320,
+                  "command": "open FloatLib.Floats.Formats.BinaryInterchange"
+                },
+                {
+                  "line": 3321,
+                  "command": "open Float.Model.UnpackedFloat"
+                }
+              ]
+            }
+          ],
+          "Submission.R7W12": [
+            {
+              "start_line": 3409,
+              "end_line": 3588,
+              "own_opens": [
+                {
+                  "line": 3410,
+                  "command": "open FloatLib.Floats"
+                },
+                {
+                  "line": 3411,
+                  "command": "open FloatLib.Floats.Formats.BinaryInterchange"
+                }
+              ]
+            }
+          ],
+          "Submission.NativeFinal": [
+            {
+              "start_line": 3591,
+              "end_line": 3750,
+              "own_opens": [
+                {
+                  "line": 3671,
+                  "command": "open FloatLib.Floats.Formats.BinaryInterchange"
+                }
+              ]
+            }
+          ],
+          "Submission.DirectSmall": [
+            {
+              "start_line": 4597,
+              "end_line": 4623,
+              "own_opens": [
+                {
+                  "line": 4599,
+                  "command": "open FloatLib.Floats Competition"
+                }
+              ]
+            }
+          ]
+        },
+        "target_declaration_lines": {
+          "DDotNonNaNScan.loop": [
+            3212
+          ],
+          "DDotNonNaNScan.loop_true_iff": [
+            3222
+          ],
+          "DDotNonNaNScan.whole": [
+            3273
+          ],
+          "DDotNonNaNScan.whole_model_nonNaN": [
+            3299
+          ],
+          "Submission.NativeFinal.dotLoop": [
+            3625
+          ],
+          "Submission.NativeFinal.dotLoop_eq_of_whole_nonNaN": [
+            3681
+          ],
+          "Submission.NativeFinal.dot_eq_of_whole_nonNaN": [
+            3711
+          ],
+          "Submission.NativeFinal.dot": [
+            3724
+          ],
+          "Submission.NativeFinal.dot_eq": [
+            3731
+          ],
+          "Submission.Packed10.finish": [
+            3979
+          ],
+          "Submission.Packed10.finish_eq_dot": [
+            3986
+          ],
+          "Submission.bmm": [
+            4629
+          ],
+          "Submission.bmm_spec": [
+            4634
+          ]
+        },
+        "active_parent_opens_at_NativeFinal": [
+          {
+            "line": 3316,
+            "command": "open FloatLib.Floats Competition"
+          }
+        ]
+      }
+    }
+  },
+  "first_new_compiler_targets": [
+    "DWordNaN.rawNaN_eq",
+    "DWordNaN.exec_toModel_eq_rawModel",
+    "DDotNonNaNScan.loop and loop_true_iff termination/Bool split",
+    "DDotNonNaNScan.whole_model_nonNaN equality orientation",
+    "Submission.R7W05/R7W12 exact new enclosing context",
+    "Submission.NativeFinal.raw_nonNaN_native_nonNaN",
+    "Submission.NativeFinal.dotLoop_eq_of_whole_nonNaN recursive rewrite/roundtrip",
+    "Submission.NativeFinal.dot_eq_of_whole_nonNaN Fin.foldl/+0 change",
+    "Submission.NativeFinal.dot_eq new hscan branch",
+    "Submission.Packed10.finish_eq_dot definitional equality",
+    "Full exact4792 statement/kernel/axiom/fullgate, actual C and paired timing"
+  ],
+  "final_verified_at_utc": "2026-10-23T01:02:38Z",
+  "final_verification": {
+    "all27_input_identities_unchanged": "PASS",
+    "two_way_exact97f_source_transformation": "PASS",
+    "34_byte_scope_repair_and_parent_opens": "PASS",
+    "matching_dot_finish_conditionals_and_unchanged_finish_proof": "PASS_STATIC_SOURCE_ONLY",
+    "W12c_explicit_exit_source_log_and41_raw_axiom_bindings": "PASS_SAVED_EVIDENCE_ONLY",
+    "twenty_directed_scope_address_models": "PASS_FINITE_MODEL_ONLY",
+    "new4792_Lean_fullgate_C_performance": "NOT_RUN"
+  }
+}

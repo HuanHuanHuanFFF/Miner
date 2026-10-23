@@ -1,0 +1,586 @@
+{
+  "schema": "floatlib.r7.singleton_native_runtime_review.v1",
+  "review_started_at_utc": "2026-10-23T01:05:25Z",
+  "review_written_at_utc": "2026-10-23T01:14:14.062369+00:00",
+  "budget_minutes": 35,
+  "global_end_utc": "2026-10-23T04:22:17Z",
+  "source_freeze_utc": "2026-10-23T02:45:00Z",
+  "authorship_disclosure": {
+    "reviewer_authored_47d_native_helper": false,
+    "reviewer_authored_47d_builder": false,
+    "reviewer_authored_47d_runtime_integration": false,
+    "reviewer_previously_authored_inherited_c44c_seed_block": true,
+    "independence_boundary": "Independent review of new47d helper/runtime/builder wiring; inherited self-authored c44c is byte/provenance checked, not claimed independently reproved."
+  },
+  "scope": "Read-only lightweight sources/originals and one negative integer-model witness. Only MD/JSON outputs; no writing builder execution, candidate edit, Git, CI, upload, toolchain install or target execution.",
+  "conclusion": {
+    "determinate_static_bug": null,
+    "source_review": "NO_DETERMINATE_NEW_BUG_FOUND",
+    "independent_source_inverse": "VERIFIED",
+    "fresh_current_policy": "PASS_STATIC_ONLY",
+    "new_Lean_statement_and_axioms": "NOT_RUN",
+    "new_fullgate": "NOT_RUN",
+    "new_C_asm": "NOT_RUN",
+    "performance_and_gain": "UNKNOWN"
+  },
+  "candidate": {
+    "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-singleton-native-normalize/Kernel.lean",
+    "bytes": 188335,
+    "sha256": "47d429fe3a351a5e002f98c1f4cb95dfdc04368c268275508be758d176f3a347"
+  },
+  "parent53d": {
+    "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-singleton-normalize/Kernel.lean",
+    "bytes": 187374,
+    "sha256": "53d1c2c40642060c970189250ea1aee88c37ba3eb1309b2bcfed1f0fcf9a3fa7"
+  },
+  "base97f": {
+    "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-direct-nonfinite/Kernel.lean",
+    "bytes": 174925,
+    "sha256": "97f77e2ce3f53dc3625349d5d2a7bc761570f9428c0b547070e37254c4960d26"
+  },
+  "changes": [
+    {
+      "kind": "insert",
+      "parent_start_line": 4403,
+      "parent_end_line_inclusive": 4402,
+      "candidate_start_line": 4403,
+      "candidate_end_line_inclusive": 4432,
+      "parent_bytes": 0,
+      "candidate_bytes": 902,
+      "before": null,
+      "after": null
+    },
+    {
+      "kind": "replace",
+      "parent_start_line": 4413,
+      "parent_end_line_inclusive": 4413,
+      "candidate_start_line": 4443,
+      "candidate_end_line_inclusive": 4443,
+      "parent_bytes": 69,
+      "candidate_bytes": 86,
+      "before": "      (Submission.mul (A.toArray.getD ((b * m + i) * n + 0) posZero)\n",
+      "after": "      (D7SingletonNative.nativeProduct (A.toArray.getD ((b * m + i) * n + 0) posZero)\n"
+    },
+    {
+      "kind": "insert",
+      "parent_start_line": 4425,
+      "parent_end_line_inclusive": 4424,
+      "candidate_start_line": 4455,
+      "candidate_end_line_inclusive": 4455,
+      "parent_bytes": 0,
+      "candidate_bytes": 42,
+      "before": null,
+      "after": "  rw [D7SingletonNative.nativeProduct_eq]\n"
+    }
+  ],
+  "independent_inverse": {
+    "method": "Independent difflib alignment and reverse all three non-equal hunks, without running builder.",
+    "restored53d_byte_exact": true,
+    "restored_sha256": "53d1c2c40642060c970189250ea1aee88c37ba3eb1309b2bcfed1f0fcf9a3fa7",
+    "prefix_unchanged_bytes": 185782,
+    "helper_file_bytes": 900,
+    "helper_plus_separators_inserted_bytes": 902,
+    "seed_bytes": 10793,
+    "seed_occurrences_parent_and_child": 1,
+    "seed_byte_identity": true,
+    "restored97f_before_seed": "Reverse bmmBeforeSingleton/spec names; result equals full97f plus exactly2LF separators.",
+    "unchanged_slices": {
+      "bmmBeforeSingleton_and_spec": {
+        "bytes": 691,
+        "sha256": "3e7599259caf9a2135b2b98cd27511f46bcb3043f85e72853fd2d15043e0b382",
+        "equal_to_parent53d": true
+      },
+      "final_dispatcher_and_spec": {
+        "bytes": 654,
+        "sha256": "3be0ef4ae367caf5986772875bb043d06be85b2ffc69842b2fb197a70d9411b5",
+        "equal_to_parent53d": true
+      }
+    },
+    "generated_code_identity_not_implied": true
+  },
+  "builder_review": {
+    "writing_builder_executed": false,
+    "exact_then_read_builder_sha256": "a272b581b08905a8748b205cc286832c97c626031228ff6d528ea9d0a2a3c143",
+    "two_new_local_wirings": [
+      "one runtime call target replacement in singletonCore",
+      "one nativeProduct_eq rewrite inserted before frozen seed bridge"
+    ],
+    "two_anchors_each_unique": true,
+    "in_memory_anchor_composition_matches_actual47d": true
+  },
+  "dispatcher_and_addresses": {
+    "bmm_line": 4459,
+    "n_one_branch_line": 4461,
+    "n_not_one_branch_line": 4462,
+    "dispatch": "if n=1 then singletonCore else bmmBeforeSingleton",
+    "dispatcher_and_spec_byte_equal_to53d": true,
+    "n_not_one_original97f_body_restored_exact": true,
+    "n_zero": "Original parent path; no singleton product.",
+    "batch_m_p": "All Nat, output length batch*m*p; no added positivity premise. Empty output has no Fin index.",
+    "core_line": 4437,
+    "bmmDecodeC_line": 4441,
+    "reference_decode_line": 2737,
+    "A_address": "((b*m+i)*n+0)",
+    "B_address": "((b*n+0)*p+j)",
+    "defaults": "posZero for both original getD reads",
+    "reference_k_zero_addresses_identical": true,
+    "no_unchecked_reads_or_reassociation": true,
+    "no_seed_workload_value_dispatch": true
+  },
+  "native_helper": {
+    "definition_line": 4409,
+    "bound_product_line": 4410,
+    "guard_line": 4411,
+    "fallback_line": 4412,
+    "one_helper_call_in_core": true,
+    "one_bound_native_multiply_expression": true,
+    "native_product_expression": "ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y",
+    "acceptance_test": "r.isNaN=false, not isFinite",
+    "native_nonNaN_return": "ExecFloat.Binary.ofFloat32 r",
+    "NaN_repair": "Submission.mul x y with original raw arguments, not decoded native carriers",
+    "source_once_only_scope": "One source-bound product on normal path; NaN fallback adds the original scalar work. Actual instruction multiplicity/boxing/allocation NOT_RUN."
+  },
+  "proof_interfaces": {
+    "nativeProduct_eq": {
+      "line": 4415,
+      "type": "forall x y : Binary32, nativeProduct x y = Submission.mul x y",
+      "true_branch": "mul_inputs -> nonNaN bridge -> two raw-carrier roundtrips -> Submission.mul_eq",
+      "false_branch": "rfl, exact scalar call",
+      "new_compile": "NOT_RUN"
+    },
+    "correct_mul_inputs": {
+      "name": "Submission.NotNaNProbe.mul_inputs",
+      "line": 2847,
+      "type": "(x*y).isNaN=false -> x.isNaN=false and y.isNaN=false"
+    },
+    "correct_bridge": {
+      "name": "Submission.R7Native.ofFloat32Mul",
+      "line": 3064,
+      "type": "x.isNaN=false -> y.isNaN=false -> ofFloat32(x*y)=ExecFloat.mul(ofFloat32 x)(ofFloat32 y)",
+      "Inf_permitted": true,
+      "modelMul_line": 3023,
+      "finite_and_Inf_cases_explicit": true
+    },
+    "unused_finite_only_bridge": {
+      "name": "Submission.NativeBridge.ofFloat32Mul",
+      "line": 2671,
+      "premises": "x.isFinite=true and y.isFinite=true",
+      "used_by_new_helper": false
+    },
+    "roundtrip": {
+      "name": "Submission.NotNaNProbe.roundtrip",
+      "line": 2817,
+      "premise": "(toFloat32 x).isNaN=false",
+      "conclusion": "ofFloat32(toFloat32 x)=x"
+    },
+    "Submission_mul_eq_line": 2720,
+    "singletonCore_eq_reference": {
+      "line": 4446,
+      "n_equals_one_premise": true,
+      "new_rewrite_line": 4455,
+      "seed_bridge_rewrite_line": 4456,
+      "old_fold_simp_line": 4457,
+      "old_fold_rules": [
+        "Fin.foldl_succ",
+        "Fin.foldl_zero",
+        "Fin.val_zero"
+      ],
+      "proof_unchanged_other_than_one_new_rewrite": true,
+      "new_compile": "NOT_RUN"
+    }
+  },
+  "accepted_and_repaired_domains": [
+    {
+      "case": "ordinary finite/subnormal/underflow signed zero",
+      "path": "native nonNaN product import",
+      "precision": "Separately rounded product retained; -0 later normalized."
+    },
+    {
+      "case": "finite overflow Inf, signed Inf times nonzero, Inf times Inf",
+      "path": "native nonNaN product import",
+      "precision": "Correct bridge permits Inf; no finite-only acceptance guard."
+    },
+    {
+      "case": "0 times Inf invalid",
+      "path": "NaN product -> original scalar",
+      "precision": "Original invalid word semantics."
+    },
+    {
+      "case": "raw qNaN or sNaN inputs including both-NaN priority",
+      "path": "NaN product -> original scalar with raw x/y",
+      "precision": "Original quieting/sign/payload/signaling-first behavior; no raw NaN native roundtrip assumed."
+    }
+  ],
+  "seed_normalizer": {
+    "definition_line": 4176,
+    "runtime": "UInt32 conditional selects0 only for0x80000000, then ExecFloat.ofRaw; no native conversion.",
+    "W10b_Core_runtime_identity": "Same runtime definition as published Core, namespace adapted; inherited c44c bytes frozen.",
+    "general_q_theorem_line": 4350,
+    "general_q_required_premise": "Model.isSNaN(toModel q)=false",
+    "exec_mul_not_snan_line": 4361,
+    "actual_mul_closure": "R7W01.exec_toModel_mul and R7W01.mul32_not_snan",
+    "all_input_mul_seed_identity_line": 4367,
+    "Submission_bridge_line": 4388,
+    "new_helper_rewritten_to_actual_mul_before_seed_bridge": true,
+    "signed_zero": "Only -0 product becomes +0, matching Spec initial+0 add.",
+    "quiet_NaN_payload": "Normalizer keeps original word; scalar repaired product is non-signaling.",
+    "c44c_Lean_status": "NOT_RUN",
+    "authorship_independence": "Self-authored inherited port, not independent mathematical revalidation."
+  },
+  "one_new_negative_model_witness": {
+    "purpose": "Demonstrate that arbitrary sNaN cannot use the raw normalizer as +0-add, so the product not-sNaN proof is indispensable.",
+    "q": "0x7f800011",
+    "raw_normalizer": "0x7f800011",
+    "integer_oracle_add_plus_zero": "0x7fc00011",
+    "different": true,
+    "oracle": {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py",
+      "bytes": 4908,
+      "sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72"
+    },
+    "oracle_hash_unchanged_after": true,
+    "status": "FINITE_INTEGER_TRANSCRIPTION_ONLY_NOT_LEAN_OR_HARDWARE",
+    "author_prior16_cases_rerun": false,
+    "author_prior16_cases_inherited_as_new_independent_validation": false
+  },
+  "original_W10_W10b_evidence": {
+    "prior_review": {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/zero-seed-proof-review.json",
+      "bytes": 98845,
+      "sha256": "df6e5674bac48977bf1b3f935948e043200baaf1cf99a52924cb82bb06336fb4"
+    },
+    "primary_original_files_rehashed": [
+      {
+        "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/Core.lean",
+        "bytes": 427,
+        "sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f"
+      },
+      {
+        "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/Proofs.lean",
+        "bytes": 3636,
+        "sha256": "90a6e0461690f8220d7ecc1710d52a267eb6239ec18d50de9f164952eff6bcbd"
+      },
+      {
+        "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/NativeZero.lean",
+        "bytes": 4847,
+        "sha256": "004c968380cb23bc165dd1a4a05c8e0cf402187f75a3d41c6fca61695882d492"
+      },
+      {
+        "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/General.lean",
+        "bytes": 2665,
+        "sha256": "c6790e97e91474de559dc913f53c28f0bebccbeb3674fe93ee5bd94fcb5bbaaa"
+      },
+      {
+        "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/MulClassification.lean",
+        "bytes": 961,
+        "sha256": "adc9302f240f3ab7938ef29ed1eb66e78c005d57908e3c633f6723e0a806d3bf"
+      },
+      {
+        "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/Product.lean",
+        "bytes": 2156,
+        "sha256": "b508427ad70785362836b1ff04577bf66969e7558ab6ba2f2a062774fa6bd29f"
+      }
+    ],
+    "selected_original_success_records_rehashed": [
+      {
+        "name": "R7W10-attempt1",
+        "original_returncode": 0,
+        "record": {
+          "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.json",
+          "bytes": 681,
+          "sha256": "f68a9de97407574ce015f853c039e4deb1ab700fa4775ddb952f17917331d722"
+        },
+        "snapshots": [
+          {
+            "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.lean",
+            "bytes": 116706,
+            "sha256": "c3f9965a7f4f55d13473e5364e95173a2a36b2c1e39bcb1f07f7dce2018432cc"
+          }
+        ],
+        "scope": "Saved public original evidence only, never exact47d/c44c port acceptance."
+      },
+      {
+        "name": "R7W10Diagnostics-attempt1",
+        "original_returncode": 0,
+        "record": {
+          "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Diagnostics-attempt1.json",
+          "bytes": 737,
+          "sha256": "42a7ebcc9fb13c1a3904723b35d8ce5b2138d1db01b9b905abac83c75c121c29"
+        },
+        "snapshots": [
+          {
+            "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Diagnostics-attempt1.lean",
+            "bytes": 137138,
+            "sha256": "8ba7df16900f2fc4bb72868dae7f08e378c9f23e9b582a5a1fbea56fb87cdfa0"
+          }
+        ],
+        "scope": "Saved public original evidence only, never exact47d/c44c port acceptance."
+      },
+      {
+        "name": "Core-attempt1",
+        "original_returncode": 0,
+        "record": {
+          "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.json",
+          "bytes": 682,
+          "sha256": "e72ab021e26eeb74a0ba469ad3472796601f1ad8c313c2a078510a3a7193a15c"
+        },
+        "snapshots": [
+          {
+            "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.lean",
+            "bytes": 427,
+            "sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f"
+          }
+        ],
+        "scope": "Saved public original evidence only, never exact47d/c44c port acceptance."
+      },
+      {
+        "name": "Proofs-attempt2",
+        "original_returncode": 0,
+        "record": {
+          "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.json",
+          "bytes": 692,
+          "sha256": "4b83b70babc8b09b7956aa232b720fe4ff3a1d1b488e5eeae9c06bf8d94b86b8"
+        },
+        "snapshots": [
+          {
+            "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.lean",
+            "bytes": 3636,
+            "sha256": "90a6e0461690f8220d7ecc1710d52a267eb6239ec18d50de9f164952eff6bcbd"
+          }
+        ],
+        "scope": "Saved public original evidence only, never exact47d/c44c port acceptance."
+      },
+      {
+        "name": "ProofsAxioms-attempt2",
+        "original_returncode": 0,
+        "record": {
+          "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/ProofsAxioms-attempt2.json",
+          "bytes": 758,
+          "sha256": "6205bd3be9b08b09609803d7e6c27c124d1224c71eaa2ede53eaf0b301cb264a"
+        },
+        "snapshots": [
+          {
+            "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/ProofsAxioms-attempt2.lean",
+            "bytes": 576,
+            "sha256": "941dec5bb4303105742d93b30202d138160f12a8af19af094540f6dc770e5414"
+          }
+        ],
+        "scope": "Saved public original evidence only, never exact47d/c44c port acceptance."
+      }
+    ],
+    "prior_raw_axiom_counts": {
+      "W10": 218,
+      "W10b": 26
+    },
+    "scope": "Source theorem provenance and previous original-log audit only. Original gate-prohibited W10 declarations were not copied wholesale, and success is not promoted to c44c/47d new Lean or fullgate."
+  },
+  "current_policy": {
+    "status": "PASS_STATIC_ONLY",
+    "reason": null,
+    "source": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+    "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+    "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+    "scope": "Unmodified policy/options bodies; exact full-slot contract extracted from upstream AST. No build/kernel/axiom/score stage.",
+    "function_source_sha256": {
+      "policy": "02b663a311285f927e48e0533fde188073ec32b84fb079639a6690f36821cce4",
+      "options": "91fdd48a992c4bc786e731e9f12ba3d975f37443e9007968f62c107effe64382"
+    }
+  },
+  "imports": [
+    {
+      "line": 1,
+      "text": "import ContractTensor"
+    }
+  ],
+  "set_options": [],
+  "namespace": {
+    "seed_namespace_closed_line": 4400,
+    "new_helper_namespace_open_line": 4404,
+    "new_helper_namespace_closed_line": 4430,
+    "singleton_Submission_reopen_line": 4433,
+    "new_dependencies_precede_uses": true,
+    "new_duplicate_export_or_forward_reference_found": false
+  },
+  "cost_boundary": {
+    "source_difference_vs53d": "NonNaN n=1 now bypasses scalar exponent-sum/LowScale path.",
+    "difference_vs97f": "Still n=1 dispatch, native isNaN guard, carrier wrapping and raw -0 selection; NaN path pays native trial plus exact scalar.",
+    "removed_add_does_not_prove_speedup": true,
+    "same_source_bodies_do_not_prove_codegen_cost_identity": true,
+    "whole_suite_time_or_gain": "UNKNOWN",
+    "no_whole_cell_time_assigned_to_n1": true,
+    "no_new_future_inputs_generated": true
+  },
+  "first_discriminator": "Compile exact47d nativeProduct_eq, inherited c44c and singleton rewrites with actual four specs/axioms; if accepted inspect actual normal product and NaN fallback C/asm, then D decides complete paired suite and independent confirmation.",
+  "inputs": [
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-singleton-native-normalize/Kernel.lean",
+      "bytes": 188335,
+      "sha256": "47d429fe3a351a5e002f98c1f4cb95dfdc04368c268275508be758d176f3a347"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-singleton-native-normalize/manifest.json",
+      "bytes": 2823,
+      "sha256": "083d0272197103c76650de82b7a46c429729ccfb5b4583765ac334d6d43a5732"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-singleton-normalize/Kernel.lean",
+      "bytes": 187374,
+      "sha256": "53d1c2c40642060c970189250ea1aee88c37ba3eb1309b2bcfed1f0fcf9a3fa7"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-direct-nonfinite/Kernel.lean",
+      "bytes": 174925,
+      "sha256": "97f77e2ce3f53dc3625349d5d2a7bc761570f9428c0b547070e37254c4960d26"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/seed-normalize-block.lean",
+      "bytes": 10793,
+      "sha256": "c44c4afbbe117e97b857ac3541638f3cbee370ba86f837fc76be16c41d08ed26"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/singleton-native-product-block.lean",
+      "bytes": 900,
+      "sha256": "acbdd0a61024056d4764abb7ce3fed5c217639de7f4b44691e7c6195c73e3442"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/build-singleton-native-normalize.py",
+      "bytes": 12258,
+      "sha256": "a272b581b08905a8748b205cc286832c97c626031228ff6d528ea9d0a2a3c143"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/singleton-native-normalize-design.md",
+      "bytes": 5237,
+      "sha256": "ba3fd560236a4652bd384435b45d48238efa89faa9aeab299b05d128dcc0f527"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/singleton-native-normalize-design.json",
+      "bytes": 14666,
+      "sha256": "f07b227bf291dddfc3075d5945bb792101156f35269136a396bca0027edeb4cb"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/zero-seed-proof-review.md",
+      "bytes": 10521,
+      "sha256": "2cfbda5ac29ae1fe5890aa81ad848a826f81f538953a551c01ee402132db3894"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/zero-seed-proof-review.json",
+      "bytes": 98845,
+      "sha256": "df6e5674bac48977bf1b3f935948e043200baaf1cf99a52924cb82bb06336fb4"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/singleton-normalize-review.md",
+      "bytes": 6898,
+      "sha256": "e35c7ec66b660293164192268f0e4b903105fc5702ad7ad0389a7f64c6e32b4c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/singleton-normalize-review.json",
+      "bytes": 22001,
+      "sha256": "1d60510d9419b22f2d6d6c41ff30a228d58c67ce1179d8acacc6110e79c5a811"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/seed-normalize-design.json",
+      "bytes": 27035,
+      "sha256": "0ebc8a739ec2b58f9f35efd0de3bc9c51c0e45a373cced5dcb3d349e472a5d87"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/build-seed-normalize.py",
+      "bytes": 12160,
+      "sha256": "135e8e429d8bd484fe4ec364d83947bfe9ccefeb1f8d6a39771717860f9cdf69"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+      "bytes": 38320,
+      "sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py",
+      "bytes": 4908,
+      "sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/Core.lean",
+      "bytes": 427,
+      "sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/Proofs.lean",
+      "bytes": 3636,
+      "sha256": "90a6e0461690f8220d7ecc1710d52a267eb6239ec18d50de9f164952eff6bcbd"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/NativeZero.lean",
+      "bytes": 4847,
+      "sha256": "004c968380cb23bc165dd1a4a05c8e0cf402187f75a3d41c6fca61695882d492"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/General.lean",
+      "bytes": 2665,
+      "sha256": "c6790e97e91474de559dc913f53c28f0bebccbeb3674fe93ee5bd94fcb5bbaaa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/MulClassification.lean",
+      "bytes": 961,
+      "sha256": "adc9302f240f3ab7938ef29ed1eb66e78c005d57908e3c633f6723e0a806d3bf"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/proofs/Product.lean",
+      "bytes": 2156,
+      "sha256": "b508427ad70785362836b1ff04577bf66969e7558ab6ba2f2a062774fa6bd29f"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.lean",
+      "bytes": 116706,
+      "sha256": "c3f9965a7f4f55d13473e5364e95173a2a36b2c1e39bcb1f07f7dce2018432cc"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10-attempt1.json",
+      "bytes": 681,
+      "sha256": "f68a9de97407574ce015f853c039e4deb1ab700fa4775ddb952f17917331d722"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Diagnostics-attempt1.lean",
+      "bytes": 137138,
+      "sha256": "8ba7df16900f2fc4bb72868dae7f08e378c9f23e9b582a5a1fbea56fb87cdfa0"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10/original-extracted/R7-W10/logs/R7W10Diagnostics-attempt1.json",
+      "bytes": 737,
+      "sha256": "42a7ebcc9fb13c1a3904723b35d8ce5b2138d1db01b9b905abac83c75c121c29"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.lean",
+      "bytes": 427,
+      "sha256": "270c698a2dd2b96d21766d35339e090ca1455f71404145b3323cd1862301b67f"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Core-attempt1.json",
+      "bytes": 682,
+      "sha256": "e72ab021e26eeb74a0ba469ad3472796601f1ad8c313c2a078510a3a7193a15c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.lean",
+      "bytes": 3636,
+      "sha256": "90a6e0461690f8220d7ecc1710d52a267eb6239ec18d50de9f164952eff6bcbd"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/Proofs-attempt2.json",
+      "bytes": 692,
+      "sha256": "4b83b70babc8b09b7956aa232b720fe4ff3a1d1b488e5eeae9c06bf8d94b86b8"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/ProofsAxioms-attempt2.lean",
+      "bytes": 576,
+      "sha256": "941dec5bb4303105742d93b30202d138160f12a8af19af094540f6dc770e5414"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W10b/original-extracted/R7-W10b/logs/ProofsAxioms-attempt2.json",
+      "bytes": 758,
+      "sha256": "6205bd3be9b08b09609803d7e6c27c124d1224c71eaa2ede53eaf0b301cb264a"
+    }
+  ],
+  "markdown": {
+    "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/singleton-native-runtime-review.md",
+    "bytes": 8190,
+    "sha256": "90992e7d283cad1f91ca454664cf22a600a2353defc563a6c5c3fede7d0d0bf0"
+  }
+}

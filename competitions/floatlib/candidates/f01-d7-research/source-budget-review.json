@@ -1,0 +1,539 @@
+{
+  "schema": "floatlib.r7.source_budget_review.v1",
+  "review_started_at_utc": "2026-10-23T01:39:58Z",
+  "budget_minutes": 25,
+  "drafted_at_utc": "2026-10-23T01:44:44.078543+00:00",
+  "reviewed_script": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\source-budget.py",
+    "bytes": 4815,
+    "sha256": "be0a57f8c62989506e194fa454a1fffdb74f65dd4382b0b51d3f64d0d95c8109",
+    "source_utf8_snapshot": "\"\"\"Prepare a local whole-file size report without changing the input Kernel.lean.\"\"\"\nimport argparse\nimport hashlib\nimport json\nfrom pathlib import Path\n\nLICENCE_WORDS=(b'copyright',b'license',b'licence',b'spdx',b'third-party notices')\n\ndef comment_spans(raw):\n    spans=[];i=0\n    while i<len(raw):\n        if raw[i:i+2]==b'--':\n            end=raw.find(b'\\n',i);end=len(raw) if end<0 else end\n            spans.append((i,end));i=end\n        elif raw[i:i+2]==b'/-':\n            start=i;i+=2;depth=1\n            while depth and i<len(raw):\n                if raw[i:i+2]==b'/-':depth+=1;i+=2\n                elif raw[i:i+2]==b'-/':depth-=1;i+=2\n                else:i+=1\n            if depth:raise ValueError('Unterminated block comment')\n            spans.append((start,i))\n        else:\n            if raw[i] in (34,96) or raw[i:i+2] in ('«'.encode(),'»'.encode()):\n                raise ValueError('Unsupported live string, quotation or quoted identifier; leave source unchanged')\n            i+=1\n    return spans\n\ndef prepare(raw):\n    raw.decode('utf8')\n    changes=[]\n    for start,end in comment_spans(raw):\n        line_start=raw.rfind(b'\\n',0,start)+1\n        line_end=raw.find(b'\\n',end);line_end=len(raw) if line_end<0 else line_end\n        if raw[line_start:start].strip(b' \\t\\r') or raw[end:line_end].strip(b' \\t\\r'):\n            continue\n        if any(word in raw[start:end].lower() for word in LICENCE_WORDS):\n            continue\n        has_newline=line_end<len(raw)\n        eol=b'\\r\\n' if has_newline and raw[line_end-1:line_end]==b'\\r' else b'\\n' if has_newline else b''\n        changes.append((line_start,line_end+int(has_newline),eol))\n    result=raw\n    for start,end,replacement in reversed(changes):result=result[:start]+replacement+result[end:]\n    return result\n\ndef code_lines(raw):\n    live=bytearray(raw)\n    for start,end in comment_spans(raw):\n        for i in range(start,end):\n            if raw[i]!=10:live[i]=32\n    original_lines=raw.split(b'\\n');live_lines=bytes(live).split(b'\\n')\n    return b''.join(source+(b'\\n' if i<len(original_lines)-1 else b'')\n                    for i,(source,visible) in enumerate(zip(original_lines,live_lines))\n                    if visible.strip(b' \\t\\r'))\n\ndef licence_hashes(raw):\n    return [hashlib.sha256(raw[start:end]).hexdigest() for start,end in comment_spans(raw)\n            if any(word in raw[start:end].lower() for word in LICENCE_WORDS)]\n\ndef report_for(original,prepared):\n    before,after=code_lines(original),code_lines(prepared)\n    licences=licence_hashes(original)\n    if before!=after:raise ValueError('Live code lines or indentation changed')\n    if licences!=licence_hashes(prepared):raise ValueError('Licence or attribution comment bytes changed')\n    return {'input_sha256':hashlib.sha256(original).hexdigest(),'input_bytes':len(original),\n        'prepared_sha256':hashlib.sha256(prepared).hexdigest(),'prepared_bytes':len(prepared),\n        'saved_bytes':len(original)-len(prepared),'official_size_cap':256000,\n        'prepared_fits_size_cap':len(prepared)<=256000,\n        'code_lines_sha256':hashlib.sha256(before).hexdigest(),'code_lines_byte_equal':True,\n        'licence_comment_hashes':licences,\n        'removed_comment_count':len(comment_spans(original))-len(comment_spans(prepared)),\n        'new_Lean_fullgate':'NOT_RUN',\n        'scope':'Local source packaging only. Entire live physical code lines including indentation and inline comments are byte-identical; documentation metadata/line numbers may change. This does not establish Lean acceptance or performance. Strings/quotations/quoted identifiers are unsupported and rejected.'}\n\ndef main():\n    ap=argparse.ArgumentParser(description=__doc__)\n    ap.add_argument('--input',required=True,type=Path)\n    ap.add_argument('--prepared-output',required=True,type=Path)\n    ap.add_argument('--report',required=True,type=Path)\n    a=ap.parse_args()\n    if len({p.resolve() for p in (a.input,a.prepared_output,a.report)})!=3:\n        ap.error('Input, prepared output and report must be distinct paths')\n    for path in (a.prepared_output,a.report):\n        if path.exists() or path.is_symlink():ap.error('Refusing to overwrite existing artifact: '+str(path))\n        if not path.parent.is_dir():ap.error('Output parent must already exist: '+str(path.parent))\n    original=a.input.read_bytes()\n    try:\n        prepared=prepare(original);report=report_for(original,prepared)\n    except (ValueError,UnicodeDecodeError) as error:ap.error(str(error))\n    if a.input.read_bytes()!=original:ap.error('Input changed during preparation')\n    with a.prepared_output.open('xb') as stream:stream.write(prepared)\n    with a.report.open('x',encoding='utf8',newline='\\n') as stream:\n        stream.write(json.dumps(report,indent=2)+'\\n')\n\nif __name__=='__main__':main()\n",
+    "line_anchors": {
+      "license_words": 7,
+      "span_scanner": 9,
+      "whole_line_removal": 29,
+      "code_lines": 46,
+      "license_hashes": 56,
+      "report": 60,
+      "main": 75
+    }
+  },
+  "reviewed_tests": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\test-source-budget.py",
+    "bytes": 5547,
+    "sha256": "9d6c10cb6b657552fd9ead318f929aa2632e55a51c57790309df067c09acc5c3"
+  },
+  "reviewed_summary": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\source-budget-summary.json",
+    "bytes": 12348,
+    "sha256": "8ab6c7f6f47b7e582ca60a8cce6721acb382b1fb6ae7fb2b284972091386a17e"
+  },
+  "determinate_witnesses": [
+    {
+      "name": "attribution_only",
+      "source_utf8": "-- Attribution: Alice; adapted from Project X\ndef x : Nat := 1\n",
+      "prepared_utf8": "\ndef x : Nat := 1\n",
+      "report": {
+        "input_sha256": "d2d38a8b8d83fe529c8ed37a1c320bfe2f386645fe368559d49184547419857f",
+        "input_bytes": 63,
+        "prepared_sha256": "d189e761d39c7d22d5c30e7f6e80aed3cd622c7ce58ad2ccb09b6f70a0e3e8d5",
+        "prepared_bytes": 18,
+        "saved_bytes": 45,
+        "official_size_cap": 256000,
+        "prepared_fits_size_cap": true,
+        "code_lines_sha256": "2fb698548c396e5702bb0a147ec89a2e6d925412feac8edd1086b96cc8dee769",
+        "code_lines_byte_equal": true,
+        "licence_comment_hashes": [],
+        "removed_comment_count": 1,
+        "new_Lean_fullgate": "NOT_RUN",
+        "scope": "Local source packaging only. Entire live physical code lines including indentation and inline comments are byte-identical; documentation metadata/line numbers may change. This does not establish Lean acceptance or performance. Strings/quotations/quoted identifiers are unsupported and rejected."
+      },
+      "status": "DETERMINATE_PROTECTION_CONTRACT_BUG_NO_LEAN_NEEDED"
+    },
+    {
+      "name": "line_license_block",
+      "source_utf8": "-- MIT License\n-- Copyright 2026 Alice\n-- Permission is hereby granted, free of charge, to any person obtaining a copy.\n-- THE SOFTWARE IS PROVIDED AS IS.\ndef x : Nat := 1\n",
+      "prepared_utf8": "-- MIT License\n-- Copyright 2026 Alice\n\n\ndef x : Nat := 1\n",
+      "report": {
+        "input_sha256": "c8ce9db88bace2e5f50ced1bcb74e7e2079890bfd6169e39a1a9531aa5c37911",
+        "input_bytes": 172,
+        "prepared_sha256": "3d2a94447c4a4f08ca3d0efa0cc3bac207874b5b29d2af9a2c7699ecf211a6c0",
+        "prepared_bytes": 58,
+        "saved_bytes": 114,
+        "official_size_cap": 256000,
+        "prepared_fits_size_cap": true,
+        "code_lines_sha256": "2fb698548c396e5702bb0a147ec89a2e6d925412feac8edd1086b96cc8dee769",
+        "code_lines_byte_equal": true,
+        "licence_comment_hashes": [
+          "c811315b1f4605a6d363c5225b2c1d1973c5fdc5a939e28a7c3a2331aa44bafc",
+          "870ba614e4ab5ab6353e4b82b19700312fcc8152a7b947d08d51e573ac4898e3"
+        ],
+        "removed_comment_count": 2,
+        "new_Lean_fullgate": "NOT_RUN",
+        "scope": "Local source packaging only. Entire live physical code lines including indentation and inline comments are byte-identical; documentation metadata/line numbers may change. This does not establish Lean acceptance or performance. Strings/quotations/quoted identifiers are unsupported and rejected."
+      },
+      "status": "DETERMINATE_PROTECTION_CONTRACT_BUG_NO_LEAN_NEEDED"
+    }
+  ],
+  "actual_preflights": [
+    {
+      "candidate": "f01-d7-direct-nonnan",
+      "input_sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+      "input_bytes": 155103,
+      "prepared_sha256": "2d50f75853502779ac131e5a5b17116e366e5e37b0e4fe0337ef48bcf5ad1978",
+      "prepared_bytes": 145350,
+      "saved_report_matches_summary": true,
+      "code_lines_reported_equal": true,
+      "actual_frozen_seed_attribution_comment": []
+    },
+    {
+      "candidate": "f01-r7-sum-singlepass-fused-proof1",
+      "input_sha256": "3d9b1ea94ec105073334b793adcb5a9fecc4eda37dd2a5809e715b5584a54576",
+      "input_bytes": 230650,
+      "prepared_sha256": "56622bd253895ed279e40c7bda68c0366c4ae70b846febaadd860d070c5ad92c",
+      "prepared_bytes": 209038,
+      "saved_report_matches_summary": true,
+      "code_lines_reported_equal": true,
+      "actual_frozen_seed_attribution_comment": []
+    },
+    {
+      "candidate": "f01-d7-scalar-exceptional-word",
+      "input_sha256": "939dbf31705408ac5177e4ede746b7cd52c72e9b7ab7b75eb2a1fd2178635237",
+      "input_bytes": 175363,
+      "prepared_sha256": "3c28be8b993e1a7bde96ad2d5d1ac7c9480bbf6ddf43176350e6dc5f0da44dc7",
+      "prepared_bytes": 163901,
+      "saved_report_matches_summary": true,
+      "code_lines_reported_equal": true,
+      "actual_frozen_seed_attribution_comment": []
+    },
+    {
+      "candidate": "f01-d7-canonical-dot-scan",
+      "input_sha256": "4792e9679c9607efd84a461a9d1ad7ca0e6bcb59d657fccacde8b96bf075f43c",
+      "input_bytes": 195683,
+      "prepared_sha256": "8547203b02e9bac215e3c2819b9f87b50b7ac5f2e80464c9d049309da60cbd10",
+      "prepared_bytes": 180955,
+      "saved_report_matches_summary": true,
+      "code_lines_reported_equal": true,
+      "actual_frozen_seed_attribution_comment": []
+    },
+    {
+      "candidate": "f01-d7-singleton-native-normalize",
+      "input_sha256": "47d429fe3a351a5e002f98c1f4cb95dfdc04368c268275508be758d176f3a347",
+      "input_bytes": 188335,
+      "prepared_sha256": "c27229a958138da7954fb41f39dc16e093b6f839eb5673c9ec521289557c04ab",
+      "prepared_bytes": 174373,
+      "saved_report_matches_summary": true,
+      "code_lines_reported_equal": true,
+      "actual_frozen_seed_attribution_comment": [
+        {
+          "source_comment_utf8": "/-\nR7 product-seed proof probe. All new declarations are NOT_RUN.\nAppend to the frozen 97f77e2c direct/nonfinite base.\nSources: supplied W10 NativeZero/General, W10b Core and W05 classifier proofs.\nFixed FloatLib definitions are MIT; Lean definitions are Apache-2.0.\nThe retained source notices remain intact. New local proof glue is NOT_RUN.\nThe only new runtime definition selects a UInt32 before wrapping its carrier.\n-/",
+          "present_in_original": true,
+          "present_in_prepared": false,
+          "contains_source_attribution": true
+        }
+      ]
+    },
+    {
+      "candidate": "f01-r7-low-normal-sum-decode",
+      "input_sha256": "353d9816425d92fbc6d0cc14c9d30e17fb64d6d4fb7ebdf594700ef02c417c2a",
+      "input_bytes": 174914,
+      "prepared_sha256": "73cf1ba770c1f3f30b18b8f0808c329f86e22033e46d4b0cfdb8e647e045fff6",
+      "prepared_bytes": 161517,
+      "saved_report_matches_summary": true,
+      "code_lines_reported_equal": true,
+      "actual_frozen_seed_attribution_comment": []
+    },
+    {
+      "candidate": "f01-d7-direct-nonfinite",
+      "input_sha256": "97f77e2ce3f53dc3625349d5d2a7bc761570f9428c0b547070e37254c4960d26",
+      "input_bytes": 174925,
+      "prepared_sha256": "bad9258954e3b7474f713aedade052d80b765b9b8e24aa0045b73a8514cd92d3",
+      "prepared_bytes": 162033,
+      "saved_report_matches_summary": true,
+      "code_lines_reported_equal": true,
+      "actual_frozen_seed_attribution_comment": []
+    }
+  ],
+  "scope": "Only this review MD/JSON and independently scoped temporary CLI fixtures were written by reviewer; all owned workspace temp fixture files deleted nonrecursively. Original root tool/test changes were made by coordinator after minimal red counterexamples, with negative source snapshots preserved.",
+  "CLI_negative_replays": [
+    {
+      "case": "attribution_only",
+      "returncode": 0,
+      "input_unchanged": true,
+      "prepared_sha256": "d189e761d39c7d22d5c30e7f6e80aed3cd622c7ce58ad2ccb09b6f70a0e3e8d5",
+      "report_claims_code_lines_equal": true,
+      "preservation_contract_violated": true,
+      "temp_root": "D:\\CodingProject\\Bitget\\.local-maintenance\\r7-20261023\\independent-source-budget-review-gu86yt18",
+      "scope": "Real CLI artifact reproduction using the frozenbe0 original copy; no Lean."
+    },
+    {
+      "case": "line_license_block",
+      "returncode": 0,
+      "input_unchanged": true,
+      "prepared_sha256": "3d2a94447c4a4f08ca3d0efa0cc3bac207874b5b29d2af9a2c7699ecf211a6c0",
+      "report_claims_code_lines_equal": true,
+      "preservation_contract_violated": true,
+      "temp_root": "D:\\CodingProject\\Bitget\\.local-maintenance\\r7-20261023\\independent-source-budget-review-gu86yt18",
+      "scope": "Real CLI artifact reproduction using the frozenbe0 original copy; no Lean."
+    }
+  ],
+  "temporary_replay_cleanup": {
+    "bounded_absolute_root": "D:\\CodingProject\\Bitget\\.local-maintenance\\r7-20261023\\independent-source-budget-review-gu86yt18",
+    "inside_ignored_maintenance_and_independent_prefix": true,
+    "recursive_delete_used": false,
+    "all_known_created_files_unlinked": true,
+    "empty_root_removed": true,
+    "still_exists": false
+  },
+  "initial_external_TEMP_attempt": {
+    "status": "PERMISSION_DENIED_BEFORE_ANY_FILE_WRITE_OR_REPLAY",
+    "path": "C:/Users/幻/AppData/Local/Packages/sandbox.{04d5a649-6917-4e0c-a1b5-73cf1749c7f3}/AC/Temp/floatlib-source-budget-review-yg2pcbcr",
+    "empty_directory_removal": "PERMISSION_DENIED",
+    "note": "No source/report/fixture file written there. Successful replay used an independently scoped workspace temp folder and removed its known files nonrecursively.",
+    "final_path_check": "ABSENT under a later read-only Test-Path check; no owned source/fixture/output file was written there"
+  },
+  "updated_at_utc": "2026-10-23T01:48:28.343139+00:00",
+  "later_observed_version": {
+    "sha256": "53aa85af4353599666ba7a51a6c7a465cef6568a484c431f95e1d4531281eea0",
+    "source_utf8_snapshot": "\"\"\"Prepare a local whole-file size report without changing the input Kernel.lean.\"\"\"\nimport argparse\nimport hashlib\nimport json\nimport re\nfrom pathlib import Path\n\nLICENCE_WORDS=(b'copyright',b'license',b'licence',b'spdx',b'third-party notices',\n               b'attribution',b'author',b'adapted',b'derived from',b'ported from',\n               b'copied from',b'taken from',b'based on',b'provenance',b'contributor')\n\ndef is_notice(comment):\n    lower=comment.lower()\n    return (any(word in lower for word in LICENCE_WORDS) or\n            re.search(rb'\\bsources?\\s*:|\\b(?:mit|apache|bsd|gpl|lgpl|mpl)\\b',lower) is not None)\n\ndef comment_spans(raw):\n    spans=[];i=0\n    while i<len(raw):\n        if raw[i:i+2]==b'--':\n            end=raw.find(b'\\n',i);end=len(raw) if end<0 else end\n            spans.append((i,end));i=end\n        elif raw[i:i+2]==b'/-':\n            start=i;i+=2;depth=1\n            while depth and i<len(raw):\n                if raw[i:i+2]==b'/-':depth+=1;i+=2\n                elif raw[i:i+2]==b'-/':depth-=1;i+=2\n                else:i+=1\n            if depth:raise ValueError('Unterminated block comment')\n            spans.append((start,i))\n        else:\n            if raw[i] in (34,96) or raw[i:i+2] in ('«'.encode(),'»'.encode()):\n                raise ValueError('Unsupported live string, quotation or quoted identifier; leave source unchanged')\n            i+=1\n    return spans\n\ndef protected_spans(raw):\n    paragraphs=[]\n    for span in comment_spans(raw):\n        if paragraphs and not raw[paragraphs[-1][-1][1]:span[0]].strip(b' \\t\\r\\n'):\n            paragraphs[-1].append(span)\n        else:paragraphs.append([span])\n    return {span for paragraph in paragraphs\n            if any(is_notice(raw[start:end]) for start,end in paragraph)\n            for span in paragraph}\n\ndef prepare(raw):\n    raw.decode('utf8')\n    protected=protected_spans(raw)\n    changes=[]\n    for start,end in comment_spans(raw):\n        line_start=raw.rfind(b'\\n',0,start)+1\n        line_end=raw.find(b'\\n',end);line_end=len(raw) if line_end<0 else line_end\n        if raw[line_start:start].strip(b' \\t\\r') or raw[end:line_end].strip(b' \\t\\r'):\n            continue\n        if (start,end) in protected:\n            continue\n        has_newline=line_end<len(raw)\n        eol=b'\\r\\n' if has_newline and raw[line_end-1:line_end]==b'\\r' else b'\\n' if has_newline else b''\n        changes.append((line_start,line_end+int(has_newline),eol))\n    result=raw\n    for start,end,replacement in reversed(changes):result=result[:start]+replacement+result[end:]\n    return result\n\ndef code_lines(raw):\n    live=bytearray(raw)\n    for start,end in comment_spans(raw):\n        for i in range(start,end):\n            if raw[i]!=10:live[i]=32\n    original_lines=raw.split(b'\\n');live_lines=bytes(live).split(b'\\n')\n    return b''.join(source+(b'\\n' if i<len(original_lines)-1 else b'')\n                    for i,(source,visible) in enumerate(zip(original_lines,live_lines))\n                    if visible.strip(b' \\t\\r'))\n\ndef licence_hashes(raw):\n    return [hashlib.sha256(raw[start:end]).hexdigest() for start,end in comment_spans(raw)\n            if (start,end) in protected_spans(raw)]\n\ndef report_for(original,prepared):\n    before,after=code_lines(original),code_lines(prepared)\n    licences=licence_hashes(original)\n    if before!=after:raise ValueError('Live code lines or indentation changed')\n    if licences!=licence_hashes(prepared):raise ValueError('Licence or attribution comment bytes changed')\n    return {'input_sha256':hashlib.sha256(original).hexdigest(),'input_bytes':len(original),\n        'prepared_sha256':hashlib.sha256(prepared).hexdigest(),'prepared_bytes':len(prepared),\n        'saved_bytes':len(original)-len(prepared),'official_size_cap':256000,\n        'prepared_fits_size_cap':len(prepared)<=256000,\n        'code_lines_sha256':hashlib.sha256(before).hexdigest(),'code_lines_byte_equal':True,\n        'licence_comment_hashes':licences,\n        'removed_comment_count':len(comment_spans(original))-len(comment_spans(prepared)),\n        'new_Lean_fullgate':'NOT_RUN',\n        'scope':'Local source packaging only. Entire live physical code lines including indentation and inline comments are byte-identical; documentation metadata/line numbers may change. This does not establish Lean acceptance or performance. Strings/quotations/quoted identifiers are unsupported and rejected.'}\n\ndef main():\n    ap=argparse.ArgumentParser(description=__doc__)\n    ap.add_argument('--input',required=True,type=Path)\n    ap.add_argument('--prepared-output',required=True,type=Path)\n    ap.add_argument('--report',required=True,type=Path)\n    a=ap.parse_args()\n    if len({p.resolve() for p in (a.input,a.prepared_output,a.report)})!=3:\n        ap.error('Input, prepared output and report must be distinct paths')\n    for path in (a.prepared_output,a.report):\n        if path.exists() or path.is_symlink():ap.error('Refusing to overwrite existing artifact: '+str(path))\n        if not path.parent.is_dir():ap.error('Output parent must already exist: '+str(path.parent))\n    original=a.input.read_bytes()\n    try:\n        prepared=prepare(original);report=report_for(original,prepared)\n    except (ValueError,UnicodeDecodeError) as error:ap.error(str(error))\n    if a.input.read_bytes()!=original:ap.error('Input changed during preparation')\n    with a.prepared_output.open('xb') as stream:stream.write(prepared)\n    with a.report.open('x',encoding='utf8',newline='\\n') as stream:\n        stream.write(json.dumps(report,indent=2)+'\\n')\n\nif __name__=='__main__':main()\n",
+    "two_original_negative_witnesses_preserved_now": [
+      true,
+      true
+    ],
+    "symbolic_copyright_witness": {
+      "source_utf8": "-- © 2026 Alice\ndef x : Nat := 1\n",
+      "prepared_utf8": "\ndef x : Nat := 1\n",
+      "report": {
+        "input_sha256": "56558adc4cab1e7ff6a1fc9e1851a8aef2870373abaa31d4cfca0abfef497f0e",
+        "input_bytes": 34,
+        "prepared_sha256": "d189e761d39c7d22d5c30e7f6e80aed3cd622c7ce58ad2ccb09b6f70a0e3e8d5",
+        "prepared_bytes": 18,
+        "saved_bytes": 16,
+        "official_size_cap": 256000,
+        "prepared_fits_size_cap": true,
+        "code_lines_sha256": "2fb698548c396e5702bb0a147ec89a2e6d925412feac8edd1086b96cc8dee769",
+        "code_lines_byte_equal": true,
+        "licence_comment_hashes": [],
+        "removed_comment_count": 1,
+        "new_Lean_fullgate": "NOT_RUN",
+        "scope": "Local source packaging only. Entire live physical code lines including indentation and inline comments are byte-identical; documentation metadata/line numbers may change. This does not establish Lean acceptance or performance. Strings/quotations/quoted identifiers are unsupported and rejected."
+      },
+      "status": "DETERMINATE_COPYRIGHT_NOTICE_DELETION"
+    }
+  },
+  "latest_bounded_recheck": {
+    "checked_at_utc": "2026-10-23T01:51:29.924029+00:00",
+    "sha256": "53aa85af4353599666ba7a51a6c7a465cef6568a484c431f95e1d4531281eea0",
+    "source_utf8_snapshot": "\"\"\"Prepare a local whole-file size report without changing the input Kernel.lean.\"\"\"\nimport argparse\nimport hashlib\nimport json\nimport re\nfrom pathlib import Path\n\nLICENCE_WORDS=(b'copyright',b'license',b'licence',b'spdx',b'third-party notices',\n               b'attribution',b'author',b'adapted',b'derived from',b'ported from',\n               b'copied from',b'taken from',b'based on',b'provenance',b'contributor')\n\ndef is_notice(comment):\n    lower=comment.lower()\n    return (any(word in lower for word in LICENCE_WORDS) or\n            re.search(rb'\\bsources?\\s*:|\\b(?:mit|apache|bsd|gpl|lgpl|mpl)\\b',lower) is not None)\n\ndef comment_spans(raw):\n    spans=[];i=0\n    while i<len(raw):\n        if raw[i:i+2]==b'--':\n            end=raw.find(b'\\n',i);end=len(raw) if end<0 else end\n            spans.append((i,end));i=end\n        elif raw[i:i+2]==b'/-':\n            start=i;i+=2;depth=1\n            while depth and i<len(raw):\n                if raw[i:i+2]==b'/-':depth+=1;i+=2\n                elif raw[i:i+2]==b'-/':depth-=1;i+=2\n                else:i+=1\n            if depth:raise ValueError('Unterminated block comment')\n            spans.append((start,i))\n        else:\n            if raw[i] in (34,96) or raw[i:i+2] in ('«'.encode(),'»'.encode()):\n                raise ValueError('Unsupported live string, quotation or quoted identifier; leave source unchanged')\n            i+=1\n    return spans\n\ndef protected_spans(raw):\n    paragraphs=[]\n    for span in comment_spans(raw):\n        if paragraphs and not raw[paragraphs[-1][-1][1]:span[0]].strip(b' \\t\\r\\n'):\n            paragraphs[-1].append(span)\n        else:paragraphs.append([span])\n    return {span for paragraph in paragraphs\n            if any(is_notice(raw[start:end]) for start,end in paragraph)\n            for span in paragraph}\n\ndef prepare(raw):\n    raw.decode('utf8')\n    protected=protected_spans(raw)\n    changes=[]\n    for start,end in comment_spans(raw):\n        line_start=raw.rfind(b'\\n',0,start)+1\n        line_end=raw.find(b'\\n',end);line_end=len(raw) if line_end<0 else line_end\n        if raw[line_start:start].strip(b' \\t\\r') or raw[end:line_end].strip(b' \\t\\r'):\n            continue\n        if (start,end) in protected:\n            continue\n        has_newline=line_end<len(raw)\n        eol=b'\\r\\n' if has_newline and raw[line_end-1:line_end]==b'\\r' else b'\\n' if has_newline else b''\n        changes.append((line_start,line_end+int(has_newline),eol))\n    result=raw\n    for start,end,replacement in reversed(changes):result=result[:start]+replacement+result[end:]\n    return result\n\ndef code_lines(raw):\n    live=bytearray(raw)\n    for start,end in comment_spans(raw):\n        for i in range(start,end):\n            if raw[i]!=10:live[i]=32\n    original_lines=raw.split(b'\\n');live_lines=bytes(live).split(b'\\n')\n    return b''.join(source+(b'\\n' if i<len(original_lines)-1 else b'')\n                    for i,(source,visible) in enumerate(zip(original_lines,live_lines))\n                    if visible.strip(b' \\t\\r'))\n\ndef licence_hashes(raw):\n    return [hashlib.sha256(raw[start:end]).hexdigest() for start,end in comment_spans(raw)\n            if (start,end) in protected_spans(raw)]\n\ndef report_for(original,prepared):\n    before,after=code_lines(original),code_lines(prepared)\n    licences=licence_hashes(original)\n    if before!=after:raise ValueError('Live code lines or indentation changed')\n    if licences!=licence_hashes(prepared):raise ValueError('Licence or attribution comment bytes changed')\n    return {'input_sha256':hashlib.sha256(original).hexdigest(),'input_bytes':len(original),\n        'prepared_sha256':hashlib.sha256(prepared).hexdigest(),'prepared_bytes':len(prepared),\n        'saved_bytes':len(original)-len(prepared),'official_size_cap':256000,\n        'prepared_fits_size_cap':len(prepared)<=256000,\n        'code_lines_sha256':hashlib.sha256(before).hexdigest(),'code_lines_byte_equal':True,\n        'licence_comment_hashes':licences,\n        'removed_comment_count':len(comment_spans(original))-len(comment_spans(prepared)),\n        'new_Lean_fullgate':'NOT_RUN',\n        'scope':'Local source packaging only. Entire live physical code lines including indentation and inline comments are byte-identical; documentation metadata/line numbers may change. This does not establish Lean acceptance or performance. Strings/quotations/quoted identifiers are unsupported and rejected.'}\n\ndef main():\n    ap=argparse.ArgumentParser(description=__doc__)\n    ap.add_argument('--input',required=True,type=Path)\n    ap.add_argument('--prepared-output',required=True,type=Path)\n    ap.add_argument('--report',required=True,type=Path)\n    a=ap.parse_args()\n    if len({p.resolve() for p in (a.input,a.prepared_output,a.report)})!=3:\n        ap.error('Input, prepared output and report must be distinct paths')\n    for path in (a.prepared_output,a.report):\n        if path.exists() or path.is_symlink():ap.error('Refusing to overwrite existing artifact: '+str(path))\n        if not path.parent.is_dir():ap.error('Output parent must already exist: '+str(path.parent))\n    original=a.input.read_bytes()\n    try:\n        prepared=prepare(original);report=report_for(original,prepared)\n    except (ValueError,UnicodeDecodeError) as error:ap.error(str(error))\n    if a.input.read_bytes()!=original:ap.error('Input changed during preparation')\n    with a.prepared_output.open('xb') as stream:stream.write(prepared)\n    with a.report.open('x',encoding='utf8',newline='\\n') as stream:\n        stream.write(json.dumps(report,indent=2)+'\\n')\n\nif __name__=='__main__':main()\n",
+    "minimal_witness_checks": [
+      {
+        "case": "attribution_only",
+        "notice_source_byte_preserved": true,
+        "report_code_equal": true,
+        "input_sha256": "d2d38a8b8d83fe529c8ed37a1c320bfe2f386645fe368559d49184547419857f",
+        "prepared_sha256": "d2d38a8b8d83fe529c8ed37a1c320bfe2f386645fe368559d49184547419857f"
+      },
+      {
+        "case": "line_license_block",
+        "notice_source_byte_preserved": true,
+        "report_code_equal": true,
+        "input_sha256": "c8ce9db88bace2e5f50ced1bcb74e7e2079890bfd6169e39a1a9531aa5c37911",
+        "prepared_sha256": "c8ce9db88bace2e5f50ced1bcb74e7e2079890bfd6169e39a1a9531aa5c37911"
+      },
+      {
+        "case": "copyright_symbol_only",
+        "notice_source_byte_preserved": false,
+        "report_code_equal": true,
+        "input_sha256": "56558adc4cab1e7ff6a1fc9e1851a8aef2870373abaa31d4cfca0abfef497f0e",
+        "prepared_sha256": "d189e761d39c7d22d5c30e7f6e80aed3cd622c7ce58ad2ccb09b6f70a0e3e8d5"
+      }
+    ],
+    "actual47d_c44c_attribution_preserved": true,
+    "actual47d_in_memory_prepared_bytes": 176512,
+    "scope": "Only these three protection witnesses plus actual47d source note. Not whole tool test suite, no Lean/new official source preparation or adoption."
+  },
+  "observed_live_files_before_report": {
+    "source-budget.py": {
+      "sha256": "e1ee62f4d61219a80fffe20b54b869baf666b25d136a08a4087f3380a5d6ee51",
+      "bytes": 5933
+    },
+    "test-source-budget.py": {
+      "sha256": "a0fad18716e57206ed4f1e9d36c4bf96016a464803518798653dee66119fde9e",
+      "bytes": 7323
+    },
+    "source-budget-summary.json": {
+      "sha256": "8ab6c7f6f47b7e582ca60a8cce6721acb382b1fb6ae7fb2b284972091386a17e",
+      "bytes": 12348
+    }
+  },
+  "lexical_and_artifact_review": {
+    "nested_comments": "Depth-counting outer spans; only LF terminates line comments. No additional concrete ordinary-comment/indentation damage found in this bounded source review.",
+    "live_quotes": "ASCII double quote, backtick and UTF8 angle quoted-id delimiters are rejected outside comments, before main writes artifacts. Other real Lean syntax was not independently parsed/compiled.",
+    "physical_code_lines": "Original masking and validation share the same lexer; the report is not an independent Lean lexical/semantic oracle.",
+    "overwrite_boundary": "resolve3-distinct paths, existing/symlink artifact rejection, existing parent dirs and exclusive xb/x writes inspected. No new deterministic overwrite counterexample found.",
+    "report_pair_boundary": "Writes are sequential, not atomic. A later report I/O failure can leave a prepared file, but process fails; artifact existence alone is not success.",
+    "actual_seven_reports": "Each original saved output hash and complete report matches originalbe0 summary; input hashes match all seven frozen candidate bytes. Not full Lean/gate."
+  },
+  "written_at_utc": "2026-10-23T01:53:51.801104+00:00",
+  "fixed_version_recheck": {
+    "sha256": "e1ee62f4d61219a80fffe20b54b869baf666b25d136a08a4087f3380a5d6ee51",
+    "source_utf8_snapshot": "\"\"\"Prepare a local whole-file size report without changing the input Kernel.lean.\"\"\"\nimport argparse\nimport hashlib\nimport json\nimport re\nfrom pathlib import Path\n\nLICENCE_WORDS=(b'copyright',b'license',b'licence',b'spdx',b'third-party notices',\n               b'attribution',b'author',b'adapted',b'derived from',b'ported from',\n               b'copied from',b'taken from',b'based on',b'provenance',b'contributor')\n\ndef is_notice(comment):\n    lower=comment.lower()\n    return (any(word in lower for word in LICENCE_WORDS) or '©'.encode() in comment or\n            re.search(rb'\\bsources?\\s*:|\\b(?:mit|apache|bsd|gpl|lgpl|mpl)\\b|\\(c\\)(?:\\s|\\d)',lower) is not None)\n\ndef comment_spans(raw):\n    spans=[];i=0\n    while i<len(raw):\n        if raw[i:i+2]==b'--':\n            end=raw.find(b'\\n',i);end=len(raw) if end<0 else end\n            spans.append((i,end));i=end\n        elif raw[i:i+2]==b'/-':\n            start=i;i+=2;depth=1\n            while depth and i<len(raw):\n                if raw[i:i+2]==b'/-':depth+=1;i+=2\n                elif raw[i:i+2]==b'-/':depth-=1;i+=2\n                else:i+=1\n            if depth:raise ValueError('Unterminated block comment')\n            spans.append((start,i))\n        else:\n            if raw[i] in (34,96) or raw[i:i+2] in ('«'.encode(),'»'.encode()):\n                raise ValueError('Unsupported live string, quotation or quoted identifier; leave source unchanged')\n            i+=1\n    return spans\n\ndef protected_spans(raw):\n    paragraphs=[]\n    for span in comment_spans(raw):\n        if paragraphs and not raw[paragraphs[-1][-1][1]:span[0]].strip(b' \\t\\r\\n'):\n            paragraphs[-1].append(span)\n        else:paragraphs.append([span])\n    return {span for paragraph in paragraphs\n            if any(is_notice(raw[start:end]) for start,end in paragraph)\n            for span in paragraph}\n\ndef prepare(raw):\n    raw.decode('utf8')\n    protected=protected_spans(raw)\n    changes=[]\n    for start,end in comment_spans(raw):\n        line_start=raw.rfind(b'\\n',0,start)+1\n        line_end=raw.find(b'\\n',end);line_end=len(raw) if line_end<0 else line_end\n        if raw[line_start:start].strip(b' \\t\\r') or raw[end:line_end].strip(b' \\t\\r'):\n            continue\n        if (start,end) in protected:\n            continue\n        has_newline=line_end<len(raw)\n        eol=b'\\r\\n' if has_newline and raw[line_end-1:line_end]==b'\\r' else b'\\n' if has_newline else b''\n        changes.append((line_start,line_end+int(has_newline),eol))\n    result=raw\n    for start,end,replacement in reversed(changes):result=result[:start]+replacement+result[end:]\n    return result\n\ndef code_lines(raw):\n    live=bytearray(raw)\n    for start,end in comment_spans(raw):\n        for i in range(start,end):\n            if raw[i]!=10:live[i]=32\n    original_lines=raw.split(b'\\n');live_lines=bytes(live).split(b'\\n')\n    return b''.join(source+(b'\\n' if i<len(original_lines)-1 else b'')\n                    for i,(source,visible) in enumerate(zip(original_lines,live_lines))\n                    if visible.strip(b' \\t\\r'))\n\ndef licence_hashes(raw):\n    protected=protected_spans(raw)\n    return [hashlib.sha256(raw[start:end]).hexdigest() for start,end in comment_spans(raw)\n            if (start,end) in protected]\n\ndef report_for(original,prepared):\n    before,after=code_lines(original),code_lines(prepared)\n    licences=licence_hashes(original)\n    if before!=after:raise ValueError('Live code lines or indentation changed')\n    if licences!=licence_hashes(prepared):raise ValueError('Licence or attribution comment bytes changed')\n    return {'input_sha256':hashlib.sha256(original).hexdigest(),'input_bytes':len(original),\n        'prepared_sha256':hashlib.sha256(prepared).hexdigest(),'prepared_bytes':len(prepared),\n        'saved_bytes':len(original)-len(prepared),'official_size_cap':256000,\n        'prepared_fits_size_cap':len(prepared)<=256000,\n        'code_lines_sha256':hashlib.sha256(before).hexdigest(),'code_lines_byte_equal':True,\n        'licence_comment_hashes':licences,\n        'removed_comment_count':len(comment_spans(original))-len(comment_spans(prepared)),\n        'new_Lean_fullgate':'NOT_RUN',\n        'notice_policy':'Recognized licence/copyright/attribution/source cues protect the complete adjacent comment paragraph through the next code boundary, including its grant/disclaimer lines. The exact cue list is in this script; this is not a universal natural-language legal classifier.',\n        'scope':'Local source packaging only. Entire live physical code lines including indentation and inline comments are byte-identical; documentation metadata/line numbers may change. This does not establish Lean acceptance or performance. Strings/quotations/quoted identifiers are unsupported and rejected.'}\n\ndef main():\n    ap=argparse.ArgumentParser(description=__doc__)\n    ap.add_argument('--input',required=True,type=Path)\n    ap.add_argument('--prepared-output',required=True,type=Path)\n    ap.add_argument('--report',required=True,type=Path)\n    a=ap.parse_args()\n    if len({p.resolve() for p in (a.input,a.prepared_output,a.report)})!=3:\n        ap.error('Input, prepared output and report must be distinct paths')\n    for path in (a.prepared_output,a.report):\n        if path.exists() or path.is_symlink():ap.error('Refusing to overwrite existing artifact: '+str(path))\n        if not path.parent.is_dir():ap.error('Output parent must already exist: '+str(path.parent))\n    original=a.input.read_bytes()\n    try:\n        prepared=prepare(original);report=report_for(original,prepared)\n    except (ValueError,UnicodeDecodeError) as error:ap.error(str(error))\n    if a.input.read_bytes()!=original:ap.error('Input changed during preparation')\n    with a.prepared_output.open('xb') as stream:stream.write(prepared)\n    with a.report.open('x',encoding='utf8',newline='\\n') as stream:\n        stream.write(json.dumps(report,indent=2)+'\\n')\n\nif __name__=='__main__':main()\n",
+    "minimal_three_witnesses_all_preserved": true,
+    "checks": [
+      {
+        "case": "attribution_only",
+        "notice_source_byte_preserved": true,
+        "report_code_equal": true,
+        "input_prepared_sha256": "d2d38a8b8d83fe529c8ed37a1c320bfe2f386645fe368559d49184547419857f",
+        "protected_span_hash_count": 1
+      },
+      {
+        "case": "line_license_block",
+        "notice_source_byte_preserved": true,
+        "report_code_equal": true,
+        "input_prepared_sha256": "c8ce9db88bace2e5f50ced1bcb74e7e2079890bfd6169e39a1a9531aa5c37911",
+        "protected_span_hash_count": 4
+      },
+      {
+        "case": "copyright_symbol_only",
+        "notice_source_byte_preserved": true,
+        "report_code_equal": true,
+        "input_prepared_sha256": "56558adc4cab1e7ff6a1fc9e1851a8aef2870373abaa31d4cfca0abfef497f0e",
+        "protected_span_hash_count": 1
+      }
+    ],
+    "scope": "Independent in-memory recheck of exactly the three previously demonstrated protection failures; no new natural-language grid or whole candidate rescan."
+  },
+  "completed_at_utc": "2026-10-23T01:58:24.287316+00:00",
+  "conclusions": {
+    "initial_be0_notice_preservation": "FAILED_ON_TWO_DETERMINATE_CLASSES_AND_ACTUAL47d_ATTRIBUTION",
+    "intermediate53aa_notice_preservation": "FIRST_TWO_FIXED_BUT_SYMBOLIC_COPYRIGHT_FAILED",
+    "fixed_version": "e1ee62f4d61219a80fffe20b54b869baf666b25d136a08a4087f3380a5d6ee51",
+    "fixed_three_minimal_witnesses": "PASS_INDEPENDENT_IN_MEMORY_RECHECK",
+    "root_eight_CLI_groups": "PASS_SAVED_RAW_RECEIPT_VERIFIED",
+    "other_determinate_Lean_layout_or_path_overwrite_bug_found": false,
+    "heuristic_boundary": "Explicit notice cues and adjacent-paragraph preservation; not arbitrary natural-language legal recognition or independent Lean lexer.",
+    "new_Lean_fullgate": "NOT_RUN",
+    "performance": "NOT_RUN",
+    "current_fixed_seven_source_regeneration": "Owned by coordinator; not rescanned or certified by this review."
+  },
+  "negative_source_bindings": {
+    "original_be0": {
+      "root": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\negative-sources\\source-budget-licence0",
+      "receipt": {
+        "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/receipt.json",
+        "bytes": 1854,
+        "sha256": "ca9ed12c0ff47e865f77e2e40dd5fb6db8592afbc9381609d51c8d6d34d786fd"
+      },
+      "original_file_entries_verified": true,
+      "source_utf8_matches_review_snapshot": true,
+      "old_five_group_count": 5
+    },
+    "intermediate53aa": {
+      "root": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\negative-sources\\source-budget-copyright1",
+      "receipt": {
+        "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-copyright1/receipt.json",
+        "bytes": 481,
+        "sha256": "6dba823e6da3e28d8de6f743456b5783bae559c77a1653b01f28a7a36e21066c"
+      },
+      "source_utf8_matches_review_snapshot": true,
+      "copyright_raw_output_hashes_match_receipt": true
+    }
+  },
+  "root_fixed_eight_group_evidence": {
+    "receipt": {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/source-budget-test-evidence/receipt.json",
+      "bytes": 823,
+      "sha256": "98218378dc224ff23dcaa8a2f323cb6b45c41c5df29117507ce0357e71027038"
+    },
+    "record": {
+      "started_at_utc": "2026-10-23T01:51:40.507517+00:00",
+      "finished_at_utc": "2026-10-23T01:51:43.329862+00:00",
+      "exit_code": 0,
+      "script_sha256": "e1ee62f4d61219a80fffe20b54b869baf666b25d136a08a4087f3380a5d6ee51",
+      "tests_sha256": "a0fad18716e57206ed4f1e9d36c4bf96016a464803518798653dee66119fde9e",
+      "raw_output": {
+        "stdout.raw": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr.raw": {
+          "bytes": 111,
+          "sha256": "7827e0ed5b940751bb337fa33ba02dbfd2c679685d6227b0e3eaadcb2b0c1f4e"
+        }
+      },
+      "scope": "8wholefileartifact regression groups and their subcases on lightweight localPython children. No Lean/compiler/CI/performance run. Actual baseline failures/oldprepared results retained innegative-sources."
+    },
+    "stdout": {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/source-budget-test-evidence/stdout.raw",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/source-budget-test-evidence/stderr.raw",
+      "bytes": 111,
+      "sha256": "7827e0ed5b940751bb337fa33ba02dbfd2c679685d6227b0e3eaadcb2b0c1f4e"
+    },
+    "raw_output_contains_eight_tests_and_OK": true,
+    "reviewer_reran_eight_suite": false
+  },
+  "prior_W13c_reports_unchanged": {
+    "low-normal-public-composition-review.md": {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/low-normal-public-composition-review.md",
+      "bytes": 7888,
+      "sha256": "95df0a6394216c380c1647103994d97d35a72791c9d950ac4075a6721080fe39"
+    },
+    "low-normal-public-composition-review.json": {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/low-normal-public-composition-review.json",
+      "bytes": 69341,
+      "sha256": "ac4f91150125deb4ccc2088058ae4b1ee70157017a64376eb9dd8f32d55b3c7b"
+    }
+  },
+  "immutable_evidence_inputs": [
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/source-budget.py",
+      "bytes": 5933,
+      "sha256": "e1ee62f4d61219a80fffe20b54b869baf666b25d136a08a4087f3380a5d6ee51"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/test-source-budget.py",
+      "bytes": 7323,
+      "sha256": "a0fad18716e57206ed4f1e9d36c4bf96016a464803518798653dee66119fde9e"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/source-budget-test-evidence/receipt.json",
+      "bytes": 823,
+      "sha256": "98218378dc224ff23dcaa8a2f323cb6b45c41c5df29117507ce0357e71027038"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/source-budget-test-evidence/stdout.raw",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/source-budget-test-evidence/stderr.raw",
+      "bytes": 111,
+      "sha256": "7827e0ed5b940751bb337fa33ba02dbfd2c679685d6227b0e3eaadcb2b0c1f4e"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/receipt.json",
+      "bytes": 1854,
+      "sha256": "ca9ed12c0ff47e865f77e2e40dd5fb6db8592afbc9381609d51c8d6d34d786fd"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/source-budget.py",
+      "bytes": 4815,
+      "sha256": "be0a57f8c62989506e194fa454a1fffdb74f65dd4382b0b51d3f64d0d95c8109"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/test-source-budget.py",
+      "bytes": 5547,
+      "sha256": "9d6c10cb6b657552fd9ead318f929aa2632e55a51c57790309df067c09acc5c3"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/source-budget-summary.json",
+      "bytes": 12348,
+      "sha256": "8ab6c7f6f47b7e582ca60a8cce6721acb382b1fb6ae7fb2b284972091386a17e"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-copyright1/source-budget.py",
+      "bytes": 5571,
+      "sha256": "53aa85af4353599666ba7a51a6c7a465cef6568a484c431f95e1d4531281eea0"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-copyright1/receipt.json",
+      "bytes": 481,
+      "sha256": "6dba823e6da3e28d8de6f743456b5783bae559c77a1653b01f28a7a36e21066c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/attribution.input.raw",
+      "bytes": 85,
+      "sha256": "a96bab525eb3452c8f865e0602a0f8060e1645904e323e6f6c5c8d401beb2d72"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/attribution.actual.raw",
+      "bytes": 40,
+      "sha256": "9d78ee14abf105a6b829d08b1719876143750ab50989334dcd9976a34b934256"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/attribution.report.json",
+      "bytes": 838,
+      "sha256": "4ff1cc00c731d32604d113bc3e40fb4e1234acb3f94cabcb18cdea59e4dcf897"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/attribution.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/attribution.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/licence-lines.input.raw",
+      "bytes": 148,
+      "sha256": "589c652e91001831c2baecaa498b4c34c3483315a5d4fac08b2771972c8a400d"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/licence-lines.actual.raw",
+      "bytes": 80,
+      "sha256": "6ae552ebca88edbc70cb066617267391ae26787ce98947394b4042d11d6db1aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/licence-lines.report.json",
+      "bytes": 985,
+      "sha256": "b611efeecebd79f0b626b79397ae6be179909591e2bc9701a6e64901ccc6b95c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/licence-lines.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-licence0/licence-lines.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-copyright1/copyright.input.raw",
+      "bytes": 56,
+      "sha256": "8b05256c3d12ffd05beb32f7c958cb41d0e4a4a1dc103239cc219e56f12a30bd"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-copyright1/copyright.actual.raw",
+      "bytes": 40,
+      "sha256": "9d78ee14abf105a6b829d08b1719876143750ab50989334dcd9976a34b934256"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-copyright1/copyright.report.json",
+      "bytes": 838,
+      "sha256": "8c8237a9c4d22240dff10c8d0d03e80fd5675ee1d2ab788bfd3bba2ead3117b1"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-copyright1/copyright.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/negative-sources/source-budget-copyright1/copyright.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/low-normal-public-composition-review.md",
+      "bytes": 7888,
+      "sha256": "95df0a6394216c380c1647103994d97d35a72791c9d950ac4075a6721080fe39"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/low-normal-public-composition-review.json",
+      "bytes": 69341,
+      "sha256": "ac4f91150125deb4ccc2088058ae4b1ee70157017a64376eb9dd8f32d55b3c7b"
+    }
+  ],
+  "markdown": {
+    "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/source-budget-review.md",
+    "bytes": 6213,
+    "sha256": "7542345bfe6b670211af2304d752833004a0863201891bacc15e35ab393b78d7"
+  }
+}

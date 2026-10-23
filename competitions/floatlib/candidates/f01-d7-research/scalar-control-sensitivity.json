@@ -1,0 +1,79 @@
+{
+  "reviewed_at_utc": "2026-10-23T01:11:15.614594+00:00",
+  "status": "DIAGNOSTIC_SENSITIVITY_SCENARIO_ONLY",
+  "input_public_results_sha256": "99b77939668a200ec8f80aa8db24262a222c8ddcd72b01056f54e57674680dd8",
+  "exact_source_rows": {
+    "f01-d7-direct-small": {
+      "sha256": "d9a808479dd6a7c7da345ce680773105b638cc6c9e8145e34d10f59751411fb3",
+      "bytes": 141685
+    },
+    "f01-d7-direct-nonnan": {
+      "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+      "bytes": 155103
+    }
+  },
+  "source_scalar_runtime_body_hashes": {
+    "f01-d7-direct-small": {
+      "add": "22317e858146f60adc10f0625532aa0b0dbcee2e4a0601be55c9de412421215b",
+      "mul": "bb5a9aea9886afe9d38de5e9a9eb809576598659d3d51d12de52d21249b84f9b",
+      "nativeMul": "90d47130ab835aafdaf84db1878139328331bb49c05dc98f27613c7668216f39"
+    },
+    "f01-d7-direct-nonnan": {
+      "add": "22317e858146f60adc10f0625532aa0b0dbcee2e4a0601be55c9de412421215b",
+      "mul": "bb5a9aea9886afe9d38de5e9a9eb809576598659d3d51d12de52d21249b84f9b",
+      "nativeMul": "90d47130ab835aafdaf84db1878139328331bb49c05dc98f27613c7668216f39"
+    }
+  },
+  "rows": [
+    {
+      "run": 39840672791,
+      "seed": 807,
+      "actual_whole_reference_normalized_ratio": 0.9070099218225419,
+      "observed_operation_normalized_ratios": {
+        "add": 1.0002168789820682,
+        "mul": 0.9993489567888293,
+        "sum": 0.8571709728015375,
+        "bmm": 0.8073555243452044
+      },
+      "sensitivity_whole_with_scalar_held_at_parent": 0.9073453633050225,
+      "sensitivity_gain": 0.09265463669497753,
+      "parent_operation_total_ns": {
+        "add": 77792792.0,
+        "mul": 79289298.0,
+        "sum": 44122179.0,
+        "bmm": 123418346.0
+      },
+      "candidate_original_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39840672791/download-81e3479e9e2b47249bf76c8d44eb2e62/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-nonnan-verdict.json",
+      "candidate_verdict_sha256": "acb4356315d319baf59f00f4583a1c52753f7b705e3043d40e1aacf399491701",
+      "parent_original_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39840672791/download-81e3479e9e2b47249bf76c8d44eb2e62/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-small-verdict.json",
+      "parent_verdict_sha256": "ca27223b667c479d68835de0eeafbb1fe26f82241506f7e9eb3fc555070342e3"
+    },
+    {
+      "run": 39847080316,
+      "seed": 809,
+      "actual_whole_reference_normalized_ratio": 0.8617567155999797,
+      "observed_operation_normalized_ratios": {
+        "add": 0.9509084648634203,
+        "mul": 0.9429566779797689,
+        "sum": 0.8411660374578155,
+        "bmm": 0.7708604479506298
+      },
+      "sensitivity_whole_with_scalar_held_at_parent": 0.8858874324054271,
+      "sensitivity_gain": 0.11411256759457289,
+      "parent_operation_total_ns": {
+        "add": 58859257.0,
+        "mul": 63490373.0,
+        "sum": 42383339.0,
+        "bmm": 104898763.0
+      },
+      "candidate_original_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39847080316/download-61bf160491654012b5e910d27b81b2f6/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-nonnan-verdict.json",
+      "candidate_verdict_sha256": "ab40d1a47a72e12135e0db8b20ee45f92c929b1bfaecf8b05704b86b02eb932b",
+      "parent_original_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39847080316/download-61bf160491654012b5e910d27b81b2f6/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-small-verdict.json",
+      "parent_verdict_sha256": "01e8df876045735be45094ae42eaa8696920833e22829de2e582a001b40094df"
+    }
+  ],
+  "formula": "sum(parent operation time * observed per-op reference-normalized new/parent ratio forsum,bmm; factor1 foradd,mul) / sum(parent operation time)",
+  "interpretation": "If none of the observed unchanged-source scalar timing improvement is credited, the sum/BMM changes still reconstruct9.27percent/11.41percent lower complete time in these two observations. This is an explicit counterfactual diagnostic, not a corrected official score, measurement of actual drift, or causal proof.",
+  "causal_boundary": "Equal Lean function text is not evidence of equal emitted machine code/alignment. Shared module/codegen changes and environmental timing both remain possible. Original actual whole9.30percent/13.82percent results are retained unchanged.",
+  "source_acceptance": "Original60f807and809fullgate acceptance and frozen independent confirmation unchanged. No new timing or newCI."
+}

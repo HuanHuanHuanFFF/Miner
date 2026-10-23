@@ -188,3 +188,21 @@
 - 807原始计分cell×work重新核：低normal helper295268次，新guard仅在327432次旧非零low分支判断（32164次次正规miss），不是每个503万字都新增guard。命中cell sum:sparse/subnormal/extremes的整cell仅占当前60f整包2.405%，同批c760父本2.081%；这是曝光上限，不是可回收时间。详D7-research/low-normal-cost-screen.py/.json。保持一份353d备选，主力不因局部去ofBits/once/spill而转离非有限值组合/3d9/原始特殊word。
 - 前沿97f BMM+3d9 sum的残余cold是18519=10053NaN+8466非NaN特殊（7634Inf/832invalid），独立scalar包含在内；不是939已编译组合。旧tensor完整回放数不得继续支撑新增小变体，native result guard和canonical BMM scan有重叠。
 - W13c继续按既定公开宿主数学组合范围回收，不发送本地353d/3d9。若10分钟目标延迟，保留真实执行状态、失败/缺项；无需为填满十小时再新增近邻。原04:22:17截止、02:45冻结不变。D继续本地完整成本/源审查及可复核提交。
+
+
+## D24 01:28 UTC：官方基准校正、源码上限和证据回收
+
+- D已读checkpoint23：既定网页作业全结束、W13c约9分钟实际完成而回收滞后，保留真实时间。24组原包已独立全CRC/清单/解压字节PASS：3698payload、3669清单、175900366bytes。22组回执已冻结，数学索引当前22组专项/14项/580registry；W13c独立精确source/失败/80axiom审查进行中，W15尚未继承成CI实际链接证据。
+- 官方API/公开validator源码e78afe97的19份新响应已校验，D7-research/public-source-refresh-20261023T005839Z。按源码声明#265scoring-v2 anchor2.209重启；#279官方6.80117×，speedup_basis=scoring-v2-2026-10。现行乘数不是legacy链盲乘，当前writer/JSON/看板已改正。原anchor bench日志未取得，不把声明当本次重测。FloatLib无source路由；retired271/source404，fork/tag/release空，18PR全部官方本仓库，8个新基准champ digest与189本地源码不匹配。
+- 本地提交c329a506保存939/353d等已完成段，不推送。自动公开push拒绝仍待人类既有问题回复；0新CI。原04:22:17截止/02:45冻结不变。
+- D已完成5组wholeKernel文件边界回归并制作source-budget.py（只研究打包，不是性能变体）：仅删除占整行的注释，保留含license/copyright等全文块、所有代码物理行/缩进/行内注释；遇live string/quotation/quotedidentifier拒绝，输出/报告不得覆盖输入或已存文件。7份真实源码原件逐字不变；新本地预备字节Lean/gate仍NOT_RUN，输出仅在.local-maintenance。
+- size实际预检：60f155103→145350；3d9230650→209038（省21612）；939175363→163901；4792195683→180955；47d188335→174373；353d174914→161517；97f174925→162033。精确hash/layout/licence字段见D7-research/source-budget-summary.json。全组合仍不可直接相加后称可用候选；优先基于真实已通过组件决定，公共证明共享和移除真正无依赖声明的代价可继续只读评估。
+- 源审查作者范围另写source-review-roles.json。4792 scanner为nan agent原作，实际新hooks/glue/open另次复核，但不能把整候选称作者独立；47d实际新runtime由未写该port的profile复核，而c44c继承证明是它原作。这些身份都不替代新Lean/fullgate与冻结独立新runner确认。
+
+## D25 02:24 UTC：严格设置闭合与预检反例修复
+
+- D已独立核对W13d：同一e8fb主源码和4db诊断源码，与W13c字节相同；两条真实编译命令均显式关闭autoImplicit/relaxedAutoImplicit，退出0，80项原始stdout公理输出逐项对照。完整gate、私有353d/3d9的编译和收益仍NOT_RUN。25组原包CRC/清单/解压字节完整PASS，3796payload、3766清单项、178872017bytes；数学索引773文件/14项，W13c/d补充MR14、W15补充MR13，不重复计成果。
+- source-budget独立审查发现旧be0删除attribution/source及截断连续许可证、实际47d来源块遗失；中间53aa又漏©。负面脚本/样本/原输出已冻结在negative-sources/source-budget-licence0与copyright1，旧候选从未改写。新e1ee62f4经真实CLI红绿回归与另次审查，8组通过；当前7份预备大小为60f147066、3d9210754、939166529、4792182671、47d176512、353d163233、97f163749。D24旧预备大小作废，不能继续引用。仅本地打包准备，无Lean/性能结论。
+- W15另次审查核对119份实际保存文本：6个完整反汇编符号视图、31/16/7字节原语、常量与重定位；大二进制未随包回收，CI实际链接runtime仍UNKNOWN。矩阵全输入共享扫描按完整准备成本停放；不据局部重复读取增加变体。
+- 9组既有CI均终态且已收齐，0运行/排队；公开push仍待既有用户问题回复，810尚未派发。validation-cost-ledger.json记录22个完整gate原观测164.7—292.8秒、中位266.2秒；新230KB候选编译成本未知，不能据公共片段15.8秒保证新完整gate时长。
+- 当前02:45源码冻结、04:22:17研究截止不变。请继续现有证据/交接收束，不启动新网页作业或近邻；冻结时交接精确ready清单、未跑项和当前原始包索引。不要因已无外部作业提前结束十小时窗口，也不将等待写成CI运行。

@@ -29,7 +29,7 @@
 | 单项内积负零归一化 | 47d429fe；a132最小seed证明、原53d成本对照 | 非NaN产品沿原生路径，NaN才精确修复；n!=1不改。静态policy PASS，新Lean/fullgate/收益NOT_RUN |
 | 完整调用阶段成本 | [实际C缺失返回诊断](profile-review.md)、[修复模块](profile-current.py) | 805辅助编译选择失败已修复；807实际四份binary/137次调用逐一核对通过，见[诊断及投入决定](profile-summary.json) |
 
-所有逐项数据从[精确新suite结果](public-suite-results.json)进入；失败、慢样本和原件保持原字节。00:30UTC官方再次核对冠军279，比较基准同步更新；原始响应由[current-official-snapshot.json](current-official-snapshot.json)定位，四运算看板见根dashboard.md。累计乘数仍是跨suite历史链，不展示成冠军直接差距。原CI均已自然结束并回收，研究窗口继续。
+所有逐项数据从[精确新suite结果](public-suite-results.json)进入；失败、慢样本和原件保持原字节。00:30UTC官方再次核对冠军279，比较基准同步更新；原始响应由[current-official-snapshot.json](current-official-snapshot.json)定位，四运算看板见根dashboard.md。官方API现明确给279的倍率6.80117×、基准scoring-v2-2026-10；官方按hash链并在换suite时用实测anchor重启，不再用旧“跨suite历史链”说明。它不是我方public-v2直接差距。原CI均已自然结束并回收，研究窗口继续。
 
 ## 下一验证顺序
 
@@ -41,4 +41,10 @@
 
 新增本地路线：`4a30c99f`为NaN-only对照，`939dbf31`实际接入既有exceptional-word语义；两者普通路径不变、精确新Lean/性能NOT_RUN。[807前沿复核](word-route-frontier-review.md)扣除97f quiet-stop与3d9单遍sum已减少的完整回放，剩18519coldcalls=10053NaN+8466无NaN特殊调用；不是已编译组合或时间份额。旧26.37%整cell曝光及旧完整回放数不再当后续残余机会。`97f77e2c`实际direct组合也尚未完整编译，不替换当前60f。
 
-[当前数学储备](math-reserve-index.md)现为22组专项交付、14项结论、579份鲜核来源/日志；[公共宿主复核](canonical-public-host-review.json)核W12c五次实际编译源码/退出码、原四spec与41项公理报告。公共片段接受不能继承给4792/3d9/47d/939/353d的新运行接线。[低解码成本边界](low-normal-cost-screen.json)另将命中与整cell曝光分开。22组ZIP原件完整性已逐字节通过，ZIP与全部负面原件保留。
+[当前数学储备](math-reserve-index.md)现为25组专项交付、14项结论、773份鲜核来源/日志；[公共宿主复核](canonical-public-host-review.json)核W12c五次实际编译源码/退出码、原四spec与41项公理报告。公共片段接受不能继承给4792/3d9/47d/939/353d的新运行接线。[低解码成本边界](low-normal-cost-screen.json)另将命中与整cell曝光分开。25组ZIP原件完整性已逐字节通过，ZIP与全部负面原件保留。
+
+[公开强起点及倍率复查](public-source-refresh-20261023T005839Z/README.md)未找到可复用新冠军源码；官方私有基准乘数的来源、hash链和实测anchor按新源码核实，旧跨suite说明已修正。
+
+[单文件大小预检](source-budget-notes.md)已完成8组回归及来源保留缺陷修复；3d9预备副本210754字节，原230650字节不变。新字节尚未Lean/fullgate验收，不当作新的运行提升。
+
+[严格公共同源补验](strict-public-settings-review.json)已核主/诊断两次显式关闭autoImplicit、实际exit0及80项原公理；这只关闭公共数学宿主的设置缺项，新私有候选完整gate/计时仍NOT_RUN。

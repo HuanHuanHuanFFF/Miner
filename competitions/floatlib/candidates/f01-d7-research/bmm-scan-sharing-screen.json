@@ -1,0 +1,1103 @@
+{
+  "schema_version": 1,
+  "title": "BMM row/column NaN-summary sharing opportunity screen",
+  "started_at_utc": "2026-10-23T01:08:41Z",
+  "budget_deadline_utc": "2026-10-23T01:38:41Z",
+  "overall_deadline_utc": "2026-10-23T04:22:17Z",
+  "screened_at_utc": "2026-10-23T01:28:25Z",
+  "decision": "PARK_IMPLEMENTATION",
+  "rationale": "Whole-suite eager summaries add work on almost entirely normal paths; naive eager creation of lazy cells still creates tens of thousands of never-forced objects. Fixed Lean has real same-object memoization, but current RowStream/RowOutput has no cache owner or accepted sharing integration. One all-cold case has real classification reuse potential; no measured cycle or net suite signal supports implementation now.",
+  "scope": {
+    "writes": [
+      "competitions/floatlib/candidates/f01-d7-research/bmm-scan-sharing-screen.md",
+      "competitions/floatlib/candidates/f01-d7-research/bmm-scan-sharing-screen.json"
+    ],
+    "candidate_or_R_changed": false,
+    "Git_CI_upload": false,
+    "toolchain_install": false,
+    "new_external_session": false,
+    "new_float_enumeration": false,
+    "new_candidate": false,
+    "future_confirmation_read": false,
+    "all_gains": "UNKNOWN"
+  },
+  "role_context": {
+    "four_a30_source_helper_builder_authored": false,
+    "one7331_source_helper_builder_authored": false,
+    "nine39_integration_builder_authored": false,
+    "four792_scanner_component_authored": true,
+    "four792_actual_hooks_glue_builder_authored": false,
+    "four792_review_author_independent": false,
+    "interpretation": "Prior4792 check was another source/inverse method review, including self-review of the authored DDotNonNaNScan component. Existing reports unchanged.47d review stopped before report/model generation and reassigned."
+  },
+  "baseline": {
+    "candidate": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+    "sha256": "4792e9679c9607efd84a461a9d1ad7ca0e6bcb59d657fccacde8b96bf075f43c",
+    "discovery_seed": 807,
+    "plan_sha256": "9cc5d7368749c369172b019d66bc4cd8455ae4323d0b9a175bd031f936e78622",
+    "cold_cost_sha256": "aa251334465a3d52ef9b2ad01bcd771b39ae7f06bf19b928ca75c1caecad002f",
+    "source_status": "Existing4792 new Lean/fullgate/C/performance remain NOT_RUN."
+  },
+  "numerical_evidence": {
+    "input_identities": {
+      "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39840672791/download-81e3479e9e2b47249bf76c8d44eb2e62/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json": {
+        "bytes": 99920,
+        "sha256": "9cc5d7368749c369172b019d66bc4cd8455ae4323d0b9a175bd031f936e78622"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/cold-scan-cost-807.json": {
+        "bytes": 24949,
+        "sha256": "aa251334465a3d52ef9b2ad01bcd771b39ae7f06bf19b928ca75c1caecad002f"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/cold-scan-cost-807.py": {
+        "bytes": 4373,
+        "sha256": "220fc46e7fbfdd99268613691d7f41c7b9bdaa826eee12d6dc66a94d4e53de80"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/nonnan-input-nan-output-807.json": {
+        "bytes": 75496,
+        "sha256": "cc1fee5a1860b2db7508f2acec2996f44bb3299f8128da3eb0bf42c9a9e00c46"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/frontier-scalar-counts-807.json": {
+        "bytes": 230911,
+        "sha256": "d30447c871c8add14c1a7fcd347dc434ac17917946759c5e050f5c8537e61efd"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/frontier-scalar-counts-807-verification.json": {
+        "bytes": 17161,
+        "sha256": "f458e6ca505fbebe8ec33a98cdda736f3d1eed5badbbe216dae76c6951249b00"
+      },
+      "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean": {
+        "bytes": 195683,
+        "sha256": "4792e9679c9607efd84a461a9d1ad7ca0e6bcb59d657fccacde8b96bf075f43c"
+      },
+      "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/manifest.json": {
+        "bytes": 2963,
+        "sha256": "1cb1dff1d4d32ea734b72b48051da4d84ff91509a3d0a65681be9394966f4e09"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/toolchain/include/lean/lean.h": {
+        "bytes": 136786,
+        "sha256": "982c731a1fbacc7688006f44f9f7af9d9e3e0247d310a728827f49e7f1466c13"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/toolchain-version.stdout": {
+        "bytes": 106,
+        "sha256": "cf6e65bfc214882b1c13717aae89d383a03f6bcf5c96dfbae13368cd3e07ff9d"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/readelf-header.stdout": {
+        "bytes": 951,
+        "sha256": "15f9cf7da9b630d5d8ffb4c6103512e396c854e47d505e8aeaff46a26bc04135"
+      }
+    },
+    "case_data": [
+      {
+        "name": "bmm:dense:0",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 69,
+          "m": 2,
+          "n": 212,
+          "p": 6
+        },
+        "outputs": 828,
+        "rows": 138,
+        "columns": 414,
+        "A_words": 29256,
+        "B_words": 87768,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:dense:1",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 38,
+          "m": 5,
+          "n": 154,
+          "p": 6
+        },
+        "outputs": 1140,
+        "rows": 190,
+        "columns": 228,
+        "A_words": 29260,
+        "B_words": 35112,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:dense:2",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 3,
+          "m": 33,
+          "n": 34,
+          "p": 44
+        },
+        "outputs": 4356,
+        "rows": 99,
+        "columns": 132,
+        "A_words": 3366,
+        "B_words": 4488,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:dense:3",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 186,
+          "m": 3,
+          "n": 105,
+          "p": 3
+        },
+        "outputs": 1674,
+        "rows": 558,
+        "columns": 558,
+        "A_words": 58590,
+        "B_words": 58590,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:dense:4",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 4901,
+          "m": 2,
+          "n": 6,
+          "p": 3
+        },
+        "outputs": 29406,
+        "rows": 9802,
+        "columns": 14703,
+        "A_words": 58812,
+        "B_words": 88218,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:dense:5",
+        "timed": true,
+        "route": "DirectSmall",
+        "shape": {
+          "batch": 22058,
+          "m": 8,
+          "n": 1,
+          "p": 1
+        },
+        "outputs": 176464,
+        "rows": 176464,
+        "columns": 22058,
+        "A_words": 176464,
+        "B_words": 22058,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:ml:0",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 891,
+          "m": 2,
+          "n": 11,
+          "p": 9
+        },
+        "outputs": 16038,
+        "rows": 1782,
+        "columns": 8019,
+        "A_words": 19602,
+        "B_words": 88209,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:ml:1",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 123,
+          "m": 3,
+          "n": 119,
+          "p": 4
+        },
+        "outputs": 1476,
+        "rows": 369,
+        "columns": 492,
+        "A_words": 43911,
+        "B_words": 58548,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:ml:2",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 122,
+          "m": 36,
+          "n": 10,
+          "p": 4
+        },
+        "outputs": 17568,
+        "rows": 4392,
+        "columns": 488,
+        "A_words": 43920,
+        "B_words": 4880,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:ml:3",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 2,
+          "m": 31,
+          "n": 37,
+          "p": 58
+        },
+        "outputs": 3596,
+        "rows": 62,
+        "columns": 116,
+        "A_words": 2294,
+        "B_words": 4292,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:ml:4",
+        "timed": true,
+        "route": "DirectSmall",
+        "shape": {
+          "batch": 653,
+          "m": 6,
+          "n": 45,
+          "p": 1
+        },
+        "outputs": 3918,
+        "rows": 3918,
+        "columns": 653,
+        "A_words": 176310,
+        "B_words": 29385,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:ml:5",
+        "timed": true,
+        "route": "DirectSmall",
+        "shape": {
+          "batch": 617,
+          "m": 2,
+          "n": 143,
+          "p": 1
+        },
+        "outputs": 1234,
+        "rows": 1234,
+        "columns": 617,
+        "A_words": 176462,
+        "B_words": 88231,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:ml:6",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 52,
+          "m": 4,
+          "n": 210,
+          "p": 4
+        },
+        "outputs": 832,
+        "rows": 208,
+        "columns": 208,
+        "A_words": 43680,
+        "B_words": 43680,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:ml:7",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 2,
+          "m": 57,
+          "n": 26,
+          "p": 53
+        },
+        "outputs": 6042,
+        "rows": 114,
+        "columns": 106,
+        "A_words": 2964,
+        "B_words": 2756,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:sparse:0",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 1,
+          "m": 47,
+          "n": 121,
+          "p": 36
+        },
+        "outputs": 1692,
+        "rows": 47,
+        "columns": 36,
+        "A_words": 5687,
+        "B_words": 4356,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:sparse:1",
+        "timed": true,
+        "route": "DirectSmall",
+        "shape": {
+          "batch": 1633,
+          "m": 9,
+          "n": 6,
+          "p": 2
+        },
+        "outputs": 29394,
+        "rows": 14697,
+        "columns": 3266,
+        "A_words": 88182,
+        "B_words": 19596,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:sparse:2",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 48,
+          "m": 2,
+          "n": 367,
+          "p": 5
+        },
+        "outputs": 480,
+        "rows": 96,
+        "columns": 240,
+        "A_words": 35232,
+        "B_words": 88080,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:sparse:3",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 1,
+          "m": 45,
+          "n": 117,
+          "p": 55
+        },
+        "outputs": 2475,
+        "rows": 45,
+        "columns": 55,
+        "A_words": 5265,
+        "B_words": 6435,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:sparse:4",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 1,
+          "m": 54,
+          "n": 73,
+          "p": 37
+        },
+        "outputs": 1998,
+        "rows": 54,
+        "columns": 37,
+        "A_words": 3942,
+        "B_words": 2701,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:sparse:5",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 6,
+          "m": 45,
+          "n": 31,
+          "p": 21
+        },
+        "outputs": 5670,
+        "rows": 270,
+        "columns": 126,
+        "A_words": 8370,
+        "B_words": 3906,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:specials:0",
+        "timed": true,
+        "route": "DirectSmall",
+        "shape": {
+          "batch": 26,
+          "m": 3,
+          "n": 47,
+          "p": 1
+        },
+        "outputs": 78,
+        "rows": 78,
+        "columns": 26,
+        "A_words": 3666,
+        "B_words": 1222,
+        "nan_outputs": 78,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 1304
+      },
+      {
+        "name": "bmm:specials:1",
+        "timed": true,
+        "route": "DirectSmall",
+        "shape": {
+          "batch": 226,
+          "m": 21,
+          "n": 1,
+          "p": 3
+        },
+        "outputs": 14238,
+        "rows": 4746,
+        "columns": 678,
+        "A_words": 4746,
+        "B_words": 678,
+        "nan_outputs": 911,
+        "eligible_outputs": 39,
+        "quiet_steps_saved": 39,
+        "eligible_scan_words": 78,
+        "rejected_scan_words": 1216
+      },
+      {
+        "name": "bmm:specials:2",
+        "timed": true,
+        "route": "DirectSmall",
+        "shape": {
+          "batch": 29,
+          "m": 114,
+          "n": 5,
+          "p": 1
+        },
+        "outputs": 3306,
+        "rows": 3306,
+        "columns": 29,
+        "A_words": 16530,
+        "B_words": 145,
+        "nan_outputs": 1378,
+        "eligible_outputs": 166,
+        "quiet_steps_saved": 568,
+        "eligible_scan_words": 1660,
+        "rejected_scan_words": 6328
+      },
+      {
+        "name": "bmm:specials:3",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 668,
+          "m": 8,
+          "n": 11,
+          "p": 3
+        },
+        "outputs": 16032,
+        "rows": 5344,
+        "columns": 2004,
+        "A_words": 58784,
+        "B_words": 22044,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:specials:4",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 314,
+          "m": 2,
+          "n": 24,
+          "p": 9
+        },
+        "outputs": 5652,
+        "rows": 628,
+        "columns": 2826,
+        "A_words": 15072,
+        "B_words": 67824,
+        "nan_outputs": 27,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 685
+      },
+      {
+        "name": "bmm:specials:5",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 74,
+          "m": 2,
+          "n": 237,
+          "p": 5
+        },
+        "outputs": 740,
+        "rows": 148,
+        "columns": 370,
+        "A_words": 35076,
+        "B_words": 87690,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:subnormal:0",
+        "timed": true,
+        "route": "DirectSmall",
+        "shape": {
+          "batch": 14705,
+          "m": 6,
+          "n": 1,
+          "p": 2
+        },
+        "outputs": 176460,
+        "rows": 88230,
+        "columns": 29410,
+        "A_words": 88230,
+        "B_words": 29410,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:subnormal:1",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 1,
+          "m": 55,
+          "n": 105,
+          "p": 18
+        },
+        "outputs": 990,
+        "rows": 55,
+        "columns": 18,
+        "A_words": 5775,
+        "B_words": 1890,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:subnormal:2",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 226,
+          "m": 3,
+          "n": 52,
+          "p": 5
+        },
+        "outputs": 3390,
+        "rows": 678,
+        "columns": 1130,
+        "A_words": 35256,
+        "B_words": 58760,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:subnormal:3",
+        "timed": true,
+        "route": "DirectSmall",
+        "shape": {
+          "batch": 397,
+          "m": 37,
+          "n": 6,
+          "p": 2
+        },
+        "outputs": 29378,
+        "rows": 14689,
+        "columns": 794,
+        "A_words": 88134,
+        "B_words": 4764,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:extremes:0",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 1,
+          "m": 14,
+          "n": 12,
+          "p": 23
+        },
+        "outputs": 322,
+        "rows": 14,
+        "columns": 23,
+        "A_words": 168,
+        "B_words": 276,
+        "nan_outputs": 77,
+        "eligible_outputs": 77,
+        "quiet_steps_saved": 593,
+        "eligible_scan_words": 1848,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:extremes:1",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 219,
+          "m": 12,
+          "n": 8,
+          "p": 3
+        },
+        "outputs": 7884,
+        "rows": 2628,
+        "columns": 657,
+        "A_words": 21024,
+        "B_words": 5256,
+        "nan_outputs": 11,
+        "eligible_outputs": 11,
+        "quiet_steps_saved": 62,
+        "eligible_scan_words": 176,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:extremes:2",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 1,
+          "m": 14,
+          "n": 15,
+          "p": 27
+        },
+        "outputs": 378,
+        "rows": 14,
+        "columns": 27,
+        "A_words": 210,
+        "B_words": 405,
+        "nan_outputs": 378,
+        "eligible_outputs": 378,
+        "quiet_steps_saved": 1150,
+        "eligible_scan_words": 11340,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:extremes:3",
+        "timed": true,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 1,
+          "m": 53,
+          "n": 78,
+          "p": 55
+        },
+        "outputs": 2915,
+        "rows": 53,
+        "columns": 55,
+        "A_words": 4134,
+        "B_words": 4290,
+        "nan_outputs": 0,
+        "eligible_outputs": 0,
+        "quiet_steps_saved": 0,
+        "eligible_scan_words": 0,
+        "rejected_scan_words": 0
+      },
+      {
+        "name": "bmm:check",
+        "timed": false,
+        "route": "PackedBase",
+        "shape": {
+          "batch": 2,
+          "m": 9,
+          "n": 25,
+          "p": 9
+        },
+        "outputs": 162,
+        "rows": 18,
+        "columns": 18,
+        "A_words": 450,
+        "B_words": 450,
+        "nan_outputs": 111,
+        "eligible_outputs": 76,
+        "quiet_steps_saved": 1100,
+        "eligible_scan_words": 3800,
+        "rejected_scan_words": 709
+      }
+    ],
+    "route_aggregates": {
+      "timed_PackedBase": {
+        "cases": 25,
+        "outputs": 133574,
+        "rows": 27788,
+        "columns": 33068,
+        "A_words": 569650,
+        "B_words": 830454,
+        "nan_outputs": 493,
+        "eligible_outputs": 466,
+        "quiet_steps_saved": 1805,
+        "eligible_scan_words": 13364,
+        "rejected_scan_words": 685,
+        "slots": 60856,
+        "input_words": 1400104,
+        "cold_scan_words": 14049,
+        "hypothetical_lazy_slots_if_eagerly_constructed": 60856,
+        "min_never_forced_slots": 59870,
+        "conditional_24B_thunk_struct_requests": 1460544,
+        "conditional_8B_array_pointer_payload": 486848,
+        "eager_input_to_existing_cold_scan_word_ratio": 99.6586233895651,
+        "eager_full_input_word_coverage_ceiling": 1400104,
+        "zero_nan_endpoint_cases": 21,
+        "zero_nan_endpoint_case_input_words": 1289869,
+        "zero_nan_endpoint_case_slots": 54039,
+        "max_distinct_slots_forced_on_cold_outputs": 986,
+        "eager_standalone_zero_nan_case_word_lower_bound": 1289869,
+        "lower_bound_reason": "Each nonempty matrix word is used; zero NaN outputs imply no raw NaN operands under the fixed model. Eager row/column predicates therefore cannot short-circuit on those cases."
+      },
+      "timed_DirectSmall": {
+        "cases": 9,
+        "outputs": 434470,
+        "rows": 307362,
+        "columns": 57531,
+        "A_words": 818724,
+        "B_words": 195489,
+        "nan_outputs": 2367,
+        "eligible_outputs": 205,
+        "quiet_steps_saved": 607,
+        "eligible_scan_words": 1738,
+        "rejected_scan_words": 8848,
+        "slots": 364893,
+        "input_words": 1014213,
+        "cold_scan_words": 10586,
+        "hypothetical_lazy_slots_if_eagerly_constructed": 364893,
+        "min_never_forced_slots": 360159,
+        "conditional_24B_thunk_struct_requests": 8757432,
+        "conditional_8B_array_pointer_payload": 2919144,
+        "eager_input_to_existing_cold_scan_word_ratio": 95.80700925750992,
+        "eager_full_input_word_coverage_ceiling": 1014213,
+        "zero_nan_endpoint_cases": 6,
+        "zero_nan_endpoint_case_input_words": 987226,
+        "zero_nan_endpoint_case_slots": 356030,
+        "max_distinct_slots_forced_on_cold_outputs": 4734,
+        "eager_standalone_zero_nan_case_word_lower_bound": 987226,
+        "lower_bound_reason": "Each nonempty matrix word is used; zero NaN outputs imply no raw NaN operands under the fixed model. Eager row/column predicates therefore cannot short-circuit on those cases."
+      },
+      "raw_PackedBase": {
+        "cases": 1,
+        "outputs": 162,
+        "rows": 18,
+        "columns": 18,
+        "A_words": 450,
+        "B_words": 450,
+        "nan_outputs": 111,
+        "eligible_outputs": 76,
+        "quiet_steps_saved": 1100,
+        "eligible_scan_words": 3800,
+        "rejected_scan_words": 709,
+        "slots": 36,
+        "input_words": 900,
+        "cold_scan_words": 4509,
+        "hypothetical_lazy_slots_if_eagerly_constructed": 36,
+        "min_never_forced_slots": 0,
+        "conditional_24B_thunk_struct_requests": 864,
+        "conditional_8B_array_pointer_payload": 288,
+        "eager_input_to_existing_cold_scan_word_ratio": 0.1996007984031936,
+        "eager_full_input_word_coverage_ceiling": 900,
+        "zero_nan_endpoint_cases": 0,
+        "zero_nan_endpoint_case_input_words": 0,
+        "zero_nan_endpoint_case_slots": 0,
+        "max_distinct_slots_forced_on_cold_outputs": 36,
+        "eager_standalone_zero_nan_case_word_lower_bound": 0,
+        "lower_bound_reason": "Each nonempty matrix word is used; zero NaN outputs imply no raw NaN operands under the fixed model. Eager row/column predicates therefore cannot short-circuit on those cases."
+      }
+    },
+    "analytical_allcold_case": {
+      "name": "bmm:extremes:2",
+      "all_outputs_nan": true,
+      "exact_touched_rows": 14,
+      "exact_touched_columns": 27,
+      "source_words_for_perfect_once_row_and_column_summaries": 615,
+      "current_cold_scan_words": 11340,
+      "word_classification_reduction_if_perfect_sharing": 10725,
+      "not_a_time_gain": true
+    },
+    "raw_separated": true,
+    "existing_cost_checksum_and_frontier_steps_reconciled": true,
+    "new_float_enumeration": false
+  },
+  "findings": [
+    {
+      "id": "S1",
+      "status": "VERIFIED_EXISTING_DATA_REAGGREGATION",
+      "claim": "35 existing BMM case checksum anchors and quiet-step fields reconcile with the frozen frontier. Timed and raw are separated. Packed has493 NaN outputs/466 eligible,1805 avoided quiet arithmetic steps and14049 current scan words. Direct has2367/205,607 steps and10586 words;607 is the raw-data value, not617.",
+      "new_float_replay": false
+    },
+    {
+      "id": "S2",
+      "status": "ANALYTIC_SCREEN_PARK",
+      "claim": "Packed full row/column coverage is1400104 input words and60856 summary slots. This is a full-coverage ceiling, not an exact forced-read claim when summaries short-circuit. Its21 zero-NaN-endpoint cases alone cover1289869 words/54039 slots, where all predicates remain true and standalone eager summaries cannot short-circuit under the fixed model.",
+      "classification_or_memory_count_not_cycles": true,
+      "fusion_caveat": "Fusing classification into existing nativeA/packB may avoid a second raw read pass, but adds predicate/reduction/storage work to normal paths. No reusable row/column flags currently exist and no generated-code evidence makes that work free."
+    },
+    {
+      "id": "S3",
+      "status": "ANALYTIC_SCREEN_PARK",
+      "claim": "DirectSmall has no nativeA-map/packedB preparation stage to reuse. Its eager coverage would be1014213 words/364893 slots, against10586 current scan words and607 avoided arithmetic steps. This cost is independent of packed and must not be charged to an existing prep that DirectSmall never executes.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4597
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4629
+        }
+      ],
+      "n1_overlap": "The n=1 domain overlaps a separately proposed singleton route. No additive gain or uncompiled combined-route subtraction is made."
+    },
+    {
+      "id": "S4",
+      "status": "VERIFIED_CURRENT_SOURCE_STRUCTURE",
+      "claim": "The active packed route is bmm->bmmPackedBase->RowStream.core->RowOutput.row->Packed10.finish. RowOutput.output/core are older proof-equivalent routes, not the active final RowStream path. A-row sharing needs a row-scoped owner outside the per-j function; B-column sharing across rows needs an owner outside the flatMap over rows.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 3979
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4440
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4454
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4529
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4542
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4544
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4574
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-canonical-dot-scan/Kernel.lean",
+          "line": 4629
+        }
+      ],
+      "current_source_Thunk_references": 0,
+      "placement_cost": "Creating a Thunk outside per-j avoids repeated A computation but constructs it for normal-only rows too. Creating it inside the NaN branch per dot avoids normal creation but provides no cross-dot reuse unless the same object is retained."
+    },
+    {
+      "id": "S5",
+      "status": "VERIFIED_FIXED_PRIMARY_RUNTIME",
+      "claim": "Lean4.34 Thunk has real caching for repeated get on the same object: mk is runtime-supported; get_core atomically claims the closure, applies it once, stores m_value and later gets use that value. Pure logical get is fn(), which supports result proofs but does not prove physical sharing across separately created thunks.",
+      "sources": [
+        "https://github.com/leanprover/lean4/blob/293d5d0c0c3f3dded4688b3ccd6a33939ac5102b/src/Init/Core.lean",
+        "https://github.com/leanprover/lean4/blob/293d5d0c0c3f3dded4688b3ccd6a33939ac5102b/src/runtime/object.cpp"
+      ],
+      "not_claimed": "The word lazy does not establish zero allocation, zero force overhead or a shared object in the new callback context."
+    },
+    {
+      "id": "S6",
+      "status": "CONDITIONAL_ALLOCATION_PROJECTION",
+      "claim": "W11 lean.h mkThunk and Thunk.pure allocate lean_thunk_object. On the recorded ELF64 layout the struct is24 bytes before allocator/captures/closure/storage overhead. If all60856 packed row/column thunks are materialized, the thunk structs alone request1460544 bytes per suite checksum-domain pass (aggregate across cases, not peak RSS). At most986 distinct cells can be forced by493 cold outputs, so at least59870 cells remain unforced.",
+      "header_lines": {
+        "layout": 232,
+        "mk": 1374,
+        "pure": 1383,
+        "get": 1393
+      },
+      "not_actual_new_codegen": "No new summary implementation or object was generated. Compiler sinking/elimination and exact allocation counts are UNKNOWN. Cached Bool itself is a tagged scalar, not a heap allocation per get."
+    },
+    {
+      "id": "S7",
+      "status": "VERIFIED_ANALYTIC_LOCAL_REUSE_SIGNAL",
+      "claim": "bmm:extremes:2 has all378 outputs NaN and eligible. Its14 rows/27 columns imply exact41 touched summaries. Perfect one-time classification needs615 words versus11340 current repeated scan words, a10725-word difference. This is a real local reuse opportunity, not a timing gain or justification for whole-suite eager prep.",
+      "evidence": {
+        "name": "bmm:extremes:2",
+        "all_outputs_nan": true,
+        "exact_touched_rows": 14,
+        "exact_touched_columns": 27,
+        "source_words_for_perfect_once_row_and_column_summaries": 615,
+        "current_cold_scan_words": 11340,
+        "word_classification_reduction_if_perfect_sharing": 10725,
+        "not_a_time_gain": true
+      },
+      "unknowns": "Other cases do not retain per-output cold row/column identities in the cost JSON; their actual lazy reuse rate cannot be reconstructed from aggregate counts without new diagnostics."
+    }
+  ],
+  "thunk_and_proof_cost": {
+    "logic": "Thunk.get of a constructed pure closure reduces to fn(); standard API is already in Init. Correctness still needs row-summary true->all actual A reads nonNaN, column-summary true->all actual B reads nonNaN, exact(batch,row/column,n,stride,default) binding and preservation of result/fallback/packed order.",
+    "runtime": "Only the same live cache object reuses the stored result. Rebuilding Thunk.mk for each dot recomputes each dot. mk/pure construction, closure captures, first-force apply_1 and later cached loads/RC checks remain costs.",
+    "new_interfaces": "Current finish takes only raw buffers/addresses/result. Sharing changes flag/cache ownership and threading through RowStream and RowOutput, with new soundness lemmas and existing row/tile refinements to reconnect.",
+    "finite_path_budget": "Normal endpoints currently skip scanner entirely. Eager Bool computation or eager Thunk creation must be included for every normal row/column; no zero overhead assumption.",
+    "no_proof_reimplementation": "Canonical arithmetic closure need not be reproved. Structural cache/index soundness and new whole-candidate validation would be new work."
+  },
+  "primary_sources": [
+    {
+      "url": "https://github.com/leanprover/lean4/blob/293d5d0c0c3f3dded4688b3ccd6a33939ac5102b/src/Init/Core.lean",
+      "git_blob_sha1": "d55190c7a9f9de89bc671813e643a22b016bfb39",
+      "excerpt": {
+        "first_line": 105,
+        "last_line": 190,
+        "bytes": 3225,
+        "utf8_sha256": "e1030a5ee020274292ccb8303ece1ae4e44bc8f2686c4b7efb78675725be18ee"
+      },
+      "facts": {
+        "Thunk_structure": 118,
+        "mk_primitive": 130,
+        "pure_primitive": 137,
+        "get_primitive": 147,
+        "fn_cache_rewrite": 153
+      },
+      "retrieved_between_utc": [
+        "2026-10-23T01:12:13Z",
+        "2026-10-23T01:13:24Z"
+      ],
+      "excerpt_hashed_at_utc": "2026-10-23T01:19:23Z"
+    },
+    {
+      "url": "https://github.com/leanprover/lean4/blob/293d5d0c0c3f3dded4688b3ccd6a33939ac5102b/src/runtime/object.cpp",
+      "git_blob_sha1": "49213d7be079e11589f1efcfe880dba44622a6e7",
+      "excerpt": {
+        "first_line": 540,
+        "last_line": 565,
+        "bytes": 1179,
+        "utf8_sha256": "1633927279d2ea529de5ea2eded38d5582ae647e9eafb19a16c99dc89b880483"
+      },
+      "facts": {
+        "get_core": 540,
+        "claim_closure_atomic_exchange": 541,
+        "apply_once": 550,
+        "cache_result_store": 554
+      },
+      "retrieved_between_utc": [
+        "2026-10-23T01:12:13Z",
+        "2026-10-23T01:13:24Z"
+      ],
+      "excerpt_hashed_at_utc": "2026-10-23T01:19:23Z"
+    }
+  ],
+  "primary_hash_scope": "Fixed full source identified by Git blob SHA1; returned relevant UTF8 excerpts SHA256 computed independently. No claim to have hashed entire remote response bodies. Default-branch search was used for path discovery only; all semantic claims use fixed293d sources.",
+  "minimal_reopen": {
+    "first_falsifier": "A minimal actual C/O3 check in the real RowStream/RowOutput callback context must demonstrate where Thunk construction occurs, that B-column owners survive across rows and that the same object reaches repeated cold gets. If normal-only rows materialize dense cache objects, keep PARK before spending proof/benchmark budget.",
+    "additional_needed": "Use the next existing independent diagnostic to record cold(batch,i,j) and scan stops for unique-row/column counts, without rerunning a floating search or changing score-source claims. The known all-cold378-output case is a fixed positive control, not a shape-specific production dispatch.",
+    "promotion_bar": "Only if the same-source normal-path allocation/dispatch cost is explicitly bounded and real reuse survives codegen should a single sound integration be considered. Then exact-source original fullgate and complete paired suite timing/frozen confirmation remain necessary.",
+    "current_action": "PARK; no cache helper, candidate or variant grid created."
+  },
+  "final_verified_at_utc": "2026-10-23T01:33:19Z",
+  "final_verification": {
+    "all11_local_input_identities_unchanged": "PASS",
+    "all35_existing_cost_case_checksums_and_frontier_steps_reconciled": "PASS_DATA_ONLY",
+    "route_shape_aggregates_recomputed": "PASS",
+    "raw_cases_separate": "PASS",
+    "fixed_Lean_Thunk_primary_source_and_runtime_read": "VERIFIED_SOURCE",
+    "new_float_enumeration_or_candidate_implementation": "NOT_RUN"
+  }
+}
