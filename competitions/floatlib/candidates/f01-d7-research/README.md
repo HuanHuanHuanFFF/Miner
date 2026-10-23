@@ -48,6 +48,8 @@
 
 [独立公开实现补查](public-source-search-20261023T0227Z/receipt.json)另保存9个GitHub仓库/代码搜索的精确工具响应；返回范围没有新可用竞赛实现，索引范围不当作全网不存在的证明。
 
+[哈希字段核对](digest-semantics/receipt.json)确认官方digest就是未变Kernel原字节SHA，补核当前190份本地原件与8个已查冠军digest仍无完全同字节匹配；不据此判断算法是否相同。gate的incumbent_sha256是参照二进制，champion_sha256是当次计时参照的源码，均不当作挑战者digest。
+
 [单文件大小预检](source-budget-notes.md)已完成8组回归及来源保留缺陷修复；3d9预备副本210754字节，原230650字节不变。新字节尚未Lean/fullgate验收，不当作新的运行提升。
 
 [严格公共同源补验](strict-public-settings-review.json)已核主/诊断两次显式关闭autoImplicit、实际exit0及80项原公理；这只关闭公共数学宿主的设置缺项，新私有候选完整gate/计时仍NOT_RUN。
