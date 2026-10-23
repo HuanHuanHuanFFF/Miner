@@ -1,16 +1,12 @@
 # FloatLib 冲冠看板
 
-现任冠军 [#285](https://conjectures.io/v1/competitions/floatlib/submissions/285)｜2026-10-23 19:58核对。
+冠军核对：[2026-10-23 19:58 北京时间](competitions/floatlib/candidates/f01-d7-research/official-20261023T115802Z/receipts.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。
 
-我方首选：[单遍求和＋矩阵优化＋结果守卫组合](competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean)。
-
-| 运算 | 冠军耗时 | 我方耗时（冠军倍数） |
-| --- | ---: | ---: |
-| 加法 add | 1.00× | — |
-| 乘法 mul | 1.00× | — |
-| 求和 sum | 1.00× | — |
-| 矩阵乘法 bmm | 1.00× | — |
-
-耗时倍数＝我方耗时÷冠军耗时，越小越快；“—”表示暂无同口径数据。
+| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时 | 验证 |
+| --- | --- | --- | ---: | --- |
+| 加法 add | [#285](https://conjectures.io/v1/competitions/floatlib/submissions/285) | [原生结果守卫](competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean) | 待补 | 完整通过2次 |
+| 乘法 mul | #285 | [结果守卫＋低位回退](competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean) | 待补 | 完整通过2次 |
+| 求和 sum | #285 | [单遍有序求和](competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean) | 待补 | 完整通过2次 |
+| 矩阵乘法 bmm | #285 | [直接点积＋矩阵布局](competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean) | 待补 | 完整通过2次 |
 
 **结论：尚无取代#285的已验方案。** [数据](competitions/floatlib/candidates/f01-d7-research/multiplier-comparison.json)

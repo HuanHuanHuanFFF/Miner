@@ -20,26 +20,29 @@ def main():
     assert number == snapshot["champion"]
     assert view["dashboard_policy"]["baseline"] == "current_champion"
     checked = datetime.fromisoformat(snapshot["queried_at_utc"]).astimezone(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M")
-    label = {
-        "f01-r8-combined-result-guard": "单遍求和＋矩阵优化＋结果守卫组合",
-        "f01-d7-direct-singlepass-proof2": "单遍求和＋直接点积完整包",
-    }.get(view["candidate"], view["candidate"])
+    assert champion["official_normalized_self_time"] == 1.0
+    policy = view["dashboard_policy"]
+    assert policy["layout"] == "legacy_four_operations"
+    run_count = len(set(view["full_gate_runs"]))
+    labels = policy["candidate_labels_by_operation"]
+    receipt = champion["receipts"]
     lines = [
         "# FloatLib 冲冠看板", "",
-        f"现任冠军 [#{number}](https://conjectures.io/v1/competitions/floatlib/submissions/{number})｜{checked}核对。", "",
-        f"我方首选：[{label}]({source.relative_to(ROOT).as_posix()})。", "",
-        "| 运算 | 冠军耗时 | 我方耗时（冠军倍数） |",
-        "| --- | ---: | ---: |",
+        f"冠军核对：[{checked} 北京时间]({receipt})｜各项均以现任完整包冠军为 1.00×，耗时越低越好。", "",
+        "| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时 | 验证 |",
+        "| --- | --- | --- | ---: | --- |",
     ]
     for op, name in (("add", "加法 add"), ("mul", "乘法 mul"), ("sum", "求和 sum"), ("bmm", "矩阵乘法 bmm")):
         value = champion["candidate_over_champion_time_by_operation"][op]
         if value == "UNKNOWN":
-            display = "—"
+            display = policy["missing_value"]
         else:
             assert type(value) in (int, float) and math.isfinite(value) and value > 0
-            display = f"{value:.2f}×"
-        lines.append(f"| {name} | 1.00× | {display} |")
-    lines += ["", "耗时倍数＝我方耗时÷冠军耗时，越小越快；“—”表示暂无同口径数据。", "",
+            display = f"**约 {value:.1f}×**"
+        champion_link = f"[#{number}](https://conjectures.io/v1/competitions/floatlib/submissions/{number})" if op == "add" else f"#{number}"
+        candidate_link = f"[{labels[op]}]({source.relative_to(ROOT).as_posix()})"
+        lines.append(f"| {name} | {champion_link} | {candidate_link} | {display} | 完整通过{run_count}次 |")
+    lines += ["",
               f"**结论：尚无取代#{number}的已验方案。** [数据](competitions/floatlib/candidates/f01-d7-research/multiplier-comparison.json)", ""]
     (ROOT / "dashboard.md").write_text("\n".join(lines), encoding="utf-8")
 
