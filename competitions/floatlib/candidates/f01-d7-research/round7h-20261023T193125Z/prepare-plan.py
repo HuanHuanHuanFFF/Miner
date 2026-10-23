@@ -17,6 +17,9 @@ parser.add_argument('--statement-only', nargs='*', default=[])
 parser.add_argument('--capture-codegen', nargs='*', default=[])
 parser.add_argument('--role', choices=['DISCOVERY','ADDITIONAL_INPUT_DIAGNOSTIC','STATEMENT_DIAGNOSTIC','FROZEN_INDEPENDENT_CONFIRMATION'], default='DISCOVERY')
 parser.add_argument('--prior-run', type=int)
+parser.add_argument('--cohort', type=Path)
+parser.add_argument('--cohort-sha256')
+parser.add_argument('--cohort-role', choices=['A','B'])
 args = parser.parse_args()
 assert len(set(args.candidates)) == len(args.candidates)
 assert set(args.statement_only) | set(args.capture_codegen) <= set(args.candidates)
@@ -54,6 +57,14 @@ for name in args.candidates:
 if args.role != 'STATEMENT_DIAGNOSTIC':
     assert next(r['sha256'] for r in rows if r['candidate']=='f01-r8-combined-result-guard')=='41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7'
 if args.role=='FROZEN_INDEPENDENT_CONFIRMATION':
+    assert args.cohort and args.cohort_sha256 and args.cohort_role, 'Explicit frozen cohort and role required'
+    verify_spec=importlib.util.spec_from_file_location('r11_request_cohort',OUT/'verify-three-groups.py')
+    verifier=importlib.util.module_from_spec(verify_spec);verify_spec.loader.exec_module(verifier)
+    cohort=read(args.cohort)
+    verifier.verify_freeze(cohort,args.cohort_sha256,args.cohort,guard)
+    assert args.prior_run==cohort['groups']['D']['run'], 'Wrong frozen discovery'
+    assert args.seed==cohort['groups'][args.cohort_role]['seed'], 'Wrong frozen confirmation seed'
+    assert args.candidates==cohort['candidate_orders'][args.cohort_role], 'Wrong frozen measurement order'
     packet=guard.load_run(ROOT,D7,args.prior_run,tuple(args.candidates))
     assert packet['run_conclusion']=='success' and packet['job_conclusion']=='success'
     assert not packet['codegen_present'], 'Use a clean discovery before frozen confirmation'
@@ -67,6 +78,7 @@ plan={'seed':args.seed,'official_commit':guard.OFFICIAL,'suite':'suites/public-v
       'purpose':'R11 complete-cost architecture experiment; exact source and original public-v2 gates. No official champion or formal admission claim.'}
 if args.role=='FROZEN_INDEPENDENT_CONFIRMATION':
     plan['confirmation_candidates']=[{'candidate':r['candidate'],'sha256':r['sha256'],'prior_discovery_run':args.prior_run} for r in rows if r['candidate']!='f01-r8-combined-result-guard']
+    plan['cohort']={'path':args.cohort.relative_to(ROOT).as_posix() if args.cohort.is_absolute() else args.cohort.as_posix(),'sha256':args.cohort_sha256,'role':args.cohort_role}
 for p in [D7/'public-suite.py',D7/'adoption-guard.py',ROOT/'competitions/floatlib/pins.json',ROOT/'competitions/floatlib/candidates/f01-mul-log2-proof1/ci.py']:
     files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
 for p in [OUT/'round-plan.json',Path(__file__).resolve()]:
