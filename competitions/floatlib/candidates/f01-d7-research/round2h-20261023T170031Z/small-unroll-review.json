@@ -1,0 +1,204 @@
+{
+  "started_at_utc": "2026-10-23T17:21:58Z",
+  "completed_at_utc": "2026-10-23T17:26:23.943901+00:00",
+  "deadline_utc": "2026-10-23T17:30:00Z",
+  "conclusion": "NO_DETERMINISTIC_STATIC_ERROR_FOUND; all new Lean/fullgate/C/performance NOT_RUN_BY_REVIEWER",
+  "independence": "Reviewer didnot author candidate orbuilder. Readonly source comparison and text-level semantic/proof inspection; builder was not imported/executed. No Git, CI, network, agents, source/state edits or842/843 future input inspection.",
+  "candidate": {
+    "path": "competitions/floatlib/candidates/f01-d10-bmm-small-unroll/Kernel.lean",
+    "sha256": "d70ebe881ce9c9cd48e83eb02b71b41f50340746717e8b461c6da65e766ed791",
+    "bytes": 236880
+  },
+  "parent": {
+    "path": "competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean",
+    "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+    "bytes": 235169
+  },
+  "builder": {
+    "path": "competitions/floatlib/candidates/f01-d10-bmm-small-unroll/build.py",
+    "sha256": "dc5ca0f1f72ab6759c1501ca18cdf4343247ac8583df638ab046233515cef641",
+    "bytes": 3619
+  },
+  "manifest": {
+    "path": "competitions/floatlib/candidates/f01-d10-bmm-small-unroll/manifest.json",
+    "sha256": "aa2fc9e4b35a481b2988e1d4dbec1f2bb9c689c5e03269194359e54fcbd1038f",
+    "bytes": 947
+  },
+  "diff": [
+    {
+      "kind": "insert",
+      "old_lines": [
+        5222,
+        5221
+      ],
+      "new_lines": [
+        5222,
+        5263
+      ],
+      "old_bytes": 0,
+      "new_bytes": 1681
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        6075,
+        6075
+      ],
+      "new_lines": [
+        6117,
+        6117
+      ],
+      "old_bytes": 78,
+      "new_bytes": 83
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        6085,
+        6085
+      ],
+      "new_lines": [
+        6127,
+        6127
+      ],
+      "old_bytes": 26,
+      "new_bytes": 51
+    }
+  ],
+  "inverse": {
+    "byte_identical_parent": true,
+    "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+  },
+  "source_delta_bytes": 1711,
+  "capacity_remaining_bytes": 19120,
+  "semantics": {
+    "smallStep_lines": [
+      5223,
+      5226
+    ],
+    "smallStep": "Exactly acc + toFloat32(A.getD(baseA+k)posZero) * toFloat32(B.getD(baseB+k*p)posZero); originaldotLoop has the same step. No FMA/reassociation/sourcehardwareflag change.",
+    "smallLoop_lines": [
+      5228,
+      5238
+    ],
+    "chains": [
+      {
+        "n": 0,
+        "step_order": [],
+        "initial": "Float32.ofBits0",
+        "mul_count": 0,
+        "add_count": 0
+      },
+      {
+        "n": 1,
+        "step_order": [
+          0
+        ],
+        "initial": "Float32.ofBits0",
+        "mul_count": 1,
+        "add_count": 1
+      },
+      {
+        "n": 2,
+        "step_order": [
+          0,
+          1
+        ],
+        "initial": "Float32.ofBits0",
+        "mul_count": 2,
+        "add_count": 2
+      },
+      {
+        "n": 3,
+        "step_order": [
+          0,
+          1,
+          2
+        ],
+        "initial": "Float32.ofBits0",
+        "mul_count": 3,
+        "add_count": 3
+      },
+      {
+        "n": 4,
+        "step_order": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "initial": "Float32.ofBits0",
+        "mul_count": 4,
+        "add_count": 4
+      }
+    ],
+    "order_check": "Parsedactual eachmatchbranch smallStep indices outer-to-inner []/[0]/[1,0]/[2,1,0]/[3,2,1,0]; nested acc dependency gives original leftfold0..n-1. This is source structural verification, not a float oracle orLean proof.",
+    "n0": "Returns original +0 with no A/B getD reads, includingn0 withpositiveoutputcount. Empty batch/m/p stillhasnoVector.ofFn callback.",
+    "signed_zero": "n1 stillcomputes +0 + (a*b); it neverreturnsrawmultiplyalone. Thus source retains originalnegativezero handling ratherthan introducing a seednormalizer assumption.",
+    "native_nan_and_invalid": "sameordered native operations produce same resultcandidate; dotSmall keeps exactold nonNaN-import vsrawNaNreplay branch usingoriginalarrays/indices. sNaN/qNaNpayload/invalid priority remainsownedbyexistingrawreplay.",
+    "n_ge5": "Default calls originaldotLoop n ...0(Float32.ofBits0) exactly, includinglongthin p<=2 route; no newUSize casts/bounds/wraparound. Addedmatch/wrapper maystillcost time evenwhenmathidentical.",
+    "dispatch": "BMM6141 unchangedn<=4 orp<=2 selectsDirectSmall; onlyits runtimecall6117 changes todotSmall. n>=5,p>2 remainsoriginalpacked; largeNat defaults remainoldNat/getD semantics."
+  },
+  "proof_review": {
+    "smallLoop_eq_lines": [
+      5240,
+      5252
+    ],
+    "smallLoop_eq": "Five successiveNat constructorcases cover0/1/2/3/4 andresidualNat.succ^5n. Literalbranches simp[smallLoop,smallStep,dotLoop] onlyneed atmost4 oldsteps andconstantNat comparisons; leafn>=5 isdefinitionallydefaultoldloop, rfl. No newrecursivefunction ornewterminationargument introduced.",
+    "dotSmall_eq_lines": [
+      5259,
+      5262
+    ],
+    "dotSmall_eq": "Unfold dotSmall andold dot; rewrite actual smallLoop_eq makes resultproduceridentical under samelet/if; branchproofhf unused asbefore. SameNat/ArrayBinary32/Float32 parameter types; no newfinite premise.",
+    "core_eq_reference_line": 6127,
+    "core_bridge": "rw[NativeFinal.dotSmall_eq,NativeFinal.dot_eq] restoresaccepted41 bridge beforeexactoldaddress/indexproof. Alloriginaltheoremstatements andk orderretained.",
+    "shared_proof_boundary": "OriginalNativeFinal.dotLoop/dot/dot_eq andallotheroriginalNativeFinalcode remain byteidentical; onlynewdefinitions appended beforeendNativeFinal. Hence oldPacked10.dot10_lane definitional coupling is untouched, unlikeD9decoder modification thatchangedshared dotLoop. Newlemmas are notsimp-attributed, no changedglobaloptions/instances.",
+    "limits": "No actualLean elaboration; simp unfolding generatedequations, match reduction andrw congruence remain exactsource statement checks. No knownconcretebadname/type/terminationgoal identified; ifCIshowsone, fixonlythe reportedlocalproof andbindnewSHA."
+  },
+  "unchanged_blocks": {
+    "original_NativeFinal_prefix": {
+      "bytes": 4097,
+      "sha256": "61248a3a3880080db71f923cb3c9800a310ca0febf466b70a42921211e8fef68"
+    },
+    "R7NaNReplay_excluding_endmarker": {
+      "bytes": 3271,
+      "sha256": "b8b91cacdcb73a427146190c2df0d8cd9ff3e26e8bc14aced54a9f05da9d059b"
+    },
+    "Packed10_through_before_DirectSmall": {
+      "bytes": 33109,
+      "sha256": "ede18371c6171028f880a37c0dd130ba57729f577fbe1f38468c9f7451840509"
+    },
+    "R7SinglePassSum_excluding_endmarker": {
+      "bytes": 9212,
+      "sha256": "223785c0ec8d8fd64153aba1ad09db78a8329865856b5fd0908368b45dfe9812"
+    },
+    "scalar": "Completeprefix before5222 identical; add/mul unchanged. Originalsum/finalsum dispatch/spec unchanged. AllNaN replayandpackedruntime/spec unchanged."
+  },
+  "builder_review": {
+    "parent_pin_exact": true,
+    "behavior": "Top-level script writesKernel+manifest; notsafe toimportforread-onlyreview. AddsoneNativeFinalblock, boundsDirectSmallnamespace, replacesone runtimeandoneproofline, asserts2qualifieddotSmallmentions. Actualindependentinverseconfirmsnootherchanges.",
+    "nonblocking_detail": "Sizeassert occurs afterwrites; currentactualKernel verified236880<=256000 so no currentcapacityissue. Futurebuilds wouldbenefitprewritecheck but no requesttoscriptmodify."
+  },
+  "static_policy": {
+    "result": "PASS fixed4b7 BANNED/options/attribute/import checks only",
+    "fixedgate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+    "imports": [
+      "ContractTensor"
+    ],
+    "new_attributes": [
+      "inline smallStep"
+    ],
+    "new_options": [],
+    "new_declarations_unique": [
+      "smallStep",
+      "smallLoop",
+      "smallLoop_eq",
+      "dotSmall",
+      "dotSmall_eq"
+    ],
+    "license": "Allparentlegalnoticesretained; onlytwooldcall/prooflines replaced."
+  },
+  "performance_boundary": "UnrollingremovesNatloopcontrol onlyforn<=4 atsourcelevel. UnknownifLLVM inlines smallLoop/smallStep, eliminateslookup/addresswork, expandsactualcode oraddsnewdispatchcost to n>=5,p<=2. No instruction count orwholegain inferred. Gate/newC/newinputsnotexamined.",
+  "next_minimal_check": "Exactfullsource officialstatement firstvalidatesnewsmallLoop_eq/dotSmall_eq andexistingPacked10 theorem dependencies. Onlyifaccepted, originalfullgate andsame-runretained41 timing; newC shouldshowactualn0..4 paths anddefaultoverhead. Keepallslow/failures andthree-group frozenR10rule.",
+  "final_source_sha256": "d70ebe881ce9c9cd48e83eb02b71b41f50340746717e8b461c6da65e766ed791"
+}
