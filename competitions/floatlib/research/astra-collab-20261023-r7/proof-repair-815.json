@@ -1,0 +1,328 @@
+{
+  "state": "READY_FOR_D_EXACT_STATEMENT_NOT_RUN",
+  "started_at_utc": "2026-10-23T05:09:32Z",
+  "deadline_utc": "2026-10-23T05:29:32Z",
+  "updated_at_utc": "2026-10-23T05:22:00.531037+00:00",
+  "candidate": {
+    "candidate": "f01-d7-direct-singlepass-proof2",
+    "candidate_file": "Kernel.lean",
+    "candidate_sha256": "a84c1618cebe5892cbffd3657de8f2e6b96f0f70df2811af75c09a6ea3c5f736",
+    "candidate_bytes": 233714,
+    "parent": "f01-d7-direct-singlepass",
+    "parent_sha256": "cc06a47faf9f982c324d265c90beb2b9cea953f33773eabed3ed6eab29260dfc",
+    "created_at_utc": "2026-10-23T05:17:52.851332+00:00",
+    "validation_mode": "statement-only-first",
+    "proof_status": "NOT_RUN_EXACT_PROOF_REPAIR",
+    "runtime_source": "All bytes outside seven theorem proof bodies unchanged. All theorem statements, termination hints, runtime declarations, imports, options and licences preserved. Inverse patch recovers exactcc06.",
+    "actual_failed_runs": [
+      39903049887,
+      39904116090
+    ],
+    "actual_full_log_sha256": "9040af327d033818c6091fd14fcbd0c9151d8d4b9bd21f142b06462ae752334b",
+    "changed_proofs": [
+      "suffixLoop_eq",
+      "raw_nan_of_high_reject",
+      "native_step_eq",
+      "repair_quiet",
+      "natLoop_eq",
+      "loop_eq",
+      "run_spec"
+    ],
+    "audit": "../../research/astra-collab-20261023-r7/proof-repair-815.json",
+    "full_gate": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "formal_submission": "NOT_SUBMITTED"
+  },
+  "full_error_log": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\39904116090\\download-e93b4b2f375c40e091f8e5cb24c2a844\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-d7-direct-singlepass\\full-build-output.txt",
+    "sha256": "9040af327d033818c6091fd14fcbd0c9151d8d4b9bd21f142b06462ae752334b",
+    "bytes": 29122,
+    "errors": [
+      {
+        "old_line": 4979,
+        "column": 4,
+        "message": "Type mismatch"
+      },
+      {
+        "old_line": 6104,
+        "column": 4,
+        "message": "omega could not prove the goal:"
+      },
+      {
+        "old_line": 6124,
+        "column": 56,
+        "message": "Tactic `simp` failed with a nested error:"
+      },
+      {
+        "old_line": 6135,
+        "column": 56,
+        "message": "Tactic `simp` failed with a nested error:"
+      },
+      {
+        "old_line": 6174,
+        "column": 12,
+        "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern"
+      },
+      {
+        "old_line": 6181,
+        "column": 39,
+        "message": "unsolved goals"
+      },
+      {
+        "old_line": 6185,
+        "column": 14,
+        "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern"
+      },
+      {
+        "old_line": 6194,
+        "column": 10,
+        "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern"
+      },
+      {
+        "old_line": 6232,
+        "column": 8,
+        "message": "Tactic `rfl` failed: The left-hand side"
+      },
+      {
+        "old_line": 6235,
+        "column": 10,
+        "message": "Tactic `rfl` failed: The left-hand side"
+      },
+      {
+        "old_line": 6236,
+        "column": 10,
+        "message": "Tactic `rfl` failed: The left-hand side"
+      },
+      {
+        "old_line": 6238,
+        "column": 6,
+        "message": "Tactic `rfl` failed: The left-hand side"
+      },
+      {
+        "old_line": 6252,
+        "column": 81,
+        "message": "unsolved goals"
+      }
+    ]
+  },
+  "patches": [
+    {
+      "name": "suffixLoop_eq",
+      "start": 179411,
+      "end": 179752,
+      "old_body": "  rw [suffixLoop]\n  split\n  · rename_i hk\n    rw [Fin.foldl.loop, dif_pos hk]\n    have ih := suffixLoop_eq x (k + 1) (R7W02.step acc (x.get ⟨k, hk⟩))\n      (R7W02.step_isQNaN acc (x.get ⟨k, hk⟩) hq)\n    rw [R7W02.step_eq_add acc (x.get ⟨k, hk⟩) hq, ← Submission.add_eq] at ih\n    exact ih\n  · rename_i hk\n    rw [Fin.foldl.loop, dif_neg hk]\n",
+      "new_body": "  rw [suffixLoop]\n  split\n  · rename_i hk\n    rw [Fin.foldl.loop, dif_pos hk]\n    have ih := suffixLoop_eq x (k + 1) (R7W02.step acc (x.get ⟨k, hk⟩))\n      (R7W02.step_isQNaN acc (x.get ⟨k, hk⟩) hq)\n    have hs : R7W02.step acc (x.get ⟨k, hk⟩) = step x acc ⟨k, hk⟩ := by\n      simpa only [step, Submission.add_eq] using\n        R7W02.step_eq_add acc (x.get ⟨k, hk⟩) hq\n    exact ih.trans (congrArg\n      (fun a : Binary32 => Fin.foldl.loop n (step x) a (k + 1)) hs)\n  · rename_i hk\n    rw [Fin.foldl.loop, dif_neg hk]\n",
+      "old_start_line": 4972,
+      "old_end_line": 4981,
+      "new_start_line": 4972,
+      "new_end_line": 4984,
+      "old_body_sha256": "9cea65dd573b1242258865d4ec1ed5504a4e4336a88da6bc63bf7c5893e01b92",
+      "new_body_sha256": "6a54e8e23452ec18c19d3d65e7e36abac69f8cdbc4106e0b151c63cf3590e231"
+    },
+    {
+      "name": "raw_nan_of_high_reject",
+      "start": 223385,
+      "end": 223586,
+      "old_body": "  have hgt : ¬ R2W01b.magnitude u ≤ (0x7f800000 : UInt32) := by\n    simp only [UInt32.lt_iff_toNat_lt, UInt32.le_iff_toNat_le,\n      ← UInt32.toNat_inj] at h hi ⊢\n    omega\n  exact decide_eq_false hgt\n",
+      "new_body": "  have hgt : ¬ R2W01b.magnitude u ≤ (0x7f800000 : UInt32) := by\n    intro hle\n    exact hi (UInt32.le_antisymm hle (UInt32.not_lt.mp h))\n  exact decide_eq_false hgt\n",
+      "old_start_line": 6101,
+      "old_end_line": 6105,
+      "new_start_line": 6104,
+      "new_end_line": 6107,
+      "old_body_sha256": "6ef3822c6b31186ba23e40be9d2b1190c67cb3cd330c6791bdbbdfe261fd8965",
+      "new_body_sha256": "061e6ff3aa0f1da5fb81b053b8284831b19269c57d5529651a5191eb392d2f29"
+    },
+    {
+      "name": "native_step_eq",
+      "start": 224306,
+      "end": 224582,
+      "old_body": "  have hn : (ExecFloat.Binary.toFloat32 q).isNaN = false := by\n    have h := R7W12.rawNotNaN_eq_native_classifier q\n    rw [hq] at h\n    cases hh : (ExecFloat.Binary.toFloat32 q).isNaN <;> simp_all\n  rw [hv, R7W12.ofFloat32_add, NotNaNProbe.roundtrip q hn, Submission.add_eq]\n",
+      "new_body": "  have hn : (ExecFloat.Binary.toFloat32 q).isNaN = false := by\n    apply Bool.not_inj\n    exact (R7W12.rawNotNaN_eq_native_classifier q).symm.trans hq\n  rw [hv, R7W12.ofFloat32_add, NotNaNProbe.roundtrip q hn, Submission.add_eq]\n",
+      "old_start_line": 6121,
+      "old_end_line": 6125,
+      "new_start_line": 6123,
+      "new_end_line": 6126,
+      "old_body_sha256": "e39c325244d67cc6c7be51d75d01b218036742905226feba6c0b0d9737aabdec",
+      "new_body_sha256": "27891b5c9f1845c0c18cc759e7e2ccb716ee0fe9075a5509f7ecadbac89954a7"
+    },
+    {
+      "name": "repair_quiet",
+      "start": 224893,
+      "end": 225331,
+      "old_body": "  have hn : (ExecFloat.Binary.toFloat32 q).isNaN = true := by\n    have h := R7W12.rawNotNaN_eq_native_classifier q\n    rw [hq] at h\n    cases hh : (ExecFloat.Binary.toFloat32 q).isNaN <;> simp_all\n  have he : (R7W05.nativeSumStep acc q).isNaN = true := by\n    unfold R7W05.nativeSumStep\n    rw [R7W05.native_add_nan_right _ _ hn]\n    rfl\n  simpa only [R7W05.repairSumStep, Submission.add_eq] using\n    R7W05.repairSumStep_isQNaN acc q he\n",
+      "new_body": "  have hn : (ExecFloat.Binary.toFloat32 q).isNaN = true := by\n    apply Bool.not_inj\n    exact (R7W12.rawNotNaN_eq_native_classifier q).symm.trans hq\n  have he : (R7W05.nativeSumStep acc q).isNaN = true := by\n    unfold R7W05.nativeSumStep\n    rw [R7W05.native_add_nan_right _ _ hn]\n    rfl\n  simpa only [R7W05.repairSumStep, Submission.add_eq] using\n    R7W05.repairSumStep_isQNaN acc q he\n",
+      "old_start_line": 6132,
+      "old_end_line": 6141,
+      "new_start_line": 6133,
+      "new_end_line": 6141,
+      "old_body_sha256": "d32224296fd66445abf63355a272ca7cbb4d121aa100241e16b8e8363877e7f5",
+      "new_body_sha256": "ceeb4f336bf2ae2dda9322c048f99186edc7341857ea29cd3d85c2bfc2e63d45"
+    },
+    {
+      "name": "natLoop_eq",
+      "start": 226270,
+      "end": 227531,
+      "old_body": "  rw [natLoop]\n  split\n  · rename_i hk\n    rw [Fin.foldl.loop, dif_pos hk]\n    dsimp only\n    split\n    · rename_i hl\n      split\n      · rename_i hh\n        have hi := natLoop_eq x (k + 1)\n          (acc + R2W01b.tableProduct (x.get ⟨k, hk⟩).raw.1)\n        rw [native_step_eq acc (x.get ⟨k, hk⟩) _\n          (table_eq _ hl hh) (raw_nonNaN_of_le _ (UInt32.le_of_lt hh))] at hi\n        exact hi\n      · rename_i hh\n        split\n        · rename_i hinf\n          have hle : R2W01b.magnitude (x.get ⟨k, hk⟩).raw.1 ≤\n              (0x7f800000 : UInt32) := by\n            rw [hinf]\n          have hi := natLoop_eq x (k + 1)\n            (acc + Float32.ofBits (x.get ⟨k, hk⟩).raw.1)\n          rw [native_step_eq acc (x.get ⟨k, hk⟩) _ rfl (raw_nonNaN_of_le _ hle)] at hi\n          exact hi\n        · rename_i hinf\n          exact R7SumRepair.suffixLoop_eq x (k + 1) _\n            (repair_quiet acc (x.get ⟨k, hk⟩) (raw_nan_of_high_reject _ hh hinf))\n    · rename_i hl\n      have hle := UInt32.le_of_lt (low_reject_finite _ hl)\n      have hi := natLoop_eq x (k + 1)\n        (acc + Float32.ofBits (x.get ⟨k, hk⟩).raw.1)\n      rw [native_step_eq acc (x.get ⟨k, hk⟩) _ rfl (raw_nonNaN_of_le _ hle)] at hi\n      exact hi\n  · rename_i hk\n    rw [Fin.foldl.loop, dif_neg hk]\n",
+      "new_body": "  rw [natLoop]\n  split\n  · rename_i hk\n    rw [Fin.foldl.loop, dif_pos hk]\n    dsimp only\n    split\n    · rename_i hl\n      split\n      · rename_i hh\n        have ih := natLoop_eq x (k + 1)\n          (acc + R2W01b.tableProduct (x.get ⟨k, hk⟩).raw.1)\n        have hv : R2W01b.tableProduct (x.get ⟨k, hk⟩).raw.1 =\n            ExecFloat.Binary.toFloat32 (x.get ⟨k, hk⟩) := by\n          simpa only [ExecFloat.Binary.toFloat32, ExecFloat.Binary.toBits32] using\n            table_eq (x.get ⟨k, hk⟩).raw.1 hl hh\n        have hs := native_step_eq acc (x.get ⟨k, hk⟩)\n          (R2W01b.tableProduct (x.get ⟨k, hk⟩).raw.1) hv\n          (raw_nonNaN_of_le _ (UInt32.le_of_lt hh))\n        exact ih.trans (congrArg\n          (fun a : Binary32 => Fin.foldl.loop n (R7SumRepair.step x) a (k + 1)) hs)\n      · rename_i hh\n        split\n        · rename_i hinf\n          have hle : R2W01b.magnitude (x.get ⟨k, hk⟩).raw.1 ≤\n              (0x7f800000 : UInt32) := UInt32.le_of_eq hinf\n          have ih := natLoop_eq x (k + 1)\n            (acc + Float32.ofBits (x.get ⟨k, hk⟩).raw.1)\n          have hs := native_step_eq acc (x.get ⟨k, hk⟩)\n            (Float32.ofBits (x.get ⟨k, hk⟩).raw.1) rfl (raw_nonNaN_of_le _ hle)\n          exact ih.trans (congrArg\n            (fun a : Binary32 => Fin.foldl.loop n (R7SumRepair.step x) a (k + 1)) hs)\n        · rename_i hinf\n          exact R7SumRepair.suffixLoop_eq x (k + 1) _\n            (repair_quiet acc (x.get ⟨k, hk⟩) (raw_nan_of_high_reject _ hh hinf))\n    · rename_i hl\n      have hle := UInt32.le_of_lt (low_reject_finite _ hl)\n      have ih := natLoop_eq x (k + 1)\n        (acc + Float32.ofBits (x.get ⟨k, hk⟩).raw.1)\n      have hs := native_step_eq acc (x.get ⟨k, hk⟩)\n        (Float32.ofBits (x.get ⟨k, hk⟩).raw.1) rfl (raw_nonNaN_of_le _ hle)\n      exact ih.trans (congrArg\n        (fun a : Binary32 => Fin.foldl.loop n (R7SumRepair.step x) a (k + 1)) hs)\n  · rename_i hk\n    rw [Fin.foldl.loop, dif_neg hk]\n",
+      "old_start_line": 6163,
+      "old_end_line": 6197,
+      "new_start_line": 6163,
+      "new_end_line": 6206,
+      "old_body_sha256": "2dc20d9ae5b27ccd2ff59bf3e63b5fbaa8a2ae4b75a593c8d5e1c84a31676b04",
+      "new_body_sha256": "aa9b6fc6fa6d18ae5f9aa72954f3697590a53956367fbc9ad281e6d0f1ff0323"
+    },
+    {
+      "name": "loop_eq",
+      "start": 228763,
+      "end": 229296,
+      "old_body": "  rw [loop]\n  split\n  · rename_i hk\n    have hkn : k.toNat < n := by rw [← hn]; exact USize.lt_iff_toNat_lt.mp hk\n    rw [natLoop, dif_pos hkn]\n    dsimp only\n    split\n    · split\n      · rw [loop_eq, Packed10Index.stepNat hk]\n        rfl\n      · split\n        · rw [loop_eq, Packed10Index.stepNat hk]\n          rfl\n        · rfl\n    · rw [loop_eq, Packed10Index.stepNat hk]\n      rfl\n  · rename_i hk\n    have hkn : ¬ k.toNat < n := by\n      rw [← hn]\n      simpa only [USize.lt_iff_toNat_lt] using hk\n    rw [natLoop, dif_neg hkn]\n",
+      "new_body": "  rw [loop]\n  split\n  · rename_i hk\n    have hkn : k.toNat < n := by rw [← hn]; exact USize.lt_iff_toNat_lt.mp hk\n    rw [natLoop, dif_pos hkn]\n    dsimp only\n    have hread : x.toArray.uget k (by simpa only [x.size_toArray] using hkn) =\n        x.get ⟨k.toNat, hkn⟩ := by rfl\n    rw [hread]\n    by_cases hl : (0x0bffffff : UInt32) ≤ R2W01b.magnitude (x.get ⟨k.toNat, hkn⟩).raw.1 - 1\n    · simp only [dif_pos hl, if_pos hl]\n      by_cases hh : R2W01b.magnitude (x.get ⟨k.toNat, hkn⟩).raw.1 < (0x7f800000 : UInt32)\n      · simp only [dif_pos hh, if_pos hh]\n        rw [loop_eq, Packed10Index.stepNat hk]\n      · simp only [dif_neg hh, if_neg hh]\n        by_cases hi : R2W01b.magnitude (x.get ⟨k.toNat, hkn⟩).raw.1 = (0x7f800000 : UInt32)\n        · simp only [dif_pos hi, if_pos hi]\n          rw [loop_eq, Packed10Index.stepNat hk]\n        · simp only [dif_neg hi, if_neg hi]\n    · simp only [dif_neg hl, if_neg hl]\n      rw [loop_eq, Packed10Index.stepNat hk]\n  · rename_i hk\n    have hkn : ¬ k.toNat < n := by\n      rw [← hn]\n      simpa only [USize.lt_iff_toNat_lt] using hk\n    rw [natLoop, dif_neg hkn]\n",
+      "old_start_line": 6223,
+      "old_end_line": 6243,
+      "new_start_line": 6232,
+      "new_end_line": 6257,
+      "old_body_sha256": "6ed205c5a7aa4d5e1404d0b3d7fd3d59e63aed41d173282ba4826c0c47941fdf",
+      "new_body_sha256": "d5694852cc3d3551ffe3cce2434df2e24a2e70974457ddbb73a5920170c8789e"
+    },
+    {
+      "name": "run_spec",
+      "start": 229706,
+      "end": 230213,
+      "old_body": "  intro n x\n  have hrun : run x = natLoop x 0 (Float32.ofBits 0) := by\n    unfold run\n    split\n    · rw [loop_eq, USize.toNat_zero]\n    · rfl\n  rw [hrun, natLoop_eq]\n  have hstep : R7SumRepair.step x = fun (acc : Binary32) (i : Fin n) =>\n      ExecFloat.add acc (x.get i) := by\n    funext acc i\n    exact congrArg (fun f : Binary32 → Binary32 → Binary32 => f acc (x.get i))\n      Submission.add_eq\n  change Fin.foldl n (R7SumRepair.step x) posZero = sumSpec x.get\n  rw [hstep, Fin.foldl_eq_finRange_foldl]\n",
+      "new_body": "  intro n x\n  have hrun : run x = natLoop x 0 (Float32.ofBits 0) := by\n    unfold run\n    split\n    · rw [loop_eq, USize.toNat_zero]\n    · rfl\n  rw [hrun, natLoop_eq]\n  have hstep : R7SumRepair.step x = fun (acc : Binary32) (i : Fin n) =>\n      ExecFloat.add acc (x.get i) := by\n    funext acc i\n    exact congrArg (fun f : Binary32 → Binary32 → Binary32 => f acc (x.get i))\n      Submission.add_eq\n  change Fin.foldl n (R7SumRepair.step x) posZero = sumSpec x.get\n  rw [hstep, Fin.foldl_eq_finRange_foldl]\n  rfl\n",
+      "old_start_line": 6253,
+      "old_end_line": 6266,
+      "new_start_line": 6267,
+      "new_end_line": 6281,
+      "old_body_sha256": "1310e32c5b38b5a5960d2af869f383aab63884984e41537d985011d2b067331f",
+      "new_body_sha256": "41b67fb514e3e58ffb51c4facb6eecb8a28d70c239dc304a95a9196465ae470c"
+    }
+  ],
+  "unchanged_projection": {
+    "method": "Every byte outside exact seven theorem bodies is equal; theorem statements and termination hints remain in projection. Exact inverse recovers originalcc06.",
+    "bytes": 228722,
+    "sha256": "f862405960b83f241ed0575be6fdbb1c4dd57df3baef2573cf936e795d0f92b4",
+    "old_equals_new": true,
+    "inverse_parent_sha256": "cc06a47faf9f982c324d265c90beb2b9cea953f33773eabed3ed6eab29260dfc",
+    "generated_C_or_machine_code_identity": "NOT_RUN; source identity does not assert binary identity"
+  },
+  "original_static_policy": "PASS_HASH_SIZE_IMPORT_BANNED_OPTIONS_ATTRIBUTES_ONLY",
+  "remaining": [
+    "ExactnewKernel Lean4.34/FloatLib originalstatement NOT_RUN",
+    "Kernel replay,axiom audit,checksum,25pairedrounds NOT_RUN",
+    "No new performance or onlinechampion claim"
+  ],
+  "git_ci_web_actions": "NONE; D sole coordinator",
+  "actual_error_fix_mapping": [
+    {
+      "old_line": 4979,
+      "theorem": "suffixLoop_eq",
+      "repair": "Keep ih originalacc and transport onlyfoldacc using explicit equality",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6104,
+      "theorem": "raw_nan_of_high_reject",
+      "repair": "UInt32 order antisymmetry contradiction",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6124,
+      "theorem": "native_step_eq",
+      "repair": "Bool.not_inj exact equality transport",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6135,
+      "theorem": "repair_quiet",
+      "repair": "Bool.not_inj exact equality transport",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6174,
+      "theorem": "natLoop_eq",
+      "repair": "Explicit table value andcodec bridge,fold congruence",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6181,
+      "theorem": "natLoop_eq",
+      "repair": "UInt32.le_of_eq hinf",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6185,
+      "theorem": "natLoop_eq",
+      "repair": "Explicit ofBits value andfold congruence",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6194,
+      "theorem": "natLoop_eq",
+      "repair": "Explicit ofBits value andfold congruence",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6232,
+      "theorem": "loop_eq",
+      "repair": "Normalize array/vector read thenmatchingguard cases",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6235,
+      "theorem": "loop_eq",
+      "repair": "Normalize array/vector read thenmatchingguard cases",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6236,
+      "theorem": "loop_eq",
+      "repair": "Normalize array/vector read thenmatchingguard cases",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6238,
+      "theorem": "loop_eq",
+      "repair": "Normalize array/vector read thenmatchingguard cases",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    },
+    {
+      "old_line": 6252,
+      "theorem": "run_spec",
+      "repair": "Close originalsumSpec definition withrfl",
+      "status": "PROPOSED_EXACT_SOURCE_NOT_COMPILED"
+    }
+  ],
+  "completed_at_utc": "2026-10-23T05:22:00.531037+00:00",
+  "elapsed_seconds": 748.531037,
+  "second_identity_check": {
+    "method": "Independently relocate seven declaration bodies in bothsources and erase them; no storedpatchoffset used",
+    "nonproof_bytes": 228722,
+    "sha256": "f862405960b83f241ed0575be6fdbb1c4dd57df3baef2573cf936e795d0f92b4",
+    "old_equals_new": true,
+    "protected_parent_files_unchanged": [
+      "competitions/floatlib/candidates/f01-d7-direct-singlepass/Kernel.lean",
+      "competitions/floatlib/candidates/f01-d7-direct-singlepass/manifest.json",
+      "competitions/floatlib/candidates/f01-r7-sum-singlepass-fused-proof1/Kernel.lean",
+      "competitions/floatlib/candidates/f01-r7-sum-singlepass-fused-proof1/manifest.json"
+    ],
+    "added_runtime_declarations_inside_proofs": false
+  },
+  "documents": [
+    {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\proof-repair-815.md",
+      "bytes": 4789,
+      "sha256": "dc651c526a693f4d7debdb2a69d0097ad21cd37019c027bd106fc83629b7c74b"
+    },
+    {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-direct-singlepass-proof2\\README.md",
+      "bytes": 1395,
+      "sha256": "10a3f2db2a9ceaec2b2ad2e09d9eefda17f58af09f74d7a80b5a35687f2f9761"
+    },
+    {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-direct-singlepass-proof2\\manifest.json",
+      "bytes": 1230,
+      "sha256": "8a030364989fc56b28c41211d5c8675d3fa89339ee3d7cb9f0f69eb432881bf4"
+    }
+  ]
+}
