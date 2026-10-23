@@ -1,6 +1,6 @@
 # R7 十小时冲冠
 
-授权后补充验证已收齐9次CI。当前保留[a84单遍求和＋直接点积](../f01-d7-direct-singlepass-proof2/README.md)：818发现、819冻结独立确认均完整通过，相对原保留60f整包降耗22.5%–22.8%，公开原版倍率3.44–3.83×。bee6结果判别路线独立确认降耗10.4%–10.6%，作为备选；e139零值捷径完整通过但慢2.4%，停放。
+上一验证检查点已收齐9次CI，当时保留[a84单遍求和＋直接点积](../f01-d7-direct-singlepass-proof2/README.md)：818发现、819冻结独立确认均完整通过，相对原保留60f整包降耗22.5%–22.8%，公开原版倍率3.44–3.83×。bee6结果判别路线独立确认降耗10.4%–10.6%，作为备选；e139零值捷径完整通过但慢2.4%，停放。
 
 [原始验收及失败索引](authorized-validation/continuation-results.json)与[选用门槛](authorized-validation/adoption-guard-review.md)记录精确源码、全部负面结果、独立确认和16项回归。唯一当前入口仍是[开发状态](../../coordination/development-status.json)。原13处求和证明错误经7个proof-only修复关闭，运行源码逆变换核对见[singlepass-proof2-coordinator-review.json](authorized-validation/singlepass-proof2-coordinator-review.json)。
 

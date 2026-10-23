@@ -10,7 +10,7 @@
 
 **R8组合41**现已将MR04守卫与a84的MR02/MR11/MR12接入同一精确235169B源，821/822原版完整gate和独立确认通过。[联合源码与原件](round1h-20261023T110107Z/round-results.json)；各旧哈希原缺项不继承。
 
-- **当前保留a84**：[单遍求和＋直接点积](../f01-d7-direct-singlepass-proof2/Kernel.lean)，818/819原版完整gate及冻结独立确认均通过。MR02/MR11/MR12的实际读取、Nat/USize和最终规格接线已在这一精确源中验收；原cc06在811/815失败，3d9等其他哈希不继承结果。
+- **前次保留a84**：[单遍求和＋直接点积](../f01-d7-direct-singlepass-proof2/Kernel.lean)，818/819原版完整gate及冻结独立确认均通过。MR02/MR11/MR12的实际读取、Nat/USize和最终规格接线已在这一精确源中验收；原cc06在811/815失败，3d9等其他哈希不继承结果。
 - **已验证备选bee6**：[结果判别](../f01-d7-result-guard-both-proof2/Kernel.lean)，817/812完整gate及独立确认均通过，接入MR04的IEEE自比较判据。原d027失败及1f4未验状态仍保留。
 - 两条路线分别确认相对60f整包降耗22.5%–22.8%及10.4%–10.6%；未创建两者新组合。[原始验收索引](authorized-validation/continuation-results.json)。
 
