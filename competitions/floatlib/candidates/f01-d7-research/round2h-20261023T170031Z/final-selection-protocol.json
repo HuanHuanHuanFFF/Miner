@@ -1,0 +1,27 @@
+{
+  "recorded_at_utc": "2026-10-23T18:15:48.535628+00:00",
+  "timing": "After early841/844/845/846/848/849/850 discovery, before collecting851/853 and before any842/843 generation or inspection.",
+  "round_plan_sha256": "b5f44b682d24b477395c68e59784c531ae76f013b89582783e8ba9ceace90590",
+  "baseline": {
+    "candidate": "f01-r8-combined-result-guard",
+    "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+  },
+  "final_source_selection": [
+    "Only exact-source full successful discovery batches with all observers disabled are eligible.",
+    "Prefer sources passing both pre-frozen discovery rules (whole<=.97,p05>0); choose smallest normalized whole ratio, then smallest BMM ratio, then candidate name for deterministic tie-breaking.",
+    "If none pass, choose the smallest whole ratio among complete candidates for explicitly diagnostic-only extra-input tests; no adoption can follow a failed discovery screen.",
+    "Freeze one exact source before either842 or843; keep it for both extra groups regardless of their outcomes. Never switch source/seed after seeing a slow group.",
+    "Retain every failed source, slow group, and infrastructure attempt. Multiple candidates in853 count as one input group."
+  ],
+  "extra_groups": {
+    "A": 842,
+    "B": 843
+  },
+  "adoption": "All3 complete exact-source candidate/control gates and all3 source-bound local thresholds; fresh three-group validator then narrow adopter. No averaging or best2of3.",
+  "cutoffs": {
+    "new_candidates": "2026-10-23T18:25:00Z",
+    "final_freeze_target": "2026-10-23T18:30:00Z",
+    "window_end": "2026-10-23T19:00:31Z"
+  },
+  "diagnostic852": "May start after final extra-input runs if complete standard-runner time remains; never displace or truncate already-started validation."
+}
