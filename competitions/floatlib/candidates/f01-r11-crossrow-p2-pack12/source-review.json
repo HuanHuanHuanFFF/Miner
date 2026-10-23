@@ -1,0 +1,65 @@
+{
+  "candidate": {
+    "candidate": "f01-r11-crossrow-p2-pack12",
+    "candidate_file": "Kernel.lean",
+    "candidate_sha256": "4bdd1e7db35cd85e17d06511721d5dbf7f654ec12e58633264b08a086ec54fa0",
+    "candidate_bytes": 252609,
+    "created_at_utc": "2026-10-23T20:37:17.683311+00:00",
+    "parent": "f01-d10-bmm-direct-rows",
+    "parent_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+    "retained_control_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+    "mechanism": "p=2 positive-n matrices with>=4flattenedrows: localP12 packets forfour independentrows,8orderedFloat32accumulators, exactrawNaN finish intoW8,flatfinal output. EachrowA conversion sharedbetweencolumns; fouridenticalBbases reuse twoconversions, crossingbatch bases remainseparate.",
+    "actual_guard": "p=2 AND4<=batch*m AND0<n ANDn<USize.size ANDA.size<USize.size ANDB.size<USize.size ANDbatch*m*p<USize.size",
+    "tail": "ceilrows/4 groups; up to3 extra rows computedusingtotalgetD,notreturned. Empty/n0/otherp/hugecases fall backtoa066.",
+    "proof_chain": "Concretepacketreads -> eachF8lane equalsoriginalordered NativeFinal.dotLoop -> originalfinish/NaNreplay -> losslessW8wordrebuild ->crossbatch/tail mapping -> DirectRows.core ->originalbmm_spec. No unclosedexternalpremise intended.",
+    "preservation": "Originala066 bytes retained except reversiblefinalbmm/spec rename. Allpriorruntime/proof/licence blocks remain; no pruning/minification.",
+    "validation_mode": "full-gate",
+    "proof_status": "NOT_RUN_FIRST_COMPLETE_CROSSROW_PROTOTYPE",
+    "full_gate": "NOT_RUN",
+    "codegen": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "formal_submission": "NOT_SUBMITTED",
+    "increment_sha256": "34944745d0dd8941cc344b25951324b6e1ccf24fae199c214d3136bd4b82d667",
+    "build_script_sha256": "882c715ea9ca0b9897a354826eb4a8435d17174afe87aea2e547de43c2abdd95"
+  },
+  "namespace_balance": "PASS_LEXICAL_ONLY",
+  "exports_and_specs": {
+    "Submission.add": [
+      3263
+    ],
+    "Submission.add_spec": [
+      3268
+    ],
+    "Submission.mul": [
+      3301
+    ],
+    "Submission.mul_spec": [
+      3306
+    ],
+    "Submission.sum": [
+      6336
+    ],
+    "Submission.sum_spec": [
+      6338
+    ],
+    "Submission.bmm": [
+      6759
+    ],
+    "Submission.bmm_spec": [
+      6766
+    ]
+  },
+  "static_policy": "PASS_SIZE_IMPORT_BANNED_OPTIONS_ATTRIBUTES",
+  "source_margin_bytes": 3391,
+  "rename": {
+    "old_start_char": 234546,
+    "old_end_char": 235183,
+    "old": "\ndef bmm (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=\n  if n ≤ 4 ∧ 2 < p then DirectRows.core batch m n p A B\n  else bmmBeforeDirectRows batch m n p A B\n\ntheorem bmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)),\n    (bmm batch m n p A B).get = bmmSpec batch m n p A.get B.get := by\n  intro batch m n p A B\n  unfold bmm\n  split\n  · rw [DirectRows.core_eq, DirectSmall.core_eq_reference]\n    exact referenceBmm_spec batch m n p A B\n  · exact bmmBeforeDirectRows_spec batch m n p A B\n",
+    "new": "\ndef bmmBeforeR11Cross (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=\n  if n ≤ 4 ∧ 2 < p then DirectRows.core batch m n p A B\n  else bmmBeforeDirectRows batch m n p A B\n\ntheorem bmmBeforeR11Cross_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)),\n    (bmmBeforeR11Cross batch m n p A B).get = bmmSpec batch m n p A.get B.get := by\n  intro batch m n p A B\n  unfold bmmBeforeR11Cross\n  split\n  · rw [DirectRows.core_eq, DirectSmall.core_eq_reference]\n    exact referenceBmm_spec batch m n p A B\n  · exact bmmBeforeDirectRows_spec batch m n p A B\n"
+  },
+  "parent_inverse_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+  "new_block_bytes": 15409,
+  "source_before_rename_sha256": "f6e38b7b9565b87b82804205d77cb26f78d66b7dac71e3a412d5ee75f8400580",
+  "source_after_rename_sha256": "54f8b578a852d162ae0ed541b7a2bea8c1b7e0f1d7b0eaaf1b234d37809e5432",
+  "scope": "Static/full-source preparation only. No Lean,hardware,C/asm or performance evidence inherited."
+}

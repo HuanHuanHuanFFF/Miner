@@ -1,0 +1,473 @@
+{
+  "task": "R11 capture symbol selection and priority repair",
+  "started_utc": "2026-10-23T20:39:15Z",
+  "completed_utc": "2026-10-23T20:53:10.430834+00:00",
+  "changed_file": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/capture-codegen.py",
+    "sha256": "fc57703dfe9393c37821ed8dc15bda135eb5439665a374647b12daa5358e7f11",
+    "bytes": 44249,
+    "line_endings": "LF",
+    "function_lines": {
+      "sha": 46,
+      "utc": 50,
+      "require": 54,
+      "write_all": 59,
+      "read_regular": 68,
+      "save_json": 94,
+      "_stage_events": 98,
+      "_snapshot": 143,
+      "_bounded_tool": 205,
+      "_symbol_info": 246,
+      "_selected": 275,
+      "_symbol_sort_key": 279,
+      "_disassemble": 287,
+      "_kill_group": 352,
+      "run_gate": 372,
+      "selftest": 559
+    }
+  },
+  "scope": "Only selection rules, global selection sorting/report metadata, and existing selftest changed; added this review only. No adapter, gate, compiler, environment, candidate, CI or Git changes.",
+  "baseline_helper_sha256": "9fe62953a57544b301ea799a59e8a047024dc4478434a23c0b5ed7e1e8b71dbb",
+  "before_snapshot_protection": "906 is root-reported in flight on old helper commit daf744aa. No previous source/receipts/artifacts were overwritten or relabeled; future capture records bind new helper hash normally.",
+  "confirmed_test_seam": "Parent explicitly requested symbol selection/sorting and the existing selftest; exercised _disassemble report through fake nm/objdump, not Lean/LLVM.",
+  "observed_nm_naming": {
+    "source": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/nm-0.txt",
+    "source_sha256": "2b53024ff3c658c6943c485efaaa5e247f239337db818cd1ff4fc64704e91501",
+    "actual_public_example": "lp_competition_Submission_R11RawIndex_loop___redArg",
+    "actual_generated_private_example": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0___redArg",
+    "actual_private_lines": [
+      382,
+      384,
+      390,
+      392
+    ],
+    "additional_requested_source_private_family": "lp__private_<module_and_index>__Submission_<function>",
+    "source_private_boundary": "Requested lp__private family and future Fin-fold/CrossRows cases are covered by representative fixtures. They were not present as actual instruction bodies in902, and no new compilation was run to claim that they exist there."
+  },
+  "selection_policy": {
+    "tiers": [
+      {
+        "priority": 0,
+        "stems": [
+          "R11RawIndex_loop",
+          "Packed8Index_loop",
+          "R11CrossRows_wordLoop",
+          "R11CrossRows_dot8"
+        ]
+      },
+      {
+        "priority": 1,
+        "stems": [
+          "R11RawA_core",
+          "R11RawIndex_runDot",
+          "RowStream_emit",
+          "RowStream_group",
+          "RowStream_row",
+          "RowStream_output",
+          "RowStream_core",
+          "R11CrossRows_core",
+          "R11CrossRows_packGeneral",
+          "R11CrossRows_packShared",
+          "R11CrossRows_finish8",
+          "R11CrossRows_words"
+        ]
+      },
+      {
+        "priority": 2,
+        "stems": [
+          "NativeFinal_dot",
+          "NativeFinal_dotLoop",
+          "NativeFinal_sumLoop",
+          "dotLoop",
+          "DirectSmall_core",
+          "NativeDecodeSumWord_loop",
+          "Packed10Index_loop",
+          "LowZero"
+        ]
+      },
+      {
+        "priority": 3,
+        "stems": [
+          "add",
+          "mul",
+          "nativeMul"
+        ]
+      }
+    ],
+    "ordering": "Global across all nm inventories; priority then prefer redArg computational body to lambda/bare wrapper, then stem/name/object index. Old scalar in earlier object cannot exhaust cap before new hot loop in later object.",
+    "boundaries": "Exact function stem or triple-underscore compiler suffix; private generated _spec__<digits> recognized; LowZero remains an exact namespace family. Boxed variants, single-underscore near-matches, wrong Submission namespace and addition/wordLooper/looping rejected.",
+    "live_symbols_only": "Existing nm T/t/W/w filter retained; no data symbols are selected.",
+    "report_fields_added": [
+      "selection_priority",
+      "selection_order",
+      "nm_inventory_complete",
+      "stems_without_nm_matches",
+      "objects_not_inspected when deadline stops inventory",
+      "matching_symbols per object",
+      "omitted_symbols per object with symbol/size/priority/reason",
+      "selection_truncated boolean",
+      "priority per captured symbol"
+    ],
+    "omission_reasons": [
+      "symbol_budget",
+      "deadline"
+    ],
+    "absence_boundary": "No nm match is not proof of compiler elimination; nm failure/deadline is separately recorded. The unchanged20-slot cap can still omit lower-priority matched functions, explicitly reported."
+  },
+  "budgets_unchanged": {
+    "MAX_SYMBOLS": 20,
+    "FILE_LIMIT": 8388608,
+    "TOTAL_LIMIT": 25165824,
+    "MAX_FILES": 8,
+    "COPY_SECONDS": 2.0,
+    "POST_SECONDS": 30.0
+  },
+  "byte_and_AST_scope_verification": {
+    "inverse_sha256": "9fe62953a57544b301ea799a59e8a047024dc4478434a23c0b5ed7e1e8b71dbb",
+    "inverse_method": "Restore only original STEMS and original _selected/_disassemble body, remove new selftest section; reconstructed UTF8 bytes exactly hash to frozen9fe. LF format preserved.",
+    "other_function_bodies_byte_identical": [
+      {
+        "name": "sha",
+        "source_sha256": "166ad903d6d1b4f98706f40c535e6a84f4a6268f81640d32bb1d0f02c6857de1"
+      },
+      {
+        "name": "utc",
+        "source_sha256": "eaf581fceee82ef95cedac7d0369ead3de59532e834ccec7e141b018164760c0"
+      },
+      {
+        "name": "require",
+        "source_sha256": "bcff74528b014bca76f7b5d65a8b39730912add58e7cf926b18ed5bed308d327"
+      },
+      {
+        "name": "write_all",
+        "source_sha256": "b4c51a4963b49d3418a38e7e87e06d47c71ad5893d988c3d839bc75007cb6348"
+      },
+      {
+        "name": "read_regular",
+        "source_sha256": "8373612cdaf109e5bb1001adb383288af29e524e5ae26a3cfbcf4915fc8cc457"
+      },
+      {
+        "name": "save_json",
+        "source_sha256": "c5c00e1a3290d4344e8ea021294db8b2a7871027155151f5334dc359f0428499"
+      },
+      {
+        "name": "_stage_events",
+        "source_sha256": "575f78397bf4d1a480eec9dc9f543180bf232c8cdf76a505a9e6f6922699d7ad"
+      },
+      {
+        "name": "_snapshot",
+        "source_sha256": "ddaaa5bd542f18e9e6e398aba953a5075690e3eb7ff51cc0cdf9ee6204f693c5"
+      },
+      {
+        "name": "_bounded_tool",
+        "source_sha256": "c85457783e78eb0e6105aae2d6fdac5dcdc61fbaccc39e38bdeb2a1b8bd212c0"
+      },
+      {
+        "name": "_kill_group",
+        "source_sha256": "fe2ab0b75c0046cfdeb2123edb6ea9c49efe2bdae60d0526f6bcad1dddf6531c"
+      },
+      {
+        "name": "run_gate",
+        "source_sha256": "36fc74e57b37ee4556b4342b3b582ff8bdcb5ebf77ac390d278faadff6e42c31"
+      }
+    ],
+    "other_constants_AST_identical": [
+      "MARKER",
+      "SCORE",
+      "FILE_LIMIT",
+      "TOTAL_LIMIT",
+      "MAX_FILES",
+      "COPY_SECONDS",
+      "POST_SECONDS",
+      "MAX_SYMBOLS",
+      "OBJECT",
+      "TRACE"
+    ],
+    "new_helpers": [
+      "_symbol_info",
+      "_symbol_sort_key"
+    ],
+    "inverse_command_result": {
+      "chunk_id": "44ef89",
+      "wall_time_seconds": 1.8202150000000001,
+      "exit_code": 0,
+      "original_token_count": 42,
+      "output": "INVERSE 34364 9fe62953a57544b301ea799a59e8a047024dc4478434a23c0b5ed7e1e8b71dbb\r\nFINAL_FORMAT_LF 44222 354d8fb7f4ed9310431e820a2f6bc1d506acd8c9fccba0a4013c859e61830218\r\n"
+    }
+  },
+  "red_green": {
+    "red_source_sha256": "8c132e6ce5db2b1a489560543f89613023b23f41f8684e1ef4323509cf3c7306",
+    "red_failure": "new hot/output symbols lost behind old scalar budget",
+    "red": {
+      "exit_code": 1,
+      "output": "Traceback (most recent call last):\r\n  File \"D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\capture-codegen.py\", line 688, in <module>\r\n    selftest()\r\n    ~~~~~~~~^^\r\n  File \"D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\capture-codegen.py\", line 569, in selftest\r\n    require(set(new_symbols) <= set(captured), 'new hot/output symbols lost behind old scalar budget')\r\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\capture-codegen.py\", line 49, in require\r\n    raise RuntimeError(message)\r\nRuntimeError: new hot/output symbols lost behind old scalar budget\r\n"
+    },
+    "green_source_sha256": "fc57703dfe9393c37821ed8dc15bda135eb5439665a374647b12daa5358e7f11",
+    "green": {
+      "chunk_id": "8ed04c",
+      "wall_time_seconds": 5.2718457,
+      "exit_code": 0,
+      "original_token_count": 301,
+      "output": "{\r\n  \"selftest\": \"PASS\",\r\n  \"tests\": [\r\n    {\r\n      \"test\": \"new_symbol_priority_boundaries_and_budget\",\r\n      \"pass\": true,\r\n      \"captured\": 20,\r\n      \"omitted\": 22,\r\n      \"actual_llvm\": \"NOT_RUN\"\r\n    },\r\n    {\r\n      \"test\": \"symbol_deadline_omissions\",\r\n      \"pass\": true,\r\n      \"captured\": 0,\r\n      \"omitted\": 42,\r\n      \"actual_llvm\": \"NOT_RUN\"\r\n    },\r\n    {\r\n      \"test\": \"before\",\r\n      \"pass\": true,\r\n      \"capture_state\": \"CAPTURED\",\r\n      \"actual_llvm\": \"NOT_RUN\"\r\n    },\r\n    {\r\n      \"test\": \"after\",\r\n      \"pass\": true,\r\n      \"capture_state\": \"UNKNOWN\",\r\n      \"actual_llvm\": \"NOT_RUN\"\r\n    },\r\n    {\r\n      \"test\": \"mismatch\",\r\n      \"pass\": true,\r\n      \"capture_state\": \"UNKNOWN\",\r\n      \"actual_llvm\": \"NOT_RUN\"\r\n    },\r\n    {\r\n      \"test\": \"postfail\",\r\n      \"pass\": true,\r\n      \"capture_state\": \"CAPTURED\",\r\n      \"actual_llvm\": \"NOT_RUN\"\r\n    },\r\n    {\r\n      \"test\": \"timeout\",\r\n      \"pass\": true,\r\n      \"capture_state\": \"UNKNOWN\",\r\n      \"actual_llvm\": \"NOT_RUN\"\r\n    },\r\n    {\r\n      \"test\": \"timestamp_and_symbol_boundaries\",\r\n      \"pass\": true\r\n    }\r\n  ],\r\n  \"scope\": \"Lightweight Python children and fake ELF only; no Linux/Lean/compiler validation.\"\r\n}\r\n"
+    },
+    "green_summary": {
+      "selftest": "PASS",
+      "tests": [
+        {
+          "test": "new_symbol_priority_boundaries_and_budget",
+          "pass": true,
+          "captured": 20,
+          "omitted": 22,
+          "actual_llvm": "NOT_RUN"
+        },
+        {
+          "test": "symbol_deadline_omissions",
+          "pass": true,
+          "captured": 0,
+          "omitted": 42,
+          "actual_llvm": "NOT_RUN"
+        },
+        {
+          "test": "before",
+          "pass": true,
+          "capture_state": "CAPTURED",
+          "actual_llvm": "NOT_RUN"
+        },
+        {
+          "test": "after",
+          "pass": true,
+          "capture_state": "UNKNOWN",
+          "actual_llvm": "NOT_RUN"
+        },
+        {
+          "test": "mismatch",
+          "pass": true,
+          "capture_state": "UNKNOWN",
+          "actual_llvm": "NOT_RUN"
+        },
+        {
+          "test": "postfail",
+          "pass": true,
+          "capture_state": "CAPTURED",
+          "actual_llvm": "NOT_RUN"
+        },
+        {
+          "test": "timeout",
+          "pass": true,
+          "capture_state": "UNKNOWN",
+          "actual_llvm": "NOT_RUN"
+        },
+        {
+          "test": "timestamp_and_symbol_boundaries",
+          "pass": true
+        }
+      ],
+      "scope": "Lightweight Python children and fake ELF only; no Linux/Lean/compiler validation."
+    },
+    "new_priority_fixture": "Earlier object has24 scalar aliases plus one legacy native function; later object has17 required new public/private helpers and near-match/boxed negatives. 20 captured,22 matching functions omitted with symbol_budget; all17 new required functions retained.",
+    "new_deadline_fixture": "Fake clock expires after nm. Zero disassemblies executed; all42 matching symbols reported as deadline omissions; no fake asm files created.",
+    "retained_existing_cases": [
+      "raw stdout/merged stderr bytes and nonzero exit7",
+      "one capture on split/duplicate statement events",
+      "layer wiped before/after event race",
+      "kernel mismatch",
+      "postprocessor failure leaves original result",
+      "timeout exits and preserves bytes",
+      "private fakeELF cleanup outside artifacts",
+      "UTC timestamp boundary and old symbol checks"
+    ],
+    "actual_llvm": "NOT_RUN",
+    "actual_nm_objdump_execution": "NOT_RUN; fake tools only in selftest",
+    "scratch_leftovers": []
+  },
+  "real902_nm_readonly_replay": [
+    {
+      "nm_line": 243,
+      "symbol": "lp_competition_Submission_R11RawIndex_loop___redArg",
+      "size_bytes": 290,
+      "priority": 0,
+      "within_cap": true
+    },
+    {
+      "nm_line": 241,
+      "symbol": "lp_competition_Submission_R11RawIndex_loop",
+      "size_bytes": 61,
+      "priority": 0,
+      "within_cap": true
+    },
+    {
+      "nm_line": 382,
+      "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0___redArg",
+      "size_bytes": 1440,
+      "priority": 1,
+      "within_cap": true
+    },
+    {
+      "nm_line": 384,
+      "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0___redArg___lam__0",
+      "size_bytes": 1456,
+      "priority": 1,
+      "within_cap": true
+    },
+    {
+      "nm_line": 390,
+      "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_RowStream_core_spec__0___redArg",
+      "size_bytes": 1548,
+      "priority": 1,
+      "within_cap": true
+    },
+    {
+      "nm_line": 392,
+      "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_RowStream_core_spec__0___redArg___lam__0",
+      "size_bytes": 1427,
+      "priority": 1,
+      "within_cap": true
+    },
+    {
+      "nm_line": 312,
+      "symbol": "lp_competition_Submission_RowStream_core___lam__0",
+      "size_bytes": 30,
+      "priority": 1,
+      "within_cap": true
+    },
+    {
+      "nm_line": 240,
+      "symbol": "lp_competition_Submission_R11RawA_core",
+      "size_bytes": 792,
+      "priority": 1,
+      "within_cap": true
+    },
+    {
+      "nm_line": 380,
+      "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0",
+      "size_bytes": 53,
+      "priority": 1,
+      "within_cap": true
+    },
+    {
+      "nm_line": 245,
+      "symbol": "lp_competition_Submission_R11RawIndex_runDot",
+      "size_bytes": 936,
+      "priority": 1,
+      "within_cap": true
+    },
+    {
+      "nm_line": 310,
+      "symbol": "lp_competition_Submission_RowStream_core",
+      "size_bytes": 897,
+      "priority": 1,
+      "within_cap": true
+    },
+    {
+      "nm_line": 388,
+      "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_RowStream_core_spec__0",
+      "size_bytes": 63,
+      "priority": 1,
+      "within_cap": true
+    },
+    {
+      "nm_line": 177,
+      "symbol": "lp_competition_Submission_NativeDecodeSumWord_loop___redArg",
+      "size_bytes": 193,
+      "priority": 2,
+      "within_cap": true
+    },
+    {
+      "nm_line": 195,
+      "symbol": "lp_competition_Submission_Packed10Index_loop___redArg",
+      "size_bytes": 204,
+      "priority": 2,
+      "within_cap": true
+    },
+    {
+      "nm_line": 135,
+      "symbol": "lp_competition_Submission_DirectSmall_core___lam__0",
+      "size_bytes": 1410,
+      "priority": 2,
+      "within_cap": true
+    },
+    {
+      "nm_line": 133,
+      "symbol": "lp_competition_Submission_DirectSmall_core",
+      "size_bytes": 538,
+      "priority": 2,
+      "within_cap": true
+    },
+    {
+      "nm_line": 175,
+      "symbol": "lp_competition_Submission_NativeDecodeSumWord_loop",
+      "size_bytes": 193,
+      "priority": 2,
+      "within_cap": true
+    },
+    {
+      "nm_line": 185,
+      "symbol": "lp_competition_Submission_NativeFinal_dot",
+      "size_bytes": 242,
+      "priority": 2,
+      "within_cap": true
+    },
+    {
+      "nm_line": 186,
+      "symbol": "lp_competition_Submission_NativeFinal_dotLoop",
+      "size_bytes": 1150,
+      "priority": 2,
+      "within_cap": true
+    },
+    {
+      "nm_line": 191,
+      "symbol": "lp_competition_Submission_NativeFinal_sumLoop",
+      "size_bytes": 478,
+      "priority": 2,
+      "within_cap": true
+    },
+    {
+      "nm_line": 193,
+      "symbol": "lp_competition_Submission_Packed10Index_loop",
+      "size_bytes": 61,
+      "priority": 2,
+      "within_cap": false
+    },
+    {
+      "nm_line": 348,
+      "symbol": "lp_competition_Submission_add",
+      "size_bytes": 225,
+      "priority": 3,
+      "within_cap": false
+    },
+    {
+      "nm_line": 356,
+      "symbol": "lp_competition_Submission_mul",
+      "size_bytes": 877,
+      "priority": 3,
+      "within_cap": false
+    },
+    {
+      "nm_line": 358,
+      "symbol": "lp_competition_Submission_nativeMul",
+      "size_bytes": 62,
+      "priority": 3,
+      "within_cap": false
+    }
+  ],
+  "real902_projection_summary": {
+    "matched": 24,
+    "within_cap": 20,
+    "omitted": 4,
+    "first": "lp_competition_Submission_R11RawIndex_loop___redArg",
+    "omitted_names": [
+      "lp_competition_Submission_Packed10Index_loop",
+      "lp_competition_Submission_add",
+      "lp_competition_Submission_mul",
+      "lp_competition_Submission_nativeMul"
+    ],
+    "boundary": "Selector projection only; existing90214asm files were not regenerated, and no object binary retained for new disassembly."
+  },
+  "remaining_runner_acceptance": [
+    "Root independently review exact new helper and freeze its hash before dispatch",
+    "On a future original-gate discovery, inspect actual RawIndex/CrossRows/Packed8/RowStream instruction-body headers and relocations, not empty objdump section headings",
+    "Check omitted_symbols/deadline against desired hot code; do not silently increase20-slot budget",
+    "Actual Linux nm/objdump, same-process capture and end-to-end official gate with new helper remain NOT_RUN locally",
+    "Performance observer overhead remains UNKNOWN; frozen independent confirmation keeps capture disabled"
+  ]
+}

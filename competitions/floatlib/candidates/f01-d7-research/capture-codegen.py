@@ -32,8 +32,15 @@ POST_SECONDS = 30.0
 MAX_SYMBOLS = 20
 OBJECT = re.compile(r'^Submission(?:\.c)?\.o(?:\.(?:export|noexport))?$')
 TRACE = re.compile(r'^Submission(?:\.c(?:\.o(?:\.(?:export|noexport))?)?|\.o(?:\.(?:export|noexport))?|\.olean|\.ilean)?\.trace$')
-STEMS = ('add', 'mul', 'nativeMul', 'NativeFinal_dot', 'NativeFinal_dotLoop', 'NativeFinal_sumLoop', 'dotLoop', 'DirectSmall_core',
-         'RowStream_core', 'NativeDecodeSumWord_loop', 'Packed10Index_loop', 'LowZero')
+HOT_STEMS = ('R11RawIndex_loop', 'Packed8Index_loop', 'R11CrossRows_wordLoop', 'R11CrossRows_dot8')
+OUTPUT_STEMS = ('R11RawA_core', 'R11RawIndex_runDot', 'RowStream_emit', 'RowStream_group',
+                'RowStream_row', 'RowStream_output', 'RowStream_core', 'R11CrossRows_core',
+                'R11CrossRows_packGeneral', 'R11CrossRows_packShared', 'R11CrossRows_finish8',
+                'R11CrossRows_words')
+LEGACY_STEMS = ('NativeFinal_dot', 'NativeFinal_dotLoop', 'NativeFinal_sumLoop', 'dotLoop',
+                'DirectSmall_core', 'NativeDecodeSumWord_loop', 'Packed10Index_loop', 'LowZero')
+SCALAR_STEMS = ('add', 'mul', 'nativeMul')
+STEMS = HOT_STEMS + OUTPUT_STEMS + LEGACY_STEMS + SCALAR_STEMS
 
 
 def sha(raw):
@@ -236,53 +243,105 @@ def _bounded_tool(argv, artifact, seconds, limit):
     return info
 
 
-def _selected(name):
+def _symbol_info(name):
+    """Recognize a function boundary, including actual private specializations."""
+    if '___boxed' in name:
+        return None
     prefix = 'lp_competition_Submission_'
-    if not name.startswith(prefix) or '___boxed' in name:
-        return False
-    short = name[len(prefix):]
-    return any(short == stem or short.startswith(stem + '_') for stem in STEMS)
+    private = False
+    if name.startswith(prefix):
+        short = name[len(prefix):]
+    else:
+        # Source-private declarations and compiler-generated array/Fin helpers differ.
+        match = re.fullmatch(r'lp(?:_competition_)?__private_[A-Za-z0-9_]+__Submission_([A-Za-z0-9_]+)', name)
+        if match is None:
+            match = re.fullmatch(r'lp(?:_competition_)?__private_[A-Za-z0-9_]+'
+                                 r'___at___00Submission_([A-Za-z0-9_]+)', name)
+        if match is None:
+            return None
+        short, private = match.group(1), True
+    for priority, stems in enumerate((HOT_STEMS, OUTPUT_STEMS, LEGACY_STEMS, SCALAR_STEMS)):
+        for stem in stems:
+            if not short.startswith(stem):
+                continue
+            tail = short[len(stem):]
+            if (not tail or tail.startswith('___') or
+                    (private and re.fullmatch(r'_spec__[0-9]+(?:___[A-Za-z0-9_]+)?', tail)) or
+                    (stem == 'LowZero' and re.fullmatch(r'_[A-Za-z][A-Za-z0-9_]*', tail))):
+                return {'stem': stem, 'priority': priority, 'private': private, 'short': short}
+    return None
+
+
+def _selected(name):
+    return _symbol_info(name) is not None
+
+
+def _symbol_sort_key(name):
+    info = _symbol_info(name)
+    require(info is not None, 'sorting an unselected symbol')
+    # Prefer computational redArg bodies to erased-argument wrappers.
+    variant = 0 if '___redArg' in info['short'] else 1 if '___lam__' in info['short'] else 2
+    return info['priority'], variant, info['stem'], name
 
 
 def _disassemble(staged, folder, deadline, record):
     nm, objdump = shutil.which('nm'), shutil.which('objdump')
-    result = {'state': 'UNKNOWN', 'nm': nm, 'objdump': objdump, 'objects': [], 'selected_symbols': 0}
+    result = {'state': 'UNKNOWN', 'nm': nm, 'objdump': objdump, 'objects': [], 'selected_symbols': 0,
+              'selection_order': [], 'selection_priority': ['new-hot-loop', 'new-core-pack-output',
+                                                          'legacy-native', 'legacy-scalar']}
     if not nm or not objdump or folder is None:
         result['error'] = 'nm/objdump or artifact directory unavailable'
         return result
-    complete = True
+    complete, pending, matched = True, [], set()
+    # Read each existing object first so an old object's scalar names cannot consume
+    # the global symbol cap before a later object's new hot loop is considered.
     for index, (private, obj) in enumerate(staged):
         if time.monotonic() >= deadline:
             complete = False
+            result['objects_not_inspected'] = len(staged) - index
             break
         symbols_file = folder / f'nm-{index}.txt'
         tool = _bounded_tool([nm, '-S', '--defined-only', '--radix=x', str(private)], symbols_file,
                              min(4, deadline - time.monotonic()), 2 * 1024 * 1024)
-        entry = {'object_sha256': obj['sha256'], 'source': obj['source'], 'nm': tool, 'symbols': []}
+        entry = {'object_sha256': obj['sha256'], 'source': obj['source'], 'nm': tool, 'symbols': [],
+                 'matching_symbols': 0, 'omitted_symbols': [], 'selection_truncated': False}
         result['objects'].append(entry)
         if not tool['ok']:
             complete = False
             continue
-        selected = []
         for line in symbols_file.read_text(encoding='utf-8', errors='replace').splitlines():
             fields = line.split()
             if len(fields) == 4 and fields[2] in 'TtWw' and _selected(fields[3]):
                 try:
-                    selected.append((int(fields[0], 16), int(fields[1], 16), fields[3]))
+                    address, size, name = int(fields[0], 16), int(fields[1], 16), fields[3]
                 except ValueError:
                     complete = False
-        selected.sort(key=lambda x: (x[2] not in ('lp_competition_Submission_add', 'lp_competition_Submission_mul', 'lp_competition_Submission_nativeMul'), x[2]))
-        for address, size, name in selected:
-            if result['selected_symbols'] >= MAX_SYMBOLS or time.monotonic() >= deadline:
-                complete = False
-                entry['selection_truncated'] = True
-                break
-            artifact = folder / f'asm-{index}-{len(entry["symbols"])}.txt'
-            assembly = _bounded_tool([objdump, '-dr', '--no-show-raw-insn', '-Mintel', '--disassemble=' + name, str(private)],
-                                     artifact, min(4, deadline - time.monotonic()), 8 * 1024 * 1024)
-            entry['symbols'].append({'symbol': name, 'address_hex': hex(address), 'size_bytes': size, 'assembly': assembly})
-            result['selected_symbols'] += 1
-            complete &= assembly['ok']
+                    continue
+                info = _symbol_info(name)
+                matched.add(info['stem'])
+                entry['matching_symbols'] += 1
+                pending.append((index, private, entry, address, size, name))
+    result['nm_inventory_complete'] = complete
+    result['stems_without_nm_matches'] = [stem for stem in STEMS if stem not in matched]
+    pending.sort(key=lambda item: (_symbol_sort_key(item[5]), item[0]))
+    for index, private, entry, address, size, name in pending:
+        reason = ('symbol_budget' if result['selected_symbols'] >= MAX_SYMBOLS else
+                  'deadline' if time.monotonic() >= deadline else None)
+        info = _symbol_info(name)
+        if reason is not None:
+            complete = False
+            entry['selection_truncated'] = True
+            entry['omitted_symbols'].append({'symbol': name, 'size_bytes': size,
+                                             'priority': info['priority'], 'reason': reason})
+            continue
+        artifact = folder / f'asm-{index}-{len(entry["symbols"])}.txt'
+        assembly = _bounded_tool([objdump, '-dr', '--no-show-raw-insn', '-Mintel', '--disassemble=' + name, str(private)],
+                                 artifact, min(4, deadline - time.monotonic()), 8 * 1024 * 1024)
+        entry['symbols'].append({'symbol': name, 'address_hex': hex(address), 'size_bytes': size,
+                                 'priority': info['priority'], 'assembly': assembly})
+        result['selection_order'].append({'object_index': index, 'symbol': name, 'priority': info['priority']})
+        result['selected_symbols'] += 1
+        complete &= assembly['ok']
     if result['selected_symbols']:
         result['state'] = 'COMPLETE_SELECTED_SYMBOLS' if complete else 'PARTIAL'
     else:
@@ -514,6 +573,110 @@ def selftest():
             if Path(record['cwd']).parent.name == 'postfail':
                 raise RuntimeError('intentional selftest postprocessor failure')
             return {'state': 'SELFTEST_SKIPPED_DISASSEMBLY', 'selected_symbols': 0, 'not_actual_llvm': True}
+
+        # Exercise the report seam with fake nm/objdump; no Linux tools are run.
+        original_tool, original_which = _bounded_tool, shutil.which
+        hot = 'lp_competition_Submission_R11RawIndex_loop___redArg'
+        private_hot = 'lp__private_Submission_0__Submission_R11CrossRows_wordLoop___redArg'
+        real_private = ('lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold'
+                        '___at___00Submission_R11RawA_core_spec__0___redArg')
+        new_symbols = [hot, private_hot, 'lp_competition_Submission_Packed8Index_loop___redArg',
+                       'lp_competition_Submission_R11CrossRows_dot8',
+                       'lp_competition_Submission_R11RawA_core', real_private,
+                       'lp_competition_Submission_RowStream_emit',
+                       'lp_competition_Submission_RowStream_group',
+                       'lp_competition_Submission_RowStream_row',
+                       'lp_competition_Submission_RowStream_output',
+                       'lp_competition_Submission_RowStream_core',
+                       'lp_competition___private_Init_Data_Fin_Fold_0__Fin_foldl_loop'
+                       '___at___00Submission_RowStream_emit_spec__0___redArg',
+                       'lp__private_Submission_0__Submission_R11CrossRows_core',
+                       'lp_competition_Submission_R11CrossRows_packGeneral',
+                       'lp_competition_Submission_R11CrossRows_packShared',
+                       'lp_competition_Submission_R11CrossRows_finish8',
+                       'lp_competition_Submission_R11CrossRows_words']
+        bad_symbols = [hot + '___boxed', 'lp_competition_Submission_R11RawIndex_looping',
+                       'lp_competition_Submission_R11RawIndex_loop_extra',
+                       'lp__private_Submission_0__NotSubmission_R11CrossRows_wordLoop',
+                       'lp_competition_Submission_R11CrossRows_wordLooper',
+                       'lp_competition_Submission_R11RawA_core_extra',
+                       'lp_competition_Submission_addition',
+                       'lp_competition_Submission_Packed8Index_loops',
+                       'lp__private_Submission_0__Submission_R11CrossRows_words_extra',
+                       'lp_competition___private_Init_Data_Fin_Fold_0__Fin_foldl_loop'
+                       '___at___00Submission_RowStream_emitExtra_spec__0']
+        old_symbols = ['lp_competition_Submission_NativeFinal_dotLoop'] + [
+            'lp_competition_Submission_add___lam__' + str(i) for i in range(24)]
+        symbol_dir = base / 'symbol-selection'
+        symbol_dir.mkdir()
+        first, second = base / 'old-object', base / 'new-object'
+        fixtures = {str(first): old_symbols, str(second): new_symbols + bad_symbols}
+
+        def fake_tool(argv, artifact, timeout, limit):
+            if argv[0] == 'fake-nm':
+                raw = ''.join('00000000 00000020 T ' + n + '\n' for n in fixtures[argv[-1]]).encode()
+            else:
+                name = next(a.split('=', 1)[1] for a in argv if a.startswith('--disassemble='))
+                raw = ('00000000 <' + name + '>:\n  0: ret\n').encode()
+            artifact.write_bytes(raw)
+            return {'ok': True, 'returncode': 0, 'bytes': len(raw), 'sha256': sha(raw),
+                    'artifact': artifact.name}
+
+        try:
+            globals()['_bounded_tool'] = fake_tool
+            shutil.which = lambda name: 'fake-' + name
+            selected_report = original_post([(first, {'sha256': 'old', 'source': 'old'}),
+                                             (second, {'sha256': 'new', 'source': 'new'})],
+                                            symbol_dir, time.monotonic() + 5, {})
+        finally:
+            globals()['_bounded_tool'] = original_tool
+            shutil.which = original_which
+        captured = [x['symbol'] for obj in selected_report['objects'] for x in obj['symbols']]
+        require(set(new_symbols) <= set(captured), 'new hot/output symbols lost behind old scalar budget')
+        require(not set(bad_symbols) & set(captured), 'near-match/boxed symbols captured')
+        require(selected_report['selected_symbols'] == MAX_SYMBOLS == 20, 'symbol budget changed')
+        require(selected_report['state'] == 'PARTIAL' and
+                sum(len(obj['omitted_symbols']) for obj in selected_report['objects']) == 22,
+                'budget omission/truncation not reported')
+        order = selected_report['selection_order']
+        require(order[0]['symbol'] in (hot, private_hot,
+                'lp_competition_Submission_Packed8Index_loop___redArg',
+                'lp_competition_Submission_R11CrossRows_dot8'), 'old scalar precedes new hot loop')
+        require(all(x['priority'] == 0 for x in order[:4]) and
+                order[len(new_symbols)]['priority'] == 2 and
+                all(x['priority'] == 3 for x in order[len(new_symbols) + 1:]), 'priority order drift')
+        results.append({'test': 'new_symbol_priority_boundaries_and_budget', 'pass': True,
+                        'captured': len(captured), 'omitted': 22, 'actual_llvm': 'NOT_RUN'})
+
+        # Exhaust the unchanged deadline after nm, before any objdump invocation.
+        original_clock = time.monotonic
+        clock = [0.0]
+        deadline_dir = base / 'symbol-deadline'
+        deadline_dir.mkdir()
+
+        def expired_tool(argv, artifact, timeout, limit):
+            value = fake_tool(argv, artifact, timeout, limit)
+            if argv[0] == 'fake-nm' and argv[-1] == str(second):
+                clock[0] = 10.0
+            return value
+
+        try:
+            globals()['_bounded_tool'] = expired_tool
+            shutil.which = lambda name: 'fake-' + name
+            time.monotonic = lambda: clock[0]
+            expired = original_post([(first, {'sha256': 'old', 'source': 'old'}),
+                                     (second, {'sha256': 'new', 'source': 'new'})],
+                                    deadline_dir, 5.0, {})
+        finally:
+            globals()['_bounded_tool'] = original_tool
+            shutil.which = original_which
+            time.monotonic = original_clock
+        omitted = [x for obj in expired['objects'] for x in obj['omitted_symbols']]
+        require(expired['selected_symbols'] == 0 and len(omitted) == 42 and
+                all(x['reason'] == 'deadline' for x in omitted) and
+                not list(deadline_dir.glob('asm-*')), 'deadline omissions not complete')
+        results.append({'test': 'symbol_deadline_omissions', 'pass': True,
+                        'captured': 0, 'omitted': 42, 'actual_llvm': 'NOT_RUN'})
 
         _disassemble = fake_post
         program = r'''

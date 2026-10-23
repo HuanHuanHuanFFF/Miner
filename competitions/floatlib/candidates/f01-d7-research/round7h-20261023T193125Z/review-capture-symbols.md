@@ -1,0 +1,15 @@
+符号选择修复已完成，当前helper SHA `fc57703dfe9393c37821ed8dc15bda135eb5439665a374647b12daa5358e7f11`，44249 B。只改capture-codegen.py的选择、排序/遗漏元数据和既有selftest。没有改adapter、gate、编译、运行环境、候选或预算，也没有Git/CI。906仍绑定Root给定的旧helper commit daf744aa，本次未回写历史回执。
+
+先核902真实nm：公开名为`lp_competition_Submission_R11RawIndex_loop___redArg`；编译器私有特化是`lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0___redArg`（382/384行及RowStream对应390/392）。新选择器兼容这两种，以及本次指定的`lp__private_...__Submission_`源私有形式。后者与未来Fin-fold/CrossRows的代表形式用本地fixture覆盖，没有伪称它们已在902编译出来。
+
+新hotloop为RawIndex_loop、Packed8Index_loop、CrossRows_wordLoop/dot8；随后是RawA_core/runDot、RowStream emit/group/row/output/core和CrossRows core/packGeneral/packShared/finish8/words；再旧native helper，最后旧scalar。redArg计算体优先于其包装函数。先收集每个对象的nm，再统一排序，所以前一个旧对象的标量不会先耗尽20槽。匹配使用精确函数边界/Lean的___后缀，私有特化另识别_spec__数字；拒绝boxed、addition、wordLooper、looping、单下划线extra和错误Submission命名空间。LowZero保持原命名空间族兼容。
+
+MAX_SYMBOLS仍20，所有复制/字节/时间预算及nm/objdump调用参数上限保持。新元数据给出全局selection_order、nm_inventory_complete、未出现的请求stem、各对象匹配数、每个因symbol_budget/deadline未捕获的名称、priority和selection_truncated。没有nm匹配不等于已被编译器消除；失败/截止另有证据。超过20个匹配时仍会遗漏，现可明确看到，不承诺一次收齐所有变体。
+
+TDD红：旧选择与排序遇到“早对象标量、晚对象新hotloop”时，以`new hot/output symbols lost behind old scalar budget`失败，原退出码1与trace留在JSON。实现后selftest退出0，8项全通过。新增fixture有17个必需新函数：20槽内全保留，22个低优先级匹配明确记遗漏，boxed/相近负例均拒绝；另一个fixture在nm之后耗尽截止时间，0个objdump、42个deadline遗漏。既有stdout原字节、原非零退出码、清理竞态、只捕获一次、源不匹配、后处理失败、超时、临时ELF清理及UTC证据测试全部保留。只用Python子进程/假nm、objdump、ELF，没有Linux/Lean/实际LLVM验收。
+
+以902原nm只读重排，匹配24个，RawIndex_loop___redArg排第一；RawA_core和先前漏掉的实际私有RawA/RowStream helper均进前20。预期遗漏是旧Packed10Index_loop包装体与add/mul/nativeMul三个scalar，详表见JSON。这只是新选择器对旧nm的投影，不重生成或升级902已有14份asm。
+
+边界核对：把三个授权编辑区逆向恢复后，旧UTF-8字节精确回到SHA `9fe62953a57544b301ea799a59e8a047024dc4478434a23c0b5ed7e1e8b71dbb`。run_gate、快照、日志、bounded tool、进程清理等11个函数的原字节和预算常量AST均一致；保留原LF格式。所有自测临时目录已清空。具体源hash、红绿原输出、函数hash、排序结果和未验证项见同名JSON。
+
+Root可先独立审查并冻结新helper；下次discovery收原statement对象时，必须再核真正的`地址<symbol>:`指令体、relocation和omitted清单，不能只看objdump空section标题。真实Linux工具和新helper端到端capture仍NOT_RUN；观察者扰动仍UNKNOWN，冻结独立确认继续关闭捕获。
