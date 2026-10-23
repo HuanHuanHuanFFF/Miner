@@ -1,0 +1,1499 @@
+{
+  "schema": "floatlib.r7.low_normal_constant_source_review.v1",
+  "review_started_at_utc": "2026-10-23T00:24:51Z",
+  "review_written_at_utc": "2026-10-23T00:34:51.066127+00:00",
+  "budget_minutes": 40,
+  "scope": "Read-only W14b/W14c original source/proof/codegen/static-policy review; only these two review files written. Previous W14 historical negative remains unchanged.",
+  "summary": {
+    "new_determined_proof_bug": null,
+    "W14b_all_u_constant_source_equality": "VERIFIED_FROM_SAVED_ORIGINAL_ORDINARY_LEAN_AND_AXIOM_LOGS",
+    "W14b_low_normal_small_Nat_warm_loop_once_and_FP_spill_removed": "VERIFIED_FROM_SAVED_ACTUAL_CLANG_DISASSEMBLY",
+    "W14c_8192_full_public60f_host_compile_and_audit": "VERIFIED_FROM_SAVED_ORIGINAL_EXIT_AND_SOURCE_RECEIPTS",
+    "prepared_decoder_mapping_Lean": "NOT_RUN",
+    "prepared_decoder_mapping_fullgate": "NOT_RUN",
+    "runtime_and_gain": "UNKNOWN"
+  },
+  "boundary": {
+    "no_local_Lean_Linux_install": true,
+    "no_Git_CI_upload": true,
+    "no_target_execution_or_microbenchmark": true,
+    "no_candidate_or_R_source_write": true,
+    "no_archive_full_rescan": true,
+    "object_hashes": "Original remote metadata only; ELF binaries not shipped or locally rehashed. Saved C/disassembly/log bytes independently hashed and inspected.",
+    "W14c_per_command_frozen_source_snapshots": "No separate per-command source snapshot in this package; compile paths plus postcompile source/artifact hashes and exact composition receipt. No contradictory source drift observed.",
+    "new_mapping_not_promoted_from_old_compile": true
+  },
+  "constant": {
+    "all_u_index": "(u-u)+(118:UInt32)=118",
+    "all_u_value": "constantFromTable u = Float32.ofBits 0x2f800000",
+    "table_size": 512,
+    "index": 118,
+    "scaleBits_calculation": "(118-23)<<23 = 95<<23 = 0x2f800000",
+    "proof_path": [
+      "index_eq/simp",
+      "index_bound/scaleTable_size/decide",
+      "scaleTable_entry",
+      "rfl"
+    ],
+    "new_old_helper_equality_domain": "All UInt32; this only equates the old and new helpers, not all-input helper decoding",
+    "source_line_anchors": {
+      "W14b_index_eq": 8,
+      "W14b_index_bound": 11,
+      "W14b_constantFromTable": 16,
+      "W14b_constantFromTable_eq": 20
+    },
+    "prototype_only_listed_transform_exact": true
+  },
+  "codegen": {
+    "C_still_contains_u_sub_u": true,
+    "C_anchors": {
+      "ConstantSource_constant": [
+        27,
+        34
+      ],
+      "R7W14b_direct_constant": [
+        190,
+        197
+      ],
+      "R7W14b_loop_constant": [
+        393,
+        402
+      ]
+    },
+    "primitive_header_anchors": {
+      "uint32_sub": 2094,
+      "float32_mul": 3257
+    },
+    "actual_constant_asm": {
+      "bytes": 23,
+      "table_element_load_offset": "0xa",
+      "array_offset": "0x3c8",
+      "offset_equation": "24+118*8",
+      "float_payload_offset": "0x8",
+      "call_count": 0,
+      "conditional_branch_count": 0,
+      "input_dependent_integer_ops": 0
+    },
+    "low_helper_multiply_offsets": [
+      "0x28",
+      "0x34"
+    ],
+    "small_Nat_low_normal_loop": {
+      "path": [
+        "0xa2",
+        "0xc8 first mulss",
+        "0xcd fixed element118 load",
+        "0x111 second mulss",
+        "0x41 addss"
+      ],
+      "call_on_path": false,
+      "FP_stack_store_reload_on_path": false
+    },
+    "fallback": {
+      "acc_store": "0x30",
+      "of_bits_call": "0x36",
+      "acc_reload": "0x3b"
+    },
+    "old_W14_negative_retained": {
+      "acc_store": "0x7d",
+      "acc_reload": "0xf1",
+      "once_cold_retained": true
+    },
+    "once_absence_scope": "Only actual W14b/ConstantSource C/symbols/relocations; not entire imported closure or future mapped module",
+    "ordinary_primitive_semantics": "Source branches retain original tableProduct and ofBits primitives; complete generated layout/cost is not identical.",
+    "independent_saved_objdump_byte_comparison": [
+      {
+        "symbol_stem": "originalConvert",
+        "old_range": [
+          "0x0",
+          "0x4e"
+        ],
+        "new_range": [
+          "0x0",
+          "0x4e"
+        ],
+        "bytes_equal": true,
+        "bytes_each": 78
+      },
+      {
+        "symbol_stem": "originalLoop",
+        "old_range": [
+          "0x0",
+          "0x18b"
+        ],
+        "new_range": [
+          "0x0",
+          "0x18b"
+        ],
+        "bytes_equal": true,
+        "bytes_each": 395
+      },
+      {
+        "symbol_stem": "researchConvert",
+        "old_range": [
+          "0x66",
+          "0x8e"
+        ],
+        "new_range": [
+          "0x5f",
+          "0x87"
+        ],
+        "bytes_equal": true,
+        "bytes_each": 40
+      },
+      {
+        "symbol_stem": "researchLoop",
+        "old_range": [
+          "0x100",
+          "0x12b"
+        ],
+        "new_range": [
+          "0xeb",
+          "0x116"
+        ],
+        "bytes_equal": false,
+        "bytes_each": 43
+      }
+    ],
+    "recorded_remote_objects": [
+      {
+        "module": "R7W14b",
+        "object_path": "/tmp/r7w14b-build/R7W14b.c.o.export",
+        "sha256": "4c53d6d6b16b71503d68b20bafafefbbe89bfeaf49ec9d225009191e5290fd8d",
+        "size_bytes": 10280,
+        "sha256_after_inspection": "4c53d6d6b16b71503d68b20bafafefbbe89bfeaf49ec9d225009191e5290fd8d"
+      },
+      {
+        "module": "ConstantSource",
+        "object_path": "/tmp/r7w14b-build/ConstantSource.c.o.export",
+        "sha256": "b90047583d1ed969dbca8e245943bcd5339ec09c31c39e3a39b7b8bb00eb73f1",
+        "size_bytes": 3064,
+        "sha256_after_inspection": "b90047583d1ed969dbca8e245943bcd5339ec09c31c39e3a39b7b8bb00eb73f1"
+      }
+    ],
+    "cost_limits": [
+      "Two dependent low-normal multiplications remain",
+      "Table load and integer-to-float costs remain",
+      "Fallback/Nat slow/boxed adapters and table initialization remain",
+      "Ordinary guard/register/shared-block layout changed",
+      "Standalone Nat/Array probe is not exact USize/Vector candidate",
+      "No benchmark or whole-suite time evidence"
+    ]
+  },
+  "W14c": {
+    "recovered_at_utc": "2026-10-23T00:28:40.181780+00:00",
+    "only_recdepth_10000_to_8192": true,
+    "exact_host_composition": "public60f155103bytes + LF + revised ConstantSource minus its import Submission line",
+    "host_prefix_bytes": 155103,
+    "host_append_bytes": 768,
+    "host_options": [
+      "set_option maxRecDepth 8192"
+    ],
+    "host_resource_option_line": 3653,
+    "namespace_line": 3656,
+    "original_four_specs_unchanged": true,
+    "HostAudit_exact_four_types_and_original_conjunction": true,
+    "compiles": [
+      {
+        "stem": "compile-ConstantSource",
+        "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-ConstantSource.command.json",
+        "exit_code": 0,
+        "start_utc": "2026-10-23T00:21:00.747355+00:00",
+        "end_utc": "2026-10-23T00:21:14.561518+00:00",
+        "argv": [
+          "env",
+          "LEAN_PATH=/tmp/r7w14c-build:/tmp/r7w11-build/official/lean/.lake/packages/MD4Lean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/BibtexQuery/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/UnicodeBasic/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Cli/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/leansqlite/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/batteries/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Qq/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/aesop/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/importGraph/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/plausible/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/doc-gen4/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/mathlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/floatlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/TorchLean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/build/lib/lean:/tmp/r7w06-toolchain/lean-4.34.0-linux/lib/lean",
+          "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lean",
+          "-R",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/source",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-o",
+          "/tmp/r7w14c-build/ConstantSource.olean",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/source/ConstantSource.lean"
+        ],
+        "old_W14b_build_on_path": false
+      },
+      {
+        "stem": "compile-Host",
+        "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-Host.command.json",
+        "exit_code": 0,
+        "start_utc": "2026-10-23T00:21:00.744690+00:00",
+        "end_utc": "2026-10-23T00:21:19.196189+00:00",
+        "argv": [
+          "env",
+          "LEAN_PATH=/tmp/r7w14c-build:/tmp/r7w11-build/official/lean/.lake/packages/MD4Lean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/BibtexQuery/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/UnicodeBasic/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Cli/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/leansqlite/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/batteries/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Qq/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/aesop/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/importGraph/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/plausible/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/doc-gen4/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/mathlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/floatlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/TorchLean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/build/lib/lean:/tmp/r7w06-toolchain/lean-4.34.0-linux/lib/lean",
+          "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lean",
+          "-R",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/source",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-o",
+          "/tmp/r7w14c-build/Host.olean",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/source/Host.lean"
+        ],
+        "old_W14b_build_on_path": false
+      },
+      {
+        "stem": "audit-standalone-01",
+        "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-standalone-01.command.json",
+        "exit_code": 0,
+        "start_utc": "2026-10-23T00:21:53.962972+00:00",
+        "end_utc": "2026-10-23T00:21:56.837717+00:00",
+        "argv": [
+          "env",
+          "LEAN_PATH=/tmp/r7w14c-build:/tmp/r7w11-build/official/lean/.lake/packages/MD4Lean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/BibtexQuery/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/UnicodeBasic/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Cli/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/leansqlite/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/batteries/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Qq/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/aesop/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/importGraph/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/plausible/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/doc-gen4/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/mathlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/floatlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/TorchLean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/build/lib/lean:/tmp/r7w06-toolchain/lean-4.34.0-linux/lib/lean",
+          "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lean",
+          "-R",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/source",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-o",
+          "/tmp/r7w14c-build/StandaloneAudit.olean",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/source/StandaloneAudit.lean"
+        ],
+        "old_W14b_build_on_path": false
+      },
+      {
+        "stem": "audit-host-01",
+        "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-host-01.command.json",
+        "exit_code": 0,
+        "start_utc": "2026-10-23T00:21:56.872350+00:00",
+        "end_utc": "2026-10-23T00:21:59.494009+00:00",
+        "argv": [
+          "env",
+          "LEAN_PATH=/tmp/r7w14c-build:/tmp/r7w11-build/official/lean/.lake/packages/MD4Lean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/BibtexQuery/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/UnicodeBasic/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Cli/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/leansqlite/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/batteries/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Qq/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/aesop/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/importGraph/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/plausible/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/doc-gen4/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/mathlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/floatlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/TorchLean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/build/lib/lean:/tmp/r7w06-toolchain/lean-4.34.0-linux/lib/lean",
+          "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lean",
+          "-R",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/source",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-o",
+          "/tmp/r7w14c-build/HostAudit.olean",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/source/HostAudit.lean"
+        ],
+        "old_W14b_build_on_path": false
+      },
+      {
+        "stem": "static-policy-01",
+        "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/static-policy-01.command.json",
+        "exit_code": 1,
+        "start_utc": "2026-10-23T00:21:19.775574+00:00",
+        "end_utc": "2026-10-23T00:21:19.823629+00:00",
+        "argv": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/scripts/static_policy.py",
+          "--gate",
+          "/tmp/r7w11-build/official/gate.py",
+          "--host",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/source/Host.lean",
+          "--output",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/evidence/static-policy.json"
+        ],
+        "old_W14b_build_on_path": false
+      },
+      {
+        "stem": "static-policy-02",
+        "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/static-policy-02.command.json",
+        "exit_code": 0,
+        "start_utc": "2026-10-23T00:22:09.495857+00:00",
+        "end_utc": "2026-10-23T00:22:09.582999+00:00",
+        "argv": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/scripts/static_policy.py",
+          "--gate",
+          "/tmp/r7w11-build/official/gate.py",
+          "--host",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/source/Host.lean",
+          "--output",
+          "/workspace/scratch/24c4d3556a2a/R7-W14c/evidence/static-policy.json"
+        ],
+        "old_W14b_build_on_path": false
+      }
+    ],
+    "policy_load_first_failure": "Missing loguru at import, before calling policy; not Host rejection",
+    "new_C_asm_link_gate_benchmark": "NOT_RUN",
+    "mapped_W13_W13b_new_decoder_in_Host": false
+  },
+  "W14b_commands": [
+    {
+      "stem": "proof-constant-01",
+      "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-01.command.json",
+      "exit_code": 1,
+      "start_utc": "2026-10-23T00:06:54.105325+00:00",
+      "end_utc": "2026-10-23T00:07:13.435661+00:00",
+      "argv": [
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lake",
+        "env",
+        "lean",
+        "-R",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-o",
+        "/tmp/r7w14b-build/ConstantSource.olean",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source/ConstantSource.lean"
+      ],
+      "old_W14b_build_on_path": true
+    },
+    {
+      "stem": "proof-constant-02",
+      "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-02.command.json",
+      "exit_code": 1,
+      "start_utc": "2026-10-23T00:07:54.621445+00:00",
+      "end_utc": "2026-10-23T00:08:01.911249+00:00",
+      "argv": [
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lake",
+        "env",
+        "lean",
+        "-R",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-o",
+        "/tmp/r7w14b-build/ConstantSource.olean",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source/ConstantSource.lean"
+      ],
+      "old_W14b_build_on_path": true
+    },
+    {
+      "stem": "proof-constant-03",
+      "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-03.command.json",
+      "exit_code": 0,
+      "start_utc": "2026-10-23T00:08:25.649406+00:00",
+      "end_utc": "2026-10-23T00:08:31.937770+00:00",
+      "argv": [
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lake",
+        "env",
+        "lean",
+        "-R",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-o",
+        "/tmp/r7w14b-build/ConstantSource.olean",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source/ConstantSource.lean"
+      ],
+      "old_W14b_build_on_path": true
+    },
+    {
+      "stem": "proof-prototype-01",
+      "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-prototype-01.command.json",
+      "exit_code": 0,
+      "start_utc": "2026-10-23T00:09:02.605623+00:00",
+      "end_utc": "2026-10-23T00:09:06.333108+00:00",
+      "argv": [
+        "env",
+        "LEAN_PATH=/tmp/r7w14b-build:/tmp/r7w14-build:/tmp/r7w11-build/official/lean/.lake/packages/MD4Lean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/BibtexQuery/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/UnicodeBasic/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Cli/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/leansqlite/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/batteries/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Qq/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/aesop/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/importGraph/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/plausible/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/doc-gen4/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/mathlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/floatlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/TorchLean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/build/lib/lean:/tmp/r7w06-toolchain/lean-4.34.0-linux/lib/lean",
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lean",
+        "-R",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-o",
+        "/tmp/r7w14b-build/R7W14b.olean",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source/R7W14b.lean"
+      ],
+      "old_W14b_build_on_path": true
+    },
+    {
+      "stem": "proof-helper-01",
+      "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-helper-01.command.json",
+      "exit_code": 0,
+      "start_utc": "2026-10-23T00:09:06.377520+00:00",
+      "end_utc": "2026-10-23T00:09:09.807408+00:00",
+      "argv": [
+        "env",
+        "LEAN_PATH=/tmp/r7w14b-build:/tmp/r7w14-build:/tmp/r7w11-build/official/lean/.lake/packages/MD4Lean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/BibtexQuery/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/UnicodeBasic/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Cli/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/leansqlite/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/batteries/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Qq/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/aesop/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/importGraph/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/plausible/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/doc-gen4/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/mathlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/floatlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/TorchLean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/build/lib/lean:/tmp/r7w06-toolchain/lean-4.34.0-linux/lib/lean",
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lean",
+        "-R",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-o",
+        "/tmp/r7w14b-build/Proof.olean",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source/Proof.lean"
+      ],
+      "old_W14b_build_on_path": true
+    },
+    {
+      "stem": "proof-axioms-01",
+      "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-axioms-01.command.json",
+      "exit_code": 0,
+      "start_utc": "2026-10-23T00:09:09.847884+00:00",
+      "end_utc": "2026-10-23T00:09:12.873322+00:00",
+      "argv": [
+        "env",
+        "LEAN_PATH=/tmp/r7w14b-build:/tmp/r7w14-build:/tmp/r7w11-build/official/lean/.lake/packages/MD4Lean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/BibtexQuery/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/UnicodeBasic/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Cli/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/leansqlite/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/batteries/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Qq/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/aesop/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/importGraph/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/plausible/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/doc-gen4/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/mathlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/floatlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/TorchLean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/build/lib/lean:/tmp/r7w06-toolchain/lean-4.34.0-linux/lib/lean",
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lean",
+        "-R",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-o",
+        "/tmp/r7w14b-build/Axioms.olean",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source/Axioms.lean"
+      ],
+      "old_W14b_build_on_path": true
+    },
+    {
+      "stem": "lean-c-ConstantSource",
+      "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/lean-c-ConstantSource.command.json",
+      "exit_code": 0,
+      "start_utc": "2026-10-23T00:09:53.199692+00:00",
+      "end_utc": "2026-10-23T00:09:57.431712+00:00",
+      "argv": [
+        "env",
+        "LEAN_PATH=/tmp/r7w14b-build:/tmp/r7w14-build:/tmp/r7w11-build/official/lean/.lake/packages/MD4Lean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/BibtexQuery/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/UnicodeBasic/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Cli/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/leansqlite/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/batteries/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Qq/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/aesop/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/importGraph/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/plausible/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/doc-gen4/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/mathlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/floatlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/TorchLean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/build/lib/lean:/tmp/r7w06-toolchain/lean-4.34.0-linux/lib/lean",
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lean",
+        "-R",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-o",
+        "/tmp/r7w14b-build/ConstantSource.olean",
+        "-c",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/generated/ConstantSource.c",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source/ConstantSource.lean"
+      ],
+      "old_W14b_build_on_path": true
+    },
+    {
+      "stem": "lean-c-R7W14b",
+      "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/lean-c-R7W14b.command.json",
+      "exit_code": 0,
+      "start_utc": "2026-10-23T00:09:57.715232+00:00",
+      "end_utc": "2026-10-23T00:10:01.290465+00:00",
+      "argv": [
+        "env",
+        "LEAN_PATH=/tmp/r7w14b-build:/tmp/r7w14-build:/tmp/r7w11-build/official/lean/.lake/packages/MD4Lean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/BibtexQuery/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/UnicodeBasic/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Cli/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/leansqlite/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/batteries/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/Qq/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/aesop/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/importGraph/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/plausible/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/doc-gen4/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/mathlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/floatlib/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/packages/TorchLean/.lake/build/lib/lean:/tmp/r7w11-build/official/lean/.lake/build/lib/lean:/tmp/r7w06-toolchain/lean-4.34.0-linux/lib/lean",
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lean",
+        "-R",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-o",
+        "/tmp/r7w14b-build/R7W14b.olean",
+        "-c",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/generated/R7W14b.c",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/source/R7W14b.lean"
+      ],
+      "old_W14b_build_on_path": true
+    },
+    {
+      "stem": "clang-ConstantSource",
+      "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/clang-ConstantSource.command.json",
+      "exit_code": 0,
+      "start_utc": "2026-10-23T00:09:57.464387+00:00",
+      "end_utc": "2026-10-23T00:09:57.679316+00:00",
+      "argv": [
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/clang",
+        "-c",
+        "-o",
+        "/tmp/r7w14b-build/ConstantSource.c.o.export",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/generated/ConstantSource.c",
+        "-I",
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/include",
+        "-fstack-clash-protection",
+        "-ffp-contract=off",
+        "-fdata-sections",
+        "-ffunction-sections",
+        "-fPIC",
+        "-fvisibility=hidden",
+        "-Wno-unused-command-line-argument",
+        "--sysroot",
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux",
+        "-nostdinc",
+        "-isystem",
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/include/clang",
+        "-O3",
+        "-DNDEBUG",
+        "-DLEAN_EXPORTING"
+      ],
+      "old_W14b_build_on_path": true
+    },
+    {
+      "stem": "clang-R7W14b",
+      "command_record": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/clang-R7W14b.command.json",
+      "exit_code": 0,
+      "start_utc": "2026-10-23T00:10:01.324049+00:00",
+      "end_utc": "2026-10-23T00:10:01.438460+00:00",
+      "argv": [
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/clang",
+        "-c",
+        "-o",
+        "/tmp/r7w14b-build/R7W14b.c.o.export",
+        "/workspace/scratch/24c4d3556a2a/R7-W14b/generated/R7W14b.c",
+        "-I",
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/include",
+        "-fstack-clash-protection",
+        "-ffp-contract=off",
+        "-fdata-sections",
+        "-ffunction-sections",
+        "-fPIC",
+        "-fvisibility=hidden",
+        "-Wno-unused-command-line-argument",
+        "--sysroot",
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux",
+        "-nostdinc",
+        "-isystem",
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/include/clang",
+        "-O3",
+        "-DNDEBUG",
+        "-DLEAN_EXPORTING"
+      ],
+      "old_W14b_build_on_path": true
+    }
+  ],
+  "axiom_audits": {
+    "W13": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/logs/R7W13Diagnostics-attempt1.log",
+      "raw_declaration_count": 60,
+      "depends_lines": 59,
+      "no_axiom_lines": 1,
+      "used_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "unexpected_axioms": [],
+      "raw_lines": [
+        "'R7W13.LowNormal' does not depend on any axioms",
+        "'R7W13.machineExponent_toNat' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.add_exp32_no_wrap' depends on axioms: [propext, Quot.sound]",
+        "'R7W13.add_exp32_toNat' depends on axioms: [propext, Quot.sound]",
+        "'R7W13.add_exp32_wordSign' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.add_exp32_wordFrac' depends on axioms: [propext, Quot.sound]",
+        "'R7W13.add_exp32_mantissa' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.add_exp32_wordExp' depends on axioms: [propext, Quot.sound]",
+        "'R7W13.add_exp32_normalBand' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.low_raw32_decode' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.low_rawModel_decode' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.low_raw32_isNormal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.low_rawModel_isNormal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.add_exp32_raw32_isNormal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.dyadic_scaleDown32_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.binary32_mul_scaleDown32' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.scaleDown32_raw_decode' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.scaleDown32_native_decode' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.scaleDown32_normal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.scaleDown32_finite' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.scaleDown32_toReal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.native_mul_scaleDown32' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.native_mul_scaleDown32_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.lowNormalDecode' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.raised_table_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.raised_table_decode' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.lowNormal_iff_machine' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.low_native_isNormal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.raised_table_isNormal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.lowNormalDecode_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.lowNormalDecode_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.lowNormalDecode_eq_machine' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.lowNormalDecode_bits_machine' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.lowNormalDecode_nativeModel' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.lowNormalDecode_isNormal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13.lowNormalDecode_fields' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.exponent_zero_positive_zero_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.exponent_zero_negative_zero_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.exponent_zero_positive_zero_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.exponent_zero_negative_zero_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.exponent_zero_positive_min_subnormal_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.exponent_zero_negative_min_subnormal_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.exponent_zero_second_subnormal_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.exponent_zero_positive_max_subnormal_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.exponent_zero_negative_max_subnormal_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.normal_edge_00800000_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.normal_edge_00ffffff_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.normal_edge_80800000_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.normal_edge_80ffffff_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.normal_edge_0b800000_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.normal_edge_0bffffff_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.normal_edge_8b800000_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.normal_edge_8bffffff_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.normal_interior_89edcae2_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.normal_interior_09698368_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.normal_interior_03bd45ef_output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.lowNormalDecode_positive_zero_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Witnesses.lowNormalDecode_negative_zero_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Assertions.exact_value_type' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13Assertions.exact_bits_type' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    "W13b": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/logs/R7W13bDiagnostics-attempt1.log",
+      "raw_declaration_count": 29,
+      "depends_lines": 29,
+      "no_axiom_lines": 0,
+      "used_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "unexpected_axioms": [],
+      "raw_lines": [
+        "'R7W13b.low_false_iff_nat' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.low_false_le_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.low_decide_false_le_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.low_false_minNormal_lowNormal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.low_decide_false_minNormal_true_lowNormal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.low_false_minNormal_iff_lowNormal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.wrapper' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.original_table_branch_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.wrapper_eq_ofBits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.wrapper_eq_convert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.wrapper_eq_convert_eq_ofBits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.wrapper_bits_eq_convert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.wrapper_bits_eq_ofBits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13b.wrapper_outside_eq_convert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.positive_zero_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.negative_zero_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.max_subnormal_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.exponent_one_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.exponent_twenty_three_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.exponent_twenty_four_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.positive_infinity_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.negative_infinity_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.negative_quiet_nan_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.signaling_nan_bits' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.negative_quiet_nan_bits_ne_original' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bWitnesses.signaling_nan_bits_ne_original' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bAssertions.all_words_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bAssertions.all_words_convert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W13bAssertions.all_words_bits' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    "W14b": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-axioms-01.stdout",
+      "raw_declaration_count": 4,
+      "depends_lines": 4,
+      "no_axiom_lines": 0,
+      "used_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "unexpected_axioms": [],
+      "raw_lines": [
+        "'R7W14b.index_eq' depends on axioms: [propext]",
+        "'R7W14b.index_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W14b.constantFromTable_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W14b.lowNormalDecode_eq_old' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    "W14c_Host": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-host-01.stdout",
+      "raw_declaration_count": 8,
+      "depends_lines": 8,
+      "no_axiom_lines": 0,
+      "used_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "unexpected_axioms": [],
+      "raw_lines": [
+        "'Submission.add_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'Submission.mul_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'Submission.sum_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'Submission.bmm_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W14b.index_eq' depends on axioms: [propext]",
+        "'R7W14b.index_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W14b.constantFromTable_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W14b.constantFromTable' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    "W14c_Standalone": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-standalone-01.stdout",
+      "raw_declaration_count": 4,
+      "depends_lines": 4,
+      "no_axiom_lines": 0,
+      "used_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "unexpected_axioms": [],
+      "raw_lines": [
+        "'R7W14b.index_eq' depends on axioms: [propext]",
+        "'R7W14b.index_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W14b.constantFromTable_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R7W14b.constantFromTable' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    }
+  },
+  "fresh_local_original_policy_only": {
+    "exact_W14c_host": {
+      "status": "PASS_STATIC_ONLY",
+      "reason": null,
+      "source": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+      "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "scope": "Unmodified policy/options bodies; exact full-slot contract extracted from upstream AST. No build/kernel/axiom/score stage.",
+      "function_source_sha256": {
+        "policy": "02b663a311285f927e48e0533fde188073ec32b84fb079639a6690f36821cce4",
+        "options": "91fdd48a992c4bc786e731e9f12ba3d975f37443e9007968f62c107effe64382"
+      }
+    },
+    "public60f_plus_old10000": {
+      "status": "FAIL_STATIC_ONLY",
+      "reason": "set_option maxRecDepth 10000: allowed values are 1 to 8192",
+      "source": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+      "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "scope": "Unmodified policy/options bodies; exact full-slot contract extracted from upstream AST. No build/kernel/axiom/score stage.",
+      "function_source_sha256": {
+        "policy": "02b663a311285f927e48e0533fde188073ec32b84fb079639a6690f36821cce4",
+        "options": "91fdd48a992c4bc786e731e9f12ba3d975f37443e9007968f62c107effe64382"
+      }
+    },
+    "prepared_builder_in_memory_only": {
+      "status": "PASS_STATIC_ONLY",
+      "reason": null,
+      "source": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+      "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "scope": "Unmodified policy/options bodies; exact full-slot contract extracted from upstream AST. No build/kernel/axiom/score stage.",
+      "function_source_sha256": {
+        "policy": "02b663a311285f927e48e0533fde188073ec32b84fb079639a6690f36821cce4",
+        "options": "91fdd48a992c4bc786e731e9f12ba3d975f37443e9007968f62c107effe64382"
+      }
+    }
+  },
+  "source_mapping": {
+    "W13_success_source_snapshot_equals_main": true,
+    "W13b_success_source_snapshot_equals_main": true,
+    "W13_prefix_bytes": 49186,
+    "W13_prefix_sha256": "31af82f99759de603dbecb1c1f7de58ffd2e2e1350f883dabfb134d6f570c67c",
+    "W13_prefix_byte_identical_to_public60f_and_c760": true,
+    "W13_increment_exact_suffix": true,
+    "W13b_full_exact_W13_prefix_and_increment_suffix": true,
+    "copied_declaration_counts": {
+      "W13": 36,
+      "W13b": 14,
+      "constant_block": 4,
+      "runtime_tail": 5
+    },
+    "theorem_minimized": false,
+    "additional_W05_W12_dependency": false,
+    "actual_bridge_dependencies": [
+      "R2W01c.native_mul_eq_of_decoded_raw_model_mul_eq",
+      "R2W01cModel.mul_eq_of_finite_value",
+      "R2W01c.normal_eq",
+      "R2W01c native/raw codecs",
+      "R2W01b.scaleTable_entry"
+    ],
+    "terminal_chain": [
+      "R7LowTableDecode.convert_eq",
+      "R7LowTableDecode.convert_eq_wrapper",
+      "R7W13b.wrapper_eq_ofBits",
+      "R7W13b.low_false_minNormal_lowNormal",
+      "R7W13.lowNormalDecode_eq",
+      "R7LowTableDecode.lowNormalDecode_eq_proved",
+      "R7LowTableDecode.constantFromTable_eq"
+    ],
+    "new_constant_namespace_only": "R7W14b -> R7LowTableDecode",
+    "unused_reference_helpers_may_emit_old_once": true,
+    "static_scope_or_forward_reference_bug_found": false,
+    "prepared_builder_read_at_utc": "2026-10-23T00:28:17Z",
+    "in_memory_only": {
+      "bytes": 174914,
+      "sha256": "353d9816425d92fbc6d0cc14c9d30e17fb64d6d4fb7ebdf594700ef02c417c2a",
+      "inverse_to_parent_byte_exact": true,
+      "candidate_written": false,
+      "builder_executed": false,
+      "compile": "NOT_RUN",
+      "warning": "Only binds the then-read builder/tail, not a later frozen R candidate."
+    }
+  },
+  "mathematical_domains": [
+    {
+      "claim": "helper exact original word/Float32 value",
+      "domain": "Raw exponent1..23, both signs/all fractions; exponent0 excluded",
+      "status": "Saved W13 proof/axiom accepted"
+    },
+    {
+      "claim": "new wrapper = original convert = Float32.ofBits u",
+      "domain": "All UInt32; zero/subnormal/nonfinite branches preserved",
+      "status": "Saved W13b proof/axiom accepted"
+    },
+    {
+      "claim": "wrapper.toBits = original convert.toBits",
+      "domain": "All UInt32; does not state arbitrary raw word roundtrip",
+      "status": "Saved W13b proof/axiom accepted"
+    }
+  ],
+  "NaN_boundary": {
+    "saved_success_witnesses": {
+      "0xffc12345": "0x7fc00000",
+      "0x7f800001": "0x7fc00000"
+    },
+    "witness_driver_recdepth": 32768,
+    "witness_driver_mapped_into_candidate": false,
+    "witnesses_are_not_gate_eligible_source": true,
+    "raw_payload_fallback_must_remain": true
+  },
+  "next_discriminator": "Freeze R exact decoder-only candidate; compile its four actual specs plus axioms/current8192policy, inspect actual live NativeDecodeSum C/asm, then D decides complete paired public-suite run. No gain claim from exposure.",
+  "inputs": [
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/checkpoint-21-low-normal-codegen-and-policy.md",
+      "bytes": 3162,
+      "sha256": "d593da306fce5b4c50bede4a6f5043e1e08c029346fec30e778dae385b8d92ad"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/low-normal-assets-audit.json",
+      "bytes": 1060,
+      "sha256": "5ab7dc6b154713d8fecd44dfe36193cef0cdd6174dee7b62c6c75453f53dc3bf"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/build-low-normal-sum.py",
+      "bytes": 4341,
+      "sha256": "2a6ef38871fe2d64a7faf41899780003f27c9726b2dfbdc241429974191ea33b"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/low-normal-runtime-tail.lean",
+      "bytes": 926,
+      "sha256": "1fc77ba77f5a6f7e7695688c181229b197e6b848ef46ada853efdf5dd54492ca"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/low-normal-proof-cost-notes.md",
+      "bytes": 2630,
+      "sha256": "13990f57746934e90cf559d9e8bc76063d5f4beeb6c0ed0cccfc91f8058fb15f"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+      "bytes": 38320,
+      "sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/build-seed-normalize.py",
+      "bytes": 12160,
+      "sha256": "135e8e429d8bd484fe4ec364d83947bfe9ccefeb1f8d6a39771717860f9cdf69"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-r7-nonnan-runtime/Kernel.lean",
+      "bytes": 153390,
+      "sha256": "c76056882d69a1122da44b4bc0bb3ab5274251826f0677af2aec5771926d7435"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/R7W13.lean",
+      "bytes": 63410,
+      "sha256": "a17d90417f1a8cd6a8cd396510501082355a00e513cf82af7875d5f8f443928d"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/R7W13Increment.lean",
+      "bytes": 14224,
+      "sha256": "55ce42724776e218139bd702373829ca55910955c07f8f0821ba2feaf949b620"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/logs/R7W13-attempt2.lean",
+      "bytes": 63410,
+      "sha256": "a17d90417f1a8cd6a8cd396510501082355a00e513cf82af7875d5f8f443928d"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/logs/R7W13-attempt2.json",
+      "bytes": 681,
+      "sha256": "4dabd969b2089a7531eb7dd7ac69ed879a9b289ec5c63e76d8b4a64eed13d5c2"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/logs/R7W13Diagnostics-attempt1.lean",
+      "bytes": 76235,
+      "sha256": "ccb4b0ef3ea158004aa683375d95186b1ca3db142f0a5446e47783537138ecca"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/logs/R7W13Diagnostics-attempt1.json",
+      "bytes": 737,
+      "sha256": "bb4b9a2241376cce0219a3225824ea8c52b82d614c0306b28575a97e56628eb5"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/logs/R7W13Diagnostics-attempt1.log",
+      "bytes": 16233,
+      "sha256": "a9f77512bc5e7062918f64c549ba7c8d332abd77b62c0471aef49c14bb3fa298"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/R7W13b.lean",
+      "bytes": 69035,
+      "sha256": "b1e06099064b56544a99f1ab085df8b25e6baa01d255c4e43f45310ba242fb7c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/R7W13bIncrement.lean",
+      "bytes": 5624,
+      "sha256": "f7d2cd47627ba56aa1f4d1b41800fdc289355587ed6b466dae8659d557db0e91"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/verification.json",
+      "bytes": 1035,
+      "sha256": "8502ae5ed96d2e568d2c0e24edf94798c852ac8d2d1bd08aba5d7c407398e4de"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/R7W13bWitnesses.lean",
+      "bytes": 71618,
+      "sha256": "fe99bc62667339d367a395212bf0a884a2634de75e8d0b294c6c2120074b3287"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/logs/R7W13bWitnesses-attempt1.json",
+      "bytes": 737,
+      "sha256": "b004b045b7da19b1ad8cd16f1eb871d9231c8f85e966e96d19f38734c9e4ac50"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/logs/R7W13b-attempt1.lean",
+      "bytes": 69035,
+      "sha256": "b1e06099064b56544a99f1ab085df8b25e6baa01d255c4e43f45310ba242fb7c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/logs/R7W13b-attempt1.json",
+      "bytes": 692,
+      "sha256": "8fcb870f02fc1dd765ecc4fa2a67482c3d1bca5f5b56ddfa79757e2191c5ba15"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/logs/R7W13bDiagnostics-attempt1.lean",
+      "bytes": 74672,
+      "sha256": "33cd83faaadd6df3fa7b12f23b315a1b470f557d082df9432f5695752fdf5acd"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/logs/R7W13bDiagnostics-attempt1.json",
+      "bytes": 747,
+      "sha256": "293d65db4321d0872b1e58a76bc277df7904809a401b61a73da381c3d101bcd0"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/logs/R7W13bDiagnostics-attempt1.log",
+      "bytes": 7548,
+      "sha256": "656d46f221590611a78c7f0d9179801bd477c6bd29d77b905fac3a3ae860b826"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/source/ConstantSource.lean",
+      "bytes": 786,
+      "sha256": "e6a553e98ec595d4c38973d1251b337fb476e98bff2d1b2cc47bbff192218114"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/source/R7W14b.lean",
+      "bytes": 1436,
+      "sha256": "fe9e76106e2030fd1a614073976c079150f20c1d4e2157f4693fbcb8a1bbd5dd"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/source/Proof.lean",
+      "bytes": 399,
+      "sha256": "49557191d01c4b55295cce6d13f991f47f67ffa3f10765afe5877f8253466682"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/source/Axioms.lean",
+      "bytes": 163,
+      "sha256": "e1fa44894fdbba454476ca5b5026702a8510faf8de795bc4aaeeb817a5ec6763"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/source/Kernel.lean",
+      "bytes": 155103,
+      "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/source/toolchain/include/lean/lean.h",
+      "bytes": 136786,
+      "sha256": "982c731a1fbacc7688006f44f9f7af9d9e3e0247d310a728827f49e7f1466c13"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/generated/ConstantSource.c",
+      "bytes": 2586,
+      "sha256": "6ac827fe2e84a44517ff1ee7bc9081a3af72d4e07c407df99642096e8c5150a0"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/generated/R7W14b.c",
+      "bytes": 19742,
+      "sha256": "982122f33474500c9ef705780a6553cfb53b59e86d1fd38419c77e53f006989f"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/notes/proof-review.md",
+      "bytes": 5184,
+      "sha256": "573655eaa6c464d3e458b211f98e951906c306003757803484bf1effa33cba25"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/notes/asm-review.md",
+      "bytes": 8819,
+      "sha256": "1ead9127a1dd4c6d66c54560e356ed05b79b3cc09ff6ebf0d173072c55c99398"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/proof-artifacts.json",
+      "bytes": 1962,
+      "sha256": "c02734041d3578e5ff6b4f957d0691a819d2d4dd8c4a591fa751c82dd9e53b50"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/post-codegen-proof-identity.json",
+      "bytes": 3430,
+      "sha256": "f8413b6824efb2a82cc0c0e3d34b9468b1c578b2e1630a13ef436035ddbb6e32"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/w14-object-comparison.json",
+      "bytes": 1657,
+      "sha256": "23ed90d3458dc859ef8808e7ba0320105822abc310a3682857255fb63a7ce327"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/compiler-command-diff.json",
+      "bytes": 2331,
+      "sha256": "91bf1c251f6160729b3b33587164e74f7b039591b158c66ecc4c2421d5aa2dd3"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/prototype.diff",
+      "bytes": 870,
+      "sha256": "599b1ccd51bb2b500727ddd20c37e462629330442bce97cc1b7b6c5791f618fc"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/prototype-change-audit.json",
+      "bytes": 501,
+      "sha256": "1fa6807b03632cf0c26e0fdff65ba856379a2aa34fee5261f569e72ba7634ae8"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/elf/ConstantSource.json",
+      "bytes": 34992,
+      "sha256": "ac02e67d8e06b32655d07f14c41b09cc3ffc73a8c1356a47276dd85aa3741c4c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/elf/R7W14b.json",
+      "bytes": 123911,
+      "sha256": "0067f8dd5e0fd10cba70a81f2514e5cccb3ff079495621f4e210bfcdb85a4d7d"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/elf/selected/ConstantSource/l_R7W14b_constantFromTable-bac0b86145.txt",
+      "bytes": 281,
+      "sha256": "a491f3f2aa32bab3a42d6dee5a140b7fc6431a4a718c00c5969c9f5c49c598fd"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/elf/selected/R7W14b/l_R7W14b_lowNormalDecode-4da537dd44.txt",
+      "bytes": 486,
+      "sha256": "f434b5e10ca42c918d4cb7c39a2d3940d046592bb0f73146eee1f09e110aae3d"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/elf/selected/R7W14b/l_R7W14b_researchConvert-814408a50d.txt",
+      "bytes": 1262,
+      "sha256": "85dd3c48ed92e62fddb7637f4def999ae2c7c974dc0c88888af884a06df15073"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/elf/selected/R7W14b/l_R7W14b_researchLoop-4ec579edb9.txt",
+      "bytes": 3876,
+      "sha256": "75be4472281b72d43571a211725230bfabccdc525c6bd7b737486eedbcebe07f"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/evidence/elf/raw/R7W14b/objdump-disassembly.stdout",
+      "bytes": 42457,
+      "sha256": "f006d0a2fc765584d66ceb8c81e6c4711f4c456c493690a53c4cd58447f9af42"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14/original-extracted/R7-W14/source/R7W14.lean",
+      "bytes": 1436,
+      "sha256": "d5e02a2308fc8e6f1825148b4cdba6477fae49b86632d475c255df716f9d2f8b"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14/original-extracted/R7-W14/evidence/elf/raw/R7W14/objdump-disassembly.stdout",
+      "bytes": 49287,
+      "sha256": "9d50f12d2803947e43a3ff6eaf3935d7a5c07374c2fe39ee565743f1811d5b36"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/ConstantSource-original.lean",
+      "bytes": 786,
+      "sha256": "e6a553e98ec595d4c38973d1251b337fb476e98bff2d1b2cc47bbff192218114"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/ConstantSource.lean",
+      "bytes": 785,
+      "sha256": "fdce65a41e155b3009e5c4b10eab6020b37195081b0ca56bc154537274749663"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/Kernel-original.lean",
+      "bytes": 155103,
+      "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/Host.lean",
+      "bytes": 155871,
+      "sha256": "65a78403229b21528d88964fdd05a381802f9ec2f43859b8e77ecd8249daf806"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/HostAudit.lean",
+      "bytes": 1750,
+      "sha256": "4813e238e8b3a10d31315529be855db6b9eaf9779f7fef7dec66c2eaeed62bb0"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/StandaloneAudit.lean",
+      "bytes": 602,
+      "sha256": "c5d64ed2c38b877ba63ea858f35f621a76a9c936b5c7c3c9250ecb44eaafd073"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/official/gate.py",
+      "bytes": 38320,
+      "sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/official/lean/verify/VerifyFull.lean",
+      "bytes": 700,
+      "sha256": "761298d629b641c2ebe26e81ae68582cec3e424486aa5f4bd81cb4932f5b7682"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/official/lean/contract/Contract.lean",
+      "bytes": 1731,
+      "sha256": "454d6ffe93f13b39e2dabdda5ead4a042dcd201bf025e79663ef711c1d63ee5b"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/official/lean/contract/ContractTensor.lean",
+      "bytes": 3433,
+      "sha256": "65f31bc0d7793f0208465ca554486834b572a45c21c35772789551ac8a82a26c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/scripts/static_policy.py",
+      "bytes": 3076,
+      "sha256": "215c83aef7346f08ab257cf756393ac2fc8eb763d39c3799cc5bfce2ccba1625"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/evidence/source-provenance.json",
+      "bytes": 7109,
+      "sha256": "fc93feae16c0245ccd83ba61833473393286ed2f0d973a63d86858f74e924d21"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/evidence/audit-artifacts.json",
+      "bytes": 1157,
+      "sha256": "1cf9e3004cacc31ef9060bd367f0783258f6f6048ce956487cc4e346167d3afe"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/evidence/static-policy.json",
+      "bytes": 1278,
+      "sha256": "de9b04bbe5597978e80b857cdc756ad11b6d1ec764e49f3ee1db659f65148ccc"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/notes/proof-review.md",
+      "bytes": 4594,
+      "sha256": "dabd6c23b9dd39d03abd3304ace17ccefbb03d851139cccfa599148b7eee5cad"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/notes/policy-review.md",
+      "bytes": 3232,
+      "sha256": "89a62c23e8369f04c212830eba8f0d2dc7d3c80c241cf44e0a573fae96cde02b"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/receipt.json",
+      "bytes": 11653,
+      "sha256": "1fe6468232c62b29536154ab1d54ff629ece7c70a07be76a4a4c4f3eff8fdab0"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-01.command.json",
+      "bytes": 1050,
+      "sha256": "c19317e22fcb58ab9566ab5eb051cf250a756d9052ba47c6166056b3a68eac1d"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-01.exitcode",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-01.stdout",
+      "bytes": 670,
+      "sha256": "04e83d42a4c9c09ea9888f5fc122a46011c4970441965cfc7d9f1d01181caa14"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-02.command.json",
+      "bytes": 1050,
+      "sha256": "45f936f66b823b9d0412d75648813c075c95fed5037b854e2d8b95dea16a2f9d"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-02.exitcode",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-02.stdout",
+      "bytes": 102,
+      "sha256": "bf40f198ead31de56fe30663895e3700381dafa055e2934c2e0f1134ab8c842a"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-02.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-03.command.json",
+      "bytes": 1050,
+      "sha256": "dc7ae80275dd7286fd6141a1f355121764fd5fc0e68780a6ff56280830721019"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-03.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-03.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-constant-03.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-prototype-01.command.json",
+      "bytes": 2388,
+      "sha256": "1a060f7849155fbb63768967887a46d276c072de61b6bd4636b586e3503a4895"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-prototype-01.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-prototype-01.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-prototype-01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-helper-01.command.json",
+      "bytes": 2386,
+      "sha256": "450254eff523378826045f456649901aa159e4d4dc1a66f43129e94613e619d3"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-helper-01.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-helper-01.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-helper-01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-axioms-01.command.json",
+      "bytes": 2388,
+      "sha256": "22c4f656e6774f2b1b90b0b196905be2c098aab8c800021f7a47d719b3bf9c3c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-axioms-01.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-axioms-01.stdout",
+      "bytes": 307,
+      "sha256": "aec6791b1a9c445c763263e7f44d8349106bf531df98d9c1579992591be018cf"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-axioms-01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/lean-c-ConstantSource.command.json",
+      "bytes": 2488,
+      "sha256": "5dd0f5de173e613d40666713aa21d560d2c4e4ee2bc8aad76fe7d5e7877a4d14"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/lean-c-ConstantSource.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/lean-c-ConstantSource.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/lean-c-ConstantSource.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/lean-c-R7W14b.command.json",
+      "bytes": 2464,
+      "sha256": "04a7e99538385042fad4cad78665707d8984f4a03bd299d411a2e3e7ee0ceaaa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/lean-c-R7W14b.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/lean-c-R7W14b.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/lean-c-R7W14b.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/clang-ConstantSource.command.json",
+      "bytes": 1362,
+      "sha256": "751261f4d6b802202bb9d8b93431729cb0507d6fdd6c296bf81fad8125aca2b8"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/clang-ConstantSource.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/clang-ConstantSource.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/clang-ConstantSource.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/clang-R7W14b.command.json",
+      "bytes": 1346,
+      "sha256": "89a88d114476f3c9b978ef57a3987f3aaf6454d39c9b0cca6fa775a6dc6010a7"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/clang-R7W14b.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/clang-R7W14b.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/clang-R7W14b.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-ConstantSource.command.json",
+      "bytes": 2388,
+      "sha256": "01bbfbff145e1c48ef58698e427ca574f803622e2374bad84144914d4a2f52f6"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-ConstantSource.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-ConstantSource.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-ConstantSource.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-Host.command.json",
+      "bytes": 2368,
+      "sha256": "614f41f1d4d39a2b476153ef073472e4c1e0e3c1500c4673780b6d94ecb6d0da"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-Host.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-Host.stdout",
+      "bytes": 10748,
+      "sha256": "ebc100250b2d79cd7837df255c0c205bf8ef2db3e99c88ef6042ef06d864dca6"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-Host.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-standalone-01.command.json",
+      "bytes": 2389,
+      "sha256": "98e5fe8eeb307cfda1604848c76f25f6eaaa8503977e3a9f373bb6b83bd92c79"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-standalone-01.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-standalone-01.stdout",
+      "bytes": 657,
+      "sha256": "4569d38d99872bd3284ae64a16ede10e5d98429ef15b9d064aeffd07806b3098"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-standalone-01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-host-01.command.json",
+      "bytes": 2377,
+      "sha256": "4933f02a2bb88ccc2bbe566dd4d09247ca69a11fecba1ac9e0f9ade38998a9b0"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-host-01.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-host-01.stdout",
+      "bytes": 981,
+      "sha256": "5d60ebcdefd2e8918db523b6633b23d470d9d1fe9297d5964af13f6f7ed2afc4"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-host-01.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/static-policy-01.command.json",
+      "bytes": 598,
+      "sha256": "51af9d49e3a33f813de65b2cd0f8406911ea1d81abae4097d4e97be93ba2c713"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/static-policy-01.exitcode",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/static-policy-01.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/static-policy-01.stderr",
+      "bytes": 617,
+      "sha256": "9131a4d0398fbfba9877d18456fc363e0647a2535d35880e4edee7ae59681b94"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/static-policy-02.command.json",
+      "bytes": 598,
+      "sha256": "a7b26094797c8efa7a8ab3e506ef67e7b69d84f90a546f393c12740cf864fb8f"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/static-policy-02.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/static-policy-02.stdout",
+      "bytes": 1278,
+      "sha256": "de9b04bbe5597978e80b857cdc756ad11b6d1ec764e49f3ee1db659f65148ccc"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/static-policy-02.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "markdown": {
+    "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/low-normal-constant-source-review.md",
+    "bytes": 9588,
+    "sha256": "7b4323d1d356c0e0c5f8a5858d16f9a3873fa0405279fe7f8eb8931d3d41fe42"
+  }
+}

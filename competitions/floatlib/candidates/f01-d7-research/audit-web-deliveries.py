@@ -28,7 +28,7 @@ for d in index['deliveries']:
             assert len(content)==f['bytes'] and h==f['sha256'],name
             assert target.is_file() and target.read_bytes()==content,target
             payloads[name]=h;size+=len(content)
-        manifests=[n for n in names if PurePosixPath(n).name in ('MANIFEST.sha256','SHA256SUMS')]
+        manifests=[n for n in names if PurePosixPath(n).name in ('MANIFEST.sha256','SHA256SUMS','SHA256SUMS.txt')]
         assert len(manifests)==1,manifests
         m=manifests[0];prefix=PurePosixPath(m).parent
         checks=0;covered=set();secondary=None
@@ -40,11 +40,14 @@ for d in index['deliveries']:
             covered.add(key)
             checks+=1
         excluded={m}
-        if PurePosixPath(m).name=='SHA256SUMS':
+        manifest_basename=PurePosixPath(m).name
+        if manifest_basename in ('SHA256SUMS','SHA256SUMS.txt'):
             metadata_member=(prefix/'manifest.json').as_posix()
             metadata=json.loads(z.read(metadata_member))
             assert metadata['algorithm']=='SHA256'
-            assert set(metadata['excluded_self_references'])=={'manifest.json','SHA256SUMS'}
+            exclusion_key=('excluded_self_references' if manifest_basename=='SHA256SUMS'
+                           else 'excluded_self_referential_files')
+            assert set(metadata[exclusion_key])=={'manifest.json',manifest_basename}
             excluded.add(metadata_member)
             metadata_entries=metadata['files'];metadata_paths=set()
             for item in metadata_entries:

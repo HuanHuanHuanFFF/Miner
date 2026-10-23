@@ -56,10 +56,10 @@ s['current_protocol']['scope']='Current original paid private suite; current cha
 write(sp,s)
 labels={'add':'加法 add','mul':'乘法 mul','sum':'求和 sum','bmm':'矩阵乘法 bmm'}
 t=datetime.datetime.fromisoformat(snapshot['queried_at_utc']).astimezone(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y-%m-%d %H:%M')
-lines=['# FloatLib 冲冠看板','',f"冠军 [#{champ['submission']}](https://conjectures.io/v1/competitions/floatlib/submissions/{champ['submission']})｜{t}核对。**我方/冠军耗时越低越好；公开原版/我方加速越高越好。**",'',f'当前保留[直接点积＋非NaN完整包]({source.relative_to(root).as_posix()})，两轮新版公开套件完整通过。','','| 运算 | 冠军耗时基准 | 我方 / 冠军耗时 | 我方对公开原版加速 | 我方耗时占比 |','| --- | ---: | ---: | ---: | ---: |']
+lines=['# FloatLib 冲冠看板','',f"冠军 [#{champ['submission']}](https://conjectures.io/v1/competitions/floatlib/submissions/{champ['submission']})｜{t}核对。**我方/冠军耗时越低越好。**",'',f'当前保留[直接点积＋非NaN完整包]({source.relative_to(root).as_posix()})，整包对公开原版 **{whole[0]:.2f}–{whole[1]:.2f}×**。','','| 运算 | 冠军耗时基准 | 我方 / 冠军耗时 | 我方对公开原版加速 | 我方耗时占比 |','| --- | ---: | ---: | ---: | ---: |']
 for op in ops:
     lo,hi=speed[op]['speedup_range'];share=speed[op]['time_share_median_percent'];lines.append(f'| {labels[op]} | 1.00× | 待正式评测 | {lo:.2f}–{hi:.2f}× | {share:.1f}% |')
 g=sorted((1-r['whole_entry_headline_ratio_normalized_candidate_over_parent'])*100 for r in comparisons)
-lines+=['',f"整包我方 **{whole[0]:.2f}–{whole[1]:.2f}×**；冠军官方累计 **{champ['speedup_vs_shipped']:.2f}×** 含跨套件历史，不能相除算差距。[数据](competitions/floatlib/candidates/f01-d7-research/multiplier-comparison.json)",'',f"**结论：尚无取代#{champ['submission']}的已验方案；组合包相对上一保留版本再降耗{g[0]:.0f}%–{g[1]:.0f}%，继续冲冠。**",'']
+lines+=['',f"**结论：尚无取代#{champ['submission']}的已验方案；组合包相对上一保留版本再降耗{g[0]:.0f}%–{g[1]:.0f}%。** [数据](competitions/floatlib/candidates/f01-d7-research/multiplier-comparison.json)",'']
 (root/'dashboard.md').write_text('\n'.join(lines),encoding='utf-8')
 print(json.dumps({'candidate':a.candidate,'sha256':h,'whole_public_speedup':whole,'shares':s['optimization_priority']['current_public_suite_share_percent']}))

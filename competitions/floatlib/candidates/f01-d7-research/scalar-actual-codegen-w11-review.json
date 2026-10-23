@@ -1,0 +1,1909 @@
+{
+  "schema_version": 1,
+  "task": "R7 W11 actual scalar codegen independent review",
+  "started_utc": "2026-10-22T23:42:02Z",
+  "reviewed_utc": "2026-10-23T00:07:21Z",
+  "task_deadline_utc": "2026-10-23T00:27:02Z",
+  "overall_deadline_utc": "2026-10-23T04:22:17Z",
+  "decision": "PARK_NOINLINE_LOWSCALE",
+  "decision_basis": "Actual ordinary finite mul traverses only 89 encoded bytes at 26 instruction sites; it jumps over inline LowScale. No linked placement, dynamic profile or timing supports a new noinline variant.",
+  "source": {
+    "candidate": "f01-d7-direct-nonnan",
+    "candidate_sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+    "candidate_bytes": 155103,
+    "public_source_url": "https://raw.githubusercontent.com/HuanHuanHuanFFF/Miner/f69da28963f2a68cf9232818b4facf74de161d5b/competitions/floatlib/candidates/f01-d7-direct-nonnan/Kernel.lean",
+    "public_commit": "f69da28963f2a68cf9232818b4facf74de161d5b",
+    "public_source_git_blob": "82ccbe5ed9dfd725a1e380b672a55b454b78166a",
+    "local_source_byte_identical": true,
+    "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+    "FloatLib_revision": "0d91825727839f597fd06b22fdd038ea21480f0c",
+    "Lean_version": "4.34.0",
+    "Lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+    "clang_version": "22.1.4",
+    "clang_commit": "35990504507d79e0b9deb809c8ee5e1b34ceef20",
+    "target": "x86_64-unknown-linux-gnu",
+    "official_harness_binding": {
+      "repository": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels",
+      "commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "files": [
+        {
+          "path": "source/official/lean/lakefile.lean",
+          "official_path": "lean/lakefile.lean",
+          "sha256": "74fa88c2847c0a988ad24d9e09489429582532a77f05e7b013a5ff38645e582b",
+          "bytes": 3864,
+          "url": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/4b7e83841cc0c32c6529f533923c73d33b5ecf97/lean/lakefile.lean"
+        },
+        {
+          "path": "source/official/lean/bench/MainFull.lean",
+          "official_path": "lean/bench/MainFull.lean",
+          "sha256": "8bf2a6adf6bc0c6220b0a842d3c750fca171b31eb6f0095f3d86c960ebdb48dc",
+          "bytes": 482,
+          "url": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/4b7e83841cc0c32c6529f533923c73d33b5ecf97/lean/bench/MainFull.lean"
+        },
+        {
+          "path": "source/official/lean/bench/Bench.lean",
+          "official_path": "lean/bench/Bench.lean",
+          "sha256": "e4552e256c7cd238826895741fb8b3a4d2d7d5bffe4c178daeff029096249e6b",
+          "bytes": 8198,
+          "url": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/4b7e83841cc0c32c6529f533923c73d33b5ecf97/lean/bench/Bench.lean"
+        },
+        {
+          "path": "source/official/lean/bench/BenchFull.lean",
+          "official_path": "lean/bench/BenchFull.lean",
+          "sha256": "033fdbe9b365fd5a7e9c595dd8f4f8d5bf8ba99d404eea7c8d2de8b2e9ce44d5",
+          "bytes": 3736,
+          "url": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/4b7e83841cc0c32c6529f533923c73d33b5ecf97/lean/bench/BenchFull.lean"
+        },
+        {
+          "path": "source/official/lean/bench/BenchSuite.lean",
+          "official_path": "lean/bench/BenchSuite.lean",
+          "sha256": "2f1672738e07851fdb24ed968c248fc2e6d8a3e677c27763ebd489ada9425a9f",
+          "bytes": 10064,
+          "url": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/4b7e83841cc0c32c6529f533923c73d33b5ecf97/lean/bench/BenchSuite.lean"
+        }
+      ],
+      "crosschecked_with": [
+        "evidence/harness-source-manifest.json",
+        "evidence/official-original-files.json",
+        "evidence/official-source-preservation.json"
+      ]
+    }
+  },
+  "evidence_scope": {
+    "root": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11",
+    "primary_subset_file_count": 77,
+    "primary_subset_bytes_freshly_hashed": 28141574,
+    "all_used_files_match_both_internal_manifests": true,
+    "manifest_json_sha256": "f6a4a1a567e513ab4070eaee7896ddd6d3aab7a5b7dc12a0c1cf85018defb347",
+    "SHA256SUMS_sha256": "958deb0f794bde3a66a76533786e739822f8eb5a4496e0e370641506cc80534d",
+    "complete_archive_audit": false,
+    "raw_object_binaries_packaged": false,
+    "object_hash_provenance": "Recorded pre/post inspection hashes, equal in W11 metadata; binaries absent locally, so not independently rehashed here.",
+    "fresh_verification": "Used C, command records, raw objdump/readelf text and fixed runtime header were rehashed locally and compared to both internal manifests.",
+    "disassembly_view": "evidence/elf/raw/<Module>/objdump-disassembly.stdout (-drwC); line references do not use derived objdump-parsed-view line numbering.",
+    "object_kind": "ELF64 ET_REL diagnostic objects, section-relative offsets; no linked virtual addresses."
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "status": "VERIFIED",
+      "topic": "Source and compiler binding",
+      "claim": "W11 source is exact public 60f. Five actual C files and export objects are bound by Lake clang commands to the same staged source and -O3 -ffp-contract=off compilation; no LTO flag appears.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/kernel-identity.json"
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/kernel-final-identity.json"
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/target-facets.stdout",
+          "line": 5478
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/target-facets.stdout",
+          "line": 5663
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/target-clang-commands.json"
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/harness-source-manifest.json"
+        }
+      ]
+    },
+    {
+      "id": "F2",
+      "status": "VERIFIED",
+      "topic": "Build attempts and completion boundary",
+      "claim": "Both full VerifyFull/benchFull target attempts timed out (600s and 100s, exit 124). Raw tails remain in dependency compilation and contain no confirmed final benchFull linker invocation; benchFull exists=false. Separate requested C/object facets exited 0. The resume MainFull:c.o record is Replayed, not a fresh compile.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/official-build.command.json"
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/official-build.exitcode"
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/official-resume.command.json"
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/official-resume.exitcode"
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/target-facets.exitcode"
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/official-resume.stdout",
+          "line": 5659
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/build-artifacts.json"
+        }
+      ],
+      "fullgate": "NOT_COMPLETED",
+      "benchmark_run": "NOT_RUN",
+      "cleaned_25_round_score_object_identity": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "F3",
+      "status": "VERIFIED",
+      "topic": "Actual benchmark closure chain",
+      "claim": "MainFull static closures point to local boxed add/mul lambdas. Legacy and suite scalar loops still call lean_apply_2. Lean has cloned candidate arithmetic into MainFull local bodies; callbacks do not directly dispatch to the standalone Submission_mul symbol.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/official/lean/bench/MainFull.lean",
+          "line": 8
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/MainFull.c",
+          "line": 62
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/readelf-relocations.stdout",
+          "line": 117
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/Bench.c",
+          "line": 1753
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/BenchSuite.c",
+          "line": 8443
+        }
+      ],
+      "legacy_loop_symbol": "lp_competition___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00Bench_sweep_spec__0___redArg",
+      "legacy_loop_bytes": 880,
+      "legacy_apply2_offset": "0x1ae",
+      "suite_loop_symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_forIn_x27Unsafe_loop___at___00Bench_Suite_runScalar_spec__0",
+      "suite_loop_bytes": 301,
+      "suite_apply2_offset": "0x86",
+      "static_closure_mapping": {
+        "closed_1": "main___lam__0___boxed (add)",
+        "closed_2": "main___lam__1___boxed (legacy mul)",
+        "closed_5": "main___lam__3___boxed (suite mul)"
+      }
+    },
+    {
+      "id": "F4",
+      "status": "VERIFIED",
+      "topic": "UInt32 boxed ABI does not imply per-call heap allocation",
+      "claim": "On this ELF64 target UInt32 arguments/results use tagged immediates. The 116-byte MainFull boxed wrapper tag-tests/unboxes, directly calls its local unboxed body, and returns (uint32<<1)|1. Its only cold calls are reference decrements for nonscalar inputs; no allocator target is present. Static scalar closures have m_rc=0.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/toolchain/include/lean/lean.h",
+          "line": 334
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/toolchain/include/lean/lean.h",
+          "line": 2955
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/MainFull.c",
+          "line": 62
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/objdump-disassembly.stdout",
+          "line": 673
+        }
+      ],
+      "wrapper_offsets": {
+        "tag_tests": [
+          "0x4",
+          "0x15"
+        ],
+        "unbox_shifts": [
+          "0x26",
+          "0x29"
+        ],
+        "local_body_call": "0x2c",
+        "tagged_result": "0x33",
+        "cold_ref_decrement_calls": [
+          "0x4d",
+          "0x67"
+        ]
+      },
+      "not_claimed": "No claim that lean_apply_2 runtime internals, all backend branches, or the complete benchmark allocate nothing."
+    },
+    {
+      "id": "F5",
+      "status": "VERIFIED",
+      "topic": "Separate genuine allocation sites from per-item arithmetic",
+      "claim": "Suite pair constructors and generator/pass closures are setup. The scalar per-item loop's apply_2 precedes checksum/update/backedge; its 16-byte mi_malloc_small call is in the loop-termination IO-result path, once per completed pass rather than per scalar element.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/BenchSuite.c",
+          "line": 8405
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/BenchSuite.c",
+          "line": 8430
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/BenchSuite.c",
+          "line": 8443
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/BenchSuite.c",
+          "line": 8499
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/official/lean/bench/BenchSuite.lean",
+          "line": 184
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchSuite/objdump-disassembly.stdout",
+          "line": 19219
+        }
+      ],
+      "suite_loop_allocation_offset": "0xe6",
+      "suite_loop_allocation_size": 16,
+      "timing_boundary": "Input Array/pair construction occurs before measure. Pass-result construction belongs to each timed pass; not a per-item UInt32 boxing cost."
+    },
+    {
+      "id": "F6",
+      "status": "VERIFIED",
+      "topic": "Finite ordinary mul layout",
+      "claim": "MainFull legacy/suite mul bodies are 884 bytes and byte-identical with matching transfer targets. Their ordinary finite branch traverses entry [0x0,0x32) and native [0x20a,0x231), totaling 89 encoded bytes / 26 instruction sites. The 894-byte standalone Submission_mul has the same ordinary path count, with native block shifted to [0x214,0x23b).",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/objdump-disassembly.stdout",
+          "line": 421
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/objdump-disassembly.stdout",
+          "line": 560
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Submission/objdump-disassembly.stdout",
+          "line": 5581
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/readelf-symbols.stdout"
+        }
+      ],
+      "path_condition": "((x>>23)&255)+((y>>23)&255)>=128 and both exponent fields !=255",
+      "count_meaning": "Static encoded bytes/instruction sites on this path, excluding callees and outer ABI; not cycles or dynamic branch-frequency measurements.",
+      "noinline_decision": "PARK",
+      "noinline_reason": "LowScale remains inlined, but ordinary execution already jumps over it. C/function total size alone supplies no new layout-performance evidence."
+    },
+    {
+      "id": "F7",
+      "status": "VERIFIED",
+      "topic": "External Float32 codecs survive",
+      "claim": "Actual normal MainFull mul retains two calls to lean_float32_of_bits and one tail jump to lean_float32_to_bits. lean_float32_mul becomes mulss. The first decoded value is spilled to the stack across the second external decode call.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/objdump-disassembly.stdout",
+          "line": 560
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Submission/objdump-disassembly.stdout",
+          "line": 5722
+        }
+      ],
+      "MainFull_offsets": {
+        "of_bits_calls": [
+          "0x20d",
+          "0x21a"
+        ],
+        "spill": "0x212",
+        "mulss": "0x21f",
+        "to_bits_tail_jump": "0x22c"
+      },
+      "Submission_offsets": {
+        "of_bits_calls": [
+          "0x217",
+          "0x224"
+        ],
+        "spill": "0x21c",
+        "mulss": "0x229",
+        "to_bits_tail_jump": "0x236"
+      },
+      "erased_wrappers": "ExecFloat nominal/subtype/constructor/projection wrappers and inline Float32 mul primitive no longer impose separate calls here.",
+      "preserved_boundary": "Underlying Float32.ofBits/toBits external calls remain. No cycles or removable-cost estimate is available."
+    },
+    {
+      "id": "F8",
+      "status": "VERIFIED",
+      "topic": "Add and low-path calls are conditional",
+      "claim": "MainFull add has conditional of_bits sites at +0x44/+0xa2 and final to_bits tail jump +0xe9; numeric branches use cvtsi2ss, scale table and mulss. MainFull mul's specialized software backend, uint32_of_big_nat and cold ref decrement sites are outside the ordinary finite path.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/objdump-disassembly.stdout",
+          "line": 7
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/objdump-disassembly.stdout",
+          "line": 421
+        }
+      ],
+      "caveat": "Do not charge all static calls or both add decode alternatives to every invocation.",
+      "low_path_offsets": {
+        "specialized_MulBackend_call": "0x1de",
+        "uint32_of_big_nat": "0x1ee",
+        "ref_decrement": "0x364"
+      },
+      "standalone_LowScale_mul_bytes": 843,
+      "MainFull_calls_standalone_LowScale": false
+    },
+    {
+      "id": "F9",
+      "status": "INFERRED",
+      "topic": "Candidate-controlled optimization boundary",
+      "claim": "Under the fixed separately compiled official harness, a Kernel change can alter the arithmetic body and its MainFull clone, but has no demonstrated way to remove the Bench loop's generic lean_apply_2 interface. Whether a smaller candidate body changes the inner boxed-wrapper direct call/inlining is UNKNOWN and requires fresh actual objects.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/official/lean/bench/MainFull.lean",
+          "line": 8
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/target-facets.stdout",
+          "line": 5669
+        },
+        {
+          "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/objdump-disassembly.stdout",
+          "line": 673
+        }
+      ],
+      "next_falsifier": "Only revisit selective noinline after measured instruction-cache/placement evidence or a separately justified candidate yields actual object changes; then compare exact MainFull closures and a complete paired official benchmark."
+    }
+  ],
+  "object_modules": [
+    {
+      "module": "Submission",
+      "C_sha256": "69cc5063eb3fadad54df3a0b849c0261d7eae170a56bf25ec830c1dadfc0c7d6",
+      "C_bytes": 715720,
+      "recorded_object_sha256": "26974d94bd560615dd0c9927c00c809bc61e7cef6c56ac9271649a29f1539800",
+      "recorded_object_bytes": 193776,
+      "recorded_before_after_object_hash_equal": true,
+      "object_packaged": false,
+      "object_path": "/tmp/r7w11-build/official/lean/.lake/build/ir/Submission.c.o.export",
+      "ELF_class": "ELF64",
+      "ELF_type": "REL (Relocatable file)",
+      "roots": [
+        {
+          "symbol": "lp_competition_Submission_add",
+          "bytes": 238
+        },
+        {
+          "symbol": "lp_competition_Submission_add___boxed",
+          "bytes": 116
+        },
+        {
+          "symbol": "lp_competition_Submission_mul",
+          "bytes": 894
+        },
+        {
+          "symbol": "lp_competition_Submission_mul___boxed",
+          "bytes": 116
+        }
+      ]
+    },
+    {
+      "module": "MainFull",
+      "C_sha256": "72d050dd6da03770c38f0344f8f4c0bfd1c25f62a236d636acc1f496d4524aad",
+      "C_bytes": 83831,
+      "recorded_object_sha256": "f87b30d3644aa60f2b604a19f88525f3ea5c6cdd73b4abaea1ec981fc160783f",
+      "recorded_object_bytes": 12832,
+      "recorded_before_after_object_hash_equal": true,
+      "object_packaged": false,
+      "object_path": "/tmp/r7w11-build/official/lean/.lake/build/ir/MainFull.c.o.export",
+      "ELF_class": "ELF64",
+      "ELF_type": "REL (Relocatable file)",
+      "roots": [
+        {
+          "symbol": "_lean_main",
+          "bytes": 178
+        },
+        {
+          "symbol": "lp_competition_main___lam__0",
+          "bytes": 238
+        },
+        {
+          "symbol": "lp_competition_main___lam__0___boxed",
+          "bytes": 116
+        },
+        {
+          "symbol": "lp_competition_main___lam__1",
+          "bytes": 884
+        },
+        {
+          "symbol": "lp_competition_main___lam__1___boxed",
+          "bytes": 116
+        },
+        {
+          "symbol": "lp_competition_main___lam__3",
+          "bytes": 884
+        },
+        {
+          "symbol": "lp_competition_main___lam__3___boxed",
+          "bytes": 116
+        },
+        {
+          "symbol": "main",
+          "bytes": 199
+        }
+      ]
+    },
+    {
+      "module": "Bench",
+      "C_sha256": "0e241f41ba3de5d960a9e36e99db572d14783d8549e820c8d2df6744746e8894",
+      "C_bytes": 148451,
+      "recorded_object_sha256": "3a9f28e29febbf01b98b0cfb8f6c1132d2218c74adee562afb7da19f9d800dd6",
+      "recorded_object_bytes": 121896,
+      "recorded_before_after_object_hash_equal": true,
+      "object_packaged": false,
+      "object_path": "/tmp/r7w11-build/official/lean/.lake/build/ir/Bench.c.o.export",
+      "ELF_class": "ELF64",
+      "ELF_type": "REL (Relocatable file)",
+      "roots": [
+        {
+          "symbol": "lp_competition_Bench_run",
+          "bytes": 18
+        },
+        {
+          "symbol": "lp_competition_Bench_run___boxed",
+          "bytes": 18
+        },
+        {
+          "symbol": "lp_competition_Bench_sweep",
+          "bytes": 298
+        },
+        {
+          "symbol": "lp_competition_Bench_sweep___boxed",
+          "bytes": 104
+        },
+        {
+          "symbol": "lp_competition___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00Bench_sweep3_spec__0",
+          "bytes": 5
+        },
+        {
+          "symbol": "lp_competition___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00Bench_sweep3_spec__0___boxed",
+          "bytes": 153
+        },
+        {
+          "symbol": "lp_competition___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00Bench_sweep3_spec__0___redArg",
+          "bytes": 1312
+        },
+        {
+          "symbol": "lp_competition___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00Bench_sweep3_spec__0___redArg___boxed",
+          "bytes": 153
+        },
+        {
+          "symbol": "lp_competition___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00Bench_sweep_spec__0",
+          "bytes": 5
+        },
+        {
+          "symbol": "lp_competition___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00Bench_sweep_spec__0___boxed",
+          "bytes": 153
+        },
+        {
+          "symbol": "lp_competition___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00Bench_sweep_spec__0___redArg",
+          "bytes": 880
+        },
+        {
+          "symbol": "lp_competition___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00Bench_sweep_spec__0___redArg___boxed",
+          "bytes": 153
+        }
+      ]
+    },
+    {
+      "module": "BenchFull",
+      "C_sha256": "f0dd6ef5182ef899afe4b286ef554390f358527c104133b44d274631965522c5",
+      "C_bytes": 66403,
+      "recorded_object_sha256": "aca0f9a70ab767a5890fca95bbb2c0c9a833d9c7886f7a4ab38d1a87ae17a104",
+      "recorded_object_bytes": 39584,
+      "recorded_before_after_object_hash_equal": true,
+      "object_packaged": false,
+      "object_path": "/tmp/r7w11-build/official/lean/.lake/build/ir/BenchFull.c.o.export",
+      "ELF_class": "ELF64",
+      "ELF_type": "REL (Relocatable file)",
+      "roots": [
+        {
+          "symbol": "lp_competition_Bench_runFull",
+          "bytes": 1081
+        },
+        {
+          "symbol": "lp_competition_Bench_runFull___boxed",
+          "bytes": 5
+        },
+        {
+          "symbol": "lp_competition_Bench_runPairsAs",
+          "bytes": 659
+        },
+        {
+          "symbol": "lp_competition_Bench_runPairsAs___boxed",
+          "bytes": 47
+        }
+      ]
+    },
+    {
+      "module": "BenchSuite",
+      "C_sha256": "959b8a6c43010728275d57b3087f4b15a14035dc40832ed713439073cad8a1a7",
+      "C_bytes": 393988,
+      "recorded_object_sha256": "5f9647fdd7f2864a78942e51d6d3117754f4a97a58182cd295f26a53edbdb374",
+      "recorded_object_bytes": 287352,
+      "recorded_before_after_object_hash_equal": true,
+      "object_packaged": false,
+      "object_path": "/tmp/r7w11-build/official/lean/.lake/build/ir/BenchSuite.c.o.export",
+      "ELF_class": "ELF64",
+      "ELF_type": "REL (Relocatable file)",
+      "roots": [
+        {
+          "symbol": "lp_competition_Bench_Suite_run",
+          "bytes": 3109
+        },
+        {
+          "symbol": "lp_competition_Bench_Suite_runScalar",
+          "bytes": 225
+        },
+        {
+          "symbol": "lp_competition_Bench_Suite_runScalar___boxed",
+          "bytes": 5
+        },
+        {
+          "symbol": "lp_competition_Bench_Suite_runScalar___lam__0",
+          "bytes": 152
+        },
+        {
+          "symbol": "lp_competition_Bench_Suite_runScalar___lam__0___boxed",
+          "bytes": 191
+        },
+        {
+          "symbol": "lp_competition_Bench_Suite_runScalar___lam__1",
+          "bytes": 23
+        },
+        {
+          "symbol": "lp_competition_Bench_Suite_runScalar___lam__1___boxed",
+          "bytes": 111
+        },
+        {
+          "symbol": "lp_competition_Bench_Suite_run___boxed",
+          "bytes": 5
+        },
+        {
+          "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_forIn_x27Unsafe_loop___at___00Bench_Suite_runScalar_spec__0",
+          "bytes": 301
+        },
+        {
+          "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_forIn_x27Unsafe_loop___at___00Bench_Suite_runScalar_spec__0___boxed",
+          "bytes": 232
+        }
+      ]
+    }
+  ],
+  "exact_clang_command_bindings": [
+    {
+      "log": "logs/official-resume.stdout",
+      "line": 5660,
+      "raw_command": "trace: .> /tmp/r7w06-toolchain/lean-4.34.0-linux/bin/clang -c -o /tmp/r7w11-build/official/lean/.lake/build/ir/MainFull.c.o.export /tmp/r7w11-build/official/lean/.lake/build/ir/MainFull.c -I /tmp/r7w06-toolchain/lean-4.34.0-linux/include -fstack-clash-protection -ffp-contract=off -fdata-sections -ffunction-sections -fPIC -fvisibility=hidden -Wno-unused-command-line-argument --sysroot /tmp/r7w06-toolchain/lean-4.34.0-linux -nostdinc -isystem /tmp/r7w06-toolchain/lean-4.34.0-linux/include/clang -O3 -DNDEBUG -DLEAN_EXPORTING",
+      "raw_log_line_equal": true
+    },
+    {
+      "log": "logs/target-facets.stdout",
+      "line": 5478,
+      "raw_command": "trace: .> /tmp/r7w06-toolchain/lean-4.34.0-linux/bin/clang -c -o /tmp/r7w11-build/official/lean/.lake/build/ir/Bench.c.o.export /tmp/r7w11-build/official/lean/.lake/build/ir/Bench.c -I /tmp/r7w06-toolchain/lean-4.34.0-linux/include -fstack-clash-protection -ffp-contract=off -fdata-sections -ffunction-sections -fPIC -fvisibility=hidden -Wno-unused-command-line-argument --sysroot /tmp/r7w06-toolchain/lean-4.34.0-linux -nostdinc -isystem /tmp/r7w06-toolchain/lean-4.34.0-linux/include/clang -O3 -DNDEBUG -DLEAN_EXPORTING",
+      "raw_log_line_equal": true
+    },
+    {
+      "log": "logs/target-facets.stdout",
+      "line": 5486,
+      "raw_command": "trace: .> /tmp/r7w06-toolchain/lean-4.34.0-linux/bin/clang -c -o /tmp/r7w11-build/official/lean/.lake/build/ir/BenchFull.c.o.export /tmp/r7w11-build/official/lean/.lake/build/ir/BenchFull.c -I /tmp/r7w06-toolchain/lean-4.34.0-linux/include -fstack-clash-protection -ffp-contract=off -fdata-sections -ffunction-sections -fPIC -fvisibility=hidden -Wno-unused-command-line-argument --sysroot /tmp/r7w06-toolchain/lean-4.34.0-linux -nostdinc -isystem /tmp/r7w06-toolchain/lean-4.34.0-linux/include/clang -O3 -DNDEBUG -DLEAN_EXPORTING",
+      "raw_log_line_equal": true
+    },
+    {
+      "log": "logs/target-facets.stdout",
+      "line": 5663,
+      "raw_command": "trace: .> /tmp/r7w06-toolchain/lean-4.34.0-linux/bin/clang -c -o /tmp/r7w11-build/official/lean/.lake/build/ir/Submission.c.o.export /tmp/r7w11-build/official/lean/.lake/build/ir/Submission.c -I /tmp/r7w06-toolchain/lean-4.34.0-linux/include -fstack-clash-protection -ffp-contract=off -fdata-sections -ffunction-sections -fPIC -fvisibility=hidden -Wno-unused-command-line-argument --sysroot /tmp/r7w06-toolchain/lean-4.34.0-linux -nostdinc -isystem /tmp/r7w06-toolchain/lean-4.34.0-linux/include/clang -O3 -DNDEBUG -DLEAN_EXPORTING",
+      "raw_log_line_equal": true
+    },
+    {
+      "log": "logs/target-facets.stdout",
+      "line": 5665,
+      "raw_command": "trace: .> /tmp/r7w06-toolchain/lean-4.34.0-linux/bin/clang -c -o /tmp/r7w11-build/official/lean/.lake/build/ir/BenchSuite.c.o.export /tmp/r7w11-build/official/lean/.lake/build/ir/BenchSuite.c -I /tmp/r7w06-toolchain/lean-4.34.0-linux/include -fstack-clash-protection -ffp-contract=off -fdata-sections -ffunction-sections -fPIC -fvisibility=hidden -Wno-unused-command-line-argument --sysroot /tmp/r7w06-toolchain/lean-4.34.0-linux -nostdinc -isystem /tmp/r7w06-toolchain/lean-4.34.0-linux/include/clang -O3 -DNDEBUG -DLEAN_EXPORTING",
+      "raw_log_line_equal": true
+    },
+    {
+      "log": "logs/target-facets.stdout",
+      "line": 5669,
+      "raw_command": "trace: .> /tmp/r7w06-toolchain/lean-4.34.0-linux/bin/clang -c -o /tmp/r7w11-build/official/lean/.lake/build/ir/MainFull.c.o.export /tmp/r7w11-build/official/lean/.lake/build/ir/MainFull.c -I /tmp/r7w06-toolchain/lean-4.34.0-linux/include -fstack-clash-protection -ffp-contract=off -fdata-sections -ffunction-sections -fPIC -fvisibility=hidden -Wno-unused-command-line-argument --sysroot /tmp/r7w06-toolchain/lean-4.34.0-linux -nostdinc -isystem /tmp/r7w06-toolchain/lean-4.34.0-linux/include/clang -O3 -DNDEBUG -DLEAN_EXPORTING",
+      "raw_log_line_equal": true
+    }
+  ],
+  "build_attempts": [
+    {
+      "argv": [
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lake",
+        "-v",
+        "build",
+        "VerifyFull",
+        "benchFull"
+      ],
+      "cwd": "/tmp/r7w11-build/official/lean",
+      "started_utc": "2026-10-22T22:35:03.846635+00:00",
+      "finished_utc": "2026-10-22T22:45:04.115750+00:00",
+      "timeout_seconds": 600,
+      "exit_code": 124
+    },
+    {
+      "argv": [
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lake",
+        "-v",
+        "build",
+        "VerifyFull",
+        "benchFull"
+      ],
+      "cwd": "/tmp/r7w11-build/official/lean",
+      "started_utc": "2026-10-22T22:48:02.123587+00:00",
+      "finished_utc": "2026-10-22T22:49:42.248536+00:00",
+      "timeout_seconds": 100,
+      "exit_code": 124
+    },
+    {
+      "argv": [
+        "/tmp/r7w06-toolchain/lean-4.34.0-linux/bin/lake",
+        "-v",
+        "build",
+        "+Submission:c.o",
+        "+MainFull:c.o",
+        "+BenchSuite:c.o",
+        "+BenchFull:c.o",
+        "+Bench:c.o"
+      ],
+      "cwd": "/tmp/r7w11-build/official/lean",
+      "started_utc": "2026-10-22T22:45:34.832591+00:00",
+      "finished_utc": "2026-10-22T22:47:16.540872+00:00",
+      "timeout_seconds": 260,
+      "exit_code": 0
+    }
+  ],
+  "build_artifacts_benchFull": {
+    "module": "benchFull",
+    "path": "/tmp/r7w11-build/official/lean/.lake/build/bin/benchFull",
+    "exists": false,
+    "packaged": false
+  },
+  "symbols": {
+    "lp_competition_main___lam__0": {
+      "object": "MainFull",
+      "symbol": "lp_competition_main___lam__0",
+      "size_bytes": 238,
+      "encoded_bytes_reconstructed": 238,
+      "reconstructed_function_bytes_sha256": "387840be26b00a62bdf27d1c24b31ef9d994a9072235620c84604ebeaf8880ce",
+      "raw_first_instruction_line": 8,
+      "raw_last_instruction_line": 71,
+      "instruction_sites": 64,
+      "static_transfers": [
+        {
+          "address_hex": "0x9",
+          "kind": "cross_symbol_branch",
+          "mnemonic": "je",
+          "target": "lp_competition_Submission_TunedAdd_add"
+        },
+        {
+          "address_hex": "0x18",
+          "kind": "cross_symbol_branch",
+          "mnemonic": "je",
+          "target": "lp_competition_Submission_TunedAdd_add"
+        },
+        {
+          "address_hex": "0x44",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_float32_of_bits"
+        },
+        {
+          "address_hex": "0xa2",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_float32_of_bits"
+        },
+        {
+          "address_hex": "0xe9",
+          "kind": "cross_symbol_branch",
+          "mnemonic": "jmp",
+          "target": "lean_float32_to_bits"
+        }
+      ]
+    },
+    "lp_competition_main___lam__1": {
+      "object": "MainFull",
+      "symbol": "lp_competition_main___lam__1",
+      "size_bytes": 884,
+      "encoded_bytes_reconstructed": 884,
+      "reconstructed_function_bytes_sha256": "37b69abf620162d1decb820b143e5279042ddc6dad13e71bc02771dd2b08a96a",
+      "raw_first_instruction_line": 123,
+      "raw_last_instruction_line": 370,
+      "instruction_sites": 248,
+      "static_transfers": [
+        {
+          "address_hex": "0x39",
+          "kind": "cross_symbol_branch",
+          "mnemonic": "jmp",
+          "target": "lp_competition_Submission_FastMul_mul"
+        },
+        {
+          "address_hex": "0x1de",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_MulBackend_word___at___00FloatLib_Floats_Formats_BinaryInterchange_Configured_Plan_softwareMul32Certified_spec__1"
+        },
+        {
+          "address_hex": "0x1ee",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_uint32_of_big_nat"
+        },
+        {
+          "address_hex": "0x20d",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_float32_of_bits"
+        },
+        {
+          "address_hex": "0x21a",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_float32_of_bits"
+        },
+        {
+          "address_hex": "0x22c",
+          "kind": "cross_symbol_branch",
+          "mnemonic": "jmp",
+          "target": "lean_float32_to_bits"
+        },
+        {
+          "address_hex": "0x364",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_dec_ref_cold"
+        }
+      ]
+    },
+    "lp_competition_main___lam__3": {
+      "object": "MainFull",
+      "symbol": "lp_competition_main___lam__3",
+      "size_bytes": 884,
+      "encoded_bytes_reconstructed": 884,
+      "reconstructed_function_bytes_sha256": "37b69abf620162d1decb820b143e5279042ddc6dad13e71bc02771dd2b08a96a",
+      "raw_first_instruction_line": 422,
+      "raw_last_instruction_line": 669,
+      "instruction_sites": 248,
+      "static_transfers": [
+        {
+          "address_hex": "0x39",
+          "kind": "cross_symbol_branch",
+          "mnemonic": "jmp",
+          "target": "lp_competition_Submission_FastMul_mul"
+        },
+        {
+          "address_hex": "0x1de",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_MulBackend_word___at___00FloatLib_Floats_Formats_BinaryInterchange_Configured_Plan_softwareMul32Certified_spec__1"
+        },
+        {
+          "address_hex": "0x1ee",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_uint32_of_big_nat"
+        },
+        {
+          "address_hex": "0x20d",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_float32_of_bits"
+        },
+        {
+          "address_hex": "0x21a",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_float32_of_bits"
+        },
+        {
+          "address_hex": "0x22c",
+          "kind": "cross_symbol_branch",
+          "mnemonic": "jmp",
+          "target": "lean_float32_to_bits"
+        },
+        {
+          "address_hex": "0x364",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_dec_ref_cold"
+        }
+      ],
+      "ordinary_finite_path": {
+        "condition": "exp_x+exp_y>=128 and both exponent fields!=255",
+        "entry_range": [
+          0,
+          50
+        ],
+        "native_range": [
+          522,
+          561
+        ],
+        "emitted_bytes": 89,
+        "instruction_sites": 26,
+        "instructions": [
+          {
+            "offset": 0,
+            "bytes": 2,
+            "encoded_hex": "4156",
+            "instruction": "push   %r14",
+            "raw_line": 422
+          },
+          {
+            "offset": 2,
+            "bytes": 1,
+            "encoded_hex": "53",
+            "instruction": "push   %rbx",
+            "raw_line": 423
+          },
+          {
+            "offset": 3,
+            "bytes": 1,
+            "encoded_hex": "50",
+            "instruction": "push   %rax",
+            "raw_line": 424
+          },
+          {
+            "offset": 4,
+            "bytes": 2,
+            "encoded_hex": "89f8",
+            "instruction": "mov    %edi,%eax",
+            "raw_line": 425
+          },
+          {
+            "offset": 6,
+            "bytes": 3,
+            "encoded_hex": "c1e817",
+            "instruction": "shr    $0x17,%eax",
+            "raw_line": 426
+          },
+          {
+            "offset": 9,
+            "bytes": 3,
+            "encoded_hex": "0fb6c8",
+            "instruction": "movzbl %al,%ecx",
+            "raw_line": 427
+          },
+          {
+            "offset": 12,
+            "bytes": 2,
+            "encoded_hex": "89f0",
+            "instruction": "mov    %esi,%eax",
+            "raw_line": 428
+          },
+          {
+            "offset": 14,
+            "bytes": 3,
+            "encoded_hex": "c1e817",
+            "instruction": "shr    $0x17,%eax",
+            "raw_line": 429
+          },
+          {
+            "offset": 17,
+            "bytes": 3,
+            "encoded_hex": "0fb6c0",
+            "instruction": "movzbl %al,%eax",
+            "raw_line": 430
+          },
+          {
+            "offset": 20,
+            "bytes": 3,
+            "encoded_hex": "8d1408",
+            "instruction": "lea    (%rax,%rcx,1),%edx",
+            "raw_line": 431
+          },
+          {
+            "offset": 23,
+            "bytes": 6,
+            "encoded_hex": "81fa80000000",
+            "instruction": "cmp    $0x80,%edx",
+            "raw_line": 432
+          },
+          {
+            "offset": 29,
+            "bytes": 2,
+            "encoded_hex": "721f",
+            "instruction": "jb     3e <lp_competition_main___lam__3+0x3e>",
+            "raw_line": 433
+          },
+          {
+            "offset": 31,
+            "bytes": 6,
+            "encoded_hex": "81f9ff000000",
+            "instruction": "cmp    $0xff,%ecx",
+            "raw_line": 434
+          },
+          {
+            "offset": 37,
+            "bytes": 2,
+            "encoded_hex": "740b",
+            "instruction": "je     32 <lp_competition_main___lam__3+0x32>",
+            "raw_line": 435
+          },
+          {
+            "offset": 39,
+            "bytes": 5,
+            "encoded_hex": "3dff000000",
+            "instruction": "cmp    $0xff,%eax",
+            "raw_line": 436
+          },
+          {
+            "offset": 44,
+            "bytes": 6,
+            "encoded_hex": "0f85d8010000",
+            "instruction": "jne    20a <lp_competition_main___lam__3+0x20a>",
+            "raw_line": 437
+          },
+          {
+            "offset": 522,
+            "bytes": 3,
+            "encoded_hex": "4889f3",
+            "instruction": "mov    %rsi,%rbx",
+            "raw_line": 560
+          },
+          {
+            "offset": 525,
+            "bytes": 5,
+            "encoded_hex": "e800000000",
+            "instruction": "call   212 <lp_competition_main___lam__3+0x212>",
+            "raw_line": 561
+          },
+          {
+            "offset": 530,
+            "bytes": 6,
+            "encoded_hex": "f30f11442404",
+            "instruction": "movss  %xmm0,0x4(%rsp)",
+            "raw_line": 562
+          },
+          {
+            "offset": 536,
+            "bytes": 2,
+            "encoded_hex": "89df",
+            "instruction": "mov    %ebx,%edi",
+            "raw_line": 563
+          },
+          {
+            "offset": 538,
+            "bytes": 5,
+            "encoded_hex": "e800000000",
+            "instruction": "call   21f <lp_competition_main___lam__3+0x21f>",
+            "raw_line": 564
+          },
+          {
+            "offset": 543,
+            "bytes": 6,
+            "encoded_hex": "f30f59442404",
+            "instruction": "mulss  0x4(%rsp),%xmm0",
+            "raw_line": 565
+          },
+          {
+            "offset": 549,
+            "bytes": 4,
+            "encoded_hex": "4883c408",
+            "instruction": "add    $0x8,%rsp",
+            "raw_line": 566
+          },
+          {
+            "offset": 553,
+            "bytes": 1,
+            "encoded_hex": "5b",
+            "instruction": "pop    %rbx",
+            "raw_line": 567
+          },
+          {
+            "offset": 554,
+            "bytes": 2,
+            "encoded_hex": "415e",
+            "instruction": "pop    %r14",
+            "raw_line": 568
+          },
+          {
+            "offset": 556,
+            "bytes": 5,
+            "encoded_hex": "e900000000",
+            "instruction": "jmp    231 <lp_competition_main___lam__3+0x231>",
+            "raw_line": 569
+          }
+        ]
+      }
+    },
+    "lp_competition_main___lam__3___boxed": {
+      "object": "MainFull",
+      "symbol": "lp_competition_main___lam__3___boxed",
+      "size_bytes": 116,
+      "encoded_bytes_reconstructed": 116,
+      "reconstructed_function_bytes_sha256": "35873c193bf481059b1ebae9a0b70bb75e9738b18199cf2a3d02bf061b6b59df",
+      "raw_first_instruction_line": 674,
+      "raw_last_instruction_line": 716,
+      "instruction_sites": 43,
+      "static_transfers": [
+        {
+          "address_hex": "0x2c",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lp_competition_main___lam__3"
+        },
+        {
+          "address_hex": "0x4d",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_dec_ref_cold"
+        },
+        {
+          "address_hex": "0x67",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_dec_ref_cold"
+        }
+      ]
+    },
+    "lp_competition_Submission_mul": {
+      "object": "Submission",
+      "symbol": "lp_competition_Submission_mul",
+      "size_bytes": 894,
+      "encoded_bytes_reconstructed": 894,
+      "reconstructed_function_bytes_sha256": "e0b5fd2244ea6497c3bd87bd6c890f0282a9cc6c7b0c113d09d40c969cd8ae40",
+      "raw_first_instruction_line": 5582,
+      "raw_last_instruction_line": 5831,
+      "instruction_sites": 250,
+      "static_transfers": [
+        {
+          "address_hex": "0x39",
+          "kind": "cross_symbol_branch",
+          "mnemonic": "jmp",
+          "target": "lp_competition_Submission_FastMul_mul"
+        },
+        {
+          "address_hex": "0x1e8",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_MulBackend_word"
+        },
+        {
+          "address_hex": "0x1f8",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_uint32_of_big_nat"
+        },
+        {
+          "address_hex": "0x217",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_float32_of_bits"
+        },
+        {
+          "address_hex": "0x224",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_float32_of_bits"
+        },
+        {
+          "address_hex": "0x236",
+          "kind": "cross_symbol_branch",
+          "mnemonic": "jmp",
+          "target": "lean_float32_to_bits"
+        },
+        {
+          "address_hex": "0x36e",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_dec_ref_cold"
+        }
+      ],
+      "ordinary_finite_path": {
+        "condition": "exp_x+exp_y>=128 and both exponent fields!=255",
+        "entry_range": [
+          0,
+          50
+        ],
+        "native_range": [
+          532,
+          571
+        ],
+        "emitted_bytes": 89,
+        "instruction_sites": 26,
+        "instructions": [
+          {
+            "offset": 0,
+            "bytes": 2,
+            "encoded_hex": "4156",
+            "instruction": "push   %r14",
+            "raw_line": 5582
+          },
+          {
+            "offset": 2,
+            "bytes": 1,
+            "encoded_hex": "53",
+            "instruction": "push   %rbx",
+            "raw_line": 5583
+          },
+          {
+            "offset": 3,
+            "bytes": 1,
+            "encoded_hex": "50",
+            "instruction": "push   %rax",
+            "raw_line": 5584
+          },
+          {
+            "offset": 4,
+            "bytes": 2,
+            "encoded_hex": "89f8",
+            "instruction": "mov    %edi,%eax",
+            "raw_line": 5585
+          },
+          {
+            "offset": 6,
+            "bytes": 3,
+            "encoded_hex": "c1e817",
+            "instruction": "shr    $0x17,%eax",
+            "raw_line": 5586
+          },
+          {
+            "offset": 9,
+            "bytes": 3,
+            "encoded_hex": "0fb6c8",
+            "instruction": "movzbl %al,%ecx",
+            "raw_line": 5587
+          },
+          {
+            "offset": 12,
+            "bytes": 2,
+            "encoded_hex": "89f0",
+            "instruction": "mov    %esi,%eax",
+            "raw_line": 5588
+          },
+          {
+            "offset": 14,
+            "bytes": 3,
+            "encoded_hex": "c1e817",
+            "instruction": "shr    $0x17,%eax",
+            "raw_line": 5589
+          },
+          {
+            "offset": 17,
+            "bytes": 3,
+            "encoded_hex": "0fb6c0",
+            "instruction": "movzbl %al,%eax",
+            "raw_line": 5590
+          },
+          {
+            "offset": 20,
+            "bytes": 3,
+            "encoded_hex": "8d1408",
+            "instruction": "lea    (%rax,%rcx,1),%edx",
+            "raw_line": 5591
+          },
+          {
+            "offset": 23,
+            "bytes": 6,
+            "encoded_hex": "81fa80000000",
+            "instruction": "cmp    $0x80,%edx",
+            "raw_line": 5592
+          },
+          {
+            "offset": 29,
+            "bytes": 2,
+            "encoded_hex": "721f",
+            "instruction": "jb     3e <lp_competition_Submission_mul+0x3e>",
+            "raw_line": 5593
+          },
+          {
+            "offset": 31,
+            "bytes": 6,
+            "encoded_hex": "81f9ff000000",
+            "instruction": "cmp    $0xff,%ecx",
+            "raw_line": 5594
+          },
+          {
+            "offset": 37,
+            "bytes": 2,
+            "encoded_hex": "740b",
+            "instruction": "je     32 <lp_competition_Submission_mul+0x32>",
+            "raw_line": 5595
+          },
+          {
+            "offset": 39,
+            "bytes": 5,
+            "encoded_hex": "3dff000000",
+            "instruction": "cmp    $0xff,%eax",
+            "raw_line": 5596
+          },
+          {
+            "offset": 44,
+            "bytes": 6,
+            "encoded_hex": "0f85e2010000",
+            "instruction": "jne    214 <lp_competition_Submission_mul+0x214>",
+            "raw_line": 5597
+          },
+          {
+            "offset": 532,
+            "bytes": 3,
+            "encoded_hex": "4889f3",
+            "instruction": "mov    %rsi,%rbx",
+            "raw_line": 5722
+          },
+          {
+            "offset": 535,
+            "bytes": 5,
+            "encoded_hex": "e800000000",
+            "instruction": "call   21c <lp_competition_Submission_mul+0x21c>",
+            "raw_line": 5723
+          },
+          {
+            "offset": 540,
+            "bytes": 6,
+            "encoded_hex": "f30f11442404",
+            "instruction": "movss  %xmm0,0x4(%rsp)",
+            "raw_line": 5724
+          },
+          {
+            "offset": 546,
+            "bytes": 2,
+            "encoded_hex": "89df",
+            "instruction": "mov    %ebx,%edi",
+            "raw_line": 5725
+          },
+          {
+            "offset": 548,
+            "bytes": 5,
+            "encoded_hex": "e800000000",
+            "instruction": "call   229 <lp_competition_Submission_mul+0x229>",
+            "raw_line": 5726
+          },
+          {
+            "offset": 553,
+            "bytes": 6,
+            "encoded_hex": "f30f59442404",
+            "instruction": "mulss  0x4(%rsp),%xmm0",
+            "raw_line": 5727
+          },
+          {
+            "offset": 559,
+            "bytes": 4,
+            "encoded_hex": "4883c408",
+            "instruction": "add    $0x8,%rsp",
+            "raw_line": 5728
+          },
+          {
+            "offset": 563,
+            "bytes": 1,
+            "encoded_hex": "5b",
+            "instruction": "pop    %rbx",
+            "raw_line": 5729
+          },
+          {
+            "offset": 564,
+            "bytes": 2,
+            "encoded_hex": "415e",
+            "instruction": "pop    %r14",
+            "raw_line": 5730
+          },
+          {
+            "offset": 566,
+            "bytes": 5,
+            "encoded_hex": "e900000000",
+            "instruction": "jmp    23b <lp_competition_Submission_mul+0x23b>",
+            "raw_line": 5731
+          }
+        ]
+      }
+    },
+    "lp_competition_Submission_LowScale_mul": {
+      "object": "Submission",
+      "symbol": "lp_competition_Submission_LowScale_mul",
+      "size_bytes": 843,
+      "encoded_bytes_reconstructed": 843,
+      "reconstructed_function_bytes_sha256": "e5af6a85ef1d94cb22e51ec7f476b4c81677c83d07dd81f9223506b93a75336c",
+      "raw_first_instruction_line": 5083,
+      "raw_last_instruction_line": 5324,
+      "instruction_sites": 242,
+      "static_transfers": [
+        {
+          "address_hex": "0x3d",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_MulBackend_word"
+        },
+        {
+          "address_hex": "0x51",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_uint32_of_big_nat"
+        },
+        {
+          "address_hex": "0x33b",
+          "kind": "call",
+          "mnemonic": "call",
+          "target": "lean_dec_ref_cold"
+        }
+      ]
+    }
+  },
+  "primary_evidence_registry": {
+    "source/Kernel.lean": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/Kernel.lean",
+      "bytes": 155103,
+      "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/kernel-identity.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/kernel-identity.json",
+      "bytes": 347,
+      "sha256": "4319d8129e1777cff5efb983982ac6d822381c8e53e24efdfaa07370537f6f98",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/kernel-final-identity.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/kernel-final-identity.json",
+      "bytes": 226,
+      "sha256": "dd0e7e150f8ff19f6039ffcd0bd36f4c9652ccc2624fad5958b4e914ade01c79",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "source/toolchain/include/lean/lean.h": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/toolchain/include/lean/lean.h",
+      "bytes": 136786,
+      "sha256": "982c731a1fbacc7688006f44f9f7af9d9e3e0247d310a728827f49e7f1466c13",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "source/official/lean/lakefile.lean": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/official/lean/lakefile.lean",
+      "bytes": 3864,
+      "sha256": "74fa88c2847c0a988ad24d9e09489429582532a77f05e7b013a5ff38645e582b",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/build-artifacts.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/build-artifacts.json",
+      "bytes": 13211,
+      "sha256": "99c002744f80cc8fc8bef73ce806d8d2017ba1495afa4bb879b3fe6a1648ffd1",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/target-clang-commands.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/target-clang-commands.json",
+      "bytes": 3705,
+      "sha256": "1274950694f640e443d36162b4ccc4c86f6053a46db33dd6fae69848b7e36419",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/index.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/index.json",
+      "bytes": 5644,
+      "sha256": "a8ea473c0e1b426ef64ad9497bf3c03f6d39fad53bf03a8f91d04e5104c24abd",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "generated/Submission.c": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/Submission.c",
+      "bytes": 715720,
+      "sha256": "69cc5063eb3fadad54df3a0b849c0261d7eae170a56bf25ec830c1dadfc0c7d6",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/Submission.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/Submission.json",
+      "bytes": 2327437,
+      "sha256": "01a73a65745cf47cebb5b7722adb810d6714f3b6eaf8d4238128be9b826d7012",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Submission/readelf-symbols.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Submission/readelf-symbols.stdout",
+      "bytes": 59997,
+      "sha256": "9528c988a59e65ccf6ea8ea2c3e7a26ebd8053fc4a410c0ede188fe246141676",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Submission/readelf-symbols.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Submission/readelf-symbols.command.json",
+      "bytes": 208,
+      "sha256": "13524e9b590c4fbdf77de9b5b1f59f8c1a1178bb2b576d7d4086bb3f9aa4ee05",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Submission/readelf-symbols.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Submission/readelf-symbols.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Submission/objdump-disassembly.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Submission/objdump-disassembly.stdout",
+      "bytes": 1389862,
+      "sha256": "f4aabc792740f73c11363ae0ac285fe2ea2d4da866847b84f7b55d65572745af",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Submission/objdump-disassembly.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Submission/objdump-disassembly.command.json",
+      "bytes": 210,
+      "sha256": "474eee8efd2dafdedfc79451b973462cc2b1731c2e4fb7b711bb10dab87d7695",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Submission/objdump-disassembly.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Submission/objdump-disassembly.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "generated/MainFull.c": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/MainFull.c",
+      "bytes": 83831,
+      "sha256": "72d050dd6da03770c38f0344f8f4c0bfd1c25f62a236d636acc1f496d4524aad",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/MainFull.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/MainFull.json",
+      "bytes": 137452,
+      "sha256": "622c30ea625c92cc4d20e6718e2b65fbc090b816b312bf3537cbad277073cc74",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/MainFull/readelf-symbols.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/readelf-symbols.stdout",
+      "bytes": 6244,
+      "sha256": "c63047ff8851b1043ba23e2cc250f5f39d899659a47dc69472159e5385f2676f",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/MainFull/readelf-symbols.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/readelf-symbols.command.json",
+      "bytes": 206,
+      "sha256": "39b0810bee2a97ebfd7c0128457539a267459f45c7c34c5532f3012702a9c19e",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/MainFull/readelf-symbols.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/readelf-symbols.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/MainFull/objdump-disassembly.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/objdump-disassembly.stdout",
+      "bytes": 53775,
+      "sha256": "b0f1a5ca130057f486431b5c12c5c6aa4967dfe269ba7f374bafd431f4876d02",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/MainFull/objdump-disassembly.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/objdump-disassembly.command.json",
+      "bytes": 208,
+      "sha256": "9c5f2340bb35aca0997b71ffded9f203dd60446d9b49c11fd7e9a9445389a856",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/MainFull/objdump-disassembly.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/objdump-disassembly.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "generated/Bench.c": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/Bench.c",
+      "bytes": 148451,
+      "sha256": "0e241f41ba3de5d960a9e36e99db572d14783d8549e820c8d2df6744746e8894",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/Bench.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/Bench.json",
+      "bytes": 1549367,
+      "sha256": "f17fb89fba25608dfed6ab83c021a721775b4239c279750195fbb66dafc4d9ad",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Bench/readelf-symbols.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Bench/readelf-symbols.stdout",
+      "bytes": 64329,
+      "sha256": "9147c826f04e3508ac3fa0a8449f95948cd9a06c017c2132adc5c98ec2b2a229",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Bench/readelf-symbols.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Bench/readelf-symbols.command.json",
+      "bytes": 203,
+      "sha256": "e09b90e409331f950b93a2849062c97f790af359e943724ce749f9ecbc974258",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Bench/readelf-symbols.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Bench/readelf-symbols.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Bench/objdump-disassembly.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Bench/objdump-disassembly.stdout",
+      "bytes": 620196,
+      "sha256": "c916833b0dd77d813b81942905fcd99888d489516b7893536af1084610eb373e",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Bench/objdump-disassembly.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Bench/objdump-disassembly.command.json",
+      "bytes": 205,
+      "sha256": "1c92c106e09c17e5d2bcce2d45abe672ab1a5af21785cdc302635dcb1cad0c81",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/Bench/objdump-disassembly.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/Bench/objdump-disassembly.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "generated/BenchFull.c": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/BenchFull.c",
+      "bytes": 66403,
+      "sha256": "f0dd6ef5182ef899afe4b286ef554390f358527c104133b44d274631965522c5",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/BenchFull.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/BenchFull.json",
+      "bytes": 628543,
+      "sha256": "37e5a5196e65703911d27f32580115a6421f71d2a4e22150589abeabe41d1d9b",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchFull/readelf-symbols.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchFull/readelf-symbols.stdout",
+      "bytes": 13317,
+      "sha256": "694b2355c5655a27e9fe77fb292423cc2c4c0087399c424fd6805b9b3a2ddb1c",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchFull/readelf-symbols.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchFull/readelf-symbols.command.json",
+      "bytes": 207,
+      "sha256": "590a9fe56915313b237f94059aca27873735389f0be2c4789381cae14bc6e828",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchFull/readelf-symbols.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchFull/readelf-symbols.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchFull/objdump-disassembly.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchFull/objdump-disassembly.stdout",
+      "bytes": 328050,
+      "sha256": "5fced090c3d6854612b080bea38ee2c2edc58343003b83d1545cafc35639b66a",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchFull/objdump-disassembly.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchFull/objdump-disassembly.command.json",
+      "bytes": 209,
+      "sha256": "0e4dc201d9769c1dcd7887ddcf2071ba1630f36a8ae84f822aecec04c9c0ef81",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchFull/objdump-disassembly.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchFull/objdump-disassembly.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "generated/BenchSuite.c": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/generated/BenchSuite.c",
+      "bytes": 393988,
+      "sha256": "959b8a6c43010728275d57b3087f4b15a14035dc40832ed713439073cad8a1a7",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/BenchSuite.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/BenchSuite.json",
+      "bytes": 3901902,
+      "sha256": "f2afa92aaa603f6bf314ea610b3aea365530207ad5a902404e95eba1f1786986",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchSuite/readelf-symbols.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchSuite/readelf-symbols.stdout",
+      "bytes": 137589,
+      "sha256": "13ca31d2cc7ae481b948bf3ad83ca9a154f5e6ec397006d42712472d52771a3f",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchSuite/readelf-symbols.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchSuite/readelf-symbols.command.json",
+      "bytes": 208,
+      "sha256": "0e7641565e40c651e15b3c837ff7d3172d77d2c2dbddcd4f8e90a88ead34f647",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchSuite/readelf-symbols.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchSuite/readelf-symbols.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchSuite/objdump-disassembly.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchSuite/objdump-disassembly.stdout",
+      "bytes": 1832808,
+      "sha256": "c59277b038bcac331dad6b0b9974c6f3ee6cdb4f6a86b582390ba8f3b7cc5a19",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchSuite/objdump-disassembly.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchSuite/objdump-disassembly.command.json",
+      "bytes": 210,
+      "sha256": "096e2996f069dbf649d596079c973232f1e4b9c9a47e96b0ec14e337ae1de96d",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/BenchSuite/objdump-disassembly.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/BenchSuite/objdump-disassembly.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/MainFull/readelf-header.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/readelf-header.stdout",
+      "bytes": 951,
+      "sha256": "15f9cf7da9b630d5d8ffb4c6103512e396c854e47d505e8aeaff46a26bc04135",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/MainFull/readelf-relocations.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/readelf-relocations.stdout",
+      "bytes": 14028,
+      "sha256": "b0669cb0561377d7fe1763aaadfe9f47737e13f85a86a6dbde199b2a3e3ce0ab",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/MainFull/readelf-relocations.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/readelf-relocations.command.json",
+      "bytes": 206,
+      "sha256": "b2c47ace97e61096152fb51d638a41b2cfb02b8884b4c2c64c8c1101ddc4ea1a",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/elf/raw/MainFull/readelf-relocations.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/elf/raw/MainFull/readelf-relocations.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/official-build.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/official-build.command.json",
+      "bytes": 897,
+      "sha256": "f7bb96baf1b0fa275a3c558f3772495280d09cc6c0a523b7ed74acb8c70cd5d6",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/official-build.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/official-build.exitcode",
+      "bytes": 4,
+      "sha256": "ca2ebdf97d7469496b1f4b78958f9dc8447efdcb623953fee7b6996b762f6fff",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/official-build.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/official-build.stdout",
+      "bytes": 5206884,
+      "sha256": "dff5cc530df95d376a5e842745833edb297cc4bba2ba8c2534dfb154cec1a3b9",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/official-resume.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/official-resume.command.json",
+      "bytes": 897,
+      "sha256": "b0e3926bba3be51a844d065b0a557602892338893be880763123eb89fa76465e",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/official-resume.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/official-resume.exitcode",
+      "bytes": 4,
+      "sha256": "ca2ebdf97d7469496b1f4b78958f9dc8447efdcb623953fee7b6996b762f6fff",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/official-resume.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/official-resume.stdout",
+      "bytes": 5397636,
+      "sha256": "4619ed6e821a7b49f65d303b90e18690828e797aea16481f5f662e08d3a809ac",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/target-facets.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/target-facets.command.json",
+      "bytes": 967,
+      "sha256": "31388080a3b4f6428ec24dd07d1dc38052fc185c2d029663b400a42abcc61825",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/target-facets.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/target-facets.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/target-facets.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/target-facets.stdout",
+      "bytes": 2609392,
+      "sha256": "0ded8fba60090eddcc6053ce22ba6977324be5f8064effc5d5b2add6230f4aec",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/toolchain-version.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/toolchain-version.command.json",
+      "bytes": 853,
+      "sha256": "cf9f9d18475bed939e27594f2fcbfc853da87867decf125683e7ca74a9832fca",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/toolchain-version.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/toolchain-version.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/toolchain-version.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/toolchain-version.stdout",
+      "bytes": 106,
+      "sha256": "cf6e65bfc214882b1c13717aae89d383a03f6bcf5c96dfbae13368cd3e07ff9d",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/clang-version.command.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/clang-version.command.json",
+      "bytes": 854,
+      "sha256": "0c8b9787e95141853671a18d6396b87e11b57fe56c23938f1056d00976153ea3",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/clang-version.exitcode": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/clang-version.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "logs/clang-version.stdout": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/logs/clang-version.stdout",
+      "bytes": 211,
+      "sha256": "f7ae65042ea8e6cf4f67cbef5cd2d295957636588523ebb2801591da216e6414",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "source/official/lean/bench/MainFull.lean": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/official/lean/bench/MainFull.lean",
+      "bytes": 482,
+      "sha256": "8bf2a6adf6bc0c6220b0a842d3c750fca171b31eb6f0095f3d86c960ebdb48dc",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "source/official/lean/bench/Bench.lean": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/official/lean/bench/Bench.lean",
+      "bytes": 8198,
+      "sha256": "e4552e256c7cd238826895741fb8b3a4d2d7d5bffe4c178daeff029096249e6b",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "source/official/lean/bench/BenchFull.lean": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/official/lean/bench/BenchFull.lean",
+      "bytes": 3736,
+      "sha256": "033fdbe9b365fd5a7e9c595dd8f4f8d5bf8ba99d404eea7c8d2de8b2e9ce44d5",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "source/official/lean/bench/BenchSuite.lean": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/official/lean/bench/BenchSuite.lean",
+      "bytes": 10064,
+      "sha256": "2f1672738e07851fdb24ed968c248fc2e6d8a3e677c27763ebd489ada9425a9f",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/dependency-revisions.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/dependency-revisions.json",
+      "bytes": 3875,
+      "sha256": "745d694b284da9502871d2d809dde0983dc4069473ef877e4ea5d43b53429a13",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/toolchain-source-files.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/toolchain-source-files.json",
+      "bytes": 833,
+      "sha256": "a0e3353828ed0bfae3f04b5df42a0f8ad3f697d7f45832ea411bb123c352efe5",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/toolchain-files.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/toolchain-files.json",
+      "bytes": 1625,
+      "sha256": "30464697711613bb0fa41cf903378ad3a7468fd83e59fc31c8e91a6add666c94",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/harness-source-manifest.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/harness-source-manifest.json",
+      "bytes": 9761,
+      "sha256": "25a5c7885b463c31313603e7d854bc814c591dce461cda6b1f91294b424a4d21",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/official-original-files.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/official-original-files.json",
+      "bytes": 33288,
+      "sha256": "f23e085e520f47d982add0c48dc1471cb9daa18e24e42c1bf767f3fc2a0caf44",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    },
+    "evidence/official-source-preservation.json": {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/official-source-preservation.json",
+      "bytes": 55573,
+      "sha256": "458756a1815d0e6970ed593052fd34b18b7906dac1856f83d1d9fd397adc03c4",
+      "matches_manifest_json": true,
+      "matches_SHA256SUMS": true
+    }
+  },
+  "limits": {
+    "new_Lean_or_compiler_execution": "NOT_RUN",
+    "fullgate_from_W11": "NOT_COMPLETED",
+    "actual_timing_from_W11": "NOT_RUN",
+    "performance_gain": "UNKNOWN",
+    "linked_placement_or_icache_profile": "UNKNOWN",
+    "apply2_runtime_internal_allocation": "NOT_INSPECTED",
+    "applicability_to_other_candidates": "NOT_ESTABLISHED",
+    "changes": "Only scalar-actual-codegen-w11-review.md/.json; no candidate, R, Git, CI, upload or toolchain installation."
+  },
+  "verification_checks": {
+    "primary_subset_dual_manifest_and_bytes": "PASS",
+    "primary_subset_unchanged_on_final_rehash": "PASS",
+    "six_symbols_raw_encoded_bytes_sizes_counts_and_SHA": "PASS",
+    "ordinary_mul_two_paths_89_bytes_26_instruction_sites": "PASS",
+    "both_MainFull_mul_bytes_and_transfer_targets_equal": "PASS",
+    "five_harness_files_manifest_original_preservation_chain": "PASS",
+    "finding_source_line_anchors_exist": "PASS",
+    "all_markdown_local_links_exist": "PASS",
+    "new_Lean_fullgate_or_timing": "NOT_RUN"
+  }
+}

@@ -22,16 +22,23 @@
 | quiet-NaN点积后缀 | 9a2a05cd；806/808完整PASS | 相对8eb整包0.80671/0.87944；raw位guard7ac在808更慢，暂不采用 |
 | 两种非有限值组合、自比较guard | b169在808只有一处证明失败；修复0e8bc05c/1f4d31aa | 固定Lean原四spec证明有精确0e8成功证据；810现行静态规则PASS，完整gate等待公开推送授权 |
 | 原生前缀、sum后缀、单项内积、标量特殊分支 | 810八个statement探针 | 精确候选已冻结，原失败保留；尚未编译/计时，不列为完整成果 |
+| 原始NaN感知单遍sum | 3d9b1ea9；W12/W12b原件与新循环独立审查 | 复用原decoder分支；首次rawNaN才精确修复，随后只扫所需尾部。静态policy PASS，新循环Lean/fullgate/收益NOT_RUN |
+| 原始位特殊值冷路 | 939dbf31；仅替换既有finite守卫失败分支，独立逆变换和条件审查通过 | NaN优先级、Inf/zero/invalid直接word处理；普通路径不改。新Lean/fullgate/C/收益NOT_RUN |
+| 低normal求和解码 | 353d9816；独立c760父本，只改真实decode，独立审查通过 | E1..23原始数学及公共片段通过；807命中cell整包曝光上限2.405%，不等于可回收时间。新USize整合Lean/fullgate/C/收益NOT_RUN |
+| 矩阵NaN冷路扫描 | 4792e967；W12像闭包＋实际Nat loop | 两处dot/finish同形；原703作用域缺口及字节已冻结。静态policy PASS，新Nat接线与完整成本NOT_RUN |
+| 单项内积负零归一化 | 47d429fe；a132最小seed证明、原53d成本对照 | 非NaN产品沿原生路径，NaN才精确修复；n!=1不改。静态policy PASS，新Lean/fullgate/收益NOT_RUN |
 | 完整调用阶段成本 | [实际C缺失返回诊断](profile-review.md)、[修复模块](profile-current.py) | 805辅助编译选择失败已修复；807实际四份binary/137次调用逐一核对通过，见[诊断及投入决定](profile-summary.json) |
 
-所有逐项数据从[精确新suite结果](public-suite-results.json)进入；失败、慢样本和原件保持原字节。21:33UTC官方核对冠军274，累计乘数含跨suite历史链；四运算看板见根dashboard.md。原CI均已自然结束并回收，研究窗口继续。
+所有逐项数据从[精确新suite结果](public-suite-results.json)进入；失败、慢样本和原件保持原字节。00:30UTC官方再次核对冠军279，比较基准同步更新；原始响应由[current-official-snapshot.json](current-official-snapshot.json)定位，四运算看板见根dashboard.md。累计乘数仍是跨suite历史链，不展示成冠军直接差距。原CI均已自然结束并回收，研究窗口继续。
 
 ## 下一验证顺序
 
-[投入依据](opportunity-ledger.json)绑定当前60f两轮逐cell时间与807实际命中，UNKNOWN收益只做最小探针；cell曝光上限不当作可回收时间。810已更新为proof2三份完整gate和八份statement，等具体公开推送授权；目前没有CI排队。后续依反馈优先处理原生前缀、标量special/raw NaN、结果守卫与低零快返，避免无反馈扩网格；分块检查点先回收数学，按实际命中计数暂缓运行优化。
+[投入依据](opportunity-ledger.json)绑定当前60f两轮逐cell时间与807实际命中，UNKNOWN收益只做最小探针；cell曝光上限不当作可回收时间。810为proof2三份完整gate和八份statement，其中canonical探针已按实际位宽失败换为ec36。等具体公开推送授权，目前没有CI排队。新运行接线先做精确statement；后续只有实际通过者进入完整成本和冻结确认，不扩近邻网格。分块检查点保留数学并停放运行，普通乘法热入口的noinline方向也没有新的机器码成本依据。
 
 [标量实际C审查](scalar-codegen-review.md)、[344项实际输出校验](scalar-opportunity-807.json)、[新桥独立静态审查](nan-probe-review.md)和[研究原件独立完整性](web-delivery-integrity.json)仅提供各自范围的证据；新增源码编译/完整gate仍待真实执行。
 
 原版gate的可选[实际对象采集](capture-codegen-notes.md)已通过六组本地基础行为自测，仅供discovery；810的0e8/1f4按需启用，任何冻结独立确认整批禁用。实际Linux/Lean工具及完整集成仍NOT_RUN。
 
-新增本地路线：`4a30c99f`原始位NaN冷支路已完成独立静态审查，普通路径不变；[807回退机会](scalar-nan-fallback-807.json)的70个tensor案例与四份实际Lean输出校验一致，所涉整cell26.37%仅为曝光上限。`97f77e2c`把原direct后缀接入修复后的非有限值组合；两份均静态policy通过，Lean/fullgate/性能NOT_RUN，不替换当前60f。
+新增本地路线：`4a30c99f`为NaN-only对照，`939dbf31`实际接入既有exceptional-word语义；两者普通路径不变、精确新Lean/性能NOT_RUN。[807前沿复核](word-route-frontier-review.md)扣除97f quiet-stop与3d9单遍sum已减少的完整回放，剩18519coldcalls=10053NaN+8466无NaN特殊调用；不是已编译组合或时间份额。旧26.37%整cell曝光及旧完整回放数不再当后续残余机会。`97f77e2c`实际direct组合也尚未完整编译，不替换当前60f。
+
+[当前数学储备](math-reserve-index.md)现为22组专项交付、14项结论、579份鲜核来源/日志；[公共宿主复核](canonical-public-host-review.json)核W12c五次实际编译源码/退出码、原四spec与41项公理报告。公共片段接受不能继承给4792/3d9/47d/939/353d的新运行接线。[低解码成本边界](low-normal-cost-screen.json)另将命中与整cell曝光分开。22组ZIP原件完整性已逐字节通过，ZIP与全部负面原件保留。

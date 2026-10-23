@@ -1,0 +1,119 @@
+{
+  "status": "SOURCE_COUNT_AND_COMPLETED_CELL_COST_BOUNDARY_ONLY",
+  "computed_at_utc": "2026-10-23T00:48:15.971109+00:00",
+  "candidate": "f01-r7-low-normal-sum-decode",
+  "candidate_sha256": "353d9816425d92fbc6d0cc14c9d30e17fb64d6d4fb7ebdf594700ef02c417c2a",
+  "discovery_run": 39840672791,
+  "discovery_seed": 807,
+  "inputs": {
+    "competitions/floatlib/research/astra-collab-20261023-r7/sum-decoder-low-screen.json": {
+      "sha256": "803d59f532da6869de9eafe1efd1ea800a708f996207e8731dfeb84502505f72",
+      "bytes": 28035
+    },
+    "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json": {
+      "sha256": "99b77939668a200ec8f80aa8db24262a222c8ddcd72b01056f54e57674680dd8",
+      "bytes": 225954
+    }
+  },
+  "cell_rows": [
+    {
+      "cell": "sum:dense",
+      "all_words": 1045147,
+      "low_normal_full": 0,
+      "subnormal_full": 0,
+      "zero_full": 0,
+      "observed_retained_cell_ns": 4020059.0,
+      "observed_retained_cell_share_percent": 1.364516541030933,
+      "new_low_branch_guard_evaluations": 0,
+      "new_helper_hits": 0,
+      "new_low_branch_guard_nonzero_subnormal_misses": 0
+    },
+    {
+      "cell": "sum:ml",
+      "all_words": 1393108,
+      "low_normal_full": 0,
+      "subnormal_full": 0,
+      "zero_full": 0,
+      "observed_retained_cell_ns": 2374267.0,
+      "observed_retained_cell_share_percent": 0.805890310148157,
+      "new_low_branch_guard_evaluations": 0,
+      "new_helper_hits": 0,
+      "new_low_branch_guard_nonzero_subnormal_misses": 0
+    },
+    {
+      "cell": "sum:sparse",
+      "all_words": 1058544,
+      "low_normal_full": 116203,
+      "subnormal_full": 0,
+      "zero_full": 333027,
+      "observed_retained_cell_ns": 4155275.0,
+      "observed_retained_cell_share_percent": 1.4104125014165987,
+      "new_low_branch_guard_evaluations": 116203,
+      "new_helper_hits": 116203,
+      "new_low_branch_guard_nonzero_subnormal_misses": 0
+    },
+    {
+      "cell": "sum:specials",
+      "all_words": 287960,
+      "low_normal_full": 0,
+      "subnormal_full": 254,
+      "zero_full": 25831,
+      "observed_retained_cell_ns": 24364335.0,
+      "observed_retained_cell_share_percent": 8.26991298354549,
+      "new_low_branch_guard_evaluations": 254,
+      "new_helper_hits": 0,
+      "new_low_branch_guard_nonzero_subnormal_misses": 254
+    },
+    {
+      "cell": "sum:subnormal",
+      "all_words": 705307,
+      "low_normal_full": 176393,
+      "subnormal_full": 31910,
+      "zero_full": 0,
+      "observed_retained_cell_ns": 1954482.0,
+      "observed_retained_cell_share_percent": 0.6634039495806454,
+      "new_low_branch_guard_evaluations": 208303,
+      "new_helper_hits": 176393,
+      "new_low_branch_guard_nonzero_subnormal_misses": 31910
+    },
+    {
+      "cell": "sum:extremes",
+      "all_words": 556778,
+      "low_normal_full": 2672,
+      "subnormal_full": 0,
+      "zero_full": 0,
+      "observed_retained_cell_ns": 976404.0000000001,
+      "observed_retained_cell_share_percent": 0.3314178743965616,
+      "new_low_branch_guard_evaluations": 2672,
+      "new_helper_hits": 2672,
+      "new_low_branch_guard_nonzero_subnormal_misses": 0
+    }
+  ],
+  "counted_guard_evaluations": 327432,
+  "counted_helper_hits": 295268,
+  "counted_guard_misses": 32164,
+  "helper_hit_fraction_all_sum_input_words": 0.058505473915976006,
+  "helper_hit_fraction_new_guard_evaluations": 0.901768916904884,
+  "new_guard_fraction_all_sum_input_words": 0.0648785656937286,
+  "affected_cells": [
+    "sum:sparse",
+    "sum:subnormal",
+    "sum:extremes"
+  ],
+  "retained_complete_involved_cell_time_share_percent_ceiling": 2.4052343253938058,
+  "isolated_parent_complete_involved_cell_time_share_percent_ceiling": 2.080550109604243,
+  "break_even_model": {
+    "symbols": "S = net ns saved per helper-hit excluding its new guard; G = ns per new guard evaluation; L = all other layout/setup/loop changes in ns",
+    "delta_ns": "295268*S - 327432*G - L",
+    "zero_layout_required_S_over_G": 1.1089315469336332,
+    "scope": "Symbolic first-order pass model only. No S/G/L measured, no cycles assigned and no independence/additivity assumed."
+  },
+  "decision": "One distinct controlled decoder candidate only. Its measured source-cell exposure is smaller than the whole sum share; keep behind accepted nonfinite composition and singlepass proof feedback. Do not park it merely because only5.85percent of words hit: the added source guard is only on the old nonzero low branch.",
+  "measurement_boundary": [
+    "Original measure uses best of3 timed sweeps and original gate aggregates per-case samples across25 paired rounds. Counts are one repeated input pass, not multiplied by inner/rounds.",
+    "Zero uses old unsigned-wrap table path; ordinary high/table and nonfinite branches keep source tests. Added threshold test occurs only for nonzero exponent0..23 inputs. Compiler may still change other branch layout.",
+    "Entire involved cell time is an exposure ceiling, not helper time or a predicted saving. No claim that this one route can recover all of it.",
+    "807 source counts anchored to prior actual outputs; 353d exact compile/fullgate/C/timing remain NOT_RUN. No private suite/prevalence or champion gap claimed.",
+    "353d isolates c760 sum decoder. 3d9 is an alternative singlepass mechanism; these gains are not added."
+  ]
+}

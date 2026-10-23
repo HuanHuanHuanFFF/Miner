@@ -1,0 +1,478 @@
+{
+  "schema": "floatlib.r7.low_normal_runtime_source_review.v1",
+  "started_at_utc": "2026-10-23T00:41:31Z",
+  "written_at_utc": "2026-10-23T00:48:04.012565+00:00",
+  "budget_minutes": 35,
+  "global_end_utc": "2026-10-23T04:22:17Z",
+  "source_freeze_utc": "2026-10-23T02:45:00Z",
+  "scope": "Independent read-only review of exact353d runtime wiring and source inverse; only MD/JSON outputs. No Git/CI/upload/build/Lean/target execution. Prior W14b/c codegen report is referenced, not rerun.",
+  "conclusion": {
+    "determined_static_bug": null,
+    "status": "SOURCE_REVIEW_NO_DETERMINATE_BUG",
+    "exact_source_inverse": "VERIFIED",
+    "exact_current_official_static_policy": "PASS_STATIC_ONLY",
+    "all_input_obligation_inference": "New decoder lemma has no finite/nonNaN/exponent premise; actual guard proof closes the conditional low-normal theorem internally.",
+    "exact_new_Lean_and_axioms": "NOT_RUN",
+    "exact_new_fullgate": "NOT_RUN",
+    "exact_new_C_asm_benchmark": "NOT_RUN",
+    "gain": "UNKNOWN"
+  },
+  "candidate": {
+    "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-r7-low-normal-sum-decode/Kernel.lean",
+    "bytes": 174914,
+    "sha256": "353d9816425d92fbc6d0cc14c9d30e17fb64d6d4fb7ebdf594700ef02c417c2a"
+  },
+  "parent": {
+    "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-r7-nonnan-runtime/Kernel.lean",
+    "bytes": 153390,
+    "sha256": "c76056882d69a1122da44b4bc0bb3ab5274251826f0677af2aec5771926d7435"
+  },
+  "source_changes": [
+    {
+      "kind": "insert",
+      "parent_start_line": 3346,
+      "parent_end_line_inclusive": 3345,
+      "candidate_start_line": 3346,
+      "candidate_end_line_inclusive": 3855,
+      "parent_bytes": 0,
+      "candidate_bytes": 21504,
+      "before": null,
+      "after": null
+    },
+    {
+      "kind": "replace",
+      "parent_start_line": 3350,
+      "parent_end_line_inclusive": 3350,
+      "candidate_start_line": 3860,
+      "candidate_end_line_inclusive": 3860,
+      "parent_bytes": 72,
+      "candidate_bytes": 82,
+      "before": "@[inline] def decode (x : Binary32) : Float32 := R2W01b.convert x.raw.1\n",
+      "after": "@[inline] def decode (x : Binary32) : Float32 := R7LowTableDecode.convert x.raw.1\n"
+    },
+    {
+      "kind": "replace",
+      "parent_start_line": 3354,
+      "parent_end_line_inclusive": 3354,
+      "candidate_start_line": 3864,
+      "candidate_end_line_inclusive": 3864,
+      "parent_bytes": 25,
+      "candidate_bytes": 35,
+      "before": "  rw [R2W01c.convert_eq]\n",
+      "after": "  rw [R7LowTableDecode.convert_eq]\n"
+    }
+  ],
+  "independent_inverse": {
+    "method": "Independent difflib line alignment, reverse all three non-equal hunks. Builder was not executed.",
+    "bytes_equal": true,
+    "restored_sha256": "c76056882d69a1122da44b4bc0bb3ab5274251826f0677af2aec5771926d7435",
+    "inserted_lines": 510,
+    "inserted_bytes": 21504,
+    "inserted_sha256": "b842d6c21b621f91b4525d7ce4ad7b7f1d7c92469a73ba5fadbf3508469c4fea",
+    "retained_original_source_bytes": "All parent bytes except decoder target line and its proof rewrite line; no generated-code identity implied.",
+    "independently_unchanged_fragments": {
+      "NativeDecodeSumWord": {
+        "bytes": 1689,
+        "sha256": "d6168fb722fde22ce2813adbcbfd0ef7cccc5bb95a507606c630357300edae87",
+        "byte_equal_to_parent": true
+      },
+      "final_sum": {
+        "bytes": 527,
+        "sha256": "b198c764703ea35354112009d5f8194086c7c46af3a6ef65bba4c9e8b129c627",
+        "byte_equal_to_parent": true
+      },
+      "all_later_BMM": {
+        "bytes": 5821,
+        "sha256": "c008d59bf6715ff5bfdd905bfd790f0a7431863dc1390736288c951819815e52",
+        "byte_equal_to_parent": true
+      }
+    }
+  },
+  "call_chain": [
+    {
+      "name": "Submission.sum",
+      "line": 3937
+    },
+    {
+      "name": "Submission.NativeDecodeSumWord.run",
+      "line": 3919
+    },
+    {
+      "name": "Submission.NativeDecodeSumWord.loop",
+      "line": 3890,
+      "fallback": "n>=USize.size uses NativeDecodeSum.loop"
+    },
+    {
+      "name": "Submission.NativeDecodeSum.decode",
+      "line": 3860
+    },
+    {
+      "name": "R7LowTableDecode.convert",
+      "line": 3838
+    }
+  ],
+  "loop_and_dimensions": {
+    "Nat_decode_use_line": 3869,
+    "USize_decode_use_line": 3895,
+    "USize_guard_line": 3920,
+    "USize_read_line": 3894,
+    "count_toNat_equals_n_unchanged": true,
+    "within_bound_proof_and_next_step_unchanged": true,
+    "USize_overflow_argument": "n<USize.size and k<count implies k+1 does not wrap; original next_decreases/stepNat proofs retained byte-exact.",
+    "large_n_fallback": "NativeDecodeSum.loop x 0 +0",
+    "n_zero": "Original loop base returns +0 seed, then original nonNaN result path.",
+    "left_to_right_single_accumulator_unchanged": true,
+    "new_seed_or_workload_dispatch": false
+  },
+  "exact_proof_chain": {
+    "decode_eq": {
+      "line": 3862,
+      "type": "forall x : Binary32, decode x = ExecFloat.Binary.toFloat32 x",
+      "new_rewrite_line": 3864,
+      "premises": [],
+      "last_rfl_goal": "Same Float32.ofBits x.raw.1 vs ExecFloat.Binary.toFloat32 x target as parent after its previous rewrite.",
+      "compile_status": "NOT_RUN"
+    },
+    "lowNormalDecode_eq_proved": {
+      "line": 3834,
+      "type": "forall u : UInt32, lowNormalDecode u = R7W13.lowNormalDecode u",
+      "proof": "simp only [lowNormalDecode, R7W13.lowNormalDecode, constantFromTable_eq]",
+      "compile_status": "NOT_RUN"
+    },
+    "convert_eq_wrapper": {
+      "line": 3848,
+      "type": "forall u : UInt32, convert u = R7W13b.wrapper u",
+      "proof": "simp only [convert, R7W13b.wrapper, lowNormalDecode_eq_proved]",
+      "compile_status": "NOT_RUN"
+    },
+    "convert_eq": {
+      "line": 3851,
+      "type": "forall u : UInt32, convert u = Float32.ofBits u",
+      "proof": "trans convert_eq_wrapper with R7W13b.wrapper_eq_ofBits",
+      "compile_status": "NOT_RUN"
+    },
+    "conditional_domain_closure": {
+      "line": 3695,
+      "actual_conditions": [
+        "not (0x0bffffff <= magnitude u - 1)",
+        "0x00800000 <= magnitude u"
+      ],
+      "conclusion": "R7W13.LowNormal u (raw exponent1..23)",
+      "domain_not_left_to_caller": true,
+      "full_wrapper_theorem_line": 3763
+    },
+    "sum_spec": {
+      "line": 3942,
+      "source_unchanged": true,
+      "uses": [
+        "NativeDecodeSumWord.run_eq",
+        "NativeDecodeSum.loop_eq",
+        "originalSum_spec"
+      ],
+      "new_context_compile_status": "NOT_RUN"
+    }
+  },
+  "branch_domains": [
+    {
+      "domain": "positive/negative zero",
+      "path": "Original wrapped low guard true; original finite tableProduct",
+      "helper_new_path": false
+    },
+    {
+      "domain": "nonzero subnormal E0",
+      "path": "Original low guard false; added minimum-normal test false; ofBits",
+      "helper_new_path": false
+    },
+    {
+      "domain": "normal E1..23, all signs/fractions",
+      "path": "Original low guard false; minimum-normal test true; new raised-table then2^-32 helper",
+      "helper_new_path": true
+    },
+    {
+      "domain": "normal E24..254",
+      "path": "Original upper tableProduct",
+      "helper_new_path": false
+    },
+    {
+      "domain": "Inf or NaN",
+      "path": "Original upper ofBits fallback",
+      "helper_new_path": false
+    }
+  ],
+  "raw_NaN_and_special_values": {
+    "final_sum_native_result_line": 3938,
+    "result_guard_line": 3939,
+    "raw_reference_replay_line": 3940,
+    "referenceSum_definition_line": 2297,
+    "reference_loop": "Original raw Vector Binary32 x.foldl Submission.add posZero",
+    "raw_inputs_not_replaced_by_decoded_inputs": true,
+    "NativeFinal_sumLoop_eq_line": 2664,
+    "originalSum_spec_line": 2762,
+    "notNaN_result_argument": "Original backwards add_inputs proof controls the accepted native path; NaN result retains raw reference replay.",
+    "payload_roundtrip_not_assumed": true,
+    "canonical_NaN_value_not_equal_arbitrary_raw_payload": true,
+    "saved_public_counterexamples": {
+      "0xffc12345": "0x7fc00000",
+      "0x7f800001": "0x7fc00000"
+    },
+    "finite_overflow_infinity": "Original result guard accepts nonNaN Inf exactly as parent proof; no new behavior claim.",
+    "Inf_cancellation_invalid": "Original NaN result takes full raw replay.",
+    "signed_zero_subnormal_paths": "Original seeds/order/branches retained; low helper excludes E0."
+  },
+  "namespace_and_policy": {
+    "insertion_preceded_by_end_Submission_line": 3344,
+    "named_namespace_pairs_in_new_block_balanced": true,
+    "new_namespaces": [
+      "R7W13",
+      "R7W13b",
+      "R7LowTableDecode"
+    ],
+    "new_namespaces_absent_from_parent": true,
+    "imports": [
+      {
+        "line": 1,
+        "text": "import ContractTensor"
+      }
+    ],
+    "options": [
+      {
+        "line": 3802,
+        "text": "set_option maxRecDepth 8192"
+      }
+    ],
+    "maxRecDepth10000_or_witness32768_copied": false,
+    "new_global_resource_option_scope": "From constant block through all later declarations; runtime source unaffected but exact compilation remains required.",
+    "original_entry_names_add_mul_sum_bmm_unique": true,
+    "fixed_current_policy": {
+      "status": "PASS_STATIC_ONLY",
+      "reason": null,
+      "source": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+      "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "scope": "Unmodified policy/options bodies; exact full-slot contract extracted from upstream AST. No build/kernel/axiom/score stage.",
+      "function_source_sha256": {
+        "policy": "02b663a311285f927e48e0533fde188073ec32b84fb079639a6690f36821cce4",
+        "options": "91fdd48a992c4bc786e731e9f12ba3d975f37443e9007968f62c107effe64382"
+      }
+    },
+    "source_byte_limit": 256000
+  },
+  "public_source_mapping": {
+    "W13_increment_byte_identity_occurrences": 1,
+    "W13b_increment_byte_identity_occurrences": 1,
+    "W14c_compiled_constant_block_namespace_only_identity_occurrences": 1,
+    "runtime_tail_byte_identity_occurrences": 1,
+    "W13_prerequisite_prefix_bytes": 49186,
+    "W13_prerequisite_prefix_sha256": "31af82f99759de603dbecb1c1f7de58ffd2e2e1350f883dabfb134d6f570c67c",
+    "W13_prerequisite_prefix_byte_identical_to_c760": true,
+    "constant_mapping": "Strip standalone import/recdepth header; retain compiled8192 resource before block; namespace R7W14b -> R7LowTableDecode.",
+    "whole_builder_result_matches_candidate": "VERIFIED by source block content and independent difference/inverse, without executing writing builder.",
+    "public_success_boundary": {
+      "W13": "Conditional low-normal mathematical proof in original public prefix context; exact new full host not compiled.",
+      "W13b": "Complete all-UInt32 wrapper proof in public context; exact new full host not compiled.",
+      "W14b": "All-u constant/new-old-helper equality plus separate actual Nat/Array probe C/asm.",
+      "W14c": "8192 public60f Host plus constant only; four old entries/specs unchanged, no three new bridges/actual USize wiring.",
+      "W13c": "Checkpoint22 describes a public60f helper-only composition job. Not locally recovered at00:43UTC; no failure inferred; even future success cannot replace353d acceptance."
+    },
+    "prior_original_audit_counts": {
+      "W13": 60,
+      "W13b": 29,
+      "W14b": 4,
+      "W14c_Host": 8,
+      "W14c_Standalone": 4
+    },
+    "three_allowed_axioms_from_saved_public_audits": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "new_exact_candidate_axiom_audit": "NOT_RUN"
+  },
+  "negative_evidence_and_limits": [
+    "Original W14 warm once/FP spill negative remains frozen in prior report; not overwritten.",
+    "W14b standalone codegen removes that low-normal-path issue but is not actual353d USize codegen.",
+    "Original10000 source not current-policy eligible; actual353d uses8192.",
+    "Unused mathematical reference Float32 helpers may emit old once symbols/module initialization; whole candidate once/initialization behavior unobserved.",
+    "Retained source bytes do not establish retained generated code layout or cost.",
+    "Low-normal input count295268 is exposure only, never a measured time share or gain.",
+    "Exact353d full statement, original gate replay/axioms/score, generated code and performance all NOT_RUN."
+  ],
+  "next_discriminator": "Compile exact353d actual four specs and axiom audit under fixed current8192 policy; if accepted inspect actual live sum C/asm, then D selects authorized full paired suite. No new variants requested.",
+  "inputs": [
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-r7-low-normal-sum-decode/Kernel.lean",
+      "bytes": 174914,
+      "sha256": "353d9816425d92fbc6d0cc14c9d30e17fb64d6d4fb7ebdf594700ef02c417c2a"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-r7-low-normal-sum-decode/manifest.json",
+      "bytes": 2257,
+      "sha256": "fe7835cda0f2c6ad9c8fb4f18ec59246e6ed069302cda754b81f443050a1b3d9"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-r7-nonnan-runtime/Kernel.lean",
+      "bytes": 153390,
+      "sha256": "c76056882d69a1122da44b4bc0bb3ab5274251826f0677af2aec5771926d7435"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/checkpoint-22-low-normal-candidate.md",
+      "bytes": 2618,
+      "sha256": "d94bea6e28c3e7508c881a8636d45a1d4bbabaab1bb30b25ff5e526c8c5c3c1c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/low-normal-candidate-lineage.json",
+      "bytes": 510,
+      "sha256": "371cafed65d7dfc1d924b0c7b5f7763bba1245e83eff20bc190d0895b78d2cc2"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/build-low-normal-sum.py",
+      "bytes": 4341,
+      "sha256": "2a6ef38871fe2d64a7faf41899780003f27c9726b2dfbdc241429974191ea33b"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/low-normal-runtime-tail.lean",
+      "bytes": 926,
+      "sha256": "1fc77ba77f5a6f7e7695688c181229b197e6b848ef46ada853efdf5dd54492ca"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/low-normal-constant-source-review.md",
+      "bytes": 9588,
+      "sha256": "7b4323d1d356c0e0c5f8a5858d16f9a3873fa0405279fe7f8eb8931d3d41fe42"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/low-normal-constant-source-review.json",
+      "bytes": 89192,
+      "sha256": "2d7c978ebb96cd72385fcac576e778f29686c817497851d341bb3a1ca5283b24"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/build-seed-normalize.py",
+      "bytes": 12160,
+      "sha256": "135e8e429d8bd484fe4ec364d83947bfe9ccefeb1f8d6a39771717860f9cdf69"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+      "bytes": 38320,
+      "sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/R7W13Increment.lean",
+      "bytes": 14224,
+      "sha256": "55ce42724776e218139bd702373829ca55910955c07f8f0821ba2feaf949b620"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/R7W13.lean",
+      "bytes": 63410,
+      "sha256": "a17d90417f1a8cd6a8cd396510501082355a00e513cf82af7875d5f8f443928d"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/logs/R7W13-attempt2.lean",
+      "bytes": 63410,
+      "sha256": "a17d90417f1a8cd6a8cd396510501082355a00e513cf82af7875d5f8f443928d"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/logs/R7W13-attempt2.json",
+      "bytes": 681,
+      "sha256": "4dabd969b2089a7531eb7dd7ac69ed879a9b289ec5c63e76d8b4a64eed13d5c2"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/logs/R7W13Diagnostics-attempt1.log",
+      "bytes": 16233,
+      "sha256": "a9f77512bc5e7062918f64c549ba7c8d332abd77b62c0471aef49c14bb3fa298"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13/original-extracted/R7-W13/logs/R7W13Diagnostics-attempt1.json",
+      "bytes": 737,
+      "sha256": "bb4b9a2241376cce0219a3225824ea8c52b82d614c0306b28575a97e56628eb5"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/R7W13bIncrement.lean",
+      "bytes": 5624,
+      "sha256": "f7d2cd47627ba56aa1f4d1b41800fdc289355587ed6b466dae8659d557db0e91"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/R7W13b.lean",
+      "bytes": 69035,
+      "sha256": "b1e06099064b56544a99f1ab085df8b25e6baa01d255c4e43f45310ba242fb7c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/logs/R7W13b-attempt1.lean",
+      "bytes": 69035,
+      "sha256": "b1e06099064b56544a99f1ab085df8b25e6baa01d255c4e43f45310ba242fb7c"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/logs/R7W13b-attempt1.json",
+      "bytes": 692,
+      "sha256": "8fcb870f02fc1dd765ecc4fa2a67482c3d1bca5f5b56ddfa79757e2191c5ba15"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/logs/R7W13bDiagnostics-attempt1.log",
+      "bytes": 7548,
+      "sha256": "656d46f221590611a78c7f0d9179801bd477c6bd29d77b905fac3a3ae860b826"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W13b/original-extracted/R7-W13b/logs/R7W13bDiagnostics-attempt1.json",
+      "bytes": 747,
+      "sha256": "293d65db4321d0872b1e58a76bc277df7904809a401b61a73da381c3d101bcd0"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/source/ConstantSource.lean",
+      "bytes": 786,
+      "sha256": "e6a553e98ec595d4c38973d1251b337fb476e98bff2d1b2cc47bbff192218114"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/source/Proof.lean",
+      "bytes": 399,
+      "sha256": "49557191d01c4b55295cce6d13f991f47f67ffa3f10765afe5877f8253466682"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14b/original-extracted/R7-W14b/logs/proof-axioms-01.stdout",
+      "bytes": 307,
+      "sha256": "aec6791b1a9c445c763263e7f44d8349106bf531df98d9c1579992591be018cf"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/ConstantSource.lean",
+      "bytes": 785,
+      "sha256": "fdce65a41e155b3009e5c4b10eab6020b37195081b0ca56bc154537274749663"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/Host.lean",
+      "bytes": 155871,
+      "sha256": "65a78403229b21528d88964fdd05a381802f9ec2f43859b8e77ecd8249daf806"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/source/HostAudit.lean",
+      "bytes": 1750,
+      "sha256": "4813e238e8b3a10d31315529be855db6b9eaf9779f7fef7dec66c2eaeed62bb0"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-Host.command.json",
+      "bytes": 2368,
+      "sha256": "614f41f1d4d39a2b476153ef073472e4c1e0e3c1500c4673780b6d94ecb6d0da"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/compile-Host.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-host-01.command.json",
+      "bytes": 2377,
+      "sha256": "4933f02a2bb88ccc2bbe566dd4d09247ca69a11fecba1ac9e0f9ade38998a9b0"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-host-01.exitcode",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "D:/CodingProject/Bitget/competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W14c/original-extracted/R7-W14c/logs/audit-host-01.stdout",
+      "bytes": 981,
+      "sha256": "5d60ebcdefd2e8918db523b6633b23d470d9d1fe9297d5964af13f6f7ed2afc4"
+    }
+  ],
+  "markdown": {
+    "path": "D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/low-normal-runtime-review.md",
+    "bytes": 8149,
+    "sha256": "a55eae64a3ab84a6e0ecbc48844421a6ef52276ae066de513aca1de092987005"
+  }
+}

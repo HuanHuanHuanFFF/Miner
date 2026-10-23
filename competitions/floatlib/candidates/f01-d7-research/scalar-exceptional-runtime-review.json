@@ -1,0 +1,1107 @@
+{
+  "schema_version": 1,
+  "title": "Independent static review of scalar exceptional-word runtime integration",
+  "started_at_utc": "2026-10-23T00:24:36Z",
+  "budget_deadline_utc": "2026-10-23T01:04:36Z",
+  "overall_deadline_utc": "2026-10-23T04:22:17Z",
+  "reviewed_at_utc": "2026-10-23T00:36:19Z",
+  "conclusion": {
+    "status": "NO_DETERMINISTIC_STATIC_INTEGRATION_BUG_FOUND",
+    "definite_bugs": [],
+    "source_scope_inverse": "PASS",
+    "fixed_original_policy": "PASS_STATIC_ONLY",
+    "new_nested_Lean": "NOT_RUN",
+    "global17331_Lean": "NOT_RUN_NOT_INHERITED",
+    "candidate_statement_replay_axioms_fullgate": "NOT_RUN",
+    "actual_C_asm_allocation": "UNKNOWN",
+    "actual_paired_performance": "UNKNOWN"
+  },
+  "write_scope": [
+    "competitions/floatlib/candidates/f01-d7-research/scalar-exceptional-runtime-review.md",
+    "competitions/floatlib/candidates/f01-d7-research/scalar-exceptional-runtime-review.json"
+  ],
+  "authorization_boundary": "Read-only candidates/builders/R and fixed public sources; no builder execution, candidate/R mutation, Git, CI, upload or toolchain installation.",
+  "candidate": {
+    "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+    "sha256": "939dbf31705408ac5177e4ede746b7cd52c72e9b7ab7b75eb2a1fd2178635237",
+    "bytes": 175363,
+    "parent_sha256": "4a30c99f8230aae6d1b0cd238d1a6b1c9ac0aac0c448ca67d3005d3a6d00d528",
+    "global_probe_sha256": "17331a8b2ff3ddcced087d4165eaf5887620caf0e0051da70eb01800383cc04c",
+    "original_math_sha256": "b884fff04a3353c02d37a824e57aa43ea3b79834569b47601b225441023c79f1",
+    "adapted_nested_math_sha256": "9134fffd86d5653bbbf27d6c13d47febf4ce76c6e787f9748cc15c1b0a544f67"
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "status": "VERIFIED_SOURCE_BYTES",
+      "claim": "Independent939->4a30 inverse and4a30->939 forward equality pass. Parent4a30 was independently reconstructed from exact60f using only its three original closed namespace blocks, exact NaN block, existing helper literal and the documented four cold edits. No writing builder was run.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2694
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2996
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 3011
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 3019
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 3032
+        }
+      ],
+      "implication": "Outside the replaced ScalarNaN block and two runtime/two proof substitutions, all source is unchanged, including finite numeric branches, low-exponent mul, all tensor reads/order/layout and exports."
+    },
+    {
+      "id": "F2",
+      "status": "VERIFIED_STATIC_INTERFACE",
+      "claim": "Each existing false finite guard provides precisely the negation required by its own cold-spec theorem. Both arguments are the actual original raw words. No broadened condition, swapped operands or unrelated theorem premise is passed.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2963
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2976
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2993
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 3010
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 3016
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 3031
+        }
+      ],
+      "exact_premise": "¬ (Model.NativeBinary32.expField x.raw.1 ≠ 0xff ∧ Model.NativeBinary32.expField y.raw.1 ≠ 0xff)",
+      "proof_connection": "special_of_rejected supplies exponent255 on at least one side, selecting the exceptional arm of the fixed Model.Spec. The then branches and their proofs remain unchanged.",
+      "elaboration": "NOT_RUN; split/rename_i and definitional namespace/type matching must still be accepted on exact939."
+    },
+    {
+      "id": "F3",
+      "status": "VERIFIED_STATIC_SCOPE_AND_BYTES",
+      "claim": "Submission.NativeBridge/NotNaNProbe/R7Native remain exact original byte blocks and precede the new math use. Earlier R2W01c.NativeBridge remains474-645. All namespace/end pairs balance. New DExceptionalWord is Submission.DExceptionalWord; its unqualified DWordNaN references resolve to Submission.DWordNaN and its explicit Submission.FastMul/R7Native/NativeBridge targets precede use.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 474
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2044
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2236
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2293
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2520
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2710
+        }
+      ],
+      "order": [
+        "Submission.FastMul.ofBits",
+        "Submission.NativeBridge.toModelExecMul",
+        "Submission.NotNaNProbe",
+        "Submission.R7Native.toModelExecAdd",
+        "Submission.DWordNaN public helper proofs",
+        "Submission.DExceptionalWord runtime/models/carrier/spec",
+        "Submission.add/nativeMul/mul"
+      ],
+      "formal_scope_acceptance": "NOT_RUN"
+    },
+    {
+      "id": "F4",
+      "status": "VERIFIED_SOURCE_SEMANTIC_MATCH_WITH_FINITE_CHECKS",
+      "claim": "New word runtime exactly retains the17331 semantic draft: signaling before quiet, same-class left priority, quiet-bit OR preserving sign/payload; add Inf same-sign keeps a, opposite signs returns positive canonicalNaN; multiply rejects either signed zero times Inf and otherwise uses sign inequality for signed Inf.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2784
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2792
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2805
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2812
+        }
+      ],
+      "fixed_spec": "FloatLib0d918 Model.Spec.add/mul exceptional arms and Model.chooseNaN2 IEEE policy, not a host hardware policy.",
+      "finite_evidence": "Existing30 pairs replayed against60 explicit expected operation words and source-derived oracle; exact original trace reproduced. Four pre-existing out-of-domain witnesses and seven incorrect-rule witnesses retained.",
+      "formal_claim": "NOT_PROVED_BY_THIS_REVIEW"
+    },
+    {
+      "id": "F5",
+      "status": "VERIFIED_COLD_DOMAIN_ONLY",
+      "claim": "addWord/mulWord/addCold/mulCold do no ordinary finite arithmetic. Their correctness is restricted to the rejected-both-finite premise. Current qualified runtime calls occur only in the two existing else arms; the outer ex+ey<128 LowScale choice is unchanged.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2784
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2792
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2996
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 3019
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 3034
+        }
+      ],
+      "outside_domain_counterexample": {
+        "a": "0x3f800000",
+        "b": "0x3f800000",
+        "addWord": "0x7fc00000",
+        "correct_add": "0x40000000",
+        "mulWord": "0x7fc00000",
+        "correct_mul": "0x3f800000"
+      },
+      "low_guard_boundary": "Native exponent fields are masked8-bit values, so ex+ey<=510; any exponent255 implies the sum cannot be<128. Thus actual special inputs reach nativeMul's false guard, not LowScale."
+    },
+    {
+      "id": "F6",
+      "status": "VERIFIED_SOURCE_CALL_CHAIN_ONLY",
+      "claim": "The11 new runtime definitions contain no Option/rawChoose/generic dyadic/Model.Spec construction call. Cold runtime routes through addWord/mulWord and existing FastMul.ofBits. The old Option-valued DWordNaN.rawChoose remains in the file and is used by proof equalities/cases, without a new runtime edge from exported cold callers.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2586
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2805
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2812
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2894
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2918
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2957
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2960
+        }
+      ],
+      "not_claimed": "No actual C/assembly was generated for939. Source Option-free structure does not establish no heap allocation, total allocation reduction, inlining or timing. Independent rawChoose symbol presence/absence is insufficient; inspect actual MainFull callback clones/cold call graph."
+    },
+    {
+      "id": "F7",
+      "status": "SOURCE_BOUND_NOT_FORMALLY_ACCEPTED",
+      "claim": "Cached primary0d918 Agreement publicly declares expField_beq_zero, expField_beq_allOnes, fracField_beq_zero and signBit_eq with Value arguments, fitting ofUInt32 u plus toUInt32_ofUInt32 rewrites. Private ofUInt32_posInf/negInf/canonicalNaN/signedInf names are not called; new closed invalid/infinity proofs use decide/public nativeOverflow theorem. Concrete carrier_model rewrites the stored32-bit word and preserves NaN sign/payload.",
+      "evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2735
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2749
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2763
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2769
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2776
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2943
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean",
+          "line": 2952
+        }
+      ],
+      "compile_targets": [
+        "Submission.DExceptionalWord.rawInf_eq",
+        "Submission.DExceptionalWord.rawZero_eq",
+        "Submission.DExceptionalWord.rawSign_eq",
+        "Submission.DExceptionalWord.infinityWord_eq",
+        "Submission.DExceptionalWord.addWord_eq_choice",
+        "Submission.DExceptionalWord.mulWord_eq_choice",
+        "Submission.DExceptionalWord.addWord_model",
+        "Submission.DExceptionalWord.mulWord_model",
+        "Submission.DExceptionalWord.carrier_model",
+        "Submission.DExceptionalWord.ofBits_model",
+        "Submission.DExceptionalWord.addCold_spec",
+        "Submission.DExceptionalWord.mulCold_spec",
+        "Submission.add_spec false branch",
+        "Submission.nativeMul_spec false branch"
+      ],
+      "limitation": "Public source/API signatures and a static proof route do not certify actual ContractTensor import visibility, elaboration, kernel replay or axioms."
+    },
+    {
+      "id": "F8",
+      "status": "VERIFIED_SCOPE_SEPARATION",
+      "claim": "939 retains4a30/60f tensor source, not a combined97f quiet-stop/3d9 singlepass candidate. New807 frontier counts are only later component-priority evidence. Standalone scalar, BMM and sum repair are separated; no large-domain807 model was rerun during this review.",
+      "statistics_source": "competitions/floatlib/candidates/f01-d7-research/frontier-scalar-counts-807.json",
+      "future_component_timed_counts": {
+        "standalone_add": {
+          "cold": 6689,
+          "NaN": 3412,
+          "no_NaN_exceptional": 3277
+        },
+        "standalone_mul": {
+          "cold": 4004,
+          "NaN": 1962,
+          "no_NaN_exceptional": 2042
+        },
+        "BMM_add": {
+          "cold": 4772,
+          "NaN": 2227,
+          "no_NaN_exceptional": 2545
+        },
+        "BMM_mul": {
+          "cold": 2734,
+          "NaN": 2132,
+          "no_NaN_exceptional": 602
+        },
+        "singlepass_sum": {
+          "cold": 320,
+          "NaN": 320,
+          "no_NaN_exceptional": 0
+        }
+      },
+      "inference": "Full exceptional words cover existing no-NaN Inf/invalid cold misses that the previous NaN-only route retained. This is reuse of existing semantics, not a new semantics discovery or additive gain; native result guard and canonical BMM scan overlap it.",
+      "actual939_performance": "UNKNOWN"
+    }
+  ],
+  "source_level_runtime_chain": {
+    "add_else": "Submission.DExceptionalWord.addCold -> addWord -> signaling/quiet guards or addNoNaN -> rawInf/rawSign/invalidWord -> Submission.FastMul.ofBits",
+    "nativeMul_else": "Submission.DExceptionalWord.mulCold -> mulWord -> signaling/quiet guards or mulNoNaN -> rawInf/rawZero/rawSign/infinityWord/invalidWord -> Submission.FastMul.ofBits",
+    "predicates": "Submission.DWordNaN.rawSNaN/rawNaN -> fixed NativeBinary32 UInt32 field extraction and bit tests",
+    "proof_only_Option_use": [
+      "addWord_eq_choice",
+      "mulWord_eq_choice",
+      "addWord_model",
+      "mulWord_model"
+    ],
+    "generated_call_graph": "NOT_RUN"
+  },
+  "evidence": {
+    "identities": {
+      "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/Kernel.lean": {
+        "bytes": 175363,
+        "sha256": "939dbf31705408ac5177e4ede746b7cd52c72e9b7ab7b75eb2a1fd2178635237"
+      },
+      "competitions/floatlib/candidates/f01-d7-scalar-exceptional-word/manifest.json": {
+        "bytes": 2462,
+        "sha256": "b21f87ffa4105ec8b5ddb49a42fce95382f51031c046251cb0247911827a0085"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/build-scalar-exceptional-word.py": {
+        "bytes": 5053,
+        "sha256": "ff3fa13fda60609516423547d6dce7c1915dcbf7de8ee28c74a652f85b4d9d1a"
+      },
+      "competitions/floatlib/candidates/f01-d7-scalar-nan-select/Kernel.lean": {
+        "bytes": 163399,
+        "sha256": "4a30c99f8230aae6d1b0cd238d1a6b1c9ac0aac0c448ca67d3005d3a6d00d528"
+      },
+      "competitions/floatlib/candidates/f01-d7-scalar-nan-select/manifest.json": {
+        "bytes": 1718,
+        "sha256": "760808d34b1d20d6359e3db5b5ac6847f4b9ca5aba7b485737aa10c5cf301694"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/build-scalar-nan-select.py": {
+        "bytes": 5704,
+        "sha256": "71257fd35cd1fd403f806af37fdb221d1072dbaac50cb1372e6fdd5c036e916c"
+      },
+      "competitions/floatlib/candidates/f01-d7-direct-nonnan/Kernel.lean": {
+        "bytes": 155103,
+        "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/nan-choice-block.lean": {
+        "bytes": 7555,
+        "sha256": "584ace5443838454b3687f7a93cfca07be4f9cce2c889c7196b171b7cfd4c93c"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/exceptional-word-block.lean": {
+        "bytes": 12596,
+        "sha256": "b884fff04a3353c02d37a824e57aa43ea3b79834569b47601b225441023c79f1"
+      },
+      "competitions/floatlib/candidates/f01-d7-exceptional-word-probe/Kernel.lean": {
+        "bytes": 175262,
+        "sha256": "17331a8b2ff3ddcced087d4165eaf5887620caf0e0051da70eb01800383cc04c"
+      },
+      "competitions/floatlib/candidates/f01-d7-exceptional-word-probe/manifest.json": {
+        "bytes": 1534,
+        "sha256": "20be495c3cf26d5094085db4ea6239741bac148cb7f1f6e29e0b626427fe543d"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/exceptional-word-design.json": {
+        "bytes": 74362,
+        "sha256": "1f645113e44863918b4204332998ea117891a0b843ca94fe73a1d12fedd347a6"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/frontier-scalar-counts-807.json": {
+        "bytes": 230911,
+        "sha256": "d30447c871c8add14c1a7fcd347dc434ac17917946759c5e050f5c8537e61efd"
+      },
+      "competitions/floatlib/candidates/f01-d7-research/frontier-scalar-counts-807-verification.json": {
+        "bytes": 17161,
+        "sha256": "f458e6ca505fbebe8ec33a98cdda736f3d1eed5badbbe216dae76c6951249b00"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py": {
+        "bytes": 4908,
+        "sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72"
+      },
+      ".local-maintenance/r7-20261023/current-policy/gate.py": {
+        "bytes": 38320,
+        "sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194"
+      },
+      ".local-maintenance/r7-20261023/current-policy/receipt.json": {
+        "bytes": 330,
+        "sha256": "1284c2cb342eb9270c555d3093c82678795c45782c1c626d5b2f7130848242f1"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01/original-extracted/R7-W01/upstream/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Spec/Dyadic.lean": {
+        "bytes": 4842,
+        "sha256": "932ee9d22d6241cda8c38dd22df4ecaffa934cdd1aa2922a0681afd1669ffb67"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01/original-extracted/R7-W01/upstream/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Model/Carrier.lean": {
+        "bytes": 26809,
+        "sha256": "ff74af867a84c3b88eaaf337f6cbd1e9b65f801d0643f663593154ba7671338b"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01/original-extracted/R7-W01/upstream/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Dyadic/Rounding.lean": {
+        "bytes": 8850,
+        "sha256": "cbc4f0a6a43562e8144a007835cea18c7004869e63b36a25f5052c1044c504c1"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W01/original-extracted/R7-W01/upstream/FloatLib/FloatLib/Floats/ExecFloat/Carrier.lean": {
+        "bytes": 15488,
+        "sha256": "40c83855123500a740dcef751a4c356a222533180af6ccf896cf745983c1c70f"
+      },
+      "competitions/floatlib/research/materials/20261022/R2-W01c/FloatLib_R2-W01c/public_sources/floatlib_fixed/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Base/Runtime.lean": {
+        "bytes": 6683,
+        "sha256": "1a00aeab50520759e90e3af0cbcea0e61a03ec1b2648907409f4da9d6c73ef67"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/official/lean/contract/Contract.lean": {
+        "bytes": 1731,
+        "sha256": "454d6ffe93f13b39e2dabdda5ead4a042dcd201bf025e79663ef711c1d63ee5b"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/source/official/lean/contract/ContractTensor.lean": {
+        "bytes": 3433,
+        "sha256": "65f31bc0d7793f0208465ca554486834b572a45c21c35772789551ac8a82a26c"
+      },
+      "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W11/original-extracted/R7-W11/evidence/harness-source-manifest.json": {
+        "bytes": 9761,
+        "sha256": "25a5c7885b463c31313603e7d854bc814c591dce461cda6b1f91294b424a4d21"
+      }
+    },
+    "inverse_939_to_4a30": true,
+    "forward_4a30_to_939": true,
+    "independent_60f_to_4a30": true,
+    "three_moved_proof_blocks": {
+      "NativeBridge": {
+        "939": {
+          "start_line": 2044,
+          "end_line": 2234,
+          "bytes": 10136,
+          "sha256": "03b626fbaf4e5ac0cc3c9bd6a0009eeaa00eb4d508b0f9b64d867fee2682d3fc"
+        },
+        "60f": {
+          "start_line": 2064,
+          "end_line": 2254,
+          "bytes": 10136,
+          "sha256": "03b626fbaf4e5ac0cc3c9bd6a0009eeaa00eb4d508b0f9b64d867fee2682d3fc"
+        },
+        "4a30": {
+          "start_line": 2044,
+          "end_line": 2234,
+          "bytes": 10136,
+          "sha256": "03b626fbaf4e5ac0cc3c9bd6a0009eeaa00eb4d508b0f9b64d867fee2682d3fc"
+        }
+      },
+      "NotNaNProbe": {
+        "939": {
+          "start_line": 2236,
+          "end_line": 2291,
+          "bytes": 2494,
+          "sha256": "6440cc47ffac4bbfc9c5a42f48d3a4ef7b455d2f7f6792a341b2d0e2630061a1"
+        },
+        "60f": {
+          "start_line": 2374,
+          "end_line": 2429,
+          "bytes": 2494,
+          "sha256": "6440cc47ffac4bbfc9c5a42f48d3a4ef7b455d2f7f6792a341b2d0e2630061a1"
+        },
+        "4a30": {
+          "start_line": 2236,
+          "end_line": 2291,
+          "bytes": 2494,
+          "sha256": "6440cc47ffac4bbfc9c5a42f48d3a4ef7b455d2f7f6792a341b2d0e2630061a1"
+        }
+      },
+      "R7Native": {
+        "939": {
+          "start_line": 2293,
+          "end_line": 2516,
+          "bytes": 11022,
+          "sha256": "1f60d2bac8219bc597768fc77bd54a71ddf5a4c1bcadacb61ef56fa39856bf2b"
+        },
+        "60f": {
+          "start_line": 2431,
+          "end_line": 2654,
+          "bytes": 11022,
+          "sha256": "1f60d2bac8219bc597768fc77bd54a71ddf5a4c1bcadacb61ef56fa39856bf2b"
+        },
+        "4a30": {
+          "start_line": 2293,
+          "end_line": 2516,
+          "bytes": 11022,
+          "sha256": "1f60d2bac8219bc597768fc77bd54a71ddf5a4c1bcadacb61ef56fa39856bf2b"
+        }
+      }
+    },
+    "earlier_R2_prefix_sha256": "b5a57ded4409c1725d71052ad6bb9d38d8608f10b80bac60237b9ff59be444e9",
+    "earlier_R2_prefix_bytes": 49185,
+    "namespace_ranges": {
+      "R2W01c.NativeBridge": [
+        {
+          "start_line": 474,
+          "end_line": 645
+        }
+      ],
+      "Submission.NativeBridge": [
+        {
+          "start_line": 2044,
+          "end_line": 2234
+        }
+      ],
+      "Submission.NotNaNProbe": [
+        {
+          "start_line": 2236,
+          "end_line": 2291
+        }
+      ],
+      "Submission.R7Native": [
+        {
+          "start_line": 2293,
+          "end_line": 2516
+        }
+      ],
+      "Submission.DWordNaN": [
+        {
+          "start_line": 2520,
+          "end_line": 2692
+        }
+      ],
+      "Submission.DExceptionalWord": [
+        {
+          "start_line": 2710,
+          "end_line": 2989
+        }
+      ]
+    },
+    "balanced_namespaces": true,
+    "nan_block_exactly_once": true,
+    "adapted_math": {
+      "full_sha256": "9134fffd86d5653bbbf27d6c13d47febf4ce76c6e787f9748cc15c1b0a544f67",
+      "inserted_rstrip_sha256": "f6e837294aec9ad8da7b32883e3e096f3a4b14bd52a77cd09bae4be69dcf2588",
+      "namespace_declarations_and_proofs_unchanged_except_two_header_comments": true
+    },
+    "policy": {
+      "status": "PASS_STATIC_ORIGINAL_POLICY_FUNCTIONS",
+      "result": null,
+      "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+      "gate_url": "https://raw.githubusercontent.com/conjectures-io/conjectures-optimisation-float-kernels/4b7e83841cc0c32c6529f533923c73d33b5ecf97/gate.py",
+      "slot": "full",
+      "contract": "ContractTensor",
+      "max_bytes": 256000,
+      "official_statement_or_fullgate": "NOT_RUN"
+    },
+    "finite_checks": {
+      "status": "PASS_TARGETED_INTEGER_MODEL_AND_STATIC_DEFS_ONLY",
+      "pairs": 30,
+      "operation_checks": 60,
+      "witnesses": [
+        {
+          "label": "quiet_left_signaling_right",
+          "a": "0x7fc00111",
+          "b": "0xff800002",
+          "outputs": {
+            "add": "0xffc00002",
+            "mul": "0xffc00002"
+          }
+        },
+        {
+          "label": "signaling_left_quiet_right",
+          "a": "0xff800003",
+          "b": "0x7fc00222",
+          "outputs": {
+            "add": "0xffc00003",
+            "mul": "0xffc00003"
+          }
+        },
+        {
+          "label": "both_signaling_left_priority",
+          "a": "0x7f800011",
+          "b": "0xff800022",
+          "outputs": {
+            "add": "0x7fc00011",
+            "mul": "0x7fc00011"
+          }
+        },
+        {
+          "label": "both_quiet_left_priority",
+          "a": "0xffc00111",
+          "b": "0x7fc00222",
+          "outputs": {
+            "add": "0xffc00111",
+            "mul": "0xffc00111"
+          }
+        },
+        {
+          "label": "positive_inf_right_nan",
+          "a": "0x7f800000",
+          "b": "0xffc00234",
+          "outputs": {
+            "add": "0xffc00234",
+            "mul": "0xffc00234"
+          }
+        },
+        {
+          "label": "left_nan_negative_inf",
+          "a": "0x7f800345",
+          "b": "0xff800000",
+          "outputs": {
+            "add": "0x7fc00345",
+            "mul": "0x7fc00345"
+          }
+        },
+        {
+          "label": "negative_zero_right_signaling",
+          "a": "0x80000000",
+          "b": "0x7f800067",
+          "outputs": {
+            "add": "0x7fc00067",
+            "mul": "0x7fc00067"
+          }
+        },
+        {
+          "label": "negative_quiet_positive_zero",
+          "a": "0xffc00456",
+          "b": "0x00000000",
+          "outputs": {
+            "add": "0xffc00456",
+            "mul": "0xffc00456"
+          }
+        },
+        {
+          "label": "inf_inf_signs",
+          "a": "0x7f800000",
+          "b": "0x7f800000",
+          "outputs": {
+            "add": "0x7f800000",
+            "mul": "0x7f800000"
+          }
+        },
+        {
+          "label": "inf_signed_zero",
+          "a": "0x7f800000",
+          "b": "0x00000000",
+          "outputs": {
+            "add": "0x7f800000",
+            "mul": "0x7fc00000"
+          }
+        },
+        {
+          "label": "signed_zero_inf",
+          "a": "0x00000000",
+          "b": "0x7f800000",
+          "outputs": {
+            "add": "0x7f800000",
+            "mul": "0x7fc00000"
+          }
+        },
+        {
+          "label": "inf_signed_one",
+          "a": "0x7f800000",
+          "b": "0x3f800000",
+          "outputs": {
+            "add": "0x7f800000",
+            "mul": "0x7f800000"
+          }
+        },
+        {
+          "label": "signed_one_inf",
+          "a": "0x3f800000",
+          "b": "0x7f800000",
+          "outputs": {
+            "add": "0x7f800000",
+            "mul": "0x7f800000"
+          }
+        },
+        {
+          "label": "inf_inf_signs",
+          "a": "0x7f800000",
+          "b": "0xff800000",
+          "outputs": {
+            "add": "0x7fc00000",
+            "mul": "0xff800000"
+          }
+        },
+        {
+          "label": "inf_signed_zero",
+          "a": "0x7f800000",
+          "b": "0x80000000",
+          "outputs": {
+            "add": "0x7f800000",
+            "mul": "0x7fc00000"
+          }
+        },
+        {
+          "label": "signed_zero_inf",
+          "a": "0x80000000",
+          "b": "0x7f800000",
+          "outputs": {
+            "add": "0x7f800000",
+            "mul": "0x7fc00000"
+          }
+        },
+        {
+          "label": "inf_signed_one",
+          "a": "0x7f800000",
+          "b": "0xbf800000",
+          "outputs": {
+            "add": "0x7f800000",
+            "mul": "0xff800000"
+          }
+        },
+        {
+          "label": "signed_one_inf",
+          "a": "0xbf800000",
+          "b": "0x7f800000",
+          "outputs": {
+            "add": "0x7f800000",
+            "mul": "0xff800000"
+          }
+        },
+        {
+          "label": "inf_inf_signs",
+          "a": "0xff800000",
+          "b": "0x7f800000",
+          "outputs": {
+            "add": "0x7fc00000",
+            "mul": "0xff800000"
+          }
+        },
+        {
+          "label": "inf_signed_zero",
+          "a": "0xff800000",
+          "b": "0x00000000",
+          "outputs": {
+            "add": "0xff800000",
+            "mul": "0x7fc00000"
+          }
+        },
+        {
+          "label": "signed_zero_inf",
+          "a": "0x00000000",
+          "b": "0xff800000",
+          "outputs": {
+            "add": "0xff800000",
+            "mul": "0x7fc00000"
+          }
+        },
+        {
+          "label": "inf_signed_one",
+          "a": "0xff800000",
+          "b": "0x3f800000",
+          "outputs": {
+            "add": "0xff800000",
+            "mul": "0xff800000"
+          }
+        },
+        {
+          "label": "signed_one_inf",
+          "a": "0x3f800000",
+          "b": "0xff800000",
+          "outputs": {
+            "add": "0xff800000",
+            "mul": "0xff800000"
+          }
+        },
+        {
+          "label": "inf_inf_signs",
+          "a": "0xff800000",
+          "b": "0xff800000",
+          "outputs": {
+            "add": "0xff800000",
+            "mul": "0x7f800000"
+          }
+        },
+        {
+          "label": "inf_signed_zero",
+          "a": "0xff800000",
+          "b": "0x80000000",
+          "outputs": {
+            "add": "0xff800000",
+            "mul": "0x7fc00000"
+          }
+        },
+        {
+          "label": "signed_zero_inf",
+          "a": "0x80000000",
+          "b": "0xff800000",
+          "outputs": {
+            "add": "0xff800000",
+            "mul": "0x7fc00000"
+          }
+        },
+        {
+          "label": "inf_signed_one",
+          "a": "0xff800000",
+          "b": "0xbf800000",
+          "outputs": {
+            "add": "0xff800000",
+            "mul": "0x7f800000"
+          }
+        },
+        {
+          "label": "signed_one_inf",
+          "a": "0xbf800000",
+          "b": "0xff800000",
+          "outputs": {
+            "add": "0xff800000",
+            "mul": "0x7f800000"
+          }
+        },
+        {
+          "label": "positive_inf_negative_min_subnormal",
+          "a": "0x7f800000",
+          "b": "0x80000001",
+          "outputs": {
+            "add": "0x7f800000",
+            "mul": "0xff800000"
+          }
+        },
+        {
+          "label": "negative_min_subnormal_negative_inf",
+          "a": "0x80000001",
+          "b": "0xff800000",
+          "outputs": {
+            "add": "0xff800000",
+            "mul": "0x7f800000"
+          }
+        }
+      ],
+      "counterexamples_to_wrong_rules": [
+        {
+          "bad_rule": "quiet_before_signaling",
+          "op": "add",
+          "a": "0x7fc00111",
+          "b": "0xff800002",
+          "wrong_word": "0x7fc00111",
+          "reference_word": "0xffc00002"
+        },
+        {
+          "bad_rule": "canonicalize_selected_nan",
+          "op": "add",
+          "a": "0xffc00111",
+          "b": "0x7fc00222",
+          "wrong_word": "0x7fc00000",
+          "reference_word": "0xffc00111"
+        },
+        {
+          "bad_rule": "infinity_before_nan",
+          "op": "add",
+          "a": "0x7f800000",
+          "b": "0xffc00234",
+          "wrong_word": "0x7f800000",
+          "reference_word": "0xffc00234"
+        },
+        {
+          "bad_rule": "ignore_opposite_inf_signs",
+          "op": "add",
+          "a": "0x7f800000",
+          "b": "0xff800000",
+          "wrong_word": "0x7f800000",
+          "reference_word": "0x7fc00000"
+        },
+        {
+          "bad_rule": "omit_zero_times_inf_invalid",
+          "op": "mul",
+          "a": "0x7f800000",
+          "b": "0x0",
+          "wrong_word": "0x7f800000",
+          "reference_word": "0x7fc00000"
+        },
+        {
+          "bad_rule": "recognize_only_positive_zero",
+          "op": "mul",
+          "a": "0x7f800000",
+          "b": "0x80000000",
+          "wrong_word": "0xff800000",
+          "reference_word": "0x7fc00000"
+        },
+        {
+          "bad_rule": "ignore_rhs_product_sign",
+          "op": "mul",
+          "a": "0x7f800000",
+          "b": "0xbf800000",
+          "wrong_word": "0x7f800000",
+          "reference_word": "0xff800000"
+        }
+      ],
+      "outside_domain_witnesses": [
+        {
+          "a": "0x0",
+          "b": "0x80000000",
+          "status": "OUTSIDE_DOMAIN_MUST_NOT_DISPATCH",
+          "outputs": {
+            "add": {
+              "cold_word": "0x7fc00000",
+              "reference": "0x0"
+            },
+            "mul": {
+              "cold_word": "0x7fc00000",
+              "reference": "0x80000000"
+            }
+          }
+        },
+        {
+          "a": "0x80000000",
+          "b": "0x0",
+          "status": "OUTSIDE_DOMAIN_MUST_NOT_DISPATCH",
+          "outputs": {
+            "add": {
+              "cold_word": "0x7fc00000",
+              "reference": "0x0"
+            },
+            "mul": {
+              "cold_word": "0x7fc00000",
+              "reference": "0x80000000"
+            }
+          }
+        },
+        {
+          "a": "0x80000000",
+          "b": "0x80000000",
+          "status": "OUTSIDE_DOMAIN_MUST_NOT_DISPATCH",
+          "outputs": {
+            "add": {
+              "cold_word": "0x7fc00000",
+              "reference": "0x80000000"
+            },
+            "mul": {
+              "cold_word": "0x7fc00000",
+              "reference": "0x0"
+            }
+          }
+        },
+        {
+          "a": "0x7f7fffff",
+          "b": "0x7f7fffff",
+          "status": "OUTSIDE_DOMAIN_MUST_NOT_DISPATCH",
+          "outputs": {
+            "add": {
+              "cold_word": "0x7fc00000",
+              "reference": "0x7f800000"
+            },
+            "mul": {
+              "cold_word": "0x7fc00000",
+              "reference": "0x7f800000"
+            }
+          }
+        }
+      ],
+      "trace_sha256": "cf5be09579eb5a1419e2d96ed2c7f28e242ed96f97ffa54926444cf0e41a04d4",
+      "oracle_sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+      "oracle_unchanged": true,
+      "runtime_definitions": [
+        "rawInf",
+        "rawZero",
+        "rawSign",
+        "invalidWord",
+        "infinityWord",
+        "addNoNaN",
+        "mulNoNaN",
+        "addWord",
+        "mulWord",
+        "addCold",
+        "mulCold"
+      ],
+      "runtime_no_generic_dyadic_or_option_reference": true,
+      "lean_compile": "NOT_RUN",
+      "performance": "UNKNOWN",
+      "fresh_replay_seconds": 0.004700099991168827
+    },
+    "fixed_primary_fragment_bindings": [
+      {
+        "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Agreement.lean",
+        "git_blob_sha1": "f319e0d19a7aa8f421a169c0c4f8bf6d2497722a",
+        "first_line": 37,
+        "last_line": 101,
+        "utf8_sha256": "304050d9d3453f238a0efe3c54bf1af973cb70fe6e82e724a95071190ce43f41"
+      },
+      {
+        "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Agreement.lean",
+        "git_blob_sha1": "f319e0d19a7aa8f421a169c0c4f8bf6d2497722a",
+        "first_line": 123,
+        "last_line": 128,
+        "utf8_sha256": "96a2986864bdbfa6748aed25b0cc17ebb998440ca683cbcc8aac2a8fbb341d28"
+      },
+      {
+        "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Agreement.lean",
+        "git_blob_sha1": "f319e0d19a7aa8f421a169c0c4f8bf6d2497722a",
+        "first_line": 174,
+        "last_line": 204,
+        "utf8_sha256": "1dc3f2d5b07b2358bdb1624fb9a516c53b67a988266c68525568bbbd0472e42e"
+      },
+      {
+        "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Packing.lean",
+        "git_blob_sha1": "d2a05e54fbd16b7f008aa295b986764ca71bb91e",
+        "first_line": 56,
+        "last_line": 58,
+        "utf8_sha256": "4ad8b5d89c7c53c383bb581ff0d8175c9e091d3a28fffbcae8b8646edcf7bc8e"
+      },
+      {
+        "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Packing.lean",
+        "git_blob_sha1": "d2a05e54fbd16b7f008aa295b986764ca71bb91e",
+        "first_line": 148,
+        "last_line": 156,
+        "utf8_sha256": "e9fe7206f619a469985a7097cc47a2153895f70f6427420f1f63d418a83dd005"
+      }
+    ],
+    "runtime_definition_sha256": {
+      "rawInf": "6e74dcef3ab5f217db1723d1e28da562cc2339432699046678675c2cdfb4c87f",
+      "rawZero": "93abb5635657316ace5ffc48bd3bd873ac4676b8da3248761f53068d54eb8d1e",
+      "rawSign": "514da30a5ec1c93fd3d9da4b70360a5b016b887a008756724ca49f24f8e223ec",
+      "invalidWord": "d1a1e1411219d8198e2140b7feeaf5074b4971b71d41bd183b05d8ddadb506c4",
+      "infinityWord": "fe6f35a152ae6bc0eabdf1a07c2d8f7b19dc24d2cc4e0772042f141e94c530f4",
+      "addNoNaN": "34749165616532c5154c9e41d8c65254dc0a2003b3d68a33af5221881f2477f4",
+      "mulNoNaN": "4267131ceb9344bf4abbcd263cf2595149d2bea6a5c3fabd1dc87369ea7daf55",
+      "addWord": "dd6b6f41ef22abc7320fc6bc4b92333242d6622edd187e73fd7d7940acf39b85",
+      "mulWord": "8fbebccb17af53ec53e608d9b44755fbcaea330aa53dc84256d25beeea48b0de",
+      "addCold": "f5f8d1eb48da27465de13ff63c88609cfa11cf18eb6b3794662da19b2db798a1",
+      "mulCold": "67e0a0dfc5d1f5b2f5473843f0ba29ee4f60e235ab1ff01df67b301b9f85a253"
+    },
+    "runtime_explicit_option_or_generic_model_reference": false,
+    "all_read_inputs_unchanged": true,
+    "primary_roundtrip_source_binding": {
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Base/Proof.lean",
+      "git_blob_sha1": "e469f73d5fa8e5c3dc10dc91c402322aebf4db4a",
+      "utf8_sha256": "b6b013f5f2e0e11cdbcc4524580c5d648492945141e05ed460307fcae0e9a87e"
+    },
+    "fixed_full_source_fragment_ranges_exact": [
+      {
+        "input": "fixed_Spec_Dyadic",
+        "first_line": 36,
+        "last_line": 107,
+        "utf8_sha256": "7e9391b7430e740119f955659147855867e4773cb26b5af2ecf6a8be5b8abf0f"
+      },
+      {
+        "input": "fixed_Model_Carrier",
+        "first_line": 104,
+        "last_line": 106,
+        "utf8_sha256": "6efef694d5896c7cb8baf277fdcf2e93b25d74a86bc9ed847f2fbeb9a0586c8a"
+      },
+      {
+        "input": "fixed_Model_Carrier",
+        "first_line": 130,
+        "last_line": 153,
+        "utf8_sha256": "abfe632b51cc227c73f601861e23cbe8223a7580629a355e905f27a53fadaf70"
+      },
+      {
+        "input": "fixed_Model_Carrier",
+        "first_line": 196,
+        "last_line": 207,
+        "utf8_sha256": "327710031a91ca015355f165c6cec8bd8606681a7f57d1ec658f40d1d51ff76a"
+      },
+      {
+        "input": "fixed_Model_Carrier",
+        "first_line": 252,
+        "last_line": 307,
+        "utf8_sha256": "a19a6f1cba0d9f6907f62c606fa2ee3d6653be697c3a4d286960e91b839844a1"
+      },
+      {
+        "input": "fixed_Model_Carrier",
+        "first_line": 338,
+        "last_line": 355,
+        "utf8_sha256": "2198cf59a6dbf08f59ddef85450bd9d593a3cfe24783646eb843e11d02b29298"
+      },
+      {
+        "input": "fixed_Dyadic_Rounding",
+        "first_line": 80,
+        "last_line": 93,
+        "utf8_sha256": "7f5fc61c61dd43c0e8fe83ec41954a4511d8cd2ac94b94439020fc29f87f4c35"
+      },
+      {
+        "input": "fixed_ExecFloat_Carrier",
+        "first_line": 137,
+        "last_line": 163,
+        "utf8_sha256": "12d2d0b778f10a1460b6e2678eededa9858f290683534b5ee95df6741942bf0b"
+      },
+      {
+        "input": "fixed_Native_Runtime",
+        "first_line": 35,
+        "last_line": 83,
+        "utf8_sha256": "3748d685cf44833f3a7cef1cdc70ea27e1622d1a0cb28e659152919c1863e34c"
+      }
+    ]
+  },
+  "first_real_validation": [
+    "Compile exact939 full candidate unchanged under the pinned original ContractTensor/Lean4.34/FloatLib0d918 environment. Do not infer acceptance from global17331 or parent4a30.",
+    "Replay kernel, transitive axiom audit and original full gate; use raw word outputs for the30 targeted pairs and finite-domain routing controls.",
+    "Inspect actual MainFull scalar callback clones and Submission C/O3 objects/relocations for the true cold helper graph, retained codecs, boxing and allocation sites; source no Option is not a binary cost result.",
+    "Run complete paired original timing and frozen confirmation only after correctness acceptance; no gain claimed from old complete tensor replays, whole-cell exposure or the lone sum320 count."
+  ],
+  "final_verified_at_utc": "2026-10-23T00:40:33Z",
+  "final_verification": {
+    "all25_identity_hashes_unchanged": "PASS",
+    "original_policy_AST": "PASS_STATIC_ONLY",
+    "exact_two_generation_directions_and_parent_reconstruction": "PASS",
+    "closed_proof_blocks_and_namespace_stack": "PASS",
+    "existing30_pair_60_operation_word_checks": "PASS_FINITE_MODEL_ONLY",
+    "all9_fixed_source_fragment_ranges_exact": "PASS",
+    "new_candidate_Lean_or_C_execution": "NOT_RUN"
+  }
+}

@@ -73,7 +73,7 @@
 | T10 | 非NaN原始字包含Inf，可精确往返；native add/mul结果非NaN可推出两个输入非NaN | [notnan-probe](../candidates/f01-d6-notnan-probe/Kernel.lean)，dfef26d5；706 statement PASS。该R6探针自身仅数学桥；当时缺的允许Inf操作规格桥已由R7 M21实际完整闭合，不回写R6原件 |
 | T11 | quiet NaN并非一般sum的吸收元；后续signaling NaN可优先替换它。dot各乘积已quiet时才有潜在后缀吸收 | [R6原文交接](astra-collab-20261022-r6/checkpoint-09-web-complete.md)：四个原件包已校验。R6当时NaN decode、quiet幂等及mul无signaling桥未闭合；R7 M22已由真实完整gate闭合，R6原始记录仍保留 |
 
-R7数学与证明部分已逐项审查14份交付，按实际源码/成功快照/退出码及公理日志整理为[数学储备索引](../candidates/f01-d7-research/math-reserve-index.md)，精确路径及哈希在同名JSON；原包完整性已覆盖16份，其他专项审查继续。原件均标LOCAL_ONLY，不因网页编译而晋升为本候选完整gate。主要新增承接点如下：
+R7数学与代码生成部分已逐项审查17份交付，按实际源码/成功快照/退出码及公理日志整理为[数学储备索引](../candidates/f01-d7-research/math-reserve-index.md)，精确路径及哈希在同名JSON；原包完整性已覆盖19份，低指数缩放专项审查继续。原件均标LOCAL_ONLY，不因网页编译而晋升为本候选完整gate。主要新增承接点如下：
 
 | 编号 | 数学储备及条件 | 现行验收边界 |
 |---|---|---|
@@ -84,7 +84,9 @@ R7数学与证明部分已逐项审查14份交付，按实际源码/成功快照
 | T16 | 对任意正K，保存真实块起点与前态的失败块完整raw后缀重放满足原sumSpec | MR07/W07源码/日志闭合；不是块和重关联，当前无运行候选或完整成本结果 |
 | T17 | 固定K=32的Array Float32 flat/Nat/USize wrappers，对相同任意UInt32 fallback等价 | MR08/W08b后续闭合原gap；仍缺与原raw sumSpec的组合桥，给定fallback值也未证明惰性冷路计算 |
 | T18 | 实际逐步mul结果永非sNaN，初项add(+0,product)等于仅把product的raw负零改成正零；其他符号/payload原样保留 | MR10/W10/W10b精确普通编译及218/26项原公理日志已核；完整原单位有policy/依赖体积问题，最小允许适配与n=1整合仍NOT_RUN，性能UNKNOWN |
-| T19 | 对任意native参数，ofFloat32无条件保持实际add/mul；exact native image对原序运算闭合，故原始+0及各非NaN读入字允许sum/dot/BMM直接导入native结果，途中和终点可NaN | MR11/W12精确完整普通编译与269项原公理报告已核；任意raw初值须保留image条件，61d最小映射、4792实际矩阵扫描和3d9单遍sum仍未继承新Lean或完整gate/收益 |
+| T19 | 对任意native参数，ofFloat32无条件保持实际add/mul；exact native image对原序运算闭合，故原始+0及各非NaN读入字允许sum/dot/BMM直接导入native结果，途中和终点可NaN | MR11/W12精确普通编译与269项原公理报告已核；W12c公共宿主另实际验原四spec及41项公理。任意raw初值须保留image条件，4792实际矩阵扫描和3d9单遍sum不继承公共宿主的新Lean或完整gate/收益 |
+| T20 | 旧decoder低分支拒绝考虑UInt32幅值减1回绕后仍蕴含finite；任意native前态可与原始非NaN逐步精确相加，首次原始NaN的实际修复必quiet | MR12/W12b成功快照及369项原公理报告已核；3d9的9条新循环/映射/spec定理仍未编译，右quiet与右signaling的原始优先级反例保留 |
+| T21 | 原始binary32指数1..23的表乘法解码逐位精确；保留原零/次正规/非有限分支后wrapper对全部UInt32等于旧convert；固定table[118]常量可消除已查局部暖循环once/外部调用/spill | MR14/W13/W13b数学及W14b/c原始普通编译/代码回执已核；指数0排除、NaN不能raw roundtrip。新353d实际USize解码接线Lean/fullgate/C/收益均NOT_RUN；T06既有数学想法不重复当发现 |
 
 MR09另保存了部分应用step在funext补齐参数后再simp的具体修复：精确0e8已普通编译/四原spec/公理PASS，原版fullgate仍待验证。上述数学储备的性能均不由证明存在推出。
 
@@ -103,6 +105,8 @@ R2-W03b 另有 34 条定理组成的 [unpacked-rounding 替代证明草稿][W03b
 | UInt8 lane／延迟回退地址 | 各自完整通过，约 0.13%／0.38% 差异，不采用 | 静态操作数减少不等于稳定速度收益 |
 | 矩阵改善等于整包改善 | stream-pack 同批 BMM 少 22.9%，该批整包反而约慢 2% | 保留分项与整包结果，组件收益不相加 |
 | 阶段诊断 output 占比≈99% | 609 混合 13 次调用，含不计分 raw 软件回退 | 正式计分类的阶段占比仍 UNKNOWN；607 零工作量诊断无效 |
+| C函数大就表示普通热路径也大 | W11实际MainFull mul虽含LowScale，普通路只经过89字节/26指令位置 | 无完整成本依据继续做noinline；对象/机器码形状也不是计时收益 |
+| UInt32 boxed wrapper意味着每次堆分配 | W11的ELF64 wrapper实际为tagged immediate，未调用allocator | 官方apply2、候选内部cold backend及准备/IO分配分别审查，不能据此推广整次调用无分配 |
 
 反例、失败源、慢样本和原始回执都保留在来源包及 [R4][R4]、[R5][R5]；没有用后来的修复覆盖早期失败。
 

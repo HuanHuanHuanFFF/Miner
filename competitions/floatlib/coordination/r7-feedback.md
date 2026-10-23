@@ -1,3 +1,21 @@
+## D22 00:35 UTC：残余前沿及已有word语义的唯一运行接入
+
+- D frontier-scalar-counts-807已完成一次110.19s枚举，70tensor×4实际Lean checksum、70旧word-SHA及逐case旧计数全匹配，86standalone×4原checksum另鲜核。真实97f quiet-stop BMM 18797→7365步；3d9 sum14939→320次唯一scalaradd、10952 suffixword/160sNaN替换不是add。合计残余cold18519=NaN选择10053+无NaN8466（Inf结果7634/invalid832）；全是计数而非时间，且native resultguard/canonical scan显著重叠，不相加。
+- 仅为sum320次repair不值得继续造近邻。基于已有17331全word数学probe，D将它接到4a30原两处false finite guard实际cold caller，准备唯一f01-d7-scalar-exceptional-word939dbf31705408ac5177e4ede746b7cd52c72e9b7ab7b75eb2a1fd2178635237/175363bytes。不是新语义成果：使用原addCold_spec/mulCold_spec及实际hf，所有ordinary/numeric/low-mul/tensor源码保留4a30，逆变换精确还原父本，staticpolicy PASS；nested namespace/newcaller的Lean/fullgate/C/收益全NOT_RUN，独立审查进行中。该候选仍是60f体系，不能冒充已组合97f+3d9残余调用。
+- 00:30:38官方fresh仍279/HEAD4b7/public-v2/shipped不变。四行看板去掉跨suite累计乘数展示，保持279=1.00×、当前已验公开加速及份额、一句话结论；完整历史字段仍留JSON审计。未正式评测我方对279的比率。
+- D已读W14b常量源修订与8192接入要求；原W14 warm spill否定保持，14b新数据依赖表常量消once/spill的正面代码形状另列。只读审查指出5624bytes属于W13b增量，W14b ConstantSource.lean实际786bytes，不能混。W14c公共60f宿主65a78403/常量块fdce65a4已返回本地，D子agent正在核原exit0/8公理及8192实际policy范围；它没有W13/W13b新decoder接线，不能继承完整候选接受。
+- 继续由R拥有一份隔离sum-decoder候选，D不重复写decoder；R不重复D scalar或矩阵。后续实际计时回到获授权的原版CI，暂不扩数值变体或把网页对象/叶函数观察说成整包提速。所有已开始原件收齐，10小时04:22:17截止不变；公开push仍等原问题用户回复，0新CI。
+
+## D21 00:16 UTC：三条运行接线与公共数学/代码生成边界
+
+- 本地新检查点d66bf582（59文件）已保存4792规范像冷扫描、47d原生单项乘积归一化、R3d9单遍sum与ec36 canonical探针修复、279冠军快照。没有推送/派发。810仍3full+8statement且精确ec36；public upload授权未到。
+- D独立audit-canonical-public-host.py已逐字节核W12c五次成功source snapshots/exit0、原四spec相同断言、8/41项raw公理集合及当前原版静态policy；e2e编译增量与61d去注释空白正文相同。其公开60f宿主173a不含4792/3d9新循环，所以新接线全NOT_RUN。现行官方静态gate原字节/receipt已轻量保存于D7-research/official-policy，不修改上游gate。
+- 独立3d9审查没有发现确定阻塞，真实USize/Nat读取/回绕/超大后备与首rawNaN实际add/suffix均核对；W12b369项原公理/exit闭合，九条新lemma仍未编译。review中的loop_eq同名定位已改为R7SinglePassSum6170，不改任何源码。
+- W11真实MainFull mul普通路仅89bytes/26指令位置，LowScale虽内联但跳过；停放无新依据noinline。UInt32 wrapper是立即数，官方apply2边界仍在；不说全调用无分配。两次VerifyFull/benchFull完整target exit124时仍在编依赖，未确认最终link执行，benchFull不存在；应称完整目标构建尝试超时，原历史说法保留、现行结论纠正。
+- 原件完整性已独立PASS19份/3155payload/3134manifest/168928586解压字节，旧17receipt已精确冻结，原ZIP/report都保留。数学/代码生成专项已审17份、MR01—MR13/T20，441registry文件独立核对；W13/W14专项正在结合历史复核。
+- D子agent正在以真实97f quiet-stop和3d9一次sum修复重数807剩余scalar冷路机会；旧60f的14939/18797完整回放调用不可继续当新前沿残余。另一个只读审查确认W13/14低normal公式不同于R2wide64实际方案，但warm loop spill未消，不能据此断言必慢或直接晋升运行候选。数学与C原件齐后先评估最小下一步，不扩相近网格，也不在网页拿代理计时冒充当前suite。
+- 10小时原截止04:22:17 UTC和02:45主要源码冻结保持，当前实际CI为0，9旧run终态/收齐。仍无正式参赛上传、资金或新公开推送授权。
+
 ## D20 23:46 UTC：实际scope修复、16原件与单遍sum静态验收
 
 - 703首次静态独立审查确认：暂闭Submission会结束原open；重开后R7W05/R7W12子namespace的open不外泄，旧NativeFinal后续源码缺名字上下文。D已仅补`open FloatLib.Floats Competition`，当前f01-d7-canonical-dot-scan SHA4792e9679c9607efd84a461a9d1ad7ca0e6bcb59d657fccacde8b96bf075f43c/195683bytes，原policy PASS。原703完整Kernel/manifest/builder在D7-research/negative-sources/canonical-dot-scan-scope0精确冻结；这是静态确定缺口，不写成实际Lean/官方CI失败。最小61d块不改。
@@ -161,3 +179,12 @@
 - D标量新候选285ed400，f01-d7-special-model，仅statement探针：在原failed-finite分支直接执行原Spec/Dyadic的特殊值分支，跳过双toDyadic，正常scalar路径不动。源/证明均NOT_RUN，下一批编译。其作用与R矩阵/求和后缀互补，不扩大相近变体。
 - 已核官方BenchSuite.special：NaN为sign|0x7f800000|(low|1)，low含完整23位且未强制quiet位，因此公开计分生成器本身可产生sNaN。R的last-sNaN路线有真实可达性；仍需按精确case观测命中与完整扫描成本，不把定向oracle比例当计分份额。
 - 当前冠军19:28官方snapshot684更新为274，源HEAD4b7与public-v2 SHA均未变。官方累计813.98含跨suite链，不据此推算新差距。看板与当前保留d9已更新，整包公开原版加速2.48–2.51×（802/804冻结确认口径）。
+
+
+## D23 00:49 UTC：两条新运行接线静态闭合，低解码投入边界
+
+- D已收妥22组公共原包并独立CRC/清单完整覆盖/解压逐字节通过：3478payload、3452manifest entries、172502024bytes。新增SHA256SUMS.txt/excluded_self_referential_files格式按原两项自引用排除严格核验，原19回执冻结不覆盖。数学索引MR14/T21覆盖低指数条件/全wrapper/常量/代码界线；579registry文件鲜核。
+- 939dbf31 scalar exceptional runtime独立审查通过（仅静态），353d9816低normal实际decoder独立审查通过（仅静态）；4792实际矩阵扫描审查尚在收束。两者新Lean/fullgate/C/计时仍NOT_RUN，公开上传尚待人类回复，没有新CI在跑。
+- 807原始计分cell×work重新核：低normal helper295268次，新guard仅在327432次旧非零low分支判断（32164次次正规miss），不是每个503万字都新增guard。命中cell sum:sparse/subnormal/extremes的整cell仅占当前60f整包2.405%，同批c760父本2.081%；这是曝光上限，不是可回收时间。详D7-research/low-normal-cost-screen.py/.json。保持一份353d备选，主力不因局部去ofBits/once/spill而转离非有限值组合/3d9/原始特殊word。
+- 前沿97f BMM+3d9 sum的残余cold是18519=10053NaN+8466非NaN特殊（7634Inf/832invalid），独立scalar包含在内；不是939已编译组合。旧tensor完整回放数不得继续支撑新增小变体，native result guard和canonical BMM scan有重叠。
+- W13c继续按既定公开宿主数学组合范围回收，不发送本地353d/3d9。若10分钟目标延迟，保留真实执行状态、失败/缺项；无需为填满十小时再新增近邻。原04:22:17截止、02:45冻结不变。D继续本地完整成本/源审查及可复核提交。
