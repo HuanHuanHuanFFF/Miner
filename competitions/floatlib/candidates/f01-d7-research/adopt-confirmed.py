@@ -49,14 +49,17 @@ s['performance']={'protocol':results['protocol']+'; public shipped reference','f
 s['current_champion_comparison'].update(submission=champ['submission'],source_digest=detail['digest'],policy_snapshot=competition['current_snapshot_id'],queried_at_utc=snapshot['queried_at_utc'],candidate=a.candidate,direct_paired_ratio='UNKNOWN')
 s['current_multiplier_view'].update(official_champion=champ['submission'],snapshot=competition['current_snapshot_id'],candidate=a.candidate,candidate_current_public_suite_speedup_range=whole,champion_official_historical_speedup_vs_shipped=champ['speedup_vs_shipped'],champion_official_speedup_basis=champ.get('speedup_basis'))
 s['optimization_priority'].update(basis_applicability='Exact '+a.candidate+' discovery and frozen new-seed/new-runner complete gates',current_public_suite_share_percent={op:speed[op]['time_share_median_percent'] for op in ops},research_authorization='R7 ten-hour collaboration '+s['collaboration']['start_utc']+' through '+s['collaboration']['deadline_utc'])
-s['selection_scope']='Retain exact '+h+' after discovery and frozen confirmation; ten-hour champion research remains active'
-if s.get('active_jobs'):
+window_finished=bool(s['collaboration'].get('window_completed_at_utc'))
+s['selection_scope']='Retain exact '+h+' after discovery and frozen confirmation; '+('ten-hour research window ended' if window_finished else 'ten-hour champion research remains active')
+if window_finished:
+    s['research_resources']=('R7 research window ended; already-started CI is collecting terminal results' if s.get('active_jobs') else 'R7 research window ended; all prior CI terminal and collected, no new CI queued or running. Frozen new integrations still await their own authorized verification.')
+elif s.get('active_jobs'):
     s['research_resources']='R7 Astra research active; already-started CI continues to terminal results; local analysis and evidence recovery continue'
 elif s['collaboration'].get('publication',{}).get('state')=='AWAITING_EXPLICIT_PUBLIC_PUSH_AUTHORIZATION':
     s['research_resources']='R7 local/source research active; all prior CI terminal and collected, no new CI queued or running. Explicit public-push authorization remains pending after automatic approval rejection.'
 else:
     s['research_resources']='R7 local/source research active; no CI queued or running'
-s['remaining']=['Current-champion replacement unachieved','Continue authorized ten-hour research through '+s['collaboration']['deadline_utc'],'Formal submission, registration and funds outside scope']
+s['remaining']=['Current-champion replacement unachieved',('Frozen new integrations await separately authorized original gates' if window_finished else 'Continue authorized ten-hour research through '+s['collaboration']['deadline_utc']),'Formal submission, registration and funds outside scope']
 s['current_protocol']['scope']='Current original paid private suite; current champion'+str(champ['submission'])+' verification_current=true and26cell report verified; public-v2 SHA unchanged'
 write(sp,s)
 labels={'add':'加法 add','mul':'乘法 mul','sum':'求和 sum','bmm':'矩阵乘法 bmm'}

@@ -220,3 +220,9 @@
 - Nan只读939接入可行性：精确29961B旧scalar区在cc06唯一出现，新50221B区的内存投影252623B/SHA2b4dfc44，余3377B。D另用60f/939最长公共前后缀（不同29959B最小区）得到相同完整投影SHA并逆回cc06。没有写新源/manifest/CI计划，190候选不增加。
 - 明确负面：cc06若用WordFinite到NativeFinal的宽namespace锚点，会误删40743B的R7W03/NaN suffix/replayEarly等实际依赖；错误产物211880B反而满足容量。报告与D另法核验保留该反例，不能仅据字节相加或sizePASS就认定正确接线。后续仅在cc06/939各自完整gate、939净收益和普通cell无回归成立后再考虑新轮实际组合。
 - R验收顺序报告已按原字节复制D7的validation-order-review.md/json并保存映射回执。D采用60f→cc06最小完整gate主批、全观察器关闭；第二槽有预算时d027/e139两个已有statement，父组件只在真实失败定位时补验。旧810保持原计划和NOT_DISPATCHED，不静默扩批/变更标签。03:15确认派发里程碑已错过，状态文件明确记录公开push授权待答；不延长原04:22:17研究截止。03:17只读远端仍f69da289、0active。
+
+## D28 04:25 UTC：十小时窗口结束与终态收齐
+
+- 04:22:34实际截止后核验，elapsed36017.76秒，window_complete=true；190源码/全部manifest、12验证入口、773数学来源及9批CI终态一致。R研究实际04:22:35结束，最终交接已收；D另核50份E盘ZIP/report哈希全部一致，原件保留。
+- 04:15官方仍279/6.80117×scoring-v2，源HEAD4b7/public-v2不变；04:16远端仍f69/0active。当前保留60f不变，冲冠目标UNACHIEVED，cc06等精确新运行稿仍NOT_RUN，原公开push问题未答。
+- 当前状态已结束，不自动排新任务。刷新看板的实际闭合状态分支已执行确认，不再把已结束窗口显示为研发进行中。最终证据在D7-research/round-end-evidence.json及research-final-handoff-receipt.json；私人研究状态原字节快照只留本地忽略目录。
