@@ -1,0 +1,9 @@
+未发现确定静态阻断。D9精确SHA5480649d30bf1e0d8a219486b89b3f975847d7a5aa224cce58907978e9e77c11，235483B；父本41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7，235169B。仅三处差异：5156–5164增加304B directDecode及等式；5168–5169替换两次输入解码（144B→116B）；5187增加38B simp。独立逆向逐hunk恢复完整41，净增314B，距上限20517B。
+
+两处运行变化都在NativeFinal.dotLoop：同一原raw getD地址/default的toFloat32改为directDecode。k顺序、逐次乘法后加法、+0初始值、Nat循环、最终NaN判断及原A/B replayEarly没有改动。scalar add/mul、sum、Packed10/RowStream/DirectSmall dispatcher均保留原字节；Packed10起44264B、DirectSmall起11155B和R7SinglePassSum起9470B分别独立比较相同，NaNReplay完整3286B亦相同。许可/import/options保留，固定4b7静态policy检查PASS。
+
+directDecode_eq的桥是真实allUInt32命题R2W01c.convert_eq:1901，不要求finite/NormalBand。固定Contract将Binary32定义为ExecFloat.Binary8/23；固定Native API的toFloat32=Float32.ofBits(toBits32x)，toBits32x=x.raw.1，因此改写convert_eq后正好是同一Float32。它没有宣称native转换保留原NaN payload；原回退仍处理raw语义。dotLoop_eq的result.isNaN=false前提、Fin.foldl结论保持，新增simp只把hs中的两个directDecode恢复旧native表达式，然后同一IH和既有nonNaN桥继续使用。
+
+对unfold→rw→rfl一般行为曾提出待查疑问；实际父本NativeDecodeSum.decode_eq:5816–5819具有完全相同helper/type和证明模式，且精确41已通过821/822。该直接反证据意味着不能将这个模式列为新增确定风险，更不能据猜测改候选。精确D9的Lean编译仍由运行中的831裁决。
+
+本审查者未编写此D9候选；未运行builder、Lean、C、Git或CI，未改候选。新helper及dotLoop证明、新机器码和性能均未由本审查运行或判定；不将静态policy/逆变换写成831通过。交付前再次核Kernel同一5480649d…。

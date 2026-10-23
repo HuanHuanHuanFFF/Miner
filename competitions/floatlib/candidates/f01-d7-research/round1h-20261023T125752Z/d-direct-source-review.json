@@ -1,0 +1,120 @@
+{
+  "started_at_utc": "2026-10-23T13:11:06Z",
+  "completed_at_utc": "2026-10-23T13:15:41.070392+00:00",
+  "conclusion": "NO_DETERMINISTIC_STATIC_BLOCKER_FOUND; exact D9 Lean/gate/C/performance not evaluated by reviewer;831 running per coordinator",
+  "source": {
+    "path": "competitions/floatlib/candidates/f01-d9-bmm-direct-decode/Kernel.lean",
+    "sha256": "5480649d30bf1e0d8a219486b89b3f975847d7a5aa224cce58907978e9e77c11",
+    "bytes": 235483
+  },
+  "parent": {
+    "path": "competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean",
+    "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+    "bytes": 235169
+  },
+  "manifest": {
+    "path": "competitions/floatlib/candidates/f01-d9-bmm-direct-decode/manifest.json",
+    "sha256": "74d3d46f30975cb1e3886423a33120c126b7b7b4de9d24658d047716cdd7af8c",
+    "bytes": 791
+  },
+  "independence": "Reviewer did not author D9 decoder candidate. Read source and exact parent; no builder execution, source edits, Git or CI.",
+  "diff": [
+    {
+      "kind": "insert",
+      "old_lines": [
+        5156,
+        5155
+      ],
+      "new_lines": [
+        5156,
+        5164
+      ],
+      "old_bytes": 0,
+      "new_bytes": 304
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        5159,
+        5160
+      ],
+      "new_lines": [
+        5168,
+        5169
+      ],
+      "old_bytes": 144,
+      "new_bytes": 116
+    },
+    {
+      "kind": "insert",
+      "old_lines": [
+        5178,
+        5177
+      ],
+      "new_lines": [
+        5187,
+        5187
+      ],
+      "old_bytes": 0,
+      "new_bytes": 38
+    }
+  ],
+  "inverse_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+  "delta_bytes": 314,
+  "capacity_remaining": 20517,
+  "runtime_changes": "Exactly twoNativeFinal.dotLoop input conversions become directDecode; no arithmetic/reduction/address/control/replay change. New helper is R2W01b.convert x.raw.1, inline.",
+  "proof_changes": {
+    "helper": "NativeFinal.directDecode_eq5160 usesexisting allUInt32 R2W01c.convert_eq1901, with no finite or normal premise",
+    "type_alignment": "Competition.Binary32=ExecFloat.Binary exponentBits8 fractionBits23; fixedNative.toFloat32131-134 =Float32.ofBits(toBits32value), andtoBits3267-70=value.raw.1. After convert_eq, helper equality is definitionally the same nativeFloat32 value, not a claimed rawNaN payload roundtrip.",
+    "dotLoop_eq": "Original result.isNaN=false premise andoriginal Fin.foldl conclusion unchanged; after unfolding recursive step, onlysimp[directDecode_eq] at hs restores exactoldnative accumulator expression before IH; NotNaNProbe add/mul input bridges andR7Native homomorphisms unchanged.",
+    "unchanged_cold_tail": "dot still checks resultNaN then exactoriginalraw replayEarly withoriginalA/B; numericconvert fallsback toFloat32.ofBits outsideprovedfastOK band. NaNpayloads preserved byexistingrawreplay, not bynative conversion."
+  },
+  "unchanged_blocks": {
+    "scalar_and_replay_prefix": "All original bytes before firstinsertion retained. Newdeclarations inserted afterNativeFinal.sumLoop_eq; add/mul/allrawNaNreplay unchanged.",
+    "R7NaNReplay": {
+      "bytes": 3286,
+      "sha256": "00ca8eb5f34d8b8e5f293c997dd16e20e16873b9df517219f4471eb7abdbb0a3"
+    },
+    "Packed10_suffix": {
+      "bytes": 44264,
+      "sha256": "07f3e11375ff5ed6e615847863443a45b7b7643140f8a694def59b0ca492169a"
+    },
+    "DirectSmall_suffix": {
+      "bytes": 11155,
+      "sha256": "c3a209b3ad2e8a1910e12a39a1d01b9caa857aafb2d4f815437c77e867125849"
+    },
+    "R7SinglePassSum_suffix": {
+      "bytes": 9470,
+      "sha256": "4e9744ef3f1cfb26d817909a2dd1761807a12b24b974cde3394bddcfe3596817"
+    }
+  },
+  "rw_rfl_crosscheck": "Initial generic concern thatrw mightclosegoal was checked againstparentNativeDecodeSum.decode_eq5816-5819. Parent has identical helper/type/proof pattern(unfolddecode;rw[convert_eq];rfl) and parent41 passed821/822. Hence this is not a substantiated newrisk/error; actual831 remains the exactcomposition elaboration check.",
+  "static_policy": {
+    "result": "PASS exact fixed4b7 BANNED/options/attribute/import checks",
+    "imports": [
+      "ContractTensor"
+    ],
+    "set_options": [],
+    "source_bytes": 235483,
+    "legal": "No parent bytes removed except two decoder expressions; all licenses unchanged",
+    "scope": "NotLean/fullgate PASS"
+  },
+  "primary_api": [
+    {
+      "path": "competitions/floatlib/research/materials/20261022/R2-W01c/FloatLib_R2-W01c/public_sources/floatlib_fixed/FloatLib/Floats/Formats/IEEE754/Native.lean",
+      "sha256": "b6da171304380025f556bfc93a88d4b4b7b6c7ee8fd9e07581db90878c3ec35d",
+      "bytes": 9521
+    },
+    {
+      "path": "competitions/floatlib/research/materials/20261022/R2-W01c/FloatLib_R2-W01c/public_sources/official/lean/contract/Contract.lean",
+      "sha256": "454d6ffe93f13b39e2dabdda5ead4a042dcd201bf025e79663ef711c1d63ee5b",
+      "bytes": 1731
+    }
+  ],
+  "not_run": [
+    "NewdirectDecode_eq andupdateddotLoop_eq elaboration by thisreviewer",
+    "831outcome",
+    "NewC/object/performance"
+  ],
+  "final_source_sha256": "5480649d30bf1e0d8a219486b89b3f975847d7a5aa224cce58907978e9e77c11"
+}
