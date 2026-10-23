@@ -99,9 +99,9 @@
 | [f01-d6-public-suite](../../candidates/f01-d6-public-suite/Kernel.lean) | 完整通过 | 19 | [39846309529](../../candidates/f01-mul-log2-proof1/ci-runs/39846309529/download-cc7339e93405469cb1426319df998e25/diagnostics/f01-d7-public-suite/public-suite/f01-d5-stream-pack-verdict.json) |
 | [f01-d7-canonical-dot-scan](../../candidates/f01-d7-canonical-dot-scan/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-direct-nonfinite](../../candidates/f01-d7-direct-nonfinite/Kernel.lean) | 无匹配回执 | 0 | — |
-| [f01-d7-direct-nonnan](../../candidates/f01-d7-direct-nonnan/Kernel.lean) | 完整通过 | 4 | [39904491256](../../candidates/f01-mul-log2-proof1/ci-runs/39904491256/download-006a3120198d4dbbb8967edfb1c2e5da/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-nonnan-verdict.json) |
+| [f01-d7-direct-nonnan](../../candidates/f01-d7-direct-nonnan/Kernel.lean) | 完整通过 | 8 | [39907016104](../../candidates/f01-mul-log2-proof1/ci-runs/39907016104/download-b10bbda208e54d74a589fff058be9eb9/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-nonnan-verdict.json) |
 | [f01-d7-direct-singlepass](../../candidates/f01-d7-direct-singlepass/Kernel.lean) | 已失败 | 0 | [39904116090](../../candidates/f01-mul-log2-proof1/ci-runs/39904116090/download-e93b4b2f375c40e091f8e5cb24c2a844/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-singlepass-verdict.json) |
-| [f01-d7-direct-singlepass-proof2](../../candidates/f01-d7-direct-singlepass-proof2/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-d7-direct-singlepass-proof2](../../candidates/f01-d7-direct-singlepass-proof2/Kernel.lean) | 完整通过 | 2 | [39907016104](../../candidates/f01-mul-log2-proof1/ci-runs/39907016104/download-b10bbda208e54d74a589fff058be9eb9/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-singlepass-proof2-verdict.json) |
 | [f01-d7-direct-small](../../candidates/f01-d7-direct-small/Kernel.lean) | 完整通过 | 5 | [39847080316](../../candidates/f01-mul-log2-proof1/ci-runs/39847080316/download-61bf160491654012b5e910d27b81b2f6/diagnostics/f01-d7-public-suite/public-suite/f01-d7-direct-small-verdict.json) |
 | [f01-d7-dot-nonnan-scan-probe](../../candidates/f01-d7-dot-nonnan-scan-probe/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-exceptional-word-probe](../../candidates/f01-d7-exceptional-word-probe/Kernel.lean) | 无匹配回执 | 0 | — |
@@ -110,7 +110,7 @@
 | [f01-d7-public-suite](../../candidates/f01-d7-public-suite/Kernel.lean) | 完整通过 | 19 | [39846309529](../../candidates/f01-mul-log2-proof1/ci-runs/39846309529/download-cc7339e93405469cb1426319df998e25/diagnostics/f01-d7-public-suite/public-suite/f01-d5-stream-pack-verdict.json) |
 | [f01-d7-result-guard-add](../../candidates/f01-d7-result-guard-add/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-result-guard-both](../../candidates/f01-d7-result-guard-both/Kernel.lean) | 已失败 | 0 | [39903681347](../../candidates/f01-mul-log2-proof1/ci-runs/39903681347/download-104b25d48a2944cda69f8d957ab75ddb/diagnostics/f01-d7-public-suite/public-suite/f01-d7-result-guard-both-verdict.json) |
-| [f01-d7-result-guard-both-proof2](../../candidates/f01-d7-result-guard-both-proof2/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-d7-result-guard-both-proof2](../../candidates/f01-d7-result-guard-both-proof2/Kernel.lean) | 完整通过 | 2 | [39906526802](../../candidates/f01-mul-log2-proof1/ci-runs/39906526802/download-f7f63eec154f4d6d896a400652cb3825/diagnostics/f01-d7-public-suite/public-suite/f01-d7-result-guard-both-proof2-verdict.json) |
 | [f01-d7-result-guard-mul](../../candidates/f01-d7-result-guard-mul/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-scalar-exceptional-word](../../candidates/f01-d7-scalar-exceptional-word/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-d7-scalar-nan-select](../../candidates/f01-d7-scalar-nan-select/Kernel.lean) | 无匹配回执 | 0 | — |

@@ -2,9 +2,17 @@
 
 初次审查范围为 W01、W01b、W02–W09、W08b 共 11 份交付。后续专项审查现覆盖 **25 份交付、14 项结论、773 个来源/日志/审查文件**；25份原包的 CRC、清单完整覆盖及解压字节均已独立核验。没有本地运行 Lean。旧完整性回执由原提交及 integrity-history 冻结保存，最新原包回执独立列出。
 
-以下 **14 项**分为 1 项已用组件、10 项数学储备、1 项具体证明修复、2 项代码生成证据。网页固定 Lean 4.34 的普通编译/规格/公理日志，与精确候选原版 full gate 分列；新整合与性能不继承网页结果。原件均为 **LOCAL_ONLY**，精确相对路径、source/log SHA-256、退出码与 `E:/Download` 原包恢复位置保存在同名 JSON；本页只链接已核对本地 Git 字节的候选。
+下表保留原审查时的分类：**14 项**分为 1 项已用组件、10 项数学储备、1 项具体证明修复、2 项代码生成证据。网页固定 Lean 4.34 的普通编译/规格/公理日志，与精确候选原版 full gate 分列；新整合与性能不继承网页结果。原件均为 **LOCAL_ONLY**，精确相对路径、source/log SHA-256、退出码与 `E:/Download` 原包恢复位置保存在同名 JSON；本页只链接已核对本地 Git 字节的候选。
 
-当前 [c760 非NaN基座](../f01-r7-nonnan-runtime/Kernel.lean)（`c7605688…`）已有 805/807/809 原版 gate；[60f 保留包](../f01-d7-direct-nonnan/Kernel.lean)使用该基座。W05 复制的既有 NativeBridge/NotNaNProbe/R7Native 不重复计为新储备，也不把 W01/W01b 误记为这些既有非NaN证明的原创来源。
+原10小时窗口结束时，[c760 非NaN基座](../f01-r7-nonnan-runtime/Kernel.lean)（`c7605688…`）已有 805/807/809 原版 gate；[60f 保留包](../f01-d7-direct-nonnan/Kernel.lean)使用该基座。W05 复制的既有 NativeBridge/NotNaNProbe/R7Native 不重复计为新储备，也不把 W01/W01b 误记为这些既有非NaN证明的原创来源。
+
+## 授权后的实际接入验收
+
+- **当前保留a84**：[单遍求和＋直接点积](../f01-d7-direct-singlepass-proof2/Kernel.lean)，818/819原版完整gate及冻结独立确认均通过。MR02/MR11/MR12的实际读取、Nat/USize和最终规格接线已在这一精确源中验收；原cc06在811/815失败，3d9等其他哈希不继承结果。
+- **已验证备选bee6**：[结果判别](../f01-d7-result-guard-both-proof2/Kernel.lean)，817/812完整gate及独立确认均通过，接入MR04的IEEE自比较判据。原d027失败及1f4未验状态仍保留。
+- 两条路线分别确认相对60f整包降耗22.5%–22.8%及10.4%–10.6%；未创建两者新组合。[原始验收索引](authorized-validation/continuation-results.json)。
+
+原储备审查与缺项：
 
 | 编号／交付 | 可迁移结论及必要条件 | 实际证据与当前边界 | 下个外部证伪点 |
 |---|---|---|---|

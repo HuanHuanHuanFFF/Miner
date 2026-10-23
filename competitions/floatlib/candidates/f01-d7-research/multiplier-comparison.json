@@ -1,10 +1,10 @@
 {
-  "as_of_utc": "2026-10-23T04:23:00.119719+00:00",
-  "candidate": "f01-d7-direct-nonnan",
-  "kernel_sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+  "as_of_utc": "2026-10-23T05:54:53.281682+00:00",
+  "candidate": "f01-d7-direct-singlepass-proof2",
+  "kernel_sha256": "a84c1618cebe5892cbffd3657de8f2e6b96f0f70df2811af75c09a6ea3c5f736",
   "full_gate_runs": [
-    39840672791,
-    39847080316
+    39905644450,
+    39907016104
   ],
   "public_results": "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json",
   "champion": {
@@ -15,55 +15,166 @@
     "official_cumulative_speedup_vs_shipped": 6.801172876863092,
     "official_speedup_basis": "scoring-v2-2026-10",
     "cumulative_scope": "Official API hash-linked estimate on its declared benchmark basis; a changed benchmark requires a measured anchor. Not a matched comparison to our public-v2 candidate.",
-    "snapshot": "708",
-    "receipts": "competitions/floatlib/candidates/f01-d7-research/official-20261023T041521Z/receipts.json"
+    "snapshot": "711",
+    "receipts": "competitions/floatlib/candidates/f01-d7-research/official-20261023T055255Z/receipts.json"
   },
   "public_speedup": {
     "whole_range": [
-      2.843792679974477,
-      2.942815288983305
+      3.4437129638475112,
+      3.8331427113524263
     ],
     "operations": {
       "add": {
         "speedup_range": [
-          2.5744517541461676,
-          2.813943581552718
+          2.660882650311083,
+          2.718525207915629
         ],
-        "time_share_median_percent": 25.235862202436415
+        "time_share_median_percent": 32.6730544150795
       },
       "mul": {
         "speedup_range": [
-          1.4050901903854165,
-          1.4863319363006284
+          1.3670674127460611,
+          1.3969207347643529
         ],
-        "time_share_median_percent": 26.327569659740934
+        "time_share_median_percent": 34.59511371204287
       },
       "sum": {
         "speedup_range": [
-          4.485291950064925,
-          4.564097355247172
+          12.164773450231523,
+          16.96688780909035
         ],
-        "time_share_median_percent": 14.090979205883128
+        "time_share_median_percent": 5.744194305144227
       },
       "bmm": {
         "speedup_range": [
-          3.4304743309577392,
-          3.5431286112208076
+          4.617040345953963,
+          6.834800456422844
         ],
-        "time_share_median_percent": 34.34558893193952
+        "time_share_median_percent": 26.98763756773341
       }
     }
   },
   "previous_package": {
-    "candidate": "f01-d7-direct-small",
+    "candidate": "f01-d7-direct-nonnan",
     "whole_normalized_ratios": [
-      0.9070099218225419,
-      0.8617567155999797
+      0.7723024200391897,
+      0.7748858073923254
     ],
     "bmm_normalized_ratios": [
-      0.8073555243452044,
-      0.7708604479506298
+      0.6301707830056756,
+      0.6121831545937517
     ]
   },
-  "formal_submission": "NOT_SUBMITTED"
+  "formal_submission": "NOT_SUBMITTED",
+  "local_selection_guard": {
+    "accepted": true,
+    "method": "LOCAL_INDEPENDENT_CROSS_GATE_BOOTSTRAP",
+    "selection_policy": {
+      "method": "LOCAL_INDEPENDENT_CROSS_GATE_BOOTSTRAP",
+      "headline_normalized_ratio_max": 0.97,
+      "gain_p05_min_exclusive": 0.0,
+      "bootstrap_samples": 2000,
+      "bootstrap_seed": 90423,
+      "round_statistic": "median(submission_ns/incumbent_ns)",
+      "resampling": "independent gates with paired reference/submission rounds"
+    },
+    "samples": [
+      {
+        "run": 39905644450,
+        "job": 120256854552,
+        "seed": 818,
+        "relative_normalized_ratio": 0.7723024200391897,
+        "gain_p05": 0.20212764824224072
+      },
+      {
+        "run": 39907016104,
+        "job": 120261196639,
+        "seed": 819,
+        "relative_normalized_ratio": 0.7748858073923254,
+        "gain_p05": 0.20240495967643457
+      }
+    ],
+    "quantile": "linear interpolation at (n-1)*0.05",
+    "scope": "Local retention only; independent cross-gate bootstrap, not official paired admission",
+    "identity": {
+      "candidate": "f01-d7-direct-singlepass-proof2",
+      "candidate_sha256": "a84c1618cebe5892cbffd3657de8f2e6b96f0f70df2811af75c09a6ea3c5f736",
+      "baseline": "f01-d7-direct-nonnan",
+      "baseline_sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15"
+    },
+    "evidence": [
+      {
+        "ci_run_sha256": "837e9d4baf23d941ed00b11138d7a1a8bd88347f5fd752b7f3d5103351c3f10d",
+        "artifact_index_sha256": "8aa2fca76ddb22c7ffc58dec6cbd2d0801dff64845acfbf53d9ab046a763c27b",
+        "artifact_listing_sha256": "b4cbccdc663f3b7365d824de4d49195134410e8dc425a5828de9760f024c75cc",
+        "summary_sha256": "797f918dd13cfc2466df223e5db115eafe8acfd7e3da263919662c6a1d6a45b1",
+        "plan_sha256": "1b418ca92cb3b7ba0f5c47e61723c25d6f265512d3603de9d87e45bbe9dd0692",
+        "source_commit": "eae5c90a967a9f9be71ddb81f532fb1700660025",
+        "commit_tree_verified": [
+          "suite-plan.json",
+          "public-suite.py",
+          "f01-d7-direct-singlepass-proof2/Kernel.lean",
+          "f01-d7-direct-nonnan/Kernel.lean"
+        ],
+        "run_conclusion": "success",
+        "job_conclusion": "success",
+        "job_name": "floatlib",
+        "input_sha256": {
+          "f01-d7-direct-singlepass-proof2": "a84c1618cebe5892cbffd3657de8f2e6b96f0f70df2811af75c09a6ea3c5f736",
+          "f01-d7-direct-nonnan": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15"
+        },
+        "suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a",
+        "generator_sha256": "7198464dfc08f4bb2a3a5e31ce5a105964d1d73ad6b11ee49e682a30c04daf69",
+        "drawn_plan_sha256": "1bd5378be676ce1a55c90fe7ef70b9817da69e4dec0cefa7f8b2cd3d78f988a8",
+        "ci_log_sha256": "7676586e19960d7e5dfd1e94e0c37cdacc1e41ec7dcd64fc16a9b2abc4aa691b",
+        "run_attempt": null,
+        "runner": null,
+        "runner_basis": "Distinct actual job IDs plus raw hosted Ubuntu24 setup log; absent runner/run_attempt fields remain unknown",
+        "verdict_sha256": {
+          "f01-d7-direct-singlepass-proof2": "1b127b854609aca71781804f2b4980b0629d3e55549f8c704ba1f735d0521b0b",
+          "f01-d7-direct-nonnan": "2ff06e755e9bed098c625e50343c7b5a6a5706b7291ca2727da83d69b74c6d63"
+        }
+      },
+      {
+        "ci_run_sha256": "778dd07d91e4b4e6f17cba8e98471a07615878d80a272562c3a66be1088dd6ae",
+        "artifact_index_sha256": "3b9f36a3d5608e8744baef619d28a7043d95eff31da6099b9371f4bc623cc1d1",
+        "artifact_listing_sha256": "f097f8aa22691e33fd855fe1159fe333f22ef6754fc406b36fe6b47c4780880f",
+        "summary_sha256": "d8e67febb20d2b95a26ff977ad0add5d66d62cf9f5875d04c84d83e3f98ed0c9",
+        "plan_sha256": "e9734d3934d794d8c05289a0eea9f23a5587b1f16430ae8c575540f64e363fd3",
+        "source_commit": "5b9c4856bf666f8eb7ae4b7198261191d298d266",
+        "commit_tree_verified": [
+          "suite-plan.json",
+          "public-suite.py",
+          "f01-d7-direct-singlepass-proof2/Kernel.lean",
+          "f01-d7-direct-nonnan/Kernel.lean"
+        ],
+        "run_conclusion": "success",
+        "job_conclusion": "success",
+        "job_name": "floatlib",
+        "input_sha256": {
+          "f01-d7-direct-singlepass-proof2": "a84c1618cebe5892cbffd3657de8f2e6b96f0f70df2811af75c09a6ea3c5f736",
+          "f01-d7-direct-nonnan": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15"
+        },
+        "suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a",
+        "generator_sha256": "7198464dfc08f4bb2a3a5e31ce5a105964d1d73ad6b11ee49e682a30c04daf69",
+        "drawn_plan_sha256": "ccf13fb721d1321e201fb1309eb1501bdf5f855acf74e6dfb687afe76625adff",
+        "ci_log_sha256": "26aa3423d1ec275f7df992f1fcf56be8b9b2cc004bf0e81249997018d19cfeef",
+        "run_attempt": null,
+        "runner": null,
+        "runner_basis": "Distinct actual job IDs plus raw hosted Ubuntu24 setup log; absent runner/run_attempt fields remain unknown",
+        "verdict_sha256": {
+          "f01-d7-direct-singlepass-proof2": "554a2e2b835094fa5896062453832c889f5050995d74edaddb2e97ea783f4420",
+          "f01-d7-direct-nonnan": "f7fffb8382d77fa76aaa8a3983c8f835d5310f3aea0593dd84684b8c8ba92b41"
+        }
+      }
+    ],
+    "random_stream": "One Random(90423) stream; discovery then confirmation, candidate then baseline, 25 paired-round index draws each, 2000 replicates per run",
+    "helper_sha256": "b009d7b2f2161d756584013ebfc8adea3d2373ddac04c08a4602eb53e4c7a0b2",
+    "adapter_sha256": "86084d93c52022f4f4a5cfb7969e2b4a035b9a4a4f1f8c6c7e74bd412eafca24"
+  },
+  "independent_adoption_runs": [
+    39905644450,
+    39907016104
+  ],
+  "display_sample_scope": "Every retained exact-source full current-public-v2 result in the audit, including slower control samples; no best-sample filtering"
 }
