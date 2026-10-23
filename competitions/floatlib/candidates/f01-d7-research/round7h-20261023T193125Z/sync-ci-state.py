@@ -76,16 +76,37 @@ def main():
                 assert file.is_relative_to(artifact)
                 assert file.stat().st_size == info['bytes'] and digest(file) == info['sha256']
             summary_path = artifact/'diagnostics/f01-d7-public-suite/public-suite/summary.json'
-            summary = read(summary_path)
-            assert summary['seed'] == seed and summary['source_commit'] == row['source_commit']
-            assert summary['requested_plan_sha256'] == digest(plan_path)
-            assert [x['candidate'] for x in summary['results']] == row['candidates']
             row.update(state='TERMINAL_COLLECTED_'+str(ci['conclusion']).upper(),
-                       conclusion=ci['conclusion'], collected=True,
-                       summary=summary_path.relative_to(ROOT).as_posix(),
-                       summary_sha256=digest(summary_path),
-                       results=[{k: x.get(k) for k in ('candidate', 'kernel_sha256', 'full_gate', 'statement_pass', 'stage', 'exit_code')}
-                                for x in summary['results']])
+                       conclusion=ci['conclusion'], collected=True)
+            if summary_path.exists():
+                summary = read(summary_path)
+                assert summary['seed'] == seed and summary['source_commit'] == row['source_commit']
+                assert summary['requested_plan_sha256'] == digest(plan_path)
+                actual = [x['candidate'] for x in summary['results']]
+                assert actual == row['candidates'][:len(actual)]
+                if summary.get('complete') is True:
+                    assert actual == row['candidates']
+                row.update(summary=summary_path.relative_to(ROOT).as_posix(),
+                           summary_sha256=digest(summary_path),
+                           results=[{k: x.get(k) for k in ('candidate', 'kernel_sha256', 'full_gate', 'statement_pass', 'stage', 'exit_code')}
+                                    for x in summary['results']],
+                           unexecuted_candidates=row['candidates'][len(actual):])
+            else:
+                # A wrapper failure can precede the actual candidate adapter. Do
+                # not manufacture candidate failures or timing zeros from it.
+                outer_path = artifact/'summary.json'
+                outer = read(outer_path)
+                assert int(outer['run_id']) == run and outer['source_commit'] == row['source_commit']
+                assert len(outer['results']) == 1 and outer['results'][0]['candidate'] == 'f01-d7-public-suite'
+                verdict_path = artifact/outer['results'][0]['verdict']
+                verdict = read(verdict_path)
+                assert verdict.get('passed') is False and ci['conclusion'] != 'success'
+                row.update(state='OUTER_ADAPTER_FAILURE_COLLECTED', results=[],
+                           summary=outer_path.relative_to(ROOT).as_posix(), summary_sha256=digest(outer_path),
+                           unexecuted_candidates=row['candidates'],
+                           outer_failure={'verdict': verdict_path.relative_to(ROOT).as_posix(),
+                                          'sha256': digest(verdict_path), 'stage': verdict['stage'],
+                                          'reason': verdict.get('reason', '')})
         rows.append(row)
     rows.sort(key=lambda x: x['seed'])
     completed = [x['run'] for x in rows if x['collected']]

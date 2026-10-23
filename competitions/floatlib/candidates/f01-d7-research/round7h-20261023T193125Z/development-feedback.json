@@ -1,8 +1,6 @@
 {
-  "updated_at_utc": "2026-10-23T21:14:55.537656+00:00",
-  "active_ci": [
-    40024496791
-  ],
+  "updated_at_utc": "2026-10-23T21:28:53.421304+00:00",
+  "active_ci": [],
   "completed_ci": [
     {
       "run": 40013486988,
@@ -158,6 +156,44 @@
       "verdict_sha256": "7eabc9ffc6732edf9378089aa867a91b6e838fd10c41a1a8c7854e45f3439e8f",
       "summary_sha256": "c10ff1e4bc22d72ed20d8d92089f6fbc4f874cdaa2b0eefa64d976b72653b459",
       "scope": "First exact crossrow source statement failure; no runtime/performance acceptance. Preserve4bdd and repair in a new candidate."
+    },
+    {
+      "run": 40024496791,
+      "seed": 909,
+      "state": "OUTER_ADAPTER_FAILURE_COLLECTED",
+      "requested_candidates_execution": "NOT_STARTED",
+      "reason": "gate error: Command '['nm', '--defined-only', '/home/runner/work/_temp/floatlib-upstream/.sandbox/layer/upper/ir/Submission.c.o.export']' timed out after 15 seconds"
+    },
+    {
+      "run": 40025423585,
+      "seed": 910,
+      "results": [
+        {
+          "candidate": "f01-d11-bmm-underflow-zero",
+          "kernel_sha256": "d37743d3ad6fbc0ee81007a70dc8b1795d3b1aeda4fc58ed379cbab7544feddb",
+          "validation_mode": "statement-only",
+          "full_gate": false,
+          "statement_pass": false,
+          "exit_code": 1,
+          "stage": "statement",
+          "reason": "the obligation does not typecheck: error: work/Submission.lean:6590:15: Unknown constant `Bool.and_eq_true.mp` | error: build failed",
+          "verdict": "f01-d11-bmm-underflow-zero-verdict.json",
+          "verdict_sha256": "91394417d19073a82402061873bd9f242413be62eab936977e061d96e2dd64ac"
+        },
+        {
+          "candidate": "f01-d11-bmm-batch-local-output",
+          "kernel_sha256": "7e7776d95fd74d3fc2fa68ab629750228d800cac54825b41606b20ee538fdc9b",
+          "validation_mode": "statement-only",
+          "full_gate": false,
+          "statement_pass": false,
+          "exit_code": 1,
+          "stage": "statement",
+          "reason": "the obligation does not typecheck: error: work/Submission.lean:6624:8: Tactic `rewrite` failed: Did not find an occurrence of the pattern | error: work/Submission.lean:6656:86: unsolved goals | error: build failed",
+          "verdict": "f01-d11-bmm-batch-local-output-verdict.json",
+          "verdict_sha256": "552b06aacdd76eb92824b6ff1e6dfba585fe2d022cd8600967966048e9c6c3c0"
+        }
+      ],
+      "scope": "Statement-only failures; no runtime/performance result."
     }
   ],
   "pending_statement": {
@@ -171,7 +207,7 @@
   "opportunity_updates": "opportunity-updates.json",
   "for_astra": "Latest old-control analysis: n2,p2 shape[2941,15,2,2] alone14.81percent BMM and no replay. Prefer p2 all positive n, not onlyn>4 if your proof supports it. Old long-n screen30.36percent is not complete coverage of your proposed guard. Data are source852 old diagnostic only.",
   "official_refresh": "Champion285 and4b7 public protocol unchanged; full fresh raw snapshot official-20261023T195319Z.",
-  "next": "909 fused5b complete gate/capture running. 910 checks whole-array underflow-zero and batch-localB output. Astra repairing three concrete proof bridge errors after908.",
+  "next": "911 retries untouched5b+rawA+controls on fresh runner after outer nm timeout. Underflowproof2 by Sol; batchlocalproof2 by root; CrossRowsproof2 by Astra. No official/compiler/gate timeout changes.",
   "codegen_902": {
     "report": "review-raw-a-codegen.json",
     "verified_C": "Machine branch removes global A map, one raw conversion per k, no perMAC boxing; old row/tiles/output arrays and divisions remain.",

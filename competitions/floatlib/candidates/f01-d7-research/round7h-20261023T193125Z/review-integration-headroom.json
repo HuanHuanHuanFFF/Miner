@@ -1,0 +1,507 @@
+{
+  "review": "R11 combined source headroom; no new package generated",
+  "started_utc": "2026-10-23T21:08:54Z",
+  "completed_utc": "2026-10-23T21:18:31.465824+00:00",
+  "sources": [
+    {
+      "role": "fused",
+      "path": "competitions/floatlib/candidates/f01-d11-bmm-fused-output-proof3/Kernel.lean",
+      "sha256": "5b7d926cf628c2d87042386834f7c1581b9a6aa7441af196453984b395534ba2",
+      "bytes": 245841
+    },
+    {
+      "role": "cross",
+      "path": "competitions/floatlib/candidates/f01-r11-crossrow-p2-pack12/Kernel.lean",
+      "sha256": "4bdd1e7db35cd85e17d06511721d5dbf7f654ec12e58633264b08a086ec54fa0",
+      "bytes": 252609
+    },
+    {
+      "role": "underflow",
+      "path": "competitions/floatlib/candidates/f01-d11-bmm-underflow-zero/Kernel.lean",
+      "sha256": "d37743d3ad6fbc0ee81007a70dc8b1795d3b1aeda4fc58ed379cbab7544feddb",
+      "bytes": 244775
+    },
+    {
+      "role": "parent",
+      "path": "competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean",
+      "sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+      "bytes": 237142
+    }
+  ],
+  "increments": [
+    {
+      "kind": "cross",
+      "path": "competitions/floatlib/candidates/f01-r11-crossrow-p2-pack12/increment.lean",
+      "sha256": "34944745d0dd8941cc344b25951324b6e1ccf24fae199c214d3136bd4b82d667",
+      "bytes": 15409,
+      "candidate_net_increment": 15467,
+      "removed_sum_dependencies": [],
+      "deleted_optional_Packed10_dependencies": []
+    },
+    {
+      "kind": "underflow",
+      "path": "competitions/floatlib/candidates/f01-d11-bmm-underflow-zero/underflow-zero-block.lean",
+      "sha256": "49c05a1c4456efeaea2f4719ea010afb3f0e2514f481b7b3ca2aeeb07cc93c2f",
+      "bytes": 7555,
+      "candidate_net_increment": 7633,
+      "removed_sum_dependencies": [],
+      "deleted_optional_Packed10_dependencies": []
+    }
+  ],
+  "reference_inventory": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/review-source-headroom.json",
+    "sha256": "7306958385d4976e103aed6e516b45b3ac97f06f6788acc91b6856c7f4272b60",
+    "all10_P_O_span_hashes_rechecked_on5b7d": true
+  },
+  "P_O_blocks_rebound_to5b7d": [
+    {
+      "id": "P1",
+      "name": "old_Packed10_materialized_core",
+      "lines_inclusive": [
+        5670,
+        5785
+      ],
+      "byte_range_half_open": [
+        209113,
+        214090
+      ],
+      "bytes": 4977,
+      "sha256": "3d0fdf3a3084907fda4eabe2b6c26c4c1be95c7e6d26b5655c447193bd725447",
+      "start_anchor_unique": "namespace Packed10\n\ndef tileResults (batch m n p : Nat) (A : Array Float32)\n",
+      "end_anchor_unique": "  rw [hi]\n\nend Packed10\n",
+      "condition": "Remove together with P2/P3/P4/P5 and rewire bmmPackedBase_spec; active packed primitives must remain.",
+      "notice_cues": []
+    },
+    {
+      "id": "P2",
+      "name": "old_bmmR4",
+      "lines_inclusive": [
+        5787,
+        5805
+      ],
+      "byte_range_half_open": [
+        214091,
+        214915
+      ],
+      "bytes": 824,
+      "sha256": "bcc139fc9f6f341d44c041e3af29e506425c40d9909add02917ecdff2865e920",
+      "start_anchor_unique": "def bmmR4 (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n",
+      "end_anchor_unique": "    (referenceBmm_spec batch m n p A B)\n",
+      "condition": "Keep the outer end Submission at5808. Code consumers in P4 and surviving bmmPackedBase_spec; comment mentions retained.",
+      "notice_cues": []
+    },
+    {
+      "id": "P3",
+      "name": "old_RowOutput_namespace",
+      "lines_inclusive": [
+        5906,
+        5970
+      ],
+      "byte_range_half_open": [
+        218141,
+        220620
+      ],
+      "bytes": 2479,
+      "sha256": "e5c944df6004e98b1e82d4cec489831d13e17eb2c0026770e2bda8853d0dedd8",
+      "start_anchor_unique": "namespace Submission.RowOutput\n",
+      "end_anchor_unique": "end Submission.RowOutput\n",
+      "condition": "Its only external code consumers are bmmRows/bmmRows_spec in P4.",
+      "notice_cues": []
+    },
+    {
+      "id": "P4",
+      "name": "old_bmmRows_namespace",
+      "lines_inclusive": [
+        5972,
+        5996
+      ],
+      "byte_range_half_open": [
+        220621,
+        221511
+      ],
+      "bytes": 890,
+      "sha256": "23bab9695ef6097bb7f409adba1e70b46eed7bcd4de8ec531711bc3d552c536c",
+      "start_anchor_unique": "namespace Submission\n\nopen FloatLib.Floats Competition\n\ndef bmmRows (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n",
+      "end_anchor_unique": "      · exact RowOutput.core_eq batch m n p A B\n  exact (congrArg (fun v : Vector Binary32 (batch * m * p) => v.get) h).trans\n    (bmmR4_spec batch m n p A B)\n\nend Submission\n",
+      "condition": "No external token references to bmmRows/spec. This is the actual name; bmmRowOutput is absent.",
+      "notice_cues": []
+    },
+    {
+      "id": "P5",
+      "name": "RowStream_Packed10_alias",
+      "lines_inclusive": [
+        6220,
+        6225
+      ],
+      "byte_range_half_open": [
+        231475,
+        231764
+      ],
+      "bytes": 289,
+      "sha256": "154effcc644142dd011333161751936506cff68472e53e0c479106d06e7fa48c",
+      "start_anchor_unique": "theorem core_eq (batch m n p : Nat)\n    (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) :\n    core batch m n p A B = Packed10.core batch m n p A B := by\n  exact (core_eq_reference batch m n p A B).trans\n",
+      "end_anchor_unique": "    (Packed10.core_eq_reference batch m n p A B).symm\n",
+      "condition": "Only surviving code consumer is bmmPackedBase_spec:6232; replace with retained core_eq_reference. Keep core_eq_reference and closing namespace6210.",
+      "notice_cues": []
+    },
+    {
+      "id": "O1",
+      "name": "optional_decode_bounds",
+      "lines_inclusive": [
+        5515,
+        5542
+      ],
+      "byte_range_half_open": [
+        203400,
+        204269
+      ],
+      "bytes": 869,
+      "sha256": "bb2a0f02832ddfb3c8bcbfffa7899037cf9b625191eb955f36c51594522ee4b5",
+      "start_anchor_unique": "namespace Packed10\n\nopen Competition\n",
+      "end_anchor_unique": "  · exact Nat.mod_lt _ hpPos\n\nend Packed10\n",
+      "condition": "Only old outputFromTiles family consumes it; removable after planB. Whole paired namespace, no change to Packed10Index.",
+      "notice_cues": []
+    },
+    {
+      "id": "O2",
+      "name": "optional_old_column_helpers",
+      "lines_inclusive": [
+        5304,
+        5311
+      ],
+      "byte_range_half_open": [
+        193117,
+        193309
+      ],
+      "bytes": 192,
+      "sha256": "ec98ada1ecba340225d7daadddcbd315f3bf097a589f780c20760d5d995103a3",
+      "start_anchor_unique": "theorem groups_pos_of_col (p j : Nat) (hj : j < p) :\n",
+      "end_anchor_unique": "    10 * (j / 10) + j % 10 = j := by\n  omega\n",
+      "condition": "Consumers all lie in P1/P3. Keep groups at5302 and vector_get_ofFn at5313.",
+      "notice_cues": []
+    },
+    {
+      "id": "O3",
+      "name": "optional_lane_zero_alias",
+      "lines_inclusive": [
+        5293,
+        5294
+      ],
+      "byte_range_half_open": [
+        192624,
+        192699
+      ],
+      "bytes": 75,
+      "sha256": "e15ed8c31a7d54f30452eb216db11a93c53e0d7be830035788112608aacbf6f5",
+      "start_anchor_unique": "theorem lane_zero (l : Fin 10) : lane zero10 l = zero32 :=\n",
+      "end_anchor_unique": "theorem lane_zero (l : Fin 10) : lane zero10 l = zero32 :=\n  lane_zero10 l\n",
+      "condition": "No consumers; keep zero10 and lane_zero10 because finish_dot10_lane uses lane_zero10:5495.",
+      "notice_cues": []
+    },
+    {
+      "id": "O4",
+      "name": "optional_finish_fold_wrappers",
+      "lines_inclusive": [
+        5463,
+        5482
+      ],
+      "byte_range_half_open": [
+        200854,
+        201860
+      ],
+      "bytes": 1006,
+      "sha256": "5a98c11694094842eebd22dffd8a0679387a891608f49f752f79d99585d045d0",
+      "start_anchor_unique": "theorem finish_eq_fold (n baseA baseB p : Nat) (Araw Braw : Array Binary32)\n",
+      "end_anchor_unique": "  simp only [Submission.add_eq, Submission.mul_eq]\n",
+      "condition": "Remove both together; finish_eq_fold only feeds finish_eq_kernel_fold. Keep finish_eq_dot and finish_dot10_lane.",
+      "notice_cues": []
+    },
+    {
+      "id": "O5",
+      "name": "optional_finish_dot10_lane_fold",
+      "lines_inclusive": [
+        5499,
+        5510
+      ],
+      "byte_range_half_open": [
+        202689,
+        203384
+      ],
+      "bytes": 695,
+      "sha256": "f797352855a8b3ed94fbc0b9b885ce88797c2f19a2696dfcb5c7026a670f56a0",
+      "start_anchor_unique": "theorem finish_dot10_lane_fold (n baseA baseB p : Nat) (Araw Braw : Array Binary32)\n",
+      "end_anchor_unique": "  rw [finish_dot10_lane n baseA baseB p Araw Braw B l hb, NativeFinal.dot_eq]\n",
+      "condition": "No consumers; keep finish_dot10_lane used by current group_prefix.",
+      "notice_cues": []
+    }
+  ],
+  "new_direct_delete_sum_blocks": [
+    {
+      "id": "S1",
+      "name": "NativeFinal.sumLoop + sumLoop_eq",
+      "lines_inclusive": [
+        5124,
+        5154
+      ],
+      "byte_range_half_open": [
+        186082,
+        187271
+      ],
+      "bytes": 1189,
+      "sha256": "e9750f808169bc40d4ed40879d24d7dbc8b71615510fc28077c0c4781baed745",
+      "start_anchor_unique": "def sumLoop {n : Nat} (x : Vector Binary32 n) (k : Nat) (acc : Float32) : Float32 :=\n",
+      "end_anchor_unique": "      NotNaNProbe.roundtrip _ ha.2] at hnext\n    exact hnext\n  · rename_i hk\n    refine ⟨?_, ?_⟩\n    · simpa only [hs] using hf\n    · rw [Fin.foldl.loop, dif_neg hk]\n      exact congrArg ExecFloat.Binary.ofFloat32 hs.symm\ntermination_by n - k\n",
+      "condition": "Delete only the two sum declarations, retain NativeFinal namespace/dotLoop/dot/proofs.",
+      "notice_cues": []
+    },
+    {
+      "id": "S2",
+      "name": "originalSum + originalSum_spec",
+      "lines_inclusive": [
+        5224,
+        5239
+      ],
+      "byte_range_half_open": [
+        190174,
+        190792
+      ],
+      "bytes": 618,
+      "sha256": "0914dcecb5cb059af02fd9c552eba3116129531f5b3fbdc47ee6c59a1f0039e7",
+      "start_anchor_unique": "def originalSum {n : Nat} (x : Vector Binary32 n) : Binary32 :=\n",
+      "end_anchor_unique": "  · exact referenceSum_spec n x\n",
+      "condition": "Only old sumBefore bridge consumes these; delete with S1/S5.",
+      "notice_cues": []
+    },
+    {
+      "id": "S3",
+      "name": "Submission.NativeDecodeSum complete namespace",
+      "lines_inclusive": [
+        5810,
+        5838
+      ],
+      "byte_range_half_open": [
+        214933,
+        215831
+      ],
+      "bytes": 898,
+      "sha256": "a50bf7ef50e50d26ddebb7fda4098c988e60620713578b317d334195629b31b0",
+      "start_anchor_unique": "namespace Submission.NativeDecodeSum\n",
+      "end_anchor_unique": "end Submission.NativeDecodeSum\n",
+      "condition": "decode/decode_eq/loop/loop_eq only feed obsolete WordSum chain.",
+      "notice_cues": []
+    },
+    {
+      "id": "S4",
+      "name": "Submission.NativeDecodeSumWord complete namespace",
+      "lines_inclusive": [
+        5840,
+        5885
+      ],
+      "byte_range_half_open": [
+        215832,
+        217521
+      ],
+      "bytes": 1689,
+      "sha256": "d6168fb722fde22ce2813adbcbfd0ef7cccc5bb95a507606c630357300edae87",
+      "start_anchor_unique": "namespace Submission.NativeDecodeSumWord\n",
+      "end_anchor_unique": "end Submission.NativeDecodeSumWord\n",
+      "condition": "loop/run and proofs only feed obsolete SumBefore; keep shared Packed10Index helpers.",
+      "notice_cues": []
+    },
+    {
+      "id": "S5",
+      "name": "Submission namespace containing sumBeforeR7SinglePass + spec",
+      "lines_inclusive": [
+        5887,
+        5903
+      ],
+      "byte_range_half_open": [
+        217522,
+        218139
+      ],
+      "bytes": 617,
+      "sha256": "dda273faa895e40c6f75382915ac23a4c1143ee4a68370f396a500f10c2d4bb5",
+      "start_anchor_unique": "namespace Submission\n\nopen FloatLib.Floats Competition\n\ndef sumBeforeR7SinglePass {n : Nat} (x : Vector Binary32 n) : Binary32 :=\n",
+      "end_anchor_unique": "  exact h.trans (originalSum_spec n x)\n\nend Submission\n",
+      "condition": "No external callers after final sum_spec is SinglePassSum.run_spec. Delete whole paired namespace.",
+      "notice_cues": []
+    }
+  ],
+  "remaining_deleted_sum_names_after_S1S5": {
+    "NativeDecodeSum": [],
+    "NativeDecodeSumWord": [],
+    "sumBeforeR7SinglePass": [],
+    "originalSum": [],
+    "originalSum_spec": [],
+    "sumLoop": [],
+    "sumLoop_eq": []
+  },
+  "same_sum_spans_identical_in_all3_sources": true,
+  "new_sum_spec_rewire_required": false,
+  "dependency_closure_status": "STATIC_TEXT_AND_NAMESPACE_INFERENCE_NOT_LEAN_VERIFIED",
+  "active_sum_chain": {
+    "sum": 6525,
+    "sum_spec": 6527,
+    "R7SinglePassSum.run_spec": 6504,
+    "R7SinglePassSum.run": 6499,
+    "own_Nat_fallback": 6382,
+    "natLoop_eq": 6398,
+    "word_loop": 6448,
+    "word_loop_eq": 6467
+  },
+  "must_keep": [
+    {
+      "name": "R7SinglePassSum whole namespace",
+      "lines": [
+        6308,
+        6521
+      ],
+      "reason": "Actual final sum and all-input proof. run falls back to its own natLoop when n>=USize.size; old NativeDecodeSum.loop is not this fallback."
+    },
+    {
+      "name": "R7SumRepair.suffixLoop/step/suffixLoop_eq",
+      "lines": [
+        5003,
+        5037
+      ],
+      "reason": "Actual cold raw NaN suffix and proof. Do not remove alongside unused old wrappers."
+    },
+    {
+      "name": "R7W12.ofFloat32_add/rawNotNaN_eq_native_classifier, NotNaNProbe.roundtrip",
+      "reason": "Actual native_step_eq/repair_quiet bridge, including canonical native NaN accumulator."
+    },
+    {
+      "name": "R7W05.nativeSumStep/repairSumStep/repairSumStep_isQNaN and dependencies",
+      "reason": "Actual repair_quiet still calls them; an old-sum-sounding namespace is not wholly unused."
+    },
+    {
+      "name": "R2W01b/R2W01c actual decoder table/convert proof",
+      "reason": "Actual SinglePassSum uses tableProduct and convert_eq; deleting old NativeDecodeSum decode helper does not make the underlying decoder unused."
+    },
+    {
+      "name": "Packed10Index.stepNat/next_decreases",
+      "reason": "Active sum plus CrossRows increment189/203/210 depend on them. Keep Packed10Index and its active packed loop."
+    },
+    {
+      "name": "NativeFinal.dotLoop/dot/dot_eq, R7NaNReplay, Packed10.finish/finish_eq_dot/finish_dot10_lane, packB/packB_lane, vector_get_ofFn",
+      "reason": "Actual F10, DirectSmall and CrossRows arithmetic and raw NaN proof dependencies."
+    }
+  ],
+  "namespace_collision_checked": {
+    "new_increment": "Submission.R11CrossRows.lane_zero",
+    "declaration_line": 66,
+    "consumer_line": 225,
+    "status": "KEEP; distinct from optional deletion Submission.Packed10.lane_zero at5293. Current CrossRows namespace has its own definition; do not delete by bare-name search."
+  },
+  "BMM_aliases": [
+    {
+      "name": "bmmR4/bmmRows/RowOutput old chain",
+      "status": "P1-P5 removal plus existing single spec rewire"
+    },
+    {
+      "name": "bmmPackedBase + spec",
+      "base_lines": [
+        6229,
+        6253
+      ],
+      "gross_bytes": 920,
+      "status": "KEEP runtime definition; only retarget spec as P plan"
+    },
+    {
+      "name": "bmmBeforeDirectRows + spec",
+      "base_lines": [
+        6284,
+        6303
+      ],
+      "gross_bytes": 751,
+      "status": "LIVE fallback, not directly deletable. Removing requires dispatcher and proof inlining; not recommended for this capacity repair."
+    },
+    {
+      "name": "DirectRows",
+      "base_lines": [
+        6532,
+        6565
+      ],
+      "gross_bytes": 1191,
+      "status": "KEEP; CrossRows.core_eq_rows theorem depends on it even when original direct runtime guard differs."
+    }
+  ],
+  "P_spec_rewire": {
+    "name": "bmmPackedBase_spec",
+    "base_lines": [
+      6239,
+      6251
+    ],
+    "old_bytes": 547,
+    "proposed_bytes": 565,
+    "delta": 18,
+    "target": "RowStream.core_eq_reference then referenceBmm_spec",
+    "Lean": "NOT_RUN_NEW_INTEGRATION"
+  },
+  "notice_preservation": {
+    "all_removed_spans_have_no_detected_author_license_source_notice": true,
+    "referenceSum_retained": {
+      "lines": [
+        3322,
+        3329
+      ],
+      "bytes": 441,
+      "sha256": "aed483d7b864f50fab2daa1635ac6c7ecf7809b9f8ff1680e509922ba73e5aa5",
+      "reason": "TorchLean doc at3322 stays attached to original declaration. Do not delete only368B code leaving orphan doc, and do not edit attribution for small savings."
+    },
+    "new_underflow_MIT_FiniteProof_notice": "Preserve full7555B increment; not trimmed or rewritten.",
+    "historical_bmmR4_comment_lines_preserved": [
+      818,
+      852,
+      1186
+    ]
+  },
+  "capacity": {
+    "projection_method": "Exact independent net deltas added to5b7d; not a generated combined source. Final names/whitespace/spec repairs may change bytes.",
+    "base": 245841,
+    "cross_net_delta": 15467,
+    "underflow_net_delta": 7633,
+    "projected_before_pruning": 268941,
+    "P_net_saved": 9441,
+    "after_P": 259500,
+    "decoder_only_S3S4S5": {
+      "saved": 3204,
+      "projected_bytes": 256296,
+      "over_cap": 296
+    },
+    "P_plus_all5_sum_blocks": {
+      "new_saved": 5011,
+      "projected_bytes": 254489,
+      "headroom": 1511
+    },
+    "at_least4KB_headroom_plan": {
+      "delete": "P1-P5 plus S1-S5 plus prior O1-O5",
+      "total_net_saved": 17289,
+      "new_saved_beyond_P": 7848,
+      "projected_bytes": 251652,
+      "headroom": 4348,
+      "new_sum_spec_rewires": 0
+    },
+    "ReferenceSum_extra368B": "Not counted; keep original441B attributed block."
+  },
+  "composition_checks": [
+    "Use increments rather than concatenating full copies of common a066 source; only one final add/mul/sum/bmm and specs.",
+    "If underflow guard is outermost, its miss must reach combined CrossRows dispatcher; CrossRows miss reaches fused base. Keeping its original a066 fallback alias can bypass intended optimizations while still return correct values.",
+    "Keep p=0/empty/n=0/hugeNat defaults, exact per-output add/mul order and original-word NaN replay. No seed/workload dispatch.",
+    "After actual assembly repeat namespace/reference scan on exact new source, verify inverse/runtime bytes and all license notices, measure<=256000 and run exact official policy.",
+    "Then original statement/four specs/kernel replay/axioms/checksum and fullgate; accepted components and finite/textual checks do not establish new Lean closure."
+  ],
+  "not_run": [
+    "New integrated Lean",
+    "fullgate",
+    "codegen",
+    "performance",
+    "formal submission"
+  ],
+  "no_actions": [
+    "No candidate/helper/status modified",
+    "No new Kernel/combined source generated",
+    "No Git/CI/network/agent/toolchain",
+    "No future input generation or inspection"
+  ]
+}

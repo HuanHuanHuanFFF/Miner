@@ -1,6 +1,6 @@
 {
   "state": "R11_ACTIVE_BMM_STRUCTURAL_RESEARCH",
-  "updated_at_utc": "2026-10-23T21:14:18.813851+00:00",
+  "updated_at_utc": "2026-10-23T21:28:52.168197+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "candidate": "competitions/floatlib/candidates/f01-r8-combined-result-guard",
@@ -1288,7 +1288,8 @@
             "stage": "score",
             "exit_code": 0
           }
-        ]
+        ],
+        "unexecuted_candidates": []
       },
       {
         "run": 40014284237,
@@ -1334,7 +1335,8 @@
             "stage": "score",
             "exit_code": 0
           }
-        ]
+        ],
+        "unexecuted_candidates": []
       },
       {
         "run": 40017211049,
@@ -1360,7 +1362,8 @@
             "stage": "statement",
             "exit_code": 1
           }
-        ]
+        ],
+        "unexecuted_candidates": []
       },
       {
         "run": 40018666234,
@@ -1413,7 +1416,8 @@
             "stage": "score",
             "exit_code": 0
           }
-        ]
+        ],
+        "unexecuted_candidates": []
       },
       {
         "run": 40019256733,
@@ -1439,7 +1443,8 @@
             "stage": "statement",
             "exit_code": 1
           }
-        ]
+        ],
+        "unexecuted_candidates": []
       },
       {
         "run": 40020689288,
@@ -1485,7 +1490,8 @@
             "stage": "score",
             "exit_code": 0
           }
-        ]
+        ],
+        "unexecuted_candidates": []
       },
       {
         "run": 40021897970,
@@ -1511,7 +1517,8 @@
             "stage": "statement",
             "exit_code": 0
           }
-        ]
+        ],
+        "unexecuted_candidates": []
       },
       {
         "run": 40024012440,
@@ -1537,13 +1544,14 @@
             "stage": "statement",
             "exit_code": 1
           }
-        ]
+        ],
+        "unexecuted_candidates": []
       },
       {
         "run": 40024496791,
         "seed": 909,
         "source_commit": "65aef01c16e389cbe5c7e4ff89c4d0dcdffe1ee2",
-        "state": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+        "state": "OUTER_ADAPTER_FAILURE_COLLECTED",
         "candidates": [
           "f01-d11-bmm-fused-output-proof3",
           "f01-d11-bmm-raw-a-one-group",
@@ -1555,8 +1563,60 @@
           "f01-d11-bmm-fused-output-proof3",
           "f01-d11-bmm-raw-a-one-group"
         ],
-        "collected": false,
-        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T210753Z/dispatch.json"
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T210753Z/dispatch.json",
+        "conclusion": "failure",
+        "results": [],
+        "summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40024496791/download-53433bf72e33485ab2e31e0036183b26/summary.json",
+        "summary_sha256": "bd2d82ea944b7b362444e7c600d48218a59d8c627b448db7d9fc34dd155cd2f1",
+        "unexecuted_candidates": [
+          "f01-d11-bmm-fused-output-proof3",
+          "f01-d11-bmm-raw-a-one-group",
+          "f01-d10-bmm-direct-rows",
+          "f01-r8-combined-result-guard"
+        ],
+        "outer_failure": {
+          "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40024496791/download-53433bf72e33485ab2e31e0036183b26/f01-d7-public-suite-verdict.json",
+          "sha256": "dd02742ddae453622b4b0407f182682d194b74692ed6b1cd61e482a625fafeab",
+          "stage": "statement",
+          "reason": "gate error: Command '['nm', '--defined-only', '/home/runner/work/_temp/floatlib-upstream/.sandbox/layer/upper/ir/Submission.c.o.export']' timed out after 15 seconds"
+        }
+      },
+      {
+        "run": 40025423585,
+        "seed": 910,
+        "source_commit": "6aff7ca260ae5fd7c62f548f5fabbb5c2cee0dbd",
+        "state": "TERMINAL_COLLECTED_FAILURE",
+        "candidates": [
+          "f01-d11-bmm-underflow-zero",
+          "f01-d11-bmm-batch-local-output"
+        ],
+        "role": "STATEMENT_DIAGNOSTIC",
+        "capture_codegen": [],
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T211520Z/dispatch.json",
+        "conclusion": "failure",
+        "summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40025423585/download-50f43747e99846ebac96a513ea4ebeb0/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+        "summary_sha256": "f2dbabad9d79913aaeebb42c9e94a9a78575290dfe456eaed3b051d92772ac66",
+        "results": [
+          {
+            "candidate": "f01-d11-bmm-underflow-zero",
+            "kernel_sha256": "d37743d3ad6fbc0ee81007a70dc8b1795d3b1aeda4fc58ed379cbab7544feddb",
+            "full_gate": false,
+            "statement_pass": false,
+            "stage": "statement",
+            "exit_code": 1
+          },
+          {
+            "candidate": "f01-d11-bmm-batch-local-output",
+            "kernel_sha256": "7e7776d95fd74d3fc2fa68ab629750228d800cac54825b41606b20ee538fdc9b",
+            "full_gate": false,
+            "statement_pass": false,
+            "stage": "statement",
+            "exit_code": 1
+          }
+        ],
+        "unexecuted_candidates": []
       }
     ],
     "completed_ci": [
@@ -1567,11 +1627,11 @@
       40019256733,
       40020689288,
       40021897970,
-      40024012440
+      40024012440,
+      40024496791,
+      40025423585
     ],
-    "active_ci": [
-      40024496791
-    ],
+    "active_ci": [],
     "reset_used_count": 0,
     "notes": "All preparation, queues, coordination, proof repair and collection count within the fixed wall-clock window. Keep working to deadline; finish and collect any started CI even if terminal collection extends past deadline. Do not start new research after deadline.",
     "prepared_requests": [
@@ -1773,6 +1833,34 @@
             "sha256": "7e7776d95fd74d3fc2fa68ab629750228d800cac54825b41606b20ee538fdc9b",
             "capture_codegen": false,
             "validation_mode": "statement-only"
+          }
+        ]
+      },
+      {
+        "seed": 911,
+        "role": "DISCOVERY",
+        "plan": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/plan-911.json",
+        "sha256": "b1465b260abe882742084bf38ac90c284a467b2c3922c025fbfed26b2124930c",
+        "candidates": [
+          {
+            "candidate": "f01-d11-bmm-fused-output-proof3",
+            "sha256": "5b7d926cf628c2d87042386834f7c1581b9a6aa7441af196453984b395534ba2",
+            "capture_codegen": true
+          },
+          {
+            "candidate": "f01-d11-bmm-raw-a-one-group",
+            "sha256": "c477e8078eef66255f1c750b46575fc987144717eb1bffc943cf58a514755a6a",
+            "capture_codegen": true
+          },
+          {
+            "candidate": "f01-d10-bmm-direct-rows",
+            "sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+            "capture_codegen": false
+          },
+          {
+            "candidate": "f01-r8-combined-result-guard",
+            "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+            "capture_codegen": false
           }
         ]
       }
