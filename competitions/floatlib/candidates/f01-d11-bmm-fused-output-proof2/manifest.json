@@ -1,0 +1,38 @@
+{
+  "candidate": "f01-d11-bmm-fused-output-proof2",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "2c73622e91fa0edef0e37a22bac1724190451479b0dceeee04ef5d181cc811ed",
+  "candidate_bytes": 245054,
+  "created_at_utc": "2026-10-23T20:18:03.593409+00:00",
+  "parent": "f01-d11-bmm-fused-output",
+  "parent_sha256": "1b71f67ee1cb154399e60a0657618c4b968d8e4b4d642cfc0621fdf416811792",
+  "baseline": "f01-r8-combined-result-guard",
+  "baseline_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+  "mechanism": "Replace Packed RowStream row-index Vector.flatMap / rowTiles Vector / RowOutput.row Vector with nested Fin.foldl over rows and F10 column groups carrying one output Array. Compute each F10 once, finish valid lanes and push immediately. Preallocate total output capacity with Array.mkEmpty. Keep nativeA map and full packedB unchanged.",
+  "proof": "All fused-output prefix/row/lane proofs and reference connection retained. Only core_eq_reference array-index elaboration is repaired; source remains NOT_RUN until exact new statement check.",
+  "scope": "Only Packed RowStream changes. Parent DirectRows, DirectSmall, add, mul, sum, NaN replay and native MAC inner loop unchanged.",
+  "edge_cases": "Definition and proof quantify all Nat dimensions, including empty groups/rows, n=0, incomplete F10 tails and huge Nat. Existing bmmPackedBase empty-output/n=0 reference fallback and Packed10Index.runDot machine-bound fallback remain in dispatcher.",
+  "validation_mode": "statement-only first; full original gate if accepted",
+  "proof_status": "NOT_RUN",
+  "kernel_replay": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "checksum": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "formal_submission": "NOT_SUBMITTED",
+  "attribution": "All parent author/provenance comments preserved byte-for-byte outside replaced RowStream block. New fused-output writer/proof is session-authored; no external implementation copied.",
+  "change": "Proof only: establish hqo:q<output.size by output_prefix before change, supply the explicit index proof to GetElem, and use the same hqo in the prefix rewrite. No runtime definition or environment/compiler option changed.",
+  "previous_failure": {
+    "run": 40017211049,
+    "seed": 903,
+    "source_sha256": "1b71f67ee1cb154399e60a0657618c4b968d8e4b4d642cfc0621fdf416811792",
+    "stage": "statement",
+    "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40017211049/download-2cc430a78bfb46d29fb8ac9ee87f2ec4/diagnostics/f01-d7-public-suite/public-suite/f01-d11-bmm-fused-output-verdict.json",
+    "verdict_sha256": "1ac42368e06cd97a8f49db541bd27d04fbf6b0738b978f74fac9461cf2f0924a",
+    "errors": [
+      "6191:9 failed to prove index is valid",
+      "6185:0 whnf heartbeat 200000 timeout",
+      "6203:8 unknown constant core_eq_reference"
+    ],
+    "interpretation": "First error is explicit index proof omission; subsequent timeout and missing constant may be cascading. This repair must be checked rather than assumed to remove them."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "state": "PASS_EXACT_PROOF_ONLY_BYTE_TRANSFORM",
+  "parent_sha256": "1b71f67ee1cb154399e60a0657618c4b968d8e4b4d642cfc0621fdf416811792",
+  "candidate_sha256": "2c73622e91fa0edef0e37a22bac1724190451479b0dceeee04ef5d181cc811ed",
+  "candidate_bytes": 245054,
+  "delta_bytes": 56,
+  "old_text": "  intro q hq\n  change (output batch m n p A B)[q] = _\n  rw [(output_prefix batch m n p A B).2 q (by\n    rw [(output_prefix batch m n p A B).1]\n    exact hq)]\n",
+  "new_text": "  intro q hq\n  have hqo : q < (output batch m n p A B).size := by\n    rw [(output_prefix batch m n p A B).1]\n    exact hq\n  change (output batch m n p A B)[q]'hqo = _\n  rw [(output_prefix batch m n p A B).2 q hqo]\n",
+  "old_text_sha256": "483aa47049973bea9260fe6c027dd2a63591ab922423f41b555c50556b40be84",
+  "new_text_sha256": "80b09cbf4984e28fd9215fe8c9cca14d1d3e34778b0fdb5ecc83edbdc0c5f023",
+  "inverse_edit_recovers_parent_bytes": true,
+  "edits_confined_to": "Submission.RowStream.core_eq_reference proof",
+  "all_runtime_definition_bytes_preserved": true,
+  "all_author_source_comments_preserved": true,
+  "compiler_environment_options_changed": false,
+  "Lean_and_float_validation": "NOT_RUN"
+}
