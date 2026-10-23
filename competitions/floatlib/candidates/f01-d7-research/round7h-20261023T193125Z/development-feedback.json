@@ -1,23 +1,6 @@
 {
-  "updated_at_utc": "2026-10-23T23:25:50.106553+00:00",
+  "updated_at_utc": "2026-10-23T23:30:58.104988+00:00",
   "active_ci": [
-    {
-      "run": 40037275281,
-      "seed": 919,
-      "source_commit": "67a6bac0384077ba82bd2a31d7cdbd1803ad57ef",
-      "state": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
-      "candidates": [
-        "f01-d11-scalar-normal-band",
-        "f01-d11-bmm-self-classifier",
-        "f01-d11-add-official-fallback",
-        "f01-d10-bmm-direct-rows",
-        "f01-r8-combined-result-guard"
-      ],
-      "role": "DISCOVERY",
-      "capture_codegen": [],
-      "collected": false,
-      "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T230153Z/dispatch.json"
-    },
     {
       "run": 40039524733,
       "seed": 921,
@@ -33,6 +16,25 @@
       ],
       "collected": false,
       "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T232443Z/dispatch.json"
+    },
+    {
+      "run": 40039965234,
+      "seed": 922,
+      "source_commit": "abef9f10695e70b9b30e5bc481d4edde151fbbfc",
+      "state": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+      "candidates": [
+        "f01-d11-bmm-combined-classifier",
+        "f01-d11-bmm-direct-batch-rows",
+        "f01-d11-bmm-direct-continuous",
+        "f01-d10-bmm-direct-rows",
+        "f01-r8-combined-result-guard"
+      ],
+      "role": "DISCOVERY",
+      "capture_codegen": [
+        "f01-d11-bmm-direct-batch-rows"
+      ],
+      "collected": false,
+      "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T232922Z/dispatch.json"
     }
   ],
   "completed_ci": [
@@ -586,12 +588,75 @@
         }
       ],
       "unexecuted_candidates": []
+    },
+    {
+      "run": 40037275281,
+      "seed": 919,
+      "source_commit": "67a6bac0384077ba82bd2a31d7cdbd1803ad57ef",
+      "state": "TERMINAL_COLLECTED_SUCCESS",
+      "candidates": [
+        "f01-d11-scalar-normal-band",
+        "f01-d11-bmm-self-classifier",
+        "f01-d11-add-official-fallback",
+        "f01-d10-bmm-direct-rows",
+        "f01-r8-combined-result-guard"
+      ],
+      "role": "DISCOVERY",
+      "capture_codegen": [],
+      "collected": true,
+      "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T230153Z/dispatch.json",
+      "conclusion": "success",
+      "summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40037275281/download-e37cc567ba224394852a6714e764333f/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+      "summary_sha256": "ba36dd1fc57d208e8df979b4e18bec509ea0862f4484fb1cba27b58adf9770f6",
+      "results": [
+        {
+          "candidate": "f01-d11-scalar-normal-band",
+          "kernel_sha256": "e279b35413de1a753dc38edafcca3f476745390ede518ddeab93f0ccc1b8ef1d",
+          "full_gate": true,
+          "statement_pass": false,
+          "stage": "score",
+          "exit_code": 0
+        },
+        {
+          "candidate": "f01-d11-bmm-self-classifier",
+          "kernel_sha256": "6457ed8f64714c116d8e861e612c53a9019446e8a282964611c794ccba29f482",
+          "full_gate": true,
+          "statement_pass": false,
+          "stage": "score",
+          "exit_code": 0
+        },
+        {
+          "candidate": "f01-d11-add-official-fallback",
+          "kernel_sha256": "73177f570f584f3429e181e5a27f98bfb56e6fc26fd6b7b3e0fbd3ba2152a553",
+          "full_gate": true,
+          "statement_pass": false,
+          "stage": "score",
+          "exit_code": 0
+        },
+        {
+          "candidate": "f01-d10-bmm-direct-rows",
+          "kernel_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+          "full_gate": true,
+          "statement_pass": false,
+          "stage": "score",
+          "exit_code": 0
+        },
+        {
+          "candidate": "f01-r8-combined-result-guard",
+          "kernel_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+          "full_gate": true,
+          "statement_pass": false,
+          "stage": "score",
+          "exit_code": 0
+        }
+      ],
+      "unexecuted_candidates": []
     }
   ],
   "opportunity_updates": "opportunity-updates.json",
   "for_astra": "Latest old-control analysis: n2,p2 shape[2941,15,2,2] alone14.81percent BMM and no replay. Prefer p2 all positive n, not onlyn>4 if your proof supports it. Old long-n screen30.36percent is not complete coverage of your proposed guard. Data are source852 old diagnostic only.",
   "official_refresh": "official-20261023T222400Z; champion285 and4b7 unchanged; pointerchecktime updated only",
-  "next": "921 minimal wide4eb9e/41 full+capture run40039524733 active;919 still active. Prepare922 full comparison6c2d,1c54,2aaa,a066,41 with capture1c54. 0655 clean918 did not pass performance screen; do not retry merely to find a good seed or hide the negative. Need genuinely new mechanism or sufficient new-source full cohort evidence.",
+  "next": "921 minimal wide4/41 run40039524733 and922 classifier6c2d/batchrows1c54/2aaa/a066/41 run40039965234 active. Sol prepares exact capacity f8dc239141 from frozen builder, Astra owns40lane/finalsource. Preserve outer UnderflowZero priority; wide inserts only on its miss path. Final cohort not frozen yet; no future holdout inputs exposed.",
   "codegen_902": {
     "report": "review-raw-a-codegen.json",
     "verified_C": "Machine branch removes global A map, one raw conversion per k, no perMAC boxing; old row/tiles/output arrays and divisions remain.",
@@ -665,5 +730,84 @@
     },
     "verdict": "CORRECTNESS_PASS_DISCOVERY_SCREEN_FAIL_KEEP_NEGATIVE_NO_ADOPTION",
     "source_rewritten": false
+  },
+  "result919": {
+    "f01-d11-add-official-fallback": {
+      "full_gate_both": true,
+      "relative_normalized_ratio": 1.0032880561487414,
+      "gain_p05": -0.007978380677789332,
+      "per_operation_normalized": {
+        "add": 0.9964736914317102,
+        "mul": 0.9992357259444862,
+        "sum": 1.0388446462344594,
+        "bmm": 1.0060130258663966
+      }
+    },
+    "f01-d11-bmm-self-classifier": {
+      "full_gate_both": true,
+      "relative_normalized_ratio": 0.9976598482387486,
+      "gain_p05": 0.0008993170660283045,
+      "per_operation_normalized": {
+        "add": 0.9970218740728093,
+        "mul": 0.9997215917559149,
+        "sum": 1.0326410270402762,
+        "bmm": 0.9908848897839324
+      }
+    },
+    "f01-d11-scalar-normal-band": {
+      "full_gate_both": true,
+      "relative_normalized_ratio": 1.01759515477376,
+      "gain_p05": -0.016012888546970583,
+      "per_operation_normalized": {
+        "add": 1.0434968178569994,
+        "mul": 1.010062178159508,
+        "sum": 1.0025650235069579,
+        "bmm": 1.0063211139459933
+      }
+    },
+    "decision": "Scalar e279 PARK no gain. Classifier6457 small BMM gain only, combined6c2d full922 underway. Fallback7317 correctness fullPASS; reclaim15513B permitted as capacity base, measured whole1.003288 not assumed free or a speed upgrade. Specials not regressed this sample; all negatives retained."
+  },
+  "wide_assets": {
+    "output_lean": {
+      "path": "review-output-wide-layout.lean",
+      "sha256": "42a3547cd310297a2f79c636b8eb152547c8d4118f3bb66893b4762fd808bab1",
+      "bytes": 13649,
+      "status": "FINAL_DRAFT_NOT_RUN",
+      "earlier_e233_draft_superseded": true
+    },
+    "capacity_base": {
+      "candidate": "f01-d11-bmm-combined-capacity",
+      "sha256": "f8dca27517ed79927ab928af1b96ac25facffdff8b29efcbeccc48312fda9d03",
+      "bytes": 239141,
+      "headroom": 16859,
+      "new_full_gate": "NOT_RUN",
+      "outer_underflow_guard_sha256": "b135a8eef0606c7356dc12d5956115d3832aa5cddb5dc5e71e5030380c76062e",
+      "root_static_reconstruction": "PASS"
+    },
+    "capacity_note": "Do not paste entire generic13649B asset+probe4120B blindly; also need actual40lane projection. Specialize/remove unusedgenerichelpers or ordinaryblanklines without losingnotices; otherwise choose compact-S/O backbone withmoreheadroom. Wide must preserve UnderflowZero first priority.",
+    "preferred_backbone": {
+      "candidate": "f01-d11-bmm-wide-backbone",
+      "sha256": "749bc933597ec15b200e8146899f7a055e25b4eef425e156bca337a13c38ca28",
+      "bytes": 223584,
+      "headroom": 32416,
+      "components": "fused+direct+underflow+classifier+officialfallback; noCross",
+      "outer_underflow_guard_sha256": "b135a8eef0606c7356dc12d5956115d3832aa5cddb5dc5e71e5030380c76062e",
+      "Lean": "NOT_RUN_PREPARED923"
+    }
+  },
+  "result921": {
+    "run": 40039524733,
+    "full_gate_all": true,
+    "probe_active_entry_unchanged": true,
+    "actual_probe_hot_loop": "SIMD10x4lanes;12XMM;0x200-0x2df no calls/rsp/heapalloc",
+    "new_algorithm_acceptance": "NOT_APPLICABLE_UNUSED",
+    "decision": "GO_REAL_ENTRY_AND_PROOF_EXPERIMENT",
+    "Luna_report": "pending"
+  },
+  "pending923": {
+    "state": "PREPARED_STATEMENT_ONLY",
+    "proof_probe": "e73c7e957e80bc2409d7f4b656a3581b78acf3353d16cbe7eb1dae06df8eeaeb",
+    "projection_asset": "afd8d0bf8598f2f7eb612d2b53f8c318a8f4eb0b6eec41502c135db060774291",
+    "backbone": "749bc933597ec15b200e8146899f7a055e25b4eef425e156bca337a13c38ca28"
   }
 }

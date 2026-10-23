@@ -1,0 +1,126 @@
+{
+  "candidate": "f01-d11-bmm-wide-backbone",
+  "candidate_sha256": "749bc933597ec15b200e8146899f7a055e25b4eef425e156bca337a13c38ca28",
+  "candidate_bytes": 223584,
+  "headroom_bytes": 32416,
+  "wrapper_sha256": "e24d4ea5d781d47452b893f7d172df0bd3fd91b5b14e064ff3466bb5ee0fb8c0",
+  "frozen_composer_sha256": "299a5ce768230a2e658510f2669b1c949247b40d8ac59aa418eb96830f2eb6d5",
+  "frozen_donor_builder_sha256": "a13842131e051be7e84796a2fafe8978acb6c38f5aff1b84cb2d677f6f9476de",
+  "recipe": "underflow+direct then exact6457 and7317",
+  "recipe_source_sha256": "2fd068b1893ac6d24feb766ec86673dc025a056650f0cdc5bdaf6b64073ef605",
+  "recipe_source_bytes": 239031,
+  "parent": "f01-d11-bmm-fused-output-compact",
+  "parent_sha256": "f2fa8d10872e1b341f2400db3ceb3c2a9e4f0f6e6d9cd9779469bc9286760553",
+  "state": "READY_FOR_STATEMENT",
+  "checks": {
+    "original_policy": "PASS_EXACT_PINNED_POLICY_FUNCTION",
+    "namespace_stack": "BALANCED",
+    "four_exports_and_specs": "EXACTLY_ONE_EACH",
+    "duplicate_declarations": {},
+    "remaining_retired_name_counts": {
+      "NativeDecodeSum": 0,
+      "NativeDecodeSumWord": 0,
+      "sumBeforeR7SinglePass": 0,
+      "originalSum": 0,
+      "originalSum_spec": 0,
+      "sumLoop": 0,
+      "sumLoop_eq": 0,
+      "decode_bounds": 0,
+      "groups_pos_of_col": 0,
+      "column_decomposition": 0,
+      "finish_eq_fold": 0,
+      "finish_eq_kernel_fold": 0,
+      "finish_dot10_lane_fold": 0,
+      "tileResults": 0,
+      "outputFromTiles": 0,
+      "inlineDecodeC": 0,
+      "bmmR4": 0,
+      "bmmRows": 0
+    },
+    "required_preserved_declarations": [
+      "Submission.DirectRows.core",
+      "Submission.DirectRows.core_eq",
+      "Submission.NativeFinal.dot",
+      "Submission.NativeFinal.dot_eq",
+      "Submission.R7SinglePassSum.run",
+      "Submission.R7SinglePassSum.run_spec",
+      "Submission.Packed10Index.runDot",
+      "Submission.RowStream.core_eq_reference"
+    ],
+    "new_decl_count": 466,
+    "fallback_chain": [
+      {
+        "entry": "bmm",
+        "guard": "exact6a two Array.all",
+        "hit": "UnderflowZero.zeros",
+        "miss": "bmmBeforeUnderflowZero"
+      },
+      {
+        "entry": "bmmBeforeUnderflowZero",
+        "guard": "n<=4 and p>2",
+        "hit": "DirectContinuous.core",
+        "miss": "bmmBeforeDirectRows"
+      }
+    ],
+    "fallback_tail": "bmmBeforeDirectRows -> DirectSmall or bmmPackedBase -> empty/n0 reference or RowStream.core",
+    "Lean_dependency_closure": "STATIC_ONLY_NOT_RUN",
+    "donor_six_exact_edits": "PASS",
+    "inverse_to_recipe_2fd": "PASS",
+    "inverse_to_compact_f2fa": "PASS",
+    "removed_only_forty_TunedAdd_declarations": "PASS",
+    "Cross_declarations_absent": "PASS",
+    "original_author_notice_hash_multiset_preserved": "PASS",
+    "additional_notice_classification_from_retained_adjacent_comments": {
+      "01045ce7808c049cda69516cd15451bc862f2e03e35095d3ecc5d302a57f9ae3": 1
+    },
+    "public_spec_checks": {
+      "Submission.add_spec": {
+        "type_unchanged": true,
+        "full_chunk_unchanged": false,
+        "parent_sha256": "2c8786329f150749e4381a5d7d0a730e75dc4e329cfdb7ae33f021d0dbcd1a33",
+        "candidate_sha256": "f5452f305467071b80e378c4897b6f4f2d0f3cafe4377ee78e8bd97ebde9ab4d"
+      },
+      "Submission.mul_spec": {
+        "type_unchanged": true,
+        "full_chunk_unchanged": true,
+        "parent_sha256": "c5101e81605658837baef64a8d374c764609a30f4658235cf20df1ba58a4f3c8",
+        "candidate_sha256": "c5101e81605658837baef64a8d374c764609a30f4658235cf20df1ba58a4f3c8"
+      },
+      "Submission.sum_spec": {
+        "type_unchanged": true,
+        "full_chunk_unchanged": true,
+        "parent_sha256": "1fee330cdd957137ba07ce209d2271c73325f0ffb210f79aec0a777cf5e4513a",
+        "candidate_sha256": "1fee330cdd957137ba07ce209d2271c73325f0ffb210f79aec0a777cf5e4513a"
+      },
+      "Submission.bmm_spec": {
+        "type_unchanged": true,
+        "full_chunk_unchanged": true,
+        "parent_sha256": "7bbb5a52b46710ff556857563645f5582e4c76a51bfcfc58b7492704a21baed4",
+        "candidate_sha256": "7bbb5a52b46710ff556857563645f5582e4c76a51bfcfc58b7492704a21baed4"
+      }
+    },
+    "no_intermediate_Kernel_written": true,
+    "whitespace_changes": "NONE"
+  },
+  "outer_underflow": {
+    "bytes": 1039,
+    "sha256": "b135a8eef0606c7356dc12d5956115d3832aa5cddb5dc5e71e5030380c76062e",
+    "text": "namespace Submission\nopen FloatLib.Floats Competition\n\n/-- Both short-circuiting scans and the zero fill are inside the timed entry. -/\ndef bmm (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=\n  if A.toArray.all UnderflowZero.small && B.toArray.all UnderflowZero.small then\n    UnderflowZero.zeros batch m p\n  else bmmBeforeUnderflowZero batch m n p A B\n\ntheorem bmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)),\n    (bmm batch m n p A B).get = bmmSpec batch m n p A.get B.get := by\n  intro batch m n p A B\n  unfold bmm\n  split\n  · rename_i h\n    have hh : A.toArray.all UnderflowZero.small = true ∧\n        B.toArray.all UnderflowZero.small = true := by\n      simpa only [Bool.and_eq_true] using h\n    rw [UnderflowZero.zeros_eq_reference batch m n p A B hh.1 hh.2]\n    exact referenceBmm_spec batch m n p A B\n  · exact bmmBeforeUnderflowZero_spec batch m n p A B\n\nend Submission\n",
+    "byte_identical_to_2fd_and_f8dc": true,
+    "wide_must_only_replace_miss": "Insert wide inside bmmBeforeUnderflowZero; preserve the outer guard and final public specification."
+  },
+  "proof_status": "NOT_RUN_NEW_COMBINATION",
+  "leanchecker": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "checksum": "NOT_RUN",
+  "full_gate": "NOT_RUN",
+  "generated_c_assembly": "NOT_RUN",
+  "performance": "UNKNOWN_CAPACITY_AND_ISOLATION_ONLY",
+  "formal_submission": "NOT_SUBMITTED",
+  "candidate_file": "Kernel.lean",
+  "created_at_utc": "2026-10-23T23:37:03.276008+00:00",
+  "mechanism": "Independent no-Cross wide backbone retaining UnderflowZero outer guard, DirectContinuous short-n, fused RowStream,6457 endpoint classifiers and7317 official shared-add fallback. No wide loop added and no claim that removing Cross improves speed.",
+  "attribution": "Frozen composer notices and exact donor licence/source paragraphs preserved; no whitespace or ordinary source cleanup.",
+  "validation_mode": "New exact statement and original full gate required",
+  "ci_owner": "root"
+}
