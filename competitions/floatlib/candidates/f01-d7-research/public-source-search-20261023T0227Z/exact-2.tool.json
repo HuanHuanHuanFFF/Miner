@@ -1,0 +1,124 @@
+{
+  "query": "\"conjectures-optimisation-float-kernels\"",
+  "result": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "results": [
+          {
+            "url": "https://github.com/conjectures-io/conjectures-validator/blob/e78afe97f93cbdae1f65f354a8e8d12b355f2020/docs/COMPETITION_API.md",
+            "path": "docs/COMPETITION_API.md",
+            "display_url": "https://github.com/conjectures-io/conjectures-validator/blob/e78afe97f93cbdae1f65f354a8e8d12b355f2020/docs/COMPETITION_API.md",
+            "display_title": "docs/COMPETITION_API.md",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "\n## FloatLib\n\n`{board}` is a FloatLib board: `floatlib`, the paid full entry (slot `full`), or one of its practice boards: `floatlib-add`, `-mul`, `-fma`, `-div`, `-sqrt`, `-sum`, `-bmm`. All of them read FloatLib's own database (`COMPETITION_FLOATLIB_DATABASE_URL`, as the `platform_api` role of `conjectures-optimisation-float-kernels`) and nothing else. The shapes are FloatLib's own API's (`validator/service/schemas.py` there), plus `kernels`, `promoted_at`, `/champions` and the rules on `/health`. Times are `YYYY-MM-DDTHH:MM:SSZ`, ids integers. Full-entry submissions are accepted here when enabled; practice boards are read-only. Every route answers **404 `NOT_FOUND`** when FloatLib is not served here, and **503 `COMPETITION_SCHEMA_UNAVAILABLE`** when its database is older than its migration 0016 or `platform_api` cannot read `promotions`.\n\n### GET `/v1/competitions/{board}`\n",
+                "matches": [
+                  {
+                    "text": "conjectures-optimisation-float-kernels",
+                    "indices": [
+                      298,
+                      336
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/conjectures-io/conjectures-validator/blob/e78afe97f93cbdae1f65f354a8e8d12b355f2020/submission_api/floatlib_store.py",
+            "path": "submission_api/floatlib_store.py",
+            "display_url": "https://github.com/conjectures-io/conjectures-validator/blob/e78afe97f93cbdae1f65f354a8e8d12b355f2020/submission_api/floatlib_store.py",
+            "display_title": "submission_api/floatlib_store.py",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "\"\"\"Explicit async adapter to the FloatLib-owned schema (`conjectures-optimisation-float-kernels`).\n\nRead-only, through the `platform_api` role that repository grants (`deploy/platform/\nplatform_api.sql`): `submissions`, `promotions` and the published `weight_sets.api_snapshot`.\nNo ORM, migration, gate or scoring code is copied here; what the board means is the schema's\ncontract (`deploy/platform/CONTRACT.md` there), restated in the queries below:\n",
+                "matches": [
+                  {
+                    "text": "conjectures-optimisation-float-kernels",
+                    "indices": [
+                      57,
+                      95
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/conjectures-io/conjectures-validator/blob/e78afe97f93cbdae1f65f354a8e8d12b355f2020/submission_api/competitions/__init__.py",
+            "path": "submission_api/competitions/__init__.py",
+            "display_url": "https://github.com/conjectures-io/conjectures-validator/blob/e78afe97f93cbdae1f65f354a8e8d12b355f2020/submission_api/competitions/__init__.py",
+            "display_title": "submission_api/competitions/__init__.py",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "FLOATLIB: Final = \"floatlib\"\nKINDS: Final = (DEFLATE, FLOATLIB)\n\n# FloatLib's slug and boards, as `conjectures-optimisation-float-kernels` names them\n# (`validator/service/sig.py`): the competition's own slug is the paid full entry, each\n# single-kernel practice board `floatlib-<slot>`. A miner signs the slug, so these are wire format.\nFLOATLIB_SLUG: Final = \"floatlib\"",
+                "matches": [
+                  {
+                    "text": "conjectures-optimisation-float-kernels",
+                    "indices": [
+                      99,
+                      137
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/conjectures-io/conjectures-validator/blob/e78afe97f93cbdae1f65f354a8e8d12b355f2020/.env.example",
+            "path": ".env.example",
+            "display_url": "https://github.com/conjectures-io/conjectures-validator/blob/e78afe97f93cbdae1f65f354a8e8d12b355f2020/.env.example",
+            "display_title": ".env.example",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "# Which competitions this deployment serves, each from its OWN database: no competition\n# schema carries a slug column, so two competitions may never share one, and startup refuses\n# it. Unset, the deployment serves COMPETITION_SLUG alone from COMPETITION_DATABASE_URL, as\n# before. FloatLib (conjectures-optimisation-float-kernels) is served read-only, every board:\n# `floatlib` and `floatlib-<slot>`; its database's platform_api role needs SELECT on\n# `promotions` (that repository's deploy/platform/grant.sh). See\n# submission_api/competitions/__init__.py.",
+                "matches": [
+                  {
+                    "text": "conjectures-optimisation-float-kernels",
+                    "indices": [
+                      293,
+                      331
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/conjectures-io/conjectures-validator/blob/e78afe97f93cbdae1f65f354a8e8d12b355f2020/tests/test_floatlib_api.py",
+            "path": "tests/test_floatlib_api.py",
+            "display_url": "https://github.com/conjectures-io/conjectures-validator/blob/e78afe97f93cbdae1f65f354a8e8d12b355f2020/tests/test_floatlib_api.py",
+            "display_title": "tests/test_floatlib_api.py",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "\"\"\"FloatLib served beside DEFLATE: the registry, its configuration, and FloatLib's reads.\n\nThe reads run against a real Postgres schema with the columns FloatLib's migrations (0016, the\n`promotions` table with demotion) give it -- `conjectures-optimisation-float-kernels`,\n`deploy/platform/CONTRACT.md` -- in a schema of its own inside the competition fixture database,\nso DEFLATE's tables there are untouched.\n\"\"\"",
+                "matches": [
+                  {
+                    "text": "conjectures-optimisation-float-kernels",
+                    "indices": [
+                      232,
+                      270
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "isError": false
+    }
+  }
+}

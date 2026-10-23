@@ -1,0 +1,768 @@
+{
+  "query": "ContractTensor",
+  "result": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "results": [
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/furiosa-opt-std/src/engine/contraction/mod.rs",
+            "path": "furiosa-opt-std/src/engine/contraction/mod.rs",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/furiosa-opt-std/src/engine/contraction/mod.rs",
+            "display_title": "furiosa-opt-std/src/engine/contraction/mod.rs",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "}\n\n/// Tensor streamed after the contraction engine.\npub type ContractTensor<'l, const T: Tu, D, Chip, Cluster, Slice, Time, Packet, B = CurrentBackend> =\n    TuTensor<'l, { T }, PositionContraction, D, Chip, Cluster, Slice, Time, Packet, B>;\n\nimpl<'l, const T: Tu, D: Scalar, Chip: M, Cluster: M, Slice: M, Time: M, Packet: M, B: Backend>",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      62,
+                      76
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/recurrent_contract.go",
+            "path": "arch/recurrent_contract.go",
+            "display_url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/recurrent_contract.go",
+            "display_title": "arch/recurrent_contract.go",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "\t\"reflect\"\n)\n\nfunc contractTensor(dtype int, shape []int, names ...string) ContractTensor {\n\tt := ContractTensor{DType: dtype, Shape: append([]int(nil), shape...)}\n\tfor i, d := range shape {\n\t\tname := fmt.Sprintf(\"axis_%d\", i)",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      19,
+                      33
+                    ]
+                  },
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      75,
+                      89
+                    ]
+                  },
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      98,
+                      112
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/cbambic24/HAMR_Visualization/blob/f4a71cbdd1fb6ef5978f00fb85f5b26905308757/Read_HAMR_Data/hamr_read.h",
+            "path": "Read_HAMR_Data/hamr_read.h",
+            "display_url": "https://github.com/cbambic24/HAMR_Visualization/blob/f4a71cbdd1fb6ef5978f00fb85f5b26905308757/Read_HAMR_Data/hamr_read.h",
+            "display_title": "Read_HAMR_Data/hamr_read.h",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "        int nb, int nx1, int nx2, int nx3, int axisym, int l);\n    void boostVector(float* u, float* u_boost, float* uu_c,\n        int nb, int nx1, int nx2, int nx3, int inverse);\n    void contractTensor(float* tnsr, float* tnsr_out, float* M,\n        int nb, int nx1, int nx2, int nx3, int axisym_tnsr, int axisym_M);\n\n    // default destructor",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      189,
+                      203
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/cbambic24/HAMR_Visualization/blob/f4a71cbdd1fb6ef5978f00fb85f5b26905308757/Read_HAMR_Data/hamr_read.cpp",
+            "path": "Read_HAMR_Data/hamr_read.cpp",
+            "display_url": "https://github.com/cbambic24/HAMR_Visualization/blob/f4a71cbdd1fb6ef5978f00fb85f5b26905308757/Read_HAMR_Data/hamr_read.cpp",
+            "display_title": "Read_HAMR_Data/hamr_read.cpp",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "  }\n}\n\nvoid Tools::contractTensor(float* tnsr, float* tnsr_out, float* M,\n    int nb, int nx1, int nx2, int nx3, int axisym_tnsr, int axisym_M) {\n  // Dispatch once per call -- not per grid cell -- to the instantiation\n  // matching these flags, so the hot loop itself is branch-free.",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      19,
+                      33
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/bmcllc/mycelium-network/blob/e22fea9bb4514c2e956a98444e5bd7615e37e091/ET-COSMIC-OLD/src/vps/voidRunnerBridge.ts",
+            "path": "ET-COSMIC-OLD/src/vps/voidRunnerBridge.ts",
+            "display_url": "https://github.com/bmcllc/mycelium-network/blob/e22fea9bb4514c2e956a98444e5bd7615e37e091/ET-COSMIC-OLD/src/vps/voidRunnerBridge.ts",
+            "display_title": "ET-COSMIC-OLD/src/vps/voidRunnerBridge.ts",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "  }\n\n  /** Contração tensorial LUSUS-Q via /api/lusus/tensor/contract (Rust ou fallback JS). */\n  async contractTensor(req: TensorContractRequest): Promise<TensorContractResult> {\n    return contractLususTensor(req, this.options.apiBase);\n  }\n",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      106,
+                      120
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/moving-tensors/commit-engine.md",
+            "path": "docs/src/moving-tensors/commit-engine.md",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/moving-tensors/commit-engine.md",
+            "display_title": "docs/src/moving-tensors/commit-engine.md",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "fn cast_commit<'l, const T: Tu>(\n    input: ContractTensor<'l, T, f32, m![1], m![1 # 2], m![P], m![M], m![N]>,\n) -> DmTensor<bf16, m![1], m![1 # 2], m![P], m![M, N # 16]> {",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      44,
+                      58
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "#\n# let c: ContractTensor<'_, _, f32, m![1], m![1 # 2], m![P], m![M], m![N]> = ContractTensor::new(&mut device.main, Tensor::zero());\n# let _o = cast_commit(c);",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      11,
+                      25
+                    ]
+                  },
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      79,
+                      93
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/commit-adapter.md",
+            "path": "docs/src/computing-tensors/commit-adapter.md",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/commit-adapter.md",
+            "display_title": "docs/src/computing-tensors/commit-adapter.md",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "fn commit_trim_f32_non_padding<'l, const T: Tu>(\n    input: ContractTensor<'l, T, f32, m![1], m![1], m![1], m![M, K], m![W]>,\n) -> CommitTrimTensor<'l, T, f32, m![1], m![1], m![1], m![M, K], m![W = 4]> {",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      60,
+                      74
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "# let _o = commit_trim_i8_padding(a);\n# let b: ContractTensor<'_, _, f32, m![1], m![1], m![1], m![M, K], m![W]> = ContractTensor::new(&mut device.main, Tensor::zero());\n# let _o = commit_trim_f32_non_padding(b);",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      47,
+                      61
+                    ]
+                  },
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      114,
+                      128
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/grid_contract.go",
+            "path": "arch/grid_contract.go",
+            "display_url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/grid_contract.go",
+            "display_title": "arch/grid_contract.go",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "\t\tif len(r.Tensor.Shape) == 4 {\n\t\t\tr.Tensor = contractTensor(r.Tensor.DType, r.Tensor.Shape, \"batch\", \"height\", \"width\", \"channel\")\n\t\t}",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      46,
+                      60
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "\t\t}\n\t\tpc.Representations = append(pc.Representations, ContractRepresentation{ID: \"internal:\" + out, Binding: out, Direction: \"internal\", Meaning: \"graph_activation\", Tensor: contractTensor(TensorFloat32, shapes[op.Output], names...)})\n\t\tif op.Op == \"stop_gradient\" {",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      174,
+                      188
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/cast-engine.md",
+            "path": "docs/src/computing-tensors/cast-engine.md",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/cast-engine.md",
+            "display_title": "docs/src/computing-tensors/cast-engine.md",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "\n## Interface\n\n`CollectTensor`, `ContractTensor`, and `VectorFinalTensor` all expose `.cast()` with the same semantics.\n\n```rust,ignore\n{{#include ../../../furiosa-opt-std/src/engine/cast.rs:cast_impl}}",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      33,
+                      47
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/vector-engine/index.md",
+            "path": "docs/src/computing-tensors/vector-engine/index.md",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/vector-engine/index.md",
+            "display_title": "docs/src/computing-tensors/vector-engine/index.md",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "fn relu<'l, const T: Tu>(\n    input: ContractTensor<'l, T, f32, m![1], m![B], m![K], m![M, N / 8], m![N % 8]>,\n) -> VectorFinalTensor<'l, T, f32, m![1], m![B], m![K], m![M, N / 8], m![N % 8]> {",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      37,
+                      51
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "# \n# let c: ContractTensor<'_, _, f32, m![1], m![B], m![K], m![M, N / 8], m![N % 8]> = ContractTensor::new(&mut device.main, Tensor::zero());\n# let _o = relu(c);",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      12,
+                      26
+                    ]
+                  },
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      87,
+                      101
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/execution_contract_validate.go",
+            "path": "arch/execution_contract_validate.go",
+            "display_url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/execution_contract_validate.go",
+            "display_title": "arch/execution_contract_validate.go",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "}\nfunc validateContractTensor(t ContractTensor, path string) error {\n\tif t.DType != TensorInt32 && t.DType != TensorFloat32 {",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      15,
+                      29
+                    ]
+                  },
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      32,
+                      46
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "\t}\n\tcheck := func(name string, t ContractTensor, decls map[string]TensorDecl) error {\n\t\td, ok := decls[name]",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      33,
+                      47
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/execution_contract.go",
+            "path": "arch/execution_contract.go",
+            "display_url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/execution_contract.go",
+            "display_title": "arch/execution_contract.go",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "}\ntype ContractTensor struct {\n\tDType   int            `json:\"dtype\"`",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      7,
+                      21
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "\tMeaning   string         `json:\"meaning\"`\n\tTensor    ContractTensor `json:\"tensor\"`\n}",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      54,
+                      68
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/contraction-engine/lane-folder.md",
+            "path": "docs/src/computing-tensors/contraction-engine/lane-folder.md",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/contraction-engine/lane-folder.md",
+            "display_title": "docs/src/computing-tensors/contraction-engine/lane-folder.md",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "    // Output: OutTime = m![M, P] = [Time, Packet], OutPacket = m![N] = [Lane].\n) -> ContractTensor<'l, T, f32, m![1], m![1 # 2], m![1 # 256], m![M, P], m![N]> {\n    input.contract_lane::<m![M, P], m![N]>(LaneMode::Interleaved)",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      85,
+                      99
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "    // Output: OutTime = m![M, N, P / 8] = [Time, Lane, Packet / 8], OutPacket = m![P % 8] = [Packet % 8].\n) -> ContractTensor<'l, T, f32, m![1], m![1 # 2], m![1 # 256], m![M, N, P / 8], m![P % 8]> {\n    input.contract_lane::<m![M, N, P / 8], m![P % 8]>(LaneMode::Sequential)",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      112,
+                      126
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/contraction-engine/index.md",
+            "path": "docs/src/computing-tensors/contraction-engine/index.md",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/contraction-engine/index.md",
+            "display_title": "docs/src/computing-tensors/contraction-engine/index.md",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "    // Output: one (M × N) f32 matrix per (slice, V-outer) pair.\n) -> ContractTensor<'l, T, f32, Chip, Cluster, Slice, m![V / 16], m![N]> {\n    input",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      71,
+                      85
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "    // Output: one (M × N) f32 matrix per slice.\n) -> ContractTensor<'l, T, f32, Chip, Cluster, Slice, m![M], m![N]> {\n    input",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      55,
+                      69
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/furiosa-opt-std/src/engine/mod.rs",
+            "path": "furiosa-opt-std/src/engine/mod.rs",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/furiosa-opt-std/src/engine/mod.rs",
+            "display_title": "furiosa-opt-std/src/engine/mod.rs",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "//!     │     →  ContractOuterTensor  ─contract_packet→  ContractPacketTensor\n//!     │     ─contract_time→  ContractTimeTensor  ─contract_lane→  ContractTensor\n//!     ├── cast                     →  CastTensor",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      164,
+                      178
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "//!\n//! ContractTensor           (PositionContraction)\n//!     ├── cast                     →  CastTensor",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      8,
+                      22
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/ttt_mlp_contract.go",
+            "path": "arch/ttt_mlp_contract.go",
+            "display_url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/ttt_mlp_contract.go",
+            "display_title": "arch/ttt_mlp_contract.go",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "\t}\n\tt := contractTensor(TensorFloat32, []int{ctx.BatchSize, l.StateSize}, \"batch\", \"packed_inner_state\")\n\tfor i, role := range []string{\"adaptive_memory\", \"update_accumulator\"} {",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      9,
+                      23
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "\tif stateful {\n\t\tconv := contractTensor(TensorFloat32, []int{1, 2, 3, ctx.ModelDim}, \"batch\", \"qk\", \"history\", \"feature\")\n\t\tb.States = append(b.States, ContractState{ID: b.OwnerID + \"/conv\", OwnerID: b.OwnerID, Role: \"recurrent_cache\", Storage: \"tensor\", Tensor: &conv, Binding: \"explicit_ir\", Input: l.ConvInput, Output: l.ConvOutput, Initialization: ContractInitialization{Kind: \"zero\"}, Lifetime: lifetime, Reset: reset, Gradient: gradient, Growth: \"fixed_bound_dimensions\", SchemaVersion: 1, Compatibility: []string{\"shape\", \"dtype\", \"convolution_order\"}}, ContractState{ID: b.OwnerID + \"/offset\", OwnerID: b.OwnerID, Role: \"control\", Storage: \"control\", Control: &ContractControl{Type: \"int\", Initial: 0, Min: 0, MaxExclusive: l.ChunkSize}, Binding: \"host\", Initialization: ContractInitialization{Kind: \"zero\"}, Lifetime: lifetime, Reset: reset, Gradient: \"not_differentiable\", Growth: \"fixed_bound_dimensions\", SchemaVersion: 1, Compatibility: []string{\"chunk_size\", \"algorithmic_offset\"}})",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      25,
+                      39
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/execution_contract_report.go",
+            "path": "arch/execution_contract_report.go",
+            "display_url": "https://github.com/mrothroc/mixlab/blob/f9c4781a9c17cc2ba3924828f35c50bc91c6a5a7/arch/execution_contract_report.go",
+            "display_title": "arch/execution_contract_report.go",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "\t\tfor _, d := range side.decls {\n\t\t\tc.Representations = append(c.Representations, ContractRepresentation{ID: side.direction + \":\" + d.Name, Binding: d.Name, Direction: side.direction, Meaning: d.Name, Tensor: contractTensor(d.DType, d.Shape)})\n\t\t}",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      209,
+                      223
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "\t\t\tif r.Binding == \"tokens\" {\n\t\t\t\tr.Tensor = contractTensor(r.Tensor.DType, s, \"batch\", \"time\")\n\t\t\t}",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      45,
+                      59
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/furiosa-opt-std/src/engine/contraction/lane.rs",
+            "path": "furiosa-opt-std/src/engine/contraction/lane.rs",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/furiosa-opt-std/src/engine/contraction/lane.rs",
+            "display_title": "furiosa-opt-std/src/engine/contraction/lane.rs",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "//! Lane Folder (`contract_lane`): folds `Lane` into the output stream,\n//! producing the contraction pipeline's final [`ContractTensor`].\n",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      121,
+                      135
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "use crate::context::*;\nuse crate::engine::contraction::{ContractTensor, ContractTimeTensor};\nuse crate::tensor::Tensor;",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      56,
+                      70
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/furiosa-opt-std/src/engine/vector/tensor/mod.rs",
+            "path": "furiosa-opt-std/src/engine/vector/tensor/mod.rs",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/furiosa-opt-std/src/engine/vector/tensor/mod.rs",
+            "display_title": "furiosa-opt-std/src/engine/vector/tensor/mod.rs",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "//! - `VectorTensorPair`: Pair of tensors for two-group (interleaved) operations\n//! - `VectorInterSliceReduceTensor`: After inter-slice reduce\n//!\n//! # Initialization / Entry (on CollectTensor / ContractTensor)\n//! ```text\n//! vector_init()                              → VectorInitTensor\n//!   ├─ vector_intra_slice_tag(TagMode) → VectorBranchTensor           { VeOrder::IntraFirst }",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      197,
+                      211
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/contraction-engine/packet-reducer.md",
+            "path": "docs/src/computing-tensors/contraction-engine/packet-reducer.md",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/contraction-engine/packet-reducer.md",
+            "display_title": "docs/src/computing-tensors/contraction-engine/packet-reducer.md",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "fn matmul<'l, const T: Tu>(\n    input: CollectTensor<'l, T, bf16, m![1], m![1 # 2], m![1 # 256], m![A, B / 16], m![B % 16]>,\n    trf: &TrfTensor<bf16, m![1], m![1 # 2], m![1 # 256], m![C], m![B]>,\n) -> ContractTensor<'l, T, f32, m![1], m![1 # 2], m![1 # 256], m![A], m![C]> {\n    //\n    // Spatial reduction: tree depth 5 reduces 32 bf16 elements along B → f32\n    // Output (Interleaved): Time = [A], Packet = [C]",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      202,
+                      216
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/FlorianASchroeder/TDVP/blob/44b49bbe4a06137309eb7ceefc9d6c40302ac052/contracttensors.m",
+            "path": "contracttensors.m",
+            "display_url": "https://github.com/FlorianASchroeder/TDVP/blob/44b49bbe4a06137309eb7ceefc9d6c40302ac052/contracttensors.m",
+            "display_title": "contracttensors.m",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "function X = contracttensors(X, numindX, indX, Y, numindY, indY)\n% Contracts tensors X and Y about the indices (dimensions) indX, indY\n%\t1. Permutes dimensions indX to the last and indY to the first place of X and Y respectively",
+                "matches": [
+                  {
+                    "text": "contracttensor",
+                    "indices": [
+                      13,
+                      27
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "%\n% eg: Cleft = contracttensors(conj(B), 3, [1, 3], Cleft, 3, [3, 1]);      % Cleft_fb = B*_dfe Cleft_ebd\n",
+                "matches": [
+                  {
+                    "text": "contracttensor",
+                    "indices": [
+                      16,
+                      30
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/ORNL-QCI/exatn/blob/c528f7ec7323ab5f4485b85efcefa016c32e1a2d/python/examples/contraction.py",
+            "path": "python/examples/contraction.py",
+            "display_url": "https://github.com/ORNL-QCI/exatn/blob/c528f7ec7323ab5f4485b85efcefa016c32e1a2d/python/examples/contraction.py",
+            "display_title": "python/examples/contraction.py",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "    exatn.createTensor('A1', a1.copy(order='F'))\n    exatn.createTensor('B1', b1.copy(order='F'))\n\n    exatn.contractTensors('C1(a,c)=A1(a,b)*B1(b,c)',1.0)\n\n    c1 = exatn.getLocalTensor('C1')\n    print('C1 shape: ',c1.shape)",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      109,
+                      123
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/ORNL-QCI/exatn/blob/c528f7ec7323ab5f4485b85efcefa016c32e1a2d/python/examples/tensor_basic.py",
+            "path": "python/examples/tensor_basic.py",
+            "display_url": "https://github.com/ORNL-QCI/exatn/blob/c528f7ec7323ab5f4485b85efcefa016c32e1a2d/python/examples/tensor_basic.py",
+            "display_title": "python/examples/tensor_basic.py",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "\n# Perform calculation\nexatn.createTensor(tNet.getTensor(4))\nexatn.contractTensors(pattern)\n\n# Evaluate the tensor network (after merging two tensors)\nexatn.evaluate(tNet)",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      67,
+                      81
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/ORNL-QCI/exatn/blob/c528f7ec7323ab5f4485b85efcefa016c32e1a2d/python/exatn-py.cpp",
+            "path": "python/exatn-py.cpp",
+            "display_url": "https://github.com/ORNL-QCI/exatn/blob/c528f7ec7323ab5f4485b85efcefa016c32e1a2d/python/exatn-py.cpp",
+            "display_title": "python/exatn-py.cpp",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "  m.def(\n    \"contractTensors\",\n    // Default contraction: alpha = 1.0",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      14,
+                      28
+                    ]
+                  }
+                ]
+              },
+              {
+                "property": "content",
+                "fragment": "    [](const std::string& contraction) {\n      return exatn::contractTensorsSync(contraction, 1.0);\n    },",
+                "matches": [
+                  {
+                    "text": "contractTensor",
+                    "indices": [
+                      61,
+                      75
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/contraction-engine/time-reducer.md",
+            "path": "docs/src/computing-tensors/contraction-engine/time-reducer.md",
+            "display_url": "https://github.com/furiosa-ai/furiosa-opt/blob/5ec376347e108689096928bc4be2c0e4176fd7c9/docs/src/computing-tensors/contraction-engine/time-reducer.md",
+            "display_title": "docs/src/computing-tensors/contraction-engine/time-reducer.md",
+            "text_matches": [
+              {
+                "property": "content",
+                "fragment": "    // TRF operand: single-lane weight per slice.\n    trf: &TrfTensor<bf16, m![1], m![1 # 2], m![A / 8], m![1], m![B]>,\n    // Output: one f32 per (slice, A % 8) cell.\n) -> ContractTensor<'l, T, f32, m![1], m![1 # 2], m![A / 8], m![A % 8], m![1 # 8]> {\n    input\n         // Outer: Lane = m![1], OutTime = m![B / 16, A % 8], OutPacket = m![B % 16].\n         .contract_outer::<m![B / 16, A % 8], m![B % 16], _, _, _>(trf)",
+                "matches": [
+                  {
+                    "text": "ContractTensor",
+                    "indices": [
+                      173,
+                      187
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "isError": false
+    }
+  }
+}

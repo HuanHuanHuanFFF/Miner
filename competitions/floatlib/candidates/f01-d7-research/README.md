@@ -23,6 +23,7 @@
 | 两种非有限值组合、自比较guard | b169在808只有一处证明失败；修复0e8bc05c/1f4d31aa | 固定Lean原四spec证明有精确0e8成功证据；810现行静态规则PASS，完整gate等待公开推送授权 |
 | 原生前缀、sum后缀、单项内积、标量特殊分支 | 810八个statement探针 | 精确候选已冻结，原失败保留；尚未编译/计时，不列为完整成果 |
 | 原始NaN感知单遍sum | 3d9b1ea9；W12/W12b原件与新循环独立审查 | 复用原decoder分支；首次rawNaN才精确修复，随后只扫所需尾部。静态policy PASS，新循环Lean/fullgate/收益NOT_RUN |
+| 直接点积与单遍sum组合 | [cc06a47f](../f01-d7-direct-singlepass/README.md)，232363字节 | 同0e8父本的97f/3d9机械组合，逆变换恢复3d9；静态policy PASS，精确新Lean/fullgate/收益NOT_RUN |
 | 原始位特殊值冷路 | 939dbf31；仅替换既有finite守卫失败分支，独立逆变换和条件审查通过 | NaN优先级、Inf/zero/invalid直接word处理；普通路径不改。新Lean/fullgate/C/收益NOT_RUN |
 | 低normal求和解码 | 353d9816；独立c760父本，只改真实decode，独立审查通过 | E1..23原始数学及公共片段通过；807命中cell整包曝光上限2.405%，不等于可回收时间。新USize整合Lean/fullgate/C/收益NOT_RUN |
 | 矩阵NaN冷路扫描 | 4792e967；W12像闭包＋实际Nat loop | 两处dot/finish同形；原703作用域缺口及字节已冻结。静态policy PASS，新Nat接线与完整成本NOT_RUN |
@@ -45,6 +46,10 @@
 
 [公开强起点及倍率复查](public-source-refresh-20261023T005839Z/README.md)未找到可复用新冠军源码；官方私有基准乘数的来源、hash链和实测anchor按新源码核实，旧跨suite说明已修正。
 
+[独立公开实现补查](public-source-search-20261023T0227Z/receipt.json)另保存9个GitHub仓库/代码搜索的精确工具响应；返回范围没有新可用竞赛实现，索引范围不当作全网不存在的证明。
+
 [单文件大小预检](source-budget-notes.md)已完成8组回归及来源保留缺陷修复；3d9预备副本210754字节，原230650字节不变。新字节尚未Lean/fullgate验收，不当作新的运行提升。
 
 [严格公共同源补验](strict-public-settings-review.json)已核主/诊断两次显式关闭autoImplicit、实际exit0及80项原公理；这只关闭公共数学宿主的设置缺项，新私有候选完整gate/计时仍NOT_RUN。
+
+[运行源码冻结](source-freeze.json)于02:45:52 UTC记录190份候选和12个验证入口的精确字节；研究窗口继续至04:22:17。cc06机械组合的[另次审查](direct-singlepass-review.md)已完成，当前无运行CI，810仍未派发。
