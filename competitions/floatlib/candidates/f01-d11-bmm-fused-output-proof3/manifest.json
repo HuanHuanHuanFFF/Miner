@@ -1,0 +1,38 @@
+{
+  "candidate": "f01-d11-bmm-fused-output-proof3",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "5b7d926cf628c2d87042386834f7c1581b9a6aa7441af196453984b395534ba2",
+  "candidate_bytes": 245841,
+  "created_at_utc": "2026-10-23T20:36:03.403353+00:00",
+  "parent": "f01-d11-bmm-fused-output-proof2",
+  "parent_sha256": "2c73622e91fa0edef0e37a22bac1724190451479b0dceeee04ef5d181cc811ed",
+  "baseline": "f01-r8-combined-result-guard",
+  "baseline_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+  "mechanism": "Replace Packed RowStream row-index Vector.flatMap / rowTiles Vector / RowOutput.row Vector with nested Fin.foldl over rows and F10 column groups carrying one output Array. Compute each F10 once, finish valid lanes and push immediately. Preallocate total output capacity with Array.mkEmpty. Keep nativeA map and full packedB unchanged.",
+  "proof": "New prefix_vector_eq_ofFn quantifies abstract out:Array, so Vector.ext/GetElem elaboration cannot unfold concrete output. points_eq_reference reuses the already accepted DirectSmall-style Vector.ofFn congruence proof and original NativeFinal.dot_eq/address bridge. core_eq_reference composes them. Exact new statement remains NOT_RUN.",
+  "scope": "Only Packed RowStream changes. Parent DirectRows, DirectSmall, add, mul, sum, NaN replay and native MAC inner loop unchanged.",
+  "edge_cases": "Definition and proof quantify all Nat dimensions, including empty groups/rows, n=0, incomplete F10 tails and huge Nat. Existing bmmPackedBase empty-output/n=0 reference fallback and Packed10Index.runDot machine-bound fallback remain in dispatcher.",
+  "validation_mode": "statement-only first; full original gate if accepted",
+  "proof_status": "NOT_RUN",
+  "kernel_replay": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "checksum": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "formal_submission": "NOT_SUBMITTED",
+  "attribution": "All parent author/provenance comments preserved byte-for-byte outside replaced RowStream block. New fused-output writer/proof is session-authored; no external implementation copied.",
+  "change": "Proof only: factor the writer-to-Vector equality through a generic abstract Array Prefix lemma; prove scalar point-vector equivalence separately; core_eq_reference now composes the two opaque theorems. Remove concrete output GetElem/change/simp interaction from the combined theorem. No source trimming, runtime, compiler or environment changes.",
+  "previous_failure": {
+    "run": 40019256733,
+    "seed": 905,
+    "source_sha256": "2c73622e91fa0edef0e37a22bac1724190451479b0dceeee04ef5d181cc811ed",
+    "stage": "statement",
+    "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40019256733/download-7bf307c0b7d641309f3afc28df73f547/diagnostics/f01-d7-public-suite/public-suite/f01-d11-bmm-fused-output-proof2-verdict.json",
+    "verdict_sha256": "b40b26767f286b4456428fb84a3de70025da5c2503fa99c6c34e89b824a5b191",
+    "errors": [
+      "6185:0 whnf heartbeat 200000 timeout",
+      "6204:8 unknown constant core_eq_reference"
+    ],
+    "observed": "Explicit GetElem validity error disappeared; core_eq_reference still timed out. All earlier fused writer invariant theorems were accepted in the statement traversal.",
+    "root_cause_hypothesis": "INFERRED: concrete output-dependent Vector.ext/change/rewrites permit expensive definitional normalization of nested Fin.foldl while checking transported index types. No gate trace isolates the exact tactic. Proof3 separates an abstract container bridge from the scalar semantic bridge to prevent this concrete unfolding and localize any remaining failure."
+  }
+}

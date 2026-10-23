@@ -1,0 +1,979 @@
+{
+  "review": "CI902 rawA C/nm/assembly coverage review",
+  "started_utc": "2026-10-23T20:27:10Z",
+  "completed_utc": "2026-10-23T20:36:06.720233+00:00",
+  "reviewer": "profile_review_r7",
+  "run": {
+    "id": 40014284237,
+    "seed": 902,
+    "head_sha": "6eb257b2e079c5778558af5151d852d70f9f3301",
+    "conclusion": "success",
+    "floatlib_job_id": 120622239018,
+    "artifact_id": 12529260152,
+    "artifact_archive_digest": "sha256:15ca1e4d1d8e3cf5e52acc6c9a7c79d07705863849d5da4f95ad711f32a0e738",
+    "download_directory": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140"
+  },
+  "bindings": {
+    "candidate_sha256": "c477e8078eef66255f1c750b46575fc987144717eb1bffc943cf58a514755a6a",
+    "candidate_bytes": 244077,
+    "parent_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+    "parent_bytes": 237142,
+    "compiled_lean_equals_request_input_and_local": true,
+    "parent_input_equals_local": true,
+    "original_archive_member_hashes_rechecked": 27,
+    "original_gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+    "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+    "suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a",
+    "generator_sha256": "7198464dfc08f4bb2a3a5e31ce5a105964d1d73ad6b11ee49e682a30c04daf69",
+    "requested_plan_sha256": "7db2a2cd0ec436ce6a2ddbcf0d54060388d8ec09474cd1e36b8f10b1d9dea1a7",
+    "current_capture_helper_matches_used_sha256": true
+  },
+  "original_verdict": {
+    "passed": true,
+    "mode": "gate",
+    "stage": "score",
+    "exit_code": 0,
+    "sha256": "1daa66c6e39ca3544fbfc27446fa456325275ba8ef24bee1e347a7317fe7e073",
+    "boundary": "Observed original public fullgate902 only; codegen observer on, no independent confirmation/adoption claim."
+  },
+  "compiled_object": {
+    "C_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+    "C_bytes": 1394349,
+    "object_sha256_recorded": "04746ef716b7c7a9db23047eb81f97bd64f1b9c72405af194e4f2a9543b7d1bc",
+    "object_bytes_recorded": 560344,
+    "object_payload_retained": false,
+    "hash_verification_boundary": "C/nm/asm/trace file bytes rehashed. Object SHA is capture receipt evidence; deleted object cannot be independently rehashed or further disassembled now. No final timed binary disassembly/link map retained here.",
+    "toolchain": "Lean4.34.0 commit293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+    "compiler": "clang -c -O3 -DNDEBUG -DLEAN_EXPORTING -ffp-contract=off -fdata-sections -ffunction-sections; exact argv in C.o.export.trace"
+  },
+  "findings": [
+    {
+      "id": "GLOBAL_NATIVE_A_MAP",
+      "status": "VERIFIED_C_PATH",
+      "evidence_c_lines": [
+        42363,
+        42406,
+        42276,
+        42340,
+        42117,
+        42193
+      ],
+      "claim": "Outer guard4<n and2<p andp<=10 calls RawA.core directly. RawA.core has no nativeA mapping; callback machine-bound success calls unboxed RawIndex.loop directly. The map is not performed eagerly on this fast path.",
+      "limits": "Outer guard alone does not establish the inner machine guard. Its failure branch at42184 still maps fullA for that runDot invocation. Nonmatching shapes call the unchanged old path. No dynamic per-case branch trace was captured."
+    },
+    {
+      "id": "PER_K_CONVERSION_NOT_PER_LANE_BOXING",
+      "status": "VERIFIED_C_PATH",
+      "evidence_c_lines": [
+        41812,
+        41887
+      ],
+      "claim": "Raw loop uses size_t indices and ten float accumulators; one borrowed rawA element, one UInt32 unbox and one lean_float32_of_bits per k, then ten mul/add pairs. No lean_box_float32, closure allocation or Nat div/mod in the iteration body. Terminal return alone allocates one F10 constructor with40 scalar bytes.",
+      "limits": "No new raw-loop machine instructions captured. Primitive callee internals and final machine allocation/spill behavior remainUNKNOWN; boxed wrapper symbols are not used by the direct hot call at42172."
+    },
+    {
+      "id": "CONVERSION_COUNT_BOUNDARY",
+      "status": "INFERRED_FROM_SOURCE_AND_C_SCHEDULE",
+      "evidence_c_lines": [
+        39695,
+        39722,
+        41849,
+        41850,
+        42172
+      ],
+      "claim": "For ordinary nonempty selected shapes with successful machine guard, groups(p)=1. Both the old global map and new row loop convert each A word once. The change removes native Float32 materialization/map traversal, while moving conversion into MAC loop; it does not remove ten conversions per k."
+    },
+    {
+      "id": "REMAINING_OUTPUT_AND_PREPARATION",
+      "status": "VERIFIED_C_NOT_RAW_ASM",
+      "evidence_c_lines": [
+        42217,
+        42218,
+        42225,
+        42235,
+        42237,
+        42240,
+        42243,
+        42282,
+        40173,
+        40174,
+        40332,
+        40336,
+        40360
+      ],
+      "claim": "PackedB remains. Row-index Array.ofFn remains; each row computes r/m andr%m plus ceil(p/10), allocates group closure and rowTiles Array, calls original RowOutput.row, allocates output closure/row Array and appends. Output callback still has j/10 andj%10 plus lane selection, original finish/NaN replay and UInt32 boxing for Array output.",
+      "limits": "These are generated-C call sites and control-flow placements, not machine instruction counts or measured time shares. No additional per-MAC Float32 boxing is implied."
+    },
+    {
+      "id": "OLD_PATH_ASM_PROVES_C_COUNTS_CAN_MISLEAD",
+      "status": "VERIFIED_OLD_PATH_OBJECT_ASM",
+      "evidence": {
+        "asm": "asm-0-11.txt",
+        "body_lines": [
+          469,
+          522
+        ],
+        "hot_lines": [
+          485,
+          500
+        ],
+        "old_C_lines": [
+          38835,
+          38918
+        ]
+      },
+      "claim": "The old Packed10Index loop retained in c477 has ten C unbox_float32 calls, but actual loop loads A float once then broadcasts and uses3mulps/3addps updates for4+4+2lanes. No function calls inside the loop backedge. F10 allocation happens after exit, not perMAC.",
+      "limits": "This is old-path assembly in the c477 statement object, not an independently captured a066 binary and not evidence that the new raw loop has same vectorization."
+    },
+    {
+      "id": "FOREIGN_OF_BITS_COST",
+      "status": "INFERRED_RISK_NEW_MACHINE_UNKNOWN",
+      "evidence": {
+        "new_C_lines": [
+          41849,
+          41850
+        ],
+        "same_object_old_asm": "asm-0-8.txt",
+        "PLT_relocation_lines": [
+          475,
+          515
+        ],
+        "spill_lines": [
+          476,
+          523,
+          524
+        ]
+      },
+      "claim": "New raw loop C calls lean_float32_of_bits each k. In captured NativeFinal.dotLoop the same primitive really remains a PLT call, with intermediate/accumulator stack storage. A foreign call and accumulator spills in the new loop are therefore a concrete question, but not confirmed without its missing asm."
+    }
+  ],
+  "assembly": {
+    "state_from_capture": "COMPLETE_SELECTED_SYMBOLS",
+    "selected_count": 14,
+    "new_rawA_rawIndex_actual_bodies": 0,
+    "actual_coverage": [
+      {
+        "symbol": "lp_competition_Submission_add",
+        "nm_size_bytes": 225,
+        "asm_artifact": "asm-0-0.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_add"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_mul",
+        "nm_size_bytes": 877,
+        "asm_artifact": "asm-0-1.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_mul"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_nativeMul",
+        "nm_size_bytes": 62,
+        "asm_artifact": "asm-0-2.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_nativeMul"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_DirectSmall_core",
+        "nm_size_bytes": 538,
+        "asm_artifact": "asm-0-3.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_DirectSmall_core"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_DirectSmall_core___lam__0",
+        "nm_size_bytes": 1410,
+        "asm_artifact": "asm-0-4.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_DirectSmall_core___lam__0"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_NativeDecodeSumWord_loop",
+        "nm_size_bytes": 193,
+        "asm_artifact": "asm-0-5.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_NativeDecodeSumWord_loop"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_NativeDecodeSumWord_loop___redArg",
+        "nm_size_bytes": 193,
+        "asm_artifact": "asm-0-6.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_NativeDecodeSumWord_loop___redArg"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_NativeFinal_dot",
+        "nm_size_bytes": 242,
+        "asm_artifact": "asm-0-7.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_NativeFinal_dot"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_NativeFinal_dotLoop",
+        "nm_size_bytes": 1150,
+        "asm_artifact": "asm-0-8.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_NativeFinal_dotLoop"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_NativeFinal_sumLoop",
+        "nm_size_bytes": 478,
+        "asm_artifact": "asm-0-9.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_NativeFinal_sumLoop"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_Packed10Index_loop",
+        "nm_size_bytes": 61,
+        "asm_artifact": "asm-0-10.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_Packed10Index_loop"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_Packed10Index_loop___redArg",
+        "nm_size_bytes": 204,
+        "asm_artifact": "asm-0-11.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_Packed10Index_loop___redArg"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_RowStream_core",
+        "nm_size_bytes": 897,
+        "asm_artifact": "asm-0-12.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_RowStream_core"
+        ]
+      },
+      {
+        "symbol": "lp_competition_Submission_RowStream_core___lam__0",
+        "nm_size_bytes": 30,
+        "asm_artifact": "asm-0-13.txt",
+        "actual_instruction_body_headers": [
+          "lp_competition_Submission_RowStream_core___lam__0"
+        ]
+      }
+    ],
+    "relevant_nm_symbols": [
+      {
+        "nm_line": 195,
+        "symbol": "lp_competition_Submission_Packed10Index_loop___redArg",
+        "size_hex": "00000000000000cc",
+        "size_bytes": 204,
+        "has_asm_body": true
+      },
+      {
+        "nm_line": 240,
+        "symbol": "lp_competition_Submission_R11RawA_core",
+        "size_hex": "0000000000000318",
+        "size_bytes": 792,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 241,
+        "symbol": "lp_competition_Submission_R11RawIndex_loop",
+        "size_hex": "000000000000003d",
+        "size_bytes": 61,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 242,
+        "symbol": "lp_competition_Submission_R11RawIndex_loop___boxed",
+        "size_hex": "00000000000008aa",
+        "size_bytes": 2218,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 243,
+        "symbol": "lp_competition_Submission_R11RawIndex_loop___redArg",
+        "size_hex": "0000000000000122",
+        "size_bytes": 290,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 244,
+        "symbol": "lp_competition_Submission_R11RawIndex_loop___redArg___boxed",
+        "size_hex": "00000000000006a3",
+        "size_bytes": 1699,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 245,
+        "symbol": "lp_competition_Submission_R11RawIndex_runDot",
+        "size_hex": "00000000000003a8",
+        "size_bytes": 936,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 246,
+        "symbol": "lp_competition_Submission_R11RawIndex_runDot___boxed",
+        "size_hex": "0000000000000089",
+        "size_bytes": 137,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 258,
+        "symbol": "lp_competition_Submission_R11RawIndex_within",
+        "size_hex": "00000000000000c5",
+        "size_bytes": 197,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 259,
+        "symbol": "lp_competition_Submission_R11RawIndex_within___boxed",
+        "size_hex": "0000000000000166",
+        "size_bytes": 358,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 260,
+        "symbol": "lp_competition_Submission_R11RawIndex_within___redArg",
+        "size_hex": "00000000000000c5",
+        "size_bytes": 197,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 261,
+        "symbol": "lp_competition_Submission_R11RawIndex_within___redArg___boxed",
+        "size_hex": "0000000000000166",
+        "size_bytes": 358,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 350,
+        "symbol": "lp_competition_Submission_bmm",
+        "size_hex": "00000000000000e4",
+        "size_bytes": 228,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 380,
+        "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0",
+        "size_hex": "0000000000000035",
+        "size_bytes": 53,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 381,
+        "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0___boxed",
+        "size_hex": "0000000000000150",
+        "size_bytes": 336,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 382,
+        "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0___redArg",
+        "size_hex": "00000000000005a0",
+        "size_bytes": 1440,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 383,
+        "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0___redArg___boxed",
+        "size_hex": "0000000000000112",
+        "size_bytes": 274,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 384,
+        "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0___redArg___lam__0",
+        "size_hex": "00000000000005b0",
+        "size_bytes": 1456,
+        "has_asm_body": false
+      },
+      {
+        "nm_line": 385,
+        "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0___redArg___lam__0___boxed",
+        "size_hex": "0000000000000153",
+        "size_bytes": 339,
+        "has_asm_body": false
+      }
+    ],
+    "why_missing": "Used helper9fe STEMS and _selected at239-244 do not include R11RawIndex or R11RawA; private row helpers also fail the required Submission_ prefix.14<20, not a reported symbol-budget truncation. objdump writes empty Disassembly of section headers for many unselected symbols: names appearing there are not instruction coverage.",
+    "new_loop_SIMD": "UNKNOWN",
+    "new_loop_of_bits_call": "C_PRESENT_MACHINE_UNKNOWN",
+    "new_loop_spills": "UNKNOWN",
+    "new_raw_core_machine_map_elimination": "UNKNOWN_ASM; source/C_fast_path_confirmed",
+    "new_row_divmod_machine_hoisting": "UNKNOWN"
+  },
+  "observer": {
+    "mode": "original-gate-statement-side-capture",
+    "recorded_snapshot_start_utc": "2026-10-23T19:52:30.125753+00:00",
+    "recorded_snapshot_finish_utc": "2026-10-23T19:52:30.132660+00:00",
+    "recorded_capture_vs_axioms_emission": {
+      "state": "UNKNOWN",
+      "reason": "capture finish or original axioms emission timestamp/timezone unavailable",
+      "reader_arrival_is_not_emission_time": true
+    },
+    "overhead": "UNKNOWN; even capture before observed score can perturb CPU/cache. Confirm performance with capture disabled.",
+    "objects_removed": true,
+    "boundary": "Actual original statement capture; no diagnostic recompile was used here. Actual final linked timed machine code is not separately bound by this capture."
+  },
+  "next_one_minimal_discriminator": {
+    "action": "In the next root-owned opt-in original-statement discovery capture, prioritize exact nm-present lp_competition_Submission_R11RawIndex_loop___redArg disassembly, without changing candidate or gate.",
+    "questions": [
+      "Does ofBits remain a call on each backedge?",
+      "Are accumulator vectors spilled/reloaded around it?",
+      "Are ten lane updates still SLP mulps/addps?"
+    ],
+    "why": "Differentiates genuine nativeA materialization savings from a new conversion/ABI cost before another arithmetic variant. Existing deleted object cannot supply that missing asm locally.",
+    "no_action_taken": true
+  },
+  "not_claimed": [
+    "No machine-level tenfold unboxing/conversion saving",
+    "No perMAC heap allocation on new fast path inferred from boxed wrappers",
+    "No wholecell cost allocation or new speedup conclusion",
+    "No final timed binary machine-code identity claim",
+    "No independent confirmation or adoption",
+    "No source/adapter/capture helper modification; no CI/Git/network/new agent; no new input generation"
+  ],
+  "evidence": [
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+      "sha256": "051c82bc73b501ed58fde2679346a1026da35e156881e28aef0dca4dead6111b",
+      "bytes": 33382,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/requested-plan.json",
+      "sha256": "7db2a2cd0ec436ce6a2ddbcf0d54060388d8ec09474cd1e36b8f10b1d9dea1a7",
+      "bytes": 1584,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/f01-d11-bmm-raw-a-one-group-verdict.json",
+      "sha256": "1daa66c6e39ca3544fbfc27446fa456325275ba8ef24bee1e347a7317fe7e073",
+      "bytes": 7860,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/f01-d11-bmm-raw-a-one-group-gate.log",
+      "sha256": "a5cb9e1ad418bde794a2bcb2c3022a081671889f9bda7e7c7e86844ec5c3d8df",
+      "bytes": 7457,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-d11-bmm-raw-a-one-group/Kernel.lean",
+      "sha256": "c477e8078eef66255f1c750b46575fc987144717eb1bffc943cf58a514755a6a",
+      "bytes": 244077,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-d10-bmm-direct-rows/Kernel.lean",
+      "sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+      "bytes": 237142,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-0.txt",
+      "sha256": "793b838dc97d687a8bd2894eca2d9f94c02f8085d7c486bf4d605d90ad469d72",
+      "bytes": 32314,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-1.txt",
+      "sha256": "3abe948e2e8f08a4d1e7462c7d65815b9589ca1f00e7948c65fee219a149a944",
+      "bytes": 37255,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-10.txt",
+      "sha256": "240a79bb6e271f2845e6956ee1dad71b9e51022ff2189199b4e9c43791115a60",
+      "bytes": 30480,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-11.txt",
+      "sha256": "2085ec5a0ed15b13b2899ac3d86e84c74d08c3a83fa2a1bec5d44d53c99847f1",
+      "bytes": 31949,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-12.txt",
+      "sha256": "de4fb053a289fa7bcee33fe552ad234404eeaa8a05adaa7d7438c958cfe13b86",
+      "bytes": 40283,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-13.txt",
+      "sha256": "508381493ef73dee825cb59525d8e2c90c437dc006fc5658563f374bb6f29367",
+      "bytes": 30435,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-2.txt",
+      "sha256": "1bf131ca7485a3d919a1f236d2f07e05d3a40f5977702d553c89304a7eb3cd85",
+      "bytes": 30841,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-3.txt",
+      "sha256": "055a6dc0091e7181992f6a809da655218698b7cc179cad9f615936fa64d2871c",
+      "bytes": 36441,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-4.txt",
+      "sha256": "4b423ce23be76479f802ac285da20971489703c3bb18186c94e9adfe29077981",
+      "bytes": 47343,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-5.txt",
+      "sha256": "b97fea8e1dcc98be4d0c3cd0778b62524b94276032ca0c5dd5240be58ecb3d32",
+      "bytes": 31751,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-6.txt",
+      "sha256": "dd03239918ce7edb2f9b0312496e3b1c6d90ca0a8daf77ba4072f793ca059a0c",
+      "bytes": 31825,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-7.txt",
+      "sha256": "4566b8c2e5a8a26602e4e373bedb8c9132171569666e4bcb27911e69389f7979",
+      "bytes": 33839,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-8.txt",
+      "sha256": "8efa28beb964b331470821289261a0228e9e24d57d40092b429a2f5c0aeaa3b7",
+      "bytes": 43256,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/asm-0-9.txt",
+      "sha256": "edd6ce50d28cb6ec645805af6a0a134d71cdc61820063fdd4d91f3d30d69b3b8",
+      "bytes": 35376,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/capture-record.json",
+      "sha256": "1fc241f1348eb6ab25df20f9c4a058d31f2973d1b5f513d92d8039eb20799977",
+      "bytes": 22556,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/compiled-Submission.lean",
+      "sha256": "c477e8078eef66255f1c750b46575fc987144717eb1bffc943cf58a514755a6a",
+      "bytes": 244077,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/file-0-Submission.c",
+      "sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "bytes": 1394349,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/file-1-Submission.c.o.export.trace",
+      "sha256": "ca5fbdba20c6120392a666aa75580ed36d7b498cb360bcb0e3ebd67b1e1199f8",
+      "bytes": 1303,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/file-2-Submission.trace",
+      "sha256": "9b511125defc4f9b9ead18db8cb917854079493169ad486b689ce17895cc5d01",
+      "bytes": 22682,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/nm-0.txt",
+      "sha256": "2b53024ff3c658c6943c485efaaa5e247f239337db818cd1ff4fc64704e91501",
+      "bytes": 39232,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/download-c940aee00b7a4cba8cc126b8221c5140/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-raw-a-one-group/capture-f7033b9431be4eebb7fd3a8be8002b30/snapshot.json",
+      "sha256": "ceab3588162ef7e2536a30d880ccb405fc4d1b25001247ac15cce5a545e0afa7",
+      "bytes": 2070,
+      "original_index_match": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/ci-run.json",
+      "sha256": "18faff2388ffc738f6759f0ec55a46915e83983129479bac3caa163a437f8e31",
+      "bytes": 3872,
+      "original_index_match": "NOT_AN_ARCHIVE_MEMBER"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/artifacts.json",
+      "sha256": "30228a49681eb89b70ce6689c090fa7dfc0b58a046b6ff359809c2bd3916c6b5",
+      "bytes": 954,
+      "original_index_match": "NOT_AN_ARCHIVE_MEMBER"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40014284237/original-artifact-hashes.json",
+      "sha256": "fcf4abc128e340548314c8abbc1ca0c79db55e67aa0b6c2ecba19538ffd71283",
+      "bytes": 14662,
+      "original_index_match": "NOT_AN_ARCHIVE_MEMBER"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d11-bmm-raw-a-one-group/Kernel.lean",
+      "sha256": "c477e8078eef66255f1c750b46575fc987144717eb1bffc943cf58a514755a6a",
+      "bytes": 244077,
+      "original_index_match": "NOT_AN_ARCHIVE_MEMBER"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean",
+      "sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+      "bytes": 237142,
+      "original_index_match": "NOT_AN_ARCHIVE_MEMBER"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/capture-codegen.py",
+      "sha256": "9fe62953a57544b301ea799a59e8a047024dc4478434a23c0b5ed7e1e8b71dbb",
+      "bytes": 34364,
+      "original_index_match": "NOT_AN_ARCHIVE_MEMBER"
+    }
+  ],
+  "C_function_segments": [
+    {
+      "symbol": "lp_competition_Submission_R11RawIndex_loop___redArg",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        41812,
+        41887
+      ],
+      "C_character_range_half_open": [
+        1361893,
+        1366186
+      ],
+      "sha256": "27c4786974e3d02e33383c7eb259bac355b44e6d12642b30b5d0e8b3ef990e15",
+      "bytes": 4293,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 1,
+        "lean_box_float32": 0,
+        "lean_unbox_float32": 0,
+        "lean_unbox_uint32": 1,
+        "lean_float32_mul": 10,
+        "lean_float32_add": 10,
+        "lean_nat_div": 0,
+        "lean_nat_mod": 0,
+        "lean_alloc_ctor": 1,
+        "lean_alloc_closure": 0,
+        "l_Array_ofFn___redArg": 0,
+        "l_Array_append___redArg": 0
+      }
+    },
+    {
+      "symbol": "lp_competition_Submission_R11RawA_core",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        42276,
+        42340
+      ],
+      "C_character_range_half_open": [
+        1387053,
+        1389670
+      ],
+      "sha256": "b069aaeafb02e761abf2a0551fa4b123edbd25961e51090d7350d05fe49e2c62",
+      "bytes": 2617,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 0,
+        "lean_box_float32": 0,
+        "lean_unbox_float32": 0,
+        "lean_unbox_uint32": 0,
+        "lean_float32_mul": 0,
+        "lean_float32_add": 0,
+        "lean_nat_div": 0,
+        "lean_nat_mod": 0,
+        "lean_alloc_ctor": 0,
+        "lean_alloc_closure": 0,
+        "l_Array_ofFn___redArg": 1,
+        "l_Array_append___redArg": 0
+      }
+    },
+    {
+      "symbol": "lp_competition_Submission_R11RawIndex_runDot",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        42036,
+        42105
+      ],
+      "C_character_range_half_open": [
+        1375085,
+        1378395
+      ],
+      "sha256": "b078129a210ef158975eb3150e59bc7ac53dcc63a9108c829c0e80973b11145e",
+      "bytes": 3310,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 0,
+        "lean_box_float32": 0,
+        "lean_unbox_float32": 0,
+        "lean_unbox_uint32": 0,
+        "lean_float32_mul": 0,
+        "lean_float32_add": 0,
+        "lean_nat_div": 0,
+        "lean_nat_mod": 0,
+        "lean_alloc_ctor": 0,
+        "lean_alloc_closure": 0,
+        "l_Array_ofFn___redArg": 0,
+        "l_Array_append___redArg": 0
+      }
+    },
+    {
+      "symbol": "lp_competition_Submission_Packed10Index_loop___redArg",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        38835,
+        38918
+      ],
+      "C_character_range_half_open": [
+        1231888,
+        1236731
+      ],
+      "sha256": "18c9ed9d10a6580a0a00550200ff6c5371bfc5decb155320b948646237d775a9",
+      "bytes": 4843,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 0,
+        "lean_box_float32": 0,
+        "lean_unbox_float32": 10,
+        "lean_unbox_uint32": 0,
+        "lean_float32_mul": 10,
+        "lean_float32_add": 10,
+        "lean_nat_div": 0,
+        "lean_nat_mod": 0,
+        "lean_alloc_ctor": 1,
+        "lean_alloc_closure": 0,
+        "l_Array_ofFn___redArg": 0,
+        "l_Array_append___redArg": 0
+      }
+    },
+    {
+      "symbol": "lp_competition_Submission_RowStream_core",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        40837,
+        40904
+      ],
+      "C_character_range_half_open": [
+        1319853,
+        1322784
+      ],
+      "sha256": "0c563c32358fb7037f59bacc4b79fcfdc4f5c0b98f009da73efcdd36e0d0dbda",
+      "bytes": 2931,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 0,
+        "lean_box_float32": 0,
+        "lean_unbox_float32": 0,
+        "lean_unbox_uint32": 0,
+        "lean_float32_mul": 0,
+        "lean_float32_add": 0,
+        "lean_nat_div": 0,
+        "lean_nat_mod": 0,
+        "lean_alloc_ctor": 0,
+        "lean_alloc_closure": 0,
+        "l_Array_ofFn___redArg": 1,
+        "l_Array_append___redArg": 0
+      }
+    },
+    {
+      "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_mapMUnsafe_map___at___00Submission_Packed10_core_spec__0",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        39695,
+        39722
+      ],
+      "C_character_range_half_open": [
+        1269560,
+        1270704
+      ],
+      "sha256": "a89bec63d43402cee1865eef5676aac68647e63bc9061d66c3cce0ac0d640f2d",
+      "bytes": 1144,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 1,
+        "lean_box_float32": 1,
+        "lean_unbox_float32": 0,
+        "lean_unbox_uint32": 1,
+        "lean_float32_mul": 0,
+        "lean_float32_add": 0,
+        "lean_nat_div": 0,
+        "lean_nat_mod": 0,
+        "lean_alloc_ctor": 0,
+        "lean_alloc_closure": 0,
+        "l_Array_ofFn___redArg": 0,
+        "l_Array_append___redArg": 0
+      }
+    },
+    {
+      "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0___redArg",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        42208,
+        42262
+      ],
+      "C_character_range_half_open": [
+        1383410,
+        1386058
+      ],
+      "sha256": "810d7fd0b48d8ea7bd0135f4da6bcd02bdebafdde2bcc8f6a7b18a2152d7cfd9",
+      "bytes": 2648,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 0,
+        "lean_box_float32": 0,
+        "lean_unbox_float32": 0,
+        "lean_unbox_uint32": 0,
+        "lean_float32_mul": 0,
+        "lean_float32_add": 0,
+        "lean_nat_div": 2,
+        "lean_nat_mod": 1,
+        "lean_alloc_ctor": 0,
+        "lean_alloc_closure": 1,
+        "l_Array_ofFn___redArg": 1,
+        "l_Array_append___redArg": 1
+      }
+    },
+    {
+      "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_R11RawA_core_spec__0___redArg___lam__0",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        42117,
+        42193
+      ],
+      "C_character_range_half_open": [
+        1378829,
+        1382617
+      ],
+      "sha256": "121ccfd7968e5350135f82fc153ddab71f9890983406e24bd5305b5deaa147dc",
+      "bytes": 3788,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 0,
+        "lean_box_float32": 0,
+        "lean_unbox_float32": 0,
+        "lean_unbox_uint32": 0,
+        "lean_float32_mul": 0,
+        "lean_float32_add": 0,
+        "lean_nat_div": 0,
+        "lean_nat_mod": 0,
+        "lean_alloc_ctor": 0,
+        "lean_alloc_closure": 0,
+        "l_Array_ofFn___redArg": 0,
+        "l_Array_append___redArg": 0
+      }
+    },
+    {
+      "symbol": "lp_competition_Submission_RowOutput_row___redArg___lam__0",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        40168,
+        40318
+      ],
+      "C_character_range_half_open": [
+        1289308,
+        1294868
+      ],
+      "sha256": "188f11fffe525d4a8f5502b71c0de668185bc5f9c4fa86f23d09f700e38901d7",
+      "bytes": 5560,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 0,
+        "lean_box_float32": 0,
+        "lean_unbox_float32": 0,
+        "lean_unbox_uint32": 0,
+        "lean_float32_mul": 0,
+        "lean_float32_add": 0,
+        "lean_nat_div": 1,
+        "lean_nat_mod": 1,
+        "lean_alloc_ctor": 0,
+        "lean_alloc_closure": 0,
+        "l_Array_ofFn___redArg": 0,
+        "l_Array_append___redArg": 0
+      }
+    },
+    {
+      "symbol": "lp_competition_Submission_RowOutput_row___redArg",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        40336,
+        40360
+      ],
+      "C_character_range_half_open": [
+        1295681,
+        1297079
+      ],
+      "sha256": "b7b49c0c1950819ff174c3b47c86e88426fcf7e6f32d0703cc62fa210b616a1a",
+      "bytes": 1398,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 0,
+        "lean_box_float32": 0,
+        "lean_unbox_float32": 0,
+        "lean_unbox_uint32": 0,
+        "lean_float32_mul": 0,
+        "lean_float32_add": 0,
+        "lean_nat_div": 0,
+        "lean_nat_mod": 0,
+        "lean_alloc_ctor": 0,
+        "lean_alloc_closure": 1,
+        "l_Array_ofFn___redArg": 1,
+        "l_Array_append___redArg": 0
+      }
+    },
+    {
+      "symbol": "lp_competition_Submission_bmm",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        42363,
+        42406
+      ],
+      "C_character_range_half_open": [
+        1391469,
+        1392971
+      ],
+      "sha256": "30db6cd5723f4546b516b38f2decf774fa45aba79d0d8adc41bd039ac4dc6dba",
+      "bytes": 1502,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 0,
+        "lean_box_float32": 0,
+        "lean_unbox_float32": 0,
+        "lean_unbox_uint32": 0,
+        "lean_float32_mul": 0,
+        "lean_float32_add": 0,
+        "lean_nat_div": 0,
+        "lean_nat_mod": 0,
+        "lean_alloc_ctor": 0,
+        "lean_alloc_closure": 0,
+        "l_Array_ofFn___redArg": 0,
+        "l_Array_append___redArg": 0
+      }
+    },
+    {
+      "symbol": "lp_competition_Submission_Packed10_finish",
+      "C_source_sha256": "e4596dd8d44e7dcda0971d28ca022a420681e27ac585ece0155664e4bdf14850",
+      "C_lines_inclusive": [
+        38799,
+        38817
+      ],
+      "C_character_range_half_open": [
+        1230378,
+        1231049
+      ],
+      "sha256": "cb04b5df2e555fd202bfd7b0d5ef257cb97580b5e6773647151b68dbef5c2a27",
+      "bytes": 671,
+      "static_call_sites_not_dynamic_counts": {
+        "lean_float32_of_bits": 0,
+        "lean_box_float32": 0,
+        "lean_unbox_float32": 0,
+        "lean_unbox_uint32": 0,
+        "lean_float32_mul": 0,
+        "lean_float32_add": 0,
+        "lean_nat_div": 0,
+        "lean_nat_mod": 0,
+        "lean_alloc_ctor": 0,
+        "lean_alloc_closure": 0,
+        "l_Array_ofFn___redArg": 0,
+        "l_Array_append___redArg": 0
+      }
+    }
+  ]
+}
