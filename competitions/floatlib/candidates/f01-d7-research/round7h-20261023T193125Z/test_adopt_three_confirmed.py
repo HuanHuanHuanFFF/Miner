@@ -123,6 +123,13 @@ class AdoptionTests(unittest.TestCase):
     def test_missing_third_is_rejected_without_writes(self):
         del self.f.selection["groups"]["B"]
         self.zero_write_failure()
+    def test_new_retained_source_clears_old_research_overlay(self):
+        self.f.view['dashboard_research_candidate']={'candidate':'older-research'}
+        self.f.state['current_multiplier_view']['displayed_research_candidate']={'candidate':'older-research'}
+        self.f.save(self.f.view_path,self.f.view);self.f.save(self.f.state_path,self.f.state)
+        result,path=self.f.run();self.assertTrue(result['accepted'],result)
+        self.assertNotIn('dashboard_research_candidate',ad.read(self.f.view_path))
+        self.assertNotIn('displayed_research_candidate',ad.read(self.f.state_path)['current_multiplier_view'])
     def test_missing_renderer_freeze_is_rejected_before_target_writes(self):
         del self.f.freeze['files']['competitions/floatlib/scripts/render_dashboard.py']
         self.f.save(self.f.freeze_path,self.f.freeze)

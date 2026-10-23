@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "review": "R11 execution-binding follow-up",
+  "started_at_utc": "2026-10-23T22:12:31Z",
+  "completed_at_utc": "2026-10-23T22:16:09.238244+00:00",
+  "conclusion": "NO_NEW_BLOCKER_FOUND_CAN_FREEZE_IMPLEMENTATION_AFTER_CURRENT_REGRESSIONS",
+  "runtime_scripts_modified_by_review": false,
+  "git_ci_network_or_agents_used": false,
+  "files": {
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/execution-binding.py": {
+      "bytes": 3291,
+      "sha256": "f70e0eeb31b1b01a707fab52036c0780e61479edbcc894cfed063558df90ca3b"
+    },
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/freeze-cohort.py": {
+      "bytes": 6021,
+      "sha256": "afe5cc0070744683b645fc28ca4c1b1dc791ddf7aec6227092f5f63eaa10edfc"
+    },
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/prepare-plan.py": {
+      "bytes": 7496,
+      "sha256": "a8eefc26cb80701f00df772801229a1e07290089d0473d7ff3bc3c0b48282fbb"
+    },
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/verify-three-groups.py": {
+      "bytes": 19198,
+      "sha256": "84b7c319d81cefca2183ef6cf83d805153757d4a83dd15fbda480819485af41a"
+    },
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/adopt-three-confirmed.py": {
+      "bytes": 20507,
+      "sha256": "698c98364ce28cfc030182f9490f227d744415afcbb29a416baf626594d56ebc"
+    },
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/test_verify_three_groups.py": {
+      "bytes": 18966,
+      "sha256": "01fafd7f0595592b13cda7178573ea904cae95f6a5266d15441fedcc1d0fdce0"
+    },
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/test_adopt_three_confirmed.py": {
+      "bytes": 14389,
+      "sha256": "fbee5cb2d4692520edac3c2cda17d2c39d381c982ad6f74dfe0c52e0bbe0df0d"
+    },
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/execution-binding-review.json": {
+      "bytes": 2138,
+      "sha256": "ee990cd6ad3cc4f191091faf260f443263406cc34a861be53884f91600b234d8"
+    },
+    "competitions/floatlib/candidates/f01-d7-research/adoption-guard.py": {
+      "bytes": 14417,
+      "sha256": "b009d7b2f2161d756584013ebfc8adea3d2373ddac04c08a4602eb53e4c7a0b2"
+    },
+    "competitions/floatlib/candidates/f01-d7-research/public-suite.py": {
+      "bytes": 11220,
+      "sha256": "86084d93c52022f4f4a5cfb7969e2b4a035b9a4a4f1f8c6c7e74bd412eafca24"
+    },
+    "competitions/floatlib/candidates/f01-d7-research/audit-suites.py": {
+      "bytes": 7073,
+      "sha256": "4931ede28fc2d41a12ecab0fa6d5039d72bd8d9fdae6e2e9fe486b96ebe6c573"
+    },
+    "competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py": {
+      "bytes": 9471,
+      "sha256": "519a1898fd95b4c2482ab8ff5fbbfe1fd131e47a02f10706ec02dad3bb165904"
+    },
+    ".github/workflows/deflate-baseline.yml": {
+      "bytes": 4764,
+      "sha256": "c0925ea63a1cce2172c38e11dda1962c9a725c0da64b15965f2abbd725c81b13"
+    },
+    "competitions/floatlib/scripts/render_dashboard.py": {
+      "bytes": 5561,
+      "sha256": "85466ca8cc6d3806fe6fea6a0aad4ebea12bba891bfb6af3db704d0d560b20cb"
+    }
+  },
+  "closed_prior_gaps": {
+    "actual_execution_versions": "11 fixed paths, exact required set, local freeze linkage, every authenticated D/A/B actual source_commit blob hashed; any mismatch prevents acceptance",
+    "renderer": "required local frozen path plus explicit adopter pre/post checks"
+  },
+  "preserved_guards": [
+    "original D7 adapter",
+    "exact primary candidate/retained41",
+    "actual immutable run HEAD/source/plan binding",
+    "three distinct run/job/seed",
+    "25 paired rounds",
+    "both D+A and D+B local bootstrap guards",
+    "per-group .97 and positive p05",
+    "actual drawn input diversity",
+    "A/B exact external cohort digest/order",
+    "capture/profile refusal",
+    "fresh adoption revalidation and transaction rollback"
+  ],
+  "independent_in_memory_replays": [
+    {
+      "case": "unchanged execution D/A/B",
+      "accepted": true,
+      "group_count": 3
+    },
+    {
+      "case": "changed B outer",
+      "accepted": false,
+      "group_count": 3,
+      "failure_stage": "execution:B"
+    },
+    {
+      "case": "changed D workflow",
+      "accepted": false,
+      "group_count": 3,
+      "failure_stage": "execution:D"
+    },
+    {
+      "case": "A missing source_commit",
+      "accepted": false,
+      "group_count": 3,
+      "failure_stage": "execution:A"
+    },
+    {
+      "case": "missing renderer",
+      "rejected": true,
+      "stage": "verify_freeze"
+    }
+  ],
+  "replay_scope": "Existing synthetic I/O fixture and real unchanged statistical validator. Git check_output explicitly forbidden; no writes/real gate packets.",
+  "root_saved_actual_tree_checks": {
+    "receipt_path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/execution-binding-review.json",
+    "receipt_sha256": "ee990cd6ad3cc4f191091faf260f443263406cc34a861be53884f91600b234d8",
+    "checks": [
+      {
+        "source_commit": "a283b365ff71d981a124d6793eeeddd0102188ab",
+        "accepted": false,
+        "reason": "Run execution differs from frozen cohort: competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py"
+      },
+      {
+        "source_commit": "669e1e437b1592192de45adb8899ed2a33b4ee03",
+        "accepted": true,
+        "checked_files": 11
+      },
+      {
+        "source_commit": "26b892ee39467f268b00cc4f105840a5b72bf8f5",
+        "accepted": true,
+        "checked_files": 11
+      }
+    ],
+    "status": "SAVED_RECEIPT_INSPECTED_NOT_REEXECUTED"
+  },
+  "root_saved_test_result": "45 PASS including6 execution/map/render-negative tests and1 adoption renderer-missing test",
+  "current_test_method_counts": {
+    "test_verify_three_groups.py": 27,
+    "test_adopt_three_confirmed.py": 19
+  },
+  "current_total_methods": 46,
+  "current_full_suites_rerun_here": false,
+  "next_minimum_check": [
+    "python -B competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/test_verify_three_groups.py",
+    "python -B competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/test_adopt_three_confirmed.py"
+  ],
+  "new_candidate_full_gate_and_cohort": "NOT_RUN_BY_REVIEW_FUTURE_OBLIGATION",
+  "formal_admission": "UNKNOWN_NOT_ESTABLISHED",
+  "old_freezes_rewritten": false,
+  "current_cohort_exists": false
+}

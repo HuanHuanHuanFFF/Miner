@@ -13,6 +13,7 @@ for rid in sorted(int(p.parent.name) for p in RUNS.glob('[0-9]*/ci-run.json') if
     for filename,info in index['files'].items():
         payload=(artifact/filename).read_bytes();assert len(payload)==info['bytes'] and hashlib.sha256(payload).hexdigest()==info['sha256'],filename
     summary=json.loads((stage/'summary.json').read_bytes());assert summary['official_commit']=='4b7e83841cc0c32c6529f533923c73d33b5ecf97'
+    requested=json.loads((stage/'requested-plan.json').read_bytes())
     if 'adapter_sha256' in summary:
         original=subprocess.check_output(['git','show',summary['source_commit']+':competitions/floatlib/candidates/f01-d7-research/public-suite.py'])
         assert hashlib.sha256(original).hexdigest()==summary['adapter_sha256']
@@ -23,6 +24,8 @@ for rid in sorted(int(p.parent.name) for p in RUNS.glob('[0-9]*/ci-run.json') if
     for entry in summary['results']:
         vp=stage/entry['verdict'];v=json.loads(vp.read_bytes());k=stage/'inputs'/entry['candidate']/'Kernel.lean';digest=hashlib.sha256(k.read_bytes()).hexdigest();assert digest==entry['kernel_sha256']
         row={'run':rid,'candidate':entry['candidate'],'kernel_sha256':digest,'official_commit':summary['official_commit'],'suite_sha256':summary['suite_sha256'],'seed':summary['seed'],'full_gate':entry['full_gate'],'statement_pass':entry.get('statement_pass',False),'stage':v['stage'],'reason':v.get('reason',''),'verdict':vp.relative_to(ROOT).as_posix(),'verdict_sha256':hashlib.sha256(vp.read_bytes()).hexdigest()}
+        row.update(sample_role=requested.get('sample_role','UNKNOWN_HISTORICAL_ROLE'),
+                   execution_has_observer=bool(requested.get('profile_parent') or requested.get('profile_current') or any(c.get('capture_codegen') for c in requested['candidates'])))
         if entry.get('codegen') is not None:
             cg=entry['codegen']
             original_helper=subprocess.check_output(['git','show',summary['source_commit']+':competitions/floatlib/candidates/f01-d7-research/capture-codegen.py'])

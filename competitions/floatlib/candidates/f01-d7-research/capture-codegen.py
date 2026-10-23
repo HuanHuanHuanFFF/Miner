@@ -33,10 +33,16 @@ MAX_SYMBOLS = 20
 OBJECT = re.compile(r'^Submission(?:\.c)?\.o(?:\.(?:export|noexport))?$')
 TRACE = re.compile(r'^Submission(?:\.c(?:\.o(?:\.(?:export|noexport))?)?|\.o(?:\.(?:export|noexport))?|\.olean|\.ilean)?\.trace$')
 HOT_STEMS = ('R11RawIndex_loop', 'Packed8Index_loop', 'R11CrossRows_wordLoop', 'R11CrossRows_dot8')
+FOLD_OUTPUT_STEMS = ('RowStream_output', 'DirectContinuous_output', 'DirectContinuous_row',
+                     'BatchLocalPacked_output', 'BatchLocalPacked_batchStep',
+                     'BatchLocalPacked_row', 'BatchLocalPacked_group')
 OUTPUT_STEMS = ('R11RawA_core', 'R11RawIndex_runDot', 'RowStream_emit', 'RowStream_group',
                 'RowStream_row', 'RowStream_output', 'RowStream_core', 'R11CrossRows_core',
                 'R11CrossRows_packGeneral', 'R11CrossRows_packShared', 'R11CrossRows_finish8',
-                'R11CrossRows_words')
+                'R11CrossRows_words', 'DirectContinuous_core', 'DirectContinuous_output',
+                'DirectContinuous_row', 'BatchLocalPacked_core', 'BatchLocalPacked_output',
+                'BatchLocalPacked_batchStep', 'BatchLocalPacked_row', 'BatchLocalPacked_group',
+                'BatchLocalPacked_packBatch')
 LEGACY_STEMS = ('NativeFinal_dot', 'NativeFinal_dotLoop', 'NativeFinal_sumLoop', 'dotLoop',
                 'DirectSmall_core', 'NativeDecodeSumWord_loop', 'Packed10Index_loop', 'LowZero')
 SCALAR_STEMS = ('add', 'mul', 'nativeMul')
@@ -247,6 +253,21 @@ def _symbol_info(name):
     """Recognize a function boundary, including actual private specializations."""
     if '___boxed' in name:
         return None
+    # Actual 911 globals differ from the private Array helpers below. Only the
+    # exact Fin.foldl specialization encoding and named output chains qualify.
+    fold = re.fullmatch(
+        r'(?:lp_competition_Fin_foldl_loop|lp(?:_competition_)?__private_[A-Za-z0-9_]+__Fin_foldl_loop)'
+        r'___at___00Submission_([A-Za-z0-9_]+)_spec__[0-9]+(?:___redArg)?', name)
+    if fold is not None and fold.group(1) in FOLD_OUTPUT_STEMS:
+        return {'stem': fold.group(1), 'priority': 0,
+                'private': not name.startswith('lp_competition_Fin_foldl_loop___at___'),
+                'short': name, 'specialized_output': True}
+    encoded_fold = re.fullmatch(
+        r'(?:lp_competition_Fin_foldl_loop|lp(?:_competition_)?__private_[A-Za-z0-9_]+__Fin_foldl_loop)'
+        r'___at___00Submission_([A-Za-z0-9_]+)', name)
+    if encoded_fold is not None and any(encoded_fold.group(1).startswith(stem + '_spec__')
+                                       for stem in FOLD_OUTPUT_STEMS):
+        return None  # Malformed owned fold suffix must not enter the old private fallback.
     prefix = 'lp_competition_Submission_'
     private = False
     if name.startswith(prefix):
@@ -280,7 +301,8 @@ def _symbol_sort_key(name):
     info = _symbol_info(name)
     require(info is not None, 'sorting an unselected symbol')
     # Prefer computational redArg bodies to erased-argument wrappers.
-    variant = 0 if '___redArg' in info['short'] else 1 if '___lam__' in info['short'] else 2
+    variant = (-2 if '___redArg' in info['short'] else -1) if info.get('specialized_output') else (
+        0 if '___redArg' in info['short'] else 1 if '___lam__' in info['short'] else 2)
     return info['priority'], variant, info['stem'], name
 
 
@@ -647,6 +669,92 @@ def selftest():
                 all(x['priority'] == 3 for x in order[len(new_symbols) + 1:]), 'priority order drift')
         results.append({'test': 'new_symbol_priority_boundaries_and_budget', 'pass': True,
                         'captured': len(captured), 'omitted': 22, 'actual_llvm': 'NOT_RUN'})
+
+        # Exact nm names from 911's fused-output object; these are the entry's
+        # specialized loops, while the standalone group/row bodies are retained.
+        output_loops = [
+            'lp_competition_Fin_foldl_loop___at___00Submission_RowStream_output_spec__0',
+            'lp_competition_Fin_foldl_loop___at___00Submission_RowStream_output_spec__1',
+            'lp_competition_Fin_foldl_loop___at___00Submission_RowStream_output_spec__2']
+        standalone = [
+            'lp_competition_Submission_RowStream_group___redArg',
+            'lp_competition_Submission_RowStream_group___redArg___lam__0',
+            'lp_competition_Submission_RowStream_emit___lam__0',
+            'lp_competition_Submission_RowStream_core',
+            'lp_competition_Submission_RowStream_emit',
+            'lp_competition_Submission_RowStream_group',
+            'lp_competition_Submission_RowStream_output',
+            'lp_competition_Submission_RowStream_row']
+        fused = base / 'fused-911-object'
+        fixtures[str(fused)] = output_loops + standalone + old_symbols
+        fused_dir = base / 'fused-911-selection'
+        fused_dir.mkdir()
+        try:
+            globals()['_bounded_tool'] = fake_tool
+            shutil.which = lambda name: 'fake-' + name
+            fused_report = original_post([(fused, {'sha256': 'fused911', 'source': 'fused911'})],
+                                         fused_dir, time.monotonic() + 5, {})
+        finally:
+            globals()['_bounded_tool'] = original_tool
+            shutil.which = original_which
+        order = [x['symbol'] for x in fused_report['selection_order']]
+        require(set(output_loops) <= set(order), '911 actual output specialized loops missing')
+        require(set(order[:3]) == set(output_loops), 'standalone output helpers precede actual 911 loops')
+        require(fused_report['selected_symbols'] == MAX_SYMBOLS == 20 and
+                sum(len(obj['omitted_symbols']) for obj in fused_report['objects']) == 16,
+                '911 replay did not retain bounded omission reporting')
+        results.append({'test': 'actual_911_output_loops_before_standalone_helpers', 'pass': True,
+                        'captured': 20, 'omitted': 16, 'actual_llvm': 'NOT_RUN'})
+
+        # Source-backed names with the same strict compiler encoding. Actual
+        # emission/LLVM for these new candidate paths is not claimed by this test.
+        future_loops = [
+            'lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__0',
+            'lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__1',
+            'lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_row_spec__0___redArg',
+            'lp__private_Init_Data_Fin_Fold_0__Fin_foldl_loop'
+            '___at___00Submission_DirectContinuous_row_spec__0',
+            'lp_competition_Fin_foldl_loop___at___00Submission_BatchLocalPacked_output_spec__0',
+            'lp_competition_Fin_foldl_loop___at___00Submission_BatchLocalPacked_batchStep_spec__0',
+            'lp_competition_Fin_foldl_loop___at___00Submission_BatchLocalPacked_group_spec__0',
+            'lp_competition___private_Init_Data_Fin_Fold_0__Fin_foldl_loop'
+            '___at___00Submission_BatchLocalPacked_row_spec__0___redArg']
+        future_outputs = ['lp_competition_Submission_' + stem for stem in (
+            'DirectContinuous_core', 'DirectContinuous_output', 'DirectContinuous_row',
+            'BatchLocalPacked_core', 'BatchLocalPacked_output', 'BatchLocalPacked_batchStep',
+            'BatchLocalPacked_row', 'BatchLocalPacked_group', 'BatchLocalPacked_packBatch')]
+        invalid_outputs = [
+            output_loops[0] + '___boxed', future_loops[0] + '___boxed',
+            future_loops[-1] + '___boxed',
+            future_loops[0].replace('output_spec', 'outputExtra_spec'),
+            future_loops[4].replace('output_spec', 'output_extra_spec'),
+            future_loops[0] + '_extra', future_loops[0] + '___redArgument',
+            future_loops[-1].replace('___redArg', '___redArgument'),
+            future_loops[0].replace('Fin_foldl_loop', 'List_foldl_loop'),
+            future_loops[-1].replace('00Submission_', '00NotSubmission_'),
+            'lp_competition_Submission_BatchLocalPacked_output_extra']
+        future = base / 'future-output-object'
+        fixtures[str(future)] = future_loops + future_outputs + invalid_outputs + old_symbols
+        future_dir = base / 'future-output-selection'
+        future_dir.mkdir()
+        try:
+            globals()['_bounded_tool'] = fake_tool
+            shutil.which = lambda name: 'fake-' + name
+            future_report = original_post([(future, {'sha256': 'future', 'source': 'future'})],
+                                          future_dir, time.monotonic() + 5, {})
+        finally:
+            globals()['_bounded_tool'] = original_tool
+            shutil.which = original_which
+        order = [x['symbol'] for x in future_report['selection_order']]
+        require(set(future_loops + future_outputs) <= set(order), 'new output/fold chain missing')
+        require(set(order[:len(future_loops)]) == set(future_loops), 'new output loops not prioritized')
+        require(not set(invalid_outputs) & set(order) and
+                all(not _selected(x) for x in invalid_outputs), 'encoded output near-match/boxed captured')
+        require(future_report['selected_symbols'] == MAX_SYMBOLS == 20 and
+                sum(len(obj['omitted_symbols']) for obj in future_report['objects']) == 22,
+                'new output replay budget/omission drift')
+        results.append({'test': 'new_output_fold_encoding_and_rejection_boundaries', 'pass': True,
+                        'captured': 20, 'omitted': 22, 'actual_emission_and_llvm': 'UNKNOWN_NOT_RUN'})
 
         # Exhaust the unchanged deadline after nm, before any objdump invocation.
         original_clock = time.monotonic

@@ -42,12 +42,15 @@ def main():
         assert measured["candidate"] == research["candidate"] and measured["kernel_sha256"] == research["kernel_sha256"]
         actual = {r["run"] for r in json.loads((ROOT / view["public_results"]).read_bytes())["records"]
                   if r.get("full_gate") and r["kernel_sha256"] == research["kernel_sha256"]}
-        assert actual == set(research["full_gate_runs"]) == set(measured["full_gate_runs"]) and len(actual) >= 3
+        frozen_runs = set(research["full_gate_runs"])
+        assert frozen_runs == set(measured["full_gate_runs"]) and frozen_runs <= actual and len(frozen_runs) >= 3
         assert measured["whole"]["ratio_median"] < estimate["whole"]["ratio_median"]
         source = ROOT / research["kernel"]
         assert hashlib.sha256(source.read_bytes()).hexdigest() == research["kernel_sha256"]
         estimate = dict(measured, evidence=research["evidence"])
-        run_count = len(actual)
+        # Later same-source controls stay in the raw index; the displayed model
+        # remains bound to its frozen validation groups and original values.
+        run_count = len(frozen_runs)
         labels = dict(labels, bmm=research["bmm_label"])
         direct_times = {op: "UNKNOWN" for op in ("add", "mul", "sum", "bmm")}
     lines = [

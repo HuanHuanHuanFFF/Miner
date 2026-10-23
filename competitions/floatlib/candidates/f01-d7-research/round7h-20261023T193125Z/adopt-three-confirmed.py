@@ -125,6 +125,10 @@ def prepare_views(view, state, freeze, selection, rows, pairs, runs, root, now):
                 group["relative_normalized_ratio"] <= freeze["selection_policy"]["headline_normalized_ratio_max"] and
                 group["gain_p05"] > freeze["selection_policy"]["gain_p05_min_exclusive"], "Independent group fails original policy")
     v, s = deepcopy(view), deepcopy(state)
+    # Adoption selects the new retained package. An old research overlay must
+    # not hide it or compare its stale source/model against the new estimate.
+    v.pop('dashboard_research_candidate', None)
+    s['current_multiplier_view'].pop('displayed_research_candidate', None)
     independent = [runs[r] for r in ("D", "A", "B")]
     all_runs = [r["run"] for r in rows]
     by_run = {r["run"]: r for r in rows}
@@ -175,7 +179,10 @@ def prepare_views(view, state, freeze, selection, rows, pairs, runs, root, now):
         "kernels_vs_shipped": ratios,
         "independent_kernels_vs_shipped": [{op:r["operation_total_ns"][op]/r["operation_reference_total_ns"][op] for op in OPS} for r in independent_rows],
         "local_selection_guard": selection, "previous_package": previous,
-        "all_source_samples": [{"run":r["run"],"seed":r["seed"],"ratio":r["ratio"],"verdict":r["verdict"],"verdict_sha256":r["verdict_sha256"]} for r in rows],
+        "all_source_samples": [{"run":r["run"],"seed":r["seed"],"ratio":r["ratio"],"verdict":r["verdict"],"verdict_sha256":r["verdict_sha256"],
+                                "sample_role":r.get('sample_role','UNKNOWN_HISTORICAL_ROLE'),
+                                "execution_has_observer":r.get('execution_has_observer','UNKNOWN_HISTORICAL_OBSERVER'),
+                                "codegen_capture_state":r.get('codegen',{}).get('state','NOT_REQUESTED' if r.get('execution_has_observer') is False else 'UNKNOWN')} for r in rows],
         "evidence": view["public_results"]}
     s["current_multiplier_view"].update(candidate=candidate["name"], candidate_time_over_current_champion="UNKNOWN",
         all_retained_source_public_gate_runs=all_runs, independent_adoption_runs=independent,
