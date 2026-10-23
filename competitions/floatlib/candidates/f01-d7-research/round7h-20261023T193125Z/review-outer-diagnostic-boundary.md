@@ -1,0 +1,13 @@
+已限定修复外层ci-diagnostics.py：新SHA `519a1898fd95b4c2482ab8ff5fbbfe1fd131e47a02f10706ec02dad3bb165904`，9471 B。旧SHA为6ef7d5c04b66cd48357dbdff7896b1d4cd85503f3b2e5473719f0d1de6d993a9。本地实际embedded statement AST回归RED后10项GREEN；真实runner与Linux工具未运行。
+
+909/run40024496791、HEAD65aef01c16e389cbe5c7e4ff89c4d0dcdffe1ee2的原件表明：外层8eb的VerifyFull和benchFull都exit0，随后embedded statement:41的nm subprocess.run(timeout=15)抛TimeoutExpired，后面的public-suite pm.run未到达。四个新候选仍应记NOT_STARTED，不能记为Lean/性能失败。原始reason和5821 B replay.log保持原字节，四份相关原件重新匹配归档哈希；本次与新fc capture helper无关。
+
+按diagnosing-bugs先构建并运行最小反馈环：test_outer_diagnostic_capture.py从ci-diagnostics.py真实code字面量提取statement函数AST，仅隔离外部globals。临时fake C/ELF目录与stub nm/objdump触发同一控制流，真实adapter导入及pm.run接缝保持在所执行函数内，loader仅替换外部运行。单个nm超时回归RED，旧源码完整10项回归还出现2 failure/5 error，明确复现工具失败阻断adapter。依任务许可跳过3—5个假设排名：trace/源已定位异常边界；hosted nm为何慢仍UNKNOWN，没有把增大超时当修复。
+
+修复只在原statement成功后的可选对象采集中增加optional_object_tool。nm或objdump超时、OSError、非零退出写入既有native-assembly-index.json的UNKNOWN行，含工具、对象路径/SHA、目标symbol及异常/退出码。失败的nm部分输出不再拿来反汇编，失败的objdump不写成成功asm。成功路径的原disassembly记录不变，随后真实pm.run(g,kernel,out)照常执行。没有全局except：original_statement失败原因原样返回、其异常原样抛出；adapter在正常nm或nm超时之后抛错都继续抛错，验收失败不会被可选采集吞掉。
+
+[回归脚本](D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/test_outer_diagnostic_capture.py)的10项覆盖nm/objdump TimeoutExpired、OSError、非零、原statement失败/异常、adapter异常及全成功。GREEN退出0，10项约0.154秒；工具全部stub，不跑真实Linux/Lean，也不等待15秒。实际测试命令、RED/GREEN原输出与脚本SHA在JSON中。
+
+边界验证：改动仅落原optional对象采集byte区间2818—4652（新至5813），区间之前与之后均逐字相同；original_statement、g.STAGES、adapter/profile分支、外层Popen/环境、120/2400超时、verdict判定均未改。两处工具argv/kwargs经AST对比一致，15秒不变。只新增捕获TimeoutExpired/OSError的窄except，工具非零走显式UNKNOWN；C/trace及其它文件I/O边界保持原行为。临时测试目录已清理。
+
+仅修改一个运行文件、新增指定测试与本报告；没有Git/CI/上传、新agent、候选或public-suite.py修改。Root需独立审查并在后续原runner验证新wrapper。909证据不回写，本地测试不升级四个新候选的状态；nm慢的根因仍待真实host证据。

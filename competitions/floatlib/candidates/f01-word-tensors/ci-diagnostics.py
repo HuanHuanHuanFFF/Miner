@@ -40,6 +40,24 @@ def statement(src,verdict):
         # Inspect the object the unchanged official build actually produced.
         # No recompilation, flags, gate inputs or measured binary are changed.
         objects=[]
+        def optional_object_tool(argv, object_data, **kwargs):
+            try:
+                result=subprocess.run(argv,**kwargs)
+            except (subprocess.TimeoutExpired,OSError) as error:
+                details={'error_type':type(error).__name__,'error':str(error)}
+            else:
+                if result.returncode == 0:
+                    return result
+                stderr=result.stderr or ''
+                if isinstance(stderr,bytes):
+                    stderr=stderr.decode('utf-8',errors='replace')
+                details={'exit_code':result.returncode,'error':stderr}
+            objects.append({'kind':'optional-built-object-capture','state':'UNKNOWN',
+                            'tool':argv[0],'source':argv[-1],
+                            'object_sha256':hashlib.sha256(object_data).hexdigest(),
+                            'symbol':next((arg.split('=',1)[1] for arg in argv if arg.startswith('--disassemble=')),None),
+                            **details})
+            return None
         for path in (g.LAYER/'upper').rglob('*'):
             if not path.is_file() or 'Submission' not in path.name:
                 continue
@@ -52,11 +70,15 @@ def statement(src,verdict):
             data=path.read_bytes()
             if not data.startswith(b'\x7fELF'):
                 continue
-            symbols=subprocess.run(['nm','--defined-only',str(path)],capture_output=True,text=True,timeout=15)
+            symbols=optional_object_tool(['nm','--defined-only',str(path)],data,capture_output=True,text=True,timeout=15)
+            if symbols is None:
+                continue
             names=[line.split()[-1] for line in symbols.stdout.splitlines() if line.split()]
             names=[name for name in names if name.startswith('lp_competition_Submission_') and 'loop' in name.lower() and 'boxed' not in name and ('Packed' in name or 'NativeDecodeSum' in name or 'Tile' in name)]
             for symbol in names:
-                result=subprocess.run(['objdump','-d','--no-show-raw-insn','-Mintel','--disassemble='+symbol,str(path)],capture_output=True,timeout=15)
+                result=optional_object_tool(['objdump','-d','--no-show-raw-insn','-Mintel','--disassemble='+symbol,str(path)],data,capture_output=True,timeout=15)
+                if result is None:
+                    continue
                 name='native-loop-'+str(len(objects))+'.asm.txt';(out/name).write_bytes(result.stdout)
                 objects.append({'kind':'actual-built-object-disassembly','source':str(path),'object_sha256':hashlib.sha256(data).hexdigest(),'symbol':symbol,'file':name,'sha256':hashlib.sha256(result.stdout).hexdigest(),'exit_code':result.returncode,'kernel_sha256':hashlib.sha256(kernel.read_bytes()).hexdigest(),'scope':'Diagnostic statement replay using the unchanged pinned build; this is not the cleaned-up timed gate object.'})
         (out/'native-assembly-index.json').write_text(json.dumps(objects,indent=2)+'\n',encoding='utf-8')

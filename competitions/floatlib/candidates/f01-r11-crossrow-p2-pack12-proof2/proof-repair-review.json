@@ -1,0 +1,49 @@
+{
+  "manifest": {
+    "candidate": "f01-r11-crossrow-p2-pack12-proof2",
+    "candidate_file": "Kernel.lean",
+    "candidate_sha256": "5c5e7071927400ecd75d02d69b0ce62236a50a615912d99e7f8470a9ccf19c6b",
+    "candidate_bytes": 252699,
+    "created_at_utc": "2026-10-23T21:16:16.135036+00:00",
+    "parent": "f01-r11-crossrow-p2-pack12",
+    "parent_sha256": "4bdd1e7db35cd85e17d06511721d5dbf7f654ec12e58633264b08a086ec54fa0",
+    "repair": "Only lane_update numeral/projection simp; dot8_lane zero8 explicit normalization; rowWord_eq let/Fin projection reduction before/after rewrites.",
+    "runtime_definition_bytes": "UNCHANGED_BY_EXACT_INVERSE_OUTSIDE_THREE_THEOREM_BLOCKS",
+    "trigger_run": 40024012440,
+    "trigger_validation_mode": "statement-only",
+    "trigger_verdict_sha256": "7eabc9ffc6732edf9378089aa867a91b6e838fd10c41a1a8c7854e45f3439e8f",
+    "trigger_log_sha256": "59066fef2021bb9f426635120767738cea597af4e9cb97c93eb6fb208ad6d294",
+    "validation_mode": "full-gate",
+    "proof_status": "NOT_RUN_EXACT_PROOF2",
+    "full_gate": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "formal_submission": "NOT_SUBMITTED",
+    "build_script_sha256": "b30d3ef95ab198e617d53e2e1afb3d038c6692c885c29ea6ef97f683920bd894",
+    "scope": "No runtime change, resource option increase, source pruning, or unobserved web conditional patch. Original failure retained."
+  },
+  "changed_theorems": [
+    "lane_update",
+    "dot8_lane",
+    "rowWord_eq"
+  ],
+  "replacements": [
+    {
+      "theorem": "lane_update",
+      "old": "theorem lane_update (s : F8) (v : P12) (l : Fin 8) :\n    lane (update s v) l = lane s l + inputA v l * inputB v l := by\n  rcases l with ⟨l,hl⟩\n  have h : l=0 ∨ l=1 ∨ l=2 ∨ l=3 ∨ l=4 ∨ l=5 ∨ l=6 ∨ l=7 := by omega\n  rcases h with rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl <;> rfl\n",
+      "new": "theorem lane_update (s : F8) (v : P12) (l : Fin 8) :\n    lane (update s v) l = lane s l + inputA v l * inputB v l := by\n  rcases l with ⟨l,hl⟩\n  have h : l=0 ∨ l=1 ∨ l=2 ∨ l=3 ∨ l=4 ∨ l=5 ∨ l=6 ∨ l=7 := by omega\n  rcases h with rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl <;>\n    simp [lane, update, inputA, inputB]\n"
+    },
+    {
+      "theorem": "dot8_lane",
+      "old": "theorem dot8_lane (n p a0 a1 a2 a3 b0 b1 b2 b3 : Nat) (A B : Array Binary32)\n    (hn : n<USize.size) (l : Fin 8) :\n    lane (dot8 n p a0 a1 a2 a3 b0 b1 b2 b3 A B hn) l =\n      NativeFinal.dotLoop n (select4 a0 a1 a2 a3 (l.val%4))\n        (select4 b0 b1 b2 b3 (l.val%4)+l.val/4) p A B 0 (Float32.ofBits 0) := by\n  unfold dot8\n  rw [wordLoop_eq, USize.toNat_zero]\n  simpa only [lane_zero] using\n    natLoop_lane n p a0 a1 a2 a3 b0 b1 b2 b3 A B 0 zero8 l\n",
+      "new": "theorem dot8_lane (n p a0 a1 a2 a3 b0 b1 b2 b3 : Nat) (A B : Array Binary32)\n    (hn : n<USize.size) (l : Fin 8) :\n    lane (dot8 n p a0 a1 a2 a3 b0 b1 b2 b3 A B hn) l =\n      NativeFinal.dotLoop n (select4 a0 a1 a2 a3 (l.val%4))\n        (select4 b0 b1 b2 b3 (l.val%4)+l.val/4) p A B 0 (Float32.ofBits 0) := by\n  unfold dot8\n  rw [wordLoop_eq, USize.toNat_zero]\n  have h := natLoop_lane n p a0 a1 a2 a3 b0 b1 b2 b3 A B 0 zero8 l\n  rw [lane_zero] at h\n  simpa only [zero8] using h\n"
+    },
+    {
+      "theorem": "rowWord_eq",
+      "old": "theorem rowWord_eq (batch m n p : Nat) (A B : Array Binary32) (hn : n<USize.size)\n    (r : Fin (batch*m)) (j : Fin p) (hp : p≤2) :\n    rowWord batch m p (words batch m n p A B hn) r j hp =\n      NativeFinal.dot n ((r.val/m*m+r.val%m)*n) (r.val/m*n*p+j.val) p A B := by\n  unfold rowWord words\n  rw [Packed10.vector_get_ofFn, blockRows_word]\n  have hr : r.val/m*m+r.val%m=r.val := by\n    simpa only [Nat.mul_comm] using Nat.div_add_mod r.val m\n  simp only [row_decomposition, hr]\n",
+      "new": "theorem rowWord_eq (batch m n p : Nat) (A B : Array Binary32) (hn : n<USize.size)\n    (r : Fin (batch*m)) (j : Fin p) (hp : p≤2) :\n    rowWord batch m p (words batch m n p A B hn) r j hp =\n      NativeFinal.dot n ((r.val/m*m+r.val%m)*n) (r.val/m*n*p+j.val) p A B := by\n  unfold rowWord words\n  dsimp only\n  rw [Packed10.vector_get_ofFn, blockRows_word]\n  dsimp only\n  have hr : r.val/m*m+r.val%m=r.val := by\n    simpa only [Nat.mul_comm] using Nat.div_add_mod r.val m\n  simp only [row_decomposition, hr]\n"
+    }
+  ],
+  "inverse_parent_sha256": "4bdd1e7db35cd85e17d06511721d5dbf7f654ec12e58633264b08a086ec54fa0",
+  "static_policy": "PASS",
+  "size_margin": 3301
+}

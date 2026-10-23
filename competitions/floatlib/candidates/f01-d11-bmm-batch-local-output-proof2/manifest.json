@@ -1,0 +1,29 @@
+{
+  "candidate": "f01-d11-bmm-batch-local-output-proof2",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "28af18b4ba270203a44e2cda950967a51475fc592d92b5f026f5bca43498a8e1",
+  "candidate_bytes": 254436,
+  "created_at_utc": "2026-10-23T21:33:30.862177+00:00",
+  "parent": "f01-d11-bmm-batch-local-output",
+  "parent_sha256": "7e7776d95fd74d3fc2fa68ab629750228d800cac54825b41606b20ee538fdc9b",
+  "draft_sha256": "7314cb0d6501ea896b7ba508af5054252a3ab5f8154a79703f733258d3f222ba",
+  "mechanism": "For nonempty n>4,p>2 packed matrices only, retain global nativeA but construct only one batch of B packets, compute that batch into the same continuous output Array, then release the local packet scope. No global packedB Vector in the new runtime path. Original ordered MAC and raw NaN finish unchanged.",
+  "proof": "Concrete packBatch equals original packB.get b; batch/row/group prefix invariants connect the actual local preparation and output to referenceBmm. Full-source statement NOT_RUN.",
+  "guard": "4<n AND2<p AND0<batch*m; all other shapes use exact5b7d parent.",
+  "validation_mode": "statement-only first, then full-gate",
+  "proof_status": "NOT_RUN_PROOF_GLUE_REPAIR",
+  "performance": "UNKNOWN",
+  "lifetime_codegen": "UNKNOWN_UNTIL_ACTUAL_C_AND_ASM",
+  "formal_submission": "NOT_SUBMITTED",
+  "change": "Only proof terms: rewrite the actual Nat.succ_mul bound and explicitly use i.isLt; rewrite hb for the remaining raw B Nat base after the Fin index rewrite. All computational value expressions, scan/packing/arithmetic/output and resource options unchanged.",
+  "previous_failure": {
+    "run": 40025423585,
+    "seed": 910,
+    "stage": "statement",
+    "verdict_sha256": "552b06aacdd76eb92824b6ff1e6dfba585fe2d022cd8600967966048e9c6c3c0",
+    "errors": [
+      "6624:8 add_mul pattern absent on Nat.succ bound",
+      "6656:86 Nat r/m B base remains after Fin equality rewrite"
+    ]
+  }
+}

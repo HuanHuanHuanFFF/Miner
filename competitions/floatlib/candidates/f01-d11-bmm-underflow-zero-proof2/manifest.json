@@ -1,0 +1,45 @@
+{
+  "candidate": "f01-d11-bmm-underflow-zero-proof2",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "6a69d6edd8afe6240fc6970c5eb8957a26f50595158c2020715f769dd094ea81",
+  "candidate_bytes": 244896,
+  "created_at_utc": "2026-10-23T21:28:22.259054+00:00",
+  "parent": "f01-d11-bmm-underflow-zero",
+  "parent_sha256": "d37743d3ad6fbc0ee81007a70dc8b1795d3b1aeda4fc58ed379cbab7544feddb",
+  "baseline": "f01-r8-combined-result-guard",
+  "baseline_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+  "mechanism": "Two short-circuit Array.all scans on original A/B words. If every magnitude<0x16000000, return full +0 Vector.replicate; else exact original a066 dispatcher. All scan and fill costs remain in entry.",
+  "threshold": {
+    "raw_magnitude_strict_lt": "0x16000000",
+    "max_raw_exponent": 43,
+    "max_finiteScale_each": 42,
+    "max_sum_scale": 84
+  },
+  "proof": "small_exp and scale_small derive scale sum<=84; generic 64-bit log2 bound gives roundP subnormal branch and shift149-scale>=65, so rseAny=0 even without a mantissa bound. FastMul.mul_spec/ExecFloat.Proof.mul_eq_spec connect signed zero to actual ExecFloat.mul. +0 plus either signed zero is +0. Fin.foldl fixed-zero induction and Array.all/getD default-zero connect to original referenceBmm and all four formal specs. New text is NOT_RUN.",
+  "history_difference": "R10 astra-subnormal-next proposed a broader exponent-sum<=102 whole-matrix condition without a Lean theorem or new Kernel; exposed831 had zero matching whole-matrix cases. This is the first implemented whole-array fixed-threshold path in the searched records, using a stronger domain for a simpler full proof. It differs from previously negative per-MAC low-exponent and zero-input guards.",
+  "history_evidence": [
+    "competitions/floatlib/candidates/f01-d7-research/round1h-20261023T125752Z/astra-subnormal-next.md",
+    "competitions/floatlib/candidates/f01-d7-research/round1h-20261023T125752Z/direct-low-input-scope-831.json"
+  ],
+  "edge_cases": "All Nat dimensions; empty arrays all=true, n=0 fold fixed-zero, zero output length; out-of-bounds getD uses certified small +0. Guard rejects any infinity/NaN magnitude. Original a066 unchanged on guard miss.",
+  "source_status": "FROZEN_FOR_SECOND_UNDERFLOW_STATEMENT",
+  "validation_mode": "statement-only first; original complete gate if accepted",
+  "proof_status": "NOT_RUN",
+  "kernel_replay": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "checksum": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "formal_submission": "NOT_SUBMITTED",
+  "attribution": "All parent provenance retained. finiteScale_toNat proof ported from FloatLib Team MIT FiniteProof.lean captured in existing R6-W01 public-source evidence; attribution comment in Kernel. Remaining new proof/runtime session-authored.",
+  "change": "Proof only: replace invalid Bool.and_eq_true.mp field notation with explicitly typed conjunction and simpa only [Bool.and_eq_true] using branch hypothesis. Original accepted-parent proof text already uses this rewrite lemma form. No runtime, arithmetic theorem, environment or proof resource change.",
+  "previous_failure": {
+    "run": 40025423585,
+    "seed": 910,
+    "stage": "statement",
+    "source_sha256": "d37743d3ad6fbc0ee81007a70dc8b1795d3b1aeda4fc58ed379cbab7544feddb",
+    "verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40025423585/download-50f43747e99846ebac96a513ea4ebeb0/diagnostics/f01-d7-public-suite/public-suite/f01-d11-bmm-underflow-zero-verdict.json",
+    "verdict_sha256": "91394417d19073a82402061873bd9f242413be62eab936977e061d96e2dd64ac",
+    "reason": "6590:15 Unknown constant Bool.and_eq_true.mp",
+    "scope": "No other error reported in earlier small/scale/roundP/actual ExecFloat.mul/signed-zero/fold/reference bridge; full package and all original gates still require actual new acceptance."
+  }
+}
