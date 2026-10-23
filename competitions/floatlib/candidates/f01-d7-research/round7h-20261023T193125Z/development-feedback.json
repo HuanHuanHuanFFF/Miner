@@ -1,23 +1,6 @@
 {
-  "updated_at_utc": "2026-10-23T20:05:21.520966+00:00",
-  "active_ci": [
-    {
-      "run": 40014284237,
-      "seed": 902,
-      "source_commit": "6eb257b2e079c5778558af5151d852d70f9f3301",
-      "state": "IN_PROGRESS",
-      "candidates": [
-        "f01-d11-bmm-raw-a-one-group",
-        "f01-r8-combined-result-guard",
-        "f01-d10-bmm-direct-rows"
-      ],
-      "role": "DISCOVERY",
-      "capture_codegen": [
-        "f01-d11-bmm-raw-a-one-group"
-      ],
-      "collected": false
-    }
-  ],
+  "updated_at_utc": "2026-10-23T20:20:54.249287+00:00",
+  "active_ci": [],
   "completed_ci": [
     {
       "run": 40013486988,
@@ -31,16 +14,44 @@
       "vs_a066_bmm_ratio": 0.9634250076744673,
       "vs_a066_gain_p05": -0.034000328682129544,
       "scope": "Discovery with codegen observer; exact whole protocol passed, no final adoption."
+    },
+    {
+      "run": 40014284237,
+      "seed": 902,
+      "candidate": "f01-d11-bmm-raw-a-one-group",
+      "sha256": "c477e8078eef66255f1c750b46575fc987144717eb1bffc943cf58a514755a6a",
+      "all_three_full_gate": true,
+      "vs41_whole_ratio": 0.9809209538900878,
+      "vs41_bmm_ratio": 0.9201033736857436,
+      "vs_a066_whole_ratio": 0.9905395077727845,
+      "vs_a066_bmm_ratio": 0.9532848983359827,
+      "vs_a066_gain_p05": -0.007213223483861553,
+      "scope": "Discovery with codegen observer; no adoption. New raw-A loop assembly coverage must be checked, not inferred from capture status."
+    },
+    {
+      "at_utc": "2026-10-23T20:20:54.249287+00:00",
+      "run": 40017211049,
+      "seed": 903,
+      "source_commit": "29aaa2aeab59bc471f148b60e5ce2ac422f825ce",
+      "candidate": "f01-d11-bmm-fused-output",
+      "sha256": "1b71f67ee1cb154399e60a0657618c4b968d8e4b4d642cfc0621fdf416811792",
+      "full_gate": false,
+      "statement_pass": false,
+      "stage": "statement",
+      "reason": "the obligation does not typecheck: error: work/Submission.lean:6191:9: failed to prove index is valid, possible solutions: | - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid | error: work/Submission.lean:6185:0: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached | error: work/Submission.lean:6203:8: (kernel) unknown constant 'Submission.RowStream.core_eq_reference' | error: build failed",
+      "summary_sha256": "39a5ed06cc40dde652cee010c538acc411ba23ea7fcb9aa13627b5afd4d66250",
+      "verdict_sha256": "1ac42368e06cd97a8f49db541bd27d04fbf6b0738b978f74fac9461cf2f0924a",
+      "scope": "Execution/proof bridge failure, not a performance or arithmetic counterexample. Original1b71 preserved. Proof-only2c73 waits for statement."
     }
   ],
   "pending_statement": {
-    "candidate": "f01-d11-bmm-fused-output",
-    "sha256": "1b71f67ee1cb154399e60a0657618c4b968d8e4b4d642cfc0621fdf416811792",
-    "bytes": 244998,
-    "state": "FROZEN_WAITING_FOR_FREE_RUNNER_SLOT"
+    "candidate": "f01-d11-bmm-fused-output-proof2",
+    "sha256": "2c73622e91fa0edef0e37a22bac1724190451479b0dceeee04ef5d181cc811ed",
+    "bytes": 245054,
+    "state": "READY_FOR_STATEMENT"
   },
   "opportunity_updates": "opportunity-updates.json",
   "for_astra": "Latest old-control analysis: n2,p2 shape[2941,15,2,2] alone14.81percent BMM and no replay. Prefer p2 all positive n, not onlyn>4 if your proof supports it. Old long-n screen30.36percent is not complete coverage of your proposed guard. Data are source852 old diagnostic only.",
   "official_refresh": "Champion285 and4b7 public protocol unchanged; full fresh raw snapshot official-20261023T195319Z.",
-  "next": "Dispatch frozen1b71 statement now that one slot is free; await raw-A902 complete result. Continue structural research."
+  "next": "Exact1b71 statement is running. Additional clean new input904 will compare both input-preparation controls with41/a066; no final confirmation inputs drawn."
 }
