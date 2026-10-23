@@ -1,0 +1,40 @@
+{
+  "state": "READY_PROOF_ONLY_REPAIR_NOT_RUN",
+  "started_at_utc": "2026-10-23T13:28:25Z",
+  "delivered_at_utc": "2026-10-23T13:30:24.752790+00:00",
+  "deadline_utc": "2026-10-23T13:31:00Z",
+  "candidate": {
+    "candidate": "f01-r9-bmm-native-event-replay-proof2",
+    "candidate_file": "Kernel.lean",
+    "candidate_sha256": "9244e3349fd8b03b3765771240a093be4a8689a2e6c074630c01157b1ca04e00",
+    "candidate_bytes": 240090,
+    "parent": "f01-r9-bmm-native-event-replay",
+    "parent_sha256": "0d9c2c96a4cb6c92609d8fbd1efac71852d7b75fafac5d3723935f17d5c15ee0",
+    "created_at_utc": "2026-10-23T13:30:24.752790+00:00",
+    "validation_mode": "full-gate",
+    "proof_status": "NOT_RUN_EXPLICIT_TYPED_QUIET_BRIDGE",
+    "repair": "Onlyr9_repairQuiet proofbody. Establish exactrawstep=libraryrepair, guard=isQNaN by actual classifier identity, thencongrArg/Eq.trans. No broad simp normalization.",
+    "runtime_bytes_unchanged": true,
+    "outside_proof_bytes": 239060,
+    "outside_proof_sha256": "8a12ecf4d4f91296fb702db60cd52b2bc136f68c95f331e5f67fb6b5bb92cffa",
+    "full_gate": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "formal_submission": "NOT_SUBMITTED"
+  },
+  "actual_failure": {
+    "run": 39959840945,
+    "stage": "statement",
+    "line": 5120,
+    "message": "Type mismatch: After simplification, term",
+    "full_goal": "NOT_SAVED_IN_ORIGINAL_GATE_SUMMARY; exactnormalformdifferenceUNKNOWN",
+    "raw_log": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\39959840945\\download-627a556114914086b08886d4b035fde1\\diagnostics\\f01-d7-public-suite\\public-suite\\f01-r9-bmm-native-event-replay-gate.log",
+    "raw_log_sha256": "8fd37cc05bd74c14489150483ea4e09b6fc4f672faf637d64fdb46d62b9974c1"
+  },
+  "old_proof_body": "  have h := R7W05.repairDotStep_isQNaN acc\n    (Araw.getD (baseA + k.val) posZero) (Braw.getD (baseB + k.val * p) posZero) hevent\n  simpa only [R7W01.execQuietGuard, R7W01.quietGuard,\n    FloatLib.Floats.Formats.BinaryInterchange.Model.isQNaN_eq_nan_and_not_signaling,\n    replayStep, R7W05.repairDotStep, Submission.add_eq, Submission.mul_eq] using h\n",
+  "new_proof_body": "  have h := R7W05.repairDotStep_isQNaN acc\n    (Araw.getD (baseA + k.val) posZero) (Braw.getD (baseB + k.val * p) posZero) hevent\n  have hs : replayStep n baseA baseB p Araw Braw (ExecFloat.Binary.ofFloat32 acc) k =\n      R7W05.repairDotStep acc (Araw.getD (baseA + k.val) posZero)\n        (Braw.getD (baseB + k.val * p) posZero) := by\n    unfold replayStep R7W05.repairDotStep\n    rw [Submission.add_eq, Submission.mul_eq]\n  have hg : R7W01.execQuietGuard\n      (replayStep n baseA baseB p Araw Braw (ExecFloat.Binary.ofFloat32 acc) k) =\n      FloatLib.Floats.Formats.BinaryInterchange.Model.isQNaN\n        (ExecFloat.Binary.toModel\n          (replayStep n baseA baseB p Araw Braw (ExecFloat.Binary.ofFloat32 acc) k)) := by\n    unfold R7W01.execQuietGuard R7W01.quietGuard\n    exact (FloatLib.Floats.Formats.BinaryInterchange.Model.isQNaN_eq_nan_and_not_signaling _).symm\n  exact hg.trans ((congrArg\n    (fun q : Binary32 => FloatLib.Floats.Formats.BinaryInterchange.Model.isQNaN\n      (ExecFloat.Binary.toModel q)) hs).trans h)\n",
+  "proof_header_and_entire_rest_unchanged": true,
+  "inverse_parent_sha256": "0d9c2c96a4cb6c92609d8fbd1efac71852d7b75fafac5d3723935f17d5c15ee0",
+  "static": "PASS_SIZE_IMPORT_BANNED; options/attributesunchangedfromparent",
+  "next": "D exactcandidate statement/fullgate. If thisexplicittypedbridge fails, collectfull goal; do notguessanother broad simp variant.",
+  "R_actions": "Onlynewcandidateandthisrepairreport; noGit/CI/web/otherthread."
+}
