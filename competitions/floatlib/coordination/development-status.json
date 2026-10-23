@@ -1,6 +1,6 @@
 {
   "state": "R11_ACTIVE_BMM_STRUCTURAL_RESEARCH",
-  "updated_at_utc": "2026-10-23T23:42:34.501306+00:00",
+  "updated_at_utc": "2026-10-23T23:53:58.528407+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "candidate": "competitions/floatlib/candidates/f01-r8-combined-result-guard",
@@ -2147,15 +2147,64 @@
         "run": 40040850289,
         "seed": 923,
         "source_commit": "f6e3aa1cc4cbd23fdc60d5e2340b47a521e89df9",
-        "state": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+        "state": "TERMINAL_COLLECTED_SUCCESS",
         "candidates": [
           "f01-d11-wide-projection-proof",
           "f01-d11-bmm-wide-backbone"
         ],
         "role": "STATEMENT_DIAGNOSTIC",
         "capture_codegen": [],
-        "collected": false,
-        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T233857Z/dispatch.json"
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T233857Z/dispatch.json",
+        "conclusion": "success",
+        "summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40040850289/download-d6aa778ad74643f286ceb23d97ed89c3/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+        "summary_sha256": "d73a847d6d567eafe36dfed1e116f524d37784f887430ee67e3b78bb456e2596",
+        "results": [
+          {
+            "candidate": "f01-d11-wide-projection-proof",
+            "kernel_sha256": "e73c7e957e80bc2409d7f4b656a3581b78acf3353d16cbe7eb1dae06df8eeaeb",
+            "full_gate": false,
+            "statement_pass": true,
+            "stage": "statement",
+            "exit_code": 0
+          },
+          {
+            "candidate": "f01-d11-bmm-wide-backbone",
+            "kernel_sha256": "749bc933597ec15b200e8146899f7a055e25b4eef425e156bca337a13c38ca28",
+            "full_gate": false,
+            "statement_pass": true,
+            "stage": "statement",
+            "exit_code": 0
+          }
+        ],
+        "unexecuted_candidates": []
+      },
+      {
+        "run": 40041351847,
+        "seed": 924,
+        "source_commit": "b70651c4bd052a5b502589eddd653d52e856f897",
+        "state": "TERMINAL_COLLECTED_FAILURE",
+        "candidates": [
+          "f01-d11-wide-writer-proof"
+        ],
+        "role": "STATEMENT_DIAGNOSTIC",
+        "capture_codegen": [],
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T234430Z/dispatch.json",
+        "conclusion": "failure",
+        "summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40041351847/download-2602218842f749ceb3c6a4245b4682f9/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+        "summary_sha256": "40603dfe4dad6ed8ca4bb93401956fca5836f824f1d3742eb37115d8a9b73dd9",
+        "results": [
+          {
+            "candidate": "f01-d11-wide-writer-proof",
+            "kernel_sha256": "20a42e290817150b06095e945cf21453808471781cee799917d7c8fe73593b7f",
+            "full_gate": false,
+            "statement_pass": false,
+            "stage": "statement",
+            "exit_code": 1
+          }
+        ],
+        "unexecuted_candidates": []
       }
     ],
     "completed_ci": [
@@ -2178,11 +2227,12 @@
       40034884263,
       40037152933,
       40037275281,
-      40039524733
+      40039524733,
+      40040850289,
+      40041351847
     ],
     "active_ci": [
-      40039965234,
-      40040850289
+      40039965234
     ],
     "reset_used_count": 0,
     "notes": "All preparation, queues, coordination, proof repair and collection count within the fixed wall-clock window. Keep working to deadline; finish and collect any started CI even if terminal collection extends past deadline. Do not start new research after deadline.",
@@ -2744,6 +2794,20 @@
           {
             "candidate": "f01-d11-wide-writer-proof",
             "sha256": "20a42e290817150b06095e945cf21453808471781cee799917d7c8fe73593b7f",
+            "capture_codegen": false,
+            "validation_mode": "statement-only"
+          }
+        ]
+      },
+      {
+        "seed": 925,
+        "role": "STATEMENT_DIAGNOSTIC",
+        "plan": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/plan-925.json",
+        "sha256": "988f02a95cdc4518cabca3828e4fe4cbdcbee2c871e14ef9809af9f219c41776",
+        "candidates": [
+          {
+            "candidate": "f01-d11-wide-writer-proof2",
+            "sha256": "ea10235659e5c3eef3ed1bd0e32920a0f479dd04d4188d22083e0ab8aee1a1d7",
             "capture_codegen": false,
             "validation_mode": "statement-only"
           }
