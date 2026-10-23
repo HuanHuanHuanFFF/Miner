@@ -1,0 +1,57 @@
+{
+  "candidate": "f01-d11-bmm-self-classifier",
+  "candidate_sha256": "6457ed8f64714c116d8e861e612c53a9019446e8a282964611c794ccba29f482",
+  "candidate_bytes": 237208,
+  "parent_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+  "delta_bytes": 66,
+  "headroom_bytes": 18792,
+  "checks": {
+    "exact_parent_pin": "PASS",
+    "unique_three_edits": "PASS",
+    "full_byte_inverse": "PASS",
+    "namespace_declaration_inventory": "PASS",
+    "unique_eight_exports_and_specs": "PASS",
+    "author_comments_preserved": "PASS",
+    "resource_options_unchanged": "PASS",
+    "original_gate_policy": "PASS",
+    "original_gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+    "inventory_parser_sha256": "58662bf7218de54978d999bfb424975732cf845708869e1d611dd712d7470f22",
+    "imports": [
+      "import ContractTensor"
+    ],
+    "runtime_modified_definitions": [
+      "Submission.NativeFinal.dot",
+      "Submission.Packed10.finish"
+    ],
+    "proof_modified_theorems": [
+      "Submission.NativeFinal.dot_eq"
+    ],
+    "all_other_bytes": "UNCHANGED_BY_EXACT_REVERSIBLE_PATCH",
+    "lean_statement": "NOT_RUN",
+    "leanchecker": "NOT_RUN",
+    "axiom_audit": "NOT_RUN",
+    "checksum": "NOT_RUN",
+    "full_gate": "NOT_RUN",
+    "generated_c_assembly": "NOT_RUN",
+    "performance": "UNKNOWN"
+  },
+  "created_at_utc": "2026-10-23T22:34:18.266919+00:00",
+  "candidate_file": "Kernel.lean",
+  "parent": "f01-d10-bmm-direct-rows",
+  "mechanism": "Historical R7 self-BEq classifier migrated ONLY to NativeFinal.dot and Packed10.finish on current a066. Native loops, packing, addresses, raw NaN replay, fallback and all scalar/sum code unchanged.",
+  "proof": "Existing R7W04.nonNaN_eq_true_iff transports dot_eq premise to unchanged dotLoop_eq. Both terminal guards agree, so unchanged finish_eq_dot remains rw [hs] <;> rfl; all downstream proofs unchanged.",
+  "history": {
+    "old_candidate": "f01-r7-self-nonnan-guard",
+    "old_sha256": "6b00a89d1b1dd1fc3537d54871298583ff969169c22bd07b594eda5ab0a77e24",
+    "old_parent": "b1696ff9a51a112c5e34e1a86ef2634c58548492e452199ee041927c6cb5a18d",
+    "old_route_status": "Old four-endpoint source and proof1/proof2 remain NOT_RUN; no matching full receipt in current result index. R8 scalar classifiers do not cover these current BMM endpoints.",
+    "novelty": "New exact-parent wiring experiment, not a new mechanism or measured gain"
+  },
+  "lowering_evidence": "Pinned R7-W06 lean.h declares lean_float32_isnan externally and defines lean_float32_beq static inline. No claim that beq was a foreign call; new candidate codegen is NOT_RUN.",
+  "proof_status": "NOT_RUN",
+  "validation_mode": "full-gate",
+  "performance": "UNKNOWN",
+  "formal_submission": "NOT_SUBMITTED",
+  "state": "READY_FOR_STATEMENT",
+  "ci_owner": "root"
+}

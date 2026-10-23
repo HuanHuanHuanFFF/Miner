@@ -1,0 +1,32 @@
+[
+  {
+    "name": "NativeFinal.dot: classify terminal Float32 with existing inline self-BEq",
+    "offset_in_previous_stage": 189184,
+    "before": "def dot (n baseA baseB p : Nat) (A B : Array Binary32) : Binary32 :=\n  let result := dotLoop n baseA baseB p A B 0 (Float32.ofBits 0)\n  if hf : result.isNaN = false then ExecFloat.Binary.ofFloat32 result\n  else R7NaNReplay.replayEarly n baseA baseB p A B",
+    "after": "def dot (n baseA baseB p : Nat) (A B : Array Binary32) : Binary32 :=\n  let result := dotLoop n baseA baseB p A B 0 (Float32.ofBits 0)\n  if hf : R7W04.nonNaN result = true then ExecFloat.Binary.ofFloat32 result\n  else R7NaNReplay.replayEarly n baseA baseB p A B",
+    "before_sha256": "7a12923b45f8d14ee690de5ac8ca97056c147e1d74de216b3cdbbf0835acd77a",
+    "after_sha256": "383c9ee28aaacf482ad3b87634911709237ef869ebedb6f3645aca15b90bed53",
+    "previous_source_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+    "next_source_sha256": "8dc790fd5bbf36313308fdbe59494420711f92d6db23808ca89bcfe92ee942d7"
+  },
+  {
+    "name": "NativeFinal.dot_eq: transport classifier premise through existing iff",
+    "offset_in_previous_stage": 189746,
+    "before": "    have h := (dotLoop_eq n baseA baseB p A B 0 (Float32.ofBits 0) _ rfl hf).2",
+    "after": "    have hnon := (R7W04.nonNaN_eq_true_iff _).mp hf\n    have h := (dotLoop_eq n baseA baseB p A B 0 (Float32.ofBits 0) _ rfl hnon).2",
+    "before_sha256": "2ed6267940acfc4c05a36ba1c34261661b7ed9dc8c964ca89c8a8bb7866d1931",
+    "after_sha256": "07d85e708f021445ffaa5f2bd1e3be06c4e4ba6b5cd5b16515e87706b7c194ea",
+    "previous_source_sha256": "8dc790fd5bbf36313308fdbe59494420711f92d6db23808ca89bcfe92ee942d7",
+    "next_source_sha256": "a3ca74d9f2016c0fd2016c4067e8c65340e8d24a00ea76052881ea23083bd7c2"
+  },
+  {
+    "name": "Packed10.finish: same classifier as NativeFinal.dot",
+    "offset_in_previous_stage": 200391,
+    "before": "def finish (n baseA baseB p : Nat) (Araw Braw : Array Binary32)\n    (result : Float32) : Binary32 :=\n  if hf : result.isNaN = false then ExecFloat.Binary.ofFloat32 result\n  else R7NaNReplay.replayEarly n baseA baseB p Araw Braw",
+    "after": "def finish (n baseA baseB p : Nat) (Araw Braw : Array Binary32)\n    (result : Float32) : Binary32 :=\n  if hf : R7W04.nonNaN result = true then ExecFloat.Binary.ofFloat32 result\n  else R7NaNReplay.replayEarly n baseA baseB p Araw Braw",
+    "before_sha256": "a5bfde71c9ff3fb2794709d86cad47a655e2c7179280b09bd0a0d3ca15eb1b75",
+    "after_sha256": "c4a09ecc13bf0bc7eca8e64660cc602fe6a95e100e6330a2a4e8b3d51e2558cb",
+    "previous_source_sha256": "a3ca74d9f2016c0fd2016c4067e8c65340e8d24a00ea76052881ea23083bd7c2",
+    "next_source_sha256": "6457ed8f64714c116d8e861e612c53a9019446e8a282964611c794ccba29f482"
+  }
+]

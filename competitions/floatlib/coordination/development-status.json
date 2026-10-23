@@ -1,6 +1,6 @@
 {
   "state": "R11_ACTIVE_BMM_STRUCTURAL_RESEARCH",
-  "updated_at_utc": "2026-10-23T22:16:39.216335+00:00",
+  "updated_at_utc": "2026-10-23T22:36:52.810819+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "candidate": "competitions/floatlib/candidates/f01-r8-combined-result-guard",
@@ -359,8 +359,8 @@
   "current_champion_comparison": {
     "submission": 285,
     "source_digest": "a1e99008577119824464154be5ec52dd390fc1e429b8f85b6ea73315e7103082",
-    "policy_snapshot": "750",
-    "queried_at_utc": "2026-10-23T18:48:10.574497+00:00",
+    "policy_snapshot": "753",
+    "queried_at_utc": "2026-10-23T22:24:02.305182+00:00",
     "candidate": "f01-r8-combined-result-guard",
     "direct_paired_ratio": "UNKNOWN",
     "method": "Only exact same-suite paired current-champion result supports a direct gap; no cross-suite chain inference",
@@ -1760,7 +1760,7 @@
         "run": 40030638967,
         "seed": 914,
         "source_commit": "26b892ee39467f268b00cc4f105840a5b72bf8f5",
-        "state": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+        "state": "TERMINAL_COLLECTED_SUCCESS",
         "candidates": [
           "f01-d11-bmm-underflow-zero-proof2",
           "f01-r11-crossrow-p2-pack12-proof2",
@@ -1773,8 +1773,54 @@
           "f01-r11-crossrow-p2-pack12-proof2",
           "f01-d11-bmm-batch-local-output-proof2"
         ],
-        "collected": false,
-        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T215929Z/dispatch.json"
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T215929Z/dispatch.json",
+        "conclusion": "success",
+        "summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40030638967/download-224ebe46fc3148e0be4d59757e4fcaf3/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+        "summary_sha256": "14b5133248fc94f6897e7a88c3e9f97ee053325e3ca641eb0f5c4062cff19698",
+        "results": [
+          {
+            "candidate": "f01-d11-bmm-underflow-zero-proof2",
+            "kernel_sha256": "6a69d6edd8afe6240fc6970c5eb8957a26f50595158c2020715f769dd094ea81",
+            "full_gate": true,
+            "statement_pass": false,
+            "stage": "score",
+            "exit_code": 0
+          },
+          {
+            "candidate": "f01-r11-crossrow-p2-pack12-proof2",
+            "kernel_sha256": "5c5e7071927400ecd75d02d69b0ce62236a50a615912d99e7f8470a9ccf19c6b",
+            "full_gate": true,
+            "statement_pass": false,
+            "stage": "score",
+            "exit_code": 0
+          },
+          {
+            "candidate": "f01-d11-bmm-batch-local-output-proof2",
+            "kernel_sha256": "28af18b4ba270203a44e2cda950967a51475fc592d92b5f026f5bca43498a8e1",
+            "full_gate": true,
+            "statement_pass": false,
+            "stage": "score",
+            "exit_code": 0
+          },
+          {
+            "candidate": "f01-d10-bmm-direct-rows",
+            "kernel_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+            "full_gate": true,
+            "statement_pass": false,
+            "stage": "score",
+            "exit_code": 0
+          },
+          {
+            "candidate": "f01-r8-combined-result-guard",
+            "kernel_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+            "full_gate": true,
+            "statement_pass": false,
+            "stage": "score",
+            "exit_code": 0
+          }
+        ],
+        "unexecuted_candidates": []
       },
       {
         "run": 40031408913,
@@ -1811,6 +1857,26 @@
           }
         ],
         "unexecuted_candidates": []
+      },
+      {
+        "run": 40032766690,
+        "seed": 916,
+        "source_commit": "123dcd0d7a8da0d089af13d8e736c0709d362fdf",
+        "state": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+        "candidates": [
+          "f01-d11-bmm-direct-continuous",
+          "f01-r11-crossrow-short-shared",
+          "f01-d11-bmm-fused-output-proof3",
+          "f01-d10-bmm-direct-rows",
+          "f01-r8-combined-result-guard"
+        ],
+        "role": "DISCOVERY",
+        "capture_codegen": [
+          "f01-d11-bmm-direct-continuous",
+          "f01-r11-crossrow-short-shared"
+        ],
+        "collected": false,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T221834Z/dispatch.json"
       }
     ],
     "completed_ci": [
@@ -1827,10 +1893,11 @@
       40027315361,
       40029166371,
       40030324309,
+      40030638967,
       40031408913
     ],
     "active_ci": [
-      40030638967
+      40032766690
     ],
     "reset_used_count": 0,
     "notes": "All preparation, queues, coordination, proof repair and collection count within the fixed wall-clock window. Keep working to deadline; finish and collect any started CI even if terminal collection extends past deadline. Do not start new research after deadline.",
@@ -2195,6 +2262,26 @@
             "capture_codegen": false
           }
         ]
+      },
+      {
+        "seed": 917,
+        "role": "STATEMENT_DIAGNOSTIC",
+        "plan": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/plan-917.json",
+        "sha256": "51ddcef9280d5bf6cd3003ae98d70b620f509128615fb7d264659c7ceca519f5",
+        "candidates": [
+          {
+            "candidate": "f01-d11-bmm-combined-base",
+            "sha256": "f3fb2bbf86244f298a857239413fbc6d35bbe5a1946bc7274f9c6040eae1ff97",
+            "capture_codegen": false,
+            "validation_mode": "statement-only"
+          },
+          {
+            "candidate": "f01-d11-bmm-self-classifier",
+            "sha256": "6457ed8f64714c116d8e861e612c53a9019446e8a282964611c794ccba29f482",
+            "capture_codegen": false,
+            "validation_mode": "statement-only"
+          }
+        ]
       }
     ],
     "official_refresh": {
@@ -2204,7 +2291,13 @@
       "status": "VERIFIED_SNAPSHOT_PROTOCOL_UNCHANGED",
       "source_status": 404
     },
-    "ci_state_schema": "CANONICAL_STARTED_CI_RECORDS_FROM_FROZEN_REQUESTS"
+    "ci_state_schema": "CANONICAL_STARTED_CI_RECORDS_FROM_FROZEN_REQUESTS",
+    "latest_official_snapshot": {
+      "receipt": "competitions/floatlib/candidates/f01-d7-research/official-20261023T222400Z/receipts.json",
+      "sha256": "b98b3ed9c606f3b9dd749241953b3a266c2eabe79b6d09da6d8114dc5240a436",
+      "champion": 285,
+      "digest": "a1e99008577119824464154be5ec52dd390fc1e429b8f85b6ea73315e7103082"
+    }
   },
   "research_round_history": [
     {

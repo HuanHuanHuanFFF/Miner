@@ -4,8 +4,24 @@ from datetime import datetime, timezone
 import hashlib
 import importlib.util
 import json
+import os
 from pathlib import Path
 import re
+import uuid
+
+
+def save_state_atomic(path, value, expected):
+    """Avoid truncating current state and preserve concurrent external changes."""
+    temporary = path.with_name(path.name + '.prepare-' + uuid.uuid4().hex + '.tmp')
+    try:
+        with temporary.open('x', encoding='utf-8', newline='\n') as stream:
+            stream.write(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+        if path.read_bytes() != expected:
+            raise ValueError('Concurrent state change; frozen plan retained for explicit recovery')
+        os.replace(temporary, path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
 
 ROOT = Path(__file__).resolve().parents[5]
 OUT = Path(__file__).resolve().parent
@@ -33,7 +49,8 @@ digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 read = lambda p: json.loads(p.read_text(encoding='utf-8'))
 save = lambda p,x: p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 state_path=ROOT/'competitions/floatlib/coordination/development-status.json'
-state=read(state_path)
+state_raw=state_path.read_bytes()
+state=json.loads(state_raw)
 assert state['research_round']['id']=='R11-20261023T193125Z', 'Wrong active round; refuse all writes'
 if args.role != 'STATEMENT_DIAGNOSTIC':
     assert 'f01-r8-combined-result-guard' in args.candidates, 'A scored comparison needs retained41'
@@ -97,5 +114,5 @@ previous=digest(live)
 save(destination,plan);live.write_bytes(destination.read_bytes())
 save(OUT/f'freeze-{args.seed}.json',{'recorded_at_utc':datetime.now(timezone.utc).isoformat(),'request_sha256':digest(destination),'previous_live_plan_sha256':previous,'files':files,'unused_seed_checked_against_dispatches':len(used),'role':args.role})
 state['research_round'].setdefault('prepared_requests',[]).append({'seed':args.seed,'role':args.role,'plan':destination.relative_to(ROOT).as_posix(),'sha256':digest(destination),'candidates':rows})
-state['updated_at_utc']=datetime.now(timezone.utc).isoformat();save(state_path,state)
+state['updated_at_utc']=datetime.now(timezone.utc).isoformat();save_state_atomic(state_path,state,state_raw)
 print(json.dumps({'seed':args.seed,'role':args.role,'candidates':args.candidates,'request_sha256':digest(destination)},ensure_ascii=False))

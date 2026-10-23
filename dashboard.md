@@ -1,6 +1,6 @@
 # FloatLib 冲冠看板
 
-冠军核对：[2026-10-24 02:48 北京时间](competitions/floatlib/candidates/f01-d7-research/official-20261023T184804Z/receipts.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。
+冠军核对：[2026-10-24 06:24 北京时间](competitions/floatlib/candidates/f01-d7-research/official-20261023T222400Z/receipts.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。
 
 | 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时（预估） | 验证 |
 | --- | --- | --- | ---: | --- |
