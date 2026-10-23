@@ -32,7 +32,8 @@ for path in (root/'competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs'
     if receipt.get('state') in ('RUN_IDENTIFIED','DISPATCH_SENT_NO_AUTOMATIC_RETRY'):
         used.append(int(receipt['inputs']['seed']))
 g.require(not {842,843}.intersection(used),'Final extra input seed already dispatched')
-files=[out/'round-plan.json',out/'prepare-plan.py',out/'verify-three-groups.py',d7/'adoption-guard.py',d7/'public-suite.py',Path(__file__).resolve()]
+files=[out/'round-plan.json',out/'prepare-plan.py',out/'verify-three-groups.py',d7/'adoption-guard.py',d7/'public-suite.py',Path(__file__).resolve(),
+       out/'adopt-three-confirmed.py',root/'competitions/floatlib/scripts/estimate_champion_time.py',out/'freeze-anchor.json']
 v=p['verdicts'][baseline]
 freeze={'schema_version':1,'candidate':{'name':a.candidate,'sha256':p['kernel_hashes'][a.candidate]},
     'baseline':{'name':baseline,'sha256':p['kernel_hashes'][baseline]},
