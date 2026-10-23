@@ -38,10 +38,12 @@ def run(g,kernel,out):
     assert before==after, 'Original gate/summary changed during diagnostics'
     result_path=profile_out/'profile-retained-result.json'
     result=json.loads(result_path.read_bytes()) if result_path.exists() else {}
-    complete=bool(code==0 and result.get('complete'))
+    with (out/'retained-profile-official-source-clean.log').open('wb') as log:
+        clean=subprocess.run(['git','diff','--exit-code'],cwd=upstream,stdout=log,stderr=subprocess.STDOUT,timeout=20).returncode==0
+    complete=bool(code==0 and result.get('complete') and clean)
     receipt={'diagnostic_only':True,'complete':complete,'exit_code':code,'seed':plan['seed'],
         'original_adapter_sha256':hashlib.sha256(original_path.read_bytes()).hexdigest(),
-        'wrapper_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        'wrapper_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'official_source_clean_after':clean,
         'original_before_sha256':before,'original_after_sha256':after,
         'result_sha256':hashlib.sha256(result_path.read_bytes()).hexdigest() if result_path.exists() else None,
         'scope':'Original adapter/full gates execute in nested diagnostic output. Original source/verdict/summary unchanged. Profiling is excluded from scored selection and dashboard sample index.'}

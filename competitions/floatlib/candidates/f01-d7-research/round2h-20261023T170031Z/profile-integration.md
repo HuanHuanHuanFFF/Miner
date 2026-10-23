@@ -1,0 +1,9 @@
+# 阶段诊断接入
+
+原public-suite.py保持86084d93…原字节；原adoption-guard会要求每个历史commit的adapter与当前文件一致，不能直接在它上面追加诊断。最初未提交的接入草稿触发了这个本地校验，已撤回，没有据此启动CI或放宽guard。
+
+ci-diagnostics.py仅在原D7请求显式profile_current=true时选择本轮profile-wrapper.py；普通发现和确认仍选原adapter。wrapper先调用原adapter，把完整gate放进retained-profile-gates/public-suite，再单独运行retained41 profiler。原verdict/summary前后哈希相同，诊断后另检官方checkout干净。
+
+该嵌套路径明确排除在public-suite-results评分样本索引之外。原完整验收、原控制、同构控制和有时钟的阶段记录分别留存；诊断失败会令本次任务失败，不改变原gate结果。
+
+profiler本地12项测试、自检和844实际原回执绑定检查通过；Linux编译、真实阶段计时仍待852实际任务。native_dot/replay与direct/output存在重叠，禁止把重叠量相加或称为官方阶段份额。
