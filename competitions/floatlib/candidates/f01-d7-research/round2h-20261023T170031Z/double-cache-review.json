@@ -1,0 +1,98 @@
+{
+  "completed_at_utc": "2026-10-23T18:04:10.827220+00:00",
+  "scope": "Read-only new SingletonBPredecode.core/core_eq and final dispatcher review; no Git/CI/network/agents or future842/843 input inspection. Only this JSON and companion MD written.",
+  "conclusion": "NO_NEW_CORRECTNESS_DEFECT_FOUND_BY_STATIC_REVIEW; LEAN_AND_RUNTIME_NOT_RUN",
+  "source": {
+    "path": "competitions/floatlib/candidates/f01-d10-bmm-singleton-double-cache/Kernel.lean",
+    "sha256": "ce6832e600a35382cb7d61ed1f30e539fad54d56545a95dcdb9ce0289f870de1",
+    "bytes": 253674,
+    "cap": 256000,
+    "remaining_bytes": 2326
+  },
+  "parent": {
+    "path": "competitions/floatlib/candidates/f01-d10-bmm-singleton-row-cache/Kernel.lean",
+    "sha256": "f44802093e149959a4b64c519464f9d445de040b6bc2f760512a70596e2640b8",
+    "bytes": 251636
+  },
+  "verified_static_checks": [
+    {
+      "check": "EXACT_SCOPED_DELTA",
+      "status": "VERIFIED",
+      "evidence": "Pure Python reconstruction of frozen parent dispatcher rename plus AST-literal build block is byte-identical to ce6832; build.py was not executed."
+    },
+    {
+      "check": "CORE_REDUCTION",
+      "status": "VERIFIED_TEXTUAL",
+      "evidence": "Removing only nativeB let and replacing mapped getD multiplication by fa*toFloat32(y) makes the entire new core text byte-identical to parent SingletonRowCache.core."
+    },
+    {
+      "check": "TOTAL_MAP_READ_LEMMA",
+      "status": "VERIFIED_SOURCE_STATEMENT",
+      "source_lines": [
+        5387,
+        5393
+      ],
+      "evidence": "Packed10.nativeA_getD binds any Array Binary32 and any Nat index, including out-of-bounds, with exact Packed10.zero32/toFloat32(posZero) default correspondence."
+    },
+    {
+      "check": "RAW_B_PAYLOAD_FALLBACK",
+      "status": "VERIFIED_SOURCE_USE",
+      "source_lines": [
+        6757,
+        6765
+      ],
+      "evidence": "x and y use exactly parent raw reads and addresses. y remains original B.toArray.getD at baseB+j; result NaN false branch is unchanged Submission.mul x y. Only native multiplication right operand becomes predecoded float."
+    },
+    {
+      "check": "DISPATCHER_N1_BOUNDARY",
+      "status": "VERIFIED_SOURCE",
+      "source_lines": [
+        6779,
+        6794
+      ],
+      "evidence": "New branch requires n=1 and p>2 and m>=4; h.1 supplies exactly n=1 to singletonCore_eq_reference. Else uses exact renamed f448 dispatcher/spec; no broadened singleton call."
+    },
+    {
+      "check": "SOURCE_SIZE_AND_NEW_BLOCK_POLICY",
+      "status": "VERIFIED_STATIC",
+      "evidence": "253674 bytes,2326 belowcap; added block has no sorry/admit/unsafe/axiom/extern/implemented_by/native_decide tokens."
+    }
+  ],
+  "proof_assessment": {
+    "simp_closure": "INFERRED_EXPECTED_TO_CLOSE_NOT_COMPILED",
+    "reason": "After unfold of both cores, default simp zeta reduction exposes nativeB=B.toArray.map toFloat32 under flatMap/ofFn lambdas. The precise total mapped-getD lemma rewrites the sole changed operand; residual terms match definitionally. No new Nat-index bounds or NaN theorem needed.",
+    "all_nat_core_equality": "Mapped B read equals parent conversion at every Nat index/default; core_eq need not assume n=1. Reference equivalence still correctly requires n=1 in final branch.",
+    "empty_outputs": "With batch0, output empty and B map empty. With m0 or p0 or n0, new final guard is false; generic core equality remains total by empty Vector extensionality and total map read.",
+    "parent_dependency": "New proof relies on exact f448 SingletonRowCache.core_eq and previous singleton proof, both still require their own exact-source gate; this review does not certify inherited mathematics."
+  },
+  "findings": [],
+  "performance_limits": [
+    "No measurement or speedup claim; all B map/allocation/output remain inside complete entry timing",
+    "m>=4 is a fixed reuse heuristic, not proof of amortized speedup",
+    "Raw y is defined before the if although used only in fallback; absence of raw B reads on the native fast path is not established without exact generated C inspection",
+    "Only2326bytes remain for any Lean proof repair or further changes; root must recheck cap after edits"
+  ],
+  "acceptance_limits": [
+    "Discovery853 with41/f448/ce is one input group, not three independent groups or admission",
+    "Statement/simp acceptance, kernel replay, axioms, checksums and original25-round timing remain NOT_RUN for this child review",
+    "No direct same-suite champion result or formal submission derived"
+  ],
+  "files_read": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d10-bmm-singleton-double-cache/Kernel.lean",
+      "sha256": "ce6832e600a35382cb7d61ed1f30e539fad54d56545a95dcdb9ce0289f870de1"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d10-bmm-singleton-row-cache/Kernel.lean",
+      "sha256": "f44802093e149959a4b64c519464f9d445de040b6bc2f760512a70596e2640b8"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d10-bmm-singleton-double-cache/build.py",
+      "sha256": "a755294f1dffd1f206e65b1390008f856fde4b119a8db2ce1ac3b3d2e23ebc95"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d10-bmm-singleton-double-cache/manifest.json",
+      "sha256": "db3294394ef2b93c193388e50e364d72991a1fc8c3a63aa9c1a748a178e63f0a"
+    }
+  ]
+}

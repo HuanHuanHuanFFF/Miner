@@ -1,5 +1,5 @@
 {
-  "state": "READY_FOR_FULL_GATE",
+  "state": "N1_FULL_PASS_NO_ADOPTION_USIZE_READY_FOR_FULL_GATE",
   "first_checkpoint_at_utc": "2026-10-23T17:08:11.929109+00:00",
   "window_start_utc": "2026-10-23T17:00:31Z",
   "deadline_utc": "2026-10-23T19:00:31Z",
@@ -145,5 +145,165 @@
       "sha256": "badf69751c9217b1cda1117f0fa08f9cc5d4fa4bcf3eaef898e67e6a14ad3814"
     }
   ],
-  "ready_ack_at_utc": "2026-10-23T17:20:05.419800+00:00"
+  "ready_ack_at_utc": "2026-10-23T17:20:05.419800+00:00",
+  "D_small_unroll_review": {
+    "at_utc": "2026-10-23T17:26:52.076156+00:00",
+    "source": "competitions\\floatlib\\candidates\\f01-d10-bmm-small-unroll\\Kernel.lean",
+    "sha256": "d70ebe881ce9c9cd48e83eb02b71b41f50340746717e8b461c6da65e766ed791",
+    "bytes": 236880,
+    "status": "NO_DETERMINATE_SOURCE_BUG_FOUND_NOT_LEAN_ACCEPTANCE",
+    "independent_inverse_to41": true,
+    "preserves": "Initial +0 and exactordered MAC chain; native endpointclassification andrawNaNreplay; packed dotLoop andallnonDirectSmall callers untouched. DirectSmallonlytwo runtime/proof references changed.",
+    "proof_check": "Five nestedNat cases cover0,1,2,3,4; finaln>=5 branch definitionally olddotLoop. simp unfolds onlyfixedsmalln equations; exactclosure stillrequiresLean. dotSmall_eq transportscompleteFloat32 result beforeoriginalNaNhandling.",
+    "risk": "n>=5longthin stillpays addedn-match peroutput beforeoldloop; sourcefallbacksame isnotzerooverhead. smallunroll retains+0 add unlikeRsingleton. Cannotaddgains orassumecombinedrouting.",
+    "checker_correction": "Firstreadonlyinverse incorrectly normalized valid blankline before reversing references; corrected checker preservesallwhitespace and exactinversepasses. No sourcebug orsourcewrite resulted.",
+    "actions": "Read-only; originalDbuilder notexecuted andsource unchanged"
+  },
+  "usize_route": {
+    "state": "READY_FOR_FULL_GATE",
+    "target_scope": "longthin direct n>4,p<=2 only; preserveallshortn41 andpacked behavior",
+    "preferred_boundary": "Checkarray sizes/n/p atmatrix entry once, notperoutput; derive rawA andstridedB bounds fromPacked10.decode_bounds, thenmachineindex loop",
+    "proof_assets": [
+      "Packed10Index.addNat",
+      "Packed10Index.stepNat",
+      "Packed10Index.next_decreases",
+      "Packed10Index.boundA",
+      "Packed10.decode_bounds"
+    ],
+    "gaps": [
+      "newstridedB multiplication/no-wrap lemma",
+      "matrix-globalguards toper-q addressbounds",
+      "Array.uget vsactualgetD transport",
+      "hugeNat fallback andorderedFloat32loop equality"
+    ],
+    "target_source_or_gap_utc": "2026-10-23T18:15:00Z",
+    "candidate": {
+      "candidate": "f01-r10-bmm-longthin-usize",
+      "candidate_file": "Kernel.lean",
+      "candidate_sha256": "f278796997dc8ca584ec661ea2f253e5174b95fedbd6268e11152040ce29d736",
+      "candidate_bytes": 243876,
+      "created_at_utc": "2026-10-23T17:41:47.613726+00:00",
+      "parent": "f01-r8-combined-result-guard",
+      "parent_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+      "validation_mode": "full-gate",
+      "proof_status": "NOT_RUN_NEW_USIZE_LOOP_AND_ALL_INPUT_BOUNDS",
+      "mechanism": "Onlyn>4,p<=2 with n,p,andbotharraylengths<USize.size use machinecount/base/stride anduget. Sixguards evaluatedonce perBMM, per-output basecasts, perMAC machineindex arithmetic. Exactnative multiplythenadd, +0,finalNaNguard/rawreplay retained. Allother/oversized paths retain41.",
+      "proof": "row-major bounds for everydecodedq andk; no-wrap machineaddition/multiplication; uget=getD; loop equality tooriginalNativeFinal.dotLoop; actualcore equality toDirectSmall andoriginalfour-spec package. No abstractpremiseleftatentry.",
+      "source_boundary": "All41 bytes retained except reversible bmm/spec rename. NativeFinal.dotLoop,DirectSmall,packed,scalar,sum andlicences unchanged. Newnamespace/dispatcher append only.",
+      "increment_sha256": "ec1e7047b78b8e6d13b4b32208e70c7944622faf9df52e104a3213454512ca1b",
+      "build_sha256": "36813a6e60d6b2245d23a2186b74d6471eb4795ed579714559b2492f306ad616",
+      "full_gate": "NOT_RUN",
+      "codegen": "NOT_RUN",
+      "performance": "UNKNOWN",
+      "formal_submission": "NOT_SUBMITTED"
+    },
+    "old_dispatcher": "\ndef bmm (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=\n  if n ≤ 4 ∨ p ≤ 2 then DirectSmall.core batch m n p A B\n  else bmmPackedBase batch m n p A B\n\ntheorem bmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)),\n    (bmm batch m n p A B).get = bmmSpec batch m n p A.get B.get := by\n  intro batch m n p A B\n  unfold bmm\n  split\n  · rw [DirectSmall.core_eq_reference]\n    exact referenceBmm_spec batch m n p A B\n  · exact bmmPackedBase_spec batch m n p A B\n",
+    "new_dispatcher": "\ndef bmmBeforeR10Machine (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=\n  if n ≤ 4 ∨ p ≤ 2 then DirectSmall.core batch m n p A B\n  else bmmPackedBase batch m n p A B\n\ntheorem bmmBeforeR10Machine_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)),\n    (bmmBeforeR10Machine batch m n p A B).get = bmmSpec batch m n p A.get B.get := by\n  intro batch m n p A B\n  unfold bmmBeforeR10Machine\n  split\n  · rw [DirectSmall.core_eq_reference]\n    exact referenceBmm_spec batch m n p A B\n  · exact bmmPackedBase_spec batch m n p A B\n",
+    "parent_inverse_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+    "unchanged_prefix_bytes": 225043,
+    "unchanged_suffix_bytes": 9510,
+    "new_append_bytes": 8641,
+    "namespace_balance": true,
+    "four_exports_specs": {
+      "Submission.add": [
+        3263
+      ],
+      "Submission.add_spec": [
+        3268
+      ],
+      "Submission.mul": [
+        3301
+      ],
+      "Submission.mul_spec": [
+        3306
+      ],
+      "Submission.sum": [
+        6336
+      ],
+      "Submission.sum_spec": [
+        6338
+      ],
+      "Submission.bmm": [
+        6508
+      ],
+      "Submission.bmm_spec": [
+        6516
+      ]
+    },
+    "static_policy": "PASS_IMPORT_SIZE_BANNED_OPTIONS_ATTRIBUTES",
+    "remaining": [
+      "newexactLean",
+      "originalkernel/axioms/checksums",
+      "pairedfullcostandthreeindependentinputgroups"
+    ],
+    "gain": "UNKNOWN",
+    "delivery_complete_at_utc": "2026-10-23T17:53:03.405688+00:00",
+    "independent_inverse_check": {
+      "parent_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+      "method": "Relocate actualrenamed finaldispatcher inbuiltKernel, removeexactincrementandtwojoiningnewlines, inverseidentifiers; comparewhole41",
+      "result": "PASS_SOURCE_ONLY"
+    },
+    "finite_address_screen": {
+      "path": "competitions\\floatlib\\candidates\\f01-r10-bmm-longthin-usize\\bounds-screen.json",
+      "sha256": "3c1b98fc143e7290d60638c425d262e965251e24955d76aa43cbc2b894cb991e",
+      "scope": "Finiteintegeraddresses only; notLean/performance"
+    },
+    "files": [
+      {
+        "path": "competitions\\floatlib\\candidates\\f01-r10-bmm-longthin-usize\\Kernel.lean",
+        "bytes": 243876,
+        "sha256": "f278796997dc8ca584ec661ea2f253e5174b95fedbd6268e11152040ce29d736"
+      },
+      {
+        "path": "competitions\\floatlib\\candidates\\f01-r10-bmm-longthin-usize\\manifest.json",
+        "bytes": 1534,
+        "sha256": "023653b1e771fd9950cbe36cdabd1a201963e00767d66b8fbd2f5e40146bb2dd"
+      },
+      {
+        "path": "competitions\\floatlib\\candidates\\f01-r10-bmm-longthin-usize\\build.py",
+        "bytes": 5642,
+        "sha256": "36813a6e60d6b2245d23a2186b74d6471eb4795ed579714559b2492f306ad616"
+      },
+      {
+        "path": "competitions\\floatlib\\candidates\\f01-r10-bmm-longthin-usize\\increment.lean",
+        "bytes": 8641,
+        "sha256": "ec1e7047b78b8e6d13b4b32208e70c7944622faf9df52e104a3213454512ca1b"
+      },
+      {
+        "path": "competitions\\floatlib\\candidates\\f01-r10-bmm-longthin-usize\\README.md",
+        "bytes": 1481,
+        "sha256": "78f13dd4e14da16fa2c030c8dcccda7cdc6bd7905ff75b4c93229dc6a6056f82"
+      },
+      {
+        "path": "competitions\\floatlib\\candidates\\f01-r10-bmm-longthin-usize\\bounds-screen.json",
+        "bytes": 2419,
+        "sha256": "3c1b98fc143e7290d60638c425d262e965251e24955d76aa43cbc2b894cb991e"
+      },
+      {
+        "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round2h-20261023T170031Z\\astra-bmm.md",
+        "bytes": 10286,
+        "sha256": "5bb52c1e041899203d9b953677577b73e49818b51a5121377e7ff9cd7b8f500e"
+      }
+    ]
+  },
+  "primary_validation": {
+    "evidence": "competitions\\floatlib\\candidates\\f01-d7-research\\round2h-20261023T170031Z\\result-846-f01-r10-bmm-singleton-native.json",
+    "sha256": "89a858544c9bd43c53d0a5f6369eac7de092bad1bc37301b9ba2ba1b24548b7e",
+    "full_gate_both": true,
+    "normalized_whole": 0.9904540222629836,
+    "normalized_bmm": 0.9621232174910586,
+    "gain_p05": -0.001366513877349762,
+    "adopt": false
+  },
+  "ready_for_D": {
+    "candidate": "f01-r10-bmm-longthin-usize",
+    "kernel": "competitions/floatlib/candidates/f01-r10-bmm-longthin-usize/Kernel.lean",
+    "sha256": "f278796997dc8ca584ec661ea2f253e5174b95fedbd6268e11152040ce29d736",
+    "bytes": 243876,
+    "status": "READY_EXACT_LEAN_AND_FULL_GATE_NOT_RUN",
+    "baseline": "f01-r8-combined-result-guard",
+    "baseline_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+  },
+  "measured_candidate": "f01-r10-bmm-singleton-native",
+  "latest_handoff_at_utc": "2026-10-23T17:54:46.528819+00:00"
 }

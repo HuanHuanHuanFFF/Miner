@@ -38,3 +38,42 @@
 本稿与D的低指数word试验隔离。若将来合成，singleton原生helper会绕开NativeFinal.dotLoop；只叠加D对旧loop的改动不会让n1使用word乘法，需要真实接线与重新验证，不能相加两条收益。
 
 建议D直接对精确新源和41做原完整gate（其本身先验statement），关闭observer。若发现样本值得采用，冻结同源完成另外两个未参与选择的新输入组，三组均保留，任一不达既定门槛不隐去。当前没有选过未来种子，也没有本地计时或工具链动作。
+
+## D的小n展开稿：只读反馈
+
+精确d70ebe881ce9c9cd48e83eb02b71b41f50340746717e8b461c6da65e766ed791，236880B。独立移除42行新增NativeFinal块、逆回DirectSmall的两处运行/证明引用后，恢复完整41字节。未发现确定源码错误；未执行D builder或修改D源。
+
+嵌套Nat分支覆盖0、1、2、3、4和剩余≥5，固定小n的simp目标只展开相应dotLoop方程；最后分支是原dotLoop的定义相等。初始+0、每次mul后add顺序、最终NaN判据和精确raw replay保留。NativeFinal.dot本身及packed共享证明未改，避免R9直接改dotLoop牵动packed等式的问题。仍需实际Lean验证。
+
+成本风险：n≥5的long-thin每个输出仍多经过一次n分类后才调用原loop；“回退源码相同”不等于零开销。它保留初始+0浮点加法，与R的n1归一化方案不同；两者在n1重叠，不能直接相加收益。
+
+## DirectSmall USize：下一份最小可证设计
+
+只覆盖n>4、p≤2的long-thin direct；不扩大n≤4网格或packed宽度。优先把n/p和两数组长度可表示为USize的guard放在整次矩阵入口，利用Packed10.decode_bounds为每个输出证明地址范围，避免每个dot重复做六项guard。循环保持baseA+k、baseB+k*p的机器整数计算和原native乘加顺序。
+
+复用Packed10Index.addNat/stepNat/next_decreases/boundA；新增必要部分是strided-B乘法不回绕、Matrix坐标到首尾地址界、uget=getD及逐步循环等式。n或尺寸超USize范围时走原41，不删巨大Nat域。第一风险是这些全输入地址义务和一次guard是否足够，先闭合最小设计再决定出源；最迟18:15交候选或具体缺口。
+
+## n1已取得的实际反馈
+
+D保存的result-846-f01-r10-bmm-singleton-native.json：run39994377803，ff34及41原完整gate均通过，完整checksum/25轮。整包比0.9904540223，BMM比0.9621232175，局部gain_p05=-0.0013665；未达冻结的整包≤0.97且p05>0门槛，不采纳、不换基准。证明接受与性能采用分列，旧创建时NOT_RUN清单不改写成历史已知。
+
+## long-thin USize完整稿
+
+[f01-r10-bmm-longthin-usize](../../f01-r10-bmm-longthin-usize/Kernel.lean)：**f278796997dc8ca584ec661ea2f253e5174b95fedbd6268e11152040ce29d736**，243876B，余12124B，独立对照仍为精确41。
+
+改动是整矩阵入口一次判断n>4、p≤2以及n/p/A.size/B.size可表示为USize，再构造新core。每输出仍使用原bmmDecodeC和Nat基地址，只把count/base/stride转换一次；每MAC的k推进、baseA+k、baseB+k*p是机器整数。新loop通过实际地址证明使用uget，避免重复getD范围检查。没有修改乘法decoder或浮点算术，也没有使用R9 native NaN重放。所有其他形状/超范围路径调用原41分派。
+
+地址证明的闭合点：
+
+1. row_lt用外坐标和内坐标界推出row-major线性界；Packed10.decode_bounds提供每个实际输出q的b/i/j界。A索引用两次row_lt；B先用原index_address重排为(b*n+k)*p+j，再用两次row_lt。它覆盖任意batch/m/n/p；空输出没有q，无额外非空假设。
+2. 活跃k<count时，实际地址<A/B.size<USize.size。由此证明k*stride及baseB+k*stride不回绕，A地址复用Packed10Index.addNat。count后继复用stepNat/next_decreases。
+3. 地址只在k<count分支计算，不要求退出后下一B指针仍可表示。所有proof参数为Prop；预期编译后不产生每MAC检查，但实际C尚未观察。
+4. raw_uget_eq_getD连接同一输入word，loop_eq保持逐步native乘加；nativeWithin_eq和dotWithin_eq恢复原NativeFinal.dotLoop/dot，最终core和bmm_spec接原全输入义务。终点NaN仍用41原字重放，保留payload/优先级。
+
+独立字节检查：只把原bmm/spec做可逆重命名，再追加8641B；旧NativeFinal.dotLoop、DirectSmall/packed声明、scalar、sum和所有许可均未改。解出实际替换边界并去掉追加块可恢复完整41。没有执行任何写入旧候选的builder。
+
+有限地址筛查覆盖9360组小整数维度、2552组guard接受情形、63233个MAC地址；另检查真实32/64位size边界以及“最后一次后指针本会回绕、但循环已退出”的定向例。结果只支持这些整数模型，没有真实Array/Float32运行或Lean接受。
+
+首个实际可证伪点是新完整源的matrix_bounds、strided_nat、uget重写和循环归纳能否被Lean4.34接受；随后看原完整gate。若通过，检查实际C确实是机器索引而非把Nat转换留在内循环，并在完整成本中保留入口guard、每输出转换、地址解码、旧NaN回放及未改控制组。新核心省的是long-thin索引，不是全部BMM或整cell时间；收益UNKNOWN。
+
+此稿尚未与n1或D的地址/按行输出稿合成。按当前两个R稿简单累计可能接近或超过源大小上限，真正合成需要重新核共享代码、精确接线与完整gate，不能相加收益。R不决定额外CI占位，D根据剩余验证容量选择。
