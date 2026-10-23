@@ -1,0 +1,67 @@
+{
+  "candidate": "f01-d11-bmm-direct-batch-rows",
+  "candidate_sha256": "1c544655a8bc6e1d5267dcf98fc1359263cba5da71bc9c72924119b0fa60e6e2",
+  "candidate_bytes": 251809,
+  "parent_sha256": "2aaa5d9e84c758a23a8c6dc1f77d800950fbaa5769aec7a38d299741c17a5f56",
+  "delta_bytes": 3243,
+  "headroom_bytes": 4191,
+  "checks": {
+    "exact_parent_and_replacement_pins": "PASS",
+    "exact_full_inverse": "PASS",
+    "declaration_inventory": "PASS",
+    "public_exports_and_four_specs_exact_bytes": {
+      "Submission.add": "9d3eb914a6345e95494c7f9c3c01e28a0bfdbf19baeddfb72751e1b8576139f9",
+      "Submission.add_spec": "2c8786329f150749e4381a5d7d0a730e75dc4e329cfdb7ae33f021d0dbcd1a33",
+      "Submission.mul": "ca53b3a1958006f35df59df20498ad697329f156e7031c09cb9b4c9e3d082a06",
+      "Submission.mul_spec": "c5101e81605658837baef64a8d374c764609a30f4658235cf20df1ba58a4f3c8",
+      "Submission.sum": "e55f936ef1408f9f1bba7f54c2d6db6d336b39aa1d47dd4f1d56ae4285955c84",
+      "Submission.sum_spec": "1fee330cdd957137ba07ce209d2271c73325f0ffb210f79aec0a777cf5e4513a",
+      "Submission.bmm": "4cc2c34fbe997fb66c6f1d9a09da332865840a93c938047372cedcf32a9e7f32",
+      "Submission.bmm_spec": "2f5c4e9019ae86af96dd05f282e7513228a6f529516170964656b55004e9c0d9"
+    },
+    "new_runtime_source_checks": {
+      "batchRow": {
+        "sha256": "d8632260b8d161bab438d819cf8f1254eb3e796944cd9c69cf60188d579abfd6",
+        "division_modulo_absent": true,
+        "nativeA_packedB_absent": true,
+        "old_row_not_called": true
+      },
+      "batchStep": {
+        "sha256": "8a2e3c2cef2a2b4632648d20031325211eb7d1b99253b63524730c47b8b1668b",
+        "division_modulo_absent": true,
+        "nativeA_packedB_absent": true,
+        "old_row_not_called": true
+      },
+      "output": {
+        "sha256": "77c0a5a88e1c04751c0e582188662e8bca765b4143615075cbbfe39ed0b95843",
+        "division_modulo_absent": true,
+        "nativeA_packedB_absent": true,
+        "old_row_not_called": true
+      }
+    },
+    "author_notices_and_old_helpers_preserved": "PASS",
+    "resources_unchanged": "PASS",
+    "original_gate_policy": "PASS",
+    "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+    "new_statement": "NOT_RUN",
+    "leanchecker": "NOT_RUN",
+    "axiom_audit": "NOT_RUN",
+    "checksum": "NOT_RUN",
+    "full_gate": "NOT_RUN",
+    "generated_c_assembly": "NOT_RUN",
+    "performance": "UNKNOWN"
+  },
+  "candidate_file": "Kernel.lean",
+  "parent": "f01-d11-bmm-direct-continuous",
+  "created_at_utc": "2026-10-23T23:09:08.989744+00:00",
+  "state": "READY_FOR_STATEMENT",
+  "mechanism": "Same n<=4,p>2 dispatch and scalar dots; nested batch then row Fin.foldl. Per-batch baseA0=b*m*n and baseB=b*n*p, rows use baseA0+i*n. No flattened-row division, no extra tuple accumulator, nativeA or packedB. All new loop costs remain in call.",
+  "proof": "New batchRow equals unchanged old row at proof-only flattened row index, using mul_add_div and add_mul. Existing row_prefix -> inner foldl_inv -> outer foldl_inv -> unchanged core/reference and all four public spec proofs.",
+  "edge_cases": "Proof states cover all Nat dimensions, including m=0/batch=0/p=0/n=0. Positivity needed for division only under i:Fin m in proof. Original fallback dispatcher and HugeNat representation unchanged.",
+  "lowering_limit": "No source-level div on new writer path; generated C/asm may introduce closure/loop/address costs and are NOT_RUN. Prior row had one dynamic div, with64/32 alternatives; not two independent divisions.",
+  "proof_status": "NOT_RUN_NEW_LOOP_PROOF",
+  "validation_mode": "statement first then original full gate paired with exact2aaa",
+  "performance": "UNKNOWN",
+  "formal_submission": "NOT_SUBMITTED",
+  "ci_owner": "root"
+}
