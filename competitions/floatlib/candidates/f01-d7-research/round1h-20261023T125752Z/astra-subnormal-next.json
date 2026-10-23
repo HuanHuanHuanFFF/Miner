@@ -1,0 +1,87 @@
+{
+  "state": "READONLY_OPPORTUNITY_NO_NEW_KERNEL",
+  "start_utc": "2026-10-23T13:34:57Z",
+  "written_at_utc": "2026-10-23T13:38:50.887617+00:00",
+  "deadline_utc": "2026-10-23T13:39:00Z",
+  "baseline": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-r8-combined-result-guard\\Kernel.lean",
+    "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+  },
+  "hardware_hypothesis": "Subnormal native multiply/add may be slow. ActualhostFPassist/DAZ/FTZ/instructiontiming notmeasured; wholecelltime doesnotattributecost.",
+  "sufficient_zero_guard": {
+    "domain": "ex,ey are actual 8bit rawexpField; ex+ey<=102 withnowrap sum<=510",
+    "argument": "For anyfinite binary32 withrawexponente (includinge=0), |x|<2^(e-126). Hence product<2^(ex+ey-252)<=2^-150, belowhalf leastsubnormal; RNE gives signedzero withsignxor. Guard excludes any exponent255.",
+    "status": "Mathematical derivation and exact boundarywitnesses only; no newLean guard theorem compiled",
+    "sharpness_for_exponent_only_bound": "sum103 is notsafe for allfraction values",
+    "do_not_skip_add": "Preserve native + operation; -0 + +0 = +0 differsfromskipping ifacc=-0. Whole-dot +0 shortcut needsallproducts-zero andseed+0 proof."
+  },
+  "existing_word_route": {
+    "guard": "ex+ey<128, evaluated onoriginalrawwords; do not changefloatroundingmode",
+    "verified_parent_assets": [
+      "Submission.LowScale.roundLow_eq",
+      "Submission.LowScale.roundSelect_eq",
+      "Submission.LowScale.core_eq",
+      "Submission.LowScale.mul_eq",
+      "Submission.LowScale.mul_spec",
+      "Submission.FastMul.roundP_eq",
+      "Submission.FastMul.rseAny_eq",
+      "Submission.R7Native.ofFloat32Mul",
+      "Submission.R7W05 native/rawprojection lemmas",
+      "Submission.R7W05.mul_toFloat32"
+    ],
+    "other_saved_assets": [
+      "f01-r6-web-lowguards outer_finite andouter_special_false",
+      "f01-d7-low-zero signedzero proof was fullvalidatedbut2.4percentslower overall; not a presentBMM win"
+    ],
+    "integration": "Direct path has rawx/y: lowguard -> toFloat32(LowScale.mul x y), highmiss -> unchangednative mul; then unchangednative add. Explicitexact product-to-native bridge needed. PackedF10 stores decodedFloat32, so rawtags/extra toBits/re-readinginputcanerasebenefit. Preferdirect diagnostic first.",
+    "remaining_cost": "wordrounding,returnofBits,guardmisses,andnativeadd onsubnormalresult remain; no guaranteed gain"
+  },
+  "exact_witnesses": [
+    {
+      "a": "19ffffff",
+      "b": "19ffffff",
+      "raw_exponent_sum": 102,
+      "exact_subnormal_quantization_word": "00000000"
+    },
+    {
+      "a": "19ffffff",
+      "b": "1a7fffff",
+      "raw_exponent_sum": 103,
+      "exact_subnormal_quantization_word": "00000001"
+    },
+    {
+      "a": "99ffffff",
+      "b": "19ffffff",
+      "raw_exponent_sum": 102,
+      "exact_subnormal_quantization_word": "80000000"
+    },
+    {
+      "a": "00000001",
+      "b": "3f800000",
+      "raw_exponent_sum": 127,
+      "exact_subnormal_quantization_word": "00000001"
+    },
+    {
+      "a": "007fffff",
+      "b": "40000000",
+      "raw_exponent_sum": 128,
+      "exact_subnormal_quantization_word": "00fffffe"
+    }
+  ],
+  "counterexamples": [
+    "Any subnormal is not automatically zero:00000001*3f800000=00000001",
+    "sum103unsafe:19ffffff*1a7fffff=00000001",
+    "Discardingsign wrong:99ffffff*19ffffff=80000000",
+    "Zero×Inf is NaN; zero-only guard withoutfinite exclusion invalid",
+    "Skipping +0 canchange-0 accumulator"
+  ],
+  "cheapest_next_falsification": "Onalreadyexposed821/822 inputs only, screenraw exponent bounds andcountdirect MAC lowguard hits/misses; also test whether wholematrix maxExpA+maxExpB<=102 everholds. If no eligibility,stopzero-shortcutbeforeproof. Ifeligible, exactguard=>wordroundP signedzero theorem andone actualcontext completecost test. Do not usefutureconfirmationinputs.",
+  "cost_boundary": "No guardhit prevalence or ns saved known;3.15/10.60percent arecomplete subnormalcells. Cheaprawguard count not equalcheapcompletepath. Wholematrix scan must includeallprep/outputcost.",
+  "no_actions": "No newKernel,CI,toolsinstallation,Git,web,agent,otherthreadmessage; onlythese two reports.",
+  "delivered_files_completed_at_utc": "2026-10-23T13:39:29.620174+00:00",
+  "scope_note": "JSONanalysiscompleted13:38:50; finalMDsaveactualtime retained separately. No workbudget extension ornewexperiment.",
+  "markdown_sha256": "66e8d95ad964a3198a25c142f24cc1a3109b6791cd26df860213300a2e35677a",
+  "actual_file_delivery_elapsed_seconds": 272.620174,
+  "fixed_checkpoint_overrun_seconds": 29.620174,
+  "five_minute_total_cap_met": true
+}
