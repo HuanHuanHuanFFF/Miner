@@ -1,0 +1,47 @@
+{
+  "manifest": {
+    "candidate": "f01-r11-wide4-codegen-probe",
+    "candidate_file": "Kernel.lean",
+    "candidate_sha256": "eb9e76393b13448bd031134035706d3b05ce08b018f7d81dd5614db0c9ac007f",
+    "candidate_bytes": 241262,
+    "created_at_utc": "2026-10-23T23:02:15.891342+00:00",
+    "parent": "f01-d10-bmm-direct-rows",
+    "parent_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+    "experiment_type": "CODEGEN_ONLY_UNUSED_EXPORTED_MACHINE_LOOP",
+    "mechanism": "4nativeArows x one existingF10Bpacket,40scalarFloat32accumulators,onePpacketreadperiteration. Column-major40fields reuse R11F8 four-row alignment; terminalF40constructoronly.",
+    "layout_decision": "One layout, no grid. Column-major prefers10 groups of4 independentrows; row-major3vectorsperrow wouldneed12accumulators. ActualSLP/registerallocation UNKNOWN.",
+    "active_four_specs_and_bmm": "Entirea066prefix byte-identical; probe nevercalled byactiveentries.",
+    "probe_preconditions": "SameverifiedPacked10Index boundA/addNat/next_decreases pattern forfourbases. Allproofsareexplicittypedarguments,erasedatruntime; no actualBMMwiringclaimed.",
+    "validation_mode": "full-gate",
+    "proof_status": "NOT_RUN_NEW_MACHINE_LOOP_TYPECHECK",
+    "full_gate": "NOT_RUN",
+    "matrix_algorithm_acceptance": "NOT_APPLICABLE_PROBE_UNUSED",
+    "performance": "NOT_APPLICABLE_NEW_LOOP_UNUSED",
+    "codegen": "NOT_RUN",
+    "formal_submission": "NOT_SUBMITTED",
+    "capture_required": [
+      "R11WideRows4.wordLoop",
+      "R11WideRows4_wordLoop___redArg"
+    ],
+    "falsifier": "InspectactualhotloopforSIMD,foreigncalls,perMACallocationorhotstackspill; entry40argstackloadsandterminalF40allocationarenothotspill. Badmachinecode parksbeforefulloutputproof.",
+    "future_missing": "No40laneprojection-to-originaldot proof,rawNaNfinish,tailrowrouting,column-groupF40buffer/outputorder orwhole-entrymeasurement. Needallbeforeanynewalgorithmclaim.",
+    "build_script_sha256": "0dee3aa9cdfec125b1aba359daad0ff6964eca1249233e129ac8681e7b0433da",
+    "increment_sha256": "04ca30e0c26ae420d1f7991c6c4b7c48401177ca26a6463551171ed44770673f"
+  },
+  "prefix_identity": true,
+  "prefix_bytes": 237142,
+  "source_margin": 14738,
+  "new_names": [
+    "Submission.R11WideRows4.F40",
+    "Submission.R11WideRows4.wordLoop"
+  ],
+  "input_reads_per_iteration": {
+    "nativeA": 4,
+    "existing_F10_B": 1
+  },
+  "scalar_MAC_chains": 40,
+  "loop_accumulator_record_allocations_source": 0,
+  "result_construction": "OneF40onlywhenk>=count",
+  "static_policy": "PASS",
+  "scope": "Source-levelshape only; compiler can spill/reorderloads. Probe gate performance would be old activea066, not thisloop."
+}

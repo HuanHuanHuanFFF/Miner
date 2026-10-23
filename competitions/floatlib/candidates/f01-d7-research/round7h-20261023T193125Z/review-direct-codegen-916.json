@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "review": "916 actual DirectContinuous C/object assembly",
+  "started_at_utc": "2026-10-23T23:01:05Z",
+  "completed_at_utc": "2026-10-23T23:06:20.359388+00:00",
+  "run": 40032766690,
+  "seed": 916,
+  "source_commit": "123dcd0d7a8da0d089af13d8e736c0709d362fdf",
+  "artifact_integrity": {
+    "index": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/original-artifact-hashes.json",
+      "bytes": 24690,
+      "sha256": "01ccde26eb05389aff301a0dd6bd4efae17385caa065ef715b58e8281a811900"
+    },
+    "members": 106,
+    "actual_members": 106,
+    "all_sizes_hashes_match": true,
+    "originals_modified": false
+  },
+  "binding": {
+    "kernel": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/download-dae01f1a82994aa98c740e12a71d1d7f/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-direct-continuous/capture-1fc0e8fc73f446858eb8becfd5ebdce0/compiled-Submission.lean",
+      "bytes": 248566,
+      "sha256": "2aaa5d9e84c758a23a8c6dc1f77d800950fbaa5769aec7a38d299741c17a5f56"
+    },
+    "indexed_input": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/download-dae01f1a82994aa98c740e12a71d1d7f/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-d11-bmm-direct-continuous/Kernel.lean",
+      "bytes": 248566,
+      "sha256": "2aaa5d9e84c758a23a8c6dc1f77d800950fbaa5769aec7a38d299741c17a5f56"
+    },
+    "C": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/download-dae01f1a82994aa98c740e12a71d1d7f/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-direct-continuous/capture-1fc0e8fc73f446858eb8becfd5ebdce0/file-0-Submission.c",
+      "bytes": 1402865,
+      "sha256": "e7c209c11aab68734dbaaefa115ef984a535dc6755b1062bc285ec86961c4324"
+    },
+    "capture": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/download-dae01f1a82994aa98c740e12a71d1d7f/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-direct-continuous/capture-1fc0e8fc73f446858eb8becfd5ebdce0/capture-record.json",
+      "bytes": 35430,
+      "sha256": "0c08c9c3877ffa52a64c0df8b55afd13671b8327399ec4a587ef21edb4fd99bb"
+    },
+    "object_metadata": {
+      "source": "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/ir/Submission.c.o.export",
+      "bytes": 571904,
+      "sha256": "53997fdc317e5891aed9f37ebb3239e68fbb0f17ef6be6f913c44a7570ab94f1",
+      "state": "VERIFIED_CAPTURED_BYTES",
+      "temporary_copy_sha256": "53997fdc317e5891aed9f37ebb3239e68fbb0f17ef6be6f913c44a7570ab94f1",
+      "object_retained": false
+    },
+    "capture_helper_sha256": "a302982683d8104211bf74d89ff22ea032159d8b94059e2ae91c63dfa1242be8",
+    "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+    "mode": "ORIGINAL_STATEMENT_BUILD_NOT_RECOMPILE",
+    "final_linked_image": "UNKNOWN_NOT_SAVED",
+    "object_rehash": "UNAVAILABLE_OBJECT_REMOVED",
+    "observer_overhead": "UNKNOWN"
+  },
+  "actual_path": {
+    "entry_C_lines": [
+      42755,
+      42781
+    ],
+    "guard": "n<=4 and p>2",
+    "output_C_lines": [
+      42705,
+      42718
+    ],
+    "row_loop": "lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__1",
+    "lane_loop": "lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__0",
+    "actual_call_C_lines": [
+      42714,
+      42679
+    ],
+    "not_standalone_helper_inference": true
+  },
+  "machine_findings": [
+    {
+      "status": "VERIFIED_C_AND_ASM",
+      "claim": "Fresh full-capacity output only; actual emission lacks row-index/row-output arrays, append, closure and lean_apply.",
+      "C_lines": [
+        42711,
+        42617,
+        42659
+      ],
+      "asm": {
+        "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/download-dae01f1a82994aa98c740e12a71d1d7f/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-direct-continuous/capture-1fc0e8fc73f446858eb8becfd5ebdce0/asm-0-11.txt",
+        "bytes": 34972,
+        "sha256": "beea16862016b56a44e901400bbb0c81317e563a4afdf65b6cf2857ce4d4bd1a"
+      },
+      "allocation_offset": "0xcb",
+      "initial_refcount": 1
+    },
+    {
+      "status": "VERIFIED_ACTUAL_ASM",
+      "claim": "Per output NativeFinal.dot call and lean_array_push; UInt32 immediate tag, not new heap box.",
+      "asm": {
+        "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/download-dae01f1a82994aa98c740e12a71d1d7f/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-direct-continuous/capture-1fc0e8fc73f446858eb8becfd5ebdce0/asm-0-0.txt",
+        "bytes": 36973,
+        "sha256": "7ce693ddb93030a37230748a6a9db2f5f83847f2b5437bb4d822f04140c8de67"
+      },
+      "body_lines": [
+        689,
+        824
+      ],
+      "dot_call_offset": "0x9c",
+      "push_offset": "0xc9",
+      "tag_offset": "0xbe",
+      "C_lines": [
+        42631,
+        42634
+      ]
+    },
+    {
+      "status": "VERIFIED_ACTUAL_ASM",
+      "claim": "One r/m quotient per row remains; width alternatives are not two divisions.",
+      "asm": {
+        "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/download-dae01f1a82994aa98c740e12a71d1d7f/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-direct-continuous/capture-1fc0e8fc73f446858eb8becfd5ebdce0/asm-0-1.txt",
+        "bytes": 45420,
+        "sha256": "880b21a3c42d9ba8695f4273a69bd9b65487b2d7726b009d91b7c601ad740c82"
+      },
+      "body_lines": [
+        693,
+        1012
+      ],
+      "division_offsets": [
+        "0x129 div r14",
+        "0x1a2 div r14d"
+      ],
+      "large_Nat_alternative": "lean_nat_big_div",
+      "back_edge_offset": "0x28a",
+      "C_line": 42673
+    }
+  ],
+  "baseline_comparison_limits": {
+    "same_run5b_kernel": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/download-dae01f1a82994aa98c740e12a71d1d7f/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-d11-bmm-fused-output-proof3/Kernel.lean",
+      "bytes": 245841,
+      "sha256": "5b7d926cf628c2d87042386834f7c1581b9a6aa7441af196453984b395534ba2"
+    },
+    "same_run5b_separate_C_object_asm": "NOT_CAPTURED",
+    "same_source_components": {
+      "DirectRows": {
+        "same_bytes": true,
+        "bytes": 1191,
+        "sha256": "0872645cb4f9ae545b641dd217ea0de263b00ae32f51017b79c6034544c61e13"
+      },
+      "NativeFinal": {
+        "same_bytes": true,
+        "bytes": 4114,
+        "sha256": "8cdfc6f1885316ae1509f5cddd27694a570258ea667bb3a902cec2a955f20de5"
+      },
+      "RowStream": {
+        "same_bytes": true,
+        "bytes": 10277,
+        "sha256": "ac9d1697a62fd34b191ec3cf4907bc3fcfdb6d24cc15b7599c076deb51d8de47"
+      }
+    },
+    "retained_DirectRows_C_is_structural_before_image_only": {
+      "range": [
+        42389,
+        42439
+      ],
+      "division_mod_lines": [
+        42398,
+        42399
+      ],
+      "closure_line": 42414,
+      "row_Array_ofFn_line": 42421,
+      "append_line": 42422
+    },
+    "old_two_hardware_divisions_or_quadratic_append_copy_claimed": false
+  },
+  "remaining_unknowns": [
+    "actual linked NativeFinal.dot/MAC/NaN-replay assembly omitted by20-symbol cap",
+    "runtime allocation/copy counters",
+    "instruction/path time shares",
+    "independent clean confirmation and formal adoption"
+  ],
+  "next_one_falsifiable_direction": {
+    "proposal": "Explicit nested batch/row enumeration, same column emitter and NativeFinal.dot; compute baseB per batch and preserve b/i/j order.",
+    "first_check": "Original statement/proof then actual entry row assembly has no quotient and no reintroduced arrays/append/closure.",
+    "gain": "UNKNOWN",
+    "new_candidate_or_tool_created": false
+  },
+  "exposed_plan": {
+    "path": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/download-dae01f1a82994aa98c740e12a71d1d7f/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+      "bytes": 99902,
+      "sha256": "f6e1c7d16cf08cee08bbd8f22ba3ec23b013f3190e4ee88fe8fbd1520e2745ed"
+    },
+    "timed_guarded_cases": [
+      {
+        "name": "bmm:ml:0",
+        "batch": 3267,
+        "m": 9,
+        "n": 2,
+        "p": 3,
+        "work": 176418
+      },
+      {
+        "name": "bmm:sparse:1",
+        "batch": 14705,
+        "m": 2,
+        "n": 2,
+        "p": 3,
+        "work": 176460
+      },
+      {
+        "name": "bmm:extremes:0",
+        "batch": 300,
+        "m": 2,
+        "n": 1,
+        "p": 6,
+        "work": 3600
+      }
+    ],
+    "logical_rows_per_matrix_set": 59413,
+    "not_process_call_count_or_timing_share": true
+  },
+  "same_run_complete_cost_comparisons": {
+    "f01-d11-bmm-fused-output-proof3": {
+      "target_bmm_ns": 20329859.0,
+      "baseline_bmm_ns": 22883095.0,
+      "normalized_bmm": 0.8917879629771835,
+      "normalized_whole": 0.974986114804631,
+      "verdict": {
+        "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/download-dae01f1a82994aa98c740e12a71d1d7f/diagnostics/f01-d7-public-suite/public-suite/f01-d11-bmm-fused-output-proof3-verdict.json",
+        "bytes": 7868,
+        "sha256": "604e7ab8fc287378d259036d6c222b81373c44549be7b999a855afe5c726ac3c"
+      }
+    },
+    "f01-d10-bmm-direct-rows": {
+      "target_bmm_ns": 20329859.0,
+      "baseline_bmm_ns": 24936885.0,
+      "normalized_bmm": 0.8155503390574169,
+      "normalized_whole": 0.963487755699982,
+      "verdict": {
+        "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40032766690/download-dae01f1a82994aa98c740e12a71d1d7f/diagnostics/f01-d7-public-suite/public-suite/f01-d10-bmm-direct-rows-verdict.json",
+        "bytes": 7852,
+        "sha256": "cca65045c05cc4b7188cc15cd560d43393527fa6ed1480375f168d7d9da28c8c"
+      }
+    }
+  },
+  "all_five_public_gates_passed": true,
+  "single_group_not_final_adoption": true,
+  "source_tool_git_ci_agent_mutation": false
+}

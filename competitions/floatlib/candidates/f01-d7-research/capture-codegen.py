@@ -32,15 +32,17 @@ POST_SECONDS = 30.0
 MAX_SYMBOLS = 20
 OBJECT = re.compile(r'^Submission(?:\.c)?\.o(?:\.(?:export|noexport))?$')
 TRACE = re.compile(r'^Submission(?:\.c(?:\.o(?:\.(?:export|noexport))?)?|\.o(?:\.(?:export|noexport))?|\.olean|\.ilean)?\.trace$')
-HOT_STEMS = ('R11RawIndex_loop', 'Packed8Index_loop', 'R11CrossRows_wordLoop', 'R11CrossRows_dot8')
+HOT_STEMS = ('R11WideRows4_wordLoop', 'R11RawIndex_loop', 'Packed8Index_loop', 'R11CrossRows_wordLoop', 'R11CrossRows_dot8')
 FOLD_OUTPUT_STEMS = ('RowStream_output', 'DirectContinuous_output', 'DirectContinuous_row',
+                     'DirectContinuous_batchRow', 'DirectContinuous_batchStep',
                      'BatchLocalPacked_output', 'BatchLocalPacked_batchStep',
                      'BatchLocalPacked_row', 'BatchLocalPacked_group')
 OUTPUT_STEMS = ('R11RawA_core', 'R11RawIndex_runDot', 'RowStream_emit', 'RowStream_group',
                 'RowStream_row', 'RowStream_output', 'RowStream_core', 'R11CrossRows_core',
                 'R11CrossRows_packGeneral', 'R11CrossRows_packShared', 'R11CrossRows_finish8',
                 'R11CrossRows_words', 'DirectContinuous_core', 'DirectContinuous_output',
-                'DirectContinuous_row', 'BatchLocalPacked_core', 'BatchLocalPacked_output',
+                'DirectContinuous_row', 'DirectContinuous_batchRow', 'DirectContinuous_batchStep',
+                'BatchLocalPacked_core', 'BatchLocalPacked_output',
                 'BatchLocalPacked_batchStep', 'BatchLocalPacked_row', 'BatchLocalPacked_group',
                 'BatchLocalPacked_packBatch')
 LEGACY_STEMS = ('NativeFinal_dot', 'NativeFinal_dotLoop', 'NativeFinal_sumLoop', 'dotLoop',
@@ -755,6 +757,23 @@ def selftest():
                 'new output replay budget/omission drift')
         results.append({'test': 'new_output_fold_encoding_and_rejection_boundaries', 'pass': True,
                         'captured': 20, 'omitted': 22, 'actual_emission_and_llvm': 'UNKNOWN_NOT_RUN'})
+
+        wide = 'lp_competition_Submission_R11WideRows4_wordLoop'
+        batch_outputs = [
+            'lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_batchRow_spec__0',
+            'lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_batchStep_spec__1___redArg']
+        valid_wide_batch = [wide, wide + '___redArg'] + batch_outputs
+        invalid_wide_batch = [wide + '___boxed', wide + 'ing', wide + '_extra',
+            batch_outputs[0] + '___redArgument', batch_outputs[1] + '_extra',
+            batch_outputs[0].replace('batchRow_spec', 'batchRowExtra_spec')]
+        require(all(_selected(n) for n in valid_wide_batch) and
+                all(not _selected(n) for n in invalid_wide_batch),
+                'wide/batch-row selection boundary drift')
+        require(_symbol_info(wide)['priority'] == 0 and
+                all(_symbol_info(n).get('specialized_output') for n in batch_outputs),
+                'wide/batch-row hot priority drift')
+        results.append({'test': 'wide_machine_loop_and_batch_row_boundaries', 'pass': True,
+                        'actual_emission_simd_spill': 'UNKNOWN_NOT_RUN'})
 
         # Exhaust the unchanged deadline after nm, before any objdump invocation.
         original_clock = time.monotonic
