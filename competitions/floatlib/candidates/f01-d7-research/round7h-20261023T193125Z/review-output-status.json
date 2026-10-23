@@ -1,0 +1,22 @@
+{
+  "owner": "r11_fused_output",
+  "state": "READY_FOR_STATEMENT",
+  "updated_at_utc": "2026-10-23T19:48:41Z",
+  "candidate": "competitions/floatlib/candidates/f01-d11-bmm-fused-output",
+  "parent": "f01-d10-bmm-direct-rows",
+  "parent_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+  "kernel_sha256": "1b71f67ee1cb154399e60a0657618c4b968d8e4b4d642cfc0621fdf416811792",
+  "kernel_bytes": 244998,
+  "source_status": "FROZEN_FOR_FIRST_STATEMENT_CHECK_DO_NOT_MUTATE",
+  "mechanism": "Fin.foldl row and column-group traversal carries one Array Binary32 initialized with full output capacity. Each F10 tile is computed once, then valid lanes are finished and pushed immediately. No row-number Array, rowTiles Vector, row output Vector or flatMap.",
+  "proof_plan": "Generic Fin.foldl prefix invariant and push/emit lemmas; group prefix is row*p+min(10*g,p); complete output equals referenceBmm and then Packed10.core through the existing exact packed-lane and NativeFinal bridges.",
+  "input_preparation": "Keep parent nativeA map and Packed10.packB unchanged for isolated mechanism comparison.",
+  "proof_status": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "formal_submission": "NOT_SUBMITTED",
+  "finite_layout_diagnostic": "PASS: 1548 shapes / 203175 positions; candidates/f01-d11-bmm-fused-output/layout-precheck.json. Not a Lean or float proof.",
+  "next_checkpoint": "Root statement check on exact frozen hash. Preserve this source on failure and write repair in a new revision candidate after reading actual feedback.",
+  "ci_owner": "root",
+  "source_freeze_target_utc": "2026-10-24T00:46:25Z",
+  "deadline_utc": "2026-10-24T02:31:25Z"
+}

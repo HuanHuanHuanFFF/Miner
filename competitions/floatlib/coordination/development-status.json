@@ -1,6 +1,6 @@
 {
   "state": "R11_ACTIVE_BMM_STRUCTURAL_RESEARCH",
-  "updated_at_utc": "2026-10-23T19:47:11.893482+00:00",
+  "updated_at_utc": "2026-10-23T20:05:21.520966+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "candidate": "competitions/floatlib/candidates/f01-r8-combined-result-guard",
@@ -20,18 +20,18 @@
   "acceptance_target_status": "UNACHIEVED",
   "active_jobs": [
     {
-      "run": 40013486988,
-      "seed": 901,
-      "source_commit": "4ac18f4050f216c8e48d8ad0d30c9a2b50940e45",
+      "run": 40014284237,
+      "seed": 902,
+      "source_commit": "6eb257b2e079c5778558af5151d852d70f9f3301",
       "state": "IN_PROGRESS",
       "candidates": [
+        "f01-d11-bmm-raw-a-one-group",
         "f01-r8-combined-result-guard",
-        "f01-d10-bmm-direct-rows",
-        "f01-d11-bmm-unpacked-narrow"
+        "f01-d10-bmm-direct-rows"
       ],
       "role": "DISCOVERY",
       "capture_codegen": [
-        "f01-d11-bmm-unpacked-narrow"
+        "f01-d11-bmm-raw-a-one-group"
       ],
       "collected": false
     }
@@ -1256,7 +1256,8 @@
     "ownership": {
       "D": "f01-d11-* candidates; this round except astra-* and review-* files; current state, Git, CI and dashboard coordinator",
       "R": "f01-r11-* candidates and this round astra-* handoff/status; no Git/CI/model-reset operations",
-      "bounded_reviewer": "this round review-* files only; no candidate/Git/CI/reset operations"
+      "bounded_reviewer": "this round review-* files only; no candidate/Git/CI/reset operations",
+      "implementation_agent": "f01-d11-bmm-fused-output* and review-output-* only; exact frozen1b71 awaits statement; root retains CI/Git coordination"
     },
     "selection": "Full original gate on exact source; compare complete per-cell normalized cost against frozen41 and current research start. Keep negative samples and source identities. Three input groups before a retained/displayed result; freeze before two unseen confirmation groups. Official champion requirement is separate from incremental research selection.",
     "started_ci": [
@@ -1264,7 +1265,7 @@
         "run": 40013486988,
         "seed": 901,
         "source_commit": "4ac18f4050f216c8e48d8ad0d30c9a2b50940e45",
-        "state": "IN_PROGRESS",
+        "state": "COMPLETED_SUCCESS_ALL_THREE_FULL_GATES",
         "candidates": [
           "f01-r8-combined-result-guard",
           "f01-d10-bmm-direct-rows",
@@ -1274,12 +1275,30 @@
         "capture_codegen": [
           "f01-d11-bmm-unpacked-narrow"
         ],
+        "collected": true
+      },
+      {
+        "run": 40014284237,
+        "seed": 902,
+        "source_commit": "6eb257b2e079c5778558af5151d852d70f9f3301",
+        "state": "IN_PROGRESS",
+        "candidates": [
+          "f01-d11-bmm-raw-a-one-group",
+          "f01-r8-combined-result-guard",
+          "f01-d10-bmm-direct-rows"
+        ],
+        "role": "DISCOVERY",
+        "capture_codegen": [
+          "f01-d11-bmm-raw-a-one-group"
+        ],
         "collected": false
       }
     ],
-    "completed_ci": [],
-    "active_ci": [
+    "completed_ci": [
       40013486988
+    ],
+    "active_ci": [
+      40014284237
     ],
     "reset_used_count": 0,
     "notes": "All preparation, queues, coordination, proof repair and collection count within the fixed wall-clock window. Keep working to deadline; finish and collect any started CI even if terminal collection extends past deadline. Do not start new research after deadline.",
@@ -1329,8 +1348,29 @@
             "capture_codegen": false
           }
         ]
+      },
+      {
+        "seed": 903,
+        "role": "STATEMENT_DIAGNOSTIC",
+        "plan": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/plan-903.json",
+        "sha256": "e9373bd3a4d60164cbf6c80b5b955ab3c05ac984beb8a951daf9cbaa550687f7",
+        "candidates": [
+          {
+            "candidate": "f01-d11-bmm-fused-output",
+            "sha256": "1b71f67ee1cb154399e60a0657618c4b968d8e4b4d642cfc0621fdf416811792",
+            "capture_codegen": false,
+            "validation_mode": "statement-only"
+          }
+        ]
       }
-    ]
+    ],
+    "official_refresh": {
+      "directory": "competitions/floatlib/candidates/f01-d7-research/official-20261023T195319Z",
+      "champion": 285,
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "status": "VERIFIED_SNAPSHOT_PROTOCOL_UNCHANGED",
+      "source_status": 404
+    }
   },
   "research_round_history": [
     {

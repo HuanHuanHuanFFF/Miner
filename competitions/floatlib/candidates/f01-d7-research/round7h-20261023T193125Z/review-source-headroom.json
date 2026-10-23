@@ -1,0 +1,511 @@
+{
+  "review": "R11 source headroom deletion inventory; no new candidate generated",
+  "reviewer": "profile_review_r7",
+  "started_utc": "2026-10-23T20:01:08Z",
+  "completed_utc": "2026-10-23T20:06:50.526606+00:00",
+  "base": {
+    "path": "competitions/floatlib/candidates/f01-d11-bmm-fused-output/Kernel.lean",
+    "sha256": "1b71f67ee1cb154399e60a0657618c4b968d8e4b4d642cfc0621fdf416811792",
+    "bytes": 244998,
+    "line_endings": "LF",
+    "current_headroom": 11002
+  },
+  "verified": "Exact bytes, unique anchors, original text references and local scope inspection only",
+  "proposed_dependency_closure": "INFERRED_NOT_LEAN_VERIFIED",
+  "blocks": [
+    {
+      "id": "P1",
+      "name": "old_Packed10_materialized_core",
+      "base_lines_inclusive": [
+        5670,
+        5785
+      ],
+      "base_byte_offsets_half_open": [
+        209113,
+        214090
+      ],
+      "bytes_including_each_line_LF": 4977,
+      "sha256": "3d0fdf3a3084907fda4eabe2b6c26c4c1be95c7e6d26b5655c447193bd725447",
+      "start_anchor_unique_exact": "namespace Packed10\n\ndef tileResults (batch m n p : Nat) (A : Array Float32)\n",
+      "end_anchor_unique_exact": "  rw [hi]\n\nend Packed10\n",
+      "declarations": [
+        "Submission.Packed10.tileResults",
+        "Submission.Packed10.tileResults_get",
+        "Submission.Packed10.tile_finish",
+        "Submission.Packed10.inlineDecodeC",
+        "Submission.Packed10.inlineDecodeC_eq",
+        "Submission.Packed10.outputFromTiles",
+        "Submission.Packed10.outputFromTiles_eq",
+        "Submission.Packed10.core",
+        "Submission.Packed10.core_eq_reference"
+      ],
+      "conditions": "Remove together with P2/P3/P4/P5 and rewire bmmPackedBase_spec; active packed primitives must remain.",
+      "attribution_cues_in_removed_span": []
+    },
+    {
+      "id": "P2",
+      "name": "old_bmmR4",
+      "base_lines_inclusive": [
+        5787,
+        5805
+      ],
+      "base_byte_offsets_half_open": [
+        214091,
+        214915
+      ],
+      "bytes_including_each_line_LF": 824,
+      "sha256": "bcc139fc9f6f341d44c041e3af29e506425c40d9909add02917ecdff2865e920",
+      "start_anchor_unique_exact": "def bmmR4 (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n",
+      "end_anchor_unique_exact": "    (referenceBmm_spec batch m n p A B)\n",
+      "declarations": [
+        "Submission.bmmR4",
+        "Submission.bmmR4_spec"
+      ],
+      "conditions": "Keep the outer end Submission at5808. Code consumers in P4 and surviving bmmPackedBase_spec; comment mentions retained.",
+      "attribution_cues_in_removed_span": []
+    },
+    {
+      "id": "P3",
+      "name": "old_RowOutput_namespace",
+      "base_lines_inclusive": [
+        5906,
+        5970
+      ],
+      "base_byte_offsets_half_open": [
+        218141,
+        220620
+      ],
+      "bytes_including_each_line_LF": 2479,
+      "sha256": "e5c944df6004e98b1e82d4cec489831d13e17eb2c0026770e2bda8853d0dedd8",
+      "start_anchor_unique_exact": "namespace Submission.RowOutput\n",
+      "end_anchor_unique_exact": "end Submission.RowOutput\n",
+      "declarations": [
+        "Submission.RowOutput.row",
+        "Submission.RowOutput.output",
+        "Submission.RowOutput.output_eq",
+        "Submission.RowOutput.core",
+        "Submission.RowOutput.core_eq"
+      ],
+      "conditions": "Its only external code consumers are bmmRows/bmmRows_spec in P4.",
+      "attribution_cues_in_removed_span": []
+    },
+    {
+      "id": "P4",
+      "name": "old_bmmRows_namespace",
+      "base_lines_inclusive": [
+        5972,
+        5996
+      ],
+      "base_byte_offsets_half_open": [
+        220621,
+        221511
+      ],
+      "bytes_including_each_line_LF": 890,
+      "sha256": "23bab9695ef6097bb7f409adba1e70b46eed7bcd4de8ec531711bc3d552c536c",
+      "start_anchor_unique_exact": "namespace Submission\n\nopen FloatLib.Floats Competition\n\ndef bmmRows (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n",
+      "end_anchor_unique_exact": "      · exact RowOutput.core_eq batch m n p A B\n  exact (congrArg (fun v : Vector Binary32 (batch * m * p) => v.get) h).trans\n    (bmmR4_spec batch m n p A B)\n\nend Submission\n",
+      "declarations": [
+        "Submission.bmmRows",
+        "Submission.bmmRows_spec"
+      ],
+      "conditions": "No external token references to bmmRows/spec. This is the actual name; bmmRowOutput is absent.",
+      "attribution_cues_in_removed_span": []
+    },
+    {
+      "id": "P5",
+      "name": "RowStream_Packed10_alias",
+      "base_lines_inclusive": [
+        6203,
+        6208
+      ],
+      "base_byte_offsets_half_open": [
+        230632,
+        230921
+      ],
+      "bytes_including_each_line_LF": 289,
+      "sha256": "154effcc644142dd011333161751936506cff68472e53e0c479106d06e7fa48c",
+      "start_anchor_unique_exact": "theorem core_eq (batch m n p : Nat)\n    (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) :\n    core batch m n p A B = Packed10.core batch m n p A B := by\n  exact (core_eq_reference batch m n p A B).trans\n",
+      "end_anchor_unique_exact": "    (Packed10.core_eq_reference batch m n p A B).symm\n",
+      "declarations": [
+        "Submission.RowStream.core_eq"
+      ],
+      "conditions": "Only surviving code consumer is bmmPackedBase_spec:6232; replace with retained core_eq_reference. Keep core_eq_reference and closing namespace6210.",
+      "attribution_cues_in_removed_span": []
+    },
+    {
+      "id": "O1",
+      "name": "optional_decode_bounds",
+      "base_lines_inclusive": [
+        5515,
+        5542
+      ],
+      "base_byte_offsets_half_open": [
+        203400,
+        204269
+      ],
+      "bytes_including_each_line_LF": 869,
+      "sha256": "bb2a0f02832ddfb3c8bcbfffa7899037cf9b625191eb955f36c51594522ee4b5",
+      "start_anchor_unique_exact": "namespace Packed10\n\nopen Competition\n",
+      "end_anchor_unique_exact": "  · exact Nat.mod_lt _ hpPos\n\nend Packed10\n",
+      "declarations": [
+        "Submission.Packed10.decode_bounds"
+      ],
+      "conditions": "Only old outputFromTiles family consumes it; removable after planB. Whole paired namespace, no change to Packed10Index.",
+      "attribution_cues_in_removed_span": []
+    },
+    {
+      "id": "O2",
+      "name": "optional_old_column_helpers",
+      "base_lines_inclusive": [
+        5304,
+        5311
+      ],
+      "base_byte_offsets_half_open": [
+        193117,
+        193309
+      ],
+      "bytes_including_each_line_LF": 192,
+      "sha256": "ec98ada1ecba340225d7daadddcbd315f3bf097a589f780c20760d5d995103a3",
+      "start_anchor_unique_exact": "theorem groups_pos_of_col (p j : Nat) (hj : j < p) :\n",
+      "end_anchor_unique_exact": "    10 * (j / 10) + j % 10 = j := by\n  omega\n",
+      "declarations": [
+        "Submission.Packed10.groups_pos_of_col",
+        "Submission.Packed10.column_decomposition"
+      ],
+      "conditions": "Consumers all lie in P1/P3. Keep groups at5302 and vector_get_ofFn at5313.",
+      "attribution_cues_in_removed_span": []
+    },
+    {
+      "id": "O3",
+      "name": "optional_lane_zero_alias",
+      "base_lines_inclusive": [
+        5293,
+        5294
+      ],
+      "base_byte_offsets_half_open": [
+        192624,
+        192699
+      ],
+      "bytes_including_each_line_LF": 75,
+      "sha256": "e15ed8c31a7d54f30452eb216db11a93c53e0d7be830035788112608aacbf6f5",
+      "start_anchor_unique_exact": "theorem lane_zero (l : Fin 10) : lane zero10 l = zero32 :=\n",
+      "end_anchor_unique_exact": "theorem lane_zero (l : Fin 10) : lane zero10 l = zero32 :=\n  lane_zero10 l\n",
+      "declarations": [
+        "Submission.Packed10.lane_zero"
+      ],
+      "conditions": "No consumers; keep zero10 and lane_zero10 because finish_dot10_lane uses lane_zero10:5495.",
+      "attribution_cues_in_removed_span": []
+    },
+    {
+      "id": "O4",
+      "name": "optional_finish_fold_wrappers",
+      "base_lines_inclusive": [
+        5463,
+        5482
+      ],
+      "base_byte_offsets_half_open": [
+        200854,
+        201860
+      ],
+      "bytes_including_each_line_LF": 1006,
+      "sha256": "5a98c11694094842eebd22dffd8a0679387a891608f49f752f79d99585d045d0",
+      "start_anchor_unique_exact": "theorem finish_eq_fold (n baseA baseB p : Nat) (Araw Braw : Array Binary32)\n",
+      "end_anchor_unique_exact": "  simp only [Submission.add_eq, Submission.mul_eq]\n",
+      "declarations": [
+        "Submission.Packed10.finish_eq_fold",
+        "Submission.Packed10.finish_eq_kernel_fold"
+      ],
+      "conditions": "Remove both together; finish_eq_fold only feeds finish_eq_kernel_fold. Keep finish_eq_dot and finish_dot10_lane.",
+      "attribution_cues_in_removed_span": []
+    },
+    {
+      "id": "O5",
+      "name": "optional_finish_dot10_lane_fold",
+      "base_lines_inclusive": [
+        5499,
+        5510
+      ],
+      "base_byte_offsets_half_open": [
+        202689,
+        203384
+      ],
+      "bytes_including_each_line_LF": 695,
+      "sha256": "f797352855a8b3ed94fbc0b9b885ce88797c2f19a2696dfcb5c7026a670f56a0",
+      "start_anchor_unique_exact": "theorem finish_dot10_lane_fold (n baseA baseB p : Nat) (Araw Braw : Array Binary32)\n",
+      "end_anchor_unique_exact": "  rw [finish_dot10_lane n baseA baseB p Araw Braw B l hb, NativeFinal.dot_eq]\n",
+      "declarations": [
+        "Submission.Packed10.finish_dot10_lane_fold"
+      ],
+      "conditions": "No consumers; keep finish_dot10_lane used by current group_prefix.",
+      "attribution_cues_in_removed_span": []
+    }
+  ],
+  "plans": {
+    "A_no_spec_rewire": {
+      "delete": [
+        "P3",
+        "P4"
+      ],
+      "gross_removed_bytes": 3369,
+      "proof_delta_bytes": 0,
+      "net_saved_bytes": 3369,
+      "projected_bytes": 241629,
+      "projected_headroom": 14371,
+      "meets_8KiB": false,
+      "status": "TEXT_ONLY_NOT_RUN"
+    },
+    "B_recommended_minimal_structural_chain": {
+      "delete": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5"
+      ],
+      "rewire": [
+        "Submission.bmmPackedBase_spec"
+      ],
+      "gross_removed_bytes": 9459,
+      "proof_delta_bytes": 18,
+      "net_saved_bytes": 9441,
+      "net_saved_KiB": 9.2197265625,
+      "projected_bytes": 235557,
+      "projected_headroom": 20443,
+      "meets_8KiB": true,
+      "status": "PROPOSED_NOT_GENERATED_NOT_COMPILED"
+    },
+    "C_optional_extra_proof_trimming": {
+      "requires": "B",
+      "delete_extra": [
+        "O1",
+        "O2",
+        "O3",
+        "O4",
+        "O5"
+      ],
+      "extra_saved_bytes": 2837,
+      "total_net_saved_bytes": 12278,
+      "projected_bytes": 232720,
+      "projected_headroom": 23280,
+      "status": "OPTIONAL_DO_NOT_EXPAND_UNLESS_NEEDED"
+    }
+  },
+  "remaining_references_after_B_deletions_before_rewire": {
+    "bmmR4": [
+      {
+        "base_line": 818,
+        "text": "the `sum`, `bmmR4` and full-entry kernels and `lean/stage2/` are written against those definitions;",
+        "classification": "PRESERVED_HISTORICAL_COMMENT"
+      },
+      {
+        "base_line": 852,
+        "text": "their proofs into namespaces of their own, with TorchLean's `sum` and `bmmR4` built from them, at",
+        "classification": "PRESERVED_HISTORICAL_COMMENT"
+      },
+      {
+        "base_line": 1186,
+        "text": "the `sum`, `bmmR4` and full-entry kernels and `lean/stage2/` are written against those definitions;",
+        "classification": "PRESERVED_HISTORICAL_COMMENT"
+      },
+      {
+        "base_line": 6226,
+        "text": "  have h : bmmPackedBase batch m n p A B = bmmR4 batch m n p A B := by",
+        "classification": "LIVE_PROOF_REFERENCE_TO_REWIRE"
+      },
+      {
+        "base_line": 6227,
+        "text": "    unfold bmmPackedBase bmmR4",
+        "classification": "LIVE_PROOF_REFERENCE_TO_REWIRE"
+      }
+    ],
+    "bmmR4_spec": [
+      {
+        "base_line": 6234,
+        "text": "    (bmmR4_spec batch m n p A B)",
+        "classification": "LIVE_PROOF_REFERENCE_TO_REWIRE"
+      }
+    ],
+    "bmmRows": [],
+    "bmmRows_spec": [],
+    "RowOutput": [],
+    "tileResults": [],
+    "tileResults_get": [],
+    "tile_finish": [],
+    "outputFromTiles": [],
+    "outputFromTiles_eq": [],
+    "inlineDecodeC": [],
+    "inlineDecodeC_eq": [],
+    "Packed10.core": [],
+    "Packed10.core_eq_reference": [],
+    "RowStream.core_eq": [
+      {
+        "base_line": 6232,
+        "text": "      · exact RowStream.core_eq batch m n p A B",
+        "classification": "LIVE_PROOF_REFERENCE_TO_REWIRE"
+      }
+    ]
+  },
+  "rewire": {
+    "theorem": "Submission.bmmPackedBase_spec",
+    "original_lines": [
+      6222,
+      6234
+    ],
+    "original_bytes": 547,
+    "original_sha256": "fabbd2d7c20b67a741dd515a9ebfb4d58751f10609f4112aa331835c7a6dfeef",
+    "proposed_proof_bytes": 565,
+    "proposed_proof_sha256": "96cf3c0abb36a41d0bfedc38aff7fc737c509403c0543d3edf073046181e9e28",
+    "delta_bytes": 18,
+    "four_exact_substitutions": [
+      {
+        "base_line": 6226,
+        "old": " = bmmR4 batch m n p A B := by",
+        "new": " = referenceBmm batch m n p A B := by"
+      },
+      {
+        "base_line": 6227,
+        "old": "    unfold bmmPackedBase bmmR4\n",
+        "new": "    unfold bmmPackedBase\n"
+      },
+      {
+        "base_line": 6232,
+        "old": "RowStream.core_eq batch m n p A B",
+        "new": "RowStream.core_eq_reference batch m n p A B"
+      },
+      {
+        "base_line": 6234,
+        "old": "(bmmR4_spec batch m n p A B)",
+        "new": "(referenceBmm_spec batch m n p A B)"
+      }
+    ],
+    "proof_route": "bmmPackedBase=referenceBmm via existing empty/n0 splits and RowStream.core_eq_reference; then congrArg Vector.get and referenceBmm_spec",
+    "new_Lean_status": "NOT_RUN",
+    "runtime_definition_changed": false
+  },
+  "spec_changes": {
+    "delete_helpers": [
+      "Submission.bmmR4_spec",
+      "Submission.bmmRows_spec",
+      "Submission.RowOutput.output_eq",
+      "Submission.RowOutput.core_eq",
+      "Submission.Packed10.core_eq_reference",
+      "Submission.RowStream.core_eq"
+    ],
+    "rewire_surviving": [
+      "Submission.bmmPackedBase_spec"
+    ],
+    "retain_interfaces": [
+      "Submission.bmmBeforeDirectRows_spec",
+      "Submission.DirectRows.core_eq",
+      "Submission.bmm_spec",
+      "Submission.add_spec",
+      "Submission.mul_spec",
+      "Submission.sum_spec"
+    ],
+    "formal_all_input_obligations": "Must rerun exact new source; old acceptance and text-only reference closure do not establish Lean correctness."
+  },
+  "must_keep": [
+    {
+      "name": "Submission.RowStream.core_eq_reference",
+      "base_lines": [
+        6185,
+        6201
+      ],
+      "reason": "The retained direct reference equality replaces the entire obsolete proof route; its original uncompiled status and prior GetElem risk remain."
+    },
+    {
+      "name": "Submission.Packed10.finish_dot10_lane",
+      "base_lines": [
+        5484,
+        5497
+      ],
+      "reason": "Actual group_prefix uses it at6128; needed NaN replay/native lane bridge."
+    },
+    {
+      "name": "Submission.Packed10.packB/packB_lane",
+      "base_lines": [
+        5318,
+        5378
+      ],
+      "reason": "Active preparation and group_prefix:6130."
+    },
+    {
+      "name": "Submission.Packed10.dot10/dot10_lane/nativeA_getD/finish/finish_eq_dot",
+      "base_lines": [
+        5388,
+        5461
+      ],
+      "reason": "Active packed runDot fallback, exact finish and lane proof; cannot delete generic older-looking helpers wholesale."
+    },
+    {
+      "name": "Submission.Packed10Index",
+      "base_lines": [
+        5545,
+        5668
+      ],
+      "reason": "Active runDot and machine-bound Nat fallback. stepNat/next_decreases also used by NativeDecodeSumWord:5852/5863/5871 and active SinglePassSum:6448/6466/6470/6473/6480."
+    },
+    {
+      "name": "Submission.Packed10.groups/vector_get_ofFn/zero10/lane_zero10/lane_update/packet",
+      "base_lines": [
+        5259,
+        5316
+      ],
+      "reason": "Retained runtime dimensions/packing and mandatory lane proof dependencies; groups_pos_of_col can go only separately."
+    },
+    {
+      "name": "Submission.index_address/NativeFinal.dot_eq",
+      "base_lines": [
+        5206,
+        5243
+      ],
+      "reason": "Retained RowStream group/reference and DirectSmall reference bridges."
+    },
+    {
+      "name": "Submission.bmmPackedBase runtime definition",
+      "base_lines": [
+        6216,
+        6220
+      ],
+      "reason": "Leave all dispatch/arithmetic bytes unchanged; only proof body is proposed to change."
+    },
+    {
+      "name": "Submission.DirectSmall, bmmBeforeDirectRows, DirectRows, final bmm/bmm_spec",
+      "base_lines": [
+        6239,
+        6568
+      ],
+      "reason": "All actual direct runtime routes and outer spec interfaces remain unchanged."
+    }
+  ],
+  "attribution": {
+    "author_source_comments_edited": false,
+    "plan_B_removed_attribution_cues": 0,
+    "retained_comment_mentions_bmmR4": [
+      818,
+      852,
+      1186
+    ],
+    "boundary": "These remain historical provenance, not dangling Lean names. Do not delete or rewrite them to save bytes."
+  },
+  "name_correction": {
+    "bmmRowOutput_exact_occurrences": 0,
+    "actual_old_wrapper": "Submission.bmmRows"
+  },
+  "limitations": [
+    "No Lean elaboration, kernel replay, axiom audit or fullgate performed",
+    "No new Kernel or compacted package produced",
+    "All offsets and line pointers bind exact1b71, not a future combination",
+    "Source cap arithmetic assumes exactly the listed LF spans and four proof substitutions; remeasure a new integrated file",
+    "No runtime speedup inferred from deleting unused definitions/proofs",
+    "Astra cross-batch composition may introduce consumers of these old names; repeat dependency inventory on actual combined source before applying",
+    "Known original1b71 GetElem elaboration risk at6191 is not fixed by this inventory"
+  ],
+  "minimum_validation_sequence": [
+    "On a new owned candidate, bind exact1b71 and actual cross-batch source hashes; apply named removals/one spec rewire only if references still match",
+    "Verify inverse byte edits preserve all retained runtime/source-provenance bytes; measure <=256000 and run exact current static policy",
+    "Statement first on exact new source; if accepted, original full gate including four specs, replay, axioms and checksums",
+    "Only then full paired complete-cost discovery and frozen independent input/runner confirmation; preserve negative evidence"
+  ],
+  "no_mutations_to_base": true
+}

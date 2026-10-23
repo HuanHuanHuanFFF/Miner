@@ -29,6 +29,11 @@ guard = importlib.util.module_from_spec(spec); spec.loader.exec_module(guard)
 digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 read = lambda p: json.loads(p.read_text(encoding='utf-8'))
 save = lambda p,x: p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+state_path=ROOT/'competitions/floatlib/coordination/development-status.json'
+state=read(state_path)
+assert state['research_round']['id']=='R11-20261023T193125Z', 'Wrong active round; refuse all writes'
+if args.role != 'STATEMENT_DIAGNOSTIC':
+    assert 'f01-r8-combined-result-guard' in args.candidates, 'A scored comparison needs retained41'
 used = []
 for p in (ROOT/'competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs').glob('dispatch-*/dispatch.json'):
     entry = read(p)
@@ -46,6 +51,14 @@ for name in args.candidates:
     if name in args.statement_only: row['validation_mode']='statement-only'
     rows.append(row)
     for p in [kernel,manifest]:files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
+if args.role != 'STATEMENT_DIAGNOSTIC':
+    assert next(r['sha256'] for r in rows if r['candidate']=='f01-r8-combined-result-guard')=='41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7'
+if args.role=='FROZEN_INDEPENDENT_CONFIRMATION':
+    packet=guard.load_run(ROOT,D7,args.prior_run,tuple(args.candidates))
+    assert packet['run_conclusion']=='success' and packet['job_conclusion']=='success'
+    assert not packet['codegen_present'], 'Use a clean discovery before frozen confirmation'
+    assert packet['plan'].get('selection_policy')==guard.SELECTION_POLICY
+    assert all(packet['kernel_hashes'][r['candidate']]==r['sha256'] for r in rows), 'Prior exact sources differ'
 plan={'seed':args.seed,'official_commit':guard.OFFICIAL,'suite':'suites/public-v2.json','dispatch_state':'READY',
       'publication_state':'AUTHORIZED_R11_PUBLIC_DEVELOPMENT_VALIDATION','candidates':rows,
       'comparison_baseline':'f01-r8-combined-result-guard','profile_parent':False,'profile_current':False,
@@ -56,14 +69,17 @@ if args.role=='FROZEN_INDEPENDENT_CONFIRMATION':
     plan['confirmation_candidates']=[{'candidate':r['candidate'],'sha256':r['sha256'],'prior_discovery_run':args.prior_run} for r in rows if r['candidate']!='f01-r8-combined-result-guard']
 for p in [D7/'public-suite.py',D7/'adoption-guard.py',ROOT/'competitions/floatlib/pins.json',ROOT/'competitions/floatlib/candidates/f01-mul-log2-proof1/ci.py']:
     files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
+for p in [OUT/'round-plan.json',Path(__file__).resolve()]:
+    files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
+if args.capture_codegen:
+    p=D7/'capture-codegen.py'
+    files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
 destination=OUT/f'plan-{args.seed}.json'
 assert not destination.exists(), 'A frozen request already exists for this seed'
 live=ROOT/'competitions/floatlib/candidates/f01-d7-public-suite/suite-plan.json'
 previous=digest(live)
 save(destination,plan);live.write_bytes(destination.read_bytes())
 save(OUT/f'freeze-{args.seed}.json',{'recorded_at_utc':datetime.now(timezone.utc).isoformat(),'request_sha256':digest(destination),'previous_live_plan_sha256':previous,'files':files,'unused_seed_checked_against_dispatches':len(used),'role':args.role})
-state_path=ROOT/'competitions/floatlib/coordination/development-status.json';state=read(state_path)
-assert state['research_round']['id']=='R11-20261023T193125Z'
 state['research_round'].setdefault('prepared_requests',[]).append({'seed':args.seed,'role':args.role,'plan':destination.relative_to(ROOT).as_posix(),'sha256':digest(destination),'candidates':rows})
 state['updated_at_utc']=datetime.now(timezone.utc).isoformat();save(state_path,state)
 print(json.dumps({'seed':args.seed,'role':args.role,'candidates':args.candidates,'request_sha256':digest(destination)},ensure_ascii=False))

@@ -1,0 +1,23 @@
+{
+  "candidate": "f01-d11-bmm-fused-output",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "1b71f67ee1cb154399e60a0657618c4b968d8e4b4d642cfc0621fdf416811792",
+  "candidate_bytes": 244998,
+  "created_at_utc": "2026-10-23T19:47:55.862412+00:00",
+  "parent": "f01-d10-bmm-direct-rows",
+  "parent_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+  "baseline": "f01-r8-combined-result-guard",
+  "baseline_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+  "mechanism": "Replace Packed RowStream row-index Vector.flatMap / rowTiles Vector / RowOutput.row Vector with nested Fin.foldl over rows and F10 column groups carrying one output Array. Compute each F10 once, finish valid lanes and push immediately. Preallocate total output capacity with Array.mkEmpty. Keep nativeA map and full packedB unchanged.",
+  "proof": "Generic Fin.foldl indexed invariant; Prefix size and every written element; emit_prefix; group_prefix through Packed10Index.runDot_eq and Packed10.finish_dot10_lane with exact original-word NaN replay; row/output prefix through min tail counts; row-major decode bridge; equality to referenceBmm and Packed10.core. All new proof text is NOT_RUN.",
+  "scope": "Only Packed RowStream changes. Parent DirectRows, DirectSmall, add, mul, sum, NaN replay and native MAC inner loop unchanged.",
+  "edge_cases": "Definition and proof quantify all Nat dimensions, including empty groups/rows, n=0, incomplete F10 tails and huge Nat. Existing bmmPackedBase empty-output/n=0 reference fallback and Packed10Index.runDot machine-bound fallback remain in dispatcher.",
+  "validation_mode": "statement-only first, full original public gate if accepted",
+  "proof_status": "NOT_RUN",
+  "kernel_replay": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "checksum": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "formal_submission": "NOT_SUBMITTED",
+  "attribution": "All parent author/provenance comments preserved byte-for-byte outside replaced RowStream block. New fused-output writer/proof is session-authored; no external implementation copied."
+}

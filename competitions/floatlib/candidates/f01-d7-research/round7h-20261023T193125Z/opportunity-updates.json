@@ -1,0 +1,52 @@
+{
+  "at_utc": "2026-10-23T20:01:24.440895+00:00",
+  "scope": "Additional read-only derivative of already-executed seed852 diagnostic, not new timing or recoverable stage costs.",
+  "plan_sha256": "7cbfe852e487ffba0c804aa6e368e026ad5108bbd515bcfe39d12f4353b7713f",
+  "control_sha256": "d7e7e59ac85ca2692c9d2a8868c63819735ed066912b61c8ee6ca76740dbadf8",
+  "bmm_total_best_ns": 35992011,
+  "p2_short_n": {
+    "cases": 1,
+    "best_ns_sum": 5330197,
+    "fraction": 0.1480938922807064,
+    "case_names": [
+      "bmm:ml:0"
+    ]
+  },
+  "p2_long_n": {
+    "cases": 8,
+    "best_ns_sum": 8696256,
+    "fraction": 0.24161628534732332,
+    "case_names": [
+      "bmm:ml:1",
+      "bmm:ml:4",
+      "bmm:ml:6",
+      "bmm:sparse:4",
+      "bmm:specials:0",
+      "bmm:subnormal:0",
+      "bmm:extremes:1",
+      "bmm:extremes:2"
+    ]
+  },
+  "packed_n_divisible4": {
+    "cases": 4,
+    "best_ns_sum": 1472561,
+    "fraction": 0.0409135516212195,
+    "case_names": [
+      "bmm:dense:0",
+      "bmm:ml:2",
+      "bmm:sparse:1",
+      "bmm:subnormal:3"
+    ]
+  },
+  "decisions": [
+    {
+      "route": "Cross-batch p2",
+      "decision": "Include n<=4 if proof/representation supports it. Largest single old control case n2,p2 is14.81percent of BMM; previous30.36percent screen only covered long-n and is not the full proposed guard."
+    },
+    {
+      "route": "Global A pack4 restricted to aligned n",
+      "decision": "PARK_THIS_RESTRICTED_VARIANT_BEFORE_FULL_PROOF",
+      "reason": "Only4.09percent BMM control exposure in this old diagnostic. This does not reject general packet-A with correct tails; wait for raw-A actual cost/codegen before a new representation."
+    }
+  ]
+}

@@ -1,0 +1,262 @@
+{
+  "review": "R11 fused-output exact static source review",
+  "reviewer": "profile_review_r7",
+  "review_started_utc": "2026-10-23T19:49:59Z",
+  "review_completed_utc": "2026-10-23T19:58:07.707490+00:00",
+  "authorship_disclosure": "Reviewer did not author this new RowStream block or builder; previously reviewed ancestor code.",
+  "candidate": {
+    "path": "competitions/floatlib/candidates/f01-d11-bmm-fused-output/Kernel.lean",
+    "sha256": "1b71f67ee1cb154399e60a0657618c4b968d8e4b4d642cfc0621fdf416811792",
+    "bytes": 244998,
+    "remaining_to_256000": 11002
+  },
+  "parent": {
+    "path": "competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean",
+    "sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+    "bytes": 237142
+  },
+  "conclusion": "NO_DEFINITE_STATIC_BLOCKER_FOUND; one concrete GetElem elaboration risk requires statement compilation",
+  "definite_errors": [],
+  "verified_local": {
+    "candidate_identity": true,
+    "one_namespace_replacement_only": true,
+    "candidate_replaced_span_lines": [
+      5999,
+      6210
+    ],
+    "parent_replaced_span_lines": [
+      5999,
+      6038
+    ],
+    "outside_span_byte_identical": true,
+    "independent_inverse_returns_exact_parent": true,
+    "block_file_matches_candidate": true,
+    "imports_and_options_unchanged": true,
+    "retained_export_and_spec_text_unchanged": true,
+    "policy": "PASS_EXACT_CACHED_4b7_TEXT_POLICY_AND_256000_BYTE_LIMIT",
+    "policy_method": "AST-extracted original policy/options with original constants and full-slot ContractTensor; no gate stages executed"
+  },
+  "source_mechanism": {
+    "array_initialization_line": 6166,
+    "outer_fold_line": 6165,
+    "group_fold_line": 6140,
+    "push_fold_line": 6044,
+    "runDot_single_binding_line": 6091,
+    "finish_lines": [
+      6093,
+      6096
+    ],
+    "source_tile_count": "batch*m*Packed10.groups(p), unchanged from parent on the changed route",
+    "runtime_route": "n>4 and p>2 and batch*m*p!=0; parent direct/small routes and dispatch unchanged",
+    "array_alias_observation": "row/group partial applications and read closure do not capture the old out value; out is only the current fold accumulator. Actual RC uniqueness remains UNKNOWN.",
+    "old_materializations_removed_from_active_RowStream": "row-index Vector, per-row rowTiles Vector, RowOutput.row Vector, Vector.flatMap",
+    "retained_preparation": "A.toArray.map ExecFloat.Binary.toFloat32 and full Packed10.packB",
+    "output_schedule": "row-major r, then group g, then lane l; finish now interleaved after each group rather than after every tile of a row"
+  },
+  "proof_obligations_checked": [
+    {
+      "lines": [
+        6004,
+        6055
+      ],
+      "claim": "Prefix checks both exact size and every existing element; prefix_push preserves old positions and adds f(k); generic finite fold and emit advance index by one.",
+      "status": "STATIC_TARGETS_CONSISTENT_NOT_COMPILED"
+    },
+    {
+      "lines": [
+        6063,
+        6081
+      ],
+      "claim": "q=r*p+j decodes to (r/m,r%m,j) for m,p positive; div_add_mod reconstructs r for A base. Cached Nat lemma signatures match.",
+      "status": "STATIC_TARGETS_CONSISTENT_NOT_COMPILED"
+    },
+    {
+      "lines": [
+        6098,
+        6133
+      ],
+      "claim": "group prefix r*p+min(10*g,p) advances by min(10,p-10*g); valid lane bound and packB_lane/index_address bridge match finish_dot10_lane actual signature.",
+      "status": "STATIC_TARGETS_CONSISTENT_NOT_COMPILED"
+    },
+    {
+      "lines": [
+        6142,
+        6183
+      ],
+      "claim": "last group min boundary equals p; rows advance to (r+1)*p; final Prefix size proof is Vector constructor proof, not a runtime length truncation.",
+      "status": "STATIC_TARGETS_CONSISTENT_NOT_COMPILED"
+    },
+    {
+      "lines": [
+        6185,
+        6208
+      ],
+      "claim": "new reference equality feeds original Packed10.core equality and unchanged bmmPackedBase_spec.",
+      "status": "NOT_RUN_ELABORATION_RISK_BELOW"
+    }
+  ],
+  "risks": [
+    {
+      "id": "GETELEM_BOUND_ORDER",
+      "classification": "INFERRED_ELABORATION_RISK_NOT_CONFIRMED_ERROR",
+      "lines": [
+        6189,
+        6194
+      ],
+      "detail": "At change (output ...)[q] = _, local hq bounds q by batch*m*p. The output size equality is only explicitly used on the following rw proof; output_prefix is not a simp theorem. Automatic GetElem bound elaboration may fail before reaching that proof.",
+      "minimal_if_failed": "Introduce hqo : q < (output ...).size using output_prefix.1 and hq before change, or supply an explicit GetElem proof.",
+      "first_discriminator": "Exact frozen statement build, inspect first error near line6191; no edit needed if elaboration succeeds."
+    },
+    {
+      "id": "ARRAY_REFERENCE_AND_CLOSURE_COST",
+      "classification": "UNKNOWN_RUNTIME_COST",
+      "lines": [
+        6042,
+        6044,
+        6083,
+        6096,
+        6135,
+        6140,
+        6160,
+        6183
+      ],
+      "detail": "Source has a fresh capacity-reserved array and no explicit old-output capture, but this does not prove reference uniqueness, destructive push, closure specialization, allocation count, or one retained runDot call in generated code.",
+      "first_discriminator": "After successful statement, inspect exact generated RowStream/Fin.foldl specializations and lean_array_push ownership/retains; then full per-cell paired gate against exact parent and41. Keep codegen observer separate from confirmation."
+    }
+  ],
+  "edge_cases": {
+    "empty_outputs": "Existing public dispatcher/direct branches or bmmPackedBase guard bypass new output writer; standalone Prefix design also has zero-row/group identities.",
+    "n_zero": "Existing n<=4 direct routes unchanged; standalone packed zero accumulator remains original code. No new product/add order.",
+    "tails": "Only l<min(10,p-10*g) is emitted; padded invalid F10 lanes remain computed but are not finished or pushed.",
+    "huge_nat": "New folds and indices remain Nat/Fin with no new machine-width narrowing; original runDot USize checks and Nat fallback unchanged. Resource feasibility of enormous allocations is not tested.",
+    "NaN_Inf_signed_zero_subnormal": "F10 update order, zero32 seed and Packed10.finish original-word replay are outside replaced span; raw A/B replay bases remain r*n and (r/m)*n*p+j. No new arithmetic guard or NaN policy."
+  },
+  "integration_note": {
+    "severity": "NONBLOCKING_IF_R11_EXPLICIT_STATEMENT_ENTRY_IS_USED",
+    "detail": "Candidate manifest validation_mode is prose, not statement-only. R11 prepare-plan ignores that value and writes entry mode from --statement-only; public-suite validates the entry. Direct run-gates reads manifest mode and would treat this prose value as full gate.",
+    "minimum_action": "Root must freeze validation_mode=statement-only in nested plan for the first statement run; do not infer it from candidate manifest prose."
+  },
+  "owner_layout_receipt": {
+    "state": "READ_ONLY_NOT_RERUN",
+    "shapes": 1548,
+    "written_elements": 203175,
+    "large_nat_spots": 12,
+    "boundary": "Finite integer layout only; no Lean/floating checksum/codegen/performance result inherited."
+  },
+  "not_run": [
+    "Lean statement",
+    "kernel replay",
+    "axiom audit",
+    "floating checksum",
+    "full official gate",
+    "generated C/IR/asm",
+    "timing",
+    "independent confirmation",
+    "formal submission"
+  ],
+  "performance": "UNKNOWN",
+  "official_admission": "UNKNOWN",
+  "candidate_hash_rechecked_before_report": true,
+  "evidence": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d11-bmm-fused-output/Kernel.lean",
+      "sha256": "1b71f67ee1cb154399e60a0657618c4b968d8e4b4d642cfc0621fdf416811792",
+      "bytes": 244998
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean",
+      "sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+      "bytes": 237142
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d11-bmm-fused-output/fused-output-block.lean",
+      "sha256": "1139863b6dec57edf278dd400434f831aa2a309071b9da943be10722cc1679d1",
+      "bytes": 9434
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d11-bmm-fused-output/build.py",
+      "sha256": "d243ca08c2976c275fd9aca092b52779e4c37924ec1d51a1881e6c8c5086c532",
+      "bytes": 3335
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d11-bmm-fused-output/manifest.json",
+      "sha256": "03df3712b3c4e344618b4f5c646042f1e6ace19b84c5c9d50a9d7b6f5c7b5704",
+      "bytes": 2125
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d11-bmm-fused-output/layout-precheck.py",
+      "sha256": "108e0e6050914b6cac33af1791816f35b87ab1abe9a23b50f8d6631c8113c7ee",
+      "bytes": 2539
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d11-bmm-fused-output/layout-precheck.json",
+      "sha256": "f05e7e8d015c8ccd2d5b427b0c3202026684753929dfd3d8666444e5cd79b0de",
+      "bytes": 674
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/review-output-status.json",
+      "sha256": "35ba8f3232a59457d513d59951d349d1f4d3f2e8a4d6b9070b77d1c83bb7a749",
+      "bytes": 1669
+    },
+    {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/upstream/gate-4b7e838.py",
+      "sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+      "bytes": 38320
+    },
+    {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W12/original-extracted/R7-W12/public/Lean4/src/Init/Data/Fin/Fold.lean",
+      "sha256": "00586d9eb4c13e6c3bac1dfb43a1f1dc86eda7e62df1570da8d11946ceac086a",
+      "bytes": 12296
+    },
+    {
+      "path": "competitions/floatlib/research/materials/20261022/R2-W04/R2-W04/upstream/lean-core-review/src_Init_Data_Array_Lemmas.lean",
+      "sha256": "232a65023b867747afdd948b4123b4636ae9809047a094e1b63de8939501825c",
+      "bytes": 191146
+    },
+    {
+      "path": "competitions/floatlib/research/materials/20261022/R2-W04/R2-W04/upstream/lean-core-review/src_Init_Data_Array_Basic.lean",
+      "sha256": "85b1fcc2eac430164656c02295d9cf5d3549826517a2a89083a7afae28b1e4f2",
+      "bytes": 75780
+    },
+    {
+      "path": "competitions/floatlib/research/astra-collab-20261022-r5/upstream/src_Init_Data_Nat_Mod.lean",
+      "sha256": "08624fdf16e09f65f3f7bf07e9d8ee7dedd4cbebe0c4006756af3de15e3cd83d",
+      "bytes": 2955
+    },
+    {
+      "path": "competitions/floatlib/research/astra-collab-20261022-r5/upstream/src_Init_Data_Nat_Lemmas.lean",
+      "sha256": "5eda52f6dc0f8efa4ea9b3c42d5206f1afe41f2d51d0681fbfe40793cf223ef4",
+      "bytes": 84767
+    },
+    {
+      "path": "competitions/floatlib/research/astra-collab-20261022-r5/upstream/src_Init_Data_Nat_Div_Basic.lean",
+      "sha256": "0c8fc51180b0d4fb6319e8a44acd7999f3a1b3aad21d8da5c0ad575914f9d120",
+      "bytes": 17794
+    },
+    {
+      "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W08/original-extracted/R7-W08/upstream/bounds/src/lean/Init/Prelude.lean",
+      "sha256": "2a3163bdd830cd31f1f1bc9bc79ea6bdad6a3b2c6f334166792bbc73631f3b10",
+      "bytes": 238777
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/prepare-plan.py",
+      "sha256": "04ad217160254d2fc4e94fe3dddf8fe82f0484e611dcced480d3981dadc2b412",
+      "bytes": 6077
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/public-suite.py",
+      "sha256": "86084d93c52022f4f4a5cfb7969e2b4a035b9a4a4f1f8c6c7e74bd412eafca24",
+      "bytes": 11220
+    },
+    {
+      "path": "competitions/floatlib/scripts/run-gates.py",
+      "sha256": "0e076f17ebff9fd97e557cae89866f2b615fe3f68314b26cbca0ec51a30df9d0",
+      "bytes": 7789
+    },
+    {
+      "path": "competitions/floatlib/research/astra-collab-20261022-r5/upstream/Vector-Basic.lean",
+      "sha256": "d2b5e00d72b2cc1db9b2aece6254c114b3ca6107d03db2e67dff08fd04f20aa3",
+      "bytes": 23061
+    }
+  ]
+}
