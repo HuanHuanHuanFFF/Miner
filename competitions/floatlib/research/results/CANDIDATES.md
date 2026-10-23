@@ -2,7 +2,7 @@
 
 [返回数学结论](../RESULTS.md)。按源码 SHA-256 关联已保存的实际 CI 回执；同字节别名共享证据。完整通过、仅编译、失败及无匹配回执分列。这里不重新运行 Lean。
 
-共 198 份候选。机器可读的定理行号、源码哈希与全部成功/失败回执见 [candidate-catalog.json](candidate-catalog.json)。
+共 201 份候选。机器可读的定理行号、源码哈希与全部成功/失败回执见 [candidate-catalog.json](candidate-catalog.json)。
 
 `无匹配回执`表示本目录没有找到对应源码的回执，不表示数学不成立。完整通过仍须结合原回执中的内核、公理和计时审计。仅本地或尚未冻结的源码只列名称；JSON保留路径、字节范围与SHA。
 
@@ -20,6 +20,8 @@
 | [f01-d1-native-mul-bridge](../../candidates/f01-d1-native-mul-bridge/Kernel.lean) | 已失败 | 0 | [39588316068](../../candidates/f01-mul-log2-proof1/ci-runs/39588316068/download-31cedcbd2c9646bca6ea68af4a09b28d/f01-d1-native-mul-bridge-verdict.json) |
 | [f01-d1-native-sum-acc](../../candidates/f01-d1-native-sum-acc/Kernel.lean) | 完整通过 | 2 | [39593447390](../../candidates/f01-mul-log2-proof1/ci-runs/39593447390/download-1d8b6dec66364120a62b867654c11f70/f01-d1-native-sum-acc-verdict.json) |
 | [f01-d1-product-buffer](../../candidates/f01-d1-product-buffer/Kernel.lean) | 完整通过 | 1 | [39586252775](../../candidates/f01-mul-log2-proof1/ci-runs/39586252775/download-5dbabe35c6a44ae3acffb0918ed28dbd/f01-d1-product-buffer-verdict.json) |
+| [f01-d10-bmm-low-word-typed](../../candidates/f01-d10-bmm-low-word-typed/Kernel.lean) | 无匹配回执 | 0 | — |
+| f01-d10-bmm-small-unroll（本地字节） | 无匹配回执 | 0 | — |
 | [f01-d2-checked-floatarray](../../candidates/f01-d2-checked-floatarray/Kernel.lean) | 完整通过 | 1 | [39663131701](../../candidates/f01-mul-log2-proof1/ci-runs/39663131701/download-4d8a1a17e93c49598c38c54607e80d7e/f01-d2-checked-floatarray-verdict.json) |
 | [f01-d2-decoder-helpers](../../candidates/f01-d2-decoder-helpers/Kernel.lean) | 仅编译通过 | 0 | [39673654220](../../candidates/f01-mul-log2-proof1/ci-runs/39673654220/download-65c04c51e0b340a49fce5a21578a15c8/f01-d2-decoder-helpers-verdict.json) |
 | [f01-d2-final-finite](../../candidates/f01-d2-final-finite/Kernel.lean) | 完整通过 | 3 | [39675095662](../../candidates/f01-mul-log2-proof1/ci-runs/39675095662/download-841460987b364559b3d1468c6b3a7457/f01-d2-final-finite-verdict.json) |
@@ -144,6 +146,7 @@
 | [f01-r1-direct-sum-loop](../../candidates/f01-r1-direct-sum-loop/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-r1-guarded-native-add](../../candidates/f01-r1-guarded-native-add/Kernel.lean) | 已失败 | 0 | [39587321905](../../candidates/f01-mul-log2-proof1/ci-runs/39587321905/download-0fdace2af1d940aca2c92655ae5c3a18/f01-d1-native-add-verdict.json) |
 | [f01-r1-native-sum-acc](../../candidates/f01-r1-native-sum-acc/Kernel.lean) | 完整通过 | 2 | [39593447390](../../candidates/f01-mul-log2-proof1/ci-runs/39593447390/download-1d8b6dec66364120a62b867654c11f70/f01-d1-native-sum-acc-verdict.json) |
+| f01-r10-bmm-singleton-native（本地字节） | 无匹配回执 | 0 | — |
 | [f01-r2-checked-floatarray](../../candidates/f01-r2-checked-floatarray/Kernel.lean) | 完整通过 | 1 | [39663131701](../../candidates/f01-mul-log2-proof1/ci-runs/39663131701/download-4d8a1a17e93c49598c38c54607e80d7e/f01-d2-checked-floatarray-verdict.json) |
 | [f01-r2-final-finite-preimage](../../candidates/f01-r2-final-finite-preimage/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-r2-low-scale-rounding-proof](../../candidates/f01-r2-low-scale-rounding-proof/Kernel.lean) | 已失败 | 0 | [39675095662](../../candidates/f01-mul-log2-proof1/ci-runs/39675095662/download-841460987b364559b3d1468c6b3a7457/f01-d2-low-scale-rounding-proof-verdict.json) |

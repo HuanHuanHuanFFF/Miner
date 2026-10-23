@@ -1,9 +1,9 @@
 {
-  "as_of_utc": "2026-10-23T13:56:36.061222+00:00",
+  "as_of_utc": "2026-10-23T17:17:53.619817+00:00",
   "status": "INFERRED",
-  "method": "CROSS_RUN_GROUP_COST_PROJECTION",
+  "method": "FROZEN_ANCHOR_NORMALIZED_PAIRED_DELTAS",
   "candidate": "f01-r8-combined-result-guard",
-  "estimator_sha256": "53b33e9cc0002896dd4dda38f002d944d57ef81937992708495ee12bf553627c",
+  "estimator_sha256": "fe926204104484d1fc62bf06eb57666c0f3673829664f283c9c813497bf46983",
   "public_results_sha256": "4c3095d659ccc2778238dee380b4d8edc398feaa021c31a87aa68e650cbee2c4",
   "kernel_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
   "champion_submission": 285,
@@ -16,14 +16,14 @@
   "champion_report_sha256": "e7bd6dd51e2e4dd78662faea08628cace0a2aab5089a27fcaad50d888c91053c",
   "official_receipts": "competitions/floatlib/candidates/f01-d7-research/official-20261023T135255Z/receipts.json",
   "official_receipts_sha256": "774482e3f6ba76567bbd414b66c475318711ba3b9abf169f7cebce333021179f",
-  "formula": "For each run and operation: sum(candidate_group_ns_per_work * public_group_work) / sum(champion_group_ns_per_work * the_same_public_group_work); median over all retained exact-source full-gate runs. Whole uses summed ns before division.",
+  "formula": "Frozen original group costs/work, updated only by each cell median (candidate_submission/candidate_incumbent)/(anchor_submission/anchor_incumbent) across ALL declared matched full gates; re-sum four operations and whole for each frozen workload, then median across frozen workloads.",
   "assumptions": [
     "Champion private-suite group mean costs approximate the same named public-suite groups.",
     "Cross-run hardware cost scale is assumed 1.0; no matched CPU calibration is available.",
     "Both sources use the original gate ns-per-work units; length, shape and value distributions can differ."
   ],
-  "scope": "User-requested development gap estimate. Direct same-suite champion comparison and official admission remain UNKNOWN. No use of the overall champion speedup as a per-operation factor.",
-  "range_scope": "Min/max across the projected public runs, not a confidence interval.",
+  "scope": "INFERRED rough development estimate; original cross-suite/cross-hardware calibration uncertainty is frozen, not resolved. Direct same-suite champion comparison and official admission remain UNKNOWN.",
+  "range_scope": "Range across frozen anchor workloads after common paired delta; not a confidence interval.",
   "operations": {
     "add": {
       "ratio_median": 1.1396346568806557,
@@ -386,5 +386,16 @@
       },
       "whole_ratio": 1.5779857128343022
     }
-  ]
+  ],
+  "aggregation": "median_per_cell_normalized_delta_then_frozen_work_projection",
+  "anchor_payload_sha256": "0d648aebbcb0e94d1c6b5abe810117dcca16f4d5e4a50f2ddc934ea5536b5025",
+  "direct_same_suite_champion_comparison": "UNKNOWN",
+  "official_admission": "UNKNOWN",
+  "update_kind": "EXACT_FROZEN_SOURCE_IDENTITY",
+  "paired_updates": [],
+  "anchor": "competitions/floatlib/candidates/f01-d7-research/round2h-20261023T170031Z/freeze-anchor.json",
+  "anchor_sha256": "d7bcc98f3e78a3971e88a53f1fcf6e514c83c80c3ea9d583178e09577ed1cfbc",
+  "current_public_results_sha256": "1506e463caf62d21529cc51f40eb0c61dbb129eff911982accdc6514c8f7746a",
+  "current_champion_report": "competitions/floatlib/candidates/f01-d7-research/official-20261023T170525Z/champion-report.raw",
+  "current_champion_report_sha256": "e7bd6dd51e2e4dd78662faea08628cace0a2aab5089a27fcaad50d888c91053c"
 }

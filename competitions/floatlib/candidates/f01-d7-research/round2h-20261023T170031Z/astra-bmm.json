@@ -1,0 +1,149 @@
+{
+  "state": "READY_FOR_FULL_GATE",
+  "first_checkpoint_at_utc": "2026-10-23T17:08:11.929109+00:00",
+  "window_start_utc": "2026-10-23T17:00:31Z",
+  "deadline_utc": "2026-10-23T19:00:31Z",
+  "candidate_target_utc": "2026-10-23T17:25:00Z",
+  "parent_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+  "old_unvalidated_candidate_sha256": "47d429fe3a351a5e002f98c1f4cb95dfdc04368c268275508be758d176f3a347",
+  "selected": "n=1 nativeproduct once, raw -0->+0 normalizer, exact rawmul fallback onNaN; otherwise unchanged41 dispatcher",
+  "rationale": "Old821/822 each2n1cases with184440/352867outputs. RemovesgenericNat dotloop, initialnative+0 add, endpoint/replay scaffolding; multiply datapath staysnative unlikeDlowwordroute. Wholecell exposure not recoverabletime.",
+  "alternative": "DirectSmall USize acrossn<=4 orp<=2 couldhelp536724/542429longthinMACwork, butneedsnewstridedB/getD/addressbounds andhugeNatfallback proof. Packed alreadyUSize; no widthgrid.",
+  "important_proof_port": "Old47d seedclassifier usesnumeric BitVec8/23 style known troublesome inW12. Current41 alreadyhas exactR7W05 model_toModel_isNaN/toFloat32_isNaN; newproofport willdelegate these two proofbodies only, keepingnormalizer/runtime unchanged. Preserveold47d.",
+  "preservation": "No oldKernel/manifest/tool/Git/CI/state edits. Four exports/specs and size gate required.",
+  "new_Lean_fullgate_timing": "NOT_RUN",
+  "built_at_utc": "2026-10-23T17:13:51.999044+00:00",
+  "candidate": {
+    "candidate": "f01-r10-bmm-singleton-native",
+    "candidate_file": "Kernel.lean",
+    "candidate_sha256": "ff34b1b7e2166b7b22f53d5f3e656b6567fd7487d457343e3599885757ab25ad",
+    "candidate_bytes": 247919,
+    "created_at_utc": "2026-10-23T17:13:51.999044+00:00",
+    "parent": "f01-r8-combined-result-guard",
+    "parent_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+    "mechanism_source": "f01-d7-singleton-native-normalize",
+    "mechanism_source_sha256": "47d429fe3a351a5e002f98c1f4cb95dfdc04368c268275508be758d176f3a347",
+    "mechanism": "Onlyn=1: nativeproduct once; nonNaN product directly wrapped, NaN usesexactoriginalrawSubmission.mul; normalize onlyrawnegativezero topositivezero. This removesgeneralNat dotloop andinitialnative+0 add. Alln!=1 call exact41 dispatcher.",
+    "proof_port": "Exact old47d runtime andsingleton proof retained. Onlytwo duplicate seedclassifier proofbodies delegate toalreadyaccepted41 R7W05 lemmas; old47d itself remainsunvalidated.",
+    "validation_mode": "full-gate",
+    "proof_status": "NOT_RUN_NEW_FULL_COMPOSITION",
+    "full_gate": "NOT_RUN",
+    "codegen": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "formal_submission": "NOT_SUBMITTED",
+    "preservation": "All41 bytes preserved except exact reversible finalbmm/spec renaming. Originalscalar,sum,R7SinglePassSum,replay,packed/direct code andlicences unchanged. Newproof/runtime append only.",
+    "build_script_sha256": "ea5f80e2afd11b34e499e913e0f36a5938b513254044a4145d825680de642a45"
+  },
+  "donor_exact_reconstruction": {
+    "old97f_plus_exactaddition_recovers47d": true,
+    "donor_addition_bytes": 13348,
+    "donor_addition_sha256": "b21bb0b8aca1f7ef2129fcd20c71a8d2c0b8936df6f4edffaa7d9bfb1462c0ce"
+  },
+  "classifier_proof_changes": [
+    {
+      "theorem": "model_toModel_isNaN",
+      "old_body": "  have he : unpackExponent (Model.toModelBits x) = (-1 : BitVec 8) ↔\n      Model.expField x = FloatFormat.binary32.expAllOnesNat := by\n    rw [← BitVec.toNat_inj, Model.unpackExponent_toNat,\n      Model.toNat_neg_one_exponentBits FloatFormat.binary32]\n  have hm : unpackMantissa (Model.toModelBits x) = (0 : BitVec 23) ↔\n      Model.fracField x = 0 := by\n    rw [← BitVec.toNat_inj, Model.unpackMantissa_toNat]\n    rfl\n  change (Model.toModel x).isNaN = Model.IEEE.isNaN x\n  unfold Model.toModel unpack\n  dsimp only\n  split_ifs <;>\n    simp_all [Float.Model.UnpackedFloat.isNaN, Model.IEEE.isNaN]\n\n",
+      "new_body": "  exact Submission.R7W05.model_toModel_isNaN x\n\n",
+      "old_body_sha256": "19117316954dd3510838ab9fd60f199c4ed51271d74f0d64a8b722e791dff94d",
+      "new_body_sha256": "9c1688ced81f76e0af9bc12d8a8aea56cdb8caf2eef15e62fc6993aa2683a5ff"
+    },
+    {
+      "theorem": "toFloat32_isNaN",
+      "old_body": "  change ((Model.toFloat32Model (ExecFloat.Binary.toModel x)).unpack).isNaN = _\n  rw [Model.unpack_toFloat32Model]\n  exact model_toModel_isNaN _\n\n",
+      "new_body": "  exact Submission.R7W05.toFloat32_isNaN x\n\n",
+      "old_body_sha256": "e48fbb5f46fc04b93ac84c4836724638ddea597a55094141fb7c7027b55c803b",
+      "new_body_sha256": "d9136fa6ef91b0b121eef8c5b6cae5fbc51680b21988e917d37bd23e9d45ac24"
+    }
+  ],
+  "adapted_addition_sha256": "d3d565d1d426aecdc753c830003984685d835203338292d00bc2ef520da40bd9",
+  "adapted_addition_bytes": 12688,
+  "dispatcher_rename": {
+    "start": 223264,
+    "end": 223870,
+    "old": "\ndef bmm (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=\n  if n ≤ 4 ∨ p ≤ 2 then DirectSmall.core batch m n p A B\n  else bmmPackedBase batch m n p A B\n\ntheorem bmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)),\n    (bmm batch m n p A B).get = bmmSpec batch m n p A.get B.get := by\n  intro batch m n p A B\n  unfold bmm\n  split\n  · rw [DirectSmall.core_eq_reference]\n    exact referenceBmm_spec batch m n p A B\n  · exact bmmPackedBase_spec batch m n p A B\n",
+    "new": "\ndef bmmBeforeSingleton (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=\n  if n ≤ 4 ∨ p ≤ 2 then DirectSmall.core batch m n p A B\n  else bmmPackedBase batch m n p A B\n\ntheorem bmmBeforeSingleton_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)),\n    (bmmBeforeSingleton batch m n p A B).get = bmmSpec batch m n p A.get B.get := by\n  intro batch m n p A B\n  unfold bmmBeforeSingleton\n  split\n  · rw [DirectSmall.core_eq_reference]\n    exact referenceBmm_spec batch m n p A B\n  · exact bmmPackedBase_spec batch m n p A B\n"
+  },
+  "inverse_parent_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+  "singlepass_tail_sha256": "4e9744ef3f1cfb26d817909a2dd1761807a12b24b974cde3394bddcfe3596817",
+  "singlepass_tail_byte_preserved": true,
+  "runtime_identity": {
+    "normalizer_sha256": "ab3143638bc65d6f1083e67c1396dc9eb2dbcdf9511f77875305e27c60df9d0d",
+    "native_helper_sha256": "acbdd0a61024056d4764abb7ce3fed5c217639de7f4b44691e7c6195c73e3442",
+    "singleton_core_sha256": "42706a6dcbb1d87129b397df052dfc6bbf25b4cc210d754e8aafc243c21d6f7f",
+    "all_three_exact47d": true
+  },
+  "static_policy": "PASS_IMPORT_SIZE_BANNED_OPTIONS_ATTRIBUTES",
+  "namespace_balance": true,
+  "four_exports_specs": {
+    "Submission.add": [
+      3263
+    ],
+    "Submission.add_spec": [
+      3268
+    ],
+    "Submission.mul": [
+      3301
+    ],
+    "Submission.mul_spec": [
+      3306
+    ],
+    "Submission.sum": [
+      6336
+    ],
+    "Submission.sum_spec": [
+      6338
+    ],
+    "Submission.bmm": [
+      6627
+    ],
+    "Submission.bmm_spec": [
+      6632
+    ]
+  },
+  "size_margin": 8081,
+  "remaining": [
+    "Exact candidateLean/axiom/kernel replayNOT_RUN",
+    "Completechecksums/25pairedrounds inallthreeDgroupsNOT_RUN",
+    "C/assembly/wholegainUNKNOWN"
+  ],
+  "next_test": "D originalfullgate onexact candidate+41, allobserversoff, sourcefreeze beforeunused846/extra groups. No componentgain addition.",
+  "delivery_complete_at_utc": "2026-10-23T17:19:43.512551+00:00",
+  "before1725": true,
+  "second_inverse_check": {
+    "method": "Re-locatefinalbmm namespace boundary independently; revert onlydispatcher identifiers, truncatepreciseappend andrestore full41; fullsinglepass tailretained",
+    "parent_inverse_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+    "old_dispatcher_bytes": 616,
+    "new_dispatcher_bytes": 676,
+    "untouched_post_dispatcher_tail_bytes": 9510,
+    "addition_bytes": 12688,
+    "result": "PASS_SOURCE_IDENTITY_ONLY"
+  },
+  "files": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-r10-bmm-singleton-native\\Kernel.lean",
+      "bytes": 247919,
+      "sha256": "ff34b1b7e2166b7b22f53d5f3e656b6567fd7487d457343e3599885757ab25ad"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-r10-bmm-singleton-native\\manifest.json",
+      "bytes": 1513,
+      "sha256": "a85da7c342b765610ef584fd7a9a09a7cad88e508ffcf4deade1f7fe59373cf7"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-r10-bmm-singleton-native\\README.md",
+      "bytes": 1379,
+      "sha256": "c38a66f62b1a4a1520cb2d93c69828b12f6e3f8e5d24cc239d5a09338218e64d"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-r10-bmm-singleton-native\\build.py",
+      "bytes": 9438,
+      "sha256": "ea5f80e2afd11b34e499e913e0f36a5938b513254044a4145d825680de642a45"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round2h-20261023T170031Z\\astra-bmm.md",
+      "bytes": 5304,
+      "sha256": "badf69751c9217b1cda1117f0fa08f9cc5d4fa4bcf3eaef898e67e6a14ad3814"
+    }
+  ],
+  "ready_ack_at_utc": "2026-10-23T17:20:05.419800+00:00"
+}

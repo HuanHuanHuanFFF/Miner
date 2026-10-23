@@ -1,0 +1,234 @@
+{
+  "started_at_utc": "2026-10-23T17:08:05Z",
+  "completed_at_utc": "2026-10-23T17:14:07.409048+00:00",
+  "scope": "Read-only three-input-group acceptance design. Only these two review files written. No prepare/adoption/guard execution, Git, CI, candidate/state edits or agents. No reserved842/843 drawn plans or generator outputs inspected/generated.",
+  "conclusion": "Round intent is coherent; automatic tools still enforce only two groups. Three-group claim/adoption needs explicit third evidence and global checks before any write. No current R10 performance/adoption result asserted.",
+  "baseline": {
+    "candidate": "f01-r8-combined-result-guard",
+    "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+  },
+  "files_rehashed": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round2h-20261023T170031Z/round-plan.json",
+      "sha256": "b5f44b682d24b477395c68e59784c531ae76f013b89582783e8ba9ceace90590",
+      "bytes": 6146
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round2h-20261023T170031Z/prepare-plan.py",
+      "sha256": "7d3e0f5fcd8d2a9e25968ef3e3e9441ee5d3ac5d801260f15f7ae97b88670439",
+      "bytes": 4910
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round2h-20261023T170031Z/discovery-841-plan.json",
+      "sha256": "a5bdf4e49dba2d8a955431519b24711aa95673d8dbb1ff88f98f6f8f2fc15027",
+      "bytes": 1363
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round2h-20261023T170031Z/discovery-841-freeze.json",
+      "sha256": "2438ac46d5010e9e71a3b3b6640c0e66204f96d3fff5f6c87ac8835cd3e8d50f",
+      "bytes": 1665
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/adoption-guard.py",
+      "sha256": "b009d7b2f2161d756584013ebfc8adea3d2373ddac04c08a4602eb53e4c7a0b2",
+      "bytes": 14417
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/adopt-confirmed.py",
+      "sha256": "23c01dcf2cdc6a0c9b6c6d674bd649de7e50f97ad6437c78faae3d9f5501bafc",
+      "bytes": 12703
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/public-suite.py",
+      "sha256": "86084d93c52022f4f4a5cfb7969e2b4a035b9a4a4f1f8c6c7e74bd412eafca24",
+      "bytes": 11220
+    }
+  ],
+  "verified_tool_behavior": [
+    {
+      "source": "round-plan.json:27-31",
+      "fact": "Requires3groups, same exactcandidate, extra groups unseen before freeze, everywhole normalizedratio<=.97 andgainp05>0, no omissions"
+    },
+    {
+      "source": "prepare-plan.py:17-28,44-48",
+      "fact": "Pins currentbaseline41/currentcandidate SHA+size; scans sent/identifieddispatchseed receipts; generates fixedsuite/currentofficial/noobserver plan andfreeze hashes. It does not execute generation ofdrawn inputs itself."
+    },
+    {
+      "source": "adoption-guard.py:111-188",
+      "fact": "load_run rehashes artifact listing/index/allfiles, originalrunHEAD plan/helper/Kernels, provenance, official/suite/generator,156cases/152timed/26workcells andfullgate25rounds, storesdrawn_planSHA."
+    },
+    {
+      "source": "adoption-guard.py:51,72,94,191-205",
+      "fact": "Exactly2packets only; differentpairrun/job/seed; checks fullverdictseed=summaryseed=planseed, observeroff, baseline/candidateSHA, referencefingerprints, run+floatlibjobsuccess; confirmation links discovery; localratio/p05 per sample."
+    },
+    {
+      "source": "adopt-confirmed.py:19,69-76",
+      "fact": "Calls one2groupverify; firstwrite71; performance/full_gate_runs/seeds serialize2only. No thirdargument/cohortreceiptcheck."
+    }
+  ],
+  "findings": [
+    {
+      "id": "M1",
+      "status": "VERIFIED_TOOL_GAP_BLOCKS_AUTOMATED_THREE_GROUP_CLAIM",
+      "priority": "P1",
+      "issue": "Three-group requirement lives inround-plan butguard/adopter accept exactly2. A thirdfailed/missing group would not be inspected byadopt-confirmed currentCLI.",
+      "minimum_action": "Before anyadoptCLI/statewrite, root must complete andhashlink one round-specific3group receipt satisfying allchecks below. For automation, a narrowprewrite third/cohortcheck is needed; do not call2groupPASS a3groupPASS. No genericframework required."
+    },
+    {
+      "id": "M2",
+      "status": "VERIFIED_GLOBAL_CHECK_GAP",
+      "priority": "P1",
+      "issue": "Calling two guards doesnot ensureA!=B acrosscalls orcompare3drawnplan hashes/actualshapes. Reusing same confirmation twice could passbothpaircalls.",
+      "minimum_action": "Unionrun/job/seed identity musteach havecardinality3, exactlyone discovery plusboth reservedfinalgroups, nonemptydistinctdrawnplanhashes; reportcase-generation andshapes separately."
+    },
+    {
+      "id": "M3",
+      "status": "VERIFIED_FREEZE_METADATA_GAP",
+      "priority": "P2",
+      "issue": "prepare-generatedrequest includesauthorization_receipt path but no3group declaration orround-planSHA; freeze filehashes source/helper/CI/pins but omitsround-plan/prepare-plan hashes. Pairguard doesnot read3grouprequirement.",
+      "minimum_action": "Preserve currentround-plan SHA andprepare-plan SHA in candidate-final/cohortfreeze receipt before extraresults; freeze identities/roles/rules/order forD,A,B and bind eachoriginal requestSHA/runHEAD later. Do not retrofit oldrequests."
+    },
+    {
+      "id": "M4",
+      "status": "NONFINAL_SCREEN_IS_WEAKER_THAN_ADOPTION",
+      "priority": "P2",
+      "issue": "prepare confirmation screen calls load_run and checks candidateSHA/policy thenstats, but doesnot itself apply validate_packets checks suchasplan/summary/verdictseedequality, exactbaselineSHA, observeroff, run/jobconclusions orfullreference consistency. Finalverify catches these, so this is unsafe-to-trustscreen/possiblewastedconfirmation, not evidence ofanactualwrongadoption.",
+      "minimum_action": "Before sendingextra jobs verifydiscoverypacketbaseline41, allseedrelations, observers, successconclusions andactualrefs. Currentprepare asserts assumeordinaryPython; avoid-O/PYTHONOPTIMIZE. Existing sent/ambiguous dispatchstatuses are correctly scanned, butseedledger mustalso coverlegacy/manualruns withoutdispatchreceipts."
+    }
+  ],
+  "minimal_three_group_protocol": [
+    {
+      "step": 1,
+      "name": "Freeze once",
+      "check": "After useful exact-source discoveryD and before inspectingextra inputs/results, freezecandidateH, baseline41, suite+generator+adapter+guardSHA, discoveryrun/seed, exacttwoextragrouproles/seeds/order, requiredgroups3/allpassrule andround-planSHA. Sourcechanged afterD requires newexact-sourceD; observedextra groups become discovery data andcannotbe reusedasfreshholdouts."
+    },
+    {
+      "step": 2,
+      "name": "Run each control andcandidate together",
+      "check": "Each group uses original25roundfullgates/pairs500000/wholepublicv2 forbothcandidateand41 withinoneactualhostedfloatlibjob withsameBENCHseed/plan/CPUaffinity/environment. Candidateandbaseline eachpairedtosh Shippedreference byofficialgate; this is notdirectcandidate-vs-baselinepairedtiming. Atmost2publicCI concurrently; rootsolecoordinator. Differentgroups useactualdifferentjobs/runs; missingrunnerid/runattempt remainUNKNOWN withexistinghostedlog evidence."
+    },
+    {
+      "step": 3,
+      "name": "Bind raw originals",
+      "check": "For eachD/A/B: collectterminalci-run/artifactindex/originalrequest/summary/verdict/input/drawnplan/26cellwork/logs; validateexactHEADtreesource/request/helper andsummary.source_commit=runHEAD; identicalsuite/generator/referenceandcandidate/baselineSHA. plan.seed=summary.seed=bothfullverdict.seed, fullmodegate/stagescore/passed,25rounds,156cases=152timed+4raw including35BMM=34timed+1raw; observersdisabled."
+    },
+    {
+      "step": 4,
+      "name": "Reuse2groupvalidator withoutpretendingitaccepts3",
+      "check": "Run verify_adoption(D,A) andverify_adoption(D,B), bothagainstsamecandidate/currentbaseline41. BothA/Bconfirmation_candidates entriesmustpointtothe sameD andsameH. Eachpair enforceswhole<=.97 andindependentcrossgatebootstrap2000/90423 gainp05>0 onbothsamples. Two receipts overlapD; countD onlyonce."
+    },
+    {
+      "step": 5,
+      "name": "Check globalcohort andinputs",
+      "check": "Explicitlyrequire3distinctrunIDs,3distinctactualfloatlibjobIDs,3distinctseeds, sameH/41/suite/generator/reference IDs acrossbothreceipts; exactlythepredeclaredD,A,B. All3drawnplanSHA present/different. Onlyafterexecution/freeze, compareactual(name,kernel,timed,length,batch,m,n,p,work) vectors andcase-generationfields/seeds. Recordchangedcase/shape counts; differentseed/hash alone mustnotbemisreported asprovennewshapes. Partialshapeoverlap isallowedoriginalgeneratorbehavior, notfaileddiversity. Ifshapevectorscoincide, showactualgenerationdifferences ratherthanclaimshapevariety."
+    },
+    {
+      "step": 6,
+      "name": "Allgroups, noshopping",
+      "check": "Preserve everyfailed/slowgroup/attempt rawbytes, hash, reason andsource. Eachof3mustindividuallymeetthreshold; noaverages/best2of3/p05averaging. Missing, slower orfailingthirdgroup => NOT_THREE_GROUP_CONFIRMED/retain41. Infrastructurefailure staysrecordedUNKNOWNperformance; anyreviewedrerun retains exactpayload/seed andallattempts; do notreplaceaperformancefailurewithnewseeduntilpass."
+    },
+    {
+      "step": 7,
+      "name": "Write onlyafterthirdcheck",
+      "check": "Create one round-specifichashlinkedcohortreceipt containing3originalidentities/plans/shapefingerprints/pergroupratio+p05, two guardreceipts andallfailures. Root checks source/freezerules stillmatch beforeanytwo-groupadopter isallowed towrite. Existingadopteroutputstilllists2; keep3groupreceiptasexplicitadditional evidence oraddnarrowoutputsupport later. Neverlabelcurrentautomaticoutputas3groupverification."
+    }
+  ],
+  "bootstrap_reuse_detail": "Currentguard resetsRandom90423 perverify call andconsumesdiscovery thenconfirmation. Thusverify(D,A) andverify(D,B) giveidenticalDdraws andA/Buse theconfirmationportion ofsamefixedstream; recordthispreciseconvention now. It is2independentcrossgatecomparisons over3data groups, not3jointconfidence orofficialadmission. Do notpoolgates/rounds orrepurposebestp05.",
+  "already_executed_examples": [
+    {
+      "run": 39944891642,
+      "seed": 821,
+      "source_commit": "74448b8eec2f2cf53ab7b27a3e8ae5ad676fc5e4",
+      "job_id": 120385013714,
+      "kernel_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+      "drawn_plan": {
+        "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39944891642/download-067ffecb3a594f9f98ad3eb83dedfe60/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+        "sha256": "5f0e8924828c7e008f918e25ee27a5daa8d03de4da7a1c4a03e15ab9571108a8",
+        "bytes": 99914
+      },
+      "shape_fingerprint_sha256": "b0aaa7826a598e69400126ffccd354cdbce9cd7fbc33cc4abf88af8a8483e34a",
+      "first_timed_bmm_shape": {
+        "name": "bmm:dense:0",
+        "kernel": "bmm",
+        "timed": true,
+        "length": 1,
+        "batch": 18,
+        "m": 3,
+        "n": 445,
+        "p": 7,
+        "work": 168210
+      },
+      "cases": 156,
+      "timed": 152,
+      "raw": 4,
+      "timed_bmm": 34,
+      "fullgate": true,
+      "rounds": 25,
+      "all43_indexed_files_rehashed": true
+    },
+    {
+      "run": 39946600549,
+      "seed": 822,
+      "source_commit": "af4dc74415266ab6cfcd244cd3b2e15f41c807d8",
+      "job_id": 120390667184,
+      "kernel_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+      "drawn_plan": {
+        "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39946600549/download-fb3a5a3d826e4bdf9abb14c351defa29/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+        "sha256": "79316340ae24727ef2bc70329e23d4ec705df52b25869cd243e1f686784e34c8",
+        "bytes": 99940
+      },
+      "shape_fingerprint_sha256": "e95eabc42ed411d7965e48e760aa20869a4322e92743e4d22293e9cc03216629",
+      "first_timed_bmm_shape": {
+        "name": "bmm:dense:0",
+        "kernel": "bmm",
+        "timed": true,
+        "length": 1,
+        "batch": 1,
+        "m": 16,
+        "n": 29,
+        "p": 17,
+        "work": 7888
+      },
+      "cases": 156,
+      "timed": 152,
+      "raw": 4,
+      "timed_bmm": 34,
+      "fullgate": true,
+      "rounds": 25,
+      "all43_indexed_files_rehashed": true
+    }
+  ],
+  "actual_diversity_example": {
+    "seeds": [
+      821,
+      822
+    ],
+    "shape_and_work_fields_changed_cases": 81,
+    "of_total": 156,
+    "bmm_shapes_and_work_changed": 35,
+    "of_bmm_all_including_raw": 35,
+    "limit": "Demonstratesoldexecutedgeneratoroutputs differ; doesnotassertdiversityorpassingfuture842/843."
+  },
+  "negative_retention_examples": [
+    {
+      "run": 39961709177,
+      "candidate": "f01-d9-bmm-direct-decode-proof2",
+      "both_fullgate_pass": true,
+      "relative_whole": 1.040345439125485,
+      "implication": "CorrectnessPASS isnotselectionPASS; keepslowgroup"
+    },
+    {
+      "run": 39962018518,
+      "candidate": "f01-r9-bmm-native-event-replay-proof2",
+      "both_fullgate_pass": true,
+      "relative_whole": 1.0084279855953868,
+      "implication": "Belowrequired3%gain despitecompletegates; donotomit"
+    }
+  ],
+  "not_done": [
+    "Nofuture842/843inputgeneration, drawnplanreading orresultinspection",
+    "Noexecute prepare-plan/adopt/guard(load_run usesGit internally) underread-only/noGitassignment",
+    "No candidate/state/otherSolanchorfile changes",
+    "NoactualR10thirdgroupornewadoptionconclusion"
+  ]
+}
