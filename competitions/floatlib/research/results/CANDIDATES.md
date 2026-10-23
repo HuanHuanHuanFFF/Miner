@@ -2,7 +2,7 @@
 
 [返回数学结论](../RESULTS.md)。按源码 SHA-256 关联已保存的实际 CI 回执；同字节别名共享证据。完整通过、仅编译、失败及无匹配回执分列。这里不重新运行 Lean。
 
-共 192 份候选。机器可读的定理行号、源码哈希与全部成功/失败回执见 [candidate-catalog.json](candidate-catalog.json)。
+共 193 份候选。机器可读的定理行号、源码哈希与全部成功/失败回执见 [candidate-catalog.json](candidate-catalog.json)。
 
 `无匹配回执`表示本目录没有找到对应源码的回执，不表示数学不成立。完整通过仍须结合原回执中的内核、公理和计时审计。仅本地或尚未冻结的源码只列名称；JSON保留路径、字节范围与SHA。
 
@@ -193,6 +193,7 @@
 | [f01-r7-sum-native-repair-proof2](../../candidates/f01-r7-sum-native-repair-proof2/Kernel.lean) | 无匹配回执 | 0 | — |
 | f01-r7-sum-singlepass-fused（本地字节） | 无匹配回执 | 0 | — |
 | [f01-r7-sum-singlepass-fused-proof1](../../candidates/f01-r7-sum-singlepass-fused-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
+| [f01-r8-combined-result-guard](../../candidates/f01-r8-combined-result-guard/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-rebuilt-mul](../../candidates/f01-rebuilt-mul/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-rebuilt-mul-proof1](../../candidates/f01-rebuilt-mul-proof1/Kernel.lean) | 无匹配回执 | 0 | — |
 | [f01-same-scale-add](../../candidates/f01-same-scale-add/Kernel.lean) | 无匹配回执 | 0 | — |

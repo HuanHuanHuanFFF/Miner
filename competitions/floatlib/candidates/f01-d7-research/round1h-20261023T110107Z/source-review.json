@@ -1,0 +1,159 @@
+{
+  "review_started_at_utc": "2026-10-23T11:10:50Z",
+  "review_completed_at_utc": "2026-10-23T11:14:51.486313+00:00",
+  "conclusion": "NO_DETERMINISTIC_STATIC_BLOCKER_FOUND; exact combined Lean/fullgate/codegen NOT_RUN; performance UNKNOWN",
+  "independence": "Reviewer did not author this combined candidate/builder or bee6 result-guard implementation; prior related static source reviews are not compilation evidence. Builder was read but never executed. Reconstruction derived independently from actual parent byte differences, without builder operation offsets.",
+  "sources": {
+    "f01-d7-direct-nonnan": {
+      "path": "competitions/floatlib/candidates/f01-d7-direct-nonnan/Kernel.lean",
+      "sha256": "60f74aa4af01a9b35ece66a7c310e6b05b5b84b9b7121a4cccd12a0a9c987e15",
+      "bytes": 155103
+    },
+    "f01-d7-result-guard-both-proof2": {
+      "path": "competitions/floatlib/candidates/f01-d7-result-guard-both-proof2/Kernel.lean",
+      "sha256": "bee6ccdfec16d2b21810af4bea2389bcb2765e534b667cdc952188845227f183",
+      "bytes": 156558
+    },
+    "f01-d7-direct-singlepass-proof2": {
+      "path": "competitions/floatlib/candidates/f01-d7-direct-singlepass-proof2/Kernel.lean",
+      "sha256": "a84c1618cebe5892cbffd3657de8f2e6b96f0f70df2811af75c09a6ea3c5f736",
+      "bytes": 233714
+    },
+    "f01-r8-combined-result-guard": {
+      "path": "competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean",
+      "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+      "bytes": 235169
+    }
+  },
+  "builder": {
+    "path": "competitions/floatlib/candidates/f01-r8-combined-result-guard/build.py",
+    "sha256": "58662bf7218de54978d999bfb424975732cf845708869e1d611dd712d7470f22",
+    "bytes": 13088
+  },
+  "manifest": {
+    "path": "competitions/floatlib/candidates/f01-r8-combined-result-guard/manifest.json",
+    "sha256": "629c966abe3fce5599c3ae7001b8f7c25beccaffca33ca4a81462d7dcbc97da8",
+    "bytes": 1762
+  },
+  "independent_reconstruction": {
+    "method": "Line diff identifies the first donor-only top insertion; remove it, compute byte longest common prefix/suffix of60f and remaining bee6, uniquely splice resulting scalar interval into a84, then insert top block; exact actual result equality. Reverse yields full a84.",
+    "top_insert_bytes": 1672,
+    "top_insert_byte_offset": 22,
+    "old_scalar_bytes": 29959,
+    "new_scalar_bytes": 29742,
+    "old_scalar_sha256": "71d5cc2fa98f9a573d8ec95b541ec13b4790da8f95fd797a5e517fab9972c9f3",
+    "new_scalar_sha256": "35ce4da069ae60efcf3b0a4aacc078bfb17d42cb9f50906a6575b49749a47618",
+    "old_scalar_offset_in_a84": 113717,
+    "projected_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+    "inverse_sha256": "a84c1618cebe5892cbffd3657de8f2e6b96f0f70df2811af75c09a6ea3c5f736",
+    "delta_bytes": 1455
+  },
+  "unchanged_a84_tail": {
+    "bytes": 90038,
+    "sha256": "916288766adbf6b289ef5f2bb0f9c2aa3da3b5afe47846563a3b9b2946f99978",
+    "start_a84_line": 3351,
+    "exact_equal": true,
+    "specific_suffixes": {
+      "R7SinglePassSum": {
+        "bytes": 9470,
+        "sha256": "4e9744ef3f1cfb26d817909a2dd1761807a12b24b974cde3394bddcfe3596817"
+      },
+      "Submission.DirectSmall": {
+        "bytes": 11155,
+        "sha256": "c3a209b3ad2e8a1910e12a39a1d01b9caa857aafb2d4f815437c77e867125849"
+      },
+      "NativeFinal": {
+        "bytes": 49110,
+        "sha256": "2c938180563b2610f1f62024e367b481a878ce164c2201cf200fff489679bfe6"
+      }
+    },
+    "seven_original_proof_repairs_preserved": {
+      "R7SumRepair.suffixLoop_eq": 5018,
+      "R7SinglePassSum.raw_nan_of_high_reject": 6149,
+      "R7SinglePassSum.native_step_eq": 6167,
+      "R7SinglePassSum.repair_quiet": 6178,
+      "R7SinglePassSum.natLoop_eq": 6209,
+      "R7SinglePassSum.loop_eq": 6278,
+      "R7SinglePassSum.run_spec": 6315
+    }
+  },
+  "moved_closed_blocks": {
+    "scope": "All three are inside Submission; exactly identical in60f/bee6/a84/new; no open namespace leak found",
+    "NativeBridge": {
+      "bytes": 10136,
+      "sha256": "03b626fbaf4e5ac0cc3c9bd6a0009eeaa00eb4d508b0f9b64d867fee2682d3fc",
+      "new_lines": [
+        2788,
+        2978
+      ]
+    },
+    "NotNaNProbe": {
+      "bytes": 2494,
+      "sha256": "6440cc47ffac4bbfc9c5a42f48d3a4ef7b455d2f7f6792a341b2d0e2630061a1",
+      "new_lines": [
+        2980,
+        3035
+      ]
+    },
+    "R7Native": {
+      "bytes": 11022,
+      "sha256": "1f60d2bac8219bc597768fc77bd54a71ddf5a4c1bcadacb61ef56fa39856bf2b",
+      "new_lines": [
+        3037,
+        3260
+      ]
+    }
+  },
+  "scalar_semantics": {
+    "R7W04.nonNaN_line": 6,
+    "guard": "Native IEEE self-BEq returns true offNaN; exact donor theorem block copied",
+    "add_line": 3263,
+    "add_spec_line": 3268,
+    "add": "Single let result numeric-convert add; accept nonNaN result via ofFloat32; otherwise exact TunedAdd.add fallback with original x/y",
+    "bee6_add_representation_repairs_retained": [
+      3275,
+      3277
+    ],
+    "nativeMul_line": 3284,
+    "nativeMul_spec_line": 3289,
+    "nativeMul": "Single let native product, accept nonNaN result inclInf/zero/subnormal; nativeNaN falls back to exact FastMul.mul x y",
+    "mul_line": 3301,
+    "mul": "Original low-exp ex+ey<128 -> LowScale unchanged, otherwise nativeMul; original mul_spec connects both",
+    "boundary": "Raw NaN payload/sign/signaling and invalid operations retain raw fallback. NonNaN input/roundtrip and add/mul bridges copied exactly; no new runtime guard or seed dispatch beyond donor delta."
+  },
+  "declaration_inventory": {
+    "method": "Independent nested-comment/string mask plus explicit namespace/section/declaration heads; matched closing scope names; no duplicate qualified def/theorem/abbrev found; not a Lean parser",
+    "duplicates": {},
+    "unique_exports": {
+      "Submission.add": 3263,
+      "Submission.add_spec": 3268,
+      "Submission.mul": 3301,
+      "Submission.mul_spec": 3306,
+      "Submission.sum": 6336,
+      "Submission.sum_spec": 6338,
+      "Submission.bmm": 6099,
+      "Submission.bmm_spec": 6104
+    },
+    "scope_risk": "No definite unresolved forward dependency found; moved blocks use imported APIs and prior/same moved namespace helpers. Actual elaboration remains NOT_RUN."
+  },
+  "policy": {
+    "fixedgate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+    "static_policy": "PASS exact fixed BANNED/options/allowed attributes and imports checks",
+    "imports": [
+      "ContractTensor"
+    ],
+    "set_options": [],
+    "bytes": 235169,
+    "capacity_remaining_bytes": 20831,
+    "legal_notices": "All complete legal-comment blocks from all3parents occur with at least original multiplicity:60f5,bee6 5,a84 6. No minification or license removal."
+  },
+  "limits": [
+    "Parent gate passes were supplied as task context; this review did not recertify old CI runs",
+    "Copied seven proof repairs and scalar donor proofs are source-byte verified, not new combined elaboration",
+    "Shared sum/bmm source bytes do not prove identical performance when scalar callees change",
+    "NaN-heavy fallback native-work overhead and interaction with sum/smallBMM remain UNKNOWN",
+    "No Lean/toolchain installation, builder execution, Git, upload, CI, web, new agents or other-session messaging"
+  ],
+  "next_falsification": "Exact combined original gate statement first tests moved namespace resolution and actual four exported proofs; full checksums/axioms and public-suite timing then test the combined implementation. Any useful discovery needs frozen independent confirmation.",
+  "candidate_sha256_rechecked_before_delivery": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+}
