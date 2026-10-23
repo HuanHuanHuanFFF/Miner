@@ -1,14 +1,14 @@
 # FloatLib 冲冠看板
 
-冠军核对：[2026-10-24 01:05 北京时间](competitions/floatlib/candidates/f01-d7-research/official-20261023T170525Z/receipts.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。
+冠军核对：[2026-10-24 02:48 北京时间](competitions/floatlib/candidates/f01-d7-research/official-20261023T184804Z/receipts.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。
 
 | 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时（预估） | 验证 |
 | --- | --- | --- | ---: | --- |
-| 加法 add | [#285](https://conjectures.io/v1/competitions/floatlib/submissions/285) | [原生结果守卫](competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean) | **约 1.14×** | 完整通过6次 |
-| 乘法 mul | #285 | [结果守卫＋低位回退](competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean) | **约 1.24×** | 完整通过6次 |
-| 求和 sum | #285 | [单遍有序求和](competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean) | **约 1.13×** | 完整通过6次 |
-| 矩阵乘法 bmm | #285 | [直接点积＋矩阵布局](competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean) | **约 3.55×** | 完整通过6次 |
+| 加法 add | [#285](https://conjectures.io/v1/competitions/floatlib/submissions/285) | [原生结果守卫](competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean) | **约 1.14×** | 完整通过3次 |
+| 乘法 mul | #285 | [结果守卫＋低位回退](competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean) | **约 1.24×** | 完整通过3次 |
+| 求和 sum | #285 | [单遍有序求和](competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean) | **约 1.13×** | 完整通过3次 |
+| 矩阵乘法 bmm | #285 | [按行寻址](competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean) | **约 3.32×** | 完整通过3次 |
 
-整包预估耗时：冠军的 **约 1.50×**。
+整包预估耗时：冠军的 **约 1.47×**。
 
-**结论：预估暂不能取代#285；主要差距在矩阵乘法（约3.55倍耗时）。** [计算依据](competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json)
+**结论：预估暂不能取代#285；主要差距在矩阵乘法（约3.32倍耗时）。** [计算依据](competitions/floatlib/candidates/f01-d7-research/round2h-20261023T170031Z/best-research-champion-estimate.json)

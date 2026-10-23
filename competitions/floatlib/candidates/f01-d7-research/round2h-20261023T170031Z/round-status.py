@@ -42,16 +42,18 @@ def change(value):
 lines=['# R10两小时矩阵探索','',
        '北京时间2026-10-24 01:00:31—03:00:31。目标仍是新冠军；根看板统一使用现任冠军乘数。',
        '',f'截至 {now.isoformat()}，已完成 {len(result["completed_ci"])} 个CI，运行中 {len(result["active_ci"])} 个。',
-       '', '| 候选 | 矩阵变化 | 整体变化 | 验收状态 |', '|---|---:|---:|---|']
+       '', '| 输入seed | 候选 | 矩阵变化 | 整体变化 | 验收状态 |', '|---|---|---:|---:|---|']
 for row in rows:
     status='待完整结果'
     if row.get('full_gate_both'):
         status='完整gate通过；发现门槛通过' if row['discovery_screen_passed'] else '完整gate通过；未达采纳门槛'
     elif row.get('failure'):status='statement失败，无性能结论'
-    lines.append(f'| {row["candidate"]} | {change(row.get("bmm_ratio"))} | {change(row.get("whole_ratio"))} | {status} |')
+    lines.append(f'| {row["seed"]} | {row["candidate"]} | {change(row.get("bmm_ratio"))} | {change(row.get("whole_ratio"))} | {status} |')
 lines += ['', '变化量是相对本轮已保留41的同组参照归一化完整入口成本；冠军差距只见根看板。',
           '', '同一候选的最终确认要求冻结源码、两个未参与选择的新输入组，与发现组共同逐组通过。负面结果与慢组全部保留；一轮三份候选的853只计一个输入组。',
           '', '[精确结果索引](round-results.json) · [事前计划](round-plan.json) · [三组验收规则](three-group-design.md) · [固定冠军基准](anchor-design.md) · [阶段诊断](profile-integration.md)',
+          '', '最终按行寻址三组矩阵分别快7.39%／6.47%／10.85%，整体分别快2.39%／0.78%／3.00%（原值2.996779%，不能舍入成通过3%门槛）。保留版本仍为41；根看板展示三组已验的研究首选a066。三对输入各改变35个BMM形状及全部156项生成字段。',
+          '', '853缓存组仅覆盖一个n=1案例、3600输出、m=1；双侧B缓存分支未触发，性能机制不能据此否定。下轮发现组先核目标路径覆盖，确认输入继续冻结后保持未查看。',
           '', '正式参赛提交未授权、未执行；公开Git推送只用于开发与标准runner验证。']
 (out/'README.md').write_bytes(('\n'.join(lines)+'\n').encode())
 print(json.dumps({'completed_ci':len(result['completed_ci']),'active_ci':result['active_ci'],'experiments':len(rows),'elapsed_wall_seconds':result['elapsed_wall_seconds']}))

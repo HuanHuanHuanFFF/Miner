@@ -1,0 +1,749 @@
+{
+  "as_of_utc": "2026-10-23T18:49:30.220082+00:00",
+  "status": "INFERRED",
+  "method": "FROZEN_ANCHOR_NORMALIZED_PAIRED_DELTAS",
+  "candidate": "f01-d10-bmm-direct-rows",
+  "estimator_sha256": "fe926204104484d1fc62bf06eb57666c0f3673829664f283c9c813497bf46983",
+  "public_results_sha256": "4c3095d659ccc2778238dee380b4d8edc398feaa021c31a87aa68e650cbee2c4",
+  "kernel_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+  "champion_submission": 285,
+  "champion_digest": "a1e99008577119824464154be5ec52dd390fc1e429b8f85b6ea73315e7103082",
+  "champion_suite": {
+    "version": "scoring-v2-2026-10",
+    "sha256": "2e32904d42216dc6995bcd5124da9a9f74d6bce472abe86c5c075ad52e2c6697"
+  },
+  "champion_report": "competitions/floatlib/candidates/f01-d7-research/official-20261023T135255Z/champion-report.raw",
+  "champion_report_sha256": "e7bd6dd51e2e4dd78662faea08628cace0a2aab5089a27fcaad50d888c91053c",
+  "official_receipts": "competitions/floatlib/candidates/f01-d7-research/official-20261023T135255Z/receipts.json",
+  "official_receipts_sha256": "774482e3f6ba76567bbd414b66c475318711ba3b9abf169f7cebce333021179f",
+  "formula": "For each run and operation: sum(candidate_group_ns_per_work * public_group_work) / sum(champion_group_ns_per_work * the_same_public_group_work); median over all retained exact-source full-gate runs. Whole uses summed ns before division.",
+  "assumptions": [
+    "Champion private-suite group mean costs approximate the same named public-suite groups.",
+    "Cross-run hardware cost scale is assumed 1.0; no matched CPU calibration is available.",
+    "Both sources use the original gate ns-per-work units; length, shape and value distributions can differ."
+  ],
+  "scope": "User-requested development gap estimate. Direct same-suite champion comparison and official admission remain UNKNOWN. No use of the overall champion speedup as a per-operation factor.",
+  "range_scope": "Min/max across the projected public runs, not a confidence interval.",
+  "operations": {
+    "add": {
+      "ratio_median": 1.139771503226859,
+      "ratio_range": [
+        0.7062100395623185,
+        1.3418452291719751
+      ]
+    },
+    "mul": {
+      "ratio_median": 1.2429627329075101,
+      "ratio_range": [
+        0.8742828234646409,
+        1.492094161688424
+      ]
+    },
+    "sum": {
+      "ratio_median": 1.1255715372884227,
+      "ratio_range": [
+        0.7709694449169132,
+        1.4499634449508274
+      ]
+    },
+    "bmm": {
+      "ratio_median": 3.31692861918771,
+      "ratio_range": [
+        2.3542626735438623,
+        3.979243467775685
+      ]
+    }
+  },
+  "whole": {
+    "ratio_median": 1.4706790174991897,
+    "ratio_range": [
+      0.9776987225179247,
+      1.661000173312251
+    ]
+  },
+  "samples": [
+    {
+      "run": 39944891642,
+      "seed": 821,
+      "candidate_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39944891642/download-067ffecb3a594f9f98ad3eb83dedfe60/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+      "candidate_verdict_sha256": "4c2860959353cf7e8d4094f6eb24fe4952217b72b825672c7edce0f916148ca6",
+      "candidate_suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a",
+      "candidate_total_ns": {
+        "add": 59795172.6700684,
+        "mul": 60274615.41770558,
+        "sum": 9195814.932403576,
+        "bmm": 52431346.74101134
+      },
+      "champion_projected_total_ns": {
+        "add": 50610390.96714585,
+        "mul": 51953614.19021952,
+        "sum": 11927599.716217808,
+        "bmm": 15570669.620113205
+      },
+      "cell_work": {
+        "add:dense": 857142,
+        "add:ml": 1142856,
+        "add:sparse": 857142,
+        "add:specials": 412010,
+        "add:subnormal": 571428,
+        "add:paired": 1142856,
+        "add:extremes": 571428,
+        "mul:dense": 857142,
+        "mul:ml": 1142856,
+        "mul:sparse": 857142,
+        "mul:specials": 481195,
+        "mul:subnormal": 571428,
+        "mul:paired": 1142856,
+        "mul:extremes": 571428,
+        "sum:dense": 1041864,
+        "sum:ml": 1401237,
+        "sum:sparse": 1054978,
+        "sum:specials": 254509,
+        "sum:subnormal": 704043,
+        "sum:extremes": 703874,
+        "bmm:dense": 1014318,
+        "bmm:ml": 1432340,
+        "bmm:sparse": 994950,
+        "bmm:specials": 278860,
+        "bmm:subnormal": 666492,
+        "bmm:extremes": 69924
+      },
+      "operation_ratios": {
+        "add": 1.1814801570864157,
+        "mul": 1.1601621245640408,
+        "sum": 0.7709694449169132,
+        "bmm": 3.367314831038727
+      },
+      "whole_ratio": 1.3969996332025936,
+      "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
+    },
+    {
+      "run": 39946600549,
+      "seed": 822,
+      "candidate_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39946600549/download-fb3a5a3d826e4bdf9abb14c351defa29/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+      "candidate_verdict_sha256": "77bac8070ba2724fcc5126f935112fb51ce14fc825098a16e25d7c843149509c",
+      "candidate_suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a",
+      "candidate_total_ns": {
+        "add": 36684813.31738913,
+        "mul": 44173118.16861374,
+        "sum": 11460429.292455545,
+        "bmm": 32898368.375916015
+      },
+      "champion_projected_total_ns": {
+        "add": 51946037.669083476,
+        "mul": 50524975.42335653,
+        "sum": 11627947.485121556,
+        "bmm": 13973958.278153487
+      },
+      "cell_work": {
+        "add:dense": 857142,
+        "add:ml": 1142856,
+        "add:sparse": 857142,
+        "add:specials": 546229,
+        "add:subnormal": 571428,
+        "add:paired": 1142856,
+        "add:extremes": 571428,
+        "mul:dense": 857142,
+        "mul:ml": 1142856,
+        "mul:sparse": 857142,
+        "mul:specials": 360223,
+        "mul:subnormal": 571428,
+        "mul:paired": 1142856,
+        "mul:extremes": 571428,
+        "sum:dense": 1057985,
+        "sum:ml": 1395624,
+        "sum:sparse": 1056776,
+        "sum:specials": 220744,
+        "sum:subnormal": 705058,
+        "sum:extremes": 526383,
+        "bmm:dense": 826985,
+        "bmm:ml": 1358718,
+        "bmm:sparse": 1037888,
+        "bmm:specials": 211253,
+        "bmm:subnormal": 705400,
+        "bmm:extremes": 14128
+      },
+      "operation_ratios": {
+        "add": 0.7062100395623185,
+        "mul": 0.8742828234646409,
+        "sum": 0.9855934856189918,
+        "bmm": 2.3542626735438623
+      },
+      "whole_ratio": 0.9776987225179247,
+      "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
+    },
+    {
+      "run": 39958723767,
+      "seed": 831,
+      "candidate_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39958723767/download-1b4b78439342465ebf917d2ae9650fc6/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+      "candidate_verdict_sha256": "1054aa004438e7bbe47af1c48c40319ff69573b3d326b881df3f46f40612a997",
+      "candidate_suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a",
+      "candidate_total_ns": {
+        "add": 68933019.22443736,
+        "mul": 73811773.30430596,
+        "sum": 16399784.790536605,
+        "bmm": 50847487.240371644
+      },
+      "champion_projected_total_ns": {
+        "add": 51371810.79145357,
+        "mul": 50307524.065899864,
+        "sum": 11310481.548790198,
+        "bmm": 13435254.423861152
+      },
+      "cell_work": {
+        "add:dense": 857142,
+        "add:ml": 1142856,
+        "add:sparse": 857142,
+        "add:specials": 488525,
+        "add:subnormal": 571428,
+        "add:paired": 1142856,
+        "add:extremes": 571428,
+        "mul:dense": 857142,
+        "mul:ml": 1142856,
+        "mul:sparse": 857142,
+        "mul:specials": 341810,
+        "mul:subnormal": 571428,
+        "mul:paired": 1142856,
+        "mul:extremes": 571428,
+        "sum:dense": 1057742,
+        "sum:ml": 1408366,
+        "sum:sparse": 1044055,
+        "sum:specials": 71129,
+        "sum:subnormal": 704496,
+        "sum:extremes": 529913,
+        "bmm:dense": 732534,
+        "bmm:ml": 1339574,
+        "bmm:sparse": 1043317,
+        "bmm:specials": 192128,
+        "bmm:subnormal": 688217,
+        "bmm:extremes": 23620
+      },
+      "operation_ratios": {
+        "add": 1.3418452291719751,
+        "mul": 1.467211409721077,
+        "sum": 1.4499634449508274,
+        "bmm": 3.7846315102203034
+      },
+      "whole_ratio": 1.661000173312251,
+      "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
+    },
+    {
+      "run": 39959840945,
+      "seed": 833,
+      "candidate_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39959840945/download-627a556114914086b08886d4b035fde1/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+      "candidate_verdict_sha256": "364f5b795891e4ad8eabab694b1601030588ebebc3f8c90aff6464b656e3d8e4",
+      "candidate_suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a",
+      "candidate_total_ns": {
+        "add": 68028550.0522932,
+        "mul": 73507546.52008766,
+        "sum": 16762306.003662152,
+        "bmm": 50490644.77312534
+      },
+      "champion_projected_total_ns": {
+        "add": 51396877.987917416,
+        "mul": 49264683.42782602,
+        "sum": 12142921.481284605,
+        "bmm": 15456907.787182787
+      },
+      "cell_work": {
+        "add:dense": 857142,
+        "add:ml": 1142856,
+        "add:sparse": 857142,
+        "add:specials": 491044,
+        "add:subnormal": 571428,
+        "add:paired": 1142856,
+        "add:extremes": 571428,
+        "mul:dense": 857142,
+        "mul:ml": 1142856,
+        "mul:sparse": 857142,
+        "mul:specials": 253506,
+        "mul:subnormal": 571428,
+        "mul:paired": 1142856,
+        "mul:extremes": 571428,
+        "sum:dense": 1053922,
+        "sum:ml": 1386667,
+        "sum:sparse": 1057411,
+        "sum:specials": 369295,
+        "sum:subnormal": 705724,
+        "sum:extremes": 692122,
+        "bmm:dense": 754156,
+        "bmm:ml": 1371805,
+        "bmm:sparse": 1016606,
+        "bmm:specials": 381826,
+        "bmm:subnormal": 704754,
+        "bmm:extremes": 19350
+      },
+      "operation_ratios": {
+        "add": 1.3235930413572128,
+        "mul": 1.492094161688424,
+        "sum": 1.3804178862143857,
+        "bmm": 3.266542407336693
+      },
+      "whole_ratio": 1.6278401959886952,
+      "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
+    },
+    {
+      "run": 39961709177,
+      "seed": 834,
+      "candidate_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39961709177/download-9d7627f15e49459db4ba992644ff1b55/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+      "candidate_verdict_sha256": "69dd429de8a699d7be8dfba8c59d103c2198a08ad1632178f9c0d7fac0494a7e",
+      "candidate_suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a",
+      "candidate_total_ns": {
+        "add": 54383815.902057044,
+        "mul": 60028554.42441018,
+        "sum": 11961030.747475084,
+        "bmm": 35095510.4903679
+      },
+      "champion_projected_total_ns": {
+        "add": 51431727.26223912,
+        "mul": 50105803.18192021,
+        "sum": 11491948.311085422,
+        "bmm": 14163935.697393093
+      },
+      "cell_work": {
+        "add:dense": 857142,
+        "add:ml": 1142856,
+        "add:sparse": 857142,
+        "add:specials": 494546,
+        "add:subnormal": 571428,
+        "add:paired": 1142856,
+        "add:extremes": 571428,
+        "mul:dense": 857142,
+        "mul:ml": 1142856,
+        "mul:sparse": 857142,
+        "mul:specials": 324729,
+        "mul:subnormal": 571428,
+        "mul:paired": 1142856,
+        "mul:extremes": 571428,
+        "sum:dense": 1041747,
+        "sum:ml": 1402532,
+        "sum:sparse": 1058107,
+        "sum:specials": 28689,
+        "sum:subnormal": 697990,
+        "sum:extremes": 702509,
+        "bmm:dense": 711106,
+        "bmm:ml": 1326076,
+        "bmm:sparse": 1060935,
+        "bmm:specials": 239262,
+        "bmm:subnormal": 664830,
+        "bmm:extremes": 92550
+      },
+      "operation_ratios": {
+        "add": 1.057398201401362,
+        "mul": 1.1980359681385253,
+        "sum": 1.0408183559211777,
+        "bmm": 2.4778078099314804
+      },
+      "whole_ratio": 1.2694754068767866,
+      "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
+    },
+    {
+      "run": 39962018518,
+      "seed": 836,
+      "candidate_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39962018518/download-a7ccce564f3a459e99106fb6563dfb6b/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+      "candidate_verdict_sha256": "dc451d689d4883ac3a62d74c6f7748a5dac942cdcbed6ffe5bef948116889800",
+      "candidate_suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a",
+      "candidate_total_ns": {
+        "add": 58395673.49017599,
+        "mul": 65769646.24411592,
+        "sum": 14612967.781072998,
+        "bmm": 66783454.06676502
+      },
+      "champion_projected_total_ns": {
+        "add": 53180629.436487414,
+        "mul": 51067771.23563174,
+        "sum": 12073592.777072188,
+        "bmm": 16782952.49023694
+      },
+      "cell_work": {
+        "add:dense": 857142,
+        "add:ml": 1142856,
+        "add:sparse": 857142,
+        "add:specials": 670293,
+        "add:subnormal": 571428,
+        "add:paired": 1142856,
+        "add:extremes": 571428,
+        "mul:dense": 857142,
+        "mul:ml": 1142856,
+        "mul:sparse": 857142,
+        "mul:specials": 406185,
+        "mul:subnormal": 571428,
+        "mul:paired": 1142856,
+        "mul:extremes": 571428,
+        "sum:dense": 1050387,
+        "sum:ml": 1409677,
+        "sum:sparse": 1052926,
+        "sum:specials": 454476,
+        "sum:subnormal": 703155,
+        "sum:extremes": 531903,
+        "bmm:dense": 992128,
+        "bmm:ml": 1396606,
+        "bmm:sparse": 1035242,
+        "bmm:specials": 403452,
+        "bmm:subnormal": 704730,
+        "bmm:extremes": 58914
+      },
+      "operation_ratios": {
+        "add": 1.0980628493673021,
+        "mul": 1.287889497676495,
+        "sum": 1.2103247186556678,
+        "bmm": 3.979243467775685
+      },
+      "whole_ratio": 1.5443584017957857,
+      "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
+    }
+  ],
+  "aggregation": "median_per_cell_normalized_delta_then_frozen_work_projection",
+  "anchor_payload_sha256": "0d648aebbcb0e94d1c6b5abe810117dcca16f4d5e4a50f2ddc934ea5536b5025",
+  "direct_same_suite_champion_comparison": "UNKNOWN",
+  "official_admission": "UNKNOWN",
+  "update_kind": "PAIRED_SOURCE_DELTA",
+  "cell_relative_delta_median": {
+    "add:dense": 1.001215887495926,
+    "add:extremes": 1.0008545765021122,
+    "add:ml": 0.9998881471550817,
+    "add:paired": 1.0008123915135128,
+    "add:sparse": 1.0004623462468474,
+    "add:specials": 0.9991441866181359,
+    "add:subnormal": 0.9985110993860101,
+    "bmm:dense": 0.8892581650139825,
+    "bmm:extremes": 0.9983096626857458,
+    "bmm:ml": 0.9011051948058005,
+    "bmm:sparse": 0.9922996333742043,
+    "bmm:specials": 0.9879164434940138,
+    "bmm:subnormal": 0.8998165079227155,
+    "mul:dense": 0.9995292379548125,
+    "mul:extremes": 1.0003844484108402,
+    "mul:ml": 1.0012475323375767,
+    "mul:paired": 1.000123594875249,
+    "mul:sparse": 0.9995092679392468,
+    "mul:specials": 0.9953025819169827,
+    "mul:subnormal": 0.997232377565223,
+    "sum:dense": 0.9995228970761383,
+    "sum:extremes": 1.0004085315319964,
+    "sum:ml": 1.0004945389867785,
+    "sum:sparse": 0.9990005975176417,
+    "sum:specials": 0.9996869963058896,
+    "sum:subnormal": 1.0006245226332724
+  },
+  "paired_updates": [
+    {
+      "run": 39996680317,
+      "seed": 850,
+      "runner_execution": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite",
+      "candidate_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/f01-d10-bmm-direct-rows-verdict.json",
+      "candidate_verdict_sha256": "8d7d2b20ccba6cd0644692539057b0a688fc6e485311baed4a982fa0373c344f",
+      "baseline_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+      "baseline_verdict_sha256": "ba2a91e2242e62eb7838b9d7775abfff40b7d2aff3f305e8a3935819ada3aee5",
+      "cell_relative_delta": {
+        "add:dense": 0.9939685221559849,
+        "add:extremes": 0.9722779557281072,
+        "add:ml": 1.0000394502599395,
+        "add:paired": 0.9984208329555798,
+        "add:sparse": 1.0004623462468474,
+        "add:specials": 0.9980135966260056,
+        "add:subnormal": 0.9985110993860101,
+        "bmm:dense": 0.8857582603816376,
+        "bmm:extremes": 0.8448432240329032,
+        "bmm:ml": 0.9318684017419154,
+        "bmm:sparse": 0.964526214827445,
+        "bmm:specials": 0.9510027390766783,
+        "bmm:subnormal": 0.8998165079227155,
+        "mul:dense": 0.9916638771006888,
+        "mul:extremes": 1.0013207777686346,
+        "mul:ml": 1.0082015534910616,
+        "mul:paired": 0.9965055683174427,
+        "mul:sparse": 0.9995092679392468,
+        "mul:specials": 0.9927816275033077,
+        "mul:subnormal": 0.997232377565223,
+        "sum:dense": 0.999649751203739,
+        "sum:extremes": 1.0004085315319964,
+        "sum:ml": 1.0002442860128842,
+        "sum:sparse": 0.9948785897255973,
+        "sum:specials": 0.9996869963058896,
+        "sum:subnormal": 1.0006245226332724
+      },
+      "raw_evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/f01-d10-bmm-direct-rows-verdict.json",
+          "sha256": "8d7d2b20ccba6cd0644692539057b0a688fc6e485311baed4a982fa0373c344f"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-d10-bmm-direct-rows/Kernel.lean",
+          "sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+          "sha256": "fb92ee19d91cef06296954b3920d5260192bb6801e6e416c3d50de1c9564c46c"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/provenance.json",
+          "sha256": "3b1547a6fe15763b1c92599a0ab68bbf3d8626ea6ae73a096cfbdf0d65d3622b"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/requested-plan.json",
+          "sha256": "1a374bd8f53b167ead0b732372241475fc7a3f4a7e9cba45f808af30e8981057"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+          "sha256": "babb123bc492d5054b7a39e93feafa51ba1ca61e9bb672c66897fdef30da91e1"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/public-cell-work.json",
+          "sha256": "dcb4696b548587d985d3e9de11d3b08c870b17a2e6f4c2f5e724a50e9b76995c"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/public-v2.json",
+          "sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+          "sha256": "ba2a91e2242e62eb7838b9d7775abfff40b7d2aff3f305e8a3935819ada3aee5"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-r8-combined-result-guard/Kernel.lean",
+          "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+          "sha256": "fb92ee19d91cef06296954b3920d5260192bb6801e6e416c3d50de1c9564c46c"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/provenance.json",
+          "sha256": "3b1547a6fe15763b1c92599a0ab68bbf3d8626ea6ae73a096cfbdf0d65d3622b"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/requested-plan.json",
+          "sha256": "1a374bd8f53b167ead0b732372241475fc7a3f4a7e9cba45f808af30e8981057"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+          "sha256": "babb123bc492d5054b7a39e93feafa51ba1ca61e9bb672c66897fdef30da91e1"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/public-cell-work.json",
+          "sha256": "dcb4696b548587d985d3e9de11d3b08c870b17a2e6f4c2f5e724a50e9b76995c"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39996680317/download-6fd0de365b9843db9bfcbc5b10896b17/diagnostics/f01-d7-public-suite/public-suite/public-v2.json",
+          "sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a"
+        }
+      ]
+    },
+    {
+      "run": 40003013355,
+      "seed": 842,
+      "runner_execution": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite",
+      "candidate_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/f01-d10-bmm-direct-rows-verdict.json",
+      "candidate_verdict_sha256": "0f96c60de34f7f7cffb4237ee844e92386111c177d18e0376aaac13fdf033340",
+      "baseline_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+      "baseline_verdict_sha256": "7e7c3fe2865c19a92cda3fb0a82b13b793c372d107637722bcc49021ba55c7ee",
+      "cell_relative_delta": {
+        "add:dense": 1.0055171641330056,
+        "add:extremes": 1.0133561067163337,
+        "add:ml": 0.9998881471550817,
+        "add:paired": 1.0097949065579455,
+        "add:sparse": 0.9990656760331325,
+        "add:specials": 1.0352212694514797,
+        "add:subnormal": 1.0027838666089324,
+        "bmm:dense": 0.9936079328986962,
+        "bmm:extremes": 1.0307574344279768,
+        "bmm:ml": 0.7872135943072867,
+        "bmm:sparse": 0.9939695864999656,
+        "bmm:specials": 1.032556072851723,
+        "bmm:subnormal": 0.9972840134017176,
+        "mul:dense": 0.9995505766518341,
+        "mul:extremes": 0.9972852124520883,
+        "mul:ml": 0.9976251154246671,
+        "mul:paired": 1.000123594875249,
+        "mul:sparse": 0.9984543588744341,
+        "mul:specials": 1.027015920088822,
+        "mul:subnormal": 0.9984923992632058,
+        "sum:dense": 0.9950163391600069,
+        "sum:extremes": 1.0025143718071987,
+        "sum:ml": 1.0014146768746972,
+        "sum:sparse": 0.9990005975176417,
+        "sum:specials": 1.0364674738556323,
+        "sum:subnormal": 1.002862717797295
+      },
+      "raw_evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/f01-d10-bmm-direct-rows-verdict.json",
+          "sha256": "0f96c60de34f7f7cffb4237ee844e92386111c177d18e0376aaac13fdf033340"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-d10-bmm-direct-rows/Kernel.lean",
+          "sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+          "sha256": "0172c1fc4346c69866efaf73bb7e68757951c586f44c402c2e3934a52c9187ec"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/provenance.json",
+          "sha256": "9e9297631c3f5dcc88b3936645fa5c165a5df0aa7be43f9740479c41e0eeed75"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/requested-plan.json",
+          "sha256": "f2c92cb5a89f42fc9bc70087af0e8593a59a278e2ba0319e255dfc2cbb62c406"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+          "sha256": "0f17001711a7cd6c4c75c39599e345264c57dee7affa39bd0f676ee0ad981153"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/public-cell-work.json",
+          "sha256": "3d5de32a2be4b4e63473c33c4488c0969ea0757aec9fea279811eb68976d7a1d"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/public-v2.json",
+          "sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+          "sha256": "7e7c3fe2865c19a92cda3fb0a82b13b793c372d107637722bcc49021ba55c7ee"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-r8-combined-result-guard/Kernel.lean",
+          "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+          "sha256": "0172c1fc4346c69866efaf73bb7e68757951c586f44c402c2e3934a52c9187ec"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/provenance.json",
+          "sha256": "9e9297631c3f5dcc88b3936645fa5c165a5df0aa7be43f9740479c41e0eeed75"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/requested-plan.json",
+          "sha256": "f2c92cb5a89f42fc9bc70087af0e8593a59a278e2ba0319e255dfc2cbb62c406"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+          "sha256": "0f17001711a7cd6c4c75c39599e345264c57dee7affa39bd0f676ee0ad981153"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/public-cell-work.json",
+          "sha256": "3d5de32a2be4b4e63473c33c4488c0969ea0757aec9fea279811eb68976d7a1d"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003013355/download-0a7502f2555a49c0b9ddf9dbfba64955/diagnostics/f01-d7-public-suite/public-suite/public-v2.json",
+          "sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a"
+        }
+      ]
+    },
+    {
+      "run": 40003240475,
+      "seed": 843,
+      "runner_execution": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite",
+      "candidate_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/f01-d10-bmm-direct-rows-verdict.json",
+      "candidate_verdict_sha256": "ae47b790de83679fa0225a2069147e3bb9e289beee340a0c40babe0fb0e29587",
+      "baseline_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+      "baseline_verdict_sha256": "af692db9ac524f89b144b3818503aa5d537b89bad29991a6940a4d42975b9525",
+      "cell_relative_delta": {
+        "add:dense": 1.001215887495926,
+        "add:extremes": 1.0008545765021122,
+        "add:ml": 0.9984170127009958,
+        "add:paired": 1.0008123915135128,
+        "add:sparse": 1.001896570811115,
+        "add:specials": 0.9991441866181359,
+        "add:subnormal": 0.9983906307294796,
+        "bmm:dense": 0.8892581650139825,
+        "bmm:extremes": 0.9983096626857458,
+        "bmm:ml": 0.9011051948058005,
+        "bmm:sparse": 0.9922996333742043,
+        "bmm:specials": 0.9879164434940138,
+        "bmm:subnormal": 0.7492000245081176,
+        "mul:dense": 0.9995292379548125,
+        "mul:extremes": 1.0003844484108402,
+        "mul:ml": 1.0012475323375767,
+        "mul:paired": 1.0005792126926563,
+        "mul:sparse": 0.99990184191344,
+        "mul:specials": 0.9953025819169827,
+        "mul:subnormal": 0.9970360976395207,
+        "sum:dense": 0.9995228970761383,
+        "sum:extremes": 0.9955197098627075,
+        "sum:ml": 1.0004945389867785,
+        "sum:sparse": 0.9995161585276473,
+        "sum:specials": 0.9958298467404624,
+        "sum:subnormal": 0.9999950404126993
+      },
+      "raw_evidence": [
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/f01-d10-bmm-direct-rows-verdict.json",
+          "sha256": "ae47b790de83679fa0225a2069147e3bb9e289beee340a0c40babe0fb0e29587"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-d10-bmm-direct-rows/Kernel.lean",
+          "sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+          "sha256": "7e57d74a4b142ea6a27e49866d63e96f2b8cdb122a85a561fc9e471b8e48f54a"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/provenance.json",
+          "sha256": "0ca6baa3a01b683dcd21704754e3aceca74171f493bf36ab87801d02cf6f5384"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/requested-plan.json",
+          "sha256": "cffc4297c83355e96cb19e5f5b7c9d9e48a2b36fd132c1af12bac242cd1ab3f2"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+          "sha256": "addc34c83d9d0bf98d3c53668f8a558a7ddbde7bca73ac5c7537bbeb49f0cc95"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/public-cell-work.json",
+          "sha256": "327fafb2850b1da87c2584ab4846edcabdb4da417af794f329782fc21495a517"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/public-v2.json",
+          "sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/f01-r8-combined-result-guard-verdict.json",
+          "sha256": "af692db9ac524f89b144b3818503aa5d537b89bad29991a6940a4d42975b9525"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-r8-combined-result-guard/Kernel.lean",
+          "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+          "sha256": "7e57d74a4b142ea6a27e49866d63e96f2b8cdb122a85a561fc9e471b8e48f54a"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/provenance.json",
+          "sha256": "0ca6baa3a01b683dcd21704754e3aceca74171f493bf36ab87801d02cf6f5384"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/requested-plan.json",
+          "sha256": "cffc4297c83355e96cb19e5f5b7c9d9e48a2b36fd132c1af12bac242cd1ab3f2"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+          "sha256": "addc34c83d9d0bf98d3c53668f8a558a7ddbde7bca73ac5c7537bbeb49f0cc95"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/public-cell-work.json",
+          "sha256": "327fafb2850b1da87c2584ab4846edcabdb4da417af794f329782fc21495a517"
+        },
+        {
+          "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40003240475/download-cfc689ebf5bb48dd837c6da2abdb6d4d/diagnostics/f01-d7-public-suite/public-suite/public-v2.json",
+          "sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a"
+        }
+      ]
+    }
+  ],
+  "full_gate_runs": [
+    39996680317,
+    40003013355,
+    40003240475
+  ],
+  "anchor": "competitions/floatlib/candidates/f01-d7-research/round2h-20261023T170031Z/freeze-anchor.json",
+  "anchor_sha256": "d7bcc98f3e78a3971e88a53f1fcf6e514c83c80c3ea9d583178e09577ed1cfbc",
+  "retained": false,
+  "selection_scope": "Research display only. Every exact-source complete input group is included. Retention policy and current kernel unchanged."
+}

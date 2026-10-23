@@ -31,6 +31,25 @@ def main():
         assert estimate["status"] == "INFERRED" and estimate["champion_submission"] == number
         assert estimate["champion_digest"] == champion["digest"] and estimate["kernel_sha256"] == view["kernel_sha256"]
         assert hashlib.sha256((ROOT / estimate["evidence"]).read_bytes()).hexdigest() == estimate["evidence_sha256"]
+    direct_times = champion["candidate_over_champion_time_by_operation"]
+    research = view.get("dashboard_research_candidate")
+    if research:
+        path = ROOT / research["evidence"]
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == research["evidence_sha256"]
+        measured = json.loads(path.read_bytes())
+        assert measured["status"] == "INFERRED" and measured["champion_submission"] == number
+        assert measured["champion_digest"] == champion["digest"]
+        assert measured["candidate"] == research["candidate"] and measured["kernel_sha256"] == research["kernel_sha256"]
+        actual = {r["run"] for r in json.loads((ROOT / view["public_results"]).read_bytes())["records"]
+                  if r.get("full_gate") and r["kernel_sha256"] == research["kernel_sha256"]}
+        assert actual == set(research["full_gate_runs"]) == set(measured["full_gate_runs"]) and len(actual) >= 3
+        assert measured["whole"]["ratio_median"] < estimate["whole"]["ratio_median"]
+        source = ROOT / research["kernel"]
+        assert hashlib.sha256(source.read_bytes()).hexdigest() == research["kernel_sha256"]
+        estimate = dict(measured, evidence=research["evidence"])
+        run_count = len(actual)
+        labels = dict(labels, bmm=research["bmm_label"])
+        direct_times = {op: "UNKNOWN" for op in ("add", "mul", "sum", "bmm")}
     lines = [
         "# FloatLib 冲冠看板", "",
         f"冠军核对：[{checked} 北京时间]({receipt})｜各项均以现任完整包冠军为 1.00×，耗时越低越好。", "",
@@ -38,7 +57,7 @@ def main():
         "| --- | --- | --- | ---: | --- |",
     ]
     for op, name in (("add", "加法 add"), ("mul", "乘法 mul"), ("sum", "求和 sum"), ("bmm", "矩阵乘法 bmm")):
-        value = champion["candidate_over_champion_time_by_operation"][op]
+        value = direct_times[op]
         if value == "UNKNOWN" and policy.get("use_estimates_when_direct_unknown") and estimate:
             value = estimate["operations"][op]["ratio_median"]
         if value == "UNKNOWN":

@@ -1,8 +1,8 @@
 # FloatLib 数学结论
 
-截至 2026-10-22，统一整理 R1–R6 已有结论、12份历史归档与R6新增4份研究交付。四项性能与冠军见[看板](../../../dashboard.md)，当前候选选择见[开发状态](../coordination/development-status.json)。
+截至 2026-10-24，保留 R1–R6 归档与后续精确源码验收。四项性能与冠军见[看板](../../../dashboard.md)，当前保留版本及研究候选见[开发状态](../coordination/development-status.json)。
 
-**已建立原生算术、精确解码、有序累加、机器字索引及矩阵按行输出的证明链；后续按“耗时占比 × 可实现降耗”，结合开发和验证成本选择具体路线。** R7当前保留[直接点积＋非NaN完整包](../candidates/f01-d7-direct-nonnan/Kernel.lean)，冻结后独立确认通过；Inf、NaN及组合成果见[R7](../candidates/f01-d7-research/README.md)。下表K仍固定指8eb原件，历史证明与失败保持原版。尚未取代冠军，旧份额与冠军倍数不跨suite继承；适用范围见[套件变更](../docs/suite-transition-20261022.md)。
+**已建立原生算术、精确解码、有序累加、机器字索引及矩阵按行输出的证明链；后续按“耗时占比 × 可实现降耗”，结合开发和验证成本选择具体路线。** 当前保留[R8完整包41](../candidates/f01-r8-combined-result-guard/Kernel.lean)；R10[按行寻址a066](../candidates/f01-d10-bmm-direct-rows/Kernel.lean)完成三组不同输入，作为看板研究首选，尚未达到本轮三组逐一3%的采纳门槛。[R10精确结果](../candidates/f01-d7-research/round2h-20261023T170031Z/README.md)。下表K仍固定指8eb原件，历史证明与失败保持原版。尚未取代冠军，旧份额与冠军倍数不跨suite继承；适用范围见[套件变更](../docs/suite-transition-20261022.md)。
 
 | 运算 | 已可复用的结论 | 当前使用方式 |
 |---|---|---|
@@ -15,7 +15,7 @@
 
 ## 1. 已通过完整候选验证的证明组件
 
-以下 K 指当前完整包，SHA-256 为 `8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045`。其R5四次完整回执为 39766391628、39767698381、39769247640、39770153343，后者为冻结后的独立确认。固定 Lean、FloatLib、官方源及审计入口见[本轮汇总][R5]。R6新增实际验证见[R6汇总](../candidates/f01-d6-research/summary.json)；旧回执保持原版。
+以下 K 固定指历史完整包，SHA-256 为 `8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045`。其R5四次完整回执为 39766391628、39767698381、39769247640、39770153343，后者为冻结后的独立确认。固定 Lean、FloatLib、官方源及审计入口见[本轮汇总][R5]。R6新增实际验证见[R6汇总](../candidates/f01-d6-research/summary.json)；旧回执保持原版。
 
 | 编号 | 数学结论与必要条件 | 可复用声明／精确源码 |
 |---|---|---|
@@ -56,6 +56,18 @@
 | M24 | M21实际终点实现与M23直接点积接口可精确组合；直接分支同样接受Inf，原生/软件顺序与NaN回退均由该组合源码的原obligation重新验收 | [direct-nonnan](../candidates/f01-d7-direct-nonnan/Kernel.lean)，60f74aa4；807发现、809冻结新seed新runner完整确认PASS；性能不由组件成绩相加 |
 
 原始逐项数据与精确verdict从[R7结果](../candidates/f01-d7-research/public-suite-results.json)定位；仅statement或网页自述的后续稿未列作完整组件。R7阶段诊断137次BMM调用已逐一核对，计时/校验/raw分离；[诊断范围与投入决定](../candidates/f01-d7-research/profile-summary.json)保留探针开销异常，不能将finish/回退时间写成纯输出分配或官方阶段份额。
+
+### R10：精确组合源码的完整验收
+
+| 编号 | 数学结论与范围 | 精确源与验收 |
+|---|---|---|
+| M25 | 乘积不会是sNaN；仅将精确乘积原字−0改成+0即可恢复原+0种子加法。不能把此等式推广到任意原始sNaN。非NaN原生乘积导入与NaN原字回退可组成n=1内积 | [ff34单项内积](../candidates/f01-r10-bmm-singleton-native/Kernel.lean)，39994377803完整PASS；[复用已优化标量乘法995d](../candidates/f01-d10-bmm-singleton-tuned/Kernel.lean)，39998179051完整PASS。旧53d/47d原件不追认通过 |
+| M26 | n=0…4的固定有序乘加链逐项等于原Nat dotLoop，保留初始+0、每次舍入及NaN回放；n≥5直接回原循环 | [d70展开](../candidates/f01-d10-bmm-small-unroll/Kernel.lean)，39994942866完整PASS；该组BMM慢约0.7%，保留证明、停放运行替换 |
+| M27 | 按行共享商余数与基地址后，Vector.flatMap的完整输出等于原平坦DirectSmall；包括空输出、n=0和任意Nat维度 | [a066按行寻址](../candidates/f01-d10-bmm-direct-rows/Kernel.lean)，39996680317、40003013355、40003240475三组完整PASS。矩阵快约7.4%/6.5%/10.8%，未据此更换保留版本 |
+| M28 | 实际矩阵坐标可构造两数组的strided地址界；机器加乘不回卷与uget=getD连接原Nat循环。入口一次检查可表示范围，超范围回41，因此不删巨大Nat域 | [f278长薄机器索引](../candidates/f01-r10-bmm-longthin-usize/Kernel.lean)，40000561390完整PASS；该组未见净收益，数学组件保留 |
+| M29 | 行内外提A的原生转换、预转换B并经total map/getD等式读取，仍等于原n=1乘积、负零归一化及NaN原字回退 | [f448行缓存](../candidates/f01-d10-bmm-singleton-row-cache/Kernel.lean)与[ce683双侧缓存](../candidates/f01-d10-bmm-singleton-double-cache/Kernel.lean)，40000065474均完整PASS。853仅3600个n=1输出且m=1，B缓存分支未触发，不能据该组否定其性能机制 |
+
+本轮经验：发现组先核对目标路径是否实际覆盖；确认组仍须冻结后保持未查看。三组a066的每对输入均改变35个BMM形状，完整生成字段均有变化。新增同源慢控制不能重新校准冠军估值；当前看板以冻结基准和同组参照归一化增量更新。原始失败、慢组及未触发分支的限制均见[R10结果](../candidates/f01-d7-research/round2h-20261023T170031Z/round-results.json)。
 
 ## 2. 已提取、尚未形成正式验证组件的数学储备
 
