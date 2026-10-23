@@ -1,0 +1,218 @@
+{
+  "started_at_utc": "2026-10-23T17:30:23Z",
+  "completed_at_utc": "2026-10-23T17:35:31.706526+00:00",
+  "conclusion": "NO_DETERMINISTIC_STATIC_ERROR_FOUND; exactnewLean/fullgate/C/performance NOT_RUN_BY_REVIEWER",
+  "scope": "Onlythese2reviewfileswritten; source/builderreadonly; no Git,CI,network,agents/derivation or842/843futureinputinspection",
+  "independence": "Reviewer didnot author DirectRows candidate/builder. Priorrelatedstaticreviews are notnewacceptance evidence.",
+  "candidate": {
+    "path": "competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean",
+    "sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78",
+    "bytes": 237142
+  },
+  "parent": {
+    "path": "competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean",
+    "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+    "bytes": 235169
+  },
+  "builder": {
+    "path": "competitions/floatlib/candidates/f01-d10-bmm-direct-rows/build.py",
+    "sha256": "9e73ca2cf99137391b4f2608ae418706b01ae4865597d7e7e1bf2170988f4b45",
+    "bytes": 3763
+  },
+  "manifest": {
+    "path": "competitions/floatlib/candidates/f01-d10-bmm-direct-rows/manifest.json",
+    "sha256": "723b44377b0fdd3e02d46b2f577d248e54be3c805b597a8bfd3f190915a68097",
+    "bytes": 937
+  },
+  "diff": [
+    {
+      "kind": "replace",
+      "old_lines": [
+        6099,
+        6099
+      ],
+      "new_lines": [
+        6099,
+        6099
+      ],
+      "old_bytes": 66,
+      "new_bytes": 82
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        6104,
+        6104
+      ],
+      "new_lines": [
+        6104,
+        6104
+      ],
+      "old_bytes": 81,
+      "new_bytes": 97
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        6106,
+        6106
+      ],
+      "new_lines": [
+        6106,
+        6106
+      ],
+      "old_bytes": 70,
+      "new_bytes": 86
+    },
+    {
+      "kind": "replace",
+      "old_lines": [
+        6108,
+        6108
+      ],
+      "new_lines": [
+        6108,
+        6108
+      ],
+      "old_bytes": 13,
+      "new_bytes": 29
+    },
+    {
+      "kind": "insert",
+      "old_lines": [
+        6341,
+        6340
+      ],
+      "new_lines": [
+        6341,
+        6396
+      ],
+      "old_bytes": 0,
+      "new_bytes": 1909
+    }
+  ],
+  "inverse_sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+  "source_delta_bytes": 1973,
+  "capacity_remaining_bytes": 18858,
+  "change_scope": "Fouridentifier-only lineedits rename originalbmm/spec/bodyspec/unfold toBeforeDirectRows; append1909B newrowcore/eq/dispatcher/spec. Independentinversefullyrecovers41. Originalfloatingpointcode/scalars/sum/packed/NaNreplay unchanged.",
+  "path": {
+    "core_lines": [
+      6346,
+      6354
+    ],
+    "selection_lines": [
+      6381,
+      6384
+    ],
+    "selection": "Onlyn<=4 ANDp>2 -> DirectRows.core; allother shapes original41 dispatcherunderbmmBeforeDirectRows. NewbmmBeforeDirectRows/body/proof onlyrenamed, finalexportbmm/spec eachunique.",
+    "runtime": "IdentityVector rowindices0..batch*m-1 flatMap, eachrowproducesj0..p-1, NativeFinal.dot calledwith samecomputedbaseA/baseB+j andoriginalrawarrays. No newdecoder, seednormalizer, arithmeticguard orNaNbehavior."
+  },
+  "index_derivation": {
+    "flatmap_lemma": "Vector.getElem_flatMap:2050-2056 gives outerrowxs[q/p] andinnerindexq%p. ofFnid -> r.val=q/p.",
+    "new": "b_new=(q/p)/m; i_new=(q/p)%m; j_new=q%p. baseA=(b_new*m+i_new)*n; baseB=b_new*n*p+j_new.",
+    "original_decode": "Whenm*p!=0,p!=0: b_old=q/(m*p), i_old=(q%(m*p))/p, j_old=(q%(m*p))%p.",
+    "b_identity": "Nat.div_div_eq_div_mul q p m =>(q/p)/m=q/(p*m); Nat.mul_comm p m normalizes denominator m*p.",
+    "i_identity": "Nat.mod_mul_left_div_self q p m =>(q%(m*p))/p=(q/p)%m.",
+    "j_identity": "Nat.mod_mul_left_mod q m p =>(q%(m*p))%p=q%p.",
+    "result": "AllNativeFinal.dot arguments match exactly; no floatingpoint theorem needed forcore_eq."
+  },
+  "proof_review": {
+    "core_eq_lines": [
+      6356,
+      6374
+    ],
+    "empty_output": "Vector.ext providesq<hbatch*m*p; proof6362-6370 derivesm*p!=0 andp!=0 by contradiction(hq becomesq<0). ThusbmmDecodeCifs reduce, and getElem_flatMap/ofFn exposes exactindexexpressions. The proof doesnotassume globalnonemptydimension; impossibleq cases arevacuous.",
+    "Nat_lemmas": "Allthree fixedprimarytheorems have unconditionalNat signatures, includingzero laws; no missingpositive-m argument totheseidentities. hmp/hp coverconditionals.",
+    "same_accepted_pattern": "ParentRowStream.core_eq6016-6036 alreadyuses identicalhmp/hp construction andsameNat rewrite list withVector.getElem_flatMap. NewcoreusesNat b/i directly, fewerFinproofwrappers. Exactnewfullsource stillnotcompiled byreviewer.",
+    "no_termination_change": "Newcore uses finiteVector.ofFn/flatMap, no newrecursive definition/terminationproof. AllindicesNat; no USize conversion or overflowassumption introduced.",
+    "final_spec_lines": [
+      6386,
+      6394
+    ],
+    "final_spec": "Truebranchrewritescorrespondingvector viaDirectRows.core_eq thenDirectSmall.core_eq_reference andusesreferenceBmm_spec. Falsebranchusesrenamedoldspec. No need toproveextra shape premise forunconditionalcore_eq.",
+    "names_and_scope": "OneclosedSubmission.DirectRows plusreopenedSubmission; NativeFinal.dot/DirectSmall.core/bmmBeforeDirectRows allalreadydeclared. No duplicatefinalbmm/spec, no changedglobaloptions/attributes."
+  },
+  "edge_cases": {
+    "batch0": "outerFin(batch*m)empty; no callback/dot/read",
+    "m0": "outeridentityVectorempty; div/modm notruntimeevaluatedinsideabsentrowcallback; core_eqvacuuous",
+    "p0": "newdispatcherdoesnotselectcore(p>2false); helperflatMaphas0innercolumns andcore_eqisvacuous",
+    "n0": "Forp>2newrowroutecallsoriginaldot0, whichreturnsoriginal+0 anddoesnotreadA/B; baseaddressesmaycomputebutarraysremainunread",
+    "p1_p2": "Newguardfalse; exact41DirectSmall/native route retained",
+    "n_ge5": "Newguardfalse; exact41packed oroldp<=2route retained; extraoutershapecheckperformance unknown",
+    "hugeNat": "No machinewordindices/castsadded; truecaseallNatdiv/modidentitiesandexistinggetD defaults. LogicalsemanticsunboundedNat, practicalresourcefeasibilitynotclaimed"
+  },
+  "unchanged_blocks": {
+    "NativeFinal_excluding_endmarker": {
+      "bytes": 4098,
+      "sha256": "f98a69354a2d7fb6f8874f794cf4a75d4c397011700a051a3dfbc1d8ff25d3fc"
+    },
+    "R7NaNReplay_excluding_endmarker": {
+      "bytes": 3271,
+      "sha256": "b8b91cacdcb73a427146190c2df0d8cd9ff3e26e8bc14aced54a9f05da9d059b"
+    },
+    "Packed10_through_before_DirectSmall": {
+      "bytes": 33109,
+      "sha256": "ede18371c6171028f880a37c0dd130ba57729f577fbe1f38468c9f7451840509"
+    },
+    "R7SinglePassSum_excluding_endmarker": {
+      "bytes": 9212,
+      "sha256": "223785c0ec8d8fd64153aba1ad09db78a8329865856b5fd0908368b45dfe9812"
+    }
+  },
+  "limited_address_check": {
+    "cases": 119,
+    "kind": "Handselectedsmallshape flat-q vsrow/columnintegeridentities only; includesemptydimensions",
+    "not_claimed": "NotFloat32execution,notLean,notfuturegeneratorinputs,notfullgate"
+  },
+  "static_policy": {
+    "result": "PASS exactfixed4b7 BANNED/options/attributes/import checks only",
+    "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+    "imports": [
+      "ContractTensor"
+    ],
+    "newoptions": [],
+    "newattrs": [],
+    "size": 237142,
+    "legal": "Allparentnoticesretained; no sourceminification"
+  },
+  "builder_review": "Readnotexecuted/imported. ParentSHApinned, frozenKernel overwriteexplicitlyrefused, sourcecapacitycheckedbeforewrite. Actual5diffhunks matchintended4renames+append; independentsourceinverseverified.",
+  "performance_risks": [
+    "PerrowVectorconstruction plus identityVector andArray.flatMapcombine remain insideentry; hoistedNatdivisiondoesnotguaranteenetgain",
+    "CurrentlayoutsourcegroupsbaseA/baseBoncerow, butLLVM sharing/inlining/allocation behavior notverified",
+    "Newouterguard mayaffectfallbacktiming; nonewcostshare/wholegainclaim"
+  ],
+  "primary_sources": [
+    {
+      "path": "competitions/floatlib/research/materials/20261022/R2-W01c/FloatLib_R2-W01c/public_sources/official/lean/contract/ContractTensor.lean",
+      "sha256": "65f31bc0d7793f0208465ca554486834b572a45c21c35772789551ac8a82a26c",
+      "bytes": 3433
+    },
+    {
+      "path": "competitions/floatlib/research/astra-collab-20261022-r5/upstream/Vector-Lemmas.lean",
+      "sha256": "1fbf1aa137616c09fcf9b81cee06182d404323cdb1d40ee670c57308bd2de37d",
+      "bytes": 127192
+    },
+    {
+      "path": "competitions/floatlib/research/astra-collab-20261022-r5/upstream/Vector-Basic.lean",
+      "sha256": "d2b5e00d72b2cc1db9b2aece6254c114b3ca6107d03db2e67dff08fd04f20aa3",
+      "bytes": 23061
+    },
+    {
+      "path": "competitions/floatlib/research/astra-collab-20261022-r5/upstream/src_Init_Data_Nat_Div_Basic.lean",
+      "sha256": "0c8fc51180b0d4fb6319e8a44acd7999f3a1b3aad21d8da5c0ad575914f9d120",
+      "bytes": 17794
+    },
+    {
+      "path": "competitions/floatlib/research/astra-collab-20261022-r5/upstream/src_Init_Data_Nat_Mod.lean",
+      "sha256": "08624fdf16e09f65f3f7bf07e9d8ee7dedd4cbebe0c4006756af3de15e3cd83d",
+      "bytes": 2955
+    }
+  ],
+  "next_minimal_check": "Exactoriginalstatementforcore_eqandfinalspec first; ifaccepted measurecompleteentryagainstfrozen41, includingrowconstruction/flatten, allslowandfailedsamples. NewC shouldconfirmlayout/addresshoistingactualcalls beforecausalclaim. PreserveR10threegroup rule.",
+  "not_run": [
+    "Newcore_eq/newbmm_spec Leanelaboration",
+    "Exactnewfullgate/C/asm/performance",
+    "Any842/843inputinspection"
+  ],
+  "final_candidate_sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78"
+}
