@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "review": "R11 cohort execution binding",
+  "started_at_utc": "2026-10-23T21:46:52Z",
+  "scope": "read-only source/receipt audit; only this report pair written",
+  "gate_or_adoption_executed": false,
+  "git_ci_network_agents_used": false,
+  "findings": [
+    {
+      "id": "runtime-cohort-binding",
+      "status": "VERIFIED",
+      "severity": "must-fix-before-new-cohort",
+      "claim": "Cohort required files and final per-run tree checks omit actual outer/workflow/CI chain; dispatch already records these identities but final cohort does not compare them across roles.",
+      "evidence": [
+        "freeze-cohort.py:57",
+        "verify-three-groups.py:74",
+        "../adoption-guard.py:132",
+        "../../f01-mul-log2-proof1/ci.py:64"
+      ],
+      "minimal_patch": "R11 fixed execution_files mapping, required presence and actual D/A/B source_commit tree blob SHA comparisons; keep D7 adapter unchanged"
+    },
+    {
+      "id": "renderer-unfrozen",
+      "status": "VERIFIED",
+      "severity": "must-fix-before-adoption-writes",
+      "claim": "Adopter executes render_dashboard.py without freezing/requiring it.",
+      "evidence": [
+        "adopt-three-confirmed.py:202",
+        "adopt-three-confirmed.py:208",
+        "freeze-cohort.py:57"
+      ]
+    },
+    {
+      "id": "observer-display-provenance",
+      "status": "VERIFIED",
+      "severity": "nonblocking-display",
+      "claim": "All exact-source full-gate ranges may include captured discovery; serialized sample views lose observer label. D/A/B acceptance itself rejects observers.",
+      "minimal_patch": "Retain observer/role labels and explicitly distinguish clean confirmation summaries; do not silently discard raw rows"
+    }
+  ],
+  "confirmed_protections": [
+    "actual primary Kernel/plan/adapter HEAD tree binding",
+    "observer/profile D rejected",
+    "three distinct run/job/seed identities",
+    "D+A and D+B independent local guards",
+    "25 paired rounds and fixed .97/p05 policy",
+    "actual shape/work and generation-vector diversity",
+    "external cohort digest bound into A/B plans",
+    "adoption reruns verifier and rejects diagnostic_only"
+  ],
+  "readonly_replays": [
+    {
+      "fixture": "existing test_verify_three_groups freeze fixture",
+      "mock": "digest reader only",
+      "accepted_with_omitted_runtime_files": true,
+      "omitted_paths_read": false,
+      "omitted_paths": [
+        "competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py",
+        ".github/workflows/deflate-baseline.yml",
+        "competitions/floatlib/scripts/render_dashboard.py"
+      ],
+      "meaning": "missing required-file schema reproduced, not real gate/adoption acceptance"
+    },
+    {
+      "case": "D capture flag",
+      "rejected": true,
+      "reason": "Observer must be disabled"
+    },
+    {
+      "case": "D actual codegen metadata",
+      "rejected": true,
+      "reason": "Observer must be disabled"
+    }
+  ],
+  "required_execution_paths": [
+    ".github/workflows/deflate-baseline.yml",
+    "competitions/floatlib/pins.json",
+    "competitions/floatlib/scripts/ci-prepare.sh",
+    "competitions/floatlib/scripts/ci-setup.sh",
+    "competitions/floatlib/scripts/ci-validate.sh",
+    "competitions/floatlib/scripts/run-gates.py",
+    "competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py",
+    "competitions/floatlib/candidates/f01-d7-public-suite/Kernel.lean",
+    "competitions/floatlib/candidates/f01-d7-public-suite/manifest.json"
+  ],
+  "additional_local_tools_to_freeze": [
+    "competitions/floatlib/candidates/f01-mul-log2-proof1/ci.py",
+    "competitions/floatlib/scripts/render_dashboard.py"
+  ],
+  "existing_tests_recommended_not_run_here": [
+    {
+      "path": "test_verify_three_groups.py",
+      "tests": 21
+    },
+    {
+      "path": "test_adopt_three_confirmed.py",
+      "tests": 17
+    },
+    {
+      "path": "../tests/test_adoption_guard.py",
+      "tests": 16,
+      "note": "actual historical811 test invokes Git tree reader; outside this review scope"
+    },
+    {
+      "path": "test_outer_diagnostic_capture.py",
+      "tests": 10,
+      "note": "optional; earlier separate task PASS, not rerun here"
+    }
+  ],
+  "snapshots": {
+    "freeze-cohort.py": {
+      "bytes": 5817,
+      "sha256": "1fdfa188fe3083645e1d04f7965c49a0086a9e18c442fc55204061b04b617811"
+    },
+    "prepare-plan.py": {
+      "bytes": 7128,
+      "sha256": "5d275d3552c8a79396c6b1d03dd935fa502c4d6531cc403b6e739fc6b4de5273"
+    },
+    "verify-three-groups.py": {
+      "bytes": 18706,
+      "sha256": "e12232b688f959bebee0b68335f933fcf5504975880f11d62fe334b649cc5b24"
+    },
+    "adopt-three-confirmed.py": {
+      "bytes": 19792,
+      "sha256": "319b7979727a90bf785307185d96b87b043796b643fd5c387ce64abe8588cdb6"
+    },
+    "../public-suite.py": {
+      "bytes": 11220,
+      "sha256": "86084d93c52022f4f4a5cfb7969e2b4a035b9a4a4f1f8c6c7e74bd412eafca24"
+    },
+    "../adoption-guard.py": {
+      "bytes": 14417,
+      "sha256": "b009d7b2f2161d756584013ebfc8adea3d2373ddac04c08a4602eb53e4c7a0b2"
+    },
+    "../../../scripts/render_dashboard.py": {
+      "bytes": 5344,
+      "sha256": "40f1068f0f95bae3e8bb4eba38a05132187eab065d17885a4132f44a14d29ab8"
+    },
+    "../../f01-word-tensors/ci-diagnostics.py": {
+      "bytes": 9471,
+      "sha256": "519a1898fd95b4c2482ab8ff5fbbfe1fd131e47a02f10706ec02dad3bb165904"
+    },
+    ".github/workflows/deflate-baseline.yml": {
+      "bytes": 4764,
+      "sha256": "c0925ea63a1cce2172c38e11dda1962c9a725c0da64b15965f2abbd725c81b13"
+    }
+  },
+  "immutable_912": {
+    "sample_role": "STATEMENT_DIAGNOSTIC",
+    "validation_modes": "three statement-only",
+    "eligible_as_clean_D": false,
+    "freeze_sha256": "d0dd96cea8b74fa7ab2c78db5e94e5b86d0d96e4be664f83f06fb0a7b8fbd787",
+    "outer_supplement_sha256": "929300e53349ffa2f8434a04ddf1782c0f2832524d4503514bb8ae74c6a2b462",
+    "plan_sha256": "c1ce661bc64e8d3f08294146adc78af56e46afabaf66b1072279f0622b30fde7",
+    "run": 40029166371,
+    "source_commit": "669e1e437b1592192de45adb8899ed2a33b4ee03",
+    "rewritten": false
+  },
+  "new_runtime_patches": "NOT_IMPLEMENTED",
+  "new_tests": "NOT_RUN",
+  "performance_or_formal_admission_claim": "NONE",
+  "completed_at_utc": "2026-10-23T21:57:29Z"
+}

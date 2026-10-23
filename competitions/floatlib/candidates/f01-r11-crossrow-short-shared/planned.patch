@@ -1,0 +1,84 @@
+--- a/Kernel.lean
++++ b/Kernel.lean
+@@ -6608,11 +6608,58 @@
+ termination_by count.toNat-k.toNat
+ decreasing_by all_goals exact Packed10Index.next_decreases (by assumption)
+ 
++@[inline] def read32 (v : Array Binary32) (i : Nat) : Float32 :=
++  ExecFloat.Binary.toFloat32 (v.getD i posZero)
++
++/-- Called only for n=1 or n=2; decode both slices before accumulator arithmetic. -/
++@[inline] def shortShared (n p a0 a1 a2 a3 b0 : Nat) (A B : Array Binary32) : F8 :=
++  let z := Float32.ofBits 0
++  let x0 := read32 A a0
++  let x1 := read32 A a1
++  let x2 := read32 A a2
++  let x3 := read32 A a3
++  let y0 := read32 B b0
++  let y1 := read32 B (b0+1)
++  if n=1 then
++    ⟨z+x0*y0,z+x1*y0,z+x2*y0,z+x3*y0,
++     z+x0*y1,z+x1*y1,z+x2*y1,z+x3*y1⟩
++  else
++    let u0 := read32 A (a0+1)
++    let u1 := read32 A (a1+1)
++    let u2 := read32 A (a2+1)
++    let u3 := read32 A (a3+1)
++    let v0 := read32 B (b0+p)
++    let v1 := read32 B ((b0+1)+p)
++    let s0 := z+x0*y0
++    let s1 := z+x1*y0
++    let s2 := z+x2*y0
++    let s3 := z+x3*y0
++    let s4 := z+x0*y1
++    let s5 := z+x1*y1
++    let s6 := z+x2*y1
++    let s7 := z+x3*y1
++    ⟨s0+u0*v0,s1+u1*v0,s2+u2*v0,s3+u3*v0,
++     s4+u0*v1,s5+u1*v1,s6+u2*v1,s7+u3*v1⟩
++
++theorem shortShared_lane (n p a0 a1 a2 a3 b0 : Nat) (A B : Array Binary32)
++    (hn : n=1 ∨ n=2) (l : Fin 8) :
++    lane (shortShared n p a0 a1 a2 a3 b0 A B) l =
++      NativeFinal.dotLoop n (select4 a0 a1 a2 a3 (l.val%4))
++        (select4 b0 b0 b0 b0 (l.val%4)+l.val/4) p A B 0 (Float32.ofBits 0) := by
++  rcases l with ⟨l,hl⟩
++  have h : l=0 ∨ l=1 ∨ l=2 ∨ l=3 ∨ l=4 ∨ l=5 ∨ l=6 ∨ l=7 := by omega
++  rcases h with rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl <;>
++    rcases hn with rfl|rfl <;>
++    simp [shortShared, read32, lane, select4, NativeFinal.dotLoop, Nat.add_assoc]
++
+ def dot8 (n p a0 a1 a2 a3 b0 b1 b2 b3 : Nat) (A B : Array Binary32)
+     (hn : n<USize.size) : F8 :=
+-  let v := pack n p a0 a1 a2 a3 b0 b1 b2 b3 A B
+-  let z := Float32.ofBits 0
+-  wordLoop n v (USize.ofNat n) (USize.toNat_ofNat_of_lt' hn) 0 z z z z z z z z
++  if (n=1 ∨ n=2) ∧ b1=b0 ∧ b2=b0 ∧ b3=b0 then
++    shortShared n p a0 a1 a2 a3 b0 A B
++  else
++    let v := pack n p a0 a1 a2 a3 b0 b1 b2 b3 A B
++    let z := Float32.ofBits 0
++    wordLoop n v (USize.ofNat n) (USize.toNat_ofNat_of_lt' hn) 0 z z z z z z z z
+ 
+ theorem dot8_lane (n p a0 a1 a2 a3 b0 b1 b2 b3 : Nat) (A B : Array Binary32)
+     (hn : n<USize.size) (l : Fin 8) :
+@@ -6620,10 +6667,15 @@
+       NativeFinal.dotLoop n (select4 a0 a1 a2 a3 (l.val%4))
+         (select4 b0 b1 b2 b3 (l.val%4)+l.val/4) p A B 0 (Float32.ofBits 0) := by
+   unfold dot8
+-  rw [wordLoop_eq, USize.toNat_zero]
+-  have h := natLoop_lane n p a0 a1 a2 a3 b0 b1 b2 b3 A B 0 zero8 l
+-  rw [lane_zero] at h
+-  simpa only [zero8] using h
++  split
++  · rename_i h
++    rcases h with ⟨hs,h1,h2,h3⟩
++    subst b1; subst b2; subst b3
++    exact shortShared_lane n p a0 a1 a2 a3 b0 A B hs l
++  · rw [wordLoop_eq, USize.toNat_zero]
++    have h := natLoop_lane n p a0 a1 a2 a3 b0 b1 b2 b3 A B 0 zero8 l
++    rw [lane_zero] at h
++    simpa only [zero8] using h
+ 
+ def laneIndex (r : Fin 4) (j : Fin 2) : Fin 8 :=
+   ⟨r.val+4*j.val, by have hr:=r.isLt; have hj:=j.isLt; omega⟩

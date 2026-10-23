@@ -1,0 +1,39 @@
+{
+  "manifest": {
+    "candidate": "f01-r11-crossrow-short-shared",
+    "candidate_file": "Kernel.lean",
+    "candidate_sha256": "7cad7df494da6004b9e4b202f4d09b838ef8d4b79ba6fe934eea7287784fea28",
+    "candidate_bytes": 254550,
+    "parent_sha256": "5c5e7071927400ecd75d02d69b0ce62236a50a615912d99e7f8470a9ccf19c6b",
+    "web_donor_sha256": "5645b861ce6eeaa00cbb80a791dcb225dca75463f1816ca051d52fe6b62ba910",
+    "archive_sha256": "58cb49f49c6325a795348f7fd0736de3d6974cb69c6e6d1a3f34f8d8082b7da9",
+    "created_at_utc": "2026-10-23T22:01:06.499549+00:00",
+    "mechanism": "n1/n2 with allfourBbases equal: decode wholeone/twoslices thenunroll8orderedchains; noVectorP12 on selectedgroup. Mixedbases/othern retainparent.",
+    "proof_rebase": "Allthree observed908repairs retained, including explicitzero8normalization inside newdot8_lane fallback.",
+    "validation_mode": "full-gate",
+    "proof_status": "NOT_RUN",
+    "full_gate": "NOT_RUN",
+    "codegen": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "formal_submission": "NOT_SUBMITTED",
+    "readiness": "FROZEN_READY_FOR_D_STATEMENT",
+    "parent_statement_pass": {
+      "run": 40029166371,
+      "seed": 912,
+      "verdict_sha256": "3c85a3c7eaa396d57d5c21ebdd5539cf9b5e3b040184ac069893ed71b7400343",
+      "scope": "Parentstatementonly; no newcandidateacceptance inherited"
+    },
+    "build_script_sha256": "3bb3a5c9fb37726c283fc8be4c4262d6fb9b20e6b8df31e73066f9644031611a",
+    "attribution": "Web6Pro R11-W03; originalsource notices preserved. A/B are alternative lowerings, onlyA prepared."
+  },
+  "inverse_parent_sha256": "5c5e7071927400ecd75d02d69b0ce62236a50a615912d99e7f8470a9ccf19c6b",
+  "inverse_web_A_sha256": "5645b861ce6eeaa00cbb80a791dcb225dca75463f1816ca051d52fe6b62ba910",
+  "changed_original_region": {
+    "start": 243415,
+    "end": 244151
+  },
+  "original_region": "def dot8 (n p a0 a1 a2 a3 b0 b1 b2 b3 : Nat) (A B : Array Binary32)\n    (hn : n<USize.size) : F8 :=\n  let v := pack n p a0 a1 a2 a3 b0 b1 b2 b3 A B\n  let z := Float32.ofBits 0\n  wordLoop n v (USize.ofNat n) (USize.toNat_ofNat_of_lt' hn) 0 z z z z z z z z\n\ntheorem dot8_lane (n p a0 a1 a2 a3 b0 b1 b2 b3 : Nat) (A B : Array Binary32)\n    (hn : n<USize.size) (l : Fin 8) :\n    lane (dot8 n p a0 a1 a2 a3 b0 b1 b2 b3 A B hn) l =\n      NativeFinal.dotLoop n (select4 a0 a1 a2 a3 (l.val%4))\n        (select4 b0 b1 b2 b3 (l.val%4)+l.val/4) p A B 0 (Float32.ofBits 0) := by\n  unfold dot8\n  rw [wordLoop_eq, USize.toNat_zero]\n  have h := natLoop_lane n p a0 a1 a2 a3 b0 b1 b2 b3 A B 0 zero8 l\n  rw [lane_zero] at h\n  simpa only [zero8] using h\n",
+  "new_region": "@[inline] def read32 (v : Array Binary32) (i : Nat) : Float32 :=\n  ExecFloat.Binary.toFloat32 (v.getD i posZero)\n\n/-- Called only for n=1 or n=2; decode both slices before accumulator arithmetic. -/\n@[inline] def shortShared (n p a0 a1 a2 a3 b0 : Nat) (A B : Array Binary32) : F8 :=\n  let z := Float32.ofBits 0\n  let x0 := read32 A a0\n  let x1 := read32 A a1\n  let x2 := read32 A a2\n  let x3 := read32 A a3\n  let y0 := read32 B b0\n  let y1 := read32 B (b0+1)\n  if n=1 then\n    ⟨z+x0*y0,z+x1*y0,z+x2*y0,z+x3*y0,\n     z+x0*y1,z+x1*y1,z+x2*y1,z+x3*y1⟩\n  else\n    let u0 := read32 A (a0+1)\n    let u1 := read32 A (a1+1)\n    let u2 := read32 A (a2+1)\n    let u3 := read32 A (a3+1)\n    let v0 := read32 B (b0+p)\n    let v1 := read32 B ((b0+1)+p)\n    let s0 := z+x0*y0\n    let s1 := z+x1*y0\n    let s2 := z+x2*y0\n    let s3 := z+x3*y0\n    let s4 := z+x0*y1\n    let s5 := z+x1*y1\n    let s6 := z+x2*y1\n    let s7 := z+x3*y1\n    ⟨s0+u0*v0,s1+u1*v0,s2+u2*v0,s3+u3*v0,\n     s4+u0*v1,s5+u1*v1,s6+u2*v1,s7+u3*v1⟩\n\ntheorem shortShared_lane (n p a0 a1 a2 a3 b0 : Nat) (A B : Array Binary32)\n    (hn : n=1 ∨ n=2) (l : Fin 8) :\n    lane (shortShared n p a0 a1 a2 a3 b0 A B) l =\n      NativeFinal.dotLoop n (select4 a0 a1 a2 a3 (l.val%4))\n        (select4 b0 b0 b0 b0 (l.val%4)+l.val/4) p A B 0 (Float32.ofBits 0) := by\n  rcases l with ⟨l,hl⟩\n  have h : l=0 ∨ l=1 ∨ l=2 ∨ l=3 ∨ l=4 ∨ l=5 ∨ l=6 ∨ l=7 := by omega\n  rcases h with rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl <;>\n    rcases hn with rfl|rfl <;>\n    simp [shortShared, read32, lane, select4, NativeFinal.dotLoop, Nat.add_assoc]\n\ndef dot8 (n p a0 a1 a2 a3 b0 b1 b2 b3 : Nat) (A B : Array Binary32)\n    (hn : n<USize.size) : F8 :=\n  if (n=1 ∨ n=2) ∧ b1=b0 ∧ b2=b0 ∧ b3=b0 then\n    shortShared n p a0 a1 a2 a3 b0 A B\n  else\n    let v := pack n p a0 a1 a2 a3 b0 b1 b2 b3 A B\n    let z := Float32.ofBits 0\n    wordLoop n v (USize.ofNat n) (USize.toNat_ofNat_of_lt' hn) 0 z z z z z z z z\n\ntheorem dot8_lane (n p a0 a1 a2 a3 b0 b1 b2 b3 : Nat) (A B : Array Binary32)\n    (hn : n<USize.size) (l : Fin 8) :\n    lane (dot8 n p a0 a1 a2 a3 b0 b1 b2 b3 A B hn) l =\n      NativeFinal.dotLoop n (select4 a0 a1 a2 a3 (l.val%4))\n        (select4 b0 b1 b2 b3 (l.val%4)+l.val/4) p A B 0 (Float32.ofBits 0) := by\n  unfold dot8\n  split\n  · rename_i h\n    rcases h with ⟨hs,h1,h2,h3⟩\n    subst b1; subst b2; subst b3\n    exact shortShared_lane n p a0 a1 a2 a3 b0 A B hs l\n  · rw [wordLoop_eq, USize.toNat_zero]\n    have h := natLoop_lane n p a0 a1 a2 a3 b0 b1 b2 b3 A B 0 zero8 l\n    rw [lane_zero] at h\n    simpa only [zero8] using h\n",
+  "static": "PASS",
+  "source_margin": 1450
+}

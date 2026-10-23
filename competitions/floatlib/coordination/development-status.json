@@ -1,6 +1,6 @@
 {
   "state": "R11_ACTIVE_BMM_STRUCTURAL_RESEARCH",
-  "updated_at_utc": "2026-10-23T21:58:43.733729+00:00",
+  "updated_at_utc": "2026-10-23T22:04:35.137019+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "candidate": "competitions/floatlib/candidates/f01-r8-combined-result-guard",
@@ -1724,15 +1724,57 @@
         "run": 40030324309,
         "seed": 913,
         "source_commit": "112f1930c7b70020cefe672cdfce729584a710ec",
-        "state": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+        "state": "TERMINAL_COLLECTED_SUCCESS",
         "candidates": [
           "f01-d11-scalar-normal-band",
           "f01-d11-bmm-fused-output-compact"
         ],
         "role": "STATEMENT_DIAGNOSTIC",
         "capture_codegen": [],
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T215636Z/dispatch.json",
+        "conclusion": "success",
+        "summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40030324309/download-25f67cdeabfc42e59f4bb2b0cde14377/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+        "summary_sha256": "2cb3a84b01822aea7bd660e499e8c33a5c16b1aa828f82276fc5f9f0655c0189",
+        "results": [
+          {
+            "candidate": "f01-d11-scalar-normal-band",
+            "kernel_sha256": "e279b35413de1a753dc38edafcca3f476745390ede518ddeab93f0ccc1b8ef1d",
+            "full_gate": false,
+            "statement_pass": true,
+            "stage": "statement",
+            "exit_code": 0
+          },
+          {
+            "candidate": "f01-d11-bmm-fused-output-compact",
+            "kernel_sha256": "f2fa8d10872e1b341f2400db3ceb3c2a9e4f0f6e6d9cd9779469bc9286760553",
+            "full_gate": false,
+            "statement_pass": true,
+            "stage": "statement",
+            "exit_code": 0
+          }
+        ],
+        "unexecuted_candidates": []
+      },
+      {
+        "run": 40030638967,
+        "seed": 914,
+        "source_commit": "26b892ee39467f268b00cc4f105840a5b72bf8f5",
+        "state": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+        "candidates": [
+          "f01-d11-bmm-underflow-zero-proof2",
+          "f01-r11-crossrow-p2-pack12-proof2",
+          "f01-d11-bmm-batch-local-output-proof2",
+          "f01-d10-bmm-direct-rows",
+          "f01-r8-combined-result-guard"
+        ],
+        "role": "DISCOVERY",
+        "capture_codegen": [
+          "f01-r11-crossrow-p2-pack12-proof2",
+          "f01-d11-bmm-batch-local-output-proof2"
+        ],
         "collected": false,
-        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T215636Z/dispatch.json"
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T215929Z/dispatch.json"
       }
     ],
     "completed_ci": [
@@ -1747,10 +1789,11 @@
       40024496791,
       40025423585,
       40027315361,
-      40029166371
+      40029166371,
+      40030324309
     ],
     "active_ci": [
-      40030324309
+      40030638967
     ],
     "reset_used_count": 0,
     "notes": "All preparation, queues, coordination, proof repair and collection count within the fixed wall-clock window. Keep working to deadline; finish and collect any started CI even if terminal collection extends past deadline. Do not start new research after deadline.",
@@ -2060,6 +2103,26 @@
             "candidate": "f01-r8-combined-result-guard",
             "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
             "capture_codegen": false
+          }
+        ]
+      },
+      {
+        "seed": 915,
+        "role": "STATEMENT_DIAGNOSTIC",
+        "plan": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/plan-915.json",
+        "sha256": "627c0bdb53aeee923595f12702d5cf0c72b4d19a31b2733ac1b60d93ec386610",
+        "candidates": [
+          {
+            "candidate": "f01-d11-bmm-direct-continuous",
+            "sha256": "2aaa5d9e84c758a23a8c6dc1f77d800950fbaa5769aec7a38d299741c17a5f56",
+            "capture_codegen": false,
+            "validation_mode": "statement-only"
+          },
+          {
+            "candidate": "f01-r11-crossrow-short-shared",
+            "sha256": "7cad7df494da6004b9e4b202f4d09b838ef8d4b79ba6fe934eea7287784fea28",
+            "capture_codegen": false,
+            "validation_mode": "statement-only"
           }
         ]
       }

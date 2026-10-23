@@ -83,6 +83,10 @@ for p in [D7/'public-suite.py',D7/'adoption-guard.py',ROOT/'competitions/floatli
     files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
 for p in [OUT/'round-plan.json',Path(__file__).resolve()]:
     files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
+binding_spec=importlib.util.spec_from_file_location('r11_prepare_execution',OUT/'execution-binding.py')
+binding=importlib.util.module_from_spec(binding_spec);binding_spec.loader.exec_module(binding)
+for p in [ROOT/n for n in binding.EXECUTION_FILES]+[OUT/'execution-binding.py']:
+    files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
 if args.capture_codegen:
     p=D7/'capture-codegen.py'
     files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}

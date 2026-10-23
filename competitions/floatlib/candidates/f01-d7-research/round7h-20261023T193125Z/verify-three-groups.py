@@ -41,6 +41,13 @@ def import_guard():
     return guard
 
 
+def import_binding():
+    spec = importlib.util.spec_from_file_location('r11_execution_binding', HERE / 'execution-binding.py')
+    binding = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(binding)
+    return binding
+
+
 def verify_freeze(freeze, expected_sha256, freeze_path, guard, root=ROOT):
     """External freeze digest is mandatory; a self-recomputed digest is insufficient."""
     require(digest(freeze_path) == expected_sha256, "Frozen cohort bytes differ from external SHA-256")
@@ -71,8 +78,9 @@ def verify_freeze(freeze, expected_sha256, freeze_path, guard, root=ROOT):
             "Frozen suite/generator differs from unchanged guard")
     require(set(freeze["reference"]) == {"incumbent_sha256", "champion_sha256"} and
             all(isinstance(v, str) and re.fullmatch(r"[0-9a-f]{64}", v) for v in freeze["reference"].values()), "Missing frozen reference identities")
-    required = (HERE / "round-plan.json", HERE / "selection-policy.json", HERE / "prepare-plan.py", OWN / "adoption-guard.py",
-                OWN / "public-suite.py", Path(__file__).resolve())
+    binding = import_binding()
+    binding.verify_freeze(freeze)
+    required = binding.required_local_paths(root, HERE) + [root / n for n in binding.EXECUTION_FILES]
     files = freeze["files"]
     for path in required:
         key = path.relative_to(root).as_posix()
@@ -220,6 +228,10 @@ def verify_three_groups(freeze, runs, guard, root=ROOT, own=OWN, shape_loader=lo
     for role, packet in packets.items():
         receipt["groups"][role] = {"run": packet["run_id"], "job": packet["job_id"], "seed": packet["seed"],
                                   "evidence": packet["evidence"], "gain_p05": "UNKNOWN_IF_GUARD_REJECTED"}
+        try:
+            receipt['groups'][role]['execution_binding'] = import_binding().verify_run(freeze, packet, guard, root)
+        except Exception as exc:
+            receipt['failures'].append({'stage': 'execution:' + role, 'type': type(exc).__name__, 'reason': str(exc)})
         try:
             receipt["groups"][role]["relative_normalized_ratio"] = packet["verdicts"][candidate]["ratio"] / packet["verdicts"][baseline]["ratio"]
             shapes[role] = shape_loader(root, guard, packet)

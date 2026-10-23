@@ -22,8 +22,8 @@ REFERENCE = {"incumbent_sha256": "b" * 64, "champion_sha256": "c" * 64}
 
 
 def freeze_fixture():
-    paths = (HERE / "round-plan.json", HERE / "selection-policy.json", HERE / "prepare-plan.py", HERE.parent / "adoption-guard.py",
-             HERE.parent / "public-suite.py", HERE / "verify-three-groups.py")
+    binding = mod.import_binding()
+    paths = binding.required_local_paths(mod.ROOT, HERE) + [mod.ROOT/n for n in binding.EXECUTION_FILES]
     return {"schema_version": 1, "required_groups": 3, "frozen_at_utc": "2026-10-23T00:00:00Z",
             "holdouts_unseen_before_freeze": True,
             "candidate": {"name": CANDIDATE, "sha256": SOURCE},
@@ -32,11 +32,13 @@ def freeze_fixture():
             "candidate_orders": {r: [CANDIDATE, BASELINE] for r in ('D','A','B')},
             "selection_policy": deepcopy(guard.SELECTION_POLICY), "suite_sha256": guard.SUITE_SHA,
             "generator_sha256": guard.GENERATOR_SHA, "reference": REFERENCE,
+            "execution_files": binding.snapshot(mod.ROOT),
             "files": {p.relative_to(mod.ROOT).as_posix(): {"sha256": mod.digest(p)} for p in paths}}
 
 
 def packet_fixture(run, seed, factor=0.8):
     plan = {"seed": seed, "selection_policy": deepcopy(guard.SELECTION_POLICY),
+            "sample_role": "DISCOVERY",
             "comparison_baseline": BASELINE, "profile_parent": False, "profile_current": False,
             "candidates": [{"candidate": CANDIDATE, "sha256": SOURCE, "capture_codegen": False},
                            {"candidate": BASELINE, "sha256": mod.BASELINE_SHA, "capture_codegen": False}]}
@@ -55,6 +57,7 @@ def packet_fixture(run, seed, factor=0.8):
             "kernel_hashes": {CANDIDATE: SOURCE, BASELINE: mod.BASELINE_SHA},
             "verdicts": {CANDIDATE: verdict(factor), BASELINE: verdict(1)},
             "evidence": {"suite_sha256": guard.SUITE_SHA, "generator_sha256": guard.GENERATOR_SHA,
+                         "source_commit": f'{run:040x}',
                          "drawn_plan_sha256": hashlib.sha256(str(run).encode()).hexdigest()}}
 
 
@@ -62,6 +65,11 @@ class SyntheticIO:
     def __init__(self):
         self.packets = {r: packet_fixture(r, s) for r, s in ((101, 11), (102, 22), (103, 33))}
         self.calls = []
+        self.execution = {f'{r:040x}': {name: (mod.ROOT/name).read_bytes()
+                          for name in mod.import_binding().EXECUTION_FILES} for r in self.packets}
+
+    def read_tree_blob(self, root, source_commit, relative):
+        return self.execution[source_commit][relative]
 
     def load_run(self, root, own, run, names):
         if run not in self.packets:
@@ -104,6 +112,45 @@ class ThreeGroupTests(unittest.TestCase):
         self.assertEqual(self.io.calls, [(101, 102), (101, 103)])
         self.assertFalse(result["adoption_performed"])
         self.assertEqual(set(result["groups"]), {"D", "A", "B"})
+        self.assertEqual(set(result['groups']['B']['execution_binding']['files']),
+                         set(mod.import_binding().EXECUTION_FILES))
+
+    def test_third_actual_outer_helper_change_rejected_with_all_original_groups_kept(self):
+        key = 'competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py'
+        self.io.execution[f'{103:040x}'][key] += b'changed'
+        result = self.run_verify()
+        self.assertFalse(result['accepted'])
+        self.assertEqual(result['group_count'], 3)
+        self.assertTrue(any(f['stage'] == 'execution:B' and key in f['reason'] for f in result['failures']))
+
+    def test_discovery_actual_workflow_change_rejected(self):
+        key = '.github/workflows/deflate-baseline.yml'
+        self.io.execution[f'{101:040x}'][key] += b'changed'
+        result = self.run_verify()
+        self.assertFalse(result['accepted'])
+        self.assertTrue(any(f['stage'] == 'execution:D' and key in f['reason'] for f in result['failures']))
+
+    def test_missing_actual_commit_cannot_skip_execution_check(self):
+        del self.io.packets[102]['evidence']['source_commit']
+        self.assertFalse(self.run_verify()['accepted'])
+
+    def test_freeze_cannot_omit_outer_helper_from_execution_manifest(self):
+        del self.freeze['execution_files']['competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py']
+        with patch.object(mod, 'digest', return_value='expected'):
+            with self.assertRaisesRegex(ValueError, 'execution files'):
+                mod.verify_freeze(self.freeze, 'expected', Path('fake-freeze'), guard)
+
+    def test_freeze_cannot_omit_renderer(self):
+        del self.freeze['files']['competitions/floatlib/scripts/render_dashboard.py']
+        with patch.object(mod, 'digest', return_value='expected'):
+            with self.assertRaisesRegex(ValueError, 'Missing frozen helper'):
+                mod.verify_freeze(self.freeze, 'expected', Path('fake-freeze'), guard)
+
+    def test_execution_table_cannot_disagree_with_local_frozen_file(self):
+        self.freeze['execution_files']['.github/workflows/deflate-baseline.yml']['sha256'] = '0'*64
+        with patch.object(mod, 'digest', return_value='expected'):
+            with self.assertRaisesRegex(ValueError, 'binding differs'):
+                mod.verify_freeze(self.freeze, 'expected', Path('fake-freeze'), guard)
 
     def test_reusing_confirmation_a_as_b_is_rejected(self):
         self.runs["B"] = 102

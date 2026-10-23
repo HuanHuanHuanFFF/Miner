@@ -51,7 +51,7 @@ class Fixture:
         self.freeze={"candidate":{"name":"new-synthetic","sha256":self.hash},"baseline":{"name":BASE_NAME,"sha256":ad.BASELINE},
             "groups":{r:{"seed":100+n,"run":n} for r,n in self.runs.items()},"suite_sha256":"suite",
             "selection_policy":{"headline_normalized_ratio_max":.97,"gain_p05_min_exclusive":0.0},"files":{}}
-        for p in (self.here/"adopt-three-confirmed.py",self.scripts/"estimate_champion_time.py",self.anchor):
+        for p in (self.here/"adopt-three-confirmed.py",self.scripts/"estimate_champion_time.py",self.scripts/"render_dashboard.py",self.anchor):
             if not p.exists():p.write_bytes(b"synthetic-frozen-helper")
             self.freeze["files"][p.relative_to(self.root).as_posix()]={"sha256":ad.sha(p.read_bytes())}
         self.freeze_path=self.here/"cohort-freeze.json";self.save(self.freeze_path,self.freeze)
@@ -123,6 +123,12 @@ class AdoptionTests(unittest.TestCase):
     def test_missing_third_is_rejected_without_writes(self):
         del self.f.selection["groups"]["B"]
         self.zero_write_failure()
+    def test_missing_renderer_freeze_is_rejected_before_target_writes(self):
+        del self.f.freeze['files']['competitions/floatlib/scripts/render_dashboard.py']
+        self.f.save(self.f.freeze_path,self.f.freeze)
+        self.f.freeze_sha=ad.sha(self.f.freeze_path.read_bytes())
+        result=self.zero_write_failure()
+        self.assertTrue(any('freeze' in x['reason'] for x in result['failures']))
     def test_slow_third_is_rejected_without_writes(self):
         self.f.selection["groups"]["B"]["relative_normalized_ratio"]=1.04
         self.zero_write_failure()

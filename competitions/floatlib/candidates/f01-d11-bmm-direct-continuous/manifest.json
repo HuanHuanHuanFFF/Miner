@@ -1,0 +1,29 @@
+{
+  "candidate": "f01-d11-bmm-direct-continuous",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "2aaa5d9e84c758a23a8c6dc1f77d800950fbaa5769aec7a38d299741c17a5f56",
+  "candidate_bytes": 248566,
+  "created_at_utc": "2026-10-23T21:56:43.041740+00:00",
+  "parent": "f01-d11-bmm-fused-output-proof3",
+  "parent_sha256": "5b7d926cf628c2d87042386834f7c1581b9a6aa7441af196453984b395534ba2",
+  "parent_validation": {
+    "run": 40027315361,
+    "seed": 911,
+    "full_gate": true,
+    "verdict": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40027315361\\download-4a79e554697544c9b3d9f99c75284e70\\diagnostics\\f01-d7-public-suite\\public-suite\\f01-d11-bmm-fused-output-proof3-verdict.json",
+    "verdict_sha256": "2e867ba22b5fb2dd151e15933377434004005cae677bab79d682ba622af1e258"
+  },
+  "mechanism": "Only n<=4 and p>2 branch: replace row-number Vector.flatMap / per-row Vector with Fin.foldl over flat rows and emit p original NativeFinal.dot results into one preallocated Array. Share flat baseA=r*n and baseB=(r/m)*n*p per row. This runtime branch never maps nativeA or prepares packedB. All other shapes keep full-gate5b parent routes, including new packed RowStream.",
+  "proof": "row_prefix uses existing emit_prefix and point_row; output_prefix uses foldl_inv; Vector wrapper/reference equality composes already accepted generic prefix_vector_eq_ofFn and points_eq_reference, avoiding concrete output normalization. Final branch connects to original referenceBmm_spec. All new text NOT_RUN.",
+  "scope": "One guard family only. p<=2 unchanged for Astra route ownership. No numeric decoder replacement, unrolling, floating arithmetic change, unsafe or external code. Parent exact source retained; no compact unvalidated parent used.",
+  "edge_cases": "New core proof all Nat dimensions including empty batch/m/p and n=0, though runtime dispatcher selects only n<=4,p>2. Original NativeFinal.dot preserves exact raw NaN replay and fixed MAC sequence; arbitrary Nat output count and addresses remain Nat.",
+  "cost_boundary": "Output allocation, scalar dot conversions, NaN replay, writing and destruction remain inside original timed call. Source contains no row array; actual C exclusivity/closure/control cost remains UNKNOWN. Flat A row reconstruction/modulo removal is part of mechanism and not separately attributed.",
+  "validation_mode": "statement-only first; original complete gate if accepted",
+  "proof_status": "NOT_RUN",
+  "kernel_replay": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "checksum": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "formal_submission": "NOT_SUBMITTED",
+  "attribution": "All parent author/provenance and obsolete helper declarations retained byte-for-byte. New continuous direct output writer/proof session-authored using existing in-file interfaces."
+}

@@ -54,9 +54,13 @@ def main():
     g.require(not {a.seed_a, a.seed_b}.intersection(used), 'Holdout seed already dispatched')
     for seed in (a.seed_a, a.seed_b):
         g.require(not (HERE/f'plan-{seed}.json').exists(), 'Holdout already prepared')
-    files = [HERE/n for n in ('round-plan.json', 'selection-policy.json', 'prepare-plan.py', 'verify-three-groups.py', 'adopt-three-confirmed.py', 'summarize-run.py', 'freeze-cohort.py')]
-    files += [D7/'adoption-guard.py', D7/'public-suite.py', ROOT/'competitions/floatlib/scripts/estimate_champion_time.py']
-    estimator_spec = importlib.util.spec_from_file_location('r11_freeze_estimator', files[-1])
+    binding_spec = importlib.util.spec_from_file_location('r11_freeze_execution', HERE/'execution-binding.py')
+    binding = importlib.util.module_from_spec(binding_spec)
+    binding_spec.loader.exec_module(binding)
+    execution = binding.snapshot(ROOT)
+    binding.verify_run({'execution_files': execution}, p, g, ROOT)
+    files = binding.required_local_paths(ROOT, HERE) + [ROOT/n for n in binding.EXECUTION_FILES]
+    estimator_spec = importlib.util.spec_from_file_location('r11_freeze_estimator', ROOT/'competitions/floatlib/scripts/estimate_champion_time.py')
     estimator = importlib.util.module_from_spec(estimator_spec)
     estimator_spec.loader.exec_module(estimator)
     files += [Path(estimator.DEFAULT_ANCHOR), screen_path]
@@ -74,6 +78,7 @@ def main():
               'frozen_at_utc': datetime.now(timezone.utc).isoformat(),
               'holdouts_unseen_before_freeze': True, 'diagnostic_only': a.diagnostic_only,
               'discovery_evidence': p['evidence'], 'discovery_screen': screen,
+              'execution_files': execution,
               'files': {path.relative_to(ROOT).as_posix(): {'sha256': digest(path)} for path in files}}
     destination = HERE/'cohort-freeze.json'
     g.require(not destination.exists() and not (HERE/'cohort-freeze.sha256').exists(), 'Cohort already frozen')

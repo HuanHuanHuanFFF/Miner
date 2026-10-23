@@ -205,7 +205,7 @@ def adopt(freeze_path, expected_sha, runs, root=ROOT, verifier=None, estimator=N
         guard = verifier.import_guard()
         def frozen():
             verifier.verify_freeze(freeze,expected_sha,freeze_path,guard,root=root)
-            for path in (here/"adopt-three-confirmed.py",root/"competitions/floatlib/scripts/estimate_champion_time.py",Path(estimator.DEFAULT_ANCHOR)):
+            for path in (here/"adopt-three-confirmed.py",root/"competitions/floatlib/scripts/estimate_champion_time.py",root/"competitions/floatlib/scripts/render_dashboard.py",Path(estimator.DEFAULT_ANCHOR)):
                 key=path.relative_to(root).as_posix()
                 require(key in freeze["files"] and sha(path.read_bytes())==freeze["files"][key]["sha256"], "Missing/changed adoption estimator anchor freeze: "+key)
         frozen()
