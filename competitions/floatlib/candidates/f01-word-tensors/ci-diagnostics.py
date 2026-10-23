@@ -71,7 +71,12 @@ def statement(src,verdict):
                 (out/'profile-error.txt').write_text(traceback.format_exc(),encoding='utf-8')
         if kernel.parent.name in ('f01-d6-public-suite','f01-d7-public-suite'):
             research_dir='f01-d6-research' if kernel.parent.name=='f01-d6-public-suite' else 'f01-d7-research'
-            ps=importlib.util.spec_from_file_location('current_public_suite',profiler.parent.parent/research_dir/'public-suite.py')
+            adapter=profiler.parent.parent/research_dir/'public-suite.py'
+            if kernel.parent.name=='f01-d7-public-suite':
+                request=json.loads((profiler.parent.parent/'f01-d7-public-suite/suite-plan.json').read_bytes())
+                if request.get('profile_current'):
+                    adapter=profiler.parent.parent/research_dir/'round2h-20261023T170031Z/profile-wrapper.py'
+            ps=importlib.util.spec_from_file_location('current_public_suite',adapter)
             pm=importlib.util.module_from_spec(ps);ps.loader.exec_module(pm)
             pm.run(g,kernel,out)
     return reason
