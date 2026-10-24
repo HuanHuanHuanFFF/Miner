@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "review": "R13 short-packed route and optional cross-fused-output static review",
+  "reviewed_at_utc": "2026-10-24T12:44:00Z",
+  "scope": "Read-only source and historical evidence review; no Lean, CI, Git, candidate or shared-state action.",
+  "short_packed": {
+    "candidate": "f01-d13-short-packed",
+    "candidate_sha256": "252b4539d34bdf384de8d9dd5cfa20e54538598a65600e4c68348cc4c004af80",
+    "candidate_bytes": 248130,
+    "remaining_bytes": 7870,
+    "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+    "manifest_sha256": "65cbfd57a2e748725dac4f5c494725a4b93c1dcf3ecfb95b6e1e3a5280bdfef6",
+    "builder_sha256": "7c047fd5d83a144d2168a108fa0118fd1ac76867840c561b9335f5ed7b656730",
+    "inverse_reconstruction": {
+      "runtime_and_proof_replacements": 2,
+      "each_replacement_seen_once": true,
+      "reconstructed_parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+      "all_other_source_bytes_unchanged": true
+    },
+    "route": "After outer UnderflowZero and p=2 Cross guards, n<=4 and p>2 switches from DirectContinuous.core to RowStream.core; all other dimensions retain the original fallback.",
+    "proof_bridge": "Existing unconditional RowStream.core_eq_reference; original public obligation unchanged",
+    "formal_integration": "NOT_RUN",
+    "full_gate": "NOT_RUN_IN_THIS_REVIEW",
+    "root_d5_run": 40094337126
+  },
+  "historical_route_coverage": {
+    "old_all_rowstream_source": {
+      "candidate": "f01-d5-stream-pack",
+      "kernel_sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045",
+      "public_index_sha256": "0ee6c1f4c4b4fd9de8cd57bc874aed5bd959d0197ac6ff617fe720f7df0be7d5",
+      "full_gate_runs": [39832394805, 39833363659, 39835885059, 39836787411, 39839349846, 39840672791, 39846309529],
+      "per_seed_n_le4_p_gt2_bmm_cases": {
+        "801": 2,
+        "802": 0,
+        "804": 3,
+        "805": 6,
+        "806": 8,
+        "807": 1,
+        "808": 1
+      },
+      "timed_cases_total": 19,
+      "historical_negative_for_exact_df5c_route_switch": false,
+      "interpretation": "Historical full-gate exposure/correctness of RowStream on short shapes in a different package; no causal comparison to DirectContinuous on df5c."
+    },
+    "direct_continuous_route": {
+      "candidate": "f01-d11-bmm-direct-continuous",
+      "kernel_sha256": "2aaa5d9e84c758a23a8c6dc1f77d800950fbaa5769aec7a38d299741c17a5f56",
+      "full_gate_runs": [40032766690, 40039965234],
+      "run_916_result_sha256": "61a89d9aadaf26aecaf118906608909db9c2ea189f08815b1cdd8d87639bb14c",
+      "run_916_normalized_whole": 0.963487755699982,
+      "run_916_normalized_bmm": 0.8155503390574169,
+      "run_916_gain_p05": 0.030509032601674257,
+      "run_916_observer_present": true,
+      "interpretation": "Full-gate pass for DirectContinuous versus D10 DirectRows; not a RowStream-versus-DirectContinuous test."
+    },
+    "current_df5c_profile_summary_sha256": "5d27e0497b7682946d1c522fda7ee48a0e2006ccd01b88b0687ddf62a6d03713",
+    "current_df5c_profile": {
+      "run": 40092014611,
+      "seed": 1224016,
+      "direct_continuous_timed_cases": 8,
+      "direct_continuous_original_whole_sum_ms": 14.246874,
+      "rowstream_timed_cases": 15,
+      "rowstream_original_whole_sum_ms": 6.231684,
+      "same_case_comparison": false,
+      "performance_inference": "UNKNOWN"
+    }
+  },
+  "cross_fused_output": {
+    "candidate": "f01-r13-cross-fused-output",
+    "candidate_sha256": "3c5ef024e33f5858ee001f18bde42c2db1857d4513540924e5b750614d2f07e6",
+    "candidate_bytes": 255114,
+    "remaining_bytes": 886,
+    "manifest_sha256": "8a4fb288c8185876c99f7fe39cd2f7bb36d50b88c27d0f822cf3795790a0ff7a",
+    "builder_sha256": "67f07c3048072252f1b735e1b2ce54f2f4bce21ab9705e9dd2871c82c016d0ab",
+    "inverse_reconstruction": {
+      "three_ledger_edits_seen_once": true,
+      "reconstructed_parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172"
+    },
+    "changed_dispatch": "Only existing guarded p=2 Cross arm and its proof bridge",
+    "prefix_tail_review": "Each W8 pair maps to two row-major RowStream.point entries; per-row guard omits padded tail; groups=ceil(rows/4) closes full output prefix.",
+    "unchanged": ["UnderflowZero priority", "p2 Cross guard", "P12 pack", "ordered dot recurrence", "finish8", "NaN behavior", "other routes"],
+    "lean_full_gate_codegen_performance": "NOT_RUN"
+  },
+  "conclusion": "No exact historical full-gate negative covers the df5c change from DirectContinuous to RowStream on n<=4,p>2. Historical full gates exercised the old all-RowStream package and the DirectContinuous route separately, but neither isolates this source-local switch. The active D5 run is the relevant current-source test. The optional Cross fusion is statically reversible and its prefix/tail proof chain is plausible; machine lowering, Array reuse and cost remain unverified."
+}

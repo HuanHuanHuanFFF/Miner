@@ -1,6 +1,6 @@
 {
-  "state": "R13_ACTIVE_EXACT_SOURCE_COST_DIAGNOSTIC",
-  "updated_at_utc": "2026-10-24T12:34:27.092564+00:00",
+  "state": "R13_ACTIVE_MATRIX_ROUTE_AND_OUTPUT",
+  "updated_at_utc": "2026-10-24T12:47:44.219377+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "candidate": "competitions/floatlib/candidates/f01-d12-scalar-combined",
@@ -34444,14 +34444,29 @@
         "run": 40094358287,
         "seed": 1324004,
         "source_commit": "ee13e72c60188a8b870bbd10d436effc7c537c01",
-        "state": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+        "state": "TERMINAL_COLLECTED_SUCCESS",
         "candidates": [
           "f01-d12-scalar-combined"
         ],
         "role": "ADDITIONAL_INPUT_DIAGNOSTIC",
         "capture_codegen": [],
-        "collected": false,
-        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261024T123230Z/dispatch.json"
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261024T123230Z/dispatch.json",
+        "conclusion": "success",
+        "raw_ci_log_sha256": "4d35df44af564227fd2c0d37765fbab3a15639c648f8d4380d72edf1ce022efd",
+        "raw_ci_log_bytes": 84841,
+        "summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40094358287/download-1e2e8bb954ab4ff9a6a1d314e2333970/diagnostics/f01-d13-cost-profile/cost-profile/summary.json",
+        "summary_sha256": "2faa2e4b354537acafc17b34d52786e0d662173e5ecf163d60a971023ff653d3",
+        "diagnostic_only": true,
+        "results": [
+          {
+            "candidate": "f01-d12-scalar-combined",
+            "kernel_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+            "full_gate": false,
+            "diagnostic_only": true
+          }
+        ],
+        "unexecuted_candidates": []
       },
       {
         "run": 40094337126,
@@ -34467,15 +34482,45 @@
         "capture_codegen": [],
         "collected": false,
         "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261024T123211Z/dispatch.json"
+      },
+      {
+        "run": 40094769314,
+        "seed": 1324006,
+        "source_commit": "d1b8478975b7ad81f9f039f558a26022a6c65cb9",
+        "state": "TERMINAL_COLLECTED_SUCCESS",
+        "candidates": [
+          "f01-r13-cross-fused-output"
+        ],
+        "role": "STATEMENT_DIAGNOSTIC",
+        "capture_codegen": [],
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261024T123828Z/dispatch.json",
+        "conclusion": "success",
+        "raw_ci_log_sha256": "df56094dafa6cac70b26b90b1e9396b18d3c84ad2b19c8010cf14e60e867f906",
+        "raw_ci_log_bytes": 87534,
+        "summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40094769314/download-77c397eb9b9c4326afff65f0febcbf99/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+        "summary_sha256": "35722c9a653a5236ab614bcd32bddbe1053452467e71027cbcf98d20c4e04e35",
+        "results": [
+          {
+            "candidate": "f01-r13-cross-fused-output",
+            "kernel_sha256": "3c5ef024e33f5858ee001f18bde42c2db1857d4513540924e5b750614d2f07e6",
+            "full_gate": false,
+            "statement_pass": true,
+            "stage": "statement",
+            "exit_code": 0
+          }
+        ],
+        "unexecuted_candidates": []
       }
     ],
     "completed_ci": [
       40092014611,
       40091246795,
-      40092053346
+      40092053346,
+      40094358287,
+      40094769314
     ],
     "active_ci": [
-      40094358287,
       40094337126
     ],
     "prepared_requests": [
@@ -34578,6 +34623,29 @@
             "validation_mode": "statement-only"
           }
         ]
+      },
+      {
+        "seed": 1324007,
+        "role": "DISCOVERY",
+        "plan": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/plan-1324007.json",
+        "sha256": "b69beffb6d38cc5c394f558726ec334b78ab7d973403fa6a8a7ea1dd504f1947",
+        "candidates": [
+          {
+            "candidate": "f01-r8-combined-result-guard",
+            "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+            "capture_codegen": false
+          },
+          {
+            "candidate": "f01-d12-scalar-combined",
+            "sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+            "capture_codegen": false
+          },
+          {
+            "candidate": "f01-r13-cross-fused-output",
+            "sha256": "3c5ef024e33f5858ee001f18bde42c2db1857d4513540924e5b750614d2f07e6",
+            "capture_codegen": false
+          }
+        ]
       }
     ],
     "usage_reset": {
@@ -34592,7 +34660,31 @@
       "receipt": "competitions/floatlib/candidates/f01-d7-research/official-20261024T113835Z/receipts.json",
       "sha256": "36bbbdd6036a310e9ba73c5ba1381c0ddeccfa433a17e33e8d3c0035d31c17b1"
     },
-    "ci_state_schema": "CANONICAL_STARTED_CI_RECORDS_FROM_FROZEN_REQUESTS"
+    "ci_state_schema": "CANONICAL_STARTED_CI_RECORDS_FROM_FROZEN_REQUESTS",
+    "latest_decision": {
+      "candidate": "f01-r13-preparation-convert",
+      "state": "PARK_FULL_GATE_PASS_NO_GAIN",
+      "run": 40092053346,
+      "whole_over_DF": 1.00343455854775,
+      "bmm_over_DF": 1.0059523225417446,
+      "gain_p05": -0.013822355246058992,
+      "next": "Short-dot packed route and Cross direct final-output hypotheses; no adopted source/model change."
+    },
+    "cost_diagnostic": {
+      "fine_run": 40092014611,
+      "verified_cases": 156,
+      "state": "COMPLETE_CHECKSUMS_PASS_HIGH_PROBE_DISTURBANCE",
+      "coarse_run": 40094358287,
+      "coarse_state": "TERMINAL_SUCCESS_COLLECTION_RUNNING",
+      "raw_whole_route_ms_exposed_seed1224016": {
+        "DirectContinuous": 14.246874,
+        "Cross": 12.615592,
+        "RowStream": 6.231684,
+        "DirectSmall": 4.479591,
+        "UnderflowZero": 0.233924
+      },
+      "scope": "Untouched whole-call cost locator only; no official score or removable stage-cost prediction."
+    }
   },
   "research_round_history": [
     {

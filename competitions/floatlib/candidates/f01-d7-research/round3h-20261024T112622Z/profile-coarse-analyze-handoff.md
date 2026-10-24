@@ -1,0 +1,9 @@
+# Coarse reader
+
+CLI: `python profile-coarse-analyze.py --result <original/profile-r13-coarse-result.json> --index <original-artifact-hashes.json> --out <new-receipt.json>`. It requires a fresh output, exactDF, original seed1224016/156case plan and coarse producer SHA `a61018514107d585cfd23c1a240f07177092d2d858bc829836703fbc98868529`. Dispatch seed1324004 is not substituted for the profile's input seed.
+
+The independent generated copy inherits the validated fine reader's raw hash/index checks, original/checksum/root-call reconciliation, generator/source model and source/instrumentation reconstruction. Changes bind the new prefix, ten categories, FC13 marker and coarse helper, reject actual fine files explicitly, and require every non-root coarse boundary's call count to be at most the BMM root count.
+
+Every case and route/cell/kernel group reports original whole, profile whole and their ratio. The ratio combines instrumentation, compiler/layout and process/cache/system effects; it is not isolated timer overhead or a candidate speedup. Each boundary also has calls and inclusive/exclusive nanoseconds. Cross words includes prep/packet compute/repair, and Cross core-exclusive is the materialization/cleanup outside words. RowStream Amap and packB are full outer helpers; RowStream exclusive is the remaining compute/output/cleanup. DirectContinuous is a complete compute/output scope. Missing/inseparable boundaries remain UNKNOWN. No stage share estimates official points or champion multipliers.
+
+`profile-coarse-analyze-test.py` passed with exit0 on156 synthetic rows, exact1.15 whole-ratio fixture, Cross interval/exclusive fixture and15 rejection cases. It rejects the actual previous fine result by both producer identity and filename/protocol. Raw stdout/stderr/exit and source hashes are retained. Real coarse artifact validation remains NOT_RUN until run40094358287 is collected. Old readers and frozen runtime files are unchanged.
