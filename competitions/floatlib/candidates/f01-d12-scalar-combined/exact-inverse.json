@@ -1,0 +1,55 @@
+{
+  "parent_sha256": "3ff4eb8e3f9be968592a05f3d934b679705a3bbdeb655afb7596951611f36221",
+  "donor_sha256": "59de0e17223abebdd802bba98347ad8a4a7d6e90bfdca5ffd94bed3ad7005ce4",
+  "candidate_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "candidate_bytes": 248144,
+  "headroom_bytes": 7856,
+  "operations": [
+    {
+      "name": "exact59de two existing converter inputs",
+      "offset_in_previous_stage": 133373,
+      "before": "  let result := ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y\n",
+      "after": "  let result := R2W01b.convert x.raw.1 * R2W01b.convert y.raw.1\n",
+      "before_sha256": "e22c81b7716d3aa165105c2dc73cf06c3e740828b9e1855120a2ded597761c15",
+      "after_sha256": "ea85bfd7546cd5fe5194626faec210de076acbe3f31a89149967c499eb1e9e05",
+      "previous_source_sha256": "3ff4eb8e3f9be968592a05f3d934b679705a3bbdeb655afb7596951611f36221",
+      "next_source_sha256": "1e79d2378626f0ef0e547ec1a4d821f043d41404473cd9636b7967cff06b6283"
+    },
+    {
+      "name": "exact59de converter_eq rewrite and native proof representation",
+      "offset_in_previous_stage": 133681,
+      "before": "  · rename_i hn\n    have hi := NotNaNProbe.mul_inputs _ _ ((R7W04.nonNaN_eq_true_iff _).mp hn)\n    rw [R7Native.ofFloat32Mul _ _ hi.1 hi.2,\n",
+      "after": "  · rename_i hn\n    rw [R2W01c.convert_eq, R2W01c.convert_eq] at hn ⊢\n    change R7W04.nonNaN (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y) = true at hn\n    have hi := NotNaNProbe.mul_inputs _ _ ((R7W04.nonNaN_eq_true_iff _).mp hn)\n    change ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y) = _\n    rw [R7Native.ofFloat32Mul _ _ hi.1 hi.2,\n",
+      "before_sha256": "bd4aba42aa1c3ecd0cc80cdfc425fd32a196e689df511f5028fde0d5c1dcbe14",
+      "after_sha256": "c6395baac4a2f9d9bfbddf321850ddc10d9f463163ff4870b23dc50cea1f7780",
+      "previous_source_sha256": "1e79d2378626f0ef0e547ec1a4d821f043d41404473cd9636b7967cff06b6283",
+      "next_source_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172"
+    }
+  ],
+  "inverse_parent_exact": true,
+  "inverse_parent_sha256": "3ff4eb8e3f9be968592a05f3d934b679705a3bbdeb655afb7596951611f36221",
+  "only_nativeMul_chunk_changed": true,
+  "exact59de_nativeMul_except_preserved_cold_leaves": true,
+  "matches_prior_two_order_projection": true,
+  "eight_public_types": {
+    "Submission.add": "TYPE_UNCHANGED",
+    "Submission.add_spec": "TYPE_UNCHANGED",
+    "Submission.mul": "TYPE_UNCHANGED",
+    "Submission.mul_spec": "TYPE_UNCHANGED",
+    "Submission.sum": "TYPE_UNCHANGED",
+    "Submission.sum_spec": "TYPE_UNCHANGED",
+    "Submission.bmm": "TYPE_UNCHANGED",
+    "Submission.bmm_spec": "TYPE_UNCHANGED"
+  },
+  "declaration_inventory_unchanged_unique": true,
+  "original_policy_static": "PASS",
+  "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+  "resources_options_attributes_unchanged": true,
+  "individual_component_receipts": {
+    "parent_run": 40072436647,
+    "donor_run": 40073100983,
+    "parent_and_donor_full_gate": "PASS25_INDIVIDUALLY; does not validate combination"
+  },
+  "new_Lean_full_gate": "NOT_RUN",
+  "new_performance": "UNKNOWN_NOT_ADDITIVE"
+}
