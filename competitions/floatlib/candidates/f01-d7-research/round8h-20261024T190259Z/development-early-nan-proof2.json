@@ -1,0 +1,15 @@
+{
+  "candidate": "f01-r14-dev-early-nan-proof2",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "dc8af0a6b1a64551e8c756e256eae30d072072d1932b708094ebfc1976b39db1",
+  "candidate_bytes": 249050,
+  "parent": "f01-r14-dev-early-nan",
+  "parent_sha256": "398d4d2a01b239df0d0c046ffe93b00c2f910716485d581f3783d921d6b27cf3",
+  "created_at_utc": "2026-10-24T20:01:07.758996+00:00",
+  "validation_mode": "statement-only",
+  "proof_status": "NOT_RUN_ONE_PROOF_TYPE_NAME_FIX",
+  "mechanism": "Hoist exact signaling-first raw NaN selection before native scalar add and nativeMul, using already verified selected_add/selected_mul; keep old paths and complete tensor tail unchanged. Different from R12 cold selector which only runs after native conversion/result detection.",
+  "performance": "UNKNOWN; targets expensive NaN conversions, ordinary inputs pay raw classification. No zero shortcut or change to arithmetic/order.",
+  "runtime_identical_parent": true,
+  "correction": "Exact original statement error3118: old helper theorem type still mentioned future add; rename its type to addBeforeRawSelect, leaving every executable declaration byte-identical."
+}
