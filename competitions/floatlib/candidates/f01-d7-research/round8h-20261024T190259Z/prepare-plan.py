@@ -112,7 +112,8 @@ if args.role=='FROZEN_INDEPENDENT_CONFIRMATION':
     assert packet['plan'].get('selection_policy')==guard.SELECTION_POLICY
     assert all(packet['kernel_hashes'][r['candidate']]==r['sha256'] for r in rows), 'Prior exact sources differ'
 plan={'seed':args.seed,'official_commit':guard.OFFICIAL,'suite':'suites/public-v2.json','dispatch_state':'READY',
-      'publication_state':'AUTHORIZED_R14_PUBLIC_DEVELOPMENT_VALIDATION','candidates':rows,
+      'publication_state':'LOCAL_PREPARATION_PUBLIC_PUSH_AUTHORITY_SEPARATE','candidates':rows,
+      'publication_scope_note':'This local frozen plan does not grant publication permission. Check current development-status research_round.publication and fresh human authorization before any push.',
       'comparison_baseline':'f01-d12-scalar-combined','profile_parent':False,'profile_current':False,
       'authorization_receipt':(OUT/'round-plan.json').relative_to(ROOT).as_posix(),
       'selection_policy':guard.SELECTION_POLICY,'sample_role':args.role,

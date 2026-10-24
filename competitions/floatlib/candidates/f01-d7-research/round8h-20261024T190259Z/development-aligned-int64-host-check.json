@@ -1,0 +1,34 @@
+{
+  "state": "SELECTED_HOST_CHECK_PASS",
+  "at_utc": "2026-10-24T21:47:24.773070+00:00",
+  "counts": {
+    "cases": 38816,
+    "accepted_normal": 37681,
+    "accepted_cancel": 168,
+    "fallback_subnormal": 405,
+    "fallback_overflow": 562,
+    "negative": 19294,
+    "gap_over7": 23195
+  },
+  "wall_seconds": 0.13704270002199337,
+  "trace_sha256": "ecfe5c71f300017ef9fae648b9c5ccb6114a815bb37e59dc33e4be41019d8b6f",
+  "script_sha256": "fb91d98a3c97d9e37127fa8f443620a70c88a6758e21ce7bd44b7a68d2ee4ff8",
+  "domain": "Normal inputs, gap<=25; exact signed64 aligned sum, cancel=>+0, otherwise accept only unreduced final exponent1..254.",
+  "outside_guard_counterexamples": [
+    {
+      "a": "0x800001",
+      "b": "0x80800000",
+      "wrong_without_guard": "0xf5000000",
+      "expected": "0x1",
+      "unreduced_final_exponent": -22
+    },
+    {
+      "a": "0x7f7fffff",
+      "b": "0x7f7fffff",
+      "wrong_without_guard": "0x7fffffff",
+      "expected": "0x7f800000",
+      "unreduced_final_exponent": 255
+    }
+  ],
+  "scope": "Finite host arithmetic and bitcast model only. No Lean, runtime compilation, benchmark, new holdout, or proof claim."
+}

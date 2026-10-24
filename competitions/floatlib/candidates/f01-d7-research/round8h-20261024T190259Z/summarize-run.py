@@ -44,5 +44,11 @@ if result['full_gate_both']:
         per_operation_normalized=by_op,per_cell_normalized=cells,
         normalized_scope='Candidate/reference versus baseline/reference; workload-weighted per operation, same actual CI execution. Not a direct paired candidate/baseline gate.')
 path=out/f'result-{p["seed"]}-{a.candidate}-vs-{baseline}.json'
+if path.exists() and json.loads(path.read_bytes()).get('run') != a.run:
+    # Same-seed order diagnostics are different runs. Keep the first receipt
+    # and use an explicit run suffix instead of erasing its earlier result.
+    path=path.with_name(path.stem+f'-run{a.run}.json')
+    if path.exists():
+        assert json.loads(path.read_bytes()).get('run')==a.run
 path.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
-print(json.dumps({k:v for k,v in result.items() if k not in ('evidence','per_cell_normalized','selection_policy')}))
+print(json.dumps({**{k:v for k,v in result.items() if k not in ('evidence','per_cell_normalized','selection_policy')},'result_path':path.relative_to(root).as_posix()}))
