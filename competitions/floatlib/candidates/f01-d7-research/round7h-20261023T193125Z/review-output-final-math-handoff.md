@@ -80,3 +80,21 @@ F4字段读取与实际packA的连接已在独立ec112投影诊断源补齐源�
 
 
 后续独立投影资产ec11262306db740f79a51af22a13230963fdc9ac9e77a99e45fcb9a07dfe7d4e/235266 B，仅把9a真实Vector F4循环的packA_read→wordLoop_row→runDot_row/block_row及projectRow依赖打包；asset851736a0/6048 B。全部Lean/full仍NOT_RUN；Astra两份donor、唯一proof语法变化和exact9a逆向在独立manifest/builder中记录。不会追写9a/6e99或本轮final cohort。
+
+
+## 936后续快照（保留此前初始状态）
+
+936/run40049985877对ec112的真实statement失败已经完整回收。唯一报错是6258 `No goals to be solved`：wordLoop_row的false分支在 `rw [Packed10.dot10, dif_neg hkn]` 后目标已经关闭，后面的 `rfl` 多余。verdict SHA256为9204d063cd24bfdaad318121861be3b4967b2af195878d06334e94d0f852c8b8，raw replay.log为81835bc4c0a3c17cf1788c3bf3d7ad564d3ea763b2572d6853c8479061eacd0d；原ec112、9a、Astra donor字节均保留。此次日志没有出现其他编译错误，但这不等于失败源获接受。
+
+独立proof2 source **0feec56a57674a2c7d5de0da3f3c7633e36d5bb5e8c9204ca53a420d4bdcbdfc / 235258 B**，只删上述8 B证明步骤。local asset为93b1ac6fed4b6f73aef621d374fcea195886a04ca3bdd0ef3cd93b5684104bdf / 6040 B；builder为882aafb434078e7012c12ffd2b9a13006973d36ac160de86473b8d7e0eec473f。exact inverse还原ec112，9a运行prefix、全部8个新声明和4个原spec不变；原policy和轻量fresh --verify通过。manifest初始statement、kernel replay、axiom audit、checksum、full gate均为 **NOT_RUN**；没有active Panel入口或性能接受。Root只安排短statement，不新增长full CI。
+
+Root本次交接报告主候选6c2d已三组采用；这项独立未接入口证明实验不改变该选择，本subagent未改最终cohort文件。真实Panel入口的Projects、output/tail/hugeNat接线、完整义务与完整调用成本仍需下一轮独立闭合。
+
+
+## 937接受快照（只更新证据）
+
+937/run40050615221已完整回收，exact **0feec56a57674a2c7d5de0da3f3c7633e36d5bb5e8c9204ca53a420d4bdcbdfc / 235258 B** 的 **statementPASS**。verdict SHA256为 **a7a01fd7e8ac51513365bfd39a4f3384de7feed04435a46eecdcd1623113e632**；原始目录为 `ci-runs/40050615221/download-dc3fa09f463946e5b590a715193f9be0/diagnostics/f01-d7-public-suite/public-suite/`，summary/输入/contract/verifier哈希见JSON，实际输入Kernel与本地冻结源逐字节一致。
+
+当前接受范围是：真实Vector F4的packA读取证明、实际40标量wordLoop对任意初始累加器的逐row投影，以及零起点runDot和真实block helper的逐row投影。它关闭了新F4表示的数值循环桥；不是旧Array Float32投影证明的继承，也不是新矩阵算法接受。原始manifest的NOT_RUN不回写，936/ec112失败源、donor和原回执保持字节。
+
+**仍未接受：** 完整Matrix Projects实例、连续输出与localTail的实际入口接线、hugeNat分派/回退集成、panel生命周期，以及新算法的kernel replay、axiom audit、checksum、full gate和完整调用性能。938/run40051011135的独立guard桥由Root短statement验证中，本快照没有将其视为通过。主候选6c2d及finalcohort保持不变；本次没有新源码或新CI。

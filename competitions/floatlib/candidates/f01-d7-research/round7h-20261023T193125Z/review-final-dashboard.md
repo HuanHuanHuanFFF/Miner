@@ -4,7 +4,7 @@
 
 ## Same source, unchanged model and baseline
 
-The numeric model SHA `da02d4370ddf4ff28419ceda1a86a2d1dde5a81838f09d2540e705b30fe3b1d1` is byte-for-byte the atomic-adoption after SHA. Displayed add/mul/sum/bmm estimates1.14/1.24/1.13/2.64 and whole1.39 match this model's two-decimal median rounding. There is no per-operation fastest-source splice. Champion#285 is the stored official snapshot755, digest `a1e99008577119824464154be5ec52dd390fc1e429b8f85b6ea73315e7103082`, with self baseline1.0. This check did not query a new live leaderboard.
+The numeric model SHA `da02d4370ddf4ff28419ceda1a86a2d1dde5a81838f09d2540e705b30fe3b1d1` is byte-for-byte the atomic-adoption after SHA. Displayed add/mul/sum/bmm estimates1.14/1.24/1.13/2.64 and whole1.39 match this model's two-decimal median rounding. There is no per-operation fastest-source splice. Champion#285 is the stored official receipt `competitions/floatlib/candidates/f01-d7-research/official-20261024T000558Z/receipts.json` (queried at `2026-10-24T00:06:00.904834+00:00`), digest `a1e99008577119824464154be5ec52dd390fc1e429b8f85b6ea73315e7103082`, with self baseline1.0. This check did not query a new live leaderboard.
 
 Current anchor, estimator and renderer hashes match their frozen cohort entries. A pure in-memory replay called only the frozen estimator's select_pairs/estimate_from_anchor, re-read and checked original source evidence, and reproduced operations, whole, paired_updates, cell_relative_delta_median and samples exactly. No main/save/render entry ran. Whole timing follows the frozen sum-before-ratio projection; no operation receives a separate winning source.
 

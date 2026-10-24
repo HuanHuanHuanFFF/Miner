@@ -85,6 +85,8 @@
 
 局部尾行的[6e99f707数学资产](../candidates/f01-d11-panel4-tail-proof2/Kernel.lean)在40048163768通过statement：`prepare_read → dot10_shift → runDot_prepared → Prefix`连接局部数值基址与原始回放基址。该新namespace仍未接入实际Panel入口，完整内核重放、公理验收与性能不由此替代。原f767在40047532920的两处失败及旧draft均保留。
 
+真实F4的[0feec56a行投影](../candidates/f01-d11-panel4-projection-proof2/Kernel.lean)在40050615221通过statement：实际packA读取支撑任意40个初始累加器的wordLoop逐行等式，再连接runDot和block；原ec112在40049985877的冗余证明步骤失败保留。[2dc2546f边界桥](../candidates/f01-r11-wide4-guard-proof/Kernel.lean)在40051011135通过statement，给出具体四行块地址界、机器范围及direct-within的Projects。二者均未连接新矩阵入口，不能升级为完整Panel算法或运行收益。
+
 ## 2. 已提取、尚未形成正式验证组件的数学储备
 
 | 编号 | 结论／适用条件 | 当前证据及决定 |
