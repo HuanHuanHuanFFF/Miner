@@ -133,10 +133,41 @@ def bench_suite_symbol(name):
     return bool(re.search(r'(?:runScalar|measure|Suite_run)(?:___|_spec__|$)', name))
 
 
+def assembly_focus_config(m, env, kernel):
+    """Read the frozen request once, before launching the original gate."""
+    result = {'state': 'DEFAULT_SCALAR', 'assembly_focus': 'scalar', 'plan_path': None}
+    try:
+        child_env = os.environ if env is None else env
+        workspace = child_env.get('GITHUB_WORKSPACE')
+        if not workspace:
+            return result
+        plan_path = Path(workspace).resolve() / 'competitions/floatlib/candidates/f01-d7-public-suite/suite-plan.json'
+        raw = m.read_regular(plan_path, 2*1024*1024, time.monotonic()+1)
+        result.update(plan_path=str(plan_path), plan_sha256=m.sha(raw))
+        plan = json.loads(raw)
+        requested = plan.get('r12_mainfull_capture')
+        if not requested or Path(kernel).parent.name not in requested.get('candidates', []):
+            return result
+        focus = requested.get('assembly_focus', 'scalar')
+        result['requested_assembly_focus'] = focus
+        m.require(focus in ('scalar', 'bmm'), 'assembly_focus must be scalar or bmm')
+        result.update(state='CONFIGURED' if 'assembly_focus' in requested else 'DEFAULT_SCALAR', assembly_focus=focus)
+    except Exception as exc:
+        result.update(state='UNKNOWN', assembly_focus=None, error=str(exc))
+    return result
+
+
 def _disassemble(m, staged, folder, deadline, record):
+    config = record.get('assembly_focus_configuration', {'assembly_focus': 'scalar'})
+    focus = config.get('assembly_focus', 'scalar')
     result = {'state': 'UNKNOWN', 'objects': [], 'selected_symbols': 0, 'selection_order': [],
               'selection_basis': 'MainFull actual C definitions/closure targets plus actual nm; then immutable BenchSuite runScalar/measure chain; then Submission scalar wrappers',
-              'stems_without_nm_matches': [], 'nm_inventory_complete': True}
+              'stems_without_nm_matches': [], 'nm_inventory_complete': True, 'assembly_focus': focus}
+    if focus not in ('scalar', 'bmm'):
+        result['error'] = 'Invalid assembly focus isolated from original gate: ' + str(config.get('error', focus))
+        return result
+    if focus == 'bmm':
+        result['selection_basis'] = 'Submission exact fd17 _symbol_info/_symbol_sort_key before MainFull and BenchSuite; complete actual C still retained'
     scans = {}
     for item in record['snapshot']['files']:
         if item.get('kind') == 'c':
@@ -161,6 +192,7 @@ def _disassemble(m, staged, folder, deadline, record):
             if len(fields) != 4 or fields[2] not in 'TtWw':
                 continue
             name = fields[3]
+            legacy_info = None
             if module == 'MainFull':
                 wanted = name in actual.get('defined_functions', []) or name in actual.get('closure_targets', [])
                 priority = 1 if '___boxed' in name else 0
@@ -170,14 +202,25 @@ def _disassemble(m, staged, folder, deadline, record):
                 # wrappers can consume the finite symbol budget.
                 priority = (2 if 'runScalar_spec__' in name else 3) + (1 if '___boxed' in name else 0)
             else:
-                wanted = bool(re.fullmatch(r'lp_competition_Submission_(?:add|mul|nativeMul)(?:___[A-Za-z0-9_]+)?', name))
-                priority = 6 if '___boxed' in name else 5
+                if focus == 'bmm':
+                    legacy_info = m._symbol_info(name)
+                    wanted = legacy_info is not None
+                    priority = legacy_info['priority'] if wanted else 0
+                else:
+                    wanted = bool(re.fullmatch(r'lp_competition_Submission_(?:add|mul|nativeMul)(?:___[A-Za-z0-9_]+)?', name))
+                    priority = 6 if '___boxed' in name else 5
             if wanted:
                 entry['matching_symbols'] += 1
-                queue.append((priority, name, index, private, entry, fields[0], fields[1]))
-    queue.sort(key=lambda row: (row[0], '___lam__' not in row[1], row[1], row[2]))
+                if focus == 'bmm' and legacy_info is not None:
+                    key = (0, *m._symbol_sort_key(name), index)
+                else:
+                    key = (priority, '___lam__' not in name, name, index)
+                    if focus == 'bmm':
+                        key = (1, *key)
+                queue.append((key, priority, name, index, private, entry, fields[0], fields[1]))
+    queue.sort(key=lambda row: row[0])
     complete = result['nm_inventory_complete']
-    for priority, name, index, private, entry, address, size in queue:
+    for key, priority, name, index, private, entry, address, size in queue:
         if result['selected_symbols'] >= MAX_SYMBOLS or time.monotonic() >= deadline:
             complete = False
             entry['selection_truncated'] = True
@@ -201,8 +244,12 @@ def _disassemble(m, staged, folder, deadline, record):
 
 def run_gate(argv, cwd, env, log_path, timeout, output, kernel):
     m = load_legacy()
+    config = assembly_focus_config(m, env, kernel)
     m._snapshot = lambda *args: _snapshot(m, *args)
-    m._disassemble = lambda *args: _disassemble(m, *args)
+    def post(staged, folder, deadline, record):
+        record['assembly_focus_configuration'] = config
+        return _disassemble(m, staged, folder, deadline, record)
+    m._disassemble = post
     m.COPY_SECONDS = COPY_SECONDS
     m.TOTAL_LIMIT = TOTAL_LIMIT
     m.MAX_FILES = MAX_FILES
@@ -214,16 +261,21 @@ def run_gate(argv, cwd, env, log_path, timeout, output, kernel):
     except BaseException as exc:
         record = getattr(exc, 'codegen_record', None)
         if record is not None:
-            _finish_record(m, record)
+            _finish_record(m, record, config)
         raise
-    _finish_record(m, record)
+    _finish_record(m, record, config)
     return completed, record
 
 
-def _finish_record(m, record):
+def _finish_record(m, record, config):
+    record['assembly_focus_configuration'] = config
+    if config['state'] == 'UNKNOWN':
+        record['state'] = 'UNKNOWN'
+        record.setdefault('errors', []).append('R12 assembly focus: ' + config['error'])
     record['r12_mainfull_capture'] = {'wrapper_sha256': m.sha(Path(__file__).read_bytes()),
         'legacy_module_sha256': LEGACY_SHA256, 'actual_mainfull_required': True,
-        'disassembly_after_original_gate_exit': True, 'confirmation_allowed': False}
+        'disassembly_after_original_gate_exit': True, 'confirmation_allowed': False,
+        'assembly_focus': config['assembly_focus'], 'assembly_focus_state': config['state']}
     if record.get('artifact_directory'):
         try:
             m.save_json(Path(record['artifact_directory']) / 'capture-record.json', record)

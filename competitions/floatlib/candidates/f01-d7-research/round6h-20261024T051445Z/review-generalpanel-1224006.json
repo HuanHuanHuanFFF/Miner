@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "review_id": "R12-GENERALPANEL-1224006-SOURCE-REVIEW-20261024",
+  "reviewed_at_utc": "2026-10-24T06:54:44Z",
+  "status": "SOURCE_BOUND_STATEMENT_DIAGNOSTIC_ONLY",
+  "scope": "Read-only review of GeneralPanel declaration inventory, production entry guards and source size bound. No candidate, tool, state, CI or Git modifications.",
+  "execution": {
+    "round": "R12-20261024T051445Z",
+    "seed": 1224006,
+    "run": 40071679912,
+    "source_commit": "91c7a6071adfc02ea52be6eb17724bec72baae6d",
+    "run_state_at_review": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+    "local_terminal_artifact_present": false,
+    "plan_sha256": "d09c1305495d74e95a84f528e5446cca0ed45fe6a357a945fca64134f52f4a5f",
+    "freeze_sha256": "b3d09f1fed08a8387b0cb915979c77a7ecd28be8817be393b1fb8cb848e35a93",
+    "freeze_request_sha256_matches_plan": true,
+    "validation_mode": "statement-only",
+    "sample_role": "STATEMENT_DIAGNOSTIC",
+    "candidates": [
+      {"name":"f01-d12-scalar-cold-nan-select-proof2","sha256":"3ff4eb8e3f9be968592a05f3d934b679705a3bbdeb655afb7596951611f36221","bytes":247897,"validation_mode":"statement-only"},
+      {"name":"f01-r12-general-panel","sha256":"a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe","bytes":255559,"validation_mode":"statement-only"}
+    ],
+    "allow_private": false,
+    "independent_full_gate_claim": false,
+    "performance_claim": false,
+    "separate_run_005": {"run":40071334389,"candidate":"f01-d12-mul-existing-convert","state":"ACTIVE_NOT_GENERALPANEL_EVIDENCE"}
+  },
+  "size_cap": {
+    "maximum_bytes": 256000,
+    "candidate_bytes": 255559,
+    "remaining_bytes": 441,
+    "manifest_fits_size_cap": true,
+    "kernel_git_blob_matches_manifest": true
+  },
+  "declaration_review": {
+    "candidate_sha256_bound": "a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe",
+    "static_policy": "PASS",
+    "inventory_scope": "def/theorem/abbrev only; original full Lean validation still required",
+    "removed_declarations_count": 17,
+    "added_declarations_count": 18,
+    "removed_finite_proof_bodies": [
+      "Submission.WordFinite.nativeFiniteOfExp",
+      "Submission.WordFinite.modelFiniteOfExp",
+      "Submission.FinalFinite.add_finite_inputs",
+      "Submission.FinalFinite.mul_finite_inputs",
+      "Submission.FinalFinite.packInfinity_notFinite",
+      "Submission.FinalFinite.packNaN_notFinite"
+    ],
+    "removed_old_R11WideRows4_declarations": [
+      "Submission.R11WideRows4.baseAt",
+      "Submission.R11WideRows4.joinRows",
+      "Submission.R11WideRows4.lane_of_row_eq",
+      "Submission.R11WideRows4.row_bound",
+      "Submission.R11WideRows4.run",
+      "Submission.R11WideRows4.run_row",
+      "Submission.R11WideRows4.within",
+      "Submission.R11WideRows4.within_row",
+      "Submission.R11WideRows4.wordLoop",
+      "Submission.R11WideRows4.wordLoop_row",
+      "Submission.R11WideLayout.nativeA_span"
+    ],
+    "namespace_replacement_check": "Old qualified R11WideRows4 loop/entry declarations are absent; the new wordLoop/runDot/packA/block definitions are under Submission.Panel4. R11WideRows4.F40 and lane projection pieces remain as output representation/proof interface.",
+    "scope_boundary": "Static inventory and source hash do not prove Lean closure. Candidate proof/full_gate remain NOT_RUN."
+  },
+  "production_entry_review": {
+    "top_level": "Submission.bmm",
+    "dispatch": [
+      "If A and B both satisfy UnderflowZero.small, return the exact zero vector.",
+      "Otherwise call bmmBeforeUnderflowZero.",
+      "bmmBeforeUnderflowZero selects R11WideActual.core only under 4<=m, 4<n, 2<p, n<USize.size, A.toArray.size<USize.size; otherwise it falls back to bmmWithR11Cross and the prior wide/direct routes."
+    ],
+    "panel_call_path": [
+      "Submission.bmm",
+      "Submission.bmmBeforeUnderflowZero guard branch",
+      "Submission.R11WideActual.core/output",
+      "Submission.R11WideActual.buildTiles",
+      "Submission.Panel4.block",
+      "Submission.Panel4.packA and Panel4.runDot"
+    ],
+    "source_level_observations": {
+      "panel_helper_is_reachable_from_real_entry": true,
+      "packA_is_called_per_complete_four_row_block": true,
+      "tiles_are_bound_once_before_block_emit_in_R11WideLayout_writeBatch": true,
+      "B_preparation": "Packed10.packB is prepared by output; Panel4.block receives the batch's packed B.",
+      "fallback_retained": true,
+      "outer_underflow_zero_branch_retained": true,
+      "explicit_B_array_size_term_in_panel_entry_predicate": false
+    },
+    "validation_boundary": "The above is source call-graph evidence. The statement-only run does not establish all-input proof, runtime reachability/compilation, machine code, or complete score cost."
+  },
+  "bound_files": {
+    "competitions/floatlib/candidates/f01-r12-general-panel/Kernel.lean": {"bytes":255559,"sha256":"a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe"},
+    "competitions/floatlib/candidates/f01-r12-general-panel/manifest.json": {"bytes":5571,"sha256":"2283e892d5a95865b160c802e020c70405a7d608c1a3de75a77a4dc4c2224bac"},
+    "competitions/floatlib/candidates/f01-r12-general-panel/build.py": {"bytes":12343,"sha256":"83db3a5e2e5b7d91bb85ee8100715930e8347e0d5a1c6084239d75f695a412a0"},
+    "competitions/floatlib/candidates/f01-r12-general-panel/decl-policy-review.json": {"bytes":35730,"sha256":"5192feeadc13149e467db18679334af03fe2df0817611b88dd0770ae4d578e49"},
+    "competitions/floatlib/candidates/f01-r12-general-panel/README.md": {"bytes":2800,"sha256":"c6472dea9e9254ad3ca92203cc09d75e4e98371f78977b89fa71b44e04b6516c"},
+    "competitions/floatlib/candidates/f01-r12-general-panel/input-freeze-receipt.json": {"bytes":2592,"sha256":"b09f45d7fdf6a2bec138e8ef6d88bb1ac86cc4fabf81a5308020bec4238c1921"},
+    "competitions/floatlib/candidates/f01-r12-general-panel/dry-run.json": {"bytes":3687,"sha256":"8090a24e69df846ebf198e83c436a690cefb6b57ad0f5633f04da4cf731cb829"},
+    "competitions/floatlib/candidates/f01-d12-scalar-cold-nan-select-proof2/Kernel.lean": {"bytes":247897,"sha256":"3ff4eb8e3f9be968592a05f3d934b679705a3bbdeb655afb7596951611f36221"},
+    "competitions/floatlib/candidates/f01-d12-scalar-cold-nan-select-proof2/manifest.json": {"bytes":1855,"sha256":"a9a1c1c3ca69031c94943583a9693010cffdc0ee2ef7f8c44df3f75f870224f2"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/plan-1224006.json": {"bytes":1571,"sha256":"d09c1305495d74e95a84f528e5446cca0ed45fe6a357a945fca64134f52f4a5f"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/freeze-1224006.json": {"bytes":3932,"sha256":"b3d09f1fed08a8387b0cb915979c77a7ecd28be8817be393b1fb8cb848e35a93"},
+    "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261024T064846Z/dispatch.json": {"bytes":2843,"sha256":"3b9226e27f86af26a6ca6cbbe57931eb19ba88875c75e201e93b9eb3fe27e95e"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/adopt-three-confirmed.py": {"bytes":22160,"sha256":"b3f089b9fae6725663bfdb31478c3267fa0873078f1a243c6ebd2e9ae978ff5b"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/test_adopt_three_confirmed.py": {"bytes":26135,"sha256":"6bd0ee0b75eea3fa5934bf7072a5a926561a5d48af7cfd291a573317b3a54f47"}
+  }
+}
