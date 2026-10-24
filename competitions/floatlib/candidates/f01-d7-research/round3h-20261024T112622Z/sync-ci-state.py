@@ -63,6 +63,11 @@ def main():
             import subprocess
             raw = subprocess.check_output(['git', 'show', receipt['source_commit']+':'+key], cwd=ROOT)
             assert hashlib.sha256(raw).hexdigest() == plan['profile_request_sha256']
+            freeze=read(HERE/f'freeze-{seed}.json')
+            assert freeze['request_sha256']==digest(plan_path)
+            for name, expected in freeze['files'].items():
+                actual=subprocess.check_output(['git','show',receipt['source_commit']+':'+name],cwd=ROOT)
+                assert hashlib.sha256(actual).hexdigest()==expected['sha256'] and len(actual)==expected['bytes'],name
         else:
             assert receipt['frozen_file_sha256'][key] == digest(plan_path)
         run = receipt['run']['databaseId']
