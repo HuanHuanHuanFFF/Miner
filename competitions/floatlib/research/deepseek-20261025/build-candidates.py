@@ -18,6 +18,8 @@ P8_OLD = "  if n ≤ 4 ∨ p ≤ 2 then DirectSmall.core batch m n p A B"
 P8_NEW = "  if n ≤ 4 ∨ p ≤ 8 then DirectSmall.core batch m n p A B"
 P2_OLD = "  if h : p=2 ∧ 4≤batch*m ∧ 0<n ∧ n<USize.size ∧"
 P2_NEW = "  if h : p=2 ∧ batch*m < 4 ∧ 0<n ∧ n<USize.size ∧"
+CONT_OLD = "  if n ≤ 4 ∧ 2 < p then DirectContinuous.core batch m n p A B"
+CONT_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 2 then DirectContinuous.core batch m n p A B"
 
 SPECS = [
     {
@@ -43,6 +45,28 @@ SPECS = [
         "hypothesis": (
             "Tests whether the two direct-routing changes compose: p=2 work plus 3<=p<=8 work "
             "leave the packed/Cross paths."),
+    },
+    {
+        "name": "f01-deepseek-p2cont",
+        "edits": [(P2_OLD, P2_NEW), (CONT_OLD, CONT_NEW)],
+        "mechanism": (
+            "p=2 with batch*m>=4 skips R11CrossRows; DirectContinuous's guard is widened from "
+            "`n ≤ 4 ∧ 2 < p` to `(n ≤ 4 ∧ 2 < p) ∨ p ≤ 2`. DirectContinuous.core is proven equal "
+            "to the reference for all shapes and writes each row directly with an Array.mkEmpty "
+            "output, avoiding per-output decode div/mod."),
+        "hypothesis": (
+            "For p=2 rows, two direct dots with one shared row base may beat Cross's four-row P12 "
+            "packing and its fixed preparation/output machinery."),
+    },
+    {
+        "name": "f01-deepseek-p2cont8",
+        "edits": [(P2_OLD, P2_NEW), (CONT_OLD, CONT_NEW), (P8_OLD, P8_NEW)],
+        "mechanism": (
+            "Combines the p=2 DirectContinuous routing, the widened DirectContinuous guard and the "
+            "p ≤ 8 DirectSmall predicate. All three branches retain their unconditional spec "
+            "theorems; no new proof obligation is introduced."),
+        "hypothesis": (
+            "Composite direct-routing candidate: p=2 rows and 3<=p<=8 rows both leave Cross/Packed10."),
     },
 ]
 
