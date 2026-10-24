@@ -133,6 +133,19 @@ def bench_suite_symbol(name):
     return bool(re.search(r'(?:runScalar|measure|Suite_run)(?:___|_spec__|$)', name))
 
 
+def bmm_core_symbol_info(name):
+    """Exact observed Fin.foldl core specializations; never boxed/near matches."""
+    match = re.fullmatch(
+        r'(?:lp_competition_Fin_foldl_loop|lp(?:_competition_)?__private_[A-Za-z0-9_]+__Fin_foldl_loop)'
+        r'___at___00Submission_R11WideActual_core_spec__([0-9]+)'
+        r'(?:___redArg|___lam__([0-9]+)(?:___redArg)?)?', name)
+    if match is None:
+        return None
+    return {'priority': -1, 'specialized_output': True,
+            'sort_key': (0 if match.group(2) is not None else 1, int(match.group(1)),
+                         int(match.group(2)) if match.group(2) is not None else -1, name)}
+
+
 def assembly_focus_config(m, env, kernel):
     """Read the frozen request once, before launching the original gate."""
     result = {'state': 'DEFAULT_SCALAR', 'assembly_focus': 'scalar', 'plan_path': None}
@@ -167,7 +180,7 @@ def _disassemble(m, staged, folder, deadline, record):
         result['error'] = 'Invalid assembly focus isolated from original gate: ' + str(config.get('error', focus))
         return result
     if focus == 'bmm':
-        result['selection_basis'] = 'Submission exact fd17 _symbol_info/_symbol_sort_key before MainFull and BenchSuite; complete actual C still retained'
+        result['selection_basis'] = 'Observed Fin.foldl R11WideActual.core specializations/producers first; then exact Panel4 hot/prepare/block stems; then remaining Submission fd17 order and MainFull/BenchSuite. Complete actual C still retained.'
     scans = {}
     for item in record['snapshot']['files']:
         if item.get('kind') == 'c':
@@ -193,6 +206,7 @@ def _disassemble(m, staged, folder, deadline, record):
                 continue
             name = fields[3]
             legacy_info = None
+            core_info = None
             if module == 'MainFull':
                 wanted = name in actual.get('defined_functions', []) or name in actual.get('closure_targets', [])
                 priority = 1 if '___boxed' in name else 0
@@ -203,16 +217,20 @@ def _disassemble(m, staged, folder, deadline, record):
                 priority = (2 if 'runScalar_spec__' in name else 3) + (1 if '___boxed' in name else 0)
             else:
                 if focus == 'bmm':
-                    legacy_info = m._symbol_info(name)
-                    wanted = legacy_info is not None
-                    priority = legacy_info['priority'] if wanted else 0
+                    core_info = bmm_core_symbol_info(name)
+                    legacy_info = m._symbol_info(name) if core_info is None else None
+                    wanted = core_info is not None or legacy_info is not None
+                    priority = core_info['priority'] if core_info is not None else legacy_info['priority'] if wanted else 0
                 else:
                     wanted = bool(re.fullmatch(r'lp_competition_Submission_(?:add|mul|nativeMul)(?:___[A-Za-z0-9_]+)?', name))
                     priority = 6 if '___boxed' in name else 5
             if wanted:
                 entry['matching_symbols'] += 1
-                if focus == 'bmm' and legacy_info is not None:
-                    key = (0, *m._symbol_sort_key(name), index)
+                if focus == 'bmm' and core_info is not None:
+                    key = (-3, *core_info['sort_key'], index)
+                elif focus == 'bmm' and legacy_info is not None:
+                    panel = legacy_info['stem'] in ('Panel4_wordLoop', 'Panel4_packA', 'Panel4_block', 'Panel4_runDot')
+                    key = (-2 if panel else 0, *m._symbol_sort_key(name), index)
                 else:
                     key = (priority, '___lam__' not in name, name, index)
                     if focus == 'bmm':

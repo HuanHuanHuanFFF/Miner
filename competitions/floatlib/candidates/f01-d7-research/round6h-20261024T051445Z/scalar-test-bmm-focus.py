@@ -51,7 +51,13 @@ def main():
                 parts=line.split()
                 if len(parts)==4 and parts[2] in 'TtWw' and legacy._symbol_info(parts[3]) is not None:
                     actual_names.append(parts[3])
-            expected=sorted(actual_names,key=legacy._symbol_sort_key)[:20]
+            def priority(name):
+                core=m.bmm_core_symbol_info(name)
+                if core is not None:
+                    return (-3,*core['sort_key'])
+                panel=legacy._symbol_info(name)['stem'] in ('Panel4_wordLoop','Panel4_packA','Panel4_block','Panel4_runDot')
+                return (-2 if panel else 0,*legacy._symbol_sort_key(name))
+            expected=sorted(actual_names,key=priority)[:20]
             assert [s['symbol'] for s in bmm]==expected
             assert all(s['object_index']==1 for s in bmm)
             assert any('Panel4_wordLoop' in s['symbol'] for s in bmm)

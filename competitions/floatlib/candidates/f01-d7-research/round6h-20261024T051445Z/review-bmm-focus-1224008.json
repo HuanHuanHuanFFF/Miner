@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "review_id": "R12-BMM-FOCUS-1224008-READONLY-20261024",
+  "reviewed_at_utc": "2026-10-24T07:06:01Z",
+  "status": "FROZEN_008_SELECTOR_GAP_CONFIRMED_NO_DISPATCH",
+  "scope": "Read-only review of plan 1224008, frozen helper SHA 53525f, legacy fd17 symbol policy, current guarded observer path, saved tests and builder provenance. No tests rerun and no core/Git/CI/reset changes.",
+  "plan": {
+    "seed": 1224008,
+    "plan_path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/plan-1224008.json",
+    "plan_sha256": "cf2efe4877e271f73d054a9789f7220b771d613466a3aebf9c7c8b34162720a8",
+    "freeze_path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/freeze-1224008.json",
+    "freeze_sha256": "8663ecbc1b143782be6769090822daf10f39de177a307aec495477d2089bcf06",
+    "freeze_request_sha_matches_plan": true,
+    "assembly_focus": "bmm",
+    "capture_candidate": "f01-r12-general-panel",
+    "capture_candidate_sha256": "a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe",
+    "capture_codegen": true,
+    "sample_role": "DISCOVERY",
+    "clean_D_eligible": false,
+    "dispatch_state": "NOT_DISPATCHED",
+    "reason_not_dispatched": "Root reported waiting for run 40071334389 to release a public CI slot."
+  },
+  "helper_hashes": {
+    "plan_frozen_r12_capture_mainfull_sha256": "53525f8e5ac09300d01b57e37ff652eecdaa4ec3b6dc3d09c11f01dc4c924695",
+    "HEAD_r12_capture_mainfull_sha256": "53525f8e5ac09300d01b57e37ff652eecdaa4ec3b6dc3d09c11f01dc4c924695",
+    "current_worktree_r12_capture_mainfull_sha256": "80fa64edc24819b1aa574d719804f85ecdd2caf5da6dd4c20e7f7b73cf0e4e38",
+    "legacy_fd17_sha256": "fd17f35a4ef1bc1b1df2afe5fcfe39691d88e7e605968acbe3c38df09df9078b",
+    "shared_D7_capture_codegen_sha256": "926e0e72695156c79c56612a20fe6ed015a2ea4a8373d8d9fc9ac5f37c12d90d"
+  },
+  "selector_review": {
+    "bmm_focus_uses_fd17_symbol_policy": true,
+    "submission_symbols_priority_class": 0,
+    "mainfull_and_benchsuite_priority_class": 1,
+    "assembly_symbol_budget": 20,
+    "mainfull_C_capture_is_independent_of_symbol_selection": true,
+    "mainfull_C_capture_bounds": {"per_file_bytes":8388608,"total_bytes":33554432,"file_count":24,"copy_seconds":3.0},
+    "fd17_FOLD_OUTPUT_STEMS_contains_R11WideActual_core": false,
+    "legacy_OUTPUT_STEMS_contains_R11WideActual_core": true,
+    "actual_symbol_names_missing_from_fold_selector": [
+      "lp_competition_Fin_foldl_loop___at___00Submission_R11WideActual_core_spec__0",
+      "lp_competition_Fin_foldl_loop___at___00Submission_R11WideActual_core_spec__1",
+      "lp_competition_Fin_foldl_loop___at___00Submission_R11WideActual_core_spec__2",
+      "lp_competition_Fin_foldl_loop___at___00Submission_R11WideActual_core_spec__3",
+      "lp_competition_Fin_foldl_loop___at___00Submission_R11WideActual_core_spec__2___lam__0"
+    ],
+    "reason": "The exact Fin.foldl specialization branch checks FOLD_OUTPUT_STEMS; core_spec__N stem is absent there. The lower generic OUTPUT_STEMS fallback does not parse Fin_foldl_loop___at___00Submission_* names, and the lambda child does not match the exact fold regex.",
+    "result": "Frozen BMM focus can prioritize Submission, but misses the actual R11WideActual core fold specializations; it cannot claim coverage of the active Panel entry path."
+  },
+  "prior_actual_codegen_evidence": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/astra-typed-within-codegen-1224003.json",
+    "sha256": "1261296bedced0c6bf6c84e8dbc604986e0240d2e228704294f3037ab05f22dc",
+    "run": 40068680108,
+    "source_kernel_sha256": "22ea9e2684466e039c094e6a231847dbb44ffa8eb08e68b77fb3fc0ea18e5ac7",
+    "scope": "Prior typed-within candidate, not GeneralPanel. Its function inventory includes the five named R11WideActual core symbols; none occur in its 20-element assembly list. This supports the selector-gap finding, not a GeneralPanel runtime/codegen claim."
+  },
+  "single_execution_and_classification": {
+    "unknown_focus": "Config validation records UNKNOWN; one original fd17 gate is still the only gate process; postprocess selection returns UNKNOWN and the original log/exit/verdict path is not replayed.",
+    "metadata_failure": "Snapshot/record save errors are caught and recorded; no gate retry is present. A final capture-record save failure may leave no metadata artifact and current helper can retain CAPTURED in the in-memory record, so downstream evidence must treat missing metadata as incomplete. The plan capture_codegen flag still excludes clean D.",
+    "clean_D_guard": "R12 plan has capture_codegen=true for the captured GeneralPanel row; adoption-guard rejects any row with capture_codegen, as well as codegen_present/profile observers.",
+    "focus_test": "The saved test verifies invalid-focus isolation and once-only original exit/log/cleanup with a fake child; actual Lean/ELF gate NOT_RUN."
+  },
+  "saved_test_receipt": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/scalar-bmm-capture-tests.json",
+    "sha256": "874aeae1574ecf4f2b3a979b83b472217d4f0395e25046df9462da50d319a6bc",
+    "state": "PASS",
+    "total_cases": 8,
+    "scripts": [
+      {"name":"scalar-test-observer.py","exit_code":0,"cases":5,"stdout_sha256":"456650559168539f8f102a3951137812d8a8ba8b9d2179cb4dabff6ff62a92b2","stderr_bytes":0},
+      {"name":"scalar-test-bmm-focus.py","exit_code":0,"cases":3,"stdout_sha256":"463e400afb4569737519c9ca5c232816341e529703e1757d822f15dd8a969cab","stderr_bytes":0}
+    ],
+    "bmm_focus_fixture_scope": "Saved 400672 Main/Bench plus prior actual927 Panel4 C/nm fixture; it does not assert R11WideActual_core_spec__0..3 or core_spec__2___lam__0 selection.",
+    "actual_Lean_ELF_gate": "NOT_RUN"
+  },
+  "generalpanel_builder_provenance": {
+    "candidate_bytes": 255559,
+    "limit_bytes": 256000,
+    "margin_bytes": 441,
+    "candidate_sha256": "a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe",
+    "builder_sha256": "83db3a5e2e5b7d91bb85ee8100715930e8347e0d5a1c6084239d75f695a412a0",
+    "source_commit_with_builder_inputs": "738b49f3ebe660a8361380e1f6028bdfb2106fc9",
+    "tracked_inputs_verified": [
+      {"path":"competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/astra-shared-rowstream.lean","sha256":"2ccc2aa52bffc7de775551e14141707dcc21da1b3478648ec5f022cfbc4fd1d0"},
+      {"path":"competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/astra-panel-flow.lean","sha256":"dd704cd4d4a9e3c4cb93bc4e7804e2a5092efd210228834b7acb8ce93f77604a"},
+      {"path":"competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/astra-panel-actual.lean","sha256":"ad61c2dcf5650483f087ad717af1346130d1ff9c1a664e4e7f23ee11fba115d4"},
+      {"path":"competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/astra-next-capacity.json","sha256":"9677f886e8ef3258b365dc16f3c42229ec0fb0be0992958e89a1c29e16b18671"},
+      {"path":"competitions/floatlib/candidates/f01-d11-panel4-projection-proof2/panel4-projection-proof2.lean","sha256":"93b1ac6fed4b6f73aef621d374fcea195886a04ca3bdd0ef3cd93b5684104bdf"}
+    ],
+    "stage_list_sha256": "858fb7afff4d481fd4c4f2bc99b49600aa8174fec7cd088c5500b6f824838f83",
+    "freeze_files_note": "freeze-1224008 files bind the executed Kernel/manifest and validation machinery; builder provenance is separately available from tracked source commit and stage-1224008.paths."
+  },
+  "bound_files": {
+    "plan-1224008.json": "cf2efe4877e271f73d054a9789f7220b771d613466a3aebf9c7c8b34162720a8",
+    "freeze-1224008.json": "8663ecbc1b143782be6769090822daf10f39de177a307aec495477d2089bcf06",
+    "capture-mainfull.py_frozen": "53525f8e5ac09300d01b57e37ff652eecdaa4ec3b6dc3d09c11f01dc4c924695",
+    "capture-mainfull.py_worktree": "80fa64edc24819b1aa574d719804f85ecdd2caf5da6dd4c20e7f7b73cf0e4e38",
+    "legacy_fd17.py": "fd17f35a4ef1bc1b1df2afe5fcfe39691d88e7e605968acbe3c38df09df9078b",
+    "D7_capture-codegen.py": "926e0e72695156c79c56612a20fe6ed015a2ea4a8373d8d9fc9ac5f37c12d90d",
+    "scalar-bmm-capture-tests.json": "874aeae1574ecf4f2b3a979b83b472217d4f0395e25046df9462da50d319a6bc",
+    "GeneralPanel_Kernel.lean": "a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe",
+    "GeneralPanel_decl-policy-review.json": "5192feeadc13149e467db18679334af03fe2df0817611b88dd0770ae4d578e49"
+  }
+}

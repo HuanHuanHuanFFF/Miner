@@ -1,0 +1,25 @@
+# 1224008 BMM-focus capture wiring review
+
+**The frozen 1224008 plan requests `assembly_focus=bmm` for GeneralPanel and is correctly marked as an observer diagnostic, but the frozen 53525f selector is not sufficient for the actual GeneralPanel call path.** It delegates to the unchanged fd17 symbol rules; those rules omit the `R11WideActual_core` fold specialization from `FOLD_OUTPUT_STEMS`. Prior 1224003 codegen evidence contains `core_spec__0..3` and `core_spec__2___lam__0` in its function inventory, but none in the captured assembly list. Root's decision not to dispatch 008 and to repair the new wrapper for 009 is consistent with this gap.
+
+## Frozen plan and routing
+
+- `plan-1224008.json` SHA `cf2efe48…62720a8`, freeze SHA `8663ecbc…8bcf06`; the freeze request digest matches the plan. It explicitly sets `assembly_focus=bmm`, targets only `f01-r12-general-panel` for capture, and marks its plan row `capture_codegen=true`. The capture target is the last candidate in `[41, 6c2d, GeneralPanel]`.
+- Plan role is `DISCOVERY`, but the observer flag prevents it from being a clean D. `adoption-guard.validate_packets` rejects both `codegen_present` and any candidate row with `capture_codegen`; the status remains diagnostic even if capture metadata is missing.
+- The plan pins helper SHA `53525f8e…c924695`, legacy fd17 `fd17f35a…df9078b`, and D7 wrapper `926e0e72…c12d90d`. The current worktree `capture-mainfull.py` has since changed to SHA `80fa64ed…`; that edit is not the frozen 008 helper. 008 is still undispatched, so no run evidence can be attributed to either helper. Keep the 53525f request as history and make 009 pin the repaired helper explicitly.
+
+## Selection defect in frozen 53525f
+
+For BMM focus, `capture-mainfull.py` calls the imported fd17 `_symbol_info` and `_symbol_sort_key`. Recognized Submission symbols are queued with sort key class 0; MainFull and BenchSuite candidates are class 1. The 20-symbol budget therefore prioritizes recognized Submission symbols. The source capture itself runs separately: `_snapshot` copies complete MainFull/Submission/BenchSuite C, trace and object bytes under its per-file/total limits, and requires MainFull C/object/trace. Focus changes post-gate symbol selection, not C-file capture.
+
+The fd17 `FOLD_OUTPUT_STEMS` tuple does **not** contain `R11WideActual_core` (although the less-specific `OUTPUT_STEMS` contains that string). The names at issue are compiler-generated Fin-fold symbols of form `lp_competition_Fin_foldl_loop___at___00Submission_R11WideActual_core_spec__N`; `_symbol_info` accepts these through its fold branch only if the stem is in `FOLD_OUTPUT_STEMS`. They then fail the ordinary Submission-prefix fallback. `core_spec__2___lam__0` also falls outside the current fold regex. As a result, the frozen selector will not prioritize the actual wide core producer/specializations requested for BMM.
+
+The 1224003 source-bound codegen report (run 40068680108, source `f01-r12-wide4-typed-within`) inventories the `R11WideActual_core_spec__0..3` functions and `core_spec__2___lam__0`, but these names are absent from its 20 selected assembly entries. That report is not a GeneralPanel run; it demonstrates the selector's missed symbol family. The saved BMM-focus test fixture also starts with `DirectContinuous_output_spec__0`; it does not assert the actual `R11WideActual_core_spec__*` names. Add a fixture from the 1224003 inventory and require the reachable GeneralPanel core plus relevant closures to win the frozen symbol budget before calling BMM capture complete.
+
+## Fail-closed and evidence limits
+
+An explicit unknown focus is rejected in configuration; the helper records `UNKNOWN`, lets the original fd17 gate execute once, returns its original result/log, and does not retry. Post-gate selection errors likewise cannot start another gate. Capture metadata save errors are caught and recorded without replaying the gate or changing its verdict. The current `_finish_record` save-error branch appends an error but may leave `record.state=CAPTURED`; a missing metadata file must still be reported as incomplete evidence. The plan's `capture_codegen=true` prevents such a run from being promoted to clean D.
+
+The available 5 observer + 3 BMM-focus test receipt records exact `exit_code=0`, raw stdout/stderr hashes, and `actual_Lean_ELF_gate=NOT_RUN`. It uses fake-child/saved-symbol fixtures. It verifies once-only exit/log/cleanup and invalid-focus isolation, but not the missing actual GeneralPanel core symbols.
+
+008 has not been dispatched because CI capacity is occupied. The frozen GeneralPanel source is 255,559 bytes (441 bytes below the 256,000-byte cap); its statement-only plan and input hashes match its frozen Kernel. Current `stage-1224008.paths` includes the three R12 `.lean` builder inputs. `build.py`, those inputs, the R11 capacity source and the Panel4 projection sources are tracked in current commit `738b49f3…`, so the builder source tree is reproducible there; 008's `freeze.files` itself still freezes the candidate and CI inputs, not the builder provenance. No full proof, full gate, performance or codegain claim is made.
