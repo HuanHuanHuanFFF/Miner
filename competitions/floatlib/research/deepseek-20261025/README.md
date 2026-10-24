@@ -17,21 +17,30 @@
 | BMM sparse 每 MAC 约为 dense 的 1.6 倍 | 14.57 vs 8.97 ns/work | 见形状分析 |
 | BMM subnormal 极快 | 1.86 ns/work | 全小值证书命中，直接零填充 |
 
-形状分析（`analyze-bmm-shapes.py`）：`n>4 且 3≤p≤8` 的 case 占 bmm 计分工作量约 15.9%，
-现走 Packed10，每行固定 10 lane，p=3 时约 70% 填充。六条此类 case：
-ml:0(1×41×3)、ml:6(8×36×3)、sparse:3(6×181×5)、subnormal:3(2×84×3)、
-specials:1(24×6×6)、specials:4(6×225×5)。
+形状分析（`analyze-bmm-shapes.py`）：按 df5c 实际分派顺序
+（underflow-zero → Cross(p=2,batch·m≥4) → DirectContinuous(n≤4,p>2) → DirectSmall(n≤4 或 p≤2) → Packed10）
+还原后：
+
+- `n>4 且 3≤p≤8` 的 case 占 bmm 计分工作量约 15.9%，现走 Packed10，每行固定 10 lane；p=3 时约 70% 填充。
+  六条此类 case：ml:0(1×41×3)、ml:6(8×36×3)、sparse:3(6×181×5)、subnormal:3(2×84×3)、
+  specials:1(24×6×6)、specials:4(6×225×5)。
+- p=2 的 case（dense 全部 6 条、sparse 3 条等）走 R11CrossRows（四行×两列 → P12），不是 DirectSmall；
+  它们是 dense 组 7.93 ms 的主体。
 
 ## 已排除的重复路线
 
 `f01-d7-low-zero`（e139093a）已在 `ex+ey<128` 分支内加零操作数快路，但整包 1.0243 更慢；
-sparse 数据上零检测分支本身不可预测。不重复该路线。
+sparse 数据上零检测分支不可预测。不重复该路线。
 
 ## 本窗候选
 
 | 候选 | 机制 | 证明负担 | 状态 |
 |---|---|---|---|
-| `f01-deepseek-p8-direct`（d2f97bad） | BMM 分派 `p ≤ 8` 改走既有 DirectSmall | 0 新证明 | 本地静态 diff；待 CI |
+| `f01-deepseek-p8-direct`（d2f97bad） | BMM 分派 `p ≤ 8` 改走既有 DirectSmall | 0 新证明 | CI run 40123953691 |
+| `f01-deepseek-p2-direct`（43d15b12） | p=2 Cross 守卫 `4≤batch·m` → `batch·m<4`，p=2 改走 DirectSmall | 0 新证明 | 待同 run A/B |
+| `f01-deepseek-p2p8`（386af2d5） | 上述两条组合 | 0 新证明 | 待同 run A/B |
+| `f01-deepseek-p2cont`（e878b0f2） | p=2 改走 DirectContinuous（全形状定理），并放宽其守卫到 `p≤2` | 0 新证明 | 备选 |
+| `f01-deepseek-p2cont8`（169f8198） | p2cont + p8 组合 | 0 新证明 | 待同 run A/B |
 
 ## 边界
 

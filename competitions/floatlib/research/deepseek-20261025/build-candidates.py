@@ -20,6 +20,7 @@ P2_OLD = "  if h : p=2 ∧ 4≤batch*m ∧ 0<n ∧ n<USize.size ∧"
 P2_NEW = "  if h : p=2 ∧ batch*m < 4 ∧ 0<n ∧ n<USize.size ∧"
 CONT_OLD = "  if n ≤ 4 ∧ 2 < p then DirectContinuous.core batch m n p A B"
 CONT_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 2 then DirectContinuous.core batch m n p A B"
+CONT8_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 8 then DirectContinuous.core batch m n p A B"
 
 SPECS = [
     {
@@ -67,6 +68,17 @@ SPECS = [
             "theorems; no new proof obligation is introduced."),
         "hypothesis": (
             "Composite direct-routing candidate: p=2 rows and 3<=p<=8 rows both leave Cross/Packed10."),
+    },
+    {
+        "name": "f01-deepseek-p2contp8",
+        "edits": [(P2_OLD, P2_NEW), (CONT_OLD, CONT8_NEW)],
+        "mechanism": (
+            "p=2 with batch*m>=4 skips R11CrossRows and the DirectContinuous guard is widened to "
+            "`(n ≤ 4 ∧ 2 < p) ∨ p ≤ 8`, so both p=2 rows and 3<=p<=8 rows use the direct writer "
+            "instead of DirectSmall or Packed10. No other runtime bytes change."),
+        "hypothesis": (
+            "One direct row writer for all p<=8 avoids both the Cross packing and the DirectSmall "
+            "per-output decode; tests whether DirectContinuous generalises better than DirectSmall."),
     },
 ]
 
