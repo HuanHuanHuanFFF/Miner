@@ -1,0 +1,50 @@
+{
+  "candidate": "f01-r13-preparation-convert",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "7086031b8164647e199f52c6b44fc7f54233ec4e75e2221fa95d30a676270d57",
+  "candidate_bytes": 248615,
+  "parent": "f01-d12-scalar-combined",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "parent_bytes": 248144,
+  "at_utc": "2026-10-24T11:39:00.259581+00:00",
+  "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+  "lean_toolchain": "leanprover/lean4:v4.34.0",
+  "floatlib_commit": "0d91825727839f597fd06b22fdd038ea21480f0c",
+  "mechanism": "Existing all-input numeric converter only in once-per-input RowStream A map and valid Packed10 B preparation; all layout, padding, calls, dot order, guards, output and replay unchanged.",
+  "provenance": "Reuse repository R2W01b numeric decoder and R2W01c.convert_eq already present in exact df5c. No new external source or claimed novel arithmetic.",
+  "proof_status": "NOT_RUN_NEW_INTEGRATION",
+  "benchmark": "NOT_RUN",
+  "dispatch_state": "D_DECISION_PENDING_CURRENT_PROFILE",
+  "proof_bridge": "Unconditional Float32 value equality via existing convert_eq, extensional function equality for Array.map, packB_get and output_prefix rewritten without weakening their statements.",
+  "first_falsifier": "Affected preparation must have enough measured whole-call share; verify actual warm native conversion has no of_bits call, then complete original gate and clean candidate/df5c comparison. No timing inferred from exposure counts.",
+  "edits": [
+    {
+      "name": "insert_unconditional_value_bridge",
+      "old": "namespace Packed10\n\nstructure F10 where",
+      "new": "namespace R13NativePrep\n\n@[inline] def toNative (x : Binary32) : Float32 := R2W01b.convert x.raw.1\n\ntheorem toNative_eq (x : Binary32) : toNative x = ExecFloat.Binary.toFloat32 x := by\n  simpa only [toNative, ExecFloat.Binary.toFloat32, ExecFloat.Binary.toBits32] using\n    R2W01c.convert_eq x.raw.1\n\ntheorem toNative_fun_eq : toNative = ExecFloat.Binary.toFloat32 := funext toNative_eq\n\nend R13NativePrep\n\nnamespace Packed10\n\nstructure F10 where"
+    },
+    {
+      "name": "replace_valid_B_conversion",
+      "old": "            ExecFloat.Binary.toFloat32 B.toArray[base + j]\n",
+      "new": "            R13NativePrep.toNative B.toArray[base + j]\n"
+    },
+    {
+      "name": "preserve_original_packB_get_statement",
+      "old": "  simp only [packB, vector_get_ofFn]\n",
+      "new": "  simp only [packB, vector_get_ofFn, R13NativePrep.toNative_eq]\n"
+    },
+    {
+      "name": "replace_once_per_input_A_map",
+      "old": "  let nativeA := A.toArray.map ExecFloat.Binary.toFloat32\n",
+      "new": "  let nativeA := A.toArray.map R13NativePrep.toNative\n"
+    },
+    {
+      "name": "preserve_original_output_prefix_statement",
+      "old": "    Prefix (point batch m n p A B) (batch * m * p) (output batch m n p A B) := by\n  exact foldl_inv",
+      "new": "    Prefix (point batch m n p A B) (batch * m * p) (output batch m n p A B) := by\n  rw [output, R13NativePrep.toNative_fun_eq]\n  exact foldl_inv"
+    }
+  ],
+  "inverse_reconstruction_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "validation_scope": "Static exact-source reconstruction and byte limit only. No local Lean or heavy Linux toolchain used. Original full gate, actual lowering and timing remain NOT_RUN.",
+  "author_role": "R / Astra; D owns Git, CI and adoption"
+}

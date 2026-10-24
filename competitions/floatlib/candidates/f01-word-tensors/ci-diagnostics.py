@@ -91,6 +91,11 @@ def statement(src,verdict):
             except Exception as error:
                 import traceback
                 (out/'profile-error.txt').write_text(traceback.format_exc(),encoding='utf-8')
+        if kernel.parent.name == 'f01-d13-cost-profile':
+            adapter=profiler.parent.parent/'f01-d7-research/round3h-20261024T112622Z/profile-suite.py'
+            ps=importlib.util.spec_from_file_location('r13_separate_cost_diagnostic',adapter)
+            pm=importlib.util.module_from_spec(ps);ps.loader.exec_module(pm)
+            pm.run(g,kernel,out)
         if kernel.parent.name in ('f01-d6-public-suite','f01-d7-public-suite'):
             research_dir='f01-d6-research' if kernel.parent.name=='f01-d6-public-suite' else 'f01-d7-research'
             adapter=profiler.parent.parent/research_dir/'public-suite.py'
@@ -117,9 +122,10 @@ sys.exit(0 if verdict.passed else 1)
             try:
                 profiler=Path(__file__).resolve().parent.parent/'f01-d5-costsplit/profile-native.py'
                 p=subprocess.Popen([str(a.upstream/'.venv/bin/python'),'-c',code,str(a.upstream),str(a.kernel),str(out),str(profiler)],cwd=a.upstream,env=os.environ.copy(),stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
-                report['replay_exit_code']=p.wait(timeout=2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 120)
+                replay_timeout=1800 if a.name=='f01-d13-cost-profile' else 2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 120
+                report['replay_exit_code']=p.wait(timeout=replay_timeout)
             except subprocess.TimeoutExpired:
-                os.killpg(p.pid,signal.SIGKILL);p.wait();report['replay']='diagnostic-only replay process group timed out at 120s'
+                os.killpg(p.pid,signal.SIGKILL);p.wait();report['replay']=f'diagnostic-only replay process group timed out at {replay_timeout}s'
         report['replay_seconds']=round(time.monotonic()-start,3)
     candidate_c=out/'candidate-c-index.json'
     report['generated_c']=json.loads(candidate_c.read_bytes()) if candidate_c.exists() else []

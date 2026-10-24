@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "review": "R13 read-only tool and evidence preflight",
+  "reviewed_at_utc": "2026-10-24T11:33:38Z",
+  "scope": "Read-only migration and profile compatibility review; no tests, CI, Lean, heavy tools, Git, state, or model updates",
+  "r13": {
+    "round_plan": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/round-plan.json",
+    "round_plan_sha256": "aa30166a1f136ff56e3f0f0385611a55bbe4deb4da6b2526e0de2f7ebcbf6813",
+    "baseline": {
+      "candidate": "f01-d12-scalar-combined",
+      "sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+      "bytes": 248144
+    },
+    "estimator_control": {
+      "candidate": "f01-r8-combined-result-guard",
+      "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+    },
+    "retained_model_sha256": "5d946420b8e1a7ecc68aacde44b0e2910a467ee3e3546724d502f252fe8a031f",
+    "retained_model_values": {
+      "status": "INFERRED",
+      "add": 1.016106212086427,
+      "mul": 1.1262391291785552,
+      "sum": 1.140537484229386,
+      "bmm": 1.8440017089242597,
+      "whole": 1.177389359213009,
+      "direct_same_suite_champion_comparison": "UNKNOWN",
+      "official_admission": "UNKNOWN"
+    },
+    "policy": {
+      "groups": 3,
+      "rounds": 25,
+      "headline_normalized_ratio_max": 0.97,
+      "gain_p05_min_exclusive": 0.0,
+      "public_suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a"
+    },
+    "state_observation": {
+      "top_level_state": "R13_ACTIVE_EXACT_SOURCE_COST_DIAGNOSTIC",
+      "nested_collaboration_round": "R7",
+      "action_owner": "Root"
+    }
+  },
+  "r12_precedent": {
+    "round_plan_sha256": "3d4ecbae17ae0758609d086efe56f41057c2a394279449d81b6adb76da58e34c",
+    "cohort_freeze_sha256": "31b9aaa14d29b04a12e2e5745876920436fb968a73b14cb56128666ff95fbe2d",
+    "scoring_baseline": {
+      "candidate": "f01-d11-bmm-combined-classifier",
+      "sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+      "r13_compatible": false
+    },
+    "estimator_control": {
+      "candidate": "f01-r8-combined-result-guard",
+      "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+      "r13_compatible": true
+    },
+    "retained_estimate_freeze": {
+      "sha256": "f6fd05df105e55a73910cf01ef89188254092de6fbf3a0a0cb89adb68540b518",
+      "source_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+      "model_sha256": "5d946420b8e1a7ecc68aacde44b0e2910a467ee3e3546724d502f252fe8a031f",
+      "declared_full_gate_runs": [40074431355, 40076675251, 40078982864, 40080782614, 40083425886, 40083571000],
+      "no_numeric_model_change": true
+    },
+    "adoption": {
+      "receipt_sha256": "cb2729e84b8f495c9ed1147369b92d319c62c6fa384fd46f214a743c902f6d06",
+      "status": "THREE_GROUP_ADOPTED",
+      "independent_runs": [40074431355, 40083425886, 40083571000]
+    },
+    "post_adoption_display_receipt_sha256": "08797f64954c7cf7a4b2cd4d9c60e5e6a5feca885be83813333d0cb61a38b8bc",
+    "retained_metadata_receipt_sha256": "731f2bb8385c50415724cb40511dacb97bf9f2ca76caf97c17db76e8a3c78c4f",
+    "retained_metadata_receipt_source_sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+    "retained_metadata_receipt_applies_to_df5c": false
+  },
+  "estimator_dry_run": {
+    "script": "competitions/floatlib/scripts/estimate_champion_time.py",
+    "script_sha256": "fe926204104484d1fc62bf06eb57666c0f3673829664f283c9c813497bf46983",
+    "source_check": "select_pairs requires set of declared full-gate runs to equal all eligible exact-source full-gate record runs",
+    "stale_metadata_error": "Declared gates omit eligible source records",
+    "required_r13_action": "Append newly eligible df5c full-gate run IDs to view metadata and preserve an identity-only receipt; do not persist or adopt recalculated same-source numbers; keep model SHA 5d946420b8e1a7ecc68aacde44b0e2910a467ee3e3546724d502f252fe8a031f",
+    "pairing_separation": {
+      "three_group_scoring": "new candidate vs df5c",
+      "champion_estimator": "new candidate vs anchor control 41"
+    }
+  },
+  "profile_assets": {
+    "profile_entry": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/profile-entry.py",
+      "sha256": "8e018627c7fe0aef5d46cda6c8ffd8ba0b16630ea1635fbf10cd0fd817c50992",
+      "hardcoded_parent_sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045"
+    },
+    "profile_current": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/profile-current.py",
+      "sha256": "dd3b1f6691bd1083c1bc2eae44232e3e3d0590b2b9e656d1829d322de9a6cf72",
+      "hardcoded_parent_sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045",
+      "hardcoded_route_symbols": ["RowStream_core", "Packed10_core_spec", "Packed10_packB", "RowOutput_row"],
+      "requires_exactly_four_core_returns": true,
+      "directly_reusable_for_df5c_instrumentation": false,
+      "reusable_design_only": "plan-to-call mapping after exact DF5c route and call coverage are reimplemented"
+    },
+    "r12_plan_files_checked": 20,
+    "r12_profile_parent_true": 0,
+    "r12_stage_profile_available": false,
+    "r7_profile_summary_sha256": "cf07e6f627266a6dbe463af4db8af90f1a3ea4324b1fb10152c03aed9815d6a6",
+    "r7_profile_scope": "old 8eb parent; not transferable to df5c"
+  },
+  "bound_inputs": {
+    "competitions/floatlib/coordination/development-status.json": "275bca407521017d852923c9a959c3c2bc090ec34446464c1a8508aa166a9ade",
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/round-results.json": "0e2da4804cffe4dfe4cd8453d0a335ff99438ae927b17609025be506e5170b4e",
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/review-final-adoption-model.json": "402dbc581742c6838b893283b5885bb1044b3b19fb867c749ee8bc6235d8c8b6",
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/public-index-at-adoption.json": "0ee6c1f4c4b4fd9de8cd57bc874aed5bd959d0197ac6ff617fe720f7df0be7d5"
+  },
+  "conclusion": "R13 migration is feasible with a narrow scorer/baseline split and identity-only df5c metadata update. Existing 8eb profile instrumentation is incompatible; reuse its mapping design only after exact-source coverage is rebuilt. No R13 candidate acceptance or performance claim is made."
+}

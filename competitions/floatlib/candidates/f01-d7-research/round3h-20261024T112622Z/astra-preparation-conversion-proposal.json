@@ -1,0 +1,24 @@
+{
+  "at_utc": "2026-10-24T11:36:00Z",
+  "state": "PROPOSAL_NOT_PERFORMANCE_CLAIM",
+  "mechanism": "Use the existing, all-input-proved R2W01b.convert at once-per-input A mapping and B packet preparation. Preserve native arrays, packet width, lifetime, dot recurrence, output and NaN replay. This removes foreign of_bits calls on zero and raw-exponent 24..254 inputs while retaining ofBits fallback for the remaining words.",
+  "baseline": "f01-d12-scalar-combined / df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172 / 248144 bytes",
+  "source_evidence": [
+    "Kernel.lean:1901 R2W01c.convert_eq is unconditional; replace_decoder immediately below supports extensional substitution.",
+    "Kernel.lean:5115 Packed10.packB still converts each valid B value with ExecFloat.Binary.toFloat32; padding uses zero32 and is not a removable foreign conversion.",
+    "Kernel.lean:5583 RowStream.output prepares nativeA with Array.map ExecFloat.Binary.toFloat32 once.",
+    "CrossP12.packShared/packGeneral also retain foreign conversions, but are outside the first minimal candidate so the effect is localized."
+  ],
+  "difference_from_old_results": [
+    "R4 scalar-decode a7dca manifest explicitly leaves bmm and sum unchanged. Its scalar aggregate regression is not a BMM preparation measurement.",
+    "R12 59de/df5c change nativeMul's two operands only. That establishes reusable correctness and a changed scalar call context, not BMM speed.",
+    "R11 raw-A removes A preparation and decodes in the MAC loop, causing foreign calls/spills. This proposal retains once-per-input preparation and does not duplicate that mechanism.",
+    "R12 GeneralPanel a1ab changes representation/lifetime and failed whole gain; column4 da09 changes width and failed incremental gain. Neither tests this exact decoder substitution."
+  ],
+  "first_falsifier": "Sol's exact-current-source diagnostic: if affected preparation contributes <3% of whole scored time, even eliminating it cannot meet this round's 3% incremental gate. If large enough, actual candidate code generation must show warm conversions lowered without foreign of_bits; compare complete original public-v2 call cost, including converter predicate/table loads/extra multiply and unchanged allocation. Do not allocate cell time by MAC fractions.",
+  "mathematical_bridge": "Define an inline Binary32-to-Float32 wrapper and unconditional equality via R2W01c.convert_eq. Rewrite only runtime preparation bodies and add local proof rewrites so existing original-value lane/output statements remain unchanged. Full original four-obligation/axiom/checksum gate is still required.",
+  "bounded_delivery": "One minimal complete candidate, manifest and inverse reconstruction within 45 minutes of selection; first <=15-minute source/exposure/proof feasibility checkpoint. No prediction that CI or independent confirmation fits in those 45 minutes.",
+  "opportunity": "UNKNOWN until current per-case/stage times. R12 BMM scored share was roughly 16..22% of whole, so a whole 3% gain needs a substantial BMM saving. All-input conversion frequency and warm-path coverage will be reconstructed separately as INFERRED source counts.",
+  "fallback_risk": "Small normals/subnormals and nonfinite words add a predicate before the original foreign conversion. Allocation remains. A blanket speed claim would be unsupported.",
+  "requested_decision": "D/Sol assess current preparation time and select this one bounded candidate only if attainable whole gain justifies original full gate; no CI dispatched by R."
+}
