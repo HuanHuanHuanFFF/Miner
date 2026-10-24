@@ -21,12 +21,13 @@ def gh(args,e):
 def save(p,value):p.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('mode',choices=['dispatch','status','collect']);ap.add_argument('--run');ap.add_argument('--workflow',default='floatlib-validate.yml');ap.add_argument('--candidates',default='baseline');ap.add_argument('--seed',default='42');args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('mode',choices=['dispatch','status','collect']);ap.add_argument('--run');ap.add_argument('--workflow',default='floatlib-validate.yml');ap.add_argument('--candidates',default='baseline');ap.add_argument('--seed',default='42');ap.add_argument('--branch',default='codex/multi-track-floatlib',help='Explicit authorized experimental branch; must match checked-out branch');args=ap.parse_args()
     e=env();evidence=ROOT/'competitions/floatlib/evidence';evidence.mkdir(exist_ok=True)
     if args.mode=='dispatch':
         assert re.fullmatch(r'(?:baseline|f01-[a-z0-9-]+)(?:,(?:baseline|f01-[a-z0-9-]+))*',args.candidates)
         assert args.seed.isdecimal();assert args.workflow in ['floatlib-validate.yml','deflate-baseline.yml']
-        branch=subprocess.check_output(['git','branch','--show-current'],cwd=ROOT,text=True).strip();sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip();assert branch=='codex/multi-track-floatlib'
+        branch=subprocess.check_output(['git','branch','--show-current'],cwd=ROOT,text=True).strip();sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip();assert branch==args.branch and branch.startswith(('codex/','huan/')),'Explicit experimental branch must match checkout'
+        subprocess.run(['git','check-ref-format','--branch',branch],cwd=ROOT,check=True,stdout=subprocess.DEVNULL)
         raw=gh(['api',f'repos/{REPO}'],e);repository=json.loads(raw);assert repository['private'] is False
         remote=json.loads(gh(['api',f'repos/{REPO}/commits/{branch}'],e));assert remote['sha']==sha,'Push precise commit before dispatch'
         stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ');receipt=evidence/('dispatch-'+stamp);receipt.mkdir()
