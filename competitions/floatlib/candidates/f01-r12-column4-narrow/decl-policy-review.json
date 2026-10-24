@@ -1,0 +1,1924 @@
+{
+  "candidate_sha256": "da09fb59fa456b498af6bde48d54adcd37f85c4ba7df272163b184a2b83038c4",
+  "static_policy": "PASS",
+  "unused_proofs": [
+    {
+      "name": "replay_eq",
+      "qualified_name": "Submission.R7NaNReplay.replay_eq",
+      "bytes": 400,
+      "sha256": "99acd228d219fc4aaa67000b301eafa7decdc2d1dcdc91a750a9b40d70195d26",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem replay_eq (n baseA baseB p : Nat) (Araw Braw : Array Binary32) (result : Float32) :\n    replay n baseA baseB p Araw Braw result =\n      Fin.foldl n (fun acc i => Submission.add acc\n        (Submission.mul (Araw.getD (baseA + i.val) posZero)\n          (Braw.getD (baseB + i.val * p) posZero))) posZero := by\n  unfold replay\n  split\n  · exact replayEarly_eq n baseA baseB p Araw Braw\n  · rfl\n"
+    },
+    {
+      "name": "mul_ofFloat32",
+      "qualified_name": "Submission.R7W12.mul_ofFloat32",
+      "bytes": 191,
+      "sha256": "081569bc075b6eadb7e233065b9fdbe33dd17b59b394221b0420a17abde292d4",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem mul_ofFloat32 (a b : Float32) :\n    ExecFloat.mul (ExecFloat.Binary.ofFloat32 a) (ExecFloat.Binary.ofFloat32 b) =\n      ExecFloat.Binary.ofFloat32 (a * b) := (ofFloat32_mul a b).symm\n"
+    },
+    {
+      "name": "referenceSum_spec",
+      "qualified_name": "Submission.referenceSum_spec",
+      "bytes": 282,
+      "sha256": "2ce790b9e73a9ebb17166f33de4a5beebe391b2d09bb1a49d38ba34bce972aa3",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem referenceSum_spec : ∀ (n : Nat) (x : Vector Binary32 n), referenceSum x = sumSpec x.get := by\n  intro n x\n  conv_lhs => rw [referenceSum, add_eq, ← Vector.ofFn_getElem (xs := x)]\n  rw [← Vector.foldl_toList, Vector.toList_ofFn, List.ofFn_eq_map, List.foldl_map]\n  rfl\n"
+    },
+    {
+      "name": "finiteRoundtrip",
+      "qualified_name": "Submission.GuardBridge.finiteRoundtrip",
+      "bytes": 814,
+      "sha256": "7c7dbc197b5bfb55453ceac95390b51ee3c8a9facaa1169b05bdbff396a010ec",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem finiteRoundtrip (x : Competition.Binary32)\n    (hx : (ExecFloat.Binary.toFloat32 x).isFinite = true) :\n    ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x) = x := by\n  have hcanonical : Model.IsModelCanonical (ExecFloat.Binary.toModel x) := by\n    apply modelCanonicalOfFinite\n    have hf := hx\n    change ((Model.toFloat32Model (ExecFloat.Binary.toModel x)).unpack).isFinite = true at hf\n    rw [Model.unpack_toFloat32Model] at hf\n    exact hf\n  apply Configured.Family.toModel_injective\n  change ExecFloat.Binary.toModel\n      (ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x)) =\n    ExecFloat.Binary.toModel x\n  rw [ExecFloat.Binary.toModel_ofFloat32, ExecFloat.Binary.toModel_toFloat32_eq,\n    Model.ofFloat32Model_toFloat32Model]\n  exact Model.canonicalizeModel_eq_self _ hcanonical\n"
+    },
+    {
+      "name": "normal_finite",
+      "qualified_name": "R2W01c.normal_finite",
+      "bytes": 214,
+      "sha256": "4e3d070195bfd217fe1cac5ab7c965e59234c5d1c681370a33a0ef8fdd3905ca",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem normal_finite (u : UInt32) (hn : NormalBand u) :\n    (tableProduct u).isFinite = true := by\n  rw [normal_eq u hn]\n  exact nativeFinite_of_decode _\n    (nativeModel_ofBits_decode u (target_raw_decode u hn))\n"
+    },
+    {
+      "name": "normal_bits",
+      "qualified_name": "R2W01c.normal_bits",
+      "bytes": 321,
+      "sha256": "c074cc2524a28abb72c5d1c9964541a669b7897b95c7f0345ba88a1b245267c9",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem normal_bits (u : UInt32) (hn : NormalBand u) :\n    (tableProduct u).toBits = u := by\n  exact native_mul_bits_eq_of_raw_model_mul_eq\n    (mantissa u).toFloat32 (scaleAt u) u\n    (nativeFinite_of_decode _ (mantissa_native_decode u))\n    (nativeFinite_of_decode _ (scale_native_decode u hn)) (normal_model_mul u hn)\n"
+    },
+    {
+      "name": "uint32_mantissa_model_toReal",
+      "qualified_name": "R2W01c.uint32_mantissa_model_toReal",
+      "bytes": 308,
+      "sha256": "808a0bfae35e28aedec257d167cb4c7c79e688648785611556090405134744e8",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem uint32_mantissa_model_toReal (n : UInt32)\n    (hlo : 8388608 ≤ n.toNat) (hhi : n.toNat < 16777216) :\n    Model.toReal (Model.ofFloat32Model n.toFloat32.toModel) = (n.toNat : Real) := by\n  rw [Model.toReal_eq, uint32_mantissa_model_decode n hlo hhi]\n  simp [Dyadic.toReal, Dyadic.signedSignificand]\n"
+    },
+    {
+      "name": "uint32_mantissa_model_finite",
+      "qualified_name": "R2W01c.uint32_mantissa_model_finite",
+      "bytes": 280,
+      "sha256": "8559502c6b2ccbcd415d443d26c611a46ed84e08fa3e1fcea81d68baf2f6eeef",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem uint32_mantissa_model_finite (n : UInt32)\n    (hlo : 8388608 ≤ n.toNat) (hhi : n.toNat < 16777216) :\n    Model.isFinite (Model.ofFloat32Model n.toFloat32.toModel) = true := by\n  exact Model.isFinite_eq_true_of_toDyadic?_some\n    (uint32_mantissa_model_decode n hlo hhi)\n"
+    },
+    {
+      "name": "native_mul_bits_eq_of_raw_model_mul_eq",
+      "qualified_name": "R2W01c.native_mul_bits_eq_of_raw_model_mul_eq",
+      "bytes": 569,
+      "sha256": "8b97e2e9acbe9035c1015c783e671f166ef687416791cdba00fca3ac48afc178",
+      "incoming_removed_callers": [
+        "normal_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem native_mul_bits_eq_of_raw_model_mul_eq\n    (x y : Float32) (u : UInt32)\n    (hx : x.isFinite = true) (hy : y.isFinite = true)\n    (hm : Model.mul (nativeModel x) (nativeModel y) = rawModel u) :\n    (x * y).toBits = u := by\n  have hw : ExecFloat.Binary.ofFloat32 (x * y) = ExecFloat.Binary.ofBits32 u := by\n    apply ExecFloat.Binary.toModel_inj.mp\n    rw [NativeBridge.toModelNativeMul x y hx hy]\n    exact hm\n  have hn := congrArg ExecFloat.Binary.toBits32 hw\n  simpa only [ExecFloat.Binary.toBits32_ofFloat32,\n    ExecFloat.Binary.toBits32_ofBits32] using hn\n"
+    },
+    {
+      "name": "rawModel_eq_native32",
+      "qualified_name": "R2W01c.rawModel_eq_native32",
+      "bytes": 100,
+      "sha256": "0e7aba9921748e222b49b8cde6df556d555cd6a7665105622177bac40a7943aa",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem rawModel_eq_native32 (u : UInt32) :\n    rawModel u = Model.NativeBinary32.ofUInt32 u := rfl\n"
+    },
+    {
+      "name": "convert_eq_of_normal_raw_bits",
+      "qualified_name": "R2W01b.convert_eq_of_normal_raw_bits",
+      "bytes": 230,
+      "sha256": "34808b3aa5042d52615eeee09bba63b7123a19c04d215d2fa089b760d37d063b",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem convert_eq_of_normal_raw_bits\n    (hNormalRawBits : ∀ u, NormalBand u → (tableProduct u).toBits = u)\n    (u : UInt32) : convert u = Float32.ofBits u := by\n  exact convert_eq (normal_value_of_raw_bits hNormalRawBits) u\n"
+    },
+    {
+      "name": "convert_eq_of_normal_bits",
+      "qualified_name": "R2W01b.convert_eq_of_normal_bits",
+      "bytes": 246,
+      "sha256": "d840368fb6d72a456af8d4472eb6b575917517ccc9355c861d624da3f62ec661",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem convert_eq_of_normal_bits\n    (hNormalBits : ∀ u, NormalBand u →\n      (tableProduct u).toBits = (Float32.ofBits u).toBits)\n    (u : UInt32) : convert u = Float32.ofBits u := by\n  exact convert_eq (normal_value_of_bits hNormalBits) u\n"
+    },
+    {
+      "name": "convert_zero_path",
+      "qualified_name": "R2W01b.convert_zero_path",
+      "bytes": 187,
+      "sha256": "5a3634333e1c4f72376ac331a623d9c23314f08e434b44eea6db4e22a83d81e4",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem convert_zero_path (u : UInt32) (h : magnitude u = 0) :\n    convert u = tableProduct u := by\n  have hf : fastOK u = true := (fastOK_iff u).mpr (Or.inl h)\n  rw [convert, if_pos hf]\n"
+    },
+    {
+      "name": "normal_value_of_raw_bits",
+      "qualified_name": "R2W01b.normal_value_of_raw_bits",
+      "bytes": 244,
+      "sha256": "003e6aaf577382c5fe1e2619084e13447ec0deeeebf49e42e213dfdc8934c0f9",
+      "incoming_removed_callers": [
+        "convert_eq_of_normal_raw_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem normal_value_of_raw_bits\n    (hNormalRawBits : ∀ u, NormalBand u → (tableProduct u).toBits = u) :\n    ∀ u, NormalBand u → tableProduct u = Float32.ofBits u := by\n  intro u hn\n  exact float32_eq_of_raw_bits (hNormalRawBits u hn)\n"
+    },
+    {
+      "name": "normal_value_of_bits",
+      "qualified_name": "R2W01b.normal_value_of_bits",
+      "bytes": 265,
+      "sha256": "a45034f8a5eb2699f8cf103414d4b146fa0c5908675560b0197d3de2aa4a8456",
+      "incoming_removed_callers": [
+        "convert_eq_of_normal_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem normal_value_of_bits\n    (hNormalBits : ∀ u, NormalBand u →\n      (tableProduct u).toBits = (Float32.ofBits u).toBits) :\n    ∀ u, NormalBand u → tableProduct u = Float32.ofBits u := by\n  intro u hn\n  exact float32_eq_of_toBits_eq (hNormalBits u hn)\n"
+    },
+    {
+      "name": "float32_eq_of_raw_bits",
+      "qualified_name": "R2W01b.float32_eq_of_raw_bits",
+      "bytes": 237,
+      "sha256": "081dedf1f21df8a10528c94cdf6c9fe57f52286856cc188448005f60d0df8788",
+      "incoming_removed_callers": [
+        "normal_value_of_raw_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem float32_eq_of_raw_bits {x : Float32} {u : UInt32} (h : x.toBits = u) :\n    x = Float32.ofBits u := by\n  calc\n    x = Float32.ofBits x.toBits := (float32_ofBits_toBits x).symm\n    _ = Float32.ofBits u := congrArg Float32.ofBits h\n"
+    },
+    {
+      "name": "float32_ofBits_toBits",
+      "qualified_name": "R2W01b.float32_ofBits_toBits",
+      "bytes": 260,
+      "sha256": "71022fabd0177000dff2ea7d447c6b31d7e88ae5d7cc0a6613a31cb238c2945e",
+      "incoming_removed_callers": [
+        "float32_eq_of_raw_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem float32_ofBits_toBits (x : Float32) : Float32.ofBits x.toBits = x := by\n  simpa only [FloatLib.Floats.ExecFloat.Binary.toFloat32,\n    FloatLib.Floats.ExecFloat.Binary.toBits32_ofFloat32] using\n    FloatLib.Floats.ExecFloat.Binary.toFloat32_ofFloat32 x\n"
+    },
+    {
+      "name": "float32_eq_of_toBits_eq",
+      "qualified_name": "R2W01b.float32_eq_of_toBits_eq",
+      "bytes": 308,
+      "sha256": "57ed7ffd35763575fe296dc75d328e8a0b7933dcc05687bce084b0521d6e2e69",
+      "incoming_removed_callers": [
+        "normal_value_of_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem float32_eq_of_toBits_eq {x y : Float32} (h : x.toBits = y.toBits) :\n    x = y := by\n  cases x with\n  | ofModel xm =>\n    cases y with\n    | ofModel ym =>\n      cases xm with\n      | mk xb xv =>\n        cases ym with\n        | mk yb yv =>\n          change xb = yb at h\n          cases h\n          rfl\n"
+    },
+    {
+      "name": "tableProduct_zero_bits",
+      "qualified_name": "R2W01b.tableProduct_zero_bits",
+      "bytes": 177,
+      "sha256": "73e5739044658f9434eb2d0408bff52398fed7920d7bf099b17dafbc9eef59bb",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem tableProduct_zero_bits (u : UInt32) (h : magnitude u = 0) :\n    (tableProduct u).toBits = u := by\n  exact (tableProduct_zero_bits_eq u h).trans (zero_ofBits_toBits u h)\n"
+    },
+    {
+      "name": "zero_ofBits_toBits",
+      "qualified_name": "R2W01b.zero_ofBits_toBits",
+      "bytes": 205,
+      "sha256": "1ebd2711f71ef24a637414f8e641fa51dbd2f387dcd85d2e48faa083932be928",
+      "incoming_removed_callers": [
+        "tableProduct_zero_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem zero_ofBits_toBits (u : UInt32) (h : magnitude u = 0) :\n    (Float32.ofBits u).toBits = u := by\n  cases (magnitude_zero_iff u).mp h with\n  | inl hu => subst u; decide\n  | inr hu => subst u; decide\n"
+    },
+    {
+      "name": "tableProduct_zero_bits_eq",
+      "qualified_name": "R2W01b.tableProduct_zero_bits_eq",
+      "bytes": 192,
+      "sha256": "63ed272e995b9f51673147ea543a9edc159ef82080ee9200f43bfa4d805d97bd",
+      "incoming_removed_callers": [
+        "tableProduct_zero_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem tableProduct_zero_bits_eq (u : UInt32) (h : magnitude u = 0) :\n    (tableProduct u).toBits = (Float32.ofBits u).toBits := by\n  exact congrArg Float32.toBits (tableProduct_zero_eq u h)\n"
+    },
+    {
+      "name": "zero_mantissa_conversion",
+      "qualified_name": "R2W01b.zero_mantissa_conversion",
+      "bytes": 112,
+      "sha256": "b8eccd0e4f8b2eeb51e5df16c210199352b844696915d61d93e653d2a9533954",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem zero_mantissa_conversion :\n    (0x800000 : UInt32).toFloat32 = Float32.ofBits 0x4b000000 := by\n  decide\n"
+    },
+    {
+      "name": "fastOK_negative_zero",
+      "qualified_name": "R2W01b.fastOK_negative_zero",
+      "bytes": 71,
+      "sha256": "4ad7cabb45d55d0a58e401609bbc7b79602ea762578cbf2f9a92ebb365a54955",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem fastOK_negative_zero : fastOK 0x80000000 = true := by\n  decide\n"
+    },
+    {
+      "name": "modelDotEarly_eq",
+      "qualified_name": "R7W01.modelDotEarly_eq",
+      "bytes": 498,
+      "sha256": "3c4fe0eb9861b5282292a0ed2c83c7488bc338099ab6f3e6cb5f012f8c810c93",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem modelDotEarly_eq {ι : Type} (a b : ι → M32) (indices : List ι) (acc : M32) :\n    modelDotEarly a b indices acc = modelDotFold a b indices acc := by\n  induction indices generalizing acc with\n  | nil => rfl\n  | cons i is ih =>\n      simp only [modelDotEarly]\n      split\n      · rename_i hq\n        exact (modelDotFold_absorb a b (i :: is) acc\n          (quietGuard_nan acc hq) (quietGuard_not_signaling acc hq)).symm\n      · exact ih (Model.Spec.add acc (Model.Spec.mul (a i) (b i)))\n"
+    },
+    {
+      "name": "modelDotFold_absorb",
+      "qualified_name": "R7W01.modelDotFold_absorb",
+      "bytes": 411,
+      "sha256": "3e4ba56e27ea608532ecc8164c6473f2bf244eddf192d8d97579129721e27600",
+      "incoming_removed_callers": [
+        "modelDotEarly_eq"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem modelDotFold_absorb {ι : Type} (a b : ι → M32) (indices : List ι)\n    (q : M32) (hn : q.isNaN = true) (hs : q.isSNaN = false) :\n    modelDotFold a b indices q = q := by\n  induction indices generalizing q with\n  | nil => rfl\n  | cons i is ih =>\n      change modelDotFold a b is (Model.Spec.add q (Model.Spec.mul (a i) (b i))) = q\n      rw [add_mul_absorb q (a i) (b i) hn hs]\n      exact ih q hn hs\n"
+    },
+    {
+      "name": "add_mul_absorb_bits",
+      "qualified_name": "R7W01.add_mul_absorb_bits",
+      "bytes": 180,
+      "sha256": "6cb1a8802ba7e59cf7620048029f5ad8086c833012fc516586b7804e0490ed76",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem add_mul_absorb_bits (q x y : M32)\n    (hq : isNaN q = true) (hs : isSNaN q = false) :\n    (Spec.add q (Spec.mul x y)).bits = q.bits := by\n  rw [add_mul_absorb q x y hq hs]\n"
+    },
+    {
+      "name": "invalidResult32_is_qnan",
+      "qualified_name": "R7W01.invalidResult32_is_qnan",
+      "bytes": 85,
+      "sha256": "d09ae855705b4afe8e0f448ca149b991b7ba49a0fa4d8657d321585d9cb6614f",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem invalidResult32_is_qnan :\n    isQNaN (invalidResult F32) = true := by decide\n"
+    }
+  ],
+  "declarations": {
+    "R7W04.nonNaN": [
+      6
+    ],
+    "R7W04.unpacked_self_beq_eq_not_isNaN": [
+      8
+    ],
+    "R7W04.model_self_beq_eq_not_isNaN": [
+      20
+    ],
+    "R7W04.self_beq_eq_not_isNaN": [
+      26
+    ],
+    "R7W04.nonNaN_eq_not_isNaN": [
+      32
+    ],
+    "R7W04.nonNaN_eq_true_iff": [
+      36
+    ],
+    "R7W04.nonNaN_eq_false_iff": [
+      42
+    ],
+    "R7W01.F32": [
+      61
+    ],
+    "R7W01.M32": [
+      62
+    ],
+    "R7W01.bits32": [
+      64
+    ],
+    "R7W01.fromBits32": [
+      65
+    ],
+    "R7W01.quietMask_getLsbD": [
+      67
+    ],
+    "R7W01.set_quietMask": [
+      77
+    ],
+    "R7W01.or_quietMask_eq_self": [
+      84
+    ],
+    "R7W01.quietNaN32_not_snan": [
+      112
+    ],
+    "R7W01.quietNaN32_eq_self": [
+      125
+    ],
+    "R7W01.expField32_set_quietBit": [
+      140
+    ],
+    "R7W01.fracField32_set_quietBit_ne_zero": [
+      151
+    ],
+    "R7W01.quietNaN32_is_nan": [
+      163
+    ],
+    "R7W01.quietNaN32_is_qnan": [
+      179
+    ],
+    "R7W01.quietNaN32_idempotent": [
+      186
+    ],
+    "R7W01.zero32_not_snan": [
+      197
+    ],
+    "R7W01.invalidResult32_not_snan": [
+      202
+    ],
+    "R7W01.chooseNaN2_32_not_snan": [
+      207
+    ],
+    "R7W01.fields32_not_nan": [
+      244
+    ],
+    "R7W01.nativeOverflow32_not_nan": [
+      252
+    ],
+    "R7W01.packRoundedSubnormal32_not_nan": [
+      261
+    ],
+    "R7W01.packRoundedNormal32_not_nan": [
+      273
+    ],
+    "R7W01.roundDyadicGeneral32_not_nan": [
+      301
+    ],
+    "R7W01.roundDyadic32_not_nan": [
+      316
+    ],
+    "R7W01.roundDyadic32_not_snan": [
+      322
+    ],
+    "R7W01.nativeOverflow32_not_snan": [
+      326
+    ],
+    "R7W01.mul32_not_snan": [
+      341
+    ],
+    "R7W01.add_absorb_of_not_snan": [
+      363
+    ],
+    "R7W01.add_mul_absorb": [
+      372
+    ],
+    "R7W01.quietGuard": [
+      392
+    ],
+    "R7W01.quietGuard_nan": [
+      394
+    ],
+    "R7W01.quietGuard_not_signaling": [
+      398
+    ],
+    "R7W01.modelDotFold": [
+      403
+    ],
+    "R7W01.modelDotEarly": [
+      407
+    ],
+    "R7W01.exec_toModel_add": [
+      417
+    ],
+    "R7W01.exec_toModel_mul": [
+      425
+    ],
+    "R7W01.exec_add_mul_absorb": [
+      433
+    ],
+    "R7W01.execQuietGuard": [
+      443
+    ],
+    "R7W02.rawSNaN": [
+      457
+    ],
+    "R7W02.quietRaw": [
+      460
+    ],
+    "R7W02.mask_split": [
+      463
+    ],
+    "R7W02.fraction_split": [
+      470
+    ],
+    "R7W02.mask_snan_classification": [
+      476
+    ],
+    "R7W02.rawSNaN_eq_isSNaN": [
+      512
+    ],
+    "R7W02.quietRaw_eq_quietNaN": [
+      526
+    ],
+    "R7W02.quietMask_getLsbD": [
+      541
+    ],
+    "R7W02.quietRaw_preserves_bit": [
+      552
+    ],
+    "R7W02.quietRaw_bit22": [
+      561
+    ],
+    "R7W02.quietRaw_isQNaN": [
+      569
+    ],
+    "R7W02.model_add_qnan_left": [
+      617
+    ],
+    "R7W02.fromRaw": [
+      631
+    ],
+    "R7W02.fromRaw_raw": [
+      634
+    ],
+    "R7W02.exec_toModel_eq_rawModel": [
+      637
+    ],
+    "R7W02.fromRaw_toModel": [
+      646
+    ],
+    "R7W02.exec_toModel_bits_eq_raw": [
+      652
+    ],
+    "R7W02.exec_toModel_add": [
+      658
+    ],
+    "R7W02.step": [
+      667
+    ],
+    "R7W02.step_raw": [
+      671
+    ],
+    "R7W02.step_eq_add": [
+      677
+    ],
+    "R7W02.step_isQNaN": [
+      705
+    ],
+    "R2W01b.magnitude": [
+      832
+    ],
+    "R2W01b.fastOK": [
+      835
+    ],
+    "R2W01b.NormalBand": [
+      839
+    ],
+    "R2W01b.wrap_gate_iff": [
+      842
+    ],
+    "R2W01b.fastOK_iff": [
+      855
+    ],
+    "R2W01b.magnitude_toNat": [
+      859
+    ],
+    "R2W01b.magnitude_zero_iff": [
+      865
+    ],
+    "R2W01b.fastOK_positive_zero": [
+      874
+    ],
+    "R2W01b.tableIndex": [
+      878
+    ],
+    "R2W01b.mantissa": [
+      881
+    ],
+    "R2W01b.scaleBits": [
+      884
+    ],
+    "R2W01b.tableIndex_toNat_lt": [
+      892
+    ],
+    "R2W01b.scaleTable": [
+      902
+    ],
+    "R2W01b.scaleTable_size": [
+      905
+    ],
+    "R2W01b.scaleTable_entry": [
+      908
+    ],
+    "R2W01b.scaleAt": [
+      913
+    ],
+    "R2W01b.scaleAt_eq": [
+      918
+    ],
+    "R2W01b.zero_fields": [
+      922
+    ],
+    "R2W01b.scaleAt_positive_zero": [
+      937
+    ],
+    "R2W01b.scaleAt_negative_zero": [
+      941
+    ],
+    "R2W01b.tableProduct": [
+      948
+    ],
+    "R2W01b.tableProduct_positive_zero": [
+      951
+    ],
+    "R2W01b.tableProduct_negative_zero": [
+      955
+    ],
+    "R2W01b.tableProduct_zero_eq": [
+      960
+    ],
+    "R2W01b.tableProduct_of_fastOK": [
+      978
+    ],
+    "R2W01b.convert": [
+      986
+    ],
+    "R2W01b.convert_fallback": [
+      990
+    ],
+    "R2W01b.convert_eq": [
+      994
+    ],
+    "R2W01b.convert_bits_eq": [
+      1002
+    ],
+    "R2W01b.replace_decoder": [
+      1009
+    ],
+    "R2W01b.foldl_convert_eq": [
+      1014
+    ],
+    "R2W01c.NativeBridge.le_targetExponent_totalExponent_iff": [
+      1142
+    ],
+    "R2W01c.NativeBridge.add_le_targetExponent_totalExponent_mul": [
+      1163
+    ],
+    "R2W01c.NativeBridge.le_targetExponent_totalExponent_of_toModel_eq_finite": [
+      1190
+    ],
+    "R2W01c.NativeBridge.modelMulFinite": [
+      1212
+    ],
+    "R2W01c.NativeBridge.toModelNativeMul": [
+      1283
+    ],
+    "R2W01c.nativeModel": [
+      1306
+    ],
+    "R2W01c.rawModel": [
+      1309
+    ],
+    "R2W01c.rawModel_eq_ofUInt32": [
+      1313
+    ],
+    "R2W01c.modelCanonicalOfFinite": [
+      1319
+    ],
+    "R2W01c.modelCanonical_of_decode": [
+      1328
+    ],
+    "R2W01c.nativeModel_ofBits_of_decode": [
+      1336
+    ],
+    "R2W01c.nativeModel_ofBits_decode": [
+      1346
+    ],
+    "R2W01c.nativeFinite_of_decode": [
+      1352
+    ],
+    "R2W01c.native_eq_of_model_eq": [
+      1362
+    ],
+    "R2W01c.native_mul_eq_of_raw_model_mul_eq": [
+      1369
+    ],
+    "R2W01c.native_mul_eq_of_decoded_raw_model_mul_eq": [
+      1386
+    ],
+    "R2W01c.uint32_model_eq_roundDyadic": [
+      1403
+    ],
+    "R2W01c.uint32_model_eq_of_decode": [
+      1419
+    ],
+    "R2W01c.fields32_toDyadic": [
+      1429
+    ],
+    "R2W01c.uint32_mantissa_model_eq_fields": [
+      1440
+    ],
+    "R2W01c.uint32_mantissa_model_decode": [
+      1450
+    ],
+    "R2W01cModel.mul_eq_of_finite_value": [
+      1470
+    ],
+    "R2W01cModel.dyadic_scale_value": [
+      1488
+    ],
+    "R2W01cModel.mul_eq_of_scale_decodes": [
+      1496
+    ],
+    "R2W01cModel.binary32_mantissa_scale_mul": [
+      1514
+    ],
+    "R2W01c.raw32": [
+      1534
+    ],
+    "R2W01c.wordSign": [
+      1537
+    ],
+    "R2W01c.wordExp": [
+      1540
+    ],
+    "R2W01c.wordFrac": [
+      1543
+    ],
+    "R2W01c.raw32_bits": [
+      1546
+    ],
+    "R2W01c.raw32_sign": [
+      1550
+    ],
+    "R2W01c.raw32_exp": [
+      1554
+    ],
+    "R2W01c.raw32_frac": [
+      1562
+    ],
+    "R2W01c.raw32_eq_fields": [
+      1570
+    ],
+    "R2W01c.wordFrac_lt": [
+      1576
+    ],
+    "R2W01c.mantissa_toNat": [
+      1579
+    ],
+    "R2W01c.mantissa_bounds": [
+      1587
+    ],
+    "R2W01c.normal_wordExp_bounds": [
+      1593
+    ],
+    "R2W01c.tableIndex_nat": [
+      1605
+    ],
+    "R2W01c.tableExp_nat": [
+      1611
+    ],
+    "R2W01c.high_bit_of_lt512": [
+      1618
+    ],
+    "R2W01c.tableSign_nat": [
+      1629
+    ],
+    "R2W01c.scaleBits_nat": [
+      1641
+    ],
+    "R2W01c.scale_wordSign": [
+      1682
+    ],
+    "R2W01c.scale_wordExp": [
+      1692
+    ],
+    "R2W01c.scale_wordFrac": [
+      1701
+    ],
+    "R2W01c.normal_raw32_decode": [
+      1710
+    ],
+    "R2W01c.scale_raw32_decode": [
+      1718
+    ],
+    "R2W01c.mantissa_native_decode": [
+      1737
+    ],
+    "R2W01c.scale_native_decode": [
+      1744
+    ],
+    "R2W01c.target_raw_decode": [
+      1752
+    ],
+    "R2W01c.normal_model_mul": [
+      1758
+    ],
+    "R2W01c.normal_eq": [
+      1770
+    ],
+    "R2W01c.convert_eq": [
+      1778
+    ],
+    "R2W01c.convert_bits_eq": [
+      1781
+    ],
+    "R2W01c.replace_decoder": [
+      1785
+    ],
+    "R2W01c.foldl_convert_eq": [
+      1789
+    ],
+    "Submission.FastMul.sx": [
+      1830
+    ],
+    "Submission.FastMul.sr": [
+      1833
+    ],
+    "Submission.FastMul.fastLog2": [
+      1836
+    ],
+    "Submission.FastMul.rse": [
+      1850
+    ],
+    "Submission.FastMul.rseAny": [
+      1860
+    ],
+    "Submission.FastMul.mkW": [
+      1867
+    ],
+    "Submission.FastMul.fracW": [
+      1871
+    ],
+    "Submission.FastMul.roundP": [
+      1875
+    ],
+    "Submission.FastMul.core": [
+      1909
+    ],
+    "Submission.FastMul.sm1": [
+      1922
+    ],
+    "Submission.FastMul.special": [
+      1925
+    ],
+    "Submission.FastMul.ofBits": [
+      1928
+    ],
+    "Submission.FastMul.mul": [
+      1931
+    ],
+    "Submission.FastMul.Fmt": [
+      1936
+    ],
+    "Submission.FastMul.Plan": [
+      1937
+    ],
+    "Submission.FastMul.Fam": [
+      1938
+    ],
+    "Submission.FastMul.dec": [
+      1941
+    ],
+    "Submission.FastMul.dec_eq": [
+      1945
+    ],
+    "Submission.FastMul.dec_ofBits": [
+      1948
+    ],
+    "Submission.FastMul.word32": [
+      1951
+    ],
+    "Submission.FastMul.dec_word": [
+      1961
+    ],
+    "Submission.FastMul.toUInt32_ofUInt32": [
+      1966
+    ],
+    "Submission.FastMul.log2_shift": [
+      1970
+    ],
+    "Submission.FastMul.log2_lt_64": [
+      1986
+    ],
+    "Submission.FastMul.step": [
+      1992
+    ],
+    "Submission.FastMul.log2_lt_two": [
+      2023
+    ],
+    "Submission.FastMul.fastLog2_eq": [
+      2027
+    ],
+    "Submission.FastMul.expField_toNat": [
+      2042
+    ],
+    "Submission.FastMul.sm1_eq": [
+      2049
+    ],
+    "Submission.FastMul.rseAny_eq": [
+      2062
+    ],
+    "Submission.FastMul.mkW_ofNat": [
+      2083
+    ],
+    "Submission.FastMul.toUInt32_eq": [
+      2089
+    ],
+    "Submission.FastMul.fracW_eq": [
+      2092
+    ],
+    "Submission.FastMul.roundP_eq": [
+      2107
+    ],
+    "Submission.FastMul.impl_eq": [
+      2115
+    ],
+    "Submission.FastMul.mul_eq_word": [
+      2122
+    ],
+    "Submission.FastMul.mul_spec": [
+      2133
+    ],
+    "Submission.LowScale.roundLow": [
+      2144
+    ],
+    "Submission.LowScale.roundLow_eq": [
+      2156
+    ],
+    "Submission.LowScale.roundSelect": [
+      2185
+    ],
+    "Submission.LowScale.roundSelect_eq": [
+      2190
+    ],
+    "Submission.LowScale.core": [
+      2209
+    ],
+    "Submission.LowScale.core_eq": [
+      2222
+    ],
+    "Submission.LowScale.mul": [
+      2225
+    ],
+    "Submission.LowScale.mul_eq": [
+      2229
+    ],
+    "Submission.LowScale.mul_spec": [
+      2232
+    ],
+    "Submission.GuardBridge.modelCanonicalOfFinite": [
+      2244
+    ],
+    "Submission.WordFinite.modelFiniteOfExp": [
+      2261
+    ],
+    "Submission.WordFinite.nativeFiniteOfExp": [
+      2275
+    ],
+    "Submission.NativeBridge.le_targetExponent_totalExponent_iff": [
+      2297
+    ],
+    "Submission.NativeBridge.add_le_targetExponent_totalExponent_mul": [
+      2318
+    ],
+    "Submission.NativeBridge.le_targetExponent_totalExponent_of_toModel_eq_finite": [
+      2345
+    ],
+    "Submission.NativeBridge.modelMulFinite": [
+      2367
+    ],
+    "Submission.NativeBridge.toModelNativeMul": [
+      2438
+    ],
+    "Submission.NativeBridge.toModelExecMul": [
+      2456
+    ],
+    "Submission.NativeBridge.ofFloat32Mul": [
+      2464
+    ],
+    "Submission.NotNaNProbe.modelCanonicalOfNotNaN": [
+      2483
+    ],
+    "Submission.NotNaNProbe.roundtrip": [
+      2492
+    ],
+    "Submission.NotNaNProbe.packNaN_isNaN": [
+      2509
+    ],
+    "Submission.NotNaNProbe.add_inputs": [
+      2512
+    ],
+    "Submission.NotNaNProbe.mul_inputs": [
+      2522
+    ],
+    "Submission.R7Native.F": [
+      2540
+    ],
+    "Submission.R7Native.M": [
+      2541
+    ],
+    "Submission.R7Native.finiteDecode": [
+      2543
+    ],
+    "Submission.R7Native.nonNaNView": [
+      2553
+    ],
+    "Submission.R7Native.eqOfInfinity": [
+      2561
+    ],
+    "Submission.R7Native.eqOfZero": [
+      2570
+    ],
+    "Submission.R7Native.infinityDecode": [
+      2579
+    ],
+    "Submission.R7Native.nativeOverflow_eq": [
+      2584
+    ],
+    "Submission.R7Native.specAddInfLeft": [
+      2588
+    ],
+    "Submission.R7Native.specAddInfRight": [
+      2599
+    ],
+    "Submission.R7Native.specMulInfLeft": [
+      2610
+    ],
+    "Submission.R7Native.specMulInfRight": [
+      2624
+    ],
+    "Submission.R7Native.modelAdd": [
+      2639
+    ],
+    "Submission.R7Native.modelMulInfLeft": [
+      2662
+    ],
+    "Submission.R7Native.modelMulInfRight": [
+      2680
+    ],
+    "Submission.R7Native.modelMul": [
+      2698
+    ],
+    "Submission.R7Native.toModelExecAdd": [
+      2713
+    ],
+    "Submission.R7Native.ofFloat32Add": [
+      2721
+    ],
+    "Submission.R7Native.ofFloat32Mul": [
+      2739
+    ],
+    "Submission.DWordNaN.M": [
+      2764
+    ],
+    "Submission.DWordNaN.rawNaN": [
+      2766
+    ],
+    "Submission.DWordNaN.rawSNaN": [
+      2769
+    ],
+    "Submission.DWordNaN.rawNaN_eq": [
+      2772
+    ],
+    "Submission.DWordNaN.rawSNaN_eq": [
+      2791
+    ],
+    "Submission.DWordNaN.quietWord_eq": [
+      2804
+    ],
+    "Submission.DWordNaN.quietWord_eq_snan": [
+      2821
+    ],
+    "Submission.DWordNaN.rawChoose": [
+      2830
+    ],
+    "Submission.DWordNaN.rawChoose_eq": [
+      2837
+    ],
+    "Submission.DWordNaN.rawNaN_exp": [
+      2857
+    ],
+    "Submission.DWordNaN.rawChoose_nonfinite": [
+      2864
+    ],
+    "Submission.DWordNaN.specialDecode": [
+      2885
+    ],
+    "Submission.DWordNaN.selected_model_add": [
+      2892
+    ],
+    "Submission.DWordNaN.selected_model_mul": [
+      2907
+    ],
+    "Submission.DWordNaN.selected_add": [
+      2924
+    ],
+    "Submission.DWordNaN.selected_mul": [
+      2933
+    ],
+    "Submission.ScalarNaN.add": [
+      2946
+    ],
+    "Submission.ScalarNaN.add_spec": [
+      2951
+    ],
+    "Submission.ScalarNaN.mul": [
+      2958
+    ],
+    "Submission.ScalarNaN.mul_spec": [
+      2963
+    ],
+    "Submission.add": [
+      2974
+    ],
+    "Submission.add_spec": [
+      2979
+    ],
+    "Submission.nativeMul": [
+      2995
+    ],
+    "Submission.nativeMul_spec": [
+      3000
+    ],
+    "Submission.mul": [
+      3015
+    ],
+    "Submission.mul_spec": [
+      3020
+    ],
+    "Submission.add_eq": [
+      3028
+    ],
+    "Submission.mul_eq": [
+      3032
+    ],
+    "Submission.referenceSum": [
+      3037
+    ],
+    "Submission.referenceBmm": [
+      3041
+    ],
+    "Submission.toArray_getD": [
+      3052
+    ],
+    "Submission.referenceBmm_spec": [
+      3057
+    ],
+    "Submission.FinalFinite.packNaN_notFinite": [
+      3074
+    ],
+    "Submission.FinalFinite.packInfinity_notFinite": [
+      3078
+    ],
+    "Submission.FinalFinite.add_finite_inputs": [
+      3083
+    ],
+    "Submission.FinalFinite.mul_finite_inputs": [
+      3095
+    ],
+    "Submission.R7W03.chooseNaN2_none_not_snan": [
+      3118
+    ],
+    "Submission.R7W03.model_add_not_snan": [
+      3127
+    ],
+    "Submission.R7W03.model_add_isQNaN_eq_isNaN": [
+      3148
+    ],
+    "Submission.R7W03.model_add_of_right_snan": [
+      3155
+    ],
+    "Submission.R7W03.model_add_of_right_snan_isQNaN": [
+      3165
+    ],
+    "Submission.R7W03.model_add_of_right_snan_bits": [
+      3172
+    ],
+    "Submission.R7W03.exec_add_not_snan": [
+      3186
+    ],
+    "Submission.R7W05.model_toModel_isNaN": [
+      3213
+    ],
+    "Submission.R7W05.toFloat32_isNaN": [
+      3264
+    ],
+    "Submission.R7W05.native_eq_nan_of_isNaN": [
+      3285
+    ],
+    "Submission.R7W05.toFloat32_eq_nan_of_model_nan": [
+      3330
+    ],
+    "Submission.R7W05.chooseNaN2_some_nan": [
+      3354
+    ],
+    "Submission.R7W05.model_add_nan_left": [
+      3408
+    ],
+    "Submission.R7W05.model_add_nan_right": [
+      3450
+    ],
+    "Submission.R7W05.native_add_nan_left": [
+      3492
+    ],
+    "Submission.R7W05.native_add_nan_right": [
+      3522
+    ],
+    "Submission.R7W05.add_toFloat32": [
+      3558
+    ],
+    "Submission.R7W05.add_isNaN_eq_native": [
+      3687
+    ],
+    "Submission.R7W05.add_model_isNaN_eq_native": [
+      3708
+    ],
+    "Submission.R7W05.add_spec_isNaN_eq_native": [
+      3726
+    ],
+    "Submission.R7W05.add_isNaN_true_iff": [
+      3747
+    ],
+    "Submission.R7W05.add_isNaN_false_iff": [
+      3765
+    ],
+    "Submission.R7W05.mul_unpack_of_isNaN": [
+      3807
+    ],
+    "Submission.R7W05.native_mul_nan_left": [
+      3828
+    ],
+    "Submission.R7W05.native_mul_nan_right": [
+      3855
+    ],
+    "Submission.R7W05.mul_toFloat32_of_not_nan": [
+      3888
+    ],
+    "Submission.R7W05.model_mul_nan_left": [
+      3930
+    ],
+    "Submission.R7W05.model_mul_nan_right": [
+      3969
+    ],
+    "Submission.R7W05.mul_toFloat32": [
+      4011
+    ],
+    "Submission.R7W05.mul_isNaN_eq_native": [
+      4068
+    ],
+    "Submission.R7W05.mul_model_isNaN_eq_native": [
+      4089
+    ],
+    "Submission.R7W05.mul_isNaN_true_iff": [
+      4107
+    ],
+    "Submission.R7W05.mul_isNaN_false_iff": [
+      4125
+    ],
+    "Submission.R7W05.nativeSumStep": [
+      4170
+    ],
+    "Submission.R7W05.nativeDotStep": [
+      4182
+    ],
+    "Submission.R7W05.repairSumStep": [
+      4191
+    ],
+    "Submission.R7W05.repairDotStep": [
+      4200
+    ],
+    "Submission.R7W05.native_acc_roundtrip": [
+      4215
+    ],
+    "Submission.R7W05.dot_toFloat32": [
+      4239
+    ],
+    "Submission.R7W05.native_sum_isNaN_eq_raw": [
+      4260
+    ],
+    "Submission.R7W05.native_dot_isNaN_eq_raw": [
+      4281
+    ],
+    "Submission.R7W05.repairSumStep_eq_original": [
+      4302
+    ],
+    "Submission.R7W05.repairDotStep_eq_original": [
+      4326
+    ],
+    "Submission.R7W05.repairSumStep_isNaN_eq": [
+      4350
+    ],
+    "Submission.R7W05.repairDotStep_isNaN_eq": [
+      4371
+    ],
+    "Submission.R7W05.repairSumStep_isQNaN": [
+      4392
+    ],
+    "Submission.R7W05.repairDotStep_isQNaN": [
+      4425
+    ],
+    "Submission.R7W12.ofFloat32_nan_raw": [
+      4471
+    ],
+    "Submission.R7W12.ofFloat32_nan_toModel": [
+      4474
+    ],
+    "Submission.R7W12.ofFloat32_isNaN": [
+      4479
+    ],
+    "Submission.R7W12.ofFloat32_not_snan": [
+      4485
+    ],
+    "Submission.R7W12.canonicalNaN_is_nan": [
+      4494
+    ],
+    "Submission.R7W12.canonicalNaN_not_snan": [
+      4497
+    ],
+    "Submission.R7W12.canonicalNaN_quiet_self": [
+      4500
+    ],
+    "Submission.R7W12.invalidResult_eq_canonical": [
+      4505
+    ],
+    "Submission.R7W12.chooseCanonicalNaN_left": [
+      4509
+    ],
+    "Submission.R7W12.chooseCanonicalNaN_right": [
+      4517
+    ],
+    "Submission.R7W12.model_add_canonical_left": [
+      4525
+    ],
+    "Submission.R7W12.model_add_canonical_right": [
+      4532
+    ],
+    "Submission.R7W12.model_mul_canonical_left": [
+      4540
+    ],
+    "Submission.R7W12.model_mul_canonical_right": [
+      4547
+    ],
+    "Submission.R7W12.exec_add_import_nan_left": [
+      4556
+    ],
+    "Submission.R7W12.exec_add_import_nan_right": [
+      4569
+    ],
+    "Submission.R7W12.exec_mul_import_nan_left": [
+      4581
+    ],
+    "Submission.R7W12.exec_mul_import_nan_right": [
+      4594
+    ],
+    "Submission.R7W12.ofFloat32_add": [
+      4607
+    ],
+    "Submission.R7W12.ofFloat32_mul": [
+      4622
+    ],
+    "Submission.R7W12.add_ofFloat32": [
+      4637
+    ],
+    "Submission.R7W12.rawNotNaN": [
+      4649
+    ],
+    "Submission.R7W12.magnitude_le_infinity_iff": [
+      4653
+    ],
+    "Submission.R7W12.rawNotNaN_true_iff_isNaN_false": [
+      4659
+    ],
+    "Submission.R7W12.rawNotNaN_eq_not_isNaN": [
+      4683
+    ],
+    "Submission.R7W12.rawNotNaN_eq_exec_model": [
+      4689
+    ],
+    "Submission.R7W12.rawNotNaN_exec_true_iff": [
+      4695
+    ],
+    "Submission.R7W12.rawNotNaN_eq_native_classifier": [
+      4703
+    ],
+    "Submission.R7SumRepair.step": [
+      4714
+    ],
+    "Submission.R7SumRepair.suffixLoop": [
+      4718
+    ],
+    "Submission.R7SumRepair.suffixLoop_eq": [
+      4724
+    ],
+    "Submission.R7NaNReplay.replayStep": [
+      4751
+    ],
+    "Submission.R7NaNReplay.replayStep_absorb": [
+      4756
+    ],
+    "Submission.R7NaNReplay.replayFold_absorb": [
+      4764
+    ],
+    "Submission.R7NaNReplay.replayLoop": [
+      4776
+    ],
+    "Submission.R7NaNReplay.replayLoop_eq": [
+      4785
+    ],
+    "Submission.R7NaNReplay.replayEarly": [
+      4801
+    ],
+    "Submission.R7NaNReplay.replayEarly_eq": [
+      4804
+    ],
+    "Submission.R7NaNReplay.replay": [
+      4810
+    ],
+    "Submission.NativeFinal.dotLoop": [
+      4822
+    ],
+    "Submission.NativeFinal.dotLoop_eq": [
+      4831
+    ],
+    "Submission.NativeFinal.dot": [
+      4867
+    ],
+    "Submission.NativeFinal.dot_eq": [
+      4872
+    ],
+    "Submission.index_address": [
+      4892
+    ],
+    "Submission.Packed10.zero32": [
+      4910
+    ],
+    "Submission.Packed10.zero10": [
+      4912
+    ],
+    "Submission.Packed10.lane": [
+      4914
+    ],
+    "Submission.Packed10.packet": [
+      4927
+    ],
+    "Submission.Packed10.update": [
+      4930
+    ],
+    "Submission.Packed10.lane_packet": [
+      4933
+    ],
+    "Submission.Packed10.lane_zero10": [
+      4939
+    ],
+    "Submission.Packed10.lane_update": [
+      4945
+    ],
+    "Submission.Packed10.groups": [
+      4951
+    ],
+    "Submission.Packed10.vector_get_ofFn": [
+      4954
+    ],
+    "Submission.Packed10.packB": [
+      4959
+    ],
+    "Submission.Packed10.packB_get": [
+      4981
+    ],
+    "Submission.Packed10.packB_lane": [
+      5011
+    ],
+    "Submission.Packed10.nativeA_getD": [
+      5029
+    ],
+    "Submission.Packed10.dot10": [
+      5037
+    ],
+    "Submission.Packed10.dot10_lane": [
+      5054
+    ],
+    "Submission.Packed10.finish": [
+      5092
+    ],
+    "Submission.Packed10.finish_eq_dot": [
+      5097
+    ],
+    "Submission.Packed10.finish_dot10_lane": [
+      5105
+    ],
+    "Submission.Packed10Index.addNat": [
+      5130
+    ],
+    "Submission.Packed10Index.stepNat": [
+      5135
+    ],
+    "Submission.Packed10Index.next_decreases": [
+      5143
+    ],
+    "Submission.Packed10Index.boundA": [
+      5149
+    ],
+    "Submission.Packed10Index.ugetA_getD": [
+      5152
+    ],
+    "Submission.Packed10Index.ugetB_get": [
+      5156
+    ],
+    "Submission.Packed10Index.loop": [
+      5163
+    ],
+    "Submission.Packed10Index.loop_eq": [
+      5188
+    ],
+    "Submission.Packed10Index.within": [
+      5218
+    ],
+    "Submission.Packed10Index.within_eq": [
+      5226
+    ],
+    "Submission.Packed10Index.runDot": [
+      5234
+    ],
+    "Submission.Packed10Index.runDot_eq": [
+      5240
+    ],
+    "Submission.RowStream.Prefix": [
+      5268
+    ],
+    "Submission.RowStream.prefix_push": [
+      5271
+    ],
+    "Submission.RowStream.foldl_loop_inv": [
+      5284
+    ],
+    "Submission.RowStream.foldl_inv": [
+      5299
+    ],
+    "Submission.RowStream.emit": [
+      5306
+    ],
+    "Submission.RowStream.emit_prefix": [
+      5310
+    ],
+    "Submission.RowStream.point": [
+      5321
+    ],
+    "Submission.RowStream.decode_row": [
+      5327
+    ],
+    "Submission.RowStream.point_row": [
+      5339
+    ],
+    "Submission.RowStream.group": [
+      5347
+    ],
+    "Submission.RowStream.group_prefix": [
+      5362
+    ],
+    "Submission.RowStream.row": [
+      5399
+    ],
+    "Submission.RowStream.row_prefix": [
+      5406
+    ],
+    "Submission.RowStream.output": [
+      5424
+    ],
+    "Submission.RowStream.output_prefix": [
+      5432
+    ],
+    "Submission.RowStream.core": [
+      5444
+    ],
+    "Submission.RowStream.prefix_vector_eq_ofFn": [
+      5450
+    ],
+    "Submission.RowStream.points_eq_reference": [
+      5460
+    ],
+    "Submission.RowStream.core_eq_reference": [
+      5476
+    ],
+    "Submission.bmmPackedBase": [
+      5491
+    ],
+    "Submission.bmmPackedBase_spec": [
+      5497
+    ],
+    "Submission.DirectSmall.core": [
+      5518
+    ],
+    "Submission.DirectSmall.core_eq_reference": [
+      5524
+    ],
+    "Submission.bmmBeforeDirectRows": [
+      5546
+    ],
+    "Submission.bmmBeforeDirectRows_spec": [
+      5551
+    ],
+    "Submission.R7SinglePassSum.low_reject_finite": [
+      5572
+    ],
+    "Submission.R7SinglePassSum.raw_nonNaN_of_le": [
+      5589
+    ],
+    "Submission.R7SinglePassSum.raw_nan_of_high_reject": [
+      5596
+    ],
+    "Submission.R7SinglePassSum.table_eq": [
+      5605
+    ],
+    "Submission.R7SinglePassSum.native_step_eq": [
+      5614
+    ],
+    "Submission.R7SinglePassSum.repair_quiet": [
+      5625
+    ],
+    "Submission.R7SinglePassSum.natLoop": [
+      5640
+    ],
+    "Submission.R7SinglePassSum.natLoop_eq": [
+      5656
+    ],
+    "Submission.R7SinglePassSum.loop": [
+      5706
+    ],
+    "Submission.R7SinglePassSum.loop_eq": [
+      5725
+    ],
+    "Submission.R7SinglePassSum.run": [
+      5757
+    ],
+    "Submission.R7SinglePassSum.run_spec": [
+      5762
+    ],
+    "Submission.sum": [
+      5783
+    ],
+    "Submission.sum_spec": [
+      5785
+    ],
+    "Submission.DirectRows.core": [
+      5793
+    ],
+    "Submission.DirectRows.core_eq": [
+      5803
+    ],
+    "Submission.DirectContinuous.row": [
+      5830
+    ],
+    "Submission.DirectContinuous.row_prefix": [
+      5839
+    ],
+    "Submission.DirectContinuous.output": [
+      5857
+    ],
+    "Submission.DirectContinuous.output_prefix": [
+      5863
+    ],
+    "Submission.DirectContinuous.core": [
+      5874
+    ],
+    "Submission.DirectContinuous.core_eq_reference": [
+      5879
+    ],
+    "Submission.bmmBeforeR11Cross": [
+      5892
+    ],
+    "Submission.bmmBeforeR11Cross_spec": [
+      5897
+    ],
+    "Submission.R11CrossRows.select4": [
+      5949
+    ],
+    "Submission.R11CrossRows.lane": [
+      5952
+    ],
+    "Submission.R11CrossRows.inputA": [
+      5957
+    ],
+    "Submission.R11CrossRows.inputB": [
+      5960
+    ],
+    "Submission.R11CrossRows.zero8": [
+      5965
+    ],
+    "Submission.R11CrossRows.update": [
+      5969
+    ],
+    "Submission.R11CrossRows.lane_zero": [
+      5975
+    ],
+    "Submission.R11CrossRows.lane_update": [
+      5980
+    ],
+    "Submission.R11CrossRows.packGeneral": [
+      5987
+    ],
+    "Submission.R11CrossRows.packGeneral_a": [
+      6003
+    ],
+    "Submission.R11CrossRows.packGeneral_b": [
+      6012
+    ],
+    "Submission.R11CrossRows.packShared": [
+      6023
+    ],
+    "Submission.R11CrossRows.packShared_eq": [
+      6034
+    ],
+    "Submission.R11CrossRows.pack": [
+      6038
+    ],
+    "Submission.R11CrossRows.pack_eq_general": [
+      6042
+    ],
+    "Submission.R11CrossRows.pack_a": [
+      6052
+    ],
+    "Submission.R11CrossRows.pack_b": [
+      6059
+    ],
+    "Submission.R11CrossRows.natLoop": [
+      6067
+    ],
+    "Submission.R11CrossRows.natLoop_lane": [
+      6071
+    ],
+    "Submission.R11CrossRows.wordLoop": [
+      6089
+    ],
+    "Submission.R11CrossRows.wordLoop_eq": [
+      6101
+    ],
+    "Submission.R11CrossRows.dot8": [
+      6122
+    ],
+    "Submission.R11CrossRows.dot8_lane": [
+      6128
+    ],
+    "Submission.R11CrossRows.laneIndex": [
+      6139
+    ],
+    "Submission.R11CrossRows.wordAt": [
+      6142
+    ],
+    "Submission.R11CrossRows.rebuild": [
+      6149
+    ],
+    "Submission.R11CrossRows.finish8": [
+      6152
+    ],
+    "Submission.R11CrossRows.finish8_word": [
+      6162
+    ],
+    "Submission.R11CrossRows.blockAt": [
+      6173
+    ],
+    "Submission.R11CrossRows.blockAt_word": [
+      6178
+    ],
+    "Submission.R11CrossRows.blockRows": [
+      6192
+    ],
+    "Submission.R11CrossRows.blockRows_word": [
+      6200
+    ],
+    "Submission.R11CrossRows.groups": [
+      6210
+    ],
+    "Submission.R11CrossRows.group_bound": [
+      6212
+    ],
+    "Submission.R11CrossRows.row_decomposition": [
+      6216
+    ],
+    "Submission.R11CrossRows.words": [
+      6218
+    ],
+    "Submission.R11CrossRows.rowWord": [
+      6222
+    ],
+    "Submission.R11CrossRows.rowWord_eq": [
+      6229
+    ],
+    "Submission.R11CrossRows.core": [
+      6241
+    ],
+    "Submission.R11CrossRows.core_eq_rows": [
+      6255
+    ],
+    "Submission.Packed4.zero32": [
+      6283
+    ],
+    "Submission.Packed4.zero4": [
+      6284
+    ],
+    "Submission.Packed4.lane": [
+      6285
+    ],
+    "Submission.Packed4.packet": [
+      6291
+    ],
+    "Submission.Packed4.update": [
+      6293
+    ],
+    "Submission.Packed4.lane_packet": [
+      6295
+    ],
+    "Submission.Packed4.lane_zero4": [
+      6300
+    ],
+    "Submission.Packed4.lane_update": [
+      6304
+    ],
+    "Submission.Packed4.groups": [
+      6309
+    ],
+    "Submission.Packed4.packB": [
+      6310
+    ],
+    "Submission.Packed4.packB_get": [
+      6331
+    ],
+    "Submission.Packed4.packB_lane": [
+      6360
+    ],
+    "Submission.Packed4.dot4": [
+      6372
+    ],
+    "Submission.Packed4.dot4_lane": [
+      6384
+    ],
+    "Submission.Packed4Index.ugetB_get": [
+      6418
+    ],
+    "Submission.Packed4Index.loop": [
+      6424
+    ],
+    "Submission.Packed4Index.loop_eq": [
+      6446
+    ],
+    "Submission.Packed4Index.within": [
+      6475
+    ],
+    "Submission.Packed4Index.within_eq": [
+      6482
+    ],
+    "Submission.Packed4Index.runDot": [
+      6489
+    ],
+    "Submission.Packed4Index.runDot_eq": [
+      6494
+    ],
+    "Submission.Packed4.finish_lane": [
+      6504
+    ],
+    "Submission.Narrow4.batchIndex": [
+      6519
+    ],
+    "Submission.Narrow4.firstGroup": [
+      6521
+    ],
+    "Submission.Narrow4.row": [
+      6523
+    ],
+    "Submission.Narrow4.row_prefix": [
+      6534
+    ],
+    "Submission.Narrow4.output": [
+      6555
+    ],
+    "Submission.Narrow4.output_prefix": [
+      6562
+    ],
+    "Submission.Narrow4.core": [
+      6571
+    ],
+    "Submission.Narrow4.core_eq_reference": [
+      6575
+    ],
+    "Submission.bmmBeforeUnderflowZero": [
+      6583
+    ],
+    "Submission.bmmBeforeUnderflowZero_spec": [
+      6593
+    ],
+    "Submission.UnderflowZero.small": [
+      6616
+    ],
+    "Submission.UnderflowZero.small_exp": [
+      6619
+    ],
+    "Submission.UnderflowZero.small_posZero": [
+      6629
+    ],
+    "Submission.UnderflowZero.small_getD": [
+      6631
+    ],
+    "Submission.UnderflowZero.finiteScale_toNat": [
+      6639
+    ],
+    "Submission.UnderflowZero.scale_small": [
+      6654
+    ],
+    "Submission.UnderflowZero.scale_sum_small": [
+      6659
+    ],
+    "Submission.UnderflowZero.rseAny_zero": [
+      6670
+    ],
+    "Submission.UnderflowZero.roundP_zero": [
+      6698
+    ],
+    "Submission.UnderflowZero.mul_signed_zero": [
+      6716
+    ],
+    "Submission.UnderflowZero.add_signed_zero": [
+      6740
+    ],
+    "Submission.UnderflowZero.add_mul_zero": [
+      6744
+    ],
+    "Submission.UnderflowZero.foldl_loop_zero": [
+      6749
+    ],
+    "Submission.UnderflowZero.foldl_zero": [
+      6760
+    ],
+    "Submission.UnderflowZero.zeros": [
+      6765
+    ],
+    "Submission.UnderflowZero.zeros_eq_reference": [
+      6768
+    ],
+    "Submission.bmm": [
+      6787
+    ],
+    "Submission.bmm_spec": [
+      6793
+    ]
+  },
+  "mandatory_eight_types": {
+    "Submission.add": {
+      "type_header_unchanged": true,
+      "sha256": "68c5847c664247f7f4cdd1031c7dcb4da6ace340dc6a1defb0c0ebd716a85d19"
+    },
+    "Submission.add_spec": {
+      "type_header_unchanged": true,
+      "sha256": "11e13bfd92cce0a64c9874359842a0f0c5e7d95834726019b7be673f6d4076e4"
+    },
+    "Submission.mul": {
+      "type_header_unchanged": true,
+      "sha256": "79df20178454ee37145532d4d58c95a48252d5408eedba3a89bd01e57dcdff49"
+    },
+    "Submission.mul_spec": {
+      "type_header_unchanged": true,
+      "sha256": "837c7c2400a3da94f34eaa5eb10ac9f00f2fac6b5baaed24edfaefb3a5493d47"
+    },
+    "Submission.sum": {
+      "type_header_unchanged": true,
+      "sha256": "4fd45f4adfee44aa276799a678198b06d4659a6ab592a3ae0b45fa609725ff09"
+    },
+    "Submission.sum_spec": {
+      "type_header_unchanged": true,
+      "sha256": "ca3d3baa0fe585a2df3ae5a428b31f9ddce0133e881e3ca62ebb69e433b5b462"
+    },
+    "Submission.bmm": {
+      "type_header_unchanged": true,
+      "sha256": "253976d545de241ebfaf92c847e76fb344082fb8c2c904a095730f4329bf79aa"
+    },
+    "Submission.bmm_spec": {
+      "type_header_unchanged": true,
+      "sha256": "c3c17372bf2e54cdbec76aac450759b9a07ce2317505f0250917fbd84ceb6d35"
+    }
+  },
+  "dependency_scope": "Full new source including currentcold/converter andactualnewF4proofs analyzed asretainedroots. Noattributes, comments, attached docstrings, instances, runtime or8specsremoved. Statictextgraph only; Lean dependency acceptanceNOT_RUN."
+}

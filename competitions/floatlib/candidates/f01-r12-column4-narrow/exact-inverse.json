@@ -1,0 +1,246 @@
+{
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "inverse_exact": true,
+  "operations": [
+    {
+      "name": "insert_minimal_F4_USize_current_finish_continuous_writer",
+      "offset_in_previous_stage": 237505,
+      "before": "def bmmBeforeUnderflowZero (batch m n p : Nat)",
+      "after": "/- Four-column assets adapted from f01-d7-width4-proof2 (96131686),\nvalidated there under 4b7/public-v2. The current complete integration is NOT_RUN. -/\nnamespace Packed4\nopen Packed10 (vector_get_ofFn)\nstructure F4 where\n  s0 : Float32\n  s1 : Float32\n  s2 : Float32\n  s3 : Float32\nabbrev zero32 : Float32 := Packed10.zero32\n@[inline] def zero4 : F4 := ⟨zero32, zero32, zero32, zero32⟩\n@[inline] def lane (v : F4) (l : Fin 4) : Float32 :=\n  match l.val with\n  | 0 => v.s0\n  | 1 => v.s1\n  | 2 => v.s2\n  | _ => v.s3\n@[inline] def packet (read : Nat → Float32) (col : Nat) : F4 :=\n  ⟨read col, read (col + 1), read (col + 2), read (col + 3)⟩\n@[inline] def update (acc : F4) (a : Float32) (v : F4) : F4 :=\n  ⟨acc.s0 + a * v.s0, acc.s1 + a * v.s1, acc.s2 + a * v.s2, acc.s3 + a * v.s3⟩\ntheorem lane_packet (read : Nat → Float32) (col : Nat) (l : Fin 4) :\n    lane (packet read col) l = read (col + l.val) := by\n  rcases l with ⟨l, hl⟩\n  have h : l = 0 ∨ l = 1 ∨ l = 2 ∨ l = 3 := by omega\n  rcases h with rfl | rfl | rfl | rfl <;> rfl\ntheorem lane_zero4 (l : Fin 4) : lane zero4 l = zero32 := by\n  rcases l with ⟨l, hl⟩\n  have h : l = 0 ∨ l = 1 ∨ l = 2 ∨ l = 3 := by omega\n  rcases h with rfl | rfl | rfl | rfl <;> rfl\ntheorem lane_update (acc : F4) (a : Float32) (v : F4) (l : Fin 4) :\n    lane (update acc a v) l = lane acc l + a * lane v l := by\n  rcases l with ⟨l, hl⟩\n  have h : l = 0 ∨ l = 1 ∨ l = 2 ∨ l = 3 := by omega\n  rcases h with rfl | rfl | rfl | rfl <;> rfl\n@[inline] def groups (p : Nat) : Nat := (p + 3) / 4\ndef packB (batch n p : Nat) (B : Vector Binary32 (batch * n * p)) :\n    Vector (Vector (Vector F4 n) (groups p)) batch :=\n  Vector.ofFn fun b =>\n    Vector.ofFn fun g =>\n      Vector.ofFn fun k =>\n        let base := (b.val * n + k.val) * p\n        packet (fun j =>\n          if hj : j < p then\n            have hbn : (b.val + 1) * n ≤ batch * n := Nat.mul_le_mul_right n b.isLt\n            have hbk : b.val * n + k.val < batch * n := by\n              rw [Nat.add_mul] at hbn\n              omega\n            have hp : (b.val * n + k.val + 1) * p ≤ batch * n * p :=\n              Nat.mul_le_mul_right p (Nat.succ_le_of_lt hbk)\n            have hi : base + j < B.toArray.size := by\n              rw [B.size_toArray]\n              dsimp [base]\n              rw [Nat.add_mul] at hp\n              omega\n            ExecFloat.Binary.toFloat32 B.toArray[base + j]\n          else zero32) (4 * g.val)\ntheorem packB_get (batch n p : Nat)\n    (B : Vector Binary32 (batch * n * p))\n    (b : Fin batch) (g : Fin (groups p)) (k : Fin n) :\n    (((packB batch n p B).get b).get g).get k =\n      packet (fun j =>\n        if j < p then\n          ExecFloat.Binary.toFloat32\n            (B.toArray.getD ((b.val * n + k.val) * p + j) posZero)\n        else zero32) (4 * g.val) := by\n  simp only [packB, vector_get_ofFn]\n  congr 1\n  funext j\n  split\n  · rename_i hj\n    have hbn : (b.val + 1) * n ≤ batch * n := Nat.mul_le_mul_right n b.isLt\n    have hbk : b.val * n + k.val < batch * n := by\n      rw [Nat.add_mul] at hbn\n      omega\n    have hp : (b.val * n + k.val + 1) * p ≤ batch * n * p :=\n      Nat.mul_le_mul_right p (Nat.succ_le_of_lt hbk)\n    have hi : (b.val * n + k.val) * p + j < B.toArray.size := by\n      rw [B.size_toArray]\n      rw [Nat.add_mul] at hp\n      omega\n    have hidx : (b.val * n + k.val) * p + j < batch * n * p := by\n      simpa only [B.size_toArray] using hi\n    simp [Array.getD, hidx, hj]\n  · rename_i hj\n    simp only [dif_neg hj, if_neg hj]\ntheorem packB_lane (batch n p : Nat)\n    (B : Vector Binary32 (batch * n * p))\n    (b : Fin batch) (g : Fin (groups p)) (k : Fin n) (l : Fin 4)\n    (hcol : 4 * g.val + l.val < p) :\n    lane ((((packB batch n p B).get b).get g).get k) l =\n      ExecFloat.Binary.toFloat32\n        (B.toArray.getD\n          ((b.val * n + k.val) * p + (4 * g.val + l.val)) posZero) := by\n  rw [packB_get, lane_packet, if_pos hcol]\nend Packed4\nnamespace Packed4\nopen Packed10 (nativeA_getD)\ndef dot4 (n baseA : Nat) (A : Array Float32) (B : Vector F4 n)\n    (k : Nat) (s0 s1 s2 s3 : Float32) : F4 :=\n  if hk : k < n then\n    let sharedA := A.getD (baseA + k) zero32\n    let v := B.get ⟨k, hk⟩\n    dot4 n baseA A B (k + 1)\n      (s0 + sharedA * v.s0)\n      (s1 + sharedA * v.s1)\n      (s2 + sharedA * v.s2)\n      (s3 + sharedA * v.s3)\n  else ⟨s0, s1, s2, s3⟩\ntermination_by n - k\ntheorem dot4_lane (n baseA baseB p : Nat) (Araw Braw : Array Binary32)\n    (B : Vector F4 n) (l : Fin 4)\n    (hb : ∀ i : Fin n, lane (B.get i) l =\n      ExecFloat.Binary.toFloat32 (Braw.getD (baseB + i.val * p) posZero))\n    (k : Nat) (s0 s1 s2 s3 : Float32) :\n    lane (dot4 n baseA (Araw.map ExecFloat.Binary.toFloat32) B k s0 s1 s2 s3) l =\n      NativeFinal.dotLoop n baseA baseB p Araw Braw k (lane ⟨s0, s1, s2, s3⟩ l) := by\n  by_cases hk : k < n\n  · rw [dot4, NativeFinal.dotLoop]\n    simp only [dif_pos hk, if_pos hk]\n    try dsimp only\n    have ih := dot4_lane n baseA baseB p Araw Braw B l hb (k + 1)\n      (s0 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s0)\n      (s1 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s1)\n      (s2 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s2)\n      (s3 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s3)\n    have hacc :\n        lane ⟨s0 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s0, s1 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s1, s2 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s2, s3 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s3⟩ l =\n          lane ⟨s0, s1, s2, s3⟩ l +\n            ExecFloat.Binary.toFloat32 (Araw.getD (baseA + k) posZero) *\n              ExecFloat.Binary.toFloat32 (Braw.getD (baseB + k * p) posZero) := by\n      change lane (update ⟨s0, s1, s2, s3⟩\n        ((Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32)\n        (B.get ⟨k, hk⟩)) l = _\n      rw [lane_update, nativeA_getD, hb ⟨k, hk⟩]\n    rw [hacc] at ih\n    exact ih\n  · rw [dot4, NativeFinal.dotLoop]\n    simp only [dif_neg hk, if_neg hk]\ntermination_by n - k\nend Packed4\nnamespace Packed4Index\nopen Packed4\nopen Packed10Index (addNat stepNat next_decreases boundA ugetA_getD)\ntheorem ugetB_get {n : Nat} (B : Vector F4 n) (i : USize)\n    (hi : i.toNat < n) :\n    B.toArray.uget i (by simpa only [B.size_toArray] using hi) =\n      B.get ⟨i.toNat, hi⟩ := by\n  rfl\n/-- The bounds are established once; each iteration reads with machine-word indices. -/\ndef loop {n : Nat} (count baseA : USize) (A : Array Float32) (B : Vector F4 n)\n    (hn : count.toNat = n)\n    (hA : baseA.toNat + (count.toNat - 1) < A.size)\n    (hAS : A.size < USize.size)\n    (k : USize) (s0 s1 s2 s3 : Float32) : F4 :=\n  if hk : k < count then\n    have hkn : k.toNat < n := by\n      rw [← hn]\n      exact USize.lt_iff_toNat_lt.mp hk\n    have ha := boundA baseA.toNat count.toNat k.toNat A.size hA\n      (USize.lt_iff_toNat_lt.mp hk)\n    let a := A.uget (baseA + k)\n      (by rw [addNat baseA k (Nat.lt_trans ha hAS)]; exact ha)\n    let v := B.toArray.uget k (by simpa only [B.size_toArray] using hkn)\n    loop count baseA A B hn hA hAS (k + 1)\n      (s0 + a * v.s0) (s1 + a * v.s1)\n      (s2 + a * v.s2) (s3 + a * v.s3)\n  else ⟨s0, s1, s2, s3⟩\ntermination_by count.toNat - k.toNat\ndecreasing_by\n  apply next_decreases\n  assumption\ntheorem loop_eq {n : Nat} (count baseA : USize) (A : Array Float32) (B : Vector F4 n)\n    (hn : count.toNat = n)\n    (hA : baseA.toNat + (count.toNat - 1) < A.size)\n    (hAS : A.size < USize.size)\n    (k : USize) (s0 s1 s2 s3 : Float32) :\n    loop count baseA A B hn hA hAS k s0 s1 s2 s3 =\n      Packed4.dot4 n baseA.toNat A B k.toNat s0 s1 s2 s3 := by\n  rw [loop]\n  split\n  · rename_i hk\n    have hkn : k.toNat < n := by\n      rw [← hn]\n      exact USize.lt_iff_toNat_lt.mp hk\n    have ha := boundA baseA.toNat count.toNat k.toNat A.size hA\n      (USize.lt_iff_toNat_lt.mp hk)\n    rw [Packed4.dot4, dif_pos hkn]\n    dsimp only\n    rw [loop_eq, stepNat hk]\n    simp only [ugetA_getD, addNat baseA k (Nat.lt_trans ha hAS), ugetB_get]\n    rfl\n  · rename_i hk\n    have hkn : ¬ k.toNat < n := by\n      rw [← hn]\n      simpa only [USize.lt_iff_toNat_lt] using hk\n    rw [Packed4.dot4, dif_neg hkn]\ntermination_by count.toNat - k.toNat\ndecreasing_by\n  apply next_decreases\n  assumption\n@[inline] def within (n baseA : Nat) (A : Array Float32) (B : Vector F4 n)\n    (hn : n < USize.size) (ha : baseA < USize.size)\n    (hA : baseA + (n - 1) < A.size) (hAS : A.size < USize.size) : F4 :=\n  loop (USize.ofNat n) (USize.ofNat baseA) A B\n    (USize.toNat_ofNat_of_lt' hn)\n    (by simpa only [USize.toNat_ofNat_of_lt' hn, USize.toNat_ofNat_of_lt' ha] using hA)\n    hAS 0 zero32 zero32 zero32 zero32\ntheorem within_eq (n baseA : Nat) (A : Array Float32) (B : Vector F4 n)\n    (hn : n < USize.size) (ha : baseA < USize.size)\n    (hA : baseA + (n - 1) < A.size) (hAS : A.size < USize.size) :\n    within n baseA A B hn ha hA hAS =\n      Packed4.dot4 n baseA A B 0 zero32 zero32 zero32 zero32 := by\n  simp only [within, loop_eq, USize.toNat_ofNat_of_lt' hn,\n    USize.toNat_ofNat_of_lt' ha, USize.toNat_zero]\n@[inline] def runDot (n baseA : Nat) (A : Array Float32) (B : Vector F4 n) : F4 :=\n  if h : n < USize.size ∧ baseA < USize.size ∧\n      baseA + (n - 1) < A.size ∧ A.size < USize.size then\n    within n baseA A B h.1 h.2.1 h.2.2.1 h.2.2.2\n  else Packed4.dot4 n baseA A B 0 zero32 zero32 zero32 zero32\ntheorem runDot_eq (n baseA : Nat) (A : Array Float32) (B : Vector F4 n) :\n    runDot n baseA A B =\n      Packed4.dot4 n baseA A B 0 zero32 zero32 zero32 zero32 := by\n  unfold runDot\n  split\n  · rename_i h\n    exact within_eq n baseA A B h.1 h.2.1 h.2.2.1 h.2.2.2\n  · rfl\nend Packed4Index\nnamespace Packed4\ntheorem finish_lane (n baseA baseB p : Nat) (Araw Braw : Array Binary32)\n    (B : Vector F4 n) (l : Fin 4)\n    (hb : ∀ k : Fin n, lane (B.get k) l =\n      ExecFloat.Binary.toFloat32 (Braw.getD (baseB+k.val*p) posZero)) :\n    Packed10.finish n baseA baseB p Araw Braw\n      (lane (Packed4Index.runDot n baseA (Araw.map ExecFloat.Binary.toFloat32) B) l) =\n      NativeFinal.dot n baseA baseB p Araw Braw := by\n  rw [Packed4Index.runDot_eq]\n  have h := dot4_lane n baseA baseB p Araw Braw B l hb 0 zero32 zero32 zero32 zero32\n  have hz : lane (⟨zero32,zero32,zero32,zero32⟩ : F4) l = zero32 := lane_zero4 l\n  rw [hz] at h\n  exact Packed10.finish_eq_dot n baseA baseB p Araw Braw _ h\nend Packed4\n\nnamespace Narrow4\n@[inline] def batchIndex (batch m : Nat) (r : Fin (batch*m)) : Fin batch :=\n  ⟨r.val/m,(Nat.div_lt_iff_lt_mul (Nat.pos_of_lt_mul_left r.isLt)).2 r.isLt⟩\n@[inline] def firstGroup (p : Nat) (hp : 0<p) : Fin (Packed4.groups p) :=\n  ⟨0,by unfold Packed4.groups; omega⟩\n@[inline] def row (batch m n p : Nat)\n    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))\n    (hp0 : 0<p) (hp4 : p≤4) (nativeA : Array Float32)\n    (packedB : Vector (Vector (Vector Packed4.F4 n) (Packed4.groups p)) batch)\n    (out : Array Binary32) (r : Fin (batch*m)) : Array Binary32 :=\n  let b := batchIndex batch m r\n  let rawA := r.val*n\n  let rawB := b.val*n*p\n  let result := Packed4Index.runDot n rawA nativeA ((packedB.get b).get (firstGroup p hp0))\n  RowStream.emit p (fun j => Packed10.finish n rawA (rawB+j.val) p A.toArray B.toArray\n    (Packed4.lane result ⟨j.val,Nat.lt_of_lt_of_le j.isLt hp4⟩)) out\ntheorem row_prefix (batch m n p : Nat)\n    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))\n    (hp0 : 0<p) (hp4 : p≤4) (r : Fin (batch*m)) (out : Array Binary32)\n    (hout : RowStream.Prefix (RowStream.point batch m n p A B) (r.val*p) out) :\n    RowStream.Prefix (RowStream.point batch m n p A B) ((r.val+1)*p)\n      (row batch m n p A B hp0 hp4 (A.toArray.map ExecFloat.Binary.toFloat32)\n        (Packed4.packB batch n p B) out r) := by\n  have hm : 0<m := Nat.pos_of_lt_mul_left r.isLt\n  rw [Nat.add_mul,Nat.one_mul]\n  unfold row\n  try dsimp only\n  apply RowStream.emit_prefix\n  · exact hout\n  · intro j\n    rw [RowStream.point_row batch m n p A B r.val j.val hm hp0 j.isLt]\n    apply Packed4.finish_lane\n    intro k\n    rw [Packed4.packB_lane batch n p B (batchIndex batch m r) (firstGroup p hp0) k\n      ⟨j.val,Nat.lt_of_lt_of_le j.isLt hp4⟩ (by simpa only [firstGroup,Nat.mul_zero,Nat.zero_add] using j.isLt)]\n    simp only [firstGroup,Nat.mul_zero,Nat.zero_add]\n    rw [index_address ((batchIndex batch m r).val*n) k.val p j.val]\n@[inline] def output (batch m n p : Nat)\n    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))\n    (hp0 : 0<p) (hp4 : p≤4) : Array Binary32 :=\n  let nativeA := A.toArray.map ExecFloat.Binary.toFloat32\n  let packedB := Packed4.packB batch n p B\n  Fin.foldl (batch*m) (row batch m n p A B hp0 hp4 nativeA packedB)\n    (Array.mkEmpty (batch*m*p))\ntheorem output_prefix (batch m n p : Nat)\n    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))\n    (hp0 : 0<p) (hp4 : p≤4) :\n    RowStream.Prefix (RowStream.point batch m n p A B) (batch*m*p) (output batch m n p A B hp0 hp4) := by\n  exact RowStream.foldl_inv (batch*m)\n    (row batch m n p A B hp0 hp4 (A.toArray.map ExecFloat.Binary.toFloat32) (Packed4.packB batch n p B))\n    (fun r acc => RowStream.Prefix (RowStream.point batch m n p A B) (r*p) acc)\n    (fun r acc hacc => row_prefix batch m n p A B hp0 hp4 r acc hacc)\n    (Array.mkEmpty (batch*m*p)) ⟨by simp,by intro j hj; simp at hj⟩\ndef core (batch m n p : Nat)\n    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))\n    (hp0 : 0<p) (hp4 : p≤4) : Vector Binary32 (batch*m*p) :=\n  ⟨output batch m n p A B hp0 hp4,(output_prefix batch m n p A B hp0 hp4).1⟩\ntheorem core_eq_reference (batch m n p : Nat)\n    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))\n    (hp0 : 0<p) (hp4 : p≤4) : core batch m n p A B hp0 hp4 = referenceBmm batch m n p A B := by\n  exact (RowStream.prefix_vector_eq_ofFn (RowStream.point batch m n p A B)\n    (batch*m*p) (output batch m n p A B hp0 hp4) (output_prefix batch m n p A B hp0 hp4)).trans\n    (RowStream.points_eq_reference batch m n p A B)\nend Narrow4\n\ndef bmmBeforeUnderflowZero (batch m n p : Nat)",
+      "before_sha256": "ff8919fcd0976e88d0fe6f70e32bce6fc9e334a4ebfad11856dfb2e88ceb05ee",
+      "after_sha256": "c6ccaa336fbd2d695f3178b538742c6c11184f39b8fa420a308c991ee3f801a3"
+    },
+    {
+      "name": "only_n_gt4_p3_or4_after_existing_Cross_with_machine_bounds",
+      "offset_in_previous_stage": 252052,
+      "before": "  else bmmBeforeR11Cross batch m n p A B\n",
+      "after": "  else if h4 : (p=3 ∨ p=4) ∧ 4<n ∧ n<USize.size ∧ A.toArray.size<USize.size then\n    Narrow4.core batch m n p A B\n      (by rcases h4.1 with h|h <;> omega) (by rcases h4.1 with h|h <;> omega)\n  else bmmBeforeR11Cross batch m n p A B\n",
+      "before_sha256": "7dd697186b63acf6a98fcd995aa336c2bf53e1fa082766c70c0644b16d3126ac",
+      "after_sha256": "46fc303ff5b26502c29aec88e503bad7c55601555448df611a7af341ee71f4ee"
+    },
+    {
+      "name": "close_exact_four_exported_spec_chain",
+      "offset_in_previous_stage": 252702,
+      "before": "  · exact bmmBeforeR11Cross_spec batch m n p A B\n",
+      "after": "  · split\n    · rw [Narrow4.core_eq_reference]\n      exact referenceBmm_spec batch m n p A B\n    · exact bmmBeforeR11Cross_spec batch m n p A B\n",
+      "before_sha256": "afea8b38ba0285a35d3904466b89dced9b1abbcd1d9f01584cf2d121e659ba5c",
+      "after_sha256": "9d9974c20d98cb004e5b0b01be960b3c7d54658988c20c1a312075447eaa7a7e"
+    },
+    {
+      "name": "remove_closed_unused_proof:Submission.R7NaNReplay.replay_eq",
+      "offset_in_previous_stage": 177842,
+      "before": "theorem replay_eq (n baseA baseB p : Nat) (Araw Braw : Array Binary32) (result : Float32) :\n    replay n baseA baseB p Araw Braw result =\n      Fin.foldl n (fun acc i => Submission.add acc\n        (Submission.mul (Araw.getD (baseA + i.val) posZero)\n          (Braw.getD (baseB + i.val * p) posZero))) posZero := by\n  unfold replay\n  split\n  · exact replayEarly_eq n baseA baseB p Araw Braw\n  · rfl\n",
+      "after": "",
+      "before_sha256": "99acd228d219fc4aaa67000b301eafa7decdc2d1dcdc91a750a9b40d70195d26",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:Submission.R7W12.mul_ofFloat32",
+      "offset_in_previous_stage": 170529,
+      "before": "theorem mul_ofFloat32 (a b : Float32) :\n    ExecFloat.mul (ExecFloat.Binary.ofFloat32 a) (ExecFloat.Binary.ofFloat32 b) =\n      ExecFloat.Binary.ofFloat32 (a * b) := (ofFloat32_mul a b).symm\n",
+      "after": "",
+      "before_sha256": "081569bc075b6eadb7e233065b9fdbe33dd17b59b394221b0420a17abde292d4",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:Submission.referenceSum_spec",
+      "offset_in_previous_stage": 134003,
+      "before": "theorem referenceSum_spec : ∀ (n : Nat) (x : Vector Binary32 n), referenceSum x = sumSpec x.get := by\n  intro n x\n  conv_lhs => rw [referenceSum, add_eq, ← Vector.ofFn_getElem (xs := x)]\n  rw [← Vector.foldl_toList, Vector.toList_ofFn, List.ofFn_eq_map, List.foldl_map]\n  rfl\n",
+      "after": "",
+      "before_sha256": "2ce790b9e73a9ebb17166f33de4a5beebe391b2d09bb1a49d38ba34bce972aa3",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:Submission.GuardBridge.finiteRoundtrip",
+      "offset_in_previous_stage": 97031,
+      "before": "theorem finiteRoundtrip (x : Competition.Binary32)\n    (hx : (ExecFloat.Binary.toFloat32 x).isFinite = true) :\n    ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x) = x := by\n  have hcanonical : Model.IsModelCanonical (ExecFloat.Binary.toModel x) := by\n    apply modelCanonicalOfFinite\n    have hf := hx\n    change ((Model.toFloat32Model (ExecFloat.Binary.toModel x)).unpack).isFinite = true at hf\n    rw [Model.unpack_toFloat32Model] at hf\n    exact hf\n  apply Configured.Family.toModel_injective\n  change ExecFloat.Binary.toModel\n      (ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x)) =\n    ExecFloat.Binary.toModel x\n  rw [ExecFloat.Binary.toModel_ofFloat32, ExecFloat.Binary.toModel_toFloat32_eq,\n    Model.ofFloat32Model_toFloat32Model]\n  exact Model.canonicalizeModel_eq_self _ hcanonical\n",
+      "after": "",
+      "before_sha256": "7c7dbc197b5bfb55453ceac95390b51ee3c8a9facaa1169b05bdbff396a010ec",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01c.normal_finite",
+      "offset_in_previous_stage": 77383,
+      "before": "theorem normal_finite (u : UInt32) (hn : NormalBand u) :\n    (tableProduct u).isFinite = true := by\n  rw [normal_eq u hn]\n  exact nativeFinite_of_decode _\n    (nativeModel_ofBits_decode u (target_raw_decode u hn))\n",
+      "after": "",
+      "before_sha256": "4e3d070195bfd217fe1cac5ab7c965e59234c5d1c681370a33a0ef8fdd3905ca",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01c.normal_bits",
+      "offset_in_previous_stage": 77061,
+      "before": "theorem normal_bits (u : UInt32) (hn : NormalBand u) :\n    (tableProduct u).toBits = u := by\n  exact native_mul_bits_eq_of_raw_model_mul_eq\n    (mantissa u).toFloat32 (scaleAt u) u\n    (nativeFinite_of_decode _ (mantissa_native_decode u))\n    (nativeFinite_of_decode _ (scale_native_decode u hn)) (normal_model_mul u hn)\n",
+      "after": "",
+      "before_sha256": "c074cc2524a28abb72c5d1c9964541a669b7897b95c7f0345ba88a1b245267c9",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01c.uint32_mantissa_model_toReal",
+      "offset_in_previous_stage": 64802,
+      "before": "theorem uint32_mantissa_model_toReal (n : UInt32)\n    (hlo : 8388608 ≤ n.toNat) (hhi : n.toNat < 16777216) :\n    Model.toReal (Model.ofFloat32Model n.toFloat32.toModel) = (n.toNat : Real) := by\n  rw [Model.toReal_eq, uint32_mantissa_model_decode n hlo hhi]\n  simp [Dyadic.toReal, Dyadic.signedSignificand]\n",
+      "after": "",
+      "before_sha256": "808a0bfae35e28aedec257d167cb4c7c79e688648785611556090405134744e8",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01c.uint32_mantissa_model_finite",
+      "offset_in_previous_stage": 64523,
+      "before": "theorem uint32_mantissa_model_finite (n : UInt32)\n    (hlo : 8388608 ≤ n.toNat) (hhi : n.toNat < 16777216) :\n    Model.isFinite (Model.ofFloat32Model n.toFloat32.toModel) = true := by\n  exact Model.isFinite_eq_true_of_toDyadic?_some\n    (uint32_mantissa_model_decode n hlo hhi)\n",
+      "after": "",
+      "before_sha256": "8559502c6b2ccbcd415d443d26c611a46ed84e08fa3e1fcea81d68baf2f6eeef",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01c.native_mul_bits_eq_of_raw_model_mul_eq",
+      "offset_in_previous_stage": 60660,
+      "before": "theorem native_mul_bits_eq_of_raw_model_mul_eq\n    (x y : Float32) (u : UInt32)\n    (hx : x.isFinite = true) (hy : y.isFinite = true)\n    (hm : Model.mul (nativeModel x) (nativeModel y) = rawModel u) :\n    (x * y).toBits = u := by\n  have hw : ExecFloat.Binary.ofFloat32 (x * y) = ExecFloat.Binary.ofBits32 u := by\n    apply ExecFloat.Binary.toModel_inj.mp\n    rw [NativeBridge.toModelNativeMul x y hx hy]\n    exact hm\n  have hn := congrArg ExecFloat.Binary.toBits32 hw\n  simpa only [ExecFloat.Binary.toBits32_ofFloat32,\n    ExecFloat.Binary.toBits32_ofBits32] using hn\n",
+      "after": "",
+      "before_sha256": "8b97e2e9acbe9035c1015c783e671f166ef687416791cdba00fca3ac48afc178",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01c.rawModel_eq_native32",
+      "offset_in_previous_stage": 57215,
+      "before": "theorem rawModel_eq_native32 (u : UInt32) :\n    rawModel u = Model.NativeBinary32.ofUInt32 u := rfl\n",
+      "after": "",
+      "before_sha256": "0e7aba9921748e222b49b8cde6df556d555cd6a7665105622177bac40a7943aa",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.convert_eq_of_normal_raw_bits",
+      "offset_in_previous_stage": 42383,
+      "before": "theorem convert_eq_of_normal_raw_bits\n    (hNormalRawBits : ∀ u, NormalBand u → (tableProduct u).toBits = u)\n    (u : UInt32) : convert u = Float32.ofBits u := by\n  exact convert_eq (normal_value_of_raw_bits hNormalRawBits) u\n",
+      "after": "",
+      "before_sha256": "34808b3aa5042d52615eeee09bba63b7123a19c04d215d2fa089b760d37d063b",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.convert_eq_of_normal_bits",
+      "offset_in_previous_stage": 42140,
+      "before": "theorem convert_eq_of_normal_bits\n    (hNormalBits : ∀ u, NormalBand u →\n      (tableProduct u).toBits = (Float32.ofBits u).toBits)\n    (u : UInt32) : convert u = Float32.ofBits u := by\n  exact convert_eq (normal_value_of_bits hNormalBits) u\n",
+      "after": "",
+      "before_sha256": "d840368fb6d72a456af8d4472eb6b575917517ccc9355c861d624da3f62ec661",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.convert_zero_path",
+      "offset_in_previous_stage": 41333,
+      "before": "theorem convert_zero_path (u : UInt32) (h : magnitude u = 0) :\n    convert u = tableProduct u := by\n  have hf : fastOK u = true := (fastOK_iff u).mpr (Or.inl h)\n  rw [convert, if_pos hf]\n",
+      "after": "",
+      "before_sha256": "5a3634333e1c4f72376ac331a623d9c23314f08e434b44eea6db4e22a83d81e4",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.normal_value_of_raw_bits",
+      "offset_in_previous_stage": 40692,
+      "before": "theorem normal_value_of_raw_bits\n    (hNormalRawBits : ∀ u, NormalBand u → (tableProduct u).toBits = u) :\n    ∀ u, NormalBand u → tableProduct u = Float32.ofBits u := by\n  intro u hn\n  exact float32_eq_of_raw_bits (hNormalRawBits u hn)\n",
+      "after": "",
+      "before_sha256": "003e6aaf577382c5fe1e2619084e13447ec0deeeebf49e42e213dfdc8934c0f9",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.normal_value_of_bits",
+      "offset_in_previous_stage": 40434,
+      "before": "theorem normal_value_of_bits\n    (hNormalBits : ∀ u, NormalBand u →\n      (tableProduct u).toBits = (Float32.ofBits u).toBits) :\n    ∀ u, NormalBand u → tableProduct u = Float32.ofBits u := by\n  intro u hn\n  exact float32_eq_of_toBits_eq (hNormalBits u hn)\n",
+      "after": "",
+      "before_sha256": "a45034f8a5eb2699f8cf103414d4b146fa0c5908675560b0197d3de2aa4a8456",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.float32_eq_of_raw_bits",
+      "offset_in_previous_stage": 40196,
+      "before": "theorem float32_eq_of_raw_bits {x : Float32} {u : UInt32} (h : x.toBits = u) :\n    x = Float32.ofBits u := by\n  calc\n    x = Float32.ofBits x.toBits := (float32_ofBits_toBits x).symm\n    _ = Float32.ofBits u := congrArg Float32.ofBits h\n",
+      "after": "",
+      "before_sha256": "081dedf1f21df8a10528c94cdf6c9fe57f52286856cc188448005f60d0df8788",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.float32_ofBits_toBits",
+      "offset_in_previous_stage": 39935,
+      "before": "theorem float32_ofBits_toBits (x : Float32) : Float32.ofBits x.toBits = x := by\n  simpa only [FloatLib.Floats.ExecFloat.Binary.toFloat32,\n    FloatLib.Floats.ExecFloat.Binary.toBits32_ofFloat32] using\n    FloatLib.Floats.ExecFloat.Binary.toFloat32_ofFloat32 x\n",
+      "after": "",
+      "before_sha256": "71022fabd0177000dff2ea7d447c6b31d7e88ae5d7cc0a6613a31cb238c2945e",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.float32_eq_of_toBits_eq",
+      "offset_in_previous_stage": 39626,
+      "before": "theorem float32_eq_of_toBits_eq {x y : Float32} (h : x.toBits = y.toBits) :\n    x = y := by\n  cases x with\n  | ofModel xm =>\n    cases y with\n    | ofModel ym =>\n      cases xm with\n      | mk xb xv =>\n        cases ym with\n        | mk yb yv =>\n          change xb = yb at h\n          cases h\n          rfl\n",
+      "after": "",
+      "before_sha256": "57ed7ffd35763575fe296dc75d328e8a0b7933dcc05687bce084b0521d6e2e69",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.tableProduct_zero_bits",
+      "offset_in_previous_stage": 39448,
+      "before": "theorem tableProduct_zero_bits (u : UInt32) (h : magnitude u = 0) :\n    (tableProduct u).toBits = u := by\n  exact (tableProduct_zero_bits_eq u h).trans (zero_ofBits_toBits u h)\n",
+      "after": "",
+      "before_sha256": "73e5739044658f9434eb2d0408bff52398fed7920d7bf099b17dafbc9eef59bb",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.zero_ofBits_toBits",
+      "offset_in_previous_stage": 39242,
+      "before": "theorem zero_ofBits_toBits (u : UInt32) (h : magnitude u = 0) :\n    (Float32.ofBits u).toBits = u := by\n  cases (magnitude_zero_iff u).mp h with\n  | inl hu => subst u; decide\n  | inr hu => subst u; decide\n",
+      "after": "",
+      "before_sha256": "1ebd2711f71ef24a637414f8e641fa51dbd2f387dcd85d2e48faa083932be928",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.tableProduct_zero_bits_eq",
+      "offset_in_previous_stage": 39049,
+      "before": "theorem tableProduct_zero_bits_eq (u : UInt32) (h : magnitude u = 0) :\n    (tableProduct u).toBits = (Float32.ofBits u).toBits := by\n  exact congrArg Float32.toBits (tableProduct_zero_eq u h)\n",
+      "after": "",
+      "before_sha256": "63ed272e995b9f51673147ea543a9edc159ef82080ee9200f43bfa4d805d97bd",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.zero_mantissa_conversion",
+      "offset_in_previous_stage": 38285,
+      "before": "theorem zero_mantissa_conversion :\n    (0x800000 : UInt32).toFloat32 = Float32.ofBits 0x4b000000 := by\n  decide\n",
+      "after": "",
+      "before_sha256": "b8eccd0e4f8b2eeb51e5df16c210199352b844696915d61d93e653d2a9533954",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R2W01b.fastOK_negative_zero",
+      "offset_in_previous_stage": 36077,
+      "before": "theorem fastOK_negative_zero : fastOK 0x80000000 = true := by\n  decide\n",
+      "after": "",
+      "before_sha256": "4ad7cabb45d55d0a58e401609bbc7b79602ea762578cbf2f9a92ebb365a54955",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R7W01.modelDotEarly_eq",
+      "offset_in_previous_stage": 16100,
+      "before": "theorem modelDotEarly_eq {ι : Type} (a b : ι → M32) (indices : List ι) (acc : M32) :\n    modelDotEarly a b indices acc = modelDotFold a b indices acc := by\n  induction indices generalizing acc with\n  | nil => rfl\n  | cons i is ih =>\n      simp only [modelDotEarly]\n      split\n      · rename_i hq\n        exact (modelDotFold_absorb a b (i :: is) acc\n          (quietGuard_nan acc hq) (quietGuard_not_signaling acc hq)).symm\n      · exact ih (Model.Spec.add acc (Model.Spec.mul (a i) (b i)))\n",
+      "after": "",
+      "before_sha256": "3c4fe0eb9861b5282292a0ed2c83c7488bc338099ab6f3e6cb5f012f8c810c93",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R7W01.modelDotFold_absorb",
+      "offset_in_previous_stage": 15693,
+      "before": "theorem modelDotFold_absorb {ι : Type} (a b : ι → M32) (indices : List ι)\n    (q : M32) (hn : q.isNaN = true) (hs : q.isSNaN = false) :\n    modelDotFold a b indices q = q := by\n  induction indices generalizing q with\n  | nil => rfl\n  | cons i is ih =>\n      change modelDotFold a b is (Model.Spec.add q (Model.Spec.mul (a i) (b i))) = q\n      rw [add_mul_absorb q (a i) (b i) hn hs]\n      exact ih q hn hs\n",
+      "after": "",
+      "before_sha256": "3e4ba56e27ea608532ecc8164c6473f2bf244eddf192d8d97579129721e27600",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R7W01.add_mul_absorb_bits",
+      "offset_in_previous_stage": 14225,
+      "before": "theorem add_mul_absorb_bits (q x y : M32)\n    (hq : isNaN q = true) (hs : isSNaN q = false) :\n    (Spec.add q (Spec.mul x y)).bits = q.bits := by\n  rw [add_mul_absorb q x y hq hs]\n",
+      "after": "",
+      "before_sha256": "6cb1a8802ba7e59cf7620048029f5ad8086c833012fc516586b7804e0490ed76",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remove_closed_unused_proof:R7W01.invalidResult32_is_qnan",
+      "offset_in_previous_stage": 7736,
+      "before": "theorem invalidResult32_is_qnan :\n    isQNaN (invalidResult F32) = true := by decide\n",
+      "after": "",
+      "before_sha256": "d09ae855705b4afe8e0f448ca149b991b7ba49a0fa4d8657d321585d9cb6614f",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

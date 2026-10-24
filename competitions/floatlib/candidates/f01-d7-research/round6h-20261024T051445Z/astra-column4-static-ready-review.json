@@ -1,0 +1,342 @@
+{
+  "candidate": {
+    "candidate": "f01-r12-column4-narrow",
+    "candidate_file": "Kernel.lean",
+    "candidate_sha256": "da09fb59fa456b498af6bde48d54adcd37f85c4ba7df272163b184a2b83038c4",
+    "candidate_bytes": 255439,
+    "size_margin": 561,
+    "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+    "parent_bytes": 248144,
+    "asset_sha256": "9613168637d24b6aa59c41fb184a70c714c87402c93f22e621275843e7674f7e",
+    "created_at_utc": "2026-10-24T08:36:45.465839+00:00",
+    "pre_prune_bytes": 262826,
+    "proof_bytes_removed": 7387,
+    "proof_count_removed": 27,
+    "static_policy": "PASS",
+    "inverse_parent_exact": true,
+    "all_original_comments_notices_retained": true,
+    "all_other_parent_bytes_unchanged": true,
+    "outer_final_namespace_bytes": 1039,
+    "outer_final_namespace_sha256": "b135a8eef0606c7356dc12d5956115d3832aa5cddb5dc5e71e5030380c76062e",
+    "last1039_parent_bytes_exact": true,
+    "mechanism": "Single n>4,p3/4 column4 route after existingp2Cross, originalmachinebounds andcompleteNatfallback; one4lane packetperrow, continuousoutput, currentPacked10 NaN-only finish/coldreplay.",
+    "scope_change_from_history": "Old961 globallyusedwidth4 withisFinite/fullreplay andoldrow output; this onlyp3/4,n>4 ondf5c withcurrentfinish andfusedcontinuousoutput. Historicalaggregate losses/wins are notmatchedslice evidence.",
+    "historical_negative": {
+      "run": 39847080316,
+      "seed": 809,
+      "vs_direct_small_whole": 1.155963,
+      "vs_direct_small_BMM": 1.457068,
+      "scope": "Differentglobalwidth4/oldfinish/oldwriter; retained negative, notdismissed orrenamed."
+    },
+    "falsifier": "Originalstatement thenfull+actualC: onepacked4 update, no hotforeign/readerboxing/spill, oneBprepare/resultperrow, noflatMap/rowTiles. Wholecost vsdf5c and6c; no promotion fromcounts oroldproof.",
+    "proof_status": "NOT_RUN",
+    "full_gate": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "validation_mode": "full-gate",
+    "formal_submission": "NOT_SUBMITTED",
+    "build_script_sha256": "8225d1e44f65c4dad691b9e87859ad5b6d0b57d5e3e283f27bc158e9854410fc",
+    "inputs": [
+      {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261024T051445Z\\astra-column4-assets.lean",
+        "sha256": "d9404fb015cdf7a6bc0c33745d8d832eb8eaaf4558cd335022d53a472bf1ec21"
+      },
+      {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261024T051445Z\\astra-column4-writer.lean",
+        "sha256": "aa4f8aa397bbe96973e8e64c096c16c7faa64d318872f4d1d79ed5832f773c3d"
+      }
+    ],
+    "unused_proof_closure": "Full new source including currentcold/converter andactualnewF4proofs analyzed asretainedroots. Noattributes, comments, attached docstrings, instances, runtime or8specsremoved. Statictextgraph only; Lean dependency acceptanceNOT_RUN."
+  },
+  "pruning": [
+    {
+      "name": "replay_eq",
+      "qualified_name": "Submission.R7NaNReplay.replay_eq",
+      "bytes": 400,
+      "sha256": "99acd228d219fc4aaa67000b301eafa7decdc2d1dcdc91a750a9b40d70195d26",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem replay_eq (n baseA baseB p : Nat) (Araw Braw : Array Binary32) (result : Float32) :\n    replay n baseA baseB p Araw Braw result =\n      Fin.foldl n (fun acc i => Submission.add acc\n        (Submission.mul (Araw.getD (baseA + i.val) posZero)\n          (Braw.getD (baseB + i.val * p) posZero))) posZero := by\n  unfold replay\n  split\n  · exact replayEarly_eq n baseA baseB p Araw Braw\n  · rfl\n"
+    },
+    {
+      "name": "mul_ofFloat32",
+      "qualified_name": "Submission.R7W12.mul_ofFloat32",
+      "bytes": 191,
+      "sha256": "081569bc075b6eadb7e233065b9fdbe33dd17b59b394221b0420a17abde292d4",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem mul_ofFloat32 (a b : Float32) :\n    ExecFloat.mul (ExecFloat.Binary.ofFloat32 a) (ExecFloat.Binary.ofFloat32 b) =\n      ExecFloat.Binary.ofFloat32 (a * b) := (ofFloat32_mul a b).symm\n"
+    },
+    {
+      "name": "referenceSum_spec",
+      "qualified_name": "Submission.referenceSum_spec",
+      "bytes": 282,
+      "sha256": "2ce790b9e73a9ebb17166f33de4a5beebe391b2d09bb1a49d38ba34bce972aa3",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem referenceSum_spec : ∀ (n : Nat) (x : Vector Binary32 n), referenceSum x = sumSpec x.get := by\n  intro n x\n  conv_lhs => rw [referenceSum, add_eq, ← Vector.ofFn_getElem (xs := x)]\n  rw [← Vector.foldl_toList, Vector.toList_ofFn, List.ofFn_eq_map, List.foldl_map]\n  rfl\n"
+    },
+    {
+      "name": "finiteRoundtrip",
+      "qualified_name": "Submission.GuardBridge.finiteRoundtrip",
+      "bytes": 814,
+      "sha256": "7c7dbc197b5bfb55453ceac95390b51ee3c8a9facaa1169b05bdbff396a010ec",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem finiteRoundtrip (x : Competition.Binary32)\n    (hx : (ExecFloat.Binary.toFloat32 x).isFinite = true) :\n    ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x) = x := by\n  have hcanonical : Model.IsModelCanonical (ExecFloat.Binary.toModel x) := by\n    apply modelCanonicalOfFinite\n    have hf := hx\n    change ((Model.toFloat32Model (ExecFloat.Binary.toModel x)).unpack).isFinite = true at hf\n    rw [Model.unpack_toFloat32Model] at hf\n    exact hf\n  apply Configured.Family.toModel_injective\n  change ExecFloat.Binary.toModel\n      (ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x)) =\n    ExecFloat.Binary.toModel x\n  rw [ExecFloat.Binary.toModel_ofFloat32, ExecFloat.Binary.toModel_toFloat32_eq,\n    Model.ofFloat32Model_toFloat32Model]\n  exact Model.canonicalizeModel_eq_self _ hcanonical\n"
+    },
+    {
+      "name": "normal_finite",
+      "qualified_name": "R2W01c.normal_finite",
+      "bytes": 214,
+      "sha256": "4e3d070195bfd217fe1cac5ab7c965e59234c5d1c681370a33a0ef8fdd3905ca",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem normal_finite (u : UInt32) (hn : NormalBand u) :\n    (tableProduct u).isFinite = true := by\n  rw [normal_eq u hn]\n  exact nativeFinite_of_decode _\n    (nativeModel_ofBits_decode u (target_raw_decode u hn))\n"
+    },
+    {
+      "name": "normal_bits",
+      "qualified_name": "R2W01c.normal_bits",
+      "bytes": 321,
+      "sha256": "c074cc2524a28abb72c5d1c9964541a669b7897b95c7f0345ba88a1b245267c9",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem normal_bits (u : UInt32) (hn : NormalBand u) :\n    (tableProduct u).toBits = u := by\n  exact native_mul_bits_eq_of_raw_model_mul_eq\n    (mantissa u).toFloat32 (scaleAt u) u\n    (nativeFinite_of_decode _ (mantissa_native_decode u))\n    (nativeFinite_of_decode _ (scale_native_decode u hn)) (normal_model_mul u hn)\n"
+    },
+    {
+      "name": "uint32_mantissa_model_toReal",
+      "qualified_name": "R2W01c.uint32_mantissa_model_toReal",
+      "bytes": 308,
+      "sha256": "808a0bfae35e28aedec257d167cb4c7c79e688648785611556090405134744e8",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem uint32_mantissa_model_toReal (n : UInt32)\n    (hlo : 8388608 ≤ n.toNat) (hhi : n.toNat < 16777216) :\n    Model.toReal (Model.ofFloat32Model n.toFloat32.toModel) = (n.toNat : Real) := by\n  rw [Model.toReal_eq, uint32_mantissa_model_decode n hlo hhi]\n  simp [Dyadic.toReal, Dyadic.signedSignificand]\n"
+    },
+    {
+      "name": "uint32_mantissa_model_finite",
+      "qualified_name": "R2W01c.uint32_mantissa_model_finite",
+      "bytes": 280,
+      "sha256": "8559502c6b2ccbcd415d443d26c611a46ed84e08fa3e1fcea81d68baf2f6eeef",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem uint32_mantissa_model_finite (n : UInt32)\n    (hlo : 8388608 ≤ n.toNat) (hhi : n.toNat < 16777216) :\n    Model.isFinite (Model.ofFloat32Model n.toFloat32.toModel) = true := by\n  exact Model.isFinite_eq_true_of_toDyadic?_some\n    (uint32_mantissa_model_decode n hlo hhi)\n"
+    },
+    {
+      "name": "native_mul_bits_eq_of_raw_model_mul_eq",
+      "qualified_name": "R2W01c.native_mul_bits_eq_of_raw_model_mul_eq",
+      "bytes": 569,
+      "sha256": "8b97e2e9acbe9035c1015c783e671f166ef687416791cdba00fca3ac48afc178",
+      "incoming_removed_callers": [
+        "normal_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem native_mul_bits_eq_of_raw_model_mul_eq\n    (x y : Float32) (u : UInt32)\n    (hx : x.isFinite = true) (hy : y.isFinite = true)\n    (hm : Model.mul (nativeModel x) (nativeModel y) = rawModel u) :\n    (x * y).toBits = u := by\n  have hw : ExecFloat.Binary.ofFloat32 (x * y) = ExecFloat.Binary.ofBits32 u := by\n    apply ExecFloat.Binary.toModel_inj.mp\n    rw [NativeBridge.toModelNativeMul x y hx hy]\n    exact hm\n  have hn := congrArg ExecFloat.Binary.toBits32 hw\n  simpa only [ExecFloat.Binary.toBits32_ofFloat32,\n    ExecFloat.Binary.toBits32_ofBits32] using hn\n"
+    },
+    {
+      "name": "rawModel_eq_native32",
+      "qualified_name": "R2W01c.rawModel_eq_native32",
+      "bytes": 100,
+      "sha256": "0e7aba9921748e222b49b8cde6df556d555cd6a7665105622177bac40a7943aa",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem rawModel_eq_native32 (u : UInt32) :\n    rawModel u = Model.NativeBinary32.ofUInt32 u := rfl\n"
+    },
+    {
+      "name": "convert_eq_of_normal_raw_bits",
+      "qualified_name": "R2W01b.convert_eq_of_normal_raw_bits",
+      "bytes": 230,
+      "sha256": "34808b3aa5042d52615eeee09bba63b7123a19c04d215d2fa089b760d37d063b",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem convert_eq_of_normal_raw_bits\n    (hNormalRawBits : ∀ u, NormalBand u → (tableProduct u).toBits = u)\n    (u : UInt32) : convert u = Float32.ofBits u := by\n  exact convert_eq (normal_value_of_raw_bits hNormalRawBits) u\n"
+    },
+    {
+      "name": "convert_eq_of_normal_bits",
+      "qualified_name": "R2W01b.convert_eq_of_normal_bits",
+      "bytes": 246,
+      "sha256": "d840368fb6d72a456af8d4472eb6b575917517ccc9355c861d624da3f62ec661",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem convert_eq_of_normal_bits\n    (hNormalBits : ∀ u, NormalBand u →\n      (tableProduct u).toBits = (Float32.ofBits u).toBits)\n    (u : UInt32) : convert u = Float32.ofBits u := by\n  exact convert_eq (normal_value_of_bits hNormalBits) u\n"
+    },
+    {
+      "name": "convert_zero_path",
+      "qualified_name": "R2W01b.convert_zero_path",
+      "bytes": 187,
+      "sha256": "5a3634333e1c4f72376ac331a623d9c23314f08e434b44eea6db4e22a83d81e4",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem convert_zero_path (u : UInt32) (h : magnitude u = 0) :\n    convert u = tableProduct u := by\n  have hf : fastOK u = true := (fastOK_iff u).mpr (Or.inl h)\n  rw [convert, if_pos hf]\n"
+    },
+    {
+      "name": "normal_value_of_raw_bits",
+      "qualified_name": "R2W01b.normal_value_of_raw_bits",
+      "bytes": 244,
+      "sha256": "003e6aaf577382c5fe1e2619084e13447ec0deeeebf49e42e213dfdc8934c0f9",
+      "incoming_removed_callers": [
+        "convert_eq_of_normal_raw_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem normal_value_of_raw_bits\n    (hNormalRawBits : ∀ u, NormalBand u → (tableProduct u).toBits = u) :\n    ∀ u, NormalBand u → tableProduct u = Float32.ofBits u := by\n  intro u hn\n  exact float32_eq_of_raw_bits (hNormalRawBits u hn)\n"
+    },
+    {
+      "name": "normal_value_of_bits",
+      "qualified_name": "R2W01b.normal_value_of_bits",
+      "bytes": 265,
+      "sha256": "a45034f8a5eb2699f8cf103414d4b146fa0c5908675560b0197d3de2aa4a8456",
+      "incoming_removed_callers": [
+        "convert_eq_of_normal_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem normal_value_of_bits\n    (hNormalBits : ∀ u, NormalBand u →\n      (tableProduct u).toBits = (Float32.ofBits u).toBits) :\n    ∀ u, NormalBand u → tableProduct u = Float32.ofBits u := by\n  intro u hn\n  exact float32_eq_of_toBits_eq (hNormalBits u hn)\n"
+    },
+    {
+      "name": "float32_eq_of_raw_bits",
+      "qualified_name": "R2W01b.float32_eq_of_raw_bits",
+      "bytes": 237,
+      "sha256": "081dedf1f21df8a10528c94cdf6c9fe57f52286856cc188448005f60d0df8788",
+      "incoming_removed_callers": [
+        "normal_value_of_raw_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem float32_eq_of_raw_bits {x : Float32} {u : UInt32} (h : x.toBits = u) :\n    x = Float32.ofBits u := by\n  calc\n    x = Float32.ofBits x.toBits := (float32_ofBits_toBits x).symm\n    _ = Float32.ofBits u := congrArg Float32.ofBits h\n"
+    },
+    {
+      "name": "float32_ofBits_toBits",
+      "qualified_name": "R2W01b.float32_ofBits_toBits",
+      "bytes": 260,
+      "sha256": "71022fabd0177000dff2ea7d447c6b31d7e88ae5d7cc0a6613a31cb238c2945e",
+      "incoming_removed_callers": [
+        "float32_eq_of_raw_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem float32_ofBits_toBits (x : Float32) : Float32.ofBits x.toBits = x := by\n  simpa only [FloatLib.Floats.ExecFloat.Binary.toFloat32,\n    FloatLib.Floats.ExecFloat.Binary.toBits32_ofFloat32] using\n    FloatLib.Floats.ExecFloat.Binary.toFloat32_ofFloat32 x\n"
+    },
+    {
+      "name": "float32_eq_of_toBits_eq",
+      "qualified_name": "R2W01b.float32_eq_of_toBits_eq",
+      "bytes": 308,
+      "sha256": "57ed7ffd35763575fe296dc75d328e8a0b7933dcc05687bce084b0521d6e2e69",
+      "incoming_removed_callers": [
+        "normal_value_of_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem float32_eq_of_toBits_eq {x y : Float32} (h : x.toBits = y.toBits) :\n    x = y := by\n  cases x with\n  | ofModel xm =>\n    cases y with\n    | ofModel ym =>\n      cases xm with\n      | mk xb xv =>\n        cases ym with\n        | mk yb yv =>\n          change xb = yb at h\n          cases h\n          rfl\n"
+    },
+    {
+      "name": "tableProduct_zero_bits",
+      "qualified_name": "R2W01b.tableProduct_zero_bits",
+      "bytes": 177,
+      "sha256": "73e5739044658f9434eb2d0408bff52398fed7920d7bf099b17dafbc9eef59bb",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem tableProduct_zero_bits (u : UInt32) (h : magnitude u = 0) :\n    (tableProduct u).toBits = u := by\n  exact (tableProduct_zero_bits_eq u h).trans (zero_ofBits_toBits u h)\n"
+    },
+    {
+      "name": "zero_ofBits_toBits",
+      "qualified_name": "R2W01b.zero_ofBits_toBits",
+      "bytes": 205,
+      "sha256": "1ebd2711f71ef24a637414f8e641fa51dbd2f387dcd85d2e48faa083932be928",
+      "incoming_removed_callers": [
+        "tableProduct_zero_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem zero_ofBits_toBits (u : UInt32) (h : magnitude u = 0) :\n    (Float32.ofBits u).toBits = u := by\n  cases (magnitude_zero_iff u).mp h with\n  | inl hu => subst u; decide\n  | inr hu => subst u; decide\n"
+    },
+    {
+      "name": "tableProduct_zero_bits_eq",
+      "qualified_name": "R2W01b.tableProduct_zero_bits_eq",
+      "bytes": 192,
+      "sha256": "63ed272e995b9f51673147ea543a9edc159ef82080ee9200f43bfa4d805d97bd",
+      "incoming_removed_callers": [
+        "tableProduct_zero_bits"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem tableProduct_zero_bits_eq (u : UInt32) (h : magnitude u = 0) :\n    (tableProduct u).toBits = (Float32.ofBits u).toBits := by\n  exact congrArg Float32.toBits (tableProduct_zero_eq u h)\n"
+    },
+    {
+      "name": "zero_mantissa_conversion",
+      "qualified_name": "R2W01b.zero_mantissa_conversion",
+      "bytes": 112,
+      "sha256": "b8eccd0e4f8b2eeb51e5df16c210199352b844696915d61d93e653d2a9533954",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem zero_mantissa_conversion :\n    (0x800000 : UInt32).toFloat32 = Float32.ofBits 0x4b000000 := by\n  decide\n"
+    },
+    {
+      "name": "fastOK_negative_zero",
+      "qualified_name": "R2W01b.fastOK_negative_zero",
+      "bytes": 71,
+      "sha256": "4ad7cabb45d55d0a58e401609bbc7b79602ea762578cbf2f9a92ebb365a54955",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem fastOK_negative_zero : fastOK 0x80000000 = true := by\n  decide\n"
+    },
+    {
+      "name": "modelDotEarly_eq",
+      "qualified_name": "R7W01.modelDotEarly_eq",
+      "bytes": 498,
+      "sha256": "3c4fe0eb9861b5282292a0ed2c83c7488bc338099ab6f3e6cb5f012f8c810c93",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem modelDotEarly_eq {ι : Type} (a b : ι → M32) (indices : List ι) (acc : M32) :\n    modelDotEarly a b indices acc = modelDotFold a b indices acc := by\n  induction indices generalizing acc with\n  | nil => rfl\n  | cons i is ih =>\n      simp only [modelDotEarly]\n      split\n      · rename_i hq\n        exact (modelDotFold_absorb a b (i :: is) acc\n          (quietGuard_nan acc hq) (quietGuard_not_signaling acc hq)).symm\n      · exact ih (Model.Spec.add acc (Model.Spec.mul (a i) (b i)))\n"
+    },
+    {
+      "name": "modelDotFold_absorb",
+      "qualified_name": "R7W01.modelDotFold_absorb",
+      "bytes": 411,
+      "sha256": "3e4ba56e27ea608532ecc8164c6473f2bf244eddf192d8d97579129721e27600",
+      "incoming_removed_callers": [
+        "modelDotEarly_eq"
+      ],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem modelDotFold_absorb {ι : Type} (a b : ι → M32) (indices : List ι)\n    (q : M32) (hn : q.isNaN = true) (hs : q.isSNaN = false) :\n    modelDotFold a b indices q = q := by\n  induction indices generalizing q with\n  | nil => rfl\n  | cons i is ih =>\n      change modelDotFold a b is (Model.Spec.add q (Model.Spec.mul (a i) (b i))) = q\n      rw [add_mul_absorb q (a i) (b i) hn hs]\n      exact ih q hn hs\n"
+    },
+    {
+      "name": "add_mul_absorb_bits",
+      "qualified_name": "R7W01.add_mul_absorb_bits",
+      "bytes": 180,
+      "sha256": "6cb1a8802ba7e59cf7620048029f5ad8086c833012fc516586b7804e0490ed76",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem add_mul_absorb_bits (q x y : M32)\n    (hq : isNaN q = true) (hs : isSNaN q = false) :\n    (Spec.add q (Spec.mul x y)).bits = q.bits := by\n  rw [add_mul_absorb q x y hq hs]\n"
+    },
+    {
+      "name": "invalidResult32_is_qnan",
+      "qualified_name": "R7W01.invalidResult32_is_qnan",
+      "bytes": 85,
+      "sha256": "d09ae855705b4afe8e0f448ca149b991b7ba49a0fa4d8657d321585d9cb6614f",
+      "incoming_removed_callers": [],
+      "incoming_retained_or_external": [],
+      "attributes_comments": false,
+      "body": "theorem invalidResult32_is_qnan :\n    isQNaN (invalidResult F32) = true := by decide\n"
+    }
+  ],
+  "eight_public_headers_byte_identical": true,
+  "no_source_written": true
+}
