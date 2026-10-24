@@ -1,0 +1,24 @@
+{
+  "state": "PENDING_ACTUAL_NEW_BUILD",
+  "candidate_sha256": "3c5ef024e33f5858ee001f18bde42c2db1857d4513540924e5b750614d2f07e6",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "actual_path": [
+    "Start at the actual MainFull BMM closure, then Submission.bmm and its unchanged outer UnderflowZero/Cross shape dispatch. Resolve redArg/specialized functions rather than using unused generic names.",
+    "The selected Cross branch must reach R13CrossFused.core/output and its specialized Fin.foldl loop. The old R11CrossRows.words -> all-groups Vector W8 -> core output reconstruction must be absent on that branch; old functions may legitimately remain in the object as unused definitions.",
+    "R11CrossRows.blockRows/blockAt/dot8, packShared/packGeneral, ordered F8 recurrence, finish8 and original NaN replay must remain the computation chain."
+  ],
+  "writer_checks": [
+    "One final capacity allocation before the group fold; one original blockRows calculation per group; direct w0/w1,w2/w3,w4/w5,w6/w7 pair emission in row order.",
+    "Each row pair is guarded by its own global row bound. Last partial group must emit2/4/6 outputs and no padded row. No global-q division/modulo or old Word8-vector lookup in the new output writer.",
+    "Check actual Array.push/update ownership: output must be consumed/reused through the loop, without per-push array copies, intermediate row arrays, append chains or read callbacks.",
+    "W8 fields and original F8->W8 reuse remain. Trace release after emission versus keeping all blocks alive; do not claim a separate W8 allocation was removed unless actual machine/runtime evidence supports it.",
+    "Check whether invariant rows=batch*m and group/base arithmetic are hoisted, but do not broaden the source change or claim timing from static instruction counts."
+  ],
+  "capture_priority": [
+    "Actual reachable R13CrossFused output/core/step specialization",
+    "Fin_foldl_loop___at___*Submission_R13CrossFused_*",
+    "Actual blockRows/blockAt/finish8 consumers on that path",
+    "Actual MainFull BMM binding"
+  ],
+  "limits": "Statement-diagnostic C/objects, clean timed gate artifacts and frozen independent confirmations remain separate. C reachability supports structure; final instructions, allocations and timing need their corresponding evidence. No clean full result or source acceptance is inferred from this checklist."
+}
