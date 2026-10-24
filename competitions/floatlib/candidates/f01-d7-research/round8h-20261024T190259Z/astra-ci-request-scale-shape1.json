@@ -1,0 +1,29 @@
+{
+  "id": "R14-R-SCALE-SHAPE1",
+  "state": "READY_FOR_COORDINATOR_CI",
+  "created_at_utc": "2026-10-24T19:14:13.950800+00:00",
+  "purpose": "Prove the exact original UInt64 roundProduct normal-band mantissa/exponent form before bridging two native multiplications. This is a proof-only appended namespace, not a speed candidate.",
+  "candidate": "competitions/floatlib/candidates/f01-r14-math-scale-shape1/Kernel.lean",
+  "candidate_sha256": "4c523fa6534e5c69ebda55b0c337e5d76be8cd7e88173545588a36007dacd792",
+  "candidate_bytes": 252569,
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "runtime_identical_parent": true,
+  "request": "Original pinned statement gate only (rounds=0), then audit newly introduced theorem names if the existing diagnostic hook permits it. No full timing or independent confirmation for this proof-only artifact.",
+  "theorems": [
+    "Submission.R14ScaleShape.mantissa_product_bounds",
+    "Submission.R14ScaleShape.leading_bounds",
+    "Submission.R14ScaleShape.carryNat_le",
+    "Submission.R14ScaleShape.normal_form",
+    "Submission.R14ScaleShape.first_product_form"
+  ],
+  "exact_entry": "Submission.lean = candidate Kernel.lean in original public-suite build; use existing statement pipeline. Extra theorem audit command: #print axioms <each listed name> after importing that Submission module.",
+  "dependencies": "Unchanged ContractTensor import and retained df5c declarations. Fixed FloatLib0d918/Lean293d5d0c. No source/module/toolchain dependency outside the original harness.",
+  "expected_cost": "One statement build. Prior comparable retained+small-namespace statement times about30-60seconds in runner; total queue/setup UNKNOWN. No local compile requested.",
+  "success": "All appended theorems compile with no new axioms; attach actual compiler output and original statement verdict.",
+  "failure": "Keep exact errors and source hash. R will repair only the new namespace; no runtime/gate changes.",
+  "remaining_gaps": [
+    "Formal rounded mantissa bounds and stronger h47 no-carry for380.",
+    "Decoded first native product, exact second power2 scaling, and original mul/fallback composition.",
+    "Actual runtime lowering and complete paired timing after proof closes."
+  ]
+}

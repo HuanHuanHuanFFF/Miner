@@ -44,7 +44,7 @@ def required_local_paths(root, here):
             [Path(here).parent / 'adoption-guard.py',
              Path(root) / 'competitions/floatlib/scripts/estimate_champion_time.py',
              Path(root) / 'competitions/floatlib/scripts/render_dashboard.py',
-             Path(here).parent / 'round6h-20261024T051445Z/retained-estimate-freeze.json'])
+             Path(here).parent / 'round8h-20261024T190259Z/retained-estimate-freeze.json'])
 
 
 def verify_freeze(freeze):

@@ -1,0 +1,14 @@
+{
+  "candidate": "f01-r14-dev-row-nan-lazy",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "2bd8ed5f3444adc6d32f0795e6c28936e92796554edded08d7faf77127dcf978",
+  "candidate_bytes": 249837,
+  "parent": "f01-d12-scalar-combined",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "created_at_utc": "2026-10-24T19:26:16.195039+00:00",
+  "validation_mode": "statement-only",
+  "proof_status": "NOT_RUN",
+  "mechanism": "Before RowStream native work, scan each A row for a raw NaN; those rows directly run the existing exact early software replay per output. Other rows use the same packed native path. Pure lazy thunks defer A conversion/B packing until a row actually needs them, and share those arrays across remaining rows.",
+  "correctness": "Classification never establishes a numeric equality: both selected computations are independently proved equal to the complete original ordered dot. Sign/payload replay remains original. No p-threshold, tensor shape cutoff or sum reordering.",
+  "performance": "UNKNOWN; measures raw scan/thunk overhead together with avoided native first pass and preparation. All non-RowStream paths unchanged."
+}

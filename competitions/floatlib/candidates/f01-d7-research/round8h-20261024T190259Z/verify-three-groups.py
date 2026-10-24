@@ -53,7 +53,7 @@ def import_binding():
 def retained_model_identity(root=ROOT):
     """Bind immutable prior adoption evidence, never freeze a mutable output."""
     own=Path(root)/'competitions/floatlib/candidates/f01-d7-research'
-    receipt=own/'round6h-20261024T051445Z/retained-estimate-freeze.json'
+    receipt=own/'round8h-20261024T190259Z/retained-estimate-freeze.json'
     prior=read(receipt)
     plan=read(own/'round8h-20261024T190259Z/round-plan.json')
     require(prior['source_sha256']==BASELINE_SHA and

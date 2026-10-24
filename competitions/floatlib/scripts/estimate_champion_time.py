@@ -12,7 +12,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[3]
 DATA = ROOT / "competitions/floatlib/candidates/f01-d7-research"
 OPS = ("add", "mul", "sum", "bmm")
-DEFAULT_ANCHOR = DATA / "round2h-20261023T170031Z/freeze-anchor.json"
+DEFAULT_ANCHOR = DATA / "round8h-20261024T190259Z/freeze-anchor.json"
 AGGREGATION = "median_per_cell_normalized_delta_then_frozen_work_projection"
 
 class EstimateRejected(ValueError):
