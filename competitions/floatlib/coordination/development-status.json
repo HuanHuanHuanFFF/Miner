@@ -1,6 +1,6 @@
 {
   "state": "R11_ACTIVE_BMM_STRUCTURAL_RESEARCH",
-  "updated_at_utc": "2026-10-24T00:01:34.888351+00:00",
+  "updated_at_utc": "2026-10-24T00:09:55.113095+00:00",
   "owner": "development chat",
   "branch": "codex/multi-track-floatlib",
   "candidate": "competitions/floatlib/candidates/f01-r8-combined-result-guard",
@@ -360,7 +360,7 @@
     "submission": 285,
     "source_digest": "a1e99008577119824464154be5ec52dd390fc1e429b8f85b6ea73315e7103082",
     "policy_snapshot": "753",
-    "queried_at_utc": "2026-10-23T22:24:02.305182+00:00",
+    "queried_at_utc": "2026-10-24T00:06:00.904834+00:00",
     "candidate": "f01-r8-combined-result-guard",
     "direct_paired_ratio": "UNKNOWN",
     "method": "Only exact same-suite paired current-champion result supports a direct gap; no cross-suite chain inference",
@@ -2256,14 +2256,73 @@
         "run": 40042230347,
         "seed": 925,
         "source_commit": "1a73a7a6a30daf6250f1620c43af63ffe6bad812",
-        "state": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+        "state": "TERMINAL_COLLECTED_SUCCESS",
         "candidates": [
           "f01-d11-wide-writer-proof2"
         ],
         "role": "STATEMENT_DIAGNOSTIC",
         "capture_codegen": [],
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T235420Z/dispatch.json",
+        "conclusion": "success",
+        "summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40042230347/download-16401c6821a84eb8bc8c665f078248e9/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+        "summary_sha256": "e61c6d054e74a45b1548a93ab7f03206e9e489a42b8a4f3a696d3b8a67f5b6ab",
+        "results": [
+          {
+            "candidate": "f01-d11-wide-writer-proof2",
+            "kernel_sha256": "ea10235659e5c3eef3ed1bd0e32920a0f479dd04d4188d22083e0ab8aee1a1d7",
+            "full_gate": false,
+            "statement_pass": true,
+            "stage": "statement",
+            "exit_code": 0
+          }
+        ],
+        "unexecuted_candidates": []
+      },
+      {
+        "run": 40042639860,
+        "seed": 926,
+        "source_commit": "95ddea9d9e0e5e8c4539baa8ec2fba6595acc9cb",
+        "state": "TERMINAL_COLLECTED_FAILURE",
+        "candidates": [
+          "f01-r11-wide4-inline"
+        ],
+        "role": "STATEMENT_DIAGNOSTIC",
+        "capture_codegen": [],
+        "collected": true,
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T235907Z/dispatch.json",
+        "conclusion": "failure",
+        "summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40042639860/download-bea9a0a07ca247008a2f2a6830d4e6f8/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+        "summary_sha256": "495162e09dea60ea369feb3e4946adebd7a02734eb9a3433f5f15a1cf8983445",
+        "results": [
+          {
+            "candidate": "f01-r11-wide4-inline",
+            "kernel_sha256": "43aaf31f905b71a976501f8cef170c9425d28c904b73079acc6e3f16a47dd8a5",
+            "full_gate": false,
+            "statement_pass": false,
+            "stage": "statement",
+            "exit_code": 1
+          }
+        ],
+        "unexecuted_candidates": []
+      },
+      {
+        "run": 40042916169,
+        "seed": 927,
+        "source_commit": "794e4e8444649052b80bb1048465b54206dd8555",
+        "state": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+        "candidates": [
+          "f01-d11-panel4-codegen-probe",
+          "f01-d11-bmm-direct-batch-rows-proof2",
+          "f01-r8-combined-result-guard"
+        ],
+        "role": "DISCOVERY",
+        "capture_codegen": [
+          "f01-d11-panel4-codegen-probe",
+          "f01-d11-bmm-direct-batch-rows-proof2"
+        ],
         "collected": false,
-        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261023T235420Z/dispatch.json"
+        "dispatch_receipt": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/dispatch-20261024T000209Z/dispatch.json"
       }
     ],
     "completed_ci": [
@@ -2289,10 +2348,12 @@
       40039524733,
       40039965234,
       40040850289,
-      40041351847
+      40041351847,
+      40042230347,
+      40042639860
     ],
     "active_ci": [
-      40042230347
+      40042916169
     ],
     "reset_used_count": 0,
     "notes": "All preparation, queues, coordination, proof repair and collection count within the fixed wall-clock window. Keep working to deadline; finish and collect any started CI even if terminal collection extends past deadline. Do not start new research after deadline.",
@@ -2909,6 +2970,20 @@
             "capture_codegen": false
           }
         ]
+      },
+      {
+        "seed": 928,
+        "role": "STATEMENT_DIAGNOSTIC",
+        "plan": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/plan-928.json",
+        "sha256": "3bc2166c93d7209f5d8d59fbb0284500848b21880e05a69cf124e289c0e18b43",
+        "candidates": [
+          {
+            "candidate": "f01-r11-wide4-inline-proof3",
+            "sha256": "28b819120cd3aaa1f19038f66042a9ceffe0c9329baab20fe223e98d151ce00b",
+            "capture_codegen": false,
+            "validation_mode": "statement-only"
+          }
+        ]
       }
     ],
     "official_refresh": {
@@ -2920,8 +2995,8 @@
     },
     "ci_state_schema": "CANONICAL_STARTED_CI_RECORDS_FROM_FROZEN_REQUESTS",
     "latest_official_snapshot": {
-      "receipt": "competitions/floatlib/candidates/f01-d7-research/official-20261023T222400Z/receipts.json",
-      "sha256": "b98b3ed9c606f3b9dd749241953b3a266c2eabe79b6d09da6d8114dc5240a436",
+      "receipt": "competitions/floatlib/candidates/f01-d7-research/official-20261024T000558Z/receipts.json",
+      "sha256": "8f0e00df8444c1ad7908eaa3aba786202f551f5fee28e74fbbc129778da7ef2c",
       "champion": 285,
       "digest": "a1e99008577119824464154be5ec52dd390fc1e429b8f85b6ea73315e7103082"
     }
