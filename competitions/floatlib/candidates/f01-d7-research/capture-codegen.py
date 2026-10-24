@@ -32,7 +32,7 @@ POST_SECONDS = 30.0
 MAX_SYMBOLS = 20
 OBJECT = re.compile(r'^Submission(?:\.c)?\.o(?:\.(?:export|noexport))?$')
 TRACE = re.compile(r'^Submission(?:\.c(?:\.o(?:\.(?:export|noexport))?)?|\.o(?:\.(?:export|noexport))?|\.olean|\.ilean)?\.trace$')
-HOT_STEMS = ('R11Panel4_wordLoop', 'R11WideRows4_wordLoop', 'R11RawIndex_loop', 'Packed8Index_loop', 'R11CrossRows_wordLoop', 'R11CrossRows_dot8')
+HOT_STEMS = ('Panel4_wordLoop', 'R11WideRows4_wordLoop', 'R11RawIndex_loop', 'Packed8Index_loop', 'R11CrossRows_wordLoop', 'R11CrossRows_dot8')
 FOLD_OUTPUT_STEMS = ('RowStream_output', 'DirectContinuous_output', 'DirectContinuous_row',
                      'DirectContinuous_batchRow', 'DirectContinuous_batchStep',
                      'R11WideLayout_emitRow', 'R11WideLayout_emitBlock', 'R11WideLayout_emitTail',
@@ -48,7 +48,7 @@ OUTPUT_STEMS = ('R11RawA_core', 'R11RawIndex_runDot', 'RowStream_emit', 'RowStre
                 'R11WideActual_buildTiles', 'R11WideActual_output', 'R11WideActual_core',
                 'R11WideLayout_emitRow', 'R11WideLayout_emitBlock', 'R11WideLayout_emitTail',
                 'R11WideLayout_writeBatch', 'R11WideLayout_output',
-                'R11Panel4_packA', 'R11Panel4_runDot', 'R11Panel4_block',
+                'Panel4_packA', 'Panel4_runDot', 'Panel4_block',
                 'BatchLocalPacked_core', 'BatchLocalPacked_output',
                 'BatchLocalPacked_batchStep', 'BatchLocalPacked_row', 'BatchLocalPacked_group',
                 'BatchLocalPacked_packBatch')
@@ -782,14 +782,14 @@ def selftest():
         results.append({'test': 'wide_machine_loop_and_batch_row_boundaries', 'pass': True,
                         'actual_emission_simd_spill': 'UNKNOWN_NOT_RUN'})
 
-        panel = 'lp_competition_Submission_R11Panel4_wordLoop'
+        panel = 'lp_competition_Submission_Panel4_wordLoop'
         actual_outputs = [
             'lp_competition_Fin_foldl_loop___at___00Submission_R11WideLayout_emitRow_spec__0',
             'lp_competition_Fin_foldl_loop___at___00Submission_R11WideLayout_writeBatch_spec__1___redArg',
             'lp_competition_Fin_foldl_loop___at___00Submission_R11WideActual_output_spec__0']
         actual_functions = ['lp_competition_Submission_' + stem for stem in (
             'R11WideActual_buildTiles', 'R11WideRows4_run', 'R11WideRows4_lane40',
-            'R11Panel4_packA', 'R11Panel4_block', 'R11Panel4_runDot')]
+            'Panel4_packA', 'Panel4_block', 'Panel4_runDot')]
         actual_invalid = [panel + '___boxed', panel + 'ing', panel + '_extra',
             actual_outputs[0] + '___redArgument', actual_outputs[1] + '_extra',
             actual_outputs[2].replace('output_spec', 'outputExtra_spec')]
@@ -800,6 +800,12 @@ def selftest():
         require(_symbol_info(panel)['priority'] == 0 and
                 all(_symbol_info(n).get('specialized_output') for n in actual_outputs),
                 'actual wide/panel hot priority drift')
+        # These two names are emitted in the original 927 nm, not inferred from
+        # a desired namespace. The former R11Panel4 prefix never existed.
+        require(_selected('lp_competition_Submission_Panel4_wordLoop___redArg') and
+                _selected('lp_competition_Submission_Panel4_packA') and
+                not _selected('lp_competition_Submission_R11Panel4_wordLoop'),
+                'actual927 Panel4 namespace regression')
         results.append({'test': 'actual_wide_writer_and_panel_boundaries', 'pass': True,
                         'actual_emission_and_call_path': 'UNKNOWN_NOT_RUN'})
 
