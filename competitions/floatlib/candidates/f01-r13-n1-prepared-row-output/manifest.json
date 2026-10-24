@@ -1,0 +1,54 @@
+{
+  "candidate": "f01-r13-n1-prepared-row-output",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "8661a3a5a1988b2d6b3d827aa37a7abeb81c50fffabcc38f8c8476961b425e0c",
+  "candidate_bytes": 252246,
+  "parent": "f01-d12-scalar-combined",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "parent_bytes": 248144,
+  "created_at_utc": "2026-10-24T13:09:31.090755+00:00",
+  "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+  "lean_toolchain": "leanprover/lean4:v4.34.0",
+  "floatlib_commit": "0d91825727839f597fd06b22fdd038ea21480f0c",
+  "mechanism": "After unchanged outerUnderflow/Cross, only n=1,p>2: prepare one native A scalar per row, pass it to the known column fold, compute exactly+0+fa*fb, keep nonNaN guard and original raw replayEarly1. B reads and final Array writer remain currentDirectContinuous. No Amap,Bpack,F10 or rowVector.",
+  "mathematical_change": "No new floating arithmetic claim: onePreparedDot_eq unfolds original dot/dotLoop at1 after substituting the prepared A value. row_eq/output_eq reuse original DirectContinuous prefix and reference bridge.",
+  "historical_revisit": {
+    "source": "f44802093e149959a4b64c519464f9d445de040b6bc2f760512a70596e2640b8",
+    "run": 40000065474,
+    "whole_normalized": 0.9933908291925786,
+    "BMM_normalized": 0.9693592197105697,
+    "gain_p05": -0.02792517204186711,
+    "receipt_sha256": "c99b47067c43253ddd51295333566c69b15507f4d65b6cc6ff1fef3003f47316",
+    "difference": "Oldf448 shared A but materialized per-row Vectors/flatMap and used nativeProduct plus raw seed normalization. Current candidate uses current continuous Array output and original+0-add/resultguard/raw replay; same caching idea in a changed full-call context, not novelty or inherited speed."
+  },
+  "current_source_basis": "ExactDF DirectContinuous column callback calls NativeFinal.dot/dynamic dotLoop per output; A getD/unbox/of_bits remains inside that dot. Sol actualDF C review independently confirmed source-level absence of rowfa hoist; finalLLVM cycle costs UNKNOWN.",
+  "preservation": "Three reversible edits; all original bytes/comments/attribution otherwise preserved.3c5e/708/252b not included or modified. No n2-4 or width grid, no proof prune.",
+  "first_falsifier": "Originalstatement/full gate and actual reachable new column specialization. fa must be a reusable unboxed Float32 parameter, not per-column closure/Float32 allocation/lean_apply. Check foreign B/output calls and any live-fa spills; complete uninstrumented25-round cost decides, not C counts.",
+  "proof_status": "NOT_RUN_FIRST_COMPLETE_INTEGRATION",
+  "full_gate": "NOT_RUN",
+  "codegen": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "formal_submission": "NOT_SUBMITTED",
+  "increment_bytes": 4091,
+  "increment_sha256": "94b5b8952db789a1d13520b72dd4236dc39d25f49724b8fd0388595fa5e667da",
+  "inverse_reconstruction_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "source_budget_remaining": 3754,
+  "edit_ledger": [
+    {
+      "name": "replace_Cross_miss_dispatch",
+      "old": "  else bmmBeforeR11Cross batch m n p A B",
+      "new": "  else R13N1Prepared.dispatch batch m n p A B"
+    },
+    {
+      "name": "replace_Cross_miss_proof",
+      "old": "  · exact bmmBeforeR11Cross_spec batch m n p A B",
+      "new": "  · exact R13N1Prepared.dispatch_spec batch m n p A B"
+    },
+    {
+      "name": "insert_prepared_row_and_complete_proof",
+      "old": "namespace Submission\nopen FloatLib.Floats Competition\n\ndef bmmBeforeUnderflowZero",
+      "new": "/- R13 bounded revisit of row-local A conversion. Unlike the old R10 row-cache,\n   retain the original +0 add and raw replay, and write directly to the final array. -/\nnamespace Submission.R13N1Prepared\nopen FloatLib.Floats Competition\n\n@[inline] def onePreparedDot (baseA baseB p : Nat) (A B : Array Binary32)\n    (fa : Float32) : Binary32 :=\n  let fb := ExecFloat.Binary.toFloat32 (B.getD baseB posZero)\n  let result := Float32.ofBits 0 + fa * fb\n  if hf : R7W04.nonNaN result = true then ExecFloat.Binary.ofFloat32 result\n  else R7NaNReplay.replayEarly 1 baseA baseB p A B\n\ntheorem onePreparedDot_eq (baseA baseB p : Nat) (A B : Array Binary32)\n    (fa : Float32) (ha : fa = ExecFloat.Binary.toFloat32 (A.getD baseA posZero)) :\n    onePreparedDot baseA baseB p A B fa = NativeFinal.dot 1 baseA baseB p A B := by\n  rw [ha]\n  simp [onePreparedDot, NativeFinal.dot, NativeFinal.dotLoop]\n\n@[inline] def row (batch m n p : Nat)\n    (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p))\n    (out : Array Binary32) (r : Fin (batch * m)) : Array Binary32 :=\n  let baseA := r.val * n\n  let baseB := r.val / m * n * p\n  let fa := ExecFloat.Binary.toFloat32 (A.toArray.getD baseA posZero)\n  RowStream.emit p (fun j =>\n    onePreparedDot baseA (baseB + j.val) p A.toArray B.toArray fa) out\n\ntheorem row_eq (batch m n p : Nat)\n    (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p))\n    (out : Array Binary32) (r : Fin (batch * m)) (hn : n = 1) :\n    row batch m n p A B out r = DirectContinuous.row batch m n p A B out r := by\n  subst n\n  dsimp only [row, DirectContinuous.row]\n  apply congrArg (fun read : Fin p → Binary32 => RowStream.emit p read out)\n  funext j\n  exact onePreparedDot_eq _ _ _ _ _ _ rfl\n\ndef output (batch m n p : Nat)\n    (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) : Array Binary32 :=\n  Fin.foldl (batch * m) (row batch m n p A B)\n    (Array.mkEmpty (batch * m * p))\n\ntheorem output_eq (batch m n p : Nat)\n    (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) (hn : n = 1) :\n    output batch m n p A B = DirectContinuous.output batch m n p A B := by\n  unfold output DirectContinuous.output\n  apply congrArg (fun step : Array Binary32 → Fin (batch * m) → Array Binary32 =>\n    Fin.foldl (batch * m) step (Array.mkEmpty (batch * m * p)))\n  funext out r\n  exact row_eq batch m n p A B out r hn\n\ntheorem output_prefix (batch m n p : Nat)\n    (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) (hn : n = 1) :\n    RowStream.Prefix (RowStream.point batch m n p A B) (batch * m * p)\n      (output batch m n p A B) := by\n  rw [output_eq batch m n p A B hn]\n  exact DirectContinuous.output_prefix batch m n p A B\n\ndef core (batch m n p : Nat)\n    (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) (hn : n = 1) :\n    Vector Binary32 (batch * m * p) :=\n  ⟨output batch m n p A B, (output_prefix batch m n p A B hn).1⟩\n\ntheorem core_eq_reference (batch m n p : Nat)\n    (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) (hn : n = 1) :\n    core batch m n p A B hn = referenceBmm batch m n p A B := by\n  exact (RowStream.prefix_vector_eq_ofFn (RowStream.point batch m n p A B)\n    (batch * m * p) (output batch m n p A B) (output_prefix batch m n p A B hn)).trans\n    (RowStream.points_eq_reference batch m n p A B)\n\ndef dispatch (batch m n p : Nat)\n    (A : Vector Binary32 (batch * m * n))\n    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=\n  if h : n = 1 ∧ 2 < p then core batch m n p A B h.1\n  else bmmBeforeR11Cross batch m n p A B\n\ntheorem dispatch_spec : ∀ (batch m n p : Nat)\n    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p)),\n    (dispatch batch m n p A B).get = bmmSpec batch m n p A.get B.get := by\n  intro batch m n p A B\n  unfold dispatch\n  split\n  · rw [core_eq_reference]\n    exact referenceBmm_spec batch m n p A B\n  · exact bmmBeforeR11Cross_spec batch m n p A B\n\nend Submission.R13N1Prepared\n\nnamespace Submission\nopen FloatLib.Floats Competition\n\ndef bmmBeforeUnderflowZero"
+    }
+  ],
+  "authorization": "D explicit bounded n1 GO during human-authorized R13;13:20 hard delivery checkpoint. R has no Git/CI/reset/adoption authority."
+}

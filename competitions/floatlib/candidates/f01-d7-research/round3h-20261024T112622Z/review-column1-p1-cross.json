@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "review": "R13 p=1 CrossRows opportunity and optional cross-fused-output",
+  "reviewed_at_utc": "2026-10-24T12:44:00Z",
+  "scope": "Read-only source/history review; no tests, Lean, CI, Git, candidate or state writes.",
+  "p1_cross": {
+    "existing_core_proof_premise": "R11CrossRows.core_eq_rows and rowWord_eq accept p<=2; p=1 is in range",
+    "pack_general_and_shared_parameterized_by_p": true,
+    "valid_p1_B_index": "base+k*p = base+k",
+    "unused_p1_B_index": "base+1+k*p; next entry or getD zero fallback at array end",
+    "rowWord_output": "For p=1, Fin p selects only j=0",
+    "source_level_unused_lane": "W8 computes/finishes two columns for each row, but p=1 returns only the first",
+    "compiler_elimination_of_unused_lane": "UNKNOWN; no p1 Cross codegen found",
+    "required_guard_boundary": "Add a distinct p=1 arm; retain p=2; preserve size/USize guards and handle empty output/batch safely"
+  },
+  "p1_profile_cases": {
+    "profile_run": 40092014611,
+    "profile_summary_sha256": "5d27e0497b7682946d1c522fda7ee48a0e2006ccd01b88b0687ddf62a6d03713",
+    "eligible_case": {"name":"bmm:ml:7","m":9,"n":3,"p":1,"original_whole_ms":3.396324},
+    "excluded_case": {"name":"bmm:ml:1","m":1,"n":67,"p":1,"original_whole_ms":1.083267},
+    "whole_anchor_ms":174.631942,
+    "single_eligible_case_whole_share_percent":1.945,
+    "scope":"One diagnostic plan, not a 25-round official score or a guarantee for D5 inputs"
+  },
+  "historical_full_gate": {
+    "old_all_rowstream_source": {
+      "name":"f01-d5-stream-pack",
+      "sha256":"8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045",
+      "runs":[39832394805,39833363659,39835885059,39836787411,39839349846,39840672791,39846309529],
+      "n_le4_p_gt2_case_counts_by_seed":{"801":2,"802":0,"804":3,"805":6,"806":8,"807":1,"808":1},
+      "timed_case_exposures":19,
+      "full_gate_negative_for_current_df5c_route_switch":false,
+      "scope":"Different historical source/package, not a matched short-route comparison"
+    },
+    "old_direct_continuous_source": {
+      "name":"f01-d11-bmm-direct-continuous",
+      "sha256":"2aaa5d9e84c758a23a8c6dc1f77d800950fbaa5769aec7a38d299741c17a5f56",
+      "full_gate_runs":[40032766690,40039965234],
+      "run_916_result_sha256":"61a89d9aadaf26aecaf118906608909db9c2ea189f08815b1cdd8d87639bb14c",
+      "run_916_whole_ratio_vs_d10_directrows":0.963487755699982,
+      "run_916_p05":0.030509032601674257,
+      "run_916_observer_capture":true,
+      "implementation":"DirectContinuous, not CrossRows"
+    }
+  },
+  "short_packed_candidate": {
+    "path":"competitions/floatlib/candidates/f01-d13-short-packed/Kernel.lean",
+    "sha256":"252b4539d34bdf384de8d9dd5cfa20e54538598a65600e4c68348cc4c004af80",
+    "manifest_sha256":"65cbfd57a2e748725dac4f5c494725a4b93c1dcf3ecfb95b6e1e3a5280bdfef6",
+    "builder_sha256":"7c047fd5d83a144d2168a108fa0118fd1ac76867840c561b9335f5ed7b656730",
+    "bytes":248130,
+    "remaining_bytes":7870,
+    "reverse_reconstruction_sha256":"df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+    "only_changed_references":2,
+    "active_d5_run":40094337126
+  },
+  "cross_fused_output": {
+    "sha256":"3c5ef024e33f5858ee001f18bde42c2db1857d4513540924e5b750614d2f07e6",
+    "manifest_sha256":"8a4fb288c8185876c99f7fe39cd2f7bb36d50b88c27d0f822cf3795790a0ff7a",
+    "bytes":255114,
+    "remaining_bytes":886,
+    "reverse_reconstruction_sha256":"df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+    "prefix_and_tail_static_review":"Plausible; valid row pairs map to RowStream.point, padded tail is skipped, ceil(rows/4) groups close full prefix",
+    "lean_full_gate_codegen_performance":"NOT_RUN"
+  },
+  "conclusion":"No old public full-gate negative isolates CrossRows at p=1. Existing full gates covered the old RowStream short route and DirectContinuous separately, not this current-source p1 Cross proposal. The main source-level risk is computing/finishing the unused second column; D5 full comparison is the relevant next evidence."
+}

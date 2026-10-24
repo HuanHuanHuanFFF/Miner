@@ -1,0 +1,248 @@
+{
+  "state": "SOURCE_OPPORTUNITY_VERIFIED_MACHINE_HOIST_UNKNOWN",
+  "exactDF": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "run": 40094358287,
+  "source_c": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40094358287\\download-1e2e8bb954ab4ff9a6a1d314e2333970\\diagnostics\\f01-d13-cost-profile\\cost-profile\\measurement\\profile-r13-coarse-original-Submission.c",
+    "sha256": "31e1409237ccf2e66b3b107a1ff8b3a257c9faa4e2786749c624b6aac03ccbc2"
+  },
+  "original_object_and_whole_binary_identity": {
+    "object": {
+      "logical": "/home/runner/work/_temp/floatlib-r13-cost-profile-upstream/lean/.lake/build/ir/Submission.c.o.export",
+      "bytes": 596224,
+      "sha256": "e1f73d5f62be23be3ad75f948014478e8f15b75a36a35861ea2bea88c1904128",
+      "binary_exported": false
+    },
+    "binary": {
+      "logical": "/home/runner/work/_temp/floatlib-r13-cost-profile-upstream/lean/.lake/build/bin/benchFull",
+      "bytes": 148072904,
+      "sha256": "1d543c30089cb4d988a16a1c83b99bd6110a7dcff54628ed155bd40f24123d14",
+      "binary_exported": false
+    }
+  },
+  "verified_C_chain": [
+    "lp_competition_Submission_bmm",
+    "lp_competition_Submission_bmmBeforeUnderflowZero",
+    "lp_competition_Submission_bmmBeforeR11Cross",
+    "lp_competition_Submission_DirectContinuous_output",
+    "lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__1",
+    "lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__0",
+    "lp_competition_Submission_NativeFinal_dot",
+    "lp_competition_Submission_NativeFinal_dotLoop"
+  ],
+  "symbols": {
+    "lp_competition_Submission_bmm": {
+      "source_line": 43606,
+      "body_sha256": "f5ad1876b80dfa348e1f87b40bddf41f76e06a7dc6a5c54c03052f3347961086",
+      "direct_calls": {
+        "lp_competition_Submission_bmmBeforeUnderflowZero": 2
+      },
+      "of_bits_sites": 0,
+      "lean_apply_sites": 0,
+      "float_parameter": false,
+      "snippet": "LEAN_EXPORT lean_object* lp_competition_Submission_bmm(lean_object* v_batch_14661_, lean_object* v_m_14662_, lean_object* v_n_14663_, lean_object* v_p_14664_, lean_object* v_A_14665_, lean_object* v_B_14666_){\n_start:\n{\nuint8_t v___y_14668_; lean_object* v___x_14679_; lean_object* v___x_14680_; uint8_t v___x_14681_; \nv___x_14679_ = lean_unsigned_to_nat(0u);\nv___x_14680_ = lean_array_get_size(v_A_14665_);\nv___x_14681_ = lean_nat_dec_lt(v___x_14679_, v___x_14680_);\nif (v___x_14681_ == 0)\n{\nuint8_t v___x_14682_; \nv___x_14682_ = 1;\nv___y_14668_ = v___x_14682_;\ngoto v___jp_14667_;\n}\nelse\n{\nif (v___x_14681_ == 0)\n{\nv___y_14668_ = v___x_14681_;\ngoto v___jp_14667_;\n}\nelse\n{\nsize_t v___x_14683_; size_t v___x_14684_; uint8_t v___x_14685_; \nv___x_14683_ = ((size_t)0ULL);\nv___x_14684_ = lean_usize_of_nat(v___x_14680_);\nv___x_14685_ = lp_competition___private_Init_Data_Array_Basic_0__Array_anyMUnsafe_any___at___00Submission_bmm_spec__1(v_A_14665_, v___x_14683_, v___x_14684_);\nif (v___x_14685_ == 0)\n{\nv___y_14668_ = v___x_14681_;\ngoto v___jp_14667_;\n}\nelse\n{\nlean_object* v___x_14686_; \nv___x_14686_ = lp_competition_Submission_bmmBeforeUnderflowZero(v_batch_14661_, v_m_14662_, v_n_14663_, v_p_14664_, v_A_14665_, v_B_14666_);\nreturn v___x_14686_;\n}\n}\n}\nv___jp_14667_:\n{\nlean_object* v___x_14669_; lean_object* v___x_14670_; uint8_t v___x_14671_; \nv___x_14669_ = lean_unsigned_to_nat(0u);\nv___x_14670_ = lean_array_get_size(v_B_14666_);\nv___x_14671_ = lean_nat_dec_lt(v___x_14669_, v___x_14670_);\nif (v___x_14671_ == 0)\n{\nlean_object* v___x_14672_; \nlean_dec_ref(v_B_14666_);\nlean_dec_ref(v_A_14665_);\nlean_dec(v_n_14663_);\nv___x_14672_ = lp_competition_Submission_UnderflowZero_zeros(v_batch_14661_, v_m_14662_, v_p_14664_);\nlean_dec(v_p_14664_);\nlean_dec(v_m_14662_);\nlean_dec(v_batch_14661_);\nreturn v___x_14672_;\n}\nelse\n{\nif (v___x_14671_ == 0)\n{\nlean_object* v___x_14673_; \nlean_dec_ref(v_B_14666_);\nlean_dec_ref(v_A_14665_);\nlean_dec(v_n_14663_);\nv___x_14673_ = lp_competition_Submission_UnderflowZero_zeros(v_batch_14661_, v_m_14662_, v_p_14664_);\nlean_dec(v_p_14664_);\nlean_dec(v_m_14662_);\nlean_dec(v_batch_14661_);\nreturn v___x_14673_;\n}\nelse\n{\nsize_t v___x_14674_; size_t v___x_14675_; uint8_t v___x_14676_; \nv___x_14674_ = ((size_t)0ULL);\nv___x_14675_ = lean_usize_of_nat(v___x_14670_);\nv___x_14676_ = lp_competition___private_Init_Data_Array_Basic_0__Array_anyMUnsafe_any___at___00Submission_bmm_spec__0(v___y_14668_, v_B_14666_, v___x_14674_, v___x_14675_);\nif (v___x_14676_ == 0)\n{\nlean_object* v___x_14677_; \nlean_dec_ref(v_B_14666_);\nlean_dec_ref(v_A_14665_);\nlean_dec(v_n_14663_);\nv___x_14677_ = lp_competition_Submission_UnderflowZero_zeros(v_batch_14661_, v_m_14662_, v_p_14664_);\nlean_dec(v_p_14664_);\nlean_dec(v_m_14662_);\nlean_dec(v_batch_14661_);\nreturn v___x_14677_;\n}\nelse\n{\nlean_object* v___x_14678_; \nv___x_14678_ = lp_competition_Submission_bmmBeforeUnderflowZero(v_batch_14661_, v_m_14662_, v_n_14663_, v_p_14664_, v_A_14665_, v_B_14666_);\nreturn v___x_14678_;\n}\n}\n}\n}\n}\n}"
+    },
+    "lp_competition_Submission_bmmBeforeUnderflowZero": {
+      "source_line": 43330,
+      "body_sha256": "3735ec1ac604796ed6fd4905648c34587cfab6c1a254331b39734d4e3fdb2128",
+      "direct_calls": {
+        "lp_competition_Submission_bmmBeforeR11Cross": 7
+      },
+      "of_bits_sites": 0,
+      "lean_apply_sites": 0,
+      "float_parameter": false,
+      "snippet": "LEAN_EXPORT lean_object* lp_competition_Submission_bmmBeforeUnderflowZero(lean_object* v_batch_14561_, lean_object* v_m_14562_, lean_object* v_n_14563_, lean_object* v_p_14564_, lean_object* v_A_14565_, lean_object* v_B_14566_){\n_start:\n{\nlean_object* v___x_14567_; uint8_t v___x_14568_; \nv___x_14567_ = lean_unsigned_to_nat(2u);\nv___x_14568_ = lean_nat_dec_eq(v_p_14564_, v___x_14567_);\nif (v___x_14568_ == 0)\n{\nlean_object* v___x_14569_; \nv___x_14569_ = lp_competition_Submission_bmmBeforeR11Cross(v_batch_14561_, v_m_14562_, v_n_14563_, v_p_14564_, v_A_14565_, v_B_14566_);\nreturn v___x_14569_;\n}\nelse\n{\nlean_object* v___x_14570_; lean_object* v___x_14571_; uint8_t v___x_14572_; \nv___x_14570_ = lean_unsigned_to_nat(4u);\nv___x_14571_ = lean_nat_mul(v_batch_14561_, v_m_14562_);\nv___x_14572_ = lean_nat_dec_le(v___x_14570_, v___x_14571_);\nif (v___x_14572_ == 0)\n{\nlean_object* v___x_14573_; \nlean_dec(v___x_14571_);\nv___x_14573_ = lp_competition_Submission_bmmBeforeR11Cross(v_batch_14561_, v_m_14562_, v_n_14563_, v_p_14564_, v_A_14565_, v_B_14566_);\nreturn v___x_14573_;\n}\nelse\n{\nlean_object* v___x_14574_; uint8_t v___x_14575_; \nv___x_14574_ = lean_unsigned_to_nat(0u);\nv___x_14575_ = lean_nat_dec_lt(v___x_14574_, v_n_14563_);\nif (v___x_14575_ == 0)\n{\nlean_object* v___x_14576_; \nlean_dec(v___x_14571_);\nv___x_14576_ = lp_competition_Submission_bmmBeforeR11Cross(v_batch_14561_, v_m_14562_, v_n_14563_, v_p_14564_, v_A_14565_, v_B_14566_);\nreturn v___x_14576_;\n}\nelse\n{\nlean_object* v___x_14577_; uint8_t v___x_14578_; \nv___x_14577_ = lean_obj_once(&lp_competition_Submission_Packed10Index_runDot___closed__0, &lp_competition_Submission_Packed10Index_runDot___closed__0_once, _init_lp_competition_Submission_Packed10Index_runDot___closed__0);\nv___x_14578_ = lean_nat_dec_lt(v_n_14563_, v___x_14577_);\nif (v___x_14578_ == 0)\n{\nlean_object* v___x_14579_; \nlean_dec(v___x_14571_);\nv___x_14579_ = lp_competition_Submission_bmmBeforeR11Cross(v_batch_14561_, v_m_14562_, v_n_14563_, v_p_14564_, v_A_14565_, v_B_14566_);\nreturn v___x_14579_;\n}\nelse\n{\nlean_object* v___x_14580_; uint8_t v___x_14581_; \nv___x_14580_ = lean_array_get_size(v_A_14565_);\nv___x_14581_ = lean_nat_dec_lt(v___x_14580_, v___x_14577_);\nif (v___x_14581_ == 0)\n{\nlean_object* v___x_14582_; \nlean_dec(v___x_14571_);\nv___x_14582_ = lp_competition_Submission_bmmBeforeR11Cross(v_batch_14561_, v_m_14562_, v_n_14563_, v_p_14564_, v_A_14565_, v_B_14566_);\nreturn v___x_14582_;\n}\nelse\n{\nlean_object* v___x_14583_; uint8_t v___x_14584_; \nv___x_14583_ = lean_array_get_size(v_B_14566_);\nv___x_14584_ = lean_nat_dec_lt(v___x_14583_, v___x_14577_);\nif (v___x_14584_ == 0)\n{\nlean_object* v___x_14585_; \nlean_dec(v___x_14571_);\nv___x_14585_ = lp_competition_Submission_bmmBeforeR11Cross(v_batch_14561_, v_m_14562_, v_n_14563_, v_p_14564_, v_A_14565_, v_B_14566_);\nreturn v___x_14585_;\n}\nelse\n{\nlean_object* v___x_14586_; uint8_t v___x_14587_; \nv___x_14586_ = lean_nat_mul(v___x_14571_, v_p_14564_);\nlean_dec(v___x_14571_);\nv___x_14587_ = lean_nat_dec_lt(v___x_14586_, v___x_14577_);\nlean_dec(v___x_14586_);\nif (v___x_14587_ == 0)\n{\nlean_object* v___x_14588_; \nv___x_14588_ = lp_competition_Submission_bmmBeforeR11Cross(v_batch_14561_, v_m_14562_, v_n_14563_, v_p_14564_, v_A_14565_, v_B_14566_);\nreturn v___x_14588_;\n}\nelse\n{\nlean_object* v___x_14589_; \nv___x_14589_ = lp_competition_Submission_R11CrossRows_core___redArg(v_batch_14561_, v_m_14562_, v_n_14563_, v_p_14564_, v_A_14565_, v_B_14566_);\nlean_dec(v_batch_14561_);\nreturn v___x_14589_;\n}\n}\n}\n}\n}\n}\n}\n}\n}"
+    },
+    "lp_competition_Submission_bmmBeforeR11Cross": {
+      "source_line": 40977,
+      "body_sha256": "5bf3ff56fba269b2c03572b983570dc0b5f6233096acc54c22488a73070e1924",
+      "direct_calls": {
+        "lp_competition_Submission_DirectContinuous_output": 1
+      },
+      "of_bits_sites": 0,
+      "lean_apply_sites": 0,
+      "float_parameter": false,
+      "snippet": "LEAN_EXPORT lean_object* lp_competition_Submission_bmmBeforeR11Cross(lean_object* v_batch_13509_, lean_object* v_m_13510_, lean_object* v_n_13511_, lean_object* v_p_13512_, lean_object* v_A_13513_, lean_object* v_B_13514_){\n_start:\n{\nlean_object* v___x_13515_; uint8_t v___x_13516_; \nv___x_13515_ = lean_unsigned_to_nat(4u);\nv___x_13516_ = lean_nat_dec_le(v_n_13511_, v___x_13515_);\nif (v___x_13516_ == 0)\n{\nlean_object* v___x_13517_; \nv___x_13517_ = lp_competition_Submission_bmmBeforeDirectRows(v_batch_13509_, v_m_13510_, v_n_13511_, v_p_13512_, v_A_13513_, v_B_13514_);\nreturn v___x_13517_;\n}\nelse\n{\nlean_object* v___x_13518_; uint8_t v___x_13519_; \nv___x_13518_ = lean_unsigned_to_nat(2u);\nv___x_13519_ = lean_nat_dec_lt(v___x_13518_, v_p_13512_);\nif (v___x_13519_ == 0)\n{\nlean_object* v___x_13520_; \nv___x_13520_ = lp_competition_Submission_bmmBeforeDirectRows(v_batch_13509_, v_m_13510_, v_n_13511_, v_p_13512_, v_A_13513_, v_B_13514_);\nreturn v___x_13520_;\n}\nelse\n{\nlean_object* v___x_13521_; \nv___x_13521_ = lp_competition_Submission_DirectContinuous_output(v_batch_13509_, v_m_13510_, v_n_13511_, v_p_13512_, v_A_13513_, v_B_13514_);\nlean_dec_ref(v_B_13514_);\nlean_dec_ref(v_A_13513_);\nlean_dec(v_p_13512_);\nlean_dec(v_n_13511_);\nlean_dec(v_m_13510_);\nlean_dec(v_batch_13509_);\nreturn v___x_13521_;\n}\n}\n}\n}"
+    },
+    "lp_competition_Submission_DirectContinuous_output": {
+      "source_line": 40927,
+      "body_sha256": "0c9b357ad3b662177783a4a80b5f68e6c354d583c9b3cad68df49709d1ba2b09",
+      "direct_calls": {
+        "lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__1": 1
+      },
+      "of_bits_sites": 0,
+      "lean_apply_sites": 0,
+      "float_parameter": false,
+      "snippet": "LEAN_EXPORT lean_object* lp_competition_Submission_DirectContinuous_output(lean_object* v_batch_13477_, lean_object* v_m_13478_, lean_object* v_n_13479_, lean_object* v_p_13480_, lean_object* v_A_13481_, lean_object* v_B_13482_){\n_start:\n{\nlean_object* v___x_13483_; lean_object* v___x_13484_; lean_object* v___x_13485_; lean_object* v___x_13486_; lean_object* v___x_13487_; \nv___x_13483_ = lean_nat_mul(v_batch_13477_, v_m_13478_);\nv___x_13484_ = lean_nat_mul(v___x_13483_, v_p_13480_);\nv___x_13485_ = lean_mk_empty_array_with_capacity(v___x_13484_);\nlean_dec(v___x_13484_);\nv___x_13486_ = lean_unsigned_to_nat(0u);\nv___x_13487_ = lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__1(v_n_13479_, v_m_13478_, v_p_13480_, v_A_13481_, v_B_13482_, v___x_13483_, v___x_13485_, v___x_13486_);\nlean_dec(v___x_13483_);\nreturn v___x_13487_;\n}\n}"
+    },
+    "lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__1": {
+      "source_line": 40881,
+      "body_sha256": "4d65251bdf9f9495a9238cb507803518c07dac09cbf007ae8dd5ea9f5ce3b34b",
+      "direct_calls": {
+        "lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__0": 1
+      },
+      "of_bits_sites": 0,
+      "lean_apply_sites": 0,
+      "float_parameter": false,
+      "snippet": "LEAN_EXPORT lean_object* lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__1(lean_object* v_n_13450_, lean_object* v_m_13451_, lean_object* v_p_13452_, lean_object* v_A_13453_, lean_object* v_B_13454_, lean_object* v_n_13455_, lean_object* v_x_13456_, lean_object* v_i_13457_){\n_start:\n{\nuint8_t v___x_13458_; \nv___x_13458_ = lean_nat_dec_lt(v_i_13457_, v_n_13455_);\nif (v___x_13458_ == 0)\n{\nlean_dec(v_i_13457_);\nreturn v_x_13456_;\n}\nelse\n{\nlean_object* v_baseA_13459_; lean_object* v___x_13460_; lean_object* v___x_13461_; lean_object* v_baseB_13462_; lean_object* v___x_13463_; lean_object* v___x_13464_; lean_object* v___x_13465_; lean_object* v___x_13466_; \nv_baseA_13459_ = lean_nat_mul(v_i_13457_, v_n_13450_);\nv___x_13460_ = lean_nat_div(v_i_13457_, v_m_13451_);\nv___x_13461_ = lean_nat_mul(v___x_13460_, v_n_13450_);\nlean_dec(v___x_13460_);\nv_baseB_13462_ = lean_nat_mul(v___x_13461_, v_p_13452_);\nlean_dec(v___x_13461_);\nv___x_13463_ = lean_unsigned_to_nat(0u);\nv___x_13464_ = lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__0(v_baseB_13462_, v_A_13453_, v_B_13454_, v_n_13450_, v_baseA_13459_, v_p_13452_, v_p_13452_, v_x_13456_, v___x_13463_);\nlean_dec(v_baseA_13459_);\nlean_dec(v_baseB_13462_);\nv___x_13465_ = lean_unsigned_to_nat(1u);\nv___x_13466_ = lean_nat_add(v_i_13457_, v___x_13465_);\nlean_dec(v_i_13457_);\nv_x_13456_ = v___x_13464_;\nv_i_13457_ = v___x_13466_;\ngoto _start;\n}\n}\n}"
+    },
+    "lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__0": {
+      "source_line": 40839,
+      "body_sha256": "6286d65810983ab11e0984282217645cd9ae116eb2842c714fafc0bbdc8b6959",
+      "direct_calls": {
+        "lp_competition_Submission_NativeFinal_dot": 1
+      },
+      "of_bits_sites": 0,
+      "lean_apply_sites": 0,
+      "float_parameter": false,
+      "snippet": "LEAN_EXPORT lean_object* lp_competition_Fin_foldl_loop___at___00Submission_DirectContinuous_output_spec__0(lean_object* v_baseB_13423_, lean_object* v_A_13424_, lean_object* v_B_13425_, lean_object* v_n_13426_, lean_object* v_baseA_13427_, lean_object* v_p_13428_, lean_object* v_n_13429_, lean_object* v_x_13430_, lean_object* v_i_13431_){\n_start:\n{\nuint8_t v___x_13432_; \nv___x_13432_ = lean_nat_dec_lt(v_i_13431_, v_n_13429_);\nif (v___x_13432_ == 0)\n{\nlean_dec(v_i_13431_);\nreturn v_x_13430_;\n}\nelse\n{\nlean_object* v___x_13433_; uint32_t v___x_13434_; lean_object* v___x_13435_; lean_object* v___x_13436_; lean_object* v___x_13437_; lean_object* v___x_13438_; \nv___x_13433_ = lean_nat_add(v_baseB_13423_, v_i_13431_);\nv___x_13434_ = lp_competition_Submission_NativeFinal_dot(v_n_13426_, v_baseA_13427_, v___x_13433_, v_p_13428_, v_A_13424_, v_B_13425_);\nlean_dec(v___x_13433_);\nv___x_13435_ = lean_box_uint32(v___x_13434_);\nv___x_13436_ = lean_array_push(v_x_13430_, v___x_13435_);\nv___x_13437_ = lean_unsigned_to_nat(1u);\nv___x_13438_ = lean_nat_add(v_i_13431_, v___x_13437_);\nlean_dec(v_i_13431_);\nv_x_13430_ = v___x_13436_;\nv_i_13431_ = v___x_13438_;\ngoto _start;\n}\n}\n}"
+    },
+    "lp_competition_Submission_NativeFinal_dot": {
+      "source_line": 37363,
+      "body_sha256": "a07a9ed7fbf7d4f43bc5d364609a367bcf7be4fcaa7c64032e05813f0586d643",
+      "direct_calls": {
+        "lp_competition_Submission_NativeFinal_dotLoop": 1
+      },
+      "of_bits_sites": 0,
+      "lean_apply_sites": 0,
+      "float_parameter": false,
+      "snippet": "LEAN_EXPORT uint32_t lp_competition_Submission_NativeFinal_dot(lean_object* v_n_11711_, lean_object* v_baseA_11712_, lean_object* v_baseB_11713_, lean_object* v_p_11714_, lean_object* v_A_11715_, lean_object* v_B_11716_){\n_start:\n{\nlean_object* v___x_11717_; float v___x_11718_; float v_result_11719_; uint8_t v___x_11720_; \nv___x_11717_ = lean_unsigned_to_nat(0u);\nv___x_11718_ = lean_float32_once(&lp_competition_Submission_NativeFinal_dot___closed__0, &lp_competition_Submission_NativeFinal_dot___closed__0_once, _init_lp_competition_Submission_NativeFinal_dot___closed__0);\nv_result_11719_ = lp_competition_Submission_NativeFinal_dotLoop(v_n_11711_, v_baseA_11712_, v_baseB_11713_, v_p_11714_, v_A_11715_, v_B_11716_, v___x_11717_, v___x_11718_);\nv___x_11720_ = lean_float32_beq(v_result_11719_, v_result_11719_);\nif (v___x_11720_ == 0)\n{\nuint32_t v___x_11721_; \nv___x_11721_ = lp_competition_Submission_R7NaNReplay_replayEarly(v_n_11711_, v_baseA_11712_, v_baseB_11713_, v_p_11714_, v_A_11715_, v_B_11716_);\nreturn v___x_11721_;\n}\nelse\n{\nuint32_t v___x_11722_; \nv___x_11722_ = lean_float32_to_bits(v_result_11719_);\nreturn v___x_11722_;\n}\n}\n}"
+    },
+    "lp_competition_Submission_NativeFinal_dotLoop": {
+      "source_line": 37262,
+      "body_sha256": "d765b25d06053780fb10ce20a435b42bc8e9b589c878c2946b3dfe5ad2ae4330",
+      "direct_calls": {},
+      "of_bits_sites": 2,
+      "lean_apply_sites": 0,
+      "float_parameter": true,
+      "snippet": "LEAN_EXPORT float lp_competition_Submission_NativeFinal_dotLoop(lean_object* v_n_11665_, lean_object* v_baseA_11666_, lean_object* v_baseB_11667_, lean_object* v_p_11668_, lean_object* v_A_11669_, lean_object* v_B_11670_, lean_object* v_k_11671_, float v_acc_11672_){\n_start:\n{\nfloat v___y_11674_; uint32_t v___y_11675_; uint8_t v___x_11682_; \nv___x_11682_ = lean_nat_dec_lt(v_k_11671_, v_n_11665_);\nif (v___x_11682_ == 0)\n{\nlean_dec(v_k_11671_);\nreturn v_acc_11672_;\n}\nelse\n{\nlean_object* v___x_11683_; uint32_t v___x_11684_; uint32_t v___y_11686_; lean_object* v___x_11694_; uint8_t v___x_11695_; \nv___x_11683_ = lean_nat_add(v_baseA_11666_, v_k_11671_);\nv___x_11684_ = lean_uint32_once(&lp_competition_Submission_referenceSum___redArg___closed__0, &lp_competition_Submission_referenceSum___redArg___closed__0_once, _init_lp_competition_Submission_referenceSum___redArg___closed__0);\nv___x_11694_ = lean_array_get_size(v_A_11669_);\nv___x_11695_ = lean_nat_dec_lt(v___x_11683_, v___x_11694_);\nif (v___x_11695_ == 0)\n{\nlean_dec(v___x_11683_);\nv___y_11686_ = v___x_11684_;\ngoto v___jp_11685_;\n}\nelse\n{\nlean_object* v___x_11696_; uint32_t v___x_11697_; \nv___x_11696_ = lean_array_fget_borrowed(v_A_11669_, v___x_11683_);\nlean_dec(v___x_11683_);\nv___x_11697_ = lean_unbox_uint32(v___x_11696_);\nv___y_11686_ = v___x_11697_;\ngoto v___jp_11685_;\n}\nv___jp_11685_:\n{\nfloat v_fa_11687_; lean_object* v___x_11688_; lean_object* v___x_11689_; lean_object* v___x_11690_; uint8_t v___x_11691_; \nv_fa_11687_ = lean_float32_of_bits(v___y_11686_);\nv___x_11688_ = lean_nat_mul(v_k_11671_, v_p_11668_);\nv___x_11689_ = lean_nat_add(v_baseB_11667_, v___x_11688_);\nlean_dec(v___x_11688_);\nv___x_11690_ = lean_array_get_size(v_B_11670_);\nv___x_11691_ = lean_nat_dec_lt(v___x_11689_, v___x_11690_);\nif (v___x_11691_ == 0)\n{\nlean_dec(v___x_11689_);\nv___y_11674_ = v_fa_11687_;\nv___y_11675_ = v___x_11684_;\ngoto v___jp_11673_;\n}\nelse\n{\nlean_object* v___x_11692_; uint32_t v___x_11693_; \nv___x_11692_ = lean_array_fget_borrowed(v_B_11670_, v___x_11689_);\nlean_dec(v___x_11689_);\nv___x_11693_ = lean_unbox_uint32(v___x_11692_);\nv___y_11674_ = v_fa_11687_;\nv___y_11675_ = v___x_11693_;\ngoto v___jp_11673_;\n}\n}\n}\nv___jp_11673_:\n{\nfloat v_fb_11676_; lean_object* v___x_11677_; lean_object* v___x_11678_; float v___x_11679_; float v___x_11680_; \nv_fb_11676_ = lean_float32_of_bits(v___y_11675_);\nv___x_11677_ = lean_unsigned_to_nat(1u);\nv___x_11678_ = lean_nat_add(v_k_11671_, v___x_11677_);\nlean_dec(v_k_11671_);\nv___x_11679_ = lean_float32_mul(v___y_11674_, v_fb_11676_);\nv___x_11680_ = lean_float32_add(v_acc_11672_, v___x_11679_);\nv_k_11671_ = v___x_11678_;\nv_acc_11672_ = v___x_11680_;\ngoto _start;\n}\n}\n}"
+    },
+    "lp_competition_Submission_DirectContinuous_row___redArg___lam__0": {
+      "source_line": 40743,
+      "body_sha256": "4de6e01208cd0673dfa7d5689ba1c01e54b1717c49e23ccdb9c169618d9addb9",
+      "direct_calls": {
+        "lp_competition_Submission_NativeFinal_dot": 1
+      },
+      "of_bits_sites": 0,
+      "lean_apply_sites": 0,
+      "float_parameter": false,
+      "snippet": "LEAN_EXPORT lean_object* lp_competition_Submission_DirectContinuous_row___redArg___lam__0(lean_object* v_baseB_13356_, lean_object* v_n_13357_, lean_object* v_baseA_13358_, lean_object* v_p_13359_, lean_object* v_A_13360_, lean_object* v_B_13361_, lean_object* v_acc_13362_, lean_object* v_l_13363_){\n_start:\n{\nlean_object* v___x_13364_; uint32_t v___x_13365_; lean_object* v___x_13366_; lean_object* v___x_13367_; \nv___x_13364_ = lean_nat_add(v_baseB_13356_, v_l_13363_);\nv___x_13365_ = lp_competition_Submission_NativeFinal_dot(v_n_13357_, v_baseA_13358_, v___x_13364_, v_p_13359_, v_A_13360_, v_B_13361_);\nlean_dec(v___x_13364_);\nv___x_13366_ = lean_box_uint32(v___x_13365_);\nv___x_13367_ = lean_array_push(v_acc_13362_, v___x_13366_);\nreturn v___x_13367_;\n}\n}"
+    }
+  },
+  "source_findings": [
+    "Actual row-specialized Fin loop hoists baseA and baseB indices only, then calls a specialized column Fin loop.",
+    "The column loop directly calls NativeFinal.dot for every output; it carries raw A/B and dynamic n/baseA/p, no predecoded native A float.",
+    "dot initializes k=0 and positive zero, calls dynamic dotLoop, tests native result self-equality, then returns bits or raw-input replayEarly.",
+    "dotLoop performs A and B size/bounds/get/unbox/of_bits within each k iteration, dynamic k<n test and k+1 tail goto.",
+    "For n=1 each output still traverses this ordinary C route; no n1 specialization or cross-column A conversion hoist is present in generated C.",
+    "The actual column-specialized C uses a direct dot call and no lean_apply; the unused generic row wrapper uses a boxed closure."
+  ],
+  "LLVM_boundary": {
+    "status": "UNKNOWN",
+    "actual_DF_dotLoop_assembly_exported": false,
+    "mainfull_C_files_in_original_index": [],
+    "mainfull_DF_call_chain": "UNKNOWN: no actualDF MainFull C bytes captured in this artifact",
+    "trace_mentions_MainFull_compile": true,
+    "link_mentions_MainFull_object": true,
+    "original_compile_argv": "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/bin/clang -c -o /home/runner/work/_temp/floatlib-r13-cost-profile-upstream/lean/.lake/build/ir/Submission.c.o.export /home/runner/work/_temp/floatlib-r13-cost-profile-upstream/lean/.lake/build/ir/Submission.c -I /home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/include -fstack-clash-protection -ffp-contract=off -fdata-sections -ffunction-sections -fPIC -fvisibility=hidden -Wno-unused-command-line-argument --sysroot /home/runner/.elan/toolchains/leanprover--lean4---v4.34.0 -nostdinc -isystem /home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/include/clang -O3 -DNDEBUG -DLEAN_EXPORTING",
+    "flto_seen_in_compile_or_link": false,
+    "outer_disassembly_kernel_sha256": [
+      "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045"
+    ],
+    "outer_disassembly_rejected": "Outer8eb carrier assembly is not exactDF. No inference that clang retains every generated-C operation after O3."
+  },
+  "public_seed1224016_n1_cases": [
+    {
+      "case": "bmm:dense:4",
+      "route_source_model": "DirectContinuous",
+      "batch": 8403,
+      "m": 7,
+      "n": 1,
+      "p": 3,
+      "rows": 58821,
+      "outputs": 176463,
+      "original_whole_ns": 1697825,
+      "applicable_to_DirectContinuous_n1": true,
+      "source_scheduled_A_decode_savings_if_once_per_row": 117642
+    },
+    {
+      "case": "bmm:ml:0",
+      "route_source_model": "DirectContinuous",
+      "batch": 2673,
+      "m": 6,
+      "n": 1,
+      "p": 11,
+      "rows": 16038,
+      "outputs": 176418,
+      "original_whole_ns": 1624705,
+      "applicable_to_DirectContinuous_n1": true,
+      "source_scheduled_A_decode_savings_if_once_per_row": 160380
+    },
+    {
+      "case": "bmm:sparse:2",
+      "route_source_model": "Cross",
+      "batch": 44117,
+      "m": 2,
+      "n": 1,
+      "p": 2,
+      "rows": 88234,
+      "outputs": 176468,
+      "original_whole_ns": 3788873,
+      "applicable_to_DirectContinuous_n1": false,
+      "source_scheduled_A_decode_savings_if_once_per_row": 0
+    },
+    {
+      "case": "bmm:specials:5",
+      "route_source_model": "DirectContinuous",
+      "batch": 6302,
+      "m": 7,
+      "n": 1,
+      "p": 4,
+      "rows": 44114,
+      "outputs": 176456,
+      "original_whole_ns": 1560198,
+      "applicable_to_DirectContinuous_n1": true,
+      "source_scheduled_A_decode_savings_if_once_per_row": 132342
+    }
+  ],
+  "eligible_DirectContinuous_n1": {
+    "cases": 3,
+    "original_whole_anchor_ns_sum": 4882728,
+    "source_scheduled_redundant_A_decodes_per_one_sweep": 410364,
+    "interpretation": "Source operation count only; no official score/cycle saving, and Cross n1 is excluded."
+  },
+  "new_candidate_codegen_checks": [
+    "Find A getD/of_bits once in each row before the column fold; verify the actual public specialization is reached.",
+    "Prefer a native float argument in the actual specialized column loop; inspect Float32 boxing/capture, repeated unbox, closure allocation and lean_apply calls rather than assuming closure specialization.",
+    "Retain positive-zero + fa*fb, result nonNaN test, raw-input replayEarly and one final array; replacing +0 with product can change signed-zero behavior.",
+    "If extra float boxing, lean_apply or allocation offsets the saved A decode/dynamic dot overhead, require the complete same-run gate to reject it."
+  ],
+  "scope": "Read-only mechanism precondition audit. No candidate, tests, CI, runtime modification or machine speedup claim.",
+  "checked_originals": {
+    "diagnostics/f01-d13-cost-profile/cost-profile/measurement/profile-r13-coarse-original-Submission.c": {
+      "sha256": "31e1409237ccf2e66b3b107a1ff8b3a257c9faa4e2786749c624b6aac03ccbc2",
+      "bytes": 1430091
+    },
+    "diagnostics/f01-d13-cost-profile/cost-profile/measurement/profile-r13-coarse-result.json": {
+      "sha256": "d12886df2705254fd38ed99301be30c4537f860b651c7bbf155d60875787afb9",
+      "bytes": 1043362
+    },
+    "diagnostics/f01-d13-cost-profile/cost-profile/measurement/profile-r13-coarse-build-commands.json": {
+      "sha256": "c504b7e71e6e8e5c7847924b9f7f99251b43c07cec29ac244393b72fc8dbf077",
+      "bytes": 8875
+    },
+    "diagnostics/f01-d13-cost-profile/cost-profile/measurement/profile-r13-coarse-link-response-0.rsp": {
+      "sha256": "d4451838f0b1e0649022f0860cc00d7c5c7a906c943839c4a0a22eeb2eff71da",
+      "bytes": 640079
+    },
+    "diagnostics/f01-d13-cost-profile/cost-profile/measurement/profile-r13-coarse-Kernel.lean": {
+      "sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+      "bytes": 248144
+    },
+    "diagnostics/f01-d13-cost-profile/native-assembly-index.json": {
+      "sha256": "5ff883b900ce618fedd498b260c4c69e7abfcc5e04ce489dc5c9aba4eb28b139",
+      "bytes": 3855
+    }
+  },
+  "audit_source_sha256": "abab88ddd9abb54594bb1d63395f647f44c65d936fda4417e802195dde38daa2"
+}

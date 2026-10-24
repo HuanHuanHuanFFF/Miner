@@ -1,0 +1,16 @@
+{
+  "state": "PENDING_ACTUAL8661_BUILD",
+  "candidate_sha256": "8661a3a5a1988b2d6b3d827aa37a7abeb81c50fffabcc38f8c8476961b425e0c",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "checks": [
+    "Bind actual MainFull BMM closure to the new n=1,p>2 dispatch after unchanged Underflow/Cross. Other n and p routes keep the original implementation.",
+    "Find actual R13N1Prepared output/row/column Fin.foldl specializations, not an unused onePreparedDot helper. A getD/unbox/of_bits must be outside the column loop, once per source row.",
+    "The column specialization should receive fa as an unboxed C float; reject materialization of a per-column Float32 object/closure or lean_apply. Do not mistake outer immutable inputs or output UInt32 immediate tagging for a new fa allocation.",
+    "Each output keeps exactly the original +0 add, one native multiply, nonNaN result guard and original raw replayEarly1 on NaN. There must be no dynamic NativeFinal.dotLoop on the selected ordinary n1 path.",
+    "B follows the original baseB+j getD and conversion. Inspect retained foreign B and result-toBits calls, live-fa spills and zero constant initialization before predicting any saved cycles.",
+    "One final output Array allocation, same row-major pushes and ownership; no row Vector/flatMap, global A map, B pack, F10 or cross-fused component.",
+    "A source-level cache and diagnostic C support mechanism only. Original exact statement/full gates and clean25-round whole comparison still decide correctness and value. Do not transfer f448's old0.66% whole gain or add gains across independent candidates."
+  ],
+  "history": "f448/853 is a close bounded revisit: it had row Vector/flatMap and nativeProduct/raw seed normalization; current8661 has finalArray and original+0/resultguard/raw replay. CurrentDF actual C lacked n1 hoisting/unrolling, per Sol profile-n1-callpath evidence.",
+  "limits": "Statement diagnostic C/objects are distinct from clean timed gate objects. New writer/n1 assembly is unavailable until explicitly captured; old Packed10Index snippets do not validate this path."
+}
