@@ -1,0 +1,24 @@
+{
+  "candidate": "f01-r12-general-panel",
+  "state": "FROZEN_FULL_SOURCE_NOT_RUN",
+  "priority": [
+    "Actual reachable R11WideActual.core and its generated fold/callback specializations; do not substitute inactive generic wrappers",
+    "Panel4.wordLoop actual reachable variant",
+    "Panel4.packA callback and Panel4.block preparation/callback ownership",
+    "Actual local-tail and normal-fallback callers of the rewritten RowStream.group/row"
+  ],
+  "C_first": [
+    "Panel branch has only global packedB, no global A.map; original fallback map remains intentionally reachable on other dispatch branches",
+    "One packA per complete four-row block, shared across every column group; returned F40 contains no panel pointer",
+    "One local tail array for remaining zero to three rows; numericBase and rawFinish A/B addresses remain different",
+    "No Float32 function-valued reader per MAC and no per-output Float32 boxing; hread is erased Prop",
+    "Normal fallback still uses numericBase=rawRow*n without an extra higher-order adapter"
+  ],
+  "assembly_second": "Choose the actual generated symbols from the C/nm call graph under the existing budget. Check hotloop direct F4 load, SIMD, spills/calls; distinguish preparation/ABI/terminal saves. Missing actual caller assembly remains UNKNOWN.",
+  "prior_knowledge": "Completed901/902/904/914/916 plans gave32.6–52.2 percent ofBMM MACs in full4rowblocks, not time shares; m%4=0 narrowing lost most opportunity. Currentgeneral design keepsalltails. No futureholdout read.",
+  "whole_cost": "F4 packet preparation still hasfour ofBits plusarray/callback/allocation cost. G=1 casesmay notamortize it; a faster MACloop alone is insufficient. Fullgate cleancomparison decides, no shape/width grid.",
+  "operations": "Request only; Root alone owns CI/helper changes. No R dispatch or capture-helper mutation.",
+  "candidate_sha256": "a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe",
+  "candidate_bytes": 255559,
+  "previous_dryrun_sha256": "b29eccae9c701e46630f506822d29f8c3fbd9722ad603cd961db3a2d64c28d1b"
+}
