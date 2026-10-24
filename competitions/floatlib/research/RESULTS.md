@@ -2,7 +2,7 @@
 
 截至 2026-10-24，保留 R1–R6 归档与后续精确源码验收。四项性能与冠军见[看板](../../../dashboard.md)，当前保留版本及研究候选见[开发状态](../coordination/development-status.json)。
 
-**已建立原生算术、精确解码、有序累加、机器字索引及矩阵按行输出的证明链；后续按“耗时占比 × 可实现降耗”，结合开发和验证成本选择具体路线。** 当前保留[R8完整包41](../candidates/f01-r8-combined-result-guard/Kernel.lean)；R10[按行寻址a066](../candidates/f01-d10-bmm-direct-rows/Kernel.lean)完成三组不同输入，作为看板研究首选，尚未达到本轮三组逐一3%的采纳门槛。[R10精确结果](../candidates/f01-d7-research/round2h-20261023T170031Z/README.md)。下表K仍固定指8eb原件，历史证明与失败保持原版。尚未取代冠军，旧份额与冠军倍数不跨suite继承；适用范围见[套件变更](../docs/suite-transition-20261022.md)。
+**已建立原生算术、精确解码、有序累加、机器字索引、连续矩阵输出和独立点积链的证明链；后续按“耗时占比 × 可实现降耗”，结合开发和验证成本选择具体路线。** 当前采用[R11组合6c2d](../candidates/f01-d11-bmm-combined-classifier/Kernel.lean)，首个干净发现组及冻结后两组新输入均通过原版完整gate与采纳门槛，[三组精确结果](../candidates/f01-d7-research/round7h-20261023T193125Z/three-group-receipt.json)保留全部证据。旧41与R10按行寻址a066保留为历史对照，下表K仍固定指8eb原件；历史证明与失败保持原版。尚未取代冠军，旧份额与冠军倍数不跨suite继承；适用范围见[套件变更](../docs/suite-transition-20261022.md)。
 
 | 运算 | 已可复用的结论 | 当前使用方式 |
 |---|---|---|

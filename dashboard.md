@@ -4,11 +4,11 @@
 
 | 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时（预估） | 验证 |
 | --- | --- | --- | ---: | --- |
-| 加法 add | [#285](https://conjectures.io/v1/competitions/floatlib/submissions/285) | [原生结果守卫](competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean) | **约 1.14×** | 完整通过3次 |
-| 乘法 mul | #285 | [结果守卫＋低位回退](competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean) | **约 1.24×** | 完整通过3次 |
-| 求和 sum | #285 | [单遍有序求和](competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean) | **约 1.13×** | 完整通过3次 |
-| 矩阵乘法 bmm | #285 | [按行寻址](competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean) | **约 3.32×** | 完整通过3次 |
+| 加法 add | [#285](https://conjectures.io/v1/competitions/floatlib/submissions/285) | [原生结果守卫](competitions/floatlib/candidates/f01-d11-bmm-combined-classifier/Kernel.lean) | **约 1.14×** | 完整通过6次 |
+| 乘法 mul | #285 | [结果守卫＋低位回退](competitions/floatlib/candidates/f01-d11-bmm-combined-classifier/Kernel.lean) | **约 1.24×** | 完整通过6次 |
+| 求和 sum | #285 | [单遍有序求和](competitions/floatlib/candidates/f01-d11-bmm-combined-classifier/Kernel.lean) | **约 1.13×** | 完整通过6次 |
+| 矩阵乘法 bmm | #285 | [跨行计算＋连续输出](competitions/floatlib/candidates/f01-d11-bmm-combined-classifier/Kernel.lean) | **约 2.64×** | 完整通过6次 |
 
-整包预估耗时：冠军的 **约 1.47×**。
+整包预估耗时：冠军的 **约 1.39×**。
 
-**结论：预估暂不能取代#285；主要差距在矩阵乘法（约3.32倍耗时）。** [计算依据](competitions/floatlib/candidates/f01-d7-research/round2h-20261023T170031Z/best-research-champion-estimate.json)
+**结论：预估暂不能取代#285；主要差距在矩阵乘法（约2.64倍耗时）。** [计算依据](competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json)
