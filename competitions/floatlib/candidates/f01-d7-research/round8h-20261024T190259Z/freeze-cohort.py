@@ -42,7 +42,7 @@ def main():
     a = ap.parse_args()
     read = lambda p: json.loads(p.read_bytes())
     digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
-    spec = importlib.util.spec_from_file_location('r14_cohort_guard', D7/'adoption-guard.py')
+    spec = importlib.util.spec_from_file_location('r14_cohort_guard', HERE/'adoption-guard.py')
     g = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(g)
     state = read(ROOT/'competitions/floatlib/coordination/development-status.json')

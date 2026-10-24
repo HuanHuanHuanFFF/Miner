@@ -48,7 +48,7 @@ assert args.capture_assembly_focus == 'scalar' or args.capture_mainfull, 'BMM fo
 assert not args.capture_codegen or args.role == 'DISCOVERY'
 assert not args.statement_only or args.role == 'STATEMENT_DIAGNOSTIC'
 assert args.role != 'FROZEN_INDEPENDENT_CONFIRMATION' or (args.prior_run and not args.capture_codegen and not args.statement_only)
-spec = importlib.util.spec_from_file_location('unchanged_adoption_guard', D7/'adoption-guard.py')
+spec = importlib.util.spec_from_file_location('unchanged_adoption_guard', OUT/'adoption-guard.py')
 guard = importlib.util.module_from_spec(spec); spec.loader.exec_module(guard)
 digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 read = lambda p: json.loads(p.read_text(encoding='utf-8'))
@@ -128,7 +128,7 @@ if args.capture_mainfull:
         'legacy_sha256':digest(legacy),'assembly_focus':args.capture_assembly_focus,
         'purpose':'Original statement-event static capture; observer diagnostic, never clean D.'}
     for p in (helper,legacy):files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
-for p in [D7/'public-suite.py',D7/'adoption-guard.py',ROOT/'competitions/floatlib/pins.json',ROOT/'competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-ci.py']:
+for p in [D7/'public-suite.py',OUT/'adoption-guard.py',ROOT/'competitions/floatlib/pins.json',ROOT/'competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-ci.py']:
     files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
 for p in [OUT/'round-plan.json',Path(__file__).resolve()]:
     files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}

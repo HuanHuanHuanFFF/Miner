@@ -37,7 +37,7 @@ def canonical_sha(value):
 
 
 def import_guard():
-    spec = importlib.util.spec_from_file_location("r14_unchanged_adoption_guard", OWN / "adoption-guard.py")
+    spec = importlib.util.spec_from_file_location("r14_unchanged_adoption_guard", HERE / "adoption-guard.py")
     guard = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(guard)
     return guard

@@ -10,6 +10,7 @@ import re
 
 EXECUTION_FILES = (
     '.github/workflows/deflate-baseline.yml',
+    '.github/workflows/floatlib-validate.yml',
     'competitions/floatlib/pins.json',
     'competitions/floatlib/scripts/ci-prepare.sh',
     'competitions/floatlib/scripts/ci-setup.sh',
@@ -22,7 +23,7 @@ EXECUTION_FILES = (
     'competitions/floatlib/candidates/f01-d7-research/public-suite.py',
 )
 LOCAL_REVIEW_FILES = (
-    'round-plan.json', 'selection-policy.json', 'prepare-plan.py',
+    'round-plan.json', 'selection-policy.json', 'prepare-plan.py', 'adoption-guard.py',
     'freeze-cohort.py', 'verify-three-groups.py', 'adopt-three-confirmed.py',
     'summarize-run.py', 'execution-binding.py',
     'refresh-retained-metadata.py',
