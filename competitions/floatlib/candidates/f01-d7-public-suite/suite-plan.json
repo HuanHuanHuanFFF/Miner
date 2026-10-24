@@ -1,15 +1,29 @@
 {
-  "seed": 1224015,
+  "seed": 1224016,
   "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
   "suite": "suites/public-v2.json",
   "dispatch_state": "READY",
   "publication_state": "AUTHORIZED_R12_PUBLIC_DEVELOPMENT_VALIDATION",
   "candidates": [
     {
+      "candidate": "f01-r8-combined-result-guard",
+      "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7",
+      "capture_codegen": false
+    },
+    {
+      "candidate": "f01-d11-bmm-combined-classifier",
+      "sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+      "capture_codegen": false
+    },
+    {
+      "candidate": "f01-d12-scalar-combined",
+      "sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+      "capture_codegen": false
+    },
+    {
       "candidate": "f01-r12-column4-narrow",
       "sha256": "da09fb59fa456b498af6bde48d54adcd37f85c4ba7df272163b184a2b83038c4",
-      "capture_codegen": false,
-      "validation_mode": "statement-only"
+      "capture_codegen": true
     }
   ],
   "comparison_baseline": "f01-d11-bmm-combined-classifier",
@@ -25,7 +39,18 @@
     "round_statistic": "median(submission_ns/incumbent_ns)",
     "resampling": "independent gates with paired reference/submission rounds"
   },
-  "sample_role": "STATEMENT_DIAGNOSTIC",
+  "sample_role": "DISCOVERY",
   "purpose": "R12 complete-cost architecture experiment; exact source and original public-v2 gates. No official champion or formal admission claim.",
-  "estimator_control": "f01-r8-combined-result-guard"
+  "estimator_control": "f01-r8-combined-result-guard",
+  "r12_mainfull_capture": {
+    "round": "R12-20261024T051445Z",
+    "candidates": [
+      "f01-r12-column4-narrow"
+    ],
+    "module": "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/capture-mainfull.py",
+    "module_sha256": "76ef3176ca1c91026d3c0d9109e40944b541d11aa9e6caa5873cf3ff82ee98cf",
+    "legacy_sha256": "fd17f35a4ef1bc1b1df2afe5fcfe39691d88e7e605968acbe3c38df09df9078b",
+    "assembly_focus": "bmm",
+    "purpose": "Original statement-event static capture; observer diagnostic, never clean D."
+  }
 }

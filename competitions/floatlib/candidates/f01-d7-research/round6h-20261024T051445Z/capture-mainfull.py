@@ -146,6 +146,32 @@ def bmm_core_symbol_info(name):
                          int(match.group(2)) if match.group(2) is not None else -1, name)}
 
 
+def column4_symbol_info(name):
+    """Exact source-owned families; emission is UNKNOWN until actual C/nm."""
+    variant = r'(?:___redArg)?(?:___lam__[0-9]+(?:___redArg)?)?'
+    fold = re.fullmatch(
+        r'(?:lp_competition_Fin_foldl_loop|lp(?:_competition_)?__private_[A-Za-z0-9_]+__Fin_foldl_loop)'
+        r'___at___00Submission_Narrow4_core_spec__([0-9]+)' + variant, name)
+    if fold:
+        return {'priority': -8, 'family': 'Narrow4_actual_fold',
+                'sort_key': (-8, '___lam__' not in name, int(fold.group(1)), name)}
+    if re.fullmatch(r'lp_competition_Submission_Packed4Index_loop(?:___redArg)?', name):
+        return {'priority': -7, 'family': 'Packed4_hot_loop', 'sort_key': (-7, '___redArg' not in name, name)}
+    pack = re.fullmatch(r'lp_competition_Submission_Packed4_packB' + variant, name)
+    of_fn = re.fullmatch(
+        r'(?:lp_competition_(?:Array|Vector)_ofFn(?:MUnsafe_go)?|'
+        r'lp(?:_competition_)?__private_[A-Za-z0-9_]+__(?:Array|Vector)_ofFn(?:MUnsafe_go)?)'
+        r'___at___00Submission_Packed4_packB_spec__[0-9]+' + variant, name)
+    if pack or of_fn:
+        return {'priority': -6, 'family': 'Packed4_packB',
+                'sort_key': (-6, not ('___lam__' in name or of_fn is not None), '___redArg' not in name, name)}
+    if name == 'lp_competition_Submission_Packed10Index_loop___redArg':
+        return {'priority': -5, 'family': 'Packed10_same_object_control', 'sort_key': (-5, name)}
+    if re.fullmatch(r'lp_competition_Submission_(?:Narrow4_(?:core|output|row)|Packed4Index_(?:runDot|within))' + variant, name):
+        return {'priority': -4, 'family': 'Narrow4_reachable_helpers', 'sort_key': (-4, '___redArg' not in name, name)}
+    return None
+
+
 def assembly_focus_config(m, env, kernel):
     """Read the frozen request once, before launching the original gate."""
     result = {'state': 'DEFAULT_SCALAR', 'assembly_focus': 'scalar', 'plan_path': None}
@@ -180,7 +206,7 @@ def _disassemble(m, staged, folder, deadline, record):
         result['error'] = 'Invalid assembly focus isolated from original gate: ' + str(config.get('error', focus))
         return result
     if focus == 'bmm':
-        result['selection_basis'] = 'Observed Fin.foldl R11WideActual.core specializations/producers first; then exact Panel4 hot/prepare/block stems; then remaining Submission fd17 order and MainFull/BenchSuite. Complete actual C still retained.'
+        result['selection_basis'] = 'Narrow4 actual-fold/Packed4 hot/packB source-owned families plus reserved same-object Packed10 control; then observed R11WideActual core/Panel4 and remaining fd17 order. Complete actual C retained; unobserved emission stays UNKNOWN.'
     scans = {}
     for item in record['snapshot']['files']:
         if item.get('kind') == 'c':
@@ -200,13 +226,18 @@ def _disassemble(m, staged, folder, deadline, record):
             continue
         module = obj['module']
         actual = scans.get(module, {})
-        for line in (folder / entry['nm']['artifact']).read_text(encoding='utf-8', errors='replace').splitlines():
+        nm_lines = (folder / entry['nm']['artifact']).read_text(encoding='utf-8', errors='replace').splitlines()
+        has_column4 = any((info := column4_symbol_info(parts[3])) is not None
+            and info['family'] != 'Packed10_same_object_control'
+            for line in nm_lines if len(parts := line.split()) == 4 and parts[2] in 'TtWw')
+        for line in nm_lines:
             fields = line.split()
             if len(fields) != 4 or fields[2] not in 'TtWw':
                 continue
             name = fields[3]
             legacy_info = None
             core_info = None
+            column_info = None
             if module == 'MainFull':
                 wanted = name in actual.get('defined_functions', []) or name in actual.get('closure_targets', [])
                 priority = 1 if '___boxed' in name else 0
@@ -217,16 +248,21 @@ def _disassemble(m, staged, folder, deadline, record):
                 priority = (2 if 'runScalar_spec__' in name else 3) + (1 if '___boxed' in name else 0)
             else:
                 if focus == 'bmm':
-                    core_info = bmm_core_symbol_info(name)
-                    legacy_info = m._symbol_info(name) if core_info is None else None
-                    wanted = core_info is not None or legacy_info is not None
-                    priority = core_info['priority'] if core_info is not None else legacy_info['priority'] if wanted else 0
+                    column_info = column4_symbol_info(name)
+                    if column_info is not None and column_info['family'] == 'Packed10_same_object_control' and not has_column4:
+                        column_info = None
+                    core_info = bmm_core_symbol_info(name) if column_info is None else None
+                    legacy_info = m._symbol_info(name) if column_info is None and core_info is None else None
+                    wanted = column_info is not None or core_info is not None or legacy_info is not None
+                    priority = column_info['priority'] if column_info is not None else core_info['priority'] if core_info is not None else legacy_info['priority'] if wanted else 0
                 else:
                     wanted = bool(re.fullmatch(r'lp_competition_Submission_(?:add|mul|nativeMul)(?:___[A-Za-z0-9_]+)?', name))
                     priority = 6 if '___boxed' in name else 5
             if wanted:
                 entry['matching_symbols'] += 1
-                if focus == 'bmm' and core_info is not None:
+                if focus == 'bmm' and column_info is not None:
+                    key = (*column_info['sort_key'], index)
+                elif focus == 'bmm' and core_info is not None:
                     key = (-3, *core_info['sort_key'], index)
                 elif focus == 'bmm' and legacy_info is not None:
                     panel = legacy_info['stem'] in ('Panel4_wordLoop', 'Panel4_packA', 'Panel4_block', 'Panel4_runDot')
@@ -237,6 +273,17 @@ def _disassemble(m, staged, folder, deadline, record):
                         key = (1, *key)
                 queue.append((key, priority, name, index, private, entry, fields[0], fields[1]))
     queue.sort(key=lambda row: row[0])
+    if focus == 'bmm':
+        # Reserve at most one existing same-object comparator even when a new
+        # writer emits many specializations. No extra symbol/tool budget.
+        owners = {row[3] for row in queue if (info := column4_symbol_info(row[2])) is not None
+                  and info['family'] not in ('Packed10_same_object_control',)}
+        control = next((row for row in queue if row[2] == 'lp_competition_Submission_Packed10Index_loop___redArg'
+                        and row[3] in owners), None)
+        if control is not None:
+            queue.remove(control);queue.insert(min(MAX_SYMBOLS-1, len(queue)), control)
+            result['same_object_comparison_reserved'] = {'symbol': control[2], 'object_index': control[3],
+                                                         'assembly_slot_maximum': MAX_SYMBOLS}
     complete = result['nm_inventory_complete']
     for key, priority, name, index, private, entry, address, size in queue:
         if result['selected_symbols'] >= MAX_SYMBOLS or time.monotonic() >= deadline:

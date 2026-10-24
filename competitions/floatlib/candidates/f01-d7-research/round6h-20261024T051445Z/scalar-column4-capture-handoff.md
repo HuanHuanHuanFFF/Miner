@@ -1,0 +1,9 @@
+# Column4 source-family capture extension
+
+New helper SHA `76ef3176ca1c91026d3c0d9109e40944b541d11aa9e6caa5873cf3ff82ee98cf`. Original c124 helper/runHEAD and all earlier receipts remain preserved in Git. This changes only BMM post-gate selection; scalar ordering, exact fd17 bytes, MAX20, original30-second postprocessing deadline, snapshot/argv/timeout/once-only execution and private-object cleanup are unchanged.
+
+The new exact-boundary families are Fin.foldl→Narrow4.core specializations/producers, Packed4Index.loop computational/redArg bodies, Packed4.packB closure lambdas and owned Array/Vector.ofFn specializations, then reachable Narrow4/Packed4Index helpers. Names are anchored to exact owner/function boundaries and exclude boxed or near-match suffixes. One Packed10Index.loop redArg symbol, when present in the same Submission object as Column4 paths, receives a reserved slot within the unchanged20-symbol cap. The comparator is not promoted in an object with no recognized Column4 family, preserving prior-family ordering.
+
+These families were derived from `astra-column4-assets.lean`, `astra-column4-writer.lean` and the explicit capture-needs request. Narrow4 actual C/nm has not yet been observed. New owner-boundary and slot-reservation tests are explicitly SYNTHETIC, never machine evidence. After015 statement replay, actual emitted names must be checked before using the selector for016 full capture. Complete original C is retained even when assembly selection is PARTIAL or an unanticipated family name remains UNKNOWN.
+
+`scalar-column4-capture-tests.json` is the new-version receipt: original5 observer checks, prior3 focus checks, real saved1224003 core regression and2 synthetic Column4 cases. It binds helper/legacy/test/assets/writer/needs SHA values before and after execution and saves exact raw stdout/stderr and actual process exit codes. No candidate, dispatcher, prepare/state, Git or CI operation is performed by these tests.
