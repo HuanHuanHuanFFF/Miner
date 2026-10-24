@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import re
 import uuid
+import base64
 
 
 def save_state_atomic(path, value, expected):
@@ -50,12 +51,28 @@ guard = importlib.util.module_from_spec(spec); spec.loader.exec_module(guard)
 digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 read = lambda p: json.loads(p.read_text(encoding='utf-8'))
 save = lambda p,x: p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+
+def canonicalize_manifest(path):
+    """Generated metadata uses Git's declared LF; preserve original bytes first."""
+    raw=path.read_bytes();canonical=raw.replace(b'\r\n',b'\n')
+    if raw==canonical:return
+    assert json.loads(raw)==json.loads(canonical)
+    folder=OUT/'metadata-eol-receipts';folder.mkdir(exist_ok=True)
+    original_sha=hashlib.sha256(raw).hexdigest()
+    evidence=folder/(path.parent.name+'-'+original_sha[:16]+'.json')
+    if not evidence.exists():
+        value={'recorded_at_utc':datetime.now(timezone.utc).isoformat(),'path':path.relative_to(ROOT).as_posix(),
+               'original_sha256':original_sha,'original_bytes':len(raw),'original_bytes_base64':base64.b64encode(raw).decode(),
+               'git_lf_sha256':hashlib.sha256(canonical).hexdigest(),'git_lf_bytes':len(canonical),
+               'scope':'Generated manifest only; JSON values and all Kernel bytes unchanged. Original raw CI evidence is never normalized.'}
+        with evidence.open('x',encoding='utf-8',newline='\n') as stream:stream.write(json.dumps(value,indent=2)+'\n')
+    path.write_bytes(canonical)
 state_path=ROOT/'competitions/floatlib/coordination/development-status.json'
 state_raw=state_path.read_bytes()
 state=json.loads(state_raw)
 assert state['research_round']['id']=='R12-20261024T051445Z', 'Wrong active round; refuse all writes'
 if args.role != 'STATEMENT_DIAGNOSTIC':
-    assert 'f01-d11-bmm-combined-classifier' in args.candidates, 'A scored comparison needs retained41'
+    assert 'f01-d11-bmm-combined-classifier' in args.candidates, 'A scored comparison needs retained6c'
     assert 'f01-r8-combined-result-guard' in args.candidates, 'A scored comparison needs frozen estimator control41'
 used = []
 for p in (ROOT/'competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs').glob('dispatch-*/dispatch.json'):
@@ -68,6 +85,7 @@ for name in args.candidates:
     assert re.fullmatch(r'f01-[a-z0-9-]+', name)
     folder=ROOT/'competitions/floatlib/candidates'/name
     kernel=folder/'Kernel.lean'; manifest=folder/'manifest.json'
+    canonicalize_manifest(manifest)
     meta=read(manifest)
     assert digest(kernel)==meta['candidate_sha256'] and kernel.stat().st_size==meta['candidate_bytes']<=256000
     row={'candidate':name,'sha256':digest(kernel),'capture_codegen':name in args.capture_codegen}
