@@ -1,4 +1,4 @@
-﻿"""Build DeepSeek dispatch candidates from the retained df5c kernel.
+"""Build DeepSeek dispatch candidates from the retained df5c kernel.
 
 Each candidate changes only a dispatch predicate, so every branch keeps its
 existing full-shape correctness theorem. The script refuses to run unless each
@@ -22,6 +22,7 @@ P2_NEW = "  if h : p=2 ∧ batch*m < 4 ∧ 0<n ∧ n<USize.size ∧"
 CONT_OLD = "  if n ≤ 4 ∧ 2 < p then DirectContinuous.core batch m n p A B"
 CONT_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 2 then DirectContinuous.core batch m n p A B"
 CONT8_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 8 then DirectContinuous.core batch m n p A B"
+CONT16_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 16 then DirectContinuous.core batch m n p A B"
 CONT64_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 64 then DirectContinuous.core batch m n p A B"
 CONTALL_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 1000000 then DirectContinuous.core batch m n p A B"
 
@@ -116,6 +117,17 @@ SPECS = [
         "hypothesis": (
             "If the direct row writer is competitive at every p on the public suite, the packed "
             "preparation and lane padding can be dropped as dead cost."),
+    },
+    {
+        "name": "f01-deepseek-p2contp16",
+        "edits": [(P2_OLD, P2_NEW), (CONT_OLD, CONT16_NEW)],
+        "mechanism": (
+            "Same as p2contp8 but the DirectContinuous guard is widened to `p ≤ 16` instead of "
+            "`p ≤ 8`; p=2 leaves Cross. Tests whether the sparsely occurring p=9..16 cases also "
+            "prefer the direct writer. No other runtime bytes change."),
+        "hypothesis": (
+            "p=9..16 cases carry 4-8% of scored BMM work by seed; if direct wins there too the "
+            "threshold can move without touching larger packed shapes."),
     },
 ]
 
