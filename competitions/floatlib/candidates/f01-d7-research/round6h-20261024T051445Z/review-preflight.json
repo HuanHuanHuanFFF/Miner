@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "review_id": "R12-READONLY-PREFLIGHT-20261024T051445Z",
+  "reviewed_at_utc": "2026-10-24T05:28:26Z",
+  "status": "PREFLIGHT_COMPLETE_ADAPTATION_REQUIRED",
+  "scope": "Read-only audit of R11 round-tool and CI-capture boundaries for R12. No candidate/tool/state/gate edits other than this review pair; no prepare invocation, test run, CI dispatch, adoption, dashboard update, Git action, or codegain claim.",
+  "budget": {
+    "round_start_utc": "2026-10-24T05:14:45Z",
+    "round_deadline_utc": "2026-10-24T11:14:45Z",
+    "preflight_elapsed_minutes_at_write": 13.7,
+    "limit_minutes": 20,
+    "preparation_and_review_counted": true
+  },
+  "workspace_snapshot": {
+    "branch": "codex/multi-track-floatlib",
+    "head": "8bc5d799ba5f20986dddb1921c0d2bedf46cf3a3",
+    "listed_worktrees": ["D:/CodingProject/Bitget"],
+    "preexisting_untracked_research_present": true,
+    "checked_official_paths_have_git_status_entries": false,
+    "round_state": "ACTIVE",
+    "round_state_id": "R12-20261024T051445Z",
+    "round_state_started_ci": [],
+    "round_state_active_ci": [],
+    "round_state_prepared_requests": [],
+    "round_state_sha256_at_review": "19e391bb03a4851ef16844d89a75e5fb96c9eb9c220000445c682ffbf4af2105"
+  },
+  "immutable_round_requirements": {
+    "retained_candidate": {
+      "name": "f01-d11-bmm-combined-classifier",
+      "sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+      "bytes": 254654
+    },
+    "selection_baseline": "f01-d11-bmm-combined-classifier",
+    "selection_baseline_sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+    "estimator_control": {
+      "name": "f01-r8-combined-result-guard",
+      "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+    },
+    "minimum_scored_full_plan_candidates": [
+      "f01-r8-combined-result-guard",
+      "f01-d11-bmm-combined-classifier",
+      "R12 new candidate"
+    ],
+    "selection_policy": {
+      "headline_normalized_ratio_max": 0.97,
+      "gain_p05_min_exclusive": 0.0,
+      "bootstrap_samples": 2000,
+      "bootstrap_seed": 90423,
+      "rounds_per_full_gate": 25,
+      "groups": ["D", "A", "B"],
+      "D": "clean full-gate discovery without observer",
+      "A_B": "two frozen previously unseen input groups; no observer",
+      "all_three_groups_must_pass": true
+    },
+    "runner_and_scope": {
+      "allow_private": false,
+      "max_parallel_public_ci": 2,
+      "original_contract_gate_bench_pins_reference_unchanged": true,
+      "formal_upload_funds_registration_merge": false
+    },
+    "estimate_model": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json",
+      "sha256": "da02d4370ddf4ff28419ceda1a86a2d1dde5a81838f09d2540e705b30fe3b1d1",
+      "retained_freeze": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/retained-estimate-freeze.json",
+      "retained_freeze_sha256": "814ec16544fc25d175d02207683d12f0ad6b903c0b69b6200f11fd67c2df3a1d",
+      "anchor_sha256": "d7bcc98f3e78a3971e88a53f1fcf6e514c83c80c3ea9d583178e09577ed1cfbc",
+      "estimator_sha256": "fe926204104484d1fc62bf06eb57666c0f3673829664f283c9c813497bf46983",
+      "retained_model_candidate_sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+      "retained_model_champion_submission": 285,
+      "retained_model_champion_digest": "a1e99008577119824464154be5ec52dd390fc1e429b8f85b6ea73315e7103082",
+      "no_recalibration_of_current_6c2d_model": true,
+      "reason": "estimate_champion_time.py requires an exact same-runner 41 anchor baseline for each new-source full gate; 41 is an estimator control, not the R12 score baseline. Existing 6c2d values remain frozen for the same source/champion."
+    }
+  },
+  "official_freshness": {
+    "owner_supplied_2026_10_24T0521Z_observation": {
+      "champion": 285,
+      "official_head_prefix": "4b7e8384",
+      "public_suite_sha256_prefix": "a16494e9",
+      "independently_read_by_reviewer": false,
+      "receipt_reported_by_root": "competitions/floatlib/candidates/f01-d7-research/official-20261024T052105Z"
+    },
+    "local_pointer_at_review": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/current-official-snapshot.json",
+      "queried_at_utc": "2026-10-24T02:23:20.469997+00:00",
+      "champion": 285,
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "policy_snapshot": "759",
+      "sha256": "3fc21cedf418a752fa0dedcdc552e367db1a4389582de0570071ff5112263a12",
+      "fresh_for_R12_0521_check": false
+    },
+    "state_pointer_at_review": "official_refresh=PENDING",
+    "action_owner": "Root only; bind original 05:21 receipt and refresh pointer/state without recalibrating the frozen 6c2d model"
+  },
+  "migration": [
+    {
+      "component": "prepare-plan.py",
+      "r11_interface_constraints": ["round ID R11", "requires candidate f01-r8", "comparison_baseline=f01-r8", "hard-coded 41 SHA", "writes shared suite-plan and development-status"],
+      "r12_minimal_change": ["load R12 round-plan and selection-policy as the authority", "validate baseline 6c2d and control 41 exact names/SHA separately", "all scored full plans contain new+6c2d+41", "comparison_baseline is 6c2d; estimator_control is 41", "use R12 authorization label and local request/freeze paths", "only Root updates shared plan/state pointers"],
+      "reviewer_invocation": "prohibited by assigned read-only scope"
+    },
+    {
+      "component": "freeze-cohort.py",
+      "r11_interface_constraints": ["imports final-choice.py", "fixed D933 decision", "baseline is 41", "loads only candidate+41"],
+      "r12_minimal_change": ["remove final-choice/D933 dependency", "freeze first clean qualifying D vs 6c2d", "freeze exact source hashes and orders for new+6c2d+41", "freeze two unused unseen seeds and each confirmation order", "reject any capture/profile/observer for clean D"],
+      "r11_selection_artifacts_not_reusable": ["final-choice.py", "final-selection-predeclared.json", "final-selection-receipt.json"]
+    },
+    {
+      "component": "verify-three-groups.py",
+      "r11_interface_constraints": ["BASELINE_SHA/name hard-coded to 41", "selection-policy baseline points to 41", "synthetic fixture contains two sources"],
+      "r12_minimal_change": ["score candidate vs exact 6c2d", "independently require 41 exact full gate in every D/A/B run", "validate all three candidate sources and full plan order", "retain unchanged threshold, 25 rounds, 2000 bootstrap, suite/verifier/run/head/input diversity and negative rows", "treat any capture flag as diagnostic even if no capture artifact was produced"]
+    },
+    {
+      "component": "adopt-three-confirmed.py",
+      "r11_interface_constraints": ["BASELINE and pre-write current-state requirement are 41"],
+      "r12_minimal_change": ["current retained source and score baseline are 6c2d", "41 remains the estimator anchor/control only", "adoption requires all D/A/B candidate-vs-6c2d gates accepted", "estimate refresh only for an adopted new source using same-runner 41 rows and frozen anchor rules", "Root alone performs adoption and state/dashboard/model writes"]
+    },
+    {
+      "component": "execution-binding.py",
+      "r11_interface_constraints": ["local freeze list binds R11 final-choice artifacts", "execution list predates R12 post-MainFull hook"],
+      "r12_minimal_change": ["bind R12 round plan/policy and current R12 tools", "bind candidate/6c2d/41 sources and manifests", "bind retained estimate freeze/model/anchor/estimator", "add exact post-MainFull wrapper and object extractor to run-HEAD execution list", "verify every run from immutable commit-tree blobs"]
+    },
+    {
+      "component": "sync-ci-state.py",
+      "r11_interface_constraints": ["round ID R11", "reads R11 plan glob", "writes shared development status"],
+      "r12_minimal_change": ["scope reads to R12 plans/receipts", "preserve duplicate seed/run, immutable source, allow_private=false, artifact byte/hash, terminal state and max-concurrency checks", "record planned and observed capture_codegen state", "never label a captured diagnostic run clean D", "Root only updates shared state"]
+    },
+    {
+      "component": "summarize-run.py",
+      "r11_interface_constraints": ["default score baseline is 41", "single comparison baseline"],
+      "r12_minimal_change": ["score baseline default is 6c2d", "report same-run 41 separately as estimator_control", "keep exact 25-round/2000 bootstrap and workload-weighted class reporting", "do not rewrite current 6c2d numerical model"]
+    }
+  ],
+  "post_mainfull_capture_boundary": {
+    "r11_observed_design": "public-suite.py calls capture-codegen.py around the original gate when capture_codegen is requested. R11 observer copies actual generated outputs during the successful [statement] event while transient upper exists; gate finally removes upper on return; nm/objdump analysis is post-process.",
+    "correct_two_phase_requirement": {
+      "phase_1": "During the original [statement] success event, after MainFull build output exists and before gate.finally wipes transient upper, bounded read-only copy of the actual last candidate's MainFull/Submission/BenchSuite C/object from this same execution.",
+      "phase_2": "After the original full gate and all 25 timed rounds finish, run nm/objdump only on the copied private evidence. Never re-run or recompile the gate; do not change original exit/verdict/timing fields.",
+      "source_object_identity": "Bind actual last candidate name/order, Kernel SHA from run input/commit, transient object path, copied object SHA, source commit/run, and collector SHA.",
+      "classification": "Every diagnostic plan sets capture_codegen=true. This flag alone disqualifies clean D even if copy/analysis fails. Later D/A/B confirmation runs have no observer/profile/capture.",
+      "measurement_limit": "The in-run bounded copy may perturb CPU/cache; captured run is diagnostic and cannot count as clean D or independent confirmation. Its full gate/timing remains raw evidence with observer caveat.",
+      "failures": "Missing object, timeout, source/object mismatch, or optional tool failure remains UNKNOWN/failure evidence; never convert it to clean or alter the official verdict."
+    },
+    "old_test_boundary": "test_outer_diagnostic_capture.py covers the older embedded statement/diagnostic path and does not by itself establish the two-phase MainFull lifecycle. f01-word-tensors/ci-diagnostics.py labels its built object as diagnostic replay, not the original timed gate object.",
+    "required_regressions": ["copy on correct [statement] event before wipe", "post-25-round nm/objdump on private copy only", "exact final candidate source/object binding", "mismatch/missing capture fails closed", "capture_codegen diagnostic cannot be clean D even on capture failure", "A/B observer-free", "capture failures preserve gate exit/verdict/timing bytes"]
+  },
+  "invalidated_or_retargeted_fixtures": [
+    {"file":"round7h-20261023T193125Z/test_final_choice.py", "action":"Replace; R11 D933/final-choice logic is inapplicable."},
+    {"file":"round7h-20261023T193125Z/test_verify_three_groups.py", "action":"Retarget; old baseline41/two-source fixture becomes new+6c2d+41."},
+    {"file":"round7h-20261023T193125Z/test_adopt_three_confirmed.py", "action":"Retarget; initial state/view baseline changes from 41 to 6c2d while 41 remains estimator control."},
+    {"file":"round7h-20261023T193125Z/test_outer_diagnostic_capture.py", "action":"Extend/replace relevant fixture coverage for two-phase MainFull capture, pre-wipe copy, post-timing analysis and observer classification."},
+    {"file":"round7h-20261023T193125Z/test_prepare_state_atomic.py", "action":"Generic CAS/rollback cases may be reused, but R12 round IDs/paths change and Root owns state writes."}
+  ],
+  "verification_performed": {
+    "read": ["root AGENTS.md", "FloatLib README and track rules", "pins.json", "HANDOFF.md", "R12 round-plan/selection-policy", "R11 round README/results and tool/test source"],
+    "static_code_review": true,
+    "tests_run": false,
+    "tools_executed": false,
+    "ci_dispatched": false,
+    "candidate_changed": false,
+    "official_contract_gate_bench_pins_reference_changed": false,
+    "performance_or_codegain_claim": false
+  },
+  "source_hashes": {
+    "AGENTS.md": {"bytes": 6746, "sha256": "b14101e8986ec707347ca68dee24fe87a657c3dc6e46573773711321dc176cc6"},
+    "competitions/floatlib/README.md": {"bytes": 2572, "sha256": "a754090e39407590f027135ea48fee7dbcb20e74fc62b4fa2013e7853f5af7c1"},
+    "competitions/floatlib/docs/track-rules.md": {"bytes": 2685, "sha256": "882b9bb84a5815037b51042688eeb7629155a52048b89dd9140901dbb5295a7c"},
+    "competitions/floatlib/docs/suite-transition-20261022.md": {"bytes": 2808, "sha256": "0a32c2b3461fd7675a6299d25acbaeaf8b28c68b256b7aa83f98663afc7c6d7e"},
+    "competitions/floatlib/pins.json": {"bytes": 397, "sha256": "bcaeb4a553beaa9ccfdf7d3566cfdb390faf6eae381ff6ba2bb6957570489107"},
+    "competitions/floatlib/coordination/HANDOFF.md": {"bytes": 3671, "sha256": "f146529f7acf6705feab3238cd8f62b06ea2aee7c3fe5d02b9f06267d8d7be16"},
+    "competitions/floatlib/coordination/development-status.json": {"bytes": 1509747, "sha256": "19e391bb03a4851ef16844d89a75e5fb96c9eb9c220000445c682ffbf4af2105"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/README.md": {"bytes": 574, "sha256": "aebe59aa4db4d2208cadc54f94efcf0e862e4d3e0087648695feea0f32833400"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/round-plan.json": {"bytes": 3086, "sha256": "3d4ecbae17ae0758609d086efe56f41057c2a394279449d81b6adb76da58e34c"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/selection-policy.json": {"bytes": 1157, "sha256": "c28735853ef71842d1bdd69e074585aa7923f79f644783572675f430082e49f2"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/README.md": {"bytes": 8303, "sha256": "65d11dbacdcd6dbc2fc93de72eb011b3a884df8ebe2bf1b97f99cee0fc8a26e0"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/round-plan.json": {"bytes": 2792, "sha256": "be5f4c87722d5b54593ed16e558fad29af74d9bb69ccc8207b9e2aaef0fbc105"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/round-results.json": {"bytes": 2634, "sha256": "a02dbb634b383df0da7073600b7286834762629cf2cbfdfc973d5e957c8c2a47"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/selection-policy.json": {"bytes": 1017, "sha256": "316a59f62540cdc28e8f2b68c725a981d5cd6843c243b8562f8262a75aeae731"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/prepare-plan.py": {"bytes": 8214, "sha256": "9d66505dc3b33bc17ec39727a86c54c0e8b89a290ff28e7a623616a5c3028ac5"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/freeze-cohort.py": {"bytes": 6308, "sha256": "24ccacd0ae90ef1f38448e9ccd01d605a5627db5d82a8f519755b2f61d59e30e"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/verify-three-groups.py": {"bytes": 19198, "sha256": "84b7c319d81cefca2183ef6cf83d805153757d4a83dd15fbda480819485af41a"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/adopt-three-confirmed.py": {"bytes": 20507, "sha256": "698c98364ce28cfc030182f9490f227d744415afcbb29a416baf626594d56ebc"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/execution-binding.py": {"bytes": 3382, "sha256": "8783d5a85097c6457757093b66951a1ebdb7ed706a02ee298d4294e53285b212"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/sync-ci-state.py": {"bytes": 6666, "sha256": "27cfd9a56945b196ca46e374a37528b75c1c3d0644244c389f48370a178a78da"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/summarize-run.py": {"bytes": 3094, "sha256": "efd1337eba52b04b8c798a818384d6db73305fd9efe6c0ad30221c7a1626ba50"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/test_verify_three_groups.py": {"bytes": 18966, "sha256": "01fafd7f0595592b13cda7178573ea904cae95f6a5266d15441fedcc1d0fdce0"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/test_adopt_three_confirmed.py": {"bytes": 14389, "sha256": "fbee5cb2d4692520edac3c2cda17d2c39d381c982ad6f74dfe0c52e0bbe0df0d"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/test_final_choice.py": {"bytes": 1283, "sha256": "c8e82fedd49e381c24b3588ac02f758deb7bad87b22de03e848366de006eaa33"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/test_outer_diagnostic_capture.py": {"bytes": 8374, "sha256": "ac81e845f6aaa90a42081d075278e942f6c3945f689a41c5201dc6f0a01d831c"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/test_prepare_state_atomic.py": {"bytes": 2291, "sha256": "4d34600e79ac2ee4f0ac77d583ac026232e2572ad8ec7ad651fe70090667e20d"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/final-choice.py": {"bytes": 6047, "sha256": "1014685a7130ec9c6aae3ef78eaf6f2dcccca9f466792d58db73056f47402c0f"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/final-selection-predeclared.json": {"bytes": 1107, "sha256": "7b6310569f39a0fed4d71331b0b28abe8899537608773b73c22b214a5605c38b"},
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/retained-estimate-freeze.json": {"bytes": 1514, "sha256": "814ec16544fc25d175d02207683d12f0ad6b903c0b69b6200f11fd67c2df3a1d"},
+    "competitions/floatlib/candidates/f01-d7-research/adoption-guard.py": {"bytes": 14417, "sha256": "b009d7b2f2161d756584013ebfc8adea3d2373ddac04c08a4602eb53e4c7a0b2"},
+    "competitions/floatlib/candidates/f01-d7-research/public-suite.py": {"bytes": 11220, "sha256": "86084d93c52022f4f4a5cfb7969e2b4a035b9a4a4f1f8c6c7e74bd412eafca24"},
+    "competitions/floatlib/candidates/f01-d7-research/capture-codegen.py": {"bytes": 55630, "sha256": "fd17f35a4ef1bc1b1df2afe5fcfe39691d88e7e605968acbe3c38df09df9078b"},
+    "competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py": {"bytes": 9471, "sha256": "519a1898fd95b4c2482ab8ff5fbbfe1fd131e47a02f10706ec02dad3bb165904"},
+    "competitions/floatlib/scripts/estimate_champion_time.py": {"bytes": 20489, "sha256": "fe926204104484d1fc62bf06eb57666c0f3673829664f283c9c813497bf46983"},
+    "competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json": {"bytes": 59091, "sha256": "da02d4370ddf4ff28419ceda1a86a2d1dde5a81838f09d2540e705b30fe3b1d1"},
+    "competitions/floatlib/candidates/f01-d7-research/round2h-20261023T170031Z/freeze-anchor.json": {"bytes": 97283, "sha256": "d7bcc98f3e78a3971e88a53f1fcf6e514c83c80c3ea9d583178e09577ed1cfbc"},
+    "competitions/floatlib/candidates/f01-d7-research/current-official-snapshot.json": {"bytes": 222, "sha256": "3fc21cedf418a752fa0dedcdc552e367db1a4389582de0570071ff5112263a12"},
+    ".github/workflows/deflate-baseline.yml": {"bytes": 4764, "sha256": "c0925ea63a1cce2172c38e11dda1962c9a725c0da64b15965f2abbd725c81b13"},
+    "competitions/floatlib/scripts/ci-prepare.sh": {"bytes": 2624, "sha256": "05baa18d5b6f0ff3d7f87badbc10d0847a55822b6fadfd43c60a8b5d21f37f10"},
+    "competitions/floatlib/scripts/ci-setup.sh": {"bytes": 892, "sha256": "d6c47cb7a7ff81b1a466c0db410d70616aa6664ce1693945319fdff772d1f1d0"},
+    "competitions/floatlib/scripts/ci-validate.sh": {"bytes": 206, "sha256": "8a29e43a9a613997f83a8ea9ca41d87a4d6c39c6bf337cac9cdb929142a5aa47"},
+    "competitions/floatlib/scripts/run-gates.py": {"bytes": 7789, "sha256": "0e076f17ebff9fd97e557cae89866f2b615fe3f68314b26cbca0ec51a30df9d0"},
+    "competitions/floatlib/candidates/f01-mul-log2-proof1/ci.py": {"bytes": 9080, "sha256": "1c91f974dadb9381d66a2503935fc3e0d7ec6183e960330abafcb12a4ec150c7"},
+    "competitions/floatlib/candidates/f01-d7-public-suite/Kernel.lean": {"bytes": 139972, "sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045"},
+    "competitions/floatlib/candidates/f01-d7-public-suite/manifest.json": {"bytes": 451, "sha256": "6c724764a952e01c5bf77d875500f6342b317bc3c8bbb3fca308454d0f8b3b8c"},
+    "competitions/floatlib/candidates/f01-d11-bmm-combined-classifier/Kernel.lean": {"bytes": 254654, "sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d"},
+    "competitions/floatlib/candidates/f01-r8-combined-result-guard/Kernel.lean": {"bytes": 235169, "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"}
+  }
+}

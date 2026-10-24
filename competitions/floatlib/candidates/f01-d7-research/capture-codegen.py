@@ -400,7 +400,7 @@ def _kill_group(proc):
         proc.kill()
 
 
-def run_gate(argv, cwd, env, log_path, timeout, output, kernel):
+def _submission_run_gate(argv, cwd, env, log_path, timeout, output, kernel):
     """Run unchanged argv/cwd/env; return original nonzero codes, never a capture verdict."""
     t0 = time.monotonic()
     root = Path(cwd).resolve()
@@ -937,6 +937,57 @@ else:
         finally:
             _disassemble = original_post
     print(json.dumps({'selftest': 'PASS', 'tests': results, 'scope': 'Lightweight Python children and fake ELF only; no Linux/Lean/compiler validation.'}, indent=2))
+
+
+def run_gate(argv, cwd, env, log_path, timeout, output, kernel):
+    """Default legacy capture, or an explicitly frozen R12 MainFull observer."""
+    config = None
+    setup_error = None
+    selected = None
+    try:
+        workspace = env.get('GITHUB_WORKSPACE')
+        if workspace:
+            repo = Path(workspace).resolve()
+            plan_path = repo / 'competitions/floatlib/candidates/f01-d7-public-suite/suite-plan.json'
+            plan = json.loads(plan_path.read_bytes())
+            requested = plan.get('r12_mainfull_capture')
+            if requested and Path(kernel).parent.name in requested.get('candidates', []):
+                config = requested
+                require(config.get('round') == 'R12-20261024T051445Z', 'wrong MainFull capture round')
+                name = Path(kernel).parent.name
+                entries = [row for row in plan['candidates'] if row['candidate'] == name]
+                require(len(entries) == 1 and entries[0].get('capture_codegen') is True,
+                        'MainFull observer flag missing')
+                require(sha(Path(kernel).read_bytes()) == entries[0]['sha256'], 'MainFull requested source mismatch')
+                relative = 'competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/capture-mainfull.py'
+                require(config.get('module') == relative, 'unexpected MainFull capture module')
+                path = repo / relative
+                require(sha(path.read_bytes()) == config['module_sha256'], 'MainFull module hash mismatch')
+                legacy = path.with_name('scalar-capture-legacy-fd17.py')
+                require(sha(legacy.read_bytes()) == config['legacy_sha256'] ==
+                        'fd17f35a4ef1bc1b1df2afe5fcfe39691d88e7e605968acbe3c38df09df9078b',
+                        'MainFull legacy module hash mismatch')
+                import importlib.util
+                spec = importlib.util.spec_from_file_location('r12_mainfull_observer', path)
+                selected = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(selected)
+    except Exception as exc:
+        setup_error = str(exc)
+    # Never rerun after a delegated child may have started: only setup errors
+    # before delegation may fall back to the original once-only gate path.
+    if selected is not None and setup_error is None:
+        return selected.run_gate(argv, cwd, env, log_path, timeout, output, kernel)
+    process, record = _submission_run_gate(argv, cwd, env, log_path, timeout, output, kernel)
+    if setup_error is not None and config is not None:
+        record['state'] = 'UNKNOWN'
+        record.setdefault('errors', []).append('R12 MainFull observer setup: ' + setup_error)
+        record['r12_mainfull_capture'] = {'state': 'UNKNOWN', 'error': setup_error}
+        if record.get('artifact_directory'):
+            try:
+                save_json(Path(record['artifact_directory']) / 'capture-record.json', record)
+            except Exception as exc:
+                record['errors'].append('R12 capture error metadata: ' + str(exc))
+    return process, record
 
 
 if __name__ == '__main__':
