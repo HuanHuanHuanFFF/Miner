@@ -1,0 +1,19 @@
+{
+  "candidate": "f01-deepseek-p8-direct",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "d2f97bad48d6e0018c24116dc7300519ea042e088b8f4bfb3fd756f583773327",
+  "candidate_bytes": 248144,
+  "parent": "competitions/floatlib/candidates/f01-d12-scalar-combined/Kernel.lean",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "at_utc": "2026-10-24T19:52:00Z",
+  "author_role": "deepseek free research/development agent",
+  "mechanism": "Only the bmmBeforeDirectRows predicate changes from `n ≤ 4 ∨ p ≤ 2` to `n ≤ 4 ∨ p ≤ 8`. Shapes with n>4 and 3≤p≤8 now use the proven DirectSmall scalar-dot core instead of Packed10, avoiding the 10-lane padding waste (p=3 computes 10 lanes per row today). No other runtime byte changes; native/NaN/low/underflow/preparation/output code is unchanged.",
+  "proof": "Zero new proof obligations. DirectSmall.core_eq_reference and bmmPackedBase_spec are unconditional for all shapes; bmmBeforeDirectRows_spec splits on the predicate and applies the matching theorem under either branch.",
+  "prior_evidence": "Public-v2 draw 1324009 class data: Packed10-routed cases with n>4 and p∈3..8 are bmm:ml:0 (1x41x3), bmm:ml:6 (8x36x3), bmm:sparse:3 (6x181x5), bmm:subnormal:3 (2x84x3), bmm:specials:1 (24x6x6), bmm:specials:4 (6x225x5). They carry about 15.9% of scored BMM work but are not separately timed in the public summary; packed-lane waste is a mechanism, not a measured gain.",
+  "first_falsifier": "Same-run A/B against retained f01-d12-scalar-combined on a new public-v2 seed: BMM normalized ratio must improve enough to move the whole entry toward the 0.97 threshold with positive paired p05. A flat or slower result parks the route; no claim from operation counts.",
+  "validation_mode": "full-gate",
+  "benchmark": "NOT_RUN",
+  "full_gate_status": "NOT_RUN",
+  "compile_status": "STATIC_DIFF_ONLY",
+  "formal_submission": "NOT_SUBMITTED"
+}

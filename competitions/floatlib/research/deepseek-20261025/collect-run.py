@@ -1,11 +1,11 @@
 """Collect a finished manual CI run and compute same-run A/B against the anchor.
 
-Downloads the receipts artifact, hashes every file, then reports, for each
-candidate in the batch, the public-v2 work-weighted cost ratio against the
-anchor candidate (f01-d12-scalar-combined) and against the shipped reference.
+Downloads the receipts artifact, hashes every file, then reports:
+- official pinned-gate rows from summary.json (12 classes), and
+- when the nested public-v2 entry was used, work-weighted class ratios.
 
-Only the process environment carries the token; nothing is printed or written
-except the original artifact under research/deepseek-20261025/ci-runs/<run>/.
+The token stays in this process; only the original artifact and derived JSON
+are written under research/deepseek-20261025/ci-runs/<run>/.
 """
 from __future__ import annotations
 
@@ -14,7 +14,6 @@ import hashlib
 import json
 import os
 import subprocess
-import sys
 import uuid
 from pathlib import Path
 
@@ -28,12 +27,11 @@ def token() -> str:
     p = subprocess.run(
         ["git", "credential", "fill"],
         input="protocol=https\nhost=github.com\n\n", text=True, capture_output=True, cwd=ROOT)
-    if p.returncode:
-        raise SystemExit("git credential fill failed")
     fields = dict(x.split("=", 1) for x in p.stdout.splitlines() if "=" in x)
-    if not fields.get("password"):
+    tok = fields.get("password")
+    if not tok:
         raise SystemExit("no stored GitHub credential")
-    return fields["password"]
+    return tok
 
 
 def gh(args, tok):
@@ -85,50 +83,72 @@ def main() -> int:
         (target / "ci.log").write_text(gh(["run", "view", a.run, "--repo", REPO, "--log"], tok), encoding="utf-8")
 
     dirs = [p for p in target.glob("download-*") if p.is_dir()]
-    if not dirs:
-        raise SystemExit("no downloaded artifact directory")
-    suite = next((p for p in dirs[0].rglob("public-suite") if p.is_dir() and (p / "public-cell-work.json").exists()), None)
-    if suite is None:
-        raise SystemExit("public-suite directory not found")
-    work = json.loads((suite / "public-cell-work.json").read_text(encoding="utf-8"))
-    work = work.get("cell_work", work)
+    stage = dirs[0]
+    summary_path = stage / "summary.json"
+    if not summary_path.exists():
+        raise SystemExit("summary.json missing")
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    rows = {r["candidate"]: r for r in summary.get("results", [])}
+    print("mode:", summary.get("scope", "")[:120])
+    for name, r in rows.items():
+        print(f"{name:34s} full={r.get('full_gate')} stmt={r.get('compile_pass')} "
+              f"ratio={r.get('ratio')} p05={r.get('paired_gain_p05')} wall={r.get('wall_seconds')}")
 
-    verdicts = {}
-    for v in sorted(suite.glob("*-verdict.json")):
-        d = json.loads(v.read_text(encoding="utf-8"))
-        if d.get("mode") == "diagnostic" or "classes" not in d:
-            continue
-        verdicts[d["submission"]] = d
-    if a.anchor not in verdicts:
-        raise SystemExit(f"anchor {a.anchor} missing: {sorted(verdicts)}")
+    official = {n: r for n, r in rows.items() if r.get("full_gate") and r.get("classes")}
+    if official and a.anchor in official:
+        anchor_classes = official[a.anchor]["classes"]
 
-    def totals(verdict):
-        out = {"whole": 0.0}
-        for cell, row in verdict["classes"].items():
-            op = cell.split(":")[0]
-            v = row["submission_ns"] * work[cell]
-            out[op] = out.get(op, 0.0) + v
-            out["whole"] += v
-        return out
+        def op_totals(classes):
+            out = {}
+            for cell, row in classes.items():
+                op = cell.split(":")[0]
+                out[op] = out.get(op, 0.0) + row["submission_ns"]
+                out["whole"] = out.get("whole", 0.0) + row["submission_ns"]
+            return out
 
-    anchor = totals(verdicts[a.anchor])
-    report = {"run": int(a.run), "source_commit": meta["headSha"], "branch": meta["headBranch"],
-              "anchor": a.anchor, "cells": len(work), "candidates": {}}
-    print(f"\nanchor {a.anchor}: whole {anchor['whole']/1e6:.2f} ms")
-    for name, d in verdicts.items():
-        t = totals(d)
-        rel = {op: t[op] / anchor[op] for op in ("add", "mul", "sum", "bmm", "whole")}
-        report["candidates"][name] = {
-            "kernel_sha256": d.get("submission_sha256") or d.get("candidate_sha256"),
-            "verdict_ratio_vs_shipped": d.get("ratio"),
-            "operation_ms": {k: v / 1e6 for k, v in t.items()},
-            "ratio_vs_anchor": rel,
-        }
-        print(f"{name:34s} whole/df5c={rel['whole']:.4f} bmm/df5c={rel['bmm']:.4f} "
-              f"add={rel['add']:.4f} mul={rel['mul']:.4f} sum={rel['sum']:.4f}")
+        base = op_totals(anchor_classes)
+        report = {"run": int(a.run), "mode": "official-pinned-12class", "anchor": a.anchor, "candidates": {}}
+        print(f"\nofficial pinned gate, anchor {a.anchor}: whole {base['whole']/1e6:.2f} ms")
+        for name, r in official.items():
+            t = op_totals(r["classes"])
+            rel = {op: t[op] / base[op] for op in ("add", "mul", "sum", "bmm", "whole")}
+            report["candidates"][name] = {"ratio_vs_shipped": r.get("ratio"), "p05": r.get("paired_gain_p05"),
+                                          "ratio_vs_anchor": rel, "operation_ms": {k: v / 1e6 for k, v in t.items()}}
+            print(f"{name:34s} whole/df5c={rel['whole']:.4f} bmm/df5c={rel['bmm']:.4f} "
+                  f"add={rel['add']:.4f} mul={rel['mul']:.4f} sum={rel['sum']:.4f} p05={r.get('paired_gain_p05')}")
+        (target / "deepseek-ab-result.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    (target / "deepseek-ab-result.json").write_text(
-        json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # Nested public-v2 (if present): work-weighted class totals.
+    suite = next((p for p in stage.rglob("public-suite") if p.is_dir() and (p / "public-cell-work.json").exists()), None)
+    if suite:
+        work = json.loads((suite / "public-cell-work.json").read_text(encoding="utf-8"))
+        verdicts = {}
+        for v in sorted(suite.glob("*-verdict.json")):
+            d = json.loads(v.read_text(encoding="utf-8"))
+            if d.get("mode") == "diagnostic-statement-only" or "classes" not in d:
+                continue
+            verdicts[d["submission"]] = d
+        if a.anchor in verdicts:
+            def totals(verdict):
+                out = {"whole": 0.0}
+                for cell, row in verdict["classes"].items():
+                    op = cell.split(":")[0]
+                    v = row["submission_ns"] * work[cell]
+                    out[op] = out.get(op, 0.0) + v
+                    out["whole"] += v
+                return out
+
+            anchor = totals(verdicts[a.anchor])
+            preport = {"run": int(a.run), "mode": "public-v2-work-weighted", "anchor": a.anchor, "candidates": {}}
+            print(f"\npublic-v2, anchor {a.anchor}: whole {anchor['whole']/1e6:.2f} ms")
+            for name, d in verdicts.items():
+                t = totals(d)
+                rel = {op: t[op] / anchor[op] for op in ("add", "mul", "sum", "bmm", "whole")}
+                preport["candidates"][name] = {"ratio_vs_shipped": d.get("ratio"),
+                                               "ratio_vs_anchor": rel,
+                                               "operation_ms": {k: v / 1e6 for k, v in t.items()}}
+                print(f"{name:34s} whole/df5c={rel['whole']:.4f} bmm/df5c={rel['bmm']:.4f}")
+            (target / "deepseek-public-v2-ab.json").write_text(json.dumps(preport, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"\nreceipt: {target}")
     return 0
 

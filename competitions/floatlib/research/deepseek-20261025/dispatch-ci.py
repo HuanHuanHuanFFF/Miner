@@ -108,6 +108,13 @@ def main() -> int:
         if name != "baseline":
             paths.append(f"competitions/floatlib/candidates/{name}/Kernel.lean")
             paths.append(f"competitions/floatlib/candidates/{name}/manifest.json")
+            if name == "f01-d7-public-suite":
+                plan_path = "competitions/floatlib/candidates/f01-d7-public-suite/suite-plan.json"
+                paths.append(plan_path)
+                plan = json.loads((ROOT / plan_path).read_text(encoding="utf-8"))
+                assert int(a.seed) == plan["seed"], f"seed {a.seed} != plan seed {plan['seed']}"
+                for entry in plan["candidates"]:
+                    paths.append(f"competitions/floatlib/candidates/{entry['candidate']}/Kernel.lean")
     for path in paths:
         blob = subprocess.check_output(["git", "show", f"{commit}:{path}"], cwd=ROOT)
         disk = (ROOT / path).read_bytes()
