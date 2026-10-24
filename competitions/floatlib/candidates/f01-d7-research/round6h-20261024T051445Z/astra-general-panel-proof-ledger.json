@@ -1,0 +1,110 @@
+{
+  "at_utc": "2026-10-24T07:08:37.446156+00:00",
+  "candidate": "f01-r12-general-panel",
+  "candidate_sha256": "a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe",
+  "proof_status": "PASS_ORIGINAL_STATEMENT_1224006_COMPLETE_SOURCE",
+  "receipt": "astra-general-panel-statement-1224006.json",
+  "verdict_sha256": "742c8fd292240a56594ee413be4927e34d7a44a0a385cd5a0218915e808097fd",
+  "chain": [
+    {
+      "stage": "local numeric reads",
+      "declarations": {
+        "Submission.RowStream.dot10_read_eq": [
+          3819
+        ],
+        "Submission.RowStream.runDot_read_eq": [
+          3837
+        ]
+      },
+      "meaning": "An erased Prop read equality relates local numeric offsets to global raw-map offsets; direct arrays remain executable arguments."
+    },
+    {
+      "stage": "shared normal and tail row",
+      "declarations": {
+        "Submission.RowStream.group_prefix": [
+          3856
+        ],
+        "Submission.RowStream.row_prefix": [
+          3900
+        ],
+        "Submission.RowStream.output_prefix": [
+          3922
+        ]
+      },
+      "meaning": "The same group/row proof handles normal global numeric base and tail local numeric base; normal call closes read equality by reflexivity."
+    },
+    {
+      "stage": "exact local tail",
+      "declarations": {
+        "Submission.R11WideLayout.prepareTail_read": [
+          4759
+        ],
+        "Submission.R11WideLayout.emitTail_prefix": [
+          4778
+        ]
+      },
+      "meaning": "Each tail read maps to its original global A position; raw NaN replay keeps original A/B addresses."
+    },
+    {
+      "stage": "four-row native recurrence",
+      "declarations": {
+        "Submission.Panel4Bridge.packA_read": [
+          4536
+        ],
+        "Submission.Panel4Bridge.wordLoop_row": [
+          4546
+        ],
+        "Submission.Panel4Bridge.runDot_row": [
+          4590
+        ],
+        "Submission.Panel4Bridge.block_row": [
+          4607
+        ]
+      },
+      "meaning": "One F4 field is the original row input; each output follows the original sequential +0, multiply then add chain, with no reassociation or FMA."
+    },
+    {
+      "stage": "concrete producer",
+      "declarations": {
+        "Submission.R11WideActual.buildTiles_projects": [
+          4874
+        ]
+      },
+      "meaning": "Actual raw A, actual packedB and actual b/h base close Projects; no uninstantiated abstract oracle remains."
+    },
+    {
+      "stage": "complete row-major output",
+      "declarations": {
+        "Submission.R11WideLayout.emitBlock_prefix": [
+          4726
+        ],
+        "Submission.R11WideLayout.writeBatch_prefix": [
+          4821
+        ],
+        "Submission.R11WideLayout.output_prefix": [
+          4850
+        ],
+        "Submission.R11WideActual.core_eq_reference": [
+          4895
+        ]
+      },
+      "meaning": "Full four-row blocks, incomplete final column packet, zero-to-three tail rows and all batches compose to original referenceBmm."
+    },
+    {
+      "stage": "original dispatch and specification",
+      "declarations": {
+        "Submission.bmmBeforeUnderflowZero_spec": [
+          5298
+        ],
+        "Submission.bmm_spec": [
+          5473
+        ]
+      },
+      "meaning": "The original shape/machine bounds, Underflow outer guard and other fallback branches stay in the concrete complete-source proof."
+    }
+  ],
+  "formal_runtime_scope": "Only current single-file Kernel against original fixed ContractTensor. Proof existence and typechecking do not establish the new compiled numerical gate, speed, official admission, rank, or rewards.",
+  "full_gate": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "source_notice_policy": "All original notices and other comments retained except two explicitly replaced runtime flow obligations recorded in inverse/manifest. Removed finite proof dependency families accepted in this whole-source check."
+}

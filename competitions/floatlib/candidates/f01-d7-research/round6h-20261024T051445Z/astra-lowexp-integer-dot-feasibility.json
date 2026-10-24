@@ -1,0 +1,134 @@
+{
+  "at_utc": "2026-10-24T10:42:06.492610+00:00",
+  "status": "NOT_PROVED_PARK_NO_INCREMENTAL_SOURCE_MODEL_COVERAGE",
+  "source_model_receipt_sha256": "c8b41ba5c3b514ffe2fd12fa9cb7b480222b8e411d42741446e612e786d64b44",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "LowScale_namespace_sha256": "f2b2626b2cc4f74a6cafd8042cfcf128dc760f8d47258c3f2b1d87e8607c7569",
+  "finding_zh": "六个df5c完整样本共204个timed BMM；maxExp(A)+maxExp(B)<128命中16例/2657055 MAC，但16例全部已被现有UnderflowZero全small跳过。新增case/MAC/输出均为0。当前全矩阵证书方向直接PARK，不生成Kernel/CI或新证明。",
+  "cell_timing_percent": {
+    "1224011": {
+      "BMM_fraction_whole_percent": 21.026353191838517,
+      "cells_percent_within_BMM": {
+        "bmm:dense": 9.99678573575819,
+        "bmm:ml": 43.57451877248508,
+        "bmm:sparse": 28.216283755555587,
+        "bmm:specials": 11.891814186236166,
+        "bmm:subnormal": 0.6842837123904105,
+        "bmm:extremes": 5.636313837574569
+      }
+    },
+    "1224012": {
+      "BMM_fraction_whole_percent": 20.91520585626985,
+      "cells_percent_within_BMM": {
+        "bmm:dense": 12.168607700730325,
+        "bmm:ml": 59.838318825052106,
+        "bmm:sparse": 16.511035485098095,
+        "bmm:specials": 6.8885427116251785,
+        "bmm:subnormal": 1.8924868444531056,
+        "bmm:extremes": 2.701008433041195
+      }
+    },
+    "1224014": {
+      "BMM_fraction_whole_percent": 16.00910869105206,
+      "cells_percent_within_BMM": {
+        "bmm:dense": 14.216072739098143,
+        "bmm:ml": 30.495441355054282,
+        "bmm:sparse": 37.00730891997322,
+        "bmm:specials": 5.41465065281495,
+        "bmm:subnormal": 7.960105264854049,
+        "bmm:extremes": 4.906421068205356
+      }
+    },
+    "1224016": {
+      "BMM_fraction_whole_percent": 21.555232168921425,
+      "cells_percent_within_BMM": {
+        "bmm:dense": 21.727168130238788,
+        "bmm:ml": 29.676813646568345,
+        "bmm:sparse": 27.693888089944224,
+        "bmm:specials": 12.217321813952921,
+        "bmm:subnormal": 0.5692744256425384,
+        "bmm:extremes": 8.115533893653183
+      }
+    },
+    "1224091": {
+      "BMM_fraction_whole_percent": 19.90190846788607,
+      "cells_percent_within_BMM": {
+        "bmm:dense": 31.92096656508382,
+        "bmm:ml": 24.910870298617706,
+        "bmm:sparse": 21.034878520887997,
+        "bmm:specials": 10.038987414412064,
+        "bmm:subnormal": 3.2287429767173905,
+        "bmm:extremes": 8.865554224281027
+      }
+    },
+    "1224092": {
+      "BMM_fraction_whole_percent": 18.140898748488492,
+      "cells_percent_within_BMM": {
+        "bmm:dense": 20.972420989617806,
+        "bmm:ml": 27.624746018977763,
+        "bmm:sparse": 27.226239577569245,
+        "bmm:specials": 7.067373766369886,
+        "bmm:subnormal": 13.008478711021937,
+        "bmm:extremes": 4.100740936443365
+      }
+    }
+  },
+  "timing_scope_zh": "逐组来自原始回执 submission_ns×cell_work，已与官方scored_submission_total_ns一致；是实际计分聚合成本，非整场墙钟或细分case/guard/loop耗时。不可按MAC比例切分这些cell时间。",
+  "scan_cost_boundary_zh": "完整模型扫描5393598个word；若新证书放在现有Underflow之后，本样本只剩188个失败输入，所选A后B早拒方案仍会读取3909610个word。它们不是实机事件或ns；复用准备过程可能改变此数，但不能当新增扫描免费。",
+  "mathematical_sketch_NOT_PROVED": {
+    "unit": "U=2^-149. Forfiniteword, M=frac ife=0 else2^23+frac; s=max(e-1,0); value=(-1)^sign*M*2^(s-149).",
+    "product": "Exactproduct/U=sign*(Ma*Mb)*2^(sa+sb-149). rawmaxexpsum<128 excludesNaN/Inf andsuggests eachroundedproduct fitsintegerunits withmagnitude<2^24, but thisrange/rounding bridge isnotformalized here. ExistingLowScale.mul_spec certifiesonlyeachmul result, notnewintegerdot.",
+    "important_domain_correction": "rawexpsum<128 doesnotmeanallproducts strictlysubnormal anddoesnotimplyLowScale.roundLow isalwaysused. ExistingroundSelect has product<2^48 andscale<=123 guard; otherproducts useFastMul.roundP.",
+    "accumulator": "Everyfinitebinary32 isanintegralmultipleofU, butforunitmagnitude>=2^24 not everyintegerisrepresentable. Mustapply24-significant-bit RNE aftereachaddition, inoriginalk order, afterthealreadyroundedproduct. A final-only round isincorrect.",
+    "signed_zero": "Productscanbe-0. Needprovefrom+0seed underRNE thatthechosenintegerzeroencoding preserves everyzero/cancellationcase; do notdropzero-sign semantics byassumption.",
+    "overflow": "UInt64productbounddoesnotboundaccumulatorforarbitraryNatn. Needanexplicitinductiveaccumulator/intermediates/roundcarry bound orcompleteoverflowfallback, includingoutputpacking andpossibleInf/NaN fromunbounded accumulation. Sampledimensionsarenotaproof.",
+    "engineering": "Newrawprep/maxcertificate/mantissa-sign-scale representation, per-step RNE/bitlength/shift andcontinuouswriter bridge allneedcosting. Integeroperations mayloseSIMD andcarrybranch/record/allocationcost; eliminatingpotentialFPsubnormalwork alone doesnotguaranteegain.",
+    "source_proof_cost": "UNKNOWN; new product-units/add-RNE/range/signedzero/output/infiniteNatfallback lemmas andexactcompleteKernelcapacity audit required. No sourcebudget orspeed guarantee."
+  },
+  "finite_word_counterexamples_common_oracle_only": {
+    "oracle_sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+    "not_all_products_subnormal": {
+      "A": "0x1fffffff",
+      "B": "0x207fffff",
+      "raw_exp_sum": 127,
+      "rounded_product": "0x00fffffe",
+      "product_raw_exp": 1,
+      "meaning": "Normal result, despiteeligiblemaxsum."
+    },
+    "per_step_rounding_required": {
+      "shape": [
+        1,
+        1,
+        5,
+        1
+      ],
+      "A": [
+        "0x1fffffff",
+        "0x1a800000",
+        "0x1a800000",
+        "0x1a800000",
+        "0x9fffffff"
+      ],
+      "B": [
+        "0x207fffff",
+        "0x1a000000",
+        "0x1a000000",
+        "0x1a000000",
+        "0x207fffff"
+      ],
+      "raw_max_exp_sum": 127,
+      "rounded_products": [
+        "0x00fffffe",
+        "0x00000001",
+        "0x00000001",
+        "0x00000001",
+        "0x80fffffe"
+      ],
+      "original_sequential_dot": "0x00000002",
+      "integer_sum_then_single_final_round": "0x00000003",
+      "interpretation": "At2^24 unitssuccessive+1hitsRNEtie; latercancellation exposesdifference. Commonwordoracle check, notnewLean/nativeproof."
+    }
+  },
+  "next_round_required_first_measurement_zh": "仅在新分布显示超出现有Underflow的新增命中后重访。先在发现样本测真实命中率、逐case完整调用和guard/准备/循环/输出时间，做同源码带/不带观测对照，并单独确认FP subnormal/assist是否真是主要成本。当前优先保留实际cell时间表和缺测项，不按MAC、padding或指数域推断2×。",
+  "immutable_boundaries": "NoKernel/runtime/helper/model/state/Git/CI/webchanges; onlynewastra evidence files. Confirmationinputs werealreadycompleted beforethisanalysis."
+}

@@ -1,0 +1,146 @@
+{
+  "at_utc": "2026-10-24T10:04:52.446568+00:00",
+  "title": "R12 数学与工程结论：确认新接线，区分证明通过与完整收益",
+  "summary_zh": [
+    "3ff4 将已有原始 NaN 选择证明接到当前结果守卫的冷路径，Some 保留原始字优先级，None 保留认证后备。完整通过且有本轮收益；这是旧资产在新执行上下文的重用，不能称为新发明。",
+    "df5c 在 3ff4 上仅把 nativeMul 两个输入换成已有、全输入证明等价的 converter。011 完整通过；012 同输入对照 df5c/3ff4 整体 0.999752，基本平局，不能把分别观测的乘法与冷路径收益相加。Root 冻结的 df5c 现已通过 D/A/B 三组独立确认；采用及看板更新由 Root 执行。",
+    "42c 闭合了 rawChoose=None 到输入非 NaN 的证明链，在已进入的冷分支复用原生结果，不假定结果非 NaN/有限，也不重算 FP 运算；014 完整通过，但相对 df5c 整体 0.995589、gain_p05=-0.004760，PARK。",
+    "a1ab 完成局部四行 A 面板、局部尾行和数值/原始地址分离的完整前缀证明。实际代码确实一次准备并复用，SIMD 热区无调用/栈访问，但010整体相对6c为1.002298，PARK。其父本已移除 TunedAdd，容量不得再次计入这项删除。",
+    "da09 复用旧961的四列递推与USize证明，绑定当前 NaN-only finalizer 和连续输出；016全包通过。同对象汇编每逻辑k是一组四通道乘加（编译器展开两个有顺序依赖的k），旧十列是三组4+4+2；没有热调用/栈访问，结果请求24B对48B。整体相对df5c仅0.996508、gain_p05=-0.007372，未达预定增量3%门槛，PARK。"
+  ],
+  "evidence": [
+    {
+      "label": "3ff4",
+      "candidate": "f01-d12-scalar-cold-nan-select-proof2",
+      "kernel_sha256": "3ff4eb8e3f9be968592a05f3d934b679705a3bbdeb655afb7596951611f36221",
+      "kernel_bytes": 247897,
+      "run": 40072436647,
+      "seed": 1224007,
+      "source_commit": "55c304b19eaab4c35de59e070bc6ae1da6d0a8d5",
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "full_gate": "PASS_SCORE_25ROUNDS",
+      "verdict_sha256": "42b2e9221d58ef79565db6d453410d360e3ce6a885fef66ea4b4d659f960a4eb",
+      "summary_sha256": "93e1f2e765c9f5b555b719869e8d7f6bb8bd297549dd197c6bf05233497bedac",
+      "Root_index_sha256": "e0101a36e6d49d50ebab9f0ee96a5075e5ea8f3f62895f5ace7cbed665e66886",
+      "canonical_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40072436647/download-d63b0abb12d94a5090cdfcdaef1653e9/diagnostics/f01-d7-public-suite/public-suite/f01-d12-scalar-cold-nan-select-proof2-verdict.json",
+      "canonical_summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40072436647/download-d63b0abb12d94a5090cdfcdaef1653e9/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+      "run_url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/40072436647"
+    },
+    {
+      "label": "df5c",
+      "candidate": "f01-d12-scalar-combined",
+      "kernel_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+      "kernel_bytes": 248144,
+      "run": 40074431355,
+      "seed": 1224011,
+      "source_commit": "8cfafa838e55911491dd6d2cdc1012bc5b4c7659",
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "full_gate": "PASS_SCORE_25ROUNDS",
+      "verdict_sha256": "aa7ee16dfe33bda8cc601871c90f5e40335e2d6f221ebe676e9678794950c029",
+      "summary_sha256": "93009fa99a56357a08faccb7ba0c661be0007ef823059db865f462ac7cce8118",
+      "Root_index_sha256": "5317be5cde2e7e582d15d2ec20e3f863025a027ef9a6b8795e07f64e1fed2db2",
+      "canonical_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40074431355/download-b391ac26f8764fae95bea3448a4fff27/diagnostics/f01-d7-public-suite/public-suite/f01-d12-scalar-combined-verdict.json",
+      "canonical_summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40074431355/download-b391ac26f8764fae95bea3448a4fff27/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+      "run_url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/40074431355"
+    },
+    {
+      "label": "42c",
+      "candidate": "f01-d12-none-native-result",
+      "kernel_sha256": "42c76db28de3b6239dcfddcf17ae7ebec6d06e54b4f5cd7c0ac818c7f8ce4d0a",
+      "kernel_bytes": 252826,
+      "run": 40078982864,
+      "seed": 1224014,
+      "source_commit": "c66f3c0605ae4eedf076b3e4ccec8eee397d8baf",
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "full_gate": "PASS_SCORE_25ROUNDS",
+      "verdict_sha256": "115b5bacbff2584d3a06974c7840969baf2abc6274fa05aec8726d9bfa69bb5e",
+      "summary_sha256": "fe44377256920cc326381e1a951d048f4d7bcd8fcd37ffb8d4b903e20bdaf684",
+      "Root_index_sha256": "91a7442f247f63f5d72e83460d43b322115f758dd2a0a8f97e60f765b9dab458",
+      "canonical_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40078982864/download-41e2f9ab2f8c4b5788113c46064a5099/diagnostics/f01-d7-public-suite/public-suite/f01-d12-none-native-result-verdict.json",
+      "canonical_summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40078982864/download-41e2f9ab2f8c4b5788113c46064a5099/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+      "run_url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/40078982864"
+    },
+    {
+      "label": "a1ab",
+      "candidate": "f01-r12-general-panel",
+      "kernel_sha256": "a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe",
+      "kernel_bytes": 255559,
+      "run": 40073679847,
+      "seed": 1224010,
+      "source_commit": "c16ddc5100a1405e35b3082ce3749771f2ef8aad",
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "full_gate": "PASS_SCORE_25ROUNDS",
+      "verdict_sha256": "826db8ac00e8ffc9479567a244364c7ae9d9d89177de92677c1a89a43d58e70c",
+      "summary_sha256": "104ec95d452fdaf10adca2aa6cdd299e68c1b28561aefecd4f20641626c33ce0",
+      "Root_index_sha256": "03ad13647730530a2b1aa8858b4cc47993f7116b405f48415fd47f7a13c27402",
+      "canonical_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40073679847/download-384f2a3a2e7541b0b011679a143aea16/diagnostics/f01-d7-public-suite/public-suite/f01-r12-general-panel-verdict.json",
+      "canonical_summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40073679847/download-384f2a3a2e7541b0b011679a143aea16/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+      "run_url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/40073679847"
+    },
+    {
+      "label": "da09",
+      "candidate": "f01-r12-column4-narrow",
+      "kernel_sha256": "da09fb59fa456b498af6bde48d54adcd37f85c4ba7df272163b184a2b83038c4",
+      "kernel_bytes": 255439,
+      "run": 40080782614,
+      "seed": 1224016,
+      "source_commit": "bb5c7929b39460f1bcc4a1cbec58c8ff2ac94f7e",
+      "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+      "full_gate": "PASS_SCORE_25ROUNDS",
+      "verdict_sha256": "76fed11b64b8449cb051c1317ef07c3be15bfab0cbdc773dd9267abbbf6767cd",
+      "summary_sha256": "22d16d73f02313a0a5b75c3de494d3f3041dfaec77fcc322b3068af551a6e19f",
+      "Root_index_sha256": "987cb815500dd6027f5d07d4ea431367a96acba9778e85afbc6febb1f895b643",
+      "canonical_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40080782614/download-3c198121366d4014aff9ec685d7af9ed/diagnostics/f01-d7-public-suite/public-suite/f01-r12-column4-narrow-verdict.json",
+      "canonical_summary": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40080782614/download-3c198121366d4014aff9ec685d7af9ed/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+      "run_url": "https://github.com/HuanHuanHuanFFF/Miner/actions/runs/40080782614"
+    }
+  ],
+  "reuse_boundaries": [
+    "D3四列源码是Nat循环；后续961资产已有USize桥和当前4b7/public-v2 fullPASS。旧全宽4列/旧finish/writer的正负聚合结果，都不是当前n>4,p3/4切片的测量。",
+    "零显式引用的证明池只是静态候选；必须保来源说明、附着docstring、实例/属性和8规格，并对完整新源码重新elaborate/fullgate。27条实际删除已在da09中验收；41条容量v2仅为未构建静态资产。",
+    "SIMD、源码指令/分配请求数、MAC/padding覆盖都不是整包耗时、RSS或成功概率。旧/通用未活跃函数不能替代实际specialization；最终链接二进制未留存，原对象证据边界明确。"
+  ],
+  "underflow_model": "astra-column4-underflow-exposure.json：仅已完成001/003/005/007/009/010/016，29个潜在窄列case中2个由固定UnderflowZero重构为跳过；跳过潜在MAC的8.61%，剩余占全BMM MAC12.14%，非实机事件或时间。",
+  "canonical_alias_map": "astra-ci1224016-root-alias-map.json：89成员逐件字节/hash与Root原件一致；公开摘要使用本表canonical_verdict/summary，原审查路径保留，重复89成员不需推送。",
+  "confirmation_boundary": "仅在 A1224091/run40083425886 与 B1224092/run40083571000 均完成后复核；未预读输入。冻结cohort31b9aaa14d29b04a12e2e5745876920436fb968a73b14cb56128666ff95fbe2d及三组原始回执一致。",
+  "formal_status": "无正式竞赛上传、冠军或奖励达成声明。",
+  "same_input_scalar_comparison": {
+    "run": 40076675251,
+    "seed": 1224012,
+    "whole_df5c_over_3ff4": 0.9997524211015236,
+    "verdicts": [
+      {
+        "candidate": "f01-d12-scalar-combined",
+        "canonical_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40076675251/download-fd36804a82d8480a8a14585554fa8d94/diagnostics/f01-d7-public-suite/public-suite/f01-d12-scalar-combined-verdict.json",
+        "sha256": "66d059617098dc0eb433ce9efc689c936d81b0f27adbd8224747a344ea1bc01b"
+      },
+      {
+        "candidate": "f01-d12-scalar-cold-nan-select-proof2",
+        "canonical_verdict": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40076675251/download-fd36804a82d8480a8a14585554fa8d94/diagnostics/f01-d7-public-suite/public-suite/f01-d12-scalar-cold-nan-select-proof2-verdict.json",
+        "sha256": "0a3ae9d4a23536440568efcf562c4b4a8b3faafe09492749c4c3bd7e6bddef6d"
+      }
+    ]
+  },
+  "confirmed_at_utc": "2026-10-24T10:18:50.531448+00:00",
+  "confirmation_addendum": {
+    "receipt": "astra-three-group-confirmation-recheck.json",
+    "groups": {
+      "D": {
+        "run": 40074431355,
+        "whole_normalized_vs_6c": 0.887877235448061,
+        "gain_p05": 0.11367123298285117
+      },
+      "A": {
+        "run": 40083425886,
+        "whole_normalized_vs_6c": 0.8705130649508622,
+        "gain_p05": 0.1371996503660562
+      },
+      "B": {
+        "run": 40083571000,
+        "whole_normalized_vs_6c": 0.8971983174345587,
+        "gain_p05": 0.08492480960527748
+      }
+    },
+    "scope": "同一冻结版本对旧6c的三组本地归一化总成本验证，不是正式冠军/准入/奖励。Root负责采用。"
+  }
+}

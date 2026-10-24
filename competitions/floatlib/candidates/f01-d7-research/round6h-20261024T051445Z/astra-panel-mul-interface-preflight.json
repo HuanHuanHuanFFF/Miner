@@ -1,0 +1,39 @@
+{
+  "at_utc": "2026-10-24T07:17:04.882168+00:00",
+  "state": "STATIC_INTERFACE_PREFLIGHT_ONLY_NO_FUSED_SOURCE_BUILT",
+  "panel_sha256": "a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe",
+  "scalar_sha256": "59de0e17223abebdd802bba98347ad8a4a7d6e90bfdca5ffd94bed3ad7005ce4",
+  "scalar_inverse_receipt_sha256": "39093e4714690e683a6af4cb7164dc3bc88469e1ee40f4b9d6bc72885bfd77a3",
+  "exact_full_old_scalar_patch_match_count_in_Panel": 0,
+  "reason": "Panel inherited compact E5 formatting: one empty line between nativeMul definition and theorem was absent. A blind byte replacement of the scalar inverse before block would fail.",
+  "adaptation": "Remove exactly that same empty line from both before and after replacement fragments; all nonblank scalar lines identical. No global whitespace normalization.",
+  "adapted_before_sha256": "b3b028f429d97cab4362a8d5f2e5571672f898e6c9f529ad6dfea9ff74342cf6",
+  "adapted_after_sha256": "1af0b3d56315dea73d3ad2b51dc88d437ee1372a2946b2d38b5868e05165331d",
+  "adapted_before_exactly_once": true,
+  "retained_dependency_declarations": [
+    {
+      "name": "R2W01b.convert",
+      "parent_body_sha256": "5acdcdfd2a56d6a9a3913894936dde04df0dcb229bb2dfaa57242805aad4e709",
+      "panel_body_sha256": "fce49f84750ec8063721bf74312b302e055937d3a05c0123bd8d2351e6ad23c4",
+      "nonblank_lines_identical": true,
+      "current_body": "def convert (u : UInt32) : Float32 :=\n  if fastOK u then tableProduct u else Float32.ofBits u\n"
+    },
+    {
+      "name": "R2W01c.convert_eq",
+      "parent_body_sha256": "5727c39606b6afa7ef564cc6ad2024ab70eb52b1179a1d9b14e588b92ebebc97",
+      "panel_body_sha256": "9326d6205f6143b8d0f04edd689a531f56f5c54ce025347d330968c55a5f33e5",
+      "nonblank_lines_identical": true,
+      "current_body": "theorem convert_eq (u : UInt32) : convert u = Float32.ofBits u := by\n  exact R2W01b.convert_eq normal_eq u\n"
+    }
+  ],
+  "deleted_WordFinite_FinalFinite_names_in_new_patch": [],
+  "delta_bytes": 247,
+  "prospective_combined_bytes": 255806,
+  "prospective_headroom": 194,
+  "interaction": "Scalar primitive is reachable from raw NaN replay/reference paths; do not add separately observed gains or presume independent component speedups.",
+  "required_next": "Root actual build, exact source/inverse/decl/policy, original complete gate, actual MainFull/Panel checks and frozen clean confirmations after selection.",
+  "fused_Lean": "NOT_RUN",
+  "fused_full_gate": "NOT_RUN",
+  "fused_performance": "UNKNOWN",
+  "source_mutations": false
+}

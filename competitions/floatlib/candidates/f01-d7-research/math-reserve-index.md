@@ -1,5 +1,18 @@
 # R7 可复用数学与证据入口
 
+## R12 接入与验收补充（2026-10-24）
+
+本段补充实际新整合，不改写下方原R7分类、原件缺项或当时UNKNOWN。[本轮结论](round6h-20261024T051445Z/astra-r12-conclusions.json)与[独立三组复核](round6h-20261024T051445Z/astra-three-group-confirmation-recheck.json)指向Root原始CI文件。
+
+| 精确接入 | 已验证内容 | 工程边界 |
+|---|---|---|
+| cold选择3ff4、组合df5c | 重用既有raw NaN优先级/quiet-word证明，新增carrier接线；3ff4原full007通过，df5c原D/A/B三组full25及独立确认通过。普通路径、LowScale与张量回放保持各自精确规格。 | 007收益集中specials，sum/BMM真实调用scalar修复/回放；不是四项独立收益相加。同场012的df5c/3ff4整体近于1。 |
+| None-native-result 42c | `rawChoose=None`经模型分类、原始carrier及native isNaN桥给出两输入非NaN，再用既有R7Native桥复用已计算结果；允许Inf invalid，不要求结果finite。原full014的kernel replay/axioms/checksum通过。 | 普通快路和Some优先级保留；actual MainFull确认无第二次FP。对df5c增量不显著，PARK。不能继承到其他输入分类/新接线。 |
+| typed22ea、GeneralPanel a1ab | erased Prop尺寸接口、共享numeric/raw基址行前缀及本地尾行接入均在各精确full通过。 | local numericBase不能代替原始raw回放地址。4行SIMD循环/单次packA确已生成，但完整调用无可靠收益。有限字模型不替代正式证明。 |
+| 窄列da09 | 重用96131686已有四列/USize引理，桥到当前NaN-only finish与连续row前缀；原full016通过，27条证明删除在精确新整包重新验收。 | LLVM每次回边展开两个k，2个mulps/addps对应每k一组4lane，顺序依赖保留；全调用改善不足。文本无引用不等于一般Lean依赖DAG，新的删除/组合仍须重验。 |
+
+新原始回执、负面结果与同对象C/汇编均保留；没有把full gate提升为线上冠军或奖励结论。下一轮按实际耗时占比与可实现降耗选择方向，先测真实命中与准备/循环/输出全成本，避免只按padding、MAC数量或循环机器码投入。
+
 初次审查范围为 W01、W01b、W02–W09、W08b 共 11 份交付。后续专项审查现覆盖 **25 份交付、14 项结论、773 个来源/日志/审查文件**；25份原包的 CRC、清单完整覆盖及解压字节均已独立核验。没有本地运行 Lean。旧完整性回执由原提交及 integrity-history 冻结保存，最新原包回执独立列出。
 
 下表保留原审查时的分类：**14 项**分为 1 项已用组件、10 项数学储备、1 项具体证明修复、2 项代码生成证据。网页固定 Lean 4.34 的普通编译/规格/公理日志，与精确候选原版 full gate 分列；新整合与性能不继承网页结果。原件均为 **LOCAL_ONLY**，精确相对路径、source/log SHA-256、退出码与 `E:/Download` 原包恢复位置保存在同名 JSON；本页只链接已核对本地 Git 字节的候选。

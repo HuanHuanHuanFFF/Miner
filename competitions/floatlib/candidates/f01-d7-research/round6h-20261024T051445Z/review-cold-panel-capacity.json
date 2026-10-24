@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "review_id": "R12-COLD-PANEL-CAPACITY-REVIEW-20261024",
+  "reviewed_at_utc": "2026-10-24T07:40:03Z",
+  "status": "STATIC_AUDIT_CONFIRMED_WITH_POOL_CORRECTION_AND_REPRODUCIBILITY_GAP",
+  "scope": "Read-only independent review of the R12 cold + GeneralPanel capacity proposal, its 42 byte ranges, source binding, and textual dependency closure. No candidate, capacity script, shared tool, state, Git or CI changes; no tests or Lean runs.",
+  "inputs": {
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/astra-cold-panel-capacity.py": {"bytes": 9078, "sha256": "3dc0adbcead92f253a110faffb8a4c8087c912daac30e00effda80e2e2e6f726"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/astra-cold-panel-capacity.json": {"bytes": 34876, "sha256": "3411121fc132354bbe9bb6d9c60058e551c4b58cfea9992698a28e7986cf8d27"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/astra-cold-panel-capacity-review.json": {"bytes": 1160, "sha256": "cffbd40a11174a1eaa6bb93af3b312d506a4f872a0cc892604110a2486d9106a"},
+    "competitions/floatlib/candidates/f01-r12-general-panel/Kernel.lean": {"bytes": 255559, "sha256": "a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe"},
+    "competitions/floatlib/candidates/f01-r12-general-panel/manifest.json": {"bytes": 5571, "sha256": "2283e892d5a95865b160c802e020c70405a7d608c1a3de75a77a4dc4c2224bac"},
+    "competitions/floatlib/candidates/f01-r12-general-panel/decl-policy-review.json": {"bytes": 35730, "sha256": "5192feeadc13149e467db18679334af03fe2df0817611b88dd0770ae4d578e49"},
+    "competitions/floatlib/candidates/f01-d12-scalar-cold-nan-select-proof2/Kernel.lean": {"bytes": 247897, "sha256": "3ff4eb8e3f9be968592a05f3d934b679705a3bbdeb655afb7596951611f36221"},
+    "competitions/floatlib/candidates/f01-d12-scalar-cold-nan-select-proof2/manifest.json": {"bytes": 1855, "sha256": "a9a1c1c3ca69031c94943583a9693010cffdc0ee2ef7f8c44df3f75f870224f2"},
+    "competitions/floatlib/candidates/f01-d12-scalar-cold-nan-select/exact-inverse.json": {"bytes": 33355, "sha256": "b0f09d08fc10fce68344fca8cde2b427d95a870540ad0134e90b5183e5eb74c3"},
+    "competitions/floatlib/candidates/f01-d12-mul-existing-convert/Kernel.lean": {"bytes": 254901, "sha256": "59de0e17223abebdd802bba98347ad8a4a7d6e90bfdca5ffd94bed3ad7005ce4"},
+    "competitions/floatlib/candidates/f01-d12-mul-existing-convert/manifest.json": {"bytes": 2618, "sha256": "a3c2ce5bb7347c993563d1519d87f8da2a78cb975434cfd45a03225ed911f6e8"},
+    "competitions/floatlib/candidates/f01-d12-mul-existing-convert/exact-inverse.json": {"bytes": 3830, "sha256": "39093e4714690e683a6af4cb7164dc3bc88469e1ee40f4b9d6bc72885bfd77a3"}
+  },
+  "range_audit": {
+    "receipt_entries": 42,
+    "each_byte_slice_matches_recorded_body_length_and_sha256": true,
+    "ranges_nonoverlapping": true,
+    "sum_of_recorded_body_bytes": 11840,
+    "all_selected_names_unique_in_source_declaration_scan": true,
+    "all_selected_names_map_to_one_qualified_name_in_panel_inventory": true,
+    "comment_attribute_instance_notation_macro_tokens_inside_selected_ranges": [],
+    "scope_note": "These checks validate the 42 recorded source slices. They do not validate Lean elaboration or prove dependency closure. One attached doc comment is outside the selected declaration range, as detailed below."
+  },
+  "attached_documentation_finding": {
+    "declaration": "Submission.R7W05.repairDotStep_eq_original",
+    "source_line": 3015,
+    "comment_text": "/-- The product is recomputed from both original raw words before ordinary addition. -/",
+    "comment_bytes_without_line_ending": 87,
+    "comment_sha256": "2e5acd93c0fb21e560a5a2f736025f0633af03513d49dbeb92faf5c1e79b4a86",
+    "recorded_declaration_bytes": 329,
+    "recorded_declaration_sha256": "3e9864d6bf5ffb311154476cad2fe1ba7a01acf3cddb36f680c5552333c6a571",
+    "next_declaration_after_range": "repairSumStep_isNaN_eq",
+    "effect_if_only_recorded_range_is_deleted": "The documentation comment remains and becomes attached to repairSumStep_isNaN_eq; its product-specific text is misleading there.",
+    "recommended_pool_handling": "Retain this theorem and its documentation together, or explicitly preserve and reattach the documentation before deletion."
+  },
+  "textual_closure_recheck": {
+    "reconstructed_candidate_theorem_nodes": 254,
+    "reconstructed_retained_nodes": 212,
+    "reconstructed_removable_nodes": 42,
+    "reconstructed_removable_names_equal_receipt": true,
+    "removable_set_has_textual_external_references": false,
+    "retained_callers_into_removable_set": [],
+    "future_cold_or_converter_roots_directly_reference_removable_set": [],
+    "future_root_cold_fragment_is_present_in_bound_cold_kernel": true,
+    "future_root_converter_fragment_is_present_in_current_converter_kernel": true,
+    "closure_semantics": "Textual declaration-name graph only; not Lean elaborator dependency analysis.",
+    "caveat": "The 42 entries contain five bodies with simp and five with decide. The capacity script's implicit_search_tokens regex does not establish dependencies contributed by elaboration, simplifier extensions, typeclass search or tactic behavior."
+  },
+  "converter_binding_gap": {
+    "capacity_script_pins_converter_kernel_sha256": false,
+    "capacity_script_asserts_raw_inverse_fragment_is_present_in_converter_kernel": false,
+    "current_converter_kernel_matches_manifest_and_inverse_candidate_sha": true,
+    "current_converter_sha256": "59de0e17223abebdd802bba98347ad8a4a7d6e90bfdca5ffd94bed3ad7005ce4",
+    "current_raw_inverse_fragment_bytes": 901,
+    "current_raw_inverse_fragment_present": true,
+    "required_before_reuse": "Bind the expected converter Kernel and manifest SHA-256 and assert the raw inverse fragment against that exact Kernel."
+  },
+  "capacity_estimate": {
+    "maximum_bytes": 256000,
+    "general_panel_bytes": 255559,
+    "cold_delta_bytes": 8756,
+    "converter_delta_bytes": 247,
+    "three_mechanism_bytes_before_prune": 264562,
+    "all_42_bodies_removed_bytes_estimate": 252722,
+    "all_42_bodies_removed_headroom_estimate": 3278,
+    "corrected_pool_if_documented_theorem_is_retained": {
+      "removable_body_count": 41,
+      "removable_body_bytes": 11511,
+      "three_mechanism_bytes_estimate": 253051,
+      "headroom_estimate": 2949
+    },
+    "status": "Static arithmetic only. No combined Kernel was generated or compiled."
+  },
+  "acceptance_boundary": {
+    "lean_build_performed": false,
+    "official_gate_performed": false,
+    "performance_claim": false,
+    "requires": "After any source edits and exact candidate freeze, run the full original Lean gate against that exact source and bind its complete artifacts and tool versions."
+  }
+}

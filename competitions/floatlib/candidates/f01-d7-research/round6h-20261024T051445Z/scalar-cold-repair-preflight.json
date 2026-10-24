@@ -1,0 +1,78 @@
+{
+  "state": "BOUNDED_PREFLIGHT_NO_KERNEL_WRITTEN",
+  "parent": "f01-d12-scalar-combined",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "selected_minimal_recipe": "SUM_FIRST_RAW_NAN_DIRECT_EXISTING_COLD_ADD",
+  "reason": "This branch already proved q rawNaN. ScalarNaN.add has unconditional all-input exact spec, so bypassing Submission.add avoids its two input conversions/native add/self-result guard. No extra classifier is added to ordinary prefix; raw metadata priority stays in the existing selector.",
+  "runtime_sites": {
+    "Submission.R7SinglePassSum.natLoop": {
+      "line": 5796,
+      "old_sha256": "91d1efc3a8a50738a2c237f7895fa78f433571150026c42b10b0be4e4e7fb63d",
+      "new_sha256": "82611143fdd1423b8c9f56cecdf1c3c6f11fc847be3d3d4fa2c48fb1ecd78551",
+      "runtime_call_substitutions": 1
+    },
+    "Submission.R7SinglePassSum.loop": {
+      "line": 5862,
+      "old_sha256": "8a31bf75c1b33995d3b035269b06b688767c79afdb0423c404a8d578d07ea8a7",
+      "new_sha256": "b34df4cb3b0408c3176bef7843be024693eec36345eae9178b8f095abf3f4d5f",
+      "runtime_call_substitutions": 1
+    }
+  },
+  "proof_draft_only": "theorem cold_add_eq (x y : Binary32) :\n    ScalarNaN.add x y = Submission.add x y := by\n  exact (ScalarNaN.add_spec x y).trans (Submission.add_spec x y).symm\n\n",
+  "proof_leaf_change": {
+    "before": "        · rename_i hinf\n          exact R7SumRepair.suffixLoop_eq x (k + 1) _\n",
+    "after": "        · rename_i hinf\n          rw [cold_add_eq]\n          exact R7SumRepair.suffixLoop_eq x (k + 1) _\n"
+  },
+  "projected_bytes": 248328,
+  "projected_sha256": "b2a84787b097436f3a2a7f0a48661ea2737006ce71b1069804a3d84a21e603d9",
+  "headroom_bytes": 7672,
+  "projection_is_not_a_candidate": true,
+  "public_entry_types": "UNCHANGED_IN_PROJECTION",
+  "new_runtime_guards": 0,
+  "proof_boundary": "Local cold_add_eq derives immediately from the two existing full-input specs. Only natLoop_eq cold leaf needs rewriting; machine loop_eq compares the same changed call on both sides. Actual Lean/elaboration and original full gate remain NOT_RUN.",
+  "semantics_cautions": [
+    "Do not directly return right q payload: acc may already be canonicalNaN after Inf cancellation. Existing signaling-first selector preserves exact left/right priority.",
+    "Keep suffixLoop and its later raw sNaN scan; one cold repair per vector does not authorize another suffix early stop."
+  ],
+  "historical_status": "Prior compiled-context review explicitly identified this known-rawNaN duplicate native work. Checked current candidate manifests/Kernel hooks contain no direct ScalarNaN.add(ofFloat32 acc,q) runtime repair candidate. This is conditional reuse of established math, not a new NaN algorithm; unindexed-history exhaustiveness UNKNOWN.",
+  "history_sha256": {
+    "round1h-20261023T110107Z/compiled-context-review.md": "07ea02559ee52b683bf946d5c8a89d1d5af4fd2c31e35b9abd7508f9f7205c73",
+    "word-route-frontier-review.md": "79f5bed06c435b3c4cdfcaced719c46255a180145454b31ed591264e3e6eab66",
+    "exceptional-composition-feasibility.md": "fb8066884cd0eeafde5f7cee8a42b97a8b3804712d961475354f642e60a35511",
+    "scalar-nan-select-review.md": "ea70e4f09315dc1112fd862a2e72998f24d96366ac1ebe9492a871f59a24d742"
+  },
+  "007_accounting": {
+    "observed_whole_gain_points_already_realized": 9.740871670751458,
+    "remaining_whole_cost_shares_after3ff4": {
+      "add:specials": 0.0191107387443518,
+      "mul:specials": 0.047180259410909045,
+      "sum:specials": 0.006036192388125936,
+      "bmm:specials": 0.015090891290687965
+    },
+    "all_specials_remaining_share": 0.08741808183407475,
+    "sum_full_cell_removal_upper_bound": 0.006036192388125936,
+    "bmm_full_specials_cell_removal_upper_bound": 0.015090891290687965,
+    "scope": "007 cold3ff4 observed workload, not df5c timing. Entire-cell residual shares are loose upper bounds, not removable-stage costs. The9.7409points are already realized relative6c and cannot be claimed again."
+  },
+  "current007_non_special_sum_generation": {
+    "drawn_plan_sha256": "e155bfeeab0a21a7e68f707fb419484ba4534bd06d3457f35845e7d80000755b",
+    "timed_cases_checked": 28,
+    "all_specRate_zero_and_non_raw_mag": true,
+    "consequence": "Known-rawNaN repair is confined to sum:specials in this sampled public plan; other timed sum cells have no rawNaN input generator."
+  },
+  "BMM_options": {
+    "direct_all_replay_cold_helpers": "PARK: NaN final endpoint does not make each replay prefix input nonfinite. ScalarNaN.mul None falls to FastMul and add None to ExecFloat; replacing all replay arithmetic sends finite prefix through software and can regress heavily.",
+    "raw_first_None_native": "PARK_PENDING_CURRENT_PREFIX_COST: semantically composable via selected_add/mul on Some and original Submission operation on None. But every replay prefix step pays raw selection, invalid non-NaN cases pay it twice, and current exact hit/miss timings/counts are UNKNOWN. Old807 prefix counts are not current007/df5c evidence.",
+    "early_stop": "UNCHANGED; current quiet absorption already stops replay. No newly claimed saved suffix work."
+  },
+  "investment_decision": "Sum-only direct cold entry is the best justified minimal implementation seam if011 succeeds and Root authorizes one cheap extension. Its entire-cell opportunity is under0.61percent of007 postcold whole cost, with actual repair subset smaller. Do not treat it as a new3percent whole-gain route or divert frozen confirmation budget; BMM preclassification remains parked.",
+  "falsification": [
+    "Actual combined original C must no longer route the knownrawNaN repair through native add/selfguard, while ordinary prefix decoder/loop remains intact.",
+    "Exact source must pass pinned Lean4.34 specs/kernel/axiom/checksum gate; preserve canonical-left-qNaN/right-sNaN witnesses.",
+    "Complete no-observer same-input comparison against exactdf5c must show net gain beyond control movement; if not, park without a grid."
+  ],
+  "actual_Lean": "NOT_RUN",
+  "full_gate": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "Kernel_generation": "NOT_AUTHORIZED_NOT_DONE"
+}

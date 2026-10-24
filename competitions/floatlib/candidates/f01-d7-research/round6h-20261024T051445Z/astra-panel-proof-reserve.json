@@ -1,0 +1,57 @@
+{
+  "at_utc": "2026-10-24T06:58:23.802925+00:00",
+  "status": "CAPACITY_RESERVE_ONLY_NO_SOURCE_EDIT",
+  "candidate_sha256": "a1ab536c08d666f8b3f5d848d3fb9341410f37e3072f0d1ee17dba7672e48abe",
+  "recoverable_bytes": 1665,
+  "margin_if_all_three_leaves_removed": 2106,
+  "entries": [
+    {
+      "namespace": "Submission.GuardBridge",
+      "name": "finiteRoundtrip",
+      "bytes": 814,
+      "sha256": "7c7dbc197b5bfb55453ceac95390b51ee3c8a9facaa1169b05bdbff396a010ec",
+      "start_byte": 92033,
+      "end_byte": 92847,
+      "body": "theorem finiteRoundtrip (x : Competition.Binary32)\n    (hx : (ExecFloat.Binary.toFloat32 x).isFinite = true) :\n    ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x) = x := by\n  have hcanonical : Model.IsModelCanonical (ExecFloat.Binary.toModel x) := by\n    apply modelCanonicalOfFinite\n    have hf := hx\n    change ((Model.toFloat32Model (ExecFloat.Binary.toModel x)).unpack).isFinite = true at hf\n    rw [Model.unpack_toFloat32Model] at hf\n    exact hf\n  apply Configured.Family.toModel_injective\n  change ExecFloat.Binary.toModel\n      (ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x)) =\n    ExecFloat.Binary.toModel x\n  rw [ExecFloat.Binary.toModel_ofFloat32, ExecFloat.Binary.toModel_toFloat32_eq,\n    Model.ofFloat32Model_toFloat32Model]\n  exact Model.canonicalizeModel_eq_self _ hcanonical\n",
+      "whole_file_name_occurrences": 1,
+      "incoming_internal_references": 0,
+      "incoming_external_references": 0,
+      "attributes": false,
+      "dependencies": "Existing helper declarations used by this theorem remain present; no remaining declaration refers to this leaf.",
+      "qualified_name": "Submission.GuardBridge.finiteRoundtrip"
+    },
+    {
+      "namespace": "Submission.R7W05",
+      "name": "repairDotStep_isQNaN",
+      "bytes": 525,
+      "sha256": "20a814e1b0c182aaadacc57b125b5a624a78858df113c0d766cea1e1081fbb6f",
+      "start_byte": 139512,
+      "end_byte": 140037,
+      "body": "theorem repairDotStep_isQNaN (acc : Float32) (x y : Competition.Binary32)\n    (hevent : (nativeDotStep acc x y).isNaN = true) :\n    Model.isQNaN (ExecFloat.Binary.toModel (repairDotStep acc x y)) = true := by\n  rw [Model.isQNaN_eq_nan_and_not_signaling]\n  have hn := (repairDotStep_isNaN_eq acc x y).trans hevent\n  have hs := Submission.R7W03.exec_add_not_snan\n    (ExecFloat.Binary.ofFloat32 acc) (ExecFloat.mul x y)\n  change Model.isSNaN (ExecFloat.Binary.toModel (repairDotStep acc x y)) = false at hs\n  rw [hn, hs]\n  rfl\n",
+      "whole_file_name_occurrences": 1,
+      "incoming_internal_references": 0,
+      "incoming_external_references": 0,
+      "attributes": false,
+      "dependencies": "Existing helper declarations used by this theorem remain present; no remaining declaration refers to this leaf.",
+      "qualified_name": "Submission.R7W05.repairDotStep_isQNaN"
+    },
+    {
+      "namespace": "R2W01c",
+      "name": "native_eq_of_model_eq",
+      "bytes": 326,
+      "sha256": "f418c3258f03ca42102d08d1f02c143c3d9ae7e1f9b0118c2a82c0ab354c8bb0",
+      "start_byte": 56191,
+      "end_byte": 56517,
+      "body": "theorem native_eq_of_model_eq (x y : Float32)\n    (h : nativeModel x = nativeModel y) : x = y := by\n  have hw : ExecFloat.Binary.ofFloat32 x = ExecFloat.Binary.ofFloat32 y :=\n    ExecFloat.Binary.toModel_inj.mp h\n  have hn := congrArg ExecFloat.Binary.toFloat32 hw\n  simpa only [ExecFloat.Binary.toFloat32_ofFloat32] using hn\n",
+      "whole_file_name_occurrences": 1,
+      "incoming_internal_references": 0,
+      "incoming_external_references": 0,
+      "attributes": false,
+      "dependencies": "Existing helper declarations used by this theorem remain present; no remaining declaration refers to this leaf.",
+      "qualified_name": "R2W01c.native_eq_of_model_eq"
+    }
+  ],
+  "comment_or_notice_removed": false,
+  "rejected_naive_family_check": "GuardBridge.modelCanonicalOfFinite has an earlier short-name homonym and use; no whole-family deletion asserted from short-name counting. Keep helper; finiteRoundtrip is globally unique and an unused leaf.",
+  "limits": "For a future new candidate only if actual proof repair/integration needs room. Frozen a1ab unchanged. Static exact body/reference review is not Lean/gate/performance acceptance; required four exported specs excluded."
+}
