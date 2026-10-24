@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-24T01:40:16.806434+00:00",
+  "conclusion": "NO_BLOCKING_DISCREPANCY_FOUND",
+  "scope": "Stored-evidence read-only postcheck. No gate/main/save/render/Git/CI/source changes.",
+  "candidate_sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+  "champion": {
+    "submission": 285,
+    "digest": "a1e99008577119824464154be5ec52dd390fc1e429b8f85b6ea73315e7103082",
+    "self_baseline": 1.0,
+    "scope": "Stored official snapshot755; no new live query."
+  },
+  "checks": {
+    "all_four_rows_same_exact_source": true,
+    "display_rounding_matches": true,
+    "fixed_anchor_estimator_renderer_match_cohort": true,
+    "numeric_model_exactly_unchanged_since_adoption": true,
+    "frozen_input_index_exact": true,
+    "pure_in_memory_estimator_replay_exact_fields": [
+      "operations",
+      "whole",
+      "paired_updates",
+      "cell_relative_delta_median",
+      "samples"
+    ],
+    "six_source_pairs_retained_with_roles": true,
+    "view_presentation_policy_inverse_exact": true,
+    "dashboard_reverse_label_and_CRLF_normalization_inverse_exact": true
+  },
+  "model": {
+    "method": "FROZEN_ANCHOR_NORMALIZED_PAIRED_DELTAS",
+    "status": "INFERRED",
+    "operations": {
+      "add": {
+        "ratio_median": 1.139623375268247,
+        "ratio_range": [
+          0.706104485136767,
+          1.3416352872993151
+        ]
+      },
+      "mul": {
+        "ratio_median": 1.2442011047216122,
+        "ratio_range": [
+          0.8751234218663239,
+          1.4934650434152572
+        ]
+      },
+      "sum": {
+        "ratio_median": 1.1261732906422912,
+        "ratio_range": [
+          0.7710877792538721,
+          1.4504084557318093
+        ]
+      },
+      "bmm": {
+        "ratio_median": 2.639997097899331,
+        "ratio_range": [
+          1.4778825017482093,
+          3.2639513788920587
+        ]
+      }
+    },
+    "whole": {
+      "ratio_median": 1.3901809976107984,
+      "ratio_range": [
+        0.8823934638462296,
+        1.5840136904896673
+      ]
+    },
+    "paired_updates_count": 6,
+    "anchor_projection_count": 6,
+    "distinction": "paired_updates: six exact6c measurements; samples: inherited41 frozen-anchor workload projections, not additional6c measurements.",
+    "direct_same_suite_champion_comparison": "UNKNOWN",
+    "official_admission": "UNKNOWN"
+  },
+  "source_samples": [
+    {
+      "run": 40039965234,
+      "seed": 922,
+      "role": "DISCOVERY",
+      "execution_has_observer": true,
+      "codegen_capture_state": "UNKNOWN"
+    },
+    {
+      "run": 40044330511,
+      "seed": 929,
+      "role": "DISCOVERY",
+      "execution_has_observer": true,
+      "codegen_capture_state": "UNKNOWN"
+    },
+    {
+      "run": 40044727137,
+      "seed": 930,
+      "role": "DISCOVERY",
+      "execution_has_observer": false,
+      "codegen_capture_state": "NOT_REQUESTED"
+    },
+    {
+      "run": 40047321773,
+      "seed": 933,
+      "role": "DISCOVERY",
+      "execution_has_observer": false,
+      "codegen_capture_state": "NOT_REQUESTED"
+    },
+    {
+      "run": 40048911739,
+      "seed": 103391,
+      "role": "FROZEN_INDEPENDENT_CONFIRMATION",
+      "execution_has_observer": false,
+      "codegen_capture_state": "NOT_REQUESTED"
+    },
+    {
+      "run": 40048972520,
+      "seed": 103392,
+      "role": "FROZEN_INDEPENDENT_CONFIRMATION",
+      "execution_has_observer": false,
+      "codegen_capture_state": "NOT_REQUESTED"
+    }
+  ],
+  "adoption_groups": [
+    {
+      "role": "D",
+      "run": 40044727137,
+      "ratio": 0.9162235597601194,
+      "gain_p05": 0.06467445202258348
+    },
+    {
+      "role": "A",
+      "run": 40048911739,
+      "ratio": 0.9167292033392961,
+      "gain_p05": 0.05223446867973214
+    },
+    {
+      "role": "B",
+      "run": 40048972520,
+      "ratio": 0.90641201342019,
+      "gain_p05": 0.06496548327110563
+    }
+  ],
+  "boundaries": [
+    "Local adoption is not official admission, formal submission or a new champion.",
+    "922/929 observer discovery and933 unselected discovery remain visible and do not replace D/A/B.",
+    "a066 estimate BMM3.32 to2.64 and whole1.47 to1.39 are not same-run causal measurements.",
+    "Later live-index extensions do not change this adopted model input.",
+    "Cross-suite/cross-hardware uncertainty remains; direct champion comparison UNKNOWN."
+  ],
+  "evidence": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d11-bmm-combined-classifier/Kernel.lean",
+      "sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+      "bytes": 254654
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json",
+      "sha256": "da02d4370ddf4ff28419ceda1a86a2d1dde5a81838f09d2540e705b30fe3b1d1",
+      "bytes": 59091
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/multiplier-comparison.json",
+      "sha256": "cdab347ff443c482ac2abd2c9cfcdd06d830844558e0ec470c9d24a3fdf028a4",
+      "bytes": 501628
+    },
+    {
+      "path": "competitions/floatlib/coordination/development-status.json",
+      "sha256": "fcc7f88d78141e3d96669046b26e8bc13202cbc4ca66e2d78689b3b61c04da7d",
+      "bytes": 1607472
+    },
+    {
+      "path": "dashboard.md",
+      "sha256": "d2f15efb421ac9ade3c7927cfd27a7db939d1a9a567f45afbc606ecbe6685e0e",
+      "bytes": 1331
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/adoption-attempt-20261024T012953Z-73d6e721/receipt.json",
+      "sha256": "b0af842385b20fd43b917cb79b2aa2b8310439b258305ea8a11ce8b18d6717be",
+      "bytes": 482079
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/three-group-receipt.json",
+      "sha256": "0231a6a14a66c4b0d9b309cea28161cfb0abf5c9adeefbdd64b165714ba04ff8",
+      "bytes": 462500
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/cohort-freeze.json",
+      "sha256": "ebcbe8101049eac8f758533b9bb3791f3199934b62af246371cbfcf21ed57ee7",
+      "bytes": 15414
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/dashboard-label-update.json",
+      "sha256": "4c2aaf60f43ade1a72dc38ae482317a411444f6766accb1ceedd1232c4ade8d0",
+      "bytes": 877
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/model-input-index-receipt.json",
+      "sha256": "b82312d92f371e1e55d0757ff40366028b5d2fbd437ae8ede0d925a40fe2bf37",
+      "bytes": 727
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/public-index-at-adoption.json",
+      "sha256": "f55fc7442cd978df09c8e0d38becb46af832bd6d69fcda419d0ad0865501f9ba",
+      "bytes": 1302356
+    },
+    {
+      "path": "competitions/floatlib/scripts/estimate_champion_time.py",
+      "sha256": "fe926204104484d1fc62bf06eb57666c0f3673829664f283c9c813497bf46983",
+      "bytes": 20489
+    },
+    {
+      "path": "competitions/floatlib/scripts/render_dashboard.py",
+      "sha256": "85466ca8cc6d3806fe6fea6a0aad4ebea12bba891bfb6af3db704d0d560b20cb",
+      "bytes": 5561
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round2h-20261023T170031Z/freeze-anchor.json",
+      "sha256": "d7bcc98f3e78a3971e88a53f1fcf6e514c83c80c3ea9d583178e09577ed1cfbc",
+      "bytes": 97283
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/adoption-attempt-20261024T012953Z-73d6e721/dashboard.md.before",
+      "sha256": "7239e72bfc703168c67da19b7e424b431b042a6f71cc93a1ab39f51faffc85cf",
+      "bytes": 1318
+    }
+  ]
+}
