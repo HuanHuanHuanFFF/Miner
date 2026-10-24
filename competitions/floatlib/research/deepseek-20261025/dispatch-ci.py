@@ -80,7 +80,7 @@ def main() -> int:
     assert branch == BRANCH, f"branch {branch} != {BRANCH}"
     status = run(["git", "status", "--porcelain=v1"]).stdout.splitlines()
     allowed = (
-        "?? competitions/floatlib/research/deepseek-20261025/ci-runs/",
+        "?? competitions/floatlib/research/deepseek-20261025/",
         "?? competitions/floatlib/evidence/",
     )
     offending = [line for line in status if not line.startswith(allowed)]
