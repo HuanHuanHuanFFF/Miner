@@ -33,6 +33,7 @@ parser.add_argument('--candidates', nargs='+', required=True)
 parser.add_argument('--statement-only', nargs='*', default=[])
 parser.add_argument('--capture-codegen', nargs='*', default=[])
 parser.add_argument('--capture-mainfull', nargs='*', default=[])
+parser.add_argument('--capture-assembly-focus', choices=['scalar','bmm'], default='scalar')
 parser.add_argument('--role', choices=['DISCOVERY','ADDITIONAL_INPUT_DIAGNOSTIC','STATEMENT_DIAGNOSTIC','FROZEN_INDEPENDENT_CONFIRMATION'], default='DISCOVERY')
 parser.add_argument('--prior-run', type=int)
 parser.add_argument('--cohort', type=Path)
@@ -43,6 +44,7 @@ assert len(set(args.candidates)) == len(args.candidates)
 assert set(args.statement_only) | set(args.capture_codegen) <= set(args.candidates)
 assert not set(args.statement_only) & set(args.capture_codegen)
 assert set(args.capture_mainfull) <= set(args.capture_codegen), 'MainFull capture requires visible observer flag'
+assert args.capture_assembly_focus == 'scalar' or args.capture_mainfull, 'BMM focus needs explicit MainFull observer'
 assert not args.capture_codegen or args.role == 'DISCOVERY'
 assert not args.statement_only or args.role == 'STATEMENT_DIAGNOSTIC'
 assert args.role != 'FROZEN_INDEPENDENT_CONFIRMATION' or (args.prior_run and not args.capture_codegen and not args.statement_only)
@@ -123,7 +125,8 @@ if args.capture_mainfull:
     helper=OUT/'capture-mainfull.py'; legacy=OUT/'scalar-capture-legacy-fd17.py'
     plan['r12_mainfull_capture']={'round':'R12-20261024T051445Z','candidates':args.capture_mainfull,
         'module':helper.relative_to(ROOT).as_posix(),'module_sha256':digest(helper),
-        'legacy_sha256':digest(legacy),'purpose':'Original statement-event static capture; observer diagnostic, never clean D.'}
+        'legacy_sha256':digest(legacy),'assembly_focus':args.capture_assembly_focus,
+        'purpose':'Original statement-event static capture; observer diagnostic, never clean D.'}
     for p in (helper,legacy):files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
 for p in [D7/'public-suite.py',D7/'adoption-guard.py',ROOT/'competitions/floatlib/pins.json',ROOT/'competitions/floatlib/candidates/f01-mul-log2-proof1/ci.py']:
     files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}

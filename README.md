@@ -8,7 +8,7 @@ FloatLib 的数学成果统一从[数学结论与可复用证明](competitions/f
 
 | 赛道 | 状态与入口 | 验证与证据 |
 |---|---|---|
-| [FloatLib 浮点内核](competitions/floatlib/README.md) | 冲冠研究与 Astra 协作；[开发状态](competitions/floatlib/coordination/development-status.json) | [当前十小时协作](competitions/floatlib/candidates/f01-d7-research/README.md)、候选与官方 gate 回执均在本赛道目录 |
+| [FloatLib 浮点内核](competitions/floatlib/README.md) | 冲冠研究与 Astra 协作；[开发状态](competitions/floatlib/coordination/development-status.json) | [当前六小时协作](competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/README.md)、候选与官方 gate 回执均在本赛道目录 |
 | [DEFLATE 压缩](competitions/deflate/README.md) | 官方已关闭新提交，保留全部研究与历史结果；[任务索引](competitions/deflate/docs/TASK_INDEX.md) | [赛道技术规则](competitions/deflate/docs/track-rules.md)、[历史提交看板](competitions/deflate/DASHBOARD.md)、[验证入口](competitions/deflate/docs/validation.md) |
 
 `competitions/<slug>/` 内分别存放 candidates、references、docs、evidence、scripts。`.github/workflows/` 保留仓库级手动入口；根 `scripts/project.py` 负责多赛道自检与定位。

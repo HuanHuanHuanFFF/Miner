@@ -65,7 +65,10 @@ def main():
         folder = RUNS/str(run)
         ci_path = folder/'ci-run.json'
         index_path = folder/'original-artifact-hashes.json'
-        if ci_path.exists() and index_path.exists():
+        # ci.py writes the complete raw job log last. Artifact download alone
+        # must not appear as collected while the collector is still running.
+        log_path = folder/'ci.log'
+        if ci_path.exists() and index_path.exists() and log_path.is_file() and log_path.stat().st_size > 0:
             ci, index = read(ci_path), read(index_path)
             assert ci['databaseId'] == run and ci['headSha'] == row['source_commit']
             assert ci['status'] == 'completed'
@@ -77,7 +80,8 @@ def main():
                 assert file.stat().st_size == info['bytes'] and digest(file) == info['sha256']
             summary_path = artifact/'diagnostics/f01-d7-public-suite/public-suite/summary.json'
             row.update(state='TERMINAL_COLLECTED_'+str(ci['conclusion']).upper(),
-                       conclusion=ci['conclusion'], collected=True)
+                       conclusion=ci['conclusion'], collected=True,
+                       raw_ci_log_sha256=digest(log_path), raw_ci_log_bytes=log_path.stat().st_size)
             if summary_path.exists():
                 summary = read(summary_path)
                 assert summary['seed'] == seed and summary['source_commit'] == row['source_commit']
