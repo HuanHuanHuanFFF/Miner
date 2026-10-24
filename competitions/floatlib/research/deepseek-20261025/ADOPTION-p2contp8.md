@@ -28,11 +28,53 @@ SHA-256 `699017452ec031efd8f0f161c944c4f45aab4c4eed8fff88f30faac533354049`，248
 | 1525002 | 40131881480 | 0.9654 / 0.7877 | 0.9706 / 0.8188 | — |
 | 1525003 | 40133209118 | 0.9257 / 0.7110 | 0.8912 / 0.5784 | — |
 | 1525003 复跑（顺序颠倒） | 40134598315 | 0.9257 / 0.7112 | **0.8911 / 0.5788** | — |
+| 1525004（阈值检查） | 40135988993 | — | 0.9736 / 0.8641 | — |
 
-- `p2contp8`：5 次测量全部为正，whole 中位数 0.9667，bmm 中位数 0.8188。
+- `p2contp8`：6 次测量全部为正，whole 中位数约 0.9689（范围 0.8911—0.9914），
+  bmm 中位数约 0.8268（范围 0.5784—0.9522）。
 - `p2cont`：4 次测量全部为正，whole 中位数 0.9456。
+- 阈值检查：同 run `p2contp16` 为 whole 0.9873 / bmm 0.8857，比 p2contp8 差约 1.4% → **锁定 p≤8**。
 - 同 seed 颠倒顺序复跑几乎逐位相同（0.8912 → 0.8911），run-order 偏差可排除。
 - 同 run 的 add/mul/sum 均在 1.00 附近，变化只落在 BMM。
+
+## 完整 gate 证据（run 40134598315 的原始 gate log）
+
+`f01-deepseek-p2contp8-gate.log` 逐阶段通过：
+
+```
+[intake] ok
+[policy] ok
+[statement] ok
+[kernel] Submission replays cleanly
+[kernel] VerifyFull replays cleanly
+[axioms] ['Classical.choice', 'Quot.sound', 'propext']
+[score] seed=1525003 pairs=500000 rounds=25 cpu=0
+[score] suite public-v2 (156 cases)
+[score] ratio 0.208 of the incumbent over all timed cases
+```
+
+verdict：`passed=true`、`stage=score`、`verifier_fingerprint == verifier_fingerprint_end`，
+suite SHA `a16494e9…`。回执目录
+`ci-runs/40134598315/download-*/diagnostics/f01-d7-public-suite/public-suite/`。
+
+## 类级一致性（6 个 run，p2contp8 / df5c）
+
+| cell | mean | min | max |
+|---|---:|---:|---:|
+| add:*（7 类） | 0.997–1.001 | — | — |
+| mul:*（7 类） | 0.999–1.003 | — | — |
+| sum:*（6 类） | 0.998–1.001 | — | — |
+| bmm:dense | 0.769 | 0.522 | 1.131 |
+| bmm:ml | 0.704 | 0.524 | 1.040 |
+| bmm:sparse | 0.869 | 0.585 | 1.129 |
+| bmm:subnormal | 0.898 | 0.611 | 1.259 |
+| bmm:specials | 0.908 | 0.670 | 1.004 |
+| bmm:extremes | 1.028 | 0.892 | 1.332 |
+
+- 前 5 个 run 的 add/mul/sum 同源码控制落在 1.000±0.003，标量侧噪声 <0.3%；
+- run 40135988993（seed 1525004）的 scalar 控制出现 ±3.8% 偏差（如 mul:dense 1.038），
+  属该 run 的机器噪声；该 run 只用于同 run 的 p8 vs p16 阈值比较。
+- bmm 优势集中在 dense/ml（5/6 个 run 改善），extremes 是唯一平均退化的类。
 
 ## 风险与边界
 

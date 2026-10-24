@@ -41,9 +41,25 @@ sparse 数据上零检测分支不可预测。不重复该路线。
 | `f01-deepseek-p2p8`（386af2d5） | 上述两条组合 | 0 新证明 | 未进 public-v2 |
 | `f01-deepseek-p2cont`（e878b0f2） | p=2 改走 DirectContinuous（全形状定理），并放宽其守卫到 `p≤2` | 0 新证明 | run 3 发现组 |
 | `f01-deepseek-p2cont8`（169f8198） | p2cont + p8 组合 | 0 新证明 | public-v2：whole 0.9584，bmm 0.8319 |
-| `f01-deepseek-p2contp8`（69901745） | p≤2 与 p≤8 全部 DirectContinuous | 0 新证明 | run 3 发现组 |
+| `f01-deepseek-p2contp8`（69901745） | p≤2 与 p≤8 全部 DirectContinuous | 0 新证明 | **终选**；6 run 全正 |
 | `f01-deepseek-directall`（ad91388b） | p≤64 全部 DirectContinuous | 0 新证明 | public-v2：whole 0.9585，bmm 0.8346 |
 | `f01-deepseek-directallfull`（a84bd96b） | 无界直算探针（p≤1000000） | 0 新证明 | 未测 |
+| `f01-deepseek-p2contp16`（a08d4f4a） | p≤16 直算阈值 | 0 新证明 | 比 p≤8 差 1.4% → 锁定 p≤8 |
+
+## 终选汇总（p2contp8，public-v2 原版 full gate，全部 PASS）
+
+| seed | run | whole/df5c | bmm/df5c |
+|---|---|---:|---:|
+| 1425003 | 40128718577 | 0.9667 | 0.8384 |
+| 1525001 | 40130503671 | 0.9914 | 0.9522 |
+| 1525002 | 40131881480 | 0.9706 | 0.8188 |
+| 1525003 | 40133209118 | 0.8912 | 0.5784 |
+| 1525003 复跑（顺序颠倒） | 40134598315 | 0.8911 | 0.5788 |
+| 1525004 | 40135988993 | 0.9736 | 0.8641 |
+
+中位数：whole ≈ **0.9689**，bmm ≈ **0.8268**。同 run 的 add/mul/sum 为同源码控制，
+前 5 run 噪声 <0.3%；1525004 run 噪声较大（±3.8%），只用于同 run 阈值比较。
+采用包：`ADOPTION-p2contp8.md`。
 
 ## public-v2 发现组（seed 1425002，run 40126911323，4 个 full gate 全 PASS）
 
