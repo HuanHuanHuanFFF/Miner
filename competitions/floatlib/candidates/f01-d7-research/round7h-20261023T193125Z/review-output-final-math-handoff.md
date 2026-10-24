@@ -63,7 +63,7 @@ prepare每k仍有4次ofBits和一次24 B F4分配，没有四个临时Float32 bo
 
 Tail数学资产的目标是只准备每batch最后≤3行的rows*n局部Float32数组，numeric base=rTail*n，raw finish base=(b*m+firstTail+rTail)*n。prepare_read→dot10_shift任意10acc→runDot_eq→group/row/tail Prefix均已有源码；f767首次statement失败，修复6e99已在935/run40048163768 statementPASS；这不包含kernel replay、axiom audit、checksum、full gate或新算法/性能接受。**它与已通过的旧global-nativeA emitTail不是同一实现，不能继承925/929。**
 
-F4字段读取与实际packA的连接已在独立ec112投影诊断源补齐源码，但**Lean NOT_RUN**，不能视为证明接受。仍缺：该真实Panel4.wordLoop_row编译接受、具体Projects实例、无global map的buildTiles/output、实际tail入口、hugeNat guard/fallback、source容量闭包、原fullgate和干净whole成本。global map可保留在证明参照或旧fallback，但不能在新Panel快速路径继续执行，否则panel/tail会重复准备。保留F40/projectRow/lane40与原Packed10Index；未来只替旧R11WideRows4机器家族及旧tail/flow，不盲加整份14KB generic writer，精确计划在panel4-tail报告。
+F4字段读取与实际packA的连接已在独立ec112投影诊断源补齐源码，但**Lean NOT_RUN**，不能视为证明接受。仍缺：该真实Panel4.wordLoop_row编译接受、具体Projects实例、无global map的buildTiles/output、实际tail入口、hugeNat guard/fallback、source容量闭包、原fullgate和干净whole成本。global map可保留在证明参照或旧fallback，但不能在新Panel快速路径继续执行，否则panel/tail会重复准备。保留F40/projectRow/lane40与原Packed10Index；旧R11WideRows4机器家族可在未来完成依赖审核后替换；但939 factored-tail路线仍引用旧emitTail/emitTail_prefix，旧2031 B tail族不得按unused删除。早先panel4-tail报告的对应删除建议在该路线下失效，不盲加整份14KB generic writer。
 
 ## 下一轮试验顺序
 
@@ -98,3 +98,14 @@ Root本次交接报告主候选6c2d已三组采用；这项独立未接入口证
 当前接受范围是：真实Vector F4的packA读取证明、实际40标量wordLoop对任意初始累加器的逐row投影，以及零起点runDot和真实block helper的逐row投影。它关闭了新F4表示的数值循环桥；不是旧Array Float32投影证明的继承，也不是新矩阵算法接受。原始manifest的NOT_RUN不回写，936/ec112失败源、donor和原回执保持字节。
 
 **仍未接受：** 完整Matrix Projects实例、连续输出与localTail的实际入口接线、hugeNat分派/回退集成、panel生命周期，以及新算法的kernel replay、axiom audit、checksum、full gate和完整调用性能。938/run40051011135的独立guard桥由Root短statement验证中，本快照没有将其视为通过。主候选6c2d及finalcohort保持不变；本次没有新源码或新CI。
+
+
+## 939 factored-tail接受及容量边界（最终快照）
+
+939/run40051933922已完整回收：**1b4722989e4352b7f6a80337d545ff0a97d2890f95ccac5788a095da30b1aaa8 / 251155 B，statementPASS only**。verdict为c7b6a78e12bbff00d8743a7f7f958fb74c4ef5ec2df02fc82b80cf7eda233432，原始目录为 `ci-runs/40051933922/download-ecb6c1975dc349ffb4416b91586fba11/diagnostics/f01-d7-public-suite/public-suite/`，输入Kernel与冻结源逐字节一致。
+
+新6165 B尾行资产通过group_eq→row_eq→tail_eq连接原RowStream/R11WideLayout.emitTail，直接复用emitTail_prefix，没有新增重复Prefix归纳。这个精确statement接受不包含新矩阵入口、Panel producer/new flow/输出与tail分派、巨大Nat入口回退、kernel replay、axiom audit、checksum、full gate、生命周期或性能。初始manifest的NOT_RUN保持原字节。
+
+**必须修正容量账：** factored-tail的tail_eq和tail_prefix仍依赖原rowIndex/emitTail/emitTail_prefix及其RowStream.row/row_prefix链。旧账本2031 B tail族因此仍活跃，不能当unused删除。9283→6165的3118 B只是独立资产差，不是GeneralPanel组合净省3118 B；同时扣掉旧tail族会重复记账。完整Panel新flow和producer放回后的总字节及净节省仍为 **UNKNOWN**。早先旧tail删除计划在此factored路线下被本条修正取代。
+
+本轮本范围停止新源码/新CI；主保留6c2d及finalcohort保持不变。完整未来入口仍需单独源码容量闭包与原完整gate。

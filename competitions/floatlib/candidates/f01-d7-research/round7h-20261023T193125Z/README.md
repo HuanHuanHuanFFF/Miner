@@ -34,6 +34,7 @@ E5宽4行组合在933/run40047321773完整通过，对41整体耗时0.878180、�
 |F4局部面板|9a40118e|927、931完整源通过；931真实热循环SIMD且无call/spill/分配|新helper未接矩阵入口，Panel收益未测；[机器码边界](review-panel-codegen-931.md)|
 |局部尾行与F4投影|6e99／0fee|6e99在935 statement通过；F4投影经936冗余rfl失败修复后937通过|无原globalA的新入口仍缺，不能继承旧wide算法验收|
 |重复边界检查的数学桥|2dc2546f|938 statement通过，四行块地址界及direct-within具体Projects成立|未替换实际run调用，完整成本收益仍缺|
+|尾行证明因式分解|1b472298|939 statement通过，6165B新资产复用原tail_prefix|仍依赖旧2031B tail族；含新flow/producer的完整Panel容量未闭合|
 |容量回退|7317|919完整通过，省15513B；整体耗时比a066高0.33%|供宽内核容量，代价随最终组合再验|
 
 所有上述性能均是同次执行中对固定41和研究起点a066的归一化完整成本，不混用不同源码的最佳运算。当前看板已在6c2d三组通过后更新；所有六次同源完整回执都保留，包括922、929、933的研究／控制样本，原角色和observer标记不改写。最终采用使用[预先固定的口径](selection-policy.json)，一组干净发现＋两组未见输入、新runner及预定顺序；不选最快两组，不删除失败或慢样本。
@@ -47,3 +48,7 @@ E5宽4行组合在933/run40047321773完整通过，对41整体耗时0.878180、�
 [本轮起点a066的历史敏感性](champion-gap-sensitivity.json)保留原1.24倍情景。采用6c2d后，[重新筛查后续投入](next-investment.md)：仅矩阵再快2倍，整包约冠军1.204倍；矩阵2倍且其余三项降耗约23%时才进入.97规划门槛。情景不更新当前看板数字，实际工程成本及可实现幅度还须逐个候选验证。
 
 [公开源码补充筛查](public-source-screen.md)与[实现／数学交接](review-output-final-math-handoff.md)保留具体来源、已验范围及下一轮缺项。GeneralPanel4优先解决完整接入、容量和实际caller的全成本；不将unused helper的好机器码当作新算法提速。
+
+[研究agent技术交接](research-agent-technical-handoff.md)明确重复bounds的最小接口及Panel容量依赖；[六组标量机会复核](review-next-scalar-opportunity.md)确定先查当前MainFull，再有条件复用已有冷路资产。[40批证据审计](all-ci-evidence-audit.json)核对2355个原始成员与实际Git输入，所有已启动CI均收齐、峰值并发2。
+
+当前同源码／同冠军的[数值模型已固定](retained-estimate-freeze.json)。后续同源控制只扩展原始证据，不重校当前显示值；新候选采用或现任冠军digest实际变化后再单独记录比较。旧worker状态保留各阶段时间和当时NOT_RUN，不是新的待执行队列。

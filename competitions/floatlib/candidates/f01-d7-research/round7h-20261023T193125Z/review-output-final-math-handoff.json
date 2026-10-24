@@ -846,6 +846,40 @@
         "panel_lifecycle",
         "Panel_performance"
       ]
+    },
+    {
+      "candidate": "f01-d11-panel4-tail-factored-proof",
+      "path": "competitions/floatlib/candidates/f01-d11-panel4-tail-factored-proof/Kernel.lean",
+      "bytes": 251155,
+      "sha256": "1b4722989e4352b7f6a80337d545ff0a97d2890f95ccac5788a095da30b1aaa8",
+      "evidence": [
+        {
+          "validation_mode": "statement-only",
+          "full_gate": false,
+          "statement_pass": true,
+          "stage": "statement",
+          "exit_code": 0,
+          "reason": "",
+          "run": 40051933922,
+          "seed": 939,
+          "summary_path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40051933922/download-ecb6c1975dc349ffb4416b91586fba11/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+          "summary_sha256": "876ca81c44c6f8c149dd96a7b245aad3bb2799aa6b9cf5d0483eea116ead75d5",
+          "verdict_path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40051933922/download-ecb6c1975dc349ffb4416b91586fba11/diagnostics/f01-d7-public-suite/public-suite/f01-d11-panel4-tail-factored-proof-verdict.json",
+          "verdict_sha256": "c7b6a78e12bbff00d8743a7f7f958fb74c4ef5ec2df02fc82b80cf7eda233432",
+          "input_bytes": "VERIFIED_EXACT_BYTES",
+          "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+          "suite_sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a",
+          "contract_hashes": {
+            "Contract.lean": "454d6ffe93f13b39e2dabdda5ead4a042dcd201bf025e79663ef711c1d63ee5b",
+            "ContractTensor.lean": "65f31bc0d7793f0208465ca554486834b572a45c21c35772789551ac8a82a26c"
+          },
+          "verifier_fingerprint": "dbfba2ce838eefbfcfc3f8f66c24feff9a57a9dca85374ae44ca8ed1b49d0479",
+          "verifier_fingerprint_end": "dbfba2ce838eefbfcfc3f8f66c24feff9a57a9dca85374ae44ca8ed1b49d0479",
+          "reference_complete": false
+        }
+      ],
+      "strongest_exact_package_state": "STATEMENT_PASS_ONLY",
+      "algorithm_boundary": "Concrete local tail helpers/function equalities/old Prefix reuse accepted only as unused statement asset; no active Matrix entry or performance."
     }
   ],
   "math": {
@@ -977,7 +1011,8 @@
         "Tail prepares<=3*n localFloat32 and keeps raw finish addresses separate",
         "newsource dependency/pruning closure<=256000; keep F40/projectRow and original Packed10Index loop/within",
         "Active entry retains Underflow outerguard and all empty/n0/hugeNat fallbacks",
-        "New actual entry original fullgate and clean complete cost/ownership tests"
+        "New actual entry original fullgate and clean complete cost/ownership tests",
+        "Factored tail route retains old2031B tail proof family; recompute complete producer/flow capacity without double-counting deletion. Net saving UNKNOWN."
       ],
       "no_algorithm_claim": true,
       "tail_statement935": {
@@ -1042,6 +1077,43 @@
           "panel lifecycle",
           "new full gate",
           "Panel performance"
+        ]
+      },
+      "factored_tail939": {
+        "source_sha256": "1b4722989e4352b7f6a80337d545ff0a97d2890f95ccac5788a095da30b1aaa8",
+        "source_bytes": 251155,
+        "asset_sha256": "9d7bcb60b483b1b1994836c679e8b466d3cac1c17bc0532875aaf69cbdb2d486",
+        "asset_bytes": 6165,
+        "run": 40051933922,
+        "status": "STATEMENT_PASS_ONLY",
+        "standalone_asset_delta_bytes": 3118,
+        "old_tail_ledger_bytes_still_live": 2031,
+        "required_old_declarations": [
+          "R11WideLayout.rowIndex",
+          "R11WideLayout.emitTail",
+          "R11WideLayout.emitTail_prefix",
+          "RowStream.row",
+          "RowStream.row_prefix"
+        ],
+        "old_tail_full_anchored_slice_including_comments": {
+          "parent_sha256": "ea10235659e5c3eef3ed1bd0e32920a0f479dd04d4188d22083e0ab8aee1a1d7",
+          "start": "def rowIndex (batch m : Nat)",
+          "end_exclusive": "/-- buildTiles closes over",
+          "bytes": 2181,
+          "sha256": "4d0af8d8fda0903471971b5b1913cb3bc4b5f0454b9433d42cbe50d67dc9579d"
+        },
+        "net_GeneralPanel_combination_savings": "UNKNOWN",
+        "capacity_correction": "Old2031B tail family cannot be pruned as unused under factored-tail_eq/emitTail_prefix route.3118B standalone asset saving is not net combination saving. Complete producer/newflow/dependency size UNKNOWN.",
+        "not_accepted": [
+          "active Matrix entry",
+          "complete Panel producer/new flow",
+          "hugeNat dispatch integration",
+          "kernel_replay",
+          "axiom_audit",
+          "checksum",
+          "full_gate",
+          "lifecycle",
+          "performance"
         ]
       }
     }
@@ -1369,6 +1441,16 @@
       "path": "competitions/floatlib/candidates/f01-d11-panel4-projection-proof2/panel4-projection-proof2.lean",
       "bytes": 6040,
       "sha256": "93b1ac6fed4b6f73aef621d374fcea195886a04ca3bdd0ef3cd93b5684104bdf"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/review-output-tail-factoring.lean",
+      "bytes": 6165,
+      "sha256": "9d7bcb60b483b1b1994836c679e8b466d3cac1c17bc0532875aaf69cbdb2d486"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261023T193125Z/review-output-tail-factoring.md",
+      "bytes": 5210,
+      "sha256": "f4c3b2677eaa945f0684bdb248b4a14c5ccdffa92a9004df86f8a306cb00099c"
     }
   ],
   "next_round_directions": [
@@ -1427,11 +1509,12 @@
     }
   ],
   "formal_submission": "NOT_SUBMITTED",
-  "updated_at_utc": "2026-10-24T01:45:25.936163+00:00",
+  "updated_at_utc": "2026-10-24T02:05:59.613887+00:00",
   "update935": "New evidence snapshot only; original manifests NOT_RUN and failed934 bytes preserved.",
   "root_context_update936": {
     "source": "Parent root message, not a new final-cohort audit by this subagent",
     "status": "Root reports6c2d adopted afterthreegroups; no finalcohort files touched by this proof diagnostic."
   },
-  "update937": "Evidence snapshot only: frozen manifests retain initial NOT_RUN;936 failed source and receipts preserved. Root main6c2d unchanged; separate938 guard statement pending, not accepted in this snapshot."
+  "update937": "Evidence snapshot only: frozen manifests retain initial NOT_RUN;936 failed source and receipts preserved. Root main6c2d unchanged; separate938 guard statement pending, not accepted in this snapshot.",
+  "update939": "Exact statement acceptance and capacity correction only; all initial manifests and failed historical sources unchanged. Stop new source; main6c2d/finalcohort unchanged."
 }

@@ -87,6 +87,8 @@
 
 真实F4的[0feec56a行投影](../candidates/f01-d11-panel4-projection-proof2/Kernel.lean)在40050615221通过statement：实际packA读取支撑任意40个初始累加器的wordLoop逐行等式，再连接runDot和block；原ec112在40049985877的冗余证明步骤失败保留。[2dc2546f边界桥](../candidates/f01-r11-wide4-guard-proof/Kernel.lean)在40051011135通过statement，给出具体四行块地址界、机器范围及direct-within的Projects。二者均未连接新矩阵入口，不能升级为完整Panel算法或运行收益。
 
+[1b472298尾行因式分解](../candidates/f01-d11-panel4-tail-factored-proof/Kernel.lean)在40051933922通过statement：通过group/row/tail函数等式复用原emitTail_prefix，避免重复Prefix归纳。新资产6165B，仍须保留原2031B tail依赖；相对9283B资产的3118B差额不等于完整组合净节省。实际Panel入口、完整gate及收益仍缺，[依赖与容量交接](../candidates/f01-d7-research/round7h-20261023T193125Z/research-agent-technical-handoff.md)保留缺项。
+
 ## 2. 已提取、尚未形成正式验证组件的数学储备
 
 | 编号 | 结论／适用条件 | 当前证据及决定 |
