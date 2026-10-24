@@ -1,4 +1,4 @@
-"""Build DeepSeek dispatch candidates from the retained df5c kernel.
+﻿"""Build DeepSeek dispatch candidates from the retained df5c kernel.
 
 Each candidate changes only a dispatch predicate, so every branch keeps its
 existing full-shape correctness theorem. The script refuses to run unless each
@@ -23,6 +23,7 @@ CONT_OLD = "  if n ≤ 4 ∧ 2 < p then DirectContinuous.core batch m n p A B"
 CONT_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 2 then DirectContinuous.core batch m n p A B"
 CONT8_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 8 then DirectContinuous.core batch m n p A B"
 CONT64_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 64 then DirectContinuous.core batch m n p A B"
+CONTALL_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 1000000 then DirectContinuous.core batch m n p A B"
 
 SPECS = [
     {
@@ -103,6 +104,18 @@ SPECS = [
         "hypothesis": (
             "Brackets the packed path's value: if direct wins even at p=32/59, the Packed10 "
             "preparation and lane padding are pure overhead on this suite."),
+    },
+    {
+        "name": "f01-deepseek-directallfull",
+        "edits": [(P2_OLD, P2_NEW), (CONT_OLD, CONTALL_NEW)],
+        "mechanism": (
+            "Unbounded routing probe: p=2 leaves Cross and the DirectContinuous guard becomes "
+            "`(n ≤ 4 ∧ 2 < p) ∨ p ≤ 1000000`, so in practice every shape uses the direct row "
+            "writer. DirectSmall/Packed10 remain in the kernel with their proofs but are "
+            "unreachable for scored sizes. No other runtime bytes change."),
+        "hypothesis": (
+            "If the direct row writer is competitive at every p on the public suite, the packed "
+            "preparation and lane padding can be dropped as dead cost."),
     },
 ]
 
