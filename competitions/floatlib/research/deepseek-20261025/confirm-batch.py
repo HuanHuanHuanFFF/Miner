@@ -61,12 +61,21 @@ def main():
         plan["authorization_receipt"] = "competitions/floatlib/research/deepseek-20261025/run9-plan.md"
         plan["purpose"] = "Pre-registered confirmation seed for f01-deepseek-p2contp8; all seeds reported."
         plan.pop("confirmation_candidates", None)
-        PLAN.write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        sh(["git", "add", str(PLAN.relative_to(ROOT))])
-        sh(["git", "-c", "core.quotepath=false", "commit", "-m",
-            f"实验: 预注册确认seed {seed} [skip ci]"])
-        sh(["git", "push"])
-        time.sleep(2)
+        new_text = json.dumps(plan, ensure_ascii=False, indent=2) + "\n"
+        changed = PLAN.read_text(encoding="utf-8") != new_text
+        if changed:
+            PLAN.write_text(new_text, encoding="utf-8")
+            sh(["git", "add", str(PLAN.relative_to(ROOT))])
+            sh(["git", "-c", "core.quotepath=false", "commit", "-m",
+                f"实验: 预注册确认seed {seed} [skip ci]"])
+            sh(["git", "push"])
+            time.sleep(2)
+        status_lines = sh(["git", "status", "--porcelain=v1"]).stdout.splitlines()
+        dirty = [line for line in status_lines
+                 if not line.startswith(("?? competitions/floatlib/research/deepseek-20261025/ci-runs/",
+                                         "?? competitions/floatlib/evidence/"))]
+        if dirty:
+            raise SystemExit("worktree dirty before dispatch:\n" + "\n".join(dirty))
         out = sh([sys.executable, str(RESEARCH / "dispatch-ci.py"),
                   "--candidates", "f01-d7-public-suite", "--seed", str(seed)]).stdout
         receipt = json.loads(out[out.index("{"):])
