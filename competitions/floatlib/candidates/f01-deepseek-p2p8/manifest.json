@@ -1,0 +1,30 @@
+{
+  "candidate": "f01-deepseek-p2p8",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "386af2d562c7fd19c63bc0ed9d9c8ade01aa27354a0b351189a438f9082de310",
+  "candidate_bytes": 248144,
+  "parent": "competitions/floatlib/candidates/f01-d12-scalar-combined/Kernel.lean",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "at_utc": "2026-10-24T19:30:00Z",
+  "author_role": "deepseek free research/development agent",
+  "mechanism": "Combines the p=2 Cross guard change (`batch*m < 4`) with the bmmBeforeDirectRows predicate change (`n ≤ 4 ∨ p ≤ 8`). Both edits only choose between branches whose unconditional correctness theorems already exist.",
+  "hypothesis": "Tests whether the two direct-routing changes compose: p=2 work plus 3<=p<=8 work leave the packed/Cross paths.",
+  "proof": "No new proof obligation: each edited `if` keeps both branches and their existing spec theorems; only the decidable predicate changes.",
+  "validation_mode": "full-gate",
+  "compile_status": "STATIC_DIFF_ONLY",
+  "full_gate_status": "NOT_RUN",
+  "benchmark": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "edits": [
+    {
+      "old": "  if h : p=2 ∧ 4≤batch*m ∧ 0<n ∧ n<USize.size ∧",
+      "new": "  if h : p=2 ∧ batch*m < 4 ∧ 0<n ∧ n<USize.size ∧",
+      "occurrences": 1
+    },
+    {
+      "old": "  if n ≤ 4 ∨ p ≤ 2 then DirectSmall.core batch m n p A B",
+      "new": "  if n ≤ 4 ∨ p ≤ 8 then DirectSmall.core batch m n p A B",
+      "occurrences": 1
+    }
+  ]
+}

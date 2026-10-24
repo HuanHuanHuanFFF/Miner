@@ -1,0 +1,25 @@
+{
+  "candidate": "f01-deepseek-p2-direct",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "43d15b124e1ce494143b8726ad0b165f5e36187fc379bc753da3a8346a5083d6",
+  "candidate_bytes": 248144,
+  "parent": "competitions/floatlib/candidates/f01-d12-scalar-combined/Kernel.lean",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "at_utc": "2026-10-24T19:30:00Z",
+  "author_role": "deepseek free research/development agent",
+  "mechanism": "Only the p=2 Cross guard changes: `4≤batch*m` becomes `batch*m < 4`, so p=2 shapes with batch*m>=4 fall through to the proven DirectSmall scalar-dot core instead of R11CrossRows. No other runtime bytes change.",
+  "hypothesis": "R11CrossRows packs four rows and two columns (8 outputs) through the p=2 Cross machinery; direct scalar dots may avoid its fixed packing/output overhead at the cost of reading A twice per row. Public-v2 dense, sparse and extremes groups hold most p=2 scored work.",
+  "proof": "No new proof obligation: each edited `if` keeps both branches and their existing spec theorems; only the decidable predicate changes.",
+  "validation_mode": "full-gate",
+  "compile_status": "STATIC_DIFF_ONLY",
+  "full_gate_status": "NOT_RUN",
+  "benchmark": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "edits": [
+    {
+      "old": "  if h : p=2 ∧ 4≤batch*m ∧ 0<n ∧ n<USize.size ∧",
+      "new": "  if h : p=2 ∧ batch*m < 4 ∧ 0<n ∧ n<USize.size ∧",
+      "occurrences": 1
+    }
+  ]
+}

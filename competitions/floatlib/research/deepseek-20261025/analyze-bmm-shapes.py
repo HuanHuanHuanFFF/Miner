@@ -27,8 +27,16 @@ print(f"{'case':18s} {'m':>4s} {'n':>4s} {'p':>4s} {'batch':>5s} {'work':>10s} r
 by_grp = {}
 for c in cases:
     grp = c["name"].split(":")[1]
-    route = "DirectSmall" if (c["n"] <= 4 or c["p"] <= 2) else (
-        "DirectContinuous" if (c["n"] <= 4 and c["p"] > 2) else "Packed10")
+    # Actual df5c dispatch order: underflow-zero -> Cross(p=2, batch*m>=4) ->
+    # DirectContinuous(n<=4,p>2) -> DirectSmall(n<=4 or p<=2) -> Packed10.
+    if c["p"] == 2 and c["batch"] * c["m"] >= 4:
+        route = "CrossP2"
+    elif c["n"] <= 4 and c["p"] > 2:
+        route = "DirectContinuous"
+    elif c["n"] <= 4 or c["p"] <= 2:
+        route = "DirectSmall"
+    else:
+        route = "Packed10"
     by_grp.setdefault(grp, []).append((c, route))
     print(f"{c['name']:18s} {c['m']:4d} {c['n']:4d} {c['p']:4d} {c['batch']:5d} {c['work']:10d} {route}")
 
