@@ -25,6 +25,7 @@ LOCAL_REVIEW_FILES = (
     'round-plan.json', 'selection-policy.json', 'prepare-plan.py',
     'freeze-cohort.py', 'verify-three-groups.py', 'adopt-three-confirmed.py',
     'summarize-run.py', 'execution-binding.py',
+    'final-choice.py', 'final-selection-predeclared.json', 'final-selection-receipt.json',
 )
 
 

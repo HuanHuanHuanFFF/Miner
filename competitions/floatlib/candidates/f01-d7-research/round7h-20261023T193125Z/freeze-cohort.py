@@ -26,6 +26,10 @@ def main():
     spec.loader.exec_module(g)
     state = read(ROOT/'competitions/floatlib/coordination/development-status.json')
     g.require(state['research_round']['id'] == 'R11-20261023T193125Z', 'Wrong active round')
+    if not a.diagnostic_only:
+        choice_spec = importlib.util.spec_from_file_location('r11_final_choice', HERE/'final-choice.py')
+        choice = importlib.util.module_from_spec(choice_spec); choice_spec.loader.exec_module(choice)
+        choice.validate(a.candidate, a.discovery)
     baseline = 'f01-r8-combined-result-guard'
     p = g.load_run(ROOT, D7, a.discovery, (a.candidate, baseline))
     names = [row['candidate'] for row in p['plan']['candidates']]
