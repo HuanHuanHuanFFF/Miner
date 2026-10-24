@@ -1,0 +1,49 @@
+{
+  "candidate": "f01-d12-none-native-result",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "42c76db28de3b6239dcfddcf17ae7ebec6d06e54b4f5cd7c0ac818c7f8ce4d0a",
+  "candidate_bytes": 252826,
+  "created_at_utc": "2026-10-24T08:17:23.891586+00:00",
+  "parent": "f01-d12-scalar-combined",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "mechanism": "Preserve parent native let/result/selfguard/nonNaN branch and exact rawSome priority. Only already-entered cold branch passes computedFloat32 result to new helper; rawChoose None returns ofFloat32 result, avoiding generic software fallback and a second FP calculation.",
+  "proof_route": "rawChoose None→Model.chooseNaN2 None→both model/native inputs nonNaN→R7Native add/mul+exact input roundtrip. Copied closed classifiers have fresh local names; originals/comments remain. Result identity is rfl, with no result-nonNaN/finite assumption.",
+  "checks": {
+    "inverse_parent_exact": true,
+    "eight_public_types": {
+      "Submission.add": "TYPE_UNCHANGED",
+      "Submission.add_spec": "TYPE_UNCHANGED",
+      "Submission.mul": "TYPE_UNCHANGED",
+      "Submission.mul_spec": "TYPE_UNCHANGED",
+      "Submission.sum": "TYPE_UNCHANGED",
+      "Submission.sum_spec": "TYPE_UNCHANGED",
+      "Submission.bmm": "TYPE_UNCHANGED",
+      "Submission.bmm_spec": "TYPE_UNCHANGED"
+    },
+    "all_parent_declarations_preserved_unique": true,
+    "ordinary_prefixes_unchanged": true,
+    "Some_selection_body_unchanged": true,
+    "None_uses_existing_result_without_FP_recomputation": true,
+    "original_policy_static": "PASS",
+    "resources_options_unchanged": true
+  },
+  "evidence_links": [
+    "scalar-none-native-preflight.json",
+    "scalar-none-scalar-counts.json",
+    "scalar-none-tensor-counts.json"
+  ],
+  "opportunity_boundary": "Scalar None is rare; BMM source-model invalid events are not compiled execution counts or a timing guarantee. Existing9.7409point coldSome gain is already realized and is not projected again.",
+  "state": "READY_FOR_STATEMENT",
+  "validation_mode": "statement first, then complete original gate",
+  "proof_status": "NOT_RUN_EXACT_NEW_BRIDGE",
+  "leanchecker": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "checksum": "NOT_RUN",
+  "full_gate": "NOT_RUN",
+  "codegen": "NOT_RUN",
+  "performance": "UNKNOWN_NOT_ADDITIVE",
+  "attribution": "All parent legal/source comments and classifier declarations retained in original order. Newnamespace copies exact R7W05 proof bodies with only local-name references adapted; new bridge/runtime integration remains unverified.",
+  "formal_submission": "NOT_SUBMITTED",
+  "ci_owner": "Root",
+  "build_script_sha256": "90f355f4b6aaf81a99f2cc0c0e4bf5dc2bae9db0f0c300e929c54ef3d9fc1967"
+}

@@ -1,0 +1,629 @@
+{
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "candidate_sha256": "42c76db28de3b6239dcfddcf17ae7ebec6d06e54b4f5cd7c0ac818c7f8ce4d0a",
+  "candidate_bytes": 252826,
+  "headroom_bytes": 3174,
+  "operations": [
+    {
+      "name": "insert copied closed classifiers and full-input None-native helpers",
+      "offset_in_previous_stage": 132266,
+      "before": "end ScalarNaN\n",
+      "after": "end ScalarNaN\n\n/- R12 None-result reuse. Local classifier proofs copy the accepted R7W05\nproof bodies under fresh names; the original declarations and all their\ncomments remain in their original positions. New integration is NOT_RUN. -/\nnamespace NoneNativeProof\n\nopen FloatLib.Floats Competition\nopen FloatLib.Floats.Formats.BinaryInterchange\n\nopen Float.Model.UnpackedFloat\n\ntheorem none_model_toModel_isNaN (x : Model FloatFormat.binary32) :\n\n\n    (Model.toModel x).isNaN = Model.isNaN x := by\n\n\n  have he : unpackExponent (Model.toModelBits x) = -1#(FloatFormat.binary32.toModel.exponentBits) ↔\n\n\n      Model.expField x = FloatFormat.binary32.expAllOnesNat := by\n\n\n    rw [← BitVec.toNat_inj, Model.unpackExponent_toNat,\n\n\n      Model.toNat_neg_one_exponentBits]\n\n\n  have hm : unpackMantissa (Model.toModelBits x) = 0#(FloatFormat.binary32.toModel.mantissaBitsWithoutImplicit) ↔\n\n\n      Model.fracField x = 0 := by\n\n\n    rw [← BitVec.toNat_inj, Model.unpackMantissa_toNat]\n\n\n    rfl\n\n\n  change (Model.toModel x).isNaN = Model.IEEE.isNaN x\n\n\n  unfold Model.toModel unpack\n\n\n  dsimp only\n\n\n  split_ifs <;>\n\n\n    simp_all [Float.Model.UnpackedFloat.isNaN, Model.IEEE.isNaN]\n\ntheorem none_toFloat32_isNaN (x : Binary32) :\n\n\n    (ExecFloat.Binary.toFloat32 x).isNaN = Model.isNaN (ExecFloat.Binary.toModel x) := by\n\n\n  change ((Model.toFloat32Model (ExecFloat.Binary.toModel x)).unpack).isNaN = _\n\n\n  rw [Model.unpack_toFloat32Model]\n\n\n  exact none_model_toModel_isNaN _\n\ntheorem raw_none_model (x y : Binary32)\n    (hnone : DWordNaN.rawChoose x.raw.1 y.raw.1 = none) :\n    Model.chooseNaN2 (Model.NativeBinary32.ofUInt32 x.raw.1)\n      (Model.NativeBinary32.ofUInt32 y.raw.1) = none := by\n  rw [← DWordNaN.rawChoose_eq, hnone]\n  rfl\n\ntheorem raw_none_native_inputs (x y : Binary32)\n    (hnone : DWordNaN.rawChoose x.raw.1 y.raw.1 = none) :\n    (ExecFloat.Binary.toFloat32 x).isNaN = false ∧\n      (ExecFloat.Binary.toFloat32 y).isNaN = false := by\n  have hm := (Model.chooseNaN2_eq_none_iff\n    (Model.NativeBinary32.ofUInt32 x.raw.1)\n    (Model.NativeBinary32.ofUInt32 y.raw.1)).mp (raw_none_model x y hnone)\n  constructor\n  · rw [none_toFloat32_isNaN, R7W02.exec_toModel_eq_rawModel]\n    exact hm.1\n  · rw [none_toFloat32_isNaN, R7W02.exec_toModel_eq_rawModel]\n    exact hm.2\n\ntheorem native_add_spec_of_none (x y : Binary32)\n    (hnone : DWordNaN.rawChoose x.raw.1 y.raw.1 = none) :\n    ExecFloat.Binary.ofFloat32\n      (ExecFloat.Binary.toFloat32 x + ExecFloat.Binary.toFloat32 y) =\n        ExecFloat.Spec.add x y := by\n  have hn := raw_none_native_inputs x y hnone\n  rw [R7Native.ofFloat32Add _ _ hn.1 hn.2,\n    NotNaNProbe.roundtrip x hn.1, NotNaNProbe.roundtrip y hn.2]\n  exact ExecFloat.Proof.add_eq_spec x y\n\ntheorem native_mul_spec_of_none (x y : Binary32)\n    (hnone : DWordNaN.rawChoose x.raw.1 y.raw.1 = none) :\n    ExecFloat.Binary.ofFloat32\n      (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y) =\n        ExecFloat.Spec.mul x y := by\n  have hn := raw_none_native_inputs x y hnone\n  rw [R7Native.ofFloat32Mul _ _ hn.1 hn.2,\n    NotNaNProbe.roundtrip x hn.1, NotNaNProbe.roundtrip y hn.2]\n  exact ExecFloat.Proof.mul_eq_spec x y\n\n@[inline] def addColdResult (x y : Binary32) (result : Float32) : Binary32 :=\n  match DWordNaN.rawChoose x.raw.1 y.raw.1 with\n  | some w => FastMul.ofBits w\n  | none => ExecFloat.Binary.ofFloat32 result\n\ntheorem addColdResult_spec (x y : Binary32) (result : Float32)\n    (hr : result = R2W01b.convert x.raw.1 + R2W01b.convert y.raw.1) :\n    addColdResult x y result = ExecFloat.Spec.add x y := by\n  unfold addColdResult\n  split\n  · rename_i w hw\n    exact DWordNaN.selected_add x y w hw\n  · rename_i hw\n    rw [hr, R2W01c.convert_eq, R2W01c.convert_eq]\n    change ExecFloat.Binary.ofFloat32\n      (ExecFloat.Binary.toFloat32 x + ExecFloat.Binary.toFloat32 y) = _\n    exact native_add_spec_of_none x y hw\n\n@[inline] def mulColdResult (x y : Binary32) (result : Float32) : Binary32 :=\n  match DWordNaN.rawChoose x.raw.1 y.raw.1 with\n  | some w => FastMul.ofBits w\n  | none => ExecFloat.Binary.ofFloat32 result\n\ntheorem mulColdResult_spec (x y : Binary32) (result : Float32)\n    (hr : result = R2W01b.convert x.raw.1 * R2W01b.convert y.raw.1) :\n    mulColdResult x y result = ExecFloat.Spec.mul x y := by\n  unfold mulColdResult\n  split\n  · rename_i w hw\n    exact DWordNaN.selected_mul x y w hw\n  · rename_i hw\n    rw [hr, R2W01c.convert_eq, R2W01c.convert_eq]\n    change ExecFloat.Binary.ofFloat32\n      (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y) = _\n    exact native_mul_spec_of_none x y hw\n\nend NoneNativeProof\n\n",
+      "before_sha256": "812a7b8ef32fe30c8e35c34d39b85a10ff8ff8623242a326c6defcf132b4c6d6",
+      "after_sha256": "017d754d61bdc1f472de94672e1f5186cae190fbc5a33fa42a0f7f812346dee5",
+      "previous_source_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+      "next_source_sha256": "fce61545acf5b6b93b8ca9623576fc5c1559a7690656553980c84dd898871d93"
+    },
+    {
+      "name": "reuse computed result only in exported add NaN cold branch",
+      "offset_in_previous_stage": 137144,
+      "before": "  else ScalarNaN.add x y\n",
+      "after": "  else NoneNativeProof.addColdResult x y result\n",
+      "before_sha256": "2f16d572e2c207859731f3569da23697f5bd2f601265881f4394bc2053152ef4",
+      "after_sha256": "4460655429e09dfffd4bac47edd5b4565ec1d32c1c383231cb95f396bd07a6bb",
+      "previous_source_sha256": "fce61545acf5b6b93b8ca9623576fc5c1559a7690656553980c84dd898871d93",
+      "next_source_sha256": "d4a56f6037a64b37df2f2f44e41e762efde99ffb5d8cf87110ced203b7b1c8c1"
+    },
+    {
+      "name": "new add cold proof with definitional result identity",
+      "offset_in_previous_stage": 137825,
+      "before": "  · exact ScalarNaN.add_spec x y\n",
+      "after": "  · exact NoneNativeProof.addColdResult_spec x y _ rfl\n",
+      "before_sha256": "ff56fa80e4bad246c9dc96ab97633b727cc4d7eec84ebfdecc26cf1f3adb51e9",
+      "after_sha256": "134b0fbeac4e00ac7c19e6da2501ab5a26d349bed639b4c551fcb76a74b088e0",
+      "previous_source_sha256": "d4a56f6037a64b37df2f2f44e41e762efde99ffb5d8cf87110ced203b7b1c8c1",
+      "next_source_sha256": "5550878dbe3543c6c5dc5048d0fb85014106013ea20571cfbdca7fe2f8c13d3f"
+    },
+    {
+      "name": "reuse computed result only in nativeMul NaN cold branch",
+      "offset_in_previous_stage": 138150,
+      "before": "  else ScalarNaN.mul x y\n",
+      "after": "  else NoneNativeProof.mulColdResult x y result\n",
+      "before_sha256": "de2634c1956d55177a908c4908a80c72ddabc8ae8d84590b884de14616308f63",
+      "after_sha256": "552c3e40918a8972d60dbbd4982f1b9cd116f6bb2bc741d23e3925067dbe5342",
+      "previous_source_sha256": "5550878dbe3543c6c5dc5048d0fb85014106013ea20571cfbdca7fe2f8c13d3f",
+      "next_source_sha256": "0275255db688cae909e4716497542f3fc3ed9b6e873a49d9d11b8d351bb5178d"
+    },
+    {
+      "name": "new multiply cold proof with definitional result identity",
+      "offset_in_previous_stage": 138849,
+      "before": "  · exact ScalarNaN.mul_spec x y\n",
+      "after": "  · exact NoneNativeProof.mulColdResult_spec x y _ rfl\n",
+      "before_sha256": "47fc03a8ad8fb3597e4d63812a3f8098b50a641c63847c939abba01fbdf1179a",
+      "after_sha256": "7ea805321d680baa2546e2d43815721be3a1cfe29cf0cca8681bc33364f41cb4",
+      "previous_source_sha256": "0275255db688cae909e4716497542f3fc3ed9b6e873a49d9d11b8d351bb5178d",
+      "next_source_sha256": "42c76db28de3b6239dcfddcf17ae7ebec6d06e54b4f5cd7c0ac818c7f8ce4d0a"
+    }
+  ],
+  "inverse_parent_exact": true,
+  "eight_public_types": {
+    "Submission.add": "TYPE_UNCHANGED",
+    "Submission.add_spec": "TYPE_UNCHANGED",
+    "Submission.mul": "TYPE_UNCHANGED",
+    "Submission.mul_spec": "TYPE_UNCHANGED",
+    "Submission.sum": "TYPE_UNCHANGED",
+    "Submission.sum_spec": "TYPE_UNCHANGED",
+    "Submission.bmm": "TYPE_UNCHANGED",
+    "Submission.bmm_spec": "TYPE_UNCHANGED"
+  },
+  "all_parent_declarations_preserved_unique": true,
+  "new_declarations": [
+    "Submission.NoneNativeProof.addColdResult",
+    "Submission.NoneNativeProof.addColdResult_spec",
+    "Submission.NoneNativeProof.mulColdResult",
+    "Submission.NoneNativeProof.mulColdResult_spec",
+    "Submission.NoneNativeProof.native_add_spec_of_none",
+    "Submission.NoneNativeProof.native_mul_spec_of_none",
+    "Submission.NoneNativeProof.none_model_toModel_isNaN",
+    "Submission.NoneNativeProof.none_toFloat32_isNaN",
+    "Submission.NoneNativeProof.raw_none_model",
+    "Submission.NoneNativeProof.raw_none_native_inputs"
+  ],
+  "existing_runtime_checks": {
+    "R7W04.nonNaN": {
+      "unchanged": true,
+      "sha256": "8e448dccaa6b4de874b9c084d6fbabd0076e45988f56f7418ed1be8f7e013745"
+    },
+    "R7W01.F32": {
+      "unchanged": true,
+      "sha256": "ddbe2c6d419805b49e18e60809436e163c311404b929add05e7588bd1f6adf19"
+    },
+    "R7W01.M32": {
+      "unchanged": true,
+      "sha256": "aba175d1be168bf64fafba4dd5eaaccfaebde566cba907e4903d6b02cad6d18f"
+    },
+    "R7W01.bits32": {
+      "unchanged": true,
+      "sha256": "c7f838b46a6a1382e81d814a55fceeedb06f2c70a2d40318e5b4e924e33223d6"
+    },
+    "R7W01.fromBits32": {
+      "unchanged": true,
+      "sha256": "c600c4f3deab6ece9a215e7228750b995e2cd002162b5cfef4c5163a943a5a60"
+    },
+    "R7W01.quietGuard": {
+      "unchanged": true,
+      "sha256": "0c0fbc6b4ce3150f40346280713ea1c3af8c2f2a9a42398c232b00ffb6afcbbf"
+    },
+    "R7W01.modelDotFold": {
+      "unchanged": true,
+      "sha256": "fbe7a94b5a7f77729382ef21702572f8b23452c2cab9e7afd7a475128c1a18f0"
+    },
+    "R7W01.modelDotEarly": {
+      "unchanged": true,
+      "sha256": "e16685b4597f37095977bbfb47c35e00fc483fcb252129df500044baccf87639"
+    },
+    "R7W01.execQuietGuard": {
+      "unchanged": true,
+      "sha256": "8fa0008787b950f601ee32ac7ee67d87f7bc7a2f0b3184b2cfe1435ae6b90da8"
+    },
+    "R7W02.rawSNaN": {
+      "unchanged": true,
+      "sha256": "1ad30993feb2ab71282b6820d3008fd50cd18c2e8e593ad7782d288085d0e9c6"
+    },
+    "R7W02.quietRaw": {
+      "unchanged": true,
+      "sha256": "3129193230304dbf407ca57c5d9266c4019bbaf2d4f011a7671b86ebc9ba9832"
+    },
+    "R7W02.fromRaw": {
+      "unchanged": true,
+      "sha256": "9bf48a40915803bafe985ba1b1deb5536c3fef5b8ac03c06346b983e50c8b04e"
+    },
+    "R7W02.step": {
+      "unchanged": true,
+      "sha256": "c134094cb5aaeb4f6217d8cd1f84a8384d38e60ad38bc5b92189454046a8402a"
+    },
+    "R2W01b.magnitude": {
+      "unchanged": true,
+      "sha256": "a5063c32333c639d6db95b93ea0d7dc0c8d8509519a7aae7fcdcc6b4a4618713"
+    },
+    "R2W01b.fastOK": {
+      "unchanged": true,
+      "sha256": "6a9f5ba41cb34e3b30a6ff9e4a3e794253df6dd213e71c20011e06fe99c13e02"
+    },
+    "R2W01b.NormalBand": {
+      "unchanged": true,
+      "sha256": "66a181dafff6f2dfbf22a65f3ce9bd0c745f3ff65a6933a78f568e51f028b61c"
+    },
+    "R2W01b.tableIndex": {
+      "unchanged": true,
+      "sha256": "600b6369013dc752a495aff21093b34208bb3fbdb73a87c1a14ed4045b4110b4"
+    },
+    "R2W01b.mantissa": {
+      "unchanged": true,
+      "sha256": "92542fb45c65b6f35c1b61c136849970547b8f02a8f9b4296bac54d6706ab65c"
+    },
+    "R2W01b.scaleBits": {
+      "unchanged": true,
+      "sha256": "9ddc04b3175da1e2e0b9bf6c6b4bbb95e892a39315a56ade86a85dad0d25665c"
+    },
+    "R2W01b.scaleTable": {
+      "unchanged": true,
+      "sha256": "8c34eb2dbac38c9dd1e375fb8695102191b3644978b9b903d1347e78514ff4ed"
+    },
+    "R2W01b.scaleAt": {
+      "unchanged": true,
+      "sha256": "0352729939bc5f870034ed12f155a9a4e93e817c82f486f5ad84b63fd50c1715"
+    },
+    "R2W01b.tableProduct": {
+      "unchanged": true,
+      "sha256": "e098cbdb05917d14a3964ee0daad9235fb32310a09e78be745770693db7e758c"
+    },
+    "R2W01b.convert": {
+      "unchanged": true,
+      "sha256": "26598e8c8e95588c6318f2a0d607094dffb9ecbcf994ed8c9ee18e77f4954e08"
+    },
+    "R2W01c.nativeModel": {
+      "unchanged": true,
+      "sha256": "1467ccf88bb8400f52e2047340e23f2f11e3213a506ac01cf3d2e6d1f966491d"
+    },
+    "R2W01c.rawModel": {
+      "unchanged": true,
+      "sha256": "1d5d4ea47d27a900d9955a78f9dd23f729641e5df8bab91891ac099292c262b1"
+    },
+    "R2W01c.raw32": {
+      "unchanged": true,
+      "sha256": "fa74e17bbce735b95404c3efc734bd0fd5aeb3f127cd5dd352f2ce4953a1bc92"
+    },
+    "R2W01c.wordSign": {
+      "unchanged": true,
+      "sha256": "fd4eecba3cc141a2963c461449b81d28c56df42f210bf39d4c8d5c2626b3c2e9"
+    },
+    "R2W01c.wordExp": {
+      "unchanged": true,
+      "sha256": "e3b2abf7b791049003d74e284281d6f583af41a26a578bb2701c33cb6507fdc7"
+    },
+    "R2W01c.wordFrac": {
+      "unchanged": true,
+      "sha256": "0e2b23a169259357deb32377c6c1bb79953923f5eab9c70ff982c0b699ebe84e"
+    },
+    "Submission.FastMul.sx": {
+      "unchanged": true,
+      "sha256": "897ae55344b2e7b8de290d89c9701eeeae655ce74fd3864631bc13b91ec2c901"
+    },
+    "Submission.FastMul.sr": {
+      "unchanged": true,
+      "sha256": "6493fe36663856a5bc8590b9f2103c598a7c7429b108211bd5078002f644e1ca"
+    },
+    "Submission.FastMul.fastLog2": {
+      "unchanged": true,
+      "sha256": "a9c19fb10302230412b057aea20de05b6e2871be8ce10c462b98b2c762338111"
+    },
+    "Submission.FastMul.rse": {
+      "unchanged": true,
+      "sha256": "0d375d3d6c1d1045d4e3c8c113b084d938daf0ea399bb54a0a5fa2399321def4"
+    },
+    "Submission.FastMul.rseAny": {
+      "unchanged": true,
+      "sha256": "615db64f5915b53c3e496a220fbc6cb93857c4d27b5a8e93b507818a6fbe5a38"
+    },
+    "Submission.FastMul.mkW": {
+      "unchanged": true,
+      "sha256": "f7cd3a4cdcf5a369e21ea087754ec4606a244b9d8eb5445aa8efeea74a17b865"
+    },
+    "Submission.FastMul.fracW": {
+      "unchanged": true,
+      "sha256": "0a2dd41dce65a1d971faf6330bb94886e5f49311bf7b345d7517ce3b120662b1"
+    },
+    "Submission.FastMul.roundP": {
+      "unchanged": true,
+      "sha256": "4db116619f103adbe1353cedc7b4519e64df1ab1f17da9e04094837ee33f8066"
+    },
+    "Submission.FastMul.core": {
+      "unchanged": true,
+      "sha256": "e33c9b4f8a480e92fe7571bf2241236f85f0f10f541c16c5d4a4b428787df05e"
+    },
+    "Submission.FastMul.sm1": {
+      "unchanged": true,
+      "sha256": "785505b9f8db8c2095cffadfd573342d5f79eae038f8fad8d20557539849f664"
+    },
+    "Submission.FastMul.special": {
+      "unchanged": true,
+      "sha256": "0563f1a4e57876f9eafd4643188ef205ec0e65b8d9d0fd3a1a011af974339610"
+    },
+    "Submission.FastMul.ofBits": {
+      "unchanged": true,
+      "sha256": "e6a05b396052f276875282ac058e78b7161ebcf8348cca6dc51d4436a367bb5a"
+    },
+    "Submission.FastMul.mul": {
+      "unchanged": true,
+      "sha256": "21cc2dc45a84d71ac4bf5fa64e26bcb17be85eb28994b01078bdaa33b863bc34"
+    },
+    "Submission.FastMul.Fmt": {
+      "unchanged": true,
+      "sha256": "64e035c96a554c9707b33c3a3b1ff690d4c0325a4609cea8676439ef854d6a6c"
+    },
+    "Submission.FastMul.Plan": {
+      "unchanged": true,
+      "sha256": "0c2ee8a6daae838804c86de056d446829b50564d5b208c9fbfa25ba4f56f9632"
+    },
+    "Submission.FastMul.Fam": {
+      "unchanged": true,
+      "sha256": "9337669c810ff10d74975191e5bd06a12e39fab0ae48ef49385f7f7d3f79cf58"
+    },
+    "Submission.FastMul.dec": {
+      "unchanged": true,
+      "sha256": "9d5eda4c50f5b5297efbc1a05215c8e0ff74b771782319c080315ee67597323d"
+    },
+    "Submission.LowScale.roundLow": {
+      "unchanged": true,
+      "sha256": "9ceea952e7d6a45a4a2669b99497a32eb32b93ae469867f295cfed4aa0189a32"
+    },
+    "Submission.LowScale.roundSelect": {
+      "unchanged": true,
+      "sha256": "7f2e761292a319ae3b93344dc6111a045a1ed478416825a1d2b3950e1054ccda"
+    },
+    "Submission.LowScale.core": {
+      "unchanged": true,
+      "sha256": "8d07d870cd6e061fb25b01f3767708dcd5b0a87a57a12fad1ef855b7154390d2"
+    },
+    "Submission.LowScale.mul": {
+      "unchanged": true,
+      "sha256": "4e0b9e99b29010e2b48e702822e4722033c289c9784e463c0bad783ff2160d78"
+    },
+    "Submission.R7Native.F": {
+      "unchanged": true,
+      "sha256": "a3d1148f5c7eb622b214ec9c7144960faddce54b7d7a3b244f6767284c87b1bd"
+    },
+    "Submission.R7Native.M": {
+      "unchanged": true,
+      "sha256": "aae21bceee146149e1ebd1bc0857f242d425d995a1699ac427129f72d3e30eff"
+    },
+    "Submission.DWordNaN.M": {
+      "unchanged": true,
+      "sha256": "f9306a738bc7fd2f64b1325c21f9f6ebbd736b7b7de0e64eff6217c9130d9dbf"
+    },
+    "Submission.DWordNaN.rawNaN": {
+      "unchanged": true,
+      "sha256": "651f2ca1abc8c0998aeacdf2b2445870544b8d7ecebbad99f5c862859b7d1c6a"
+    },
+    "Submission.DWordNaN.rawSNaN": {
+      "unchanged": true,
+      "sha256": "f0f73a5f4a1258cd1223041fe3a022bc9e1cff670984ec5ff2e28017d8d646ce"
+    },
+    "Submission.DWordNaN.rawChoose": {
+      "unchanged": true,
+      "sha256": "5133ff18447217982ca3a6db7e7cfc064aca7faed600e8227d20bb110092369c"
+    },
+    "Submission.ScalarNaN.add": {
+      "unchanged": true,
+      "sha256": "6d7ae4b0c52b2a278833e2ff4cdeafad8e93b17383b420e7b352ea78e5d41f12"
+    },
+    "Submission.ScalarNaN.mul": {
+      "original_chunk_preserved_as_prefix": true,
+      "sha256": "e9e5794165ea9c6f1b2e99753f6a331f38273ee9f23f05ea20f16c85d3e623cd"
+    },
+    "Submission.add": {
+      "ordinary_let_result_guard_fast_prefix_unchanged": true,
+      "before_sha256": "7d86d9b5d0eddb715b6ad8859ce982a64df794aad85a401d56c93ae2732f4a57",
+      "after_sha256": "630c6045c78f1834f47c7d7b1312723ba2d276c33f15e11644da25e157cf786c"
+    },
+    "Submission.nativeMul": {
+      "ordinary_let_result_guard_fast_prefix_unchanged": true,
+      "before_sha256": "0867c1935fdbfdfa85f9d69e737f66c619d60daf065369abd6fc9eb62a1b3eba",
+      "after_sha256": "b9da97aa3c3fca871820f288a6c399f92084573dd7afa4cb4b34e734284a8848"
+    },
+    "Submission.mul": {
+      "unchanged": true,
+      "sha256": "ca53b3a1958006f35df59df20498ad697329f156e7031c09cb9b4c9e3d082a06"
+    },
+    "Submission.referenceSum": {
+      "unchanged": true,
+      "sha256": "3ad4501d4e1a19a7a1e11688fee34339c57f8b0709a7e9ee7084b153392257a2"
+    },
+    "Submission.referenceBmm": {
+      "unchanged": true,
+      "sha256": "aef29c383b9351e548eed00ab5f9fbcef4008f0da10d41f5f57cf536afba4201"
+    },
+    "Submission.R7W05.nativeSumStep": {
+      "unchanged": true,
+      "sha256": "5917529d93403208fa52324462275f0de6c962f4ded5e054787e400e603b4f42"
+    },
+    "Submission.R7W05.nativeDotStep": {
+      "unchanged": true,
+      "sha256": "d226a4f38ec39c06fcb2b21a916167ed3c2cfecb9c882fad72d3385e644d4513"
+    },
+    "Submission.R7W05.repairSumStep": {
+      "unchanged": true,
+      "sha256": "1438dd209bef9b30d1e599b296d234edc7986234100b9c174b59d1da868f965f"
+    },
+    "Submission.R7W05.repairDotStep": {
+      "unchanged": true,
+      "sha256": "3fb9325da5ff0d21bdf2280de574c172daa416ea47645f53daa2816bd796aadb"
+    },
+    "Submission.R7W12.rawNotNaN": {
+      "unchanged": true,
+      "sha256": "b67b247858c90e0178c03a26621f595f699a39dd1abe53bf615d36cffec0771d"
+    },
+    "Submission.R7SumRepair.step": {
+      "unchanged": true,
+      "sha256": "916941b4f4bd26e0413da565b0b403d73afe003e8a5f60381ea2f3fa8eac1c97"
+    },
+    "Submission.R7SumRepair.suffixLoop": {
+      "unchanged": true,
+      "sha256": "4a87c2e8db8e87df900fda4cf825e8c7087f0943db80ea4ae5493ef220f62ccd"
+    },
+    "Submission.R7NaNReplay.replayStep": {
+      "unchanged": true,
+      "sha256": "0144ea0ed7d692610d4f65eff79e2eadcfcbb650a2862b313929fda7e38c200c"
+    },
+    "Submission.R7NaNReplay.replayLoop": {
+      "unchanged": true,
+      "sha256": "d2ba34ecc27446acf34475ebb5727e1a62ad3542938c9918760a3de9bacf6799"
+    },
+    "Submission.R7NaNReplay.replayEarly": {
+      "unchanged": true,
+      "sha256": "295db844e90e5586d2f2bae609e8c0067f465e2d31b9de013b1eabd40c469c62"
+    },
+    "Submission.R7NaNReplay.replay": {
+      "unchanged": true,
+      "sha256": "a57e90f50b4a10c46349c6a8dd3614d260fbf7af6de5340145c4a3061f4bfead"
+    },
+    "Submission.NativeFinal.dotLoop": {
+      "unchanged": true,
+      "sha256": "deb91363eeadb57b09e528c13b1bd1a620a66dd3ec8b275d79827f26e1985aa0"
+    },
+    "Submission.NativeFinal.dot": {
+      "unchanged": true,
+      "sha256": "efee89b4615e802ed8a79386ef58da56b1bd97f1e97899339fc67750a0661d40"
+    },
+    "Submission.Packed10.zero32": {
+      "unchanged": true,
+      "sha256": "23b11c4c7f9b3764f68538eccc07d4fb12d253cf1669212e2e915d963262c914"
+    },
+    "Submission.Packed10.zero10": {
+      "unchanged": true,
+      "sha256": "2bf9ef5053e418b778e51f199c159c9e4e32bfd80179992f1ead7ff9f0b25d0e"
+    },
+    "Submission.Packed10.lane": {
+      "unchanged": true,
+      "sha256": "3e6a0aaf3223d53cffebf438fa815e3994d1bf08854e0c905f4d35f56bf2d038"
+    },
+    "Submission.Packed10.packet": {
+      "unchanged": true,
+      "sha256": "fbdf60e5588987c5840d9f14f4519fe23ed7e731a1c7013336a44420de57b258"
+    },
+    "Submission.Packed10.update": {
+      "unchanged": true,
+      "sha256": "3aea48de1a8e6843c4912fe6dcbe44d3c8fce17ad28b6efe111695162fbc0b56"
+    },
+    "Submission.Packed10.groups": {
+      "unchanged": true,
+      "sha256": "3bf9eff4212635536264ac52d1ae248838ab0d4b57c0591297746d26a2b2c044"
+    },
+    "Submission.Packed10.packB": {
+      "unchanged": true,
+      "sha256": "ad5329c1031894e715c6a2aaa1df8f03b46ecd17a7829c0fe4762d9cf1e27f64"
+    },
+    "Submission.Packed10.dot10": {
+      "unchanged": true,
+      "sha256": "21a51a5edace0e2d5575f35949c7110f9ebc7b6dd383a3dab30a06f4de2af09b"
+    },
+    "Submission.Packed10.finish": {
+      "unchanged": true,
+      "sha256": "9ed4c145d6d89ecc9b64612b84bab02889195b8b968c7d833dcec77e01275da9"
+    },
+    "Submission.Packed10Index.loop": {
+      "unchanged": true,
+      "sha256": "72f52b25414ddb123acfd37813589268cb4397744238a40fd6574c352904edf9"
+    },
+    "Submission.Packed10Index.within": {
+      "unchanged": true,
+      "sha256": "2047ea96920409cc59d59708b7d69a7625113fab952256f70bbb09f0957d7bd4"
+    },
+    "Submission.Packed10Index.runDot": {
+      "unchanged": true,
+      "sha256": "3ae32f5de74cf5ecf0e2057b33839a22b7b66dc3e8e62672faafce20e51a1050"
+    },
+    "Submission.RowStream.Prefix": {
+      "unchanged": true,
+      "sha256": "291c1dcb14075485736629a7fc640dbe29c8dd3eb98ba1a4a4b452bdfbb335c7"
+    },
+    "Submission.RowStream.emit": {
+      "unchanged": true,
+      "sha256": "af14b6bb67ddf2180fb397fc16d63d30036f9eee52cf8c189e93f64407dd3ba7"
+    },
+    "Submission.RowStream.point": {
+      "unchanged": true,
+      "sha256": "260d0b5a5cd86042426606ef1bffad27d40cd074a292130f13b03cffbb52ef3b"
+    },
+    "Submission.RowStream.group": {
+      "unchanged": true,
+      "sha256": "e71ebcc5275c3fde043191d0590c07fd42c99509e11d97cfb6404a74b95ec347"
+    },
+    "Submission.RowStream.row": {
+      "unchanged": true,
+      "sha256": "fb36520326dc94f756d31301af6a503fa32454f2601f7c6464f9818ff8e76a5c"
+    },
+    "Submission.RowStream.output": {
+      "unchanged": true,
+      "sha256": "ce810dca1564ecbc2a164e834f24a9d2c7e2b89baf06ba6c65340be01cf5263f"
+    },
+    "Submission.RowStream.core": {
+      "unchanged": true,
+      "sha256": "271ef842ee054546a7649aa39b63a4407ed57a773daa823a7d71017b84687cfd"
+    },
+    "Submission.bmmPackedBase": {
+      "unchanged": true,
+      "sha256": "e65a827fc9e1f6e0ee70b6e9a933845994c75994c3a31080ebc2bf95c982aadf"
+    },
+    "Submission.DirectSmall.core": {
+      "unchanged": true,
+      "sha256": "c2582a23c474f15281cc9bd59ac9e2ec099909840fead130fa5c273e00a03af5"
+    },
+    "Submission.bmmBeforeDirectRows": {
+      "unchanged": true,
+      "sha256": "e924664e1f58d6753fec6812f58272a1ebe4c15162005de5052f0671380c28cd"
+    },
+    "Submission.R7SinglePassSum.natLoop": {
+      "unchanged": true,
+      "sha256": "91d1efc3a8a50738a2c237f7895fa78f433571150026c42b10b0be4e4e7fb63d"
+    },
+    "Submission.R7SinglePassSum.loop": {
+      "unchanged": true,
+      "sha256": "8a31bf75c1b33995d3b035269b06b688767c79afdb0423c404a8d578d07ea8a7"
+    },
+    "Submission.R7SinglePassSum.run": {
+      "unchanged": true,
+      "sha256": "42cae848033bc77fcdd42a93e332423f6d55b37dc2ece4e805a9c45f0f65d979"
+    },
+    "Submission.sum": {
+      "unchanged": true,
+      "sha256": "e55f936ef1408f9f1bba7f54c2d6db6d336b39aa1d47dd4f1d56ae4285955c84"
+    },
+    "Submission.DirectRows.core": {
+      "unchanged": true,
+      "sha256": "0a1b46ff5c0f3e9649b923fd3c409d2cdd599a8c324499295163e30608b449dd"
+    },
+    "Submission.DirectContinuous.row": {
+      "unchanged": true,
+      "sha256": "a7123c79a723740b6fe7c32108e5970ae649c130c40408818b066828537880e9"
+    },
+    "Submission.DirectContinuous.output": {
+      "unchanged": true,
+      "sha256": "afe7402818306d4fdde13536af3552f5be586289c5d05597cf4a4951c400b05e"
+    },
+    "Submission.DirectContinuous.core": {
+      "unchanged": true,
+      "sha256": "c8b32a7f5d546d8f03b162f209af8b50250e01188b1da2e3b38687b9217e7a02"
+    },
+    "Submission.bmmBeforeR11Cross": {
+      "unchanged": true,
+      "sha256": "e5b17eab726091618762e0fb4550fb93ddaab8eb87b731c684d293d2b07e13bd"
+    },
+    "Submission.R11CrossRows.select4": {
+      "unchanged": true,
+      "sha256": "a026de66b3d1c486183c929fc0627bcfee2b9d3af47053817bb9b786a8db66df"
+    },
+    "Submission.R11CrossRows.lane": {
+      "unchanged": true,
+      "sha256": "4cdecc4bba7eef72dd377060b964721bc112b6fb99c2b7b97f36195c18dde902"
+    },
+    "Submission.R11CrossRows.inputA": {
+      "unchanged": true,
+      "sha256": "2db162e48938ae0d690e35a4ae2b17eda7691145d8de0d3d5ccd38060bfe3ade"
+    },
+    "Submission.R11CrossRows.inputB": {
+      "unchanged": true,
+      "sha256": "581e58dea6fcd174948b9e477db4d065ecd038920d60cfbafc09f0af27d22b1e"
+    },
+    "Submission.R11CrossRows.zero8": {
+      "unchanged": true,
+      "sha256": "b7370dbe7c86415ebb94002b0857cb360cbbda8043137f625d957866abbee307"
+    },
+    "Submission.R11CrossRows.update": {
+      "unchanged": true,
+      "sha256": "75ef5f2e170340892409769bc99e49668805cbb59530e5f2e60b89dc51e19aa8"
+    },
+    "Submission.R11CrossRows.packGeneral": {
+      "unchanged": true,
+      "sha256": "0acf61493396bfeaaad8f5b111e192ceddd89b039b1c2ef4fc09b0332c2f8adc"
+    },
+    "Submission.R11CrossRows.packShared": {
+      "unchanged": true,
+      "sha256": "0bbe06bdf3fca729487eb729672526ec88ac67bedd56440a285de09de2a8e7c4"
+    },
+    "Submission.R11CrossRows.pack": {
+      "unchanged": true,
+      "sha256": "d3e5f8906954a5ec71374410c665d6a88dfc3bd798c94f02e20e0ba5d674ce19"
+    },
+    "Submission.R11CrossRows.natLoop": {
+      "unchanged": true,
+      "sha256": "c270a058b245ce62c12dd10d178de5ecf806dd188b91f148a7b649f893392358"
+    },
+    "Submission.R11CrossRows.wordLoop": {
+      "unchanged": true,
+      "sha256": "f58f7a5a0847ca860ad2511a6f43abe2feecd12de0b6051b041522a24fd11ec4"
+    },
+    "Submission.R11CrossRows.dot8": {
+      "unchanged": true,
+      "sha256": "3df4d4e609340e4f0ba377a3c6bcb211063f34f23819bb03327ba459a5dfe298"
+    },
+    "Submission.R11CrossRows.laneIndex": {
+      "unchanged": true,
+      "sha256": "172561f8d4449629b26a9519529fcc9a5898fe05ada636126def32b24d780d40"
+    },
+    "Submission.R11CrossRows.wordAt": {
+      "unchanged": true,
+      "sha256": "5627c64e8dbc51c1f82bcb4a726d28cb1fe2b6978a03a73a5efe6aecbd5333cf"
+    },
+    "Submission.R11CrossRows.finish8": {
+      "unchanged": true,
+      "sha256": "0cd1689eba0871d314a81d3e5f4f6dea61d5d49e042f8b7c7650121f8f4be6b0"
+    },
+    "Submission.R11CrossRows.blockAt": {
+      "unchanged": true,
+      "sha256": "dfd13820f8760f32d4ed74558707e26ce7274fe39cbdc48c54e392abc5305df3"
+    },
+    "Submission.R11CrossRows.blockRows": {
+      "unchanged": true,
+      "sha256": "6c7da578a5cafdd1433b4270d6b075247594f100719e8ada9229fe7c15654928"
+    },
+    "Submission.R11CrossRows.groups": {
+      "unchanged": true,
+      "sha256": "1f91bb4c39203efa3d4017c3d7d0083ebee7cda00a3c8de8b7a0e97a64f1b558"
+    },
+    "Submission.R11CrossRows.words": {
+      "unchanged": true,
+      "sha256": "605193e54ee09b8ee11d317fe8c9ef74f90c44491456bd942b96450f1fd209da"
+    },
+    "Submission.R11CrossRows.rowWord": {
+      "unchanged": true,
+      "sha256": "2f718b54b4791aab77d491ff3e0259f770f0d664f64d22a159c0bd84bc6db71a"
+    },
+    "Submission.R11CrossRows.core": {
+      "unchanged": true,
+      "sha256": "97b37b51bab6676bcc1266e0b80a0af110ad7f8d1a49a5b4644039bb9390ffe7"
+    },
+    "Submission.bmmBeforeUnderflowZero": {
+      "unchanged": true,
+      "sha256": "e8b6ecb6d08bc1e0c4bbecaa27402a1ee53a36af271968ac421d272626755d82"
+    },
+    "Submission.UnderflowZero.small": {
+      "unchanged": true,
+      "sha256": "fb4c6fe0e1c7a3337e9df76fb5ea189a6bef795b0767b63994632a8c2ca3c305"
+    },
+    "Submission.UnderflowZero.zeros": {
+      "unchanged": true,
+      "sha256": "518136c8aa86a4d640cce3f4ab1f859cba5e823c58e77a0d894a02b07a796c9e"
+    },
+    "Submission.bmm": {
+      "unchanged": true,
+      "sha256": "395854b94be314b77b4008130b1158911b6b95339fff66f5e619d9eee5c3c78a"
+    }
+  },
+  "copied_classifiers": {
+    "model_source_sha256": "a5e294d4043feaf254c7e3ed7586dfc07df0dc1d8da0704a5a886bda596bcbb8",
+    "model_copy_sha256": "f614523a6c955558659c942d81e38aae58f5b0d2c2c57f7fe14ea9be2d050808",
+    "native_source_sha256": "877823ed2edf7cbbb3e3ad116f93f5d042738dab0e6449cb825c5553543b4904",
+    "native_copy_sha256": "5806353ff35ad3f88f15ca1235fb0a5c347daf1fa942eb02247b6a0184b2ea20",
+    "originals_and_all_original_comments_unchanged": true,
+    "copies_exclude_next_declaration_comments": true
+  },
+  "ordinary_prefixes_unchanged": true,
+  "Some_selection_body_unchanged": true,
+  "None_uses_existing_result_without_FP_recomputation": true,
+  "original_policy_static": "PASS",
+  "resources_options_unchanged": true,
+  "new_proof_acceptance": "NOT_RUN",
+  "performance": "UNKNOWN"
+}

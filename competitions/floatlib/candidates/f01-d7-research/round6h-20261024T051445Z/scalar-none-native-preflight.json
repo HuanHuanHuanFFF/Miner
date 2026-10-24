@@ -1,0 +1,176 @@
+{
+  "state": "PROOF_AND_COST_PREFLIGHT_ONLY_NO_KERNEL",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "parent_bytes": 248144,
+  "scratch_proof_sha256": "34b82191cdea860a2077e437115e24f53ac3ff25999821058689bef34ed7c8a1",
+  "scratch_bytes": 3715,
+  "all_new_proof_acceptance": "NOT_RUN",
+  "existing_bridge_inventory": {
+    "Submission.R7Native.ofFloat32Add": {
+      "line": 2860,
+      "declaration_chunk_sha256": "7e3b987785387951bf04ba7be8b7c82761b938efccd2763a07f7f237e354191c",
+      "bytes": 1105,
+      "signature": "theorem ofFloat32Add (x y : Float32) (hx : x.isNaN = false) (hy : y.isNaN = false) :\n    ExecFloat.Binary.ofFloat32 (x + y) =\n      ExecFloat.add (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 y) "
+    },
+    "Submission.R7Native.ofFloat32Mul": {
+      "line": 2878,
+      "declaration_chunk_sha256": "4aa4d1c77fd2a96c55c8e78544f85c341b5cd2d1c1aceca1d643564f20e095db",
+      "bytes": 1354,
+      "signature": "theorem ofFloat32Mul (x y : Float32) (hx : x.isNaN = false) (hy : y.isNaN = false) :\n    ExecFloat.Binary.ofFloat32 (x * y) =\n      ExecFloat.mul (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 y) "
+    },
+    "Submission.NotNaNProbe.roundtrip": {
+      "line": 2631,
+      "declaration_chunk_sha256": "0ed0bf8ffef4566f408a1de742b44281716fd0007b3d0789fc19a3cb5386f320",
+      "bytes": 805,
+      "signature": "theorem roundtrip (x : Competition.Binary32)\n    (hx : (ExecFloat.Binary.toFloat32 x).isNaN = false) :\n    ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x) = x "
+    },
+    "Submission.DWordNaN.rawChoose_eq": {
+      "line": 2976,
+      "declaration_chunk_sha256": "0680fac1e2eaa2df9d798352f4a3dbd9c32eed1e5675dd0739ecad333e97b26a",
+      "bytes": 1007,
+      "signature": "theorem rawChoose_eq (a b : UInt32) :\n    (rawChoose a b).map Model.NativeBinary32.ofUInt32 =\n      Model.chooseNaN2 (Model.NativeBinary32.ofUInt32 a)\n        (Model.NativeBinary32.ofUInt32 b) "
+    },
+    "Submission.DWordNaN.selected_add": {
+      "line": 3063,
+      "declaration_chunk_sha256": "2bd74c73b450e5a3ea3199eaa07d899db1b91b09c0f1429fe9b60cbfa2f3afaa",
+      "bytes": 424,
+      "signature": "theorem selected_add (x y : Binary32) (w : UInt32)\n    (hw : rawChoose x.raw.1 y.raw.1 = some w) :\n    Submission.FastMul.ofBits w = ExecFloat.Spec.add x y "
+    },
+    "Submission.DWordNaN.selected_mul": {
+      "line": 3072,
+      "declaration_chunk_sha256": "a7ebfaea912f1d362fba25988bacaf0d1e9aae2650fd678ac80a9029a58388f0",
+      "bytes": 463,
+      "signature": "theorem selected_mul (x y : Binary32) (w : UInt32)\n    (hw : rawChoose x.raw.1 y.raw.1 = some w) :\n    Submission.FastMul.ofBits w = ExecFloat.Spec.mul x y "
+    },
+    "Submission.R7W05.model_toModel_isNaN": {
+      "line": 3357,
+      "declaration_chunk_sha256": "51baae74570f7b915675ca86bcd37a939bcc5d19df162210a49fed181f3338ec",
+      "bytes": 903,
+      "signature": "theorem model_toModel_isNaN (x : Model FloatFormat.binary32) :\n\n\n    (Model.toModel x).isNaN = Model.isNaN x "
+    },
+    "Submission.R7W05.toFloat32_isNaN": {
+      "line": 3408,
+      "declaration_chunk_sha256": "e7c6e1eca3e3c0c9d68b4fea31b2150a86dc3764c70f802d73df682cc7211301",
+      "bytes": 386,
+      "signature": "theorem toFloat32_isNaN (x : Binary32) :\n\n\n    (ExecFloat.Binary.toFloat32 x).isNaN = Model.isNaN (ExecFloat.Binary.toModel x) "
+    },
+    "R7W02.exec_toModel_eq_rawModel": {
+      "line": 663,
+      "declaration_chunk_sha256": "4cdbfa5169881756c1b22ed71cd78797182e0d860c207d5effa5e37d1e6243e1",
+      "bytes": 401,
+      "signature": "theorem exec_toModel_eq_rawModel (q : Competition.Binary32) :\n    ExecFloat.Binary.toModel q = Model.NativeBinary32.ofUInt32 q.raw.1 "
+    },
+    "R2W01c.convert_eq": {
+      "line": 1901,
+      "declaration_chunk_sha256": "5727c39606b6afa7ef564cc6ad2024ab70eb52b1179a1d9b14e588b92ebebc97",
+      "bytes": 108,
+      "signature": "theorem convert_eq (u : UInt32) : convert u = Float32.ofBits u "
+    }
+  },
+  "primary_choose_none": {
+    "path": "competitions/floatlib/research/astra-collab-20261023-r7/web/R7-W05/original-extracted/R7-W05/public/FloatLib/FloatLib/Floats/Formats/BinaryInterchange/Dyadic/Classification.lean",
+    "line": 162,
+    "sha256": "58ffc7c097d4fba7866dc4184036f3b9e481b720e76f1f02c8e40f893feb221f",
+    "type": "chooseNaN2 x y = none iff isNaN x=false and isNaN y=false"
+  },
+  "proof_chain": [
+    "rawChoose_eq with hnone rewrites Model.chooseNaN2(...)=none; Option.map_none reduces by rfl.",
+    "Model.chooseNaN2_eq_none_iff gives exact raw Model.isNaN false for both operands.",
+    "R7W02.exec_toModel_eq_rawModel connects original raw words to the actual Competition carrier.",
+    "R7W05.toFloat32_isNaN transports those exact classifications to both native Float32 input predicates.",
+    "R7Native.ofFloat32Add/Mul requires only input isNaN=false, includingInf; no finite or result-nonNaN hypothesis.",
+    "NotNaNProbe.roundtrip restores original raw input words; ExecFloat.Proof.*_eq_spec reaches unchanged all-input spec.",
+    "Some branch remains exact DWordNaN.selected_add/mul, preserving signaling-first sign/payload/quieting.",
+    "None returns ofFloat32(result) where result is the already computed caller let; theorem hr is rfl and erased, not another runtime calculation."
+  ],
+  "invalid_result_allowed": true,
+  "finite_only_NativeBridge_not_used": true,
+  "result_NaN_implies_exp255_bridge_not_needed": true,
+  "source_order_plan": "Move the exact two closed R7W05 model_toModel_isNaN/toFloat32_isNaN theorem chunks plus explicit opens into an earlier reopened Submission.R7W05 before new helpers. Their later references keep identical names; fd scopes and all runtime definitions stay fixed.",
+  "namespace_plan": "Scratch is append-context namespace Submission.NoneNativeProof. When inserting inside the existing Submission scope use namespace NoneNativeProof/end NoneNativeProof to avoid accidental Submission.Submission nesting.",
+  "unique_candidate_plan": "One candidate on exactdf5c: retain original let result and nonNaN fast branch; replace only add/nativeMul NaN else calls with addColdResult/mulColdResult x y result, cold proof leaves use the new specs at rfl. Keep LowScale, old ScalarNaN functions, all Some selector bodies and all tensor definitions unchanged.",
+  "conservative_source_upper_bound": 252559,
+  "conservative_headroom": 3441,
+  "actual_source_size": "UNKNOWN_UNTIL_AUTHORIZED_BUILDER; conservative bound includes scratch plus700B wrapper/leaf allowance and moves classifier bodies without duplication.",
+  "scalar_input_counts": {
+    "sha256": "c11fedd12f044084bbf8bb8f36a956e68078cb2feb4454b6ecba38acea3d28bf",
+    "rows": [
+      {
+        "run": 40072436647,
+        "totals": {
+          "add": {
+            "work": 5482505,
+            "source_raw_choose_some": 4561,
+            "source_None_invalid": 32,
+            "None_share_of_predicted_native_NaN_cold": 0.006967123884171565,
+            "None_share_all_timed_scalar_inputs": 5.836747982901977e-06
+          },
+          "mul": {
+            "work": 5794904,
+            "source_raw_choose_some": 687,
+            "source_None_invalid": 3,
+            "None_share_of_predicted_native_NaN_cold": 0.004347826086956522,
+            "None_share_all_timed_scalar_inputs": 5.17696237935952e-07
+          }
+        }
+      },
+      {
+        "run": 40073100983,
+        "totals": {
+          "add": {
+            "work": 5720132,
+            "source_raw_choose_some": 2500,
+            "source_None_invalid": 1,
+            "None_share_of_predicted_native_NaN_cold": 0.00039984006397441024,
+            "None_share_all_timed_scalar_inputs": 1.748211404911635e-07
+          },
+          "mul": {
+            "work": 5435180,
+            "source_raw_choose_some": 2386,
+            "source_None_invalid": 27,
+            "None_share_of_predicted_native_NaN_cold": 0.01118939079983423,
+            "None_share_all_timed_scalar_inputs": 4.9676367663996406e-06
+          }
+        }
+      }
+    ],
+    "scope": "Input-generator reconstruction, not hardware call measurement; non-special finite domains were skipped after checking generator fields."
+  },
+  "BMM_prefix_model_counts": {
+    "sha256": "94cb3e7b744bc59e57c5555a8dc0abe691eae55767c67e6eb7b317e87c746069",
+    "state": "COMPLETE_SOURCE_MODEL_SCOPE",
+    "totals": {
+      "40072436647": {
+        "outputs": 208795,
+        "nan_endpoints": 1723,
+        "replay_prefix_steps": 8692,
+        "add_Some": 1417,
+        "mul_Some": 1392,
+        "add_None_invalid": 306,
+        "mul_None_invalid": 25
+      },
+      "40073100983": {
+        "outputs": 22583,
+        "nan_endpoints": 1725,
+        "replay_prefix_steps": 8399,
+        "add_Some": 496,
+        "mul_Some": 482,
+        "add_None_invalid": 1229,
+        "mul_None_invalid": 14
+      }
+    },
+    "scope": "Only exposed007/009 timed BMM specials/extremes. Original native endpoint classification is modeled by exact-word arithmetic and existing canonicalization arguments; raw replay stops at first quiet NaN. Other BMM cells are UNKNOWN. Counts are not actual compiled execution or stage timings.",
+    "official_current_checksum_anchor": "UNKNOWN_NOT_SAVED_FOR_THESE_MODEL_CASES; output hashes/checksums retained for future comparison"
+  },
+  "cost_assessment": "Standalone scalar None is rare in exposed007/009 (add32/mul3 and add1/mul27). BMM specials/extremes source model suggests nontrivial invalid None endpoints (add306/mul25 and add1229/mul14), but exact compiled event counts and stage costs remain UNKNOWN. This targets expensive software None fallback without per-finite-prefix classification, so it is more controlled than raw-first replay, yet it has no measured gain.",
+  "already_realized_gain_not_reclaimed": "0079.7409whole percentage points were already gained by coldSome; do not count them as remaining None savings.",
+  "first_failure_points": [
+    "Lean elaboration of Option.map_none and actual carrier/model rewrites in the new scratch chain.",
+    "Correct early placement of two classifier proofs without duplicating names, changing global opens/options or introducing circular references.",
+    "Actual generated caller must reuse existing result, preserve ordinary path, preserve Some word priority and remove generic None fallback; extra result liveness/spills can offset savings.",
+    "Complete original gate includinginvalidInf operations,NaN payloads,±0 and subnormals; then whole-path timing vs exactdf5c rather than summing component gains."
+  ],
+  "decision": "CONDITIONAL_GO_ONE_SHORT_STATEMENT_CANDIDATE_IF_ROOT_AUTHORIZES; mathematical chain uses only existing permitted lemmas, but exact new proof and useful net gain unverified.",
+  "Kernel_or_CI_generation": "NOT_AUTHORIZED_NOT_DONE",
+  "performance": "UNKNOWN_NOT_ADDITIVE"
+}
