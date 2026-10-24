@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "review": "R13 cohort, adoption and retained-model preflight",
+  "reviewed_at_utc": "2026-10-24T12:05:06Z",
+  "scope": "Read-only review. No tests, adopter, CI, Git, shared-state, index, model, or tool writes.",
+  "r13_identity": {
+    "baseline": {
+      "candidate": "f01-d12-scalar-combined",
+      "sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172"
+    },
+    "estimator_control": {
+      "candidate": "f01-r8-combined-result-guard",
+      "sha256": "41bce4856c4c921dd67b6115928df16e5e8ed08a55b71f1296d28b77cf9ce9a7"
+    },
+    "frozen_current_model_sha256": "5d946420b8e1a7ecc68aacde44b0e2910a467ee3e3546724d502f252fe8a031f",
+    "policy": {
+      "groups": 3,
+      "rounds": 25,
+      "headline_normalized_ratio_max": 0.97,
+      "gain_p05_min_exclusive": 0.0
+    }
+  },
+  "pairing_review": {
+    "verify_freeze_baseline": "df5c",
+    "verify_freeze_estimator_control": "41",
+    "scoring_pairs": "new candidate vs same-runner df5c",
+    "estimator_pairs": "new candidate vs frozen-anchor source 41",
+    "core_source_identity_checks_correct": true,
+    "three_group_policy_preserved": true,
+    "functional_6c_or_R11_constant_in_R13_adopt_freeze_verify": false,
+    "stale_text_references_only": [
+      "Retained source/state is no longer6c error message",
+      "Current state/source no longer6c error message",
+      "Baseline must be exact retained41 error message",
+      "test comments/names mentioning 6c score baseline"
+    ]
+  },
+  "current_model_state": {
+    "model_path": "competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json",
+    "model_sha256": "5d946420b8e1a7ecc68aacde44b0e2910a467ee3e3546724d502f252fe8a031f",
+    "model_source_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+    "view_retained_freeze": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/retained-estimate-freeze.json",
+      "sha256": "f6fd05df105e55a73910cf01ef89188254092de6fbf3a0a0cb89adb68540b518",
+      "model_sha256": "5d946420b8e1a7ecc68aacde44b0e2910a467ee3e3546724d502f252fe8a031f"
+    },
+    "state_retained_freeze_matches_view": true,
+    "r12_retained_estimate_freeze_no_numeric_model_change": true,
+    "r13_round_plan_declares_model_sha": true,
+    "r13_cohort_freezes_model_sha": false,
+    "r13_adopter_checks_current_model_before_write": false
+  },
+  "public_results_metadata": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json",
+    "sha256": "0ee6c1f4c4b4fd9de8cd57bc874aed5bd959d0197ac6ff617fe720f7df0be7d5",
+    "records": 219,
+    "df5c_full_gate_rows": 6,
+    "df5c_full_gate_runs": [40074431355, 40076675251, 40078982864, 40080782614, 40083425886, 40083571000],
+    "current_view_full_gate_runs_equal_df5c_index_runs": true,
+    "r13_sync_ci_state_merges_gate_records_into_public_results": false,
+    "r13_adopter_updates_df5c_full_gate_run_metadata_before_dry_run": false,
+    "estimator_declared_run_set_requires_exact_match": true,
+    "blocking_error_if_stale": "Declared gates omit eligible source records"
+  },
+  "adoption_order_review": {
+    "dry_run_occurs_before_records_and_new_candidate_rows_are_loaded": true,
+    "score_baseline_pairs_are_separate_from_estimator_pairs": true,
+    "new_candidate_model_write_after_preflight_is_expected": true,
+    "old_source_freeze_cleared_only_when_preparing_new_source": true,
+    "required_pre_adoption_actions": [
+      "Authenticate and merge new R13 full-gate raw rows into the current public-results index",
+      "Create an identity-only receipt for df5c full_gate_runs metadata extension in view/state",
+      "Assert current model bytes equal 5d946 and both view/state retain the R12 freeze identity",
+      "Bind the immutable R12 retained-estimate-freeze receipt into the R13 cohort",
+      "Do not persist any df5c same-source estimator refresh"
+    ]
+  },
+  "test_coverage_review": {
+    "pair_separation_fixture_present": true,
+    "same_run_same_artifact_checks_present": true,
+    "old_numeric_freeze_clear_on_new_source_present": true,
+    "real_estimator_stale_run_set_case_present": false,
+    "actual_current_model_sha_precondition_case_present": false
+  },
+  "bound_files": {
+    "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/adopt-three-confirmed.py": "72da8b74475383dcde8f8faa55c3e4c1775671c859da85e53a6eff93938c9643",
+    "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/verify-three-groups.py": "d7b3ce165af736bf24d397dff69a9b4a2c80956fd412b6034344d8f4d66f8373",
+    "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/freeze-cohort.py": "9692bdb272723991ce48f6cc2b08fbbe06f9d53e33fbd139e7c476dfd9ee7d4b",
+    "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/sync-ci-state.py": "7ee28028cd2190c9053ef6301c965f1f3ad0df8afeb30b9788fe3453375322c9",
+    "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/round-plan.json": "aa30166a1f136ff56e3f0f0385611a55bbe4deb4da6b2526e0de2f7ebcbf6813",
+    "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/selection-policy.json": "1d93392f8e29a4d8d27c205302ed198fa021503ae35a305143e9d9d3880ba0f5",
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/retained-estimate-freeze.json": "f6fd05df105e55a73910cf01ef89188254092de6fbf3a0a0cb89adb68540b518",
+    "competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json": "5d946420b8e1a7ecc68aacde44b0e2910a467ee3e3546724d502f252fe8a031f",
+    "competitions/floatlib/candidates/f01-d7-research/multiplier-comparison.json": "0c7b839d2d159219ebb05b6cdbe7fb517c06aca3fa136fc18bfdc316c7611daa",
+    "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json": "0ee6c1f4c4b4fd9de8cd57bc874aed5bd959d0197ac6ff617fe720f7df0be7d5",
+    "competitions/floatlib/scripts/estimate_champion_time.py": "fe926204104484d1fc62bf06eb57666c0f3673829664f283c9c813497bf46983"
+  },
+  "conclusion": "R13 comparison identities and thresholds are correctly adapted, but the current adopter has a deterministic pre-adoption metadata failure once R13 full source rows are present and lacks a runtime check that the R12 df5c model freeze 5d946 remains intact. Root's proposed separate metadata-only index/view receipt and cohort retained_model precondition address both; retain the immutable old receipt while allowing a successful new-source model update."
+}

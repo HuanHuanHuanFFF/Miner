@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "review": "R13 retained-model binding and metadata transaction",
+  "reviewed_at_utc": "2026-10-24T12:24:00Z",
+  "scope": "Read-only review; no tests, metadata helper, adopter, CI, Git, model, or shared-state writes.",
+  "retained_model": {
+    "source_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+    "model_path": "competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json",
+    "model_sha256": "5d946420b8e1a7ecc68aacde44b0e2910a467ee3e3546724d502f252fe8a031f",
+    "r12_freeze_path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/retained-estimate-freeze.json",
+    "r12_freeze_sha256": "f6fd05df105e55a73910cf01ef89188254092de6fbf3a0a0cb89adb68540b518",
+    "r13_round_plan_model_sha_matches": true,
+    "current_view_and_state_freeze_pointers_match": true,
+    "freeze_cohort_checks_current_model_before_freeze": true,
+    "verify_freeze_checks_retained_identity_against_plan_and_r12_receipt": true,
+    "adopter_checks_current_model_sha_before_preflight_write": true,
+    "mutable_model_excluded_from_postwrite_immutable_files": true,
+    "new_source_model_write_can_complete_without_false_old_sha_rejection": true
+  },
+  "metadata_refresh": {
+    "helper_path": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/refresh-retained-metadata.py",
+    "helper_sha256": "13ad460273368efe6f5d753513330bec03b5fb3e5a3af1d458841d8607f06469",
+    "success_receipt_path": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/retained-control-metadata-20261024T121622Z.json",
+    "success_receipt_sha256": "7a15456fe8ad5191fef39e6966c5f846a1125060533978409f6950515c8cb192",
+    "source_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+    "before_full_gate_runs": [40074431355, 40076675251, 40078982864, 40080782614, 40083425886, 40083571000],
+    "after_full_gate_runs": [40074431355, 40076675251, 40078982864, 40080782614, 40083425886, 40083571000, 40092053346],
+    "model_sha256_unchanged": "5d946420b8e1a7ecc68aacde44b0e2910a467ee3e3546724d502f252fe8a031f",
+    "debug_guard_present": true,
+    "view_public_results_pointer_checked": true,
+    "raw_records_checked_by_frozen_estimator": true,
+    "model_and_index_bytes_rechecked_before_and_after": true,
+    "view_state_cas_and_caught_exception_rollback": true,
+    "failure_receipt_with_rollback_status_present": true,
+    "abrupt_termination_recovery": "NOT_IMPLEMENTED_BY_DESIGN"
+  },
+  "pair_evidence": {
+    "current_public_results_path": "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json",
+    "current_public_results_sha256": "d456dea00f0176e11f3b896183ef9746d990c1cade5b4c50ad28290586ce2cc0",
+    "df5c_full_gate_rows": 7,
+    "runs_with_exactly_one_full_gate_41_control": 7,
+    "scoring_pairs": "new candidate vs same-runner df5c",
+    "estimator_pairs": "new candidate vs same-runner 41",
+    "metadata_helper_checks_41_pairs_before_update": false,
+    "missing_pair_effect": "Later estimator dry-run/adopter rejects; metadata may need correction but no model values are written"
+  },
+  "bound_files": {
+    "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/verify-three-groups.py": "2455626aeb30b0a954e7adec79e01fda2c458c5c5cbd150e56396f5def9fc753",
+    "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/freeze-cohort.py": "865ac34ec29123c8c6795bec8bb362ad1ab1f57d602e8b87ba46a4ec8dadfbb8",
+    "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/adopt-three-confirmed.py": "6087dd38385856a2a4e59db0969332113246d242d22f670d2e899c8772352d3c",
+    "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/execution-binding.py": "46b629d07ac9ab666c6da7750c5187ae1626533f40bd6fe4522f93e82ada7958",
+    "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/refresh-retained-metadata.py": "13ad460273368efe6f5d753513330bec03b5fb3e5a3af1d458841d8607f06469",
+    "competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json": "5d946420b8e1a7ecc68aacde44b0e2910a467ee3e3546724d502f252fe8a031f",
+    "competitions/floatlib/candidates/f01-d7-research/multiplier-comparison.json": "20b77f9d895816761516dcfaa80a0b44aedc37011b790414de1a3e0a4260e6e4",
+    "competitions/floatlib/candidates/f01-d7-research/public-suite-results.json": "d456dea00f0176e11f3b896183ef9746d990c1cade5b4c50ad28290586ce2cc0"
+  },
+  "conclusion": "Model binding and the normal metadata CAS path are sound: the old df5c model is bound before new-source adoption, while successful adoption may replace the mutable model. The recorded metadata refresh added one authenticated df5c full-gate control and retained the 5d946 model bytes. Remaining boundaries are the explicitly accepted hard-kill window and fail-closed missing-41-pair detection deferred to estimator dry-run."
+}

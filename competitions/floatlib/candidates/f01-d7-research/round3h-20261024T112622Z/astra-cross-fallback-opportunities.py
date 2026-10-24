@@ -52,6 +52,9 @@ for run in prior['runs']:
     local={k:sum(x[k] for x in cases) for k in totals if k!='cases'};local['cases']=len(cases)
     for k in totals:totals[k]+=local[k]
     runs.append(dict(seed=run['seed'],run=run['run'],counts=local,cases=cases))
+old_short_path=HERE.parent/'round7h-20261023T193125Z/result-918-f01-r11-crossrow-short-shared-vs-f01-r11-crossrow-p2-pack12-proof2.json'
+old_short=json.loads(old_short_path.read_bytes())
+assert old_short['full_gate_both'] and old_short['sha256']=='7cad7df494da6004b9e4b202f4d09b838ef8d4b79ba6fe934eea7287784fea28'
 out=dict(at_utc=datetime.now(timezone.utc).isoformat(),state='READ_ONLY_TWO_HYPOTHESES_NOT_CANDIDATES',
     current_parent_sha256=sha(parent),matching_CrossRows_namespace=dict(bytes=len(cross(parent)),sha256=sha(cross(parent))),
     actual_old_capture=reference['canonical_capture'],old_capture_source_sha256=sha(captured),actual_C=selected,
@@ -78,6 +81,9 @@ out=dict(at_utc=datetime.now(timezone.utc).isoformat(),state='READ_ONLY_TWO_HYPO
           'blockRows_word supplies per-element equality; Prefix induction supplies size/order, and prefix_vector_eq_ofFn closes the exact Vector result. These are a paper-level proof plan, not compiled new declarations.'],
         first_falsifier='Current CrossRows full-call/output phase must contain material intermediate-vector/reconstruction cost. Inspect actual caller: if compiler already scalar-replaces W8 and hoists div/mod, or output residual is too small, park. n=1 groups are especially sensitive to fixed overhead but cannot be assigned time by count.',
         risk='Actual finish8 reuses the F8 object for W8 when exclusive; its lean_alloc_ctor is the reuse-failure fallback. Do not count a fresh W8 allocation per group as confirmed. Word8 storage may remain once per block; safe claim is eliminating the all-groups Vector and second traversal. Additional append/closure/allocation would negate the intended effect.')],
+    historical_short_shared_control=dict(path=str(old_short_path.relative_to(ROOT)).replace('\\','/'),sha256=sha(old_short_path.read_bytes()),run=old_short['run'],
+      candidate=old_short['sha256'],baseline=old_short['baseline_sha256'],whole_normalized=old_short['relative_normalized_ratio'],BMM_normalized=old_short['per_operation_normalized']['bmm'],gain_p05=old_short['gain_p05'],
+      lesson='R11 W03-derived7cad removed Vector P12 only for n1/n2 with all four B bases equal; same-run918 BMM was essentially tied with5c5e and whole failed. Do not repeat that unroll or claim that eliminating packets necessarily helps. Compact shared representation covers all n but needs new measured cost evidence; output fusion removes a distinct all-groups result vector, including nonshared n1 groups.'),
     decision='Wait for df5c diagnostic. Build no additional candidate or CI from this report. D chooses at most one material opportunity;708 remains frozen.',
     script_sha256=sha(Path(__file__).read_bytes()),source_record_sha256=sha(prior_path.read_bytes()))
 (HERE/'astra-cross-fallback-opportunities.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')

@@ -50,6 +50,21 @@ def import_binding():
     return binding
 
 
+def retained_model_identity(root=ROOT):
+    """Bind immutable prior adoption evidence, never freeze a mutable output."""
+    own=Path(root)/'competitions/floatlib/candidates/f01-d7-research'
+    receipt=own/'round6h-20261024T051445Z/retained-estimate-freeze.json'
+    prior=read(receipt)
+    plan=read(own/'round3h-20261024T112622Z/round-plan.json')
+    require(prior['source_sha256']==BASELINE_SHA and
+            prior['model_sha256']==plan['frozen_current_model_sha256'], 'Prior retained model identity differs')
+    require(prior['model_path']=='competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json',
+            'Prior retained model path differs')
+    return {'source_sha256':BASELINE_SHA,'model_path':prior['model_path'],
+            'sha256':prior['model_sha256'],'receipt_path':receipt.relative_to(root).as_posix(),
+            'receipt_sha256':digest(receipt)}
+
+
 def verify_freeze(freeze, expected_sha256, freeze_path, guard, root=ROOT):
     """External freeze digest is mandatory; a self-recomputed digest is insufficient."""
     require(digest(freeze_path) == expected_sha256, "Frozen cohort bytes differ from external SHA-256")
@@ -64,6 +79,7 @@ def verify_freeze(freeze, expected_sha256, freeze_path, guard, root=ROOT):
     require(freeze["candidate"]["sha256"] != BASELINE_SHA, "Candidate is the baseline")
     require(freeze.get('estimator_control') == {'name':CONTROL_NAME,'sha256':CONTROL_SHA},
             'Missing/wrong frozen estimator control41')
+    require(freeze.get('retained_model')==retained_model_identity(root), 'Missing/changed retained model identity')
     require(re.fullmatch(r"[0-9a-f]{64}", freeze["candidate"]["sha256"]) is not None, "Invalid candidate digest")
     require(set(freeze["groups"]) == set(ROLES), "Missing/extra frozen role")
     require(len({freeze["groups"][r]["seed"] for r in ROLES}) == 3, "Frozen seeds are not distinct")

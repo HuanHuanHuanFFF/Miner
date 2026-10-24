@@ -1,0 +1,669 @@
+{
+  "at_utc": "2026-10-24T12:03:31.819502+00:00",
+  "elapsed_seconds": 12.336973200028297,
+  "state": "READ_ONLY_CROSS_PREPARATION_CONVERTER_REVIEW_NO_NEW_KERNEL",
+  "parent708_sha256": "7086031b8164647e199f52c6b44fc7f54233ec4e75e2221fa95d30a676270d57",
+  "changes": [
+    {
+      "definition": "packGeneral",
+      "line": 6156,
+      "sites": 12,
+      "byte_delta": -48,
+      "original_definition_sha256": "8ae9d1d64ca7cdb696ab659e621d71e8ff584bee9ae24e198543b087a0271693",
+      "replacement": "ExecFloat.Binary.toFloat32 -> R13NativePrep.toNative inside this definition only"
+    },
+    {
+      "definition": "packShared",
+      "line": 6192,
+      "sites": 6,
+      "byte_delta": -24,
+      "original_definition_sha256": "7ef6f01a9de31c886390d0c098b91eaeef0853498bf364c50816c5e9f0be3b41",
+      "replacement": "ExecFloat.Binary.toFloat32 -> R13NativePrep.toNative inside this definition only"
+    },
+    {
+      "proof": "inputA",
+      "before": "simp [packGeneral, Packed10.vector_get_ofFn, inputA, select4]",
+      "after": "simp [packGeneral, Packed10.vector_get_ofFn, inputA, select4, R13NativePrep.toNative_eq]",
+      "byte_delta": 27
+    },
+    {
+      "proof": "inputB",
+      "before": "simp [packGeneral, Packed10.vector_get_ofFn, inputB, select4]",
+      "after": "simp [packGeneral, Packed10.vector_get_ofFn, inputB, select4, R13NativePrep.toNative_eq]",
+      "byte_delta": 27
+    }
+  ],
+  "projected_byte_delta": -18,
+  "projected_total_bytes": 248597,
+  "source_budget_limit": 256000,
+  "size_scope": "Exact textual delta for these four bounded edits only; no new declaration and no new Kernel file written. Later proof repairs or other combinations may change size.",
+  "proof_bridge": [
+    "Existing unconditional R13NativePrep.toNative_eq applies to every Binary32, including getD default posZero. No finite/nonNaN or bounds premise added.",
+    "packGeneral_a and packGeneral_b keep the original toFloat32 conclusions and gain one local rewrite lemma in their simp lists.",
+    "packShared_eq remains definitionally equal after applying the same decoder substitution to both pack definitions; its rfl structure is unchanged. New exact-source Lean elaboration remains NOT_RUN.",
+    "pack_a/pack_b, Nat/USize recurrence proofs, finish8, tails, dispatcher and four public specs retain their source statements; intended composition through old lemmas, not inherited acceptance."
+  ],
+  "history": {
+    "direct_candidate_Kernel_files_with_CrossRows": 17,
+    "pack_definition_hash_groups": {
+      "packGeneral": {
+        "8ae9d1d64ca7cdb696ab659e621d71e8ff584bee9ae24e198543b087a0271693": [
+          "f01-d11-bmm-combined-base",
+          "f01-d11-bmm-combined-capacity",
+          "f01-d11-bmm-combined-classifier",
+          "f01-d11-bmm-combined-direct",
+          "f01-d12-mul-existing-convert",
+          "f01-d12-none-native-result",
+          "f01-d12-scalar-cold-nan-select",
+          "f01-d12-scalar-cold-nan-select-proof2",
+          "f01-d12-scalar-combined",
+          "f01-r11-crossrow-p2-pack12",
+          "f01-r11-crossrow-p2-pack12-proof2",
+          "f01-r11-crossrow-short-shared",
+          "f01-r11-wide4-cross-combined",
+          "f01-r12-column4-narrow",
+          "f01-r12-general-panel",
+          "f01-r12-wide4-typed-within",
+          "f01-r13-preparation-convert"
+        ]
+      },
+      "packShared": {
+        "7ef6f01a9de31c886390d0c098b91eaeef0853498bf364c50816c5e9f0be3b41": [
+          "f01-d11-bmm-combined-base",
+          "f01-d11-bmm-combined-capacity",
+          "f01-d11-bmm-combined-classifier",
+          "f01-d11-bmm-combined-direct",
+          "f01-d12-mul-existing-convert",
+          "f01-d12-none-native-result",
+          "f01-d12-scalar-cold-nan-select",
+          "f01-d12-scalar-cold-nan-select-proof2",
+          "f01-d12-scalar-combined",
+          "f01-r11-crossrow-p2-pack12",
+          "f01-r11-crossrow-p2-pack12-proof2",
+          "f01-r11-crossrow-short-shared",
+          "f01-r11-wide4-cross-combined",
+          "f01-r12-column4-narrow",
+          "f01-r12-general-panel",
+          "f01-r12-wide4-typed-within",
+          "f01-r13-preparation-convert"
+        ]
+      }
+    },
+    "matched_existing_converter_spellings": [],
+    "boundary": "Bounded direct candidate-file search, not a global novelty proof. No matching converter spellings in the actual pack bodies is only evidence for this repository scope.",
+    "R9_negative": "d5e3512f run39961709177 fullPASS but BMM1.17313/whole1.04035 versus41. Its original548 manifest explicitly changes direct dot per-MAC decoding only and leaves packed pipeline unchanged."
+  },
+  "exposure": {
+    "state": "INFERRED_PINNED_SOURCE_COUNTS_NOT_RUNTIME_EVENTS_OR_TIMES",
+    "totals": {
+      "cases": 24,
+      "conversion_calls": 3025038,
+      "valid_reads": 3021744,
+      "default_zero_reads": 3294,
+      "warm": 2919642,
+      "fallback": 105396,
+      "shared_calls": 1268178,
+      "general_calls": 1756860
+    },
+    "runs": [
+      {
+        "seed": 1224011,
+        "run": 40074431355,
+        "counts": {
+          "cases": 3,
+          "conversion_calls": 359370,
+          "valid_reads": 357615,
+          "default_zero_reads": 1755,
+          "warm": 359343,
+          "fallback": 27,
+          "shared_calls": 183630,
+          "general_calls": 175740
+        },
+        "cases": [
+          {
+            "name": "bmm:dense:2",
+            "shape": [
+              3529,
+              5,
+              5,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 211770,
+              "valid_reads": 211725,
+              "default_zero_reads": 45,
+              "warm": 211770,
+              "fallback": 0,
+              "shared_calls": 52950,
+              "general_calls": 158820
+            }
+          },
+          {
+            "name": "bmm:sparse:5",
+            "shape": [
+              120,
+              245,
+              3,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 133920,
+              "valid_reads": 133920,
+              "default_zero_reads": 0,
+              "warm": 133920,
+              "fallback": 0,
+              "shared_calls": 130680,
+              "general_calls": 3240
+            }
+          },
+          {
+            "name": "bmm:specials:3",
+            "shape": [
+              7,
+              3,
+              190,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 13680,
+              "valid_reads": 11970,
+              "default_zero_reads": 1710,
+              "warm": 13653,
+              "fallback": 27,
+              "shared_calls": 0,
+              "general_calls": 13680
+            }
+          }
+        ]
+      },
+      {
+        "seed": 1224012,
+        "run": 40076675251,
+        "counts": {
+          "cases": 4,
+          "conversion_calls": 434880,
+          "valid_reads": 434490,
+          "default_zero_reads": 390,
+          "warm": 434880,
+          "fallback": 0,
+          "shared_calls": 104472,
+          "general_calls": 330408
+        },
+        "cases": [
+          {
+            "name": "bmm:dense:4",
+            "shape": [
+              4,
+              1,
+              384,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 4608,
+              "valid_reads": 4608,
+              "default_zero_reads": 0,
+              "warm": 4608,
+              "fallback": 0,
+              "shared_calls": 0,
+              "general_calls": 4608
+            }
+          },
+          {
+            "name": "bmm:ml:3",
+            "shape": [
+              6787,
+              13,
+              1,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 162894,
+              "valid_reads": 162891,
+              "default_zero_reads": 3,
+              "warm": 162894,
+              "fallback": 0,
+              "shared_calls": 101802,
+              "general_calls": 61092
+            }
+          },
+          {
+            "name": "bmm:specials:5",
+            "shape": [
+              683,
+              1,
+              129,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 264708,
+              "valid_reads": 264321,
+              "default_zero_reads": 387,
+              "warm": 264708,
+              "fallback": 0,
+              "shared_calls": 0,
+              "general_calls": 264708
+            }
+          },
+          {
+            "name": "bmm:extremes:1",
+            "shape": [
+              5,
+              4,
+              89,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 2670,
+              "valid_reads": 2670,
+              "default_zero_reads": 0,
+              "warm": 2670,
+              "fallback": 0,
+              "shared_calls": 2670,
+              "general_calls": 0
+            }
+          }
+        ]
+      },
+      {
+        "seed": 1224014,
+        "run": 40078982864,
+        "counts": {
+          "cases": 6,
+          "conversion_calls": 648564,
+          "valid_reads": 648006,
+          "default_zero_reads": 558,
+          "warm": 610051,
+          "fallback": 38513,
+          "shared_calls": 431976,
+          "general_calls": 216588
+        },
+        "cases": [
+          {
+            "name": "bmm:ml:6",
+            "shape": [
+              324,
+              4,
+              68,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 132192,
+              "valid_reads": 132192,
+              "default_zero_reads": 0,
+              "warm": 132192,
+              "fallback": 0,
+              "shared_calls": 132192,
+              "general_calls": 0
+            }
+          },
+          {
+            "name": "bmm:ml:7",
+            "shape": [
+              125,
+              13,
+              54,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 162324,
+              "valid_reads": 161838,
+              "default_zero_reads": 486,
+              "warm": 162324,
+              "fallback": 0,
+              "shared_calls": 101412,
+              "general_calls": 60912
+            }
+          },
+          {
+            "name": "bmm:sparse:3",
+            "shape": [
+              4901,
+              9,
+              2,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 176448,
+              "valid_reads": 176430,
+              "default_zero_reads": 18,
+              "warm": 176448,
+              "fallback": 0,
+              "shared_calls": 88224,
+              "general_calls": 88224
+            }
+          },
+          {
+            "name": "bmm:specials:3",
+            "shape": [
+              167,
+              2,
+              8,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 8064,
+              "valid_reads": 8016,
+              "default_zero_reads": 48,
+              "warm": 7057,
+              "fallback": 1007,
+              "shared_calls": 0,
+              "general_calls": 8064
+            }
+          },
+          {
+            "name": "bmm:specials:5",
+            "shape": [
+              718,
+              7,
+              1,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 10776,
+              "valid_reads": 10770,
+              "default_zero_reads": 6,
+              "warm": 9078,
+              "fallback": 1698,
+              "shared_calls": 4308,
+              "general_calls": 6468
+            }
+          },
+          {
+            "name": "bmm:subnormal:0",
+            "shape": [
+              630,
+              10,
+              14,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 158760,
+              "valid_reads": 158760,
+              "default_zero_reads": 0,
+              "warm": 122952,
+              "fallback": 35808,
+              "shared_calls": 105840,
+              "general_calls": 52920
+            }
+          }
+        ]
+      },
+      {
+        "seed": 1224016,
+        "run": 40080782614,
+        "counts": {
+          "cases": 5,
+          "conversion_calls": 667296,
+          "valid_reads": 667110,
+          "default_zero_reads": 186,
+          "warm": 600440,
+          "fallback": 66856,
+          "shared_calls": 136836,
+          "general_calls": 530460
+        },
+        "cases": [
+          {
+            "name": "bmm:dense:1",
+            "shape": [
+              1192,
+              2,
+              37,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 264624,
+              "valid_reads": 264624,
+              "default_zero_reads": 0,
+              "warm": 264624,
+              "fallback": 0,
+              "shared_calls": 0,
+              "general_calls": 264624
+            }
+          },
+          {
+            "name": "bmm:sparse:2",
+            "shape": [
+              44117,
+              2,
+              1,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 264708,
+              "valid_reads": 264702,
+              "default_zero_reads": 6,
+              "warm": 197852,
+              "fallback": 66856,
+              "shared_calls": 0,
+              "general_calls": 264708
+            }
+          },
+          {
+            "name": "bmm:sparse:4",
+            "shape": [
+              2450,
+              4,
+              9,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 132300,
+              "valid_reads": 132300,
+              "default_zero_reads": 0,
+              "warm": 132300,
+              "fallback": 0,
+              "shared_calls": 132300,
+              "general_calls": 0
+            }
+          },
+          {
+            "name": "bmm:extremes:1",
+            "shape": [
+              7,
+              35,
+              7,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 2856,
+              "valid_reads": 2793,
+              "default_zero_reads": 63,
+              "warm": 2856,
+              "fallback": 0,
+              "shared_calls": 2352,
+              "general_calls": 504
+            }
+          },
+          {
+            "name": "bmm:extremes:2",
+            "shape": [
+              5,
+              25,
+              13,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 2808,
+              "valid_reads": 2691,
+              "default_zero_reads": 117,
+              "warm": 2808,
+              "fallback": 0,
+              "shared_calls": 2184,
+              "general_calls": 624
+            }
+          }
+        ]
+      },
+      {
+        "seed": 1224091,
+        "run": 40083425886,
+        "counts": {
+          "cases": 4,
+          "conversion_calls": 517872,
+          "valid_reads": 517497,
+          "default_zero_reads": 375,
+          "warm": 517872,
+          "fallback": 0,
+          "shared_calls": 278928,
+          "general_calls": 238944
+        },
+        "cases": [
+          {
+            "name": "bmm:dense:3",
+            "shape": [
+              9803,
+              9,
+              1,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 176460,
+              "valid_reads": 176457,
+              "default_zero_reads": 3,
+              "warm": 176460,
+              "fallback": 0,
+              "shared_calls": 88224,
+              "general_calls": 88236
+            }
+          },
+          {
+            "name": "bmm:ml:3",
+            "shape": [
+              101,
+              7,
+              124,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 188232,
+              "valid_reads": 187860,
+              "default_zero_reads": 372,
+              "warm": 188232,
+              "fallback": 0,
+              "shared_calls": 75144,
+              "general_calls": 113088
+            }
+          },
+          {
+            "name": "bmm:sparse:4",
+            "shape": [
+              110,
+              14,
+              57,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 150480,
+              "valid_reads": 150480,
+              "default_zero_reads": 0,
+              "warm": 150480,
+              "fallback": 0,
+              "shared_calls": 112860,
+              "general_calls": 37620
+            }
+          },
+          {
+            "name": "bmm:extremes:2",
+            "shape": [
+              75,
+              4,
+              6,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 2700,
+              "valid_reads": 2700,
+              "default_zero_reads": 0,
+              "warm": 2700,
+              "fallback": 0,
+              "shared_calls": 2700,
+              "general_calls": 0
+            }
+          }
+        ]
+      },
+      {
+        "seed": 1224092,
+        "run": 40083571000,
+        "counts": {
+          "cases": 2,
+          "conversion_calls": 397056,
+          "valid_reads": 397026,
+          "default_zero_reads": 30,
+          "warm": 397056,
+          "fallback": 0,
+          "shared_calls": 132336,
+          "general_calls": 264720
+        },
+        "cases": [
+          {
+            "name": "bmm:ml:7",
+            "shape": [
+              8823,
+              2,
+              5,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 264720,
+              "valid_reads": 264690,
+              "default_zero_reads": 30,
+              "warm": 264720,
+              "fallback": 0,
+              "shared_calls": 0,
+              "general_calls": 264720
+            }
+          },
+          {
+            "name": "bmm:sparse:2",
+            "shape": [
+              3676,
+              12,
+              2,
+              2
+            ],
+            "counts": {
+              "cases": 1,
+              "conversion_calls": 132336,
+              "valid_reads": 132336,
+              "default_zero_reads": 0,
+              "warm": 132336,
+              "fallback": 0,
+              "shared_calls": 132336,
+              "general_calls": 0
+            }
+          }
+        ]
+      }
+    ],
+    "boundary": "Conversions are once per selected group and k field, not globally once per unique matrix element. B can be reconverted in later row groups. Cross getD tail zeros are actually converted; unlike Packed10 j>=p padding, these are included explicitly."
+  },
+  "first_falsifier": "If708 misses whole gate and exact current Cross preparation is appreciable, one integrated candidate may be worth original statement/full comparison. Require actual C/machine warm branches, fallback spills, unchanged packShared two-B reuse and output semantics; reject if total branch/table/FP cost or register pressure cancels foreign-call reduction. Do not add separate gains or use exposure as time.",
+  "risk": "R9 shows numeric conversion can regress when moved into a MAC path. This proposal changes only P12 preparation, but pack lifetimes are short and some n=1 cases can still pay dominant predicate/setup cost. Whole gain UNKNOWN.",
+  "next_action": "D decides after profile and708 cleanD; no candidate or CI generated by this script.",
+  "source_record_sha256": "c8b41ba5c3b514ffe2fd12fa9cb7b480222b8e411d42741446e612e786d64b44",
+  "script_sha256": "f24c6a6924b36154d01141bdff56cc178039600c6f0198e56fe7cb889fead6e5"
+}

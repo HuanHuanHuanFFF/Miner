@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "review": "R13 candidate and diagnostic branch",
+  "reviewed_at_utc": "2026-10-24T12:00:00Z",
+  "scope": "Read-only source, manifest, wrapper and profile review. No Lean, CI, Git mutation, test, or shared-state write.",
+  "candidate": {
+    "name": "f01-r13-preparation-convert",
+    "sha256": "7086031b8164647e199f52c6b44fc7f54233ec4e75e2221fa95d30a676270d57",
+    "bytes": 248615,
+    "byte_limit": 256000,
+    "remaining_bytes": 7385,
+    "manifest_sha256": "1be4827910ef3f5402c940346edf23e5b316089ff7ba0741489aa21fc6b675dc",
+    "parent": {
+      "name": "f01-d12-scalar-combined",
+      "sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+      "bytes": 248144
+    },
+    "reverse_reconstruction": {
+      "five_manifest_edits_seen_once": true,
+      "reconstructed_parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+      "all_other_source_bytes_unchanged": true
+    },
+    "proof_review": {
+      "existing_bridge": "R2W01b.convert / R2W01c.convert_eq",
+      "all_input_value_bridge_claim": "Static source-level reuse; no new arithmetic proof",
+      "packB_get_statement_changed": false,
+      "output_prefix_statement_changed": false,
+      "layout_padding_dot_dispatch_nan_lowScale_source_unchanged": true,
+      "statement_only_run": 40091246795,
+      "statement_only_result": "PASS per Astra receipt",
+      "original_full_gate": "NOT_RUN"
+    }
+  },
+  "profile_local_checks": {
+    "state": "PASS",
+    "fixture_kernel": "f01-d12-none-native-result/42c",
+    "fixture_sha256": "11f79813ec957aba7c1346e783b585bb382d6d719f4a9a315a94352c6b435e1c",
+    "fixture_is_exact_df5c": false,
+    "category_function_counts": {
+      "whole_bmm": 1,
+      "whole_sum": 1,
+      "amap": 1,
+      "bpack": 5,
+      "cross_prepare": 5,
+      "compute": 11,
+      "output": 27,
+      "repair": 5,
+      "dispatch_scan": 2
+    },
+    "amap_fixture_symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_mapMUnsafe_map___at___00Submission_RowStream_output_spec__0",
+    "rejected_cases": [
+      "checksum mismatch",
+      "missing stage",
+      "unbalanced timer stack",
+      "wrong root calls",
+      "exclusive over inclusive"
+    ],
+    "exact_df5c_profile_runtime": "NOT_RUN",
+    "linux_lean_clang_gate": "NOT_RUN"
+  },
+  "diagnostic_wiring": {
+    "wrapper_candidate": "f01-d13-cost-profile",
+    "wrapper_kernel_sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045",
+    "wrapper_manifest_sha256": "36f7e7f0d3defeb308b6e8d8581bf357ade15eb846866cb22535df82df6bb714",
+    "wrapper_validation_mode": "statement-only",
+    "profile_seed": 1224016,
+    "dispatch_seed": 1324001,
+    "diagnostic_only": true,
+    "full_gate": false,
+    "profile_entry_sha256": "3e5e7e63411aab9621e1a37e8b6822ac00d33fe4fda271d130a4a33dccea51a0",
+    "profile_current_sha256": "0b973c9c309b4e86d8e0576a32873ab097a41a1db3b45c1600f3892ac538a334",
+    "profile_suite_sha256": "f7abab11779dbaa39a4581793340cca442e3b50d95d7fd33878633c9604c8875",
+    "ci_diagnostics_sha256": "a8cd939124dfb8b7fa42e5d418dfc1917ab4436315d3cfcf0797bf6f9b630f2c",
+    "run_gates_sha256": "0e076f17ebff9fd97e557cae89866f2b615fe3f68314b26cbca0ec51a30df9d0",
+    "workflow_sha256": "59559bdbe0b0b251aa714844a463f64a70acb39dd457c3c3c38ad711d607acfd",
+    "profile_suite_total_deadline_seconds": 1500,
+    "profile_entry_timeout_seconds": 1000,
+    "ci_diagnostics_outer_replay_timeout_seconds": 1800,
+    "workflow_job_timeout_seconds": 2700,
+    "direct_path_uses_public_suite_180s_timeout": false,
+    "per_case_checksum_and_root_call_checks": true,
+    "observer_mutates_only_disposable_upper_c": true,
+    "original_gate_bench_contracts_and_flags_changed": false,
+    "elf_or_object_artifact_exported": false
+  },
+  "route_interpretation": {
+    "underflowzero_small": "dispatch scan then zero fill; no RowStream A-map or Packed10 B-pack conversion",
+    "r11_crossrows": "p=2 plus output/size guards; CrossRows packers, not the candidate's RowStream/Packed10 conversion path",
+    "direct_continuous": "n<=4 and p>2; bypasses RowStream A-map and Packed10 B-pack",
+    "direct_small": "n<=4 or p<=2 after earlier routes; bypasses RowStream A-map and Packed10 B-pack",
+    "rowstream_packed10": "remaining positive dimensions; only this route can exercise the changed A map and valid B lanes",
+    "amap_category_is_broad": true,
+    "bpack_category_includes_alloc_padding_and_control": true,
+    "category_timing_is_per_symbol": false,
+    "adding_amap_and_bpack_as_removable_cost_is_invalid": true,
+    "profile_counters_scope": "Checksum plus warm-up and all three timed inner sweeps; stage values are diagnostic and not the benchmark's fastest-case statistic"
+  },
+  "freeze_1324001": {
+    "plan_sha256": "aa84a5774a25f08e18201ce6439519da0a8cef534de25ce8c20725ec9a0d29ab",
+    "plan_matches_freeze_request_sha256": true,
+    "profile_request_sha256": "92b1494e02398162f83cee31ad19c49e58895d6fba249f88edff2fdb7ce04299",
+    "plan_profile_request_sha256_matches": true,
+    "frozen_local_file_count": 23,
+    "frozen_local_file_hashes_and_sizes_match": true,
+    "actual_git_head_readback_by_root": "PENDING_AT_REVIEW"
+  },
+  "additional_bound_evidence": {
+    "statement_receipt": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/astra-statement-1324002.json",
+    "statement_receipt_sha256": "6e24b2ccd2ba574c28f21eb4620ddbe3c605e073894a04bcfad65dabf7172e65",
+    "candidate_freeze_receipt_sha256": "41e1f9addec12599d1d9569c8fd62705b85c9c1c9d923042e8e51f174549a1d6",
+    "profile_handoff_sha256": "ae831974466d8add747fc5580c6fb3525b396305d5f923042c2fb9be240ca151",
+    "profile_local_tests_sha256": "01baf9b9ca8b262ecfe0ffc08faf87a022fb5415972f1c9747b6c21cef5ff9a4"
+  },
+  "operational_caveat": "The 1000s profile-entry cap is below the possible 900s statement budget plus 300s profile loop. This is fail-closed, but a slow statement pass can truncate stage sampling before the 1500s adapter deadline; Root should decide whether to align this cap before dispatch.",
+  "conclusion": "The five-edit candidate is an exact byte-preserving source transformation with a reasonable existing equality proof bridge, but only statement-level verification is available. The direct diagnostic path is correctly isolated and frozen locally; exact df5c generated-C coverage remains unknown until the diagnostic run. Interpret A-map and Packed10 totals by route and symbol, never as fully removable cost."
+}

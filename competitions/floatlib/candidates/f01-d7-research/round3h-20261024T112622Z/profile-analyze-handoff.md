@@ -1,0 +1,13 @@
+# R13 profile analysis
+
+Run `python profile-analyze.py --result <original/profile-r13-result.json> --index <original-artifact-hashes.json> --out <new/profile-analysis.json>`. The output must be fresh. This reads original artifacts and writes only the specified new JSON receipt. It never executes Lean, clang, the benchmark or CI.
+
+The reader reconciles each original artifact's SHA and byte count with the collection index; exactDF Kernel bytes; the frozen producer; the official seed1224016 canonical156case plan; original uninstrumented whole log/JSON; both profile processes' raw logs, checksums, pure-root call counts and exact nested-exclusive partitions. It reproduces the instrumentation text from the original C and frozen helper to verify the declared stage inventory. The Amap label accepts only actual RowStream_output Array.map symbols.
+
+Each case gets its original whole timing/checksum, profile whole rows, source-model route, exclusive stage values and fractions of the instrumented pure-root duration. Groups summarize routes, kernels and official cells, with timed and untimed cases separate. These fractions aggregate checksum/warmup and all timed sweeps; they are not formal score shares. The profile process/cache/timer/layout context differs from the original full-plan anchor. No stage duration is converted to an official improvement or champion multiplier.
+
+Route classification literally translates official BenchSuite.element integer-word generation, including UInt64 wrap, special/zero/subnormal precedence and the original two UnderflowZero scans. It then follows frozenDF shape predicates, including USize64 bounds. The known public plan model has35 BMM cases: RowStream15, Cross6, DirectContinuous8, DirectSmall2 and UnderflowZero4. This is SOURCE_MODEL evidence, not a recorded machine branch trace. It performs no float kernel arithmetic. Inseparable/fused/inline boundaries stay UNKNOWN.
+
+Bpack covers the emitted allocation, fill, padding and conversion helpers. Its entire time cannot be called removable conversion cost for708. Likewise RowStream Amap includes array mapping overhead. Nested exclusive accounting prevents inner compute from being counted again inside output.
+
+`profile-analyze-test.py` uses synthetic measurement rows over the prior exact public156case plan, five route fixtures, two known/wrapped SplitMix word checks and12 negative boundaries. It preserves tiny hash-reader fixtures under `profile-analyze-fixture-*`. Real R13 artifact validation remains NOT_RUN until collection. Raw stdout/stderr and exit/source hashes are retained in `profile-analyze-test-*.log` and `profile-analyze-test-execution.json`; the first denied default-Temp attempt is recorded separately rather than overwritten as a passing run.

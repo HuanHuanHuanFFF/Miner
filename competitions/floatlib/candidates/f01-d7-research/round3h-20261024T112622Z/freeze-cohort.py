@@ -90,6 +90,10 @@ def main():
     estimator = importlib.util.module_from_spec(estimator_spec)
     estimator_spec.loader.exec_module(estimator)
     files += [Path(estimator.DEFAULT_ANCHOR), screen_path]
+    vs=importlib.util.spec_from_file_location('r13_model_binding',HERE/'verify-three-groups.py')
+    verifier=importlib.util.module_from_spec(vs);vs.loader.exec_module(verifier)
+    retained_model=verifier.retained_model_identity(ROOT)
+    g.require(digest(ROOT/retained_model['model_path'])==retained_model['sha256'], 'Retained numeric model changed before cohort freeze')
     for n in names:
         files += [ROOT/'competitions/floatlib/candidates'/n/s for s in ('Kernel.lean', 'manifest.json')]
     v = p['verdicts'][baseline]
@@ -97,6 +101,7 @@ def main():
               'candidate': {'name': a.candidate, 'sha256': p['kernel_hashes'][a.candidate]},
               'baseline': {'name': baseline, 'sha256': p['kernel_hashes'][baseline]},
               'estimator_control': {'name': CONTROL, 'sha256': CONTROL_SHA},
+              'retained_model': retained_model,
               'groups': {'D': {'seed': p['seed'], 'run': a.discovery, 'job': p['job_id']}, 'A': {'seed': a.seed_a}, 'B': {'seed': a.seed_b}},
               'candidate_orders': {'D': names, 'A': list(reversed(names)), 'B': names[1:]+names[:1]},
               'required_groups': 3, 'selection_policy': g.SELECTION_POLICY,

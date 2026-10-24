@@ -25,6 +25,7 @@ LOCAL_REVIEW_FILES = (
     'round-plan.json', 'selection-policy.json', 'prepare-plan.py',
     'freeze-cohort.py', 'verify-three-groups.py', 'adopt-three-confirmed.py',
     'summarize-run.py', 'execution-binding.py',
+    'refresh-retained-metadata.py',
 )
 
 
@@ -42,7 +43,8 @@ def required_local_paths(root, here):
     return ([Path(here) / name for name in LOCAL_REVIEW_FILES] +
             [Path(here).parent / 'adoption-guard.py',
              Path(root) / 'competitions/floatlib/scripts/estimate_champion_time.py',
-             Path(root) / 'competitions/floatlib/scripts/render_dashboard.py'])
+             Path(root) / 'competitions/floatlib/scripts/render_dashboard.py',
+             Path(here).parent / 'round6h-20261024T051445Z/retained-estimate-freeze.json'])
 
 
 def verify_freeze(freeze):

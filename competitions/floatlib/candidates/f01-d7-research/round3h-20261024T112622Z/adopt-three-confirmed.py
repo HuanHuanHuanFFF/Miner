@@ -241,11 +241,16 @@ def adopt(freeze_path, expected_sha, runs, root=ROOT, verifier=None, estimator=N
                 key=path.relative_to(root).as_posix()
                 require(key in freeze["files"] and sha(path.read_bytes())==freeze["files"][key]["sha256"], "Missing/changed adoption estimator anchor freeze: "+key)
         frozen()
+        model_binding=freeze.get('retained_model',{})
+        require(model_binding.get('source_sha256')==BASELINE and
+                model_binding.get('model_path')==paths['model'].relative_to(root).as_posix() and
+                sha(paths['model'].read_bytes())==model_binding.get('sha256'),
+                'Retained numeric model changed before adoption')
         for role in runs:
             if "run" in freeze["groups"][role]:
                 require(runs[role]==freeze["groups"][role]["run"],"Run differs from frozen role")
         view,state = read(paths["view"]),read(paths["state"])
-        require(state["kernel_sha256"]==view["kernel_sha256"]==BASELINE and sha((root/state["kernel"]).read_bytes())==BASELINE,"Current state/source no longer6c")
+        require(state["kernel_sha256"]==view["kernel_sha256"]==BASELINE and sha((root/state["kernel"]).read_bytes())==BASELINE,"Current state/source no longerDF")
         inputs=(root/view["public_results"],own/"current-official-snapshot.json",Path(estimator.DEFAULT_ANCHOR),
                 root/"competitions/floatlib/candidates"/freeze["candidate"]["name"]/"Kernel.lean")
         input_hashes={path:sha(path.read_bytes()) for path in inputs}

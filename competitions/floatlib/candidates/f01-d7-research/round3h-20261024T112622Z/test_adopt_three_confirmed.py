@@ -78,6 +78,8 @@ class Fixture:
         self.runs={"D":11,"A":12,"B":13}
         self.freeze={"candidate":{"name":"new-synthetic","sha256":self.hash},"baseline":{"name":BASE_NAME,"sha256":ad.BASELINE},
             "estimator_control":{"name":CONTROL_NAME,"sha256":CONTROL_SHA},
+            "retained_model":{"source_sha256":ad.BASELINE,"model_path":self.model_path.relative_to(self.root).as_posix(),
+                              "sha256":ad.sha(self.model_path.read_bytes())},
             "groups":{r:{"seed":100+n,"run":n} for r,n in self.runs.items()},"suite_sha256":"suite",
             "selection_policy":{"headline_normalized_ratio_max":.97,"gain_p05_min_exclusive":0.0},"files":{}}
         for p in (self.here/"adopt-three-confirmed.py",self.scripts/"estimate_champion_time.py",self.scripts/"render_dashboard.py",self.anchor):
@@ -193,6 +195,16 @@ class AdoptionTests(unittest.TestCase):
     def test_missing_third_is_rejected_without_writes(self):
         del self.f.selection["groups"]["B"]
         self.zero_write_failure()
+    def test_same_source_reestimated_model_is_rejected_before_writes(self):
+        self.f.save(self.f.model_path,{'old_model':True,'unauthorized_reestimate':True})
+        result=self.zero_write_failure()
+        self.assertIn('Retained numeric model changed',result['failures'][0]['reason'])
+    def test_missing_retained_model_identity_is_rejected_before_writes(self):
+        del self.f.freeze['retained_model']
+        self.f.save(self.f.freeze_path,self.f.freeze)
+        self.f.freeze_sha=ad.sha(self.f.freeze_path.read_bytes())
+        result=self.zero_write_failure()
+        self.assertIn('Retained numeric model changed',result['failures'][0]['reason'])
     def test_new_retained_source_clears_old_overlay_and_numeric_model_freeze(self):
         self.f.view['dashboard_research_candidate']={'candidate':'older-research'}
         self.f.state['current_multiplier_view']['displayed_research_candidate']={'candidate':'older-research'}

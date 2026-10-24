@@ -15,6 +15,9 @@ spec = importlib.util.spec_from_file_location("three_groups", HERE / "verify-thr
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 guard = mod.import_guard()  # Import has no Git/process or artifact access.
+REAL_DIGEST=mod.digest
+def fake_freeze_digest(path):
+    return 'expected' if str(path)=='fake-freeze' else REAL_DIGEST(path)
 CANDIDATE = "synthetic-candidate"
 BASELINE = "f01-d12-scalar-combined"
 ESTIMATOR_CONTROL = "f01-r8-combined-result-guard"
@@ -41,6 +44,7 @@ def freeze_fixture():
             "candidate": {"name": CANDIDATE, "sha256": SOURCE},
             "baseline": {"name": BASELINE, "sha256": mod.BASELINE_SHA},
             "estimator_control": {"name": ESTIMATOR_CONTROL, "sha256": ESTIMATOR_CONTROL_SHA},
+            "retained_model": mod.retained_model_identity(),
             "groups": {"D": {"run": 101, "seed": 11}, "A": {"seed": 22}, "B": {"seed": 33}},
             "candidate_orders": deepcopy(ORDERS),
             "selection_policy": deepcopy(guard.SELECTION_POLICY), "suite_sha256": guard.SUITE_SHA,
@@ -185,19 +189,19 @@ class ThreeGroupTests(unittest.TestCase):
 
     def test_freeze_cannot_omit_outer_helper_from_execution_manifest(self):
         del self.freeze['execution_files']['competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py']
-        with patch.object(mod, 'digest', return_value='expected'):
+        with patch.object(mod, 'digest', side_effect=fake_freeze_digest):
             with self.assertRaisesRegex(ValueError, 'execution files'):
                 mod.verify_freeze(self.freeze, 'expected', Path('fake-freeze'), guard)
 
     def test_freeze_cannot_omit_renderer(self):
         del self.freeze['files']['competitions/floatlib/scripts/render_dashboard.py']
-        with patch.object(mod, 'digest', return_value='expected'):
+        with patch.object(mod, 'digest', side_effect=fake_freeze_digest):
             with self.assertRaisesRegex(ValueError, 'Missing frozen helper'):
                 mod.verify_freeze(self.freeze, 'expected', Path('fake-freeze'), guard)
 
     def test_execution_table_cannot_disagree_with_local_frozen_file(self):
         self.freeze['execution_files']['.github/workflows/deflate-baseline.yml']['sha256'] = '0'*64
-        with patch.object(mod, 'digest', return_value='expected'):
+        with patch.object(mod, 'digest', side_effect=fake_freeze_digest):
             with self.assertRaisesRegex(ValueError, 'binding differs'):
                 mod.verify_freeze(self.freeze, 'expected', Path('fake-freeze'), guard)
 
@@ -308,7 +312,7 @@ class ThreeGroupTests(unittest.TestCase):
 
     def test_changed_policy_cannot_relax_threshold(self):
         self.freeze["selection_policy"]["headline_normalized_ratio_max"] = 1.1
-        with patch.object(mod, "digest", return_value="expected"):
+        with patch.object(mod, "digest", side_effect=fake_freeze_digest):
             with self.assertRaisesRegex(ValueError, "policy"):
                 mod.verify_freeze(self.freeze, "expected", Path("fake-freeze"), guard)
 
@@ -324,6 +328,18 @@ class ThreeGroupTests(unittest.TestCase):
                 return SOURCE if Path(p) == candidate_path else actual_digest(p)
             with patch.object(mod, "digest", side_effect=candidate_digest):
                 mod.verify_freeze(self.freeze, expected, path, guard)
+
+    def test_missing_retained_model_binding_is_rejected(self):
+        del self.freeze['retained_model']
+        with patch.object(mod,'digest',side_effect=fake_freeze_digest):
+            with self.assertRaisesRegex(ValueError,'retained model identity'):
+                mod.verify_freeze(self.freeze,'expected',Path('fake-freeze'),guard)
+
+    def test_changed_retained_model_hash_cannot_be_self_declared(self):
+        self.freeze['retained_model']['sha256']='0'*64
+        with patch.object(mod,'digest',side_effect=fake_freeze_digest):
+            with self.assertRaisesRegex(ValueError,'retained model identity'):
+                mod.verify_freeze(self.freeze,'expected',Path('fake-freeze'),guard)
 
     def test_actual_shape_and_work_change_count_is_reported(self):
         packet = self.io.packets[101]

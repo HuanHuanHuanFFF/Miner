@@ -1,0 +1,150 @@
+{
+  "state": "VERIFIED_DIAGNOSTIC_ONLY",
+  "run": 40092014611,
+  "analysis_sha256": "63c5b77d8ad8cbfa9460bc7a9787b1114773515755ee6e836eeee2033bb9c4e7",
+  "result_sha256": "15b58c118227e4e78ef1bf536504ec5904570a01b7aefa72b61394f287e0554d",
+  "index_sha256": "c9c5a54bff0e2f6bb0ed3bbaf4d848266d8d7af5c24fb99ce08d08b11e2c6341",
+  "checks": {
+    "exactDF": true,
+    "seed1224016": true,
+    "cases": 156,
+    "raw_artifact_files": 794,
+    "whole_checksum_rootcall_exclusive_partition": true
+  },
+  "routes": {
+    "Cross": {
+      "timed_cases": 5,
+      "original_whole_anchor_ms_sum": 12.615592,
+      "instrumented_exclusive_fractions": {
+        "whole_bmm": 0.00011548861578383233,
+        "whole_sum": 0.0,
+        "amap": 0.0,
+        "bpack": 0.0,
+        "cross_prepare": 0.197060760283384,
+        "compute": 0.11058131768061194,
+        "output": 0.6371658212901508,
+        "repair": 0.0550703147153342,
+        "dispatch_scan": 6.297414735264731e-06
+      },
+      "profile_vs_original_context_and_instrumentation_factor": {
+        "median": 1.903944984043915,
+        "min": 1.115964152480597,
+        "max": 4.687086425934294
+      }
+    },
+    "DirectContinuous": {
+      "timed_cases": 8,
+      "original_whole_anchor_ms_sum": 14.246874,
+      "instrumented_exclusive_fractions": {
+        "whole_bmm": 5.275463565228412e-05,
+        "whole_sum": 0.0,
+        "amap": 0.0,
+        "bpack": 0.0,
+        "cross_prepare": 0.0,
+        "compute": 0.4626335955494915,
+        "output": 0.535561482595599,
+        "repair": 0.0017453252938861774,
+        "dispatch_scan": 6.841925371018813e-06
+      },
+      "profile_vs_original_context_and_instrumentation_factor": {
+        "median": 3.8962601441793776,
+        "min": 2.804718074927159,
+        "max": 5.316597362280938
+      }
+    },
+    "DirectSmall": {
+      "timed_cases": 2,
+      "original_whole_anchor_ms_sum": 4.479591,
+      "instrumented_exclusive_fractions": {
+        "whole_bmm": 0.5337315408550347,
+        "whole_sum": 0.0,
+        "amap": 0.0,
+        "bpack": 0.0,
+        "cross_prepare": 0.0,
+        "compute": 0.46625909627837303,
+        "output": 0.0,
+        "repair": 0.0,
+        "dispatch_scan": 9.36286659226858e-06
+      },
+      "profile_vs_original_context_and_instrumentation_factor": {
+        "median": 1.5267541875279953,
+        "min": 1.0661485118627263,
+        "max": 1.9873598631932643
+      }
+    },
+    "RowStream": {
+      "timed_cases": 15,
+      "original_whole_anchor_ms_sum": 6.231684,
+      "instrumented_exclusive_fractions": {
+        "whole_bmm": 0.00021539914880875773,
+        "whole_sum": 0.0,
+        "amap": 0.029211780861749793,
+        "bpack": 0.7527519693761058,
+        "cross_prepare": 0.0,
+        "compute": 0.05073581089438938,
+        "output": 0.13901823826301593,
+        "repair": 0.028045224758278416,
+        "dispatch_scan": 2.1576697651916826e-05
+      },
+      "profile_vs_original_context_and_instrumentation_factor": {
+        "median": 4.774444462774469,
+        "min": 1.437619333510267,
+        "max": 8.00325342035898
+      }
+    },
+    "UnderflowZero": {
+      "timed_cases": 4,
+      "original_whole_anchor_ms_sum": 0.233924,
+      "instrumented_exclusive_fractions": {
+        "whole_bmm": 0.004189539326336129,
+        "whole_sum": 0.0,
+        "amap": 0.0,
+        "bpack": 0.0,
+        "cross_prepare": 0.0,
+        "compute": 0.0,
+        "output": 0.25029250038714984,
+        "repair": 0.0,
+        "dispatch_scan": 0.745517960286514
+      },
+      "profile_vs_original_context_and_instrumentation_factor": {
+        "median": 0.8762953238229925,
+        "min": 0.6620079290761167,
+        "max": 1.029809885931559
+      }
+    }
+  },
+  "whole_anchor_by_operation_ms": {
+    "add": 61.341221,
+    "mul": 62.652136,
+    "sum": 12.83092,
+    "bmm": 37.807665
+  },
+  "critical_probe_distortion": [
+    {
+      "case": "bmm:dense:0",
+      "original_whole_ms": 2.190925,
+      "instrumented_whole_ms": [
+        17.567458,
+        17.501598
+      ],
+      "bpack_probes_per_process": 1284100
+    },
+    {
+      "case": "bmm:sparse:2",
+      "original_whole_ms": 6.846718,
+      "instrumented_whole_ms": [
+        32.087681,
+        32.094637
+      ],
+      "output_probes_per_process": 1588240
+    }
+  ],
+  "interpretation": [
+    "Every original/checksum and pure root call is covered. Route classification is source-model, corroborated by observed category presence, not an individual branch trace.",
+    "RowStream Bpack75.275% and Amap2.921%, Cross output63.717% describe perturbed code only. Fine-grained probe overhead and different process/cache/layout prevent original phase-cost attribution.",
+    "Bpack includes allocation, fill, padding and conversion; neither Bpack nor Amap is a candidate708 removable-cost bound.",
+    "DirectSmall root-exclusive53.373% and sum root-exclusive53.573% are unresolved regions, not measured single mechanisms.",
+    "No official score, formal performance increment or champion multiplier is estimated.",
+    "For future quantitative stage attribution, coarse probes without per-element lambdas/ofFn/output wrappers would be required; no new run or frozen-file modification is performed here."
+  ]
+}
