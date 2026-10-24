@@ -107,14 +107,21 @@ def main() -> int:
             return out
 
         base = op_totals(anchor_classes)
-        report = {"run": int(a.run), "mode": "official-pinned-12class", "anchor": a.anchor, "candidates": {}}
-        print(f"\nofficial pinned gate, anchor {a.anchor}: whole {base['whole']/1e6:.2f} ms")
+        anchor_ratio = official[a.anchor].get("ratio")
+        report = {"run": int(a.run), "mode": "official-pinned-12class",
+                  "note": "headline_ratio_vs_anchor is the verdict-ratio normalization; *_unweighted are raw class sums and only indicate direction",
+                  "anchor": a.anchor, "candidates": {}}
+        print(f"\nofficial pinned gate, anchor {a.anchor}: unweighted class sum {base['whole']/1e6:.4f}")
         for name, r in official.items():
             t = op_totals(r["classes"])
             rel = {op: t[op] / base[op] for op in ("add", "mul", "sum", "bmm", "whole")}
+            headline = (r.get("ratio") / anchor_ratio) if r.get("ratio") and anchor_ratio else None
             report["candidates"][name] = {"ratio_vs_shipped": r.get("ratio"), "p05": r.get("paired_gain_p05"),
-                                          "ratio_vs_anchor": rel, "operation_ms": {k: v / 1e6 for k, v in t.items()}}
-            print(f"{name:34s} whole/df5c={rel['whole']:.4f} bmm/df5c={rel['bmm']:.4f} "
+                                          "headline_ratio_vs_anchor": headline,
+                                          "unweighted_ratio_vs_anchor": rel,
+                                          "operation_ms": {k: v / 1e6 for k, v in t.items()}}
+            print(f"{name:34s} headline/df5c={headline if headline is None else round(headline, 4)} "
+                  f"unweighted whole={rel['whole']:.4f} bmm={rel['bmm']:.4f} "
                   f"add={rel['add']:.4f} mul={rel['mul']:.4f} sum={rel['sum']:.4f} p05={r.get('paired_gain_p05')}")
         (target / "deepseek-ab-result.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

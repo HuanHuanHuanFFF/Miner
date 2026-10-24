@@ -36,13 +36,34 @@ sparse 数据上零检测分支不可预测。不重复该路线。
 
 | 候选 | 机制 | 证明负担 | 状态 |
 |---|---|---|---|
-| `f01-deepseek-p8-direct`（d2f97bad） | BMM 分派 `p ≤ 8` 改走既有 DirectSmall | 0 新证明 | CI run 40123953691 |
-| `f01-deepseek-p2-direct`（43d15b12） | p=2 Cross 守卫 `4≤batch·m` → `batch·m<4`，p=2 改走 DirectSmall | 0 新证明 | 待同 run A/B |
-| `f01-deepseek-p2p8`（386af2d5） | 上述两条组合 | 0 新证明 | 待同 run A/B |
-| `f01-deepseek-p2cont`（e878b0f2） | p=2 改走 DirectContinuous（全形状定理），并放宽其守卫到 `p≤2` | 0 新证明 | 备选 |
-| `f01-deepseek-p2cont8`（169f8198） | p2cont + p8 组合 | 0 新证明 | 待同 run A/B |
+| `f01-deepseek-p8-direct`（d2f97bad） | BMM 分派 `p ≤ 8` 改走既有 DirectSmall | 0 新证明 | 旧十二类：慢 1.19%；public-v2：慢 0.7% |
+| `f01-deepseek-p2-direct`（43d15b12） | p=2 Cross 守卫 `4≤batch·m` → `batch·m<4`，p=2 改走 DirectSmall | 0 新证明 | 未进 public-v2 |
+| `f01-deepseek-p2p8`（386af2d5） | 上述两条组合 | 0 新证明 | 未进 public-v2 |
+| `f01-deepseek-p2cont`（e878b0f2） | p=2 改走 DirectContinuous（全形状定理），并放宽其守卫到 `p≤2` | 0 新证明 | run 3 发现组 |
+| `f01-deepseek-p2cont8`（169f8198） | p2cont + p8 组合 | 0 新证明 | public-v2：whole 0.9584，bmm 0.8319 |
+| `f01-deepseek-p2contp8`（69901745） | p≤2 与 p≤8 全部 DirectContinuous | 0 新证明 | run 3 发现组 |
+| `f01-deepseek-directall`（ad91388b） | p≤64 全部 DirectContinuous | 0 新证明 | public-v2：whole 0.9585，bmm 0.8346 |
+| `f01-deepseek-directallfull`（a84bd96b） | 无界直算探针（p≤1000000） | 0 新证明 | 未测 |
+
+## public-v2 发现组（seed 1425002，run 40126911323，4 个 full gate 全 PASS）
+
+| 候选 | whole/df5c | bmm/df5c | dense | ml | sparse | specials |
+|---|---:|---:|---:|---:|---:|---:|
+| `p2cont8` | **0.9584** | **0.8319** | 0.707 | 0.838 | 0.888 | 1.268 |
+| `directall` | 0.9585 | 0.8346 | — | — | — | — |
+| `p8-direct` | 1.0070 | 1.0329 | 0.9625 | 1.066 | 1.063 | 1.222 |
+
+归因：增益来自 p≤2（含 p=1）改走 DirectContinuous；p3–8 改 DirectSmall 单独更差；
+p>8 的 direct 与 Packed10 在本 seed 基本等价。specials（NaN-heavy p2）退化 +26.8%。
+
+## 口径更正（run 1）
+
+run 1 旧十二类曾按 12 类 `submission_ns` 不加权求和得到 whole 0.9987；官方 headline 应使用裁判比值归一：
+`0.1961162362 / 0.1938124588 = 1.01189`，即 p8 候选慢 1.19%。per-class 求和只作方向参考，
+不能替代 headline。public-v2 的数字按 `cell_work` 加权，无此问题。
 
 ## 边界
 
 类级耗时来自单次 public-v2 drawn 样本，不是官方计分份额；机制判断不等于收益。
 所有性能结论必须由临时 runner 上同 run 的候选／df5c 配对测量给出。
+单 seed 是发现组；确认需新 seed（DeepSeek 后续用 1525xxx）与新 runner。
