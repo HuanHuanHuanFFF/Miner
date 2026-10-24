@@ -1,12 +1,14 @@
-"""BMM case shape distribution for one public-v2 draw (seed 1324009).
+"""BMM case shape distribution for one public-v2 draw.
 
+Usage: python analyze-bmm-shapes.py [public-suite directory]
 Joins case parameters with class-level timing aggregates so we can size the
-population currently routed to Packed10 (n>4 and p>2). Read-only analysis.
+population routed to each BMM core. Read-only analysis.
 """
 import json
+import sys
 from pathlib import Path
 
-BASE = Path(
+BASE = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(
     r"D:\CodingProject\Bitget-DeepSeek\competitions\floatlib\candidates"
     r"\f01-mul-log2-proof1\ci-runs\40098465163"
     r"\download-d2c241d84c5e420bacc37ec73af7fb48"
