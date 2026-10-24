@@ -8,7 +8,8 @@
 
 - [冲冠看板](../../dashboard.md)：按 add、mul、sum、bmm 四项查看现任冠军与我方首选。
 - [当前开发状态](coordination/development-status.json)：当前比较口径、候选选择及证据入口。
-- [数学结论与可复用证明](research/RESULTS.md)：按四项运算整理已验结论、数学储备、反例，以及 E 盘 12 包原文和全部候选的证据索引。
+- [数学结论与可复用证明](research/RESULTS.md)：按四项运算整理已验结论、数学储备、反例，索引R1–R6十二包、R11三份网页交付及全部候选证据。
+- [R11资料与开发承接](research/materials/20261024-r11/README.md)：97份原件、数学与性能提炼、来源哈希和许可证；保留原始未验证状态及后续负结果。
 - [当前研究记录](candidates/f01-d7-research/round3h-20261024T112622Z/README.md)：三小时协作的矩阵路径验证与多输入成本研究；[历史轮次](candidates/f01-d7-research/README.md)保留原验收。
 - [前轮Astra／开发一小时协作](candidates/f01-d1-inline-all/window1h/README.md)：原生算术证明起点、逐项验收与原始回执。
 

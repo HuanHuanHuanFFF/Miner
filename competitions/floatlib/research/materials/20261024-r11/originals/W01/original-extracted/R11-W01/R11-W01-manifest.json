@@ -1,0 +1,174 @@
+{
+  "task": "R11-W01",
+  "created_at": "2026-10-24T04:59:31.391238+08:00",
+  "overall_status": "SOURCE_AUDIT_COMPLETE_FORMAL_CLOSURE_NOT_RUN",
+  "source": {
+    "attachment_sha256": "8278e5bf3a955ba6971b7db0aac77b43a7888942f11f3f33ae2c5876c1c40fcc",
+    "kernel_sha256": "4bdd1e7db35cd85e17d06511721d5dbf7f654ec12e58633264b08a086ec54fa0",
+    "kernel_bytes": 252609,
+    "pin_status": "Supplied in attachment; toolchain/dependency checkouts unavailable",
+    "lean_version": "4.34.0",
+    "lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+    "floatlib_commit": "0d91825727839f597fd06b22fdd038ea21480f0c",
+    "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97"
+  },
+  "decision": {
+    "mandatory_patch_recommended": false,
+    "confirmed_source_defect_found": false,
+    "recommendation": "Run exact original SHA first in pinned official environment; do not claim acceptance from this audit.",
+    "conditional_patch": {
+      "path": "R11-W01-conditional.patch",
+      "condition": "Only if exact compiler rejects default termination proof for natLoop_lane. No such error was observed here.",
+      "added_bytes": 20,
+      "sha256": "96f8b69364e93a145853f5d98b23222b82b20d55a0c359507dbaa25cf389f40c",
+      "bytes": 252629,
+      "limit": 256000,
+      "remaining_bytes": 3371,
+      "all_other_source_bytes_identical": true,
+      "runtime_definition_bytes_changed": false,
+      "lean_status": "NOT_RUN"
+    },
+    "row_fallback_included_in_conditional_kernel": false
+  },
+  "verification": {
+    "exact_base_hash": "PASS",
+    "byte_limit": "PASS",
+    "exact_patch_and_inverse": "PASS",
+    "source_token_scan": "PASS",
+    "import_list": [
+      "ContractTensor"
+    ],
+    "set_options_in_submission_source": [],
+    "lean_elaboration": "NOT_RUN",
+    "original_four_spec_statement_build": "NOT_RUN",
+    "official_kernel_replay": "NOT_RUN",
+    "transitive_axiom_audit": "NOT_RUN",
+    "observed_axioms": null,
+    "allowed_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "checksum_suite": "NOT_RUN",
+    "finite_float_tests": "NOT_RUN",
+    "full_call_paired_25_rounds": "NOT_RUN",
+    "performance": "UNKNOWN",
+    "allowed_resource_caps_from_context": {
+      "maxRecDepth": 8192,
+      "maxHeartbeats": 4000000,
+      "synth_pending_depth": 400000
+    },
+    "pinned_cli_option_spelling_confirmed": false
+  },
+  "hash_policy": "This manifest hashes payload files only. SHA256SUMS.txt additionally hashes this manifest; neither hashes itself. Final archive hash is supplied by external R11-W01-SHA256SUMS.txt.",
+  "files": [
+    {
+      "path": "Kernel.conditional.lean",
+      "bytes": 252629,
+      "sha256": "96f8b69364e93a145853f5d98b23222b82b20d55a0c359507dbaa25cf389f40c",
+      "verification_status": "NOT_RUN"
+    },
+    {
+      "path": "Kernel.original.lean",
+      "bytes": 252609,
+      "sha256": "4bdd1e7db35cd85e17d06511721d5dbf7f654ec12e58633264b08a086ec54fa0",
+      "verification_status": "NOT_RUN"
+    },
+    {
+      "path": "R11-W01-address-witnesses.py",
+      "bytes": 1648,
+      "sha256": "0ebc4149828b4221ca50dae3784dfe3fdfe4b5446172ec492237b316735efa98",
+      "verification_status": "PROVIDED"
+    },
+    {
+      "path": "R11-W01-audit.fragment.lean",
+      "bytes": 4138,
+      "sha256": "a8670cf2b85e688f39f444ff93d29dc6bb83ae3283750732652ef7efcd7ea9fc",
+      "verification_status": "NOT_RUN"
+    },
+    {
+      "path": "R11-W01-conditional.patch",
+      "bytes": 302,
+      "sha256": "bf452c7f4c7a4447c207cbe9c7d045b2255369732d4d4cc0f9ed7c47303e3a46",
+      "verification_status": "PROVIDED"
+    },
+    {
+      "path": "R11-W01-edge-cases.fragment.lean",
+      "bytes": 2125,
+      "sha256": "7f107f97525d7cacf40b776dd000b858c7bb7cfe43069e516c908cc78c7c5919",
+      "verification_status": "NOT_RUN"
+    },
+    {
+      "path": "R11-W01-natLoop_lane.fragment.lean",
+      "bytes": 916,
+      "sha256": "ff2b54f0ce9f566466b6a1d0290178f69ea8b2630e823ba8ecfcde2a7baee172",
+      "verification_status": "NOT_RUN"
+    },
+    {
+      "path": "R11-W01-report.md",
+      "bytes": 24446,
+      "sha256": "42479e72bb0d78baf3ea1ef4250a8831ef072f7f15a138e30f9c72c9655606bb",
+      "verification_status": "PROVIDED"
+    },
+    {
+      "path": "R11-W01-row-fallbacks.fragment.lean",
+      "bytes": 2275,
+      "sha256": "74d3e85cf4a2e5fd78f4bd99b306964c532c8d1312a416253458a97a41e262a4",
+      "verification_status": "NOT_RUN"
+    },
+    {
+      "path": "R11-W01-verify.py",
+      "bytes": 4303,
+      "sha256": "1d95e65fa13992f191ecab307d881b047bc7e37450f673b646b2888d7660f0ce",
+      "verification_status": "PROVIDED"
+    },
+    {
+      "path": "context.txt",
+      "bytes": 4426,
+      "sha256": "09d630620c49afd7959f6d872c8343acda3cbde93b1f3e0f8930ed82e1e0ae27",
+      "verification_status": "PROVIDED"
+    },
+    {
+      "path": "evidence/address-witnesses.json",
+      "bytes": 3285,
+      "sha256": "b935183c6120c16b40f8cce53c1b585d6692bec8ef87b11bd2d60c310a7751eb",
+      "verification_status": "EXACT_INTEGER_CONSTRUCTION_NOT_ACCEPTANCE"
+    },
+    {
+      "path": "evidence/commands.json",
+      "bytes": 713,
+      "sha256": "cc132bac567c64d5a9be254f94b875a77acbaccb5dda4a1155387513446edb45",
+      "verification_status": "PROVIDED"
+    },
+    {
+      "path": "evidence/environment.json",
+      "bytes": 944,
+      "sha256": "60a17af36900a7a9c469677395e9cf64414ca7ac1de1089708d434cbb3e40e96",
+      "verification_status": "PROVIDED"
+    },
+    {
+      "path": "evidence/finish-audit.md",
+      "bytes": 5124,
+      "sha256": "178fd70c529c4d44451d23d16efffdf5367104a40ccdecca5b72951d98f87278",
+      "verification_status": "PROVIDED"
+    },
+    {
+      "path": "evidence/pack-dot-audit.md",
+      "bytes": 6945,
+      "sha256": "f7d5c7ddb6c3d5b2f276765e72cd0f4682c73ba10d93c136359173f352621899",
+      "verification_status": "PROVIDED"
+    },
+    {
+      "path": "evidence/row_core_audit.md",
+      "bytes": 5779,
+      "sha256": "c21a53ffb37a1b32e971a1f8846b639739a6f4acf765257a7030ccd6fe446494",
+      "verification_status": "PROVIDED"
+    },
+    {
+      "path": "evidence/static-verification.json",
+      "bytes": 994,
+      "sha256": "f582fdee61b1b7fbdc99986ff22ba7cfb9946b54223a8a9c1bde89c315b7f4f4",
+      "verification_status": "STATIC_PASS"
+    }
+  ]
+}

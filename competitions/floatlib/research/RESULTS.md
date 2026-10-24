@@ -1,6 +1,6 @@
 # FloatLib 数学结论
 
-截至 2026-10-24，保留 R1–R6 归档与后续精确源码验收。四项性能与冠军见[看板](../../../dashboard.md)，当前保留版本及研究候选见[开发状态](../coordination/development-status.json)。
+资料整理截至 2026-10-25，保留 R1–R6 归档、R11 三份网页交付与后续精确源码验收。四项性能与冠军见[看板](../../../dashboard.md)，当前保留版本及研究候选见[开发状态](../coordination/development-status.json)。
 
 **已建立原生算术、精确解码、有序累加、机器字索引、连续矩阵输出和独立点积链的证明链；按“耗时占比 × 可实现降耗”，结合开发和完整验证成本选路。** 当前保留[R12 df5c 完整包](../candidates/f01-d12-scalar-combined/Kernel.lean)，SHA `df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172`。D/40074431355、A/40083425886、B/40083571000 均通过完整原版 gate 和冻结三组门槛，见[R12 精确验收](../candidates/f01-d7-research/round6h-20261024T051445Z/three-group-verification.json)。冠军相对模型按[原冻结回执](../candidates/f01-d7-research/round6h-20261024T051445Z/retained-estimate-freeze.json)保持；新增同源码控制只扩充原始证据。R13 的四个新候选正确性均通过，但收益未达采用门槛，见[R13 研究记录](../candidates/f01-d7-research/round3h-20261024T112622Z/README.md)。R11/6c、旧41与R10保留为历史对照；下表 K 仍固定指8eb原件。尚未取代冠军，旧份额不跨 suite 继承。
 
@@ -11,7 +11,7 @@
 | 求和 | 最终结果有限可反推各步所需有限性；原序累加与软件 fold 相等；机器字循环与 Nat 循环等价 | 原生累加器＋精确转换＋USize 索引 |
 | 矩阵乘法 | 多 lane 投影等于各自原序点积；合法地址与机器字边界可证明；行序展平与原平坦输出相等 | 十列打包＋有界读取＋逐行计算和输出 |
 
-资料入口：[12 包原文与源码](materials/20261022/README.md) · [全部候选及实际回执](results/CANDIDATES.md) · [逐定理行号与哈希](results/candidate-catalog.json)。原包中的历史 NOT_RUN、失败和作者判断保持原文；以下状态依据后续回执归并。
+资料入口：[R1–R6 十二包原文与源码](materials/20261022/README.md) · [R11 三份网页交付与提炼](materials/20261024-r11/README.md) · [全部候选及实际回执](results/CANDIDATES.md) · [逐定理行号与哈希](results/candidate-catalog.json)。原包中的历史 NOT_RUN、失败和作者判断保持原文；以下状态依据后续回执归并。
 
 ## 1. 已通过完整候选验证的证明组件
 
@@ -186,7 +186,11 @@ R13 已补[同一未插桩 df5c binary 的三组已见输入诊断](../candidate
 
 ## 5. 资料完整性
 
-本次归档保留 12 个原包的 376 个普通文件、364 条包内 SHA-256 校验、12 份报告及一份附加校验清单的映射。来源、成员长度、SHA-256、CRC 与对应磁盘位置见 [manifest.json](materials/20261022/manifest.json)。原始许可证及作者归属随源码保存。压缩包清理结果见[清理回执](materials/20261022/cleanup-receipt.json)。
+R1–R6 归档保留 12 个原包的 376 个普通文件、364 条包内 SHA-256 校验、12 份报告及一份附加校验清单的映射。来源、成员长度、SHA-256、CRC 与对应磁盘位置见 [manifest.json](materials/20261022/manifest.json)。原始许可证及作者归属随源码保存。压缩包清理结果见[清理回执](materials/20261022/cleanup-receipt.json)。
+
+R11 补充归档将 W01 证明审查、W02 稀疏数学、W03 Lean／编译性能三份交付的97份原件（3,119,501字节）纳入当前分支，另附2份项目数学／曝光补充及3份固定版本许可证。[逐文件清单](materials/20261024-r11/manifest.json)保留来源、原包哈希、清理记录与E盘原件映射；[开发承接说明](materials/20261024-r11/RESEARCH_NOTES.md)分开记录网页原始 NOT_RUN、后续精确候选验收及负结果，原件字节不改写。私人会话索引与界面截图未纳入。
+
+R11 资料完整性可复跑：`python competitions/floatlib/research/materials/20261024-r11/verify.py --git --sources`；没有E盘时去掉 `--sources`，仍可验证分支内副本。该核验不执行原件代码、Lean、CI或性能实验。
 
 归档校验可复跑：`python competitions/floatlib/scripts/archive_research.py verify --git`。候选索引按冻结源码 SHA 匹配 CI 中保存的 candidate manifest 与 verdict；保留完整通过、仅编译、失败、未找到匹配回执四类，历史原文不改写。
 

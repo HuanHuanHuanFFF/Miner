@@ -1,0 +1,10 @@
+--- a/Kernel.lean
++++ b/Kernel.lean
+@@ -6573,6 +6573,7 @@
+   · rename_i hk
+     rw [NativeFinal.dotLoop, dif_neg hk]
+ termination_by n-k
++decreasing_by omega
+ 
+ def wordLoop (n : Nat) (v : Vector P12 n) (count : USize) (hn : count.toNat=n)
+     (k : USize) (s0 s1 s2 s3 s4 s5 s6 s7 : Float32) : F8 :=
