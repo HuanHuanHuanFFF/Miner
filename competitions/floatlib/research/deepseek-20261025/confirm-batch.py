@@ -88,7 +88,7 @@ def main():
             time.sleep(2)
         status_lines = sh(["git", "status", "--porcelain=v1"]).stdout.splitlines()
         dirty = [line for line in status_lines
-                 if not line.startswith(("?? competitions/floatlib/research/deepseek-20261025/ci-runs/",
+                 if not line.startswith(("?? competitions/floatlib/research/deepseek-20261025/",
                                          "?? competitions/floatlib/evidence/"))]
         if dirty:
             raise SystemExit("worktree dirty before dispatch:\n" + "\n".join(dirty))
