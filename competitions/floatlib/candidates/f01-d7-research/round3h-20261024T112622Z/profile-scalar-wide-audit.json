@@ -1,0 +1,103 @@
+{
+  "state": "BLOCKED_MISSING_ALLOWED_NATIVE_F64_TO_F32_SEMANTIC_BRIDGE",
+  "audit_utc": "2026-10-24T13:18:31.466930+00:00",
+  "mechanism": "Exact24x24->48bit integer significand product, convert once to binary64, exact power2 scaling, then one native Float.toFloat32 rounding; preserve existing cold NaN/Inf/signed-zero behavior.",
+  "decision": "Do not implement or benchmark the mechanism under the current fixed environment.",
+  "first_hard_block": {
+    "symbol": "Float.toFloat32",
+    "declared_in": "https://github.com/leanprover/lean4/blob/v4.34.0/src/Init/Data/Float/Float32.lean",
+    "line": 555,
+    "kind": "Opaque extern; no logical cross-width rounding equation in the verified interfaces.",
+    "required_schematic_obligation": "Relate (Float.toFloat32 f).toModel to Float32.Model.pack(f.toModel.unpack), at least for the finite exact-product subset.",
+    "schematic_obligation_typechecked": false,
+    "why_existing_bridges_do_not_close": "ExecFloat.Binary.toFloat/ofFloat bridge binary64 within one width; toFloat32/ofFloat32 bridge binary32 within one width. NativeFloat ExactDecoder + generic convert is a separate decode/quantize software path, not a theorem about opaque Float.toFloat32.",
+    "scope": "A scoped source audit, not a universal impossibility theorem about all conceivable formalizations."
+  },
+  "allowed_trust": {
+    "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
+    "FloatLib_commit": "0d91825727839f597fd06b22fdd038ea21480f0c",
+    "Lean": "v4.34.0",
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "new_axiom_extern_implemented_by_csimp": "Forbidden by original gate policy",
+    "gate_path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\research\\astra-collab-20261023-r7\\upstream\\gate-4b7e838.py",
+    "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194"
+  },
+  "source_findings": {
+    "Float32_toFloat_opaque_line": 548,
+    "Float_toFloat32_opaque_line": 555,
+    "native_exact_decoder_line": 219,
+    "generic_conversion_scope": "Decode/map/quantize through destination exact domain; cannot stand in for native cast semantics.",
+    "cache_supplemental_file_count": 37,
+    "cache_exact_cross_cast_reference_count": 0,
+    "cache_search_scope": "Selected public-source snapshot, not claimed complete FloatLib tree."
+  },
+  "history": [
+    {
+      "file": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round7h-20261023T193125Z\\astra-design.md",
+      "sha256": "eda7029ea52df8bffe635c1a039c632390bc6b6cc7f3248a6e2bb23cfb83cb07"
+    },
+    {
+      "file": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\storage-cost-screening.json",
+      "sha256": "9c70c8415c71b2650a319e4430b734ab5cc236fe522d32688ce1d239ee3dbf1a"
+    },
+    {
+      "file": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\low-normal-history-review.json",
+      "sha256": "708f84e2e0d78a91f50b6b30b4173299349eb5afb607d06a6f78e79dae327cbf"
+    }
+  ],
+  "history_interpretation": "R11 astra-design line25 already parked FloatArray widening/narrowing because these same opaque conversion bridges were unproved. Storage screening reiterates that boundary. No exact48bit-product/F64-scaling performance negative was found; do not reuse UInt64.toFloat32 wide64 decoder timings as this mechanism.",
+  "deferred_after_first_block": {
+    "mantissa48_exactness": "NOT_FORMALIZED",
+    "Float64_scale_range": "NOT_INVESTIGATED_AFTER_TRUST_BLOCK",
+    "single_RNE_and_double_rounding": "BLOCKED_BY_CAST_MODEL",
+    "signed_zero_NaN_Inf_end_to_end": "NOT_PROVED",
+    "code_size": "UNKNOWN",
+    "speed": "UNKNOWN"
+  },
+  "proof_cost": "Cannot close under current verified cast interface. After a legitimate bridge exists, still needs exact integer/F64 scaling and final binary32 rounding + existing cold-result composition; no estimate of successful proof or speed is made.",
+  "minimal_next_trial": "First locate and typecheck an existing permitted cross-width theorem under import ContractTensor on the pinned runner, print its complete axiom dependencies. No runner/CI is launched for absent theorem. Only after that gate should any numerical proof or complete-cost candidate begin.",
+  "primary_sources": [
+    {
+      "file": "profile-scalar-wide-lean-Float32.lean",
+      "url": "https://github.com/leanprover/lean4/blob/v4.34.0/src/Init/Data/Float/Float32.lean",
+      "git_blob_sha": "d5618b524b8b9541966b88211763a9e5b3318bc0",
+      "encoding": "base64",
+      "sha256": "2f4b7eb845c03bd5581d70921f891798cc193f5c8c1372302a3e6064a34f7319",
+      "bytes": 21678,
+      "fetched_interval_utc": "2026-10-24 13:14:00–13:16:30 UTC"
+    },
+    {
+      "file": "profile-scalar-wide-FloatLib-IEEE754.lean",
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/Formats/IEEE754.lean",
+      "git_blob_sha": "fb4461b55920f3ca30d6444fbfbbc7a386c75693",
+      "encoding": "utf-8",
+      "sha256": "0827d025ed3c50546bdf1e4d838d25845223ef2a2c6b309be4b07e5225754afe",
+      "bytes": 1515,
+      "fetched_interval_utc": "2026-10-24 13:14:00–13:16:30 UTC"
+    },
+    {
+      "file": "profile-scalar-wide-FloatLib-Native.lean",
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/Formats/IEEE754/Native.lean",
+      "git_blob_sha": "1dae9c8169dd779413203e3f6a64a732040daf08",
+      "encoding": "utf-8",
+      "sha256": "b6da171304380025f556bfc93a88d4b4b7b6c7ee8fd9e07581db90878c3ec35d",
+      "bytes": 9521,
+      "fetched_interval_utc": "2026-10-24 13:14:00–13:16:30 UTC"
+    },
+    {
+      "file": "profile-scalar-wide-FloatLib-ConversionRuntime.lean",
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/ExecFloat/Conversion/Runtime.lean",
+      "git_blob_sha": "708690cf4f79ed70689eb136b306121df3df09b3",
+      "encoding": "utf-8",
+      "sha256": "87e67701992da028f5b931ccc44de7e4e291de47b20532cfc826a7c84720dd61",
+      "bytes": 17296,
+      "fetched_interval_utc": "2026-10-24 13:14:00–13:16:30 UTC"
+    }
+  ],
+  "audit_source_sha256": "03a5899b3dee29f2b8fef6576d3fc321d8aa3a6c7b2d67f16b67af8931c2ae33",
+  "execution": "Read-only Python/source audit only; no Lean, Linux install, candidate, benchmark or CI."
+}

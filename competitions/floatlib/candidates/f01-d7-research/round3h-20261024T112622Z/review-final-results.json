@@ -1,0 +1,195 @@
+{
+  "review": "R13 final read-only RESULTS.md audit",
+  "status": "PASS_WITH_WORDING_AND_SCOPE_CLARIFICATIONS",
+  "target": "competitions/floatlib/research/RESULTS.md",
+  "target_sha256": "c96601a730fd08996f2e48690fd110d2435d2f74f24825304bf69c737fb60e35",
+  "relevant_local_links_checked": 20,
+  "missing_links": [],
+  "findings": [
+    {
+      "id": "M35-C-GENERATED-VS-MACHINE",
+      "severity": "clarification",
+      "finding": "Statement-build generated C dataflow audit observed unboxed Float32 parameter passing; this is not Lean proof or machine code. D9 result has codegen_present=false.",
+      "suggested_edit": "Replace “statement C证明” with “statement-build generated C审查观察到”; state final machine assembly/object remains UNKNOWN; link astra-n1-statement-codegen-1324008.json."
+    },
+    {
+      "id": "N1-DISPATCH-P-BOUND",
+      "severity": "scope-clarification",
+      "finding": "R13N1Prepared.dispatch uses its new route only when n=1 and p>2. The p=2 cross route is separate."
+    },
+    {
+      "id": "CROSS-N1-HIGH-OUTPUT-COVERAGE",
+      "severity": "coverage-clarification",
+      "finding": "3c theorem/dispatch includes n=1,p=2 under shape and USize guards, but discovery plan seed1324007 had eligible_n1_case_count=0. A separate df5c diagnostic had one n=1,p=2 high-output case in seed1224091; not a 3c performance confirmation.",
+      "suggested_edit": "Explicitly separate proof/dispatch applicability from measured discovery coverage; link astra-cross-full-1324007.json and profile-whole-multi-analysis-summary.md."
+    },
+    {
+      "id": "N1-P05-AND-THRESHOLD",
+      "severity": "clarification",
+      "finding": "N1 discovery has p05=+0.0019698239 but whole ratio=0.9976344726 exceeds the required 0.97, so local_discovery_screen_passed=false."
+    },
+    {
+      "id": "SCOPE-AND-LINKS",
+      "severity": "pass",
+      "finding": "All sampled current/M33-M35 local links resolve; theorem names and 708/252b/3c/8661 normalized ratios agree with source/results. Scale-fusion and profile boundaries are accurately separated."
+    }
+  ],
+  "r13_state": {
+    "id": "R13-20261024T112622Z",
+    "state": "ACTIVE",
+    "start_utc": "2026-10-24T11:26:22Z",
+    "deadline_utc": "2026-10-24T14:26:22Z",
+    "goal_achieved": false,
+    "started_ci_count": 10,
+    "completed_ci_count": 10,
+    "active_ci_count": 0,
+    "started_ci_records": [
+      {
+        "run": 40092014611,
+        "state": "TERMINAL_COLLECTED_SUCCESS",
+        "conclusion": "success"
+      },
+      {
+        "run": 40091246795,
+        "state": "TERMINAL_COLLECTED_SUCCESS",
+        "conclusion": "success"
+      },
+      {
+        "run": 40092053346,
+        "state": "TERMINAL_COLLECTED_SUCCESS",
+        "conclusion": "success"
+      },
+      {
+        "run": 40094358287,
+        "state": "TERMINAL_COLLECTED_SUCCESS",
+        "conclusion": "success"
+      },
+      {
+        "run": 40094337126,
+        "state": "TERMINAL_COLLECTED_SUCCESS",
+        "conclusion": "success"
+      },
+      {
+        "run": 40094769314,
+        "state": "TERMINAL_COLLECTED_SUCCESS",
+        "conclusion": "success"
+      },
+      {
+        "run": 40095589452,
+        "state": "TERMINAL_COLLECTED_SUCCESS",
+        "conclusion": "success"
+      },
+      {
+        "run": 40097476072,
+        "state": "TERMINAL_COLLECTED_SUCCESS",
+        "conclusion": "success"
+      },
+      {
+        "run": 40098465163,
+        "state": "TERMINAL_COLLECTED_SUCCESS",
+        "conclusion": "success"
+      },
+      {
+        "run": 40099316795,
+        "state": "TERMINAL_COLLECTED_SUCCESS",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "results": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/result-1324003-f01-r13-preparation-convert-vs-f01-d12-scalar-combined.json",
+      "sha256_file": "251d3e987102eeb8c06ef8cf098e5dd270952f72220a48f02284f7aff253cbe2",
+      "candidate": "f01-r13-preparation-convert",
+      "candidate_sha256": "7086031b8164647e199f52c6b44fc7f54233ec4e75e2221fa95d30a676270d57",
+      "run": 40092053346,
+      "seed": 1324003,
+      "full_gate_both": true,
+      "whole_ratio": 1.00343455854775,
+      "gain_p05": -0.013822355246058992,
+      "local_discovery_screen_passed": false,
+      "codegen_present": false
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/result-1324005-f01-d13-short-packed-vs-f01-d12-scalar-combined.json",
+      "sha256_file": "aed4d93f1c9b8c36fb35d388ea8d2d979948a62cd71395cef1c2b82348321c59",
+      "candidate": "f01-d13-short-packed",
+      "candidate_sha256": "252b4539d34bdf384de8d9dd5cfa20e54538598a65600e4c68348cc4c004af80",
+      "run": 40094337126,
+      "seed": 1324005,
+      "full_gate_both": true,
+      "whole_ratio": 1.001618126670995,
+      "gain_p05": -0.05993003672720931,
+      "local_discovery_screen_passed": false,
+      "codegen_present": false
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/result-1324007-f01-r13-cross-fused-output-vs-f01-d12-scalar-combined.json",
+      "sha256_file": "4cb94ee5a385b65f7e7414bd905409c29cb5da2d310380765207d9f5b1724635",
+      "candidate": "f01-r13-cross-fused-output",
+      "candidate_sha256": "3c5ef024e33f5858ee001f18bde42c2db1857d4513540924e5b750614d2f07e6",
+      "run": 40095589452,
+      "seed": 1324007,
+      "full_gate_both": true,
+      "whole_ratio": 1.001426052015782,
+      "gain_p05": 0.0016557436153117333,
+      "local_discovery_screen_passed": false,
+      "codegen_present": false
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/result-1324009-f01-r13-n1-prepared-row-output-vs-f01-d12-scalar-combined.json",
+      "sha256_file": "435705f2b3c9469eb918860296af454ac6988bee52781f6eef5473b647dab8a7",
+      "candidate": "f01-r13-n1-prepared-row-output",
+      "candidate_sha256": "8661a3a5a1988b2d6b3d827aa37a7abeb81c50fffabcc38f8c8476961b425e0c",
+      "run": 40098465163,
+      "seed": 1324009,
+      "full_gate_both": true,
+      "whole_ratio": 0.9976344726495087,
+      "gain_p05": 0.0019698238927451373,
+      "local_discovery_screen_passed": false,
+      "codegen_present": false
+    }
+  ],
+  "evidence": [
+    {
+      "path": "competitions/floatlib/research/RESULTS.md",
+      "sha256": "c96601a730fd08996f2e48690fd110d2435d2f74f24825304bf69c737fb60e35",
+      "exists": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d12-scalar-combined/Kernel.lean",
+      "sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+      "exists": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-r13-cross-fused-output/Kernel.lean",
+      "sha256": "3c5ef024e33f5858ee001f18bde42c2db1857d4513540924e5b750614d2f07e6",
+      "exists": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-r13-n1-prepared-row-output/Kernel.lean",
+      "sha256": "8661a3a5a1988b2d6b3d827aa37a7abeb81c50fffabcc38f8c8476961b425e0c",
+      "exists": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/astra-n1-statement-codegen-1324008.json",
+      "sha256": "d4c66eace13dc7d403d35dbfbc1b63971cfbdf26e0bbf01c215169965ff04512",
+      "exists": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/astra-cross-full-1324007.json",
+      "sha256": "b3aefe1d0f1f07ebfb0fe404aa508e1b32900741818aa38eab9bf43162f32169",
+      "exists": true
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round3h-20261024T112622Z/profile-whole-multi-analysis-summary.md",
+      "sha256": "d5657e3b3b8c4efc4e3c6116651f08d1ac0c123c601f5b79cae0d2a7f935b148",
+      "exists": true
+    },
+    {
+      "path": "competitions/floatlib/coordination/development-status.json",
+      "sha256": "b7c7047532a1fcbc4a0edbbc14b36ed7f75780fdd74351e89ff550fbb890f307",
+      "exists": true
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 截至 2026-10-24，保留 R1–R6 归档与后续精确源码验收。四项性能与冠军见[看板](../../../dashboard.md)，当前保留版本及研究候选见[开发状态](../coordination/development-status.json)。
 
-**已建立原生算术、精确解码、有序累加、机器字索引、连续矩阵输出和独立点积链的证明链；后续按“耗时占比 × 可实现降耗”，结合开发和验证成本选择具体路线。** 当前采用[R11组合6c2d](../candidates/f01-d11-bmm-combined-classifier/Kernel.lean)，首个干净发现组及冻结后两组新输入均通过原版完整gate与采纳门槛，[三组精确结果](../candidates/f01-d7-research/round7h-20261023T193125Z/three-group-receipt.json)保留全部证据。旧41与R10按行寻址a066保留为历史对照，下表K仍固定指8eb原件；历史证明与失败保持原版。尚未取代冠军，旧份额与冠军倍数不跨suite继承；适用范围见[套件变更](../docs/suite-transition-20261022.md)。
+**已建立原生算术、精确解码、有序累加、机器字索引、连续矩阵输出和独立点积链的证明链；按“耗时占比 × 可实现降耗”，结合开发和完整验证成本选路。** 当前保留[R12 df5c 完整包](../candidates/f01-d12-scalar-combined/Kernel.lean)，SHA `df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172`。D/40074431355、A/40083425886、B/40083571000 均通过完整原版 gate 和冻结三组门槛，见[R12 精确验收](../candidates/f01-d7-research/round6h-20261024T051445Z/three-group-verification.json)。冠军相对模型按[原冻结回执](../candidates/f01-d7-research/round6h-20261024T051445Z/retained-estimate-freeze.json)保持；新增同源码控制只扩充原始证据。R13 的四个新候选正确性均通过，但收益未达采用门槛，见[R13 研究记录](../candidates/f01-d7-research/round3h-20261024T112622Z/README.md)。R11/6c、旧41与R10保留为历史对照；下表 K 仍固定指8eb原件。尚未取代冠军，旧份额不跨 suite 继承。
 
 | 运算 | 已可复用的结论 | 当前使用方式 |
 |---|---|---|
@@ -142,11 +142,31 @@ R2-W03b 另有 34 条定理组成的 [unpacked-rounding 替代证明草稿][W03b
 
 反例、失败源、慢样本和原始回执都保留在来源包及 [R4][R4]、[R5][R5]；没有用后来的修复覆盖早期失败。
 
+### R12–R13：原字选择、逐块输出和单步行共享
+
+| 编号 | 证明结论与范围 | 精确证据及性能边界 |
+|---|---|---|
+| M33 | 原字 NaN 选择保持 signaling 优先级、payload 和符号；冷分支复用既有选择证明，普通路径仍由认证的结果守卫连接规格。`nativeMul` 的数值 converter 由全输入 `convert_eq` 接回原转换 | df5c 的 `DWordNaN.selected_add/selected_mul`、`ScalarNaN.add_spec/mul_spec`、`nativeMul_spec`、`mul_spec`；[R12 证明归属与验收](../candidates/f01-d7-research/round6h-20261024T051445Z/astra-r12-conclusions.json)。复用资产不作为新发明 |
+| M34 | 对原 p=2 Cross 分支，每组原 `blockRows` 只算一次，八个原字按有效尾行直接推入最终数组；`Prefix` 证明长度和逐元素原序等价，不需要保存全部 W8 后二次遍历 | [3c5e 源码](../candidates/f01-r13-cross-fused-output/Kernel.lean)：`R13CrossFused.emitRow_prefix/emitBlock_prefix/output_prefix/core_eq_reference`。完整 gate PASS，但[发现组](../candidates/f01-d7-research/round3h-20261024T112622Z/result-1324007-f01-r13-cross-fused-output-vs-f01-d12-scalar-combined.json)整包/df5c=1.001426、BMM=1.008952，停放；W8 本身仍存在，不能宣称省去额外 W8 分配 |
+| M35 | n=1 时，每行中、列循环外解码一次的 A 值可作为列回调的 unboxed Float32 参数；展开原 `dotLoop 1`，保留原 `+0 + fa*fb`、结果守卫和 raw replay。行等式可运输到原连续输出前缀及完整规格 | [8661 源码](../candidates/f01-r13-n1-prepared-row-output/Kernel.lean)：`R13N1Prepared.onePreparedDot_eq/row_eq/output_eq/output_prefix/core_eq_reference`。完整 gate PASS；[发现组](../candidates/f01-d7-research/round3h-20261024T112622Z/result-1324009-f01-r13-n1-prepared-row-output-vs-f01-d12-scalar-combined.json)整包=0.997634、BMM=0.993289，未达0.97门槛；statement-build 生成 C 的审查观察到实际共享参数，最终机器成本与该 C 构建的边界仍分开 |
+
+R13 另两条已证明正确的运行接线也没有净收益：[708 一次性 A/B 转换](../candidates/f01-r13-preparation-convert/Kernel.lean)整包=1.003435、BMM=1.005952；[252b 短点积改用既有 RowStream](../candidates/f01-d13-short-packed/Kernel.lean)整包=1.001618、BMM=1.006563。四条发现组均未达到整包≤0.97，因发现门槛未通过而未进入独立确认，也没有采用或正式提交。3c 的 bootstrap p05 为正0.001656，不能误写为负；其 headline 仍不达标。各结果及原件统一从 R13 入口访问。
+
+运行范围须分开：8661 新路由仅限 `n=1,p>2`；3c 的数学与 dispatch 域为 p=2、包含n=1，但其发现组只有 n=80/91/393/99 的四个 Cross case，没有 n=1 高输出热点。后述三组同源码诊断的高输出 n=1,p=2 只出现在一个输入组，不是3c性能确认，也不能用作替代失败发现组。
+
+**测量经验。** 逐元素探针曾把 RowStream/Cross 示例放大约8.0/4.69倍，排他计时只能避免嵌套重复计数，不能消除探针成本。低频外层探针在 RowStream、DirectContinuous 的整路径约1.009/1.003倍，但 Cross 仍约1.181倍、sum 高 batch 仍显著扰动；阶段比例不能当作可移除收益。多组同源码未插桩 whole 诊断与原版25轮成绩、冻结新输入确认分别保存，不相互替代。
+
+**模型储备，尚未闭合。** [Float64 跨宽审计](../candidates/f01-d7-research/round3h-20261024T112622Z/profile-scalar-wide-summary.md)仍受 `Float.toFloat32` opaque 语义桥阻断，同宽表示桥不足以支持原生跨宽 RNE；不为此自增公理。另有[同宽 Float32 缩放合并调查](../candidates/f01-d7-research/round3h-20261024T112622Z/astra-scale-fusion-feasibility.json)：24×24 整数乘积先做 RN24、再乘合并二次幂，限定两输入均为正规数（原始指数1..254），且指数和174..380；复用表索引 `(s−150)+256*sign`。380的最大结果为0x7f7ffffe，h=46向h=47进位须保留；误扩到173会把非零结果变成零。8852个整数模型检查和纸面归约仅为 INFERRED 储备，缺通用 `roundP` 指数平移及第二乘精确性 Lean 证明，未造新候选、未实测性能。复用 R2 `normal_eq` 时还须约束原输入 E≥24，或补 E1..23 的表示桥。
+
 ## 4. 下一次可直接承接的缺口
 
 2026-10-22 用户确认：**耗时占比 × 可实现的降耗幅度，再考虑开发和验证成本。** 四个运算之间没有固定优先顺序；落后冠军的倍数、当前占比都不能单独决定选路。
 
 对实际受影响的计分类，整包降耗估计为 `Σ(该类耗时占比 × 可实现降耗)`；局部快 s 倍，对应降耗 `1−1/s`。只覆盖部分输入时计入真实命中范围，不重复计算命中率。每条路线先列机制、预期降耗范围及依据、开发／证明／完整验收成本和最小证伪实验；未知收益先做有上限的诊断，不编造成功概率。
+
+R13 已补[同一未插桩 df5c binary 的三组已见输入诊断](../candidates/f01-d7-research/round3h-20261024T112622Z/profile-whole-multi-analysis-summary.md)：乘法占34.57%–36.58%，BMM占18.00%–20.69%；这是诊断完整调用的份额，不是官方计分份额。n=1、p>2目标在每组仅一个 case，占 whole 1.223%–1.768%；p=2 Cross 的范围也随输入明显变化。1224091 的一个 add 进程慢37%，已保留，不能把全部变化归因于形状。后续优先评估覆盖较广的乘法缩放合并证明，以及多组 whole 结果支持的 BMM 路线；不靠单个热点或 MAC 数量判断整包收益。
+
+**旧 suite 历史份额（不作当前排序依据）：**
 
 以下仅为旧十二类的同源码四次完整结果；新版public-v2须按cell_work加权重测，不沿用此份额。各运算占官方十二类最小耗时之和的中位份额如下；每批都已复算并匹配原 headline ratio。[原始回执及计算](results/optimization-priority.json)。
 

@@ -1,0 +1,70 @@
+{
+  "at_utc": "2026-10-24T13:34:10.994774+00:00",
+  "state": "PAPER_DERIVATION_AND_FINITE_WORD_MODEL_NOT_LEAN_PROOF",
+  "start_utc": "2026-10-24T13:26:52Z",
+  "scope": "Read-only bounded feasibility; no candidate, Lean, nativeFloat32, benchmark, CI, Float64 cast or new axiom.",
+  "current_kernel_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "oracle_sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+  "script_sha256": "9b8ae8374d5c3d2d9c11737e6035a677a493073130e520ee53e6f3aa1fcfeb9e",
+  "domain": "Both raw exponents ex,ey in1..254 and174<=s=ex+ey<=380; mx,my=2^23+fraction. Signs arbitrary. Outside domain retains original operation.",
+  "proposal": "RN32(RN32(Float32(mx)*Float32(my))*signed2^(s-300)); both UInt32-toFloat32 mantissa conversions are exact. Two nativeFloat32 multiplies and one existing scaleTable lookup; no generic reassociation assertion.",
+  "mathematics": [
+    "Exact real product is sign*(mx*my)*2^(s-300), with P=mx*my in[2^46,(2^24-1)^2]. First multiplication rounds P to24 significant bits, where h=floorlog2P is46 or47 and the right shift is h-23.",
+    "Let R=RNE(P/2^(h-23)), carry=[R=2^24], Mnorm=2^23 if carry elseR. The original normal rounder returns sign, exponent h+s+carry-173, fraction Mnorm-2^23.",
+    "The first rounded product is Mnorm*2^(h+carry-23). Multiplication by exact signed2^(s-300) merely changes its exponent if the final word stays normal finite. The same original rounding shift/parity decides R, so no second precision rounding occurs in this domain.",
+    "Lower bound: final magnitude>=2^46*2^(174-300)=2^-80, far above minNormal2^-126. The scale itself is normal because q=s-300 ranges-126..80.",
+    "Upper380 is SAFE: Pmax=(2^24-1)^2=2^48-2^25+1. Its rounded value is2^48-2^25, so the largest scaled output at380 is2^128-2^105, raw0x7f7ffffe. The generic h=47 carry-to2^48 region is unreachable for these two24bit mantissas. Restricting to379 is unnecessary for overflow safety.",
+    "A carry from h=46 to47 is possible: (2^23+1)*(2^24-2)=2^47-2 rounds to2^47. At s380 this yields2^127, still finite. A formal proof must retain this carry branch.",
+    "The existing table index is j=(s-150)+256*sign, in24..230 or280..486. scaleBits(j) encodes sign|((s-173)<<23), exactly signed2^(s-300). Synthetic input word(j<<23) satisfies current NormalBand, so existing scaleAt/scale decode machinery applies.",
+    "The lower174 bound is tied to this existing table: at173 its index23 returns signedzero, even though the desired power2 is a representable subnormal. Do not weaken the guard without a new table/decode proof.",
+    "No zero/subnormal/NaN/Inf outputs arise under the stated input domain; sign is simply XOR. Beyond380 some outputs overflow, so the finite exact-product bridge can no longer be used unconditionally even if a broader scaling theorem might still be true."
+  ],
+  "reusable_Lean_assets": [
+    "Current Kernel R2W01c.mantissa_native_decode: exact UInt32 mantissa-to-native model value.",
+    "R2W01b.scaleAt_eq/scaleTable_size/tableIndex_toNat_lt and R2W01c.scale_native_decode: same-width signed power2 lookup; synthetic word/index arithmetic still needs proof.",
+    "R2W01c.native_mul_eq_of_raw_model_mul_eq and native_mul_eq_of_decoded_raw_model_mul_eq: finite-input native multiplication bridge with no cross-width cast.",
+    "R2W01cModel.mul_eq_of_finite_value/mul_eq_of_scale_decodes: suitable for exact SECOND scaling once the rounded intermediate and finite target are decoded; NOT sufficient to claim the first48bit product is exact.",
+    "FastMul.roundP_eq/rseAny_eq/impl_eq/mul_spec: existing word-rounding route to actual model multiplication. A normal-domain word identity can avoid needing a generic library power2-rounding theorem."
+  ],
+  "missing_formal_steps": [
+    "Prove P bounds, h46/47, ties-even quotient/carry bounds, and the stronger maximum excluding h47 carry; no UInt64 wrap.",
+    "Identify the actual first native product with the rounded word at ex=ey=150. Its value is roundedP, not exactP.",
+    "Prove the normal roundProduct exponent-translation identity: same rounding of P for scale298 and scale(s-2), then exact final scale product. This is the first minimal proof target; still NOT_COMPILED.",
+    "Prove combined synthetic-index/sign mapping and native finiteness; bridge second exact scaling and final Binary32 bits to original ExecFloat.mul; retain all outside-domain fallbacks.",
+    "Audit transitive axioms/full original obligations and actual lowering/complete timing for any future integration. Fewer multiplies does not establish whole gain; domain guards, table access and live registers may dominate."
+  ],
+  "history": "Bounded search of candidate manifests/research notes found no same same-width mantissa-product+combined-scale route or full timing result. R4 numericdecode, R6 integer normalmul and blockedF64 cast are distinct mechanisms; absence of a local hit is not novelty proof.",
+  "finite_check": {
+    "cases": 8852,
+    "directed_tie_even": 504,
+    "directed_tie_odd": 336,
+    "directed_carry": 168,
+    "random_cases": 2048,
+    "seed": 202610241326,
+    "trace_sha256": "f44cf94d3cea5f716190e2bbc935d0028dac9e1804dc78f6dcce0fd2c13d059c",
+    "max380": [
+      "0x5f7fffff",
+      "0x5f7fffff",
+      "0x577ffffe",
+      "0x67800000",
+      "0x7f7ffffe"
+    ],
+    "h46_carry380": [
+      "0x5f000001",
+      "0x5f7ffffe",
+      "0x57000000",
+      "0x67800000",
+      "0x7f000000"
+    ],
+    "outside_table_guard_counterexample": {
+      "s": 173,
+      "a": "0x2b000000",
+      "b": "0x2b800000",
+      "original": "0x17000000",
+      "existing_table_scale": "0x0",
+      "wrong_extended_fusion": "0x0"
+    },
+    "limitation": "Both sides use a frozen source-derived exact integer oracle. This tests selected boundaries and random words, not all2^46 mantissa pairs, Lean/native execution, an independent hardware oracle or performance."
+  },
+  "decision": "Mathematically plausible and same-width bridge assets exist; NOT formally closed. First prove the normal roundProduct scaling identity/first-product decode in a future bounded proof probe. Keep8661 as current CI priority; no new candidate now."
+}

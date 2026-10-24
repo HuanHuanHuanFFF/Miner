@@ -1,0 +1,659 @@
+{
+  "state": "VERIFIED_DIAGNOSTIC_NOT_SCORE",
+  "analysis_sha256": "5e8fb8f19c87a61698974e00ec2a14da8b45aef42bf8b349260c473b92297df5",
+  "seed_cases": 468,
+  "whole_row_observations": 936,
+  "raw_original_files": 69,
+  "summary": [
+    {
+      "seed": 1224011,
+      "operation_whole_shares": {
+        "add": 0.3577757424047594,
+        "mul": 0.35856768510729503,
+        "sum": 0.07679035307875866,
+        "bmm": 0.20686621940918692
+      },
+      "BMM_route_shares": {
+        "Cross": 0.13657107611578415,
+        "DirectContinuous": 0.15657975248118333,
+        "DirectSmall": 0.3766132111908343,
+        "RowStream": 0.32710353094071737,
+        "UnderflowZero": 0.003132429271480898
+      },
+      "n1_effective": {
+        "cases": 1,
+        "whole_process_mean_ns_sum": 3357726,
+        "whole_share": 0.017676954595285056,
+        "BMM_share": 0.08545114154341249,
+        "process_ns_sums": [
+          3358662,
+          3356790
+        ],
+        "case_names": [
+          "bmm:sparse:1"
+        ],
+        "shape_ranges": {
+          "batch": [
+            1521,
+            1521
+          ],
+          "m": [
+            29,
+            29
+          ],
+          "n": [
+            1,
+            1
+          ],
+          "p": [
+            4,
+            4
+          ]
+        },
+        "output_elements_range": [
+          176436,
+          176436
+        ],
+        "cases_by_output_elements_desc": [
+          {
+            "name": "bmm:sparse:1",
+            "shape": {
+              "batch": 1521,
+              "m": 29,
+              "n": 1,
+              "p": 4,
+              "length": 1,
+              "work": 176436
+            },
+            "route": "DirectContinuous",
+            "outputs": 176436,
+            "whole_process_mean_ns": 3357726,
+            "whole_share": 0.017676954595285056,
+            "BMM_share": 0.08545114154341249
+          }
+        ]
+      },
+      "p2_Cross_all": {
+        "cases": 3,
+        "whole_process_mean_ns_sum": 5366438.0,
+        "whole_share": 0.02825194219671657,
+        "BMM_share": 0.13657107611578415,
+        "process_ns_sums": [
+          5537934,
+          5194942
+        ],
+        "case_names": [
+          "bmm:dense:2",
+          "bmm:sparse:5",
+          "bmm:specials:3"
+        ],
+        "shape_ranges": {
+          "batch": [
+            7,
+            3529
+          ],
+          "m": [
+            3,
+            245
+          ],
+          "n": [
+            3,
+            190
+          ],
+          "p": [
+            2,
+            2
+          ]
+        },
+        "output_elements_range": [
+          42,
+          58800
+        ],
+        "cases_by_output_elements_desc": [
+          {
+            "name": "bmm:sparse:5",
+            "shape": {
+              "batch": 120,
+              "m": 245,
+              "n": 3,
+              "p": 2,
+              "length": 1,
+              "work": 176400
+            },
+            "route": "Cross",
+            "outputs": 58800,
+            "whole_process_mean_ns": 2764072.5,
+            "whole_share": 0.01455162931119932,
+            "BMM_share": 0.07034318775080338
+          },
+          {
+            "name": "bmm:dense:2",
+            "shape": {
+              "batch": 3529,
+              "m": 5,
+              "n": 5,
+              "p": 2,
+              "length": 1,
+              "work": 176450
+            },
+            "route": "Cross",
+            "outputs": 35290,
+            "whole_process_mean_ns": 2509196.5,
+            "whole_share": 0.013209818967106957,
+            "BMM_share": 0.06385682014605576
+          },
+          {
+            "name": "bmm:specials:3",
+            "shape": {
+              "batch": 7,
+              "m": 3,
+              "n": 190,
+              "p": 2,
+              "length": 1,
+              "work": 7980
+            },
+            "route": "Cross",
+            "outputs": 42,
+            "whole_process_mean_ns": 93169,
+            "whole_share": 0.0004904939184102911,
+            "BMM_share": 0.00237106821892501
+          }
+        ]
+      },
+      "p2_Cross_n1": {
+        "cases": 0,
+        "whole_process_mean_ns_sum": 0,
+        "whole_share": 0.0,
+        "BMM_share": null,
+        "process_ns_sums": [
+          0,
+          0
+        ],
+        "case_names": [],
+        "shape_ranges": {
+          "batch": null,
+          "m": null,
+          "n": null,
+          "p": null
+        },
+        "output_elements_range": null,
+        "cases_by_output_elements_desc": []
+      },
+      "operation_process1_process0": {
+        "add": 1.0051884957947388,
+        "mul": 0.9904387792848732,
+        "sum": 1.0172609723992059,
+        "bmm": 0.9954163283979232
+      },
+      "top_cells_by_diagnostic_share": [
+        {
+          "cell": "bmm:ml",
+          "whole_share": 0.08975380373508837
+        },
+        {
+          "cell": "mul:paired",
+          "whole_share": 0.0696096361436313
+        },
+        {
+          "cell": "mul:ml",
+          "whole_share": 0.06958614567079219
+        },
+        {
+          "cell": "add:paired",
+          "whole_share": 0.06753127154719163
+        },
+        {
+          "cell": "add:ml",
+          "whole_share": 0.06661941003345798
+        }
+      ]
+    },
+    {
+      "seed": 1224091,
+      "operation_whole_shares": {
+        "add": 0.39649034290034313,
+        "mul": 0.3457266244813443,
+        "sum": 0.07432074147620868,
+        "bmm": 0.18346229114210394
+      },
+      "BMM_route_shares": {
+        "Cross": 0.3003525942870119,
+        "DirectContinuous": 0.08750705419910489,
+        "DirectSmall": 0.2592142738239288,
+        "RowStream": 0.35270210508819483,
+        "UnderflowZero": 0.0002239726017595271
+      },
+      "n1_effective": {
+        "cases": 1,
+        "whole_process_mean_ns_sum": 2399371,
+        "whole_share": 0.012232185864911845,
+        "BMM_share": 0.06667411482088813,
+        "process_ns_sums": [
+          2404600,
+          2394142
+        ],
+        "case_names": [
+          "bmm:specials:0"
+        ],
+        "shape_ranges": {
+          "batch": [
+            9252,
+            9252
+          ],
+          "m": [
+            1,
+            1
+          ],
+          "n": [
+            1,
+            1
+          ],
+          "p": [
+            16,
+            16
+          ]
+        },
+        "output_elements_range": [
+          148032,
+          148032
+        ],
+        "cases_by_output_elements_desc": [
+          {
+            "name": "bmm:specials:0",
+            "shape": {
+              "batch": 9252,
+              "m": 1,
+              "n": 1,
+              "p": 16,
+              "length": 1,
+              "work": 148032
+            },
+            "route": "DirectContinuous",
+            "outputs": 148032,
+            "whole_process_mean_ns": 2399371,
+            "whole_share": 0.012232185864911845,
+            "BMM_share": 0.06667411482088813
+          }
+        ]
+      },
+      "p2_Cross_all": {
+        "cases": 4,
+        "whole_process_mean_ns_sum": 10808652.0,
+        "whole_share": 0.05510337509837001,
+        "BMM_share": 0.3003525942870119,
+        "process_ns_sums": [
+          10827992,
+          10789312
+        ],
+        "case_names": [
+          "bmm:dense:3",
+          "bmm:ml:3",
+          "bmm:sparse:4",
+          "bmm:extremes:2"
+        ],
+        "shape_ranges": {
+          "batch": [
+            75,
+            9803
+          ],
+          "m": [
+            4,
+            14
+          ],
+          "n": [
+            1,
+            124
+          ],
+          "p": [
+            2,
+            2
+          ]
+        },
+        "output_elements_range": [
+          600,
+          176454
+        ],
+        "cases_by_output_elements_desc": [
+          {
+            "name": "bmm:dense:3",
+            "shape": {
+              "batch": 9803,
+              "m": 9,
+              "n": 1,
+              "p": 2,
+              "length": 1,
+              "work": 176454
+            },
+            "route": "Cross",
+            "outputs": 176454,
+            "whole_process_mean_ns": 7013208.5,
+            "whole_share": 0.035753899618433164,
+            "BMM_share": 0.1948841878941725
+          },
+          {
+            "name": "bmm:sparse:4",
+            "shape": {
+              "batch": 110,
+              "m": 14,
+              "n": 57,
+              "p": 2,
+              "length": 1,
+              "work": 175560
+            },
+            "route": "Cross",
+            "outputs": 3080,
+            "whole_process_mean_ns": 941468.5,
+            "whole_share": 0.004799681949127399,
+            "BMM_share": 0.02616168106943416
+          },
+          {
+            "name": "bmm:ml:3",
+            "shape": {
+              "batch": 101,
+              "m": 7,
+              "n": 124,
+              "p": 2,
+              "length": 1,
+              "work": 175336
+            },
+            "route": "Cross",
+            "outputs": 1414,
+            "whole_process_mean_ns": 985746,
+            "whole_share": 0.005025412196610441,
+            "BMM_share": 0.027392071500502085
+          },
+          {
+            "name": "bmm:extremes:2",
+            "shape": {
+              "batch": 75,
+              "m": 4,
+              "n": 6,
+              "p": 2,
+              "length": 1,
+              "work": 3600
+            },
+            "route": "Cross",
+            "outputs": 600,
+            "whole_process_mean_ns": 1868229,
+            "whole_share": 0.009524381334199,
+            "BMM_share": 0.05191465382290317
+          }
+        ]
+      },
+      "p2_Cross_n1": {
+        "cases": 1,
+        "whole_process_mean_ns_sum": 7013208.5,
+        "whole_share": 0.035753899618433164,
+        "BMM_share": 0.1948841878941725,
+        "process_ns_sums": [
+          7033416,
+          6993001
+        ],
+        "case_names": [
+          "bmm:dense:3"
+        ],
+        "shape_ranges": {
+          "batch": [
+            9803,
+            9803
+          ],
+          "m": [
+            9,
+            9
+          ],
+          "n": [
+            1,
+            1
+          ],
+          "p": [
+            2,
+            2
+          ]
+        },
+        "output_elements_range": [
+          176454,
+          176454
+        ],
+        "cases_by_output_elements_desc": [
+          {
+            "name": "bmm:dense:3",
+            "shape": {
+              "batch": 9803,
+              "m": 9,
+              "n": 1,
+              "p": 2,
+              "length": 1,
+              "work": 176454
+            },
+            "route": "Cross",
+            "outputs": 176454,
+            "whole_process_mean_ns": 7013208.5,
+            "whole_share": 0.035753899618433164,
+            "BMM_share": 0.1948841878941725
+          }
+        ]
+      },
+      "operation_process1_process0": {
+        "add": 1.3704016888962078,
+        "mul": 0.9979071267903149,
+        "sum": 0.9829391557583478,
+        "bmm": 0.9981994766035931
+      },
+      "top_cells_by_diagnostic_share": [
+        {
+          "cell": "add:ml",
+          "whole_share": 0.0937493570046307
+        },
+        {
+          "cell": "add:sparse",
+          "whole_share": 0.07751274127505882
+        },
+        {
+          "cell": "add:dense",
+          "whole_share": 0.07036966811925927
+        },
+        {
+          "cell": "mul:ml",
+          "whole_share": 0.06787155782465895
+        },
+        {
+          "cell": "mul:paired",
+          "whole_share": 0.0673458310459097
+        }
+      ]
+    },
+    {
+      "seed": 1224092,
+      "operation_whole_shares": {
+        "add": 0.34169159836157187,
+        "mul": 0.3658172310903494,
+        "sum": 0.11250536432740478,
+        "bmm": 0.17998580622067398
+      },
+      "BMM_route_shares": {
+        "Cross": 0.1846385131164588,
+        "DirectContinuous": 0.3443214681996775,
+        "DirectSmall": 0.07069434177504363,
+        "RowStream": 0.38771557253641775,
+        "UnderflowZero": 0.01263010437240231
+      },
+      "n1_effective": {
+        "cases": 1,
+        "whole_process_mean_ns_sum": 2994883.5,
+        "whole_share": 0.015939612692900233,
+        "BMM_share": 0.08856038721940808,
+        "process_ns_sums": [
+          2994753,
+          2995014
+        ],
+        "case_names": [
+          "bmm:ml:3"
+        ],
+        "shape_ranges": {
+          "batch": [
+            7352,
+            7352
+          ],
+          "m": [
+            4,
+            4
+          ],
+          "n": [
+            1,
+            1
+          ],
+          "p": [
+            6,
+            6
+          ]
+        },
+        "output_elements_range": [
+          176448,
+          176448
+        ],
+        "cases_by_output_elements_desc": [
+          {
+            "name": "bmm:ml:3",
+            "shape": {
+              "batch": 7352,
+              "m": 4,
+              "n": 1,
+              "p": 6,
+              "length": 1,
+              "work": 176448
+            },
+            "route": "DirectContinuous",
+            "outputs": 176448,
+            "whole_process_mean_ns": 2994883.5,
+            "whole_share": 0.015939612692900233,
+            "BMM_share": 0.08856038721940808
+          }
+        ]
+      },
+      "p2_Cross_all": {
+        "cases": 2,
+        "whole_process_mean_ns_sum": 6243997.5,
+        "whole_share": 0.03323231164265232,
+        "BMM_share": 0.1846385131164588,
+        "process_ns_sums": [
+          6239574,
+          6248421
+        ],
+        "case_names": [
+          "bmm:ml:7",
+          "bmm:sparse:2"
+        ],
+        "shape_ranges": {
+          "batch": [
+            3676,
+            8823
+          ],
+          "m": [
+            2,
+            12
+          ],
+          "n": [
+            2,
+            5
+          ],
+          "p": [
+            2,
+            2
+          ]
+        },
+        "output_elements_range": [
+          35292,
+          88224
+        ],
+        "cases_by_output_elements_desc": [
+          {
+            "name": "bmm:sparse:2",
+            "shape": {
+              "batch": 3676,
+              "m": 12,
+              "n": 2,
+              "p": 2,
+              "length": 1,
+              "work": 176448
+            },
+            "route": "Cross",
+            "outputs": 88224,
+            "whole_process_mean_ns": 3813447.5,
+            "whole_share": 0.02029624062996396,
+            "BMM_share": 0.11276578445902276
+          },
+          {
+            "name": "bmm:ml:7",
+            "shape": {
+              "batch": 8823,
+              "m": 2,
+              "n": 5,
+              "p": 2,
+              "length": 1,
+              "work": 176460
+            },
+            "route": "Cross",
+            "outputs": 35292,
+            "whole_process_mean_ns": 2430550,
+            "whole_share": 0.012936071012688361,
+            "BMM_share": 0.07187272865743603
+          }
+        ]
+      },
+      "p2_Cross_n1": {
+        "cases": 0,
+        "whole_process_mean_ns_sum": 0,
+        "whole_share": 0.0,
+        "BMM_share": null,
+        "process_ns_sums": [
+          0,
+          0
+        ],
+        "case_names": [],
+        "shape_ranges": {
+          "batch": null,
+          "m": null,
+          "n": null,
+          "p": null
+        },
+        "output_elements_range": null,
+        "cases_by_output_elements_desc": []
+      },
+      "operation_process1_process0": {
+        "add": 1.0094144510598406,
+        "mul": 1.0124304242173863,
+        "sum": 1.0017633573657576,
+        "bmm": 1.0022472531459279
+      },
+      "top_cells_by_diagnostic_share": [
+        {
+          "cell": "mul:paired",
+          "whole_share": 0.07064709553099102
+        },
+        {
+          "cell": "mul:ml",
+          "whole_share": 0.07044505374631342
+        },
+        {
+          "cell": "add:ml",
+          "whole_share": 0.06608592167585953
+        },
+        {
+          "cell": "add:paired",
+          "whole_share": 0.06599619333404269
+        },
+        {
+          "cell": "mul:sparse",
+          "whole_share": 0.06257643062178425
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Same-seed checksums only; all three plans match previous R12 exposed plans field by field. No new holdout was generated or read.",
+    "1224091 process1 add is1.3704x process0; dense/ML cells near1.9x. Its whole-time shares include local system/context variation.",
+    "Each seed exposes exactly one n1/p>2 effective DirectContinuous case. This does not cover p1 DirectSmall, p2 Cross or n2..4 DirectContinuous.",
+    "Cross n1 high output appears only on1224091 among these inputs; other p2 Cross output sizes and n vary substantially. No arbitrary high-output threshold was chosen.",
+    "Two processes on one binary/runner describe workload distribution, not independent performance confirmation, official points, or candidate benefit."
+  ]
+}
