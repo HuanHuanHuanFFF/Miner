@@ -69,6 +69,22 @@
 
 本轮经验：发现组先核对目标路径是否实际覆盖；确认组仍须冻结后保持未查看。三组a066的每对输入均改变35个BMM形状，完整生成字段均有变化。新增同源慢控制不能重新校准冠军估值；当前看板以冻结基准和同组参照归一化增量更新。原始失败、慢组及未触发分支的限制均见[R10结果](../candidates/f01-d7-research/round2h-20261023T170031Z/round-results.json)。
 
+### R11：完整调用重构与逐位等价
+
+当前轮证据及最终选择统一从[R11记录](../candidates/f01-d7-research/round7h-20261023T193125Z/README.md)进入；下列验收只绑定所列精确源，不由组件成绩相加推断组合性能。
+
+| 编号 | 数学结论与范围 | 精确源与验收 |
+|---|---|---|
+| M30 | 数组前缀同时维持长度及所有已写元素等于原平坦输出；逐组只计算一次F10并emit有效尾列，可连续写出而不改变舍入及NaN回放 | [连续writer5b7d926c](../candidates/f01-d11-bmm-fused-output-proof3/Kernel.lean)，40027315361、40032766690完整PASS；精确回执见[R11实现交接](../candidates/f01-d7-research/round7h-20261023T193125Z/review-output-final-math-handoff.md) |
+| M31 | 全部原字满足指定小幅值强界时，每个实际binary32乘积均为带符号零；原+0种子的逐步加法因此全为+0。须扫描完整输入，miss仍用原路径 | [下溢证书6a69d6ed](../candidates/f01-d11-bmm-underflow-zero-proof2/Kernel.lean)，40030638967完整PASS；有限尾数、scale及原舍入引理前提均保留，不推广为必要条件 |
+| M32 | 四个独立行实例的p=2双列可组织为P12输入与八条独立点积链，各lane仍逐k先乘后加；跨batch地址及尾行按各自原字回放 | [Cross5c5e7071](../candidates/f01-r11-crossrow-p2-pack12-proof2/Kernel.lean)，40030638967、40037152933完整PASS；不是单条浮点归约重排 |
+| M33 | 四行十列的40条独立链可逐行投影为原Packed10点积，块内row-major writer及旧尾部拼成原矩阵；每条链保留+0、k顺序和终点精确回退 | [actualWide28b81912](../candidates/f01-r11-wide4-inline-proof3/Kernel.lean)，40043628421 statement、40044330511完整PASS；该源使用原Array Float32四基址，不能据此认定F4面板版本已闭合 |
+| M34 | 先按batch再按row遍历，与原flattened-row输出逐项相等，可用batch基址与行偏移替代逐行商余数；空维度与巨大Nat域仍由总定义覆盖 | [batch-row ad323bf0](../candidates/f01-d11-bmm-direct-batch-rows-proof2/Kernel.lean)，40042916169完整PASS；原1c54仅证明失败，不改写为已通过 |
+
+[931真实机器码](../candidates/f01-d7-research/round7h-20261023T193125Z/review-panel-codegen-931.md)另确认未接入的Panel4 helper以一个F4读取四行、十组SIMD乘加，热回边无调用、栈访问或分配；准备阶段仍有四次转换与一次24B对象请求。它没有证明新Panel矩阵入口等价或完整调用提速。
+
+局部尾行的[6e99f707数学资产](../candidates/f01-d11-panel4-tail-proof2/Kernel.lean)在40048163768通过statement：`prepare_read → dot10_shift → runDot_prepared → Prefix`连接局部数值基址与原始回放基址。该新namespace仍未接入实际Panel入口，完整内核重放、公理验收与性能不由此替代。原f767在40047532920的两处失败及旧draft均保留。
+
 ## 2. 已提取、尚未形成正式验证组件的数学储备
 
 | 编号 | 结论／适用条件 | 当前证据及决定 |
