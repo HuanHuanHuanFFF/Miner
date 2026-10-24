@@ -56,6 +56,17 @@ sparse 数据上零检测分支不可预测。不重复该路线。
 归因：增益来自 p≤2（含 p=1）改走 DirectContinuous；p3–8 改 DirectSmall 单独更差；
 p>8 的 direct 与 Packed10 在本 seed 基本等价。specials（NaN-heavy p2）退化 +26.8%。
 
+## public-v2 发现组 2（seed 1425003，run 40128718577）
+
+| 候选 | whole/df5c | bmm/df5c |
+|---|---:|---:|
+| `p2contp8`（p≤8 全 DirectContinuous） | **0.9667** | **0.8384** |
+| `p2cont`（只改 p≤2） | 0.9799 | 0.9062 |
+| `directall`（p≤64 全直算） | 0.9881 | 0.9494 |
+
+合并两 seed：p≤2 直算是主收益；p3–8 直算 ≥ DirectSmall；**p>8 保留 Packed10**。
+specials 在 seed 1425002 退化、1425003 改善，对 NaN 密度敏感，不单独下结论。
+
 ## 口径更正（run 1）
 
 run 1 旧十二类曾按 12 类 `submission_ns` 不加权求和得到 whole 0.9987；官方 headline 应使用裁判比值归一：
