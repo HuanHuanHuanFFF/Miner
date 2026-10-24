@@ -22,8 +22,9 @@ def main():
     assert request['dispatch_seed']==SEED and request['profile_seed']==1224016
     assert request['diagnostic_only'] is True and request['full_gate'] is False
     paths=[HERE/n for n in ['profile-entry.py','profile-current.py','profile-suite.py','prepare-profile.py','round-plan.json','execution-binding.py','sync-ci-state.py']]
-    mode=request.get('mode','fine');assert mode in ('fine','coarse')
+    mode=request.get('mode','fine');assert mode in ('fine','coarse','whole_multi')
     if mode=='coarse':paths += [HERE/n for n in ['profile-coarse-entry.py','profile-coarse-current.py']]
+    if mode=='whole_multi':paths += [HERE/n for n in ['profile-whole-multi-entry.py','profile-whole-multi-current.py']]
     paths += [PROFILE/n for n in ['Kernel.lean','manifest.json','profile-request.json']]
     source=ROOT/'competitions/floatlib/candidates/f01-d12-scalar-combined/Kernel.lean'
     paths += [HERE.parent/'profile-current.py', source]
