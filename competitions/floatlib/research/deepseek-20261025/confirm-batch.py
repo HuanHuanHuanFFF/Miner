@@ -46,6 +46,22 @@ def run_status(run_id, tok):
     return d["status"], d["conclusion"]
 
 
+def existing_run(seed):
+    """Return a run id already dispatched for this seed, if any."""
+    for d in sorted((RESEARCH / "ci-runs").glob("dispatch-*")):
+        rec = d / "dispatch.json"
+        if not rec.exists():
+            continue
+        try:
+            data = json.loads(rec.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if (data.get("inputs", {}).get("seed") == str(seed)
+                and data.get("state") == "RUN_IDENTIFIED"):
+            return data["run"]["databaseId"]
+    return None
+
+
 def main():
     existing = json.loads(PLAN.read_text(encoding="utf-8"))
     log_path = RESEARCH / "confirmation-batch-runs.json"
@@ -76,10 +92,13 @@ def main():
                                          "?? competitions/floatlib/evidence/"))]
         if dirty:
             raise SystemExit("worktree dirty before dispatch:\n" + "\n".join(dirty))
-        out = sh([sys.executable, str(RESEARCH / "dispatch-ci.py"),
-                  "--candidates", "f01-d7-public-suite", "--seed", str(seed)]).stdout
-        receipt = json.loads(out[out.index("{"):])
-        run_id = receipt["run"]["databaseId"]
+        run_id = existing_run(seed)
+        if run_id is None:
+            sh([sys.executable, str(RESEARCH / "dispatch-ci.py"),
+                "--candidates", "f01-d7-public-suite", "--seed", str(seed)])
+            run_id = existing_run(seed)
+        if run_id is None:
+            raise SystemExit(f"no run identified for seed {seed}")
         print(f"seed {seed}: run {run_id}", flush=True)
         started = time.monotonic()
         while True:
