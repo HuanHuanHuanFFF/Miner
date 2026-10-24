@@ -3,7 +3,7 @@ from pathlib import Path
 from datetime import datetime,timezone
 import argparse,hashlib,json,os,re,stat,subprocess
 OUT=Path(__file__).resolve().parent;ROOT=OUT.parents[4]
-ap=argparse.ArgumentParser();ap.add_argument('--topic',required=True);ap.add_argument('--summary',required=True);ap.add_argument('--need',default='仅供知悉');ap.add_argument('--artifact',type=Path);ap.add_argument('--state');ap.add_argument('--next');ap.add_argument('--ci');ap.add_argument('--processed',action='append',default=[]);a=ap.parse_args()
+ap=argparse.ArgumentParser();ap.add_argument('--topic',required=True);ap.add_argument('--summary',required=True);ap.add_argument('--need',default='仅供知悉');ap.add_argument('--artifact',type=Path);ap.add_argument('--state');ap.add_argument('--next');ap.add_argument('--ci');ap.add_argument('--status-need');ap.add_argument('--blocker');ap.add_argument('--processed',action='append',default=[]);a=ap.parse_args()
 assert re.fullmatch('[a-z0-9-]+',a.topic)
 own=Path('D:/CodingProject/Bitget-Collab/codex');status=own/'status.md'
 for p in (own.parent,own,status,own/'messages'):assert not p.lstat().st_file_attributes & stat.FILE_ATTRIBUTE_REPARSE_POINT
@@ -19,6 +19,8 @@ old=status.read_bytes();lines=old.decode().splitlines();changes={'更新时间�
 if a.state:changes['状态：']=a.state
 if a.next:changes['下一步：']=a.next
 if a.ci:changes['在途CI：']=a.ci
+if a.status_need:changes['需要对方：']=a.status_need
+if a.blocker:changes['阻塞：']=a.blocker
 for i,line in enumerate(lines):
     for prefix,value in changes.items():
         if line.startswith(prefix):lines[i]=prefix+value;break

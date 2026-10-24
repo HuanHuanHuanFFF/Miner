@@ -1,0 +1,16 @@
+{
+  "at_utc": "2026-10-24T20:22:28.846307+00:00",
+  "state": "FINITE_WORD_MODEL_ONLY",
+  "cases": 30800,
+  "ties_even": 648,
+  "ties_odd": 432,
+  "carry_cases": 216,
+  "wall_seconds": 0.14887749997433275,
+  "trace_sha256": "4ff2c05c44946a96b7067fa2f5f66843dc4534d4cfa8120b5ba703c745734531",
+  "oracle_sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+  "script_sha256": "e10fdf0088804f8e1f9a962e396b20ccc0eedcae17efe1ae298d236deee8ef79",
+  "domain": "Both normal inputs exponent1..254, raw exponent sum128..379; signs arbitrary. Other inputs require unchanged fallback.",
+  "mechanism": "P=24x24 product; high=P>>47; shift=23+high; q=(P+half-1+((P>>shift)&1))>>shift; carry=q>>24; exponent=sum-127+high+carry; fraction=q&0x7fffff. No generic zero/subnormal/overflow/log2 branches or native casts on this domain.",
+  "old_route_difference": "R6 normal-mul only shortens log2 and retains the generic rounder branches/product range check; that old negative result is not reused as a positive prediction.",
+  "limitation": "Source-derived exact integer oracle, not independent hardware, Lean, all-input proof or performance. Need no-wrap+bias-RNE identity, guard normal-output proof, actual UInt32 packing/spec composition, and full original gates/timing."
+}

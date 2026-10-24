@@ -1,0 +1,35 @@
+{
+  "candidate": "f01-r14-dev-p2-n1-cache",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "83a981273988f07ce89d4a18c1dbef475adb6ed2fefce381138c5d165bf2a806",
+  "candidate_bytes": 252260,
+  "created_at_utc": "2026-10-24T20:42:21.377341+00:00",
+  "parent": "f01-r13-n1-prepared-row-output",
+  "parent_sha256": "8661a3a5a1988b2d6b3d827aa37a7abeb81c50fffabcc38f8c8476961b425e0c",
+  "validation_mode": "full-gate",
+  "proof_status": "EXISTING_UNCONDITIONAL_BRANCH_PROOFS_NEW_COMBINATION_NOT_RUN",
+  "source_attribution": {
+    "peer_role": "DeepSeek free agent",
+    "peer_commit": "efba4fdcf14f74000738b5e434fead34d762a022",
+    "peer_file": "competitions/floatlib/candidates/f01-deepseek-p2cont/Kernel.lean",
+    "peer_kernel_sha256": "e878b0f2a3558a6c43d01c0af504709c39ba02aaefba6cf772f2633ace8e4732",
+    "prior_cache_kernel_sha256": "8661a3a5a1988b2d6b3d827aa37a7abeb81c50fffabcc38f8c8476961b425e0c"
+  },
+  "mechanism": "Reuse exact two p2cont branch-predicate changes from DeepSeek. Broaden existing R13 n=1 prepared-A continuous-row dispatch from p>2 to p>0, exposing it to newly direct p1/p2 outputs. All actual dot, writer and existing all-shape branch proof bodies unchanged; no p3..8 widening.",
+  "historical_difference": "R13 cache was tested only after unchanged Cross and with n1,p>2 (about1.2-1.8% whole exposed coverage). New p2 routing changes which n1 p1/p2 cases reach this established cache path; this is a changed integrated runtime, not a renamed source or inherited performance.",
+  "performance": "UNKNOWN; complete costs and actual path exposure require original full gate and fresh paired inputs. No additive component gain claim.",
+  "three_literal_changes": [
+    {
+      "old": "  if n ≤ 4 ∧ 2 < p then DirectContinuous.core batch m n p A B",
+      "new": "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 2 then DirectContinuous.core batch m n p A B"
+    },
+    {
+      "old": "  if h : p=2 ∧ 4≤batch*m ∧ 0<n ∧ n<USize.size ∧",
+      "new": "  if h : p=2 ∧ batch*m < 4 ∧ 0<n ∧ n<USize.size ∧"
+    },
+    {
+      "old": "  if h : n = 1 ∧ 2 < p then core batch m n p A B h.1",
+      "new": "  if h : n = 1 ∧ 0 < p then core batch m n p A B h.1"
+    }
+  ]
+}
