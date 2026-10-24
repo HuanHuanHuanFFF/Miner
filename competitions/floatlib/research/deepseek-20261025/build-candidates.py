@@ -4,6 +4,7 @@ Each candidate changes only a dispatch predicate, so every branch keeps its
 existing full-shape correctness theorem. The script refuses to run unless each
 replacement matches exactly once and the result stays under the byte cap.
 """
+import datetime
 import hashlib
 import json
 from pathlib import Path
@@ -21,8 +22,20 @@ P2_NEW = "  if h : p=2 ∧ batch*m < 4 ∧ 0<n ∧ n<USize.size ∧"
 CONT_OLD = "  if n ≤ 4 ∧ 2 < p then DirectContinuous.core batch m n p A B"
 CONT_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 2 then DirectContinuous.core batch m n p A B"
 CONT8_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 8 then DirectContinuous.core batch m n p A B"
+CONT64_NEW = "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 64 then DirectContinuous.core batch m n p A B"
 
 SPECS = [
+    {
+        "name": "f01-deepseek-p8-direct",
+        "edits": [(P8_OLD, P8_NEW)],
+        "mechanism": (
+            "Only the bmmBeforeDirectRows predicate changes from `n ≤ 4 ∨ p ≤ 2` to "
+            "`n ≤ 4 ∨ p ≤ 8`; shapes with n>4 and 3<=p<=8 use DirectSmall instead of Packed10. "
+            "No other runtime bytes change."),
+        "hypothesis": (
+            "Packed10 pads every row to 10 lanes, so p=3 wastes about 70% of its lane work; the "
+            "direct scalar core may win for short p even though it re-reads A."),
+    },
     {
         "name": "f01-deepseek-p2-direct",
         "edits": [(P2_OLD, P2_NEW)],
@@ -80,6 +93,17 @@ SPECS = [
             "One direct row writer for all p<=8 avoids both the Cross packing and the DirectSmall "
             "per-output decode; tests whether DirectContinuous generalises better than DirectSmall."),
     },
+    {
+        "name": "f01-deepseek-directall",
+        "edits": [(P2_OLD, P2_NEW), (CONT_OLD, CONT64_NEW)],
+        "mechanism": (
+            "Extreme routing probe: p=2 leaves Cross and DirectContinuous's guard becomes "
+            "`(n ≤ 4 ∧ 2 < p) ∨ p ≤ 64`, so every scored p<=64 shape uses the direct row writer; "
+            "only p>64 can still reach DirectSmall/Packed10. No other runtime bytes change."),
+        "hypothesis": (
+            "Brackets the packed path's value: if direct wins even at p=32/59, the Packed10 "
+            "preparation and lane padding are pure overhead on this suite."),
+    },
 ]
 
 
@@ -102,7 +126,7 @@ def build(spec):
         "candidate_bytes": len(data),
         "parent": "competitions/floatlib/candidates/f01-d12-scalar-combined/Kernel.lean",
         "parent_sha256": PARENT_SHA,
-        "at_utc": "2026-10-24T19:30:00Z",
+        "at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "author_role": "deepseek free research/development agent",
         "mechanism": spec["mechanism"],
         "hypothesis": spec["hypothesis"],
