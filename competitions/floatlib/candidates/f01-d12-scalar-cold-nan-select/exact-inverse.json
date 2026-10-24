@@ -1,0 +1,177 @@
+{
+  "base_sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+  "asset_sha256": "4a30c99f8230aae6d1b0cd238d1a6b1c9ac0aac0c448ca67d3005d3a6d00d528",
+  "candidate_sha256": "b15dd4116f79ccdbb1ef6ffd203f33bfe70abebcf9eb4b3146e21a3a20461325",
+  "candidate_bytes": 247434,
+  "headroom_bytes": 8566,
+  "operations": [
+    {
+      "name": "route original native add NaN-result branch",
+      "offset_in_previous_stage": 139315,
+      "before": "  else TunedAdd.add x y\n",
+      "after": "  else ScalarNaN.add x y\n",
+      "before_bytes": 24,
+      "after_bytes": 25,
+      "before_sha256": "55831546ec3c066f0f4d579c147e6f6f968cb56d12593beb7b820b4124a200f5",
+      "after_sha256": "2f16d572e2c207859731f3569da23697f5bd2f601265881f4394bc2053152ef4",
+      "previous_source_sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+      "next_source_sha256": "a8b70753b9fbcb411ae804ab3a1508afd980b892077ecef4c85619c94a983939"
+    },
+    {
+      "name": "original native add cold proof leaf",
+      "offset_in_previous_stage": 139973,
+      "before": "  · exact TunedAdd.add_spec x y\n",
+      "after": "  · exact ScalarNaN.add_spec x y\n",
+      "before_bytes": 33,
+      "after_bytes": 34,
+      "before_sha256": "ef3840b310358f49107b4dfaedd819d554175af4fc17e31afa103c10824cf76c",
+      "after_sha256": "ff56fa80e4bad246c9dc96ab97633b727cc4d7eec84ebfdecc26cf1f3adb51e9",
+      "previous_source_sha256": "a8b70753b9fbcb411ae804ab3a1508afd980b892077ecef4c85619c94a983939",
+      "next_source_sha256": "1a024015f6c2c603c2d20a906c33c0ac4c262d2bc81c28827de33412adaa6062"
+    },
+    {
+      "name": "route original native multiply NaN-result branch and proof",
+      "offset_in_previous_stage": 140081,
+      "before": "@[inline] def nativeMul (x y : Binary32) : Binary32 :=\n  let result := ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y\n  if hn : R7W04.nonNaN result = true then ExecFloat.Binary.ofFloat32 result\n  else FastMul.mul x y\n\ntheorem nativeMul_spec : ∀ x y : Binary32, nativeMul x y = ExecFloat.Spec.mul x y := by\n  intro x y\n  unfold nativeMul\n  dsimp only\n  split\n  · rename_i hn\n    have hi := NotNaNProbe.mul_inputs _ _ ((R7W04.nonNaN_eq_true_iff _).mp hn)\n    rw [R7Native.ofFloat32Mul _ _ hi.1 hi.2,\n      NotNaNProbe.roundtrip x hi.1, NotNaNProbe.roundtrip y hi.2]\n    exact ExecFloat.Proof.mul_eq_spec x y\n  · exact FastMul.mul_spec x y\n",
+      "after": "@[inline] def nativeMul (x y : Binary32) : Binary32 :=\n  let result := ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y\n  if hn : R7W04.nonNaN result = true then ExecFloat.Binary.ofFloat32 result\n  else ScalarNaN.mul x y\n\ntheorem nativeMul_spec : ∀ x y : Binary32, nativeMul x y = ExecFloat.Spec.mul x y := by\n  intro x y\n  unfold nativeMul\n  dsimp only\n  split\n  · rename_i hn\n    have hi := NotNaNProbe.mul_inputs _ _ ((R7W04.nonNaN_eq_true_iff _).mp hn)\n    rw [R7Native.ofFloat32Mul _ _ hi.1 hi.2,\n      NotNaNProbe.roundtrip x hi.1, NotNaNProbe.roundtrip y hi.2]\n    exact ExecFloat.Proof.mul_eq_spec x y\n  · exact ScalarNaN.mul_spec x y\n",
+      "before_bytes": 654,
+      "after_bytes": 658,
+      "before_sha256": "2a7243aa520a40cf98e7c3d0a53f3aa321e8180dfbd88c197f27979bdb3b0777",
+      "after_sha256": "40139e1a8d9decfa6d1a3ee616f5bdf29de88a6f8d86e5797518982c92ce2b3b",
+      "previous_source_sha256": "1a024015f6c2c603c2d20a906c33c0ac4c262d2bc81c28827de33412adaa6062",
+      "next_source_sha256": "34921fa120ffd8631e3ec3d68b496d74001e9ef46aaa8b12163ceafe0f7f2e98"
+    },
+    {
+      "name": "reclaim isolated TunedAdd namespace; preserve surrounding notices",
+      "offset_in_previous_stage": 79586,
+      "before": "namespace TunedAdd\n\nopen FloatLib.Floats Competition\nopen FloatLib.Floats.Formats.BinaryInterchange\nopen Model.NativeBinary32\n\n/-- One binary-search step for `log2` on the value: shift down by `k` if anything is left there. -/\n@[inline] def sx (k x : UInt64) : UInt64 := bif x >>> k == 0 then x else x >>> k\n\n/-- The same step on the running result: add `k` when the value moved. -/\n@[inline] def sr (k x r : UInt64) : UInt64 := bif x >>> k == 0 then r else r + k\n\n/-- `UInt64.log2` by binary search: six steps instead of one per bit. -/\n@[inline] def fastLog2 (x0 : UInt64) : UInt64 :=\n  let x1 := sx 32 x0\n  let r1 := sr 32 x0 0\n  let x2 := sx 16 x1\n  let r2 := sr 16 x1 r1\n  let x3 := sx 8 x2\n  let r3 := sr 8 x2 r2\n  let x4 := sx 4 x3\n  let r4 := sr 4 x3 r3\n  let x5 := sx 2 x4\n  let r5 := sr 2 x4 r4\n  sr 1 x5 r5\n\n/-- `roundShiftRightEven` with a word shift; the caller passes 1 ≤ shift < 64. -/\n@[inline] def rse (value shift : UInt64) : UInt64 :=\n  let quotient := value >>> shift\n  let remainder := value &&& ((1 <<< shift) - 1)\n  let half := (1 : UInt64) <<< (shift - 1)\n  if remainder < half then quotient\n  else if remainder > half then quotient + 1\n  else if (quotient &&& 1) == 0 then quotient\n  else quotient + 1\n\n/-- `rse` for any shift, matching roundShiftRightEven's 0 and ≥ 64 cases. -/\n@[inline] def rseAny (value shift : UInt64) : UInt64 :=\n  if shift == 0 then value\n  else if shift < 64 then rse value shift\n  else if shift == 64 then (if value > 0x8000000000000000 then 1 else 0)\n  else 0\n\n/-- `mkBits` on words. -/\n@[inline] def mkW (sign : Bool) (e f : UInt32) : UInt32 :=\n  (if sign then (0x80000000 : UInt32) else 0) ||| ((e &&& 0xff) <<< 23) ||| (f &&& 0x007fffff)\n\n/-- The stored fraction of a normalised mantissa, as `mkBits` receives it: zero below 2^23. -/\n@[inline] def fracW (n : UInt64) : UInt32 :=\n  (if n < 0x800000 then 0 else n - 0x800000).toUInt32\n\n/-- `roundProduct` with `fastLog2`, on words throughout. -/\n@[inline] def roundP (sign : Bool) (product scale : UInt64) : UInt32 :=\n  if product == 0 then\n    if sign then 0x80000000 else 0\n  else\n    let leading := fastLog2 product\n    let position := leading + scale\n    if position < 172 then\n      let fraction :=\n        if scale < 149 then\n          rseAny product (149 - scale)\n        else\n          product <<< (scale - 149)\n      if fraction == 0 then\n        if sign then 0x80000000 else 0\n      else if fraction == 0x800000 then\n        mkW sign 1 0\n      else\n        mkW sign 0 fraction.toUInt32\n    else\n      let roundedMantissa :=\n        if leading < 23 then\n          product <<< (23 - leading)\n        else\n          rseAny product (leading - 23)\n      let carry := roundedMantissa == 0x1000000\n      let normalizedPosition := if carry then position + 1 else position\n      if normalizedPosition > 425 then\n        if sign then 0xff800000 else 0x7f800000\n      else\n        let normalizedMantissa := if carry then 0x800000 else roundedMantissa\n        let encodedExponent := normalizedPosition - 171\n        mkW sign encodedExponent.toUInt32 (fracW normalizedMantissa)\n\n/-- The word kernel's finite path on bits; the caller has excluded NaN, infinity and zero. -/\n@[inline] def core (xBits yBits : UInt32) : UInt32 :=\n  let xExponent := expField xBits\n  let yExponent := expField yBits\n  let xSign := signBit xBits\n  let ySign := signBit yBits\n  let xMantissa := finiteMantissa xExponent (fracField xBits)\n  let yMantissa := finiteMantissa yExponent (fracField yBits)\n  let xScale := finiteScale xExponent\n  let yScale := finiteScale yExponent\n  if xScale ≤ yScale then\n    let shift := yScale - xScale\n    if shift ≤ 39 then\n      let sum := FloatLib.Numerics.FixedWord.addSignedMagnitudes xSign ySign xMantissa (yMantissa <<< shift)\n      roundP sum.1 sum.2 (xScale + 149)\n    else yBits\n  else\n    let shift := xScale - yScale\n    if shift ≤ 39 then\n      let sum := FloatLib.Numerics.FixedWord.addSignedMagnitudes xSign ySign (xMantissa <<< shift) yMantissa\n      roundP sum.1 sum.2 (yScale + 149)\n    else xBits\n\n/-- One operand is a NaN, an infinity or a zero, in one compare. -/\n@[inline] def sp1 (a : UInt32) : Bool := (a <<< 1) - 1 ≥ 0xfeffffff\n\n/-- The operands `core` leaves to the certified kernel: a NaN, an infinity or a zero. -/\n@[inline] def special (a b : UInt32) : Bool := sp1 a || sp1 b\n\n/-- Stored bits as a `Binary32`; the wrapper keeps goal terms well typed for `split` and `rw`. -/\n@[inline] def ofBits (w : UInt32) : Binary32 := Configured.NativeFPU.ofBinary32Bits w\n\n/-- `core` on ordinary operands, the certified kernel on special ones. -/\ndef add (x y : Binary32) : Binary32 :=\n  if special x.raw.1 y.raw.1 then ExecFloat.add x y\n  else ofBits (core x.raw.1 y.raw.1)\n\n/-- The binary32 descriptor, storage plan and family that `Binary32` unfolds to. -/\nabbrev Fmt := ExecFloat.Binary.format (exponentBits := 8) (fractionBits := 23)\nabbrev Plan := Configured.StoragePlan.forKnownWidth Fmt (1 + 8 + 23) (by rfl)\nabbrev Fam := Configured.Family Fmt (Configured.Code Plan) Plan\n\n/-- The carrier's decode, with its codec instance pinned. -/\ndef dec (z : Binary32) : Model Fmt :=\n  ExecFloat.ModelCodec.decode (F := Fam) (plan := Plan) (Model := Model Fmt) z\n\n/-- Decoding a stored value is reading its bits. -/\ntheorem dec_eq (z : Binary32) : dec z = ofUInt32 z.raw.1 := rfl\n\n/-- Decoding wrapped bits is rewrapping them in the model. -/\ntheorem dec_ofBits (w : UInt32) : dec (ofBits w) = ofUInt32 w := rfl\n\n/-- On binary32 the dispatcher is the word kernel with the generic fallback. -/\ntheorem word32 (a b : Model Fmt) :\n    Model.AddBackend.word a b =\n      match addFiniteImpl? a b with\n      | some s => s\n      | none => Model.AddBackend.generic a b := by\n  unfold Model.AddBackend.word\n  rw [dif_pos (by decide)]\n  rfl\n\n/-- The planner's `wordAdd` decodes to the dispatcher on the decoded operands. -/\ntheorem dec_word (x y : Binary32) :\n    dec (Configured.Backend.wordAdd x y) = Model.AddBackend.word (dec x) (dec y) :=\n  ExecFloat.ModelCodec.decode_liftBinary (F := Fam) (plan := Plan) (Model := Model Fmt) _ x y\n\n/-- Rewrapping a word and reading it back gives the word. -/\ntheorem toUInt32_ofUInt32 (b : UInt32) : toUInt32 (ofUInt32 b) = b := by\n  simp [toUInt32, ofUInt32, Model.ofBits]\n\n/-- Shifting out `k` low bits lowers `log2` by exactly `k`, while anything is left. -/\ntheorem log2_shift (n k : Nat) (h : n >>> k ≠ 0) : n.log2 = k + (n >>> k).log2 := by\n  have hn : n ≠ 0 := by rintro rfl; simp at h\n  rw [Nat.log2_eq_iff hn]\n  rw [Nat.shiftRight_eq_div_pow] at h ⊢\n  have h1 := Nat.log2_self_le h\n  have h2 := Nat.lt_log2_self (n := n / 2 ^ k)\n  have hk : 0 < 2 ^ k := Nat.two_pow_pos k\n  constructor\n  · calc 2 ^ (k + (n / 2 ^ k).log2) = 2 ^ k * 2 ^ (n / 2 ^ k).log2 := Nat.pow_add 2 _ _\n      _ ≤ 2 ^ k * (n / 2 ^ k) := Nat.mul_le_mul_left _ h1\n      _ ≤ n := Nat.mul_div_le n (2 ^ k)\n  · calc n < 2 ^ k * (n / 2 ^ k + 1) := Nat.lt_mul_div_succ n hk\n      _ ≤ 2 ^ k * 2 ^ ((n / 2 ^ k).log2 + 1) := Nat.mul_le_mul_left _ h2\n      _ = 2 ^ (k + (n / 2 ^ k).log2 + 1) := by rw [← Nat.pow_add]; ring_nf\n\n/-- Every 64-bit word has `log2` below 64. -/\ntheorem log2_lt_64 (x : UInt64) : x.toNat.log2 < 64 := by\n  rcases Nat.eq_zero_or_pos x.toNat with h | h\n  · simp [h]\n  · exact (Nat.log2_lt (by omega)).mpr x.toNat_lt\n\n/-- One `sx`/`sr` step keeps `log2 x0 = r + log2 x` and halves the bound on `x`. -/\ntheorem step (x0 r x k : UInt64) (hk : k.toNat ≤ 32) (hk0 : 0 < k.toNat)\n    (hinv : x0.toNat.log2 = r.toNat + x.toNat.log2) (hb : x.toNat < 2 ^ (2 * k.toNat)) :\n    x0.toNat.log2 = (sr k x r).toNat + (sx k x).toNat.log2 ∧ (sx k x).toNat < 2 ^ k.toNat := by\n  have hs : (x >>> k).toNat = x.toNat >>> k.toNat := by\n    rw [UInt64.toNat_shiftRight, Nat.mod_eq_of_lt (by omega)]\n  unfold sx sr\n  by_cases hz : x >>> k = 0\n  · simp only [hz, beq_self_eq_true, Bool.cond_true]\n    refine ⟨hinv, ?_⟩\n    have h0 : x.toNat >>> k.toNat = 0 := by rw [← hs, hz]; rfl\n    rw [Nat.shiftRight_eq_div_pow, Nat.div_eq_zero_iff] at h0\n    rcases h0 with h0 | h0\n    · exact absurd h0 (Nat.two_pow_pos _).ne'\n    · exact h0\n  · have hz' : (x >>> k == 0) = false := by simpa using hz\n    simp only [hz', Bool.cond_false]\n    have hne : x.toNat >>> k.toNat ≠ 0 := by\n      rw [← hs]\n      intro h\n      exact hz (UInt64.toNat_inj.mp (by simpa using h))\n    have hl := log2_shift x.toNat k.toNat hne\n    have h64 := log2_lt_64 x0\n    constructor\n    · rw [UInt64.toNat_add, Nat.mod_eq_of_lt (by omega), hs]\n      omega\n    · rw [hs, Nat.shiftRight_eq_div_pow]\n      apply Nat.div_lt_of_lt_mul\n      rw [← Nat.pow_add]\n      exact lt_of_lt_of_eq hb (by congr 1; omega)\n\n/-- Zero and one have `log2` zero. -/\ntheorem log2_lt_two (n : Nat) (h : n < 2) : n.log2 = 0 := by\n  interval_cases n <;> decide\n\n/-- The binary search computes `UInt64.log2` on every word. -/\ntheorem fastLog2_eq (x : UInt64) : fastLog2 x = x.log2 := by\n  apply UInt64.toNat_inj.mp\n  rw [show x.log2.toNat = x.toNat.log2 from rfl]\n  have b0 : x.toNat < 2 ^ (2 * (32 : UInt64).toNat) := x.toNat_lt\n  obtain ⟨e1, b1⟩ := step x 0 x 32 (by decide) (by decide) (by simp) b0\n  obtain ⟨e2, b2⟩ := step x _ _ 16 (by decide) (by decide) e1 (by simpa using b1)\n  obtain ⟨e3, b3⟩ := step x _ _ 8 (by decide) (by decide) e2 (by simpa using b2)\n  obtain ⟨e4, b4⟩ := step x _ _ 4 (by decide) (by decide) e3 (by simpa using b3)\n  obtain ⟨e5, b5⟩ := step x _ _ 2 (by decide) (by decide) e4 (by simpa using b4)\n  obtain ⟨e6, b6⟩ := step x _ _ 1 (by decide) (by decide) e5 (by simpa using b5)\n  rw [log2_lt_two (sx 1 (sx 2 (sx 4 (sx 8 (sx 16 (sx 32 x)))))).toNat (by simpa using b6)] at e6\n  unfold fastLog2\n  dsimp only\n  omega\n/-- The exponent field as a natural number. -/\ntheorem expField_toNat (a : UInt32) : (expField a).toNat = a.toNat / 2 ^ 23 % 2 ^ 8 := by\n  unfold expField\n  rw [UInt32.toNat_and, UInt32.toNat_shiftRight]\n  rw [show (0xff : UInt32).toNat = 2 ^ 8 - 1 from rfl, Nat.and_two_pow_sub_one_eq_mod]\n  simp [Nat.shiftRight_eq_div_pow]\n\n/-- The fraction field as a natural number. -/\ntheorem fracField_toNat (a : UInt32) : (fracField a).toNat = a.toNat % 2 ^ 23 := by\n  unfold fracField\n  rw [UInt32.toNat_and, show (0x007fffff : UInt32).toNat = 2 ^ 23 - 1 from rfl,\n    Nat.and_two_pow_sub_one_eq_mod]\n\n/-- The one-compare test as a natural-number condition. -/\ntheorem sp1_iff (a : UInt32) :\n    sp1 a = true ↔ (a.toNat % 2 ^ 31 = 0 ∨ a.toNat % 2 ^ 31 ≥ 0x7f800000) := by\n  have ha := a.toNat_lt\n  unfold sp1\n  simp only [decide_eq_true_eq, ge_iff_le, UInt32.le_iff_toNat_le, UInt32.toNat_sub,\n    UInt32.toNat_shiftLeft]\n  simp\n  omega\n\n/-- The mantissa is zero exactly when the exponent and the fraction both are. -/\ntheorem finiteMantissa_eq_zero (e f : UInt32) :\n    finiteMantissa e f = 0 ↔ e = 0 ∧ f = 0 := by\n  unfold finiteMantissa\n  split\n  · rename_i he\n    have he : e = 0 := by simpa using he\n    simp only [he, true_and]\n    constructor\n    · intro h\n      apply UInt32.toNat_inj.mp\n      simpa using congrArg UInt64.toNat h\n    · rintro rfl; rfl\n  · rename_i he\n    have he : ¬e = 0 := by simpa using he\n    simp only [he, false_and, iff_false]\n    intro h\n    have := congrArg (fun x => x.toNat.testBit 23) h\n    simp [UInt64.toNat_or, Nat.testBit_or] at this\n    exact absurd this.2 (by decide)\n\n/-- The one-compare test is the four-comparison test, on one operand. -/\ntheorem sp1_eq (a : UInt32) :\n    sp1 a = (expField a == 0xff || finiteMantissa (expField a) (fracField a) == 0) := by\n  have ha := a.toNat_lt\n  have he := expField_toNat a\n  have hf := fracField_toNat a\n  apply Bool.eq_iff_iff.mpr\n  rw [sp1_iff]\n  simp only [Bool.or_eq_true, beq_iff_eq, finiteMantissa_eq_zero]\n  rw [← UInt32.toNat_inj, ← UInt32.toNat_inj, ← UInt32.toNat_inj, he, hf]\n  simp only [show (0xff : UInt32).toNat = 255 from rfl, show (0 : UInt32).toNat = 0 from rfl]\n  omega\n/-- The word shift rounds exactly as FloatLib's natural-number-shift version. -/\ntheorem rseAny_eq (value shift : UInt64) :\n    rseAny value shift = FloatLib.Numerics.FixedWord.roundShiftRightEven value shift.toNat := by\n  unfold rseAny rse FloatLib.Numerics.FixedWord.roundShiftRightEven\n  have hs := shift.toNat_lt\n  by_cases h0 : shift = 0\n  · subst h0; rfl\n  · have h0' : shift.toNat ≠ 0 := by\n      intro h; exact h0 (UInt64.toNat_inj.mp (by simpa using h))\n    simp only [h0, beq_iff_eq, h0', reduceIte]\n    have e1 : UInt64.ofNat shift.toNat = shift := UInt64.ofNat_toNat\n    have e2 : UInt64.ofNat (shift.toNat - 1) = shift - 1 := by\n      apply UInt64.toNat_inj.mp\n      have hle : (1 : UInt64) ≤ shift := by rw [UInt64.le_iff_toNat_le]; simp; omega\n      rw [UInt64.toNat_sub_of_le _ _ hle]\n      simp\n      omega\n    have c1 : (shift < 64) ↔ shift.toNat < 64 := UInt64.lt_iff_toNat_lt\n    have c2 : shift = 64 ↔ shift.toNat = 64 := by rw [← UInt64.toNat_inj]; rfl\n    simp only [e1, e2, ← c1, ← c2]\n\n/-- `mkW` packs what `mkBits` packs: `mkBits` only ever reads its fields through `ofNat`. -/\ntheorem mkW_ofNat (sign : Bool) (e f : Nat) :\n    mkW sign (UInt32.ofNat e) (UInt32.ofNat f) = mkBits sign e f := by\n  unfold mkW mkBits\n  cases sign <;> rfl\n\n/-- A 64-bit word narrowed to 32 bits is its value taken mod 2^32. -/\ntheorem toUInt32_eq (x : UInt64) : x.toUInt32 = UInt32.ofNat x.toNat := rfl\n\n/-- `fracW` is the natural-number subtraction it replaces. -/\ntheorem fracW_eq (n : UInt64) : fracW n = UInt32.ofNat (n.toNat - 0x800000) := by\n  unfold fracW\n  split\n  · rename_i h\n    rw [UInt64.lt_iff_toNat_lt] at h\n    simp only [toUInt32_eq]\n    rw [show n.toNat - 0x800000 = 0 by simp at h; omega]\n    rfl\n  · rename_i h\n    rw [UInt64.lt_iff_toNat_lt] at h\n    simp only [toUInt32_eq]\n    rw [UInt64.toNat_sub_of_le _ _ (by rw [UInt64.le_iff_toNat_le]; simp at h ⊢; omega)]\n    rfl\n\n/-- `roundP` is FloatLib's `roundProduct`: they differ in `log2` and in staying on words. -/\ntheorem roundP_eq (sign : Bool) (product scale : UInt64) :\n    roundP sign product scale = roundProduct sign product scale := by\n  unfold roundP roundProduct\n  simp only [fastLog2_eq, rseAny_eq, fracW_eq, toUInt32_eq]\n  rw [show (1 : UInt32) = UInt32.ofNat 1 from rfl, show (0 : UInt32) = UInt32.ofNat 0 from rfl]\n  simp only [mkW_ofNat]\n\n/-- Off the fallback, the word kernel returns exactly `core` on the same bits. -/\ntheorem impl_eq (a b : UInt32) (ha : expField a ≠ 0xff) (hb : expField b ≠ 0xff)\n    (hma : finiteMantissa (expField a) (fracField a) ≠ 0)\n    (hmb : finiteMantissa (expField b) (fracField b) ≠ 0) :\n    addFiniteImpl? (ofUInt32 a) (ofUInt32 b) = some (ofUInt32 (core a b)) := by\n  unfold addFiniteImpl? core\n  simp only [roundP_eq, toUInt32_ofUInt32, ha, hb, hma, hmb, beq_iff_eq, Bool.or_eq_true, or_self,\n    if_false]\n  split_ifs <;> rfl\n\n/-- The kernel equals the planner's word addition on every pair of operands. -/\ntheorem add_eq_word (x y : Binary32) : add x y = Configured.Backend.wordAdd x y := by\n  unfold add\n  split\n  · rfl\n  · rename_i h\n    simp only [special, sp1_eq, Bool.or_eq_true, beq_iff_eq, not_or] at h\n    obtain ⟨⟨ha, hma⟩, hb, hmb⟩ := h\n    apply ExecFloat.ModelCodec.decode_injective (F := Fam) (plan := Plan) (Model := Model Fmt)\n    change dec (ofBits (core x.raw.1 y.raw.1)) = dec (Configured.Backend.wordAdd x y)\n    rw [dec_ofBits, dec_word, word32, dec_eq x, dec_eq y, impl_eq _ _ ha hb hma hmb]\n\ntheorem add_spec : ∀ x y : Binary32, add x y = ExecFloat.Spec.add x y := fun x y => by\n  rw [add_eq_word]\n  exact Configured.Backend.wordAdd_eq_spec x y\n\nend TunedAdd\n",
+      "after": "",
+      "before_bytes": 15524,
+      "after_bytes": 0,
+      "before_sha256": "04f2b622654ce1c70972fa600a27736339b74129a8cd5ca38c922cca6cef9743",
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "previous_source_sha256": "34921fa120ffd8631e3ec3d68b496d74001e9ef46aaa8b12163ceafe0f7f2e98",
+      "next_source_sha256": "f9665f8f733216859f21ce9a94b75139a7f78de517f5da78bfe202eb28d1d577"
+    },
+    {
+      "name": "reuse exact4a30 NaN proof/selection block and certified none fallbacks",
+      "offset_in_previous_stage": 123507,
+      "before": "end R7Native\n",
+      "after": "end R7Native\n\n/- Word NaN selection: fixed public binary32 fields and exact quieting/priority.\n   Newly integrated statement probe; NOT_RUN in the official compiler. -/\nnamespace DWordNaN\n\nopen FloatLib.Floats.Formats.BinaryInterchange\nabbrev M := Model FloatFormat.binary32\n\n@[inline] def rawNaN (u : UInt32) : Bool :=\n  Model.NativeBinary32.expField u == 0xff && Model.NativeBinary32.fracField u != 0\n\n@[inline] def rawSNaN (u : UInt32) : Bool :=\n  rawNaN u && (u &&& 0x00400000) == 0\n\ntheorem rawNaN_eq (u : UInt32) :\n    rawNaN u = Model.isNaN (Model.NativeBinary32.ofUInt32 u) := by\n  apply Bool.eq_iff_iff.mpr\n  change ((Model.NativeBinary32.expField u == 0xff && Model.NativeBinary32.fracField u != 0) = true) ↔\n    ((Model.expField (Model.NativeBinary32.ofUInt32 u) == 255 &&\n      Model.fracField (Model.NativeBinary32.ofUInt32 u) != 0) = true)\n  simp only [Bool.and_eq_true, beq_iff_eq, bne_iff_ne]\n  have he : Model.NativeBinary32.expField u = 0xff ↔\n      Model.expField (Model.NativeBinary32.ofUInt32 u) = 255 := by\n    change Model.NativeBinary32.expField u = 0xff ↔\n      (Model.NativeBinary32.expField u).toNat = 255\n    exact UInt32.toNat_inj.symm\n  have hf : Model.NativeBinary32.fracField u = 0 ↔\n      Model.fracField (Model.NativeBinary32.ofUInt32 u) = 0 := by\n    change Model.NativeBinary32.fracField u = 0 ↔\n      (Model.NativeBinary32.fracField u).toNat = 0\n    exact UInt32.toNat_inj.symm\n  exact and_congr he (not_congr hf)\n\ntheorem rawSNaN_eq (u : UInt32) :\n    rawSNaN u = Model.isSNaN (Model.NativeBinary32.ofUInt32 u) := by\n  unfold rawSNaN\n  rw [rawNaN_eq]\n  change (Model.isNaN (Model.NativeBinary32.ofUInt32 u) && ((u &&& 0x00400000) == 0)) =\n    (Model.isNaN (Model.NativeBinary32.ofUInt32 u) &&\n      ((u.toBitVec &&& (4194304#32)) == 0))\n  apply congrArg (fun b : Bool => Model.isNaN (Model.NativeBinary32.ofUInt32 u) && b)\n  apply Bool.eq_iff_iff.mpr\n  simp only [beq_iff_eq]\n  rw [← UInt32.toBitVec_inj, UInt32.toBitVec_and]\n  rfl\n\ntheorem quietWord_eq (u : UInt32) (hu : rawNaN u = true) :\n    Model.NativeBinary32.ofUInt32 (u ||| 0x00400000) =\n      Model.quietNaN (Model.NativeBinary32.ofUInt32 u) := by\n  have hm : Model.isNaN (Model.NativeBinary32.ofUInt32 u) = true := by\n    rw [← rawNaN_eq]\n    exact hu\n  have h := Model.NativeBinary32.ofUInt32_or_quietBit\n    (Model.NativeBinary32.ofUInt32 u)\n  simp only [Model.NativeBinary32.toUInt32_ofUInt32] at h\n  rw [h]\n  change _ = if Model.isNaN (Model.NativeBinary32.ofUInt32 u) then\n    Model.ofBits ((Model.NativeBinary32.ofUInt32 u).bits |||\n      FloatFormat.quietBit FloatFormat.binary32)\n    else Model.NativeBinary32.ofUInt32 u\n  rw [hm]\n\ntheorem quietWord_eq_snan (u : UInt32) (hu : rawSNaN u = true) :\n    Model.NativeBinary32.ofUInt32 (u ||| 0x00400000) =\n      Model.quietNaN (Model.NativeBinary32.ofUInt32 u) := by\n  apply quietWord_eq\n  change (rawNaN u && ((u &&& 0x00400000) == 0)) = true at hu\n  exact (Bool.and_eq_true.mp hu).1\n\n@[inline] def rawChoose (a b : UInt32) : Option UInt32 :=\n  if rawSNaN a then some (a ||| 0x00400000)\n  else if rawSNaN b then some (b ||| 0x00400000)\n  else if rawNaN a then some (a ||| 0x00400000)\n  else if rawNaN b then some (b ||| 0x00400000)\n  else none\n\ntheorem rawChoose_eq (a b : UInt32) :\n    (rawChoose a b).map Model.NativeBinary32.ofUInt32 =\n      Model.chooseNaN2 (Model.NativeBinary32.ofUInt32 a)\n        (Model.NativeBinary32.ofUInt32 b) := by\n  unfold rawChoose Model.chooseNaN2\n  rw [← rawSNaN_eq a, ← rawSNaN_eq b, ← rawNaN_eq a, ← rawNaN_eq b]\n  by_cases ha : rawSNaN a = true\n  · simp only [ha, ite_true, Option.map_some]\n    exact congrArg some (quietWord_eq_snan a ha)\n  · by_cases hb : rawSNaN b = true\n    · simp only [ha, hb, ite_false, ite_true, Option.map_some]\n      exact congrArg some (quietWord_eq_snan b hb)\n    · by_cases hna : rawNaN a = true\n      · simp only [ha, hb, hna, ite_false, ite_true, Option.map_some]\n        exact congrArg some (quietWord_eq a hna)\n      · by_cases hnb : rawNaN b = true\n        · simp only [ha, hb, hna, hnb, ite_false, ite_true, Option.map_some]\n          exact congrArg some (quietWord_eq b hnb)\n        · simp only [ha, hb, hna, hnb, ite_false, Option.map_none]\n\ntheorem rawNaN_exp (u : UInt32) (hu : rawNaN u = true) :\n    Model.NativeBinary32.expField u = 0xff := by\n  have h := (Bool.and_eq_true.mp hu).1\n  exact beq_iff_eq.mp h\n\ntheorem rawChoose_nonfinite (a b w : UInt32) (hw : rawChoose a b = some w) :\n    Model.NativeBinary32.expField a = 0xff ∨ Model.NativeBinary32.expField b = 0xff := by\n  unfold rawChoose at hw\n  split at hw\n  · rename_i ha\n    exact Or.inl (rawNaN_exp a (Bool.and_eq_true.mp ha).1)\n  · split at hw\n    · rename_i hb\n      exact Or.inr (rawNaN_exp b (Bool.and_eq_true.mp hb).1)\n    · split at hw\n      · rename_i ha\n        exact Or.inl (rawNaN_exp a ha)\n      · split at hw\n        · rename_i hb\n          exact Or.inr (rawNaN_exp b hb)\n        · cases hw\n\ntheorem specialDecode (u : UInt32) (hu : Model.NativeBinary32.expField u = 0xff) :\n    Model.toDyadic? (Model.NativeBinary32.ofUInt32 u) = none := by\n  rw [← Model.NativeBinary32.toDyadic_eq]\n  simp only [Model.NativeBinary32.toUInt32_ofUInt32]\n  unfold Model.NativeBinary32.toDyadic?\n  simp [hu]\n\ntheorem selected_model_add (a b w : UInt32) (hw : rawChoose a b = some w) :\n    Model.NativeBinary32.ofUInt32 w = Model.Spec.add\n      (Model.NativeBinary32.ofUInt32 a) (Model.NativeBinary32.ofUInt32 b) := by\n  have hc : Model.chooseNaN2 (Model.NativeBinary32.ofUInt32 a)\n      (Model.NativeBinary32.ofUInt32 b) = some (Model.NativeBinary32.ofUInt32 w) := by\n    rw [← rawChoose_eq, hw]\n    rfl\n  rcases rawChoose_nonfinite a b w hw with ha | hb\n  · unfold Model.Spec.add\n    rw [specialDecode a ha]\n    cases Model.toDyadic? (Model.NativeBinary32.ofUInt32 b) <;> simp only [hc]\n  · unfold Model.Spec.add\n    rw [specialDecode b hb]\n    cases Model.toDyadic? (Model.NativeBinary32.ofUInt32 a) <;> simp only [hc]\n\ntheorem selected_model_mul (a b w : UInt32) (hw : rawChoose a b = some w) :\n    Model.NativeBinary32.ofUInt32 w = Model.Spec.mul\n      (Model.NativeBinary32.ofUInt32 a) (Model.NativeBinary32.ofUInt32 b) := by\n  have hc : Model.chooseNaN2 (Model.NativeBinary32.ofUInt32 a)\n      (Model.NativeBinary32.ofUInt32 b) = some (Model.NativeBinary32.ofUInt32 w) := by\n    rw [← rawChoose_eq, hw]\n    rfl\n  rcases rawChoose_nonfinite a b w hw with ha | hb\n  · unfold Model.Spec.mul\n    rw [specialDecode a ha]\n    cases Model.toDyadic? (Model.NativeBinary32.ofUInt32 b) <;> simp only [hc]\n  · unfold Model.Spec.mul\n    rw [specialDecode b hb]\n    cases Model.toDyadic? (Model.NativeBinary32.ofUInt32 a) <;> simp only [hc]\n\nopen FloatLib.Floats Competition\n\ntheorem selected_add (x y : Binary32) (w : UInt32)\n    (hw : rawChoose x.raw.1 y.raw.1 = some w) :\n    Submission.FastMul.ofBits w = ExecFloat.Spec.add x y := by\n  rw [← ExecFloat.Proof.add_eq_spec]\n  apply Configured.Family.toModel_injective\n  change Model.NativeBinary32.ofUInt32 w = ExecFloat.Binary.toModel (ExecFloat.add x y)\n  rw [Submission.R7Native.toModelExecAdd]\n  exact selected_model_add x.raw.1 y.raw.1 w hw\n\ntheorem selected_mul (x y : Binary32) (w : UInt32)\n    (hw : rawChoose x.raw.1 y.raw.1 = some w) :\n    Submission.FastMul.ofBits w = ExecFloat.Spec.mul x y := by\n  rw [← ExecFloat.Proof.mul_eq_spec]\n  apply Configured.Family.toModel_injective\n  change Model.NativeBinary32.ofUInt32 w = ExecFloat.Binary.toModel (ExecFloat.mul x y)\n  rw [Submission.NativeBridge.toModelExecMul]\n  exact selected_model_mul x.raw.1 y.raw.1 w hw\n\nend DWordNaN\n\nnamespace ScalarNaN\n\n@[inline] def add (x y : Binary32) : Binary32 :=\n  match DWordNaN.rawChoose x.raw.1 y.raw.1 with\n  | some w => FastMul.ofBits w\n  | none => ExecFloat.add x y\n\ntheorem add_spec (x y : Binary32) : add x y = ExecFloat.Spec.add x y := by\n  unfold add\n  split\n  · rename_i w hw\n    exact DWordNaN.selected_add x y w hw\n  · exact ExecFloat.Proof.add_eq_spec x y\n\n@[inline] def mul (x y : Binary32) : Binary32 :=\n  match DWordNaN.rawChoose x.raw.1 y.raw.1 with\n  | some w => FastMul.ofBits w\n  | none => FastMul.mul x y\n\ntheorem mul_spec (x y : Binary32) : mul x y = ExecFloat.Spec.mul x y := by\n  unfold mul\n  split\n  · rename_i w hw\n    exact DWordNaN.selected_mul x y w hw\n  · exact FastMul.mul_spec x y\n\nend ScalarNaN\n\n",
+      "before_bytes": 13,
+      "after_bytes": 8311,
+      "before_sha256": "dddc8edbf241e72b7b37b201959445160a13eec9764287e2d6fd9ab7cc906fcf",
+      "after_sha256": "812b4bc0dd8e4bbc92e3bd83a94a3c819e9ae6cdf72e92c7eabb83ed41cd05a0",
+      "previous_source_sha256": "f9665f8f733216859f21ce9a94b75139a7f78de517f5da78bfe202eb28d1d577",
+      "next_source_sha256": "b15dd4116f79ccdbb1ef6ffd203f33bfe70abebcf9eb4b3146e21a3a20461325"
+    }
+  ],
+  "inverse_parent_sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+  "inverse_parent_exact": true,
+  "reused_DWordNaN_sha256": "1296801aa65e73fb16fc1fe9ff6bda04864f448be052c5b99806d509e00326d3",
+  "reused_DWordNaN_bytes": 7400,
+  "original_ScalarNaN_sha256": "6587699e453e934ffa13c95e7a6c3827d6ffd37ae4a90903e1e9454e04d99a50",
+  "adapted_ScalarNaN_sha256": "0cd9b807e078978007478dd3d76ab07e24c06ce6bb53fa8d2115faa52764b692",
+  "exported_types": {
+    "Submission.add": {
+      "type_unchanged": true,
+      "sha256": "68c5847c664247f7f4cdd1031c7dcb4da6ace340dc6a1defb0c0ebd716a85d19"
+    },
+    "Submission.add_spec": {
+      "type_unchanged": true,
+      "sha256": "11e13bfd92cce0a64c9874359842a0f0c5e7d95834726019b7be673f6d4076e4"
+    },
+    "Submission.mul": {
+      "type_unchanged": true,
+      "sha256": "79df20178454ee37145532d4d58c95a48252d5408eedba3a89bd01e57dcdff49"
+    },
+    "Submission.mul_spec": {
+      "type_unchanged": true,
+      "sha256": "837c7c2400a3da94f34eaa5eb10ac9f00f2fac6b5baaed24edfaefb3a5493d47"
+    },
+    "Submission.sum": {
+      "type_unchanged": true,
+      "sha256": "4fd45f4adfee44aa276799a678198b06d4659a6ab592a3ae0b45fa609725ff09"
+    },
+    "Submission.sum_spec": {
+      "type_unchanged": true,
+      "sha256": "ca3d3baa0fe585a2df3ae5a428b31f9ddce0133e881e3ca62ebb69e433b5b462"
+    },
+    "Submission.bmm": {
+      "type_unchanged": true,
+      "sha256": "253976d545de241ebfaf92c847e76fb344082fb8c2c904a095730f4329bf79aa"
+    },
+    "Submission.bmm_spec": {
+      "type_unchanged": true,
+      "sha256": "c3c17372bf2e54cdbec76aac450759b9a07ce2317505f0250917fbd84ceb6d35"
+    }
+  },
+  "entire_tail_from_original_mul_dispatcher_unchanged": true,
+  "static_original_policy": "PASS",
+  "declaration_inventory": "PASS_STATIC_ONLY",
+  "removed_declarations": [
+    "Submission.TunedAdd.Fam",
+    "Submission.TunedAdd.Fmt",
+    "Submission.TunedAdd.Plan",
+    "Submission.TunedAdd.add",
+    "Submission.TunedAdd.add_eq_word",
+    "Submission.TunedAdd.add_spec",
+    "Submission.TunedAdd.core",
+    "Submission.TunedAdd.dec",
+    "Submission.TunedAdd.dec_eq",
+    "Submission.TunedAdd.dec_ofBits",
+    "Submission.TunedAdd.dec_word",
+    "Submission.TunedAdd.expField_toNat",
+    "Submission.TunedAdd.fastLog2",
+    "Submission.TunedAdd.fastLog2_eq",
+    "Submission.TunedAdd.finiteMantissa_eq_zero",
+    "Submission.TunedAdd.fracField_toNat",
+    "Submission.TunedAdd.fracW",
+    "Submission.TunedAdd.fracW_eq",
+    "Submission.TunedAdd.impl_eq",
+    "Submission.TunedAdd.log2_lt_64",
+    "Submission.TunedAdd.log2_lt_two",
+    "Submission.TunedAdd.log2_shift",
+    "Submission.TunedAdd.mkW",
+    "Submission.TunedAdd.mkW_ofNat",
+    "Submission.TunedAdd.ofBits",
+    "Submission.TunedAdd.roundP",
+    "Submission.TunedAdd.roundP_eq",
+    "Submission.TunedAdd.rse",
+    "Submission.TunedAdd.rseAny",
+    "Submission.TunedAdd.rseAny_eq",
+    "Submission.TunedAdd.sp1",
+    "Submission.TunedAdd.sp1_eq",
+    "Submission.TunedAdd.sp1_iff",
+    "Submission.TunedAdd.special",
+    "Submission.TunedAdd.sr",
+    "Submission.TunedAdd.step",
+    "Submission.TunedAdd.sx",
+    "Submission.TunedAdd.toUInt32_eq",
+    "Submission.TunedAdd.toUInt32_ofUInt32",
+    "Submission.TunedAdd.word32"
+  ],
+  "new_declarations": [
+    "Submission.DWordNaN.M",
+    "Submission.DWordNaN.quietWord_eq",
+    "Submission.DWordNaN.quietWord_eq_snan",
+    "Submission.DWordNaN.rawChoose",
+    "Submission.DWordNaN.rawChoose_eq",
+    "Submission.DWordNaN.rawChoose_nonfinite",
+    "Submission.DWordNaN.rawNaN",
+    "Submission.DWordNaN.rawNaN_eq",
+    "Submission.DWordNaN.rawNaN_exp",
+    "Submission.DWordNaN.rawSNaN",
+    "Submission.DWordNaN.rawSNaN_eq",
+    "Submission.DWordNaN.selected_add",
+    "Submission.DWordNaN.selected_model_add",
+    "Submission.DWordNaN.selected_model_mul",
+    "Submission.DWordNaN.selected_mul",
+    "Submission.DWordNaN.specialDecode",
+    "Submission.ScalarNaN.add",
+    "Submission.ScalarNaN.add_spec",
+    "Submission.ScalarNaN.mul",
+    "Submission.ScalarNaN.mul_spec"
+  ],
+  "scope": "Static exact source/inverse/capacity/type/policy checks only; no Lean, gate or performance result."
+}

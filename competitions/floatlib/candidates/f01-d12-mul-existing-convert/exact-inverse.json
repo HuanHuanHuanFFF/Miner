@@ -1,0 +1,44 @@
+{
+  "base_sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+  "candidate_sha256": "59de0e17223abebdd802bba98347ad8a4a7d6e90bfdca5ffd94bed3ad7005ce4",
+  "candidate_bytes": 254901,
+  "headroom_bytes": 1099,
+  "byte_interval_in_parent": [
+    140079,
+    140733
+  ],
+  "before": "@[inline] def nativeMul (x y : Binary32) : Binary32 :=\n  let result := ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y\n  if hn : R7W04.nonNaN result = true then ExecFloat.Binary.ofFloat32 result\n  else FastMul.mul x y\n\ntheorem nativeMul_spec : ∀ x y : Binary32, nativeMul x y = ExecFloat.Spec.mul x y := by\n  intro x y\n  unfold nativeMul\n  dsimp only\n  split\n  · rename_i hn\n    have hi := NotNaNProbe.mul_inputs _ _ ((R7W04.nonNaN_eq_true_iff _).mp hn)\n    rw [R7Native.ofFloat32Mul _ _ hi.1 hi.2,\n      NotNaNProbe.roundtrip x hi.1, NotNaNProbe.roundtrip y hi.2]\n    exact ExecFloat.Proof.mul_eq_spec x y\n  · exact FastMul.mul_spec x y\n",
+  "after": "@[inline] def nativeMul (x y : Binary32) : Binary32 :=\n  let result := R2W01b.convert x.raw.1 * R2W01b.convert y.raw.1\n  if hn : R7W04.nonNaN result = true then ExecFloat.Binary.ofFloat32 result\n  else FastMul.mul x y\n\ntheorem nativeMul_spec : ∀ x y : Binary32, nativeMul x y = ExecFloat.Spec.mul x y := by\n  intro x y\n  unfold nativeMul\n  dsimp only\n  split\n  · rename_i hn\n    rw [R2W01c.convert_eq, R2W01c.convert_eq] at hn ⊢\n    change R7W04.nonNaN (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y) = true at hn\n    have hi := NotNaNProbe.mul_inputs _ _ ((R7W04.nonNaN_eq_true_iff _).mp hn)\n    change ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y) = _\n    rw [R7Native.ofFloat32Mul _ _ hi.1 hi.2,\n      NotNaNProbe.roundtrip x hi.1, NotNaNProbe.roundtrip y hi.2]\n    exact ExecFloat.Proof.mul_eq_spec x y\n  · exact FastMul.mul_spec x y\n",
+  "before_sha256": "2a7243aa520a40cf98e7c3d0a53f3aa321e8180dfbd88c197f27979bdb3b0777",
+  "after_sha256": "52e03b5afbee753828c250144e923b43983fdf2bb761324419549520fd4b8f09",
+  "inverse_parent_exact": true,
+  "inverse_parent_sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+  "all_other_parent_bytes_unchanged": true,
+  "declaration_inventory_unchanged_unique": true,
+  "public_types": {
+    "Submission.add": "TYPE_UNCHANGED",
+    "Submission.add_spec": "TYPE_UNCHANGED",
+    "Submission.mul": "TYPE_UNCHANGED",
+    "Submission.mul_spec": "TYPE_UNCHANGED",
+    "Submission.sum": "TYPE_UNCHANGED",
+    "Submission.sum_spec": "TYPE_UNCHANGED",
+    "Submission.bmm": "TYPE_UNCHANGED",
+    "Submission.bmm_spec": "TYPE_UNCHANGED"
+  },
+  "runtime_substitution_count": 2,
+  "new_runtime_guards": 0,
+  "old_negative": {
+    "candidate": "f01-d4-scalar-decode",
+    "sha256": "a7dca716f0076511875209b043f761559235a74b5729227916360e4d9373e7e9",
+    "run": 39746211363,
+    "mul_normalized_ratio": 1.037478064,
+    "near_one": 0.915636,
+    "spread": 1.046081,
+    "tiny": 1.061716
+  },
+  "new_condition": "OldR4 scalar mul had no LowScale predispatch. Current6c ex+ey<128 LowScale excludes old tiny input pairs (ex55..65,ey50..60,sums105..125) from modified nativeMul. Current native-result guard is also retained instead of old finite-input guard. This is a controlled revisit, not a new decoder.",
+  "actual_machine_target": "Current6c actual public MainFull lam3 native branch has two of_bits foreign relocations and one float spill. When each existing converter takes its numeric branch, their removal is testable; foreign/spill removal and gain are NOT_ASSUMED.",
+  "proof": "Existing all-input R2W01c.convert_eq rewrites result guard and output before the original native-mul proof. Four full specs still need original gate acceptance.",
+  "acceptance": "NOT_RUN",
+  "performance": "UNKNOWN"
+}

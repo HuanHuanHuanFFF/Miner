@@ -1,0 +1,73 @@
+{
+  "candidate": "f01-d12-scalar-cold-nan-select",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "b15dd4116f79ccdbb1ef6ffd203f33bfe70abebcf9eb4b3146e21a3a20461325",
+  "candidate_bytes": 247434,
+  "created_at_utc": "2026-10-24T06:08:43.280620+00:00",
+  "parent": "f01-d11-bmm-combined-classifier",
+  "parent_sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+  "asset": "f01-d7-scalar-nan-select",
+  "asset_sha256": "4a30c99f8230aae6d1b0cd238d1a6b1c9ac0aac0c448ca67d3005d3a6d00d528",
+  "mechanism": "Reuse existing4a30 rawChoose/selected_add/selected_mul only after current native-result NaN guard. None keeps certified add/mul fallbacks. Remove isolated TunedAdd and use official ExecFloat.add for add none capacity; preserve current numeric/native finite expressions and complete LowScale/mul/sum/BMM tail.",
+  "new_mechanism": false,
+  "decision_evidence": {
+    "run": 40067286343,
+    "source_commit": "c2d92ffb",
+    "MainFull_c_sha256": "9e8d7b111ac7a28b5497c6d3fc0b1e30cca28eb26511d3c1106609bb96873621",
+    "MainFull_object_sha256": "e1685ee1b3766c4956ab639928f83f63c7ba4848394aaa4e469254387eddee41"
+  },
+  "proof_route": "Exact old selected-word theorems; rawChoose=some supplies its own premise. None uses ExecFloat.Proof.add_eq_spec or FastMul.mul_spec. No result-NaN implies raw-exp255 assumption.",
+  "checks": {
+    "inverse_parent_exact": true,
+    "exported_types": {
+      "Submission.add": {
+        "type_unchanged": true,
+        "sha256": "68c5847c664247f7f4cdd1031c7dcb4da6ace340dc6a1defb0c0ebd716a85d19"
+      },
+      "Submission.add_spec": {
+        "type_unchanged": true,
+        "sha256": "11e13bfd92cce0a64c9874359842a0f0c5e7d95834726019b7be673f6d4076e4"
+      },
+      "Submission.mul": {
+        "type_unchanged": true,
+        "sha256": "79df20178454ee37145532d4d58c95a48252d5408eedba3a89bd01e57dcdff49"
+      },
+      "Submission.mul_spec": {
+        "type_unchanged": true,
+        "sha256": "837c7c2400a3da94f34eaa5eb10ac9f00f2fac6b5baaed24edfaefb3a5493d47"
+      },
+      "Submission.sum": {
+        "type_unchanged": true,
+        "sha256": "4fd45f4adfee44aa276799a678198b06d4659a6ab592a3ae0b45fa609725ff09"
+      },
+      "Submission.sum_spec": {
+        "type_unchanged": true,
+        "sha256": "ca3d3baa0fe585a2df3ae5a428b31f9ddce0133e881e3ca62ebb69e433b5b462"
+      },
+      "Submission.bmm": {
+        "type_unchanged": true,
+        "sha256": "253976d545de241ebfaf92c847e76fb344082fb8c2c904a095730f4329bf79aa"
+      },
+      "Submission.bmm_spec": {
+        "type_unchanged": true,
+        "sha256": "c3c17372bf2e54cdbec76aac450759b9a07ce2317505f0250917fbd84ceb6d35"
+      }
+    },
+    "entire_tail_from_original_mul_dispatcher_unchanged": true,
+    "static_original_policy": "PASS",
+    "declaration_inventory": "PASS_STATIC_ONLY"
+  },
+  "validation_mode": "statement first, then original full gate",
+  "proof_status": "NOT_RUN_EXACT_INTEGRATION",
+  "leanchecker": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "checksum": "NOT_RUN",
+  "full_gate": "NOT_RUN",
+  "codegen": "NOT_RUN_EXACT_CANDIDATE",
+  "performance": "UNKNOWN",
+  "state": "READY_FOR_STATEMENT",
+  "attribution": "All existing parent legal/author notices retained outside exact isolated TunedAdd namespace. Exact old Word NaN selection notice and DWordNaN block retained. FloatLib Team MIT public raw/model source and prior4a30 glue are reused, not a new invention.",
+  "formal_submission": "NOT_SUBMITTED",
+  "ci_owner": "Root",
+  "build_script_sha256": "fd25b2bf56468f67dba02c13c3071920eb574c213b21e337a25ce6dc79f34a33"
+}

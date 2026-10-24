@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "review_id": "R12-CAPTURE-WIRING-REVIEW-20261024",
+  "reviewed_at_utc": "2026-10-24T05:56:05Z",
+  "status": "REVIEW_COMPLETE_WITH_FAIL_CLOSED_GAPS",
+  "scope": "Read-only audit of shared D7 capture-codegen wrapper, R12 capture-mainfull, exact fd17 legacy module, CI plan/freeze identities, existing test logs, and 1224002 manifest metadata sidecar.",
+  "no_mutations": {
+    "files_written": [
+      "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/review-capture-wiring.md",
+      "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/review-capture-wiring.json"
+    ],
+    "tests_run_by_reviewer": false,
+    "ci_dispatched_by_reviewer": false,
+    "gate_run_by_reviewer": false,
+    "shared_status_changed_by_reviewer": false
+  },
+  "active_runs_at_review": [
+    {
+      "seed": 1224001,
+      "run": 40067286343,
+      "source_commit": "c2d92ffb0a92888a39388145a41d1f8def38071c",
+      "status": "DISPATCH_IDENTIFIED_WAITING_TERMINAL_COLLECTION",
+      "role": "DISCOVERY",
+      "candidate_order": ["f01-r8-combined-result-guard", "f01-d11-bmm-combined-classifier"],
+      "capture_codegen": ["f01-d11-bmm-combined-classifier"],
+      "capture_target_is_last_candidate": true,
+      "run_artifact_locally_present": false,
+      "plan_sha256": "c01a86856c16b23edf3aa9711f31c8f256690a2de17031842bd7ed25ae5a5077",
+      "freeze_request_sha256_matches_plan": true,
+      "execution_source_hashes_match_freeze": true
+    },
+    {
+      "seed": 1224002,
+      "run": 40067469469,
+      "source_commit": "5da1dc3fe0c978c249c9d989c3933a91c893ac6e",
+      "status": "TERMINAL_COLLECTED_SUCCESS",
+      "role": "STATEMENT_DIAGNOSTIC",
+      "candidate": "f01-r12-wide4-typed-within",
+      "kernel_sha256": "22ea9e2684466e039c094e6a231847dbb44ffa8eb08e68b77fb3fc0ea18e5ac7",
+      "full_gate": false,
+      "statement_pass": true,
+      "stage": "statement",
+      "exit_code": 0,
+      "interpretation": "Statement-only diagnostic; no full-gate proof or performance result. Manifest EOL receipt is separate metadata provenance."
+    }
+  ],
+  "wiring_assessment": {
+    "path": [
+      "public-suite.py calls shared capture-codegen.run_gate only for capture_codegen=true full-gate rows",
+      "shared capture-codegen selects R12 helper from frozen suite-plan.r12_mainfull_capture after checking round, row flag, source digest, helper digest and legacy digest",
+      "R12 helper verifies fd17 legacy digest, replaces only snapshot/disassembly callbacks, then delegates to the unchanged legacy run_gate API"
+    ],
+    "single_execution": {
+      "valid_setup": "Directly delegates to one legacy run_gate; no second child launch",
+      "pre_delegate_setup_failure_with_config": "Runs original legacy path once, marks R12 capture UNKNOWN, no second gate",
+      "after_delegate_exception_or_timeout": "Exception propagates; no fallback/replay",
+      "original_argv_cwd_env_log_timeout_kernel": "Passed through unchanged",
+      "raw_log_and_returncode": "Legacy tee retains raw output; CompletedProcess carries original argv and child returncode; TimeoutExpired cleanup is retained",
+      "caveat": "Bounded in-process copy may affect the timed run; the plan flag makes it diagnostic, not clean D"
+    },
+    "actual_source_object_binding": {
+      "candidate_kernel": "R12 helper copies lean/work/Submission.lean and requires its SHA to equal requested Kernel before and after snapshot",
+      "mainfull_origin": "Only .sandbox/layer/upper; no shared-cache fallback for MainFull",
+      "captured_mainfull": "C source, trace and ELF object are required; original path, build origin, bytes and SHA are recorded",
+      "submission": "C source, trace and ELF object are also required",
+      "benchsuite": "Upper output is preferred; shared lean/.lake/build fallback is explicitly labeled if upper has none",
+      "postprocess": "nm/objdump run after original gate exit on private object copies",
+      "limit": "Raw ELF is removed after postprocess and final linked benchFull identity remains UNKNOWN; evidence binds captured object SHA/tool output, not proof that the object is the one used by timed final binary"
+    },
+    "captured_target": {
+      "requested_candidate": "f01-d11-bmm-combined-classifier",
+      "in_plan_last_candidate": true,
+      "enforced_as_last_candidate_by_wrapper": false
+    }
+  },
+  "findings": [
+    {
+      "priority": "P2",
+      "finding": "R12 request may silently fall through to legacy capture when GITHUB_WORKSPACE is absent or the target candidate is omitted from r12_mainfull_capture. The wrapper only marks setup UNKNOWN when config was already assigned. capture_codegen remains true, so this cannot qualify as clean D, but generic CAPTURED can be mistaken for successful MainFull capture.",
+      "observed_current_plan": "1224001 contains GITHUB_WORKSPACE-backed CI wiring, a valid config, and 6c2d as last flagged candidate; no current failure observed.",
+      "recommendation": "When a candidate row is capture_codegen=true, require a matching R12 config; otherwise run the original gate once and record explicit r12_mainfull_capture=UNKNOWN. Assert capture target equals the last plan candidate."
+    },
+    {
+      "priority": "P2",
+      "finding": "Snapshot/final capture metadata write exceptions append errors but do not consistently downgrade record.state or r12 capture state from CAPTURED. A missing capture-record can therefore leave a successful-looking in-memory capture status with no metadata path/hash.",
+      "observed_current_plan": "No metadata-write failure was observed in a real run; 1224001 has not yet been collected.",
+      "recommendation": "Any required snapshot/capture-record persistence failure should set the MainFull capture state to UNKNOWN in the returned record and CI summary. Keep the original gate log, exit code and verdict untouched; never retry the gate."
+    },
+    {
+      "priority": "P2",
+      "finding": "The R12 helper correctly records final_link_identity=UNKNOWN and removes raw object copies after analysis. This bounds artifact size but prevents independent offline replay of object inspection and does not establish that the captured object was linked into the timed binary.",
+      "recommendation": "Retain this scope boundary in summaries; do not claim measured-binary identity or runtime execution from C/object/trace hashes alone."
+    },
+    {
+      "priority": "P2",
+      "finding": "Future canonicalize_manifest receipts are saved under metadata-eol-receipts but the current prepare-plan code does not add their path/hash to generated plan/freeze files.",
+      "recommendation": "Bind the original receipt path/SHA plus original byte SHA/length and canonical Git blob SHA into the generated freeze before dispatch; continue using canonical manifest and exact Kernel bytes as CI inputs."
+    }
+  ],
+  "existing_test_evidence_read_only": {
+    "shared-capture-selftest": {"state":"PASS", "scope":"Legacy/fake-ELF selftest; no actual Lean gate or LLVM run", "sha256":"b0fad01a04bacc6185c58e25b4f262fe04737159e4ba08db78bb55a6e827aac9"},
+    "mainfull-observer-tests": {"state":"PASS", "cases":4, "actual_Lean_ELF_gate":"NOT_RUN", "sha256":"fb903b5e0f7f9c1ade6a00ac67c7e2cff7355223b1c2dc3d8388de6cda92fa0f"},
+    "mainfull-observer-d15-tests": {"state":"PASS", "cases":5, "actual_Lean_ELF_gate":"NOT_RUN", "sha256":"456650559168539f8f102a3951137812d8a8ba8b9d2179cb4dabff6ff62a92b2"},
+    "dispatch-tests-v2": {"tests":4, "result":"OK", "sha256":"c1926dd9d71684cb44f736a340fe75913241a44fbf419345dd22fe345c78986e"},
+    "atomic-tests": {"tests":3, "result":"OK", "sha256":"41303b4e6f8e453bec28da768393fcfe604adcd2555163220110b7e3c02a9df6"},
+    "dispatch-tests-original": {"tests":4, "result":"FAILED (errors=4)", "cause":"Windows sandbox Temp path FileNotFoundError/PermissionError", "sha256":"4b788ff861b0ab880b09b487362fca5b590e9878c08f3e6cc7f4a43561c3726a"}
+  },
+  "manifest_sidecar_check": {
+    "sidecar": "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/freeze-1224002-git-metadata.json",
+    "sidecar_sha256": "fe6a1cca5844f6c07c4c2d4971dbe1ae83ccfff074e80daae658d380e17a5407",
+    "original_base64_decoded_bytes": 1663,
+    "original_sha256": "c33f8a89c899d1f8df9f34823ab5212aa6b5b5cad4231dcf0212edfa03a5f1ad",
+    "commit_blob_bytes": 1635,
+    "commit_blob_sha256": "77134a3ee329459e769d979f97460ea2a451f2b372e5dcac8d8b227d7f7c033e",
+    "current_committed_kernel_sha256": "22ea9e2684466e039c094e6a231847dbb44ffa8eb08e68b77fb3fc0ea18e5ac7",
+    "original_and_git_json_semantically_equal": true,
+    "kernel_matches_frozen_plan": true,
+    "original_freeze_modified": false,
+    "interpretation": "CRLF-to-LF manifest metadata normalization only; not a Lean result. Raw manifest bytes remain recoverable from sidecar."
+  },
+  "bound_files": {
+    "competitions/floatlib/candidates/f01-d7-research/capture-codegen.py": {"bytes":58755,"sha256":"926e0e72695156c79c56612a20fe6ed015a2ea4a8373d8d9fc9ac5f37c12d90d"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/capture-mainfull.py": {"bytes":13243,"sha256":"d15aa6daf320e779c1e3bae1415a4c05ebc9af234ba3c0d230060606058b1ef7"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/scalar-capture-legacy-fd17.py": {"bytes":55630,"sha256":"fd17f35a4ef1bc1b1df2afe5fcfe39691d88e7e605968acbe3c38df09df9078b"},
+    "competitions/floatlib/candidates/f01-d7-research/public-suite.py": {"bytes":11220,"sha256":"86084d93c52022f4f4a5cfb7969e2b4a035b9a4a4f1f8c6c7e74bd412eafca24"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/plan-1224001.json": {"bytes":2002,"sha256":"c01a86856c16b23edf3aa9711f31c8f256690a2de17031842bd7ed25ae5a5077"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/freeze-1224001.json": {"bytes":4563,"sha256":"635045fb7727c5b2dc7d2a6373b6b73eb853b586a3e16a78715b15ce030cd1ef"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/plan-1224002.json": {"bytes":1339,"sha256":"bbf5b0baee96a778babeceeb3f0c8c9b44689728c5663631dd1a627e6f664c12"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/freeze-1224002.json": {"bytes":3523,"sha256":"dbeef6491e2330af5acdeb3032e48f3dbfcc1409d94a245d7e0c12c04fd9eaac"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/freeze-1224002-git-metadata.json": {"bytes":3150,"sha256":"fe6a1cca5844f6c07c4c2d4971dbe1ae83ccfff074e80daae658d380e17a5407"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/prepare-plan.py": {"bytes":10433,"sha256":"a3f49ee2192e6f3cc36148cf9286b88419be284ed25f5e869e5184f8758ecc8c"},
+    "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/test_capture_dispatch.py": {"bytes":2977,"sha256":"3cd9f365b58b20ef8480613105424279a3967c992e9806cb0bbe900ced3950cb"}
+  }
+}

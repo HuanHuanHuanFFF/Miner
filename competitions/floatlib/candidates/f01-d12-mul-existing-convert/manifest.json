@@ -1,0 +1,50 @@
+{
+  "candidate": "f01-d12-mul-existing-convert",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "59de0e17223abebdd802bba98347ad8a4a7d6e90bfdca5ffd94bed3ad7005ce4",
+  "candidate_bytes": 254901,
+  "created_at_utc": "2026-10-24T06:12:50.317229+00:00",
+  "parent": "f01-d11-bmm-combined-classifier",
+  "parent_sha256": "6c2d394dd34e8854d0d44d5d6605c194ecb27c152a1768d236481fc03fa4277d",
+  "mechanism": "Only replace nativeMul two toFloat32 inputs with existing proven per-input R2W01b.convert. No joint guard/new band; add,TunedAdd,LowScale,NaN-result guard/FastMul fallback and all tensor bytes retained.",
+  "new_mechanism": false,
+  "history": {
+    "candidate": "f01-d4-scalar-decode",
+    "sha256": "a7dca716f0076511875209b043f761559235a74b5729227916360e4d9373e7e9",
+    "run": 39746211363,
+    "mul_normalized_ratio": 1.037478064,
+    "near_one": 0.915636,
+    "spread": 1.046081,
+    "tiny": 1.061716
+  },
+  "revisit_condition": "OldR4 scalar mul had no LowScale predispatch. Current6c ex+ey<128 LowScale excludes old tiny input pairs (ex55..65,ey50..60,sums105..125) from modified nativeMul. Current native-result guard is also retained instead of old finite-input guard. This is a controlled revisit, not a new decoder.",
+  "checks": {
+    "inverse_parent_exact": true,
+    "all_other_parent_bytes_unchanged": true,
+    "declaration_inventory_unchanged_unique": true,
+    "public_types": {
+      "Submission.add": "TYPE_UNCHANGED",
+      "Submission.add_spec": "TYPE_UNCHANGED",
+      "Submission.mul": "TYPE_UNCHANGED",
+      "Submission.mul_spec": "TYPE_UNCHANGED",
+      "Submission.sum": "TYPE_UNCHANGED",
+      "Submission.sum_spec": "TYPE_UNCHANGED",
+      "Submission.bmm": "TYPE_UNCHANGED",
+      "Submission.bmm_spec": "TYPE_UNCHANGED"
+    }
+  },
+  "proof_route": "Existing all-input R2W01c.convert_eq rewrites result guard and output before the original native-mul proof. Four full specs still need original gate acceptance.",
+  "state": "READY_FOR_STATEMENT",
+  "proof_status": "NOT_RUN_EXACT_INTEGRATION",
+  "validation_mode": "statement first, then original full gate",
+  "leanchecker": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "checksum": "NOT_RUN",
+  "full_gate": "NOT_RUN",
+  "codegen": "NOT_RUN_EXACT_CANDIDATE",
+  "performance": "UNKNOWN",
+  "formal_submission": "NOT_SUBMITTED",
+  "ci_owner": "Root",
+  "build_script_sha256": "0d7af35aa0d042da25c9b7d3d5bf9d46f26845dd82eda83153eb9e44fa9a1b5a",
+  "attribution": "All parent notices/source bytes outside nativeMul and its proof preserved. Existing converter/proof is reused; no source or historical negative claim is renamed as new."
+}
