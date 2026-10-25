@@ -1,0 +1,4384 @@
+{
+  "at_utc": "2026-10-25T01:04:08.766219+00:00",
+  "state": "STATIC_LOCAL_NAME_REACHABILITY_ONLY",
+  "source": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-combined-add-mul-dead-helper-pruned-draft1.lean",
+  "source_sha256": "0ce5e17c640e4bd4119273a01615b5e1903410f8ab11a40f9933194a0f018154",
+  "source_bytes": 267217,
+  "result": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-combined-add-mul-graph-pruned-draft1.lean",
+  "result_sha256": "423f64592f998469a8d06ab0c749cddae42e7352d5f701e61a82d2428d11b8a4",
+  "result_bytes": 252586,
+  "bytes_saved": 14631,
+  "over_limit": 0,
+  "wall_seconds": 0.14120489999186248,
+  "declaration_count": 568,
+  "root_count": 25,
+  "live_count": 527,
+  "roots": [
+    "R7W01.quietGuard_nan",
+    "R7W01.quietMask_getLsbD",
+    "R7W02.exec_toModel_eq_rawModel",
+    "R7W02.fromRaw_raw",
+    "R7W02.fromRaw_toModel",
+    "R7W04.unpacked_self_beq_eq_not_isNaN",
+    "Submission.FastMul.mul",
+    "Submission.Packed10.F10",
+    "Submission.Packed10.vector_get_ofFn",
+    "Submission.R14DIntegerNormal.carryWord_nat",
+    "Submission.R14ExponentShift.core_word",
+    "Submission.R14ExponentShift.ex_nat",
+    "Submission.add",
+    "Submission.add_eq",
+    "Submission.add_spec",
+    "Submission.bmm",
+    "Submission.bmm_spec",
+    "Submission.mul",
+    "Submission.mul_eq",
+    "Submission.mul_spec",
+    "Submission.referenceBmm",
+    "Submission.referenceBmm_spec",
+    "Submission.referenceSum",
+    "Submission.sum",
+    "Submission.sum_spec"
+  ],
+  "edges": {
+    "R7W04.nonNaN": [
+      "R7W04.nonNaN"
+    ],
+    "R7W04.unpacked_self_beq_eq_not_isNaN": [
+      "R2W01b.mantissa",
+      "R7W04.unpacked_self_beq_eq_not_isNaN",
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "R7W04.model_self_beq_eq_not_isNaN": [
+      "R7W04.model_self_beq_eq_not_isNaN",
+      "R7W04.unpacked_self_beq_eq_not_isNaN"
+    ],
+    "R7W04.self_beq_eq_not_isNaN": [
+      "R7W04.model_self_beq_eq_not_isNaN",
+      "R7W04.self_beq_eq_not_isNaN"
+    ],
+    "R7W04.nonNaN_eq_not_isNaN": [
+      "R7W04.nonNaN",
+      "R7W04.nonNaN_eq_not_isNaN",
+      "R7W04.self_beq_eq_not_isNaN"
+    ],
+    "R7W04.nonNaN_eq_true_iff": [
+      "R7W04.nonNaN",
+      "R7W04.nonNaN_eq_not_isNaN",
+      "R7W04.nonNaN_eq_true_iff"
+    ],
+    "R7W01.F32": [
+      "R7W01.F32"
+    ],
+    "R7W01.M32": [
+      "R7W01.F32",
+      "R7W01.M32"
+    ],
+    "R7W01.bits32": [
+      "R7W01.M32",
+      "R7W01.bits32"
+    ],
+    "R7W01.fromBits32": [
+      "R7W01.F32",
+      "R7W01.M32",
+      "R7W01.fromBits32",
+      "Submission.FastMul.ofBits"
+    ],
+    "R7W01.quietMask_getLsbD": [
+      "R7W01.quietMask_getLsbD"
+    ],
+    "R7W01.set_quietMask": [
+      "R7W01.set_quietMask"
+    ],
+    "R7W01.or_quietMask_eq_self": [
+      "R7W01.or_quietMask_eq_self",
+      "R7W01.quietMask_getLsbD"
+    ],
+    "R7W01.quietNaN32_not_snan": [
+      "R7W01.M32",
+      "R7W01.bits32",
+      "R7W01.fromBits32",
+      "R7W01.quietNaN32_not_snan",
+      "R7W01.set_quietMask"
+    ],
+    "R7W01.quietNaN32_eq_self": [
+      "R7W01.M32",
+      "R7W01.bits32",
+      "R7W01.fromBits32",
+      "R7W01.or_quietMask_eq_self",
+      "R7W01.quietNaN32_eq_self"
+    ],
+    "R7W01.expField32_set_quietBit": [
+      "R7W01.M32",
+      "R7W01.bits32",
+      "R7W01.expField32_set_quietBit",
+      "R7W01.fromBits32"
+    ],
+    "R7W01.fracField32_set_quietBit_ne_zero": [
+      "R7W01.M32",
+      "R7W01.bits32",
+      "R7W01.fracField32_set_quietBit_ne_zero",
+      "R7W01.fromBits32"
+    ],
+    "R7W01.quietNaN32_is_nan": [
+      "R7W01.M32",
+      "R7W01.bits32",
+      "R7W01.expField32_set_quietBit",
+      "R7W01.fracField32_set_quietBit_ne_zero",
+      "R7W01.fromBits32",
+      "R7W01.quietNaN32_is_nan"
+    ],
+    "R7W01.quietNaN32_is_qnan": [
+      "R7W01.M32",
+      "R7W01.quietNaN32_is_nan",
+      "R7W01.quietNaN32_is_qnan",
+      "R7W01.quietNaN32_not_snan"
+    ],
+    "R7W01.zero32_not_snan": [
+      "R7W01.F32",
+      "R7W01.zero32_not_snan",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "R7W01.invalidResult32_not_snan": [
+      "R7W01.F32",
+      "R7W01.invalidResult32_not_snan"
+    ],
+    "R7W01.chooseNaN2_32_not_snan": [
+      "R7W01.M32",
+      "R7W01.chooseNaN2_32_not_snan",
+      "R7W01.quietNaN32_not_snan"
+    ],
+    "R7W01.fields32_not_nan": [
+      "R7W01.F32",
+      "R7W01.fields32_not_nan",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "R7W01.nativeOverflow32_not_nan": [
+      "R7W01.F32",
+      "R7W01.nativeOverflow32_not_nan",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "R7W01.packRoundedSubnormal32_not_nan": [
+      "R7W01.F32",
+      "R7W01.M32",
+      "R7W01.fields32_not_nan",
+      "R7W01.packRoundedSubnormal32_not_nan",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "R7W01.packRoundedNormal32_not_nan": [
+      "R7W01.F32",
+      "R7W01.M32",
+      "R7W01.fields32_not_nan",
+      "R7W01.packRoundedNormal32_not_nan",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "R7W01.roundDyadicGeneral32_not_nan": [
+      "R7W01.F32",
+      "R7W01.nativeOverflow32_not_nan",
+      "R7W01.packRoundedNormal32_not_nan",
+      "R7W01.packRoundedSubnormal32_not_nan",
+      "R7W01.roundDyadicGeneral32_not_nan"
+    ],
+    "R7W01.roundDyadic32_not_nan": [
+      "R7W01.F32",
+      "R7W01.roundDyadic32_not_nan",
+      "R7W01.roundDyadicGeneral32_not_nan"
+    ],
+    "R7W01.roundDyadic32_not_snan": [
+      "R7W01.F32",
+      "R7W01.roundDyadic32_not_nan",
+      "R7W01.roundDyadic32_not_snan"
+    ],
+    "R7W01.nativeOverflow32_not_snan": [
+      "R7W01.F32",
+      "R7W01.nativeOverflow32_not_nan",
+      "R7W01.nativeOverflow32_not_snan",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "R7W01.mul32_not_snan": [
+      "R7W01.M32",
+      "R7W01.chooseNaN2_32_not_snan",
+      "R7W01.invalidResult32_not_snan",
+      "R7W01.mul32_not_snan",
+      "R7W01.nativeOverflow32_not_snan",
+      "R7W01.roundDyadic32_not_snan",
+      "R7W01.zero32_not_snan",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "R7W01.add_absorb_of_not_snan": [
+      "R7W01.M32",
+      "R7W01.add_absorb_of_not_snan",
+      "R7W01.quietNaN32_eq_self",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "R7W01.add_mul_absorb": [
+      "R7W01.M32",
+      "R7W01.add_absorb_of_not_snan",
+      "R7W01.add_mul_absorb",
+      "R7W01.mul32_not_snan",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.add",
+      "Submission.ScalarNaN.mul",
+      "Submission.add",
+      "Submission.mul"
+    ],
+    "R7W01.quietGuard": [
+      "R7W01.M32",
+      "R7W01.quietGuard"
+    ],
+    "R7W01.quietGuard_nan": [
+      "R7W01.M32",
+      "R7W01.quietGuard",
+      "R7W01.quietGuard_nan"
+    ],
+    "R7W01.quietGuard_not_signaling": [
+      "R7W01.M32",
+      "R7W01.quietGuard",
+      "R7W01.quietGuard_not_signaling"
+    ],
+    "R7W01.modelDotFold": [
+      "R7W01.M32",
+      "R7W01.modelDotFold",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.add",
+      "Submission.ScalarNaN.mul",
+      "Submission.add",
+      "Submission.mul"
+    ],
+    "R7W01.modelDotEarly": [
+      "R7W01.M32",
+      "R7W01.modelDotEarly",
+      "R7W01.quietGuard",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.add",
+      "Submission.ScalarNaN.mul",
+      "Submission.add",
+      "Submission.mul"
+    ],
+    "R7W01.exec_toModel_add": [
+      "R7W01.exec_toModel_add",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "R7W01.exec_toModel_mul": [
+      "R7W01.exec_toModel_mul",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "R7W01.exec_add_mul_absorb": [
+      "R7W01.add_mul_absorb",
+      "R7W01.exec_add_mul_absorb",
+      "R7W01.exec_toModel_add",
+      "R7W01.exec_toModel_mul",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.add",
+      "Submission.ScalarNaN.mul",
+      "Submission.add",
+      "Submission.mul"
+    ],
+    "R7W01.execQuietGuard": [
+      "R7W01.execQuietGuard",
+      "R7W01.quietGuard"
+    ],
+    "R7W02.rawSNaN": [
+      "R7W02.rawSNaN"
+    ],
+    "R7W02.quietRaw": [
+      "R7W02.quietRaw"
+    ],
+    "R7W02.mask_split": [
+      "R7W02.mask_split"
+    ],
+    "R7W02.fraction_split": [
+      "R7W02.fraction_split"
+    ],
+    "R7W02.mask_snan_classification": [
+      "R7W02.fraction_split",
+      "R7W02.mask_snan_classification",
+      "R7W02.mask_split"
+    ],
+    "R7W02.rawSNaN_eq_isSNaN": [
+      "R7W02.mask_snan_classification",
+      "R7W02.rawSNaN",
+      "R7W02.rawSNaN_eq_isSNaN"
+    ],
+    "R7W02.quietRaw_eq_quietNaN": [
+      "R7W02.quietRaw",
+      "R7W02.quietRaw_eq_quietNaN",
+      "R7W02.rawSNaN",
+      "R7W02.rawSNaN_eq_isSNaN",
+      "Submission.FastMul.ofBits"
+    ],
+    "R7W02.quietMask_getLsbD": [
+      "R7W02.quietMask_getLsbD"
+    ],
+    "R7W02.quietRaw_preserves_bit": [
+      "R7W02.quietMask_getLsbD",
+      "R7W02.quietRaw",
+      "R7W02.quietRaw_preserves_bit"
+    ],
+    "R7W02.quietRaw_bit22": [
+      "R7W02.quietRaw",
+      "R7W02.quietRaw_bit22"
+    ],
+    "R7W02.quietRaw_isQNaN": [
+      "R7W02.quietRaw",
+      "R7W02.quietRaw_bit22",
+      "R7W02.quietRaw_isQNaN",
+      "R7W02.rawSNaN",
+      "R7W02.rawSNaN_eq_isSNaN"
+    ],
+    "R7W02.model_add_qnan_left": [
+      "R7W01.quietNaN32_eq_self",
+      "R7W02.model_add_qnan_left",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "R7W02.fromRaw": [
+      "R7W02.fromRaw"
+    ],
+    "R7W02.fromRaw_raw": [
+      "R7W02.fromRaw",
+      "R7W02.fromRaw_raw"
+    ],
+    "R7W02.exec_toModel_eq_rawModel": [
+      "R7W02.exec_toModel_eq_rawModel",
+      "Submission.FastMul.ofBits"
+    ],
+    "R7W02.fromRaw_toModel": [
+      "R7W02.exec_toModel_eq_rawModel",
+      "R7W02.fromRaw",
+      "R7W02.fromRaw_raw",
+      "R7W02.fromRaw_toModel"
+    ],
+    "R7W02.exec_toModel_bits_eq_raw": [
+      "R7W02.exec_toModel_bits_eq_raw",
+      "R7W02.exec_toModel_eq_rawModel"
+    ],
+    "R7W02.exec_toModel_add": [
+      "R7W02.exec_toModel_add",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "R7W02.step": [
+      "R7W02.fromRaw",
+      "R7W02.quietRaw",
+      "R7W02.rawSNaN",
+      "R7W02.step"
+    ],
+    "R7W02.step_eq_add": [
+      "R7W02.exec_toModel_add",
+      "R7W02.exec_toModel_eq_rawModel",
+      "R7W02.fromRaw_toModel",
+      "R7W02.model_add_qnan_left",
+      "R7W02.quietRaw",
+      "R7W02.quietRaw_eq_quietNaN",
+      "R7W02.rawSNaN",
+      "R7W02.rawSNaN_eq_isSNaN",
+      "R7W02.step",
+      "R7W02.step_eq_add",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "R7W02.step_isQNaN": [
+      "R7W02.fromRaw_toModel",
+      "R7W02.quietRaw_isQNaN",
+      "R7W02.rawSNaN",
+      "R7W02.step",
+      "R7W02.step_isQNaN"
+    ],
+    "R2W01b.magnitude": [
+      "R2W01b.magnitude"
+    ],
+    "R2W01b.fastOK": [
+      "R2W01b.fastOK",
+      "R2W01b.magnitude"
+    ],
+    "R2W01b.NormalBand": [
+      "R2W01b.NormalBand",
+      "R2W01b.magnitude"
+    ],
+    "R2W01b.wrap_gate_iff": [
+      "R2W01b.wrap_gate_iff"
+    ],
+    "R2W01b.fastOK_iff": [
+      "R2W01b.NormalBand",
+      "R2W01b.fastOK",
+      "R2W01b.fastOK_iff",
+      "R2W01b.magnitude",
+      "R2W01b.wrap_gate_iff"
+    ],
+    "R2W01b.magnitude_toNat": [
+      "R2W01b.magnitude",
+      "R2W01b.magnitude_toNat"
+    ],
+    "R2W01b.magnitude_zero_iff": [
+      "R2W01b.magnitude",
+      "R2W01b.magnitude_toNat",
+      "R2W01b.magnitude_zero_iff"
+    ],
+    "R2W01b.tableIndex": [
+      "R2W01b.tableIndex"
+    ],
+    "R2W01b.mantissa": [
+      "R2W01b.mantissa"
+    ],
+    "R2W01b.scaleBits": [
+      "R2W01b.scaleBits"
+    ],
+    "R2W01b.tableIndex_toNat_lt": [
+      "R2W01b.tableIndex",
+      "R2W01b.tableIndex_toNat_lt"
+    ],
+    "R2W01b.scaleTable": [
+      "R2W01b.scaleBits",
+      "R2W01b.scaleTable",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.scaleTable_size": [
+      "R2W01b.scaleTable",
+      "R2W01b.scaleTable_size"
+    ],
+    "R2W01b.scaleTable_entry": [
+      "R2W01b.scaleBits",
+      "R2W01b.scaleTable",
+      "R2W01b.scaleTable_entry",
+      "R2W01b.scaleTable_size",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.scaleAt": [
+      "R2W01b.scaleAt",
+      "R2W01b.scaleTable",
+      "R2W01b.scaleTable_size",
+      "R2W01b.tableIndex",
+      "R2W01b.tableIndex_toNat_lt"
+    ],
+    "R2W01b.scaleAt_eq": [
+      "R2W01b.scaleAt",
+      "R2W01b.scaleAt_eq",
+      "R2W01b.scaleBits",
+      "R2W01b.scaleTable",
+      "R2W01b.tableIndex",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.zero_fields": [
+      "R2W01b.magnitude",
+      "R2W01b.magnitude_zero_iff",
+      "R2W01b.mantissa",
+      "R2W01b.scaleBits",
+      "R2W01b.tableIndex",
+      "R2W01b.zero_fields"
+    ],
+    "R2W01b.scaleAt_positive_zero": [
+      "R2W01b.scaleAt",
+      "R2W01b.scaleAt_eq",
+      "R2W01b.scaleAt_positive_zero",
+      "R2W01b.scaleBits",
+      "R2W01b.tableIndex",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.scaleAt_negative_zero": [
+      "R2W01b.scaleAt",
+      "R2W01b.scaleAt_eq",
+      "R2W01b.scaleAt_negative_zero",
+      "R2W01b.scaleBits",
+      "R2W01b.tableIndex",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.tableProduct": [
+      "R2W01b.mantissa",
+      "R2W01b.scaleAt",
+      "R2W01b.tableProduct"
+    ],
+    "R2W01b.tableProduct_positive_zero": [
+      "R2W01b.scaleAt_positive_zero",
+      "R2W01b.tableProduct",
+      "R2W01b.tableProduct_positive_zero",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.tableProduct_negative_zero": [
+      "R2W01b.scaleAt_negative_zero",
+      "R2W01b.tableProduct",
+      "R2W01b.tableProduct_negative_zero",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.tableProduct_zero_eq": [
+      "R2W01b.magnitude",
+      "R2W01b.magnitude_zero_iff",
+      "R2W01b.tableProduct",
+      "R2W01b.tableProduct_negative_zero",
+      "R2W01b.tableProduct_positive_zero",
+      "R2W01b.tableProduct_zero_eq",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.tableProduct_of_fastOK": [
+      "R2W01b.NormalBand",
+      "R2W01b.fastOK",
+      "R2W01b.fastOK_iff",
+      "R2W01b.tableProduct",
+      "R2W01b.tableProduct_of_fastOK",
+      "R2W01b.tableProduct_zero_eq",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.convert": [
+      "R2W01b.convert",
+      "R2W01b.fastOK",
+      "R2W01b.tableProduct",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.convert_eq": [
+      "R2W01b.NormalBand",
+      "R2W01b.convert",
+      "R2W01b.convert_eq",
+      "R2W01b.fastOK",
+      "R2W01b.tableProduct",
+      "R2W01b.tableProduct_of_fastOK",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.convert_bits_eq": [
+      "R2W01b.NormalBand",
+      "R2W01b.convert",
+      "R2W01b.convert_bits_eq",
+      "R2W01b.convert_eq",
+      "R2W01b.tableProduct",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01b.replace_decoder": [
+      "R2W01b.NormalBand",
+      "R2W01b.convert",
+      "R2W01b.convert_eq",
+      "R2W01b.replace_decoder",
+      "R2W01b.tableProduct",
+      "Submission.DirectContinuous.core",
+      "Submission.DirectRows.core",
+      "Submission.DirectSmall.core",
+      "Submission.FastMul.core",
+      "Submission.FastMul.ofBits",
+      "Submission.LowScale.core",
+      "Submission.R14DIntegerNormal.core",
+      "Submission.R14ExponentShift.core",
+      "Submission.R14ThinBCache.core",
+      "Submission.R14WordAdd.core",
+      "Submission.RowStream.core"
+    ],
+    "R2W01b.foldl_convert_eq": [
+      "R2W01b.NormalBand",
+      "R2W01b.convert",
+      "R2W01b.convert_eq",
+      "R2W01b.foldl_convert_eq",
+      "R2W01b.tableProduct",
+      "R7W02.step",
+      "Submission.FastMul.ofBits",
+      "Submission.FastMul.step",
+      "Submission.R7SumRepair.step"
+    ],
+    "R2W01c.NativeBridge.le_targetExponent_totalExponent_iff": [
+      "R2W01b.mantissa",
+      "R2W01c.NativeBridge.le_targetExponent_totalExponent_iff",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "R2W01c.NativeBridge.add_le_targetExponent_totalExponent_mul": [
+      "R2W01b.mantissa",
+      "R2W01c.NativeBridge.add_le_targetExponent_totalExponent_mul",
+      "R2W01c.NativeBridge.le_targetExponent_totalExponent_iff",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "R2W01c.NativeBridge.le_targetExponent_totalExponent_of_toModel_eq_finite": [
+      "R2W01b.mantissa",
+      "R2W01c.NativeBridge.le_targetExponent_totalExponent_iff",
+      "R2W01c.NativeBridge.le_targetExponent_totalExponent_of_toModel_eq_finite",
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "R2W01c.NativeBridge.modelMulFinite": [
+      "R2W01b.mantissa",
+      "R2W01c.NativeBridge.add_le_targetExponent_totalExponent_mul",
+      "R2W01c.NativeBridge.le_targetExponent_totalExponent_of_toModel_eq_finite",
+      "R2W01c.NativeBridge.modelMulFinite",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14NatNormal.mantissa",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "R2W01c.NativeBridge.toModelNativeMul": [
+      "R2W01c.NativeBridge.modelMulFinite",
+      "R2W01c.NativeBridge.toModelNativeMul",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "R2W01c.nativeModel": [
+      "R2W01c.nativeModel"
+    ],
+    "R2W01c.rawModel": [
+      "R2W01c.rawModel"
+    ],
+    "R2W01c.rawModel_eq_native32": [
+      "R2W01c.rawModel",
+      "R2W01c.rawModel_eq_native32"
+    ],
+    "R2W01c.rawModel_eq_ofUInt32": [
+      "R2W01c.rawModel",
+      "R2W01c.rawModel_eq_ofUInt32"
+    ],
+    "R2W01c.modelCanonicalOfFinite": [
+      "R2W01c.modelCanonicalOfFinite"
+    ],
+    "R2W01c.modelCanonical_of_decode": [
+      "R2W01c.modelCanonicalOfFinite",
+      "R2W01c.modelCanonical_of_decode"
+    ],
+    "R2W01c.nativeModel_ofBits_of_decode": [
+      "R2W01c.modelCanonical_of_decode",
+      "R2W01c.nativeModel",
+      "R2W01c.nativeModel_ofBits_of_decode",
+      "R2W01c.rawModel",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01c.nativeModel_ofBits_decode": [
+      "R2W01c.nativeModel",
+      "R2W01c.nativeModel_ofBits_decode",
+      "R2W01c.nativeModel_ofBits_of_decode",
+      "R2W01c.rawModel",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01c.nativeFinite_of_decode": [
+      "R2W01c.nativeFinite_of_decode",
+      "R2W01c.nativeModel"
+    ],
+    "R2W01c.native_eq_of_model_eq": [
+      "R2W01c.nativeModel",
+      "R2W01c.native_eq_of_model_eq"
+    ],
+    "R2W01c.native_mul_eq_of_raw_model_mul_eq": [
+      "R2W01c.NativeBridge.toModelNativeMul",
+      "R2W01c.nativeModel",
+      "R2W01c.native_mul_eq_of_raw_model_mul_eq",
+      "R2W01c.rawModel",
+      "Submission.FastMul.mul",
+      "Submission.FastMul.ofBits",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "R2W01c.native_mul_eq_of_decoded_raw_model_mul_eq": [
+      "R2W01c.nativeFinite_of_decode",
+      "R2W01c.nativeModel",
+      "R2W01c.native_mul_eq_of_decoded_raw_model_mul_eq",
+      "R2W01c.native_mul_eq_of_raw_model_mul_eq",
+      "R2W01c.rawModel",
+      "Submission.FastMul.mul",
+      "Submission.FastMul.ofBits",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "R2W01c.uint32_model_eq_roundDyadic": [
+      "R2W01c.uint32_model_eq_roundDyadic"
+    ],
+    "R2W01c.uint32_model_eq_of_decode": [
+      "R2W01c.uint32_model_eq_of_decode",
+      "R2W01c.uint32_model_eq_roundDyadic"
+    ],
+    "R2W01c.fields32_toDyadic": [
+      "R2W01c.fields32_toDyadic"
+    ],
+    "R2W01c.uint32_mantissa_model_eq_fields": [
+      "R2W01c.fields32_toDyadic",
+      "R2W01c.uint32_mantissa_model_eq_fields",
+      "R2W01c.uint32_model_eq_of_decode"
+    ],
+    "R2W01c.uint32_mantissa_model_decode": [
+      "R2W01c.fields32_toDyadic",
+      "R2W01c.uint32_mantissa_model_decode",
+      "R2W01c.uint32_mantissa_model_eq_fields"
+    ],
+    "R2W01cModel.mul_eq_of_finite_value": [
+      "R2W01cModel.mul_eq_of_finite_value",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "R2W01cModel.dyadic_scale_value": [
+      "R2W01cModel.dyadic_scale_value",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "R2W01cModel.mul_eq_of_scale_decodes": [
+      "R2W01cModel.dyadic_scale_value",
+      "R2W01cModel.mul_eq_of_finite_value",
+      "R2W01cModel.mul_eq_of_scale_decodes",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R14ExponentShift.sign",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "R2W01cModel.binary32_mantissa_scale_mul": [
+      "R2W01cModel.binary32_mantissa_scale_mul",
+      "R2W01cModel.mul_eq_of_scale_decodes",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R14ExponentShift.sign",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "R2W01c.raw32": [
+      "R2W01c.raw32"
+    ],
+    "R2W01c.wordSign": [
+      "R2W01c.wordSign"
+    ],
+    "R2W01c.wordExp": [
+      "R2W01c.wordExp"
+    ],
+    "R2W01c.wordFrac": [
+      "R2W01c.wordFrac"
+    ],
+    "R2W01c.raw32_bits": [
+      "R2W01c.raw32",
+      "R2W01c.raw32_bits"
+    ],
+    "R2W01c.raw32_sign": [
+      "R2W01c.raw32",
+      "R2W01c.raw32_bits",
+      "R2W01c.raw32_sign",
+      "R2W01c.wordSign"
+    ],
+    "R2W01c.raw32_exp": [
+      "R2W01c.raw32",
+      "R2W01c.raw32_bits",
+      "R2W01c.raw32_exp",
+      "R2W01c.wordExp"
+    ],
+    "R2W01c.raw32_frac": [
+      "R2W01c.raw32",
+      "R2W01c.raw32_bits",
+      "R2W01c.raw32_frac",
+      "R2W01c.wordFrac"
+    ],
+    "R2W01c.raw32_eq_fields": [
+      "R2W01c.raw32",
+      "R2W01c.raw32_eq_fields",
+      "R2W01c.raw32_exp",
+      "R2W01c.raw32_frac",
+      "R2W01c.raw32_sign",
+      "R2W01c.wordExp",
+      "R2W01c.wordFrac",
+      "R2W01c.wordSign"
+    ],
+    "R2W01c.wordFrac_lt": [
+      "R2W01c.wordFrac",
+      "R2W01c.wordFrac_lt"
+    ],
+    "R2W01c.mantissa_toNat": [
+      "R2W01b.mantissa",
+      "R2W01c.mantissa_toNat",
+      "R2W01c.wordFrac",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "R2W01c.mantissa_bounds": [
+      "R2W01b.mantissa",
+      "R2W01c.mantissa_bounds",
+      "R2W01c.mantissa_toNat",
+      "R2W01c.wordFrac_lt",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "R2W01c.normal_wordExp_bounds": [
+      "R2W01b.NormalBand",
+      "R2W01b.magnitude_toNat",
+      "R2W01c.normal_wordExp_bounds",
+      "R2W01c.wordExp"
+    ],
+    "R2W01c.tableIndex_nat": [
+      "R2W01b.tableIndex",
+      "R2W01c.tableIndex_nat"
+    ],
+    "R2W01c.tableExp_nat": [
+      "R2W01b.tableIndex",
+      "R2W01c.tableExp_nat",
+      "R2W01c.tableIndex_nat",
+      "R2W01c.wordExp"
+    ],
+    "R2W01c.high_bit_of_lt512": [
+      "R2W01c.high_bit_of_lt512"
+    ],
+    "R2W01c.tableSign_nat": [
+      "R2W01b.tableIndex",
+      "R2W01c.high_bit_of_lt512",
+      "R2W01c.tableIndex_nat",
+      "R2W01c.tableSign_nat"
+    ],
+    "R2W01c.scaleBits_nat": [
+      "R2W01b.NormalBand",
+      "R2W01b.scaleBits",
+      "R2W01b.tableIndex",
+      "R2W01c.normal_wordExp_bounds",
+      "R2W01c.scaleBits_nat",
+      "R2W01c.tableExp_nat",
+      "R2W01c.tableSign_nat",
+      "R2W01c.wordExp"
+    ],
+    "R2W01c.scale_wordSign": [
+      "R2W01b.NormalBand",
+      "R2W01b.scaleBits",
+      "R2W01b.tableIndex",
+      "R2W01c.normal_wordExp_bounds",
+      "R2W01c.scaleBits_nat",
+      "R2W01c.scale_wordSign",
+      "R2W01c.wordSign"
+    ],
+    "R2W01c.scale_wordExp": [
+      "R2W01b.NormalBand",
+      "R2W01b.scaleBits",
+      "R2W01b.tableIndex",
+      "R2W01c.normal_wordExp_bounds",
+      "R2W01c.scaleBits_nat",
+      "R2W01c.scale_wordExp",
+      "R2W01c.wordExp"
+    ],
+    "R2W01c.scale_wordFrac": [
+      "R2W01b.NormalBand",
+      "R2W01b.scaleBits",
+      "R2W01b.tableIndex",
+      "R2W01c.normal_wordExp_bounds",
+      "R2W01c.scaleBits_nat",
+      "R2W01c.scale_wordFrac",
+      "R2W01c.wordFrac"
+    ],
+    "R2W01c.normal_raw32_decode": [
+      "R2W01b.NormalBand",
+      "R2W01b.mantissa",
+      "R2W01c.fields32_toDyadic",
+      "R2W01c.mantissa_toNat",
+      "R2W01c.normal_raw32_decode",
+      "R2W01c.normal_wordExp_bounds",
+      "R2W01c.raw32",
+      "R2W01c.raw32_eq_fields",
+      "R2W01c.wordExp",
+      "R2W01c.wordFrac",
+      "R2W01c.wordFrac_lt",
+      "R2W01c.wordSign",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "R2W01c.scale_raw32_decode": [
+      "R2W01b.NormalBand",
+      "R2W01b.scaleBits",
+      "R2W01b.tableIndex",
+      "R2W01c.fields32_toDyadic",
+      "R2W01c.normal_wordExp_bounds",
+      "R2W01c.raw32",
+      "R2W01c.raw32_eq_fields",
+      "R2W01c.scale_raw32_decode",
+      "R2W01c.scale_wordExp",
+      "R2W01c.scale_wordFrac",
+      "R2W01c.scale_wordSign",
+      "R2W01c.wordExp",
+      "R2W01c.wordSign"
+    ],
+    "R2W01c.mantissa_native_decode": [
+      "R2W01b.mantissa",
+      "R2W01c.mantissa_bounds",
+      "R2W01c.mantissa_native_decode",
+      "R2W01c.nativeModel",
+      "R2W01c.uint32_mantissa_model_decode",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "R2W01c.scale_native_decode": [
+      "R2W01b.NormalBand",
+      "R2W01b.scaleAt",
+      "R2W01b.scaleAt_eq",
+      "R2W01c.nativeModel",
+      "R2W01c.nativeModel_ofBits_decode",
+      "R2W01c.rawModel_eq_ofUInt32",
+      "R2W01c.scale_native_decode",
+      "R2W01c.scale_raw32_decode",
+      "R2W01c.wordExp",
+      "R2W01c.wordSign"
+    ],
+    "R2W01c.target_raw_decode": [
+      "R2W01b.NormalBand",
+      "R2W01b.mantissa",
+      "R2W01c.normal_raw32_decode",
+      "R2W01c.rawModel",
+      "R2W01c.rawModel_eq_ofUInt32",
+      "R2W01c.target_raw_decode",
+      "R2W01c.wordExp",
+      "R2W01c.wordSign",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "R2W01c.normal_model_mul": [
+      "R2W01b.NormalBand",
+      "R2W01b.mantissa",
+      "R2W01b.scaleAt",
+      "R2W01c.mantissa_bounds",
+      "R2W01c.mantissa_native_decode",
+      "R2W01c.nativeModel",
+      "R2W01c.normal_model_mul",
+      "R2W01c.rawModel",
+      "R2W01c.scale_native_decode",
+      "R2W01c.target_raw_decode",
+      "R2W01c.wordExp",
+      "R2W01c.wordSign",
+      "R2W01cModel.binary32_mantissa_scale_mul",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R14NatNormal.mantissa",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "R2W01c.normal_eq": [
+      "R2W01b.NormalBand",
+      "R2W01b.mantissa",
+      "R2W01b.scaleAt",
+      "R2W01b.tableProduct",
+      "R2W01c.mantissa_native_decode",
+      "R2W01c.native_mul_eq_of_decoded_raw_model_mul_eq",
+      "R2W01c.normal_eq",
+      "R2W01c.normal_model_mul",
+      "R2W01c.scale_native_decode",
+      "Submission.FastMul.ofBits",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "R2W01c.convert_eq": [
+      "R2W01b.convert",
+      "R2W01b.convert_eq",
+      "R2W01c.convert_eq",
+      "R2W01c.normal_eq",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01c.convert_bits_eq": [
+      "R2W01b.convert",
+      "R2W01c.convert_bits_eq",
+      "R2W01c.convert_eq",
+      "Submission.FastMul.ofBits"
+    ],
+    "R2W01c.replace_decoder": [
+      "R2W01b.convert",
+      "R2W01c.convert_eq",
+      "R2W01c.replace_decoder",
+      "Submission.DirectContinuous.core",
+      "Submission.DirectRows.core",
+      "Submission.DirectSmall.core",
+      "Submission.FastMul.core",
+      "Submission.FastMul.ofBits",
+      "Submission.LowScale.core",
+      "Submission.R14DIntegerNormal.core",
+      "Submission.R14ExponentShift.core",
+      "Submission.R14ThinBCache.core",
+      "Submission.R14WordAdd.core",
+      "Submission.RowStream.core"
+    ],
+    "R2W01c.foldl_convert_eq": [
+      "R2W01b.convert",
+      "R2W01b.foldl_convert_eq",
+      "R2W01c.foldl_convert_eq",
+      "R2W01c.normal_eq",
+      "R7W02.step",
+      "Submission.FastMul.ofBits",
+      "Submission.FastMul.step",
+      "Submission.R7SumRepair.step"
+    ],
+    "Submission.FastMul.sx": [
+      "Submission.FastMul.sx"
+    ],
+    "Submission.FastMul.sr": [
+      "Submission.FastMul.sr"
+    ],
+    "Submission.FastMul.fastLog2": [
+      "Submission.FastMul.fastLog2",
+      "Submission.FastMul.sr",
+      "Submission.FastMul.sx"
+    ],
+    "Submission.FastMul.rse": [
+      "Submission.FastMul.rse"
+    ],
+    "Submission.FastMul.rseAny": [
+      "Submission.FastMul.rse",
+      "Submission.FastMul.rseAny"
+    ],
+    "Submission.FastMul.mkW": [
+      "Submission.FastMul.mkW",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "Submission.FastMul.fracW": [
+      "Submission.FastMul.fracW"
+    ],
+    "Submission.FastMul.roundP": [
+      "Submission.FastMul.fastLog2",
+      "Submission.FastMul.fracW",
+      "Submission.FastMul.mkW",
+      "Submission.FastMul.roundP",
+      "Submission.FastMul.rseAny",
+      "Submission.R14ExponentShift.product",
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14NatNormal.carry"
+    ],
+    "Submission.FastMul.core": [
+      "Submission.FastMul.core",
+      "Submission.FastMul.roundP",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "Submission.FastMul.sm1": [
+      "Submission.FastMul.sm1"
+    ],
+    "Submission.FastMul.special": [
+      "Submission.FastMul.sm1",
+      "Submission.FastMul.special"
+    ],
+    "Submission.FastMul.ofBits": [
+      "Submission.FastMul.ofBits"
+    ],
+    "Submission.FastMul.mul": [
+      "Submission.FastMul.core",
+      "Submission.FastMul.mul",
+      "Submission.FastMul.ofBits",
+      "Submission.FastMul.special",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.FastMul.Fmt": [
+      "Submission.FastMul.Fmt"
+    ],
+    "Submission.FastMul.Plan": [
+      "Submission.FastMul.Fmt",
+      "Submission.FastMul.Plan"
+    ],
+    "Submission.FastMul.Fam": [
+      "Submission.FastMul.Fam",
+      "Submission.FastMul.Fmt",
+      "Submission.FastMul.Plan"
+    ],
+    "Submission.FastMul.dec": [
+      "Submission.FastMul.Fam",
+      "Submission.FastMul.Fmt",
+      "Submission.FastMul.Plan",
+      "Submission.FastMul.dec",
+      "Submission.R7Native.F"
+    ],
+    "Submission.FastMul.dec_eq": [
+      "Submission.FastMul.dec",
+      "Submission.FastMul.dec_eq"
+    ],
+    "Submission.FastMul.dec_ofBits": [
+      "Submission.FastMul.dec",
+      "Submission.FastMul.dec_ofBits",
+      "Submission.FastMul.ofBits"
+    ],
+    "Submission.FastMul.word32": [
+      "Submission.FastMul.Fmt",
+      "Submission.FastMul.word32"
+    ],
+    "Submission.FastMul.dec_word": [
+      "Submission.FastMul.Fam",
+      "Submission.FastMul.Fmt",
+      "Submission.FastMul.Plan",
+      "Submission.FastMul.dec",
+      "Submission.FastMul.dec_word",
+      "Submission.R7Native.F"
+    ],
+    "Submission.FastMul.toUInt32_ofUInt32": [
+      "Submission.FastMul.ofBits",
+      "Submission.FastMul.toUInt32_ofUInt32"
+    ],
+    "Submission.FastMul.log2_shift": [
+      "Submission.FastMul.log2_shift"
+    ],
+    "Submission.FastMul.log2_lt_64": [
+      "Submission.FastMul.log2_lt_64"
+    ],
+    "Submission.FastMul.step": [
+      "Submission.FastMul.log2_lt_64",
+      "Submission.FastMul.log2_shift",
+      "Submission.FastMul.sr",
+      "Submission.FastMul.step",
+      "Submission.FastMul.sx"
+    ],
+    "Submission.FastMul.log2_lt_two": [
+      "Submission.FastMul.log2_lt_two"
+    ],
+    "Submission.FastMul.fastLog2_eq": [
+      "Submission.FastMul.fastLog2",
+      "Submission.FastMul.fastLog2_eq",
+      "Submission.FastMul.log2_lt_two",
+      "Submission.FastMul.step",
+      "Submission.FastMul.sx"
+    ],
+    "Submission.FastMul.expField_toNat": [
+      "Submission.FastMul.expField_toNat"
+    ],
+    "Submission.FastMul.sm1_eq": [
+      "Submission.FastMul.expField_toNat",
+      "Submission.FastMul.sm1",
+      "Submission.FastMul.sm1_eq"
+    ],
+    "Submission.FastMul.rseAny_eq": [
+      "Submission.FastMul.rse",
+      "Submission.FastMul.rseAny",
+      "Submission.FastMul.rseAny_eq"
+    ],
+    "Submission.FastMul.mkW_ofNat": [
+      "Submission.FastMul.mkW",
+      "Submission.FastMul.mkW_ofNat",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "Submission.FastMul.toUInt32_eq": [
+      "Submission.FastMul.toUInt32_eq"
+    ],
+    "Submission.FastMul.fracW_eq": [
+      "Submission.FastMul.fracW",
+      "Submission.FastMul.fracW_eq",
+      "Submission.FastMul.toUInt32_eq"
+    ],
+    "Submission.FastMul.roundP_eq": [
+      "Submission.FastMul.fastLog2_eq",
+      "Submission.FastMul.fracW_eq",
+      "Submission.FastMul.mkW_ofNat",
+      "Submission.FastMul.roundP",
+      "Submission.FastMul.roundP_eq",
+      "Submission.FastMul.rseAny_eq",
+      "Submission.FastMul.toUInt32_eq",
+      "Submission.R14ExponentShift.product",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "Submission.FastMul.impl_eq": [
+      "Submission.FastMul.core",
+      "Submission.FastMul.impl_eq",
+      "Submission.FastMul.roundP_eq",
+      "Submission.FastMul.toUInt32_ofUInt32"
+    ],
+    "Submission.FastMul.mul_eq_word": [
+      "Submission.FastMul.Fam",
+      "Submission.FastMul.Fmt",
+      "Submission.FastMul.Plan",
+      "Submission.FastMul.core",
+      "Submission.FastMul.dec",
+      "Submission.FastMul.dec_eq",
+      "Submission.FastMul.dec_ofBits",
+      "Submission.FastMul.dec_word",
+      "Submission.FastMul.impl_eq",
+      "Submission.FastMul.mul",
+      "Submission.FastMul.mul_eq_word",
+      "Submission.FastMul.ofBits",
+      "Submission.FastMul.sm1_eq",
+      "Submission.FastMul.special",
+      "Submission.FastMul.word32",
+      "Submission.R7Native.F"
+    ],
+    "Submission.FastMul.mul_spec": [
+      "Submission.FastMul.mul",
+      "Submission.FastMul.mul_eq_word",
+      "Submission.FastMul.mul_spec",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.LowScale.roundLow": [
+      "Submission.FastMul.mkW",
+      "Submission.FastMul.rseAny",
+      "Submission.LowScale.roundLow",
+      "Submission.R14ExponentShift.product",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "Submission.LowScale.roundLow_eq": [
+      "Submission.FastMul.fastLog2",
+      "Submission.FastMul.fastLog2_eq",
+      "Submission.FastMul.roundP",
+      "Submission.LowScale.roundLow",
+      "Submission.LowScale.roundLow_eq",
+      "Submission.R14ExponentShift.product",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "Submission.LowScale.roundSelect": [
+      "Submission.FastMul.roundP",
+      "Submission.LowScale.roundLow",
+      "Submission.LowScale.roundSelect",
+      "Submission.R14ExponentShift.product",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "Submission.LowScale.roundSelect_eq": [
+      "Submission.FastMul.roundP",
+      "Submission.LowScale.roundLow_eq",
+      "Submission.LowScale.roundSelect",
+      "Submission.LowScale.roundSelect_eq",
+      "Submission.R14ExponentShift.product",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "Submission.LowScale.core": [
+      "Submission.LowScale.core",
+      "Submission.LowScale.roundSelect",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "Submission.LowScale.core_eq": [
+      "Submission.FastMul.core",
+      "Submission.LowScale.core",
+      "Submission.LowScale.core_eq",
+      "Submission.LowScale.roundSelect_eq"
+    ],
+    "Submission.LowScale.mul": [
+      "Submission.FastMul.mul",
+      "Submission.FastMul.ofBits",
+      "Submission.FastMul.special",
+      "Submission.LowScale.core",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.LowScale.mul_eq": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.core_eq",
+      "Submission.LowScale.mul",
+      "Submission.LowScale.mul_eq"
+    ],
+    "Submission.LowScale.mul_spec": [
+      "Submission.FastMul.mul",
+      "Submission.FastMul.mul_spec",
+      "Submission.LowScale.mul",
+      "Submission.LowScale.mul_eq",
+      "Submission.LowScale.mul_spec",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.GuardBridge.modelCanonicalOfFinite": [
+      "Submission.GuardBridge.modelCanonicalOfFinite"
+    ],
+    "Submission.WordFinite.modelFiniteOfExp": [
+      "Submission.FastMul.toUInt32_ofUInt32",
+      "Submission.WordFinite.modelFiniteOfExp"
+    ],
+    "Submission.WordFinite.nativeFiniteOfExp": [
+      "Submission.WordFinite.modelFiniteOfExp",
+      "Submission.WordFinite.nativeFiniteOfExp"
+    ],
+    "Submission.NativeBridge.le_targetExponent_totalExponent_iff": [
+      "R2W01b.mantissa",
+      "Submission.NativeBridge.le_targetExponent_totalExponent_iff",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "Submission.NativeBridge.add_le_targetExponent_totalExponent_mul": [
+      "R2W01b.mantissa",
+      "Submission.NativeBridge.add_le_targetExponent_totalExponent_mul",
+      "Submission.NativeBridge.le_targetExponent_totalExponent_iff",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "Submission.NativeBridge.le_targetExponent_totalExponent_of_toModel_eq_finite": [
+      "R2W01b.mantissa",
+      "Submission.NativeBridge.le_targetExponent_totalExponent_iff",
+      "Submission.NativeBridge.le_targetExponent_totalExponent_of_toModel_eq_finite",
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "Submission.NativeBridge.modelMulFinite": [
+      "R2W01b.mantissa",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.NativeBridge.add_le_targetExponent_totalExponent_mul",
+      "Submission.NativeBridge.le_targetExponent_totalExponent_of_toModel_eq_finite",
+      "Submission.NativeBridge.modelMulFinite",
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14NatNormal.mantissa",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.NativeBridge.toModelNativeMul": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.NativeBridge.modelMulFinite",
+      "Submission.NativeBridge.toModelNativeMul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.NativeBridge.toModelExecMul": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.NativeBridge.toModelExecMul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.NativeBridge.ofFloat32Mul": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.NativeBridge.ofFloat32Mul",
+      "Submission.NativeBridge.toModelExecMul",
+      "Submission.NativeBridge.toModelNativeMul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.NotNaNProbe.modelCanonicalOfNotNaN": [
+      "Submission.NotNaNProbe.modelCanonicalOfNotNaN"
+    ],
+    "Submission.NotNaNProbe.roundtrip": [
+      "Submission.NotNaNProbe.modelCanonicalOfNotNaN",
+      "Submission.NotNaNProbe.roundtrip"
+    ],
+    "Submission.NotNaNProbe.packNaN_isNaN": [
+      "Submission.NotNaNProbe.packNaN_isNaN"
+    ],
+    "Submission.NotNaNProbe.add_inputs": [
+      "Submission.NotNaNProbe.add_inputs",
+      "Submission.NotNaNProbe.packNaN_isNaN",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.NotNaNProbe.mul_inputs": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.NotNaNProbe.mul_inputs",
+      "Submission.NotNaNProbe.packNaN_isNaN",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7Native.F": [
+      "Submission.R7Native.F"
+    ],
+    "Submission.R7Native.M": [
+      "Submission.R7Native.F",
+      "Submission.R7Native.M"
+    ],
+    "Submission.R7Native.finiteDecode": [
+      "Submission.R7Native.F",
+      "Submission.R7Native.M",
+      "Submission.R7Native.finiteDecode"
+    ],
+    "Submission.R7Native.nonNaNView": [
+      "Submission.R7Native.M",
+      "Submission.R7Native.nonNaNView"
+    ],
+    "Submission.R7Native.eqOfInfinity": [
+      "Submission.NotNaNProbe.modelCanonicalOfNotNaN",
+      "Submission.R7Native.F",
+      "Submission.R7Native.M",
+      "Submission.R7Native.eqOfInfinity"
+    ],
+    "Submission.R7Native.eqOfZero": [
+      "Submission.NotNaNProbe.modelCanonicalOfNotNaN",
+      "Submission.R7Native.F",
+      "Submission.R7Native.M",
+      "Submission.R7Native.eqOfZero"
+    ],
+    "Submission.R7Native.infinityDecode": [
+      "Submission.R7Native.F",
+      "Submission.R7Native.infinityDecode"
+    ],
+    "Submission.R7Native.nativeOverflow_eq": [
+      "Submission.R7Native.F",
+      "Submission.R7Native.nativeOverflow_eq"
+    ],
+    "Submission.R7Native.specAddInfLeft": [
+      "Submission.R7Native.F",
+      "Submission.R7Native.M",
+      "Submission.R7Native.infinityDecode",
+      "Submission.R7Native.specAddInfLeft",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7Native.specAddInfRight": [
+      "Submission.R7Native.F",
+      "Submission.R7Native.M",
+      "Submission.R7Native.infinityDecode",
+      "Submission.R7Native.specAddInfRight",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7Native.specMulInfLeft": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7Native.F",
+      "Submission.R7Native.M",
+      "Submission.R7Native.infinityDecode",
+      "Submission.R7Native.specMulInfLeft",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7Native.specMulInfRight": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7Native.F",
+      "Submission.R7Native.M",
+      "Submission.R7Native.infinityDecode",
+      "Submission.R7Native.specMulInfRight",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7Native.modelAdd": [
+      "Submission.FastMul.sx",
+      "Submission.R7Native.F",
+      "Submission.R7Native.M",
+      "Submission.R7Native.eqOfInfinity",
+      "Submission.R7Native.finiteDecode",
+      "Submission.R7Native.modelAdd",
+      "Submission.R7Native.nonNaNView",
+      "Submission.R7Native.specAddInfLeft",
+      "Submission.R7Native.specAddInfRight",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7Native.modelMulInfLeft": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7Native.F",
+      "Submission.R7Native.M",
+      "Submission.R7Native.eqOfZero",
+      "Submission.R7Native.modelMulInfLeft",
+      "Submission.R7Native.nativeOverflow_eq",
+      "Submission.R7Native.specMulInfLeft",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7Native.modelMulInfRight": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7Native.F",
+      "Submission.R7Native.M",
+      "Submission.R7Native.eqOfZero",
+      "Submission.R7Native.modelMulInfRight",
+      "Submission.R7Native.nativeOverflow_eq",
+      "Submission.R7Native.specMulInfRight",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7Native.modelMul": [
+      "Submission.FastMul.mul",
+      "Submission.FastMul.sx",
+      "Submission.LowScale.mul",
+      "Submission.NativeBridge.modelMulFinite",
+      "Submission.R7Native.F",
+      "Submission.R7Native.M",
+      "Submission.R7Native.eqOfInfinity",
+      "Submission.R7Native.modelMul",
+      "Submission.R7Native.modelMulInfLeft",
+      "Submission.R7Native.modelMulInfRight",
+      "Submission.R7Native.nonNaNView",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7Native.toModelExecAdd": [
+      "Submission.R7Native.toModelExecAdd",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7Native.ofFloat32Add": [
+      "Submission.R7Native.modelAdd",
+      "Submission.R7Native.ofFloat32Add",
+      "Submission.R7Native.toModelExecAdd",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7Native.ofFloat32Mul": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.NativeBridge.toModelExecMul",
+      "Submission.R7Native.modelMul",
+      "Submission.R7Native.ofFloat32Mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.DWordNaN.M": [
+      "Submission.DWordNaN.M"
+    ],
+    "Submission.DWordNaN.rawNaN": [
+      "Submission.DWordNaN.rawNaN"
+    ],
+    "Submission.DWordNaN.rawSNaN": [
+      "Submission.DWordNaN.rawNaN",
+      "Submission.DWordNaN.rawSNaN"
+    ],
+    "Submission.DWordNaN.rawNaN_eq": [
+      "Submission.DWordNaN.rawNaN",
+      "Submission.DWordNaN.rawNaN_eq"
+    ],
+    "Submission.DWordNaN.rawSNaN_eq": [
+      "Submission.DWordNaN.rawNaN_eq",
+      "Submission.DWordNaN.rawSNaN",
+      "Submission.DWordNaN.rawSNaN_eq"
+    ],
+    "Submission.DWordNaN.quietWord_eq": [
+      "Submission.DWordNaN.quietWord_eq",
+      "Submission.DWordNaN.rawNaN",
+      "Submission.DWordNaN.rawNaN_eq",
+      "Submission.FastMul.ofBits",
+      "Submission.FastMul.toUInt32_ofUInt32"
+    ],
+    "Submission.DWordNaN.quietWord_eq_snan": [
+      "Submission.DWordNaN.quietWord_eq",
+      "Submission.DWordNaN.quietWord_eq_snan",
+      "Submission.DWordNaN.rawNaN",
+      "Submission.DWordNaN.rawSNaN"
+    ],
+    "Submission.DWordNaN.rawChoose": [
+      "Submission.DWordNaN.rawChoose",
+      "Submission.DWordNaN.rawNaN",
+      "Submission.DWordNaN.rawSNaN"
+    ],
+    "Submission.DWordNaN.rawChoose_eq": [
+      "Submission.DWordNaN.quietWord_eq",
+      "Submission.DWordNaN.quietWord_eq_snan",
+      "Submission.DWordNaN.rawChoose",
+      "Submission.DWordNaN.rawChoose_eq",
+      "Submission.DWordNaN.rawNaN",
+      "Submission.DWordNaN.rawNaN_eq",
+      "Submission.DWordNaN.rawSNaN",
+      "Submission.DWordNaN.rawSNaN_eq"
+    ],
+    "Submission.DWordNaN.rawNaN_exp": [
+      "Submission.DWordNaN.rawNaN",
+      "Submission.DWordNaN.rawNaN_exp"
+    ],
+    "Submission.DWordNaN.rawChoose_nonfinite": [
+      "Submission.DWordNaN.rawChoose",
+      "Submission.DWordNaN.rawChoose_nonfinite",
+      "Submission.DWordNaN.rawNaN",
+      "Submission.DWordNaN.rawNaN_exp",
+      "Submission.DWordNaN.rawSNaN"
+    ],
+    "Submission.DWordNaN.specialDecode": [
+      "Submission.DWordNaN.specialDecode",
+      "Submission.FastMul.toUInt32_ofUInt32"
+    ],
+    "Submission.DWordNaN.selected_model_add": [
+      "Submission.DWordNaN.rawChoose",
+      "Submission.DWordNaN.rawChoose_eq",
+      "Submission.DWordNaN.rawChoose_nonfinite",
+      "Submission.DWordNaN.selected_model_add",
+      "Submission.DWordNaN.specialDecode",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.DWordNaN.selected_model_mul": [
+      "Submission.DWordNaN.rawChoose",
+      "Submission.DWordNaN.rawChoose_eq",
+      "Submission.DWordNaN.rawChoose_nonfinite",
+      "Submission.DWordNaN.selected_model_mul",
+      "Submission.DWordNaN.specialDecode",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.DWordNaN.selected_add": [
+      "Submission.DWordNaN.rawChoose",
+      "Submission.DWordNaN.selected_add",
+      "Submission.DWordNaN.selected_model_add",
+      "Submission.FastMul.ofBits",
+      "Submission.R7Native.toModelExecAdd",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.DWordNaN.selected_mul": [
+      "Submission.DWordNaN.rawChoose",
+      "Submission.DWordNaN.selected_model_mul",
+      "Submission.DWordNaN.selected_mul",
+      "Submission.FastMul.mul",
+      "Submission.FastMul.ofBits",
+      "Submission.LowScale.mul",
+      "Submission.NativeBridge.toModelExecMul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.ScalarNaN.add": [
+      "Submission.DWordNaN.rawChoose",
+      "Submission.FastMul.ofBits",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.ScalarNaN.add_spec": [
+      "Submission.DWordNaN.selected_add",
+      "Submission.ScalarNaN.add",
+      "Submission.ScalarNaN.add_spec",
+      "Submission.add"
+    ],
+    "Submission.ScalarNaN.mul": [
+      "Submission.DWordNaN.rawChoose",
+      "Submission.FastMul.mul",
+      "Submission.FastMul.ofBits",
+      "Submission.ScalarNaN.mul"
+    ],
+    "Submission.ScalarNaN.mul_spec": [
+      "Submission.DWordNaN.selected_mul",
+      "Submission.FastMul.mul",
+      "Submission.FastMul.mul_spec",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.ScalarNaN.mul_spec",
+      "Submission.mul"
+    ],
+    "Submission.addBeforeWord": [
+      "R2W01b.convert",
+      "R7W04.nonNaN",
+      "Submission.ScalarNaN.add",
+      "Submission.addBeforeWord"
+    ],
+    "Submission.addBeforeWord_spec": [
+      "R2W01c.convert_eq",
+      "R7W04.nonNaN",
+      "R7W04.nonNaN_eq_true_iff",
+      "Submission.NotNaNProbe.add_inputs",
+      "Submission.NotNaNProbe.roundtrip",
+      "Submission.R7Native.ofFloat32Add",
+      "Submission.ScalarNaN.add",
+      "Submission.ScalarNaN.add_spec",
+      "Submission.add",
+      "Submission.addBeforeWord",
+      "Submission.addBeforeWord_spec"
+    ],
+    "Submission.R14ExponentShift.ex": [
+      "Submission.R14ExponentShift.ex"
+    ],
+    "Submission.R14ExponentShift.ex_nat": [
+      "R2W01c.wordExp",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14ExponentShift.ex_nat"
+    ],
+    "Submission.R14ExponentShift.ex_bound": [
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14ExponentShift.ex_bound",
+      "Submission.R14ExponentShift.ex_nat"
+    ],
+    "Submission.R14ExponentShift.sum_nat": [
+      "R2W01c.wordExp",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14ExponentShift.ex_bound",
+      "Submission.R14ExponentShift.ex_nat",
+      "Submission.R14ExponentShift.sum_nat"
+    ],
+    "Submission.R14ExponentShift.sign": [
+      "Submission.R14ExponentShift.sign"
+    ],
+    "Submission.R14ExponentShift.sign_eq": [
+      "R2W01c.wordSign",
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14ExponentShift.sign_eq"
+    ],
+    "Submission.R14NatNormal.rounded": [
+      "Submission.R14NatNormal.rounded"
+    ],
+    "Submission.R14NatNormal.carry": [
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.rounded"
+    ],
+    "Submission.R14NatNormal.mantissa": [
+      "Submission.R14NatNormal.mantissa",
+      "Submission.R14NatNormal.rounded"
+    ],
+    "Submission.R14NatNormal.carry_le": [
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.carry_le"
+    ],
+    "Submission.R14NatNormal.native_round_normal": [
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.mantissa",
+      "Submission.R14NatNormal.native_round_normal",
+      "Submission.R14NatNormal.rounded"
+    ],
+    "Submission.R14NatNormal.model_round_normal": [
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.mantissa",
+      "Submission.R14NatNormal.model_round_normal",
+      "Submission.R14NatNormal.native_round_normal"
+    ],
+    "Submission.R14NatNormal.raw_normal_decode": [
+      "R2W01b.mantissa",
+      "R2W01c.fields32_toDyadic",
+      "R2W01c.mantissa_toNat",
+      "R2W01c.raw32",
+      "R2W01c.raw32_eq_fields",
+      "R2W01c.rawModel",
+      "R2W01c.rawModel_eq_ofUInt32",
+      "R2W01c.wordExp",
+      "R2W01c.wordFrac",
+      "R2W01c.wordFrac_lt",
+      "R2W01c.wordSign",
+      "Submission.R14NatNormal.raw_normal_decode"
+    ],
+    "Submission.R14SmallShiftBias.nat_bias": [
+      "Submission.R14SmallShiftBias.nat_bias"
+    ],
+    "Submission.R14SmallShiftBias.biased": [
+      "Submission.R14SmallShiftBias.biased"
+    ],
+    "Submission.R14SmallShiftBias.word_bias": [
+      "Submission.R14SmallShiftBias.biased",
+      "Submission.R14SmallShiftBias.nat_bias",
+      "Submission.R14SmallShiftBias.word_bias"
+    ],
+    "Submission.R14WordAdd.high": [
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14WordAdd.high"
+    ],
+    "Submission.R14WordAdd.low": [
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14WordAdd.low"
+    ],
+    "Submission.R14WordAdd.gap": [
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low"
+    ],
+    "Submission.R14WordAdd.sameSign": [
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14WordAdd.sameSign"
+    ],
+    "Submission.R14WordAdd.eligible": [
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.sameSign"
+    ],
+    "Submission.R14WordAdd.magnitudeWord": [
+      "R2W01b.mantissa",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.magnitudeWord",
+      "Submission.R14WordAdd.sameSign"
+    ],
+    "Submission.R14WordAdd.leadingWord": [
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.leadingWord",
+      "Submission.R14WordAdd.magnitudeWord",
+      "Submission.R14WordAdd.sameSign"
+    ],
+    "Submission.R14WordAdd.roundedWord": [
+      "Submission.R14SmallShiftBias.biased",
+      "Submission.R14WordAdd.leadingWord",
+      "Submission.R14WordAdd.magnitudeWord",
+      "Submission.R14WordAdd.roundedWord"
+    ],
+    "Submission.R14WordAdd.exponentWord": [
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14WordAdd.exponentWord",
+      "Submission.R14WordAdd.leadingWord",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.roundedWord"
+    ],
+    "Submission.R14WordAdd.fractionWord": [
+      "Submission.R14WordAdd.fractionWord",
+      "Submission.R14WordAdd.roundedWord"
+    ],
+    "Submission.R14WordAdd.core": [
+      "Submission.FastMul.mkW",
+      "Submission.R14WordAdd.core",
+      "Submission.R14WordAdd.exponentWord",
+      "Submission.R14WordAdd.fractionWord",
+      "Submission.R14WordAdd.high"
+    ],
+    "Submission.R14WordAdd.guardedAdd": [
+      "R2W01b.mantissa",
+      "R7W02.fromRaw",
+      "Submission.FastMul.mkW",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14SmallShiftBias.biased",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.guardedAdd",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.sameSign"
+    ],
+    "Submission.R14WordAdd.guardedAdd_of_ineligible": [
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.guardedAdd",
+      "Submission.R14WordAdd.guardedAdd_of_ineligible"
+    ],
+    "Submission.R14WordAdd.guardedAdd_of_normal": [
+      "R7W02.fromRaw",
+      "Submission.R14WordAdd.core",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.exponentWord",
+      "Submission.R14WordAdd.guardedAdd",
+      "Submission.R14WordAdd.guardedAdd_of_normal"
+    ],
+    "Submission.R14WordAdd.normal_field": [
+      "R2W01c.wordExp",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14ExponentShift.ex_bound",
+      "Submission.R14ExponentShift.ex_nat",
+      "Submission.R14WordAdd.normal_field"
+    ],
+    "Submission.R14WordAdd.sorted_exponents": [
+      "R2W01c.wordExp",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14ExponentShift.ex_nat",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.sorted_exponents"
+    ],
+    "Submission.R14WordAdd.gap_nat": [
+      "R2W01c.wordExp",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14ExponentShift.ex_nat",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.gap_nat",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.sorted_exponents"
+    ],
+    "Submission.R14WordAdd.sameSign_eq": [
+      "R2W01c.wordSign",
+      "Submission.R14ExponentShift.sign_eq",
+      "Submission.R14WordAdd.sameSign",
+      "Submission.R14WordAdd.sameSign_eq"
+    ],
+    "Submission.R14WordAdd.sameSign_true": [
+      "R2W01c.wordSign",
+      "Submission.R14WordAdd.sameSign",
+      "Submission.R14WordAdd.sameSign_eq",
+      "Submission.R14WordAdd.sameSign_true"
+    ],
+    "Submission.R14WordAdd.eligible_conditions": [
+      "R2W01c.wordExp",
+      "R2W01c.wordSign",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.eligible_conditions",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.normal_field",
+      "Submission.R14WordAdd.sameSign_true"
+    ],
+    "Submission.R14WordAddAlignment.magnitude": [
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAddAlignment.magnitude"
+    ],
+    "Submission.R14WordAddAlignment.shifted_ne_zero": [
+      "Submission.R14WordAddAlignment.shifted_ne_zero"
+    ],
+    "Submission.R14WordAddAlignment.large_left": [
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAddAlignment.large_left"
+    ],
+    "Submission.R14WordAddAlignment.align_high_low": [
+      "Submission.R14WordAddAlignment.align_high_low"
+    ],
+    "Submission.R14WordAddAlignment.exact_high_low": [
+      "Submission.R14WordAddAlignment.align_high_low",
+      "Submission.R14WordAddAlignment.exact_high_low",
+      "Submission.R14WordAddAlignment.large_left",
+      "Submission.R14WordAddAlignment.magnitude",
+      "Submission.R14WordAddAlignment.shifted_ne_zero"
+    ],
+    "Submission.R14WordAddAlignment.exact_low_high": [
+      "Submission.R14WordAddAlignment.exact_high_low",
+      "Submission.R14WordAddAlignment.exact_low_high",
+      "Submission.R14WordAddAlignment.magnitude"
+    ],
+    "Submission.R14WordAddAlignment.spec_add_of_decodes": [
+      "Submission.R14WordAddAlignment.spec_add_of_decodes",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R14WordAddAlignment.leadingBase": [
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAddAlignment.leadingBase"
+    ],
+    "Submission.R14WordAddAlignment.magnitude_bounds": [
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAddAlignment.leadingBase",
+      "Submission.R14WordAddAlignment.magnitude",
+      "Submission.R14WordAddAlignment.magnitude_bounds"
+    ],
+    "Submission.R14WordAddAlignment.two_bit_log2": [
+      "Submission.R14WordAddAlignment.two_bit_log2"
+    ],
+    "Submission.R14WordAddAlignment.exact_log2": [
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAddAlignment.exact_log2",
+      "Submission.R14WordAddAlignment.leadingBase",
+      "Submission.R14WordAddAlignment.magnitude",
+      "Submission.R14WordAddAlignment.magnitude_bounds",
+      "Submission.R14WordAddAlignment.two_bit_log2"
+    ],
+    "Submission.R14WordAddAlignment.log2_bounds": [
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAddAlignment.log2_bounds",
+      "Submission.R14WordAddAlignment.magnitude",
+      "Submission.R14WordAddAlignment.magnitude_bounds"
+    ],
+    "Submission.R14WordAddAlignment.word_exponent_accept_iff": [
+      "Submission.R14WordAddAlignment.word_exponent_accept_iff"
+    ],
+    "Submission.R14WordAddRounding.rounded_bounds": [
+      "Submission.FastMul.log2_shift",
+      "Submission.R14NatNormal.rounded",
+      "Submission.R14WordAddRounding.rounded_bounds"
+    ],
+    "Submission.R14WordAddRounding.shift_carry": [
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.rounded",
+      "Submission.R14WordAddRounding.rounded_bounds",
+      "Submission.R14WordAddRounding.shift_carry"
+    ],
+    "Submission.R14WordAddRounding.masked_fraction": [
+      "Submission.R14NatNormal.mantissa",
+      "Submission.R14NatNormal.rounded",
+      "Submission.R14WordAddRounding.masked_fraction",
+      "Submission.R14WordAddRounding.rounded_bounds"
+    ],
+    "Submission.R14WordAddAlignment.spec_add_normal": [
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.mantissa",
+      "Submission.R14NatNormal.model_round_normal",
+      "Submission.R14WordAddAlignment.spec_add_normal",
+      "Submission.R14WordAddAlignment.spec_add_of_decodes",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R14WordAddAlignment.model_add_normal": [
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.mantissa",
+      "Submission.R14WordAddAlignment.model_add_normal",
+      "Submission.R14WordAddAlignment.spec_add_normal",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R14WordAdd.magnitudeNat": [
+      "R2W01b.mantissa",
+      "R2W01c.wordSign",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.magnitudeNat",
+      "Submission.R14WordAddAlignment.magnitude"
+    ],
+    "Submission.R14WordAdd.baseNat": [
+      "R2W01c.wordSign",
+      "Submission.R14WordAdd.baseNat",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAddAlignment.leadingBase"
+    ],
+    "Submission.R14WordAdd.gap_pair": [
+      "R2W01c.wordExp",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.gap_nat",
+      "Submission.R14WordAdd.gap_pair",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.sorted_exponents"
+    ],
+    "Submission.R14WordAdd.sameSign_sorted": [
+      "R2W01c.wordSign",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.sameSign",
+      "Submission.R14WordAdd.sameSign_eq",
+      "Submission.R14WordAdd.sameSign_sorted"
+    ],
+    "Submission.R14WordAdd.sorted_domain": [
+      "R2W01c.wordExp",
+      "R2W01c.wordSign",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.eligible_conditions",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.sorted_domain",
+      "Submission.R14WordAdd.sorted_exponents"
+    ],
+    "Submission.R14WordAdd.magnitudeNat_bounds": [
+      "R2W01c.mantissa_bounds",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.magnitudeNat",
+      "Submission.R14WordAdd.magnitudeNat_bounds",
+      "Submission.R14WordAdd.sorted_domain",
+      "Submission.R14WordAddAlignment.magnitude_bounds"
+    ],
+    "Submission.R14WordAdd.magnitudeNat_log_bounds": [
+      "R2W01c.mantissa_bounds",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.magnitudeNat",
+      "Submission.R14WordAdd.magnitudeNat_log_bounds",
+      "Submission.R14WordAdd.sorted_domain",
+      "Submission.R14WordAddAlignment.log2_bounds"
+    ],
+    "Submission.R14WordAdd.left_word_nat": [
+      "R2W01b.mantissa",
+      "R2W01c.mantissa_bounds",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.eligible_conditions",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.left_word_nat"
+    ],
+    "Submission.R14WordAdd.magnitudeWord_nat": [
+      "R2W01b.mantissa",
+      "R2W01c.mantissa_bounds",
+      "R2W01c.wordSign",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.left_word_nat",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.magnitudeNat",
+      "Submission.R14WordAdd.magnitudeNat_bounds",
+      "Submission.R14WordAdd.magnitudeWord",
+      "Submission.R14WordAdd.magnitudeWord_nat",
+      "Submission.R14WordAdd.sameSign",
+      "Submission.R14WordAdd.sameSign_sorted",
+      "Submission.R14WordAdd.sorted_domain",
+      "Submission.R14WordAddAlignment.large_left",
+      "Submission.R14WordAddAlignment.magnitude"
+    ],
+    "Submission.R14WordAdd.base_word_nat": [
+      "R2W01c.wordSign",
+      "Submission.R14WordAdd.baseNat",
+      "Submission.R14WordAdd.base_word_nat",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.eligible_conditions",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.sameSign",
+      "Submission.R14WordAdd.sameSign_sorted",
+      "Submission.R14WordAddAlignment.leadingBase"
+    ],
+    "Submission.R14WordAdd.baseNat_bounds": [
+      "Submission.R14WordAdd.baseNat",
+      "Submission.R14WordAdd.baseNat_bounds",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.eligible_conditions",
+      "Submission.R14WordAddAlignment.leadingBase"
+    ],
+    "Submission.R14WordAdd.leadingWord_nat": [
+      "R2W01c.mantissa_bounds",
+      "Submission.R14WordAdd.baseNat",
+      "Submission.R14WordAdd.baseNat_bounds",
+      "Submission.R14WordAdd.base_word_nat",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.leadingWord",
+      "Submission.R14WordAdd.leadingWord_nat",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.magnitudeNat",
+      "Submission.R14WordAdd.magnitudeNat_log_bounds",
+      "Submission.R14WordAdd.magnitudeWord_nat",
+      "Submission.R14WordAdd.sameSign",
+      "Submission.R14WordAdd.sorted_domain",
+      "Submission.R14WordAddAlignment.exact_log2"
+    ],
+    "Submission.R14WordAdd.roundedWord_nat": [
+      "Submission.R14NatNormal.rounded",
+      "Submission.R14SmallShiftBias.word_bias",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.leadingWord",
+      "Submission.R14WordAdd.leadingWord_nat",
+      "Submission.R14WordAdd.magnitudeNat",
+      "Submission.R14WordAdd.magnitudeNat_bounds",
+      "Submission.R14WordAdd.magnitudeNat_log_bounds",
+      "Submission.R14WordAdd.magnitudeWord",
+      "Submission.R14WordAdd.magnitudeWord_nat",
+      "Submission.R14WordAdd.roundedWord",
+      "Submission.R14WordAdd.roundedWord_nat"
+    ],
+    "Submission.R14WordAdd.small64_to32_nat": [
+      "Submission.FastMul.toUInt32_eq",
+      "Submission.R14WordAdd.small64_to32_nat"
+    ],
+    "Submission.R14WordAdd.carry_word_nat": [
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.carry_le",
+      "Submission.R14WordAdd.carry_word_nat",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.magnitudeNat",
+      "Submission.R14WordAdd.magnitudeNat_bounds",
+      "Submission.R14WordAdd.magnitudeNat_log_bounds",
+      "Submission.R14WordAdd.roundedWord",
+      "Submission.R14WordAdd.roundedWord_nat",
+      "Submission.R14WordAdd.small64_to32_nat",
+      "Submission.R14WordAddRounding.shift_carry"
+    ],
+    "Submission.R14WordAdd.exponentWord_nat": [
+      "R2W01c.wordExp",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14ExponentShift.ex_nat",
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.carry_le",
+      "Submission.R14WordAdd.carry_word_nat",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.exponentWord",
+      "Submission.R14WordAdd.exponentWord_nat",
+      "Submission.R14WordAdd.leadingWord",
+      "Submission.R14WordAdd.leadingWord_nat",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.magnitudeNat",
+      "Submission.R14WordAdd.magnitudeNat_log_bounds",
+      "Submission.R14WordAdd.sorted_domain"
+    ],
+    "Submission.R14WordAdd.exponent_nat_lower": [
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.exponentWord",
+      "Submission.R14WordAdd.exponentWord_nat",
+      "Submission.R14WordAdd.exponent_nat_lower",
+      "Submission.R14WordAdd.magnitudeNat_log_bounds",
+      "Submission.R14WordAdd.sorted_domain"
+    ],
+    "Submission.R14WordAdd.fractionWord_nat": [
+      "Submission.R14NatNormal.mantissa",
+      "Submission.R14NatNormal.rounded",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.fractionWord",
+      "Submission.R14WordAdd.fractionWord_nat",
+      "Submission.R14WordAdd.magnitudeNat",
+      "Submission.R14WordAdd.magnitudeNat_bounds",
+      "Submission.R14WordAdd.magnitudeNat_log_bounds",
+      "Submission.R14WordAdd.roundedWord_nat",
+      "Submission.R14WordAdd.small64_to32_nat",
+      "Submission.R14WordAddRounding.masked_fraction",
+      "Submission.R14WordAddRounding.rounded_bounds"
+    ],
+    "Submission.R14WordAdd.core_word": [
+      "R2W01c.wordExp",
+      "R2W01c.wordSign",
+      "Submission.FastMul.mkW",
+      "Submission.FastMul.mkW_ofNat",
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.mantissa",
+      "Submission.R14WordAdd.core",
+      "Submission.R14WordAdd.core_word",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.exponentWord",
+      "Submission.R14WordAdd.exponentWord_nat",
+      "Submission.R14WordAdd.fractionWord",
+      "Submission.R14WordAdd.fractionWord_nat",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.magnitudeNat"
+    ],
+    "Submission.R14WordAdd.raw_add_model": [
+      "R2W01b.mantissa",
+      "R2W01c.mantissa_bounds",
+      "R2W01c.rawModel",
+      "R2W01c.wordExp",
+      "R2W01c.wordSign",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.mantissa",
+      "Submission.R14NatNormal.raw_normal_decode",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.eligible_conditions",
+      "Submission.R14WordAdd.gap",
+      "Submission.R14WordAdd.gap_pair",
+      "Submission.R14WordAdd.high",
+      "Submission.R14WordAdd.low",
+      "Submission.R14WordAdd.magnitudeNat",
+      "Submission.R14WordAdd.raw_add_model",
+      "Submission.R14WordAdd.sorted_domain",
+      "Submission.R14WordAdd.sorted_exponents",
+      "Submission.R14WordAddAlignment.exact_high_low",
+      "Submission.R14WordAddAlignment.exact_low_high",
+      "Submission.R14WordAddAlignment.log2_bounds",
+      "Submission.R14WordAddAlignment.magnitude",
+      "Submission.R14WordAddAlignment.magnitude_bounds",
+      "Submission.R14WordAddAlignment.model_add_normal",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R14WordAdd.core_model": [
+      "R2W01c.rawModel",
+      "Submission.R14WordAdd.core",
+      "Submission.R14WordAdd.core_model",
+      "Submission.R14WordAdd.core_word",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.exponentWord",
+      "Submission.R14WordAdd.exponentWord_nat",
+      "Submission.R14WordAdd.exponent_nat_lower",
+      "Submission.R14WordAdd.raw_add_model",
+      "Submission.R14WordAddAlignment.word_exponent_accept_iff",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R14WordAdd.core_spec": [
+      "R2W01c.rawModel_eq_native32",
+      "R7W02.exec_toModel_eq_rawModel",
+      "R7W02.fromRaw",
+      "R7W02.fromRaw_toModel",
+      "Submission.R14WordAdd.core",
+      "Submission.R14WordAdd.core_model",
+      "Submission.R14WordAdd.core_spec",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.exponentWord",
+      "Submission.R7Native.toModelExecAdd",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R14WordAdd.guardedAdd_spec": [
+      "R7W02.fromRaw",
+      "Submission.R14WordAdd.core",
+      "Submission.R14WordAdd.core_spec",
+      "Submission.R14WordAdd.eligible",
+      "Submission.R14WordAdd.exponentWord",
+      "Submission.R14WordAdd.guardedAdd",
+      "Submission.R14WordAdd.guardedAdd_of_ineligible",
+      "Submission.R14WordAdd.guardedAdd_of_normal",
+      "Submission.R14WordAdd.guardedAdd_spec",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.add": [
+      "Submission.R14WordAdd.guardedAdd",
+      "Submission.add",
+      "Submission.addBeforeWord"
+    ],
+    "Submission.add_spec": [
+      "Submission.R14WordAdd.guardedAdd_spec",
+      "Submission.ScalarNaN.add",
+      "Submission.add",
+      "Submission.addBeforeWord",
+      "Submission.addBeforeWord_spec",
+      "Submission.add_spec"
+    ],
+    "Submission.nativeMul": [
+      "R2W01b.convert",
+      "R7W04.nonNaN",
+      "Submission.ScalarNaN.mul",
+      "Submission.nativeMul"
+    ],
+    "Submission.nativeMul_spec": [
+      "R2W01c.convert_eq",
+      "R7W04.nonNaN",
+      "R7W04.nonNaN_eq_true_iff",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.NotNaNProbe.mul_inputs",
+      "Submission.NotNaNProbe.roundtrip",
+      "Submission.R7Native.ofFloat32Mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.ScalarNaN.mul_spec",
+      "Submission.mul",
+      "Submission.nativeMul",
+      "Submission.nativeMul_spec"
+    ],
+    "Submission.mulBeforeExponent": [
+      "Submission.LowScale.mul",
+      "Submission.R14ExponentShift.ex",
+      "Submission.mulBeforeExponent",
+      "Submission.nativeMul"
+    ],
+    "Submission.mulBeforeExponent_spec": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.LowScale.mul_spec",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul",
+      "Submission.mulBeforeExponent",
+      "Submission.mulBeforeExponent_spec",
+      "Submission.nativeMul_spec"
+    ],
+    "Submission.R14NativeProduct.model_mul_of_nonzero_decodes": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R14NativeProduct.model_mul_of_nonzero_decodes",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R14NatNormal.leading_bounds": [
+      "Submission.R14NatNormal.leading_bounds"
+    ],
+    "Submission.R14NatNormal.no_carry_at_47": [
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.no_carry_at_47",
+      "Submission.R14NatNormal.rounded"
+    ],
+    "Submission.R14NatNormal.mantissa_bounds": [
+      "Submission.R14NatNormal.leading_bounds",
+      "Submission.R14NatNormal.mantissa",
+      "Submission.R14NatNormal.mantissa_bounds",
+      "Submission.R14NatNormal.rounded"
+    ],
+    "Submission.R14ExponentShift.product": [
+      "Submission.R14ExponentShift.product"
+    ],
+    "Submission.R14ExponentShift.middleExponent": [
+      "Submission.R14ExponentShift.middleExponent",
+      "Submission.R14NatNormal.carry"
+    ],
+    "Submission.R14ExponentShift.storedFraction": [
+      "Submission.R14ExponentShift.storedFraction",
+      "Submission.R14NatNormal.mantissa"
+    ],
+    "Submission.R14ExponentShift.product_bounds": [
+      "Submission.R14ExponentShift.product",
+      "Submission.R14ExponentShift.product_bounds"
+    ],
+    "Submission.R14ExponentShift.middle_bounds": [
+      "Submission.R14ExponentShift.middleExponent",
+      "Submission.R14ExponentShift.middle_bounds",
+      "Submission.R14ExponentShift.storedFraction",
+      "Submission.R14NatNormal.carry_le",
+      "Submission.R14NatNormal.leading_bounds",
+      "Submission.R14NatNormal.mantissa_bounds",
+      "Submission.R14NatNormal.no_carry_at_47"
+    ],
+    "Submission.R14BiasRNE.nat_bias": [
+      "Submission.R14BiasRNE.nat_bias"
+    ],
+    "Submission.R14BiasRNE.biased": [
+      "Submission.R14BiasRNE.biased"
+    ],
+    "Submission.R14BiasRNE.word_bias": [
+      "Submission.R14BiasRNE.biased",
+      "Submission.R14BiasRNE.nat_bias",
+      "Submission.R14BiasRNE.word_bias"
+    ],
+    "Submission.R14DIntegerNormal.productWord": [
+      "R2W01b.mantissa",
+      "Submission.R14DIntegerNormal.productWord"
+    ],
+    "Submission.R14DIntegerNormal.productNat": [
+      "R2W01b.mantissa",
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14ExponentShift.product"
+    ],
+    "Submission.R14DIntegerNormal.product_bounds": [
+      "R2W01c.mantissa_bounds",
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14DIntegerNormal.product_bounds",
+      "Submission.R14ExponentShift.product_bounds"
+    ],
+    "Submission.R14DIntegerNormal.productWord_nat": [
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14DIntegerNormal.productWord",
+      "Submission.R14DIntegerNormal.productWord_nat",
+      "Submission.R14DIntegerNormal.product_bounds",
+      "Submission.R14ExponentShift.product"
+    ],
+    "Submission.R14DIntegerNormal.highWord": [
+      "Submission.R14DIntegerNormal.highWord",
+      "Submission.R14DIntegerNormal.productWord"
+    ],
+    "Submission.R14DIntegerNormal.shiftWord": [
+      "Submission.R14DIntegerNormal.highWord",
+      "Submission.R14DIntegerNormal.shiftWord"
+    ],
+    "Submission.R14DIntegerNormal.roundedWord": [
+      "Submission.R14BiasRNE.biased",
+      "Submission.R14DIntegerNormal.productWord",
+      "Submission.R14DIntegerNormal.roundedWord",
+      "Submission.R14DIntegerNormal.shiftWord"
+    ],
+    "Submission.R14DIntegerNormal.highWord_nat": [
+      "Submission.R14DIntegerNormal.highWord",
+      "Submission.R14DIntegerNormal.highWord_nat",
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14DIntegerNormal.productWord_nat",
+      "Submission.R14DIntegerNormal.product_bounds",
+      "Submission.R14NatNormal.leading_bounds"
+    ],
+    "Submission.R14DIntegerNormal.shiftWord_values": [
+      "Submission.R14DIntegerNormal.highWord",
+      "Submission.R14DIntegerNormal.highWord_nat",
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14DIntegerNormal.product_bounds",
+      "Submission.R14DIntegerNormal.shiftWord",
+      "Submission.R14DIntegerNormal.shiftWord_values",
+      "Submission.R14NatNormal.leading_bounds"
+    ],
+    "Submission.R14DIntegerNormal.shiftWord_nat": [
+      "Submission.R14DIntegerNormal.highWord_nat",
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14DIntegerNormal.product_bounds",
+      "Submission.R14DIntegerNormal.shiftWord",
+      "Submission.R14DIntegerNormal.shiftWord_nat",
+      "Submission.R14NatNormal.leading_bounds"
+    ],
+    "Submission.R14DIntegerNormal.roundedWord_nat": [
+      "Submission.R14BiasRNE.word_bias",
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14DIntegerNormal.productWord",
+      "Submission.R14DIntegerNormal.productWord_nat",
+      "Submission.R14DIntegerNormal.product_bounds",
+      "Submission.R14DIntegerNormal.roundedWord",
+      "Submission.R14DIntegerNormal.roundedWord_nat",
+      "Submission.R14DIntegerNormal.shiftWord_nat",
+      "Submission.R14DIntegerNormal.shiftWord_values",
+      "Submission.R14NatNormal.rounded"
+    ],
+    "Submission.R14DIntegerNormal.rounded_bounds": [
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14DIntegerNormal.product_bounds",
+      "Submission.R14DIntegerNormal.rounded_bounds",
+      "Submission.R14NatNormal.leading_bounds",
+      "Submission.R14NatNormal.rounded"
+    ],
+    "Submission.R14DIntegerNormal.carryWord": [
+      "Submission.R14DIntegerNormal.carryWord",
+      "Submission.R14DIntegerNormal.roundedWord"
+    ],
+    "Submission.R14DIntegerNormal.carryWord_nat": [
+      "Submission.R14DIntegerNormal.carryWord",
+      "Submission.R14DIntegerNormal.carryWord_nat",
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14DIntegerNormal.roundedWord_nat",
+      "Submission.R14DIntegerNormal.rounded_bounds",
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.rounded"
+    ],
+    "Submission.R14DIntegerNormal.exponentWord": [
+      "Submission.R14DIntegerNormal.carryWord",
+      "Submission.R14DIntegerNormal.exponentWord",
+      "Submission.R14DIntegerNormal.highWord",
+      "Submission.R14ExponentShift.ex"
+    ],
+    "Submission.R14DIntegerNormal.fractionWord": [
+      "Submission.R14DIntegerNormal.fractionWord",
+      "Submission.R14DIntegerNormal.roundedWord"
+    ],
+    "Submission.R14DIntegerNormal.core": [
+      "Submission.FastMul.mkW",
+      "Submission.R14DIntegerNormal.core",
+      "Submission.R14DIntegerNormal.exponentWord",
+      "Submission.R14DIntegerNormal.fractionWord",
+      "Submission.R14ExponentShift.sign"
+    ],
+    "Submission.R14DIntegerNormal.small64_to32_nat": [
+      "Submission.FastMul.toUInt32_eq",
+      "Submission.R14DIntegerNormal.small64_to32_nat"
+    ],
+    "Submission.R14DIntegerNormal.exponentWord_nat": [
+      "R2W01c.wordExp",
+      "Submission.R14DIntegerNormal.carryWord",
+      "Submission.R14DIntegerNormal.carryWord_nat",
+      "Submission.R14DIntegerNormal.exponentWord",
+      "Submission.R14DIntegerNormal.exponentWord_nat",
+      "Submission.R14DIntegerNormal.highWord",
+      "Submission.R14DIntegerNormal.highWord_nat",
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14DIntegerNormal.product_bounds",
+      "Submission.R14DIntegerNormal.small64_to32_nat",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14ExponentShift.ex_bound",
+      "Submission.R14ExponentShift.ex_nat",
+      "Submission.R14ExponentShift.middleExponent",
+      "Submission.R14ExponentShift.sum_nat",
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.carry_le",
+      "Submission.R14NatNormal.leading_bounds"
+    ],
+    "Submission.R14DIntegerNormal.fractionWord_nat": [
+      "Submission.R14DIntegerNormal.fractionWord",
+      "Submission.R14DIntegerNormal.fractionWord_nat",
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14DIntegerNormal.roundedWord",
+      "Submission.R14DIntegerNormal.roundedWord_nat",
+      "Submission.R14DIntegerNormal.rounded_bounds",
+      "Submission.R14DIntegerNormal.small64_to32_nat",
+      "Submission.R14ExponentShift.storedFraction",
+      "Submission.R14NatNormal.mantissa",
+      "Submission.R14NatNormal.rounded"
+    ],
+    "Submission.R14DIntegerNormal.core_word": [
+      "R2W01c.wordExp",
+      "R2W01c.wordSign",
+      "Submission.FastMul.mkW",
+      "Submission.FastMul.mkW_ofNat",
+      "Submission.R14DIntegerNormal.core",
+      "Submission.R14DIntegerNormal.core_word",
+      "Submission.R14DIntegerNormal.exponentWord",
+      "Submission.R14DIntegerNormal.exponentWord_nat",
+      "Submission.R14DIntegerNormal.fractionWord",
+      "Submission.R14DIntegerNormal.fractionWord_nat",
+      "Submission.R14DIntegerNormal.productNat",
+      "Submission.R14ExponentShift.middleExponent",
+      "Submission.R14ExponentShift.sign",
+      "Submission.R14ExponentShift.sign_eq",
+      "Submission.R14ExponentShift.storedFraction"
+    ],
+    "Submission.R14ExponentShift.core": [
+      "Submission.R14DIntegerNormal.core",
+      "Submission.R14ExponentShift.core"
+    ],
+    "Submission.R14ExponentShift.core_word": [
+      "R2W01b.mantissa",
+      "R2W01c.wordExp",
+      "R2W01c.wordSign",
+      "Submission.R14DIntegerNormal.core_word",
+      "Submission.R14ExponentShift.core",
+      "Submission.R14ExponentShift.core_word",
+      "Submission.R14ExponentShift.middleExponent",
+      "Submission.R14ExponentShift.product",
+      "Submission.R14ExponentShift.storedFraction"
+    ],
+    "Submission.R14ExponentShift.core_model": [
+      "R2W01b.mantissa",
+      "R2W01c.mantissa_bounds",
+      "R2W01c.rawModel",
+      "R2W01c.wordExp",
+      "R2W01c.wordSign",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R14ExponentShift.core",
+      "Submission.R14ExponentShift.core_model",
+      "Submission.R14ExponentShift.core_word",
+      "Submission.R14ExponentShift.middleExponent",
+      "Submission.R14ExponentShift.middle_bounds",
+      "Submission.R14ExponentShift.product",
+      "Submission.R14ExponentShift.product_bounds",
+      "Submission.R14NatNormal.carry",
+      "Submission.R14NatNormal.carry_le",
+      "Submission.R14NatNormal.leading_bounds",
+      "Submission.R14NatNormal.model_round_normal",
+      "Submission.R14NatNormal.raw_normal_decode",
+      "Submission.R14NativeProduct.model_mul_of_nonzero_decodes",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R14ExponentShift.core_spec": [
+      "R2W01c.rawModel_eq_native32",
+      "R2W01c.wordExp",
+      "R7W01.exec_toModel_mul",
+      "R7W02.exec_toModel_eq_rawModel",
+      "R7W02.fromRaw",
+      "R7W02.fromRaw_toModel",
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R14ExponentShift.core",
+      "Submission.R14ExponentShift.core_model",
+      "Submission.R14ExponentShift.core_spec",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R14ExponentShift.eligible": [
+      "Submission.R14ExponentShift.eligible",
+      "Submission.R14ExponentShift.ex"
+    ],
+    "Submission.R14ExponentShift.eligible_conditions": [
+      "R2W01c.wordExp",
+      "Submission.R14ExponentShift.eligible",
+      "Submission.R14ExponentShift.eligible_conditions",
+      "Submission.R14ExponentShift.ex",
+      "Submission.R14ExponentShift.ex_bound",
+      "Submission.R14ExponentShift.ex_nat",
+      "Submission.R14ExponentShift.sum_nat"
+    ],
+    "Submission.R14ExponentShift.guardedMul": [
+      "R7W02.fromRaw",
+      "Submission.R14ExponentShift.core",
+      "Submission.R14ExponentShift.eligible",
+      "Submission.R14ExponentShift.guardedMul"
+    ],
+    "Submission.R14ExponentShift.guardedMul_spec": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R14ExponentShift.core_spec",
+      "Submission.R14ExponentShift.eligible_conditions",
+      "Submission.R14ExponentShift.guardedMul",
+      "Submission.R14ExponentShift.guardedMul_spec",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.mul": [
+      "Submission.R14ExponentShift.guardedMul",
+      "Submission.mul",
+      "Submission.mulBeforeExponent"
+    ],
+    "Submission.mul_spec": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R14ExponentShift.guardedMul_spec",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul",
+      "Submission.mulBeforeExponent",
+      "Submission.mulBeforeExponent_spec",
+      "Submission.mul_spec"
+    ],
+    "Submission.add_eq": [
+      "Submission.ScalarNaN.add",
+      "Submission.add",
+      "Submission.add_eq",
+      "Submission.add_spec"
+    ],
+    "Submission.mul_eq": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul",
+      "Submission.mul_eq",
+      "Submission.mul_spec"
+    ],
+    "Submission.referenceSum": [
+      "Submission.add",
+      "Submission.referenceSum"
+    ],
+    "Submission.referenceBmm": [
+      "Submission.add",
+      "Submission.mul",
+      "Submission.referenceBmm"
+    ],
+    "Submission.toArray_getD": [
+      "Submission.toArray_getD"
+    ],
+    "Submission.referenceBmm_spec": [
+      "Submission.add_eq",
+      "Submission.mul_eq",
+      "Submission.referenceBmm",
+      "Submission.referenceBmm_spec",
+      "Submission.toArray_getD"
+    ],
+    "Submission.R7W03.chooseNaN2_none_not_snan": [
+      "Submission.R7W03.chooseNaN2_none_not_snan"
+    ],
+    "Submission.R7W03.model_add_not_snan": [
+      "R7W01.chooseNaN2_32_not_snan",
+      "R7W01.invalidResult32_not_snan",
+      "R7W01.roundDyadic32_not_snan",
+      "Submission.R7W03.chooseNaN2_none_not_snan",
+      "Submission.R7W03.model_add_not_snan",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W03.model_add_of_right_snan": [
+      "Submission.R7W03.model_add_of_right_snan",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W03.model_add_of_right_snan_isQNaN": [
+      "R7W01.quietNaN32_is_qnan",
+      "Submission.R7W03.model_add_of_right_snan",
+      "Submission.R7W03.model_add_of_right_snan_isQNaN",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W03.exec_add_not_snan": [
+      "Submission.R7Native.toModelExecAdd",
+      "Submission.R7W03.exec_add_not_snan",
+      "Submission.R7W03.model_add_not_snan",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W05.model_toModel_isNaN": [
+      "Submission.R7W05.model_toModel_isNaN"
+    ],
+    "Submission.R7W05.toFloat32_isNaN": [
+      "Submission.R7W05.model_toModel_isNaN",
+      "Submission.R7W05.toFloat32_isNaN"
+    ],
+    "Submission.R7W05.native_eq_nan_of_isNaN": [
+      "Submission.R7W05.native_eq_nan_of_isNaN"
+    ],
+    "Submission.R7W05.toFloat32_eq_nan_of_model_nan": [
+      "Submission.R7W05.native_eq_nan_of_isNaN",
+      "Submission.R7W05.toFloat32_eq_nan_of_model_nan",
+      "Submission.R7W05.toFloat32_isNaN"
+    ],
+    "Submission.R7W05.chooseNaN2_some_nan": [
+      "R7W01.quietNaN32_is_nan",
+      "Submission.R7W05.chooseNaN2_some_nan"
+    ],
+    "Submission.R7W05.model_add_nan_left": [
+      "Submission.R7W05.chooseNaN2_some_nan",
+      "Submission.R7W05.model_add_nan_left",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W05.model_add_nan_right": [
+      "Submission.R7W05.chooseNaN2_some_nan",
+      "Submission.R7W05.model_add_nan_right",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W05.native_add_nan_left": [
+      "Submission.NotNaNProbe.add_inputs",
+      "Submission.R7W05.native_add_nan_left",
+      "Submission.R7W05.native_eq_nan_of_isNaN"
+    ],
+    "Submission.R7W05.native_add_nan_right": [
+      "Submission.NotNaNProbe.add_inputs",
+      "Submission.R7W05.native_add_nan_right",
+      "Submission.R7W05.native_eq_nan_of_isNaN"
+    ],
+    "Submission.R7W05.add_toFloat32": [
+      "Submission.NotNaNProbe.roundtrip",
+      "Submission.R7Native.ofFloat32Add",
+      "Submission.R7Native.toModelExecAdd",
+      "Submission.R7W05.add_toFloat32",
+      "Submission.R7W05.model_add_nan_left",
+      "Submission.R7W05.model_add_nan_right",
+      "Submission.R7W05.native_add_nan_left",
+      "Submission.R7W05.native_add_nan_right",
+      "Submission.R7W05.toFloat32_eq_nan_of_model_nan",
+      "Submission.R7W05.toFloat32_isNaN",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W05.add_isNaN_eq_native": [
+      "Submission.R7W05.add_isNaN_eq_native",
+      "Submission.R7W05.add_toFloat32",
+      "Submission.R7W05.toFloat32_isNaN",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W05.add_model_isNaN_eq_native": [
+      "Submission.R7W05.add_isNaN_eq_native",
+      "Submission.R7W05.add_model_isNaN_eq_native",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W05.mul_unpack_of_isNaN": [
+      "Submission.R7W05.mul_unpack_of_isNaN"
+    ],
+    "Submission.R7W05.native_mul_nan_left": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7W05.mul_unpack_of_isNaN",
+      "Submission.R7W05.native_mul_nan_left",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7W05.native_mul_nan_right": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7W05.mul_unpack_of_isNaN",
+      "Submission.R7W05.native_mul_nan_right",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7W05.mul_toFloat32_of_not_nan": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.NotNaNProbe.roundtrip",
+      "Submission.R7Native.ofFloat32Mul",
+      "Submission.R7W05.mul_toFloat32_of_not_nan",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7W05.model_mul_nan_left": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7W05.chooseNaN2_some_nan",
+      "Submission.R7W05.model_mul_nan_left",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7W05.model_mul_nan_right": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7W05.chooseNaN2_some_nan",
+      "Submission.R7W05.model_mul_nan_right",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7W05.mul_toFloat32": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.NativeBridge.toModelExecMul",
+      "Submission.R7W05.model_mul_nan_left",
+      "Submission.R7W05.model_mul_nan_right",
+      "Submission.R7W05.mul_toFloat32",
+      "Submission.R7W05.mul_toFloat32_of_not_nan",
+      "Submission.R7W05.native_mul_nan_left",
+      "Submission.R7W05.native_mul_nan_right",
+      "Submission.R7W05.toFloat32_eq_nan_of_model_nan",
+      "Submission.R7W05.toFloat32_isNaN",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7W05.mul_isNaN_eq_native": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7W05.mul_isNaN_eq_native",
+      "Submission.R7W05.mul_toFloat32",
+      "Submission.R7W05.toFloat32_isNaN",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7W05.mul_model_isNaN_eq_native": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7W05.mul_isNaN_eq_native",
+      "Submission.R7W05.mul_model_isNaN_eq_native",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7W05.nativeSumStep": [
+      "Submission.R7W05.nativeSumStep"
+    ],
+    "Submission.R7W05.nativeDotStep": [
+      "Submission.R7W05.nativeDotStep"
+    ],
+    "Submission.R7W05.repairSumStep": [
+      "Submission.R7W05.repairSumStep",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W05.repairDotStep": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7W05.repairDotStep",
+      "Submission.ScalarNaN.add",
+      "Submission.ScalarNaN.mul",
+      "Submission.add",
+      "Submission.mul"
+    ],
+    "Submission.R7W05.native_sum_isNaN_eq_raw": [
+      "Submission.R7W05.add_toFloat32",
+      "Submission.R7W05.nativeSumStep",
+      "Submission.R7W05.native_sum_isNaN_eq_raw",
+      "Submission.R7W05.toFloat32_isNaN",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W05.repairSumStep_isNaN_eq": [
+      "Submission.R7W05.nativeSumStep",
+      "Submission.R7W05.native_sum_isNaN_eq_raw",
+      "Submission.R7W05.repairSumStep",
+      "Submission.R7W05.repairSumStep_isNaN_eq"
+    ],
+    "Submission.R7W05.repairSumStep_isQNaN": [
+      "Submission.R7W03.exec_add_not_snan",
+      "Submission.R7W05.nativeSumStep",
+      "Submission.R7W05.repairSumStep",
+      "Submission.R7W05.repairSumStep_isNaN_eq",
+      "Submission.R7W05.repairSumStep_isQNaN"
+    ],
+    "Submission.R7W12.ofFloat32_nan_toModel": [
+      "Submission.R7W12.ofFloat32_nan_toModel"
+    ],
+    "Submission.R7W12.ofFloat32_isNaN": [
+      "Submission.R7W05.toFloat32_isNaN",
+      "Submission.R7W12.ofFloat32_isNaN"
+    ],
+    "Submission.R7W12.ofFloat32_not_snan": [
+      "Submission.R7W05.native_eq_nan_of_isNaN",
+      "Submission.R7W12.ofFloat32_isNaN",
+      "Submission.R7W12.ofFloat32_nan_toModel",
+      "Submission.R7W12.ofFloat32_not_snan"
+    ],
+    "Submission.R7W12.canonicalNaN_is_nan": [
+      "Submission.R7W12.canonicalNaN_is_nan"
+    ],
+    "Submission.R7W12.canonicalNaN_not_snan": [
+      "Submission.R7W12.canonicalNaN_not_snan"
+    ],
+    "Submission.R7W12.canonicalNaN_quiet_self": [
+      "Submission.R7W12.canonicalNaN_quiet_self"
+    ],
+    "Submission.R7W12.chooseCanonicalNaN_left": [
+      "Submission.R7W12.canonicalNaN_is_nan",
+      "Submission.R7W12.canonicalNaN_not_snan",
+      "Submission.R7W12.canonicalNaN_quiet_self",
+      "Submission.R7W12.chooseCanonicalNaN_left"
+    ],
+    "Submission.R7W12.chooseCanonicalNaN_right": [
+      "Submission.R7W12.canonicalNaN_is_nan",
+      "Submission.R7W12.canonicalNaN_not_snan",
+      "Submission.R7W12.canonicalNaN_quiet_self",
+      "Submission.R7W12.chooseCanonicalNaN_right"
+    ],
+    "Submission.R7W12.model_add_canonical_left": [
+      "Submission.R7W12.canonicalNaN_is_nan",
+      "Submission.R7W12.chooseCanonicalNaN_left",
+      "Submission.R7W12.model_add_canonical_left",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W12.model_add_canonical_right": [
+      "Submission.R7W12.canonicalNaN_is_nan",
+      "Submission.R7W12.chooseCanonicalNaN_right",
+      "Submission.R7W12.model_add_canonical_right",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W12.model_mul_canonical_left": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7W12.canonicalNaN_is_nan",
+      "Submission.R7W12.chooseCanonicalNaN_left",
+      "Submission.R7W12.model_mul_canonical_left",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7W12.model_mul_canonical_right": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.R7W12.canonicalNaN_is_nan",
+      "Submission.R7W12.chooseCanonicalNaN_right",
+      "Submission.R7W12.model_mul_canonical_right",
+      "Submission.ScalarNaN.mul",
+      "Submission.mul"
+    ],
+    "Submission.R7W12.exec_add_import_nan_left": [
+      "Submission.R7Native.toModelExecAdd",
+      "Submission.R7W12.exec_add_import_nan_left",
+      "Submission.R7W12.model_add_canonical_left",
+      "Submission.R7W12.ofFloat32_not_snan",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W12.exec_add_import_nan_right": [
+      "Submission.R7Native.toModelExecAdd",
+      "Submission.R7W12.exec_add_import_nan_right",
+      "Submission.R7W12.model_add_canonical_right",
+      "Submission.R7W12.ofFloat32_isNaN",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W12.ofFloat32_add": [
+      "Submission.R7Native.ofFloat32Add",
+      "Submission.R7W05.native_add_nan_left",
+      "Submission.R7W05.native_add_nan_right",
+      "Submission.R7W05.native_eq_nan_of_isNaN",
+      "Submission.R7W12.exec_add_import_nan_left",
+      "Submission.R7W12.exec_add_import_nan_right",
+      "Submission.R7W12.ofFloat32_add",
+      "Submission.ScalarNaN.add",
+      "Submission.add"
+    ],
+    "Submission.R7W12.rawNotNaN": [
+      "Submission.R7W12.rawNotNaN"
+    ],
+    "Submission.R7W12.magnitude_le_infinity_iff": [
+      "Submission.R7W12.magnitude_le_infinity_iff"
+    ],
+    "Submission.R7W12.rawNotNaN_true_iff_isNaN_false": [
+      "Submission.R7W12.magnitude_le_infinity_iff",
+      "Submission.R7W12.rawNotNaN",
+      "Submission.R7W12.rawNotNaN_true_iff_isNaN_false"
+    ],
+    "Submission.R7W12.rawNotNaN_eq_not_isNaN": [
+      "Submission.R7W12.rawNotNaN",
+      "Submission.R7W12.rawNotNaN_eq_not_isNaN",
+      "Submission.R7W12.rawNotNaN_true_iff_isNaN_false"
+    ],
+    "Submission.R7W12.rawNotNaN_eq_exec_model": [
+      "R7W02.exec_toModel_eq_rawModel",
+      "Submission.R7W12.rawNotNaN",
+      "Submission.R7W12.rawNotNaN_eq_exec_model",
+      "Submission.R7W12.rawNotNaN_eq_not_isNaN"
+    ],
+    "Submission.R7W12.rawNotNaN_eq_native_classifier": [
+      "Submission.R7W05.toFloat32_isNaN",
+      "Submission.R7W12.rawNotNaN",
+      "Submission.R7W12.rawNotNaN_eq_exec_model",
+      "Submission.R7W12.rawNotNaN_eq_native_classifier"
+    ],
+    "Submission.R7SumRepair.step": [
+      "Submission.R7SumRepair.step",
+      "Submission.add"
+    ],
+    "Submission.R7SumRepair.suffixLoop": [
+      "R7W02.step",
+      "Submission.R7SumRepair.suffixLoop"
+    ],
+    "Submission.R7SumRepair.suffixLoop_eq": [
+      "R7W02.step",
+      "R7W02.step_eq_add",
+      "R7W02.step_isQNaN",
+      "Submission.Packed10Index.loop",
+      "Submission.R14ThinBCache.loop",
+      "Submission.R7SinglePassSum.loop",
+      "Submission.R7SumRepair.step",
+      "Submission.R7SumRepair.suffixLoop",
+      "Submission.R7SumRepair.suffixLoop_eq",
+      "Submission.add_eq"
+    ],
+    "Submission.R7NaNReplay.replayStep": [
+      "Submission.R7NaNReplay.replayStep",
+      "Submission.add",
+      "Submission.mul"
+    ],
+    "Submission.R7NaNReplay.replayStep_absorb": [
+      "R7W01.execQuietGuard",
+      "R7W01.exec_add_mul_absorb",
+      "R7W01.quietGuard_nan",
+      "R7W01.quietGuard_not_signaling",
+      "Submission.R7NaNReplay.replayStep",
+      "Submission.R7NaNReplay.replayStep_absorb",
+      "Submission.add_eq",
+      "Submission.mul_eq"
+    ],
+    "Submission.R7NaNReplay.replayFold_absorb": [
+      "R7W01.execQuietGuard",
+      "Submission.Packed10Index.loop",
+      "Submission.R14ThinBCache.loop",
+      "Submission.R7NaNReplay.replayFold_absorb",
+      "Submission.R7NaNReplay.replayStep",
+      "Submission.R7NaNReplay.replayStep_absorb",
+      "Submission.R7SinglePassSum.loop"
+    ],
+    "Submission.R7NaNReplay.replayLoop": [
+      "R7W01.execQuietGuard",
+      "Submission.R7NaNReplay.replayLoop",
+      "Submission.R7NaNReplay.replayStep"
+    ],
+    "Submission.R7NaNReplay.replayLoop_eq": [
+      "Submission.Packed10Index.loop",
+      "Submission.R14ThinBCache.loop",
+      "Submission.R7NaNReplay.replayFold_absorb",
+      "Submission.R7NaNReplay.replayLoop",
+      "Submission.R7NaNReplay.replayLoop_eq",
+      "Submission.R7NaNReplay.replayStep",
+      "Submission.R7SinglePassSum.loop"
+    ],
+    "Submission.R7NaNReplay.replayEarly": [
+      "Submission.R7NaNReplay.replayEarly",
+      "Submission.R7NaNReplay.replayLoop"
+    ],
+    "Submission.R7NaNReplay.replayEarly_eq": [
+      "Submission.R7NaNReplay.replayEarly",
+      "Submission.R7NaNReplay.replayEarly_eq",
+      "Submission.R7NaNReplay.replayLoop_eq",
+      "Submission.R7NaNReplay.replayStep"
+    ],
+    "Submission.R7NaNReplay.replay": [
+      "Submission.R7NaNReplay.replay",
+      "Submission.R7NaNReplay.replayEarly",
+      "Submission.R7NaNReplay.replayStep"
+    ],
+    "Submission.NativeFinal.dotLoop": [
+      "Submission.NativeFinal.dotLoop"
+    ],
+    "Submission.NativeFinal.dotLoop_eq": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.NativeFinal.dotLoop",
+      "Submission.NativeFinal.dotLoop_eq",
+      "Submission.NotNaNProbe.add_inputs",
+      "Submission.NotNaNProbe.mul_inputs",
+      "Submission.NotNaNProbe.roundtrip",
+      "Submission.Packed10Index.loop",
+      "Submission.R14ThinBCache.loop",
+      "Submission.R7Native.ofFloat32Add",
+      "Submission.R7Native.ofFloat32Mul",
+      "Submission.R7SinglePassSum.loop",
+      "Submission.ScalarNaN.add",
+      "Submission.ScalarNaN.mul",
+      "Submission.add",
+      "Submission.mul"
+    ],
+    "Submission.NativeFinal.dot": [
+      "R7W04.nonNaN",
+      "Submission.FastMul.ofBits",
+      "Submission.NativeFinal.dot",
+      "Submission.NativeFinal.dotLoop",
+      "Submission.R7NaNReplay.replayEarly"
+    ],
+    "Submission.NativeFinal.dot_eq": [
+      "R7W02.step",
+      "R7W04.nonNaN_eq_true_iff",
+      "Submission.FastMul.mul",
+      "Submission.FastMul.ofBits",
+      "Submission.FastMul.step",
+      "Submission.LowScale.mul",
+      "Submission.NativeFinal.dot",
+      "Submission.NativeFinal.dotLoop_eq",
+      "Submission.NativeFinal.dot_eq",
+      "Submission.R7NaNReplay.replayEarly_eq",
+      "Submission.R7NaNReplay.replayStep",
+      "Submission.R7SumRepair.step",
+      "Submission.ScalarNaN.add",
+      "Submission.ScalarNaN.mul",
+      "Submission.add",
+      "Submission.add_eq",
+      "Submission.mul",
+      "Submission.mul_eq"
+    ],
+    "Submission.index_address": [
+      "Submission.index_address"
+    ],
+    "Submission.Packed10.F10": [
+      "Submission.Packed10.F10"
+    ],
+    "Submission.Packed10.zero32": [
+      "Submission.FastMul.ofBits",
+      "Submission.Packed10.zero32"
+    ],
+    "Submission.Packed10.zero10": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.zero10",
+      "Submission.Packed10.zero32"
+    ],
+    "Submission.Packed10.lane": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.lane"
+    ],
+    "Submission.Packed10.packet": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.packet"
+    ],
+    "Submission.Packed10.update": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.update"
+    ],
+    "Submission.Packed10.lane_packet": [
+      "Submission.Packed10.lane",
+      "Submission.Packed10.lane_packet",
+      "Submission.Packed10.packet"
+    ],
+    "Submission.Packed10.lane_zero10": [
+      "Submission.Packed10.lane",
+      "Submission.Packed10.lane_zero10",
+      "Submission.Packed10.zero10",
+      "Submission.Packed10.zero32"
+    ],
+    "Submission.Packed10.lane_update": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.lane",
+      "Submission.Packed10.lane_update",
+      "Submission.Packed10.update"
+    ],
+    "Submission.Packed10.groups": [
+      "Submission.Packed10.groups"
+    ],
+    "Submission.Packed10.vector_get_ofFn": [
+      "Submission.Packed10.vector_get_ofFn"
+    ],
+    "Submission.Packed10.packB": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.groups",
+      "Submission.Packed10.packB",
+      "Submission.Packed10.packet",
+      "Submission.Packed10.zero32"
+    ],
+    "Submission.Packed10.packB_get": [
+      "Submission.Packed10.groups",
+      "Submission.Packed10.packB",
+      "Submission.Packed10.packB_get",
+      "Submission.Packed10.packet",
+      "Submission.Packed10.vector_get_ofFn",
+      "Submission.Packed10.zero32"
+    ],
+    "Submission.Packed10.packB_lane": [
+      "Submission.Packed10.groups",
+      "Submission.Packed10.lane",
+      "Submission.Packed10.lane_packet",
+      "Submission.Packed10.packB",
+      "Submission.Packed10.packB_get",
+      "Submission.Packed10.packB_lane"
+    ],
+    "Submission.Packed10.nativeA_getD": [
+      "Submission.Packed10.nativeA_getD",
+      "Submission.Packed10.zero32"
+    ],
+    "Submission.Packed10.dot10": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.dot10",
+      "Submission.Packed10.zero32"
+    ],
+    "Submission.Packed10.dot10_lane": [
+      "Submission.NativeFinal.dotLoop",
+      "Submission.Packed10.F10",
+      "Submission.Packed10.dot10",
+      "Submission.Packed10.dot10_lane",
+      "Submission.Packed10.lane",
+      "Submission.Packed10.lane_update",
+      "Submission.Packed10.nativeA_getD",
+      "Submission.Packed10.update",
+      "Submission.Packed10.zero32"
+    ],
+    "Submission.Packed10.finish": [
+      "R7W04.nonNaN",
+      "Submission.Packed10.finish",
+      "Submission.R7NaNReplay.replayEarly"
+    ],
+    "Submission.Packed10.finish_eq_dot": [
+      "Submission.NativeFinal.dot",
+      "Submission.NativeFinal.dotLoop",
+      "Submission.Packed10.finish",
+      "Submission.Packed10.finish_eq_dot",
+      "Submission.Packed10.zero32"
+    ],
+    "Submission.Packed10.finish_dot10_lane": [
+      "Submission.NativeFinal.dot",
+      "Submission.Packed10.F10",
+      "Submission.Packed10.dot10",
+      "Submission.Packed10.dot10_lane",
+      "Submission.Packed10.finish",
+      "Submission.Packed10.finish_dot10_lane",
+      "Submission.Packed10.finish_eq_dot",
+      "Submission.Packed10.lane",
+      "Submission.Packed10.lane_zero10",
+      "Submission.Packed10.zero32"
+    ],
+    "Submission.Packed10Index.addNat": [
+      "Submission.Packed10Index.addNat"
+    ],
+    "Submission.Packed10Index.stepNat": [
+      "Submission.Packed10Index.stepNat"
+    ],
+    "Submission.Packed10Index.next_decreases": [
+      "Submission.Packed10Index.next_decreases",
+      "Submission.Packed10Index.stepNat"
+    ],
+    "Submission.Packed10Index.boundA": [
+      "Submission.Packed10Index.boundA"
+    ],
+    "Submission.Packed10Index.ugetA_getD": [
+      "Submission.Packed10.zero32",
+      "Submission.Packed10Index.ugetA_getD"
+    ],
+    "Submission.Packed10Index.ugetB_get": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10Index.ugetB_get"
+    ],
+    "Submission.Packed10Index.loop": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10Index.addNat",
+      "Submission.Packed10Index.boundA",
+      "Submission.Packed10Index.loop",
+      "Submission.Packed10Index.next_decreases"
+    ],
+    "Submission.Packed10Index.loop_eq": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.dot10",
+      "Submission.Packed10Index.addNat",
+      "Submission.Packed10Index.boundA",
+      "Submission.Packed10Index.loop",
+      "Submission.Packed10Index.loop_eq",
+      "Submission.Packed10Index.next_decreases",
+      "Submission.Packed10Index.stepNat",
+      "Submission.Packed10Index.ugetA_getD",
+      "Submission.Packed10Index.ugetB_get"
+    ],
+    "Submission.Packed10Index.within": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.zero32",
+      "Submission.Packed10Index.loop",
+      "Submission.Packed10Index.within"
+    ],
+    "Submission.Packed10Index.within_eq": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.dot10",
+      "Submission.Packed10.zero32",
+      "Submission.Packed10Index.loop_eq",
+      "Submission.Packed10Index.within",
+      "Submission.Packed10Index.within_eq"
+    ],
+    "Submission.Packed10Index.runDot": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.dot10",
+      "Submission.Packed10.zero32",
+      "Submission.Packed10Index.runDot",
+      "Submission.Packed10Index.within"
+    ],
+    "Submission.Packed10Index.runDot_eq": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.dot10",
+      "Submission.Packed10.zero32",
+      "Submission.Packed10Index.runDot",
+      "Submission.Packed10Index.runDot_eq",
+      "Submission.Packed10Index.within_eq"
+    ],
+    "Submission.RowStream.Prefix": [
+      "Submission.RowStream.Prefix"
+    ],
+    "Submission.RowStream.prefix_push": [
+      "Submission.RowStream.Prefix",
+      "Submission.RowStream.prefix_push"
+    ],
+    "Submission.RowStream.foldl_loop_inv": [
+      "R7W02.step",
+      "Submission.FastMul.step",
+      "Submission.Packed10Index.loop",
+      "Submission.R14ThinBCache.loop",
+      "Submission.R7SinglePassSum.loop",
+      "Submission.R7SumRepair.step",
+      "Submission.RowStream.foldl_loop_inv"
+    ],
+    "Submission.RowStream.foldl_inv": [
+      "R7W02.step",
+      "Submission.FastMul.step",
+      "Submission.R7SumRepair.step",
+      "Submission.RowStream.foldl_inv",
+      "Submission.RowStream.foldl_loop_inv"
+    ],
+    "Submission.RowStream.emit": [
+      "Submission.RowStream.emit"
+    ],
+    "Submission.RowStream.emit_prefix": [
+      "Submission.RowStream.Prefix",
+      "Submission.RowStream.emit",
+      "Submission.RowStream.emit_prefix",
+      "Submission.RowStream.foldl_inv",
+      "Submission.RowStream.prefix_push"
+    ],
+    "Submission.RowStream.point": [
+      "Submission.NativeFinal.dot",
+      "Submission.RowStream.point"
+    ],
+    "Submission.RowStream.decode_row": [
+      "Submission.RowStream.decode_row"
+    ],
+    "Submission.RowStream.point_row": [
+      "Submission.NativeFinal.dot",
+      "Submission.RowStream.decode_row",
+      "Submission.RowStream.point",
+      "Submission.RowStream.point_row"
+    ],
+    "Submission.RowStream.group": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.finish",
+      "Submission.Packed10.groups",
+      "Submission.Packed10.lane",
+      "Submission.Packed10Index.runDot",
+      "Submission.RowStream.emit",
+      "Submission.RowStream.group"
+    ],
+    "Submission.RowStream.group_prefix": [
+      "Submission.Packed10.finish_dot10_lane",
+      "Submission.Packed10.groups",
+      "Submission.Packed10.packB",
+      "Submission.Packed10.packB_lane",
+      "Submission.Packed10Index.runDot_eq",
+      "Submission.RowStream.Prefix",
+      "Submission.RowStream.emit_prefix",
+      "Submission.RowStream.group",
+      "Submission.RowStream.group_prefix",
+      "Submission.RowStream.point",
+      "Submission.RowStream.point_row",
+      "Submission.index_address"
+    ],
+    "Submission.RowStream.row": [
+      "Submission.Packed10.F10",
+      "Submission.Packed10.groups",
+      "Submission.RowStream.group",
+      "Submission.RowStream.row"
+    ],
+    "Submission.RowStream.row_prefix": [
+      "Submission.Packed10.groups",
+      "Submission.Packed10.packB",
+      "Submission.RowStream.Prefix",
+      "Submission.RowStream.foldl_inv",
+      "Submission.RowStream.group",
+      "Submission.RowStream.group_prefix",
+      "Submission.RowStream.point",
+      "Submission.RowStream.row",
+      "Submission.RowStream.row_prefix"
+    ],
+    "Submission.RowStream.output": [
+      "Submission.Packed10.packB",
+      "Submission.RowStream.output",
+      "Submission.RowStream.row"
+    ],
+    "Submission.RowStream.output_prefix": [
+      "Submission.Packed10.packB",
+      "Submission.RowStream.Prefix",
+      "Submission.RowStream.foldl_inv",
+      "Submission.RowStream.output",
+      "Submission.RowStream.output_prefix",
+      "Submission.RowStream.point",
+      "Submission.RowStream.row",
+      "Submission.RowStream.row_prefix"
+    ],
+    "Submission.RowStream.core": [
+      "Submission.RowStream.core",
+      "Submission.RowStream.output",
+      "Submission.RowStream.output_prefix"
+    ],
+    "Submission.RowStream.prefix_vector_eq_ofFn": [
+      "Submission.RowStream.Prefix",
+      "Submission.RowStream.prefix_vector_eq_ofFn"
+    ],
+    "Submission.RowStream.points_eq_reference": [
+      "Submission.NativeFinal.dot_eq",
+      "Submission.RowStream.point",
+      "Submission.RowStream.points_eq_reference",
+      "Submission.add_eq",
+      "Submission.index_address",
+      "Submission.mul_eq",
+      "Submission.referenceBmm"
+    ],
+    "Submission.RowStream.core_eq_reference": [
+      "Submission.RowStream.core",
+      "Submission.RowStream.core_eq_reference",
+      "Submission.RowStream.output",
+      "Submission.RowStream.output_prefix",
+      "Submission.RowStream.point",
+      "Submission.RowStream.points_eq_reference",
+      "Submission.RowStream.prefix_vector_eq_ofFn",
+      "Submission.referenceBmm"
+    ],
+    "Submission.bmmPackedBase": [
+      "Submission.RowStream.core",
+      "Submission.bmmPackedBase",
+      "Submission.referenceBmm"
+    ],
+    "Submission.bmmPackedBase_spec": [
+      "Submission.RowStream.core_eq_reference",
+      "Submission.bmmPackedBase",
+      "Submission.bmmPackedBase_spec",
+      "Submission.referenceBmm",
+      "Submission.referenceBmm_spec"
+    ],
+    "Submission.DirectSmall.core": [
+      "Submission.DirectSmall.core",
+      "Submission.NativeFinal.dot"
+    ],
+    "Submission.DirectSmall.core_eq_reference": [
+      "Submission.DirectSmall.core",
+      "Submission.DirectSmall.core_eq_reference",
+      "Submission.NativeFinal.dot_eq",
+      "Submission.add_eq",
+      "Submission.index_address",
+      "Submission.mul_eq",
+      "Submission.referenceBmm"
+    ],
+    "Submission.bmmBeforeDirectRows": [
+      "Submission.DirectSmall.core",
+      "Submission.bmmBeforeDirectRows",
+      "Submission.bmmPackedBase"
+    ],
+    "Submission.bmmBeforeDirectRows_spec": [
+      "Submission.DirectSmall.core_eq_reference",
+      "Submission.bmmBeforeDirectRows",
+      "Submission.bmmBeforeDirectRows_spec",
+      "Submission.bmmPackedBase_spec",
+      "Submission.referenceBmm_spec"
+    ],
+    "Submission.R7SinglePassSum.low_reject_finite": [
+      "Submission.R7SinglePassSum.low_reject_finite"
+    ],
+    "Submission.R7SinglePassSum.raw_nonNaN_of_le": [
+      "R2W01b.magnitude",
+      "Submission.R7SinglePassSum.raw_nonNaN_of_le",
+      "Submission.R7W12.rawNotNaN"
+    ],
+    "Submission.R7SinglePassSum.raw_nan_of_high_reject": [
+      "R2W01b.magnitude",
+      "Submission.R7SinglePassSum.raw_nan_of_high_reject",
+      "Submission.R7W12.rawNotNaN"
+    ],
+    "Submission.R7SinglePassSum.table_eq": [
+      "R2W01b.convert",
+      "R2W01b.fastOK",
+      "R2W01b.magnitude",
+      "R2W01b.tableProduct",
+      "R2W01c.convert_eq",
+      "Submission.FastMul.ofBits",
+      "Submission.R7SinglePassSum.table_eq"
+    ],
+    "Submission.R7SinglePassSum.native_step_eq": [
+      "Submission.NotNaNProbe.roundtrip",
+      "Submission.R7SinglePassSum.native_step_eq",
+      "Submission.R7W12.ofFloat32_add",
+      "Submission.R7W12.rawNotNaN",
+      "Submission.R7W12.rawNotNaN_eq_native_classifier",
+      "Submission.add",
+      "Submission.add_eq"
+    ],
+    "Submission.R7SinglePassSum.repair_quiet": [
+      "Submission.R7SinglePassSum.repair_quiet",
+      "Submission.R7W05.nativeSumStep",
+      "Submission.R7W05.native_add_nan_right",
+      "Submission.R7W05.repairSumStep",
+      "Submission.R7W05.repairSumStep_isQNaN",
+      "Submission.R7W12.rawNotNaN",
+      "Submission.R7W12.rawNotNaN_eq_native_classifier",
+      "Submission.add",
+      "Submission.add_eq"
+    ],
+    "Submission.R7SinglePassSum.natLoop": [
+      "R2W01b.magnitude",
+      "R2W01b.tableProduct",
+      "Submission.FastMul.ofBits",
+      "Submission.R7SinglePassSum.natLoop",
+      "Submission.R7SumRepair.suffixLoop",
+      "Submission.add"
+    ],
+    "Submission.R7SinglePassSum.natLoop_eq": [
+      "R2W01b.magnitude",
+      "R2W01b.tableProduct",
+      "Submission.FastMul.ofBits",
+      "Submission.Packed10Index.loop",
+      "Submission.R14ThinBCache.loop",
+      "Submission.R7SinglePassSum.loop",
+      "Submission.R7SinglePassSum.low_reject_finite",
+      "Submission.R7SinglePassSum.natLoop",
+      "Submission.R7SinglePassSum.natLoop_eq",
+      "Submission.R7SinglePassSum.native_step_eq",
+      "Submission.R7SinglePassSum.raw_nan_of_high_reject",
+      "Submission.R7SinglePassSum.raw_nonNaN_of_le",
+      "Submission.R7SinglePassSum.repair_quiet",
+      "Submission.R7SinglePassSum.table_eq",
+      "Submission.R7SumRepair.step",
+      "Submission.R7SumRepair.suffixLoop_eq"
+    ],
+    "Submission.R7SinglePassSum.loop": [
+      "R2W01b.magnitude",
+      "R2W01b.tableProduct",
+      "Submission.FastMul.ofBits",
+      "Submission.Packed10Index.next_decreases",
+      "Submission.R7SinglePassSum.loop",
+      "Submission.R7SumRepair.suffixLoop",
+      "Submission.add"
+    ],
+    "Submission.R7SinglePassSum.loop_eq": [
+      "R2W01b.magnitude",
+      "Submission.Packed10Index.next_decreases",
+      "Submission.Packed10Index.stepNat",
+      "Submission.R7SinglePassSum.loop",
+      "Submission.R7SinglePassSum.loop_eq",
+      "Submission.R7SinglePassSum.natLoop"
+    ],
+    "Submission.R7SinglePassSum.run": [
+      "Submission.FastMul.ofBits",
+      "Submission.R7SinglePassSum.loop",
+      "Submission.R7SinglePassSum.natLoop",
+      "Submission.R7SinglePassSum.run"
+    ],
+    "Submission.R7SinglePassSum.run_spec": [
+      "Submission.FastMul.ofBits",
+      "Submission.R7SinglePassSum.loop_eq",
+      "Submission.R7SinglePassSum.natLoop",
+      "Submission.R7SinglePassSum.natLoop_eq",
+      "Submission.R7SinglePassSum.run",
+      "Submission.R7SinglePassSum.run_spec",
+      "Submission.R7SumRepair.step",
+      "Submission.ScalarNaN.add",
+      "Submission.add",
+      "Submission.add_eq"
+    ],
+    "Submission.sum": [
+      "Submission.R7SinglePassSum.run",
+      "Submission.sum"
+    ],
+    "Submission.sum_spec": [
+      "Submission.R7SinglePassSum.run_spec",
+      "Submission.sum",
+      "Submission.sum_spec"
+    ],
+    "Submission.DirectRows.core": [
+      "Submission.DirectRows.core",
+      "Submission.NativeFinal.dot"
+    ],
+    "Submission.DirectRows.core_eq": [
+      "Submission.DirectRows.core",
+      "Submission.DirectRows.core_eq",
+      "Submission.DirectSmall.core"
+    ],
+    "Submission.DirectContinuous.row": [
+      "Submission.DirectContinuous.row",
+      "Submission.NativeFinal.dot",
+      "Submission.RowStream.emit"
+    ],
+    "Submission.DirectContinuous.row_prefix": [
+      "Submission.DirectContinuous.row",
+      "Submission.DirectContinuous.row_prefix",
+      "Submission.NativeFinal.dot",
+      "Submission.RowStream.Prefix",
+      "Submission.RowStream.emit_prefix",
+      "Submission.RowStream.point",
+      "Submission.RowStream.point_row"
+    ],
+    "Submission.DirectContinuous.output": [
+      "Submission.DirectContinuous.output",
+      "Submission.DirectContinuous.row"
+    ],
+    "Submission.DirectContinuous.output_prefix": [
+      "Submission.DirectContinuous.output",
+      "Submission.DirectContinuous.output_prefix",
+      "Submission.DirectContinuous.row",
+      "Submission.DirectContinuous.row_prefix",
+      "Submission.RowStream.Prefix",
+      "Submission.RowStream.foldl_inv",
+      "Submission.RowStream.point"
+    ],
+    "Submission.DirectContinuous.core": [
+      "Submission.DirectContinuous.core",
+      "Submission.DirectContinuous.output",
+      "Submission.DirectContinuous.output_prefix"
+    ],
+    "Submission.DirectContinuous.core_eq_reference": [
+      "Submission.DirectContinuous.core",
+      "Submission.DirectContinuous.core_eq_reference",
+      "Submission.DirectContinuous.output",
+      "Submission.DirectContinuous.output_prefix",
+      "Submission.RowStream.point",
+      "Submission.RowStream.points_eq_reference",
+      "Submission.RowStream.prefix_vector_eq_ofFn",
+      "Submission.referenceBmm"
+    ],
+    "Submission.bmmBeforeR11Cross": [
+      "Submission.DirectContinuous.core",
+      "Submission.bmmBeforeDirectRows",
+      "Submission.bmmBeforeR11Cross"
+    ],
+    "Submission.bmmBeforeR11Cross_spec": [
+      "Submission.DirectContinuous.core_eq_reference",
+      "Submission.bmmBeforeDirectRows_spec",
+      "Submission.bmmBeforeR11Cross",
+      "Submission.bmmBeforeR11Cross_spec",
+      "Submission.referenceBmm_spec"
+    ],
+    "Submission.R14ThinBCache.loop": [
+      "Submission.Packed10.zero32",
+      "Submission.R14ThinBCache.loop"
+    ],
+    "Submission.R14ThinBCache.loop_eq": [
+      "Submission.NativeFinal.dotLoop",
+      "Submission.Packed10.nativeA_getD",
+      "Submission.R14ThinBCache.loop",
+      "Submission.R14ThinBCache.loop_eq"
+    ],
+    "Submission.R14ThinBCache.dot": [
+      "Submission.Packed10.finish",
+      "Submission.Packed10.zero32",
+      "Submission.R14ThinBCache.dot",
+      "Submission.R14ThinBCache.loop"
+    ],
+    "Submission.R14ThinBCache.dot_eq": [
+      "Submission.NativeFinal.dot",
+      "Submission.Packed10.finish_eq_dot",
+      "Submission.Packed10.zero32",
+      "Submission.R14ThinBCache.dot",
+      "Submission.R14ThinBCache.dot_eq",
+      "Submission.R14ThinBCache.loop_eq"
+    ],
+    "Submission.R14ThinBCache.row": [
+      "Submission.R14ThinBCache.dot",
+      "Submission.R14ThinBCache.row",
+      "Submission.RowStream.emit"
+    ],
+    "Submission.R14ThinBCache.row_eq": [
+      "Submission.DirectContinuous.row",
+      "Submission.R14ThinBCache.dot_eq",
+      "Submission.R14ThinBCache.row",
+      "Submission.R14ThinBCache.row_eq",
+      "Submission.RowStream.emit"
+    ],
+    "Submission.R14ThinBCache.output": [
+      "Submission.R14ThinBCache.output",
+      "Submission.R14ThinBCache.row"
+    ],
+    "Submission.R14ThinBCache.output_eq": [
+      "R7W02.step",
+      "Submission.DirectContinuous.output",
+      "Submission.FastMul.step",
+      "Submission.R14ThinBCache.output",
+      "Submission.R14ThinBCache.output_eq",
+      "Submission.R14ThinBCache.row_eq",
+      "Submission.R7SumRepair.step"
+    ],
+    "Submission.R14ThinBCache.output_prefix": [
+      "Submission.DirectContinuous.output_prefix",
+      "Submission.R14ThinBCache.output",
+      "Submission.R14ThinBCache.output_eq",
+      "Submission.R14ThinBCache.output_prefix",
+      "Submission.RowStream.Prefix",
+      "Submission.RowStream.point"
+    ],
+    "Submission.R14ThinBCache.core": [
+      "Submission.R14ThinBCache.core",
+      "Submission.R14ThinBCache.output",
+      "Submission.R14ThinBCache.output_prefix"
+    ],
+    "Submission.R14ThinBCache.core_eq_reference": [
+      "Submission.R14ThinBCache.core",
+      "Submission.R14ThinBCache.core_eq_reference",
+      "Submission.R14ThinBCache.output",
+      "Submission.R14ThinBCache.output_prefix",
+      "Submission.RowStream.point",
+      "Submission.RowStream.points_eq_reference",
+      "Submission.RowStream.prefix_vector_eq_ofFn",
+      "Submission.referenceBmm"
+    ],
+    "Submission.R14ThinBCache.dispatch": [
+      "Submission.R14ThinBCache.core",
+      "Submission.R14ThinBCache.dispatch",
+      "Submission.bmmBeforeR11Cross"
+    ],
+    "Submission.R14ThinBCache.dispatch_spec": [
+      "Submission.R14ThinBCache.core_eq_reference",
+      "Submission.R14ThinBCache.dispatch",
+      "Submission.R14ThinBCache.dispatch_spec",
+      "Submission.bmmBeforeR11Cross_spec",
+      "Submission.referenceBmm_spec"
+    ],
+    "Submission.bmmBeforeUnderflowZero": [
+      "Submission.R14ThinBCache.dispatch",
+      "Submission.bmmBeforeUnderflowZero"
+    ],
+    "Submission.bmmBeforeUnderflowZero_spec": [
+      "Submission.R14ThinBCache.dispatch_spec",
+      "Submission.bmmBeforeUnderflowZero",
+      "Submission.bmmBeforeUnderflowZero_spec"
+    ],
+    "Submission.UnderflowZero.small": [
+      "R2W01b.magnitude",
+      "Submission.UnderflowZero.small"
+    ],
+    "Submission.UnderflowZero.small_exp": [
+      "R2W01b.magnitude_toNat",
+      "Submission.FastMul.expField_toNat",
+      "Submission.UnderflowZero.small",
+      "Submission.UnderflowZero.small_exp"
+    ],
+    "Submission.UnderflowZero.small_posZero": [
+      "Submission.UnderflowZero.small",
+      "Submission.UnderflowZero.small_posZero"
+    ],
+    "Submission.UnderflowZero.small_getD": [
+      "Submission.UnderflowZero.small",
+      "Submission.UnderflowZero.small_getD",
+      "Submission.UnderflowZero.small_posZero"
+    ],
+    "Submission.UnderflowZero.finiteScale_toNat": [
+      "Submission.UnderflowZero.finiteScale_toNat"
+    ],
+    "Submission.UnderflowZero.scale_small": [
+      "Submission.UnderflowZero.finiteScale_toNat",
+      "Submission.UnderflowZero.scale_small"
+    ],
+    "Submission.UnderflowZero.scale_sum_small": [
+      "Submission.UnderflowZero.scale_small",
+      "Submission.UnderflowZero.scale_sum_small",
+      "Submission.UnderflowZero.small",
+      "Submission.UnderflowZero.small_exp"
+    ],
+    "Submission.UnderflowZero.rseAny_zero": [
+      "Submission.FastMul.rseAny",
+      "Submission.R14ExponentShift.product",
+      "Submission.UnderflowZero.rseAny_zero"
+    ],
+    "Submission.UnderflowZero.roundP_zero": [
+      "Submission.FastMul.fastLog2",
+      "Submission.FastMul.fastLog2_eq",
+      "Submission.FastMul.log2_lt_64",
+      "Submission.FastMul.roundP",
+      "Submission.R14ExponentShift.product",
+      "Submission.R14ExponentShift.sign",
+      "Submission.UnderflowZero.roundP_zero",
+      "Submission.UnderflowZero.rseAny_zero"
+    ],
+    "Submission.UnderflowZero.mul_signed_zero": [
+      "Submission.FastMul.core",
+      "Submission.FastMul.mul",
+      "Submission.FastMul.mul_spec",
+      "Submission.FastMul.ofBits",
+      "Submission.FastMul.sm1_eq",
+      "Submission.FastMul.special",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.mul",
+      "Submission.UnderflowZero.mul_signed_zero",
+      "Submission.UnderflowZero.roundP_zero",
+      "Submission.UnderflowZero.scale_sum_small",
+      "Submission.UnderflowZero.small",
+      "Submission.UnderflowZero.small_exp",
+      "Submission.mul"
+    ],
+    "Submission.UnderflowZero.add_signed_zero": [
+      "Submission.FastMul.ofBits",
+      "Submission.R14ExponentShift.sign",
+      "Submission.ScalarNaN.add",
+      "Submission.UnderflowZero.add_signed_zero",
+      "Submission.add"
+    ],
+    "Submission.UnderflowZero.add_mul_zero": [
+      "Submission.FastMul.mul",
+      "Submission.LowScale.mul",
+      "Submission.ScalarNaN.add",
+      "Submission.ScalarNaN.mul",
+      "Submission.UnderflowZero.add_mul_zero",
+      "Submission.UnderflowZero.add_signed_zero",
+      "Submission.UnderflowZero.mul_signed_zero",
+      "Submission.UnderflowZero.small",
+      "Submission.add",
+      "Submission.mul"
+    ],
+    "Submission.UnderflowZero.foldl_loop_zero": [
+      "R7W02.step",
+      "Submission.FastMul.step",
+      "Submission.Packed10Index.loop",
+      "Submission.R14ThinBCache.loop",
+      "Submission.R7SinglePassSum.loop",
+      "Submission.R7SumRepair.step",
+      "Submission.UnderflowZero.foldl_loop_zero"
+    ],
+    "Submission.UnderflowZero.foldl_zero": [
+      "R7W02.step",
+      "Submission.FastMul.step",
+      "Submission.R7SumRepair.step",
+      "Submission.UnderflowZero.foldl_loop_zero",
+      "Submission.UnderflowZero.foldl_zero"
+    ],
+    "Submission.UnderflowZero.zeros": [
+      "Submission.UnderflowZero.zeros"
+    ],
+    "Submission.UnderflowZero.zeros_eq_reference": [
+      "Submission.UnderflowZero.add_mul_zero",
+      "Submission.UnderflowZero.foldl_zero",
+      "Submission.UnderflowZero.small",
+      "Submission.UnderflowZero.small_getD",
+      "Submission.UnderflowZero.zeros",
+      "Submission.UnderflowZero.zeros_eq_reference",
+      "Submission.add_eq",
+      "Submission.mul_eq",
+      "Submission.referenceBmm"
+    ],
+    "Submission.bmm": [
+      "Submission.UnderflowZero.small",
+      "Submission.UnderflowZero.zeros",
+      "Submission.bmm",
+      "Submission.bmmBeforeUnderflowZero"
+    ],
+    "Submission.bmm_spec": [
+      "Submission.UnderflowZero.small",
+      "Submission.UnderflowZero.zeros_eq_reference",
+      "Submission.bmm",
+      "Submission.bmmBeforeUnderflowZero_spec",
+      "Submission.bmm_spec",
+      "Submission.referenceBmm_spec"
+    ]
+  },
+  "removed": [
+    {
+      "name": "R7W01.quietNaN32_is_qnan",
+      "leaf": "quietNaN32_is_qnan",
+      "scope": "R7W01",
+      "kind": "theorem",
+      "character_start": 5436,
+      "character_end": 5632,
+      "bytes": 196,
+      "sha256": "1c0616879f2cbcd329d217158e9f6757c05765e82c44b565ce67d232dc7e4811",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R7W01.modelDotFold",
+      "leaf": "modelDotFold",
+      "scope": "R7W01",
+      "kind": "def",
+      "character_start": 11337,
+      "character_end": 11500,
+      "bytes": 168,
+      "sha256": "2205a2b53b0ac5abce3d52ce25d820d0f647929c69a30969640cced7e1d543f8",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R7W01.modelDotEarly",
+      "leaf": "modelDotEarly",
+      "scope": "R7W01",
+      "kind": "def",
+      "character_start": 11502,
+      "character_end": 11722,
+      "bytes": 229,
+      "sha256": "b70b52e8669a05b6b7f42487919b0232f9e792b899182915acc346a6baf036a5",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R7W02.quietMask_getLsbD",
+      "leaf": "quietMask_getLsbD",
+      "scope": "R7W02",
+      "kind": "theorem",
+      "character_start": 16517,
+      "character_end": 16889,
+      "bytes": 376,
+      "sha256": "e899d06f6f3572d5e361b70cc722b0e7509ef24119e428b6c6b896434538f319",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R7W02.quietRaw_preserves_bit",
+      "leaf": "quietRaw_preserves_bit",
+      "scope": "R7W02",
+      "kind": "theorem",
+      "character_start": 16891,
+      "character_end": 17198,
+      "bytes": 309,
+      "sha256": "a0b40ad9a5b89b8e1213a80c2e5078755202d4bf70d7f148b655b4ab91954029",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R7W02.exec_toModel_bits_eq_raw",
+      "leaf": "exec_toModel_bits_eq_raw",
+      "scope": "R7W02",
+      "kind": "theorem",
+      "character_start": 20510,
+      "character_end": 20673,
+      "bytes": 163,
+      "sha256": "346e4485b14ff78984a508cd337e864af430102e5a548d39f23e20b0988a4ca6",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R2W01b.scaleTable_entry",
+      "leaf": "scaleTable_entry",
+      "scope": "R2W01b",
+      "kind": "theorem",
+      "character_start": 29835,
+      "character_end": 30045,
+      "bytes": 210,
+      "sha256": "50a5a1b93de1b23363b8ab630e73a1f3ec422ab57bcd1e69bae266e5766c65a6",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R2W01b.zero_fields",
+      "leaf": "zero_fields",
+      "scope": "R2W01b",
+      "kind": "theorem",
+      "character_start": 30365,
+      "character_end": 30768,
+      "bytes": 417,
+      "sha256": "18039519f39e7941bc7bfe3a10ebb33ca3e13e2ceddb05f48691c0be430774eb",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R2W01b.convert_bits_eq",
+      "leaf": "convert_bits_eq",
+      "scope": "R2W01b",
+      "kind": "theorem",
+      "character_start": 32475,
+      "character_end": 32696,
+      "bytes": 225,
+      "sha256": "5d42612f80736aec527cf913af7666ef802e5bf9be80a645d6859cd99b2f0728",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R2W01b.replace_decoder",
+      "leaf": "replace_decoder",
+      "scope": "R2W01b",
+      "kind": "theorem",
+      "character_start": 32699,
+      "character_end": 32937,
+      "bytes": 248,
+      "sha256": "16c0ff55a3eb7385a97a84be16cb7abbaf23826afacf9a0285ddd8dd425b1c7c",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R2W01b.foldl_convert_eq",
+      "leaf": "foldl_convert_eq",
+      "scope": "R2W01b",
+      "kind": "theorem",
+      "character_start": 32938,
+      "character_end": 33367,
+      "bytes": 437,
+      "sha256": "94a6609b6ff1e3cfe11eebc73ee4f9eef22dd8a3fe7380bb5ab1d04dd77ffad1",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R2W01c.native_eq_of_model_eq",
+      "leaf": "native_eq_of_model_eq",
+      "scope": "R2W01c",
+      "kind": "theorem",
+      "character_start": 49078,
+      "character_end": 49404,
+      "bytes": 326,
+      "sha256": "f418c3258f03ca42102d08d1f02c143c3d9ae7e1f9b0118c2a82c0ab354c8bb0",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R2W01c.convert_bits_eq",
+      "leaf": "convert_bits_eq",
+      "scope": "R2W01c",
+      "kind": "theorem",
+      "character_start": 65466,
+      "character_end": 65609,
+      "bytes": 143,
+      "sha256": "ed93b4969c020f2bdc216f8ae88a34b67b0c4fdaa56f668f23147a0dbaa81ee9",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R2W01c.replace_decoder",
+      "leaf": "replace_decoder",
+      "scope": "R2W01c",
+      "kind": "theorem",
+      "character_start": 65610,
+      "character_end": 65768,
+      "bytes": 164,
+      "sha256": "d11ebb8fe2415d5d2e28f4131151a51ee7a349bf8be76173c88ad7d62392175a",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "R2W01c.foldl_convert_eq",
+      "leaf": "foldl_convert_eq",
+      "scope": "R2W01c",
+      "kind": "theorem",
+      "character_start": 65769,
+      "character_end": 66041,
+      "bytes": 276,
+      "sha256": "d710f9cf027552f1993a7d8998a86efcfac23f83a5452eb8460f85a0b8c41ad2",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.GuardBridge.modelCanonicalOfFinite",
+      "leaf": "modelCanonicalOfFinite",
+      "scope": "Submission.GuardBridge",
+      "kind": "theorem",
+      "character_start": 80428,
+      "character_end": 80798,
+      "bytes": 370,
+      "sha256": "67b9d72cdf053f22946bcfae82676b903ac19ee9e22008b143c2a1e91db67d2f",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.WordFinite.modelFiniteOfExp",
+      "leaf": "modelFiniteOfExp",
+      "scope": "Submission.WordFinite",
+      "kind": "theorem",
+      "character_start": 80908,
+      "character_end": 81653,
+      "bytes": 759,
+      "sha256": "54eceea7c350e661bc6f8e2899ee8d30ef6e9db29e1a9991002f26e0f711a96d",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.WordFinite.nativeFiniteOfExp",
+      "leaf": "nativeFiniteOfExp",
+      "scope": "Submission.WordFinite",
+      "kind": "theorem",
+      "character_start": 81654,
+      "character_end": 82032,
+      "bytes": 380,
+      "sha256": "dc9432b3fdf8e0c55cf2466afa3f9d167dac6f732237a4fb6ae9389bb36b4bc8",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.NativeBridge.toModelNativeMul",
+      "leaf": "toModelNativeMul",
+      "scope": "Submission.NativeBridge",
+      "kind": "theorem",
+      "character_start": 89408,
+      "character_end": 90404,
+      "bytes": 996,
+      "sha256": "2fd79264117581a057a2a9bdc1d8eabee276bddaeda0d53cfdd702a9f0b3783f",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.NativeBridge.ofFloat32Mul",
+      "leaf": "ofFloat32Mul",
+      "scope": "Submission.NativeBridge",
+      "kind": "theorem",
+      "character_start": 90788,
+      "character_end": 91324,
+      "bytes": 538,
+      "sha256": "edbfa7bbd703dac83701e6b97e74ddbcadc0973807557292b294c86f2f704ce4",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.DWordNaN.M",
+      "leaf": "M",
+      "scope": "Submission.DWordNaN",
+      "kind": "abbrev",
+      "character_start": 104740,
+      "character_end": 104779,
+      "bytes": 39,
+      "sha256": "cb098b913e2bfe3e9dffdb946a37a6030971a72a39a8d6e91cb39fc2c054a6ec",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W03.model_add_of_right_snan",
+      "leaf": "model_add_of_right_snan",
+      "scope": "Submission.R7W03",
+      "kind": "theorem",
+      "character_start": 183144,
+      "character_end": 183559,
+      "bytes": 415,
+      "sha256": "3caccb7b5685b76da505cab3f38507471f39c5c6cb533620e01ff34337c9c0d9",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W03.model_add_of_right_snan_isQNaN",
+      "leaf": "model_add_of_right_snan_isQNaN",
+      "scope": "Submission.R7W03",
+      "kind": "theorem",
+      "character_start": 183561,
+      "character_end": 183824,
+      "bytes": 263,
+      "sha256": "68908a0e8ca74edeb246ea894f4853fa60e2eabfa1785c4448b0e65a7d321484",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.add_isNaN_eq_native",
+      "leaf": "add_isNaN_eq_native",
+      "scope": "Submission.R7W05",
+      "kind": "theorem",
+      "character_start": 190395,
+      "character_end": 190703,
+      "bytes": 310,
+      "sha256": "bd107ec7051c1ad1e6d9147c038781c189479f94aafd45527b792954e5d1b905",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.add_model_isNaN_eq_native",
+      "leaf": "add_model_isNaN_eq_native",
+      "scope": "Submission.R7W05",
+      "kind": "theorem",
+      "character_start": 190711,
+      "character_end": 190950,
+      "bytes": 239,
+      "sha256": "ebea8bd70adcceb6a3e9d52cb07df845f5c0b45d51403df2bcd0f3c238008b79",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.mul_unpack_of_isNaN",
+      "leaf": "mul_unpack_of_isNaN",
+      "scope": "Submission.R7W05",
+      "kind": "theorem",
+      "character_start": 191096,
+      "character_end": 191369,
+      "bytes": 273,
+      "sha256": "400ff89b67551cba438d61076ec6908eb83d894fb834aee861c2580f2649549c",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.native_mul_nan_left",
+      "leaf": "native_mul_nan_left",
+      "scope": "Submission.R7W05",
+      "kind": "theorem",
+      "character_start": 191377,
+      "character_end": 191689,
+      "bytes": 312,
+      "sha256": "503a5dfb2fbb6559a2b0479aca79cf037e1db16bdae25ae848c4bd044d8c259e",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.native_mul_nan_right",
+      "leaf": "native_mul_nan_right",
+      "scope": "Submission.R7W05",
+      "kind": "theorem",
+      "character_start": 191697,
+      "character_end": 192037,
+      "bytes": 340,
+      "sha256": "a853628f42dce6a070e9b856656a059a643bab210723b4f8ebb8bace4db159d1",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.mul_toFloat32_of_not_nan",
+      "leaf": "mul_toFloat32_of_not_nan",
+      "scope": "Submission.R7W05",
+      "kind": "theorem",
+      "character_start": 192051,
+      "character_end": 192735,
+      "bytes": 684,
+      "sha256": "e70815760247d74ed6b6c0f9bc19b69b93109c9a6b06516c1d7cfc6a91e7aecc",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.model_mul_nan_left",
+      "leaf": "model_mul_nan_left",
+      "scope": "Submission.R7W05",
+      "kind": "theorem",
+      "character_start": 192746,
+      "character_end": 193274,
+      "bytes": 528,
+      "sha256": "81348d9af8ca80cea66f1c1f3f9248d77de64d0cb17202c8b0c57b256cd98ddc",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.model_mul_nan_right",
+      "leaf": "model_mul_nan_right",
+      "scope": "Submission.R7W05",
+      "kind": "theorem",
+      "character_start": 193282,
+      "character_end": 193811,
+      "bytes": 529,
+      "sha256": "da31f7199cd51ff394f487c3bc5ee55e20aaadce9fe4b0e8177dbdb29076fe76",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.mul_toFloat32",
+      "leaf": "mul_toFloat32",
+      "scope": "Submission.R7W05",
+      "kind": "theorem",
+      "character_start": 193822,
+      "character_end": 194665,
+      "bytes": 843,
+      "sha256": "8bb741390ec80fe8d234607db74eed591bca9d6bd746402f7ccec189b2a42195",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.mul_isNaN_eq_native",
+      "leaf": "mul_isNaN_eq_native",
+      "scope": "Submission.R7W05",
+      "kind": "theorem",
+      "character_start": 194673,
+      "character_end": 194981,
+      "bytes": 310,
+      "sha256": "8033f7068c2daebb22158e459537ccad0bad0dd73cc5bea8203d7e6c5ac52f64",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.mul_model_isNaN_eq_native",
+      "leaf": "mul_model_isNaN_eq_native",
+      "scope": "Submission.R7W05",
+      "kind": "theorem",
+      "character_start": 194989,
+      "character_end": 195228,
+      "bytes": 239,
+      "sha256": "fd5974c3b880c67330c07a7af2eb1fd8ef393ede04d52afbeeb68015de00ac94",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.nativeDotStep",
+      "leaf": "nativeDotStep",
+      "scope": "Submission.R7W05",
+      "kind": "def",
+      "character_start": 195500,
+      "character_end": 195658,
+      "bytes": 158,
+      "sha256": "97678747b44479a50dce2e89c00a7bc50bc44cd4e9b51a6aacd1dade275d80aa",
+      "root": false,
+      "attribute": "@[inline]",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W05.repairDotStep",
+      "leaf": "repairDotStep",
+      "scope": "Submission.R7W05",
+      "kind": "def",
+      "character_start": 195818,
+      "character_end": 195988,
+      "bytes": 170,
+      "sha256": "9cb2f9b894cf3f13e949c906b8754ecd72211d75c5e92544d0107311867f2fe3",
+      "root": false,
+      "attribute": "@[inline]",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W12.model_mul_canonical_left",
+      "leaf": "model_mul_canonical_left",
+      "scope": "Submission.R7W12",
+      "kind": "theorem",
+      "character_start": 199950,
+      "character_end": 200293,
+      "bytes": 343,
+      "sha256": "bd2fd527afc1d60de6d5ff32464c68d9fb07605e6800153335c5a7b4ead52bf5",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7W12.model_mul_canonical_right",
+      "leaf": "model_mul_canonical_right",
+      "scope": "Submission.R7W12",
+      "kind": "theorem",
+      "character_start": 200294,
+      "character_end": 200679,
+      "bytes": 385,
+      "sha256": "3b714ac2f3d104f573ae7f750aed1092fa695b804e1d47cec038c4395c567077",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.R7NaNReplay.replay",
+      "leaf": "replay",
+      "scope": "Submission.R7NaNReplay",
+      "kind": "def",
+      "character_start": 208400,
+      "character_end": 208624,
+      "bytes": 224,
+      "sha256": "9eedfdf08606bf0cbcebc51995b4d1d97be2f65726b393a54cf07fb8ce5cae28",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.DirectRows.core",
+      "leaf": "core",
+      "scope": "Submission.DirectRows",
+      "kind": "def",
+      "character_start": 247650,
+      "character_end": 248065,
+      "bytes": 415,
+      "sha256": "54db66bbf630131f85cf7b3bd81fd701019ba4843b701d0f3c6df882e422da6e",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    },
+    {
+      "name": "Submission.DirectRows.core_eq",
+      "leaf": "core_eq",
+      "scope": "Submission.DirectRows",
+      "kind": "theorem",
+      "character_start": 248066,
+      "character_end": 248744,
+      "bytes": 682,
+      "sha256": "c690391c32a12e923cb7e3e07f5d88a351b03b761fb418d66365c3606502dee5",
+      "root": false,
+      "attribute": "",
+      "protected": false
+    }
+  ],
+  "scope": "Analysis derivative only, not a candidate. Names resolved first against current namespace prefixes; unmatched names conservatively retain every local suffix match, including dot-notation leaves. Attributes other than inline/noinline, instances, structures, public roots, scoped options and attributions retained. This does not implement the Lean elaborator and cannot establish correctness/runtime equivalence; complete exact-source gate is mandatory before adoption."
+}

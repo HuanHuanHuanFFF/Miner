@@ -1,0 +1,58 @@
+{
+  "timestamp_utc": "2026-10-25T00:46:18.834069+00:00",
+  "state": "SOURCE_COMPLETE_DRAFT_NOT_COMPILED",
+  "request": "20261025T004700000Z-r14-development-word-add-final-bridge-request.md",
+  "component": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/astra-word-add-raw-model1.lean",
+    "bytes": 5275,
+    "sha256": "d507f17d5b4a363fdfaf1a329be036a33df1122d4ef87b9959a1861013bf7323"
+  },
+  "theorem": "Submission.R14WordAdd.raw_add_model",
+  "dependencies": [
+    {
+      "path": "development-word-add-runtime3.lean",
+      "bytes": 3669,
+      "sha256": "9e1caaf2ec6de36ff08230ff54d646d831cb80fa17c7a4f1fc8628e87b3f8c79"
+    },
+    {
+      "path": "development-word-add-word-bridges-draft.lean",
+      "bytes": 3176,
+      "sha256": "2c64a9a6d048ca8afd4ec3d72e6dadb3f47c07f8f4b57b8ec70f17d69f04d283"
+    },
+    {
+      "path": "astra-word-add-alignment2.lean",
+      "bytes": 4018,
+      "sha256": "eaa89fa496e6dad3d82d6c14b18503c918cec02b43876c134cc851daaf3d08f9"
+    },
+    {
+      "path": "astra-word-add-bounds1.lean",
+      "bytes": 4499,
+      "sha256": "c7fa39b51d238d0d5b99a7bed58dcf31f3a20b9da19e69c94ec447fe7dd5cfee"
+    },
+    {
+      "path": "astra-word-add-model-bridge1.lean",
+      "bytes": 2200,
+      "sha256": "a60ca79e76d5882e1817d2547b580438f781a87078e390b15b58fdb8d8a73dbd"
+    },
+    {
+      "path": "development-word-add-foundation3.lean",
+      "bytes": 4202,
+      "sha256": "7dae5c3463501f1c00fc7030bd0c009e72a11b50850567f74890e1fda7860a10"
+    }
+  ],
+  "required_interface": {
+    "name": "Submission.R14WordAdd.magnitudeNat",
+    "definition": "R14WordAddAlignment.magnitude (wordSign(high u v)) (wordSign(low u v)) (mantissa(high u v)).toNat (mantissa(low u v)).toNat (gap u v).toNat",
+    "status": "AGREED_INTERFACE_MUST_BE_DEFINED_BY_D_BEFORE_COMPONENT"
+  },
+  "proof_path": [
+    "eligible_conditions normal input decodes",
+    "sort-case sign/order conditions and exact gap",
+    "exact_high_low or exact_low_high at decoded dyadic level",
+    "N nonzero and log2>=24 from frozen magnitude/log2 bounds",
+    "raw_normal_decode in original u/v order",
+    "model_add_normal with caller-supplied complete exponent<=254"
+  ],
+  "exclusions": "No raw Model.add commutativity, no input/domain expansion, no word runtime integration, no CI candidate or publication.",
+  "remaining": "Actual Lean elaboration and D word-field/final add_spec assembly. A source-complete proof attempt is not an accepted theorem."
+}
