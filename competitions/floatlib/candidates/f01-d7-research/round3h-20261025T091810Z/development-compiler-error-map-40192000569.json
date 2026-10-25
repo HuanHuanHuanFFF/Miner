@@ -1,0 +1,48 @@
+{
+  "at_utc": "2026-10-25T12:15:56.184421+00:00",
+  "run": 40192000569,
+  "candidates": [
+    {
+      "candidate": "f01-r16-dev-u32-roundtrip-probe1",
+      "kernel_sha256": "4e97be71ed7b4633d6e8db21b1487d3fde50ef64e387dea441a9bc53f94bcb03",
+      "source_commit": "2ab3079ad8eb93398a04be75f03b1288e0a0b901",
+      "source_path": "competitions/floatlib/candidates/f01-r16-dev-u32-roundtrip-probe1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40192000569/download-b34b39cd616248729b0bb3f5005690ae/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r16-dev-u32-roundtrip-probe1/full-build-output.txt",
+      "original_output_sha256": "81518415b7bdd4b325def6456ebc44cf80d4879662b7191a561b9d8522427d39",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 6832,
+          "column": 9,
+          "declaration": "Submission.R16UInt32Roundtrip.toUInt32_of_nonnegative_integral_decode",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6830,
+              "text": "  change (UInt32.ofNatClamp"
+            },
+            {
+              "line": 6831,
+              "text": "    ((x.toModel.unpack.toInt 0 (UInt32.size-1)).toNat)).toNat = _"
+            },
+            {
+              "line": 6832,
+              "text": "  rw [hi,hr]"
+            },
+            {
+              "line": 6833,
+              "text": "  simpa using (UInt32.toNat_ofNatClamp_of_lt hfit)"
+            },
+            {
+              "line": 6834,
+              "text": ""
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  Model.roundDyadicToInt Model.IEEERoundingMode.towardZero { negative := false, significand := m, exponent := ↑e }\nin the target expression\n  (UInt32.ofNatClamp\n        (match Model.ExactValue.finite { negative := false, significand := m, exponent := ↑e } with\n          | Model.ExactValue.finite d => Model.roundDyadicToInt Model.IEEERoundingMode.towardZero d\n          | Model.ExactValue.infinity negative => if negative = true then 0 else ↑UInt32.size - 1\n          | Model.ExactValue.nan sign signaling payload => 0).toNat).toNat =\n    m * 2 ^ e\n\nx : Float32\nm e : ℕ\nhd : (Model.ofFloat32Model x.toModel).toDyadic? = some { negative := false, significand := m, exponent := ↑e }\nhfit : m * 2 ^ e < UInt32.size\nhv :\n  (Model.ofFloat32Model x.toModel).exactValue =\n    Model.ExactValue.finite { negative := false, significand := m, exponent := ↑e }\nhi :\n  Float.Model.UnpackedFloat.toInt 0 (↑UInt32.size - 1) x.toModel.unpack =\n    match Model.ExactValue.finite { negative := false, significand := m, exponent := ↑e } with\n    | Model.ExactValue.finite d => Model.roundDyadicToInt Model.IEEERoundingMode.towardZero d\n    | Model.ExactValue.infinity negative => if negative = true then 0 else ↑UInt32.size - 1\n    | Model.ExactValue.nan sign signaling payload => 0\nhr :\n  Model.roundDyadicToInt Model.IEEERoundingMode.towardZero { negative := false, significand := m, exponent := ↑e } =\n    ↑(m * 2 ^ e)\n⊢ (UInt32.ofNatClamp\n        (match Model.ExactValue.finite { negative := false, significand := m, exponent := ↑e } with\n          | Model.ExactValue.finite d => Model.roundDyadicToInt Model.IEEERoundingMode.towardZero d\n          | Model.ExactValue.infinity negative => if negative = true then 0 else ↑UInt32.size - 1\n          | Model.ExactValue.nan sign signaling payload => 0).toNat).toNat =\n    m * 2 ^ e"
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}

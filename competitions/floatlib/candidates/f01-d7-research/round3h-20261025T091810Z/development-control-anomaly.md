@@ -1,0 +1,7 @@
+# R16 completed B2 ADD control anomaly needs bounded diagnosis
+
+Completed run40187127847/seed1626007 has B2 versus41 ADD normalized2.9066×; raw submission2.8392× while raw reference0.9768×. Thus reference drift alone does not explain it. MUL0.8290, SUM0.8402, BMM0.5137 versus41. All ADD cells are elevated (dense3.4502, ML3.6249, paired3.6053). These are original same-plan full controls; the new ADD candidate failed statement and contributes no timing.
+
+Same exact B2 controls in40183711165 and R15 D/A/B have ADD normalized0.8897/0.9156/0.8948/0.8847×, with reference ratios about1.000–1.002. This is one anomalous completed sample, not a new retained-source model. Five exact decomposition receipts are development-baseline-control-decomposition-<run>.json; reproducible light script development-baseline-control-check.py. Original failures/slow samples stay included, model9222 unchanged.
+
+If the future-interface worker finishes, give one available Astra a bounded10-minute existing-source/input/environment diagnosis, ending11:40; no new CI, no current401882 result reads or holdout reads. Compare actual source hot path/converter identity, completed input exposure and available runner evidence. Distinguish input/cold-code/compiler/environment hypotheses from facts; don't assume the original gate is wrong. Propose a single same-source/same-seed order diagnostic only if needed; D schedules after current full gate/earned confirmations. Do not tune a candidate or reset its first-D sample based on this anomaly.

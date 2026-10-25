@@ -1,0 +1,348 @@
+{
+  "at_utc": "2026-10-25T10:58:21.941625+00:00",
+  "run": 40186471996,
+  "candidates": [
+    {
+      "candidate": "f01-r16-dev-add-interface2",
+      "kernel_sha256": "f912a795c54b27f3494b27fba95cfc12ef3dce60a0fd417e466f62b95d9c8990",
+      "source_commit": "c8f5adc501290cd69a92cf9abc6954721758e3c8",
+      "source_path": "competitions/floatlib/candidates/f01-r16-dev-add-interface2/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40186471996/download-f5591c4b0dae4beba81dc9eb7e7babc6/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r16-dev-add-interface2/full-build-output.txt",
+      "original_output_sha256": "112df78a2be5ee27b8494b158d0a9421cfc3873878ec43133040768f6972c702",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 7095,
+          "column": 29,
+          "declaration": "Submission.R16AddUInt32Interface.uint32_bits_eq_roundDyadic",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7093,
+              "text": "theorem uint32_bits_eq_roundDyadic (n : UInt32) :"
+            },
+            {
+              "line": 7094,
+              "text": "    n.toFloat32.toBits = Model.NativeBinary32.roundDyadic"
+            },
+            {
+              "line": 7095,
+              "text": "      (⟨false, n.toNat, 0⟩ : Dyadic) := by"
+            },
+            {
+              "line": 7096,
+              "text": "  have hw : ExecFloat.Binary.ofFloat32 n.toFloat32 ="
+            },
+            {
+              "line": 7097,
+              "text": "      ExecFloat.Binary.ofBits32"
+            }
+          ],
+          "message": "Ambiguous term\n  Dyadic\nPossible interpretations:\n  _root_.Dyadic : Type\n  \n  FloatLib.Numerics.Dyadic : Type"
+        },
+        {
+          "line": 7098,
+          "column": 65,
+          "declaration": "Submission.R16AddUInt32Interface.uint32_bits_eq_roundDyadic",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7096,
+              "text": "  have hw : ExecFloat.Binary.ofFloat32 n.toFloat32 ="
+            },
+            {
+              "line": 7097,
+              "text": "      ExecFloat.Binary.ofBits32"
+            },
+            {
+              "line": 7098,
+              "text": "        (Model.NativeBinary32.roundDyadic (⟨false, n.toNat, 0⟩ : Dyadic)) := by"
+            },
+            {
+              "line": 7099,
+              "text": "    apply ExecFloat.Binary.toModel_inj.mp"
+            },
+            {
+              "line": 7100,
+              "text": "    change R2W01c.nativeModel n.toFloat32 = R2W01c.rawModel"
+            }
+          ],
+          "message": "Ambiguous term\n  Dyadic\nPossible interpretations:\n  _root_.Dyadic : Type\n  \n  FloatLib.Numerics.Dyadic : Type"
+        },
+        {
+          "line": 7101,
+          "column": 63,
+          "declaration": "Submission.R16AddUInt32Interface.uint32_bits_eq_roundDyadic",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7099,
+              "text": "    apply ExecFloat.Binary.toModel_inj.mp"
+            },
+            {
+              "line": 7100,
+              "text": "    change R2W01c.nativeModel n.toFloat32 = R2W01c.rawModel"
+            },
+            {
+              "line": 7101,
+              "text": "      (Model.NativeBinary32.roundDyadic (⟨false, n.toNat, 0⟩ : Dyadic))"
+            },
+            {
+              "line": 7102,
+              "text": "    rw [R2W01c.rawModel_eq_native32, Model.NativeBinary32.ofUInt32_roundDyadic]"
+            },
+            {
+              "line": 7103,
+              "text": "    exact R2W01c.uint32_model_eq_roundDyadic n"
+            }
+          ],
+          "message": "Ambiguous term\n  Dyadic\nPossible interpretations:\n  _root_.Dyadic : Type\n  \n  FloatLib.Numerics.Dyadic : Type"
+        },
+        {
+          "line": 7113,
+          "column": 29,
+          "declaration": "Submission.R16AddUInt32Interface.uint32_native_fields_of_shape",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7111,
+              "text": "    (he : em < 256) (hf : f < 8388608)"
+            },
+            {
+              "line": 7112,
+              "text": "    (hshape : Model.NativeBinary32.roundDyadic"
+            },
+            {
+              "line": 7113,
+              "text": "      (⟨false, n.toNat, 0⟩ : Dyadic) = Model.NativeBinary32.mkBits false em f) :"
+            },
+            {
+              "line": 7114,
+              "text": "    (Model.NativeBinary32.expField n.toFloat32.toBits).toNat = em ∧"
+            },
+            {
+              "line": 7115,
+              "text": "    (Model.NativeBinary32.fracField n.toFloat32.toBits).toNat = f := by"
+            }
+          ],
+          "message": "Ambiguous term\n  Dyadic\nPossible interpretations:\n  _root_.Dyadic : Type\n  \n  FloatLib.Numerics.Dyadic : Type"
+        },
+        {
+          "line": 7136,
+          "column": 54,
+          "declaration": "Submission.R16AddUInt32Interface.raw_round_positive_zero",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7134,
+              "text": ""
+            },
+            {
+              "line": 7135,
+              "text": "theorem raw_round_positive_zero (e : Int) :"
+            },
+            {
+              "line": 7136,
+              "text": "    Model.NativeBinary32.roundDyadic (⟨false, 0, e⟩ : Dyadic) = 0 := by"
+            },
+            {
+              "line": 7137,
+              "text": "  rfl"
+            },
+            {
+              "line": 7138,
+              "text": ""
+            }
+          ],
+          "message": "Ambiguous term\n  Dyadic\nPossible interpretations:\n  _root_.Dyadic : Type\n  \n  FloatLib.Numerics.Dyadic : Type"
+        },
+        {
+          "line": 7159,
+          "column": 4,
+          "declaration": "Submission.R16AddUInt32Interface.lowMantissa_bounds",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7157,
+              "text": "  have hp0 : 2 ^ n.log2 * 2 ^ (23 - n.log2) = 8388608 := by"
+            },
+            {
+              "line": 7158,
+              "text": "    rw [← Nat.pow_add, he0]"
+            },
+            {
+              "line": 7159,
+              "text": "    norm_num"
+            },
+            {
+              "line": 7160,
+              "text": "  have hp1 : 2 ^ (n.log2 + 1) * 2 ^ (23 - n.log2) = 16777216 := by"
+            },
+            {
+              "line": 7161,
+              "text": "    rw [← Nat.pow_add, he1]"
+            }
+          ],
+          "message": "No goals to be solved"
+        },
+        {
+          "line": 7162,
+          "column": 4,
+          "declaration": "Submission.R16AddUInt32Interface.lowMantissa_bounds",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7160,
+              "text": "  have hp1 : 2 ^ (n.log2 + 1) * 2 ^ (23 - n.log2) = 16777216 := by"
+            },
+            {
+              "line": 7161,
+              "text": "    rw [← Nat.pow_add, he1]"
+            },
+            {
+              "line": 7162,
+              "text": "    norm_num"
+            },
+            {
+              "line": 7163,
+              "text": "  rw [hp0] at hlo"
+            },
+            {
+              "line": 7164,
+              "text": "  rw [hp1] at hhi"
+            }
+          ],
+          "message": "No goals to be solved"
+        },
+        {
+          "line": 7165,
+          "column": 2,
+          "declaration": "Submission.R16AddUInt32Interface.lowMantissa_bounds",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7163,
+              "text": "  rw [hp0] at hlo"
+            },
+            {
+              "line": 7164,
+              "text": "  rw [hp1] at hhi"
+            },
+            {
+              "line": 7165,
+              "text": "  simpa only [lowMantissa, Nat.shiftLeft_eq] using And.intro hlo hhi"
+            },
+            {
+              "line": 7166,
+              "text": ""
+            },
+            {
+              "line": 7167,
+              "text": "theorem native_round_low (sign : Bool) (n : Nat) (e : Int)"
+            }
+          ],
+          "message": "Type mismatch: After simplification, term\n  ⟨hlo, hhi⟩\n has type\n  8388608 ≤ n * 2 ^ (23 - n.log2) ∧ n * 2 ^ (23 - n.log2) < 16777216\nbut is expected to have type\n  8388608 ≤ n.shiftLeft (23 - n.log2) ∧ n.shiftLeft (23 - n.log2) < 16777216"
+        },
+        {
+          "line": 7171,
+          "column": 53,
+          "declaration": "Submission.R16AddUInt32Interface.native_round_low",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7169,
+              "text": "    (hmin : -126 ≤ (n.log2 : Int) + e)"
+            },
+            {
+              "line": 7170,
+              "text": "    (hmax : (n.log2 : Int) + e ≤ 127) :"
+            },
+            {
+              "line": 7171,
+              "text": "    Model.NativeBinary32.roundDyadic (⟨sign, n, e⟩ : Dyadic) ="
+            },
+            {
+              "line": 7172,
+              "text": "      Model.NativeBinary32.mkBits sign"
+            },
+            {
+              "line": 7173,
+              "text": "        (Int.toNat ((n.log2 : Int) + e + 127)) (lowMantissa n - 8388608) := by"
+            }
+          ],
+          "message": "Ambiguous term\n  Dyadic\nPossible interpretations:\n  _root_.Dyadic : Type\n  \n  FloatLib.Numerics.Dyadic : Type"
+        },
+        {
+          "line": 7173,
+          "column": 76,
+          "declaration": "Submission.R16AddUInt32Interface.native_round_low",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7171,
+              "text": "    Model.NativeBinary32.roundDyadic (⟨sign, n, e⟩ : Dyadic) ="
+            },
+            {
+              "line": 7172,
+              "text": "      Model.NativeBinary32.mkBits sign"
+            },
+            {
+              "line": 7173,
+              "text": "        (Int.toNat ((n.log2 : Int) + e + 127)) (lowMantissa n - 8388608) := by"
+            },
+            {
+              "line": 7174,
+              "text": "  have hb := lowMantissa_bounds n hn hh"
+            },
+            {
+              "line": 7175,
+              "text": "  have hcarry : Nat.shiftLeft n (23 - n.log2) ≠ 16777216 := ne_of_lt hb.2"
+            }
+          ],
+          "message": "unsolved goals\nsign : Bool\nn : ℕ\ne : ℤ\nhn : n ≠ 0\nhh : n.log2 < 23\nhmin : -126 ≤ ↑n.log2 + e\nhmax : ↑n.log2 + e ≤ 127\nhb : 8388608 ≤ lowMantissa n ∧ lowMantissa n < 16777216\nhcarry : n.shiftLeft (23 - n.log2) ≠ 16777216\nhhigh : ¬23 ≤ n.log2\nhsub : ¬↑n.log2 + e < -126\nhover : ¬↑n.log2 + e > 127\n⊢ (if (sorry ()).significand = 0 then if (sorry ()).negative = true then 2147483648 else 0\n    else\n      if ↑(sorry ()).significand.log2 + (sorry ()).exponent < -126 then\n        if\n            (match (sorry ()).exponent + 149 with\n              | Int.ofNat shift => (sorry ()).significand <<< shift\n              | Int.negSucc shift => roundShiftRightEven (sorry ()).significand (shift + 1)) =\n              0 then\n          if (sorry ()).negative = true then 2147483648 else 0\n        else\n          if\n              (match (sorry ()).exponent + 149 with\n                | Int.ofNat shift => (sorry ()).significand <<< shift\n                | Int.negSucc shift => roundShiftRightEven (sorry ()).significand (shift + 1)) =\n                8388608 then\n            Model.NativeBinary32.mkBits (sorry ()).negative 1 0\n          else\n            Model.NativeBinary32.mkBits (sorry ()).negative 0\n              (match (sorry ()).exponent + 149 with\n              | Int.ofNat shift => (sorry ()).significand <<< shift\n              | Int.negSucc shift => roundShiftRightEven (sorry ()).significand (shift + 1))\n      else\n        if\n            127 <\n              if\n                  (if 23 ≤ (sorry ()).significand.log2 then\n                      roundShiftRightEven (sorry ()).significand ((sorry ()).significand.log2 - 23)\n                    else (sorry ()).significand <<< (23 - (sorry ()).significand.log2)) =\n                    16777216 then\n                ↑(sorry ()).significand.log2 + (sorry ()).exponent + 1\n              else ↑(sorry ()).significand.log2 + (sorry ()).exponent then\n          if (sorry ()).negative = true then 4286578688 else 2139095040\n        else\n          Model.NativeBinary32.mkBits (sorry ()).negative\n            ((if\n                    (if 23 ≤ (sorry ()).significand.log2 then\n                        roundShiftRightEven (sorry ()).significand ((sorry ()).significand.log2 - 23)\n                      else (sorry ()).significand <<< (23 - (sorry ()).significand.log2)) =\n                      16777216 then\n                  ↑(sorry ()).significand.log2 + (sorry ()).exponent + 1\n                else ↑(sorry ()).significand.log2 + (sorry ()).exponent) +\n                127).toNat\n            ((if\n                  (if 23 ≤ (sorry ()).significand.log2 then\n                      roundShiftRightEven (sorry ()).significand ((sorry ()).significand.log2 - 23)\n                    else (sorry ()).significand <<< (23 - (sorry ()).significand.log2)) =\n                    16777216 then\n                8388608\n              else\n                if 23 ≤ (sorry ()).significand.log2 then\n                  roundShiftRightEven (sorry ()).significand ((sorry ()).significand.log2 - 23)\n                else (sorry ()).significand <<< (23 - (sorry ()).significand.log2)) -\n              8388608)) =\n    Model.NativeBinary32.mkBits sign (↑n.log2 + e + 127).toNat (n <<< (23 - n.log2) - 8388608)"
+        },
+        {
+          "line": 7197,
+          "column": 67,
+          "declaration": "Submission.R16AddUInt32Interface.low_scaled_round_fields",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7195,
+              "text": "    (hn : n ≠ 0) (hh : n.log2 < 23)"
+            },
+            {
+              "line": 7196,
+              "text": "    (hE0 : 1 ≤ n.log2 + a - 23) (hE : n.log2 + a - 23 ≤ 254) :"
+            },
+            {
+              "line": 7197,
+              "text": "    Model.NativeBinary32.roundDyadic (⟨sign, n, (a : Int) - 150⟩ : Dyadic) ="
+            },
+            {
+              "line": 7198,
+              "text": "      Model.NativeBinary32.mkBits sign (n.log2 + a - 23) (lowMantissa n - 8388608) := by"
+            },
+            {
+              "line": 7199,
+              "text": "  have hmin : -126 ≤ (n.log2 : Int) + ((a : Int) - 150) := by omega"
+            }
+          ],
+          "message": "Ambiguous term\n  Dyadic\nPossible interpretations:\n  _root_.Dyadic : Type\n  \n  FloatLib.Numerics.Dyadic : Type"
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}

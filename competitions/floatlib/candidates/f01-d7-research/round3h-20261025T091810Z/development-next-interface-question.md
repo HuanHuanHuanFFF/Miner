@@ -1,0 +1,7 @@
+# R16 independent next-generation interface discriminator
+
+While source95d7 stays frozen in40187127847, R may use one available Astra for an8-minute interface/cost check, ending11:25UTC; no new CI/source mutation and no holdout reads. Question: can a legal UInt32→Float32→UInt32 integer-rounding round trip replace the external toBits boundary for the high-N ADD family? Existing source snapshot upstream/lean-lean.h has inline UInt32→Float32 at3265, inline clamped Float32→UInt32 at3204, external Float32→bits at3254. Verify exact pinned-header provenance before relying on it.
+
+For accepted current ADD-domain N, N<=2164260735<2^32; converted value is a rounded integer in range. The potential mechanism uses that rounded integer plus bounded leading-bit extraction (d<=7) to repack; it trades external bits-call/live values for another inline cast and integer logic. Cost is UNKNOWN; clamp branches may remain. This is an independent future family, not a presumed win or change to current source.
+
+First discriminator is whether ContractTensor/allowed pinned proof environment supplies a closed semantic theorem for Float32.toUInt32 on these finite exact-integer values. If opaque without an accessible bridge, mark UNKNOWN/BLOCKED_INTERFACE and stop; no assumptions, new axioms, broad proof development or wrapper-only acceptance. If available, give exact theorem/source/hash and a minimal legal obligation/cost sketch. No complete variant requested. Current complete ADD gate and any earned confirmation keep CI priority.
