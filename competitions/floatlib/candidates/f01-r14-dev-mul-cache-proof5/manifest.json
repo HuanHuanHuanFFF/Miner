@@ -1,0 +1,43 @@
+{
+  "candidate": "f01-r14-dev-mul-cache-proof5",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "2b532a06cd35fe3a62866b9e7bc7255464195a31b7f2e46f860162ed100b3e8f",
+  "candidate_bytes": 237392,
+  "created_at_utc": "2026-10-25T02:20:50.321927+00:00",
+  "parent": "f01-r14-dev-mul-cache-proof4",
+  "parent_sha256": "0ab970e382f0e29cca4ac5d54cf40bd8424180872b77b90754ee512ab51240ab",
+  "validation_mode": "full-gate",
+  "proof_status": "EQUIVALENT_EXPLICIT_WORD_PROOF_NOT_COMPILED",
+  "performance": "NOT_RUN",
+  "runtime_definition_source_changed": false,
+  "mechanism": "Exactly the already existing pre-freeze d2b8 runtime: UInt64 normal mul plus thin B caching and p<=8 direct BMM, retained DF add/SUM. Do not include the now measured slower word-add arm.",
+  "proof_changes": {
+    "rne_old_sha256": "e9abe15eaebf5dab13f717558292f49871f8fdde07b3075145915a493bb5db0a",
+    "rne_new_sha256": "f30f16a715db5773356781f4f5544d5cbb5afcbf64fd28596a898d50b86661c7",
+    "word_runtime_suffix_identical": true,
+    "old_core_model_sha256": "ec71dc9ae67eefcbf0e5220e93906b96f399e2eba85f77b5f7ab723ef789a93a",
+    "new_core_model_sha256": "80fce64fd1ba3ce31ed632f55495bb72e6b616400598a1bd51ce0a4bf5a8cf2b",
+    "redundant_dsimp_removed": 1
+  },
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-bias-rne5-explicit-word.lean",
+      "sha256": "2eb898381bb23282ec64910f12cc032bc25f1ca3cb87ffee642b2d0865639b00",
+      "bytes": 4522
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/astra-integer-core-model2.lean",
+      "sha256": "c201150eb693447adbec8c58a7e877f6f21ea336d00508582ac717680d2bd3bf",
+      "bytes": 2722
+    }
+  ],
+  "freeze_scope": "Proof-only repair of an existing algorithm source prepared well before runtime freeze. No new arithmetic route, threshold, layout or runtime definition added/changed; every other original byte retained. Not a reset of ADD/6990/thin failed D: this exact mul-plus-cache runtime has never had a scored D.",
+  "selection_basis": "ADD2 first full D is1.189276 overall, add1.562128, so park it and retain its proof result. Test existing frozen mul-only and mul/cache routes if statement controls pass.",
+  "resource_change": {
+    "old_r4": "f30f16a715db5773356781f4f5544d5cbb5afcbf64fd28596a898d50b86661c7",
+    "new_r5": "2eb898381bb23282ec64910f12cc032bc25f1ca3cb87ffee642b2d0865639b00",
+    "runtime_biased_definition_identical": true,
+    "all_other_bytes_preserved": true,
+    "cause": "UNKNOWN until controlled results"
+  }
+}
