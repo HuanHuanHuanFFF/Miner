@@ -47,3 +47,7 @@ R00:00已接受纯word Add数学任务：t1..8 biasedRNE，然后addDyadic双排
 R私有Pro上传/咨询持续授权三条真实人类原文已由开发独立核实。网页4份数学原件已在astra-web-pro-materials，实际响应后端UNKNOWN，非Lean验收。两份原intake.json含私密聊天URL，已精确gitignore并原字节留本地；开发做public derivative两份及4原始math文件的hash索引于development-web-materials-public（不含URL），校验器development-verify-web-materials.py已PASS_BYTES_ONLY。不要将整个原materials目录盲暂存。源码下载副本/提示词/dispatch JSON也已ignore。
 
 DeepSeek预注册3组与失败D复跑本方已独立collect/归一化：40138300139 .9448863/BMM.704367/p05+.034725；40139289674 .9335560/BMM.739663/p05+.055418；40140014333 .9629647/BMM.775806/p05+.032505；40141066891（旧1425003再测）.9685085/BMM.835768/p05-.009592。新正组仍附加诊断，不重置首次D。所有原始证据在公共ci-runs，尚待下一local commit纳入。Root.publisher已支持result-*和public-artifact-index，修补后也要把.gitignore显式纳入。
+
+00:20Z最高优先CI预检：R000812确认旧biased-rne1的 rw[parity,...]把局部let UInt64当Eq/Iff，不能通过。新astra-biased-rne2/e9abe15e只改proof用dsimp展开parity，再rw两个等式，runtime biased未变。MUL2/组合2/word-add-probe1仍含旧BIAS1；必须再版本修复及重冻新计划。live suite-plan1425011已HOLD，原plan/freeze1425011不改，尚未dispatch。不要推/跑这份已知坏旧计划。Root最后local commit=a8e45c8722a4ede9c2001a6fa8405b02203d1995，449项原字节核验，未推；远端仍207。
+
+00:52Z检查点：本地HEAD仍a8，远端207，公开授权待答复。修复3与support1已完，plan1425012冻结8项statement、未派发（旧5011HOLD原件保留）。新增word-add-fields1=e177a1ee/248435B，余7565B；从headroom3移除本轮MUL块并恢复DF mul、保留thin-cache/p8 BMM，附全部ADD数学与UInt32/64字段证明尝试。public add仍DF；R下一检查点接raw_add_model，D已备core/spec闭合源待桥。所有新Lean NOT_COMPILED，不本机跑。
