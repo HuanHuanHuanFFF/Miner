@@ -108,6 +108,14 @@ def statement(src,verdict):
             pm.run(g,kernel,out)
     return reason
 g.STAGES=[('intake',g.intake),('policy',g.policy),('statement',statement)]
+if kernel.parent.name == 'f01-r16-dev-u32-roundtrip-probe1':
+    manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
+    helper_manifest=json.loads(manifest_path.read_bytes())
+    helper_path=profiler.parent.parent/'f01-d7-research/round3h-20261025T091810Z/development-helper-audit.py'
+    assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
+    hs=importlib.util.spec_from_file_location('r16_explicit_math_helper_audit',helper_path)
+    hm=importlib.util.module_from_spec(hs);hs.loader.exec_module(hm)
+    g.STAGES += hm.stages(g,kernel,out,helper_manifest)
 with (g.HERE/'gate.lock').open('w') as lock:
     fcntl.flock(lock,fcntl.LOCK_EX)
     g.check_limits()

@@ -1,0 +1,7 @@
+# R16 same-input repeat recovered; ADD C available; last math probe
+
+40189703522 succeeded, original58files collected. Exact seed1626007 and controls unchanged; new runner/reversed order yielded B2 ADD/41=0.90758, whole0.76873, versus old ADD2.90662/whole1.41321. Original anomaly remains; source/input invariant rules out a deterministic input-only regression, but runner/order/codegen/clock cause remains UNKNOWN. This is repeated-input diagnostic, not independent confirmation. Both original reports stay in the index/model9222 unchanged.
+
+Actual f7f C is now in original artifact diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r16-dev-native-add-high3/candidate-c-index.json. R: one bounded selected-caller cost check before12:10; do not promote/reseed this known negative source.
+
+D imported final roundtrip probe with one compiler-established Dyadic qualification, source57d9ff44/238074B. Last short job adds the original gate's whole-module leanchecker plus22 explicit #print-axioms reports using a temporary separate audit file; original gate/contracts/bench/pins stay unchanged. The hook is restricted to this exact probe/hash, parser has5 rejection/acceptance checks. No performance/adoption claim. Slot dispatch by12:04; original deadline12:18:10 and collection reserve remain. Any compile/audit failure is preserved and not automatically expanded into another research chain.

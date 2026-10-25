@@ -29,6 +29,17 @@ for row in summary['results']:
     result = {key: row.get(key) for key in ('candidate', 'kernel_sha256', 'statement_pass', 'stage', 'reason', 'full_gate')}
     result.update(run=args.run, source_commit=meta['headSha'], verdict=original.relative_to(ROOT).as_posix(),
                   verdict_sha256=row['verdict_sha256'], kernel_replay_and_helper_axiom_audit='NOT_RUN')
+    helper_dir = folder / 'diagnostics' / row['candidate']
+    helper_path = helper_dir / 'helper-audit.json'
+    if helper_path.exists():
+        helper = json.loads(helper_path.read_bytes())
+        assert helper['kernel_sha256'] == row['kernel_sha256']
+        if helper.get('accepted'):
+            assert helper['kernel_replay'] and set(helper['reports']) == set(helper['names']) and len(helper['names']) == 22
+            assert hashlib.sha256((helper_dir / 'helper-axioms.raw').read_bytes()).hexdigest() == helper['output_sha256']
+            assert all(set(v) <= {'propext', 'Classical.choice', 'Quot.sound'} for v in helper['reports'].values())
+        result['kernel_replay_and_helper_axiom_audit'] = 'VERIFIED_EXPLICIT_22_HELPERS' if helper.get('accepted') else 'FAILED_EXPLICIT_HELPER_AUDIT'
+        result['extra_helper_audit'] = dict(path=helper_path.relative_to(ROOT).as_posix(), sha256=hashlib.sha256(helper_path.read_bytes()).hexdigest(), accepted=helper.get('accepted', False))
     output = folder / 'diagnostics' / row['candidate'] / 'full-build-output.txt'
     if output.exists():
         data = output.read_bytes()
@@ -39,7 +50,7 @@ for row in summary['results']:
     (OUT / f'development-proof-{row["candidate"]}-{args.run}.json').write_bytes((json.dumps(result, ensure_ascii=False, indent=2) + '\n').encode())
 result = dict(run=args.run, source_commit=meta['headSha'], rows=rows,
               original_artifact_files_verified=len(index['files']), at_utc=datetime.now(timezone.utc).isoformat(),
-              scope='Original statement/build diagnostics only; unused helper axiom audit, independent kernel replay, full gate and performance remain NOT_RUN.')
+              scope='Original build diagnostics; explicit extra helper replay/axioms, if executed, are authenticated per row. Full performance gate remains NOT_RUN for statement-only rows.')
 (OUT / f'development-proof-batch-{args.run}.json').write_bytes((json.dumps(result, ensure_ascii=False, indent=2) + '\n').encode())
 print(json.dumps({key: value for key, value in result.items() if key != 'rows'}))
 print(json.dumps([{key: row[key] for key in ('candidate', 'kernel_sha256', 'statement_pass', 'reason')} for row in rows]))
