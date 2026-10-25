@@ -1,0 +1,15 @@
+{
+  "candidate": "f01-r15-dev-shortn-inline-decode1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "f65e4aa5baf0b38a808f1e57e0ded26d71870d8b61b993a80ab92aeef77e8d8c",
+  "candidate_bytes": 209479,
+  "created_at_utc": "2026-10-25T04:58:27.865526+00:00",
+  "parent": "f01-r15-dev-shortn-bcache1",
+  "parent_sha256": "cb1bc62b2be91b52b45090af1f53ef8270b510b1f24264c667ec1308f094d152",
+  "mechanism": "In the once-B cached dot loop only, use the already all-input-proved R2W01b.convert instead of direct toFloat32/ofBits for A. It can avoid a foreign bitcast call in the hot loop for eligible inputs. Preparation, branches and all conversion costs remain inside full timing.",
+  "proof_route": "Existing R2W01c.convert_eq in loop_eq followed by unchanged prepared-B identity; exact same dot arithmetic and raw finish.",
+  "known_tradeoff": "The inline converter has guards/table operations and may lose. Prior scalar adoption is evidence for trying the mechanism, not evidence for this matrix result. No local C or cycle claim.",
+  "proof_status": "NOT_COMPILED_THIS_EXACT_SOURCE",
+  "performance": "NOT_RUN",
+  "invariant": "Other candidate bytes unchanged, including all public scalars/sum and outer dispatch."
+}

@@ -1,0 +1,17 @@
+{
+  "candidate": "f01-r15-dev-shortn-bcache1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "cb1bc62b2be91b52b45090af1f53ef8270b510b1f24264c667ec1308f094d152",
+  "candidate_bytes": 209458,
+  "created_at_utc": "2026-10-25T04:56:20.875683+00:00",
+  "parent": "f01-r15-dev-matrix-only1",
+  "parent_sha256": "ec82ac20cf5b2a9621dce7e409a68a4af9700b1845d23385497c896439e372a1",
+  "parent_bytes": 209444,
+  "mechanism": "Extend the already-proved once-B cache from thin outputs to m>=4,1<n<=4,all positive p. Those shapes already use scalar DirectContinuous dots in the parent, so cached-B replaces repeated B conversion across rows without replacing a shared-A vector kernel.",
+  "invariant": "Same dot loop k order, Float32 multiply then add, raw per-output NaN fallback, all add/mul/sum bytes and outer underflow-zero shortcut unchanged.",
+  "selection": "One mechanism-driven broader reuse domain; not a numeric threshold grid. m>=4 keeps at least four uses per B element in the target domain. Actual allocation/conversion cost is charged and may still lose.",
+  "proof_route": "Existing R14ThinBCache.core_eq_reference for all shapes; dispatch_spec already proves either branch independently of the shape predicate.",
+  "proof_status": "NOT_COMPILED_THIS_EXACT_SOURCE",
+  "performance": "NOT_RUN",
+  "first_discovery": "Required on this exact distinct source; parent outcome cannot be inherited, failed D will be retained."
+}
