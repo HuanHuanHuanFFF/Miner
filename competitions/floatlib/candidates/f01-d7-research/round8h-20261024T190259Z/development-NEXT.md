@@ -53,3 +53,5 @@ DeepSeek预注册3组与失败D复跑本方已独立collect/归一化：40138300
 00:52Z检查点：本地HEAD仍a8，远端207，公开授权待答复。修复3与support1已完，plan1425012冻结8项statement、未派发（旧5011HOLD原件保留）。新增word-add-fields1=e177a1ee/248435B，余7565B；从headroom3移除本轮MUL块并恢复DF mul、保留thin-cache/p8 BMM，附全部ADD数学与UInt32/64字段证明尝试。public add仍DF；R下一检查点接raw_add_model，D已备core/spec闭合源待桥。所有新Lean NOT_COMPILED，不本机跑。
 
 2026-10-25T01:26:24.603661+00:00关键恢复：人类新公开授权已到，receipt development-public-scope-authorization.json；e5及a05已push实核。五项编译401497全失败、72原件齐。当前run40150334243/a05/seed1425014是thin2=177b86c6与DF/41的首个干净完整D。R已被文件请求修pureMUL555与ADD数学；D新runtime4/fields3/spec3在development-word-add-fields-repair3.json，等待组装；allword3934和ADD a234失败原源保留。不得本机Lean；窗口截止03:02:59Z，不提前final。
+
+2026-10-25T01:37:45.457836+00:00恢复更新：local/remote a2cc9bf0已实核，plan1425015=903ef182三项statement未dispatch。MUL4=2c7194cc/253914；ADD2=f958071e/255863；combined2=27cc5fc6/253329。R012917的五数学修复与D runtime4/fields3/spec3已全部接入，builder development-apply-compile-repairs1.py；所有新源NOT_COMPILED。当前仍full D40150334243，sourcea05/seed1425014，thin2=177b86c6+DF+41；等终态收完后才dispatch下一批，不借槽。
