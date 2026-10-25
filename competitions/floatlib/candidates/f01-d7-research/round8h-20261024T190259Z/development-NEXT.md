@@ -51,3 +51,5 @@ DeepSeek预注册3组与失败D复跑本方已独立collect/归一化：40138300
 00:20Z最高优先CI预检：R000812确认旧biased-rne1的 rw[parity,...]把局部let UInt64当Eq/Iff，不能通过。新astra-biased-rne2/e9abe15e只改proof用dsimp展开parity，再rw两个等式，runtime biased未变。MUL2/组合2/word-add-probe1仍含旧BIAS1；必须再版本修复及重冻新计划。live suite-plan1425011已HOLD，原plan/freeze1425011不改，尚未dispatch。不要推/跑这份已知坏旧计划。Root最后local commit=a8e45c8722a4ede9c2001a6fa8405b02203d1995，449项原字节核验，未推；远端仍207。
 
 00:52Z检查点：本地HEAD仍a8，远端207，公开授权待答复。修复3与support1已完，plan1425012冻结8项statement、未派发（旧5011HOLD原件保留）。新增word-add-fields1=e177a1ee/248435B，余7565B；从headroom3移除本轮MUL块并恢复DF mul、保留thin-cache/p8 BMM，附全部ADD数学与UInt32/64字段证明尝试。public add仍DF；R下一检查点接raw_add_model，D已备core/spec闭合源待桥。所有新Lean NOT_COMPILED，不本机跑。
+
+2026-10-25T01:26:24.603661+00:00关键恢复：人类新公开授权已到，receipt development-public-scope-authorization.json；e5及a05已push实核。五项编译401497全失败、72原件齐。当前run40150334243/a05/seed1425014是thin2=177b86c6与DF/41的首个干净完整D。R已被文件请求修pureMUL555与ADD数学；D新runtime4/fields3/spec3在development-word-add-fields-repair3.json，等待组装；allword3934和ADD a234失败原源保留。不得本机Lean；窗口截止03:02:59Z，不提前final。

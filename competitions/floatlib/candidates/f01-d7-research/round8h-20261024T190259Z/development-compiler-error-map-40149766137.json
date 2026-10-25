@@ -1,0 +1,1382 @@
+{
+  "at_utc": "2026-10-25T01:30:10.079992+00:00",
+  "run": 40149766137,
+  "candidates": [
+    {
+      "candidate": "f01-r14-dev-allword-combined1",
+      "kernel_sha256": "393473afe5cbcd5a360a30eff7e6729f6f591a7a427aedd101ad6ef9c8bf9c7c",
+      "source_commit": "e5b2f2d3da9b420f4b470e6841cd0778a7e72173",
+      "source_path": "competitions/floatlib/candidates/f01-r14-dev-allword-combined1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40149766137/download-5e9a96e7878941d08f8a0616c36bef14/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r14-dev-allword-combined1/full-build-output.txt",
+      "original_output_sha256": "859c4718c1d2a81a9364af32a9080d3feb69111565f950dd88139371e29f693f",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 2956,
+          "column": 4,
+          "declaration": "Submission.R14SmallShiftBias.nat_bias",
+          "owner": "research",
+          "occurrences": 8,
+          "source_context": [
+            {
+              "line": 2954,
+              "text": "    unfold roundQuotientEven <;>"
+            },
+            {
+              "line": 2955,
+              "text": "    norm_num [Nat.shiftRight_eq_div_pow] <;>"
+            },
+            {
+              "line": 2956,
+              "text": "    simp only [beq_iff_eq] <;>"
+            },
+            {
+              "line": 2957,
+              "text": "    split_ifs <;> omega"
+            },
+            {
+              "line": 2958,
+              "text": ""
+            }
+          ],
+          "message": "`simp` made no progress"
+        },
+        {
+          "line": 3059,
+          "column": 2,
+          "declaration": "Submission.R14WordAdd.exponentWord",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3057,
+              "text": ""
+            },
+            {
+              "line": 3058,
+              "text": "@[inline] def exponentWord (u v : UInt32) : UInt32 :="
+            },
+            {
+              "line": 3059,
+              "text": "  leadingWord u v + R14ExponentShift.ex (low u v) - 23 + (roundedWord u v >>> 24).toUInt32"
+            },
+            {
+              "line": 3060,
+              "text": ""
+            },
+            {
+              "line": 3061,
+              "text": "@[inline] def fractionWord (u v : UInt32) : UInt32 :="
+            }
+          ],
+          "message": "failed to synthesize instance of type class\n  HSub UInt32 ℕ ?m.18\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command."
+        },
+        {
+          "line": 3083,
+          "column": 13,
+          "declaration": "Submission.R14WordAdd.guardedAdd",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3081,
+              "text": "    let h := base + (n >>> (base + 1))"
+            },
+            {
+              "line": 3082,
+              "text": "    let q := R14SmallShiftBias.biased n.toUInt64 ((h - 23).toUInt64)"
+            },
+            {
+              "line": 3083,
+              "text": "    let e := h + R14ExponentShift.ex lo - 23 + (q >>> 24).toUInt32"
+            },
+            {
+              "line": 3084,
+              "text": "    if e - 1 ≤ (253 : UInt32) then"
+            },
+            {
+              "line": 3085,
+              "text": "      R7W02.fromRaw (FastMul.mkW (decide ((2147483648 : UInt32) ≤ hi))"
+            }
+          ],
+          "message": "failed to synthesize instance of type class\n  HSub UInt32 ℕ ?m.92\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command."
+        },
+        {
+          "line": 3217,
+          "column": 4,
+          "declaration": "Submission.R14WordAddAlignment.align_high_low",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3215,
+              "text": "    simp only [Nat.sub_self, Nat.shiftLeft_eq', Nat.shiftLeft_eq, Nat.pow_zero,"
+            },
+            {
+              "line": 3216,
+              "text": "      Nat.mul_one]"
+            },
+            {
+              "line": 3217,
+              "text": "  · simpa only [Int.ofNat_eq_natCast] using"
+            },
+            {
+              "line": 3218,
+              "text": "      Model.addDyadic_alignLeftOffset 150 hiSign loSign hi lo ehi elo hhi hlo hlt"
+            },
+            {
+              "line": 3219,
+              "text": ""
+            }
+          ],
+          "message": "Type mismatch: After simplification, term\n  Model.addDyadic_alignLeftOffset 150 hiSign loSign hi lo ehi elo hhi hlo hlt\n has type\n  @Eq FloatLib.Numerics.Dyadic\n    (Model.addDyadic { negative := hiSign, significand := hi, exponent := ↑ehi - ↑150 }\n      { negative := loSign, significand := lo, exponent := ↑elo - ↑150 })\n    (Model.addDyadic { negative := hiSign, significand := hi <<< (ehi - elo), exponent := ↑elo - ↑150 }\n      { negative := loSign, significand := lo, exponent := ↑elo - ↑150 })\nbut is expected to have type\n  @Eq FloatLib.Numerics.Dyadic\n    (Model.addDyadic { negative := hiSign, significand := hi, exponent := ↑ehi - 150 }\n      { negative := loSign, significand := lo, exponent := ↑elo - 150 })\n    (Model.addDyadic { negative := hiSign, significand := hi <<< (ehi - elo), exponent := ↑elo - 150 }\n      { negative := loSign, significand := lo, exponent := ↑elo - 150 })"
+        },
+        {
+          "line": 3234,
+          "column": 4,
+          "declaration": "Submission.R14WordAddAlignment.exact_high_low",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3232,
+              "text": "  by_cases hs : hiSign = loSign"
+            },
+            {
+              "line": 3233,
+              "text": "  · subst loSign"
+            },
+            {
+              "line": 3234,
+              "text": "    simpa only [magnitude, if_pos rfl] using"
+            },
+            {
+              "line": 3235,
+              "text": "      Model.addDyadic_sameSign_sameExponent hiSign (hi <<< (ehi - elo)) lo"
+            },
+            {
+              "line": 3236,
+              "text": "        ((elo : Int) - 150) hshift hlo0"
+            }
+          ],
+          "message": "Type mismatch: After simplification, term\n  Model.addDyadic_sameSign_sameExponent hiSign (hi <<< (ehi - elo)) lo (↑elo - 150) hshift hlo0\n has type\n  @Eq FloatLib.Numerics.Dyadic\n    (Model.addDyadic { negative := hiSign, significand := hi <<< (ehi - elo), exponent := ↑elo - 150 }\n      { negative := hiSign, significand := lo, exponent := ↑elo - 150 })\n    { negative := hiSign, significand := hi <<< (ehi - elo) + lo, exponent := ↑elo - 150 }\nbut is expected to have type\n  @Eq FloatLib.Numerics.Dyadic\n    (Model.addDyadic { negative := hiSign, significand := hi <<< (ehi - elo), exponent := ↑elo - 150 }\n      { negative := hiSign, significand := lo, exponent := ↑elo - 150 })\n    { negative := hiSign, significand := if True then hi <<< (ehi - elo) + lo else hi <<< (ehi - elo) - lo,\n      exponent := ↑elo - 150 }"
+        },
+        {
+          "line": 3385,
+          "column": 2,
+          "declaration": "Submission.R14WordAddRounding.rounded_bounds",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3383,
+              "text": "  have hrhi := roundShiftRightEven_le_shiftRight_add1 n k"
+            },
+            {
+              "line": 3384,
+              "text": "  change 8388608 ≤ roundShiftRightEven n k ∧ roundShiftRightEven n k ≤ 16777216"
+            },
+            {
+              "line": 3385,
+              "text": "  omega"
+            },
+            {
+              "line": 3386,
+              "text": ""
+            },
+            {
+              "line": 3387,
+              "text": "theorem shift_carry (n : Nat) (hn : n ≠ 0) (hh : 23 ≤ n.log2) :"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  f ≥ 0\n  0 ≤ e ≤ 8388607\n  0 ≤ e - f ≤ 1\n  8388608 ≤ d ≤ 16777215\n  c ≥ 0\n  c ≥ 0\n  a ≥ 1\n  a - b ≥ 0\nwhere\n a := ↑n\n b := ↑2 ^ k\n c := ↑(n.log2 - 23)\n d := ↑n / ↑(2 ^ k)\n e := ↑(roundShiftRightEven n k)\n f := ↑(n.shiftRight k)"
+        },
+        {
+          "line": 3525,
+          "column": 51,
+          "declaration": "Submission.R14WordAdd.left_word_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3523,
+              "text": "    exact h"
+            },
+            {
+              "line": 3524,
+              "text": "  have hx := Nat.mul_le_mul_left (R2W01b.mantissa (high u v)).toNat hp"
+            },
+            {
+              "line": 3525,
+              "text": "  rw [UInt32.toNat_shiftLeft, Nat.mod_eq_of_lt (by omega)]"
+            },
+            {
+              "line": 3526,
+              "text": "  rw [Nat.shiftLeft_eq]"
+            },
+            {
+              "line": 3527,
+              "text": "  exact Nat.mod_eq_of_lt (by omega)"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  e ≥ 4294967296\n  d ≥ 0\n  c ≤ 128\n  0 ≤ b ≤ 7\n  8388608 ≤ a ≤ 16777215\n  128*a - d ≥ 0\nwhere\n a := ↑(R2W01b.mantissa (high u v)).toNat\n b := ↑(gap u v).toNat\n c := ↑2 ^ (gap u v).toNat\n d := ↑(R2W01b.mantissa (high u v)).toNat * ↑(2 ^ (gap u v).toNat)\n e := ↑(R2W01b.mantissa (high u v)).toNat * ↑(2 ^ ((gap u v).toNat % 32))"
+        },
+        {
+          "line": 3527,
+          "column": 29,
+          "declaration": "Submission.R14WordAdd.left_word_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3525,
+              "text": "  rw [UInt32.toNat_shiftLeft, Nat.mod_eq_of_lt (by omega)]"
+            },
+            {
+              "line": 3526,
+              "text": "  rw [Nat.shiftLeft_eq]"
+            },
+            {
+              "line": 3527,
+              "text": "  exact Nat.mod_eq_of_lt (by omega)"
+            },
+            {
+              "line": 3528,
+              "text": ""
+            },
+            {
+              "line": 3529,
+              "text": "theorem magnitudeWord_nat (u v : UInt32) (hd : eligible u v = true) :"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  f ≥ 0\n  e ≥ 0\n  e - f ≥ 0\n  d ≥ 0\n  c ≤ 128\n  0 ≤ b ≤ 7\n  8388608 ≤ a ≤ 16777215\n  128*a - d ≥ 0\nwhere\n a := ↑(R2W01b.mantissa (high u v)).toNat\n b := ↑(gap u v).toNat\n c := ↑2 ^ (gap u v).toNat\n d := ↑(R2W01b.mantissa (high u v)).toNat * ↑(2 ^ (gap u v).toNat)\n e := ↑?m.97\n f := ↑?m.98"
+        },
+        {
+          "line": 3546,
+          "column": 69,
+          "declaration": "Submission.R14WordAdd.magnitudeWord_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3544,
+              "text": "  · have hne : R2W01c.wordSign (high u v) ≠ R2W01c.wordSign (low u v) := by"
+            },
+            {
+              "line": 3545,
+              "text": "      intro heq"
+            },
+            {
+              "line": 3546,
+              "text": "      have ht : sameSign u v = true := by rw [sameSign_sorted, heq]; rfl"
+            },
+            {
+              "line": 3547,
+              "text": "      exact hsame ht"
+            },
+            {
+              "line": 3548,
+              "text": "    have hg : 2 ≤ (gap u v).toNat := hs.2.2.2.resolve_left hne"
+            }
+          ],
+          "message": "Tactic `rfl` failed: The left-hand side\n  R2W01c.wordSign (low u v) == R2W01c.wordSign (low u v)\nis not definitionally equal to the right-hand side\n  true\n\nu v : UInt32\nhd : eligible u v = true\nhb : 16777216 ≤ magnitudeNat u v ∧ magnitudeNat u v ≤ 2164260735\nhs :\n  (0 < R2W01c.wordExp (high u v) ∧ R2W01c.wordExp (high u v) < 255) ∧\n    (0 < R2W01c.wordExp (low u v) ∧ R2W01c.wordExp (low u v) < 255) ∧\n      (gap u v).toNat ≤ 7 ∧ (R2W01c.wordSign (high u v) = R2W01c.wordSign (low u v) ∨ 2 ≤ (gap u v).toNat)\nhsame : ¬sameSign u v = true\nheq : R2W01c.wordSign (high u v) = R2W01c.wordSign (low u v)\n⊢ (R2W01c.wordSign (low u v) == R2W01c.wordSign (low u v)) = true"
+        },
+        {
+          "line": 3597,
+          "column": 25,
+          "declaration": "Submission.R14WordAdd.leadingWord_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3595,
+              "text": "  unfold leadingWord"
+            },
+            {
+              "line": 3596,
+              "text": "  rw [UInt32.toNat_add, UInt32.toNat_shiftRight, hplus,"
+            },
+            {
+              "line": 3597,
+              "text": "    Nat.mod_eq_of_lt (by omega), magnitudeWord_nat u v hd, base_word_nat u v hd]"
+            },
+            {
+              "line": 3598,
+              "text": "  rw [← he]"
+            },
+            {
+              "line": 3599,
+              "text": "  exact Nat.mod_eq_of_lt (by omega)"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  f ≥ 0\n  f + g ≥ 4294967296\n  23 ≤ e ≤ 31\n  25 ≤ d + e ≤ 32\n  1 ≤ c ≤ 254\n  1 ≤ b ≤ 254\n  0 ≤ a ≤ 7\n  a - d - e ≥ -25\nwhere\n a := ↑(gap u v).toNat\n b := ↑(R2W01c.wordExp (high u v))\n c := ↑(R2W01c.wordExp (low u v))\n d := ↑(magnitudeNat u v) / ↑(2 ^ (baseNat u v + 1))\n e := ↑((if sameSign u v = true then 23 else 22) + gap u v + 1).toNat\n f := ↑((if sameSign u v = true then 23 else 22) + gap u v).toNat\n g := ↑(magnitudeWord u v).toNat / ↑(2 ^ ((baseNat u v + 1) % 32))"
+        },
+        {
+          "line": 3598,
+          "column": 6,
+          "declaration": "Submission.R14WordAdd.leadingWord_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3596,
+              "text": "  rw [UInt32.toNat_add, UInt32.toNat_shiftRight, hplus,"
+            },
+            {
+              "line": 3597,
+              "text": "    Nat.mod_eq_of_lt (by omega), magnitudeWord_nat u v hd, base_word_nat u v hd]"
+            },
+            {
+              "line": 3598,
+              "text": "  rw [← he]"
+            },
+            {
+              "line": 3599,
+              "text": "  exact Nat.mod_eq_of_lt (by omega)"
+            },
+            {
+              "line": 3600,
+              "text": ""
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  baseNat u v + magnitudeNat u v >>> (baseNat u v + 1)\nin the target expression\n  baseNat u v + magnitudeNat u v >>> ((baseNat u v + 1) % 32) = (magnitudeNat u v).log2\n\nu v : UInt32\nhd : eligible u v = true\nhb : 22 ≤ baseNat u v ∧ baseNat u v ≤ 30\nhl : 24 ≤ (magnitudeNat u v).log2 ∧ (magnitudeNat u v).log2 ≤ 31 ∧ (magnitudeNat u v).log2 ≤ (gap u v).toNat + 24\nhs :\n  (0 < R2W01c.wordExp (high u v) ∧ R2W01c.wordExp (high u v) < 255) ∧\n    (0 < R2W01c.wordExp (low u v) ∧ R2W01c.wordExp (low u v) < 255) ∧\n      (gap u v).toNat ≤ 7 ∧ (R2W01c.wordSign (high u v) = R2W01c.wordSign (low u v) ∨ 2 ≤ (gap u v).toNat)\nhe : (magnitudeNat u v).log2 = baseNat u v + magnitudeNat u v >>> (baseNat u v + 1)\nhplus : ((if sameSign u v = true then 23 else 22) + gap u v + 1).toNat = baseNat u v + 1\n⊢ baseNat u v + magnitudeNat u v >>> ((baseNat u v + 1) % 32) = (magnitudeNat u v).log2"
+        },
+        {
+          "line": 3806,
+          "column": 2,
+          "declaration": "Submission.R14WordAdd.core_spec",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3804,
+              "text": "    R7Native.toModelExecAdd, ← Model.Proof.add_eq_spec,"
+            },
+            {
+              "line": 3805,
+              "text": "    R7W02.exec_toModel_eq_rawModel, R7W02.exec_toModel_eq_rawModel]"
+            },
+            {
+              "line": 3806,
+              "text": "  simpa only [R2W01c.rawModel_eq_native32] using core_model x.raw.1 y.raw.1 hd he"
+            },
+            {
+              "line": 3807,
+              "text": ""
+            },
+            {
+              "line": 3808,
+              "text": "theorem guardedAdd_spec (fallback : Binary32 → Binary32 → Binary32)"
+            }
+          ],
+          "message": "Type mismatch: After simplification, term\n  core_model (↑(ExecFloat.raw x)) (↑(ExecFloat.raw y)) hd he\n has type\n  @Eq Model.NativeBinary32.Value (Model.NativeBinary32.ofUInt32 (core ↑(ExecFloat.raw x) ↑(ExecFloat.raw y)))\n    (Model.add (Model.NativeBinary32.ofUInt32 ↑(ExecFloat.raw x)) (Model.NativeBinary32.ofUInt32 ↑(ExecFloat.raw y)))\nbut is expected to have type\n  @Eq\n    (Model\n      (ExecFloat.Binary.format 8 23 FloatFormat.Encoding.ieee (FloatFormat.Encoding.ieee.defaultBias 8)\n        Binary32._proof_1 Binary32._proof_2 Binary32._proof_3 Binary32._proof_4))\n    (Model.NativeBinary32.ofUInt32 (core ↑(ExecFloat.raw x) ↑(ExecFloat.raw y)))\n    (Model.add (Model.NativeBinary32.ofUInt32 ↑(ExecFloat.raw x)) (Model.NativeBinary32.ofUInt32 ↑(ExecFloat.raw y)))"
+        },
+        {
+          "line": 4007,
+          "column": 4,
+          "declaration": "Submission.R14BiasRNE.nat_bias",
+          "owner": "research",
+          "occurrences": 2,
+          "source_context": [
+            {
+              "line": 4005,
+              "text": "    unfold roundQuotientEven"
+            },
+            {
+              "line": 4006,
+              "text": "    norm_num [Nat.shiftRight_eq_div_pow]"
+            },
+            {
+              "line": 4007,
+              "text": "    simp only [beq_iff_eq]"
+            },
+            {
+              "line": 4008,
+              "text": "    split_ifs <;> omega"
+            },
+            {
+              "line": 4009,
+              "text": ""
+            }
+          ],
+          "message": "`simp` made no progress"
+        },
+        {
+          "line": 4284,
+          "column": 14,
+          "declaration": "Submission.R14ExponentShift.core_model",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 4282,
+              "text": "    ⟨R2W01c.wordSign u, (R2W01b.mantissa u).toNat, (R2W01c.wordExp u : Int) - 150⟩"
+            },
+            {
+              "line": 4283,
+              "text": "    ⟨R2W01c.wordSign v, (R2W01b.mantissa v).toNat, (R2W01c.wordExp v : Int) - 150⟩"
+            },
+            {
+              "line": 4284,
+              "text": "    hx hy (by omega) (by omega)"
+            },
+            {
+              "line": 4285,
+              "text": "  have heOrig : (R2W01c.wordExp u : Int) - 150 +"
+            },
+            {
+              "line": 4286,
+              "text": "      ((R2W01c.wordExp v : Int) - 150) = (s : Int) - 300 := by dsimp [s]; omega"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 ≤ i ≤ 8388607\n  173 ≤ h ≤ 174\n  0 ≤ g ≤ 1\n  46 ≤ f ≤ 47\n  70368744177664 ≤ e ≤ 281474943156225\n  8388608 ≤ d ≤ 16777215\n  8388608 ≤ c ≤ 16777215\n  1 ≤ b ≤ 254\n  1 ≤ a ≤ 254\n  128 ≤ a + b ≤ 380\n  a + b + f ≥ 174\n  a + b + f + g ≤ 427\nwhere\n a := ↑(R2W01c.wordExp u)\n b := ↑(R2W01c.wordExp v)\n c := ↑(R2W01b.mantissa u).toNat\n d := ↑(R2W01b.mantissa v).toNat\n e := ↑(product (R2W01b.mantissa u) (R2W01b.mantissa v))\n f := ↑p.log2\n g := ↑(R14NatNormal.carry p)\n h := ↑(middleExponent p)\n i := ↑(storedFraction p)"
+        },
+        {
+          "line": 4284,
+          "column": 25,
+          "declaration": "Submission.R14ExponentShift.core_model",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 4282,
+              "text": "    ⟨R2W01c.wordSign u, (R2W01b.mantissa u).toNat, (R2W01c.wordExp u : Int) - 150⟩"
+            },
+            {
+              "line": 4283,
+              "text": "    ⟨R2W01c.wordSign v, (R2W01b.mantissa v).toNat, (R2W01c.wordExp v : Int) - 150⟩"
+            },
+            {
+              "line": 4284,
+              "text": "    hx hy (by omega) (by omega)"
+            },
+            {
+              "line": 4285,
+              "text": "  have heOrig : (R2W01c.wordExp u : Int) - 150 +"
+            },
+            {
+              "line": 4286,
+              "text": "      ((R2W01c.wordExp v : Int) - 150) = (s : Int) - 300 := by dsimp [s]; omega"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 ≤ i ≤ 8388607\n  173 ≤ h ≤ 174\n  0 ≤ g ≤ 1\n  46 ≤ f ≤ 47\n  70368744177664 ≤ e ≤ 281474943156225\n  8388608 ≤ d ≤ 16777215\n  8388608 ≤ c ≤ 16777215\n  1 ≤ b ≤ 254\n  1 ≤ a ≤ 254\n  128 ≤ a + b ≤ 380\n  a + b + f ≥ 174\n  a + b + f + g ≤ 427\nwhere\n a := ↑(R2W01c.wordExp u)\n b := ↑(R2W01c.wordExp v)\n c := ↑(R2W01b.mantissa u).toNat\n d := ↑(R2W01b.mantissa v).toNat\n e := ↑(product (R2W01b.mantissa u) (R2W01b.mantissa v))\n f := ↑p.log2\n g := ↑(R14NatNormal.carry p)\n h := ↑(middleExponent p)\n i := ↑(storedFraction p)"
+        },
+        {
+          "line": 4291,
+          "column": 6,
+          "declaration": "Submission.R14ExponentShift.core_model",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 4289,
+              "text": "      Int.toNat ((p.log2 : Int) + ((s : Int) - 300) + (R14NatNormal.carry p : Int) + 127) ="
+            },
+            {
+              "line": 4290,
+              "text": "      middleExponent p + s - 300 := by dsimp [middleExponent, s]; omega"
+            },
+            {
+              "line": 4291,
+              "text": "  rw [R14NatNormal.model_round_normal _ p ((s : Int) - 300)"
+            },
+            {
+              "line": 4292,
+              "text": "    (by omega) (by omega) hmin hmax, heTarget] at hm"
+            },
+            {
+              "line": 4293,
+              "text": "  rw [core_word u v hs hs', Model.NativeBinary32.ofUInt32_mkBits]"
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  Model.roundDyadic FloatFormat.binary32 { negative := ?m.266, significand := p, exponent := ↑s - 300 }\nin the target expression\n  (R2W01c.rawModel u).mul (R2W01c.rawModel v) =\n    Model.roundDyadic FloatFormat.binary32\n      {\n        negative :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.negative ^^\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.negative,\n        significand :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.significand *\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.significand,\n        exponent := ↑s - 300 }\n\nu v : UInt32\nhu0 : 0 < R2W01c.wordExp u\nhu : R2W01c.wordExp u < 255\nhv0 : 0 < R2W01c.wordExp v\nhv : R2W01c.wordExp v < 255\nhs : 128 ≤ R2W01c.wordExp u + R2W01c.wordExp v\nhs' : R2W01c.wordExp u + R2W01c.wordExp v ≤ 380\np : ℕ := product (R2W01b.mantissa u) (R2W01b.mantissa v)\ns : ℕ := R2W01c.wordExp u + R2W01c.wordExp v\nhmx : 8388608 ≤ (R2W01b.mantissa u).toNat ∧ (R2W01b.mantissa u).toNat < 16777216\nhmy : 8388608 ≤ (R2W01b.mantissa v).toNat ∧ (R2W01b.mantissa v).toNat < 16777216\nhp :\n  70368744177664 ≤ product (R2W01b.mantissa u) (R2W01b.mantissa v) ∧\n    product (R2W01b.mantissa u) (R2W01b.mantissa v) ≤ 281474943156225\nhpHi : p < 281474976710656\nhl : 46 ≤ p.log2 ∧ p.log2 ≤ 47\nhc : R14NatNormal.carry p ≤ 1\nhmid : 173 ≤ middleExponent p ∧ middleExponent p ≤ 174 ∧ storedFraction p < 8388608\nhmin : -126 ≤ ↑p.log2 + (↑s - 300)\nhmax : ↑p.log2 + (↑s - 300) + ↑(R14NatNormal.carry p) ≤ 127\nhx :\n  (R2W01c.rawModel u).toDyadic? =\n    some\n      { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat, exponent := ↑(R2W01c.wordExp u) - 150 }\nhy :\n  (R2W01c.rawModel v).toDyadic? =\n    some\n      { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat, exponent := ↑(R2W01c.wordExp v) - 150 }\nhm :\n  (R2W01c.rawModel u).mul (R2W01c.rawModel v) =\n    Model.roundDyadic FloatFormat.binary32\n      {\n        negative :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.negative ^^\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.negative,\n        significand :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.significand *\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.significand,\n        exponent := ↑s - 300 }\nheOrig : ↑(R2W01c.wordExp u) - 150 + (↑(R2W01c.wordExp v) - 150) = ↑s - 300\nheTarget : (↑p.log2 + (↑s - 300) + ↑(R14NatNormal.carry p) + 127).toNat = middleExponent p + s - 300\n⊢ Model.NativeBinary32.ofUInt32 (core u v) = (R2W01c.rawModel u).mul (R2W01c.rawModel v)"
+        },
+        {
+          "line": 6713,
+          "column": 4,
+          "declaration": "Submission.R14ThinBCache.loop_eq",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6711,
+              "text": "  · rw [loop, NativeFinal.dotLoop]"
+            },
+            {
+              "line": 6712,
+              "text": "    simp only [dif_pos hk]"
+            },
+            {
+              "line": 6713,
+              "text": "    dsimp only"
+            },
+            {
+              "line": 6714,
+              "text": "    rw [Packed10.nativeA_getD]"
+            },
+            {
+              "line": 6715,
+              "text": "    exact loop_eq n baseA baseB p A B (k + 1) _"
+            }
+          ],
+          "message": "`dsimp` made no progress"
+        }
+      ]
+    },
+    {
+      "candidate": "f01-r14-dev-integer-exponent3",
+      "kernel_sha256": "5556cd0abefe97c136f9ef857b80637fe2ea4b43594b724728aef9a24bcfa703",
+      "source_commit": "e5b2f2d3da9b420f4b470e6841cd0778a7e72173",
+      "source_path": "competitions/floatlib/candidates/f01-r14-dev-integer-exponent3/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40149766137/download-5e9a96e7878941d08f8a0616c36bef14/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r14-dev-integer-exponent3/full-build-output.txt",
+      "original_output_sha256": "2d43c1397854201c46bf0d19dc65a1bc3df1dca2ba02e5300b82435856aa7dd6",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 3421,
+          "column": 4,
+          "declaration": "Submission.R14BiasRNE.nat_bias",
+          "owner": "research",
+          "occurrences": 2,
+          "source_context": [
+            {
+              "line": 3419,
+              "text": "    unfold roundQuotientEven"
+            },
+            {
+              "line": 3420,
+              "text": "    norm_num [Nat.shiftRight_eq_div_pow]"
+            },
+            {
+              "line": 3421,
+              "text": "    simp only [beq_iff_eq]"
+            },
+            {
+              "line": 3422,
+              "text": "    split_ifs <;> omega"
+            },
+            {
+              "line": 3423,
+              "text": ""
+            }
+          ],
+          "message": "`simp` made no progress"
+        },
+        {
+          "line": 3698,
+          "column": 14,
+          "declaration": "Submission.R14ExponentShift.core_model",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3696,
+              "text": "    ⟨R2W01c.wordSign u, (R2W01b.mantissa u).toNat, (R2W01c.wordExp u : Int) - 150⟩"
+            },
+            {
+              "line": 3697,
+              "text": "    ⟨R2W01c.wordSign v, (R2W01b.mantissa v).toNat, (R2W01c.wordExp v : Int) - 150⟩"
+            },
+            {
+              "line": 3698,
+              "text": "    hx hy (by omega) (by omega)"
+            },
+            {
+              "line": 3699,
+              "text": "  have heOrig : (R2W01c.wordExp u : Int) - 150 +"
+            },
+            {
+              "line": 3700,
+              "text": "      ((R2W01c.wordExp v : Int) - 150) = (s : Int) - 300 := by dsimp [s]; omega"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 ≤ i ≤ 8388607\n  173 ≤ h ≤ 174\n  0 ≤ g ≤ 1\n  46 ≤ f ≤ 47\n  70368744177664 ≤ e ≤ 281474943156225\n  8388608 ≤ d ≤ 16777215\n  8388608 ≤ c ≤ 16777215\n  1 ≤ b ≤ 254\n  1 ≤ a ≤ 254\n  128 ≤ a + b ≤ 380\n  a + b + f ≥ 174\n  a + b + f + g ≤ 427\nwhere\n a := ↑(R2W01c.wordExp u)\n b := ↑(R2W01c.wordExp v)\n c := ↑(R2W01b.mantissa u).toNat\n d := ↑(R2W01b.mantissa v).toNat\n e := ↑(product (R2W01b.mantissa u) (R2W01b.mantissa v))\n f := ↑p.log2\n g := ↑(R14NatNormal.carry p)\n h := ↑(middleExponent p)\n i := ↑(storedFraction p)"
+        },
+        {
+          "line": 3698,
+          "column": 25,
+          "declaration": "Submission.R14ExponentShift.core_model",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3696,
+              "text": "    ⟨R2W01c.wordSign u, (R2W01b.mantissa u).toNat, (R2W01c.wordExp u : Int) - 150⟩"
+            },
+            {
+              "line": 3697,
+              "text": "    ⟨R2W01c.wordSign v, (R2W01b.mantissa v).toNat, (R2W01c.wordExp v : Int) - 150⟩"
+            },
+            {
+              "line": 3698,
+              "text": "    hx hy (by omega) (by omega)"
+            },
+            {
+              "line": 3699,
+              "text": "  have heOrig : (R2W01c.wordExp u : Int) - 150 +"
+            },
+            {
+              "line": 3700,
+              "text": "      ((R2W01c.wordExp v : Int) - 150) = (s : Int) - 300 := by dsimp [s]; omega"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 ≤ i ≤ 8388607\n  173 ≤ h ≤ 174\n  0 ≤ g ≤ 1\n  46 ≤ f ≤ 47\n  70368744177664 ≤ e ≤ 281474943156225\n  8388608 ≤ d ≤ 16777215\n  8388608 ≤ c ≤ 16777215\n  1 ≤ b ≤ 254\n  1 ≤ a ≤ 254\n  128 ≤ a + b ≤ 380\n  a + b + f ≥ 174\n  a + b + f + g ≤ 427\nwhere\n a := ↑(R2W01c.wordExp u)\n b := ↑(R2W01c.wordExp v)\n c := ↑(R2W01b.mantissa u).toNat\n d := ↑(R2W01b.mantissa v).toNat\n e := ↑(product (R2W01b.mantissa u) (R2W01b.mantissa v))\n f := ↑p.log2\n g := ↑(R14NatNormal.carry p)\n h := ↑(middleExponent p)\n i := ↑(storedFraction p)"
+        },
+        {
+          "line": 3705,
+          "column": 6,
+          "declaration": "Submission.R14ExponentShift.core_model",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3703,
+              "text": "      Int.toNat ((p.log2 : Int) + ((s : Int) - 300) + (R14NatNormal.carry p : Int) + 127) ="
+            },
+            {
+              "line": 3704,
+              "text": "      middleExponent p + s - 300 := by dsimp [middleExponent, s]; omega"
+            },
+            {
+              "line": 3705,
+              "text": "  rw [R14NatNormal.model_round_normal _ p ((s : Int) - 300)"
+            },
+            {
+              "line": 3706,
+              "text": "    (by omega) (by omega) hmin hmax, heTarget] at hm"
+            },
+            {
+              "line": 3707,
+              "text": "  rw [core_word u v hs hs', Model.NativeBinary32.ofUInt32_mkBits]"
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  Model.roundDyadic FloatFormat.binary32 { negative := ?m.266, significand := p, exponent := ↑s - 300 }\nin the target expression\n  (R2W01c.rawModel u).mul (R2W01c.rawModel v) =\n    Model.roundDyadic FloatFormat.binary32\n      {\n        negative :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.negative ^^\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.negative,\n        significand :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.significand *\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.significand,\n        exponent := ↑s - 300 }\n\nu v : UInt32\nhu0 : 0 < R2W01c.wordExp u\nhu : R2W01c.wordExp u < 255\nhv0 : 0 < R2W01c.wordExp v\nhv : R2W01c.wordExp v < 255\nhs : 128 ≤ R2W01c.wordExp u + R2W01c.wordExp v\nhs' : R2W01c.wordExp u + R2W01c.wordExp v ≤ 380\np : ℕ := product (R2W01b.mantissa u) (R2W01b.mantissa v)\ns : ℕ := R2W01c.wordExp u + R2W01c.wordExp v\nhmx : 8388608 ≤ (R2W01b.mantissa u).toNat ∧ (R2W01b.mantissa u).toNat < 16777216\nhmy : 8388608 ≤ (R2W01b.mantissa v).toNat ∧ (R2W01b.mantissa v).toNat < 16777216\nhp :\n  70368744177664 ≤ product (R2W01b.mantissa u) (R2W01b.mantissa v) ∧\n    product (R2W01b.mantissa u) (R2W01b.mantissa v) ≤ 281474943156225\nhpHi : p < 281474976710656\nhl : 46 ≤ p.log2 ∧ p.log2 ≤ 47\nhc : R14NatNormal.carry p ≤ 1\nhmid : 173 ≤ middleExponent p ∧ middleExponent p ≤ 174 ∧ storedFraction p < 8388608\nhmin : -126 ≤ ↑p.log2 + (↑s - 300)\nhmax : ↑p.log2 + (↑s - 300) + ↑(R14NatNormal.carry p) ≤ 127\nhx :\n  (R2W01c.rawModel u).toDyadic? =\n    some\n      { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat, exponent := ↑(R2W01c.wordExp u) - 150 }\nhy :\n  (R2W01c.rawModel v).toDyadic? =\n    some\n      { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat, exponent := ↑(R2W01c.wordExp v) - 150 }\nhm :\n  (R2W01c.rawModel u).mul (R2W01c.rawModel v) =\n    Model.roundDyadic FloatFormat.binary32\n      {\n        negative :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.negative ^^\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.negative,\n        significand :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.significand *\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.significand,\n        exponent := ↑s - 300 }\nheOrig : ↑(R2W01c.wordExp u) - 150 + (↑(R2W01c.wordExp v) - 150) = ↑s - 300\nheTarget : (↑p.log2 + (↑s - 300) + ↑(R14NatNormal.carry p) + 127).toNat = middleExponent p + s - 300\n⊢ Model.NativeBinary32.ofUInt32 (core u v) = (R2W01c.rawModel u).mul (R2W01c.rawModel v)"
+        }
+      ]
+    },
+    {
+      "candidate": "f01-r14-dev-native-exponent1",
+      "kernel_sha256": "913d715b19be45a82bf45ce9af528b9001bbd62d49e3520bf2504f566145ca03",
+      "source_commit": "e5b2f2d3da9b420f4b470e6841cd0778a7e72173",
+      "source_path": "competitions/floatlib/candidates/f01-r14-dev-native-exponent1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40149766137/download-5e9a96e7878941d08f8a0616c36bef14/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r14-dev-native-exponent1/full-build-output.txt",
+      "original_output_sha256": "a90b7335c7bfcc30c66ea35fd5a3921ea34dd9c89a318738ec58a9bcea6c6498",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 3400,
+          "column": 58,
+          "declaration": "Submission.R14ExponentAlgebra.translated_nat",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3398,
+              "text": "    rw [hd]"
+            },
+            {
+              "line": 3399,
+              "text": "    have hnum : em * 8388608 + f + (s + 212) * 8388608 ="
+            },
+            {
+              "line": 3400,
+              "text": "        4294967296 + ((em + s - 300) * 8388608 + f) := by omega"
+            },
+            {
+              "line": 3401,
+              "text": "    rw [hnum]"
+            },
+            {
+              "line": 3402,
+              "text": "    simp [Nat.add_mod, Nat.mod_eq_of_lt hout]"
+            }
+          ],
+          "message": "maximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information"
+        },
+        {
+          "line": 3407,
+          "column": 73,
+          "declaration": "Submission.R14ExponentAlgebra.translated_nat",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3405,
+              "text": "      rw [hsubEq]"
+            },
+            {
+              "line": 3406,
+              "text": "      simp [Nat.add_mod, Nat.mod_eq_of_lt (show s - 300 < 4294967296 by omega)]"
+            },
+            {
+              "line": 3407,
+              "text": "    rw [hsub, Nat.mod_eq_of_lt (show (s - 300) * 8388608 < 4294967296 by omega)]"
+            },
+            {
+              "line": 3408,
+              "text": "    have hnum : em * 8388608 + f + (s - 300) * 8388608 ="
+            },
+            {
+              "line": 3409,
+              "text": "        (em + s - 300) * 8388608 + f := by omega"
+            }
+          ],
+          "message": "maximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information"
+        },
+        {
+          "line": 3501,
+          "column": 60,
+          "declaration": "Submission.R14ExponentShift.first_product_bits",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3499,
+              "text": "  · have hm := R14NativeProduct.model_mul_of_nonzero_decodes"
+            },
+            {
+              "line": 3500,
+              "text": "      (R2W01c.nativeModel mx.toFloat32) (R2W01c.nativeModel my.toFloat32)"
+            },
+            {
+              "line": 3501,
+              "text": "      ⟨false, mx.toNat, 0⟩ ⟨false, my.toNat, 0⟩ hmx hmy (by omega) (by omega)"
+            },
+            {
+              "line": 3502,
+              "text": "    have he : Int.toNat ((p.log2 : Int) + 0 + (R14NatNormal.carry p : Int) + 127) ="
+            },
+            {
+              "line": 3503,
+              "text": "        middleExponent p := by unfold middleExponent; omega"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 ≤ e ≤ 1\n  46 ≤ d ≤ 47\n  d + e ≤ 127\n  70368744177664 ≤ c ≤ 281474943156225\n  8388608 ≤ b ≤ 16777215\n  8388608 ≤ a ≤ 16777215\nwhere\n a := ↑mx.toNat\n b := ↑my.toNat\n c := ↑(product mx my)\n d := ↑p.log2\n e := ↑(R14NatNormal.carry p)"
+        },
+        {
+          "line": 3501,
+          "column": 71,
+          "declaration": "Submission.R14ExponentShift.first_product_bits",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3499,
+              "text": "  · have hm := R14NativeProduct.model_mul_of_nonzero_decodes"
+            },
+            {
+              "line": 3500,
+              "text": "      (R2W01c.nativeModel mx.toFloat32) (R2W01c.nativeModel my.toFloat32)"
+            },
+            {
+              "line": 3501,
+              "text": "      ⟨false, mx.toNat, 0⟩ ⟨false, my.toNat, 0⟩ hmx hmy (by omega) (by omega)"
+            },
+            {
+              "line": 3502,
+              "text": "    have he : Int.toNat ((p.log2 : Int) + 0 + (R14NatNormal.carry p : Int) + 127) ="
+            },
+            {
+              "line": 3503,
+              "text": "        middleExponent p := by unfold middleExponent; omega"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 ≤ e ≤ 1\n  46 ≤ d ≤ 47\n  d + e ≤ 127\n  70368744177664 ≤ c ≤ 281474943156225\n  8388608 ≤ b ≤ 16777215\n  8388608 ≤ a ≤ 16777215\nwhere\n a := ↑mx.toNat\n b := ↑my.toNat\n c := ↑(product mx my)\n d := ↑p.log2\n e := ↑(R14NatNormal.carry p)"
+        },
+        {
+          "line": 3508,
+          "column": 93,
+          "declaration": "Submission.R14ExponentShift.first_product_bits",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3506,
+              "text": "          Model.roundDyadic FloatFormat.binary32 ⟨false, p, 0⟩ := by"
+            },
+            {
+              "line": 3507,
+              "text": "            simpa [p, product] using hm"
+            },
+            {
+              "line": 3508,
+              "text": "      _ = Model.ofFields FloatFormat.binary32 false (middleExponent p) (storedFraction p) := by"
+            },
+            {
+              "line": 3509,
+              "text": "          rw [R14NatNormal.model_round_normal false p 0 (by omega) (by omega)"
+            },
+            {
+              "line": 3510,
+              "text": "            hfirstLo hfirstHi, he]"
+            }
+          ],
+          "message": "unsolved goals\nmx my : UInt32\nhx0 : 8388608 ≤ mx.toNat\nhx : mx.toNat < 16777216\nhy0 : 8388608 ≤ my.toNat\nhy : my.toNat < 16777216\np : ℕ := product mx my\nhp : 70368744177664 ≤ product mx my ∧ product mx my ≤ 281474943156225\nhpHi : p < 281474976710656\nhlead : 46 ≤ p.log2 ∧ p.log2 ≤ 47\nhcarry : R14NatNormal.carry p ≤ 1\nhfirstLo : -126 ≤ ↑p.log2 + 0\nhfirstHi : ↑p.log2 + 0 + ↑(R14NatNormal.carry p) ≤ 127\nhmx :\n  (Model.ofFloat32Model mx.toFloat32.toModel).toDyadic? =\n    some { negative := false, significand := mx.toNat, exponent := 0 }\nhmy :\n  (Model.ofFloat32Model my.toFloat32.toModel).toDyadic? =\n    some { negative := false, significand := my.toNat, exponent := 0 }\nhm :\n  (R2W01c.nativeModel mx.toFloat32).mul (R2W01c.nativeModel my.toFloat32) =\n    Model.roundDyadic FloatFormat.binary32\n      {\n        negative :=\n          { negative := false, significand := mx.toNat, exponent := 0 }.negative ^^\n            { negative := false, significand := my.toNat, exponent := 0 }.negative,\n        significand :=\n          { negative := false, significand := mx.toNat, exponent := 0 }.significand *\n            { negative := false, significand := my.toNat, exponent := 0 }.significand,\n        exponent :=\n          { negative := false, significand := mx.toNat, exponent := 0 }.exponent +\n            { negative := false, significand := my.toNat, exponent := 0 }.exponent }\nhe : (↑p.log2 + 0 + ↑(R14NatNormal.carry p) + 127).toNat = middleExponent p\n⊢ Model.ofFields FloatFormat.binary32 false (middleExponent p) (R14NatNormal.mantissa p - 8388608) =\n    Model.ofFields FloatFormat.binary32 false (middleExponent p) (storedFraction p)"
+        },
+        {
+          "line": 3542,
+          "column": 2,
+          "declaration": "Submission.R14ExponentShift.core",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3540,
+              "text": "@[inline] def core (u v : UInt32) : UInt32 :="
+            },
+            {
+              "line": 3541,
+              "text": "  let mid := ((R2W01b.mantissa u).toFloat32 * (R2W01b.mantissa v).toFloat32).toBits"
+            },
+            {
+              "line": 3542,
+              "text": "  (if sign u v then 2147483648 else 0) ||| (mid + ((ex u + ex v - 300) <<< 23))"
+            },
+            {
+              "line": 3543,
+              "text": ""
+            },
+            {
+              "line": 3544,
+              "text": "theorem core_word (u v : UInt32)"
+            }
+          ],
+          "message": "failed to synthesize instance of type class\n  HOr ℕ UInt32 ?m.38\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command."
+        },
+        {
+          "line": 3591,
+          "column": 14,
+          "declaration": "Submission.R14ExponentShift.core_model",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3589,
+              "text": "    ⟨R2W01c.wordSign u, (R2W01b.mantissa u).toNat, (R2W01c.wordExp u : Int) - 150⟩"
+            },
+            {
+              "line": 3590,
+              "text": "    ⟨R2W01c.wordSign v, (R2W01b.mantissa v).toNat, (R2W01c.wordExp v : Int) - 150⟩"
+            },
+            {
+              "line": 3591,
+              "text": "    hx hy (by omega) (by omega)"
+            },
+            {
+              "line": 3592,
+              "text": "  have heOrig : (R2W01c.wordExp u : Int) - 150 +"
+            },
+            {
+              "line": 3593,
+              "text": "      ((R2W01c.wordExp v : Int) - 150) = (s : Int) - 300 := by dsimp [s]; omega"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 ≤ i ≤ 8388607\n  173 ≤ h ≤ 174\n  0 ≤ g ≤ 1\n  46 ≤ f ≤ 47\n  70368744177664 ≤ e ≤ 281474943156225\n  8388608 ≤ d ≤ 16777215\n  8388608 ≤ c ≤ 16777215\n  1 ≤ b ≤ 254\n  1 ≤ a ≤ 254\n  128 ≤ a + b ≤ 380\n  a + b + f ≥ 174\n  a + b + f + g ≤ 427\nwhere\n a := ↑(R2W01c.wordExp u)\n b := ↑(R2W01c.wordExp v)\n c := ↑(R2W01b.mantissa u).toNat\n d := ↑(R2W01b.mantissa v).toNat\n e := ↑(product (R2W01b.mantissa u) (R2W01b.mantissa v))\n f := ↑p.log2\n g := ↑(R14NatNormal.carry p)\n h := ↑(middleExponent p)\n i := ↑(storedFraction p)"
+        },
+        {
+          "line": 3591,
+          "column": 25,
+          "declaration": "Submission.R14ExponentShift.core_model",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3589,
+              "text": "    ⟨R2W01c.wordSign u, (R2W01b.mantissa u).toNat, (R2W01c.wordExp u : Int) - 150⟩"
+            },
+            {
+              "line": 3590,
+              "text": "    ⟨R2W01c.wordSign v, (R2W01b.mantissa v).toNat, (R2W01c.wordExp v : Int) - 150⟩"
+            },
+            {
+              "line": 3591,
+              "text": "    hx hy (by omega) (by omega)"
+            },
+            {
+              "line": 3592,
+              "text": "  have heOrig : (R2W01c.wordExp u : Int) - 150 +"
+            },
+            {
+              "line": 3593,
+              "text": "      ((R2W01c.wordExp v : Int) - 150) = (s : Int) - 300 := by dsimp [s]; omega"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 ≤ i ≤ 8388607\n  173 ≤ h ≤ 174\n  0 ≤ g ≤ 1\n  46 ≤ f ≤ 47\n  70368744177664 ≤ e ≤ 281474943156225\n  8388608 ≤ d ≤ 16777215\n  8388608 ≤ c ≤ 16777215\n  1 ≤ b ≤ 254\n  1 ≤ a ≤ 254\n  128 ≤ a + b ≤ 380\n  a + b + f ≥ 174\n  a + b + f + g ≤ 427\nwhere\n a := ↑(R2W01c.wordExp u)\n b := ↑(R2W01c.wordExp v)\n c := ↑(R2W01b.mantissa u).toNat\n d := ↑(R2W01b.mantissa v).toNat\n e := ↑(product (R2W01b.mantissa u) (R2W01b.mantissa v))\n f := ↑p.log2\n g := ↑(R14NatNormal.carry p)\n h := ↑(middleExponent p)\n i := ↑(storedFraction p)"
+        },
+        {
+          "line": 3598,
+          "column": 6,
+          "declaration": "Submission.R14ExponentShift.core_model",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3596,
+              "text": "      Int.toNat ((p.log2 : Int) + ((s : Int) - 300) + (R14NatNormal.carry p : Int) + 127) ="
+            },
+            {
+              "line": 3597,
+              "text": "      middleExponent p + s - 300 := by dsimp [middleExponent, s]; omega"
+            },
+            {
+              "line": 3598,
+              "text": "  rw [R14NatNormal.model_round_normal _ p ((s : Int) - 300)"
+            },
+            {
+              "line": 3599,
+              "text": "    (by omega) (by omega) hmin hmax, heTarget] at hm"
+            },
+            {
+              "line": 3600,
+              "text": "  rw [core_word u v hs hs', Model.NativeBinary32.ofUInt32_mkBits]"
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  Model.roundDyadic FloatFormat.binary32 { negative := ?m.266, significand := p, exponent := ↑s - 300 }\nin the target expression\n  (R2W01c.rawModel u).mul (R2W01c.rawModel v) =\n    Model.roundDyadic FloatFormat.binary32\n      {\n        negative :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.negative ^^\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.negative,\n        significand :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.significand *\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.significand,\n        exponent := ↑s - 300 }\n\nu v : UInt32\nhu0 : 0 < R2W01c.wordExp u\nhu : R2W01c.wordExp u < 255\nhv0 : 0 < R2W01c.wordExp v\nhv : R2W01c.wordExp v < 255\nhs : 128 ≤ R2W01c.wordExp u + R2W01c.wordExp v\nhs' : R2W01c.wordExp u + R2W01c.wordExp v ≤ 380\np : ℕ := product (R2W01b.mantissa u) (R2W01b.mantissa v)\ns : ℕ := R2W01c.wordExp u + R2W01c.wordExp v\nhmx : 8388608 ≤ (R2W01b.mantissa u).toNat ∧ (R2W01b.mantissa u).toNat < 16777216\nhmy : 8388608 ≤ (R2W01b.mantissa v).toNat ∧ (R2W01b.mantissa v).toNat < 16777216\nhp :\n  70368744177664 ≤ product (R2W01b.mantissa u) (R2W01b.mantissa v) ∧\n    product (R2W01b.mantissa u) (R2W01b.mantissa v) ≤ 281474943156225\nhpHi : p < 281474976710656\nhl : 46 ≤ p.log2 ∧ p.log2 ≤ 47\nhc : R14NatNormal.carry p ≤ 1\nhmid : 173 ≤ middleExponent p ∧ middleExponent p ≤ 174 ∧ storedFraction p < 8388608\nhmin : -126 ≤ ↑p.log2 + (↑s - 300)\nhmax : ↑p.log2 + (↑s - 300) + ↑(R14NatNormal.carry p) ≤ 127\nhx :\n  (R2W01c.rawModel u).toDyadic? =\n    some\n      { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat, exponent := ↑(R2W01c.wordExp u) - 150 }\nhy :\n  (R2W01c.rawModel v).toDyadic? =\n    some\n      { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat, exponent := ↑(R2W01c.wordExp v) - 150 }\nhm :\n  (R2W01c.rawModel u).mul (R2W01c.rawModel v) =\n    Model.roundDyadic FloatFormat.binary32\n      {\n        negative :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.negative ^^\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.negative,\n        significand :=\n          { negative := R2W01c.wordSign u, significand := (R2W01b.mantissa u).toNat,\n                exponent := ↑(R2W01c.wordExp u) - 150 }.significand *\n            { negative := R2W01c.wordSign v, significand := (R2W01b.mantissa v).toNat,\n                exponent := ↑(R2W01c.wordExp v) - 150 }.significand,\n        exponent := ↑s - 300 }\nheOrig : ↑(R2W01c.wordExp u) - 150 + (↑(R2W01c.wordExp v) - 150) = ↑s - 300\nheTarget : (↑p.log2 + (↑s - 300) + ↑(R14NatNormal.carry p) + 127).toNat = middleExponent p + s - 300\n⊢ Model.NativeBinary32.ofUInt32 (core u v) = (R2W01c.rawModel u).mul (R2W01c.rawModel v)"
+        }
+      ]
+    },
+    {
+      "candidate": "f01-r14-dev-thin-bcache1",
+      "kernel_sha256": "ef5dcd969ac532093103e719d50157631e4fb79dbd5966b54bbf4f8e2e3a8f80",
+      "source_commit": "e5b2f2d3da9b420f4b470e6841cd0778a7e72173",
+      "source_path": "competitions/floatlib/candidates/f01-r14-dev-thin-bcache1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40149766137/download-5e9a96e7878941d08f8a0616c36bef14/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r14-dev-thin-bcache1/full-build-output.txt",
+      "original_output_sha256": "9604994713dba076f63148722216b74ca3ede4dad89cc82e545436bdf516f2c3",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 6545,
+          "column": 4,
+          "declaration": "Submission.R14ThinBCache.loop_eq",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6543,
+              "text": "  · rw [loop, NativeFinal.dotLoop]"
+            },
+            {
+              "line": 6544,
+              "text": "    simp only [dif_pos hk]"
+            },
+            {
+              "line": 6545,
+              "text": "    dsimp only"
+            },
+            {
+              "line": 6546,
+              "text": "    rw [Packed10.nativeA_getD]"
+            },
+            {
+              "line": 6547,
+              "text": "    exact loop_eq n baseA baseB p A B (k + 1) _"
+            }
+          ],
+          "message": "`dsimp` made no progress"
+        }
+      ]
+    },
+    {
+      "candidate": "f01-r14-dev-word-add-entry1",
+      "kernel_sha256": "a2342948257d2e2e2011f0fe941bd2b692e70604b915734f4538b5efd1e69372",
+      "source_commit": "e5b2f2d3da9b420f4b470e6841cd0778a7e72173",
+      "source_path": "competitions/floatlib/candidates/f01-r14-dev-word-add-entry1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40149766137/download-5e9a96e7878941d08f8a0616c36bef14/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r14-dev-word-add-entry1/full-build-output.txt",
+      "original_output_sha256": "f44f3f5fa612825774b323e27525b1665839f1ca027fc451fc6df9686641228d",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 3165,
+          "column": 4,
+          "declaration": "Submission.R14SmallShiftBias.nat_bias",
+          "owner": "research",
+          "occurrences": 8,
+          "source_context": [
+            {
+              "line": 3163,
+              "text": "    unfold roundQuotientEven <;>"
+            },
+            {
+              "line": 3164,
+              "text": "    norm_num [Nat.shiftRight_eq_div_pow] <;>"
+            },
+            {
+              "line": 3165,
+              "text": "    simp only [beq_iff_eq] <;>"
+            },
+            {
+              "line": 3166,
+              "text": "    split_ifs <;> omega"
+            },
+            {
+              "line": 3167,
+              "text": ""
+            }
+          ],
+          "message": "`simp` made no progress"
+        },
+        {
+          "line": 3268,
+          "column": 2,
+          "declaration": "Submission.R14WordAdd.exponentWord",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3266,
+              "text": ""
+            },
+            {
+              "line": 3267,
+              "text": "@[inline] def exponentWord (u v : UInt32) : UInt32 :="
+            },
+            {
+              "line": 3268,
+              "text": "  leadingWord u v + R14ExponentShift.ex (low u v) - 23 + (roundedWord u v >>> 24).toUInt32"
+            },
+            {
+              "line": 3269,
+              "text": ""
+            },
+            {
+              "line": 3270,
+              "text": "@[inline] def fractionWord (u v : UInt32) : UInt32 :="
+            }
+          ],
+          "message": "failed to synthesize instance of type class\n  HSub UInt32 ℕ ?m.18\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command."
+        },
+        {
+          "line": 3292,
+          "column": 13,
+          "declaration": "Submission.R14WordAdd.guardedAdd",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3290,
+              "text": "    let h := base + (n >>> (base + 1))"
+            },
+            {
+              "line": 3291,
+              "text": "    let q := R14SmallShiftBias.biased n.toUInt64 ((h - 23).toUInt64)"
+            },
+            {
+              "line": 3292,
+              "text": "    let e := h + R14ExponentShift.ex lo - 23 + (q >>> 24).toUInt32"
+            },
+            {
+              "line": 3293,
+              "text": "    if e - 1 ≤ (253 : UInt32) then"
+            },
+            {
+              "line": 3294,
+              "text": "      R7W02.fromRaw (FastMul.mkW (decide ((2147483648 : UInt32) ≤ hi))"
+            }
+          ],
+          "message": "failed to synthesize instance of type class\n  HSub UInt32 ℕ ?m.92\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command."
+        },
+        {
+          "line": 3426,
+          "column": 4,
+          "declaration": "Submission.R14WordAddAlignment.align_high_low",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3424,
+              "text": "    simp only [Nat.sub_self, Nat.shiftLeft_eq', Nat.shiftLeft_eq, Nat.pow_zero,"
+            },
+            {
+              "line": 3425,
+              "text": "      Nat.mul_one]"
+            },
+            {
+              "line": 3426,
+              "text": "  · simpa only [Int.ofNat_eq_natCast] using"
+            },
+            {
+              "line": 3427,
+              "text": "      Model.addDyadic_alignLeftOffset 150 hiSign loSign hi lo ehi elo hhi hlo hlt"
+            },
+            {
+              "line": 3428,
+              "text": ""
+            }
+          ],
+          "message": "Type mismatch: After simplification, term\n  Model.addDyadic_alignLeftOffset 150 hiSign loSign hi lo ehi elo hhi hlo hlt\n has type\n  @Eq FloatLib.Numerics.Dyadic\n    (Model.addDyadic { negative := hiSign, significand := hi, exponent := ↑ehi - ↑150 }\n      { negative := loSign, significand := lo, exponent := ↑elo - ↑150 })\n    (Model.addDyadic { negative := hiSign, significand := hi <<< (ehi - elo), exponent := ↑elo - ↑150 }\n      { negative := loSign, significand := lo, exponent := ↑elo - ↑150 })\nbut is expected to have type\n  @Eq FloatLib.Numerics.Dyadic\n    (Model.addDyadic { negative := hiSign, significand := hi, exponent := ↑ehi - 150 }\n      { negative := loSign, significand := lo, exponent := ↑elo - 150 })\n    (Model.addDyadic { negative := hiSign, significand := hi <<< (ehi - elo), exponent := ↑elo - 150 }\n      { negative := loSign, significand := lo, exponent := ↑elo - 150 })"
+        },
+        {
+          "line": 3443,
+          "column": 4,
+          "declaration": "Submission.R14WordAddAlignment.exact_high_low",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3441,
+              "text": "  by_cases hs : hiSign = loSign"
+            },
+            {
+              "line": 3442,
+              "text": "  · subst loSign"
+            },
+            {
+              "line": 3443,
+              "text": "    simpa only [magnitude, if_pos rfl] using"
+            },
+            {
+              "line": 3444,
+              "text": "      Model.addDyadic_sameSign_sameExponent hiSign (hi <<< (ehi - elo)) lo"
+            },
+            {
+              "line": 3445,
+              "text": "        ((elo : Int) - 150) hshift hlo0"
+            }
+          ],
+          "message": "Type mismatch: After simplification, term\n  Model.addDyadic_sameSign_sameExponent hiSign (hi <<< (ehi - elo)) lo (↑elo - 150) hshift hlo0\n has type\n  @Eq FloatLib.Numerics.Dyadic\n    (Model.addDyadic { negative := hiSign, significand := hi <<< (ehi - elo), exponent := ↑elo - 150 }\n      { negative := hiSign, significand := lo, exponent := ↑elo - 150 })\n    { negative := hiSign, significand := hi <<< (ehi - elo) + lo, exponent := ↑elo - 150 }\nbut is expected to have type\n  @Eq FloatLib.Numerics.Dyadic\n    (Model.addDyadic { negative := hiSign, significand := hi <<< (ehi - elo), exponent := ↑elo - 150 }\n      { negative := hiSign, significand := lo, exponent := ↑elo - 150 })\n    { negative := hiSign, significand := if True then hi <<< (ehi - elo) + lo else hi <<< (ehi - elo) - lo,\n      exponent := ↑elo - 150 }"
+        },
+        {
+          "line": 3603,
+          "column": 2,
+          "declaration": "Submission.R14WordAddRounding.rounded_bounds",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3601,
+              "text": "  have hrhi := roundShiftRightEven_le_shiftRight_add1 n k"
+            },
+            {
+              "line": 3602,
+              "text": "  change 8388608 ≤ roundShiftRightEven n k ∧ roundShiftRightEven n k ≤ 16777216"
+            },
+            {
+              "line": 3603,
+              "text": "  omega"
+            },
+            {
+              "line": 3604,
+              "text": ""
+            },
+            {
+              "line": 3605,
+              "text": "theorem shift_carry (n : Nat) (hn : n ≠ 0) (hh : 23 ≤ n.log2) :"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  f ≥ 0\n  0 ≤ e ≤ 8388607\n  0 ≤ e - f ≤ 1\n  8388608 ≤ d ≤ 16777215\n  c ≥ 0\n  c ≥ 0\n  a ≥ 1\n  a - b ≥ 0\nwhere\n a := ↑n\n b := ↑2 ^ k\n c := ↑(n.log2 - 23)\n d := ↑n / ↑(2 ^ k)\n e := ↑(roundShiftRightEven n k)\n f := ↑(n.shiftRight k)"
+        },
+        {
+          "line": 3743,
+          "column": 51,
+          "declaration": "Submission.R14WordAdd.left_word_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3741,
+              "text": "    exact h"
+            },
+            {
+              "line": 3742,
+              "text": "  have hx := Nat.mul_le_mul_left (R2W01b.mantissa (high u v)).toNat hp"
+            },
+            {
+              "line": 3743,
+              "text": "  rw [UInt32.toNat_shiftLeft, Nat.mod_eq_of_lt (by omega)]"
+            },
+            {
+              "line": 3744,
+              "text": "  rw [Nat.shiftLeft_eq]"
+            },
+            {
+              "line": 3745,
+              "text": "  exact Nat.mod_eq_of_lt (by omega)"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  e ≥ 4294967296\n  d ≥ 0\n  c ≤ 128\n  0 ≤ b ≤ 7\n  8388608 ≤ a ≤ 16777215\n  128*a - d ≥ 0\nwhere\n a := ↑(R2W01b.mantissa (high u v)).toNat\n b := ↑(gap u v).toNat\n c := ↑2 ^ (gap u v).toNat\n d := ↑(R2W01b.mantissa (high u v)).toNat * ↑(2 ^ (gap u v).toNat)\n e := ↑(R2W01b.mantissa (high u v)).toNat * ↑(2 ^ ((gap u v).toNat % 32))"
+        },
+        {
+          "line": 3745,
+          "column": 29,
+          "declaration": "Submission.R14WordAdd.left_word_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3743,
+              "text": "  rw [UInt32.toNat_shiftLeft, Nat.mod_eq_of_lt (by omega)]"
+            },
+            {
+              "line": 3744,
+              "text": "  rw [Nat.shiftLeft_eq]"
+            },
+            {
+              "line": 3745,
+              "text": "  exact Nat.mod_eq_of_lt (by omega)"
+            },
+            {
+              "line": 3746,
+              "text": ""
+            },
+            {
+              "line": 3747,
+              "text": "theorem magnitudeWord_nat (u v : UInt32) (hd : eligible u v = true) :"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  f ≥ 0\n  e ≥ 0\n  e - f ≥ 0\n  d ≥ 0\n  c ≤ 128\n  0 ≤ b ≤ 7\n  8388608 ≤ a ≤ 16777215\n  128*a - d ≥ 0\nwhere\n a := ↑(R2W01b.mantissa (high u v)).toNat\n b := ↑(gap u v).toNat\n c := ↑2 ^ (gap u v).toNat\n d := ↑(R2W01b.mantissa (high u v)).toNat * ↑(2 ^ (gap u v).toNat)\n e := ↑?m.97\n f := ↑?m.98"
+        },
+        {
+          "line": 3764,
+          "column": 69,
+          "declaration": "Submission.R14WordAdd.magnitudeWord_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3762,
+              "text": "  · have hne : R2W01c.wordSign (high u v) ≠ R2W01c.wordSign (low u v) := by"
+            },
+            {
+              "line": 3763,
+              "text": "      intro heq"
+            },
+            {
+              "line": 3764,
+              "text": "      have ht : sameSign u v = true := by rw [sameSign_sorted, heq]; rfl"
+            },
+            {
+              "line": 3765,
+              "text": "      exact hsame ht"
+            },
+            {
+              "line": 3766,
+              "text": "    have hg : 2 ≤ (gap u v).toNat := hs.2.2.2.resolve_left hne"
+            }
+          ],
+          "message": "Tactic `rfl` failed: The left-hand side\n  R2W01c.wordSign (low u v) == R2W01c.wordSign (low u v)\nis not definitionally equal to the right-hand side\n  true\n\nu v : UInt32\nhd : eligible u v = true\nhb : 16777216 ≤ magnitudeNat u v ∧ magnitudeNat u v ≤ 2164260735\nhs :\n  (0 < R2W01c.wordExp (high u v) ∧ R2W01c.wordExp (high u v) < 255) ∧\n    (0 < R2W01c.wordExp (low u v) ∧ R2W01c.wordExp (low u v) < 255) ∧\n      (gap u v).toNat ≤ 7 ∧ (R2W01c.wordSign (high u v) = R2W01c.wordSign (low u v) ∨ 2 ≤ (gap u v).toNat)\nhsame : ¬sameSign u v = true\nheq : R2W01c.wordSign (high u v) = R2W01c.wordSign (low u v)\n⊢ (R2W01c.wordSign (low u v) == R2W01c.wordSign (low u v)) = true"
+        },
+        {
+          "line": 3815,
+          "column": 25,
+          "declaration": "Submission.R14WordAdd.leadingWord_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3813,
+              "text": "  unfold leadingWord"
+            },
+            {
+              "line": 3814,
+              "text": "  rw [UInt32.toNat_add, UInt32.toNat_shiftRight, hplus,"
+            },
+            {
+              "line": 3815,
+              "text": "    Nat.mod_eq_of_lt (by omega), magnitudeWord_nat u v hd, base_word_nat u v hd]"
+            },
+            {
+              "line": 3816,
+              "text": "  rw [← he]"
+            },
+            {
+              "line": 3817,
+              "text": "  exact Nat.mod_eq_of_lt (by omega)"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  f ≥ 0\n  f + g ≥ 4294967296\n  23 ≤ e ≤ 31\n  25 ≤ d + e ≤ 32\n  1 ≤ c ≤ 254\n  1 ≤ b ≤ 254\n  0 ≤ a ≤ 7\n  a - d - e ≥ -25\nwhere\n a := ↑(gap u v).toNat\n b := ↑(R2W01c.wordExp (high u v))\n c := ↑(R2W01c.wordExp (low u v))\n d := ↑(magnitudeNat u v) / ↑(2 ^ (baseNat u v + 1))\n e := ↑((if sameSign u v = true then 23 else 22) + gap u v + 1).toNat\n f := ↑((if sameSign u v = true then 23 else 22) + gap u v).toNat\n g := ↑(magnitudeWord u v).toNat / ↑(2 ^ ((baseNat u v + 1) % 32))"
+        },
+        {
+          "line": 3816,
+          "column": 6,
+          "declaration": "Submission.R14WordAdd.leadingWord_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 3814,
+              "text": "  rw [UInt32.toNat_add, UInt32.toNat_shiftRight, hplus,"
+            },
+            {
+              "line": 3815,
+              "text": "    Nat.mod_eq_of_lt (by omega), magnitudeWord_nat u v hd, base_word_nat u v hd]"
+            },
+            {
+              "line": 3816,
+              "text": "  rw [← he]"
+            },
+            {
+              "line": 3817,
+              "text": "  exact Nat.mod_eq_of_lt (by omega)"
+            },
+            {
+              "line": 3818,
+              "text": ""
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  baseNat u v + magnitudeNat u v >>> (baseNat u v + 1)\nin the target expression\n  baseNat u v + magnitudeNat u v >>> ((baseNat u v + 1) % 32) = (magnitudeNat u v).log2\n\nu v : UInt32\nhd : eligible u v = true\nhb : 22 ≤ baseNat u v ∧ baseNat u v ≤ 30\nhl : 24 ≤ (magnitudeNat u v).log2 ∧ (magnitudeNat u v).log2 ≤ 31 ∧ (magnitudeNat u v).log2 ≤ (gap u v).toNat + 24\nhs :\n  (0 < R2W01c.wordExp (high u v) ∧ R2W01c.wordExp (high u v) < 255) ∧\n    (0 < R2W01c.wordExp (low u v) ∧ R2W01c.wordExp (low u v) < 255) ∧\n      (gap u v).toNat ≤ 7 ∧ (R2W01c.wordSign (high u v) = R2W01c.wordSign (low u v) ∨ 2 ≤ (gap u v).toNat)\nhe : (magnitudeNat u v).log2 = baseNat u v + magnitudeNat u v >>> (baseNat u v + 1)\nhplus : ((if sameSign u v = true then 23 else 22) + gap u v + 1).toNat = baseNat u v + 1\n⊢ baseNat u v + magnitudeNat u v >>> ((baseNat u v + 1) % 32) = (magnitudeNat u v).log2"
+        },
+        {
+          "line": 4024,
+          "column": 2,
+          "declaration": "Submission.R14WordAdd.core_spec",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 4022,
+              "text": "    R7Native.toModelExecAdd, ← Model.Proof.add_eq_spec,"
+            },
+            {
+              "line": 4023,
+              "text": "    R7W02.exec_toModel_eq_rawModel, R7W02.exec_toModel_eq_rawModel]"
+            },
+            {
+              "line": 4024,
+              "text": "  simpa only [R2W01c.rawModel_eq_native32] using core_model x.raw.1 y.raw.1 hd he"
+            },
+            {
+              "line": 4025,
+              "text": ""
+            },
+            {
+              "line": 4026,
+              "text": "theorem guardedAdd_spec (fallback : Binary32 → Binary32 → Binary32)"
+            }
+          ],
+          "message": "Type mismatch: After simplification, term\n  core_model (↑(ExecFloat.raw x)) (↑(ExecFloat.raw y)) hd he\n has type\n  @Eq Model.NativeBinary32.Value (Model.NativeBinary32.ofUInt32 (core ↑(ExecFloat.raw x) ↑(ExecFloat.raw y)))\n    (Model.add (Model.NativeBinary32.ofUInt32 ↑(ExecFloat.raw x)) (Model.NativeBinary32.ofUInt32 ↑(ExecFloat.raw y)))\nbut is expected to have type\n  @Eq\n    (Model\n      (ExecFloat.Binary.format 8 23 FloatFormat.Encoding.ieee (FloatFormat.Encoding.ieee.defaultBias 8)\n        Binary32._proof_1 Binary32._proof_2 Binary32._proof_3 Binary32._proof_4))\n    (Model.NativeBinary32.ofUInt32 (core ↑(ExecFloat.raw x) ↑(ExecFloat.raw y)))\n    (Model.add (Model.NativeBinary32.ofUInt32 ↑(ExecFloat.raw x)) (Model.NativeBinary32.ofUInt32 ↑(ExecFloat.raw y)))"
+        },
+        {
+          "line": 6900,
+          "column": 4,
+          "declaration": "Submission.R14ThinBCache.loop_eq",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6898,
+              "text": "  · rw [loop, NativeFinal.dotLoop]"
+            },
+            {
+              "line": 6899,
+              "text": "    simp only [dif_pos hk]"
+            },
+            {
+              "line": 6900,
+              "text": "    dsimp only"
+            },
+            {
+              "line": 6901,
+              "text": "    rw [Packed10.nativeA_getD]"
+            },
+            {
+              "line": 6902,
+              "text": "    exact loop_eq n baseA baseB p A B (k + 1) _"
+            }
+          ],
+          "message": "`dsimp` made no progress"
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}

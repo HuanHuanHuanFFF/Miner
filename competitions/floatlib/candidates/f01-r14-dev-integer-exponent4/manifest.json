@@ -1,0 +1,71 @@
+{
+  "candidate": "f01-r14-dev-integer-exponent4",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "2c7194cc4b3ff6396dccc5cd2e709667f76ffe5a6d3e81ad834f728c960773aa",
+  "candidate_bytes": 253914,
+  "created_at_utc": "2026-10-25T01:32:32.313137+00:00",
+  "validation_mode": "full-gate",
+  "proof_status": "FIRST_ACTUAL_COMPILER_FEEDBACK_REPAIRS_NOT_COMPILED",
+  "performance": "NOT_RUN",
+  "parent": "f01-r14-dev-integer-exponent3",
+  "parent_sha256": "5556cd0abefe97c136f9ef857b80637fe2ea4b43594b724728aef9a24bcfa703",
+  "mechanism": "Exact normal domain: UInt64 24x24 product, highest bit selects shift23/24, biased ties-to-even rounding, direct carry/exponent/fraction/sign packing. No Float32 cast/mul/toBits in this fast core. Same original acyclic scalar fallback and full-input spec composition.",
+  "source_budget": {
+    "at_utc": "2026-10-24T22:28:17.680539+00:00",
+    "candidate_bytes": 253539,
+    "limit": 256000,
+    "removed_native_middle_bytes": 3415,
+    "removed_unused_algebra_bytes": 4740,
+    "integer_component_bytes": 8214,
+    "bias_component_bytes": 2468,
+    "complete_proof_attempt": true,
+    "compiled": false
+  },
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-integer-normal-proof2.lean",
+      "sha256": "bc154ed36f1e438f868392edbf4c35f999e0fc6ecea1abc0daaf6d7b29328729",
+      "bytes": 8217
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/astra-biased-rne3.lean",
+      "sha256": "fd3df0d744f52f15ba697b1f742f56d77c0ee58ea082b3f5872afbaa970f8326",
+      "bytes": 2457
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/astra-integer-core-model2.lean",
+      "sha256": "c201150eb693447adbec8c58a7e877f6f21ea336d00508582ac717680d2bd3bf",
+      "bytes": 2722
+    }
+  ],
+  "proof_changes": "Native first-product theorem and raw exponent translation proof replaced by direct word field identities; unused entire exponent-algebra namespace removed only from this new source. Original913d/5677 remain unchanged. Remaining model/spec/guard/fallback chain retained.",
+  "limits": "First real error repairs only; complete exact-source compilation/replay/axiom gate and performance still required. No runtime algorithm or operand-order change; annotated UInt32 literals make intended original arithmetic well-typed.",
+  "bytes_remaining": 2086,
+  "repair": {
+    "description": "Replace rw[local parity:UInt64] by dsimp only[parity], then rewrite actual equalities.",
+    "runtime_definition_source_changed": false,
+    "old_fragment_sha256": "3515b1819897ad3d230f53d12375b85987fcf8678779e7428f4a78e693b65b0c",
+    "new_fragment_sha256": "e9abe15eaebf5dab13f717558292f49871f8fdde07b3075145915a493bb5db0a",
+    "source_proof_only": true,
+    "inherited_preparation_fields_refer_to_parent_manifest": true
+  },
+  "exact_compiler_run": 40149766137,
+  "repairs": [
+    {
+      "parent": "astra-biased-rne2.lean",
+      "parent_sha256": "e9abe15eaebf5dab13f717558292f49871f8fdde07b3075145915a493bb5db0a",
+      "path": "astra-biased-rne3.lean",
+      "sha256": "fd3df0d744f52f15ba697b1f742f56d77c0ee58ea082b3f5872afbaa970f8326",
+      "bytes": 2457
+    },
+    {
+      "parent_theorem_sha256": "ec71dc9ae67eefcbf0e5220e93906b96f399e2eba85f77b5f7ab723ef789a93a",
+      "path": "astra-integer-core-model2.lean",
+      "source_sha256": "c201150eb693447adbec8c58a7e877f6f21ea336d00508582ac717680d2bd3bf",
+      "selected_theorem_sha256": "80fce64fd1ba3ce31ed632f55495bb72e6b616400598a1bd51ce0a4bf5a8cf2b",
+      "selected_bytes": 2424
+    }
+  ],
+  "header_removals": [],
+  "inherited_preparation_fields_refer_to_parent_manifest": true
+}

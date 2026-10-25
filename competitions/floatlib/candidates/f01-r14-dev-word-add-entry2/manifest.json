@@ -1,0 +1,141 @@
+{
+  "created_at_utc": "2026-10-25T01:32:32.320319+00:00",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "f958071e037ea5627a34d41b296d07cc97fd13eec41117de7c9b184bf0fad653",
+  "candidate_bytes": 255863,
+  "bytes_remaining": 137,
+  "parent": "f01-r14-dev-word-add-entry1",
+  "parent_sha256": "a2342948257d2e2e2011f0fe941bd2b692e70604b915734f4538b5efd1e69372",
+  "slim_parent": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-word-add-slim-parent1.lean",
+    "sha256": "cefc93772563ac2c52644c7835b99591469b5e2bf934a6e1fd36a1a06ad91f92",
+    "bytes": 209459
+  },
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-word-add-foundation3.lean",
+      "bytes": 4202,
+      "sha256": "7dae5c3463501f1c00fc7030bd0c009e72a11b50850567f74890e1fda7860a10"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/astra-small-shift-bias3.lean",
+      "bytes": 3163,
+      "sha256": "ec6a8e65cb608d094049682549e3e9213ac81e13125ca57d2a89943b2c2c2a94"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-word-add-runtime4.lean",
+      "bytes": 3691,
+      "sha256": "ed74b92765065fc814c3e392b2f4dee4b72730ddd4e6d433ffed931b430f20fe"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-word-add-word-bridges-draft.lean",
+      "bytes": 3176,
+      "sha256": "2c64a9a6d048ca8afd4ec3d72e6dadb3f47c07f8f4b57b8ec70f17d69f04d283"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/astra-word-add-alignment4.lean",
+      "bytes": 4000,
+      "sha256": "c8bd8475394f3161f412309476226edb724e961852e08ebce5d866aff8f69e50"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/astra-word-add-bounds1.lean",
+      "bytes": 4499,
+      "sha256": "c7fa39b51d238d0d5b99a7bed58dcf31f3a20b9da19e69c94ec447fe7dd5cfee"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/astra-word-add-rounding2.lean",
+      "bytes": 2092,
+      "sha256": "b358c5a11e524af35fc476a5d373c84714b3e570de543a0b9a5dd4dcfb6a846b"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/astra-word-add-model-bridge1.lean",
+      "bytes": 2200,
+      "sha256": "a60ca79e76d5882e1817d2547b580438f781a87078e390b15b58fdb8d8a73dbd"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-word-add-fields3.lean",
+      "sha256": "eac38006c15aa6bfca52471da3aab14905714c0557ac138e7dc52c70ba39adb2",
+      "bytes": 12252
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-word-add-raw-model-integration1.lean",
+      "sha256": "4820d9685fd4e96ad80fe15b7a143da21a3da700e6f50815225eacce307afe53",
+      "bytes": 4392
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-word-add-spec3.lean",
+      "sha256": "234dfa98f80295e6d12501efbb819531f8755629c5a04ee165d229859c082999",
+      "bytes": 2375
+    }
+  ],
+  "raw_model_derivation": {
+    "source": "astra-word-add-raw-model1.lean",
+    "source_sha256": "d507f17d5b4a363fdfaf1a329be036a33df1122d4ef87b9959a1861013bf7323",
+    "removed_duplicate_proof_bytes": 864,
+    "removed_duplicate_sha256": "7786b471daf878d2dcf951bd81c23b5d6d748c65d24f49dee26c4cd370dc4d49",
+    "replacements": {
+      "raw_add_sorted_conditions": "sorted_domain",
+      "raw_add_gap_nat": "gap_pair"
+    }
+  },
+  "fields_derivation": "Drop the unused order conjunct so sorted_domain matches the existing exact tuple required by the raw bridge; adapt its proof/projections only.",
+  "spec_derivation": "Use the parent exact rawModel_eq_native32 theorem to match the NativeBinary32 codec directly. Prior generic-ofUInt32 expression remains in spec1; no actual compiler error is alleged.",
+  "validation_mode": "full-gate",
+  "proof_status": "FIRST_ACTUAL_COMPILER_FEEDBACK_REPAIRS_NOT_COMPILED",
+  "performance": "NOT_RUN",
+  "runtime": "Actual public add uses pure UInt32 alignment/leading-bit and UInt64 biased RNE when both inputs normal, gap<=7 and same signs or gap>=2, and full result exponent1..254. All other inputs call the original ordered add fallback. No Float32 conversion/arithmetic in the fast arm.",
+  "unchanged": "Original DF mul/spec restored; original SUM runtime remains. The inherited thin-cache and p<=8 direct BMM is a separate new mechanism and retains its full proof attempt.",
+  "limits": "First real error repairs only; complete exact-source compilation/replay/axiom gate and performance still required. No runtime algorithm or operand-order change; annotated UInt32 literals make intended original arithmetic well-typed.",
+  "candidate": "f01-r14-dev-word-add-entry2",
+  "exact_compiler_run": 40149766137,
+  "repairs": [
+    {
+      "parent": "astra-small-shift-bias2.lean",
+      "parent_sha256": "e3de8acf9ec5ec3434419e1c7a1b46c2a1b92bdef495bd0d4e6ff9e1ff07e585",
+      "path": "astra-small-shift-bias3.lean",
+      "sha256": "ec6a8e65cb608d094049682549e3e9213ac81e13125ca57d2a89943b2c2c2a94",
+      "bytes": 3163
+    },
+    {
+      "parent": "astra-word-add-alignment2.lean",
+      "parent_sha256": "eaa89fa496e6dad3d82d6c14b18503c918cec02b43876c134cc851daaf3d08f9",
+      "path": "astra-word-add-alignment4.lean",
+      "sha256": "c8bd8475394f3161f412309476226edb724e961852e08ebce5d866aff8f69e50",
+      "bytes": 4000
+    },
+    {
+      "parent": "astra-word-add-rounding1.lean",
+      "parent_sha256": "b8e6674548e9ad8a4d8fcfb948f85ab48056c576b3289ece1829ddd91b69bff7",
+      "path": "astra-word-add-rounding2.lean",
+      "sha256": "b358c5a11e524af35fc476a5d373c84714b3e570de543a0b9a5dd4dcfb6a846b",
+      "bytes": 2092
+    },
+    {
+      "parent": "development-word-add-runtime3.lean",
+      "parent_sha256": "9e1caaf2ec6de36ff08230ff54d646d831cb80fa17c7a4f1fc8628e87b3f8c79",
+      "path": "development-word-add-runtime4.lean",
+      "sha256": "ed74b92765065fc814c3e392b2f4dee4b72730ddd4e6d433ffed931b430f20fe",
+      "bytes": 3691
+    },
+    {
+      "parent": "development-word-add-fields2.lean",
+      "parent_sha256": "fac08efd69d3ca127683764ecc1ca8349eeb0ec3c31972a3db731da1d9dd67f8",
+      "path": "development-word-add-fields3.lean",
+      "sha256": "eac38006c15aa6bfca52471da3aab14905714c0557ac138e7dc52c70ba39adb2",
+      "bytes": 12252
+    },
+    {
+      "parent": "development-word-add-spec2.lean",
+      "parent_sha256": "0bfb86c0fd3c538a25bb187254426e5cd9f225937f5ade4c261ac47a72e47744",
+      "path": "development-word-add-spec3.lean",
+      "sha256": "234dfa98f80295e6d12501efbb819531f8755629c5a04ee165d229859c082999",
+      "bytes": 2375
+    },
+    {
+      "kind": "THIN_LOOP_CONFIRMED_REDUNDANT_DSIMP_REMOVAL",
+      "runtime_changed": false
+    }
+  ],
+  "header_removals": [],
+  "inherited_preparation_fields_refer_to_parent_manifest": true
+}
