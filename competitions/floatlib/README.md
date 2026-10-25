@@ -10,7 +10,7 @@
 - [当前开发状态](coordination/development-status.json)：当前比较口径、候选选择及证据入口。
 - [数学结论与可复用证明](research/RESULTS.md)：按四项运算整理已验结论、数学储备、反例，索引R1–R6十二包、R11三份网页交付及全部候选证据。
 - [R11资料与开发承接](research/materials/20261024-r11/README.md)：97份原件、数学与性能提炼、来源哈希和许可证；保留原始未验证状态及后续负结果。
-- [当前研究记录](candidates/f01-d7-research/round8h-20261024T190259Z/README.md)：数学、开发验证与DeepSeek自由探索的八小时协作；[上一轮](candidates/f01-d7-research/round3h-20261024T112622Z/README.md)和[历史轮次](candidates/f01-d7-research/README.md)保留原验收。
+- [当前研究记录](candidates/f01-d7-research/round8h-20261024T190259Z/README.md)：数学、开发验证与DeepSeek自由探索的八小时协作（已结案、无新采用），[经验](candidates/f01-d7-research/round8h-20261024T190259Z/development-lessons.md)；[上一轮](candidates/f01-d7-research/round3h-20261024T112622Z/README.md)和[历史轮次](candidates/f01-d7-research/README.md)保留原验收。
 - [前轮Astra／开发一小时协作](candidates/f01-d1-inline-all/window1h/README.md)：原生算术证明起点、逐项验收与原始回执。
 
 - [首次双会话交接](coordination/HANDOFF.md)：环境与开发文件所有权、状态、自然检查点和本窗预算。
