@@ -15,7 +15,8 @@ reports=sorted(OUT.glob(f'development-proof-*-{args.run}.json'))
 assert reports
 result=[]
 math_names=('R14BiasRNE','R14SmallShiftBias','R14WordAddAlignment','R14WordAddRounding',
-            'R14NatNormal','R14ExponentAlgebra','R14NativeProduct','R14ExponentShift')
+            'R14NatNormal','R14ExponentAlgebra','R14NativeProduct','R14ExponentShift',
+            'R15LowCutoff','R15ThinPairs','R15LiteralMul')
 for report_path in reports:
     report=json.loads(report_path.read_bytes())
     if not report.get('compiler_output'):continue

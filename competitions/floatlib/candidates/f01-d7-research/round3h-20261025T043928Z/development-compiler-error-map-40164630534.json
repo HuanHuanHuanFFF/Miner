@@ -1,0 +1,108 @@
+{
+  "at_utc": "2026-10-25T05:19:08.418841+00:00",
+  "run": 40164630534,
+  "candidates": [
+    {
+      "candidate": "f01-r15-dev-column-pairs1",
+      "kernel_sha256": "b9629b37f47ed8b5c169de213ccec2a67a2b3b2737803c5814e996c1a1cc16b3",
+      "source_commit": "2b39b63e7e5d91c5ab20187c62a64e27ad7b9292",
+      "source_path": "competitions/floatlib/candidates/f01-r15-dev-column-pairs1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40164630534/download-32cffc059c704bc1a36e0ee8ca0769d3/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r15-dev-column-pairs1/full-build-output.txt",
+      "original_output_sha256": "7c2d63d00bc6ff1035b6ac070e12727b26d802dcc0f10ccba1b6cbce3de14558",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 6189,
+          "column": 4,
+          "declaration": "Submission.R15ThinPairs.loop_s0",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6187,
+              "text": "  · rw [loop, NativeFinal.dotLoop]"
+            },
+            {
+              "line": 6188,
+              "text": "    simp only [dif_pos hk]"
+            },
+            {
+              "line": 6189,
+              "text": "    dsimp only"
+            },
+            {
+              "line": 6190,
+              "text": "    simp only [Packed10.nativeA_getD]"
+            },
+            {
+              "line": 6191,
+              "text": "    exact loop_s0 n baseA baseB p A B (k + 1) _ _"
+            }
+          ],
+          "message": "`dsimp` made no progress"
+        },
+        {
+          "line": 6203,
+          "column": 4,
+          "declaration": "Submission.R15ThinPairs.loop_s1",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6201,
+              "text": "  · rw [loop, NativeFinal.dotLoop]"
+            },
+            {
+              "line": 6202,
+              "text": "    simp only [dif_pos hk]"
+            },
+            {
+              "line": 6203,
+              "text": "    dsimp only"
+            },
+            {
+              "line": 6204,
+              "text": "    simp only [Packed10.nativeA_getD]"
+            },
+            {
+              "line": 6205,
+              "text": "    exact loop_s1 n baseA baseB p A B (k + 1) _ _"
+            }
+          ],
+          "message": "`dsimp` made no progress"
+        },
+        {
+          "line": 6222,
+          "column": 4,
+          "declaration": "Submission.R15ThinPairs.finish_select",
+          "owner": "research",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6220,
+              "text": "  have h : j = 0 ∨ j = 1 := by omega"
+            },
+            {
+              "line": 6221,
+              "text": "  rcases h with rfl | rfl"
+            },
+            {
+              "line": 6222,
+              "text": "  · simpa only [select, Nat.add_zero, if_pos rfl] using"
+            },
+            {
+              "line": 6223,
+              "text": "      loop_s0 n baseA baseB p A B 0 Packed10.zero32 Packed10.zero32"
+            },
+            {
+              "line": 6224,
+              "text": "  · simpa only [select, if_neg Nat.one_ne_zero] using"
+            }
+          ],
+          "message": "Type mismatch: After simplification, term\n  loop_s0 n baseA baseB p A B 0 Packed10.zero32 Packed10.zero32\n has type\n  @Eq Float32 (loop n baseA baseB p A (Array.map ExecFloat.Binary.toFloat32 B) 0 Packed10.zero32 Packed10.zero32).s0\n    (NativeFinal.dotLoop n baseA baseB p A B 0 Packed10.zero32)\nbut is expected to have type\n  @Eq Float32\n    (if True then (loop n baseA baseB p A (Array.map ExecFloat.Binary.toFloat32 B) 0 Packed10.zero32 Packed10.zero32).s0\n    else (loop n baseA baseB p A (Array.map ExecFloat.Binary.toFloat32 B) 0 Packed10.zero32 Packed10.zero32).s1)\n    (NativeFinal.dotLoop n baseA baseB p A B 0 Packed10.zero32)"
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}
