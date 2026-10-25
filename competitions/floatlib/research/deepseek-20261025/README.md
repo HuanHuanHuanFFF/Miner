@@ -1,4 +1,4 @@
-# DeepSeek 8小时协作窗（2026-10-25）
+﻿# DeepSeek 8小时协作窗（2026-10-25）
 
 角色：free agent（探索／研究／开发验证）。窗口：北京时间 2026-10-25 03:03—11:03（UTC 19:03—03:03）。
 本地不运行 Lean／大型工具链；Lean 与完整 gate 只在临时 GitHub runner。
@@ -44,7 +44,7 @@ sparse 数据上零检测分支不可预测。不重复该路线。
 | `f01-deepseek-p2contp8`（69901745） | p≤2 与 p≤8 全部 DirectContinuous | 0 新证明 | **终选**；6 run 全正 |
 | `f01-deepseek-directall`（ad91388b） | p≤64 全部 DirectContinuous | 0 新证明 | public-v2：whole 0.9585，bmm 0.8346 |
 | `f01-deepseek-directallfull`（a84bd96b） | 无界直算探针（p≤1000000） | 0 新证明 | 未测 |
-| `f01-deepseek-p2contp16`（a08d4f4a） | p≤16 直算阈值 | 0 新证明 | 比 p≤8 差 1.4% → 锁定 p≤8 |
+| `f01-deepseek-p2contp16`（a08d4f4a） | p≤16 直算阈值 | 0 新证明 | 同 run p16/p8≈1.0009（无差异证据），保留 p≤8 |
 
 ## 终选汇总（p2contp8，public-v2 原版 full gate，全部 PASS）
 
