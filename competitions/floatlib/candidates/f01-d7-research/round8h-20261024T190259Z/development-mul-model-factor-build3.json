@@ -1,0 +1,37 @@
+{
+  "candidate": "f01-r14-dev-mul-cache-rse2",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "9038f8d653f030a8812c3187733488f70995253a1a7b284759c4f58b96378c19",
+  "candidate_bytes": 233544,
+  "created_at_utc": "2026-10-25T02:46:29.362719+00:00",
+  "parent": "f01-r14-dev-mul-cache-rse1",
+  "parent_sha256": "35fe53b007e213050399fd07c6d529c9f24545091670aeb48e3a98d12bd0e984",
+  "validation_mode": "full-gate",
+  "proof_status": "ACTUAL_MAXREC8192_MODEL_PROOF_FACTORIZATION_NOT_COMPILED",
+  "performance": "NOT_RUN",
+  "runtime_definition_source_changed": false,
+  "runtime_difference": "Only the normal UInt64 product rounding primitive changes from proposed biased implementation to existing admitted FastMul.rseAny; product/leading/carry/fields/guards/ordered fallback, DF add/SUM and thin/p8 BMM remain. No new algorithmic direction, data layout, threshold or resource cap.",
+  "freeze_followup": "Verification fallback on the same frozen integer-multiplication mechanism after even Nat-only new bias proofs terminate without diagnostics. This is explicitly a rounder implementation rollback, not falsely labelled proof-only. No timing inherited, no previous scored MUL D exists.",
+  "proof_reuse": "FastMul.rseAny_eq and FixedWord.roundShiftRightEven_toNat are the exact existing complete-gated source lemmas. Remove the whole unaccepted custom bias namespace; replace only roundedWord_nat by their direct composition.",
+  "source_changes": {
+    "removed_rne_module_sha256": "2eb898381bb23282ec64910f12cc032bc25f1ca3cb87ffee642b2d0865639b00",
+    "removed_rne_module_bytes": 4522,
+    "old_roundedWord_nat_sha256": "a8a55088219f02e93fc450d9e69a7b5884a2b511ae39a2f1de3bf17420a2bb88",
+    "new_roundedWord_nat_sha256": "ff96d0cef0543a10ca95653ddd610facbec909f1820309e7ca85123f2af0ec33"
+  },
+  "acceptance": "Exact source still needs actual statement, full kernel replay/axioms and first clean paired D before any independent confirmations or adoption.",
+  "actual_error_run": 40154958719,
+  "proof_repair": {
+    "old_core_model_sha256": "80fce64fd1ba3ce31ed632f55495bb72e6b616400598a1bd51ce0a4bf5a8cf2b",
+    "new_block_sha256": "be3cd0a7362728767c9f42758fb966aed8a759b472e5f49169de4fc12c918712",
+    "maxRecDepth_unchanged": 8192,
+    "strategy": "Opaque generic Nat/Model fields lemma plus short concrete word bridge; explicit folded fields instead of simp-unfolding p/s/word expressions."
+  },
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-mul-model-factored3.lean",
+      "sha256": "a09924d1008a050191f615c043ed5992a3e6792acff18c653e9c39aa61b8941c",
+      "bytes": 3620
+    }
+  ]
+}
