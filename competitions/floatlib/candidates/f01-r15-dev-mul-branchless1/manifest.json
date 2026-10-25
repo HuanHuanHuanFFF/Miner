@@ -1,0 +1,26 @@
+{
+  "candidate": "f01-r15-dev-mul-branchless1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "f529f4d4a693b6bee91aa10882237d30112637383cb447f3037057ff9bdb70d9",
+  "candidate_bytes": 236154,
+  "created_at_utc": "2026-10-25T05:30:32.910985+00:00",
+  "parent": "f01-r14-dev-mul-cache-rse2",
+  "parent_sha256": "9038f8d653f030a8812c3187733488f70995253a1a7b284759c4f58b96378c19",
+  "parent_actual_full_run": 40155753018,
+  "parent_negative_preserved": "R14 whole1.047144/MUL1.290801 vsDF; full correctness passed but first D failed. This exact new runtime has not been measured.",
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round3h-20261025T043928Z/development-branchless-normal-mul1.lean",
+      "sha256": "4ba73a11643ddc21f8c2089e00e6dbda7e224cdf7c68f39d11b8f822d17b3c7a",
+      "bytes": 2873
+    }
+  ],
+  "mechanism": "Normal-MUL rounder uses explicit 0/1 UInt64 comparison flags and bitwise combine, literal shifts23/24, and one shared rounded result for carry/fraction. Old normal eligibility and DF fallback are unchanged.",
+  "proof_route": "Boolean/0-1 case equality to existing FastMul.rse, existing shiftWord_values, pack equality to the accepted R14 core, then existing complete guardedMul_spec. No new biased RNE/Nat normal proof.",
+  "cost_hypothesis": "Remove nested data-dependent round-return decisions and generic variable-shift boundary work. Old machine code may already optimize some of it; actual C and benefit UNKNOWN. Stop if no distinct compiled work or first clean D fails.",
+  "unchanged": "All non-MUL runtime and every old proof byte outside the exported mul/spec splice retained.",
+  "inverse_splice_exact": true,
+  "proof_status": "NOT_COMPILED",
+  "full_gate": "NOT_RUN",
+  "performance": "NOT_RUN"
+}
