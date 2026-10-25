@@ -1,0 +1,75 @@
+{
+  "candidate": "f01-r14-dev-thin-bcache1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "ef5dcd969ac532093103e719d50157631e4fb79dbd5966b54bbf4f8e2e3a8f80",
+  "candidate_bytes": 236528,
+  "created_at_utc": "2026-10-24T22:22:20.058644+00:00",
+  "validation_mode": "full-gate",
+  "proof_status": "COMPLETE_SOURCE_PROOF_ATTEMPT_NOT_COMPILED",
+  "performance": "NOT_RUN",
+  "parent": "f01-r14-dev-p2-n1-cache",
+  "parent_sha256": "83a981273988f07ce89d4a18c1dbef475adb6ed2fefce381138c5d165bf2a806",
+  "compact_parent_sha256": "3c6af73f9d679e9831ac8c4abb9f0e6d41b61718301dd045bedd2402e980632a",
+  "base_line_edits": [
+    {
+      "kind": "replace",
+      "original_lines": [
+        6050,
+        6050
+      ],
+      "published_lines": [
+        6050,
+        6050
+      ]
+    },
+    {
+      "kind": "insert",
+      "original_lines": [
+        6427,
+        6426
+      ],
+      "published_lines": [
+        6427,
+        6521
+      ]
+    },
+    {
+      "kind": "replace",
+      "original_lines": [
+        6432,
+        6432
+      ],
+      "published_lines": [
+        6527,
+        6527
+      ]
+    },
+    {
+      "kind": "replace",
+      "original_lines": [
+        6435,
+        6435
+      ],
+      "published_lines": [
+        6530,
+        6530
+      ]
+    },
+    {
+      "kind": "replace",
+      "original_lines": [
+        6445,
+        6445
+      ],
+      "published_lines": [
+        6540,
+        6540
+      ]
+    }
+  ],
+  "fragment": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/development-thin-bcache.lean",
+  "fragment_sha256": "0fa6dc19d35f706d4e680f33f7571342474a4eaf249dc5467f365744c15d9476",
+  "mechanism": "For m>=4,n>1,0<p<=2, map raw B to native Float32 once for reuse across rows, keep A raw and convert it in the original ordered dot, emit each output directly, retain raw A/B for exact NaN replay. n=1 keeps the already checked prepared-A route. No new dimension threshold grid.",
+  "history": "M29 ce6832e6 cached both sides only for n=1,p>2,m>=4; its exposed853 draw did not reach the B cache. This route changes long-thin n>1 direct callers and keeps n1 unchanged; no historic speedup inherited. Published83a9 passed fixed978 full gate40136215532, but this changed candidate has no gate yet.",
+  "limits": "B map/boxed storage/allocation, traversal, guards and output costs must all remain inside actual timed entry. Potential input MAC coverage is not time saved. Full source/spec and current public-v2 paired gates still required."
+}
