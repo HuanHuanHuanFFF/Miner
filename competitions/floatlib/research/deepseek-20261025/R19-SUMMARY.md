@@ -1,4 +1,4 @@
-# R19 DeepSeek 六小时总结（2026-10-26T19:47Z—2026-10-27T01:47Z）
+﻿# R19 DeepSeek 六小时总结（2026-10-26T19:47Z—2026-10-27T01:47Z）
 
 分支 `huan/dhs-deepseek`；保留候选 B2 `622d8394`（未改动）。
 所有计时均为 public-v2 嵌套入口（official `4b7e8384`、25 轮、500k pairs），每候选独立 full gate；
@@ -15,7 +15,7 @@ A/B 在同 run 内对 B2 anchor 归一，p05 用本地独立 bootstrap（2000、
 | 4 | convert→`Float32.ofBits`（add+mul） | 40405652739 | add 1.160、mul 1.135、whole 1.121 | 强负；表解码保留 |
 | 5 | `NativeFinal.dot` 内联 | 40403277972 | bmm 0.9947 | 负 |
 | 6 | `Packed10.finish` 内联 | 40408096257 | bmm 1.0008 | 负 |
-| 7 | peer temporal-b2 复制复刻 | 40414394748；第二组 40416378615 | bmm 0.9991（第一组） | 未见复现，噪声大 |
+| 7 | peer temporal-b2 复制复刻 | 40414394748（0.9991，噪声大）、40416378615（干净，bmm 0.9671） | 方向正、幅度随 seed 缩小；整包 <1% | 部分复现，形状依赖 |
 
 ## 二、mul th0：本轮最接近的发现
 
