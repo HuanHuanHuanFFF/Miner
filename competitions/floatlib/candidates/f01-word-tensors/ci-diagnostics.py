@@ -120,7 +120,9 @@ elif kernel.parent.name.startswith('f01-r17-dev-'):
     manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
     helper_manifest=json.loads(manifest_path.read_bytes())
     if helper_manifest.get('helper_audit_module_sha256'):
-        helper_path=profiler.parent.parent/'f01-d7-research/round11h-20261025T173831Z/development-helper-audit.py'
+        helper_name=helper_manifest.get('helper_audit_module','development-helper-audit.py')
+        assert helper_name in ('development-helper-audit.py','development-helper-audit-v2.py')
+        helper_path=profiler.parent.parent/'f01-d7-research/round11h-20261025T173831Z'/helper_name
         assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
         hs=importlib.util.spec_from_file_location('r18_explicit_math_helper_audit',helper_path)
         hm=importlib.util.module_from_spec(hs);hs.loader.exec_module(hm)

@@ -1,0 +1,23 @@
+import Submission
+#print axioms Submission.R14NatNormal.rounded
+#print axioms Submission.R14NatNormal.carry
+#print axioms Submission.R14NatNormal.mantissa
+#print axioms Submission.R14NatNormal.carry_le
+#print axioms Submission.R14NatNormal.native_round_normal
+#print axioms Submission.R14NatNormal.model_round_normal
+#print axioms Submission.R14NatNormal.raw_normal_decode
+#print axioms Submission.R14WordAddRounding.rounded_bounds
+#print axioms Submission.R14WordAddRounding.shift_carry
+#print axioms Submission.R14WordAddRounding.masked_fraction
+#print axioms Submission.R16UInt32Roundtrip.roundedShift
+#print axioms Submission.R16UInt32Roundtrip.roundedInteger
+#print axioms Submission.R16UInt32Roundtrip.high_log
+#print axioms Submission.R16UInt32Roundtrip.no_carry_at_31
+#print axioms Submission.R16UInt32Roundtrip.rounded_leading
+#print axioms Submission.R16UInt32Roundtrip.high_mantissa
+#print axioms Submission.R16UInt32Roundtrip.roundedInteger_fit
+#print axioms Submission.R16UInt32Roundtrip.roundedInteger_eq_RNE
+#print axioms Submission.R16UInt32Roundtrip.native_high_decode
+#print axioms Submission.R16UInt32Roundtrip.toUInt32_of_nonnegative_integral_decode
+#print axioms Submission.R16UInt32Roundtrip.high_roundtrip
+#print axioms Submission.R16UInt32Roundtrip.high_roundtrip_RNE
