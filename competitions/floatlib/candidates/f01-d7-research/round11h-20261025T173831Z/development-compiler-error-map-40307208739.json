@@ -1,0 +1,299 @@
+{
+  "at_utc": "2026-10-26T10:32:05.870647+00:00",
+  "run": 40307208739,
+  "candidates": [
+    {
+      "candidate": "f01-r17-dev-add-public1",
+      "kernel_sha256": "7e1524c818285ce2c7721140fd0cff23560416abc6ea9a2c72ddf1be9a588be7",
+      "source_commit": "c8f0cad6abbfb5a81b47465e05e088fc462d3a3a",
+      "source_path": "competitions/floatlib/candidates/f01-r17-dev-add-public1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40307208739/download-1e71bedd2176434a8c7e70c8f3a14eb0/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r17-dev-add-public1/full-build-output.txt",
+      "original_output_sha256": "a8acd20063c2b4fe185c26021f3bfe9a59631aaffb1411ba3c918772bb724250",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 4811,
+          "column": 10,
+          "declaration": "R18A.T18.sameNoCarry",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 4809,
+              "text": "      split <;> omega"
+            },
+            {
+              "line": 4810,
+              "text": "    · have hr := roundShiftRightEven_le_shiftRight_add1 (a * 2 ^ d + b) (d + 1)"
+            },
+            {
+              "line": 4811,
+              "text": "      rw [Nat.shiftRight_eq_div_pow] at hr"
+            },
+            {
+              "line": 4812,
+              "text": "      interval_cases d <;> norm_num at hr ⊢ <;> omega"
+            },
+            {
+              "line": 4813,
+              "text": "  have hne : N18.rounded (a * 2 ^ d + b) ≠ 16777216 := by omega"
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ?m >>> ?n\nin the target expression\n  roundShiftRightEven (a * 2 ^ d + b) (d + 1) ≤ (a * 2 ^ d + b).shiftRight (d + 1) + 1\n\ncase neg\na b d : ℕ\nha : 8388608 ≤ a\nha' : a < 16777216\nhb : 8388608 ≤ b\nhb' : b < 16777216\nhd : d ≤ 7\nhh : (a * 2 ^ d + b).log2 = 24 + d\nhs : 24 + d - 23 = d + 1\nhz : ¬d = 0\nhr : roundShiftRightEven (a * 2 ^ d + b) (d + 1) ≤ (a * 2 ^ d + b).shiftRight (d + 1) + 1\n⊢ roundShiftRightEven (a * 2 ^ d + b) (d + 1) < 16777216"
+        },
+        {
+          "line": 4823,
+          "column": 6,
+          "declaration": "R18A.T18.oppNoCarry",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 4821,
+              "text": "  have hs : 23 + d - 23 = d := by omega"
+            },
+            {
+              "line": 4822,
+              "text": "  have hr := roundShiftRightEven_le_shiftRight_add1 (a * 2 ^ d - b) d"
+            },
+            {
+              "line": 4823,
+              "text": "  rw [Nat.shiftRight_eq_div_pow] at hr"
+            },
+            {
+              "line": 4824,
+              "text": "  have hq : N18.rounded (a * 2 ^ d - b) < 16777216 := by"
+            },
+            {
+              "line": 4825,
+              "text": "    unfold N18.rounded"
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  ?m >>> ?n\nin the target expression\n  roundShiftRightEven (a * 2 ^ d - b) d ≤ (a * 2 ^ d - b).shiftRight d + 1\n\na b d : ℕ\nha : 8388608 ≤ a\nha' : a < 16777216\nhb : 8388608 ≤ b\nhb' : b < 16777216\nhd0 : 1 ≤ d\nhd : d ≤ 7\nhh : (a * 2 ^ d - b).log2 = 23 + d\nhs : 23 + d - 23 = d\nhr : roundShiftRightEven (a * 2 ^ d - b) d ≤ (a * 2 ^ d - b).shiftRight d + 1\n⊢ N18.carry (a * 2 ^ d - b) = 0"
+        },
+        {
+          "line": 4991,
+          "column": 50,
+          "declaration": "R18A.T18.oppWordShift",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 4989,
+              "text": "        then (1 : UInt32) else 0)).toNat = U18.roundedShift n.toNat := by"
+            },
+            {
+              "line": 4990,
+              "text": "  have hgle : (1 : UInt32) ≤ gap := UInt32.le_iff_toNat_le.mpr hd0"
+            },
+            {
+              "line": 4991,
+              "text": "  have hbase : (gap - 1).toNat = gap.toNat - 1 := by"
+            },
+            {
+              "line": 4992,
+              "text": "    rw [UInt32.toNat_sub_of_le _ _ hgle]"
+            },
+            {
+              "line": 4993,
+              "text": "  have hbasemax : (gap - 1).toNat ≤ 7 := by rw [hbase]; omega"
+            }
+          ],
+          "message": "unsolved goals\nn gap : UInt32\na b : ℕ\nha : 8388608 ≤ a\nha' : a < 16777216\nhb : 8388608 ≤ b\nhb' : b < 16777216\nhd0 : 1 ≤ gap.toNat\nhd : gap.toNat ≤ 7\nhmag : n.toNat = a * 2 ^ gap.toNat - b\nhlo : 8388608 ≤ n.toNat\nhgle : 1 ≤ gap\n⊢ gap.toNat - UInt32.toNat 1 = gap.toNat - 1"
+        },
+        {
+          "line": 5086,
+          "column": 4,
+          "declaration": "R18A.O18.addAligned",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 5084,
+              "text": "    R7W02.exec_toModel_eq_rawModel x, R7W02.exec_toModel_eq_rawModel y,"
+            },
+            {
+              "line": 5085,
+              "text": "    ← R2W01c.rawModel_eq_native32 x.raw.1, ← R2W01c.rawModel_eq_native32 y.raw.1,"
+            },
+            {
+              "line": 5086,
+              "text": "    halign]"
+            },
+            {
+              "line": 5087,
+              "text": "  exact packModel n shift e sign elo hlo hhi hs he helo hehi"
+            },
+            {
+              "line": 5088,
+              "text": "end R18A.O18"
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (R2W01c.rawModel ↑(ExecFloat.raw x)).add (R2W01c.rawModel ↑(ExecFloat.raw y))\nin the target expression\n  Model.NativeBinary32.ofUInt32 (FastMul.mkW sign e (n.toFloat32.toUInt32 >>> shift)) =\n    (R2W01c.rawModel ↑(ExecFloat.raw x)).add (R2W01c.rawModel ↑(ExecFloat.raw y))\n\nx y : Binary32\nn shift e : UInt32\nsign : Bool\nelo : ℕ\nhlo : 8388608 ≤ n.toNat\nhhi : n.toNat ≤ 2164260735\nhs : shift.toNat = U18.roundedShift n.toNat\nhe : e.toNat = elo + shift.toNat\nhelo : 1 ≤ elo\nhehi : e.toNat < 255\nhalign :\n  (R2W01c.rawModel ↑(ExecFloat.raw x)).add (R2W01c.rawModel ↑(ExecFloat.raw y)) =\n    Model.roundDyadic FloatFormat.binary32 { negative := sign, significand := n.toNat, exponent := ↑elo - 150 }\n⊢ Model.NativeBinary32.ofUInt32 (FastMul.mkW sign e (n.toFloat32.toUInt32 >>> shift)) =\n    (R2W01c.rawModel ↑(ExecFloat.raw x)).add (R2W01c.rawModel ↑(ExecFloat.raw y))\n\nNote: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    Model.NativeBinary32.ofUInt32 (FastMul.mkW sign e (n.toFloat32.toUInt32 >>> shift))\n  has type\n    Model.NativeBinary32.Value\n  but is expected to have type\n    Model\n      (ExecFloat.Binary.format 8 23 FloatFormat.Encoding.ieee (FloatFormat.Encoding.ieee.defaultBias 8)\n        Binary32._proof_1 Binary32._proof_2 Binary32._proof_3 Binary32._proof_4)\n  in the application\n    Eq (Model.NativeBinary32.ofUInt32 (FastMul.mkW sign e (n.toFloat32.toUInt32 >>> shift)))"
+        },
+        {
+          "line": 5352,
+          "column": 17,
+          "declaration": "R18A.P18.sorted_spec",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 5350,
+              "text": "  · rename_i hd"
+            },
+            {
+              "line": 5351,
+              "text": "    have hg : d.toNat ≤ 7 := by"
+            },
+            {
+              "line": 5352,
+              "text": "      have h := (Bool.and_eq_true.mp hd).1"
+            },
+            {
+              "line": 5353,
+              "text": "      exact UInt32.le_iff_toNat_le.mp (of_decide_eq_true h)"
+            },
+            {
+              "line": 5354,
+              "text": "    have had : adj.toNat ≤ d.toNat := by"
+            }
+          ],
+          "message": "Unknown constant `Bool.and_eq_true.mp`"
+        },
+        {
+          "line": 5355,
+          "column": 17,
+          "declaration": "R18A.P18.sorted_spec",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 5353,
+              "text": "      exact UInt32.le_iff_toNat_le.mp (of_decide_eq_true h)"
+            },
+            {
+              "line": 5354,
+              "text": "    have had : adj.toNat ≤ d.toNat := by"
+            },
+            {
+              "line": 5355,
+              "text": "      have h := (Bool.and_eq_true.mp hd).2"
+            },
+            {
+              "line": 5356,
+              "text": "      exact UInt32.le_iff_toNat_le.mp (of_decide_eq_true h)"
+            },
+            {
+              "line": 5357,
+              "text": "    have hdom : R2W01c.wordSign hi = R2W01c.wordSign lo ∨ 1 ≤ d.toNat := by"
+            }
+          ],
+          "message": "Unknown constant `Bool.and_eq_true.mp`"
+        }
+      ]
+    },
+    {
+      "candidate": "f01-r17-dev-u64-public1",
+      "kernel_sha256": "23adf0984bef02e611143cfc7e40d64d65c99caa0f4d11a0648812b2fb6f1e73",
+      "source_commit": "c8f0cad6abbfb5a81b47465e05e088fc462d3a3a",
+      "source_path": "competitions/floatlib/candidates/f01-r17-dev-u64-public1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40307208739/download-1e71bedd2176434a8c7e70c8f3a14eb0/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r17-dev-u64-public1/full-build-output.txt",
+      "original_output_sha256": "6d2c6e58ceada636ae20b27fa83d6615f81fc395057599970d71df57aac98c1e",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 6849,
+          "column": 26,
+          "declaration": "R18.R17UInt64Fields.mantissaWord_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6847,
+              "text": "    (shiftWord_nat a b ha0 ha hb0 hb)"
+            },
+            {
+              "line": 6848,
+              "text": "  unfold mantissaWord numericProduct"
+            },
+            {
+              "line": 6849,
+              "text": "  rw [FastMul.toUInt32_eq,UInt32.toNat_ofNat,hq]"
+            },
+            {
+              "line": 6850,
+              "text": "  exact Nat.mod_eq_of_lt (by omega)"
+            },
+            {
+              "line": 6851,
+              "text": ""
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (OfNat.ofNat ?m.42).toNat\nin the target expression\n  (UInt32.ofNat ((a.toUInt64 * b.toUInt64).toFloat32.toUInt64 >>> shiftWord a b).toNat).toNat =\n    R14NatNormal.mantissa (R14ExponentShift.product a b)\n\na b : UInt32\nha0 : 8388608 ≤ a.toNat\nha : a.toNat < 16777216\nhb0 : 8388608 ≤ b.toNat\nhb : b.toNat < 16777216\nhp : 70368744177664 ≤ R14ExponentShift.product a b ∧ R14ExponentShift.product a b ≤ 281474943156225\nhm :\n  8388608 ≤ R14NatNormal.mantissa (R14ExponentShift.product a b) ∧\n    R14NatNormal.mantissa (R14ExponentShift.product a b) < 16777216\nhq :\n  ((a.toUInt64 * b.toUInt64).toFloat32.toUInt64 >>> shiftWord a b).toNat =\n    R14NatNormal.mantissa (R14ExponentShift.product a b)\n⊢ (UInt32.ofNat ((a.toUInt64 * b.toUInt64).toFloat32.toUInt64 >>> shiftWord a b).toNat).toNat =\n    R14NatNormal.mantissa (R14ExponentShift.product a b)"
+        },
+        {
+          "line": 6873,
+          "column": 26,
+          "declaration": "R18.R17UInt64Fields.highWord_toUInt32_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6871,
+              "text": "  have hp := R14ExponentShift.product_bounds a b ha0 ha hb0 hb"
+            },
+            {
+              "line": 6872,
+              "text": "  have he := R14ExponentShift.middle_bounds _ hp.1 hp.2"
+            },
+            {
+              "line": 6873,
+              "text": "  rw [FastMul.toUInt32_eq,UInt32.toNat_ofNat,highWord_nat a b ha0 ha hb0 hb]"
+            },
+            {
+              "line": 6874,
+              "text": "  exact Nat.mod_eq_of_lt (by omega)"
+            },
+            {
+              "line": 6875,
+              "text": ""
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (OfNat.ofNat ?m.38).toNat\nin the target expression\n  (UInt32.ofNat (highWord a b).toNat).toNat = R14ExponentShift.middleExponent (R14ExponentShift.product a b) - 173\n\na b : UInt32\nha0 : 8388608 ≤ a.toNat\nha : a.toNat < 16777216\nhb0 : 8388608 ≤ b.toNat\nhb : b.toNat < 16777216\nhp : 70368744177664 ≤ R14ExponentShift.product a b ∧ R14ExponentShift.product a b ≤ 281474943156225\nhe :\n  173 ≤ R14ExponentShift.middleExponent (R14ExponentShift.product a b) ∧\n    R14ExponentShift.middleExponent (R14ExponentShift.product a b) ≤ 174 ∧\n      R14ExponentShift.storedFraction (R14ExponentShift.product a b) < 8388608\n⊢ (UInt32.ofNat (highWord a b).toNat).toNat = R14ExponentShift.middleExponent (R14ExponentShift.product a b) - 173"
+        },
+        {
+          "line": 6907,
+          "column": 23,
+          "declaration": "R18.R17UInt64Fields.low_mask_eq_self",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6905,
+              "text": "    n &&& UInt32.ofNat (2^k-1) = n := by"
+            },
+            {
+              "line": 6906,
+              "text": "  apply UInt32.toNat.inj"
+            },
+            {
+              "line": 6907,
+              "text": "  rw [UInt32.toNat_and,UInt32.toNat_ofNat]"
+            },
+            {
+              "line": 6908,
+              "text": "  have hmask : 2^k-1 < 4294967296 := by"
+            },
+            {
+              "line": 6909,
+              "text": "    have hpow : 2^k ≤ 2^31 := Nat.pow_le_pow_right (by decide) (by omega)"
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (OfNat.ofNat ?m.37).toNat\nin the target expression\n  n.toNat &&& (UInt32.ofNat (2 ^ k - 1)).toNat = n.toNat\n\nn : UInt32\nk : ℕ\nhk : k < 32\nhn : n.toNat < 2 ^ k\n⊢ n.toNat &&& (UInt32.ofNat (2 ^ k - 1)).toNat = n.toNat"
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}

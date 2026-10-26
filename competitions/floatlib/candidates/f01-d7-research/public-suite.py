@@ -88,6 +88,20 @@ def run(g,kernel,out):
             row.update(ratio=ratio,classes=v['classes'],rounds=v['rounds'],suite=v['suite'],cell_work=cell_work,scored_submission_total_ns=total_s,scored_reference_total_ns=total_i)
         rows.append(row)
         (stage/'summary.json').write_text(json.dumps({**provenance,'results':rows,'complete':len(rows)==len(plan['candidates']),'elapsed_seconds':time.monotonic()-started},indent=2)+'\n')
+        if validation_mode=='full-gate' and not full and v.get('stage')=='statement':
+            # Separate failure-only replay: preserve the original full verdict;
+            # never add an observer to a successful timed execution.
+            original_digest=hashlib.sha256(verdict.read_bytes()).hexdigest()
+            diagnostic=repo/'competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py'
+            extra_verdict=stage/(name+'-failure-statement-diagnostic.json')
+            with (stage/(name+'-failure-statement-diagnostic.log')).open('wb') as extra_log:
+                try:
+                    diagnostic_run=subprocess.run([str(upstream/'.venv/bin/python'),str(diagnostic),'--upstream',str(upstream),'--kernel',str(dst/'Kernel.lean'),'--reports',str(stage),'--name',name,'--verdict',str(extra_verdict),'--compile-only'],cwd=upstream,env=env,stdout=extra_log,stderr=subprocess.STDOUT,timeout=180)
+                    extra={'exit_code':diagnostic_run.returncode,'scope':'Failure-only full compiler output; original full verdict unchanged. Not acceptance or timing.'}
+                except subprocess.TimeoutExpired:
+                    extra={'state':'DIAGNOSTIC_TIMEOUT','scope':'Original full verdict unchanged.'}
+            assert hashlib.sha256(verdict.read_bytes()).hexdigest()==original_digest
+            (stage/(name+'-failure-diagnostic-status.json')).write_text(json.dumps(extra,indent=2)+'\n')
         if name=='baseline' and not full:break
     if plan.get('profile_parent',False):
         assert any(r['candidate']=='f01-d5-stream-pack' and r['full_gate'] for r in rows)
