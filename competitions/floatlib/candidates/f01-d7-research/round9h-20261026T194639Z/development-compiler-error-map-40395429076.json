@@ -1,0 +1,108 @@
+{
+  "at_utc": "2026-10-26T20:39:48.375029+00:00",
+  "run": 40395429076,
+  "candidates": [
+    {
+      "candidate": "f01-r19-dev-jam17-probe1",
+      "kernel_sha256": "f78490eb6a2c2aa7a8b68ebdf54c43d68a39c8bd3bea43e9ee462bcc3cd68679",
+      "source_commit": "4eab432d9f111dc2b494de2e91537da2f997c9f4",
+      "source_path": "competitions/floatlib/candidates/f01-r19-dev-jam17-probe1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40395429076/download-01d3ee43e7ff4ae088ca57488a71a0b2/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-jam17-probe1/full-build-output.txt",
+      "original_output_sha256": "8b95821e2003650d3eecd4b992d00fb1eab623ecaebb9444a93c61f9f51df909",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 6886,
+          "column": 18,
+          "declaration": "Submission.R19Jam17.rne_jam",
+          "owner": "development",
+          "occurrences": 2,
+          "source_context": [
+            {
+              "line": 6884,
+              "text": "    unfold jamNat roundQuotientEven <;>"
+            },
+            {
+              "line": 6885,
+              "text": "    dsimp only <;>"
+            },
+            {
+              "line": 6886,
+              "text": "    split_ifs <;> omega"
+            },
+            {
+              "line": 6887,
+              "text": ""
+            },
+            {
+              "line": 6888,
+              "text": "theorem jam_bounds (p : Nat)"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a ≥ 0\nwhere\n a := ↑p / 8388608"
+        },
+        {
+          "line": 6886,
+          "column": 18,
+          "declaration": "Submission.R19Jam17.rne_jam",
+          "owner": "development",
+          "occurrences": 2,
+          "source_context": [
+            {
+              "line": 6884,
+              "text": "    unfold jamNat roundQuotientEven <;>"
+            },
+            {
+              "line": 6885,
+              "text": "    dsimp only <;>"
+            },
+            {
+              "line": 6886,
+              "text": "    split_ifs <;> omega"
+            },
+            {
+              "line": 6887,
+              "text": ""
+            },
+            {
+              "line": 6888,
+              "text": "theorem jam_bounds (p : Nat)"
+            }
+          ],
+          "message": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  a ≥ 0\nwhere\n a := ↑p / 16777216"
+        },
+        {
+          "line": 6945,
+          "column": 6,
+          "declaration": "Submission.R19Jam17.jamWord_nat",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6943,
+              "text": "    · intro h"
+            },
+            {
+              "line": 6944,
+              "text": "      apply UInt64.toNat.inj"
+            },
+            {
+              "line": 6945,
+              "text": "      simpa only [hm] using h"
+            },
+            {
+              "line": 6946,
+              "text": "  rw [jamNat_eq]"
+            },
+            {
+              "line": 6947,
+              "text": "  by_cases h : p.toNat % 131072 = 0"
+            }
+          ],
+          "message": "Type mismatch: After simplification, term\n  h\n has type\n  @Eq ℕ (p.toNat % 131072) 0\nbut is expected to have type\n  @Eq ℕ (p.toNat % 131072) (UInt64.toNat 0)"
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}

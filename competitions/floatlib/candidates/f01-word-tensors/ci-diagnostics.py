@@ -59,7 +59,7 @@ def statement(src,verdict):
                             **details})
             return None
         for path in (g.LAYER/'upper').rglob('*'):
-            if not path.is_file() or 'Submission' not in path.name:
+            if not path.is_file() or not ('Submission' in path.name or 'MainFull' in path.name):
                 continue
             if path.suffix == '.trace' and path.stat().st_size < 1_000_000:
                 data=path.read_bytes();name='build-trace-'+str(len(objects))+'.txt'
@@ -74,7 +74,7 @@ def statement(src,verdict):
             if symbols is None:
                 continue
             names=[line.split()[-1] for line in symbols.stdout.splitlines() if line.split()]
-            names=[name for name in names if name.startswith('lp_competition_Submission_') and 'boxed' not in name and (('loop' in name.lower() and ('Packed' in name or 'NativeDecodeSum' in name or 'Tile' in name or 'R19Temporal' in name)) or name in ('lp_competition_Submission_R17NumericMulInteger_normalCore','lp_competition_Submission_R17NumericMulInteger_diagnosticEntry','lp_competition_Submission_R19Jam17_normalCore','lp_competition_Submission_R19Jam17_diagnosticEntry','lp_competition_Submission_R2W01b_fastOK','lp_competition_Submission_R2W01b_convert','lp_competition_Submission_add','lp_competition_Submission_mul','lp_competition_Submission_nativeMul'))]
+            names=[name for name in names if 'boxed' not in name and ((name.startswith('lp_competition_Submission_') and (('loop' in name.lower() and ('Packed' in name or 'NativeDecodeSum' in name or 'Tile' in name or 'R19Temporal' in name)) or name in ('lp_competition_Submission_R17NumericMulInteger_normalCore','lp_competition_Submission_R17NumericMulInteger_diagnosticEntry','lp_competition_Submission_R19Jam17_normalCore','lp_competition_Submission_R19Jam17_diagnosticEntry','lp_competition_Submission_add','lp_competition_Submission_mul','lp_competition_Submission_nativeMul'))) or name in ('lp_competition_R2W01b_fastOK','lp_competition_R2W01b_convert','lp_competition_main___lam__0','lp_competition_main___lam__1','lp_competition_main___lam__3'))]
             for symbol in names:
                 result=optional_object_tool(['objdump','-d','--no-show-raw-insn','-Mintel','--disassemble='+symbol,str(path)],data,capture_output=True,timeout=15)
                 if result is None:
@@ -132,7 +132,7 @@ elif kernel.parent.name.startswith('f01-r19-dev-'):
     helper_manifest=json.loads(manifest_path.read_bytes())
     if helper_manifest.get('helper_audit_module_sha256'):
         helper_name=helper_manifest.get('helper_audit_module','development-helper-audit.py')
-        assert helper_name == 'development-helper-audit.py'
+        assert helper_name in ('development-helper-audit.py', 'development-helper-audit-v4.py')
         helper_path=profiler.parent.parent/'f01-d7-research/round9h-20261026T194639Z'/helper_name
         assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
         hs=importlib.util.spec_from_file_location('r19_explicit_math_helper_audit',helper_path)
