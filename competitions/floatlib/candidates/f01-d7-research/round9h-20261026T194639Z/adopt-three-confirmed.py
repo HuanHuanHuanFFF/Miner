@@ -237,7 +237,7 @@ def adopt(freeze_path, expected_sha, runs, root=ROOT, verifier=None, estimator=N
         guard = verifier.import_guard()
         def frozen():
             verifier.verify_freeze(freeze,expected_sha,freeze_path,guard,root=root)
-            for path in (here/"adopt-three-confirmed.py",here/"development-estimator.py",root/"competitions/floatlib/scripts/estimate_champion_time.py",root/"competitions/floatlib/scripts/render_dashboard.py",Path(estimator.DEFAULT_ANCHOR)):
+            for path in (here/"adopt-three-confirmed.py",here/"development-estimator.py",root/"competitions/floatlib/scripts/estimate_champion_time.py",root/"competitions/floatlib/scripts/render_dashboard.py",Path(estimator.DEFAULT_ANCHOR),*estimator.EXTRA_FROZEN_FILES):
                 key=path.relative_to(root).as_posix()
                 require(key in freeze["files"] and sha(path.read_bytes())==freeze["files"][key]["sha256"], "Missing/changed adoption estimator anchor freeze: "+key)
         frozen()
@@ -259,6 +259,7 @@ def adopt(freeze_path, expected_sha, runs, root=ROOT, verifier=None, estimator=N
         selection=verifier.verify_three_groups(freeze,runs,guard,root=root,own=own)
         receipt["fresh_three_group_verification"]=selection
         require(selection.get("accepted") is True and selection.get("group_count")==3 and not selection.get("failures") and not diagnostic(selection),"Fresh original three-group guard rejected")
+        estimator.bind_frozen_cohort(freeze, runs)
         frozen()
         # The retained model is explicitly frozen. Re-estimating it from every
         # later DF control contradicts that invariant and historical unpaired

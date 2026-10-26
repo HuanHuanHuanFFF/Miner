@@ -90,7 +90,7 @@ def main():
     adapter = importlib.util.module_from_spec(estimator_spec)
     estimator_spec.loader.exec_module(adapter)
     estimator = adapter.load_estimator()
-    files += [Path(estimator.DEFAULT_ANCHOR), screen_path]
+    files += [Path(estimator.DEFAULT_ANCHOR), screen_path] + list(estimator.EXTRA_FROZEN_FILES)
     vs=importlib.util.spec_from_file_location('r19_model_binding',HERE/'verify-three-groups.py')
     verifier=importlib.util.module_from_spec(vs);vs.loader.exec_module(verifier)
     retained_model=verifier.retained_model_identity(ROOT)
