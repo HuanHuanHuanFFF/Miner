@@ -1,4 +1,4 @@
-"""Independent re-implementation of the local adoption bootstrap (not official admission).
+﻿"""Independent re-implementation of the local adoption bootstrap (not official admission).
 
 Mirrors candidates/f01-d7-research/adoption-guard.py:
 - ratios per candidate = submission/incumbent per paired round (25 rounds)
@@ -14,7 +14,7 @@ from pathlib import Path
 
 RUNS = Path(r"D:\CodingProject\Bitget-DeepSeek\competitions\floatlib\research\deepseek-20261025\ci-runs")
 CANDIDATE = sys.argv[1] if len(sys.argv) > 1 else "f01-deepseek-p2contp8"
-BASELINE = "f01-d12-scalar-combined"
+BASELINE = sys.argv[2] if len(sys.argv) > 2 else "f01-d12-scalar-combined"
 
 
 def verdict(run_dir, name):
