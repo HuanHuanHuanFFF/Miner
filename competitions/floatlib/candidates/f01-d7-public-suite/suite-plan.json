@@ -1,24 +1,45 @@
 {
-  "seed": 1826007,
+  "seed": 1826008,
   "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
   "suite": "suites/public-v2.json",
-  "dispatch_state": "HOLD",
-  "candidates": [],
-  "publication_state": "STANDING_DEVELOPMENT_AUTHORIZATION_IN_AGENTS",
-  "authorization_receipt": "AGENTS.md",
-  "purpose": "Both research windows are complete. Prepare and freeze a fresh exact plan before any new dispatch; no queued experiment.",
-  "historical_branch_plans": {
-    "huan/codex-gpt": {
-      "source_commit": "fa0de4b51531e04002fc895269c52b23bd2b1c51",
-      "path": "competitions/floatlib/evidence/maintenance-20261026/source-plans/codex-suite-plan.json",
-      "bytes": 1801,
-      "sha256": "b5f821ba8e5babfa7d15d57eee6698c7871498e7b6b9f1a4c5a0f6df8331d03c"
+  "dispatch_state": "READY",
+  "publication_state": "R19_DEEPSEEK_DISPATCH_RELAX_DISCOVERY",
+  "candidates": [
+    {
+      "candidate": "f01-r15-dev-packed-b2-1",
+      "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+      "capture_codegen": false
     },
-    "huan/dhs-deepseek": {
-      "source_commit": "76f6017ac52a0a3bf070e6fe57597d0a0976e3bd",
-      "path": "competitions/floatlib/evidence/maintenance-20261026/source-plans/deepseek-suite-plan.json",
-      "bytes": 1445,
-      "sha256": "88f62b5f0f2d84d6f3869e63e9808441a810afdfa03ef32dd69a053eb1c962d9"
+    {
+      "candidate": "f01-deepseek-b2-m2",
+      "sha256": "dde06e8f98b75692a249d9b235f52b854dbef56612f1a655226313debec95fdb",
+      "capture_codegen": false
+    },
+    {
+      "candidate": "f01-deepseek-b2-m1",
+      "sha256": "6fc24a07f1cb460525b7dabc829b3c3c4b161ca0d02274a0cc7dc96e4ca4f0c7",
+      "capture_codegen": false
+    },
+    {
+      "candidate": "f01-deepseek-b2-all",
+      "sha256": "ed3f8f8b849d23185579fa642e3e7f353a685934353a83c4ab10008a626807f8",
+      "capture_codegen": false
     }
-  }
+  ],
+  "comparison_baseline": "f01-r15-dev-packed-b2-1",
+  "profile_parent": false,
+  "profile_current": false,
+  "authorization_receipt": "AGENTS.md",
+  "selection_policy": {
+    "method": "LOCAL_INDEPENDENT_CROSS_GATE_BOOTSTRAP",
+    "headline_normalized_ratio_max": 0.97,
+    "gain_p05_min_exclusive": 0.0,
+    "bootstrap_samples": 2000,
+    "bootstrap_seed": 90423,
+    "round_statistic": "median(submission_ns/incumbent_ns)",
+    "resampling": "independent gates with paired reference/submission rounds"
+  },
+  "sample_role": "DISCOVERY",
+  "purpose": "R19 DeepSeek: test whether the proven B2 pair core should cover m=2..3 / n=1 shapes; predicate-only candidates; no new proof.",
+  "scope_note": "DeepSeek branch plan; each side maintains its own suite-plan. Exact candidate and B2 anchor bound by sha256."
 }
