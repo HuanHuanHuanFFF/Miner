@@ -1,9 +1,9 @@
 {
-  "seed": 1826011,
+  "seed": 1826012,
   "official_commit": "4b7e83841cc0c32c6529f533923c73d33b5ecf97",
   "suite": "suites/public-v2.json",
   "dispatch_state": "READY",
-  "publication_state": "R19_DEEPSEEK_MUL_THRESHOLD",
+  "publication_state": "R19_DEEPSEEK_MUL_NATIVE_CONFIRMATION",
   "candidates": [
     {
       "candidate": "f01-r15-dev-packed-b2-1",
@@ -13,16 +13,6 @@
     {
       "candidate": "f01-deepseek-multh0",
       "sha256": "14a6ae2f9afd31cd584b5087fe24e001663d16222856515c9a4c4e10c1322ea5",
-      "capture_codegen": false
-    },
-    {
-      "candidate": "f01-deepseek-multh64",
-      "sha256": "7f1dee73e8a27266d535b261917ac9af70c7aa632480e29a8d9da586f7390eb6",
-      "capture_codegen": false
-    },
-    {
-      "candidate": "f01-deepseek-multh112",
-      "sha256": "9e09d1320ce19902616a6d716d40862a324c9fe1e033e2e4e1508d22350ff4c0",
       "capture_codegen": false
     }
   ],
@@ -39,7 +29,8 @@
     "round_statistic": "median(submission_ns/incumbent_ns)",
     "resampling": "independent gates with paired reference/submission rounds"
   },
-  "sample_role": "DISCOVERY",
-  "purpose": "R19 DeepSeek: test whether the mul low-scale software rounder is still profitable on the current AMD EPYC runner; constant-only candidates.",
-  "scope_note": "DeepSeek branch plan; B2 anchor and candidates bound by sha256."
+  "sample_role": "CONFIRMATION",
+  "purpose": "R19 DeepSeek: independent confirmation that removing the mul low-scale software branch (constant 128 -> 0) holds on a fresh seed.",
+  "scope_note": "DeepSeek branch plan; B2 anchor and candidate bound by sha256.",
+  "confirmation_candidates": ["f01-deepseek-multh0"]
 }
