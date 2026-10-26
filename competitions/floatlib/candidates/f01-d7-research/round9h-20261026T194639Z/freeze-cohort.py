@@ -86,9 +86,10 @@ def main():
     execution = binding.snapshot(ROOT)
     binding.verify_run({'execution_files': execution}, p, g, ROOT)
     files = binding.required_local_paths(ROOT, HERE) + [ROOT/n for n in binding.EXECUTION_FILES]
-    estimator_spec = importlib.util.spec_from_file_location('r19_freeze_estimator', ROOT/'competitions/floatlib/scripts/estimate_champion_time.py')
-    estimator = importlib.util.module_from_spec(estimator_spec)
-    estimator_spec.loader.exec_module(estimator)
+    estimator_spec = importlib.util.spec_from_file_location('r19_freeze_estimator', HERE/'development-estimator.py')
+    adapter = importlib.util.module_from_spec(estimator_spec)
+    estimator_spec.loader.exec_module(adapter)
+    estimator = adapter.load_estimator()
     files += [Path(estimator.DEFAULT_ANCHOR), screen_path]
     vs=importlib.util.spec_from_file_location('r19_model_binding',HERE/'verify-three-groups.py')
     verifier=importlib.util.module_from_spec(vs);vs.loader.exec_module(verifier)

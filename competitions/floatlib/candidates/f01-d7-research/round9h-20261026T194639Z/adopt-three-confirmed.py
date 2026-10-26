@@ -230,14 +230,14 @@ def adopt(freeze_path, expected_sha, runs, root=ROOT, verifier=None, estimator=N
     try:
         require(__debug__, "Optimized Python refused")
         verifier = verifier or module("r19_fresh_verifier",here/"verify-three-groups.py")
-        estimator = estimator or module("r19_frozen_estimator",root/"competitions/floatlib/scripts/estimate_champion_time.py")
+        estimator = estimator or module("r19_frozen_estimator",here/"development-estimator.py").load_estimator()
         renderer = renderer or module("r19_renderer",root/"competitions/floatlib/scripts/render_dashboard.py")
         freeze = read(freeze_path)
         require(not diagnostic(freeze) and len(set(runs.values()))==3 and set(runs)=={"D","A","B"}, "Diagnostic or duplicate/missing cohort rejected")
         guard = verifier.import_guard()
         def frozen():
             verifier.verify_freeze(freeze,expected_sha,freeze_path,guard,root=root)
-            for path in (here/"adopt-three-confirmed.py",root/"competitions/floatlib/scripts/estimate_champion_time.py",root/"competitions/floatlib/scripts/render_dashboard.py",Path(estimator.DEFAULT_ANCHOR)):
+            for path in (here/"adopt-three-confirmed.py",here/"development-estimator.py",root/"competitions/floatlib/scripts/estimate_champion_time.py",root/"competitions/floatlib/scripts/render_dashboard.py",Path(estimator.DEFAULT_ANCHOR)):
                 key=path.relative_to(root).as_posix()
                 require(key in freeze["files"] and sha(path.read_bytes())==freeze["files"][key]["sha256"], "Missing/changed adoption estimator anchor freeze: "+key)
         frozen()

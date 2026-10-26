@@ -45,6 +45,7 @@ def required_local_paths(root, here):
             [Path(here).parent / 'adoption-guard.py',
              Path(root) / 'competitions/floatlib/scripts/estimate_champion_time.py',
              Path(root) / 'competitions/floatlib/scripts/render_dashboard.py',
+             Path(here) / 'development-estimator.py',
              Path(here) / 'retained-estimate-freeze.json',
              Path(here) / 'development-retained-model.json',
              Path(root) / 'competitions/floatlib/candidates/f01-d7-research/round3h-20261025T043928Z/adoption-attempt-20261025T072850Z-e7312078/receipt.json'])
