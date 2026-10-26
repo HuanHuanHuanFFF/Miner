@@ -1,0 +1,660 @@
+{
+  "status": "PASS_STATIC_COST_PRECONDITIONS_WITH_LIMITS",
+  "verified_at_utc": "2026-10-26T22:52:37.440381+00:00",
+  "source_sha256": "9c4e9505702231fdb93f47f8d767ba0b2b0c2ad7ec48d8894b5a53ba87657645",
+  "source_bytes": 229293,
+  "source_manifest": "competitions/floatlib/candidates/f01-r19-dev-compact-scales1/manifest.json",
+  "run": 40410895344,
+  "run_head": "d6b76ba0baa08dd2afa9ab775aee8ee27221feea",
+  "original_files_rehashed": 88,
+  "build_flags": "Lean4.34.0/293d5d0c; clang -O3 -DNDEBUG -DLEAN_EXPORTING -ffp-contract=off, unchanged pinned build",
+  "helper_roots_allowed": 10,
+  "helper_actual_final_output": [
+    "true",
+    "512"
+  ],
+  "full_gate_and_timing": "NOT_RUN",
+  "evidence_status": {
+    "selected_C_and_actual_diagnostic_ASM": "VERIFIED",
+    "helper_true_and512": "VERIFIED_DIAGNOSTIC_EVALUATION",
+    "module_startup_order": "VERIFIED_GENERATED_C",
+    "future_timed_object_identity": "UNKNOWN_UNSEEN",
+    "native_initializer_iteration_count": "UNKNOWN",
+    "cost_trade_and_first_D_recommendation": "INFERRED_DECISION"
+  },
+  "selected_MainFull": {
+    "add": {
+      "symbol": "lp_competition_main___lam__0",
+      "C": {
+        "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/candidate-generated-1.c",
+        "start_line": 79,
+        "end_line": 524
+      },
+      "ASM": {
+        "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-10.asm.txt",
+        "symbol_start_line": 7
+      },
+      "valid_static_load_and_test_count": 1,
+      "max_compact_double_loads": 2,
+      "max_narrow_casts": 2,
+      "boxed_fallback_static_hits": 2,
+      "hot_data_materialization": false,
+      "hot_rebuild_or_validation_loop": false,
+      "nonNaN_result_guard_present": true
+    },
+    "mul": {
+      "symbol": "lp_competition_main___lam__3",
+      "C": {
+        "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/candidate-generated-1.c",
+        "start_line": 2330,
+        "end_line": 4108
+      },
+      "ASM": {
+        "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-12.asm.txt",
+        "symbol_start_line": 15
+      },
+      "valid_static_load_and_test_count": 1,
+      "max_compact_double_loads": 2,
+      "max_narrow_casts": 2,
+      "boxed_fallback_static_hits": 2,
+      "hot_data_materialization": false,
+      "hot_rebuild_or_validation_loop": false,
+      "nonNaN_result_guard_present": true
+    }
+  },
+  "selected_suite_chain": "C main initialization -> _lean_main BENCH_PLAN present -> Bench.Suite.run(ADD closure lambda0, MUL closure lambda3)",
+  "proof_materialization_helpers": {
+    "count": 4,
+    "names": [
+      "lp_competition___private_Submission_0__FloatArray_size_match__1_splitter___redArg",
+      "lp_competition___private_Submission_0__FloatArray_size_match__1_splitter",
+      "lp_competition___private_Submission_0__FloatArray_get_match__1_splitter___redArg",
+      "lp_competition___private_Submission_0__FloatArray_get_match__1_splitter"
+    ],
+    "references_each_in_Submission_C": 2,
+    "scope": "Prototype+definition only; not referenced by selected MainFull/scalar chains. Do not claim entire C has no data materialization."
+  },
+  "valid_dynamic_checks": {
+    "add_pair_operation": 1,
+    "mul_native_pair_operation": 1,
+    "mul_LowScale_pair_operation": 0,
+    "per_operand_extra_check": 0
+  },
+  "table_hit_mechanism": "Indexed contiguous8-byte FloatArray storage load -> numerical cvtsd2ss -> unchanged float32 mantissa multiply; not vectorized adjacent-operand loads.",
+  "fallbacks": {
+    "valid_false_boxed_arm": "PRESENT_REACHABLE_IN_CODE",
+    "per_input_fastOK_false_ofBits": "PRESENT",
+    "result_NaN_scalar_repair": "PRESENT",
+    "MUL_LowScale_before_valid": "PRESENT"
+  },
+  "initialization": {
+    "where": "initialize_competition_Submission called from MainFull startup before lean_run_main/Bench.Suite.run",
+    "once_scope": "Per process/module initialization guard and once cells, not once for the entire gate/CI",
+    "C_map_trip_count": 512,
+    "C_validation_trip_count_if_true": 512,
+    "native_exact_validation_check_count": "UNKNOWN_INITIALIZER_ASM_NOT_CAPTURED",
+    "helper_true_and512_prove_native_trip_count": false,
+    "hot_initialization_or_validation_loop": false,
+    "inside_scalar_benchmark_clock": "NO_BY_STARTUP_ORDER_AND_CACHED_BENCH_SOURCE",
+    "future_timed_clock_scope": "INFERRED_FROM_DIAGNOSTIC_STARTUP_AND_CACHED_OFFICIAL_SOURCE_NOT_MEASURED",
+    "startup_wall_time_allocation_and_both_tables_live": "RETAINED_COST_NOT_FREE",
+    "construction_boundary": "Original boxed table retained; map512 widening and intermediate boxed Float64 array, lean_float_array_mk packing; separate all-check of source table."
+  },
+  "comparison": {
+    "run": 40395429076,
+    "candidate": "f01-r19-dev-b2-index1",
+    "source_sha256": "9f7f96d71c153681c6a2500fd229e0627cd2ea38a3ad375afdeee25a1657eee1",
+    "add_nativeMul_mul_Lean_bodies_equal_exact_B2": true,
+    "C_object_level": "Selected MainFull control C versus compact selected MainFull C",
+    "ASM_object_level": "Control Submission.add/nativeMul versus compact selected MainFull lambda0/lambda3; all diagnostic statement build objects, not cleaned timed gate objects",
+    "trade": "Each compact hit removes one dependent boxed-entry hop and adds double-to-float narrowing; each native scalar op adds global flag address-load/byte-test/branch. PIC flag reads can offset removed memory-reference counts. No fewer-total-load or speed claim.",
+    "ADD_both_fastOK_illustration": {
+      "compact_MainFull": "Flag address0xc/byte0x30; table address/global/payload0x6c/0x73/0x7b and0xbf/0xc6/0xce; two narrowing instructions0x81/0xd4",
+      "old_Submission_add": "Table address/global/entry/payload0x47/0x4e/0x56/0x5b and0xa7/0xae/0xb6/0xbb; no narrowing",
+      "scope": "Diagnostic chosen straight paths have8 listed memory reads each; this is not a cycle model or same-symbol timed comparison."
+    }
+  },
+  "object_binding": {
+    "rows": [
+      {
+        "kind": "actual-built-object-disassembly",
+        "source": "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/ir/MainFull.c.o.export",
+        "object_sha256": "4e07dc108802ea239ba47bc817a8cffce31f7bd84214fe757f478d539182da24",
+        "symbol": "lp_competition_main___lam__0",
+        "file": "native-loop-10.asm.txt",
+        "sha256": "72bed6d5827265cb27259a1334c1662bb785a123022d7da25688d2a7e5927c07",
+        "exit_code": 0,
+        "kernel_sha256": "9c4e9505702231fdb93f47f8d767ba0b2b0c2ad7ec48d8894b5a53ba87657645",
+        "scope": "Diagnostic statement replay using the unchanged pinned build; this is not the cleaned-up timed gate object."
+      },
+      {
+        "kind": "actual-built-object-disassembly",
+        "source": "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/ir/MainFull.c.o.export",
+        "object_sha256": "4e07dc108802ea239ba47bc817a8cffce31f7bd84214fe757f478d539182da24",
+        "symbol": "lp_competition_main___lam__3",
+        "file": "native-loop-12.asm.txt",
+        "sha256": "6298a14092106f1c0c04434800bbfe31316d21aa4711bf61b3ff4f9cf0cd0b71",
+        "exit_code": 0,
+        "kernel_sha256": "9c4e9505702231fdb93f47f8d767ba0b2b0c2ad7ec48d8894b5a53ba87657645",
+        "scope": "Diagnostic statement replay using the unchanged pinned build; this is not the cleaned-up timed gate object."
+      }
+    ],
+    "raw_object_bytes_retained_and_independently_rehashed": false,
+    "scope": "Object SHA is attested by original assembly index; retained C/ASM/trace bytes independently rehashed. Not the timed object."
+  },
+  "recommendation": {
+    "decision": "WORTH_ONE_FIRST_COMPLETE_DISCOVERY_D",
+    "basis": "Actual selected path meets representation/no-hot-rebuild prerequisites; full D should decide dependent-load versus narrow+flag trade.",
+    "expected_speedup": "UNKNOWN",
+    "do_not_prebook_confirmations": true,
+    "required": "Exact9c4e source, original full25 gate, B2 and existing41 controls, no observers, original .97/positivep05 policy; failed firstD is retained, no seed reset."
+  },
+  "future_compact_full_D_or_holdout_read": false,
+  "inputs": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/astra-official-source/lean/bench/BenchSuite.lean",
+      "bytes": 10064,
+      "sha256": "2f1672738e07851fdb24ed968c248fc2e6d8a3e677c27763ebd489ada9425a9f"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40395429076/download-01d3ee43e7ff4ae088ca57488a71a0b2/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-b2-index1/build-trace-8.txt",
+      "bytes": 1303,
+      "sha256": "a08cce21126e0f8cdf95991e931c60abc5cedf0ce4957754c7bc7539424efe34"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40395429076/download-01d3ee43e7ff4ae088ca57488a71a0b2/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-b2-index1/candidate-c-index.json",
+      "bytes": 891,
+      "sha256": "e28751bd9bfdfb6f1818aab499bfeea2d7d0cac924d67ee2910458546c789b1e"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40395429076/download-01d3ee43e7ff4ae088ca57488a71a0b2/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-b2-index1/candidate-generated-0.c",
+      "bytes": 1463967,
+      "sha256": "1fe7b77589af8952ec0da9da3cf33831b9f6ad4bbaeee76e7ce6767d72051b42"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40395429076/download-01d3ee43e7ff4ae088ca57488a71a0b2/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-b2-index1/candidate-generated-1.c",
+      "bytes": 103511,
+      "sha256": "94f69ed19083e0fbb5d4b540d16d4575b82d4aac75779ce88043ef4f908bfecb"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40395429076/download-01d3ee43e7ff4ae088ca57488a71a0b2/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-b2-index1/native-assembly-index.json",
+      "bytes": 5969,
+      "sha256": "6acb4c319a93bcd8d73eb2d2a5f830e6d62e289043ba3e0ca7aa1b94dbcf6cec"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40395429076/download-01d3ee43e7ff4ae088ca57488a71a0b2/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-b2-index1/native-loop-5.asm.txt",
+      "bytes": 39063,
+      "sha256": "ee2d7fa657f45331257942b04454a649cc6c1160516363bda9bdab16ea1aa3d3"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40395429076/download-01d3ee43e7ff4ae088ca57488a71a0b2/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-b2-index1/native-loop-7.asm.txt",
+      "bytes": 38398,
+      "sha256": "eb5de84cb94c01a44af0857db7008fa9b2130ee6d31a7653bbf42cfc5466b2f0"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40395429076/download-01d3ee43e7ff4ae088ca57488a71a0b2/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-r19-dev-b2-index1/Kernel.lean",
+      "bytes": 234277,
+      "sha256": "9f7f96d71c153681c6a2500fd229e0627cd2ea38a3ad375afdeee25a1657eee1"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/build-trace-0.txt",
+      "bytes": 1247,
+      "sha256": "64335321ed88722433c006d5ffe8334119d7ce1fdc5b5fd3359027451e675c96"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/build-trace-11.txt",
+      "bytes": 1255,
+      "sha256": "241df48c8d09d38b9bcce65d566eaca19e1342d883fe68a13ddd5d81eacc7f7b"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/build-trace-14.txt",
+      "bytes": 13710,
+      "sha256": "c9057090fee21dda0bda971c17f503cfdcfe428fc0bf9c6a304d83e24d80ac49"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/build-trace-15.txt",
+      "bytes": 3400,
+      "sha256": "e469f1e153bdfa0faef4c59cd0329db3ee2de331d7ae9a4f730743cc4b63beb0"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/candidate-c-index.json",
+      "bytes": 859,
+      "sha256": "61129dc111586b3911b807d5fc67b2e46701da0701a1b3e8beb8703dcbf0d07d"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/candidate-generated-0.c",
+      "bytes": 708275,
+      "sha256": "65665cb68141c2603e48f62731058e45414af8faeffce9b1d02040e8a7705677"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/candidate-generated-1.c",
+      "bytes": 46901,
+      "sha256": "d70999b770e0cd893281c8d49ee8e0297684dfbe787977ee5685d387dc88cd34"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/diagnostic-only-verdict.json",
+      "bytes": 871,
+      "sha256": "64cee9b2a42bae17c4011520ce4292021dd2bc18d0b86f524ca9f3451e253181"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/index.json",
+      "bytes": 1184,
+      "sha256": "dbcb61421154e78071d8eafa121d5ba08e6085ccdc954f0be73960d5c89aa212"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-assembly-index.json",
+      "bytes": 8897,
+      "sha256": "c5b20bd285fc1fbb5149114b0f04eafc7a523583b97f6766488de453dc5b90ac"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-1.asm.txt",
+      "bytes": 18453,
+      "sha256": "2d2299a2a536f7b764d15df4a07e90e40f791d717dfa6decc2a80bb928975647"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-10.asm.txt",
+      "bytes": 18501,
+      "sha256": "50d7c5b31510f0deb3b3530ae7bc8ca652dd3d00ee5ee4c76e91100c699f2aea"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-12.asm.txt",
+      "bytes": 2615,
+      "sha256": "506decb41d43ba688fe77f932bb2bcbad380da704c05c5d5afbea319ff0e73b2"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-13.asm.txt",
+      "bytes": 7390,
+      "sha256": "d40043c5242096984b751291c13f71a2535de90da5078e63649dbbbfb1fa5f18"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-2.asm.txt",
+      "bytes": 17992,
+      "sha256": "29b759c424650fe2f13a2eb3b65d10f1979def92365f218c2fded0ded1fcff50"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-3.asm.txt",
+      "bytes": 19480,
+      "sha256": "74f70d3be0ba40dd15c9820e6b215a8a1a74635ff15abf9b2a5a4a32f0a63034"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-4.asm.txt",
+      "bytes": 19554,
+      "sha256": "16cacf7540b1d9af1405166bd8588f4ac700678e89ccc2c6b9a34e8f146d8dc1"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-5.asm.txt",
+      "bytes": 22061,
+      "sha256": "3394cb731c15073e0d23a16c903da5e1d36c9de7c5c5690cae3b323e2691c1f1"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-6.asm.txt",
+      "bytes": 18243,
+      "sha256": "787153e1fea19d7c9b95209e793ab58aab3fbec75e5dc66fb03bbe8b3c375e01"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-7.asm.txt",
+      "bytes": 19645,
+      "sha256": "44692c6c2995c5309503e013f20449eb63c7260450efd897c57df9fd89b5225e"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-8.asm.txt",
+      "bytes": 19777,
+      "sha256": "cd23d7f10aee27c0b4db5875426eedcffe57d9359be08bbf0fc262bcdf6f3ec0"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/native-loop-9.asm.txt",
+      "bytes": 24681,
+      "sha256": "7dc2bdcfd225e0cf5589e948f6109296c936a71a331a83a558d1be328405cb8c"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/checkout.log",
+      "bytes": 138,
+      "sha256": "9829fd50d357947af53188de8f2398b8a00b4d64ac2fad75c43b02b024503cd2"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/copy-dependencies.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/build-trace-0.txt",
+      "bytes": 1295,
+      "sha256": "b8939a731be1c90db06d3a1b55a8659af71fb4e5869b55988cc1d189c3171444"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/build-trace-13.txt",
+      "bytes": 23873,
+      "sha256": "735457f59c0d4565d0c71d3bce946ba767fc5e8063d8ab100f42ba06a9fc3e53"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/build-trace-14.txt",
+      "bytes": 3894,
+      "sha256": "5f98366aa092aa54b59d6d67b64f174d21e93dbbfa822ff7bbbe88e7f081a586"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/build-trace-9.txt",
+      "bytes": 1303,
+      "sha256": "a179b14462941dc1e59788aab9e987517179d459110781ed9e25c3c4894b2509"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/candidate-c-index.json",
+      "bytes": 891,
+      "sha256": "7d91077a9889cd853c75f9a1857ee68f63831c947c5e947b7c2cfdbd9f8eb686"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/candidate-generated-0.c",
+      "bytes": 1534312,
+      "sha256": "617f03df69c52bdbf3fb36bf9aaea5c2ff979265d98710a680fa7e0367ded912"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/candidate-generated-1.c",
+      "bytes": 114335,
+      "sha256": "427ab174d3ae60f171173086e729bd46e408d9c87de0e0e77d5456b76ed32286"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/diagnostic-only-verdict.json",
+      "bytes": 779,
+      "sha256": "147549ac5980dc1031c0291812927286606f65b411322065c83cdbe8b13d1b76"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/helper-audit-source.lean",
+      "bytes": 476,
+      "sha256": "caa470bc8d23a47e870a57c55084925b2ca90fc4d0ef45831c4e32b5c39084d5"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/helper-audit.json",
+      "bytes": 2110,
+      "sha256": "157657af89a7a92925565343d3e793915e05a8e0f1145f2695e360659b0f485d"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/helper-axioms.raw",
+      "bytes": 873,
+      "sha256": "46394a806805edafc4a3594bb49fc2170ca8f8d5f6a6bc32e1b76821804fb1de"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/index.json",
+      "bytes": 1215,
+      "sha256": "ec202fd30ec4350c268be36c7d8fa2fbb56c261f8e3e0991a0adf1fbfcf472b8"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-assembly-index.json",
+      "bytes": 8430,
+      "sha256": "1cf5778c298cd80c4122e35351381ca170c658374bda63848dbddd1eb0f50eda"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-1.asm.txt",
+      "bytes": 35353,
+      "sha256": "09ad5e4ae733295feeee58337f5adaa3fef56146046921a1e63ebcc2b02f495e"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-10.asm.txt",
+      "bytes": 6186,
+      "sha256": "72bed6d5827265cb27259a1334c1662bb785a123022d7da25688d2a7e5927c07"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-11.asm.txt",
+      "bytes": 11645,
+      "sha256": "95d6f992b7128c434e02b58cb9def15b8a56d31e9e040e7a4c9a15e45417e6cc"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-12.asm.txt",
+      "bytes": 11645,
+      "sha256": "6298a14092106f1c0c04434800bbfe31316d21aa4711bf61b3ff4f9cf0cd0b71"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-2.asm.txt",
+      "bytes": 34892,
+      "sha256": "444f4904cca253e65e5fd1a3c38daedafe1ae327c6698ddb704c0851a3b26202"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-3.asm.txt",
+      "bytes": 35143,
+      "sha256": "03ab178c5e461252b7ce94ae7a4d22d205b0a2a1139edf9cdf9fcda3b0d987fc"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-4.asm.txt",
+      "bytes": 36545,
+      "sha256": "e5aaed5c3059651d5efc69621bffb7eb12321b11fa6d2ed063530bc67c7ea0fb"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-5.asm.txt",
+      "bytes": 41754,
+      "sha256": "9db120aa5b5164512d67840597929a24d046f781f7f895071040cbe0bfe027bb"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-6.asm.txt",
+      "bytes": 40154,
+      "sha256": "677e7afcae67c491d80f9febe0488ef6b3cc93888df28d9b7831454e3d68987a"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-7.asm.txt",
+      "bytes": 45648,
+      "sha256": "ab38936de0e5b0b12eba73a987fa5a99a5e8f4647b6c6425f8aaf3527e84cd69"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/native-loop-8.asm.txt",
+      "bytes": 39543,
+      "sha256": "409f19c8c4c2223b51cca54ea55017f0ace2454e9c85a3a9016ffcb307219b5e"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-compact-scales1/replay.log",
+      "bytes": 2480,
+      "sha256": "398e64de8683df8403823f593987620162bc7094d99655524a243506060c2ca4"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-direct-bias-probe1/diagnostic-only-verdict.json",
+      "bytes": 814,
+      "sha256": "c7daeff1952b37c1d6b94d443a8e91fc2d7cec867f1dc3f343dd67785efb6cc2"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-direct-bias-probe1/full-build-output.txt",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-direct-bias-probe1/index.json",
+      "bytes": 293,
+      "sha256": "e48d5cda5c52062300eca08e8207509d32a3b4a57e503bdec2f9f016f91eb06e"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-direct-bias-probe1/replay.log",
+      "bytes": 1480,
+      "sha256": "e238ccfddd4e81a0717cd09c0da1d9a3c684cecbb233cd7a5cef9faacd91891d"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-dual-temporal-a4-1/diagnostic-only-verdict.json",
+      "bytes": 1407,
+      "sha256": "724dfa20ceae78ddaf80bce3dcdfbddeaa518d3e7711a4a87857329ba29fc435"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-dual-temporal-a4-1/full-build-output.txt",
+      "bytes": 22301,
+      "sha256": "46baed359ad365307302e2eacfbf6cecad0cc313b41565247a0919dc0afffe5a"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-dual-temporal-a4-1/index.json",
+      "bytes": 293,
+      "sha256": "3d698b753b14c893033de8e83c4b136d67e2464803e9d9ec5af08a771a8e9fca"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-dual-temporal-a4-1/replay.log",
+      "bytes": 23899,
+      "sha256": "eb4196963b828066a65371960c9b8a56f2947898edc712edf71a8f31609eedaf"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/f01-r19-dev-compact-scales1-gate.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/f01-r19-dev-compact-scales1-verdict.json",
+      "bytes": 779,
+      "sha256": "147549ac5980dc1031c0291812927286606f65b411322065c83cdbe8b13d1b76"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/f01-r19-dev-direct-bias-probe1-gate.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/f01-r19-dev-direct-bias-probe1-verdict.json",
+      "bytes": 814,
+      "sha256": "c7daeff1952b37c1d6b94d443a8e91fc2d7cec867f1dc3f343dd67785efb6cc2"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/f01-r19-dev-dual-temporal-a4-1-gate.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/f01-r19-dev-dual-temporal-a4-1-verdict.json",
+      "bytes": 1407,
+      "sha256": "724dfa20ceae78ddaf80bce3dcdfbddeaa518d3e7711a4a87857329ba29fc435"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/fetch.log",
+      "bytes": 154,
+      "sha256": "8c27fac53eb818c5b1002ed9fdefa800b5dec05c5e8e6ee751757c676c1e5441"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-r19-dev-compact-scales1/Kernel.lean",
+      "bytes": 229293,
+      "sha256": "9c4e9505702231fdb93f47f8d767ba0b2b0c2ad7ec48d8894b5a53ba87657645"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-r19-dev-direct-bias-probe1/Kernel.lean",
+      "bytes": 235339,
+      "sha256": "1180c82c69ded5619978a2673f47ce9ed6d94a80930099429fc0b7cd5b0044bd"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/inputs/f01-r19-dev-dual-temporal-a4-1/Kernel.lean",
+      "bytes": 240241,
+      "sha256": "9a5f19bea40d607de2e491aa45ab2deaac8fb68ea34a939817380eb7b362f4de"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/official-source-clean.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/provenance.json",
+      "bytes": 1043,
+      "sha256": "b8a58fa6573e7d9918e6366ca34457999ac4dcc6d3b7e1b6146025f47886e518"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/public-cell-work.json",
+      "bytes": 643,
+      "sha256": "b31f42fb0bbefaf7ad3adce0b78571880c5d00b4f031240e90de0e87b6cbab91"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/public-drawn-plan.json",
+      "bytes": 99938,
+      "sha256": "3fba14fb33bc4efe006591724c364e5be73b0aad94cd702e2b698b859462f817"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/public-v2.json",
+      "bytes": 5419,
+      "sha256": "a16494e97c6a073bfd8accf72480c34534c87808092c56074fdcfa42cd34868a"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/requested-plan.json",
+      "bytes": 1943,
+      "sha256": "69bc0b1ddf70051911604ef770be6bd6d8e81ccb8a53b4ff463a33229c3452a3"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/setup-check.log",
+      "bytes": 310,
+      "sha256": "1cea7847d9caefd37c66ddab3c2fed62c8ed182f966b86398895bfa06be1d169"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/setup.log",
+      "bytes": 4529,
+      "sha256": "ad8950fd15fd4ffee9d9bf89769032a370cbda44bed19a09222982e5b312c953"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/public-suite/summary.json",
+      "bytes": 3224,
+      "sha256": "8239792f541dd1eaa8b1f69220d0a783be4d75886c8502741582aa0c3c91cf30"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/diagnostics/f01-d7-public-suite/replay.log",
+      "bytes": 5698,
+      "sha256": "6f4a3d08a4e0146595dfdeac36e1254942dd0e9633916cc8ca94ab9d442129d7"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/environment.json",
+      "bytes": 327,
+      "sha256": "286807c11cdd52f5305177f5f477a50e1ddf62e05fda5daeafb0a48072a48411"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/f01-d7-public-suite-gate.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/f01-d7-public-suite-manifest.json",
+      "bytes": 451,
+      "sha256": "6c724764a952e01c5bf77d875500f6342b317bc3c8bbb3fca308454d0f8b3b8c"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/f01-d7-public-suite-verdict.json",
+      "bytes": 871,
+      "sha256": "64cee9b2a42bae17c4011520ce4292021dd2bc18d0b86f524ca9f3451e253181"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/inputs/f01-d7-public-suite/Kernel.lean",
+      "bytes": 139972,
+      "sha256": "8eb63a2fea39f8c483eb16857cb1dcc35ac4a30168ab91046a48aa1cb561e045"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/plan.json",
+      "bytes": 346,
+      "sha256": "a973f678c8109f0d357ddc2faf417c59cdd100eb02ba4360c4214008a2d70d16"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/prepare.log",
+      "bytes": 5623,
+      "sha256": "2419567dffa23e501d0b20e5268d07f36cb41ed873592e62bf6de13b7fdb9243"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/provenance.json",
+      "bytes": 25622,
+      "sha256": "1cce2e134736146d2a40dd249a8d992b583f8092bbd6a0ad1b306b3a5a81755d"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/setup-check.log",
+      "bytes": 294,
+      "sha256": "00dc75e741fc10a25354e236d1e62c75e305cd15e183b688130394fd4e3359d8"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/setup.log",
+      "bytes": 12392,
+      "sha256": "052afe421bb04426a6dd5614fb8b2d38ac4f7d448c0b4546ffee4f022ca3cfe7"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/download-9af980463e0648dabd2d03b5c409c96e/summary.json",
+      "bytes": 831,
+      "sha256": "c1b4cf75b397693e795c9b3d314808e44c2d2d53b775f13e9edd1a5e1fcad480"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40410895344/original-artifact-hashes.json",
+      "bytes": 17990,
+      "sha256": "63df09322f3cbe9256e46e6312214018171b9838b230cc24a030e839bade1029"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean",
+      "bytes": 226829,
+      "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-r19-dev-compact-scales1/Kernel.lean",
+      "bytes": 229293,
+      "sha256": "9c4e9505702231fdb93f47f8d767ba0b2b0c2ad7ec48d8894b5a53ba87657645"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-r19-dev-compact-scales1/manifest.json",
+      "bytes": 2287,
+      "sha256": "b48bd3e81b66b3ab8b2ba74b32d831180e521ba6bc36e2259178fb552d626141"
+    }
+  ]
+}
