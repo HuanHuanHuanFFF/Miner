@@ -1,0 +1,16 @@
+{
+  "candidate": "f01-deepseek-bits-addmul",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "79022b4a59457e5254e35440c85989c45dff5d38dddbfa614a36a8fe3eaeeca3",
+  "candidate_bytes": 226717,
+  "created_at_utc": "2026-10-26T21:19:14.832684+00:00",
+  "parent": "competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean",
+  "parent_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "mechanism": "In scalar add and nativeMul only, replace R2W01b.convert (fastOK table decode) with Float32.ofBits on the raw bits. convert_eq proves they are equal for all UInt32, so this is semantics-preserving; the two proofs drop the now-inapplicable convert_eq rewrites.",
+  "proof": "convert_eq : convert u = Float32.ofBits u; the remaining `change` steps identify ofBits x.raw.1 with ExecFloat.Binary.toFloat32 x.",
+  "validation_mode": "statement-only",
+  "proof_status": "STATIC_PATCH_NOT_COMPILED",
+  "performance": "NOT_RUN",
+  "hypothesis": "Whether the ofBits bitcast call is cheaper than the table-product decode on the current toolchain; affects add and mul, the largest whole-entry shares.",
+  "formal_submission": "NOT_SUBMITTED"
+}
