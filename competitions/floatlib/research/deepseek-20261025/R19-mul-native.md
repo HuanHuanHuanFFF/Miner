@@ -1,4 +1,4 @@
-# R19：mul 去掉低尺度软件分支（发现组，2026-10-26T21:05Z）
+﻿# R19：mul 去掉低尺度软件分支（发现组，2026-10-26T21:05Z）
 
 ## 候选
 
@@ -33,3 +33,22 @@ extremes 0.958、subnormal 0.964。标量其它项与 bmm 是干净的 1.000 控
 - 官方验证硬件 CPU 未知；若为有 denormal 惩罚的 Intel，本改动可能反向。
   确认组必须记录每次 runner CPU，并在不同 CPU 上复现。
 - 单 seed 发现组；正在 seed 1826012 起做独立确认（B2 anchor + th0，2 候选）。
+
+## 确认组 1（失败）与 CPU 依赖
+
+run 40400995011，seed 1826012，runner **INTEL XEON PLATINUM 8573C**：
+
+| 指标（对 B2） | 值 |
+|---|---:|
+| whole | 0.9940 |
+| mul | 0.9854 |
+| p05 | **−0.020359** |
+| add / sum / bmm | 0.9939 / 1.0168 / 1.0008 |
+
+mul 各类/B2：dense 1.034、extremes 1.060、**subnormal 1.229**；
+ml 0.928、sparse 0.934、specials 0.726。
+
+**结论**：该改动是 CPU 相关的。EPYC 上 native denormal 没有明显惩罚、且 DCE 掉整条分派，
+mul −7.7%；Intel 上 subnormal 慢 23%，净收益消失且整包未过 0.97。
+官方验证硬件未知，**不能把 th0 作为通用候选**；不进入确认组 2，也不组合。
+保留为“CPU 敏感”负结果，确认组 1 失败原样记录。
