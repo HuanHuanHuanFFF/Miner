@@ -1,4 +1,4 @@
-"""Patch B2's DirectContinuous row to a first-order loop (no per-row closure allocation).
+﻿"""Patch B2's DirectContinuous row to a first-order loop (no per-row closure allocation).
 
 Only the iteration structure changes: `row` keeps computing one output per lane with
 NativeFinal.dot, but iterates with an explicit recursive loop instead of
@@ -68,9 +68,16 @@ OLD_TAIL = """  simpa only [row, Nat.add_mul, Nat.one_mul] using h"""
 NEW_TAIL = """  rw [row_emit_eq]
   simpa only [Nat.add_mul, Nat.one_mul] using h"""
 
+FIX_OLD = """  dsimp only [row, DirectContinuous.row]
+  apply congrArg (fun read : Fin p → Binary32 => RowStream.emit p read out)"""
+FIX_NEW = """  dsimp only [row]
+  rw [DirectContinuous.row_emit_eq]
+  apply congrArg (fun read : Fin p → Binary32 => RowStream.emit p read out)"""
+
 assert SRC.count(OLD_ROW) == 1, SRC.count(OLD_ROW)
 assert SRC.count(OLD_TAIL) == 1, SRC.count(OLD_TAIL)
-text = SRC.replace(OLD_ROW, NEW_ROW).replace(OLD_TAIL, NEW_TAIL)
+assert SRC.count(FIX_OLD) == 1, SRC.count(FIX_OLD)
+text = SRC.replace(OLD_ROW, NEW_ROW).replace(OLD_TAIL, NEW_TAIL).replace(FIX_OLD, FIX_NEW)
 data = text.encode("utf-8")
 sha = hashlib.sha256(data).hexdigest()
 out = TRACK / "candidates/f01-deepseek-loopdc1"

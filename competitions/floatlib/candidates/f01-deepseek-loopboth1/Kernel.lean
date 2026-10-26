@@ -5948,7 +5948,8 @@ theorem row_eq (batch m n p : Nat)
     (out : Array Binary32) (r : Fin (batch * m)) :
     row batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32) out r =
       DirectContinuous.row batch m n p A B out r := by
-  dsimp only [row, DirectContinuous.row]
+  dsimp only [row]
+  rw [DirectContinuous.row_emit_eq]
   apply congrArg (fun read : Fin p → Binary32 => RowStream.emit p read out)
   funext j
   exact dot_eq _ _ _ _ _ _
