@@ -4,6 +4,8 @@
 
 **先看 [冲冠看板 dashboard.md](dashboard.md)**：按加法、乘法、求和、矩阵乘法查看冠军与我方首选。
 
+继续开发读[双 worktree 开发入口](DEVELOPMENT.md)：当前保留版、Codex／DeepSeek成果、验证计划与交接路径集中在此导航。
+
 FloatLib 的数学成果统一从[数学结论与可复用证明](competitions/floatlib/research/RESULTS.md)进入；包含 E 盘研究资料、失败路线和源码／验收对应关系。
 
 | 赛道 | 状态与入口 | 验证与证据 |

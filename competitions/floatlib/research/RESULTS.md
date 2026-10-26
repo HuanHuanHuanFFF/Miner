@@ -1,15 +1,26 @@
 # FloatLib 数学结论
 
-资料整理截至 2026-10-25，保留 R1–R6 归档、R11 三份网页交付与后续精确源码验收。四项性能与冠军见[看板](../../../dashboard.md)，当前保留版本及研究候选见[开发状态](../coordination/development-status.json)。
+资料整理更新至 2026-10-26，纳入R18与已合并DeepSeek成果；R1–R6归档、R11原件及历史状态保留。四项性能与冠军见[看板](../../../dashboard.md)，当前保留版本及研究候选见[开发状态](../coordination/development-status.json)。
 
-**已建立原生算术、精确解码、有序累加、机器字索引、连续矩阵输出和独立点积链的证明链；按“耗时占比 × 可实现降耗”，结合开发和完整验证成本选路。** 当前保留[R12 df5c 完整包](../candidates/f01-d12-scalar-combined/Kernel.lean)，SHA `df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172`。D/40074431355、A/40083425886、B/40083571000 均通过完整原版 gate 和冻结三组门槛，见[R12 精确验收](../candidates/f01-d7-research/round6h-20261024T051445Z/three-group-verification.json)。冠军相对模型按[原冻结回执](../candidates/f01-d7-research/round6h-20261024T051445Z/retained-estimate-freeze.json)保持；新增同源码控制只扩充原始证据。R13 的四个新候选正确性均通过，但收益未达采用门槛，见[R13 研究记录](../candidates/f01-d7-research/round3h-20261024T112622Z/README.md)。R11/6c、旧41与R10保留为历史对照；下表 K 仍固定指8eb原件。尚未取代冠军，旧份额不跨 suite 继承。
+**已建立原生算术、精确解码、有序累加、机器字索引、连续矩阵输出和独立点积链的证明链；按“耗时占比 × 可实现降耗”，结合开发和完整验证成本选路。** 最近采用的是[B2完整包](../candidates/f01-r15-dev-packed-b2-1/Kernel.lean)，SHA `622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58`；D/40168687803、A/40169957447、B/40171180249完整通过并满足冻结三组门槛，见[R15统一验收](../candidates/f01-d7-research/round3h-20261025T043928Z/development-final-three-group-verification.json)。当前冠军估算从开发状态进入，后续同源控制只补原证据；换冠军的参照转换另有回执。
 
-| 运算 | 已可复用的结论 | 当前使用方式 |
+历史[R12 df5c](../candidates/f01-d12-scalar-combined/Kernel.lean)及其[三组验收](../candidates/f01-d7-research/round6h-20261024T051445Z/three-group-verification.json)、[R13负结果](../candidates/f01-d7-research/round3h-20261024T112622Z/README.md)、R11/6c、旧41与R10继续作原版本对照；下文K仍固定指8eb原件。尚未取代冠军，旧份额不跨suite继承。
+
+### 最新可复用资产与限制
+
+| 资产 | 精确证据 | 接续边界 |
+|---|---|---|
+| UInt32精确数值往返 | [0873268d探针](../candidates/f01-r17-dev-u32-roundtrip-repair2/Kernel.lean)，40296747927整模块重放与22根显式审计 | 只覆盖该源及其前提，不等于新的ADD入口或收益 |
+| UInt64精确往返与lowering | [9be1162e探针](../candidates/f01-r17-dev-u64-roundtrip-repair1/Kernel.lean)、[876864bd诊断](../candidates/f01-r17-dev-u64-lowering1/Kernel.lean)，同批28／3根审计 | 诊断caller的C／ASM不能替代实际MainFull成本 |
+| 真正public MUL／ADD接线 | [R18完整原件与结果](../candidates/f01-d7-research/round11h-20261025T173831Z/development-round-results.json)，00ab／93cc原完整gate通过 | 对B2整包分别慢1.4%／24.2%，保留证明、停放这两个精确运行稿 |
+| DeepSeek p≤8路由与加法域边界 | [最终总结](deepseek-20261025/SUMMARY.md)、[word-add检查](deepseek-20261025/word-add-boundary-check.md) | 路由首次D未过，后续不重置为首D；9,223,371例有限检查不代替Lean，E=255必须回退 |
+
+| 运算 | 已可复用的结论 | 已验实现与复用方式 |
 |---|---|---|
 | 加法 | raw 指数字段可证明输入有限；精确数值解码等于原转换；有限原生加法连接正式规格 | 指数守卫＋内联转换＋特殊值软件回退 |
 | 乘法 | 原生乘法的模型桥成立；低尺度舍入可等价省略最高位搜索 | 原生路径与低尺度软件路径组合 |
 | 求和 | 最终结果有限可反推各步所需有限性；原序累加与软件 fold 相等；机器字循环与 Nat 循环等价 | 原生累加器＋精确转换＋USize 索引 |
-| 矩阵乘法 | 多 lane 投影等于各自原序点积；合法地址与机器字边界可证明；行序展平与原平坦输出相等 | 十列打包＋有界读取＋逐行计算和输出 |
+| 矩阵乘法 | 多lane投影等于各自原序点积；合法地址与机器字边界可证明；行序展平与原平坦输出相等 | 历史十列打包及连续输出，B2双列复用与成对存储；新组合另验 |
 
 资料入口：[R1–R6 十二包原文与源码](materials/20261022/README.md) · [R11 三份网页交付与提炼](materials/20261024-r11/README.md) · [全部候选及实际回执](results/CANDIDATES.md) · [逐定理行号与哈希](results/candidate-catalog.json)。原包中的历史 NOT_RUN、失败和作者判断保持原文；以下状态依据后续回执归并。
 

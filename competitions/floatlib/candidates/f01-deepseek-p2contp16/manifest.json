@@ -1,0 +1,30 @@
+{
+  "candidate": "f01-deepseek-p2contp16",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "a08d4f4a152a252d687ab513f22cbb4b5a88d6efabafafbf29cd989eea001e5a",
+  "candidate_bytes": 248159,
+  "parent": "competitions/floatlib/candidates/f01-d12-scalar-combined/Kernel.lean",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "at_utc": "2026-10-24T20:55:05.261062+00:00",
+  "author_role": "deepseek free research/development agent",
+  "mechanism": "Same as p2contp8 but the DirectContinuous guard is widened to `p ≤ 16` instead of `p ≤ 8`; p=2 leaves Cross. Tests whether the sparsely occurring p=9..16 cases also prefer the direct writer. No other runtime bytes change.",
+  "hypothesis": "p=9..16 cases carry 4-8% of scored BMM work by seed; if direct wins there too the threshold can move without touching larger packed shapes.",
+  "proof": "No new proof obligation: each edited `if` keeps both branches and their existing spec theorems; only the decidable predicate changes.",
+  "validation_mode": "full-gate",
+  "compile_status": "STATIC_DIFF_ONLY",
+  "full_gate_status": "NOT_RUN",
+  "benchmark": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "edits": [
+    {
+      "old": "  if h : p=2 ∧ 4≤batch*m ∧ 0<n ∧ n<USize.size ∧",
+      "new": "  if h : p=2 ∧ batch*m < 4 ∧ 0<n ∧ n<USize.size ∧",
+      "occurrences": 1
+    },
+    {
+      "old": "  if n ≤ 4 ∧ 2 < p then DirectContinuous.core batch m n p A B",
+      "new": "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 16 then DirectContinuous.core batch m n p A B",
+      "occurrences": 1
+    }
+  ]
+}

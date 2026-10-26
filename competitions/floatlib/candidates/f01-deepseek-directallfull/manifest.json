@@ -1,0 +1,30 @@
+{
+  "candidate": "f01-deepseek-directallfull",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "a84bd96bfda6689575d45db1df4f09644f7f3e04334f74cc06260564a2d2d304",
+  "candidate_bytes": 248164,
+  "parent": "competitions/floatlib/candidates/f01-d12-scalar-combined/Kernel.lean",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "at_utc": "2026-10-24T20:55:05.258565+00:00",
+  "author_role": "deepseek free research/development agent",
+  "mechanism": "Unbounded routing probe: p=2 leaves Cross and the DirectContinuous guard becomes `(n ≤ 4 ∧ 2 < p) ∨ p ≤ 1000000`, so in practice every shape uses the direct row writer. DirectSmall/Packed10 remain in the kernel with their proofs but are unreachable for scored sizes. No other runtime bytes change.",
+  "hypothesis": "If the direct row writer is competitive at every p on the public suite, the packed preparation and lane padding can be dropped as dead cost.",
+  "proof": "No new proof obligation: each edited `if` keeps both branches and their existing spec theorems; only the decidable predicate changes.",
+  "validation_mode": "full-gate",
+  "compile_status": "STATIC_DIFF_ONLY",
+  "full_gate_status": "NOT_RUN",
+  "benchmark": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "edits": [
+    {
+      "old": "  if h : p=2 ∧ 4≤batch*m ∧ 0<n ∧ n<USize.size ∧",
+      "new": "  if h : p=2 ∧ batch*m < 4 ∧ 0<n ∧ n<USize.size ∧",
+      "occurrences": 1
+    },
+    {
+      "old": "  if n ≤ 4 ∧ 2 < p then DirectContinuous.core batch m n p A B",
+      "new": "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 1000000 then DirectContinuous.core batch m n p A B",
+      "occurrences": 1
+    }
+  ]
+}

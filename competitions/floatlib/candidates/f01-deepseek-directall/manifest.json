@@ -1,0 +1,30 @@
+{
+  "candidate": "f01-deepseek-directall",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "ad91388b0b967021301fcf42c0a914349d12a9e1f920ba3a9077cc8bea531371",
+  "candidate_bytes": 248159,
+  "parent": "competitions/floatlib/candidates/f01-d12-scalar-combined/Kernel.lean",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "at_utc": "2026-10-24T20:55:05.256593+00:00",
+  "author_role": "deepseek free research/development agent",
+  "mechanism": "Extreme routing probe: p=2 leaves Cross and DirectContinuous's guard becomes `(n ≤ 4 ∧ 2 < p) ∨ p ≤ 64`, so every scored p<=64 shape uses the direct row writer; only p>64 can still reach DirectSmall/Packed10. No other runtime bytes change.",
+  "hypothesis": "Brackets the packed path's value: if direct wins even at p=32/59, the Packed10 preparation and lane padding are pure overhead on this suite.",
+  "proof": "No new proof obligation: each edited `if` keeps both branches and their existing spec theorems; only the decidable predicate changes.",
+  "validation_mode": "full-gate",
+  "compile_status": "STATIC_DIFF_ONLY",
+  "full_gate_status": "NOT_RUN",
+  "benchmark": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "edits": [
+    {
+      "old": "  if h : p=2 ∧ 4≤batch*m ∧ 0<n ∧ n<USize.size ∧",
+      "new": "  if h : p=2 ∧ batch*m < 4 ∧ 0<n ∧ n<USize.size ∧",
+      "occurrences": 1
+    },
+    {
+      "old": "  if n ≤ 4 ∧ 2 < p then DirectContinuous.core batch m n p A B",
+      "new": "  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 64 then DirectContinuous.core batch m n p A B",
+      "occurrences": 1
+    }
+  ]
+}
