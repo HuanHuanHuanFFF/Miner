@@ -74,7 +74,7 @@ def statement(src,verdict):
             if symbols is None:
                 continue
             names=[line.split()[-1] for line in symbols.stdout.splitlines() if line.split()]
-            names=[name for name in names if name.startswith('lp_competition_Submission_') and 'loop' in name.lower() and 'boxed' not in name and ('Packed' in name or 'NativeDecodeSum' in name or 'Tile' in name)]
+            names=[name for name in names if name.startswith('lp_competition_Submission_') and 'boxed' not in name and (('loop' in name.lower() and ('Packed' in name or 'NativeDecodeSum' in name or 'Tile' in name)) or name in ('lp_competition_Submission_R17NumericMulInteger_normalCore','lp_competition_Submission_R17NumericMulInteger_diagnosticEntry'))]
             for symbol in names:
                 result=optional_object_tool(['objdump','-d','--no-show-raw-insn','-Mintel','--disassemble='+symbol,str(path)],data,capture_output=True,timeout=15)
                 if result is None:

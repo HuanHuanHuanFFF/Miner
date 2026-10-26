@@ -1,0 +1,48 @@
+{
+  "at_utc": "2026-10-26T08:40:50.876781+00:00",
+  "run": 40293041239,
+  "candidates": [
+    {
+      "candidate": "f01-r17-dev-u32-roundtrip-repair1",
+      "kernel_sha256": "01cff324ee8bd142ec9753a2ca72c9ecb7ca24cd8c1bcac9a0925e77fd5e4905",
+      "source_commit": "f89e1d6e185d27cab13a89c899687b996a69ac6d",
+      "source_path": "competitions/floatlib/candidates/f01-r17-dev-u32-roundtrip-repair1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40293041239/download-54014e509c1a47618f3122228f9afbb4/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r17-dev-u32-roundtrip-repair1/full-build-output.txt",
+      "original_output_sha256": "f35859ac7478162b9d71bf3fc9f8f02749968334afd88c11f05bba0a45db9ee8",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 6836,
+          "column": 2,
+          "declaration": "Submission.R16UInt32Roundtrip.toUInt32_of_nonnegative_integral_decode",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6834,
+              "text": "    ((x.toModel.unpack.toInt 0 (UInt32.size-1)).toNat)).toNat = _"
+            },
+            {
+              "line": 6835,
+              "text": "  rw [hi,hr]"
+            },
+            {
+              "line": 6836,
+              "text": "  simpa using (UInt32.toNat_ofNatClamp_of_lt hfit)"
+            },
+            {
+              "line": 6837,
+              "text": ""
+            },
+            {
+              "line": 6838,
+              "text": "/-- Target numeric bridge. No shape or cast behavior is left as a hypothesis. -/"
+            }
+          ],
+          "message": "Type mismatch: After simplification, term\n  UInt32.toNat_ofNatClamp_of_lt hfit\n has type\n  @Eq ℕ (UInt32.ofNatClamp (m * 2 ^ e)).toNat (m * 2 ^ e)\nbut is expected to have type\n  @Eq ℕ (UInt32.ofNatClamp (↑m * 2 ^ e).toNat).toNat (m * 2 ^ e)"
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}
