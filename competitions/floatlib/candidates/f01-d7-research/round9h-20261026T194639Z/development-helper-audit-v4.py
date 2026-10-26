@@ -26,7 +26,7 @@ def stages(g, kernel, out, manifest):
     assert digest == manifest['candidate_sha256'] == manifest['helper_audit_source_sha256']
     names = manifest['explicit_helper_audit']
     assert len(names) == len(set(names)) == manifest['helper_audit_expected_count'] and 1 <= len(names) <= 128
-    assert all(re.fullmatch(r'(?:Submission|R18|R18A|R2W01b|R19CompactScales)\.[A-Za-z0-9_.]+', n) for n in names)
+    assert all(re.fullmatch(r'(?:Submission|R18|R18A|R2W01b|R19CompactScales|R19Base)\.[A-Za-z0-9_.]+', n) for n in names)
     assert set(manifest['helper_audit_required_endpoints']) <= set(names)
     record = dict(kernel_sha256=digest, names=names, expected_count=len(names), kernel_replay=False, accepted=False,
                   scope='Original leanchecker replays the complete Submission/VerifyFull modules; separate explicit helper axiom reports, not a performance gate.')
