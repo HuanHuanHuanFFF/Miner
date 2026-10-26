@@ -8,11 +8,13 @@
 |---|---|
 | D开发验证 | huan/codex-gpt；本目录development-*、f01-r19-dev-*；唯一Codex Git/index/push/CI/采用协调者，标准公共CI单槽 |
 | R研究主控 | 本目录astra-*、astra-workers/*；主动派3个Astra独立研究，普通交流只走文件；不操作Git/index/CI |
-| DeepSeek自由agent | 独立Bitget-DeepSeek／huan/dhs-deepseek；建议research/deepseek-20261027与f01-deepseek-r19-*；自己的Git/CI单槽，接入后写本方状态确认范围 |
+| DeepSeek自由agent | 已接入独立Bitget-DeepSeek／huan/dhs-deepseek；自己的Git/CI单槽，本方状态和消息均在留言板 |
 
 公共留言板：`D:/CodingProject/Bitget-Collab/`，仅写各自状态与独立时间戳消息；在候选、证明阶段结束和CI前后检查。启动研究端仅用必要唤醒提示，任务、结果、调整均写留言板，不连续会话催办。DeepSeek已用本方留言确认接入，自报窗口UTC19:47—次日01:47；D/R本轮9h截止不变。
 
-22:00 UTC检查点：5个Codex作业已启动，前4个终态原件收齐，第5个40407333869在途。9f索引首D整包1.00880、c70时间分块0.990205（BMM0.922129），均未达到采用门槛。b271真正Jam17 public MUL已完成声明、整模块回放及40根审计，现在与f84内联转换进行首个无观察器完整D；不是拿诊断探针的原B2入口参测。DeepSeek原生MUL阈值0首D达标但A失败，不采用、不启动B；其新标量bits-conversion由peer独立负责。当前仍保留B2、冠军#323及ab3b数值模型。
+22:45 UTC检查点：前6个Codex作业终态原件全部收齐。9f索引首D整包1.00880、c70时间分块0.990205（BMM0.922129）；新b271 Jam17整包0.998885、f84内联转换0.995855，均未达到采用门槛。40410895344中静态scale表9c4e已过声明、整模块及10根，实际valid=true/size512，正在核代码成本；双侧缓存有6个明确证明错误，DirectBias被SIGTERM且没有具体错误，准备独立helper逐根隔离。DeepSeek th0原确认失败不变，其同seed机制对照不作采用组。当前仍保留B2、冠军#323及ab3b数值模型。
+
+[实验与资源回执索引](development-experiment-ledger.json)按精确源列原始结果、共享CI墙钟与决定；未知token/路线分摊明确保留UNKNOWN，当前是否在途仍以开发状态为准。
 
 研究初配：60%投两条不同高上限路线，20%实现证明、15%反证审核、5%协调；主攻整包约10%以上的成本机制。优先调查BMM读取／准备／输出重构，再保留不同表示的第二路线；比较实际耗时份额、可实现降耗、证明与验证成本。R调度3个Astra，D最多再用2个子agent，全协作树上限5，受工具实际名额约束。
 

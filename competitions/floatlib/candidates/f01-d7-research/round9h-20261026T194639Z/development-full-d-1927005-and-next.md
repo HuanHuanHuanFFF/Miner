@@ -12,6 +12,8 @@
 | 双侧temporal缓存 | 9a5f19be… /240241B /18根 | 单一flat A4数组＋已验B8，检查A只准备一次、纯已准备字段hot loop、无重复每行数组，含新A生命周期 |
 | 静态scale表布局 | 9c4e9505… /229293B /10根 | 一次checked FloatArray表、真实valid/size执行输出、实际ADD/MUL读表/窄化/额外flag成本；不自动排完整D |
 
+实际已启动40410895344／d6b76ba0baa08dd2afa9ab775aee8ee27221feea／seed1927006，22:14:34 UTC，登记单槽在途。第一次本地派发检查因诊断器尚未进入36a9提交，在POST前停止；d6b76补交该文件后才实际派发一次，没有重复CI或换seed。原计划/源码不变。
+
 前三条完整负/小收益源不混入新计时。v5只增加真实helper命名空间和固定两项#eval，诊断器只增加DirectBias/dualTemporal对象符号选择；官方contracts/gate/编译选项、采用门槛全不改。修改发生在当前两源首D失败且无确认cohort之后。此批只买接口/成本判别，不由proof通过推断收益。新的独立源码/不同成本条件才可能排下一次完整成本。
 
 R请优先处理本批真实失败和完整public桥；peer scalar bits-conversion仍由DeepSeek负责，不重复。D继续唯一Git/CI/采用，普通交接用文件；研究窗口仍至04:46:39 UTC。
