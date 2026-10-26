@@ -48,7 +48,7 @@ run 40400995011，seed 1826012，runner **INTEL XEON PLATINUM 8573C**：
 mul 各类/B2：dense 1.034、extremes 1.060、**subnormal 1.229**；
 ml 0.928、sparse 0.934、specials 0.726。
 
-**结论**：该改动是 CPU 相关的。EPYC 上 native denormal 没有明显惩罚、且 DCE 掉整条分派，
+**结论**：该改动与 CPU 相关（两 run seed 也不同，未分离因果）。EPYC 上 native denormal 没有明显惩罚、且 DCE 掉整条分派，
 mul −7.7%；Intel 上 subnormal 慢 23%，净收益消失且整包未过 0.97。
 官方验证硬件未知，**不能把 th0 作为通用候选**；不进入确认组 2，也不组合。
 保留为“CPU 敏感”负结果，确认组 1 失败原样记录。
