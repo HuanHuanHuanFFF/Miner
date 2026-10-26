@@ -1,4 +1,4 @@
-# R19：转换与内联负结果（2026-10-26T21:56Z）
+﻿# R19：转换与内联负结果（2026-10-26T21:56Z）
 
 ## 1. `Float32.ofBits` 替代表解码（add/nativeMul）
 
@@ -39,3 +39,10 @@ runner Xeon 8573C：
 
 2 候选、单 run 的标量差异在 Xeon runner 上可漂移 ±10%（同源代码）。以后小效应必须靠：
 同一 run 的多候选中重复对照，或 ≥3 seed 的确认组；单 run 的 1—2% 不作为结论。
+
+## 3. `Packed10.finish` 内联
+
+候选 `f01-deepseek-inline-finish`（1a90b633），attribute-only。
+run [40408096257](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/40408096257)，seed 1826016，
+runner EPYC 7763：add 1.0007、mul 1.0004、sum 0.9666（未改，噪声）、**bmm 1.0008**。
+结论：pair 路径的每输出 `finish` 调用不是可测瓶颈；不内联。
