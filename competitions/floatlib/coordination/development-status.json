@@ -1,6 +1,6 @@
 {
   "state": "R19_ACTIVE_RETAIN_B2",
-  "updated_at_utc": "2026-10-26T21:44:57.628621+00:00",
+  "updated_at_utc": "2026-10-26T22:11:27.510812+00:00",
   "owner": "development chat",
   "branch": "huan/codex-gpt",
   "candidate": "competitions/floatlib/candidates/f01-r15-dev-packed-b2-1",
@@ -36,7 +36,33 @@
     "max_parallel_ci_total": 2,
     "plan": "competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/round-plan.json",
     "processed_deepseek_messages": [
-      "20261026T200500000Z-r19-start-b2-relax.md"
+      "20261026T200500000Z-r19-start-b2-relax.md",
+      "20261026T203000000Z-r19-relax-negative-loop-test.md",
+      "20261026T210400000Z-r19-mul-native-discovery.md",
+      "20261026T212200000Z-r19-mul-cpu-dependent.md",
+      "20261026T213800000Z-cpu-evidence-and-attribution.md"
+    ],
+    "processed_deepseek_receipts": [
+      {
+        "path": "D:/CodingProject/Bitget-Collab/deepseek/messages/20261026T200500000Z-r19-start-b2-relax.md",
+        "sha256": "bd81282920f68721898df6a380dee7dcf44d9cc3faba54369d99d038c966969a"
+      },
+      {
+        "path": "D:/CodingProject/Bitget-Collab/deepseek/messages/20261026T203000000Z-r19-relax-negative-loop-test.md",
+        "sha256": "8576ef0fdf5fcc21f62e12e918baab797dae7fc38059175688cec88be46f5fa2"
+      },
+      {
+        "path": "D:/CodingProject/Bitget-Collab/deepseek/messages/20261026T210400000Z-r19-mul-native-discovery.md",
+        "sha256": "9b560ae8abb10f27eb37e80e6857ef3b75368667b30ca9bedcf2412e6d3148e8"
+      },
+      {
+        "path": "D:/CodingProject/Bitget-Collab/deepseek/messages/20261026T212200000Z-r19-mul-cpu-dependent.md",
+        "sha256": "0f0ff4ae3749d98c281db2c959e6b04e72759e2ffc2b2f832fb1f84b86a98665"
+      },
+      {
+        "path": "D:/CodingProject/Bitget-Collab/deepseek/messages/20261026T213800000Z-cpu-evidence-and-attribution.md",
+        "sha256": "f4e8174fa3c2d8838e774b29f797669253901707e42c550232bbd567e9afb02f"
+      }
     ]
   },
   "current_report": "competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/README.md",
@@ -34419,18 +34445,20 @@
     "deadline_utc": "2026-10-27T04:46:39+00:00",
     "budget_minutes": 540,
     "state": "ACTIVE",
-    "current_phase": "Index and temporal complete D below threshold; repair/publicJam17 and inline-codec diagnostics running; baselineB2 retained",
+    "current_phase": "Jam17 and index-inline original full gates pass but firstD below adoption; next single statement batch DirectBias/dualTemporal/static scales1927006 prepared",
     "started_ci": [
       40392789163,
       40395429076,
       40398675395,
-      40404258098
+      40404258098,
+      40407333869
     ],
     "completed_ci": [
       40392789163,
       40395429076,
       40398675395,
-      40404258098
+      40404258098,
+      40407333869
     ],
     "active_ci": [],
     "prepared_requests": [
@@ -34567,9 +34595,45 @@
             "capture_codegen": false
           }
         ]
+      },
+      {
+        "seed": 1927006,
+        "role": "STATEMENT_DIAGNOSTIC",
+        "plan": "competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/plan-1927006.json",
+        "sha256": "69bc0b1ddf70051911604ef770be6bd6d8e81ccb8a53b4ff463a33229c3452a3",
+        "candidates": [
+          {
+            "candidate": "f01-r19-dev-direct-bias-probe1",
+            "sha256": "1180c82c69ded5619978a2673f47ce9ed6d94a80930099429fc0b7cd5b0044bd",
+            "capture_codegen": false,
+            "validation_mode": "statement-only"
+          },
+          {
+            "candidate": "f01-r19-dev-dual-temporal-a4-1",
+            "sha256": "9a5f19bea40d607de2e491aa45ab2deaac8fb68ea34a939817380eb7b362f4de",
+            "capture_codegen": false,
+            "validation_mode": "statement-only"
+          },
+          {
+            "candidate": "f01-r19-dev-compact-scales1",
+            "sha256": "9c4e9505702231fdb93f47f8d767ba0b2b0c2ad7ec48d8894b5a53ba87657645",
+            "capture_codegen": false,
+            "validation_mode": "statement-only"
+          }
+        ]
       }
     ],
-    "plan": "competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/round-plan.json"
+    "plan": "competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/round-plan.json",
+    "allocation_decisions": [
+      {
+        "at_utc": "2026-10-26T22:11:27.510795+00:00",
+        "decision": "Reject exact b271/f84 firstD; keepB2; use next diagnostic batch for fixed integer rounding, flat dual-temporal cache, and one bounded static-table layout discriminator",
+        "basis": "40407333869 complete clean D whole.998885/.995855 with negative p05; actual selected f84 removes call/spill yet only BMM3.3%; b271 runtime truly connected",
+        "token_actual": "UNKNOWN",
+        "cached_input": "UNKNOWN",
+        "CI": "one standard public slot, proof-only next batch; no local Lean"
+      }
+    ]
   },
   "research_round_history": [
     {
