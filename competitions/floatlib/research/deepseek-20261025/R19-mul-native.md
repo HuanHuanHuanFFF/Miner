@@ -79,3 +79,4 @@ mul −7.7%；Intel 上 subnormal 慢 23%，净收益消失且整包未过 0.97�
 CPU 关联现在有 seed 对照支持（仍是单 seed，属关联不是严格因果）。
 但即使 EPYC，1826012 的 whole 0.9784 也未过 0.97、p05 为负 → th0 只是“小 mul 收益”，
 不满足采用门槛，结论维持 REJECTED。
+> 口径说明（2026-10-26T23:32Z 更正）：本文中若标注 raw 的 op 比值仅作诊断；采用口径为归一化 (sub/inc)_cand ÷ (sub/inc)_B2。归一化值见 R19-SUMMARY.md 的更正表与 messages/20261026T233200000Z-r19-normalized-correction.md。

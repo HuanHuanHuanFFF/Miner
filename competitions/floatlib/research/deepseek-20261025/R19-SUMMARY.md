@@ -52,3 +52,5 @@ A/B 在同 run 内对 B2 anchor 归一，p05 用本地独立 bootstrap（2000、
 - 保留候选不变：B2 `622d8394`（226829 B，3 组采用证据）。
 - 本轮无新采用；无正式提交；无组合。
 - th0 与其它负结果源码保留在分支，供以后有 CPU 证据时复查。
+
+> 口径说明（2026-10-26T23:32Z 更正）：本文中若标注 raw 的 op 比值仅作诊断；采用口径为归一化 (sub/inc)_cand ÷ (sub/inc)_B2。归一化值见 R19-SUMMARY.md 的更正表与 messages/20261026T233200000Z-r19-normalized-correction.md。

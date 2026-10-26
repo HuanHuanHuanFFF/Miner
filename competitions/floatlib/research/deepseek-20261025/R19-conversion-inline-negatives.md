@@ -46,3 +46,4 @@ runner Xeon 8573C：
 run [40408096257](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/40408096257)，seed 1826016，
 runner EPYC 7763：add 1.0007、mul 1.0004、sum 0.9666（未改，噪声）、**bmm 1.0008**。
 结论：pair 路径的每输出 `finish` 调用不是可测瓶颈；不内联。
+> 口径说明（2026-10-26T23:32Z 更正）：本文中若标注 raw 的 op 比值仅作诊断；采用口径为归一化 (sub/inc)_cand ÷ (sub/inc)_B2。归一化值见 R19-SUMMARY.md 的更正表与 messages/20261026T233200000Z-r19-normalized-correction.md。

@@ -43,3 +43,4 @@ run 40416378615，seed 1826018，runner EPYC 7763，B2 anchor + 复制：
 - 两组合计：方向为正但幅度随 seed 明显缩小；整包收益 <1%，达不到 0.97 门槛。
 - 判断：peer 的 BMM 机制有效但**形状依赖**；其 whole 0.990 单组小收益未在不同 seed 上放大。
   不改变 peer 的流程；仅独立对照。
+> 口径说明（2026-10-26T23:32Z 更正）：本文中若标注 raw 的 op 比值仅作诊断；采用口径为归一化 (sub/inc)_cand ÷ (sub/inc)_B2。归一化值见 R19-SUMMARY.md 的更正表与 messages/20261026T233200000Z-r19-normalized-correction.md。

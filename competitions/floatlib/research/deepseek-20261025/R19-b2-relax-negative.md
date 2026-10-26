@@ -1,4 +1,4 @@
-# R19：B2 分派放宽负结果（2026-10-26T20:12Z）
+﻿# R19：B2 分派放宽负结果（2026-10-26T20:12Z）
 
 run [40390827505](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/40390827505)，public-v2 seed 1826008，
 B2 anchor + 三个 predicate-only 变体，4 个 full gate 全 PASS。
@@ -16,3 +16,5 @@ B2 anchor + 三个 predicate-only 变体，4 个 full gate 全 PASS。
   再次说明 seed 间形状差异大。
 
 回执：`ci-runs/40390827505/`；三种变体源码仅改 dispatch 谓词，保留为负结果。
+
+> 口径说明（2026-10-26T23:32Z 更正）：本文中若标注 raw 的 op 比值仅作诊断；采用口径为归一化 (sub/inc)_cand ÷ (sub/inc)_B2。归一化值见 R19-SUMMARY.md 的更正表与 messages/20261026T233200000Z-r19-normalized-correction.md。
