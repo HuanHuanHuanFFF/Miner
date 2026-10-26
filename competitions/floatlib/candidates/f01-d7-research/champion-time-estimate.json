@@ -1,22 +1,22 @@
 {
-  "as_of_utc": "2026-10-25T07:28:56.198340+00:00",
+  "as_of_utc": "2026-10-26T11:33:39.104972+00:00",
   "status": "INFERRED",
-  "method": "FROZEN_ANCHOR_NORMALIZED_PAIRED_DELTAS",
+  "method": "FROZEN_SOURCE_WITH_VERIFIED_SUCCESSOR_CELL_RATIOS",
   "candidate": "f01-r15-dev-packed-b2-1",
-  "estimator_sha256": "60476400919dff41f190c1779948f8eeca300753eb920c71ae659438f5bc3eb5",
+  "estimator_sha256": "241e4745fee98a1aedd2e1c1d9a0e6d9f995ec664fe2370cd2266dc8cece13b8",
   "public_results_sha256": "4c3095d659ccc2778238dee380b4d8edc398feaa021c31a87aa68e650cbee2c4",
   "kernel_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
-  "champion_submission": 309,
-  "champion_digest": "a54948d685997e5fb43611f46227355ae93b70c1d7bb0e31f58f7c6fe41f1b92",
+  "champion_submission": 323,
+  "champion_digest": "00fedf8188765eb484987a743ea82ae2bfea1fe468c2cab77f46fe463e34a7cb",
   "champion_suite": {
     "version": "scoring-v2-2026-10",
     "sha256": "2e32904d42216dc6995bcd5124da9a9f74d6bce472abe86c5c075ad52e2c6697"
   },
-  "champion_report": "competitions/floatlib/candidates/f01-d7-research/official-20261024T191026Z/champion-report.raw",
-  "champion_report_sha256": "473c0b94e00ab19773d6f53da7268cfbb0a9805b976957469fc03d87d2b8cd8c",
-  "official_receipts": "competitions/floatlib/candidates/f01-d7-research/official-20261024T191026Z/receipts.json",
-  "official_receipts_sha256": "eecb9e08bfb0a96c5cd76455bc31a0ba63154d92c2a85720331ed47d7f4fe1e2",
-  "formula": "Frozen original group costs/work, updated only by each cell median (candidate_submission/candidate_incumbent)/(anchor_submission/anchor_incumbent) across ALL declared matched full gates; re-sum four operations and whole for each frozen workload, then median across frozen workloads.",
+  "champion_report": "competitions/floatlib/candidates/f01-d7-research/official-20261026T111838Z/champion-report.raw",
+  "champion_report_sha256": "e3725cc1f36e3e9a95cc845271bbd65bfb363744d73fb0b0fe9add882936faac",
+  "official_receipts": "competitions/floatlib/candidates/f01-d7-research/official-20261026T111838Z/receipts.json",
+  "official_receipts_sha256": "c6f25b952203a2a5697f2478bf50b389f73a0728b7f863d2829809ca39e59d67",
+  "formula": "Keep all frozen B2 candidate totals, source deltas and workloads; multiply each original309 anchor-cell cost by the same-suite official323/309 submission_ns/incumbent_ns ratio, re-sum each frozen workload and take original workload medians.",
   "assumptions": [
     "Champion private-suite group mean costs approximate the same named public-suite groups.",
     "Cross-run hardware cost scale is assumed 1.0; no matched CPU calibration is available.",
@@ -26,39 +26,39 @@
   "range_scope": "Range across frozen anchor workloads after common paired delta; not a confidence interval.",
   "operations": {
     "add": {
-      "ratio_median": 1.0328171100535835,
+      "ratio_median": 1.0325708286497512,
       "ratio_range": [
-        0.6430220702335258,
-        1.2244792602576473
+        0.6428676481238709,
+        1.2241959586630857
       ]
     },
     "mul": {
-      "ratio_median": 1.1137807240053705,
+      "ratio_median": 1.1600987380346812,
       "ratio_range": [
-        0.7863774661443604,
-        1.3512195767098905
+        0.8191013473246878,
+        1.4080885434047279
       ]
     },
     "sum": {
-      "ratio_median": 1.1753460410538377,
+      "ratio_median": 1.174665010348817,
       "ratio_range": [
-        0.7932791815315064,
-        1.5538416964271242
+        0.7928184694982569,
+        1.553749401610869
       ]
     },
     "bmm": {
-      "ratio_median": 2.446740136248758,
+      "ratio_median": 3.003226636611876,
       "ratio_range": [
-        1.4925061402790172,
-        3.33016413229445
+        1.8427831931770031,
+        4.0459218163298925
       ]
     }
   },
   "whole": {
-    "ratio_median": 1.210135275339109,
+    "ratio_median": 1.2487239692464538,
     "ratio_range": [
-      0.7993157161779586,
-      1.4030848460252816
+      0.8250251393396439,
+      1.4480805293837737
     ]
   },
   "samples": [
@@ -75,10 +75,10 @@
         "bmm": 24911211.662796322
       },
       "champion_projected_total_ns": {
-        "add": 50050922.08680658,
-        "mul": 50622072.66056347,
-        "sum": 11783980.156329935,
-        "bmm": 10173335.164167654
+        "add": 50061906.94902863,
+        "mul": 48623687.08057419,
+        "sum": 11790827.904795019,
+        "bmm": 8342592.948632019
       },
       "cell_work": {
         "add:dense": 857142,
@@ -109,12 +109,12 @@
         "bmm:extremes": 69924
       },
       "operation_ratios": {
-        "add": 1.05786695586212,
-        "mul": 1.0309712083812235,
-        "sum": 0.7932791815315064,
-        "bmm": 2.448676983585301
+        "add": 1.0576348328075342,
+        "mul": 1.0733431081674136,
+        "sum": 0.7928184694982569,
+        "bmm": 2.9860274636653767
       },
-      "whole_ratio": 1.1367199000551511,
+      "whole_ratio": 1.1731818677448718,
       "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
     },
     {
@@ -130,10 +130,10 @@
         "bmm": 14398342.154547649
       },
       "champion_projected_total_ns": {
-        "add": 51294797.32003169,
-        "mul": 49518408.36692956,
-        "sum": 11267439.220545229,
-        "bmm": 9647090.732809946
+        "add": 51307118.753284074,
+        "mul": 47540100.655764244,
+        "sum": 11273870.62764664,
+        "bmm": 7813367.415037336
       },
       "cell_work": {
         "add:dense": 857142,
@@ -164,12 +164,12 @@
         "bmm:extremes": 14128
       },
       "operation_ratios": {
-        "add": 0.6430220702335258,
-        "mul": 0.7863774661443604,
-        "sum": 0.9741967592311789,
-        "bmm": 1.4925061402790172
+        "add": 0.6428676481238709,
+        "mul": 0.8191013473246878,
+        "sum": 0.9736410090223618,
+        "bmm": 1.8427831931770031
       },
-      "whole_ratio": 0.7993157161779586,
+      "whole_ratio": 0.8250251393396439,
       "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
     },
     {
@@ -185,10 +185,10 @@
         "bmm": 22907464.534377426
       },
       "champion_projected_total_ns": {
-        "add": 50760025.220269196,
-        "mul": 49350420.976139285,
-        "sum": 10743828.758209953,
-        "bmm": 9369859.995799424
+        "add": 50771772.02925278,
+        "mul": 47375169.292804,
+        "sum": 10744466.956171663,
+        "bmm": 7584183.8133831825
       },
       "cell_work": {
         "add:dense": 857142,
@@ -219,12 +219,12 @@
         "bmm:extremes": 23620
       },
       "operation_ratios": {
-        "add": 1.2244792602576473,
-        "mul": 1.3171146060832586,
-        "sum": 1.5538416964271242,
-        "bmm": 2.444803288912215
+        "add": 1.2241959586630857,
+        "mul": 1.37203014267442,
+        "sum": 1.553749401610869,
+        "bmm": 3.0204258095583754
       },
-      "whole_ratio": 1.387046220988282,
+      "whole_ratio": 1.4316856352479692,
       "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
     },
     {
@@ -240,10 +240,10 @@
         "bmm": 26919776.13785514
       },
       "champion_projected_total_ns": {
-        "add": 50783370.0649819,
-        "mul": 48544796.767355025,
-        "sum": 12170540.476260202,
-        "bmm": 10027455.32303143
+        "add": 50795141.95850959,
+        "mul": 46584201.005461335,
+        "sum": 12181872.726483721,
+        "bmm": 8188808.375266721
       },
       "cell_work": {
         "add:dense": 857142,
@@ -274,12 +274,12 @@
         "bmm:extremes": 19350
       },
       "operation_ratios": {
-        "add": 1.205251718015122,
-        "mul": 1.3512195767098905,
-        "sum": 1.3795868246005656,
-        "bmm": 2.6846069387140328
+        "add": 1.2049723980968883,
+        "mul": 1.4080885434047279,
+        "sum": 1.3783034568087271,
+        "bmm": 3.2873862599060177
       },
-      "whole_ratio": 1.4030848460252816,
+      "whole_ratio": 1.4480805293837737,
       "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
     },
     {
@@ -295,10 +295,10 @@
         "bmm": 16502629.74552274
       },
       "champion_projected_total_ns": {
-        "add": 50815824.866960414,
-        "mul": 49194585.8258602,
-        "sum": 10982962.318781782,
-        "bmm": 9589727.216715988
+        "add": 50827631.63387971,
+        "mul": 47222169.09670757,
+        "sum": 10981086.727619248,
+        "bmm": 7835557.084833526
       },
       "cell_work": {
         "add:dense": 857142,
@@ -329,12 +329,12 @@
         "bmm:extremes": 92550
       },
       "operation_ratios": {
-        "add": 0.9560754203802551,
-        "mul": 1.0774343340117543,
-        "sum": 1.1295827684614062,
-        "bmm": 1.7208653982103657
+        "add": 0.9558533333129879,
+        "mul": 1.1224375506284254,
+        "sum": 1.1297757034149702,
+        "bmm": 2.1061207986685675
       },
-      "whole_ratio": 1.082212112794488,
+      "whole_ratio": 1.1166292615100322,
       "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
     },
     {
@@ -350,10 +350,10 @@
         "bmm": 35604496.80438844
       },
       "champion_projected_total_ns": {
-        "add": 52444561.04152298,
-        "mul": 49937733.65099531,
-        "sum": 12094379.698810402,
-        "bmm": 10691514.108602598
+        "add": 52458117.92093655,
+        "mul": 47951797.57122497,
+        "sum": 12109800.673657687,
+        "bmm": 8800095.113228297
       },
       "cell_work": {
         "add:dense": 857142,
@@ -384,12 +384,12 @@
         "bmm:extremes": 58914
       },
       "operation_ratios": {
-        "add": 1.0077672642450468,
-        "mul": 1.150127113998987,
-        "sum": 1.2211093136462692,
-        "bmm": 3.33016413229445
+        "add": 1.007506824491968,
+        "mul": 1.197759925440937,
+        "sum": 1.2195543172826637,
+        "bmm": 4.0459218163298925
       },
-      "whole_ratio": 1.283550650623067,
+      "whole_ratio": 1.3242660707480358,
       "source_role": "FROZEN_ANCHOR_WORK_PROJECTION"
     }
   ],
@@ -397,7 +397,7 @@
   "anchor_payload_sha256": "cc65cf4e32e8d4edb62c4d43585886cb10904a6e681618a1710c06a2b0fdfdfe",
   "direct_same_suite_champion_comparison": "UNKNOWN",
   "official_admission": "UNKNOWN",
-  "update_kind": "PAIRED_SOURCE_DELTA",
+  "update_kind": "OFFICIAL_SAME_SUITE_CHAMPION_SUCCESSOR",
   "cell_relative_delta_median": {
     "add:dense": 0.9990659116424536,
     "add:extremes": 0.9991158199658975,
@@ -739,7 +739,50 @@
   ],
   "anchor": "competitions/floatlib/candidates/f01-d7-research/round8h-20261024T190259Z/freeze-anchor.json",
   "anchor_sha256": "4a833683649369da031ebdbc8b3c2d37a8bee9d50b6fb5aaf734982faef064d7",
-  "current_public_results_sha256": "c4a9807bbad3500e8aec9b90f4bad9def14e93b3efb0243e2f73d7cc0169d640",
-  "current_champion_report": "competitions/floatlib/candidates/f01-d7-research/official-20261025T072230Z/champion-report.raw",
-  "current_champion_report_sha256": "473c0b94e00ab19773d6f53da7268cfbb0a9805b976957469fc03d87d2b8cd8c"
+  "current_public_results_sha256": "fcb3e75be3107a15018614ad48d342058a9feb00fc54daaf1bf358e173d5e2f4",
+  "current_champion_report": "competitions/floatlib/candidates/f01-d7-research/official-20261026T111838Z/champion-report.raw",
+  "current_champion_report_sha256": "e3725cc1f36e3e9a95cc845271bbd65bfb363744d73fb0b0fe9add882936faac",
+  "previous_champion_model": "competitions/floatlib/candidates/f01-d7-research/round11h-20261025T173831Z/development-previous-champion-model.json",
+  "previous_champion_model_sha256": "9222bdf6edec6efe75c009203405357155045f75028727a2e1fc237b9a343e53",
+  "champion_successor_chain": {
+    "from_submission": 309,
+    "from_digest": "a54948d685997e5fb43611f46227355ae93b70c1d7bb0e31f58f7c6fe41f1b92",
+    "to_submission": 323,
+    "to_digest": "00fedf8188765eb484987a743ea82ae2bfea1fe468c2cab77f46fe463e34a7cb",
+    "suite": {
+      "version": "scoring-v2-2026-10",
+      "sha256": "2e32904d42216dc6995bcd5124da9a9f74d6bce472abe86c5c075ad52e2c6697"
+    },
+    "verifier_fingerprint": "d5b7061dd55516e8165d7204b5aec8f8575a88d937f02d2b5dc5869d0b2fe4c4",
+    "official_report_reference_digest": "a54948d685997e5fb43611f46227355ae93b70c1d7bb0e31f58f7c6fe41f1b92",
+    "cell_successor_over_previous_time": {
+      "add:dense": 1.0002876017077522,
+      "add:extremes": 1.0005711149189154,
+      "add:ml": 1.0003479878448016,
+      "add:paired": 1.000094380323045,
+      "add:sparse": 0.999827994296246,
+      "add:specials": 1.001074521780505,
+      "add:subnormal": 0.9997139231016653,
+      "bmm:dense": 0.9108524333878508,
+      "bmm:extremes": 0.9585096596136155,
+      "bmm:ml": 0.7936666034769227,
+      "bmm:sparse": 0.9547609523832473,
+      "bmm:specials": 0.971787536345636,
+      "bmm:subnormal": 0.562217150385218,
+      "mul:dense": 0.9585741832089443,
+      "mul:extremes": 0.9570777294356494,
+      "mul:ml": 0.9582610116806205,
+      "mul:paired": 0.9602918823911046,
+      "mul:sparse": 0.9565270560682705,
+      "mul:specials": 0.9818079927567014,
+      "mul:subnormal": 0.9597028688319647,
+      "sum:dense": 0.999619750239468,
+      "sum:extremes": 0.9979312924831526,
+      "sum:ml": 0.9998856484011674,
+      "sum:sparse": 0.9999544580591847,
+      "sum:specials": 1.0109998935494173,
+      "sum:subnormal": 1.0011457851474932
+    },
+    "scope": "Official same-suite paired successor ratio; original cross-suite development calibration uncertainty retained."
+  }
 }
