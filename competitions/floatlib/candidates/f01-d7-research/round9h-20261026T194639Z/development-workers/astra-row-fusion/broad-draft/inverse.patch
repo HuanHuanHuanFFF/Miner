@@ -1,0 +1,322 @@
+--- Kernel-column4-broad.draft.lean
++++ Kernel-parent-c36bc250.lean
+@@ -6904,303 +6904,6 @@
+   · exact R19Temporal.dispatch_spec batch m n p A B
+ end Submission.R19DualTemporal
+ 
+-/- R19 broad draft: repair1 core plus generic entry. NOT_RUN. -/
+-namespace Submission.R19Column4Temporal
+-open FloatLib.Floats Competition
+-open R19DualTemporal (A4 blocks)
+-
+-structure F4 where
+-  s0 : Float32
+-  s1 : Float32
+-  s2 : Float32
+-  s3 : Float32
+-
+-structure B16 where
+-  k0c0 : Float32
+-  k0c1 : Float32
+-  k0c2 : Float32
+-  k0c3 : Float32
+-  k1c0 : Float32
+-  k1c1 : Float32
+-  k1c2 : Float32
+-  k1c3 : Float32
+-  k2c0 : Float32
+-  k2c1 : Float32
+-  k2c2 : Float32
+-  k2c3 : Float32
+-  k3c0 : Float32
+-  k3c1 : Float32
+-  k3c2 : Float32
+-  k3c3 : Float32
+-
+-@[inline] def low (b : B16) : R19Temporal.B8 :=
+-  ⟨b.k0c0, b.k0c1, b.k1c0, b.k1c1, b.k2c0, b.k2c1, b.k3c0, b.k3c1⟩
+-
+-@[inline] def high (b : B16) : R19Temporal.B8 :=
+-  ⟨b.k0c2, b.k0c3, b.k1c2, b.k1c3, b.k2c2, b.k2c3, b.k3c2, b.k3c3⟩
+-
+-@[inline] def join (lo hi : R15ThinPairs.F2) : F4 :=
+-  ⟨lo.s0, lo.s1, hi.s0, hi.s1⟩
+-
+-@[inline] def packet (n base p k : Nat) (B : Array Binary32) : B16 :=
+-  ⟨if k<n then R19Temporal.read B (base+k*p) else Packed10.zero32,
+-   if k<n then R19Temporal.read B (base+1+k*p) else Packed10.zero32,
+-   if k<n then R19Temporal.read B ((base+2)+k*p) else Packed10.zero32,
+-   if k<n then R19Temporal.read B ((base+2)+1+k*p) else Packed10.zero32,
+-   if (k+1)<n then R19Temporal.read B (base+(k+1)*p) else Packed10.zero32,
+-   if (k+1)<n then R19Temporal.read B (base+1+(k+1)*p) else Packed10.zero32,
+-   if (k+1)<n then R19Temporal.read B ((base+2)+(k+1)*p) else Packed10.zero32,
+-   if (k+1)<n then R19Temporal.read B ((base+2)+1+(k+1)*p) else Packed10.zero32,
+-   if (k+2)<n then R19Temporal.read B (base+(k+2)*p) else Packed10.zero32,
+-   if (k+2)<n then R19Temporal.read B (base+1+(k+2)*p) else Packed10.zero32,
+-   if (k+2)<n then R19Temporal.read B ((base+2)+(k+2)*p) else Packed10.zero32,
+-   if (k+2)<n then R19Temporal.read B ((base+2)+1+(k+2)*p) else Packed10.zero32,
+-   if (k+3)<n then R19Temporal.read B (base+(k+3)*p) else Packed10.zero32,
+-   if (k+3)<n then R19Temporal.read B (base+1+(k+3)*p) else Packed10.zero32,
+-   if (k+3)<n then R19Temporal.read B ((base+2)+(k+3)*p) else Packed10.zero32,
+-   if (k+3)<n then R19Temporal.read B ((base+2)+1+(k+3)*p) else Packed10.zero32⟩
+-
+-theorem low_packet (n base p k : Nat) (B : Array Binary32) :
+-    low (packet n base p k B) = R19Temporal.packet n base p k B := by rfl
+-
+-theorem high_packet (n base p k : Nat) (B : Array Binary32) :
+-    high (packet n base p k B) = R19Temporal.packet n (base+2) p k B := by rfl
+-
+-def pack (n base p : Nat) (B : Array Binary32) : Vector B16 (blocks n) :=
+-  Vector.ofFn fun t => packet n base p (4*t.val) B
+-
+-theorem pack_low (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :
+-    low ((pack n base p B).get t) = (R19Temporal.pack n base p B).get t := by
+-  rw [R19Temporal.pack_get]
+-  simp only [pack, Packed10.vector_get_ofFn, low_packet]
+-
+-theorem pack_high (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :
+-    high ((pack n base p B).get t) = (R19Temporal.pack n (base+2) p B).get t := by
+-  rw [R19Temporal.pack_get]
+-  simp only [pack, Packed10.vector_get_ofFn, high_packet]
+-
+-def loop (n basePacket : Nat) (A : Array A4) (B : Vector B16 (blocks n))
+-    (hA : basePacket+blocks n ≤ A.size)
+-    (t : Nat) (s0 s1 s2 s3 : Float32) : F4 :=
+-  let k := 4*t
+-  if h3 : k+3<n then
+-    have ht : t<blocks n := by dsimp [k] at h3; unfold blocks; omega
+-    let a := A[basePacket+t]'(by omega)
+-    let b := B.get ⟨t,ht⟩
+-    let s0 := s0+a.a0*b.k0c0
+-    let s1 := s1+a.a0*b.k0c1
+-    let s2 := s2+a.a0*b.k0c2
+-    let s3 := s3+a.a0*b.k0c3
+-    let s0 := s0+a.a1*b.k1c0
+-    let s1 := s1+a.a1*b.k1c1
+-    let s2 := s2+a.a1*b.k1c2
+-    let s3 := s3+a.a1*b.k1c3
+-    let s0 := s0+a.a2*b.k2c0
+-    let s1 := s1+a.a2*b.k2c1
+-    let s2 := s2+a.a2*b.k2c2
+-    let s3 := s3+a.a2*b.k2c3
+-    loop n basePacket A B hA (t+1) (s0+a.a3*b.k3c0) (s1+a.a3*b.k3c1) (s2+a.a3*b.k3c2) (s3+a.a3*b.k3c3)
+-  else if h0 : k<n then
+-    have ht : t<blocks n := by dsimp [k] at h0; unfold blocks; omega
+-    let a := A[basePacket+t]'(by omega)
+-    let b := B.get ⟨t,ht⟩
+-    let s0 := s0+a.a0*b.k0c0
+-    let s1 := s1+a.a0*b.k0c1
+-    let s2 := s2+a.a0*b.k0c2
+-    let s3 := s3+a.a0*b.k0c3
+-    if k+1<n then
+-      let s0 := s0+a.a1*b.k1c0
+-      let s1 := s1+a.a1*b.k1c1
+-      let s2 := s2+a.a1*b.k1c2
+-      let s3 := s3+a.a1*b.k1c3
+-      if k+2<n then ⟨s0+a.a2*b.k2c0, s1+a.a2*b.k2c1, s2+a.a2*b.k2c2, s3+a.a2*b.k2c3⟩ else ⟨s0,s1,s2,s3⟩
+-    else ⟨s0,s1,s2,s3⟩
+-  else ⟨s0,s1,s2,s3⟩
+-termination_by n-4*t
+-decreasing_by all_goals omega
+-
+-theorem loop_eq (n basePacket : Nat) (A : Array A4) (B : Vector B16 (blocks n))
+-    (L H : Vector R19Temporal.B8 (blocks n))
+-    (hA : basePacket+blocks n ≤ A.size)
+-    (hL : ∀ i : Fin (blocks n), low (B.get i) = L.get i)
+-    (hH : ∀ i : Fin (blocks n), high (B.get i) = H.get i)
+-    (t : Nat) (s0 s1 s2 s3 : Float32) :
+-    loop n basePacket A B hA t s0 s1 s2 s3 =
+-      join (R19DualTemporal.loop n basePacket A L hA t s0 s1)
+-        (R19DualTemporal.loop n basePacket A H hA t s2 s3) := by
+-  have eL := @R19DualTemporal.loop.eq_def n basePacket A L hA t s0 s1
+-  have eH := @R19DualTemporal.loop.eq_def n basePacket A H hA t s2 s3
+-  have eN := @loop.eq_def n basePacket A B hA t s0 s1 s2 s3
+-  by_cases h3 : 4*t+3<n
+-  · have ht : t<blocks n := by unfold blocks; omega
+-    rw [eN, eL, eH]
+-    simp only [h3, dite_true]
+-    simp only [← hL ⟨t,ht⟩, ← hH ⟨t,ht⟩, low, high]
+-    exact loop_eq n basePacket A B L H hA hL hH (t+1) _ _ _ _
+-  · by_cases h0 : 4*t<n
+-    · have ht : t<blocks n := by unfold blocks; omega
+-      by_cases h1 : 4*t+1<n
+-      · by_cases h2 : 4*t+2<n
+-        · rw [eN, eL, eH]
+-          simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true]
+-          simp only [← hL ⟨t,ht⟩, ← hH ⟨t,ht⟩, low, high, join]
+-        · rw [eN, eL, eH]
+-          simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true, ite_false]
+-          simp only [← hL ⟨t,ht⟩, ← hH ⟨t,ht⟩, low, high, join]
+-      · rw [eN, eL, eH]
+-        simp only [h3, h0, h1, dite_false, dite_true, ite_true, ite_false]
+-        simp only [← hL ⟨t,ht⟩, ← hH ⟨t,ht⟩, low, high, join]
+-    · rw [eN, eL, eH]
+-      simp only [h3, h0, dite_false, join]
+-termination_by n-4*t
+-decreasing_by all_goals omega
+-
+-theorem loop_pack_eq (n basePacket baseB p : Nat) (A : Array A4) (B : Array Binary32)
+-    (hA : basePacket+blocks n ≤ A.size) (t : Nat) (s0 s1 s2 s3 : Float32) :
+-    loop n basePacket A (pack n baseB p B) hA t s0 s1 s2 s3 =
+-      join (R19DualTemporal.loop n basePacket A (R19Temporal.pack n baseB p B) hA t s0 s1)
+-        (R19DualTemporal.loop n basePacket A (R19Temporal.pack n (baseB+2) p B) hA t s2 s3) := by
+-  apply loop_eq
+-  · exact pack_low n baseB p B
+-  · exact pack_high n baseB p B
+-
+-@[inline] def runDot (rows n : Nat) (r : Fin rows)
+-    (A : Vector A4 (rows*blocks n)) (B : Vector B16 (blocks n)) : F4 :=
+-  loop n (r.val*blocks n) A.toArray B (R19DualTemporal.row_bound rows n A r)
+-    0 Packed10.zero32 Packed10.zero32 Packed10.zero32 Packed10.zero32
+-
+-theorem runDot_pack_eq (rows n : Nat) (r : Fin rows)
+-    (A : Vector A4 (rows*blocks n)) (baseB p : Nat) (B : Array Binary32) :
+-    runDot rows n r A (pack n baseB p B) =
+-      join (R19DualTemporal.runDot rows n r A (R19Temporal.pack n baseB p B))
+-        (R19DualTemporal.runDot rows n r A (R19Temporal.pack n (baseB+2) p B)) := by
+-  unfold runDot R19DualTemporal.runDot
+-  exact loop_pack_eq n (r.val*blocks n) baseB p A.toArray B
+-    (R19DualTemporal.row_bound rows n A r) 0 _ _ _ _
+-
+-/- Structural coverage only: no new phantom column MACs relative to B8 pairs.
+-   This guard is NOT wired into public dispatch in this probe. -/
+-def samePaddedWidth (p : Nat) : Prop := 4*((p+3)/4) = 2*((p+1)/2)
+-
+-theorem samePaddedWidth_small (p : Nat) (hp : 3≤p ∧ p≤8) :
+-    samePaddedWidth p ↔ p=3 ∨ p=4 ∨ p=7 ∨ p=8 := by
+-  unfold samePaddedWidth
+-  omega
+-
+-end Submission.R19Column4Temporal
+-
+-namespace Submission.R19Column4Temporal
+-open FloatLib.Floats Competition
+-open R19DualTemporal (A4 blocks)
+-@[inline] def groups (p : Nat) := (p+3)/4
+-abbrev AC (r n : Nat) := Vector A4 (r*blocks n)
+-abbrev BC (b n p : Nat) := Vector (Vector B16 (blocks n)) (b*groups p)
+-def ix (b p : Nat) (i : Fin b) (g : Fin (groups p)) : Fin (b*groups p) :=
+-  ⟨i.val*groups p+g.val, by
+-    have h := Nat.mul_le_mul_right (groups p) i.isLt
+-    rw [Nat.succ_mul] at h
+-    omega⟩
+-def packB (b n p : Nat) (B : Vector Binary32 (b*n*p)) : BC b n p :=
+-  Vector.ofFn fun q => pack n (q.val/groups p*n*p+4*(q.val%groups p)) p B.toArray
+-theorem packB_get (b n p : Nat) (B : Vector Binary32 (b*n*p))
+-    (i : Fin b) (g : Fin (groups p)) :
+-    (packB b n p B).get (ix b p i g) = pack n (i.val*n*p+4*g.val) p B.toArray := by
+-  have hg := g.isLt
+-  have hG : 0<groups p := Nat.zero_lt_of_lt hg
+-  have hd : (i.val*groups p+g.val)/groups p=i.val := by
+-    rw [Nat.mul_comm i.val (groups p), Nat.mul_add_div hG, Nat.div_eq_of_lt hg, Nat.add_zero]
+-  have hm : (i.val*groups p+g.val)%groups p=g.val := Nat.mul_add_mod_of_lt hg
+-  simp only [packB, ix, Packed10.vector_get_ofFn, hd, hm]
+-@[inline] def select (x : F4) (j : Nat) : Float32 :=
+-  if j=0 then x.s0 else if j=1 then x.s1 else if j=2 then x.s2 else x.s3
+-theorem finish_select (rows n : Nat) (r : Fin rows) (base p : Nat)
+-    (A B : Array Binary32) (j : Nat) (hj : j<4) :
+-    Packed10.finish n (r.val*n) (base+j) p A B
+-      (select (runDot rows n r (R19DualTemporal.packA rows n A) (pack n base p B)) j) =
+-    NativeFinal.dot n (r.val*n) (base+j) p A B := by
+-  rw [runDot_pack_eq]
+-  simp only [R19DualTemporal.runDot_eq, R19Temporal.loop_eq, Nat.mul_zero]
+-  have h : j=0 ∨ j=1 ∨ j=2 ∨ j=3 := by omega
+-  rcases h with h|h|h|h <;> subst j
+-  · simpa [select, join, R15ThinPairs.select] using
+-      R15ThinPairs.finish_select n (r.val*n) base p A B 0 (by omega)
+-  · simpa [select, join, R15ThinPairs.select] using
+-      R15ThinPairs.finish_select n (r.val*n) base p A B 1 (by omega)
+-  · simpa [select, join, R15ThinPairs.select] using
+-      R15ThinPairs.finish_select n (r.val*n) (base+2) p A B 0 (by omega)
+-  · simpa [select, join, R15ThinPairs.select, Nat.add_assoc] using
+-      R15ThinPairs.finish_select n (r.val*n) (base+2) p A B 1 (by omega)
+-variable {b m n p : Nat}
+-variable (A : Vector Binary32 (b*m*n)) (B : Vector Binary32 (b*n*p))
+-@[inline] def group (PA : AC (b*m) n) (PB : BC b n p)
+-    (r : Fin (b*m)) (out : Array Binary32) (g : Fin (groups p)) : Array Binary32 :=
+-  have hm : 0<m := Nat.pos_of_lt_mul_left r.isLt
+-  let bi : Fin b := ⟨r.val/m,(Nat.div_lt_iff_lt_mul hm).2 r.isLt⟩
+-  let v := runDot (b*m) n r PA (PB.get (ix b p bi g))
+-  RowStream.emit (min 4 (p-4*g.val)) (fun j =>
+-    Packed10.finish n (r.val*n) (bi.val*n*p+4*g.val+j.val) p A.toArray B.toArray
+-      (select v j.val)) out
+-theorem group_prefix (r : Fin (b*m)) (g : Fin (groups p)) (out : Array Binary32)
+-    (ho : RowStream.Prefix (RowStream.point b m n p A B) (r.val*p+min (4*g.val) p) out) :
+-    RowStream.Prefix (RowStream.point b m n p A B) (r.val*p+min (4*(g.val+1)) p)
+-      (group A B (R19DualTemporal.packA (b*m) n A.toArray) (packB b n p B) r out g) := by
+-  have hm : 0<m := Nat.pos_of_lt_mul_left r.isLt
+-  have hg : 4*g.val<p := by have h := g.isLt; unfold groups at h; omega
+-  have hp : 0<p := by omega
+-  have hs : min (4*g.val) p=4*g.val := by omega
+-  have he : r.val*p+min (4*(g.val+1)) p=(r.val*p+4*g.val)+min 4 (p-4*g.val) := by omega
+-  rw [he]
+-  unfold group
+-  dsimp only
+-  rw [packB_get]
+-  apply RowStream.emit_prefix
+-  · simpa only [hs] using ho
+-  · intro j
+-    have hj := j.isLt
+-    have hc : 4*g.val+j.val<p := by omega
+-    rw [show r.val*p+4*g.val+j.val=r.val*p+(4*g.val+j.val) by omega,
+-      RowStream.point_row b m n p A B r.val (4*g.val+j.val) hm hp hc]
+-    simpa only [Nat.add_assoc] using finish_select (b*m) n r (r.val/m*n*p+4*g.val) p
+-      A.toArray B.toArray j.val (Nat.lt_of_lt_of_le hj (Nat.min_le_left _ _))
+-@[inline] def row (PA : AC (b*m) n) (PB : BC b n p)
+-    (out : Array Binary32) (r : Fin (b*m)) : Array Binary32 :=
+-  Fin.foldl (groups p) (group A B PA PB r) out
+-theorem row_prefix (r : Fin (b*m)) (out : Array Binary32)
+-    (ho : RowStream.Prefix (RowStream.point b m n p A B) (r.val*p) out) :
+-    RowStream.Prefix (RowStream.point b m n p A B) ((r.val+1)*p)
+-      (row A B (R19DualTemporal.packA (b*m) n A.toArray) (packB b n p B) out r) := by
+-  have hl : min (4*groups p) p=p := by unfold groups; omega
+-  have h := RowStream.foldl_inv (groups p)
+-    (group A B (R19DualTemporal.packA (b*m) n A.toArray) (packB b n p B) r)
+-    (fun g acc => RowStream.Prefix (RowStream.point b m n p A B) (r.val*p+min (4*g) p) acc)
+-    (fun g acc ha => group_prefix A B r g acc ha) out
+-    (by simpa only [Nat.mul_zero, Nat.zero_min, Nat.add_zero] using ho)
+-  simpa only [row, hl, Nat.add_mul, Nat.one_mul] using h
+-def output : Array Binary32 :=
+-  let PA := R19DualTemporal.packA (b*m) n A.toArray
+-  let PB := packB b n p B
+-  Fin.foldl (b*m) (row A B PA PB) (Array.mkEmpty (b*m*p))
+-theorem output_prefix : RowStream.Prefix (RowStream.point b m n p A B) (b*m*p) (output A B) := by
+-  exact RowStream.foldl_inv (b*m)
+-    (row A B (R19DualTemporal.packA (b*m) n A.toArray) (packB b n p B))
+-    (fun r acc => RowStream.Prefix (RowStream.point b m n p A B) (r*p) acc)
+-    (fun r acc ha => row_prefix A B r acc ha) (Array.mkEmpty (b*m*p))
+-    ⟨by simp, by intro j hj; simp at hj⟩
+-def core : Vector Binary32 (b*m*p) := ⟨output A B,(output_prefix A B).1⟩
+-theorem core_eq_reference : core A B=referenceBmm b m n p A B := by
+-  exact (RowStream.prefix_vector_eq_ofFn (RowStream.point b m n p A B) (b*m*p)
+-    (output A B) (output_prefix A B)).trans (RowStream.points_eq_reference b m n p A B)
+-def dispatch : Vector Binary32 (b*m*p) :=
+-  if 0<m ∧ 1<n ∧ 3≤p ∧ 4*((p+3)/4)=2*((p+1)/2) then core A B
+-  else R19DualTemporal.dispatch b m n p A B
+-theorem dispatch_spec : (dispatch A B).get=bmmSpec b m n p A.get B.get := by
+-  unfold dispatch
+-  split
+-  · rw [core_eq_reference]; exact referenceBmm_spec b m n p A B
+-  · exact R19DualTemporal.dispatch_spec b m n p A B
+-end Submission.R19Column4Temporal
+-
+-
+ namespace Submission
+ open FloatLib.Floats Competition
+ 
+@@ -7208,7 +6911,7 @@
+     (B : Vector Binary32 (batch*n*p)) : Vector Binary32 (batch*m*p) :=
+   if A.toArray.all UnderflowZero.small && B.toArray.all UnderflowZero.small then
+     UnderflowZero.zeros batch m p
+-  else R19Column4Temporal.dispatch (b := batch) (m := m) (n := n) (p := p) A B
++  else R19DualTemporal.dispatch batch m n p A B
+ 
+ theorem bmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch*m*n))
+     (B : Vector Binary32 (batch*n*p)),
+@@ -7222,5 +6925,5 @@
+       simpa only [Bool.and_eq_true] using h
+     rw [UnderflowZero.zeros_eq_reference batch m n p A B hh.1 hh.2]
+     exact referenceBmm_spec batch m n p A B
+-  · exact R19Column4Temporal.dispatch_spec (b := batch) (m := m) (n := n) (p := p) A B
++  · exact R19DualTemporal.dispatch_spec batch m n p A B
+ end Submission

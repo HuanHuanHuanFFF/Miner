@@ -1,0 +1,64 @@
+{
+  "at_utc": "2026-10-27T03:19:12.562451+00:00",
+  "status": "PROOF_ONLY_REPAIR_NOT_RUN",
+  "window_start_utc": "2026-10-27T03:17:16Z",
+  "deadline_utc": "2026-10-27T03:31:00Z",
+  "actual_failure_run": 40442288468,
+  "actual_failure_source": "118d8efc9e8c3d92189913c0aae3d66bca1394a677ec09957174c9d9e97eb1fc",
+  "log_path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40442288468/download-8092dcfe5ed54ed9a9c4468707e0243d/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-column4-core2/full-build-output.txt",
+  "log_sha256": "a9e26a3026195ff66d980715104d3790c5c1221a3445459eec51d00058c1599e",
+  "cause": "The rewrite target itself fails implicit-transparency type checking: t has Fin(blocks n), while old pack.get requires Fin((n+3)/4).",
+  "change": "Explicitly normalize blocks in all local types and the goal, and expose both pack producers before applying the shared ofFn getter lemma. No rewrite-lemma substitution.",
+  "edits": [
+    {
+      "root": "Submission.R19Column4Temporal.pack_low",
+      "old_body": "  rw [R19Temporal.pack_get]\n  simp only [pack, Packed10.vector_get_ofFn, low_packet]",
+      "new_body": "  dsimp only [R19DualTemporal.blocks, pack, R19Temporal.pack] at *\n  simp only [Packed10.vector_get_ofFn, low_packet]"
+    },
+    {
+      "root": "Submission.R19Column4Temporal.pack_high",
+      "old_body": "  rw [R19Temporal.pack_get]\n  simp only [pack, Packed10.vector_get_ofFn, high_packet]",
+      "new_body": "  dsimp only [R19DualTemporal.blocks, pack, R19Temporal.pack] at *\n  simp only [Packed10.vector_get_ofFn, high_packet]"
+    }
+  ],
+  "outputs": [
+    {
+      "kind": "core",
+      "original_path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\development-workers\\astra-row-fusion\\repair1\\Kernel-core-repair1.lean",
+      "original_sha256": "118d8efc9e8c3d92189913c0aae3d66bca1394a677ec09957174c9d9e97eb1fc",
+      "original_bytes": 249625,
+      "output": "Kernel-core-repair2.lean",
+      "sha256": "036372fd3fdca079ef36e6ee2773c9ce27d8aeddc3f29d01257772f29c931e20",
+      "bytes": 249691,
+      "remaining_bytes": 6309,
+      "only_two_proof_bodies_changed": true,
+      "inverse_exact": true,
+      "original_file_unchanged": true,
+      "runtime_and_other_proofs_byte_identical": true
+    },
+    {
+      "kind": "retained-broad",
+      "original_path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\development-column4-broad-retained.lean",
+      "original_sha256": "7f1d4ec3f724526b83b17c28a6b392c7d4acb31e830fd141fae5ba5ea7429084",
+      "original_bytes": 255655,
+      "output": "Kernel-column4-broad-retained-repair2.lean",
+      "sha256": "386b5fec7a2595b1fa7e47b283abb3bdbd75066a4591ab3a5740e1cf0106741d",
+      "bytes": 255721,
+      "remaining_bytes": 279,
+      "only_two_proof_bodies_changed": true,
+      "inverse_exact": true,
+      "original_file_unchanged": true,
+      "runtime_and_other_proofs_byte_identical": true
+    }
+  ],
+  "fragment_sha256": "f68b316d257b35152284de216332a461cc7fc9a74a009e7b1c0f2976cb2ce380",
+  "fragment_bytes": 8181,
+  "compilation": "NOT_RUN",
+  "kernel_replay": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "generated_C": "NOT_RUN",
+  "timing": "NOT_RUN",
+  "cost_boundary": "For new DirectContinuous odd p=3/7, phantom MACs are additional versus its old exact p-column loop; same ceil guard only avoids extra phantom MACs relative to a B2-pair baseline.",
+  "D17_or_confirmation_input_results_accessed": false,
+  "own_Git_CI_Lean_operations": 0
+}

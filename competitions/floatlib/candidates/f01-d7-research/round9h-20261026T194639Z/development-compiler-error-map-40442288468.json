@@ -1,0 +1,78 @@
+{
+  "at_utc": "2026-10-27T03:15:21.679330+00:00",
+  "run": 40442288468,
+  "candidates": [
+    {
+      "candidate": "f01-r19-dev-column4-core2",
+      "kernel_sha256": "118d8efc9e8c3d92189913c0aae3d66bca1394a677ec09957174c9d9e97eb1fc",
+      "source_commit": "8cfa9b2880dd642deabdeff24924d63c4fc7def3",
+      "source_path": "competitions/floatlib/candidates/f01-r19-dev-column4-core2/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40442288468/download-8092dcfe5ed54ed9a9c4468707e0243d/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-column4-core2/full-build-output.txt",
+      "original_output_sha256": "a9e26a3026195ff66d980715104d3790c5c1221a3445459eec51d00058c1599e",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 7001,
+          "column": 6,
+          "declaration": "Submission.R19Column4Temporal.pack_low",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6999,
+              "text": "theorem pack_low (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :"
+            },
+            {
+              "line": 7000,
+              "text": "    low ((pack n base p B).get t) = (R19Temporal.pack n base p B).get t := by"
+            },
+            {
+              "line": 7001,
+              "text": "  rw [R19Temporal.pack_get]"
+            },
+            {
+              "line": 7002,
+              "text": "  simp only [pack, Packed10.vector_get_ofFn, low_packet]"
+            },
+            {
+              "line": 7003,
+              "text": ""
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (R19Temporal.pack ?n ?base ?p ?B).get ?t\nin the target expression\n  low ((pack n base p B).get t) = (R19Temporal.pack n base p B).get t\n\nn base p : ℕ\nB : Array Binary32\nt : Fin (blocks n)\n⊢ low ((pack n base p B).get t) = (R19Temporal.pack n base p B).get t\n\nNote: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    t\n  has type\n    Fin (blocks n)\n  but is expected to have type\n    Fin ((n + 3) / 4)\n  in the application\n    (R19Temporal.pack n base p B).get t"
+        },
+        {
+          "line": 7006,
+          "column": 6,
+          "declaration": "Submission.R19Column4Temporal.pack_high",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7004,
+              "text": "theorem pack_high (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :"
+            },
+            {
+              "line": 7005,
+              "text": "    high ((pack n base p B).get t) = (R19Temporal.pack n (base+2) p B).get t := by"
+            },
+            {
+              "line": 7006,
+              "text": "  rw [R19Temporal.pack_get]"
+            },
+            {
+              "line": 7007,
+              "text": "  simp only [pack, Packed10.vector_get_ofFn, high_packet]"
+            },
+            {
+              "line": 7008,
+              "text": ""
+            }
+          ],
+          "message": "Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (R19Temporal.pack ?n ?base ?p ?B).get ?t\nin the target expression\n  high ((pack n base p B).get t) = (R19Temporal.pack n (base + 2) p B).get t\n\nn base p : ℕ\nB : Array Binary32\nt : Fin (blocks n)\n⊢ high ((pack n base p B).get t) = (R19Temporal.pack n (base + 2) p B).get t\n\nNote: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    t\n  has type\n    Fin (blocks n)\n  but is expected to have type\n    Fin ((n + 3) / 4)\n  in the application\n    (R19Temporal.pack n (base + 2) p B).get t"
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}

@@ -1,0 +1,410 @@
+--- retained-broad
++++ a87f-broad-c36-fallback
+@@ -6363,203 +6363,6 @@
+     have hg := g.isLt
+     omega⟩
+ 
+-def packB (batch n p : Nat) (B : Vector Binary32 (batch * n * p)) :
+-    Vector (Vector B2 n) (batch * R15ThinPairs.groups p) :=
+-  Vector.ofFn fun t =>
+-    let b := t.val / R15ThinPairs.groups p
+-    let g := t.val % R15ThinPairs.groups p
+-    let base := b * n * p + 2 * g
+-    Vector.ofFn fun k =>
+-      ⟨ExecFloat.Binary.toFloat32 (B.toArray.getD (base + k.val * p) posZero),
+-       ExecFloat.Binary.toFloat32 (B.toArray.getD (base + 1 + k.val * p) posZero)⟩
+-
+-theorem packB_get (batch n p : Nat) (B : Vector Binary32 (batch * n * p))
+-    (b : Fin batch) (g : Fin (R15ThinPairs.groups p)) (k : Fin n) :
+-    ((packB batch n p B).get (tileIndex batch p b g)).get k =
+-      (⟨ExecFloat.Binary.toFloat32
+-          (B.toArray.getD (b.val * n * p + 2 * g.val + k.val * p) posZero),
+-        ExecFloat.Binary.toFloat32
+-          (B.toArray.getD (b.val * n * p + 2 * g.val + 1 + k.val * p) posZero)⟩ : B2) := by
+-  have hG : 0 < R15ThinPairs.groups p := Nat.zero_lt_of_lt g.isLt
+-  have hd : (b.val * R15ThinPairs.groups p + g.val) / R15ThinPairs.groups p = b.val := by
+-    rw [Nat.mul_comm b.val (R15ThinPairs.groups p), Nat.mul_add_div hG,
+-      Nat.div_eq_of_lt g.isLt, Nat.add_zero]
+-  have hm : (b.val * R15ThinPairs.groups p + g.val) % R15ThinPairs.groups p = g.val :=
+-    Nat.mul_add_mod_of_lt g.isLt
+-  simp only [packB, tileIndex, Packed10.vector_get_ofFn, hd, hm]
+-
+-def loop (n baseA : Nat) (A : Array Binary32) (packed : Vector B2 n)
+-    (k : Nat) (s0 s1 : Float32) : R15ThinPairs.F2 :=
+-  if hk : k < n then
+-    let a := ExecFloat.Binary.toFloat32 (A.getD (baseA + k) posZero)
+-    let b := packed.get ⟨k, hk⟩
+-    loop n baseA A packed (k + 1) (s0 + a * b.s0) (s1 + a * b.s1)
+-  else ⟨s0, s1⟩
+-termination_by n - k
+-
+-theorem loop_s0 (n baseA baseB p : Nat) (A B : Array Binary32)
+-    (packed : Vector B2 n)
+-    (hread : ∀ i : Fin n, (packed.get i).s0 =
+-      ExecFloat.Binary.toFloat32 (B.getD (baseB + i.val * p) posZero))
+-    (k : Nat) (s0 s1 : Float32) :
+-    (loop n baseA A packed k s0 s1).s0 =
+-      NativeFinal.dotLoop n baseA baseB p A B k s0 := by
+-  by_cases hk : k < n
+-  · rw [loop, NativeFinal.dotLoop]
+-    simp only [dif_pos hk]
+-    rw [hread ⟨k, hk⟩]
+-    exact loop_s0 n baseA baseB p A B packed hread (k + 1) _ _
+-  · rw [loop, NativeFinal.dotLoop]
+-    simp only [dif_neg hk]
+-termination_by n - k
+-
+-theorem loop_s1 (n baseA baseB p : Nat) (A B : Array Binary32)
+-    (packed : Vector B2 n)
+-    (hread : ∀ i : Fin n, (packed.get i).s1 =
+-      ExecFloat.Binary.toFloat32 (B.getD (baseB + i.val * p) posZero))
+-    (k : Nat) (s0 s1 : Float32) :
+-    (loop n baseA A packed k s0 s1).s1 =
+-      NativeFinal.dotLoop n baseA baseB p A B k s1 := by
+-  by_cases hk : k < n
+-  · rw [loop, NativeFinal.dotLoop]
+-    simp only [dif_pos hk]
+-    rw [hread ⟨k, hk⟩]
+-    exact loop_s1 n baseA baseB p A B packed hread (k + 1) _ _
+-  · rw [loop, NativeFinal.dotLoop]
+-    simp only [dif_neg hk]
+-termination_by n - k
+-
+-theorem pair_eq (x y : R15ThinPairs.F2) (h0 : x.s0 = y.s0) (h1 : x.s1 = y.s1) : x = y := by
+-  cases x
+-  cases y
+-  cases h0
+-  cases h1
+-  rfl
+-
+-theorem loop_eq_original (n baseA baseB p : Nat) (A B : Array Binary32)
+-    (packed : Vector B2 n)
+-    (h0 : ∀ i : Fin n, (packed.get i).s0 =
+-      ExecFloat.Binary.toFloat32 (B.getD (baseB + i.val * p) posZero))
+-    (h1 : ∀ i : Fin n, (packed.get i).s1 =
+-      ExecFloat.Binary.toFloat32 (B.getD (baseB + 1 + i.val * p) posZero))
+-    (k : Nat) (s0 s1 : Float32) :
+-    loop n baseA A packed k s0 s1 =
+-      R15ThinPairs.loop n baseA baseB p A (B.map ExecFloat.Binary.toFloat32) k s0 s1 := by
+-  apply pair_eq
+-  · exact (loop_s0 n baseA baseB p A B packed h0 k s0 s1).trans
+-      (R15ThinPairs.loop_s0 n baseA baseB p A B k s0 s1).symm
+-  · exact (loop_s1 n baseA (baseB + 1) p A B packed h1 k s0 s1).trans
+-      (R15ThinPairs.loop_s1 n baseA baseB p A B k s0 s1).symm
+-
+-theorem packed_loop_eq (batch n p baseA : Nat) (A : Array Binary32)
+-    (B : Vector Binary32 (batch * n * p))
+-    (b : Fin batch) (g : Fin (R15ThinPairs.groups p))
+-    (k : Nat) (s0 s1 : Float32) :
+-    loop n baseA A ((packB batch n p B).get (tileIndex batch p b g)) k s0 s1 =
+-      R15ThinPairs.loop n baseA (b.val * n * p + 2 * g.val) p A
+-        (B.toArray.map ExecFloat.Binary.toFloat32) k s0 s1 := by
+-  apply loop_eq_original
+-  · intro i
+-    simp only [packB_get]
+-  · intro i
+-    simp only [packB_get]
+-
+-@[inline] def group (batch m n p : Nat)
+-    (A : Vector Binary32 (batch * m * n))
+-    (B : Vector Binary32 (batch * n * p))
+-    (packedB : Vector (Vector B2 n) (batch * R15ThinPairs.groups p))
+-    (r : Fin (batch * m)) (out : Array Binary32) (g : Fin (R15ThinPairs.groups p)) :
+-    Array Binary32 :=
+-  have hm : 0 < m := Nat.pos_of_lt_mul_left r.isLt
+-  let b : Fin batch := ⟨r.val / m, (Nat.div_lt_iff_lt_mul hm).2 r.isLt⟩
+-  let baseA := r.val * n
+-  let baseB := b.val * n * p + 2 * g.val
+-  let result := loop n baseA A.toArray (packedB.get (tileIndex batch p b g))
+-    0 Packed10.zero32 Packed10.zero32
+-  let count := min 2 (p - 2 * g.val)
+-  RowStream.emit count (fun l =>
+-    Packed10.finish n baseA (baseB + l.val) p A.toArray B.toArray
+-      (R15ThinPairs.select result l.val)) out
+-
+-theorem group_eq (batch m n p : Nat)
+-    (A : Vector Binary32 (batch * m * n))
+-    (B : Vector Binary32 (batch * n * p))
+-    (r : Fin (batch * m)) (out : Array Binary32) (g : Fin (R15ThinPairs.groups p)) :
+-    group batch m n p A B (packB batch n p B) r out g =
+-      R15ThinPairs.group batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32) r out g := by
+-  simp only [group, R15ThinPairs.group, packed_loop_eq]
+-
+-@[inline] def row (batch m n p : Nat)
+-    (A : Vector Binary32 (batch * m * n))
+-    (B : Vector Binary32 (batch * n * p))
+-    (packedB : Vector (Vector B2 n) (batch * R15ThinPairs.groups p))
+-    (out : Array Binary32) (r : Fin (batch * m)) : Array Binary32 :=
+-  Fin.foldl (R15ThinPairs.groups p) (group batch m n p A B packedB r) out
+-
+-theorem row_eq (batch m n p : Nat)
+-    (A : Vector Binary32 (batch * m * n))
+-    (B : Vector Binary32 (batch * n * p)) (out : Array Binary32) (r : Fin (batch * m)) :
+-    row batch m n p A B (packB batch n p B) out r =
+-      R15ThinPairs.row batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32) out r := by
+-  unfold row R15ThinPairs.row
+-  apply congrArg (fun step : Array Binary32 → Fin (R15ThinPairs.groups p) → Array Binary32 =>
+-    Fin.foldl (R15ThinPairs.groups p) step out)
+-  funext acc g
+-  exact group_eq batch m n p A B r acc g
+-
+-def output (batch m n p : Nat)
+-    (A : Vector Binary32 (batch * m * n))
+-    (B : Vector Binary32 (batch * n * p)) : Array Binary32 :=
+-  let packedB := packB batch n p B
+-  Fin.foldl (batch * m) (row batch m n p A B packedB)
+-    (Array.mkEmpty (batch * m * p))
+-
+-theorem output_eq (batch m n p : Nat)
+-    (A : Vector Binary32 (batch * m * n))
+-    (B : Vector Binary32 (batch * n * p)) :
+-    output batch m n p A B = R15ThinPairs.output batch m n p A B := by
+-  unfold output R15ThinPairs.output
+-  apply congrArg (fun step : Array Binary32 → Fin (batch * m) → Array Binary32 =>
+-    Fin.foldl (batch * m) step (Array.mkEmpty (batch * m * p)))
+-  funext out r
+-  exact row_eq batch m n p A B out r
+-
+-theorem output_prefix (batch m n p : Nat)
+-    (A : Vector Binary32 (batch * m * n))
+-    (B : Vector Binary32 (batch * n * p)) :
+-    RowStream.Prefix (RowStream.point batch m n p A B) (batch * m * p)
+-      (output batch m n p A B) := by
+-  rw [output_eq]
+-  exact R15ThinPairs.output_prefix batch m n p A B
+-
+-def core (batch m n p : Nat)
+-    (A : Vector Binary32 (batch * m * n))
+-    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+-  ⟨output batch m n p A B, (output_prefix batch m n p A B).1⟩
+-
+-theorem core_eq_reference (batch m n p : Nat)
+-    (A : Vector Binary32 (batch * m * n))
+-    (B : Vector Binary32 (batch * n * p)) :
+-    core batch m n p A B = referenceBmm batch m n p A B := by
+-  exact (RowStream.prefix_vector_eq_ofFn (RowStream.point batch m n p A B)
+-    (batch * m * p) (output batch m n p A B) (output_prefix batch m n p A B)).trans
+-    (RowStream.points_eq_reference batch m n p A B)
+-
+-def dispatch (batch m n p : Nat)
+-    (A : Vector Binary32 (batch * m * n))
+-    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+-  if 2 ≤ p ∧ p ≤ 8 ∧ 1 < n ∧ 4 ≤ m then core batch m n p A B
+-  else bmmBeforeUnderflowZero batch m n p A B
+-
+-theorem dispatch_spec : ∀ (batch m n p : Nat)
+-    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p)),
+-    (dispatch batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+-  intro batch m n p A B
+-  unfold dispatch
+-  split
+-  · rw [core_eq_reference]
+-    exact referenceBmm_spec batch m n p A B
+-  · exact bmmBeforeUnderflowZero_spec batch m n p A B
+ 
+ end Submission.R15PackedB2
+ 
+@@ -6712,6 +6515,91 @@
+     Nat.mul_add_mod_of_lt g.isLt
+   simp only [packB, R15PackedB2.tileIndex, Packed10.vector_get_ofFn, hd, hm]
+ 
++@[inline] def group (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))
++    (packedB : Vector (Vector B8 ((n+3)/4)) (batch*R15ThinPairs.groups p))
++    (r : Fin (batch*m)) (out : Array Binary32) (g : Fin (R15ThinPairs.groups p)) :
++    Array Binary32 :=
++  have hm : 0<m := Nat.pos_of_lt_mul_left r.isLt
++  let b : Fin batch := ⟨r.val/m,(Nat.div_lt_iff_lt_mul hm).2 r.isLt⟩
++  let baseA := r.val*n
++  let baseB := b.val*n*p+2*g.val
++  let result := loop n baseA A.toArray
++    (packedB.get (R15PackedB2.tileIndex batch p b g)) 0 Packed10.zero32 Packed10.zero32
++  RowStream.emit (min 2 (p-2*g.val)) (fun l =>
++    Packed10.finish n baseA (baseB+l.val) p A.toArray B.toArray
++      (R15ThinPairs.select result l.val)) out
++
++theorem group_eq (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))
++    (r : Fin (batch*m)) (out : Array Binary32) (g : Fin (R15ThinPairs.groups p)) :
++    group batch m n p A B (packB batch n p B) r out g =
++      R15ThinPairs.group batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32) r out g := by
++  simp only [group, R15ThinPairs.group, packB_get, loop_eq, Nat.mul_zero]
++
++@[inline] def row (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))
++    (packedB : Vector (Vector B8 ((n+3)/4)) (batch*R15ThinPairs.groups p))
++    (out : Array Binary32) (r : Fin (batch*m)) : Array Binary32 :=
++  Fin.foldl (R15ThinPairs.groups p) (group batch m n p A B packedB r) out
++
++theorem row_eq (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))
++    (out : Array Binary32) (r : Fin (batch*m)) :
++    row batch m n p A B (packB batch n p B) out r =
++      R15ThinPairs.row batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32) out r := by
++  unfold row R15ThinPairs.row
++  apply congrArg (fun step : Array Binary32 → Fin (R15ThinPairs.groups p) → Array Binary32 =>
++    Fin.foldl (R15ThinPairs.groups p) step out)
++  funext acc g
++  exact group_eq batch m n p A B r acc g
++
++def output (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) : Array Binary32 :=
++  let packedB := packB batch n p B
++  Fin.foldl (batch*m) (row batch m n p A B packedB) (Array.mkEmpty (batch*m*p))
++
++theorem output_eq (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    output batch m n p A B = R15ThinPairs.output batch m n p A B := by
++  unfold output R15ThinPairs.output
++  apply congrArg (fun step : Array Binary32 → Fin (batch*m) → Array Binary32 =>
++    Fin.foldl (batch*m) step (Array.mkEmpty (batch*m*p)))
++  funext acc r
++  exact row_eq batch m n p A B acc r
++
++theorem output_prefix (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    RowStream.Prefix (RowStream.point batch m n p A B) (batch*m*p) (output batch m n p A B) := by
++  rw [output_eq]
++  exact R15ThinPairs.output_prefix batch m n p A B
++
++def core (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    Vector Binary32 (batch*m*p) :=
++  ⟨output batch m n p A B,(output_prefix batch m n p A B).1⟩
++
++theorem core_eq_reference (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    core batch m n p A B = referenceBmm batch m n p A B := by
++  exact (RowStream.prefix_vector_eq_ofFn (RowStream.point batch m n p A B)
++    (batch*m*p) (output batch m n p A B) (output_prefix batch m n p A B)).trans
++    (RowStream.points_eq_reference batch m n p A B)
++
++def dispatch (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    Vector Binary32 (batch*m*p) :=
++  if 2≤p ∧ p≤8 ∧ 1<n ∧ 4≤m then core batch m n p A B
++  else bmmBeforeUnderflowZero batch m n p A B
++
++theorem dispatch_spec (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    (dispatch batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
++  unfold dispatch
++  split
++  · rw [core_eq_reference]
++    exact referenceBmm_spec batch m n p A B
++  · exact bmmBeforeUnderflowZero_spec batch m n p A B
+ end Submission.R19Temporal
+ 
+ 
+@@ -6924,6 +6812,96 @@
+   intro i
+   exact packA_get rows n Araw r i
+ 
++@[inline] def group (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))
++    (packedA : Vector A4 ((batch*m)*blocks n))
++    (packedB : Vector (Vector R19Temporal.B8 (blocks n)) (batch*R15ThinPairs.groups p))
++    (r : Fin (batch*m)) (out : Array Binary32) (g : Fin (R15ThinPairs.groups p)) :
++    Array Binary32 :=
++  have hm : 0<m := Nat.pos_of_lt_mul_left r.isLt
++  let b : Fin batch := ⟨r.val/m,(Nat.div_lt_iff_lt_mul hm).2 r.isLt⟩
++  let baseA := r.val*n
++  let baseB := b.val*n*p+2*g.val
++  let result := runDot (batch*m) n r packedA
++    (packedB.get (R15PackedB2.tileIndex batch p b g))
++  RowStream.emit (min 2 (p-2*g.val)) (fun l =>
++    Packed10.finish n baseA (baseB+l.val) p A.toArray B.toArray
++      (R15ThinPairs.select result l.val)) out
++
++theorem group_eq (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))
++    (packedB : Vector (Vector R19Temporal.B8 (blocks n)) (batch*R15ThinPairs.groups p))
++    (r : Fin (batch*m)) (out : Array Binary32) (g : Fin (R15ThinPairs.groups p)) :
++    group batch m n p A B (packA (batch*m) n A.toArray) packedB r out g =
++      R19Temporal.group batch m n p A B packedB r out g := by
++  simp only [group, R19Temporal.group, runDot_eq] <;> rfl
++
++@[inline] def row (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))
++    (packedA : Vector A4 ((batch*m)*blocks n))
++    (packedB : Vector (Vector R19Temporal.B8 (blocks n)) (batch*R15ThinPairs.groups p))
++    (out : Array Binary32) (r : Fin (batch*m)) : Array Binary32 :=
++  Fin.foldl (R15ThinPairs.groups p) (group batch m n p A B packedA packedB r) out
++
++theorem row_eq (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))
++    (packedB : Vector (Vector R19Temporal.B8 (blocks n)) (batch*R15ThinPairs.groups p))
++    (out : Array Binary32) (r : Fin (batch*m)) :
++    row batch m n p A B (packA (batch*m) n A.toArray) packedB out r =
++      R19Temporal.row batch m n p A B packedB out r := by
++  unfold row R19Temporal.row
++  apply congrArg (fun step : Array Binary32 → Fin (R15ThinPairs.groups p) → Array Binary32 =>
++    Fin.foldl (R15ThinPairs.groups p) step out)
++  funext acc g
++  exact group_eq batch m n p A B packedB r acc g
++
++def output (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) : Array Binary32 :=
++  let packedA := packA (batch*m) n A.toArray
++  let packedB := R19Temporal.packB batch n p B
++  Fin.foldl (batch*m) (row batch m n p A B packedA packedB) (Array.mkEmpty (batch*m*p))
++
++theorem output_eq (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    output batch m n p A B = R19Temporal.output batch m n p A B := by
++  unfold output R19Temporal.output
++  apply congrArg (fun step : Array Binary32 → Fin (batch*m) → Array Binary32 =>
++    Fin.foldl (batch*m) step (Array.mkEmpty (batch*m*p)))
++  funext acc r
++  exact row_eq batch m n p A B (R19Temporal.packB batch n p B) acc r
++
++theorem output_prefix (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    RowStream.Prefix (RowStream.point batch m n p A B) (batch*m*p) (output batch m n p A B) := by
++  rw [output_eq]
++  exact R19Temporal.output_prefix batch m n p A B
++
++def core (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    Vector Binary32 (batch*m*p) :=
++  ⟨output batch m n p A B,(output_prefix batch m n p A B).1⟩
++
++theorem core_eq_reference (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    core batch m n p A B = referenceBmm batch m n p A B := by
++  exact (RowStream.prefix_vector_eq_ofFn (RowStream.point batch m n p A B)
++    (batch*m*p) (output batch m n p A B) (output_prefix batch m n p A B)).trans
++    (RowStream.points_eq_reference batch m n p A B)
++
++def dispatch (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    Vector Binary32 (batch*m*p) :=
++  if 3≤p ∧ p≤8 ∧ 1<n ∧ 4≤m then core batch m n p A B
++  else R19Temporal.dispatch batch m n p A B
++
++theorem dispatch_spec (batch m n p : Nat)
++    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)) :
++    (dispatch batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
++  unfold dispatch
++  split
++  · rw [core_eq_reference]
++    exact referenceBmm_spec batch m n p A B
++  · exact R19Temporal.dispatch_spec batch m n p A B
+ end Submission.R19DualTemporal
+ 
+ /- R19 broad draft: repair1 core plus generic entry. NOT_RUN. -/
+@@ -7214,12 +7192,12 @@
+     (output A B) (output_prefix A B)).trans (RowStream.points_eq_reference b m n p A B)
+ def dispatch : Vector Binary32 (b*m*p) :=
+   if 0<m ∧ 1<n ∧ 3≤p ∧ 4*((p+3)/4)=2*((p+1)/2) then core A B
+-  else R15PackedB2.dispatch b m n p A B
++  else R19DualTemporal.dispatch b m n p A B
+ theorem dispatch_spec : (dispatch A B).get=bmmSpec b m n p A.get B.get := by
+   unfold dispatch
+   split
+   · rw [core_eq_reference]; exact referenceBmm_spec b m n p A B
+-  · exact R15PackedB2.dispatch_spec b m n p A B
++  · exact R19DualTemporal.dispatch_spec b m n p A B
+ end Submission.R19Column4Temporal
+ 
+ 

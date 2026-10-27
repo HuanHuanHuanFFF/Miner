@@ -1,0 +1,60 @@
+0000000000000000 <lp_competition_Submission_Packed4Index_loop___redArg>:
+   0:	sub    rsp,0x18
+   4:	unpcklps xmm2,xmm3
+   7:	unpcklps xmm0,xmm1
+   a:	movlhps xmm0,xmm2
+   d:	cmp    rdi,r8
+  10:	jbe    a3 <lp_competition_Submission_Packed4Index_loop___redArg+0xa3>
+  16:	mov    r9d,edi
+  19:	sub    r9d,r8d
+  1c:	lea    rax,[r8+0x1]
+  20:	test   r9b,0x1
+  24:	je     4f <lp_competition_Submission_Packed4Index_loop___redArg+0x4f>
+  26:	lea    r9,[rdx+rsi*8]
+  2a:	add    r9,0x18
+  2e:	mov    r10,QWORD PTR [rcx+r8*8+0x18]
+  33:	mov    r8,QWORD PTR [r9+r8*8]
+  37:	movups xmm2,XMMWORD PTR [r10+0x8]
+  3c:	movss  xmm1,DWORD PTR [r8+0x8]
+  42:	shufps xmm1,xmm1,0x0
+  46:	mulps  xmm1,xmm2
+  49:	addps  xmm0,xmm1
+  4c:	mov    r8,rax
+  4f:	cmp    rdi,rax
+  52:	je     a3 <lp_competition_Submission_Packed4Index_loop___redArg+0xa3>
+  54:	lea    rax,[rdx+rsi*8]
+  58:	add    rax,0x20
+  5c:	nop    DWORD PTR [rax+0x0]
+  60:	mov    rdx,QWORD PTR [rcx+r8*8+0x18]
+  65:	mov    rsi,QWORD PTR [rcx+r8*8+0x20]
+  6a:	movups xmm2,XMMWORD PTR [rdx+0x8]
+  6e:	mov    rdx,QWORD PTR [rax+r8*8-0x8]
+  73:	mov    r9,QWORD PTR [rax+r8*8]
+  77:	movss  xmm1,DWORD PTR [rdx+0x8]
+  7c:	shufps xmm1,xmm1,0x0
+  80:	mulps  xmm1,xmm2
+  83:	addps  xmm1,xmm0
+  86:	add    r8,0x2
+  8a:	movups xmm2,XMMWORD PTR [rsi+0x8]
+  8e:	movss  xmm0,DWORD PTR [r9+0x8]
+  94:	shufps xmm0,xmm0,0x0
+  98:	mulps  xmm0,xmm2
+  9b:	addps  xmm0,xmm1
+  9e:	cmp    rdi,r8
+  a1:	jne    60 <lp_competition_Submission_Packed4Index_loop___redArg+0x60>
+  a3:	movaps XMMWORD PTR [rsp],xmm0
+  a7:	call   ac <lp_competition_Submission_Packed4Index_loop___redArg+0xac>
+			a8: R_X86_64_PLT32	lean_inc_heartbeat-0x4
+  ac:	mov    edi,0x18
+  b1:	call   b6 <lp_competition_Submission_Packed4Index_loop___redArg+0xb6>
+			b2: R_X86_64_PLT32	mi_malloc_small-0x4
+  b6:	test   rax,rax
+  b9:	je     d5 <lp_competition_Submission_Packed4Index_loop___redArg+0xd5>
+  bb:	movabs rcx,0x1800000001
+  c5:	mov    QWORD PTR [rax],rcx
+  c8:	movaps xmm0,XMMWORD PTR [rsp]
+  cc:	movups XMMWORD PTR [rax+0x8],xmm0
+  d0:	add    rsp,0x18
+  d4:	ret
+  d5:	call   da <lp_competition_Submission_Packed4Index_loop___redArg+0xda>
+			d6: R_X86_64_PLT32	lean_internal_panic_out_of_memory-0x4

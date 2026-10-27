@@ -85,7 +85,8 @@ def statement(src,verdict):
                 new_core_functions = [line.split()[-1] for line in symbols.stdout.splitlines()
                     if len(line.split()) >= 3 and line.split()[-2] in ('T','t')]
                 names += [name for name in new_core_functions if name not in names and 'boxed' not in name
-                    and name.startswith('lp_competition_Submission_R19Column4Temporal_')
+                    and (name.startswith('lp_competition_Submission_R19Column4Temporal_')
+                         or (name.startswith('lp_competition_Fin_foldl_loop_') and 'R19Column4Temporal' in name))
                     and any(part in name for part in ('loop','runDot','pack'))]
             for symbol in names:
                 result=optional_object_tool(['objdump','-dr','--no-show-raw-insn','-Mintel','--disassemble='+symbol,str(path)],data,capture_output=True,timeout=15)

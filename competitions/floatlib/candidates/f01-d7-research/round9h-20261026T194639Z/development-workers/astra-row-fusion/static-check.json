@@ -1,0 +1,159 @@
+{
+  "checked_at_utc": "2026-10-27T03:07:39.781829+00:00",
+  "status": "STATIC_SOURCE_SCREEN_PASS_ONLY",
+  "source_sha256": "8adff3a04e9f30b6416b4c192276d704b88ea20b34d2bbafcbaa6987d20df9ef",
+  "source_bytes": 249605,
+  "parent_prefix_exact": true,
+  "fragment_no_forbidden_tokens": true,
+  "operation_graph_cases": 739,
+  "operation_graph_scope": "Source-extracted per-lane MAC order and k-tail boundaries n=0..64; not an IEEE evaluation or Lean proof.",
+  "widths": [
+    {
+      "p": 1,
+      "old_computed_lanes": 2,
+      "new_computed_lanes": 4,
+      "intended_domain": false
+    },
+    {
+      "p": 2,
+      "old_computed_lanes": 2,
+      "new_computed_lanes": 4,
+      "intended_domain": false
+    },
+    {
+      "p": 3,
+      "old_computed_lanes": 4,
+      "new_computed_lanes": 4,
+      "intended_domain": true
+    },
+    {
+      "p": 4,
+      "old_computed_lanes": 4,
+      "new_computed_lanes": 4,
+      "intended_domain": true
+    },
+    {
+      "p": 5,
+      "old_computed_lanes": 6,
+      "new_computed_lanes": 8,
+      "intended_domain": false
+    },
+    {
+      "p": 6,
+      "old_computed_lanes": 6,
+      "new_computed_lanes": 8,
+      "intended_domain": false
+    },
+    {
+      "p": 7,
+      "old_computed_lanes": 8,
+      "new_computed_lanes": 8,
+      "intended_domain": true
+    },
+    {
+      "p": 8,
+      "old_computed_lanes": 8,
+      "new_computed_lanes": 8,
+      "intended_domain": true
+    }
+  ],
+  "old_r12_actual_loop": "Full four-lane packed load/mulps/addps; compiler two-k unroll; hot no call/stack access. This is old, not a B16 novelty.",
+  "conditional_runtime_request_model": {
+    "assumptions": "64-bit 8B ctor header, 24B Array header, exact capacity; excludes allocator size classes, RC, closure/callback objects, temporaries and RSS.",
+    "per_fused_four_column_group_per_k4": {
+      "old_two_B8_with_array_slots": 96,
+      "new_B16_with_array_slot": 80,
+      "difference_new_minus_old": -16
+    },
+    "per_finished_four_columns": {
+      "old_two_F2_cumulative": 32,
+      "new_F4_cumulative": 24,
+      "difference_new_minus_old": -8,
+      "old_one_live_F2": 16,
+      "new_one_live_F4": 24,
+      "live_difference_new_minus_old": 8
+    },
+    "B_array_skeleton_per_group_pair": "Old two inner array headers plus two outer slots 64B; new one header plus one outer slot 32B; conditional -32B per pair of column groups.",
+    "A_lifecycle": "Exactly existing global A4 cache remains; no new A cache or records.",
+    "B_lifecycle": "A future complete packB must replace, not coexist with, old B8 cache on selected calls; not implemented in this probe.",
+    "output": "Same p finish/replay/import/UInt32 boxes/push per row; no output cache or random writes intended.",
+    "dynamic_time": "UNKNOWN"
+  },
+  "evidence": [
+    {
+      "path": "competitions/floatlib/candidates/f01-r19-dev-dual-temporal-a4-5/Kernel.lean",
+      "bytes": 241509,
+      "sha256": "c36bc2502904bf946d442de1a4646e09689f016643f09ab0b6788f9bdd375250"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean",
+      "bytes": 226829,
+      "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-r16-dev-a4b2-entry3/Kernel.lean",
+      "bytes": 245728,
+      "sha256": "2a937bb02ece438cb129e65f7e18ce6c7b30658fcdf5f8a204e8da9208a4afc6"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-r12-column4-narrow/Kernel.lean",
+      "bytes": 255439,
+      "sha256": "da09fb59fa456b498af6bde48d54adcd37f85c4ba7df272163b184a2b83038c4"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-width4-proof2/Kernel.lean",
+      "bytes": 137146,
+      "sha256": "9613168637d24b6aa59c41fb184a70c714c87402c93f22e621275843e7674f7e"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round3h-20261025T091810Z/astra-workers/matrix-architecture/cost-review-401854.md",
+      "bytes": 4138,
+      "sha256": "d249182cea6c971b8d78e87525e0871b5f08e2d321180c04cc2057183e696050"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/astra-r12-conclusions.json",
+      "bytes": 11038,
+      "sha256": "447f36eb2df8680272ca49e63b090543c6af3eee3c2887f812f6747bcbd5e8b0"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261024T051445Z/review-f4-historical-width4-counterexample.json",
+      "bytes": 10496,
+      "sha256": "dc177e136cecb94307ebd0c74c03633c03ecd1cda24a2b9544f574b916d1319a"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/development-workers/anchor-323/dual-ci15-review/selected-chain.c.txt",
+      "bytes": 50882,
+      "sha256": "44b78c10c5761d69aa294a70980ffe7573a8896e904795a0239f3d358497ffbe"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/development-workers/anchor-323/dual-ci15-review/native-paths.json",
+      "bytes": 25722,
+      "sha256": "f2182d92d12d290ef11e96c7f8e21c05c958ee94f679d09a6680f4cb196d08c6"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/development-workers/structural-cost/indexed-b2.lean.inc",
+      "bytes": 3945,
+      "sha256": "74c0d0176ac9704dbb6b42770e5b3c673b43a28679401c04925f7ba5c90f1179"
+    },
+    {
+      "path": "competitions/floatlib/research/materials/20261024-r11/originals/W01/original-extracted/R11-W01/Kernel.conditional.lean",
+      "bytes": 252629,
+      "sha256": "96f8b69364e93a145853f5d98b23222b82b20d55a0c359507dbaa25cf389f40c"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40080782614/download-3c198121366d4014aff9ec685d7af9ed/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-r12-column4-narrow/capture-6cd6a140f1db4f6a85d4c8b6d4584c6d/file-3-Submission.c",
+      "bytes": 1504651,
+      "sha256": "ee17eedc20d773a079f1c0ae05fc12e2014db325fe21f121ac9ce7464272e9cd"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40080782614/download-3c198121366d4014aff9ec685d7af9ed/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-r12-column4-narrow/capture-6cd6a140f1db4f6a85d4c8b6d4584c6d/asm-1-2.txt",
+      "bytes": 37219,
+      "sha256": "9bc899cd1b44da05037b9df2d9309ee5e3ca942a29d3b5b451edd3efa9423488"
+    }
+  ],
+  "original_core_lean": "FAIL_STATEMENT_TWO_PACK_BRIDGE_GOALS_IN_40440668379",
+  "repair1_lean": "NOT_RUN_BY_WORKER_PARENT_CI_FEEDBACK_PENDING",
+  "new_C": "NOT_RUN_BY_WORKER",
+  "timing": "NOT_RUN",
+  "D17_or_confirmation_access": false
+}

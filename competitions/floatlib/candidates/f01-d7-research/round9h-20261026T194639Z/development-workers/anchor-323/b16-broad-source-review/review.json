@@ -1,0 +1,178 @@
+{
+  "at_utc": "2026-10-27T03:20:00.366910+00:00",
+  "draft": {
+    "sha256": "a87f560a5944a778ca93dfb9a9d2dcd59895edc56b0ae7e498dbcf873fce8f19",
+    "bytes": 255600,
+    "exact_parent_patch_inverse": true,
+    "fallback": "c36 Dual"
+  },
+  "retained_successor": {
+    "sha256": "7f1d4ec3f724526b83b17c28a6b392c7d4acb31e830fd141fae5ba5ea7429084",
+    "bytes": 255655,
+    "remaining_bytes": 345,
+    "inverse_exact_to_a87f": true,
+    "restored_B2_namespace_bytes": 9141,
+    "stub_bytes": 425,
+    "restored_B2_namespace_sha256": "ed5395fee32e0d064c3aa8519daec0c8cb96f91443982be24d37399a22e9551e",
+    "exact_B2_prelude_prefix_bytes": 225870,
+    "removed_outer_shells": [
+      {
+        "namespace": "Submission.R19Temporal",
+        "bytes": 4166,
+        "sha256": "2e42da396c44f502866e7eda433dfbe9b47dd3c2f2cea449b751495df993baeb",
+        "declarations": [
+          "core",
+          "core_eq_reference",
+          "dispatch",
+          "dispatch_spec",
+          "group",
+          "group_eq",
+          "output",
+          "output_eq",
+          "output_prefix",
+          "row",
+          "row_eq"
+        ]
+      },
+      {
+        "namespace": "Submission.R19DualTemporal",
+        "bytes": 4487,
+        "sha256": "f0744c761cdcf1bfd8068c7eb306f61914dde24dc9dfea86027d710abf97b311",
+        "declarations": [
+          "core",
+          "core_eq_reference",
+          "dispatch",
+          "dispatch_spec",
+          "group",
+          "group_eq",
+          "output",
+          "output_eq",
+          "output_prefix",
+          "row",
+          "row_eq"
+        ]
+      }
+    ],
+    "missing_known_namespace_refs": {
+      "R19Temporal": [],
+      "R19DualTemporal": [],
+      "R15PackedB2": []
+    },
+    "two_line_only_repair_sufficient": false,
+    "two_line_only_failure": "a87f has no R15PackedB2.dispatch/spec; restored fullnamespace and dead-shell removal are necessary source changes, now independently reconstructed exactly."
+  },
+  "core118d_body_byte_identical": true,
+  "core_typed_status": "UNKNOWN_NOT_READ_OR_INFERRED_FROM_INFLIGHT_CI19",
+  "nineteen_roots": [
+    "Submission.R19Column4Temporal.low_packet",
+    "Submission.R19Column4Temporal.high_packet",
+    "Submission.R19Column4Temporal.pack_low",
+    "Submission.R19Column4Temporal.pack_high",
+    "Submission.R19Column4Temporal.loop_eq",
+    "Submission.R19Column4Temporal.loop_pack_eq",
+    "Submission.R19Column4Temporal.runDot_pack_eq",
+    "Submission.R19Column4Temporal.samePaddedWidth_small",
+    "Submission.R19Column4Temporal.packB_get",
+    "Submission.R19Column4Temporal.finish_select",
+    "Submission.R19Column4Temporal.group_prefix",
+    "Submission.R19Column4Temporal.row_prefix",
+    "Submission.R19Column4Temporal.output_prefix",
+    "Submission.R19Column4Temporal.core_eq_reference",
+    "Submission.R19Column4Temporal.dispatch_spec",
+    "Submission.add_spec",
+    "Submission.mul_spec",
+    "Submission.sum_spec",
+    "Submission.bmm_spec"
+  ],
+  "root_declaration_connections_present": true,
+  "full_source_typed_replay_axioms_C": "NOT_RUN",
+  "semantic_source_checks": {
+    "outer_UnderflowZero_guard_and_zero_branch_exact": true,
+    "other3_public_ops_protected_in_exact225870B_prelude": true,
+    "true_guard": "m>0,n>1,p>=3 and4ceil(p/4)=2ceil(p/2),no upperp/m>=4 restriction",
+    "false_guard_successor": "exact retainedPackedB2.dispatch/spec, no newA4 preparation on miss",
+    "A_address": "row=r; baseA=r*n; packedA packet=r*ceil(n/4)+t,field s correspondsA[r*n+4t+s]",
+    "B_address": "bi=r/m; q=bi*ceil(p/4)+g; packetbase=bi*n*p+4g; lanej field atbase+j+(4t+s)*p",
+    "output_order": "row ascending,then group ascending,then j=0..min(4,p-4g)-1; exactly rowmajor realp outputs, no pad writes/set/tiles",
+    "NaN": "Each real lane invokes originalPacked10.finish with its ownFloat32 result and exactbaseA/baseB+j; fallback replayEarly uses originalrawA/B, not one shared fourlaneNaN decision",
+    "empty_cases": "m0/n<=1/p<3 andpmod4=1or2 miss to retained; batch0 may hitguard but emptyPA/PB/output folds avoid invalid row/packet accesses",
+    "finite_ordered_address_and_output_checks": 48090,
+    "finite_checks_not_Lean_proof": true
+  },
+  "cost_scope": {
+    "old_Dual_overlap": "A4 already present only in oldDual true domain; combines twoB8 packets/twoF2 chains intoB16/F4, with actualnewcodegen stillUNKNOWN",
+    "new_DC_and_wide_routes": "A4 plus B16 preparation/residency/destruction are new lifecycle work; cannot borrow existingA4 claim. Some oldprepared layouts may be replaced, actualnet changes require truecallerC.",
+    "ceil_equality_limit": "Equal padded width is relativeB8 pair schedule only; DC previously computes realp lanes, so p=3mod4 adds one unusedlane (not emitted). Width equation is not no-extraMAC versusall originalroutes.",
+    "ghost_lane_examples": [
+      {
+        "p": 3,
+        "new_B16_lanes": 4,
+        "old_B8_lanes": 4,
+        "old_DC_real_lanes": 3,
+        "new_ghost_vs_DC": 1
+      },
+      {
+        "p": 4,
+        "new_B16_lanes": 4,
+        "old_B8_lanes": 4,
+        "old_DC_real_lanes": 4,
+        "new_ghost_vs_DC": 0
+      },
+      {
+        "p": 7,
+        "new_B16_lanes": 8,
+        "old_B8_lanes": 8,
+        "old_DC_real_lanes": 7,
+        "new_ghost_vs_DC": 1
+      },
+      {
+        "p": 8,
+        "new_B16_lanes": 8,
+        "old_B8_lanes": 8,
+        "old_DC_real_lanes": 8,
+        "new_ghost_vs_DC": 0
+      },
+      {
+        "p": 12,
+        "new_B16_lanes": 12,
+        "old_B8_lanes": 12,
+        "old_DC_real_lanes": 12,
+        "new_ghost_vs_DC": 0
+      },
+      {
+        "p": 23,
+        "new_B16_lanes": 24,
+        "old_B8_lanes": 24,
+        "old_DC_real_lanes": 23,
+        "new_ghost_vs_DC": 1
+      },
+      {
+        "p": 27,
+        "new_B16_lanes": 28,
+        "old_B8_lanes": 28,
+        "old_DC_real_lanes": 27,
+        "new_ghost_vs_DC": 1
+      },
+      {
+        "p": 43,
+        "new_B16_lanes": 44,
+        "old_B8_lanes": 44,
+        "old_DC_real_lanes": 43,
+        "new_ghost_vs_DC": 1
+      },
+      {
+        "p": 60,
+        "new_B16_lanes": 60,
+        "old_B8_lanes": 60,
+        "old_DC_real_lanes": 60,
+        "new_ghost_vs_DC": 0
+      }
+    ],
+    "old_scope_only": "Previously verifiedCI12 nonUnderflow shape coverage7.2887%/5.9742%whole is selection context, not removablecost/generalized gain.",
+    "actual_closures_boxes_spills_cleanup_timing": "UNKNOWN_GENERATED_C_NOT_RUN"
+  },
+  "decision": "AFTER_ACTUAL_CORE_ACCEPTANCE_WORTH_ONE_EXACT_RETAINED_SUCCESSOR_FULL_SOURCE_STATEMENT_REPLAY19ROOTS_AND_ACTUAL_CALLER_C_NOT_FULL_D_YET",
+  "reason": "No source wiring counterexample found; missingB2 fallback repair is real and the7f1d reconstruction closes its static dependencies within256000. New lowrow/wide lifecycles differ enough to justify one cost-premise/codegen check, not a gain prediction.",
+  "minimum_remaining_obligations": "Exactsource typed wholemodule/VerifyFull replay+all19 roots+textpolicy, then true publicBMM→guard→packA/packB16→actualfourlane caller; verify no low/high helper constructors, dynamicapply, perFloat boxes, repeatedpreparation or hidden lifecycle exclusion.",
+  "not_done": "No source edits, no Git/CI/Lean, no D17 or confirmation inputs/results read; no incompleteCI19 acceptance claim."
+}
