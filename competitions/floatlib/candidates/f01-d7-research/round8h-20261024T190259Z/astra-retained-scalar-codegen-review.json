@@ -1,0 +1,50 @@
+{
+  "at_utc": "2026-10-24T23:25:56.255799+00:00",
+  "run": 40135440097,
+  "candidate_sha256": "32be572bb6adbdec666a9ab711ba8f3628ce52955e2b4508d5fe181c305138cf",
+  "retained_runtime_parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "exact_parent_prefix_and_only_new_theorems": true,
+  "source_module": "Submission",
+  "generated_c": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40135440097\\download-37a09f4d7ca242b2b35bb0b4ec38a3d6\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r14-math-native-product2\\candidate-generated-0.c",
+  "generated_c_sha256": "31e1409237ccf2e66b3b107a1ff8b3a257c9faa4e2786749c624b6aac03ccbc2",
+  "compile_trace_sha256": "12c5499e90335f80d69598be84c1b7ececa48adf8e572433ec0b0bd5e2651a72",
+  "normal_path_source_points": {
+    "two_mantissa_uint32_to_float32": [
+      22402,
+      22457
+    ],
+    "two_scale_table_reads": [
+      22403,
+      22458
+    ],
+    "table_index_small_nat_and_borrowed_read": [
+      22406,
+      22407,
+      22459,
+      22460
+    ],
+    "two_scale_multiplications": [
+      22410,
+      22463
+    ],
+    "one_result_multiply": 22345,
+    "self_beq_result_guard": 22346,
+    "final_return_to_bits": [
+      22381,
+      22382
+    ]
+  },
+  "runtime_primary_source": "astra-lean-float-bits-source.json",
+  "verified_flags": {
+    "O3": true,
+    "ffp_contract_off": true,
+    "flto_seen_in_this_compile": false
+  },
+  "cost_findings": [
+    "of_bits/to_bits are bit_cast plus NaN canonicalization/check, not software floating decoding; do not invent a large software-conversion cost.",
+    "Scale-table indexing appears as Nat conversion and lean_dec in C, but its index<=511 fits immediate small Nat on x64; do not count a guaranteed heap allocation.",
+    "Old source returns to_bits immediately, so a tail call may be possible. A one-native-product mid.toBits followed by integer exponent/sign work needs a continuation and may incur call/spill costs. This is a hypothesis until the new caller/object is inspected.",
+    "Pure integer core avoids Float32 runtime calls by source, but repeated product/rounding needs actual CSE confirmation and variable shifts/packing have real costs."
+  ],
+  "evidence_limits": "Diagnostic statement/bench-build layer, not the cleaned-up timed gate object. Available disassembly selects Packed10Index loops only, not scalar mul. MainFull diagnostic wrapper differs from actual public-v2 BenchSuite timing wrapper. No new-candidate asm, elapsed cost, speedup or adoption inferred."
+}

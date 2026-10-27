@@ -1,0 +1,55 @@
+{
+  "status": "OPTIONAL_LOW_PRIORITY_RESERVE_NOT_COMPILED",
+  "created_at_utc": "2026-10-25T05:32:47.388902+00:00",
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "candidate": "Kernel-tight-literal-rse.lean",
+  "candidate_sha256": "bb51244607512ca3fa1f6a4456f44cf4b538885142e2b76f61b690ad9c191676",
+  "candidate_bytes": 250492,
+  "fragment_sha256": "2eb48fe1a18b808e3cc31e4218c0ffa77c56e443f198fbd126d096893d7bf454",
+  "old_roundSelect_block_sha256": "52493e5c2b79c46b6f69794951f49bb7a5d929cb8d27322ea2e7a1ac03f71788",
+  "reverse_patch_byte_exact": true,
+  "old_roundLow_and_123_proof_unchanged": true,
+  "runtime_scope": "Only LowScale.roundSelect; scalar low branch and any BMM raw replay that calls Submission.mul can be affected",
+  "guards": [
+    {
+      "scale": 124,
+      "product_lt": "2^48",
+      "literal_shift": 25
+    },
+    {
+      "scale": 125,
+      "product_lt": "2^47",
+      "literal_shift": 24
+    },
+    {
+      "scale": 126,
+      "product_lt": "2^46",
+      "literal_shift": 23
+    }
+  ],
+  "sample_evidence": [
+    {
+      "run": 40129155932,
+      "nonzero_new_hits": 9,
+      "zero_products_at_three_scales": 322,
+      "sample_pairs": 21504
+    },
+    {
+      "run": 40152158687,
+      "nonzero_new_hits": 31,
+      "zero_products_at_three_scales": 37,
+      "sample_pairs": 21504
+    },
+    {
+      "run": 40155753018,
+      "nonzero_new_hits": 23,
+      "zero_products_at_three_scales": 112,
+      "sample_pairs": 21504
+    }
+  ],
+  "Lean": "NOT_RUN",
+  "full_gate": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "decision": "Do not enqueue on exposure evidence alone. 9/31/23 new nonzero hits per21504 sampled mul calls versus322/37/112 zero products already cheap. Root decides only with actual D budget/cost evidence.",
+  "prior_history": "No identical tight/literal case found in targeted research and candidate source search. f01-mul-rse-threshold is a different failed RNE formula and is not reused."
+}

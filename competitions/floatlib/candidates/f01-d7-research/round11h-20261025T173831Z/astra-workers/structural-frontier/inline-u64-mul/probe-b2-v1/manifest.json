@@ -1,0 +1,114 @@
+{
+  "created_utc": "2026-10-26T08:17:48.780649+00:00",
+  "state": "FROZEN_B2_PREFIX_MATH_INTERFACE_PROBE_NOT_COMPILED",
+  "parent": {
+    "path": "competitions\\floatlib\\candidates\\f01-r15-dev-packed-b2-1\\Kernel.lean",
+    "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+    "bytes": 226829
+  },
+  "support_source": {
+    "path": "competitions\\floatlib\\candidates\\f01-r16-dev-native-repack1\\Kernel.lean",
+    "sha256": "c972fd72694d4d7db4660d2dbcd640d766d013d58bd9c9a27a6c68d47010b7ac"
+  },
+  "probe": {
+    "path": "Probe-b2-u64-roundtrip-v1.lean",
+    "sha256": "9f9a297e90f236c349283248cca9aa8f94c35ff24ebe9e26873e2c63d708a933",
+    "bytes": 240164,
+    "margin": 15836
+  },
+  "pieces": [
+    {
+      "path": "support-nat-normal.lean.inc",
+      "sha256": "3ede252aa2c536f7e530aad0e9a395ceaeccfa5d8926e29f75fa27f805b9110a",
+      "bytes": 5186,
+      "source": "competitions\\floatlib\\candidates\\f01-r16-dev-native-repack1\\Kernel.lean",
+      "source_sha256": "c972fd72694d4d7db4660d2dbcd640d766d013d58bd9c9a27a6c68d47010b7ac",
+      "source_byte_start": 120424,
+      "source_byte_stop_exclusive": 125582,
+      "closing_namespace_byte_start": 126188,
+      "transform": "Copy exact contiguous support prefix and its original closing namespace; omit unrelated later declarations"
+    },
+    {
+      "path": "support-exponent-shape.lean.inc",
+      "sha256": "e309377a3e3c15c3e5e9390f5704a37a5953a06680b74e6705c189aca3f8bae2",
+      "bytes": 1392,
+      "source": "competitions\\floatlib\\candidates\\f01-r16-dev-native-repack1\\Kernel.lean",
+      "source_sha256": "c972fd72694d4d7db4660d2dbcd640d766d013d58bd9c9a27a6c68d47010b7ac",
+      "source_byte_start": 126218,
+      "source_byte_stop_exclusive": 127578,
+      "closing_namespace_byte_start": 128568,
+      "transform": "Copy exact contiguous support prefix and its original closing namespace; omit unrelated later declarations"
+    },
+    {
+      "path": "Bridge-u64-integer-v3-lf.lean.inc",
+      "sha256": "2261f1e317310bfb6505eb3ee333ad8b6b31f9ad13307f728719ecd3920fb906",
+      "bytes": 6664,
+      "transform": "NONE; frozen LF fragment copied exactly"
+    }
+  ],
+  "explicit_helper_audit": [
+    "Submission.R17UInt64Integer.roundedShift",
+    "Submission.R17UInt64Integer.roundedInteger",
+    "Submission.R17UInt64Integer.rounded_shift_cases",
+    "Submission.R17UInt64Integer.rounded_integer_bounds",
+    "Submission.R17UInt64Integer.rounded_integer_fit",
+    "Submission.R17UInt64Integer.toUInt64_of_nonnegative_integral_decode",
+    "Submission.R17UInt64Integer.uint64_model_eq_roundDyadic",
+    "Submission.R17UInt64Integer.native_uint64_decode",
+    "Submission.R17UInt64Integer.uint64_roundtrip",
+    "Submission.R17UInt64Integer.product_word_nat",
+    "Submission.R17UInt64Integer.numeric_integer_product",
+    "Submission.R17UInt64Integer.rounded_threshold",
+    "Submission.R17UInt64Integer.shift_recovery"
+  ],
+  "dependency_support_roots": [
+    "Submission.R14NatNormal.rounded",
+    "Submission.R14NatNormal.carry",
+    "Submission.R14NatNormal.mantissa",
+    "Submission.R14NatNormal.carry_le",
+    "Submission.R14NatNormal.leading_bounds",
+    "Submission.R14NatNormal.no_carry_at_47",
+    "Submission.R14NatNormal.mantissa_bounds",
+    "Submission.R14NatNormal.native_round_normal",
+    "Submission.R14NatNormal.model_round_normal",
+    "Submission.R14NatNormal.round_normal_decode",
+    "Submission.R14ExponentShift.product",
+    "Submission.R14ExponentShift.middleExponent",
+    "Submission.R14ExponentShift.storedFraction",
+    "Submission.R14ExponentShift.product_bounds",
+    "Submission.R14ExponentShift.middle_bounds"
+  ],
+  "audit_file": {
+    "path": "HelperAudit.lean.inc",
+    "sha256": "cc09884f4987dfc506dc3b596bdac23b91dac11e6ce1779dada2fb7d2b6dcc0c",
+    "bytes": 817
+  },
+  "public_runtime_delta": "NONE; exact B2 prefix including four entries/specs unchanged. Appended declarations are mathematical definitions/proofs only.",
+  "static_checks": {
+    "original_gate_path": "competitions\\floatlib\\research\\astra-collab-20261023-r7\\upstream\\gate-4b7e838.py",
+    "original_gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+    "intake_policy_options": {
+      "intake": null,
+      "policy": null,
+      "options": null
+    },
+    "comments_included": true,
+    "canonical_LF": true,
+    "read_bytes_equals_read_text_utf8": true,
+    "one_import": true
+  },
+  "required_compile": "Pinned statement then complete module replay and explicit 13-root dependency audit; original four specs alone do not certify the appendix",
+  "first_unknown": "Elaboration of the numeric UInt64 decode/truncate/clamp proof and the new product-specific normalization helpers",
+  "not_run": [
+    "Lean",
+    "Kernel replay",
+    "Helper dependency audit",
+    "C/ASM",
+    "Performance"
+  ],
+  "tokens": "UNKNOWN",
+  "cached_input": "UNKNOWN",
+  "CI": false,
+  "Git": false,
+  "local_Lean": false
+}

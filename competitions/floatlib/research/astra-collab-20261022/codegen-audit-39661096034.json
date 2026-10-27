@@ -1,0 +1,76 @@
+{
+  "run": 39661096034,
+  "recorded_at_utc": "2026-10-21T19:42:34.484439+00:00",
+  "records": [
+    {
+      "candidate": "f01-d2-preconverted-bmm",
+      "generated_c": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39661096034/download-3aecd6b983f24eada0a9c6bca013ceb3/diagnostics/f01-d2-preconverted-bmm/candidate-generated-0.c",
+      "generated_c_sha256": "fc9e443d80b26f3df89ee07ed4f44e36a15592a0c6d1efbc8bf640fcf4249a3c",
+      "function_header": "LEAN_EXPORT float lp_competition_Submission_Preconverted_dotLoop(lean_object* v_n_3566_, lean_object* v_baseA_3567_, lean_object* v_baseB_3568_, lean_object* v_p_3569_, lean_object* v_A_3570_, lean_object* v_B_3571_, lean_object* v_k_3572_, float v_acc_3573_){",
+      "function_text_sha256": "ca7ce292eba33ad4a6f6f0a565b331a927655b862a98f9e4755718d7e988fdf8",
+      "static_call_sites": {
+        "lean_float32_of_bits": 0,
+        "lean_float32_to_bits": 0,
+        "lean_float32_isfinite": 0,
+        "lean_float32_once": 1,
+        "lean_nat_add": 3,
+        "lean_nat_mul": 1,
+        "lean_nat_dec_lt": 3,
+        "lean_array_uget_borrowed": 0,
+        "lean_float_array_fget": 0,
+        "lean_float_array_data": 0,
+        "lean_float_to_float32": 0
+      },
+      "interpretation": "Static generated-C sites, not executed-call counts, linked assembly or timing"
+    },
+    {
+      "candidate": "f01-d2-checked-floatarray",
+      "generated_c": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39661096034/download-3aecd6b983f24eada0a9c6bca013ceb3/diagnostics/f01-d2-checked-floatarray/candidate-generated-0.c",
+      "generated_c_sha256": "8332a73ada888669819818738a797dba3895439244450fce7b72b2d7041c7857",
+      "function_header": "LEAN_EXPORT float lp_competition_Submission_CheckedFloatArray_dotLoop(lean_object* v_n_3696_, lean_object* v_baseA_3697_, lean_object* v_baseB_3698_, lean_object* v_p_3699_, lean_object* v_AF_3700_, lean_object* v_BF_3701_, lean_object* v_k_3702_, float v_acc_3703_){",
+      "function_text_sha256": "7441fb482cd3e3c6034e49cdb5127ccb128b988bed71a8ff63effcb93dfcfa13",
+      "static_call_sites": {
+        "lean_float32_of_bits": 0,
+        "lean_float32_to_bits": 0,
+        "lean_float32_isfinite": 0,
+        "lean_float32_once": 2,
+        "lean_nat_add": 3,
+        "lean_nat_mul": 1,
+        "lean_nat_dec_lt": 3,
+        "lean_array_uget_borrowed": 0,
+        "lean_float_array_fget": 2,
+        "lean_float_array_data": 0,
+        "lean_float_to_float32": 2
+      },
+      "interpretation": "Static generated-C sites, not executed-call counts, linked assembly or timing"
+    },
+    {
+      "candidate": "f01-d2-usize-bmm-proof1",
+      "generated_c": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/39661096034/download-3aecd6b983f24eada0a9c6bca013ceb3/diagnostics/f01-d2-usize-bmm-proof1/candidate-generated-0.c",
+      "generated_c_sha256": "8c29a5f4a58909ce3ca23881350121a80f107b386b423244fab458d2a7209288",
+      "function_header": "LEAN_EXPORT float lp_competition_Submission_NativeIndex_loop___redArg(size_t v_n_3585_, size_t v_baseA_3586_, size_t v_baseB_3587_, size_t v_stride_3588_, lean_object* v_A_3589_, lean_object* v_B_3590_, size_t v_k_3591_, float v_acc_3592_){",
+      "function_text_sha256": "c9b16e70e199018c191f0b713ff7f6ab20fa783c2aa2c49fa3bafa74aab806c4",
+      "static_call_sites": {
+        "lean_float32_of_bits": 2,
+        "lean_float32_to_bits": 0,
+        "lean_float32_isfinite": 0,
+        "lean_float32_once": 0,
+        "lean_nat_add": 0,
+        "lean_nat_mul": 0,
+        "lean_nat_dec_lt": 0,
+        "lean_array_uget_borrowed": 2,
+        "lean_float_array_fget": 0,
+        "lean_float_array_data": 0,
+        "lean_float_to_float32": 0
+      },
+      "interpretation": "Static generated-C sites, not executed-call counts, linked assembly or timing"
+    }
+  ],
+  "notes": [
+    "Both R layout dot loops contain zero raw bit-conversion and zero native finite classifier sites.",
+    "Checked FloatArray dot has zero FloatArray.data sites; two numeric narrowing sites are inline in pinned header.",
+    "Its two float32_once sites occur only in out-of-bounds branches; the Array Float32 loop initializes its default inside the loop before reads.",
+    "D index loop has size_t indices and two uget sites, retaining two raw bit-conversion sites.",
+    "Compose changes only in a newly proved and measured source; these observations do not compose speedups."
+  ]
+}

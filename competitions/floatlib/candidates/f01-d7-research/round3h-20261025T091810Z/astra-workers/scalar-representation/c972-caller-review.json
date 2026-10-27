@@ -1,0 +1,149 @@
+{
+  "at_utc": "2026-10-25T10:09:38.607116+00:00",
+  "state": "STATEMENT_PASS_SELECTED_C_CONFIRMED_SCALAR_ASM_MISSING",
+  "kernel_sha256": "c972fd72694d4d7db4660d2dbcd640d766d013d58bd9c9a27a6c68d47010b7ac",
+  "run": 40182114389,
+  "inputs": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40182114389\\download-735a56e6ace44baba2c4cd4fe7168332\\diagnostics\\f01-d7-public-suite\\public-suite\\inputs\\f01-r16-dev-native-repack1\\Kernel.lean",
+      "sha256": "c972fd72694d4d7db4660d2dbcd640d766d013d58bd9c9a27a6c68d47010b7ac",
+      "bytes": 247533
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round3h-20261025T091810Z\\astra-workers\\scalar-representation\\Kernel-native-repack.lean",
+      "sha256": "c972fd72694d4d7db4660d2dbcd640d766d013d58bd9c9a27a6c68d47010b7ac",
+      "bytes": 247533
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-r16-dev-native-repack1\\Kernel.lean",
+      "sha256": "c972fd72694d4d7db4660d2dbcd640d766d013d58bd9c9a27a6c68d47010b7ac",
+      "bytes": 247533
+    }
+  ],
+  "verdict": {
+    "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40182114389\\download-735a56e6ace44baba2c4cd4fe7168332\\diagnostics\\f01-d7-public-suite\\public-suite\\f01-r16-dev-native-repack1-verdict.json",
+    "sha256": "90a3e8a4046ca0a19f2e3ce1a0d7a065002325a83b08102af08367f82df0e125",
+    "bytes": 774
+  },
+  "full_gate": false,
+  "kernel_replay_helper_axiom_audit": "NOT_RUN",
+  "generated_C": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40182114389\\download-735a56e6ace44baba2c4cd4fe7168332\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r16-dev-native-repack1\\candidate-generated-0.c",
+      "sha256": "9b13d7cc69c5557878b3c566521c3d910fd6dd69a330ffc96959525faf20a2e1",
+      "bytes": 1878170
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40182114389\\download-735a56e6ace44baba2c4cd4fe7168332\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r16-dev-native-repack1\\candidate-generated-1.c",
+      "sha256": "dd4fecf5400fe246deffb873580cbc6f3d42863619a8269876ba2fb1a5936ae6",
+      "bytes": 223849
+    }
+  ],
+  "selected_public_path": "BENCH_PLAN present -> Bench.Suite.run closed__5 -> main___lam__3___boxed -> main___lam__3",
+  "selected_original_line": 4249,
+  "selected_body_bytes": 104322,
+  "selected_body_sha256": "79efc5229d10579f3788cb1d1982d12ba24de5306d6a395a47612b805a45fd50",
+  "selected_whole_body_static_sites": {
+    "lean_uint32_to_float32": 6,
+    "lean_float32_mul": 7,
+    "lean_array_fget_borrowed": 4,
+    "lean_float32_of_bits": 4,
+    "lean_float32_beq": 2,
+    "lean_float32_to_bits": 3,
+    "lean_alloc_ctor": 0,
+    "lean_apply_2": 0,
+    "lean_nat_add": 0,
+    "lean_nat_mul": 0
+  },
+  "selected_fast_arm_static_sites": {
+    "lean_uint32_to_float32": 2,
+    "lean_float32_mul": 1,
+    "lean_array_fget_borrowed": 0,
+    "lean_float32_of_bits": 0,
+    "lean_float32_beq": 0,
+    "lean_float32_to_bits": 1,
+    "lean_alloc_ctor": 0,
+    "lean_apply_2": 0,
+    "lean_nat_add": 0,
+    "lean_nat_mul": 0
+  },
+  "native_core_original_line": 24113,
+  "native_core_static_sites": {
+    "lean_uint32_to_float32": 2,
+    "lean_float32_mul": 1,
+    "lean_array_fget_borrowed": 0,
+    "lean_float32_of_bits": 0,
+    "lean_float32_beq": 0,
+    "lean_float32_to_bits": 1,
+    "lean_alloc_ctor": 0,
+    "lean_apply_2": 0,
+    "lean_nat_add": 0,
+    "lean_nat_mul": 0
+  },
+  "C_proven": [
+    "One rounded native product, two numeric casts, zero scale-table reads in reachable eligible arm",
+    "No duplicate middleWord evaluation in that arm",
+    "Native self-NaN guard removed only from eligible arm",
+    "After toBits, selected C still uses original raw u/v for sign tests and precomputed exponent values for repacking",
+    "Original normal-input test and exponent-sum wrap guard both precede native arm",
+    "Two inlined copies of original fallback appear in different guard-failure branches; fallback native paths retain 3 MUL/2 table reads each"
+  ],
+  "machine_unknown": [
+    "actual tailcall in B2",
+    "actual scalar spills/register allocation in c972",
+    "whether clang merges the repeated fallback C",
+    "selected timed ELF identity",
+    "cycle cost/performance"
+  ],
+  "archived_disassembly_symbols": [
+    {
+      "symbol": "lp_competition_Submission_Packed10Index_loop",
+      "file": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40182114389\\download-735a56e6ace44baba2c4cd4fe7168332\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r16-dev-native-repack1\\native-loop-0.asm.txt",
+      "sha256": "329f6f58865477375d7583dbf79fdbce359f08bdd659beed4532b8ba4f290e41"
+    },
+    {
+      "symbol": "lp_competition_Submission_Packed10Index_loop___redArg",
+      "file": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40182114389\\download-735a56e6ace44baba2c4cd4fe7168332\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r16-dev-native-repack1\\native-loop-1.asm.txt",
+      "sha256": "613065143c9fb42b141126bfb847b96a61c493c6f8fc27c27c139a45c6b2af91"
+    },
+    {
+      "symbol": "lp_competition_Submission_R15PackedB2_loop",
+      "file": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40182114389\\download-735a56e6ace44baba2c4cd4fe7168332\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r16-dev-native-repack1\\native-loop-2.asm.txt",
+      "sha256": "95fdb22d601f7e6d91b63ff359c3c9db7838ad5ce0cb3eb3023332d795d91150"
+    }
+  ],
+  "scalar_asm_state": "NOT_CAPTURED; only Packed10Index and R15PackedB2 loops were archived",
+  "scope": "No compilation, no new CI, no candidate edits, no current confirmation results; only the owner-provided diagnostic-statement archive was read.",
+  "excerpts": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round3h-20261025T091810Z\\astra-workers\\scalar-representation\\c972-selected-main-mul.c",
+      "sha256": "79efc5229d10579f3788cb1d1982d12ba24de5306d6a395a47612b805a45fd50",
+      "bytes": 104322
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round3h-20261025T091810Z\\astra-workers\\scalar-representation\\c972-native-core.c",
+      "sha256": "f60506bbcc22f619a337f045fc82f0d1d60cbb8b74dff1a868b5f4c0617b63ab",
+      "bytes": 3446
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round3h-20261025T091810Z\\astra-workers\\scalar-representation\\c972-public-mul.c",
+      "sha256": "09cf00f03248dd97be14f138ce3559e154aebf89c00a3c52c010edbdc8285671",
+      "bytes": 104189
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round3h-20261025T091810Z\\astra-workers\\scalar-representation\\c972-fast-arm.c",
+      "sha256": "f529854566242cea54af3b4ad15d0001b1a742a24f2c9730e7999fe54e5f8d7a",
+      "bytes": 1699
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round3h-20261025T091810Z\\astra-workers\\scalar-representation\\c972-fast-repack-joins.c",
+      "sha256": "a3f280f85bbe690d6a79c371f905a2eaac523372aab0f4a1a8336f0c6c50d726",
+      "bytes": 1981
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round3h-20261025T091810Z\\astra-workers\\scalar-representation\\c972-main-selection.c",
+      "sha256": "d9270fa086b54c3c2e60b59ca1b99de22ee98058393ac72480f0e8c2e6889b1a",
+      "bytes": 1315
+    }
+  ]
+}

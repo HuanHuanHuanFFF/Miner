@@ -1,0 +1,180 @@
+{
+  "created_utc": "2026-10-26T10:44:49.752336+00:00",
+  "state": "SIX_REAL_ERRORS_PROOF_ONLY_REPAIR_READY_NOT_COMPILED",
+  "candidate": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round11h-20261025T173831Z/astra-workers/numeric-roundtrip/public-add-v2/Kernel.lean",
+    "bytes": 255148,
+    "sha256": "93cc191a74b3b12a70770ffcce2eeb0c60519f5b5daec69e17100fa775d6be5e"
+  },
+  "margin": 852,
+  "parent": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round11h-20261025T173831Z/astra-workers/numeric-roundtrip/public-add-v1/Kernel.lean",
+    "bytes": 254923,
+    "sha256": "7e1524c818285ce2c7721140fd0cff23560416abc6ea9a2c72ddf1be9a588be7"
+  },
+  "feedback": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round11h-20261025T173831Z/development-proof-f01-r17-dev-add-public1-40307208739.json",
+    "bytes": 2903,
+    "sha256": "aba48ccbb314c22573fd8347501e38b63338e809f202a563cb726cdb53f45261"
+  },
+  "original_full_output": {
+    "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40307208739/download-1e71bedd2176434a8c7e70c8f3a14eb0/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r17-dev-add-public1/full-build-output.txt",
+    "bytes": 25950,
+    "sha256": "a8acd20063c2b4fe185c26021f3bfe9a59631aaffb1411ba3c918772bb724250"
+  },
+  "changes": [
+    {
+      "label": "sameNoCarry_and_oppNoCarry_method_bridge",
+      "occurrences": 2,
+      "old": "rw [Nat.shiftRight_eq_div_pow] at hr\n",
+      "new": "rw [Nat.shiftRight_eq', Nat.shiftRight_eq_div_pow] at hr\n",
+      "before_sha256": "7e1524c818285ce2c7721140fd0cff23560416abc6ea9a2c72ddf1be9a588be7",
+      "after_sha256": "7fc01f18e9577f198bb9d9031f1bcdaf165feac71d9ea341dd77b316a75a0dbf",
+      "byte_offsets_before_change": [
+        224185,
+        224723
+      ],
+      "basis": "Parent relayed scalar-cost primary293d interface check: Nat.shiftRight_eq' is the rfl method-to-notation bridge."
+    },
+    {
+      "label": "sorted_spec_Bool_conjunction_projection",
+      "occurrences": 2,
+      "old": "Bool.and_eq_true.mp hd",
+      "new": "Bool.and_eq_true_iff.mp hd",
+      "before_sha256": "7fc01f18e9577f198bb9d9031f1bcdaf165feac71d9ea341dd77b316a75a0dbf",
+      "after_sha256": "4bd697928735308b7fc9336d990b03413f6d523b9b17f28de39a2efab3fcc1dc",
+      "byte_offsets_before_change": [
+        250570,
+        250716
+      ],
+      "basis": "Parent relayed scalar-cost primary293d Bool.lean check: and_eq_true_iff is Iff.of_eq(and_eq_true x y)."
+    },
+    {
+      "label": "oppWordShift_literal_toNat_normalization",
+      "occurrences": 1,
+      "old": "  have hbase : (gap - 1).toNat = gap.toNat - 1 := by\n    rw [UInt32.toNat_sub_of_le _ _ hgle]\n",
+      "new": "  have hbase : (gap - 1).toNat = gap.toNat - 1 := by\n    rw [UInt32.toNat_sub_of_le _ _ hgle]\n    rfl\n",
+      "before_sha256": "4bd697928735308b7fc9336d990b03413f6d523b9b17f28de39a2efab3fcc1dc",
+      "after_sha256": "0b7399348c7b690ac61a0ea056cd65d525c01e6348f956b087ad0945f54d74b5",
+      "byte_offsets_before_change": [
+        232660
+      ],
+      "basis": "Original full goal is gap.toNat - UInt32.toNat 1 = gap.toNat - 1; discharge this closed literal reduction by reflexivity."
+    },
+    {
+      "label": "addAligned_canonical_model_goal_and_transitivity",
+      "occurrences": 1,
+      "old": "    ← R2W01c.rawModel_eq_native32 x.raw.1, ← R2W01c.rawModel_eq_native32 y.raw.1,\n    halign]\n  exact packModel n shift e sign elo hlo hhi hs he helo hehi\n",
+      "new": "    ← R2W01c.rawModel_eq_native32 x.raw.1, ← R2W01c.rawModel_eq_native32 y.raw.1]\n  change Model.NativeBinary32.ofUInt32 (FastMul.mkW sign e (n.toFloat32.toUInt32 >>> shift)) =\n    Model.add (R2W01c.rawModel x.raw.1) (R2W01c.rawModel y.raw.1)\n  exact (packModel n shift e sign elo hlo hhi hs he helo hehi).trans halign.symm\n",
+      "before_sha256": "0b7399348c7b690ac61a0ea056cd65d525c01e6348f956b087ad0945f54d74b5",
+      "after_sha256": "93cc191a74b3b12a70770ffcce2eeb0c60519f5b5daec69e17100fa775d6be5e",
+      "byte_offsets_before_change": [
+        237545
+      ],
+      "basis": "Original full goal reports a semireducible Binary.format versus binary32 mismatch at the final rewrite. Re-establish the canonical model Eq type with change, then compose the two already-stated equalities instead of rewriting halign through that goal."
+    }
+  ],
+  "exact_inverse_to7e": true,
+  "all_statement_headers_unchanged": true,
+  "all_runtime_definitions_abbrevs_structures_instances_byte_identical": true,
+  "helper_roots": [
+    "R18A.N18.rounded",
+    "R18A.N18.carry",
+    "R18A.N18.mantissa",
+    "R18A.N18.carry_le",
+    "R18A.N18.nativeNormal",
+    "R18A.N18.modelNormal",
+    "R18A.N18.rawNormal",
+    "R18A.W18.rounded_bounds",
+    "R18A.W18.shift_carry",
+    "R18A.W18.masked_fraction",
+    "R18A.U18.roundedShift",
+    "R18A.U18.roundedInteger",
+    "R18A.U18.high_log",
+    "R18A.U18.noCarry31",
+    "R18A.U18.roundedLead",
+    "R18A.U18.highMant",
+    "R18A.U18.roundIntFits",
+    "R18A.U18.roundIntRNE",
+    "R18A.U18.decodeHigh",
+    "R18A.U18.castDecoded",
+    "R18A.U18.high_roundtrip",
+    "R18A.U18.high_roundtrip_RNE",
+    "R18A.Z18.expBounds",
+    "R18A.Z18.expGuard",
+    "R18A.Z18.shiftNat",
+    "R18A.Z18.fracNat",
+    "R18A.T18.leading",
+    "R18A.T18.rounded",
+    "R18A.T18.rounded_binade",
+    "R18A.T18.rounded_log2",
+    "R18A.T18.threshold_leading",
+    "R18A.T18.sameMagBounds",
+    "R18A.T18.oppMagBounds",
+    "R18A.T18.sameNoCarry",
+    "R18A.T18.oppNoCarry",
+    "R18A.T18.sameLeadBounds",
+    "R18A.T18.oppLeadBounds",
+    "R18A.T18.sameInterval",
+    "R18A.T18.oppInterval",
+    "R18A.T18.sameThreshold",
+    "R18A.T18.oppThreshold",
+    "R18A.T18.thresholdNat",
+    "R18A.T18.sameWordShift",
+    "R18A.T18.oppWordShift",
+    "R18A.O18.packFrac",
+    "R18A.O18.wordExpShift",
+    "R18A.O18.packModel",
+    "R18A.O18.addAligned",
+    "R18A.L18.magnitude",
+    "R18A.L18.shiftNeZero",
+    "R18A.L18.large_left",
+    "R18A.L18.alignHL",
+    "R18A.L18.exactHL",
+    "R18A.L18.exactLH",
+    "R18A.L18.addDecoded",
+    "R18A.L18.magBounds",
+    "R18A.A18.sign_eq",
+    "R18A.A18.left_word_nat",
+    "R18A.A18.wordMagNat",
+    "R18A.A18.modelHL",
+    "R18A.A18.modelLH",
+    "R18A.K18.sortedAdd",
+    "R18A.K18.guardedAdd",
+    "R18A.P18.ex_nat",
+    "R18A.P18.normal_field",
+    "R18A.P18.sorted_spec",
+    "R18A.P18.guarded_spec"
+  ],
+  "public_gate_roots": [
+    "Submission.add_spec",
+    "Submission.mul_spec",
+    "Submission.sum_spec",
+    "Submission.bmm_spec"
+  ],
+  "audit": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round11h-20261025T173831Z/astra-workers/numeric-roundtrip/public-add-v2/HelperAudit.lean.inc",
+    "bytes": 2442,
+    "sha256": "b1e7bd09f21f4841b8d81206db6160d5d47723eaf8f7530a47e21e27058729f9"
+  },
+  "audit_byte_identical_to_v1": true,
+  "static_checks": {
+    "intake": null,
+    "policy": null,
+    "options": null
+  },
+  "canonical_LF": true,
+  "frozen7e_unchanged": true,
+  "frontend_evidence": "Scalar-cost fixed293d source validation relayed by parent. Its stated add-frontend-repair folder was not visible in this worker snapshot; do not invent a local receipt hash.",
+  "source_pipeline": "Apply this exact patch to frozen public7e; do not rerun the v1 builder over old unsynchronized long-name fragments.",
+  "compile": "NOT_RUN",
+  "kernel": "NOT_RUN",
+  "helper_audit": "NOT_RUN",
+  "full_gate": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "premise_or_algorithm_changes": false,
+  "Git": false,
+  "CI": false,
+  "local_Lean": false,
+  "tokens": "UNKNOWN"
+}

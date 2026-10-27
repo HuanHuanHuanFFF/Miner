@@ -1,0 +1,22 @@
+--- frozen9f7
++++ Kernel-index-inline-convert.draft.lean
+@@ -6489,8 +6489,8 @@
+       exact USize.lt_iff_toNat_lt.mp hk
+     have ha := Packed10Index.boundA baseA.toNat count.toNat k.toNat A.size hA
+       (USize.lt_iff_toNat_lt.mp hk)
+-    let a := ExecFloat.Binary.toFloat32 (A.uget (baseA + k)
+-      (by rw [Packed10Index.addNat baseA k (Nat.lt_trans ha hAS)]; exact ha))
++    let a := R2W01b.convert (A.uget (baseA + k)
++      (by rw [Packed10Index.addNat baseA k (Nat.lt_trans ha hAS)]; exact ha)).raw.1
+     let b := B.toArray.uget k (by simpa only [B.size_toArray] using hkn)
+     wordLoop count baseA A B hn hA hAS (k + 1) (s0 + a * b.s0) (s1 + a * b.s1)
+   else ⟨s0, s1⟩
+@@ -6516,7 +6516,7 @@
+     rw [loop, dif_pos hkn]
+     dsimp only
+     rw [wordLoop_eq, Packed10Index.stepNat hk]
+-    simp only [ugetA_getD, Packed10Index.addNat baseA k (Nat.lt_trans ha hAS), ugetB_get]
++    simp only [R2W01c.convert_eq, ugetA_getD, Packed10Index.addNat baseA k (Nat.lt_trans ha hAS), ugetB_get]
+     rfl
+   · rename_i hk
+     have hkn : ¬ k.toNat < n := by

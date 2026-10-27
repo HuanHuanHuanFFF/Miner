@@ -1,0 +1,12 @@
+--- competitions\floatlib\candidates\f01-r16-dev-u32-roundtrip-probe1\Kernel.lean
++++ Probe-high-u32-roundtrip-repair1.lean
+@@ -6821,6 +6821,9 @@
+   have hi := Model.toInt_toModel_eq (fmt := FloatFormat.binary32) (by decide)
+     (Model.ofFloat32Model x.toModel) 0 (UInt32.size-1)
+   rw [Model.toModel_ofFloat32Model,hv] at hi
++  change x.toModel.unpack.toInt 0 (UInt32.size-1) =
++    Model.roundDyadicToInt .towardZero
++      (⟨false,m,(e : Int)⟩ : FloatLib.Numerics.Dyadic) at hi
+   have hr : Model.roundDyadicToInt .towardZero (⟨false,m,(e : Int)⟩ : FloatLib.Numerics.Dyadic) =
+       ((m*2^e : Nat) : Int) := by
+     by_cases hm : m=0

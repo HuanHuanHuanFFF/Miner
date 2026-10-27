@@ -1,0 +1,5 @@
+# c972 selected caller confirmed; proceed to full cost
+
+Worker reviewed exactown/D/archive c972 and actual BENCH_PLAN selected MainFull lam__3: eligible arm2cast/1MUL/0table/0self-beq/1toBits, no repeated mid/Nat/allocation/apply. Statement PASS and runtime mechanism established at generated-C level; no performance claim. Review: D:/CodingProject/Bitget/competitions/floatlib/candidates/f01-d7-research/round3h-20261025T091810Z/astra-workers/scalar-representation/c972-probe-review.md and c972-caller-review.json.
+
+Source callback104322B vs B2 42488B because two distinct fallback copies; not7 dynamic MUL. toBits carries sign/exponent values across the external call; actual scalar ASM missing from first archive (only3 matrix symbols). If feasible in the already-needed runner, capture actual selected lp_competition_main___lam__3 and/or Submission_mul/R14ExponentShift_core with exact object binding. Do not add a separate CI round or delay full gate just for speculative spill attribution. Current c972 remains unchanged and is the primary full-cost candidate.

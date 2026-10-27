@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "review": "a066 TunedAdd fallback capacity",
+  "started_at_utc": "2026-10-23T22:42:21Z",
+  "completed_at_utc": "2026-10-23T22:48:07.789031+00:00",
+  "decision": "VIABLE_CAPACITY_LEAD_NOT_IMPLEMENTED",
+  "source": {
+    "path": "competitions/floatlib/candidates/f01-d10-bmm-direct-rows/Kernel.lean",
+    "bytes": 237142,
+    "sha256": "a06608bdc419d4647af301bfdd617d52e4796c404661a28672a022eef4a10b78"
+  },
+  "removal": {
+    "start_anchor": "namespace TunedAdd\n",
+    "end_anchor_included": "end TunedAdd\n",
+    "line_start": 1934,
+    "line_end": 2297,
+    "zero_based_byte_start": 79586,
+    "zero_based_byte_end_exclusive": 95110,
+    "bytes": 15524,
+    "sha256": "04f2b622654ce1c70972fa600a27736339b74129a8cd5ca38c922cca6cef9743",
+    "declarations": 40,
+    "instances_global_simp_macros_notation_exports_found": false,
+    "surrounding_Submission_namespace_and_notices_retained": true
+  },
+  "external_references": [
+    {
+      "line": 3266,
+      "text": "  else TunedAdd.add x y"
+    },
+    {
+      "line": 3281,
+      "text": "  \u00b7 exact TunedAdd.add_spec x y"
+    }
+  ],
+  "minimal_replacements": [
+    {
+      "line": 3266,
+      "old": "else TunedAdd.add x y",
+      "new": "else ExecFloat.add x y"
+    },
+    {
+      "line": 3281,
+      "old": "exact TunedAdd.add_spec x y",
+      "new": "exact ExecFloat.Proof.add_eq_spec x y"
+    }
+  ],
+  "capacity_arithmetic": {
+    "source_bytes": 237142,
+    "deleted_bytes": 15524,
+    "replacement_growth_bytes": 11,
+    "net_saved_bytes": 15513,
+    "hypothetical_size_bytes": 221629,
+    "hypothetical_headroom_below256000": 34371,
+    "candidate_written": false
+  },
+  "proof_target": "ExecFloat.add x y = ExecFloat.Spec.add x y",
+  "existing_closing_lemma": "ExecFloat.Proof.add_eq_spec x y, already used at3280",
+  "source_direct_TunedAdd_runtime_fallbacks": 1,
+  "retained_dependencies": [
+    {
+      "component": "FastMul",
+      "reason": "Independent37-declaration copy; LowScale consumes its own rounding/core/mul/spec",
+      "lines": [
+        2310,
+        2624,
+        2635,
+        2645,
+        2655,
+        2709,
+        2716,
+        2721
+      ]
+    },
+    {
+      "component": "R7Native/NativeBridge",
+      "reason": "Actual native add/mul and canonical bridges remain",
+      "lines": [
+        3278,
+        3870,
+        4904,
+        5146,
+        5190
+      ]
+    },
+    {
+      "component": "R2W01b/R2W01c",
+      "reason": "Native finite add and tensor decoding remain"
+    },
+    {
+      "component": "Submission.add_spec/add_eq and R7NaNReplay/R7SinglePassSum",
+      "reason": "Public unchanged specification bridge consumed downstream",
+      "lines": [
+        3314,
+        5028,
+        5054,
+        5220,
+        6327
+      ]
+    }
+  ],
+  "before_codegen": {
+    "capture_source": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40030638967/download-224ebe46fc3148e0be4d59757e4fcaf3/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-batch-local-output-proof2/capture-ab1e16a146154f2b84622cca120449c9/compiled-Submission.lean",
+      "bytes": 254436,
+      "sha256": "28af18b4ba270203a44e2cda950967a51475fc592d92b5f026f5bca43498a8e1"
+    },
+    "C": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40030638967/download-224ebe46fc3148e0be4d59757e4fcaf3/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-batch-local-output-proof2/capture-ab1e16a146154f2b84622cca120449c9/file-0-Submission.c",
+      "bytes": 1447456,
+      "sha256": "1807cee367ddaabe255d6654ef392125847491a0b245287d7498c8f25ec7b9f3"
+    },
+    "nm": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40030638967/download-224ebe46fc3148e0be4d59757e4fcaf3/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-batch-local-output-proof2/capture-ab1e16a146154f2b84622cca120449c9/nm-0.txt",
+      "bytes": 40809,
+      "sha256": "57acbfbfa7e08d7ef06f56176010ad2467ade9797be6779e33c6e373b73a2f50"
+    },
+    "add_asm": {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40030638967/download-224ebe46fc3148e0be4d59757e4fcaf3/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-bmm-batch-local-output-proof2/capture-ab1e16a146154f2b84622cca120449c9/asm-0-17.txt",
+      "bytes": 34815,
+      "sha256": "e0443a8a1ec9094cf370922e0f6cda1ac933f4b2348df1ff64ade7ebef59e375"
+    },
+    "exact_add_spec_fragment": {
+      "bytes": 961,
+      "sha256": "f36ef5737f0be6697f8137214557ac9e254f8b388ca636c8e83c32d161884b45",
+      "identical_to_a066": true
+    },
+    "C_add_lines": [
+      26391,
+      26518
+    ],
+    "C_fallback_call_line": 26422,
+    "C_TunedAdd_lines": [
+      16268,
+      18690
+    ],
+    "C_special_ExecFloat_backend_lines": [
+      18678,
+      18686
+    ],
+    "nm_TunedAdd_add_size_hex": "0x8c0",
+    "nm_export_add_size_hex": "0xe1",
+    "compiler_eliminated_TunedAdd": false,
+    "callers": [
+      {
+        "line": 18699,
+        "caller": "LEAN_EXPORT lean_object* lp_competition_Submission_TunedAdd_add___boxed",
+        "caller_start": 18691,
+        "boxed_wrapper": true
+      },
+      {
+        "line": 26422,
+        "caller": "LEAN_EXPORT uint32_t lp_competition_Submission_add",
+        "caller_start": 26391,
+        "boxed_wrapper": false
+      },
+      {
+        "line": 27987,
+        "caller": "LEAN_EXPORT uint32_t lp_competition___private_Init_Data_Array_Basic_0__Array_foldlMUnsafe_fold___at___00Submission_referenceSum_spec__0",
+        "caller_start": 27950,
+        "boxed_wrapper": false
+      },
+      {
+        "line": 28287,
+        "caller": "LEAN_EXPORT uint32_t lp_competition_Fin_foldl_loop___at___00Submission_referenceBmm_spec__0",
+        "caller_start": 28200,
+        "boxed_wrapper": false
+      },
+      {
+        "line": 30229,
+        "caller": "LEAN_EXPORT uint32_t lp_competition_Submission_R7SumRepair_step___redArg",
+        "caller_start": 30196,
+        "boxed_wrapper": false
+      },
+      {
+        "line": 30376,
+        "caller": "LEAN_EXPORT uint32_t lp_competition_Submission_R7SumRepair_step",
+        "caller_start": 30343,
+        "boxed_wrapper": false
+      },
+      {
+        "line": 30603,
+        "caller": "LEAN_EXPORT uint32_t lp_competition_Submission_R7NaNReplay_replayStep___redArg",
+        "caller_start": 30571,
+        "boxed_wrapper": false
+      },
+      {
+        "line": 32367,
+        "caller": "LEAN_EXPORT uint32_t lp_competition_Submission_R7NaNReplay_replayStep",
+        "caller_start": 32335,
+        "boxed_wrapper": false
+      },
+      {
+        "line": 34229,
+        "caller": "LEAN_EXPORT uint32_t lp_competition_Submission_R7NaNReplay_replayLoop",
+        "caller_start": 34100,
+        "boxed_wrapper": false
+      },
+      {
+        "line": 36206,
+        "caller": "LEAN_EXPORT uint32_t lp_competition_Fin_foldl_loop___at___00Submission_R7NaNReplay_replay_spec__0",
+        "caller_start": 36129,
+        "boxed_wrapper": false
+      },
+      {
+        "line": 41899,
+        "caller": "LEAN_EXPORT uint32_t lp_competition_Submission_R7SinglePassSum_natLoop",
+        "caller_start": 41824,
+        "boxed_wrapper": false
+      },
+      {
+        "line": 42120,
+        "caller": "LEAN_EXPORT uint32_t lp_competition_Submission_R7SinglePassSum_loop___redArg",
+        "caller_start": 42045,
+        "boxed_wrapper": false
+      }
+    ],
+    "call_presence_is_not_frequency": true
+  },
+  "cost_context": {
+    "run": 40030638967,
+    "seed": 914,
+    "baseline_a066_scored_whole_ns": 217812123.0,
+    "cells": [
+      {
+        "cell": "add:specials",
+        "work": 499409,
+        "scored_sub_ns": 13047257.0,
+        "whole_share_percent": 5.9901427066114215,
+        "scope": "FULL_CELL_NOT_FALLBACK_ONLY"
+      },
+      {
+        "cell": "sum:specials",
+        "work": 552120,
+        "scored_sub_ns": 4099315.0000000005,
+        "whole_share_percent": 1.8820417080274272,
+        "scope": "FULL_CELL_NOT_FALLBACK_ONLY"
+      },
+      {
+        "cell": "bmm:specials",
+        "work": 396292,
+        "scored_sub_ns": 5141985.0,
+        "whole_share_percent": 2.36074325394643,
+        "scope": "FULL_CELL_NOT_FALLBACK_ONLY"
+      },
+      {
+        "cell": "add:extremes",
+        "work": 571428,
+        "scored_sub_ns": 6083237.0,
+        "whole_share_percent": 2.7928826532763744,
+        "scope": "FULL_CELL_NOT_FALLBACK_ONLY"
+      },
+      {
+        "cell": "bmm:extremes",
+        "work": 43912,
+        "scored_sub_ns": 3643063.0,
+        "whole_share_percent": 1.6725712737302505,
+        "scope": "FULL_CELL_NOT_FALLBACK_ONLY"
+      }
+    ],
+    "fallback_hit_counts": "UNKNOWN",
+    "fallback_only_cost": "UNKNOWN",
+    "new_path_speedup_or_equal_cost": "UNKNOWN",
+    "inference": "NaN-result outer fallback normally already satisfies old special guard; not needed for replacement proof and not a measured cost conclusion."
+  },
+  "first_falsification": "Exact two replacements plus namespace deletion in a future isolated candidate; original statement catches hidden closure/name dependencies, then full original gate and clean cost comparison. No candidate generated here.",
+  "targeted_witness_categories": [
+    "both signaling-NaN priority directions",
+    "two quiet payloads/signs",
+    "opposite infinities and invalid result",
+    "-0+-0",
+    "+0+-0",
+    "minsub cancellation",
+    "finite overflow to infinity"
+  ],
+  "new_Lean_fullgate_codegen_performance": "NOT_RUN",
+  "git_ci_network_or_agents_used": false,
+  "source_modified": false
+}

@@ -1,0 +1,11 @@
+# R14 最后乘法证明接口复核
+
+时间：2026-10-25T02:58Z；只读rse1/rse2及factored3，不改开发源。
+
+FastMul.rseAny_eq在当前源中仍为原DF已有定理：任意UInt64 value/shift的rseAny等于FixedWord.roundShiftRightEven(value,shift.toNat)。固定FloatLib0d918257的Core/Proof/Rounding.lean:68提供无额外前提的toNat等式。新roundedWord确实直接调用rseAny，随后组合这两条等式、productWord_nat和shiftWord_nat，与R14NatNormal.rounded定义匹配；没有把旧证明用于不同的biased运行体。
+
+factored3的model_mul_normal_fields保留两尾数完整24位界、指数和128..380及原始finite decode；不需要额外单独eu/ev范围，因为精确decode与指数和已足够推出产品正常舍入范围。hpLo/hpHi、hmin/hmax、编码指数与carry均在抽象Nat/Model层证明，具体UInt32 core_model仍保留原正常输入前提，并通过opaque已证lemma应用连接原始顺序的rawModel。未发现明确缺项、量词弱化或新公理；实际9038的接受仍取决于在途完整gate。
+
+rse1→rse2是证明分层修复；从biased路线切到rseAny本身是运行原语回退，开发已明确披露不同源码SHA与独立验收，不能继承性能。原bias Nat-only在父源正控通过的同runner仍SIGTERM，已经隔离到添加Nat证明足以触发的情形；OOM/具体阶段/数学错误仍未证明。
+
+加法f958已独立检查原始full gate verdict、25轮、指纹前后一致及归档输入SHA，正确性通过但性能回退，保持停放。薄B177b也保持首D门槛失败的停放决定。不新开运行机制、不重复挑seed。R材料当前入口astra-status.json；所有负面源、原始日志和数学片段保留。

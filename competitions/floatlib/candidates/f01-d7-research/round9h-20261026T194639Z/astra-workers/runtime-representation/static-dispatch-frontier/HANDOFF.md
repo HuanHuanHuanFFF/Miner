@@ -1,0 +1,5 @@
+# Static representation selection frontier
+
+ACCEPTED. User R continuation22:58:21Z–02:28:21Z, D original window unchanged. First40min stage conservatively ends23:38:21Z; first liveclock23:03:48Z. Only runtime-worker files; no Git/CI/local Lean/nested agents. New9c4e fullD40417039536 is running unchanged; its actual receipt takes priority when available.
+
+Mechanism under examination: move static compact-table validity selection from each scalar invocation to initialization of an operation/function value, so Bench's already-existing function dispatch selects the chosen implementation without a second call or per-call valid branch. This is lifetime/representation selection, not an OR/XOR or blind attribute mutation. MainFull actual source passes Submission.add/mul directly toBench; compiler eta expansion/closed extraction is the first falsifier. Wider numeric decoder bypass is secondary and will first be checked for real input exposure/history before any proof work. No candidate exists yet.

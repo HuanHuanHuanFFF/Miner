@@ -1,0 +1,33 @@
+{
+  "at_utc": "2026-10-21T21:10:39.750467+00:00",
+  "run": 39673654220,
+  "kernel_sha256": "bb1f783fd3103fba89e1e072459d7fdcff9ffdb5edc3e2983b39f1eafced2f18",
+  "generated_c": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\39673654220\\download-65c04c51e0b340a49fce5a21578a15c8\\diagnostics\\f01-d2-web-packed4-proof1\\candidate-generated-0.c",
+  "generated_c_sha256": "4b3988ca1b7bdb0b79b5752564a9a2f400a20fac833b227deb0a774666f8f82a",
+  "function": "lp_competition_Submission_Packed4_dot4",
+  "start_line": 11056,
+  "end_line": 11123,
+  "static_call_sites": {
+    "lean_float32_mul": 4,
+    "lean_float32_add": 4,
+    "lean_float32_of_bits": 0,
+    "lean_float32_is_finite": 0,
+    "lean_box_float32": 0,
+    "lean_alloc_ctor": 1,
+    "lean_array_fget_borrowed": 2,
+    "lean_nat_add": 2,
+    "lean_ctor_get_float32": 4
+  },
+  "observed": [
+    "Four unboxed float accumulator parameters and loop reassignment",
+    "One 16-byte scalar-field constructor allocation only at termination",
+    "One borrowed A read and one borrowed packed-B read per body; B has four scalar fields",
+    "No raw-ofBits or finite-check call in dot4 body",
+    "Nat index arithmetic still present; no claim of USize integration"
+  ],
+  "limits": [
+    "Generated C only; no assembly/SIMD/hardware-counter claim",
+    "Builder, padding, final checks and output costs outside this function remain part of full bmm",
+    "No timing claim before full gate and paired parent result"
+  ]
+}

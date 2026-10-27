@@ -1,0 +1,117 @@
+{
+  "created_utc": "2026-10-25T11:44:50.614891+00:00",
+  "state": "DEPENDENCY_CLOSED_APPEND_PROBE_NOT_COMPILED",
+  "parent": {
+    "path": "competitions\\floatlib\\candidates\\f01-r15-dev-packed-b2-1\\Kernel.lean",
+    "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+    "bytes": 226829
+  },
+  "probe": {
+    "path": "Probe-high-u32-roundtrip.lean",
+    "sha256": "4c65f15da51c7ccf5a0ebb259aa7dd6ba7ef0e5d21520a3272aaf2ab64189a2e",
+    "bytes": 238056,
+    "margin": 17944
+  },
+  "pieces": [
+    {
+      "path": "R14NatNormal-complete.lean",
+      "sha256": "bcf877fa3bf6ec6d309daa11ded712250dcf6b93a116c52c5e6e5de0e949cc6b",
+      "bytes": 2943,
+      "original_path": "competitions\\floatlib\\candidates\\f01-d7-research\\round3h-20261025T091810Z\\astra-workers\\scalar-representation\\next-add-u32\\Add-native-high-support.lean",
+      "original_sha256": "ff4956d011aee26e501f80c89f19f1943e8d737d1c01c3a9f53bea2dd5bf0fc1",
+      "original_byte_start": 1174,
+      "original_byte_end_exclusive": 4117,
+      "transform": "NONE; exact complete namespace bytes"
+    },
+    {
+      "path": "R14WordAddRounding-complete.lean",
+      "sha256": "e9ece5b7dcafcc0eee2458a56e4d1845c2aa74dc359ab107148bad642caa254c",
+      "bytes": 1901,
+      "original_path": "competitions\\floatlib\\candidates\\f01-d7-research\\round3h-20261025T091810Z\\astra-workers\\scalar-representation\\next-add-u32\\Add-native-high-support.lean",
+      "original_sha256": "ff4956d011aee26e501f80c89f19f1943e8d737d1c01c3a9f53bea2dd5bf0fc1",
+      "original_byte_start": 4121,
+      "original_byte_end_exclusive": 6022,
+      "transform": "NONE; exact complete namespace bytes"
+    },
+    {
+      "path": "HighRoundtrip-probe-fragment.lean",
+      "sha256": "2062e3d1aa99f90ce3c106f91600aa23370e95eca42e2bdfab201b2492c27ff8",
+      "bytes": 6380,
+      "original_path": "HighRoundtrip-bridge.lean",
+      "original_sha256": "adff71869e37c50567397b91f4e1596dcd3759f2b1b7c80128eb05e5ac820d3f",
+      "transform": "Replace leading prose header only; theorem statements and bodies unchanged"
+    }
+  ],
+  "original_text_checks": {
+    "gate_path": "competitions\\floatlib\\research\\astra-collab-20261023-r7\\upstream\\gate-4b7e838.py",
+    "gate_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+    "functions": [
+      "intake",
+      "policy",
+      "options"
+    ],
+    "comments_included": true,
+    "result": {
+      "intake": null,
+      "policy": null,
+      "options": null
+    }
+  },
+  "explicit_helper_audit": [
+    "Submission.R14NatNormal.rounded",
+    "Submission.R14NatNormal.carry",
+    "Submission.R14NatNormal.mantissa",
+    "Submission.R14NatNormal.carry_le",
+    "Submission.R14NatNormal.native_round_normal",
+    "Submission.R14NatNormal.model_round_normal",
+    "Submission.R14NatNormal.raw_normal_decode",
+    "Submission.R14WordAddRounding.rounded_bounds",
+    "Submission.R14WordAddRounding.shift_carry",
+    "Submission.R14WordAddRounding.masked_fraction",
+    "Submission.R16UInt32Roundtrip.roundedShift",
+    "Submission.R16UInt32Roundtrip.roundedInteger",
+    "Submission.R16UInt32Roundtrip.high_log",
+    "Submission.R16UInt32Roundtrip.no_carry_at_31",
+    "Submission.R16UInt32Roundtrip.rounded_leading",
+    "Submission.R16UInt32Roundtrip.high_mantissa",
+    "Submission.R16UInt32Roundtrip.roundedInteger_fit",
+    "Submission.R16UInt32Roundtrip.roundedInteger_eq_RNE",
+    "Submission.R16UInt32Roundtrip.native_high_decode",
+    "Submission.R16UInt32Roundtrip.toUInt32_of_nonnegative_integral_decode",
+    "Submission.R16UInt32Roundtrip.high_roundtrip",
+    "Submission.R16UInt32Roundtrip.high_roundtrip_RNE"
+  ],
+  "fixed_interface_evidence": [
+    {
+      "path": "receipt.json",
+      "sha256": "9d3da50f10b91e31f403e3dbfb126888207b6ba3894781c0815b81caac2db52d"
+    },
+    {
+      "path": "bridge-check.json",
+      "sha256": "22a5cc2b988b6561eb7ea362aed09139671fcf6f459f0f952a108b5b38ce43a5"
+    },
+    {
+      "path": "fixed-import-chain.json",
+      "sha256": "a4f55800cd2bad7e10924bd055821bc905d89fe4cb6eecc93c92a8f246fb46b1"
+    }
+  ],
+  "dependency_closure": [
+    "ContractTensor -> Contract -> FloatLib -> Floats -> Formats -> IEEE754 -> Native.Integer -> ToInt/Rounding",
+    "Pinned Native.ToInt supplies Model.toInt_toModel_eq; Native.Model supplies Model.toModel_ofFloat32Model",
+    "Pinned Model.ExactValue supplies exactValue_eq_finite_of_toDyadic?_eq_some; Operations.Runtime supplies roundDyadicToInt",
+    "Pinned Lean exposes Float32.toUInt32, Float32.Model.toUInt32, UnpackedFloat.toUInt32, UInt32.toNat_ofNatClamp_of_lt",
+    "Exact B2 supplies R2W01c.uint32_model_eq_roundDyadic, R2W01c.fields32_toDyadic, raw-normal helpers, FastMul.log2_shift",
+    "Exact extracted R14NatNormal namespace precedes R14WordAddRounding, which precedes new round-trip bridge"
+  ],
+  "public_runtime_delta": "NONE: exact entire B2 retained as prefix; its add/mul/sum/bmm and four specs are unedited. Appended helper definitions are unreferenced by those entries.",
+  "required_next_check": "Statement compile plus explicit kernel/dependency/standard-policy audit of every listed helper; unchanged four specs alone do not certify appended proofs.",
+  "not_claimed": [
+    "Compiled Lean",
+    "Helper axiom audit passed",
+    "Full gate acceptance",
+    "Speed or code-layout equality"
+  ],
+  "local_Lean": false,
+  "CI": false,
+  "Git": false
+}

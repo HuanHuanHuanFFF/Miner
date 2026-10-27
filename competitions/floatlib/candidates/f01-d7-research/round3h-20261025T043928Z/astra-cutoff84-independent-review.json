@@ -1,0 +1,18 @@
+{
+  "reviewed_at_utc": "2026-10-25T04:58:01.081992+00:00",
+  "candidate_sha256": "837341a52575cffa9b5dfee6a44ba9369d1ee7ae4f6bb47fa47af11ae1f5831b",
+  "bytes": 253562,
+  "parent_sha256": "df5c61a0ca24a8ef18c0c42d83bdd23466872d3fe8f39dd912e9c347b27fb172",
+  "reverse_patch_exact_parent": true,
+  "review": "Root read entire new proof/runtime diff and actual FastMul.mul/LowScale.mul_eq definitions; arbitrary UInt64 roundP_zero threshold84 matches shift>=65 and strict half-minSubnormal bound. No concrete missing hypothesis found in paper/source review.",
+  "scope_boundaries": [
+    "Public shortcut only in old exponent-sum<128 arm, finite predicate follows84 guard; XOR sign retains negative zero.",
+    "All other source bytes are exact parent after reversing helper and public mul/spec splice.",
+    "Existing roundP_zero proof copied, new cutoff/finiteScale/word lifting and branch integration still require actual Lean.",
+    "No claim from6256 finite models to universal proof or performance. Domain model uses exposed runs40129155932/40152158687/40155753018; not identical to root cost triple."
+  ],
+  "lean": "NOT_RUN",
+  "full_gate": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "recommendation": "Forward exact source to D for first full D when its single slot permits; standalone and any matrix combination are distinct source hashes with own first D; no reseed reset."
+}

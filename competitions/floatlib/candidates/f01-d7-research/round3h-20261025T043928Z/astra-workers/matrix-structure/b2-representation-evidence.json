@@ -1,0 +1,63 @@
+{
+  "at_utc": "2026-10-25T05:32:49.769058+00:00",
+  "status": "REPRESENTATION_OPPORTUNITY_VERIFIED_OLD_PATTERNS_NEW_B2_NOT_BUILT",
+  "lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+  "lean_header_sha256": "982c731a1fbacc7688006f44f9f7af9d9e3e0247d310a728827f49e7f1466c13",
+  "header": [
+    {
+      "name": "lean_box_float32",
+      "line": 3007,
+      "body": "static inline lean_obj_res lean_box_float32(float v) {\n    lean_obj_res r = lean_alloc_ctor(0, 0, sizeof(float)); // NOLINT\n    lean_ctor_set_float32(r, 0, v);\n    return r;\n}",
+      "sha256": "35e0b6e7fceb3838f650ef405ebe294ba38c36de75a64b23126dffa5cb58a35a"
+    },
+    {
+      "name": "lean_unbox_float32",
+      "line": 3013,
+      "body": "static inline float lean_unbox_float32(b_lean_obj_arg o) {\n    return lean_ctor_get_float32(o, 0);\n}",
+      "sha256": "d04b78b3b8536a1a480a4cd0524da90dab347846b3f99ed0d3e22fcf0869be09"
+    },
+    {
+      "name": "lean_alloc_ctor",
+      "line": 772,
+      "body": "static inline lean_object * lean_alloc_ctor(unsigned tag, unsigned num_objs, unsigned scalar_sz) {\n    assert(tag <= LeanMaxCtorTag && num_objs < LEAN_MAX_CTOR_FIELDS && scalar_sz < LEAN_MAX_CTOR_SCALARS_SIZE);\n    lean_object * o = lean_alloc_ctor_memory(lean_usize_add_checked(lean_usize_add_checked(sizeof(lean_ctor_object), lean_usize_mul_checked(sizeof(void*), num_objs)), scalar_sz));\n    lean_set_st_header(o, tag, num_objs);\n    return o;\n}",
+      "sha256": "f1351d3f78fa46fb9a8aac55913df820a90918f14e487b411d71e02b0bf85470"
+    },
+    {
+      "name": "lean_ctor_get_float32",
+      "line": 847,
+      "body": "static inline float lean_ctor_get_float32(b_lean_obj_arg o, unsigned offset) {\n    assert(offset >= lean_ctor_num_objs(o) * sizeof(void*));\n    return *((float*)((uint8_t*)(lean_ctor_obj_cptr(o)) + offset));\n}",
+      "sha256": "fefcda36f4e858d8ca504c934e2a55a085204f1115f9fd059ad8055280306293"
+    },
+    {
+      "name": "lean_ctor_set_float32",
+      "line": 882,
+      "body": "static inline void lean_ctor_set_float32(b_lean_obj_arg o, unsigned offset, float v) {\n    assert(offset >= lean_ctor_num_objs(o) * sizeof(void*));\n    *((float*)((uint8_t*)(lean_ctor_obj_cptr(o)) + offset)) = v;\n}",
+      "sha256": "90a2b028a978a0883d336aab89b6fb073c6928cc464ad07bac27aaff8a108c9d"
+    }
+  ],
+  "mapped_Float32_C": {
+    "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40136215532/download-b5ee18c29caa44b7ac3cfe73f422b8c7/diagnostics/f01-r14-dev-p2-n1-cache/candidate-generated-0.c",
+    "file_sha256": "6b2a3d7073ad77a4b2b3580e1c20853c80f8036011f14b2a79d99a00f59ff37b",
+    "kernel_sha256": "83a981273988f07ce89d4a18c1dbef475adb6ed2fefce381138c5d165bf2a806",
+    "symbol": "lp_competition___private_Init_Data_Array_Basic_0__Array_mapMUnsafe_map___at___00Submission_RowStream_output_spec__0",
+    "line": 38972,
+    "body_sha256": "612a0bd0f49f6d4d3d5ee99c3f5cdfdb882f9f74c8059d0dc95b265e139536a4",
+    "box_site_per_element_loop": 1
+  },
+  "inline_F4_C": {
+    "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40045868764/download-da97e7bfcfbf48eb9307e69f0ab13faf/diagnostics/f01-d7-public-suite/public-suite/codegen/f01-d11-panel4-codegen-probe/capture-9e612642fbdc469b8c576f8f05da3612/file-0-Submission.c",
+    "file_sha256": "2c196b4f00a97930a41c33fd09d88caac9c159640b39ede9d8c7cf1e510a62dc",
+    "kernel_sha256": "9a40118eae28c92c1abeca7f6a141fb0fbfe963cbf40321681b8013782f9f7ac",
+    "symbol": "lp_competition_Submission_Panel4_packA___lam__0",
+    "line": 36104,
+    "body_sha256": "04b9c3ce68a3ac0e19336864369a73621e36f0985b940bc5b9ab5a94815980d6",
+    "record_constructor_sites": 1,
+    "scalar_payload_bytes": 16,
+    "Float32_set_sites": 4,
+    "individual_float_box_sites": 0
+  },
+  "B2_inference": "A two-Float32 record should use one8B scalar-payload object rather than two individual4B scalar-payload boxes; new exact generatedC remains UNKNOWN. Each inner preparedVector read could load one record pointer and two native fields.",
+  "cost_limits": "For even p, B2 element-object source count halves; allocator request bytes need not halve and physical allocator buckets/RSS/time are unknown. Nested batch/group arrays, closures, packing order/index arithmetic, extra odd-tail decodes and destruction remain inside timed BMM.",
+  "no_speed_claim": true,
+  "elapsed_seconds": 0.08510510000633076
+}

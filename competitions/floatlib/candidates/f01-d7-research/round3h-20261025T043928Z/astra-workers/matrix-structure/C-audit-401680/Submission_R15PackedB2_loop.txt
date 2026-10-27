@@ -1,0 +1,59 @@
+LEAN_EXPORT lean_object* lp_competition_Submission_R15PackedB2_loop(lean_object* v_n_14230_, lean_object* v_baseA_14231_, lean_object* v_A_14232_, lean_object* v_packed_14233_, lean_object* v_k_14234_, float v_s0_14235_, float v_s1_14236_){
+_start:
+{
+uint32_t v___y_14238_; uint8_t v___x_14250_; 
+v___x_14250_ = lean_nat_dec_lt(v_k_14234_, v_n_14230_);
+if (v___x_14250_ == 0)
+{
+lean_object* v___x_14251_; 
+lean_dec(v_k_14234_);
+v___x_14251_ = lean_alloc_ctor(0, 0, 8);
+lean_ctor_set_float32(v___x_14251_, 0, v_s0_14235_);
+lean_ctor_set_float32(v___x_14251_, 4, v_s1_14236_);
+return v___x_14251_;
+}
+else
+{
+lean_object* v___x_14252_; lean_object* v___x_14253_; uint8_t v___x_14254_; 
+v___x_14252_ = lean_nat_add(v_baseA_14231_, v_k_14234_);
+v___x_14253_ = lean_array_get_size(v_A_14232_);
+v___x_14254_ = lean_nat_dec_lt(v___x_14252_, v___x_14253_);
+if (v___x_14254_ == 0)
+{
+uint32_t v___x_14255_; 
+lean_dec(v___x_14252_);
+v___x_14255_ = lean_uint32_once(&lp_competition_Submission_referenceSum___redArg___closed__0, &lp_competition_Submission_referenceSum___redArg___closed__0_once, _init_lp_competition_Submission_referenceSum___redArg___closed__0);
+v___y_14238_ = v___x_14255_;
+goto v___jp_14237_;
+}
+else
+{
+lean_object* v___x_14256_; uint32_t v___x_14257_; 
+v___x_14256_ = lean_array_fget_borrowed(v_A_14232_, v___x_14252_);
+lean_dec(v___x_14252_);
+v___x_14257_ = lean_unbox_uint32(v___x_14256_);
+v___y_14238_ = v___x_14257_;
+goto v___jp_14237_;
+}
+}
+v___jp_14237_:
+{
+lean_object* v_b_14239_; float v_s0_14240_; float v_s1_14241_; float v_a_14242_; lean_object* v___x_14243_; lean_object* v___x_14244_; float v___x_14245_; float v___x_14246_; float v___x_14247_; float v___x_14248_; 
+v_b_14239_ = lean_array_fget_borrowed(v_packed_14233_, v_k_14234_);
+v_s0_14240_ = lean_ctor_get_float32(v_b_14239_, 0);
+v_s1_14241_ = lean_ctor_get_float32(v_b_14239_, 4);
+v_a_14242_ = lean_float32_of_bits(v___y_14238_);
+v___x_14243_ = lean_unsigned_to_nat(1u);
+v___x_14244_ = lean_nat_add(v_k_14234_, v___x_14243_);
+lean_dec(v_k_14234_);
+v___x_14245_ = lean_float32_mul(v_a_14242_, v_s0_14240_);
+v___x_14246_ = lean_float32_add(v_s0_14235_, v___x_14245_);
+v___x_14247_ = lean_float32_mul(v_a_14242_, v_s1_14241_);
+v___x_14248_ = lean_float32_add(v_s1_14236_, v___x_14247_);
+v_k_14234_ = v___x_14244_;
+v_s0_14235_ = v___x_14246_;
+v_s1_14236_ = v___x_14248_;
+goto _start;
+}
+}
+}

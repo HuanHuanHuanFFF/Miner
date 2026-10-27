@@ -1,0 +1,59 @@
+{
+  "created_utc": "2026-10-25T10:49:29.488956+00:00",
+  "state": "SOURCE_CLOSED_PUBLIC_ENTRY_DRAFT_NOT_COMPILED",
+  "parent": {
+    "path": "competitions\\floatlib\\candidates\\f01-r15-dev-packed-b2-1\\Kernel.lean",
+    "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+    "bytes": 226829
+  },
+  "candidate": {
+    "path": "Kernel-add-native-high-draft1.lean",
+    "sha256": "2f998811caa348ad7c0e66026b0d049c6ce0720549dd12622345777d24a1e13e",
+    "bytes": 255913
+  },
+  "insertion": {
+    "path": "Add-native-high-complete-insertion.lean",
+    "sha256": "244a090ae4893d4dea1b6c18c51b4ee9a4cdfa3f977adab7fc659993a1fda61c",
+    "bytes": 28670
+  },
+  "old_R14_math_parent": "f01-r14-dev-word-add-entry2 /f958071e full-gate run40152158687",
+  "new_support_scope": "Same-sign or opposite gap>=1 exact alignment; high N>=2^23 after unsigned no-wrap alignment; normal exponent guard; native UInt32 conversion and repack",
+  "same_domain_note": "Opposite gap0 is rejected before subtraction because its exact absolute N<2^23; all low N and zeros fallback. This realizes the single high-N simplification, not a parameter grid.",
+  "runtime_delta": {
+    "ADD": "new native-cast arm plus exact B2 fallback",
+    "MUL": "original B2 source byte-identical; rejected c972 runtime absent",
+    "SUM_BMM": "original source suffix byte-identical, but raw/reference/replay calls resolving public ADD can execute new ADD; all four original gate obligations required"
+  },
+  "proof_status": "All referenced new local names have source bodies; no placeholder proof/axiom. Actual statement/helper audit/full gate/timing NOT_RUN; first UInt32 transport still awaits owner probe feedback.",
+  "trimming": "No existing B2 declaration removed; unused new sum_nat and two rounding helpers plus two interface helpers omitted after reference scans; inserted non-license comments removed; no inherited36-leaf deletion list applied.",
+  "new_identifier_compression": {
+    "R14ExponentShift": "A16F",
+    "R14NatNormal": "A16N",
+    "R16AddAlignment": "A16L",
+    "R14WordAddRounding": "A16R",
+    "R16AddUInt32Interface": "A16I",
+    "magnitudeNat": "magN",
+    "magnitudeWord": "magW"
+  },
+  "copied_R14_changes": "large_left/exact alignment/domain generalized from gap>=2 to>=1; magnitude lower bound changed to1; upper bound unchanged; new high-N guard supplies log>=23.",
+  "removed_new_rounding_declarations_sha256": "b170300f50dd6f3c3a4e6a4961e8d7ac223ea06babb17009ff221642c5855f0d",
+  "components": [
+    {
+      "path": "Add-native-high-support.lean",
+      "sha256": "ff4956d011aee26e501f80c89f19f1943e8d737d1c01c3a9f53bea2dd5bf0fc1",
+      "bytes": 21637
+    },
+    {
+      "path": "UInt32NativeRound-interface.lean",
+      "sha256": "c03d6a2307046383b2b3425705419d705bc34b68d242ab7dcc7a7178b776f0cf",
+      "bytes": 2934
+    },
+    {
+      "path": "Add-native-high-entry.lean",
+      "sha256": "c8a0bd087cd6428dccd592db92c0836533aec2bb7272444559543f776f4f7f52",
+      "bytes": 8442
+    }
+  ],
+  "tokens": "UNKNOWN",
+  "ci_occupancy_seconds": 0
+}

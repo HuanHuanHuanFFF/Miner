@@ -1,0 +1,142 @@
+{
+  "created_utc": "2026-10-26T08:54:02.019009+00:00",
+  "state": "FIXED_SOURCE_COST_REVIEW_CODEGEN_PENDING",
+  "lean_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+  "floatlib_commit": "0d91825727839f597fd06b22fdd038ea21480f0c",
+  "source_records": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\structural-frontier\\inline-u64-mul\\Runtime-u64-mul-integer-v3-lf.lean.inc",
+      "bytes": 1098,
+      "sha256": "cd301ba43a18ba2b9db2a8b2f1109406d00242acdd543b26364d9925ffde6c67"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\structural-frontier\\inline-u64-mul\\Bridge-u64-integer-v3-lf.lean.inc",
+      "bytes": 6664,
+      "sha256": "2261f1e317310bfb6505eb3ee333ad8b6b31f9ad13307f728719ecd3920fb906"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\structural-frontier\\upstream\\Float32.lean",
+      "bytes": 21678,
+      "sha256": "2f4b7eb845c03bd5581d70921f891798cc193f5c8c1372302a3e6064a34f7319"
+    },
+    {
+      "path": "competitions\\floatlib\\research\\astra-collab-20261023-r7\\upstream\\lean-lean.h",
+      "bytes": 136786,
+      "sha256": "982c731a1fbacc7688006f44f9f7af9d9e3e0247d310a728827f49e7f1466c13"
+    },
+    {
+      "path": "competitions\\floatlib\\research\\astra-collab-20261023-r7\\upstream\\lean-object.cpp",
+      "bytes": 100916,
+      "sha256": "b53499ae7db8ed722a489ae5a79a394b93f6fda2e6663a3784d886867583985a"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round8h-20261024T190259Z\\development-sources\\lean-int-casts\\SInt-Float32.lean.raw",
+      "bytes": 5207,
+      "sha256": "f4f7be22aa75c1ebdbe513efbbc8c889fee07d723ae26b1a83fd59d339a37dfc"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round8h-20261024T190259Z\\development-sources\\lean-int-casts\\SInt-Basic.lean.raw",
+      "bytes": 75121,
+      "sha256": "4868b10bbef3740a4ddcaa5c8b7ccf18fd099bef301ddbc5ac8b1b8ce4e7b225"
+    }
+  ],
+  "primitive_bodies": [
+    {
+      "name": "lean_uint32_to_uint64",
+      "line": 2120,
+      "body": "static inline uint64_t lean_uint32_to_uint64(uint32_t a) { return ((uint64_t)a); }",
+      "body_sha256": "64e1f00f36302b273610d159e3b06d380df57354d612b18ca0df91f767be6eab"
+    },
+    {
+      "name": "lean_uint64_mul",
+      "line": 2132,
+      "body": "static inline uint64_t lean_uint64_mul(uint64_t a1, uint64_t a2) { return 1U*a1*a2; }",
+      "body_sha256": "a5fc649cb4354ddd369fd8673f0919a9d9f34305027c06c4afc30123adae44b2"
+    },
+    {
+      "name": "lean_uint64_to_float32",
+      "line": 3266,
+      "body": "static inline float lean_uint64_to_float32(uint64_t a) { return (float) a; }",
+      "body_sha256": "ec5b58da1a13919140e37716e27569a2abce75f62dcf65fba7aaaa1665532f56"
+    },
+    {
+      "name": "lean_float32_to_uint64",
+      "line": 3207,
+      "body": "static inline uint64_t lean_float32_to_uint64(float a) {\n    return 0. <= a ? (a < 18446744073709551616. ? (uint64_t)a : UINT64_MAX) : 0;\n}",
+      "body_sha256": "74ca372c0181a76d2fc8d08b7a5cfe1f67cf700c14d820a000afe9e35c768852"
+    },
+    {
+      "name": "lean_int64_to_float32",
+      "line": 3271,
+      "body": "static inline float lean_int64_to_float32(uint64_t a) { return (float)(int64_t) a; }",
+      "body_sha256": "d8a7ed3f4ac588fe954768502c429848783c7c6692e26144fa0c9f676c6891ff"
+    },
+    {
+      "name": "lean_float32_to_int64",
+      "line": 3234,
+      "body": "static inline uint64_t lean_float32_to_int64(float a) {\n    int64_t result;\n    if (lean_float32_isnan(a)) result = 0;\n    else result = -9223372036854775809. < a ? (a < 9223372036854775808. ? (int64_t)a : INT64_MAX) : INT64_MIN;\n    return (uint64_t)result;\n}",
+      "body_sha256": "988799d8f9fe9179587fe7dc229c0b874fc0c312bd73b88ef0bd2271e362bd30"
+    },
+    {
+      "name": "lean_box_uint64",
+      "line": 2977,
+      "body": "static inline lean_obj_res lean_box_uint64(uint64_t v) {\n    lean_obj_res r = lean_alloc_ctor(0, 0, sizeof(uint64_t));\n    lean_ctor_set_uint64(r, 0, v);\n    return r;\n}",
+      "body_sha256": "8ac7078752a67f6cfae9a9e1850ef8b8ba6d437f4610b76f09deab5ce1e535f6"
+    }
+  ],
+  "signed_reverse_external_call": {
+    "declaration_line": 2948,
+    "implementation_line": 1976,
+    "implementation": "extern \"C\" LEAN_EXPORT uint8_t lean_float32_isnan(float a) { return (bool) isnan(a); }"
+  },
+  "visible_B_expression_bounds": {
+    "mantissas": [
+      8388608,
+      16777215
+    ],
+    "exact_product": [
+      70368744177664,
+      281474943156225
+    ],
+    "RNE24_product": [
+      70368744177664,
+      281474943156224
+    ],
+    "optimizer_eliminated_clamps": "UNKNOWN",
+    "scope": "Mathematical source semantics, not compiler metadata or a new Lean proof"
+  },
+  "old_C_control_report": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\scalar-cost\\audit-old-c972-v1\\audit.json",
+    "bytes": 5611,
+    "sha256": "e4e5ffd4640d6b34c9daaafca8bce15aaf8de348539d51ba0ff7ec9a544053af"
+  },
+  "extractor": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\scalar-cost\\audit_u64_roundtrip_c.py",
+    "bytes": 14340,
+    "sha256": "c3dfb35f4fdd8e1ed8cfdb15e812d0857429210f8819528ecc5820ede2b8e5a8"
+  },
+  "review": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\scalar-cost\\review.md",
+    "bytes": 8390,
+    "sha256": "9e3bf6041f047d06203e6f81d5ff6a6ca73a155e8bad71b82d3c522fd83a5845"
+  },
+  "usage": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\scalar-cost\\README.md",
+    "bytes": 3475,
+    "sha256": "b9bb08f64f5c0023b3ae1e5a0ac1146a02408d6759eb6b295a58a3d3d84c2a3e"
+  },
+  "diagnostic_plan": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\scalar-cost\\diagnostic-plan.json",
+    "bytes": 1968,
+    "sha256": "47a7f5776da7c418142c8a0641c333e0eec629df81a60780da05bc6882b7bfbf"
+  },
+  "historical_A": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\structural-frontier\\inline-u64-mul\\Runtime-u64-mul-v1.lean.inc",
+    "bytes": 1044,
+    "sha256": "09ad116d0d1095e657e6139ac2cbbba6bf630882ed3ebd10e8d68dd46e48d33c"
+  },
+  "tokens": "UNKNOWN",
+  "cached_input": "UNKNOWN",
+  "CI_occupancy_seconds": 0,
+  "new_C_ASM": "NOT_RUN"
+}

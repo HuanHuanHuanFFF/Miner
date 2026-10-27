@@ -1,0 +1,370 @@
+{
+  "at_utc": "2026-10-25T10:21:15.462172+00:00",
+  "state": "FINITE_MODEL_AND_COMPLETED_B2_SOURCE_COVERAGE_ONLY",
+  "model_cases": 12828,
+  "model_counts": {
+    "initial_guard": 11064,
+    "zero": 182,
+    "small_cancellation": 1624,
+    "carry": 92,
+    "accepted": 10610,
+    "normal_postguard_reject": 454
+  },
+  "model_failures": [],
+  "model_trace_sha256": "4b6d2448597af9d08b230178cac059b2d13f87f88eee2280126139cf71a8c002",
+  "witnesses": [
+    {
+      "label": "zero must precede exponent postguard",
+      "u": "0x4b800000",
+      "v": "0xcb800000",
+      "a": 151,
+      "d": 0,
+      "N_exact": 0,
+      "reference": "0x0",
+      "forced_wrong_or_diagnostic": "0x800000",
+      "actual_guarded_result": "0x0"
+    },
+    {
+      "label": "a23 tiny cancellation becomes subnormal",
+      "u": "0xb800001",
+      "v": "0x8b800000",
+      "a": 23,
+      "d": 0,
+      "N_exact": 1,
+      "reference": "0x400000",
+      "forced_wrong_or_diagnostic": "0x0",
+      "actual_guarded_result": null
+    },
+    {
+      "label": "d8 UInt32 overflow can still pass exponent guard",
+      "u": "0x43ffffff",
+      "v": "0x3fffffff",
+      "a": 127,
+      "d": 8,
+      "N_exact": 4311744255,
+      "reference": "0x44007fff",
+      "forced_wrong_or_diagnostic": "0x3ffffeff",
+      "actual_guarded_result": null
+    },
+    {
+      "label": "overflow exponent cannot retain fraction",
+      "u": "0x7f7fffff",
+      "v": "0x7f7fffff",
+      "a": 254,
+      "d": 0,
+      "N_exact": 33554430,
+      "reference": "0x7f800000",
+      "forced_wrong_or_diagnostic": "0x7fffffff",
+      "actual_guarded_result": null
+    },
+    {
+      "label": "same exponent magnitude determines result sign",
+      "u": "0x3f800000",
+      "v": "0xbfc00000",
+      "a": 127,
+      "d": 0,
+      "N_exact": 4194304,
+      "reference": "0xbf000000",
+      "forced_wrong_or_diagnostic": "0xbf000000",
+      "actual_guarded_result": "0xbf000000"
+    }
+  ],
+  "coverage_pairs": 32256,
+  "coverage": [
+    {
+      "run": 40168687803,
+      "groups": {
+        "add:dense": {
+          "samples": 1536,
+          "initial_guard": 862,
+          "accepted": 862,
+          "zero": 0,
+          "small_cancellation": 116,
+          "old_software_domain": 646,
+          "accepted_fraction": 0.5611979166666666,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.07552083333333333,
+          "B2_cell_share_whole": 0.05209693531516342
+        },
+        "add:ml": {
+          "samples": 2048,
+          "initial_guard": 1882,
+          "accepted": 1882,
+          "zero": 0,
+          "small_cancellation": 211,
+          "old_software_domain": 1542,
+          "accepted_fraction": 0.9189453125,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.10302734375,
+          "B2_cell_share_whole": 0.06953064082601408
+        },
+        "add:sparse": {
+          "samples": 1536,
+          "initial_guard": 452,
+          "accepted": 452,
+          "zero": 0,
+          "small_cancellation": 31,
+          "old_software_domain": 400,
+          "accepted_fraction": 0.2942708333333333,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.020182291666666668,
+          "B2_cell_share_whole": 0.061978365351749866
+        },
+        "add:specials": {
+          "samples": 1536,
+          "initial_guard": 1296,
+          "accepted": 1294,
+          "zero": 0,
+          "small_cancellation": 205,
+          "old_software_domain": 951,
+          "normal_postguard_reject": 2,
+          "accepted_fraction": 0.8424479166666666,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.13346354166666666,
+          "B2_cell_share_whole": 0.032776841292214004
+        },
+        "add:subnormal": {
+          "samples": 1024,
+          "initial_guard": 832,
+          "accepted": 832,
+          "zero": 0,
+          "small_cancellation": 130,
+          "old_software_domain": 620,
+          "accepted_fraction": 0.8125,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.126953125,
+          "B2_cell_share_whole": 0.042039997560804294
+        },
+        "add:paired": {
+          "samples": 2048,
+          "initial_guard": 1733,
+          "accepted": 1733,
+          "zero": 0,
+          "small_cancellation": 380,
+          "old_software_domain": 1191,
+          "accepted_fraction": 0.84619140625,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.185546875,
+          "B2_cell_share_whole": 0.06949964089937101
+        },
+        "add:extremes": {
+          "samples": 1024,
+          "initial_guard": 78,
+          "accepted": 78,
+          "zero": 0,
+          "small_cancellation": 4,
+          "old_software_domain": 72,
+          "accepted_fraction": 0.076171875,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.00390625,
+          "B2_cell_share_whole": 0.03609147836541478
+        }
+      },
+      "B2_ADD_share_whole": 0.36401389961073144,
+      "plan_sha256": "52c1a6c873885d8ad8225491e09414b78c315b7d5d0b6eb98c210104e2c8a4f8",
+      "verdict_sha256": "cbb63e694304d0946b569a8a50ff1517914cdc817d4f445d2bc285835e13f924",
+      "archived_input_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+      "work_sha256": "c5f7000313711f97a42d7e8e6b631def80d727b5bb28b1b3fa887177d051f652"
+    },
+    {
+      "run": 40169957447,
+      "groups": {
+        "add:dense": {
+          "samples": 1536,
+          "initial_guard": 670,
+          "accepted": 670,
+          "zero": 0,
+          "small_cancellation": 70,
+          "old_software_domain": 532,
+          "accepted_fraction": 0.4361979166666667,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.045572916666666664,
+          "B2_cell_share_whole": 0.054484265733078775
+        },
+        "add:ml": {
+          "samples": 2048,
+          "initial_guard": 1877,
+          "accepted": 1877,
+          "zero": 0,
+          "small_cancellation": 299,
+          "old_software_domain": 1383,
+          "accepted_fraction": 0.91650390625,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.14599609375,
+          "B2_cell_share_whole": 0.07161470564586934
+        },
+        "add:sparse": {
+          "samples": 1536,
+          "initial_guard": 272,
+          "accepted": 272,
+          "zero": 0,
+          "small_cancellation": 18,
+          "old_software_domain": 243,
+          "accepted_fraction": 0.17708333333333334,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.01171875,
+          "B2_cell_share_whole": 0.059004176206512514
+        },
+        "add:specials": {
+          "samples": 1536,
+          "initial_guard": 1318,
+          "accepted": 1318,
+          "zero": 0,
+          "small_cancellation": 196,
+          "old_software_domain": 989,
+          "accepted_fraction": 0.8580729166666666,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.12760416666666666,
+          "B2_cell_share_whole": 0.02953794803864662
+        },
+        "add:subnormal": {
+          "samples": 1024,
+          "initial_guard": 928,
+          "accepted": 928,
+          "zero": 0,
+          "small_cancellation": 194,
+          "old_software_domain": 610,
+          "accepted_fraction": 0.90625,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.189453125,
+          "B2_cell_share_whole": 0.0437967061415441
+        },
+        "add:paired": {
+          "samples": 2048,
+          "initial_guard": 1237,
+          "accepted": 1237,
+          "zero": 18,
+          "small_cancellation": 362,
+          "old_software_domain": 668,
+          "accepted_fraction": 0.60400390625,
+          "zero_fraction": 0.0087890625,
+          "small_cancellation_fraction": 0.1767578125,
+          "B2_cell_share_whole": 0.07162903427003668
+        },
+        "add:extremes": {
+          "samples": 1024,
+          "initial_guard": 299,
+          "accepted": 299,
+          "zero": 0,
+          "small_cancellation": 44,
+          "old_software_domain": 231,
+          "accepted_fraction": 0.2919921875,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.04296875,
+          "B2_cell_share_whole": 0.03849017368400162
+        }
+      },
+      "B2_ADD_share_whole": 0.3685570097196897,
+      "plan_sha256": "eb06b5b61c0b04b41e51234d7f2f5df6847204362beb056d708addf3523a40f5",
+      "verdict_sha256": "86563db05fb0dac04667aae1515369fd074b7a63fc2384c9f217c3991cba1939",
+      "archived_input_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+      "work_sha256": "452d41f17acf2c669a377d410ddc84c4632a27bd9209a52185c65354a1dd89d2"
+    },
+    {
+      "run": 40171180249,
+      "groups": {
+        "add:dense": {
+          "samples": 1536,
+          "initial_guard": 496,
+          "accepted": 496,
+          "zero": 0,
+          "small_cancellation": 76,
+          "old_software_domain": 364,
+          "accepted_fraction": 0.3229166666666667,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.049479166666666664,
+          "B2_cell_share_whole": 0.051881543804315575
+        },
+        "add:ml": {
+          "samples": 2048,
+          "initial_guard": 2004,
+          "accepted": 2004,
+          "zero": 1,
+          "small_cancellation": 326,
+          "old_software_domain": 1458,
+          "accepted_fraction": 0.978515625,
+          "zero_fraction": 0.00048828125,
+          "small_cancellation_fraction": 0.1591796875,
+          "B2_cell_share_whole": 0.0691603910601872
+        },
+        "add:sparse": {
+          "samples": 1536,
+          "initial_guard": 778,
+          "accepted": 778,
+          "zero": 0,
+          "small_cancellation": 99,
+          "old_software_domain": 608,
+          "accepted_fraction": 0.5065104166666666,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.064453125,
+          "B2_cell_share_whole": 0.06711053349265769
+        },
+        "add:specials": {
+          "samples": 1536,
+          "initial_guard": 1273,
+          "accepted": 1273,
+          "zero": 2,
+          "small_cancellation": 206,
+          "old_software_domain": 918,
+          "accepted_fraction": 0.8287760416666666,
+          "zero_fraction": 0.0013020833333333333,
+          "small_cancellation_fraction": 0.13411458333333334,
+          "B2_cell_share_whole": 0.02344010865135133
+        },
+        "add:subnormal": {
+          "samples": 1024,
+          "initial_guard": 886,
+          "accepted": 886,
+          "zero": 0,
+          "small_cancellation": 158,
+          "old_software_domain": 629,
+          "accepted_fraction": 0.865234375,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.154296875,
+          "B2_cell_share_whole": 0.04968339803846206
+        },
+        "add:paired": {
+          "samples": 2048,
+          "initial_guard": 1791,
+          "accepted": 1791,
+          "zero": 273,
+          "small_cancellation": 888,
+          "old_software_domain": 506,
+          "accepted_fraction": 0.87451171875,
+          "zero_fraction": 0.13330078125,
+          "small_cancellation_fraction": 0.43359375,
+          "B2_cell_share_whole": 0.06925720120793023
+        },
+        "add:extremes": {
+          "samples": 1024,
+          "initial_guard": 735,
+          "accepted": 735,
+          "zero": 0,
+          "small_cancellation": 71,
+          "old_software_domain": 602,
+          "accepted_fraction": 0.7177734375,
+          "zero_fraction": 0.0,
+          "small_cancellation_fraction": 0.0693359375,
+          "B2_cell_share_whole": 0.03596767296790025
+        }
+      },
+      "B2_ADD_share_whole": 0.36650084922280435,
+      "plan_sha256": "551e107db910e6e51d9d1d8d180be5f5c1e15d56cdc5c97a9bc8aba4424d0227",
+      "verdict_sha256": "fdf4f4fab64ebdba248d17636c7ae4b4f4622506e8eb1e6e39bb2312bbc7db6c",
+      "archived_input_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+      "work_sha256": "f7c29f26ac9000d74931a2362e6e35b145eacb9544cd52a2ddb353133c989984"
+    }
+  ],
+  "elapsed_seconds": 0.33369699999457225,
+  "limits": {
+    "model_pairs": 15000,
+    "coverage_pairs": 33000,
+    "external_worker_timeout": 5,
+    "internal_seconds": 4.5
+  },
+  "generator_sha256": "5913360bcf3427699ccb673329988faed51fc991b5d21820d9a85bcc5692b7dd",
+  "script_sha256": "e10cad882844ffa13356f245fa1cb572996ae991ca8dd7f0f3388a4ac9f7e992",
+  "limitations": "Search-stage host pack4/exact integer model only. No Lean proof/runtime or performance for ADD. Coverage uses an unverified Python transcription of official fixed generator on named COMPLETED R15 draws. B2 measured class costs are kept separate; no time is assigned to eligible subsets. No40183711165 input/result was read.",
+  "controller_seconds": 0.445327699999325,
+  "worker_exit_code": 0
+}

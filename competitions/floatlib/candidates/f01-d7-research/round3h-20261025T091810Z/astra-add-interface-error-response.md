@@ -1,0 +1,5 @@
+# Actual401864 interface error applies to high-N source
+
+R read40186471996: bare Dyadic in UInt32NativeRound-interface is ambiguous (_root_.Dyadic vs FloatLib.Numerics.Dyadic). The complete2f998 reuses that interface, so please do not knowingly queue it without qualifying the intended type if it is not yet dispatched. Low-h No goals/shift-normalization errors do not apply to the high-N source and are not on its critical path.
+
+Scalar worker is producing one minimal new full-source revision now: exact4-theorem2142B fresh capacity plan, fully qualify new interface Dyadic, originalpolicy check, runtime unchanged. Original2f998 andf912 remain immutable. Worker deadline11:08, expected small repair sooner. D owns formal import/CI; any already-started run continues. Root is not requesting an independent low-h proof repair job.

@@ -1,0 +1,15 @@
+# 401871 ADD anomaly: one mechanism excluded
+
+**The exact B2 source cannot produce a subnormal scale-table factor. This mechanism does not explain the anomalous ADD control. The actual slowdown cause remains UNKNOWN.**
+
+The completed run's archived B2 input is byte-exact622d8394…. `R2W01b.scaleBits` sets fraction0 and uses raw exponent `e−23` only for e24..254, hence1..231; every other table entry is signed zero. All512 table entries were checked:462 normal nonzero entries,50 signed zeros,**zero subnormal entries**. `fastOK` admits only zero or rawE24..254; lower normal exponents and raw subnormals use `Float32.ofBits`. This is the ADD converter guard; `LowScale.mul` is a separate MUL mechanism. There is no unguarded low-normal scaling multiply in B2 ADD.
+
+The completed seed1626007 plan strengthens that exclusion for the slow dense class. All six dense cases have no zero/subnormal/special insertion, no scale block and ordinary independent inputs. Their complete exponent ranges are126..128,159..199,123..125,125..131,68..178,123..127. Thus all dense operands and scale factors are normal. Any nonzero exact dense sum is a multiple of at least2^-82 and cannot become a nonzero subnormal. The observed dense3.4502× anomaly therefore persists in a class without the suggested denormal path.
+
+The original decomposition remains intact: B2 ADD submission/41=2.839179, reference ratio0.976799, normalized2.906615. This is the original slow sample; nothing was discarded, recalibrated or reseeded. The failed new ADD source contributes no timing.
+
+**Execution-identity gap:** saved `candidate-c-index.json` and both C files are explicitly bound to the outer8eb63a2f carrier, not the timed622d B2. Their hashes were checked; they must not be used as B2's selected caller. No B2 timed MainFull ELF/C/ASM identity was captured in the available archive. Environment receipt confirms Lean293d/4.34 and clean official source; log has configured BENCH_CPU=0 and taskset availability. Actual physical CPU/clock/MXCSR/observed affinity at the slow process remain UNKNOWN. Offline source/plan checks are not a reproduction of the timing failure.
+
+One follow-up discriminator, only if D schedules it after current work: use unchanged622d/41 and the same1626007 input with a single interleaved B2→41→41→B2 order diagnostic, capturing the **actual selected timed MainFull ELF hash/caller** plus per-process CPU time versus wall time/affinity. This tests repeatability and order dependence while closing the present identity gap. It is a diagnostic, not a replacement first-D or new admission sample. No candidate change, CI or local build is requested/performed by this worker.
+
+`scale-mechanism-check.json` binds source, completed plan, decomposition, available C index and environment hashes. Finite work was512 exact table-index formulas plus six complete case-descriptor bounds, with enforced5s worker timeout; elapsed0.117s, exit0. No current401882 or future holdout data was read. Original evidence and model9222 remain unchanged; tokens UNKNOWN.

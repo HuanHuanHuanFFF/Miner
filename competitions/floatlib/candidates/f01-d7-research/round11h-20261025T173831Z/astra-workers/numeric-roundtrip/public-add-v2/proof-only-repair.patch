@@ -1,0 +1,55 @@
+--- public-add-v1/Kernel.lean
++++ public-add-v2/Kernel.lean
+@@ -4808,7 +4808,7 @@
+       rw [roundShiftRightEven_one]
+       split <;> omega
+     · have hr := roundShiftRightEven_le_shiftRight_add1 (a * 2 ^ d + b) (d + 1)
+-      rw [Nat.shiftRight_eq_div_pow] at hr
++      rw [Nat.shiftRight_eq', Nat.shiftRight_eq_div_pow] at hr
+       interval_cases d <;> norm_num at hr ⊢ <;> omega
+   have hne : N18.rounded (a * 2 ^ d + b) ≠ 16777216 := by omega
+   simp [N18.carry, hne]
+@@ -4820,7 +4820,7 @@
+     N18.carry (a * 2 ^ d - b) = 0 := by
+   have hs : 23 + d - 23 = d := by omega
+   have hr := roundShiftRightEven_le_shiftRight_add1 (a * 2 ^ d - b) d
+-  rw [Nat.shiftRight_eq_div_pow] at hr
++  rw [Nat.shiftRight_eq', Nat.shiftRight_eq_div_pow] at hr
+   have hq : N18.rounded (a * 2 ^ d - b) < 16777216 := by
+     unfold N18.rounded
+     rw [hh, hs]
+@@ -4990,6 +4990,7 @@
+   have hgle : (1 : UInt32) ≤ gap := UInt32.le_iff_toNat_le.mpr hd0
+   have hbase : (gap - 1).toNat = gap.toNat - 1 := by
+     rw [UInt32.toNat_sub_of_le _ _ hgle]
++    rfl
+   have hbasemax : (gap - 1).toNat ≤ 7 := by rw [hbase]; omega
+   have hN : 8388608 ≤ a * 2 ^ gap.toNat - b := by rw [← hmag]; exact hlo
+   have hM := oppMagBounds a b gap.toNat ha ha' hb hb' hd0 hd hN
+@@ -5082,9 +5083,10 @@
+   rw [R7W02.fromRaw_toModel, ← ExecFloat.Proof.add_eq_spec x y,
+     R7Native.toModelExecAdd, ← Model.Proof.add_eq_spec,
+     R7W02.exec_toModel_eq_rawModel x, R7W02.exec_toModel_eq_rawModel y,
+-    ← R2W01c.rawModel_eq_native32 x.raw.1, ← R2W01c.rawModel_eq_native32 y.raw.1,
+-    halign]
+-  exact packModel n shift e sign elo hlo hhi hs he helo hehi
++    ← R2W01c.rawModel_eq_native32 x.raw.1, ← R2W01c.rawModel_eq_native32 y.raw.1]
++  change Model.NativeBinary32.ofUInt32 (FastMul.mkW sign e (n.toFloat32.toUInt32 >>> shift)) =
++    Model.add (R2W01c.rawModel x.raw.1) (R2W01c.rawModel y.raw.1)
++  exact (packModel n shift e sign elo hlo hhi hs he helo hehi).trans halign.symm
+ end R18A.O18
+ namespace R18A.L18
+ open FloatLib.Floats
+@@ -5349,10 +5351,10 @@
+   split
+   · rename_i hd
+     have hg : d.toNat ≤ 7 := by
+-      have h := (Bool.and_eq_true.mp hd).1
++      have h := (Bool.and_eq_true_iff.mp hd).1
+       exact UInt32.le_iff_toNat_le.mp (of_decide_eq_true h)
+     have had : adj.toNat ≤ d.toNat := by
+-      have h := (Bool.and_eq_true.mp hd).2
++      have h := (Bool.and_eq_true_iff.mp hd).2
+       exact UInt32.le_iff_toNat_le.mp (of_decide_eq_true h)
+     have hdom : R2W01c.wordSign hi = R2W01c.wordSign lo ∨ 1 ≤ d.toNat := by
+       by_cases hs : R2W01c.wordSign hi = R2W01c.wordSign lo

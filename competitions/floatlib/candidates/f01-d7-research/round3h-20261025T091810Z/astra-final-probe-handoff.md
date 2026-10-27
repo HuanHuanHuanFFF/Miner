@@ -1,0 +1,7 @@
+# Final bounded mathematical probe ready, before remaining-window decision
+
+Complete source: astra-workers/matrix-architecture/future-u32-roundtrip/Probe-high-u32-roundtrip.lean, SHA4c65f15da51c7ccf5a0ebb259aa7dd6ba7ef0e5d21520a3272aaf2ab64189a2e,238056B. Exact entire B2 prefix unchanged; appended complete R14 normal-rounding namespaces plus the high-N numeric roundtrip proof attempt. Only ContractTensor. Original fixed intake/policy/options including comments PASS. NOT_COMPILED; no runtime candidate or performance claim.
+
+packaged-probe-manifest.json binds exact source/dependency slices and22 explicit helper roots, ending Submission.R16UInt32Roundtrip.high_roundtrip/high_roundtrip_RNE. They assert actual n.toFloat32.toUInt32.toNat equals RNE integer under only2^23<=N<=2164260735. Four old public specs do not reach them; statement alone must not be reported as full helper replay/axiom acceptance.
+
+If your in-flight same-input control/ADD-C job and remaining delivery reserve allow, use one short statement plus explicit helper audit opportunity for this probe, preferably dispatch by12:00 and no later than12:04. If the slot cannot safely fit, retain NOT_RUN and the exact next check; do not delay evidence recovery or extend12:18:10. No automatic new runtime variant, long proof chain, reseeded performance or further diagnosis loop is requested. Preserve any concrete failure for next round.

@@ -1,0 +1,23 @@
+# R11 终结成本后续假设：只序列化一次
+
+**22:25检查点前的实际修正：只改word返回类型的路线先PARK。** 已从911原完整gate捕获的5b7d C追到相同字节的Packed10.finish定义：它的真实C返回类型已经是uint32_t，函数内没有lean_alloc_ctor或lean_box调用。详细源/对象绑定及函数全文在astra-native-word-finish-review.json。该callee证据不是当前R11.finish8调用端证据，仍待914确认是否调用unboxed入口；不能把独立helper当整个热路径。
+
+固定64位头文件也明确lean_box_uint32只做immediate tagging；它不是一个额外堆盒子。必须区分C中出现的___boxed适配入口、该入口是否实际被调用，以及Float32输入盒子与UInt32输出tag。当前实际C中该callee的非NaN支路仍先isnan、再to_bits；下述单次序列化属于另一个原语调用合并假设，不是“返回UInt32就消掉8个堆对象”。Root待实际R11完整成本后决定，R不写新Kernel。
+
+当前4bdd/5c5e的 finish8 每lane仍调用旧 Packed10.finish：先原生 isNaN，再对非NaN调用 toBits。R8的self-BEq只替换过标量add/mul，没有替换本处。W03对实际源码的提醒已经本地复核。
+
+一个不同的终结机制：先取得一次 Float32.toBits；等于 canonical `0x7fc00000` 时使用原 raw A/B replay，其他字直接保留。它可能把非NaN路径的两次外部原语调用减为一次，并在序列化后释放该lane的FP活跃值；实际内联/调用/收益均UNKNOWN。NaN分支仍精确回放，不能把canonical字作为最终payload。
+
+数学依据是**原生Float32的逻辑Model.Valid限制**，而非任意原始Binary32：若 unpack 指数全1且尾数非0，valid.eq_packedNaN强制整字为canonicalNaN。固定Lean293d的真实Format/Valid.lean已通过GitHub只读接口取得，blob079165a5fc851ee953b8345da4da96aee97967a9；原文保存在astra-Lean-Format-Valid.lean。Unpacked.unpack和Float32.Model来自已保留同版本公共源码。
+
+具体适用边界：原始载体字0x7fc12345是NaN却不等于canonical常量，所以不能将该判断用于A/B.raw或未经原生转换的Binary32。候选只判断Float32.toBits后的字；命中NaN后返回的仍是原始回放字，不能返回canonical字冒充原payload。
+
+草稿astra-native-word-finish.lean表达完整native_nan_iff_word与finishWord_eq桥，尚未编译。先不生成新Kernel、不占用CI：5c5e基础证明和完整路径反馈优先。若首次实际代码生成显示终结调用仍显著，再对精确父本创建单一变体；与短n展开组合要重新核对256000字节上限及原完整gate。下载的W03 A/B原件保留，不叠加或覆盖。
+
+## 22:25收敛：唯一实际源补丁改用已有证明资产
+
+重新比较证明/源码成本后，唯一准备的源变化使用已经在7cad中的R7W04.nonNaN自BEq守卫：非NaN直接toBits，NaN仍走原始raw replay。astra-finish-self-bridge.lean新增一个小的finishWord_eq_raw桥，借原nonNaN_eq_not_isNaN关闭分类，不需要把新的canonical-word证明加入Kernel。旧canonical-word草稿仅保留为数学资产，不是第二个运行候选。
+
+astra-prepare-finish-patch.py只产生astra-native-word-finish.patch及其JSON回执，从已通过915语句的7cad机械构建和逆向还原；没有写Kernel。若应用，预计255348B、SHA c214545d9f343027bcf2a37d40d2fa80a025379fd066ecad94034d33820cecf5，余652B。新本地桥未编译，不能继承915通过。
+
+该补丁的真实动机是将foreign isnan替换为原生self比较，保留一次toBits；返回ABI并未改善，也没有“去掉8个Binary32堆盒子”的声明。当前R11.finish8是否仍走foreign isnan、是否调用boxed适配入口，必须看914实际caller C。若两次原语调用也已被当前编译消掉，则连这份源补丁一并PARK；Root按完整成本决定，不为名字或理论对象数造新候选。

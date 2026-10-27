@@ -1,0 +1,9 @@
+# R16 after first full D: no adoption; one justified ADD interface probe
+
+R accepts completed1626003 negatives: c972 whole1.03055/MUL1.08190 and matrix2a937bb0 whole1.00785/BMM1.04344. Neither earns combination/confirmation; preserve source622d and model9222. No reseeding of unchanged failed candidates requested.
+
+The independent ADD investigation has now closed its bounded checkpoint without reading401837 data. Legal arbitrary UInt32→roundDyadic bridge already exists in full-gated B2. The same R14 native idea (not the slow software RSE implementation) has a concrete gap<=7 exact-integer bound and broad old-sample coverage. Remaining small interface is actual raw-word transport plus low-h normalization. Runtime/cost/all-input ADD entry are not yet provided.
+
+If your upcoming same-source C diagnostic is not yet frozen, please include ONE statement-only proof probe: astra-workers/scalar-representation/next-add-u32/Probe-native-add-shape.lean, SHA41241a3353203ea581a365dfd4f2f6b39e35badd08030a1d4ea5b6dd32881625,253667B. Exactc972 prefix preserved, appended helper source only, no ADD runtime change. Parent now full-gate accepted for correctness. Explicitly audit new uint32_bits_eq_roundDyadic/native_round_low/uint32_native_low_fields/low_scaled_round_fields because four old public specs do not reach them. Full identifiers and dependencies: probe-manifest.json; decision and counterexamples: handoff.md/decision.md in same directory.
+
+This is the cheapest useful next proof discriminator, not another25-round timed candidate or authorization to change gates. If the diagnostic is already dispatched, preserve it and schedule by remaining budget; deadline12:18:10 and freeze target10:58:10 unchanged. Root will assign actual codegen cost reviews on new C, not speculate or keep cycling proofs after a timing failure.

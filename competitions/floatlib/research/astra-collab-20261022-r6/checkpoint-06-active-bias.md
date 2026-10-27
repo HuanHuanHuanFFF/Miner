@@ -1,0 +1,15 @@
+# R6 substantive arithmetic candidate ready, 2026-10-22 14:01 UTC
+
+**f01-r6-active-bias**, SHA5dc096454af79fc20948b5581ba17dd5732ea560955b303e243cb655cf77f684,180259bytes. NOT_RUN. Static hash/size/import/BANNED PASS. R integrated W01b's actual UInt64 bridge plus active packing into W01's low-core. No source edits outside R scope. This is a complete four-function candidate with public mul_spec reaching the new runtime, not a disconnected proof appendix.
+
+When101<=scale<=123, use q=p>>d and `(p+(2^(d-1)-1)+(q&1))>>d`, then direct sign-or-fraction packing. All original product-bound and finite-dispatch proofs retained. **For scale<=100 keep old LowScale.roundLow**; forscale>123 keep old FastMul.roundP. Thus W01b's unprovided small-scale zero proof is not required, and no assertion of it is smuggled into acceptance. The101 threshold is a mathematical proven-domain guard, not a benchmark answer cache. Old tiny is fully active, but new-suite exposure/performance remain UNKNOWN.
+
+23 fixed-shift proof branches each quantify over every product<2^48 and connect the real UInt64 definitions through shifts, modulo and RN-even comparisons. They are proof-only, not23 runtime cases. Both UInt64 additions' overflow boundaries are preserved. A proof of the quotient update alone is not the whole claim: actual active_roundLowBits_eq_roundP links rounding, signed zero and packing. All scripts still need Lean/typechecking/axiom audit; no webpage acceptance claim inherited.
+
+W01b originals: E:/Download/R6-W01b.zip SHAeca6a3228c975dd55331d314df3e6c7966867c5dce27d2b64cac63d379abc55d,111848bytes; report SHA5228e19902f6ab687d8b86e22ab0ef6186b219ec1e40b86ad2dad78cd90f88c1. CRC and24manifest entries verified. ParentWithBridge SHA857505ffc2ec7c5cf5c67bb348d2bf10c451ffb49768f8b5cc718afcbe4f8495 is preserved; the R builder records the integration.
+
+Also available if proof-screening budget permits: **f01-r6-web-absorption26**, SHA5c11167293f153be2ca78b45891040e8bb1ec400a0e0593b16fc1a778c6b3503,161939bytes, NOT_RUN. Fixed FloatLib's private gap39 dyadic proof was copied with attribution and tightened to26, linked through actual wordAdd backend and public add_spec. Original webca586a42 has a comment containing the forbidden import keyword atline2068; the R candidate changes only that comment. Do not queue originalca586 without this policy fix. W02 ZIP/report CRC43manifest entries verified, exact hashes in receipt. Old coverage figures are not new-suite predictions.
+
+D705 normal-mul and717 new-suite continue; R does not demand all queued candidates be fully benchmarked. Active-bias is the new arithmetic mechanism worth a bounded proof check if time permits; otherwise preserve it as a precise next-window starting point. No new direction after14:15.
+
+W03 NaN math is active with only public FloatLib Carrier/Spec definitions, after automatic review rejected the original project-context prompt. R narrowed the payload to anonymously verified public URLs; revised send succeeded. Original rejected prompt was not sent. It will be collected before freeze; no additional web jobs planned.

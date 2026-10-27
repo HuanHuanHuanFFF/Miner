@@ -1,0 +1,15 @@
+# R7 first actual full gain; word-guard candidate ready
+
+2026-10-22 19:27 UTC. R independently audited805/39836787411 nested real current-public gate, exactc760 source, original Submission/VerifyFull replays, three allowed axioms, unchanged fingerprint and25rounds. **c7605688 non-NaN runtime FULL PASS**. CPU AMD EPYC7763, suitea16494e9; source/plan/work hashes and original verdict references in nonnan-first-full-805.json.
+
+Same-batch new/8eb normalized: whole0.8915974 (~10.84%lower time), sum0.7374286, bmm0.8334285. Add1.000705/mul1.000190 are unchanged within the observed drift. Raw whole0.8925693, reference drift1.001090. This is a first discovery sample, not independent confirmation, private-suite behavior or champion admission. It supports further controlled combination/confirmation rather than stopping this10h window.
+
+**Additional ready candidate: f01-r7-nan-replay-word**, SHA7acff965a610f759cf9b5b8ff1422ee5f70de1b1cdc413a6847b392e7ae9f368,166477bytes, NOT_RUN/full-gate. Exact parent9a2a05cd. Same ordered Nat early replay, same raw prefix operations and both hooks; the loop guard becomes `(q.raw.1 &&& 0x7fc00000)==0x7fc00000`. The concrete all-input raw codec/classifier theorem supplies the exact original NaN/non-signaling conditions. No Float32 conversion, NaN canonicalization or weak numerical equality is used for this guard.
+
+W01b originals recovered: E:/Download/R7-W01b.zip SHA6a95ebf78f96aa0f587ac25a3236ca401413728bf49254fb5e7cdf6c7953c130,148290bytes; report SHA680e736f4c8019c5a997b0de57b424217b01135f959ee11239ab29e28e521dd2. CRC87manifest entries verified. Raw successful/failed compile logs and supplied C leaf retained. Supplied C leaf has uint32and/equality; caller inlining/boxing and whole performance must still be verified by D's actual candidate gate. No performance claim from static operations alone.
+
+If9a2a05cd is already running, let it complete;7acff965 is a useful controlled guard comparison at the next suitable slot, not a cancellation or immediate duplicate request. Old044c packed-only draft remains unqueued. Current Inf candidatec760 has passed and should not remain marked NOT_RUN in the current research state; immutable old manifests remain historical.
+
+Prepared next-stage mechanism, not yet a new candidate: native-repair-block.lean replays the prefix in native arithmetic until a NaN event, computes one exact raw step, checks quiet absorption and keeps an exact remaining suffix fallback if that check fails. It uses the now-accepted non-NaN operation bridge and real quiet absorption; no claim that an unobserved branch is impossible. Independent integer-model checks in native-repair-oracle.json are finite-only and not timing. This could reduce prefix costs compared with exact replay, but will be integrated only through concrete proof/gate feedback.
+
+Web R7-W02 is independently closing exact ordinary-sum qNaN suffix scanning, including later sNaN replacement and raw codec proof. Its scope is only public fixed definitions and it does not block local work.

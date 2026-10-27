@@ -1,0 +1,22 @@
+LEAN_EXPORT lean_object* lp_competition_Submission_R15PackedB2_output(lean_object* v_batch_14429_, lean_object* v_m_14430_, lean_object* v_n_14431_, lean_object* v_p_14432_, lean_object* v_A_14433_, lean_object* v_B_14434_){
+_start:
+{
+lean_object* v_packedB_14435_; lean_object* v___x_14436_; lean_object* v___x_14437_; lean_object* v___x_14438_; lean_object* v___x_14439_; lean_object* v___x_14440_; 
+lean_inc_ref(v_B_14434_);
+lean_inc(v_p_14432_);
+lean_inc(v_n_14431_);
+v_packedB_14435_ = lp_competition_Submission_R15PackedB2_packB(v_batch_14429_, v_n_14431_, v_p_14432_, v_B_14434_);
+v___x_14436_ = lean_nat_mul(v_batch_14429_, v_m_14430_);
+v___x_14437_ = lean_nat_mul(v___x_14436_, v_p_14432_);
+v___x_14438_ = lean_mk_empty_array_with_capacity(v___x_14437_);
+lean_dec(v___x_14437_);
+v___x_14439_ = lean_unsigned_to_nat(0u);
+v___x_14440_ = lp_competition_Fin_foldl_loop___at___00Submission_R15PackedB2_output_spec__1(v_p_14432_, v_m_14430_, v_batch_14429_, v_n_14431_, v_A_14433_, v_packedB_14435_, v_B_14434_, v___x_14436_, v___x_14438_, v___x_14439_);
+lean_dec(v___x_14436_);
+lean_dec_ref(v_B_14434_);
+lean_dec_ref(v_packedB_14435_);
+lean_dec(v_n_14431_);
+lean_dec(v_p_14432_);
+return v___x_14440_;
+}
+}

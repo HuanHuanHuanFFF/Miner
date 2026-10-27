@@ -1,0 +1,146 @@
+{
+  "checked_utc": "2026-10-26T09:29:43.961852+00:00",
+  "state": "BOUND_DIAGNOSTIC_LOWERING_REVIEW_NO_SPEED_CLAIM",
+  "run": 40296747927,
+  "commit_reported_by_root": "84da303a99b0ada55314efd25f81b36c4f436453",
+  "unchanged_extractor_sha256": "c3dfb35f4fdd8e1ed8cfdb15e812d0857429210f8819528ecc5820ede2b8e5a8",
+  "extractor_result": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\scalar-cost\\audit-40296747927\\audit.json",
+    "sha256": "b10c7d949ae5fe9ceb5b47464746eb9f9fb9ba532d0887f896ebb2f2356099eb",
+    "bytes": 27969
+  },
+  "original_ASM": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40296747927\\download-cbb1d67b6cc844608eaa522694021fd7\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r17-dev-u64-lowering1\\native-loop-3.asm.txt",
+      "sha256": "61d3e19e9c1dfa5115709c98f82dd7ec45ddfed4b6440491ec50e422bef36566",
+      "bytes": 60801
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40296747927\\download-cbb1d67b6cc844608eaa522694021fd7\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r17-dev-u64-lowering1\\native-loop-4.asm.txt",
+      "sha256": "cac41f0224870620ed3af5c6bdc1c26ae62a0cc89fceac7514241b8bf3ddf896",
+      "bytes": 33909
+    }
+  ],
+  "object_sha256_from_index": "aa8fa660d99df2bb91b9ee98cfd7316bf6b29243902a05c1181e535ff27f2d82",
+  "normalCore": {
+    "symbol": "lp_competition_Submission_R17NumericMulInteger_normalCore",
+    "address_span": [
+      "0x0",
+      "0x91"
+    ],
+    "instruction_counts": {
+      "mov": 5,
+      "and": 4,
+      "or": 5,
+      "imul": 1,
+      "cvtsi2ss": 1,
+      "cvttss2si": 2,
+      "movaps": 1,
+      "subss": 1,
+      "sar": 1,
+      "movss": 1,
+      "ucomiss": 1,
+      "cmova": 1,
+      "xor": 2,
+      "shr": 2,
+      "setne": 1,
+      "lea": 1,
+      "add": 3,
+      "shl": 1,
+      "ret": 1
+    },
+    "call_sites": 0,
+    "stack_references": 0,
+    "external_bits_or_conversion_helpers": 0
+  },
+  "diagnostic_accepted_path": {
+    "symbol": "lp_competition_Submission_R17NumericMulInteger_diagnosticEntry",
+    "ranges": [
+      [
+        "0x0",
+        "0x2d"
+      ],
+      [
+        "0x74",
+        "0x86"
+      ],
+      [
+        "0x266",
+        "0x272"
+      ],
+      [
+        "0x45b",
+        "0x4e4"
+      ],
+      [
+        "0xb6e",
+        "0xb7a"
+      ]
+    ],
+    "guard_edges": [
+      "0x2d ->0x74 when eu normal",
+      "0x86 ->0x266 when ev normal",
+      "0x272 ->0x45b when S128..380",
+      "0x4e4 ->0xb6e return epilogue"
+    ],
+    "instruction_counts": {
+      "push": 5,
+      "sub": 1,
+      "mov": 8,
+      "shr": 4,
+      "movzx": 2,
+      "lea": 5,
+      "cmp": 3,
+      "ja": 3,
+      "and": 4,
+      "or": 5,
+      "imul": 1,
+      "cvtsi2ss": 1,
+      "cvttss2si": 2,
+      "sar": 1,
+      "movaps": 1,
+      "subss": 1,
+      "movss": 1,
+      "ucomiss": 1,
+      "cmova": 1,
+      "xor": 2,
+      "setne": 1,
+      "add": 4,
+      "shl": 1,
+      "jmp": 1,
+      "pop": 5,
+      "ret": 1
+    },
+    "call_sites": 0,
+    "P_or_R_stack_spills_observed": 0,
+    "shared_callee_saved_pushes": 5,
+    "shared_stack_reservation_bytes": 16
+  },
+  "findings": {
+    "forward_unsigned_adjustment": "ABSENT in captured core/accepted path: one signed cvtsi2ss after bounded integer multiply",
+    "lower_zero_or_nan_clamp": "ABSENT in captured core/accepted conversion sequence; no lower-bound selection",
+    "reverse_unsigned_adjustment": "RETAINED: two cvttss2si plus subss, sign mask, and/or. No helper call and no conditional jump for this adjustment",
+    "upper_saturating_clamp": "RETAINED: constant load/ucomiss/UINT64_MAX/cmova selection",
+    "constant_value_binding": "UNKNOWN: archive shows RIP+0 references but no relocations/constant-pool bytes; identifying subss constant as2^63 and compare constant as2^64 is INFERRED from fixed source and standard lowering pattern",
+    "boxing": "No heap/closure/Nat call in normalCore C; generic guardedMul lean_apply_2 sites are fallback only; concrete diagnosticEntry fast path is call-free",
+    "fallback_stack_traffic": "Present outside accepted path, e.g.0x306/0x311,0x599/0x5a4,0x804/0x80f; not counted as fast-path spills",
+    "MainFull": "Still byte-identical B2 MainFull C SHA94f69ed1; suite-selected MUL is lam__3 with no U64 numeric chain. New helper is not timed public MUL",
+    "performance": "UNKNOWN; diagnostic-only verdict has ratio null/empty timed rounds; no cycle measurements or timed ELF identity"
+  },
+  "raw_verdict": {
+    "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40296747927\\download-cbb1d67b6cc844608eaa522694021fd7\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r17-dev-u64-lowering1\\diagnostic-only-verdict.json",
+    "sha256": "9457983b9c24a98d83c316c9a08ae1808b2c407caa667e19a000e96ed07502de",
+    "bytes": 777
+  },
+  "raw_helper_audit": {
+    "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40296747927\\download-cbb1d67b6cc844608eaa522694021fd7\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r17-dev-u64-lowering1\\helper-audit.json",
+    "sha256": "d8c971ef9e156eadf541fb08c4ae6bd2d613cf9fdf321cb192312fb83a24509f",
+    "bytes": 1174
+  },
+  "compile_trace": {
+    "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40296747927\\download-cbb1d67b6cc844608eaa522694021fd7\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r17-dev-u64-lowering1\\build-trace-5.txt",
+    "sha256": "e3c06af0f90469f98873bfebb3d38ebb0bf7ee18d62c3c458b3670a93c7df614",
+    "bytes": 1303
+  },
+  "kernel_sha256": "876864bd9777f6a78a418db1d59cf55deeab755678cce4a21003bb126ea770d9"
+}

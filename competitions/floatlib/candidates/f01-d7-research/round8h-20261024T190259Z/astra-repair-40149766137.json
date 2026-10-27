@@ -1,0 +1,69 @@
+{
+  "timestamp_utc": "2026-10-25T01:29:17.774173+00:00",
+  "state": "EXACT_COMPILER_FEEDBACK_REPAIR_DRAFT_NOT_RUN",
+  "run": 40149766137,
+  "source_commit": "e5b2f2d3da9b420f4b470e6841cd0778a7e72173",
+  "files": [
+    {
+      "original": "astra-biased-rne2.lean",
+      "original_sha256": "e9abe15eaebf5dab13f717558292f49871f8fdde07b3075145915a493bb5db0a",
+      "path": "astra-biased-rne3.lean",
+      "bytes": 2457,
+      "sha256": "fd3df0d744f52f15ba697b1f742f56d77c0ee58ea082b3f5872afbaa970f8326",
+      "edits": [
+        "simp only [beq_iff_eq]"
+      ]
+    },
+    {
+      "original": "astra-small-shift-bias2.lean",
+      "original_sha256": "e3de8acf9ec5ec3434419e1c7a1b46c2a1b92bdef495bd0d4e6ff9e1ff07e585",
+      "path": "astra-small-shift-bias3.lean",
+      "bytes": 3163,
+      "sha256": "ec6a8e65cb608d094049682549e3e9213ac81e13125ca57d2a89943b2c2c2a94",
+      "edits": [
+        "simp only [beq_iff_eq] <;>"
+      ]
+    },
+    {
+      "original": "astra-word-add-alignment2.lean",
+      "original_sha256": "eaa89fa496e6dad3d82d6c14b18503c918cec02b43876c134cc851daaf3d08f9",
+      "path": "astra-word-add-alignment3.lean",
+      "bytes": 4034,
+      "sha256": "e8a3cc1dd7862595834957c08bf2e1ad9546d5bf736577a18c893d537c394b9a",
+      "edits": [
+        "simpa only [magnitude, if_pos rfl] using",
+        "simpa only [magnitude, if_neg hs] using"
+      ]
+    },
+    {
+      "original": "astra-word-add-rounding1.lean",
+      "original_sha256": "b8e6674548e9ad8a4d8fcfb948f85ab48056c576b3289ece1829ddd91b69bff7",
+      "path": "astra-word-add-rounding2.lean",
+      "bytes": 2092,
+      "sha256": "b358c5a11e524af35fc476a5d373c84714b3e570de543a0b9a5dd4dcfb6a846b",
+      "edits": [
+        "have hrhi := roundShiftRightEven_le_shiftRight_add1 n k"
+      ]
+    },
+    {
+      "path": "astra-integer-core-model2.lean",
+      "bytes": 2722,
+      "sha256": "c201150eb693447adbec8c58a7e877f6f21ea336d00508582ac717680d2bd3bf",
+      "replaces": "Submission.R14ExponentShift.core_model in exact5556 source; statement unchanged"
+    },
+    {
+      "path": "astra-word-add-alignment4.lean",
+      "bytes": 4000,
+      "sha256": "c8bd8475394f3161f412309476226edb724e961852e08ebce5d866aff8f69e50",
+      "replaces": "alignment2; version3 preserves intermediate same-sign fix but still had offset simplification. Use4 in next source."
+    }
+  ],
+  "rationale": [
+    "norm_num already normalized beq; redundant simp-only caused actual no-progress errors",
+    "Explicit record-projection nonzero types and concrete roundDyadic magnitude in MUL bridge",
+    "Direct alignLeftOffset term avoids the failed partial Nat-to-Int literal simplification",
+    "Explicit reduceIte closes residual if True in same-sign record",
+    "Normalize Nat.shiftRight and shift notation before omega ties quotient and RNE bounds"
+  ],
+  "scope": "Only astra new versions. D rebuilds exact integer/ADD/combined candidates; no frozen source, runtime, gate or CI changes by R."
+}

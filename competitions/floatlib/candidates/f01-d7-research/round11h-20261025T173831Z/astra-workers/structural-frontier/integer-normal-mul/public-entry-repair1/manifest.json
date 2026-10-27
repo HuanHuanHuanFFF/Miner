@@ -1,0 +1,166 @@
+{
+  "created_utc": "2026-10-26T10:22:16.096749+00:00",
+  "state": "THREE_OBSERVED_REWRITE_POINTS_REPAIRED_NOT_COMPILED",
+  "parent": {
+    "path": "competitions\\floatlib\\candidates\\f01-r17-dev-u64-public1\\Kernel.lean",
+    "bytes": 255704,
+    "sha256": "23adf0984bef02e611143cfc7e40d64d65c99caa0f4d11a0648812b2fb6f1e73"
+  },
+  "archived_input": {
+    "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40302810209\\download-01cea0d70e9c4c2d8a5721ed1721668a\\diagnostics\\f01-d7-public-suite\\public-suite\\inputs\\f01-r17-dev-u64-public1\\Kernel.lean",
+    "bytes": 255704,
+    "sha256": "23adf0984bef02e611143cfc7e40d64d65c99caa0f4d11a0648812b2fb6f1e73"
+  },
+  "candidate": {
+    "path": "Kernel.lean",
+    "bytes": 255728,
+    "sha256": "00ab99c7ff16a8f0f58c5a0b6ad5c87c10c2407589ee17c5f9cba444b7cfd080",
+    "margin": 272
+  },
+  "failure_bindings": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40302810209\\download-01cea0d70e9c4c2d8a5721ed1721668a\\diagnostics\\f01-d7-public-suite\\public-suite\\f01-r17-dev-u64-public1-verdict.json",
+      "bytes": 1095,
+      "sha256": "07437ec5d85d16de6fcfcf5786a8e73ea74a4682cc124ee9a1c923cb08e68197"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40302810209\\download-01cea0d70e9c4c2d8a5721ed1721668a\\diagnostics\\f01-d7-public-suite\\public-suite\\f01-r17-dev-u64-public1-gate.log",
+      "bytes": 1227,
+      "sha256": "aead0681f83c5d9bd741dc28ed63943c072dbeada623a725b83efcefcbc53111"
+    }
+  ],
+  "actual_failure_reason": "the obligation does not typecheck: error: work/Submission.lean:6849:26: Tactic `rewrite` failed: Did not find an occurrence of the pattern | error: work/Submission.lean:6873:26: Tactic `rewrite` failed: Did not find an occurrence of the pattern | error: work/Submission.lean:6907:23: Tactic `rewrite` failed: Did not find an occurrence of the pattern | error: build failed",
+  "full_goal_available": false,
+  "changes": [
+    {
+      "theorem": "R18.R17UInt64Fields.mantissaWord_nat",
+      "line": 6849,
+      "old": "  rw [FastMul.toUInt32_eq,UInt32.toNat_ofNat,hq]",
+      "new": "  simp only [FastMul.toUInt32_eq,UInt32.toNat_ofNat',hq]"
+    },
+    {
+      "theorem": "R18.R17UInt64Fields.highWord_toUInt32_nat",
+      "line": 6873,
+      "old": "  rw [FastMul.toUInt32_eq,UInt32.toNat_ofNat,highWord_nat a b ha0 ha hb0 hb]",
+      "new": "  simp only [FastMul.toUInt32_eq,UInt32.toNat_ofNat',highWord_nat a b ha0 ha hb0 hb]"
+    },
+    {
+      "theorem": "R18.R17UInt64Fields.low_mask_eq_self",
+      "line": 6907,
+      "old": "  rw [UInt32.toNat_and,UInt32.toNat_ofNat]",
+      "new": "  simp only [UInt32.toNat_and,UInt32.toNat_ofNat']"
+    }
+  ],
+  "fixed_interface": {
+    "pin": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+    "file": {
+      "path": "competitions\\floatlib\\research\\materials\\20261022\\R2-W01c\\FloatLib_R2-W01c\\public_sources\\lean4\\src\\Init\\Data\\UInt\\Lemmas.lean",
+      "bytes": 241424,
+      "sha256": "197db99e55771dbf24ef299a091e9266fb23758643c24ea31a24a8908239dc5c"
+    },
+    "explicit_constructor_lemma": "UInt32.toNat_ofNat' : (UInt32.ofNat n).toNat = n % 2^32",
+    "literal_lemma": "UInt32.toNat_ofNat matches toNat(no_index(OfNat.ofNat n)); distinct declaration",
+    "lines": [
+      44,
+      47,
+      250
+    ]
+  },
+  "rationale": "Use the explicit-ofNat theorem and bounded simp-only normalization, which does not require a second rewrite occurrence after the first rewrite/projection reduction. No claim that the absent full goal proves one unique normalization cause.",
+  "preserved": [
+    "All theorem statements, hypotheses and subsequent Nat.mod bounds",
+    "All runtime definitions/public wrapper/fallback graph",
+    "Original try dsimp change",
+    "All67 roots and original frozen sources"
+  ],
+  "exact_inverse_rebuild": true,
+  "original_policy_checks": {
+    "intake": null,
+    "policy": null,
+    "options": null
+  },
+  "canonical_LF": true,
+  "helper_roots": [
+    "R18.R14NatNormal.rounded",
+    "R18.R14NatNormal.carry",
+    "R18.R14NatNormal.mantissa",
+    "R18.R14NatNormal.carry_le",
+    "R18.R14NatNormal.leading_bounds",
+    "R18.R14NatNormal.no_carry_at_47",
+    "R18.R14NatNormal.mantissa_bounds",
+    "R18.R14NatNormal.native_round_normal",
+    "R18.R14NatNormal.model_round_normal",
+    "R18.R14NatNormal.round_normal_decode",
+    "R18.R14ExponentShift.product",
+    "R18.R14ExponentShift.middleExponent",
+    "R18.R14ExponentShift.storedFraction",
+    "R18.R14ExponentShift.product_bounds",
+    "R18.R14ExponentShift.middle_bounds",
+    "R18.R17UInt64Integer.roundedShift",
+    "R18.R17UInt64Integer.roundedInteger",
+    "R18.R17UInt64Integer.rounded_shift_cases",
+    "R18.R17UInt64Integer.rounded_integer_bounds",
+    "R18.R17UInt64Integer.rounded_integer_fit",
+    "R18.R17UInt64Integer.toUInt64_of_nonnegative_integral_decode",
+    "R18.R17UInt64Integer.uint64_model_eq_roundDyadic",
+    "R18.R17UInt64Integer.native_uint64_decode",
+    "R18.R17UInt64Integer.uint64_roundtrip",
+    "R18.R17UInt64Integer.product_word_nat",
+    "R18.R17UInt64Integer.numeric_integer_product",
+    "R18.R17UInt64Integer.rounded_threshold",
+    "R18.R17UInt64Integer.shift_recovery",
+    "R18.R17NumericMulInteger.normalCore",
+    "R18.R17NumericMulInteger.guardedMul",
+    "R18.R17UInt64Fields.numericProduct",
+    "R18.R17UInt64Fields.highWord",
+    "R18.R17UInt64Fields.shiftWord",
+    "R18.R17UInt64Fields.mantissaWord",
+    "R18.R17UInt64Fields.fractionWord",
+    "R18.R17UInt64Fields.exponentWord",
+    "R18.R17UInt64Fields.highWord_nat",
+    "R18.R17UInt64Fields.shiftWord_nat",
+    "R18.R17UInt64Fields.mantissaWord_nat",
+    "R18.R17UInt64Fields.fractionWord_nat",
+    "R18.R17UInt64Fields.highWord_toUInt32_nat",
+    "R18.R17UInt64Fields.exponentWord_nat",
+    "R18.R17UInt64Fields.output_fields",
+    "R18.R17UInt64Fields.low_mask_eq_self",
+    "R18.R17UInt64Fields.mkW_eq_unmasked",
+    "R18.R17UInt64Fields.packed_fields",
+    "R18.R17UInt64Fields.normalCore_eq_fields",
+    "R18.R14NativeProduct.model_mul_of_nonzero_decodes",
+    "R18.R14NatNormal.raw_normal_decode",
+    "R18.R14ExponentShift.ex",
+    "R18.R14ExponentShift.ex_nat",
+    "R18.R14ExponentShift.ex_bound",
+    "R18.R14ExponentShift.sum_nat",
+    "R18.R14ExponentShift.model_mul_normal_fields",
+    "R18.R14ExponentShift.eligible",
+    "R18.R14ExponentShift.eligible_conditions",
+    "R18.R18NumericMulSpec.sign_word_eq",
+    "R18.R18NumericMulSpec.core",
+    "R18.R18NumericMulSpec.core_word",
+    "R18.R18NumericMulSpec.core_model",
+    "R18.R18NumericMulSpec.core_spec",
+    "R18.R18NumericMulSpec.guardedMul_spec",
+    "R18.R18NumericMulSpec.preserved_fallback_entry_spec",
+    "Submission.add_spec",
+    "Submission.mul_spec",
+    "Submission.sum_spec",
+    "Submission.bmm_spec"
+  ],
+  "patch": {
+    "path": "proof-only.patch",
+    "sha256": "781acd904aa427274474ed6556c2a2da7a041da07a4249bbf0a16fab0f75f380"
+  },
+  "next": "D compile exact new source. If another error occurs, preserve full statement stdout/goal before another proof edit; verdict/gate.log alone has no full goal.",
+  "not_run": [
+    "Lean",
+    "Kernel/helper audit for this source",
+    "Full gate",
+    "Performance"
+  ],
+  "CI": false,
+  "Git": false,
+  "local_Lean": false
+}

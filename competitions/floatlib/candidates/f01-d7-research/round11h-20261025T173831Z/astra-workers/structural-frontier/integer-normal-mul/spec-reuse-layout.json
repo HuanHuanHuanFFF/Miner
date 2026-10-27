@@ -1,0 +1,101 @@
+{
+  "updated_utc": "2026-10-26T08:52:04.116461+00:00",
+  "state": "MODEL_SPEC_REUSE_LAYOUT_NOT_FROZEN_FOR_CI",
+  "source": {
+    "path": "competitions\\floatlib\\candidates\\f01-r14-dev-mul-cache-rse2\\Kernel.lean",
+    "sha256": "9038f8d653f030a8812c3187733488f70995253a1a7b284759c4f58b96378c19"
+  },
+  "pieces": [
+    {
+      "name": "generic decoded multiplication",
+      "source_byte_start": 119757,
+      "source_byte_end_exclusive": 120603,
+      "copied_sha256": "677d072d54d60ee7df086035cd4c02513e7a6c8f968f76c1de806e447326b36f",
+      "assembled_sha256": "677d072d54d60ee7df086035cd4c02513e7a6c8f968f76c1de806e447326b36f",
+      "bytes": 846,
+      "namespace_wrapper": null
+    },
+    {
+      "name": "normal input decode",
+      "source_byte_start": 125847,
+      "source_byte_end_exclusive": 126367,
+      "copied_sha256": "1098f56263840f1014384d95386bd73e7b331f2781ac6bbe39f5dda7934c43f7",
+      "assembled_sha256": "9dc6814d77bca2f94cc992ff8f440570f9308e1d2b02e5b6545031f00cbd5c51",
+      "bytes": 663,
+      "namespace_wrapper": "Submission.R14NatNormal"
+    },
+    {
+      "name": "raw exponent mapping",
+      "source_byte_start": 127849,
+      "source_byte_end_exclusive": 128534,
+      "copied_sha256": "9e2a4f5ccd4d50643c848736b3393bb3f8d6e9d58d178103f61a13d1626ed047",
+      "assembled_sha256": "94f238061987ce767706d2eea73525cd608a42c409df1e71586e443b0d41e16d",
+      "bytes": 836,
+      "namespace_wrapper": "Submission.R14ExponentShift"
+    },
+    {
+      "name": "restricted original multiplication model",
+      "source_byte_start": 137623,
+      "source_byte_end_exclusive": 139974,
+      "copied_sha256": "307081398fee033da7ed7d31783ef635feed294576ec081015c871ac98aa8756",
+      "assembled_sha256": "6fd682dc00b1fe0b2abeec0369ccfc391ef2f479c0561ff66e42651b6a9ebf1b",
+      "bytes": 2502,
+      "namespace_wrapper": "Submission.R14ExponentShift"
+    },
+    {
+      "name": "unchanged eligibility and its full premises",
+      "source_byte_start": 141778,
+      "source_byte_end_exclusive": 142717,
+      "copied_sha256": "500570ec46c5b92070855b7806aab092d43564d8730302095d1ea1c0bb2f5dfa",
+      "assembled_sha256": "18782ab7c180c258a00893f1cb01235071445972e2feab54d691eb14d83afe68",
+      "bytes": 1090,
+      "namespace_wrapper": "Submission.R14ExponentShift"
+    }
+  ],
+  "support": {
+    "path": "Old-model-support-v1.lean.inc",
+    "sha256": "73379d47a837ce0f2bfa4982800ab3fa713bd941879be9d0be6a58b53b01f46f",
+    "bytes": 5941
+  },
+  "fragments": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\structural-frontier\\inline-u64-mul\\probe-b2-v1\\Probe-b2-u64-roundtrip-v1.lean",
+      "bytes": 240164,
+      "sha256": "9f9a297e90f236c349283248cca9aa8f94c35ff24ebe9e26873e2c63d708a933"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\structural-frontier\\inline-u64-mul\\Runtime-u64-mul-integer-v3-lf.lean.inc",
+      "bytes": 1098,
+      "sha256": "cd301ba43a18ba2b9db2a8b2f1109406d00242acdd543b26364d9925ffde6c67"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\structural-frontier\\inline-u64-mul\\Fields-u64-integer-v1.lean.inc",
+      "bytes": 7288,
+      "sha256": "fc9679a234e9a5615189a6fd25925cac56e4c7eb6255c94105dbaa2919447e37"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\structural-frontier\\inline-u64-mul\\Runtime-fields-bridge-v1.lean.inc",
+      "bytes": 1046,
+      "sha256": "5a9dd08b139c3e9750c06e0343fb703ecdd0223a42894ff2a4eaa0ddff64a197"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\structural-frontier\\integer-normal-mul\\Old-model-support-v1.lean.inc",
+      "bytes": 5941,
+      "sha256": "73379d47a837ce0f2bfa4982800ab3fa713bd941879be9d0be6a58b53b01f46f"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round11h-20261025T173831Z\\astra-workers\\structural-frontier\\integer-normal-mul\\Public-numeric-mul-bridge-v1.lean.inc",
+      "bytes": 4853,
+      "sha256": "c6ec1a3dd9feef3f4d91ac597a899119d06d5cc6200ea395d90de26800d662ba"
+    }
+  ],
+  "whole_untrimmed_bytes": 260395,
+  "limit": 256000,
+  "over_limit": 4395,
+  "avoided_old_integer_runtime_proof_namespace_bytes": 7864,
+  "reason": "Reuse original finite-input model theorem and carrier proof pattern rather than duplicate old R14DIntegerNormal/rse runtime proof tree",
+  "prerequisite": "Exact UInt64 reverse-cast Int.toNat normalization is known pending; do not mutate or requeue frozen9f9 from this preview",
+  "CI": false,
+  "Git": false,
+  "local_Lean": false
+}

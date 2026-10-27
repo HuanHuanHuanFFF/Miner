@@ -1,0 +1,7 @@
+# R16 research packet ready for final coordinator commit
+
+All R16 astra-* and astra-workers records are now frozen for handoff; astra-conclusions.md and astra-status.json are the current entrypoints, astra-delivery.json records exact source/model/CI snapshot and ownership. Final selected ADD C review is in astra-workers/scalar-representation/final-C-cost.md: intended1cast/1toBits, no Nat/alloc/closure accident, repeated exponent/order selections and input liveness; machine-cycle cause UNKNOWN.
+
+All three runtime candidates passed complete correctness but failed first clean cost; no adoption/confirmation and retained622d/model9222. Same-input control recovery is diagnostic only. Late roundtrip401920 is recorded RUNNING_AT_HANDOFF, not accepted; your existing job receipt is authoritative for its later result. No new research or new CI request from R. Original12:18:10 cutoff stays.
+
+Please include this final R-owned packet in the authorized coordinator commit/push alongside your own closing evidence/index, preserving unrelated old untracked files and old190 HOLD. R will not edit these delivered files while you stage; it will only observe existing job/commit receipts through the deadline. Any post-window collection should be labeled separately, with no new experiment.

@@ -1,0 +1,28 @@
+--- Kernel-add-native-high-draft1.lean
++++ D/native-add-high2/Kernel.lean
+@@ -3499,13 +3499,13 @@
+ 
+ theorem uint32_bits_eq_roundDyadic (n : UInt32) :
+     n.toFloat32.toBits = Model.NativeBinary32.roundDyadic
+-      (⟨false, n.toNat, 0⟩ : Dyadic) := by
++      (⟨false, n.toNat, 0⟩ : FloatLib.Numerics.Dyadic) := by
+   have hw : ExecFloat.Binary.ofFloat32 n.toFloat32 =
+       ExecFloat.Binary.ofBits32
+-        (Model.NativeBinary32.roundDyadic (⟨false, n.toNat, 0⟩ : Dyadic)) := by
++        (Model.NativeBinary32.roundDyadic (⟨false, n.toNat, 0⟩ : FloatLib.Numerics.Dyadic)) := by
+     apply ExecFloat.Binary.toModel_inj.mp
+     change R2W01c.nativeModel n.toFloat32 = R2W01c.rawModel
+-      (Model.NativeBinary32.roundDyadic (⟨false, n.toNat, 0⟩ : Dyadic))
++      (Model.NativeBinary32.roundDyadic (⟨false, n.toNat, 0⟩ : FloatLib.Numerics.Dyadic))
+     rw [R2W01c.rawModel_eq_native32, Model.NativeBinary32.ofUInt32_roundDyadic]
+     exact R2W01c.uint32_model_eq_roundDyadic n
+   have hbits := congrArg ExecFloat.Binary.toBits32 hw
+@@ -3515,7 +3515,7 @@
+ theorem uint32_native_fields_of_shape (n : UInt32) (em f : Nat)
+     (he : em < 256) (hf : f < 8388608)
+     (hshape : Model.NativeBinary32.roundDyadic
+-      (⟨false, n.toNat, 0⟩ : Dyadic) = Model.NativeBinary32.mkBits false em f) :
++      (⟨false, n.toNat, 0⟩ : FloatLib.Numerics.Dyadic) = Model.NativeBinary32.mkBits false em f) :
+     (Model.NativeBinary32.expField n.toFloat32.toBits).toNat = em ∧
+     (Model.NativeBinary32.fracField n.toFloat32.toBits).toNat = f := by
+   rw [uint32_bits_eq_roundDyadic, hshape]

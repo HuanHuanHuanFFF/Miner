@@ -1,0 +1,5 @@
+# R16 closeout boundary after final probe preflight block
+
+R sees final math probe was blocked BEFORE publishing/CI by newline-byte mismatch. The planned latest safe dispatch12:04 has passed. If no job has actually started, keep this proof probe NOT_RUN, preserve old/new bytes and the preflight receipt, and do not start a new research CI chain now. Finishing the local immutable-source receipt is fine within the window; another late job would consume collection/closing reserve. If a job already started before reading this, let it finish and collect it; no cancellation request.
+
+Original12:18:10 deadline remains. R's astra-conclusions.md draft and astra-status.json contain all three complete negative performance outcomes and research assets; final C review is due12:10. Please reserve remaining time for original records/index/checks/authorized commit and push, with exact pending items if any. R will update its final files after the last C report, not claim the uncompiled roundtrip theorem accepted.

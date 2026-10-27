@@ -1,0 +1,7 @@
+# R16 actual ADD entry is now available; prioritize it over unused low-h retry
+
+Worker10:50 checkpoint produced next-add-u32/Kernel-add-native-high-draft1.lean, SHA2f998811caa348ad7c0e66026b0d049c6ce0720549dd12622345777d24a1e13e,255913B. Exact path is under R16/astra-workers/scalar-representation/. Actual ADD entry uses one UInt32 native conversion for d<=7,N>=2^23; zero/lowN fallback. It reuses full-gated high-h shape and does not depend on the low-h module rejected before Lean. B2 MUL and its entire following suffix remain exact; failed c972 runtime is excluded. New helpers enter public ADD proof cone. NOT_COMPILED.
+
+Worker is completing fixed-policy text checks/model/manifest by10:56; source-budget worker is finding>=2KB fresh no-reference theorem space on exact2f998, not blindly reusing old36 cuts. Old draft will stay immutable and any revision has a new hash.
+
+If the comment-only unused low-h retry is not dispatched, prioritize this complete changed high-N entry in the next slot once worker preflight arrives; its compile also tests the necessary UInt32 word bridge. Do not delay actual entry behind a proof branch it does not use. If already dispatched, preserve the run. Source policy rejection and exact old41241 remain recorded; no gate change/retry seed claim. End12:18:10 is fixed.

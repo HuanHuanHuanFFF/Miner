@@ -1,0 +1,562 @@
+--- B2-622d
++++ producer-trimmed-B2
+@@ -396,19 +396,6 @@
+   | i :: is, acc =>
+       if quietGuard acc then acc
+       else modelDotEarly a b is (Model.Spec.add acc (Model.Spec.mul (a i) (b i)))
+-
+-theorem modelDotFold_absorb {ι : Type} (a b : ι → M32) (indices : List ι)
+-    (q : M32) (hn : q.isNaN = true) (hs : q.isSNaN = false) :
+-    modelDotFold a b indices q = q := by
+-  induction indices generalizing q with
+-  | nil => rfl
+-  | cons i is ih =>
+-      change modelDotFold a b is (Model.Spec.add q (Model.Spec.mul (a i) (b i))) = q
+-      rw [add_mul_absorb q (a i) (b i) hn hs]
+-      exact ih q hn hs
+-
+-
+-
+ 
+ theorem exec_toModel_add (x y : Competition.Binary32) :
+     ExecFloat.Binary.toModel (ExecFloat.add x y) =
+@@ -543,15 +530,6 @@
+     simpa [eq_comm] using (Nat.testBit_two_pow (n := 22) (m := i))
+   · have : i ≠ 22 := by omega
+     simp [hi, this]
+-
+-
+-theorem quietRaw_preserves_bit (u : UInt32) (i : Nat) (hi : i ≠ 22) :
+-    (quietRaw u).toBitVec.getLsbD i = u.toBitVec.getLsbD i := by
+-  unfold quietRaw
+-  rw [UInt32.toBitVec_or]
+-  change (u.toBitVec ||| (4194304#32)).getLsbD i = u.toBitVec.getLsbD i
+-  rw [BitVec.getLsbD_or, quietMask_getLsbD]
+-  simp [hi]
+ 
+ 
+ theorem quietRaw_bit22 (u : UInt32) :
+@@ -913,21 +891,6 @@
+     scaleAt u = Float32.ofBits (scaleBits (tableIndex u)) := by
+   simp only [scaleAt, scaleTable, Array.getElem_ofFn, UInt32.ofNat_toNat]
+ 
+-theorem zero_fields (u : UInt32) (h : magnitude u = 0) :
+-    (u = 0 ∧ tableIndex u = 0 ∧ mantissa u = 0x800000 ∧
+-      scaleBits (tableIndex u) = 0) ∨
+-    (u = 0x80000000 ∧ tableIndex u = 256 ∧ mantissa u = 0x800000 ∧
+-      scaleBits (tableIndex u) = 0x80000000) := by
+-  cases (magnitude_zero_iff u).mp h with
+-  | inl hu =>
+-    subst u
+-    left
+-    decide
+-  | inr hu =>
+-    subst u
+-    right
+-    decide
+-
+ theorem scaleAt_positive_zero : scaleAt 0 = Float32.ofBits 0 := by
+   rw [scaleAt_eq]
+   exact congrArg Float32.ofBits (by decide : scaleBits (tableIndex 0) = 0)
+@@ -996,13 +959,6 @@
+   calc
+     x = Float32.ofBits x.toBits := (float32_ofBits_toBits x).symm
+     _ = Float32.ofBits u := congrArg Float32.ofBits h
+-
+-theorem normal_value_of_bits
+-    (hNormalBits : ∀ u, NormalBand u →
+-      (tableProduct u).toBits = (Float32.ofBits u).toBits) :
+-    ∀ u, NormalBand u → tableProduct u = Float32.ofBits u := by
+-  intro u hn
+-  exact float32_eq_of_toBits_eq (hNormalBits u hn)
+ 
+ theorem normal_value_of_raw_bits
+     (hNormalRawBits : ∀ u, NormalBand u → (tableProduct u).toBits = u) :
+@@ -1396,13 +1352,6 @@
+   cases hx : x.toModel.unpack <;>
+     simp_all [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.isFinite]
+ 
+-theorem native_eq_of_model_eq (x y : Float32)
+-    (h : nativeModel x = nativeModel y) : x = y := by
+-  have hw : ExecFloat.Binary.ofFloat32 x = ExecFloat.Binary.ofFloat32 y :=
+-    ExecFloat.Binary.toModel_inj.mp h
+-  have hn := congrArg ExecFloat.Binary.toFloat32 hw
+-  simpa only [ExecFloat.Binary.toFloat32_ofFloat32] using hn
+-
+ theorem native_mul_eq_of_raw_model_mul_eq
+     (x y : Float32) (u : UInt32)
+     (hx : x.isFinite = true) (hy : y.isFinite = true)
+@@ -1418,19 +1367,6 @@
+     _ = ExecFloat.Binary.toFloat32 (ExecFloat.Binary.ofBits32 u) :=
+       congrArg ExecFloat.Binary.toFloat32 hw
+     _ = Float32.ofBits u := rfl
+-
+-theorem native_mul_bits_eq_of_raw_model_mul_eq
+-    (x y : Float32) (u : UInt32)
+-    (hx : x.isFinite = true) (hy : y.isFinite = true)
+-    (hm : Model.mul (nativeModel x) (nativeModel y) = rawModel u) :
+-    (x * y).toBits = u := by
+-  have hw : ExecFloat.Binary.ofFloat32 (x * y) = ExecFloat.Binary.ofBits32 u := by
+-    apply ExecFloat.Binary.toModel_inj.mp
+-    rw [NativeBridge.toModelNativeMul x y hx hy]
+-    exact hm
+-  have hn := congrArg ExecFloat.Binary.toBits32 hw
+-  simpa only [ExecFloat.Binary.toBits32_ofFloat32,
+-    ExecFloat.Binary.toBits32_ofBits32] using hn
+ 
+ theorem native_mul_eq_of_decoded_raw_model_mul_eq
+     (x y : Float32) (u : UInt32)
+@@ -2320,13 +2256,6 @@
+   rw [Model.toDyadic?_ieee_eq_model FloatFormat.binary32 (by decide)] at hd
+   cases hm : Model.toModel (Model.NativeBinary32.ofUInt32 w) <;>
+     simp_all [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.isFinite]
+-
+-theorem nativeFiniteOfExp (x : Competition.Binary32)
+-    (hx : FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32.expField x.raw.1 ≠ 0xff) :
+-    (ExecFloat.Binary.toFloat32 x).isFinite = true := by
+-  change ((Model.toFloat32Model (Model.NativeBinary32.ofUInt32 x.raw.1)).unpack).isFinite = true
+-  rw [Model.unpack_toFloat32Model]
+-  exact modelFiniteOfExp x.raw.1 hx
+ 
+ end WordFinite
+ 
+@@ -3133,16 +3062,6 @@
+ 
+ 
+ 
+-theorem mul_finite_inputs (x y : Float32) (h : (x * y).isFinite = true) :
+-    x.isFinite = true ∧ y.isFinite = true := by
+-  change (Float32.Model.pack
+-    (Float.Model.UnpackedFloat.mul Float.Model.Format.binary32
+-      x.toModel.unpack y.toModel.unpack)).isFinite = true at h
+-  change x.toModel.unpack.isFinite = true ∧ y.toModel.unpack.isFinite = true
+-  cases hx : x.toModel.unpack <;> cases hy : y.toModel.unpack <;>
+-    simp_all [Float.Model.UnpackedFloat.mul, Float.Model.UnpackedFloat.isFinite,
+-      packNaN_notFinite, packInfinity_notFinite]
+-
+ end FinalFinite
+ 
+ 
+@@ -4307,30 +4226,6 @@
+ 
+ 
+ 
+-theorem repairDotStep_eq_original (q : Competition.Binary32) (acc : Float32)
+-
+-
+-    (x y : Competition.Binary32)
+-
+-
+-    (hmatch : ExecFloat.Binary.toFloat32 q = acc) (hacc : acc.isNaN = false) :
+-
+-
+-    repairDotStep acc x y = ExecFloat.add q (ExecFloat.mul x y) := by
+-
+-
+-  unfold repairDotStep
+-
+-
+-  rw [native_acc_roundtrip q acc hmatch hacc]
+-
+-
+-
+-
+-
+-
+-
+-
+ theorem repairSumStep_isNaN_eq (acc : Float32) (x : Competition.Binary32) :
+ 
+ 
+@@ -4344,27 +4239,6 @@
+ 
+ 
+   simpa only [ExecFloat.Binary.toFloat32_ofFloat32, repairSumStep] using h.symm
+-
+-
+-
+-
+-
+-
+-
+-
+-theorem repairDotStep_isNaN_eq (acc : Float32) (x y : Competition.Binary32) :
+-
+-
+-    Model.isNaN (ExecFloat.Binary.toModel (repairDotStep acc x y)) =
+-
+-
+-      (nativeDotStep acc x y).isNaN := by
+-
+-
+-  have h := native_dot_isNaN_eq_raw (ExecFloat.Binary.ofFloat32 acc) x y
+-
+-
+-  simpa only [ExecFloat.Binary.toFloat32_ofFloat32, repairDotStep] using h.symm
+ 
+ 
+ 
+@@ -4569,23 +4443,6 @@
+   | true =>
+       rw [R7W05.native_add_nan_left a b ha, R7W05.native_eq_nan_of_isNaN a ha]
+       exact (exec_add_import_nan_left b).symm
+-
+-
+-theorem ofFloat32_mul (a b : Float32) :
+-    ExecFloat.Binary.ofFloat32 (a * b) =
+-      ExecFloat.mul (ExecFloat.Binary.ofFloat32 a) (ExecFloat.Binary.ofFloat32 b) := by
+-  cases ha : a.isNaN with
+-  | false =>
+-      cases hb : b.isNaN with
+-      | false => exact Submission.R7Native.ofFloat32Mul a b ha hb
+-      | true =>
+-          rw [R7W05.native_mul_nan_right a b hb, R7W05.native_eq_nan_of_isNaN b hb]
+-          exact (exec_mul_import_nan_right a ha).symm
+-  | true =>
+-      rw [R7W05.native_mul_nan_left a b ha, R7W05.native_eq_nan_of_isNaN a ha]
+-      exact (exec_mul_import_nan_left b).symm
+-
+-
+ 
+ 
+ end R7W12
+@@ -4754,18 +4611,6 @@
+ def replay (n baseA baseB p : Nat) (Araw Braw : Array Binary32) (result : Float32) : Binary32 :=
+   if result.isNaN then replayEarly n baseA baseB p Araw Braw
+   else Fin.foldl n (replayStep n baseA baseB p Araw Braw) posZero
+-
+-theorem replay_eq (n baseA baseB p : Nat) (Araw Braw : Array Binary32) (result : Float32) :
+-    replay n baseA baseB p Araw Braw result =
+-      Fin.foldl n (fun acc i => Submission.add acc
+-        (Submission.mul (Araw.getD (baseA + i.val) posZero)
+-          (Braw.getD (baseB + i.val * p) posZero))) posZero := by
+-  unfold replay
+-  split
+-  · exact replayEarly_eq n baseA baseB p Araw Braw
+-  · rfl
+-
+-
+ 
+ end R7NaNReplay
+ 
+@@ -6590,3 +6435,320 @@
+   · exact R15PackedB2.dispatch_spec batch m n p A B
+ 
+ end Submission
++
++section R17UInt64InterfaceProbe
++set_option maxRecDepth 8192
++
++namespace Submission.R14NatNormal
++
++open FloatLib.Floats
++open FloatLib.Floats.Formats.BinaryInterchange
++open FloatLib.Numerics
++
++def rounded (p : Nat) : Nat := roundShiftRightEven p (p.log2 - 23)
++def carry (p : Nat) : Nat := if rounded p = 16777216 then 1 else 0
++def mantissa (p : Nat) : Nat := if rounded p = 16777216 then 8388608 else rounded p
++
++theorem carry_le (p : Nat) : carry p ≤ 1 := by
++  unfold carry
++  split <;> omega
++
++theorem leading_bounds (p : Nat)
++    (hlo : 70368744177664 ≤ p) (hhi : p < 281474976710656) :
++    46 ≤ p.log2 ∧ p.log2 ≤ 47 := by
++  have hn : p ≠ 0 := by omega
++  have hl : 46 ≤ p.log2 := (Nat.le_log2 hn).2 (by norm_num; exact hlo)
++  have hh : p.log2 < 48 := (Nat.log2_lt hn).2 (by norm_num; exact hhi)
++  omega
++
++theorem no_carry_at_47 (p : Nat)
++    (hmax : p ≤ 281474943156225) (hlog : p.log2 = 47) : carry p = 0 := by
++  have hq : p / 16777216 ≤ 16777214 := by omega
++  have hr := roundShiftRightEven_le_shiftRight_add1 p 24
++  norm_num [Nat.shiftRight_eq_div_pow] at hr
++  have hb : rounded p ≤ 16777215 := by
++    unfold rounded
++    rw [hlog]
++    change roundShiftRightEven p 24 ≤ 16777215
++    omega
++  have hn : rounded p ≠ 16777216 := by omega
++  simp [carry, hn]
++
++theorem mantissa_bounds (p : Nat)
++    (hlo : 70368744177664 ≤ p) (hhi : p < 281474976710656) :
++    8388608 ≤ mantissa p ∧ mantissa p < 16777216 := by
++  have hn : p ≠ 0 := by omega
++  have hl := leading_bounds p hlo hhi
++  have hlow := Nat.log2_self_le hn
++  have hupp := Nat.lt_log2_self (n := p)
++  have hquotient :
++      8388608 ≤ Nat.shiftRight p (p.log2 - 23) ∧
++      Nat.shiftRight p (p.log2 - 23) < 16777216 := by
++    have hc : p.log2 = 46 ∨ p.log2 = 47 := by omega
++    rcases hc with hc | hc <;>
++      simp only [hc] at hlow hupp ⊢ <;>
++      norm_num [Nat.shiftRight_eq_div_pow] at hlow hupp ⊢ <;> omega
++  have hrlo := shiftRight_le_roundShiftRightEven p (p.log2 - 23)
++  have hrhi := roundShiftRightEven_le_shiftRight_add1 p (p.log2 - 23)
++  by_cases hc : rounded p = 16777216
++  · simp [mantissa, hc]
++  · simp only [mantissa, hc, ↓reduceIte]
++    change roundShiftRightEven p (p.log2 - 23) ≠ 16777216 at hc
++    unfold rounded
++    omega
++
++/-- A normal finite rounding has the same mantissa at every admissible exponent.
++The hypotheses explicitly include the carry in the upper boundary. -/
++theorem native_round_normal (sign : Bool) (p : Nat) (e : Int)
++    (hp : p ≠ 0) (hl : 23 ≤ p.log2)
++    (hmin : -126 ≤ (p.log2 : Int) + e)
++    (hmax : (p.log2 : Int) + e + (carry p : Int) ≤ 127) :
++    Model.NativeBinary32.roundDyadic ⟨sign, p, e⟩ =
++      Model.NativeBinary32.mkBits sign
++        (Int.toNat ((p.log2 : Int) + e + (carry p : Int) + 127))
++        (mantissa p - 8388608) := by
++  have hnormal : ¬(p.log2 : Int) + e < -126 := by omega
++  by_cases hc : roundShiftRightEven p (p.log2 - 23) = 16777216
++  · have hc1 : carry p = 1 := by simp [carry, rounded, hc]
++    have hf : ¬(p.log2 : Int) + e + 1 > 127 := by
++      rw [hc1] at hmax
++      norm_num at hmax
++      omega
++    simp [Model.NativeBinary32.roundDyadic, Model.pow2_eq_two_pow,
++      hp, hl, hnormal, hf, carry, rounded, mantissa, hc]
++  · have hc0 : carry p = 0 := by simp [carry, rounded, hc]
++    have hf : ¬(p.log2 : Int) + e > 127 := by
++      rw [hc0] at hmax
++      norm_num at hmax
++      omega
++    simp [Model.NativeBinary32.roundDyadic, Model.pow2_eq_two_pow,
++      hp, hl, hnormal, hf, carry, rounded, mantissa, hc]
++
++theorem model_round_normal (sign : Bool) (p : Nat) (e : Int)
++    (hp : p ≠ 0) (hl : 23 ≤ p.log2)
++    (hmin : -126 ≤ (p.log2 : Int) + e)
++    (hmax : (p.log2 : Int) + e + (carry p : Int) ≤ 127) :
++    Model.roundDyadic FloatFormat.binary32 ⟨sign, p, e⟩ =
++      Model.ofFields FloatFormat.binary32 sign
++        (Int.toNat ((p.log2 : Int) + e + (carry p : Int) + 127))
++        (mantissa p - 8388608) := by
++  rw [← Model.NativeBinary32.ofUInt32_roundDyadic,
++    native_round_normal sign p e hp hl hmin hmax,
++    Model.NativeBinary32.ofUInt32_mkBits]
++
++theorem round_normal_decode (sign : Bool) (p : Nat) (e : Int)
++    (hlo : 70368744177664 ≤ p) (hhi : p < 281474976710656)
++    (hmin : -126 ≤ (p.log2 : Int) + e)
++    (hmax : (p.log2 : Int) + e + (carry p : Int) ≤ 127) :
++    Model.toDyadic? (Model.roundDyadic FloatFormat.binary32 ⟨sign, p, e⟩) =
++      some ⟨sign, mantissa p, (p.log2 : Int) + e + (carry p : Int) - 23⟩ := by
++  have hp : p ≠ 0 := by omega
++  have hl := leading_bounds p hlo hhi
++  have hm := mantissa_bounds p hlo hhi
++  have hc := carry_le p
++  let E := Int.toNat ((p.log2 : Int) + e + (carry p : Int) + 127)
++  have hE0 : 0 < E := by dsimp [E]; omega
++  have hEhi : E < 255 := by dsimp [E]; omega
++  have hE : (E : Int) = (p.log2 : Int) + e + (carry p : Int) + 127 := by
++    dsimp [E]
++    omega
++  have hf : mantissa p - 8388608 < 8388608 := by omega
++  have hsum : 8388608 + (mantissa p - 8388608) = mantissa p := by omega
++  rw [model_round_normal sign p e hp (by omega) hmin hmax]
++  have hd := R2W01c.fields32_toDyadic sign E (mantissa p - 8388608) hE0 hEhi hf
++  have he : (E : Int) - 150 = (p.log2 : Int) + e + (carry p : Int) - 23 := by
++    rw [hE]
++    omega
++  simpa only [hsum, he] using hd
++
++end Submission.R14NatNormal
++
++namespace Submission.R14ExponentShift
++
++open FloatLib.Floats Competition
++open FloatLib.Floats.Formats.BinaryInterchange
++
++def product (mx my : UInt32) : Nat := mx.toNat * my.toNat
++def middleExponent (p : Nat) : Nat := p.log2 + R14NatNormal.carry p + 127
++def storedFraction (p : Nat) : Nat := R14NatNormal.mantissa p - 8388608
++
++theorem product_bounds (mx my : UInt32)
++    (hx0 : 8388608 ≤ mx.toNat) (hx : mx.toNat < 16777216)
++    (hy0 : 8388608 ≤ my.toNat) (hy : my.toNat < 16777216) :
++    70368744177664 ≤ product mx my ∧ product mx my ≤ 281474943156225 := by
++  have hl := Nat.mul_le_mul hx0 hy0
++  have hh := Nat.mul_le_mul (show mx.toNat ≤ 16777215 by omega)
++    (show my.toNat ≤ 16777215 by omega)
++  norm_num at hl hh
++  exact ⟨hl, hh⟩
++
++theorem middle_bounds (p : Nat)
++    (hp0 : 70368744177664 ≤ p) (hp : p ≤ 281474943156225) :
++    173 ≤ middleExponent p ∧ middleExponent p ≤ 174 ∧ storedFraction p < 8388608 := by
++  have hh : p < 281474976710656 := by omega
++  have hl := R14NatNormal.leading_bounds p hp0 hh
++  have hc := R14NatNormal.carry_le p
++  have hm := R14NatNormal.mantissa_bounds p hp0 hh
++  have hcases : p.log2 = 46 ∨ p.log2 = 47 := by omega
++  unfold middleExponent storedFraction
++  rcases hcases with h46 | h47
++  · rw [h46]
++    omega
++  · have hc0 := R14NatNormal.no_carry_at_47 p hp h47
++    rw [h47, hc0]
++    omega
++
++end Submission.R14ExponentShift
++
++namespace Submission.R17UInt64Integer
++
++open FloatLib.Floats
++open FloatLib.Floats.Formats.BinaryInterchange
++open FloatLib.Numerics
++
++def roundedShift (p : Nat) : Nat := R14ExponentShift.middleExponent p - 150
++def roundedInteger (p : Nat) : Nat := R14NatNormal.mantissa p * 2 ^ roundedShift p
++
++theorem rounded_shift_cases (p : Nat)
++    (hlo : 70368744177664 ≤ p) (hhi : p ≤ 281474943156225) :
++    roundedShift p = 23 ∨ roundedShift p = 24 := by
++  have h := R14ExponentShift.middle_bounds p hlo hhi
++  unfold roundedShift
++  omega
++
++theorem rounded_integer_bounds (p : Nat)
++    (hlo : 70368744177664 ≤ p) (hhi : p ≤ 281474943156225) :
++    70368744177664 ≤ roundedInteger p ∧ roundedInteger p < 281474976710656 := by
++  have hm := R14NatNormal.mantissa_bounds p hlo (by omega)
++  have hs := rounded_shift_cases p hlo hhi
++  rcases hs with hs | hs <;>
++    simp only [roundedInteger, hs] <;> norm_num <;> omega
++
++theorem rounded_integer_fit (p : Nat)
++    (hlo : 70368744177664 ≤ p) (hhi : p ≤ 281474943156225) :
++    roundedInteger p < UInt64.size := by
++  have h := rounded_integer_bounds p hlo hhi
++  change roundedInteger p < 18446744073709551616
++  omega
++
++theorem toUInt64_of_nonnegative_integral_decode (x : Float32) (m e : Nat)
++    (hd : Model.toDyadic? (Model.ofFloat32Model x.toModel) =
++      some ⟨false,m,(e : Int)⟩)
++    (hfit : m*2^e < UInt64.size) :
++    x.toUInt64.toNat = m*2^e := by
++  have hv := Model.exactValue_eq_finite_of_toDyadic?_eq_some hd
++  have hi := Model.toInt_toModel_eq (fmt := FloatFormat.binary32) (by decide)
++    (Model.ofFloat32Model x.toModel) 0 (UInt64.size-1)
++  rw [Model.toModel_ofFloat32Model,hv] at hi
++  change x.toModel.unpack.toInt 0 (UInt64.size-1) =
++    Model.roundDyadicToInt .towardZero
++      (⟨false,m,(e : Int)⟩ : FloatLib.Numerics.Dyadic) at hi
++  have hr : Model.roundDyadicToInt .towardZero
++      (⟨false,m,(e : Int)⟩ : FloatLib.Numerics.Dyadic) = ((m*2^e : Nat) : Int) := by
++    by_cases hm : m=0
++    · subst m
++      simp [Model.roundDyadicToInt]
++    · simp [Model.roundDyadicToInt,hm,Nat.shiftLeft_eq]
++  change (UInt64.ofNatClamp
++    ((x.toModel.unpack.toInt 0 (UInt64.size-1)).toNat)).toNat = _
++  rw [hi,hr]
++  simpa only [Int.toNat_natCast] using (UInt64.toNat_ofNatClamp_of_lt hfit)
++
++theorem uint64_model_eq_roundDyadic (n : UInt64) :
++    Model.ofFloat32Model n.toFloat32.toModel =
++      Model.roundDyadic FloatFormat.binary32
++        { negative := false, significand := n.toNat, exponent := 0 } := by
++  change Model.ofFloat32Model
++      (Float32.Model.pack
++        (Float.Model.UnpackedFloat.ofUInt64 Float.Model.Format.binary32 n)) = _
++  rw [Model.ofFloat32Model_pack]
++  change Model.ofModel FloatFormat.binary32
++      (Float.Model.UnpackedFloat.ofInt FloatFormat.binary32.toModel
++        (n.toNat : Int)) = _
++  have hn : ¬ (n.toNat : Int) < 0 := by omega
++  simpa [FloatLib.Numerics.Dyadic.ofScaledInt, hn] using
++    Model.ofModel_ofInt_eq_roundDyadic FloatFormat.binary32
++      (by decide) (n.toNat : Int)
++
++theorem native_uint64_decode (n : UInt64)
++    (hlo : 70368744177664 ≤ n.toNat) (hhi : n.toNat ≤ 281474943156225) :
++    Model.toDyadic? (Model.ofFloat32Model n.toFloat32.toModel) =
++      some ⟨false,R14NatNormal.mantissa n.toNat,(roundedShift n.toNat : Int)⟩ := by
++  have hl := R14NatNormal.leading_bounds n.toNat hlo (by omega)
++  have hc := R14NatNormal.carry_le n.toNat
++  have he := R14ExponentShift.middle_bounds n.toNat hlo hhi
++  have hshift : (n.toNat.log2 : Int)+0+(R14NatNormal.carry n.toNat : Int)-23 =
++      (roundedShift n.toNat : Int) := by
++    unfold roundedShift R14ExponentShift.middleExponent
++    omega
++  rw [uint64_model_eq_roundDyadic]
++  have hd := R14NatNormal.round_normal_decode false n.toNat 0 hlo (by omega)
++    (by omega) (by omega)
++  simpa only [hshift] using hd
++
++theorem uint64_roundtrip (n : UInt64)
++    (hlo : 70368744177664 ≤ n.toNat) (hhi : n.toNat ≤ 281474943156225) :
++    n.toFloat32.toUInt64.toNat = roundedInteger n.toNat := by
++  exact toUInt64_of_nonnegative_integral_decode _ _ _
++    (native_uint64_decode n hlo hhi) (rounded_integer_fit _ hlo hhi)
++
++theorem product_word_nat (a b : UInt32)
++    (ha0 : 8388608 ≤ a.toNat) (ha : a.toNat < 16777216)
++    (hb0 : 8388608 ≤ b.toNat) (hb : b.toNat < 16777216) :
++    (a.toUInt64*b.toUInt64).toNat = R14ExponentShift.product a b := by
++  have hp := R14ExponentShift.product_bounds a b ha0 ha hb0 hb
++  unfold R14ExponentShift.product
++  rw [UInt64.toNat_mul,UInt32.toNat_toUInt64,UInt32.toNat_toUInt64]
++  exact Nat.mod_eq_of_lt (by change R14ExponentShift.product a b < _; omega)
++
++theorem numeric_integer_product (a b : UInt32)
++    (ha0 : 8388608 ≤ a.toNat) (ha : a.toNat < 16777216)
++    (hb0 : 8388608 ≤ b.toNat) (hb : b.toNat < 16777216) :
++    (a.toUInt64*b.toUInt64).toFloat32.toUInt64.toNat =
++      roundedInteger (R14ExponentShift.product a b) := by
++  have hp := R14ExponentShift.product_bounds a b ha0 ha hb0 hb
++  have hw := product_word_nat a b ha0 ha hb0 hb
++  have hd := uint64_roundtrip (a.toUInt64*b.toUInt64)
++    (by rw [hw]; exact hp.1) (by rw [hw]; exact hp.2)
++  simpa only [hw] using hd
++
++theorem rounded_threshold (p : Nat)
++    (hlo : 70368744177664 ≤ p) (hhi : p ≤ 281474943156225) :
++    (if 140737488355328 ≤ roundedInteger p then 1 else 0) =
++      R14ExponentShift.middleExponent p - 173 := by
++  have he := R14ExponentShift.middle_bounds p hlo hhi
++  have hm := R14NatNormal.mantissa_bounds p hlo (by omega)
++  have hc : R14ExponentShift.middleExponent p=173 ∨
++      R14ExponentShift.middleExponent p=174 := by omega
++  rcases hc with hc | hc
++  · have hs : roundedShift p=23 := by simp [roundedShift,hc]
++    have hr : roundedInteger p < 140737488355328 := by
++      simp only [roundedInteger,hs]
++      norm_num
++      omega
++    simp [Nat.not_le_of_lt hr,hc]
++  · have hs : roundedShift p=24 := by simp [roundedShift,hc]
++    have hr : 140737488355328 ≤ roundedInteger p := by
++      simp only [roundedInteger,hs]
++      norm_num
++      omega
++    simp [hr,hc]
++
++theorem shift_recovery (a b : UInt32) (s64 : UInt64)
++    (ha0 : 8388608 ≤ a.toNat) (ha : a.toNat < 16777216)
++    (hb0 : 8388608 ≤ b.toNat) (hb : b.toNat < 16777216)
++    (hs : s64.toNat = roundedShift (R14ExponentShift.product a b)) :
++    ((a.toUInt64*b.toUInt64).toFloat32.toUInt64 >>> s64).toNat =
++      R14NatNormal.mantissa (R14ExponentShift.product a b) := by
++  have hp := R14ExponentShift.product_bounds a b ha0 ha hb0 hb
++  have hc := rounded_shift_cases _ hp.1 hp.2
++  have hsbound : s64.toNat < 64 := by rw [hs]; omega
++  rw [UInt64.toNat_shiftRight,Nat.mod_eq_of_lt hsbound,hs,
++    numeric_integer_product a b ha0 ha hb0 hb]
++  unfold roundedInteger
++  simp [Nat.shiftRight_eq_div_pow,Nat.two_pow_pos]
++
++end Submission.R17UInt64Integer
++
++end R17UInt64InterfaceProbe
++

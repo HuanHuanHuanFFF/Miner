@@ -1,0 +1,13 @@
+#print axioms Submission.R17UInt64Integer.roundedShift
+#print axioms Submission.R17UInt64Integer.roundedInteger
+#print axioms Submission.R17UInt64Integer.rounded_shift_cases
+#print axioms Submission.R17UInt64Integer.rounded_integer_bounds
+#print axioms Submission.R17UInt64Integer.rounded_integer_fit
+#print axioms Submission.R17UInt64Integer.toUInt64_of_nonnegative_integral_decode
+#print axioms Submission.R17UInt64Integer.uint64_model_eq_roundDyadic
+#print axioms Submission.R17UInt64Integer.native_uint64_decode
+#print axioms Submission.R17UInt64Integer.uint64_roundtrip
+#print axioms Submission.R17UInt64Integer.product_word_nat
+#print axioms Submission.R17UInt64Integer.numeric_integer_product
+#print axioms Submission.R17UInt64Integer.rounded_threshold
+#print axioms Submission.R17UInt64Integer.shift_recovery

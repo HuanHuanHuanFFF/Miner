@@ -1,0 +1,26 @@
+{
+  "purpose": "Check wrapped UInt32 exponent-only guard model against its exact intended normal domain; quantify exponent-pair domain, not workload frequency or speed.",
+  "scope": "All 65536 pairs of raw exponent fields 0..255; no Float32 runtime arithmetic executed.",
+  "limits": {
+    "seconds": 2.0,
+    "cases": 65536
+  },
+  "elapsed_seconds": 0.04916819999925792,
+  "cases": 65536,
+  "counts": {
+    "accepted": 48259,
+    "non_normal": 1020,
+    "normal_sum_low": 8001,
+    "normal_sum_high": 8256
+  },
+  "accepted_edge_sum_counts": {
+    "128": 127,
+    "380": 129
+  },
+  "uniform_raw_exponent_pair_fraction": 0.7363739013671875,
+  "uniform_normal_exponent_pair_fraction": 0.7480159960319921,
+  "trace_sha256": "d4c9aac962edd9d2d27583cd0659a6df24340192c47a5c74d4e58be08bc19bba",
+  "script_sha256": "aa4e2f46d0e371930eb51069d6de5ec0b31a13dea0dedfabb8134333bf7b306c",
+  "proof_status": "FINITE_GUARD_MODEL_ONLY; pinned Lean eligible_conditions and actual generated caller still require compilation/inspection.",
+  "performance_status": "UNKNOWN; uniform exponent-pair counts do not describe public workload or saved time."
+}

@@ -1,0 +1,71 @@
+0000000000000000 <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg>:
+   0:	push   r15
+   2:	push   r14
+   4:	push   r13
+   6:	push   r12
+   8:	push   rbx
+   9:	sub    rsp,0x10
+   d:	movaps xmm2,xmm0
+  10:	unpcklps xmm2,xmm1
+  13:	cmp    r8,rdi
+  16:	jae    c3 <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg+0xc3>
+  1c:	mov    rbx,r8
+  1f:	mov    r14,rcx
+  22:	mov    r15,rdi
+  25:	lea    r12,[rdx+rsi*8]
+  29:	add    r12,0x18
+  2d:	mov    r13,QWORD PTR [rip+0x0]        # 34 <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg+0x34>
+  34:	jmp    86 <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg+0x86>
+  36:	cs nop WORD PTR [rax+rax*1+0x0]
+  40:	and    edi,0x7fffff
+  46:	or     edi,0x800000
+  4c:	xorps  xmm0,xmm0
+  4f:	cvtsi2ss xmm0,edi
+  53:	mov    rcx,QWORD PTR [r13+0x0]
+  57:	shr    rax,0x18
+  5b:	and    eax,0x1ff
+  60:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+  65:	mulss  xmm0,DWORD PTR [rax+0x8]
+  6a:	mov    rax,QWORD PTR [r14+rbx*8+0x18]
+  6f:	inc    rbx
+  72:	movsd  xmm1,QWORD PTR [rax+0x8]
+  77:	shufps xmm0,xmm0,0x0
+  7b:	mulps  xmm0,xmm1
+  7e:	addps  xmm2,xmm0
+  81:	cmp    r15,rbx
+  84:	je     c3 <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg+0xc3>
+  86:	mov    rax,QWORD PTR [r12+rbx*8]
+  8a:	mov    rdi,rax
+  8d:	shr    rdi,1
+  90:	mov    ecx,edi
+  92:	and    ecx,0x7fffffff
+  98:	lea    edx,[rcx-0x1]
+  9b:	cmp    edx,0xbffffff
+  a1:	setb   dl
+  a4:	cmp    ecx,0x7f800000
+  aa:	setae  cl
+  ad:	or     cl,dl
+  af:	cmp    cl,0x1
+  b2:	jne    40 <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg+0x40>
+  b4:	movaps XMMWORD PTR [rsp],xmm2
+  b8:	call   bd <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg+0xbd>
+  bd:	movaps xmm2,XMMWORD PTR [rsp]
+  c1:	jmp    6a <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg+0x6a>
+  c3:	movaps XMMWORD PTR [rsp],xmm2
+  c7:	call   cc <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg+0xcc>
+  cc:	mov    edi,0x10
+  d1:	call   d6 <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg+0xd6>
+  d6:	test   rax,rax
+  d9:	je     fe <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg+0xfe>
+  db:	movabs rcx,0x1000000001
+  e5:	mov    QWORD PTR [rax],rcx
+  e8:	movaps xmm0,XMMWORD PTR [rsp]
+  ec:	movlps QWORD PTR [rax+0x8],xmm0
+  f0:	add    rsp,0x10
+  f4:	pop    rbx
+  f5:	pop    r12
+  f7:	pop    r13
+  f9:	pop    r14
+  fb:	pop    r15
+  fd:	ret
+  fe:	call   103 <lp_competition_Submission_R15PackedB2_Indexed_wordLoop___redArg+0x103>

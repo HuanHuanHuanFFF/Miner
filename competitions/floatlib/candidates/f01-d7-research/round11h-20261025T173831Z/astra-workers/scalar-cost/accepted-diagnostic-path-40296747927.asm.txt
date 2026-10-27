@@ -1,0 +1,65 @@
+0x0 push   rbp
+0x1 push   r15
+0x3 push   r14
+0x5 push   r12
+0x7 push   rbx
+0x8 sub    rsp,0x10
+0xc mov    ebx,esi
+0xe mov    eax,edi
+0x10 shr    eax,0x17
+0x13 movzx  r15d,al
+0x17 lea    ecx,[r15-0xff]
+0x1e mov    ebp,esi
+0x20 shr    ebp,0x17
+0x23 movzx  r12d,bpl
+0x27 cmp    ecx,0xffffff01
+0x2d ja     74 <lp_competition_Submission_R17NumericMulInteger_diagnosticEntry+0x74>
+0x74 lea    ecx,[r12-0xff]
+0x7c lea    esi,[r12+r15*1]
+0x80 cmp    ecx,0xffffff01
+0x86 ja     266 <lp_competition_Submission_R17NumericMulInteger_diagnosticEntry+0x266>
+0x266 lea    ecx,[rsi-0x17d]
+0x26c cmp    ecx,0xffffff02
+0x272 ja     45b <lp_competition_Submission_R17NumericMulInteger_diagnosticEntry+0x45b>
+0x45b mov    eax,edi
+0x45d and    eax,0x7fffff
+0x462 or     eax,0x800000
+0x467 mov    ecx,ebx
+0x469 and    ecx,0x7fffff
+0x46f or     ecx,0x800000
+0x475 imul   rcx,rax
+0x479 cvtsi2ss xmm0,rcx
+0x47e cvttss2si rax,xmm0
+0x483 mov    rcx,rax
+0x486 sar    rcx,0x3f
+0x48a movaps xmm1,xmm0
+0x48d subss  xmm1,DWORD PTR [rip+0x0]        # 495 <lp_competition_Submission_R17NumericMulInteger_diagnosticEntry+0x495>
+0x495 cvttss2si rdx,xmm1
+0x49a and    rdx,rcx
+0x49d or     rdx,rax
+0x4a0 movss  xmm1,DWORD PTR [rip+0x0]        # 4a8 <lp_competition_Submission_R17NumericMulInteger_diagnosticEntry+0x4a8>
+0x4a8 ucomiss xmm1,xmm0
+0x4ab mov    rax,0xffffffffffffffff
+0x4b2 cmova  rax,rdx
+0x4b6 xor    edx,edx
+0x4b8 mov    rcx,rax
+0x4bb shr    rcx,0x2f
+0x4bf setne  dl
+0x4c2 lea    ecx,[rdx+0x17]
+0x4c5 shr    rax,cl
+0x4c8 add    esi,edx
+0x4ca shl    esi,0x17
+0x4cd xor    ebx,edi
+0x4cf and    ebx,0x80000000
+0x4d5 add    esi,0xc0800000
+0x4db or     esi,ebx
+0x4dd add    eax,0xff800000
+0x4e2 or     eax,esi
+0x4e4 jmp    b6e <lp_competition_Submission_R17NumericMulInteger_diagnosticEntry+0xb6e>
+0xb6e add    rsp,0x10
+0xb72 pop    rbx
+0xb73 pop    r12
+0xb75 pop    r14
+0xb77 pop    r15
+0xb79 pop    rbp
+0xb7a ret

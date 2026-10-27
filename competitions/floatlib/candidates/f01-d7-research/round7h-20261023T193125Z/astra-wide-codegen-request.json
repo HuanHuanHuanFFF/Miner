@@ -1,0 +1,22 @@
+{
+  "candidate": "f01-r11-wide4-inline-proof3",
+  "sha256": "28b819120cd3aaa1f19038f66042a9ceffe0c9329baab20fe223e98d151ce00b",
+  "scope": "Only after exact actual candidate statement acceptance; original full gate and same-object capture owned by D",
+  "priority_symbols": [
+    "R11WideRows4_wordLoop___redArg",
+    "R11WideRows4_run",
+    "R11WideActual_buildTiles",
+    "R11WideLayout_writeBatch",
+    "R11WideLayout_emitBlock",
+    "R11WideLayout_emitRow",
+    "R11WideRows4_lane40",
+    "R11WideActual_output"
+  ],
+  "first_check": "Actual bmm underflow miss reaches wide; original classifier order remains before preparation",
+  "hoisting": "Vector.ofFn builds F40 tiles once per four-row block, not each emitted scalar; one nativeA/packB per whole call",
+  "unknown_runtime_cost": "Current candidate additionally inlines Layout emitBlock/writeBatch/output and Actual buildTiles/output per Root request. Actual C must show whether specialization eliminates indirect lane40 closure calls per output. Do not infer elimination merely from attributes.",
+  "finite_storage": "Only current block retains groups(p) F40 results; prior block released. Native A and B stay global and borrowed by loop",
+  "negative_discriminator": "Per-output indirect lean_apply, possible lane40 boxedFloat32 return, and lane selection/division may erase SIMD savings. Check actual caller path; mere standalone ___boxed definition is not evidence of use. Preserve full prep/finish/output timing. No source tweak or second width before measured evidence.",
+  "kernel_bytes_frozen": true,
+  "no_R_CI_dispatch": true
+}

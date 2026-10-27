@@ -1,0 +1,51 @@
+{
+  "at_utc": "2026-10-26T20:56:56.750464+00:00",
+  "state": "EXACT_TWO_EDIT_UNCOMPILED_DRAFT",
+  "parent": {
+    "path": "competitions/floatlib/candidates/f01-r19-dev-b2-index1/Kernel.lean",
+    "sha256": "9f7f96d71c153681c6a2500fd229e0627cd2ea38a3ad375afdeee25a1657eee1",
+    "bytes": 234277
+  },
+  "draft": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/development-workers/structural-cost/Kernel-index-inline-convert.draft.lean",
+    "sha256": "f84ea2dbffbf0406f453bbc20b4335288ba5d77bb787ae33db203665016ac384",
+    "bytes": 234290
+  },
+  "edits": [
+    {
+      "name": "inline_certified_A_converter_only_in_Indexed_wordLoop",
+      "old": "    let a := ExecFloat.Binary.toFloat32 (A.uget (baseA + k)\n      (by rw [Packed10Index.addNat baseA k (Nat.lt_trans ha hAS)]; exact ha))\n",
+      "new": "    let a := R2W01b.convert (A.uget (baseA + k)\n      (by rw [Packed10Index.addNat baseA k (Nat.lt_trans ha hAS)]; exact ha)).raw.1\n"
+    },
+    {
+      "name": "rewrite_existing_global_converter_equality_in_wordLoop_eq",
+      "old": "    simp only [ugetA_getD, Packed10Index.addNat baseA k (Nat.lt_trans ha hAS), ugetB_get]\n",
+      "new": "    simp only [R2W01c.convert_eq, ugetA_getD, Packed10Index.addNat baseA k (Nat.lt_trans ha hAS), ugetB_get]\n"
+    }
+  ],
+  "inverse_reconstruction_sha256": "9f7f96d71c153681c6a2500fd229e0627cd2ea38a3ad375afdeee25a1657eee1",
+  "inverse_byte_exact": true,
+  "namespace_binding": "Existing root R2W01b.convert and root R2W01c.convert_eq; no Submission prefix or new namespace",
+  "unchanged": [
+    "packB",
+    "shape dispatch",
+    "output global range guard",
+    "NaN finish/replay",
+    "old fallback loop",
+    "A/B source representation",
+    "all public add/mul/sum definitions",
+    "all source outside Indexed.wordLoop/wordLoop_eq"
+  ],
+  "eligibility": "magnitude=0 or 0x0c000000<=magnitude<0x7f800000; existing convert retains Float32.ofBits elsewhere",
+  "proof_reuse": "Existing all-input R2W01c.convert_eq; new exact wordLoop_eq must be checked; no new arithmetic theorem",
+  "execution": {
+    "Lean": "NOT_RUN",
+    "kernel_replay": "NOT_RUN",
+    "helper_axioms": "NOT_RUN",
+    "full_gate": "NOT_RUN",
+    "selected_MainFull_C": "NOT_RUN",
+    "ASM": "NOT_RUN",
+    "performance": "NOT_RUN"
+  },
+  "source_model_limit": "Existing converter equality does not establish compilation or cost of this new source; calls/spills on eligible path remain UNKNOWN"
+}

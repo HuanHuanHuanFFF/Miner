@@ -1,0 +1,37 @@
+<lp_competition_Submission_R17NumericMulInteger_normalCore>:
+   0:	mov    eax,esi
+   2:	and    eax,0x7fffff
+   7:	or     eax,0x800000
+   c:	mov    ecx,edx
+   e:	and    ecx,0x7fffff
+  14:	or     ecx,0x800000
+  1a:	imul   rcx,rax
+  1e:	cvtsi2ss xmm0,rcx
+  23:	cvttss2si rax,xmm0
+  28:	mov    rcx,rax
+  2b:	movaps xmm1,xmm0
+  2e:	subss  xmm1,DWORD PTR [rip+0x0]        # 36 <lp_competition_Submission_R17NumericMulInteger_normalCore+0x36>
+  36:	sar    rcx,0x3f
+  3a:	cvttss2si r8,xmm1
+  3f:	and    r8,rcx
+  42:	or     r8,rax
+  45:	movss  xmm1,DWORD PTR [rip+0x0]        # 4d <lp_competition_Submission_R17NumericMulInteger_normalCore+0x4d>
+  4d:	ucomiss xmm1,xmm0
+  50:	mov    rax,0xffffffffffffffff
+  57:	cmova  rax,r8
+  5b:	xor    r8d,r8d
+  5e:	mov    rcx,rax
+  61:	shr    rcx,0x2f
+  65:	setne  r8b
+  69:	lea    ecx,[r8+0x17]
+  6d:	shr    rax,cl
+  70:	add    r8d,edi
+  73:	shl    r8d,0x17
+  77:	xor    edx,esi
+  79:	and    edx,0x80000000
+  7f:	add    r8d,0xc0800000
+  86:	or     r8d,edx
+  89:	add    eax,0xff800000
+  8e:	or     eax,r8d
+  91:	ret
+

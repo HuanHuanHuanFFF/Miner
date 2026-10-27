@@ -1,0 +1,52 @@
+{
+  "state": "PASS_FINITE_EXACT_MODEL_NOT_LEAN",
+  "created_at_utc": "2026-10-25T05:30:46.059587+00:00",
+  "universal_paper_condition": "For nonzero product<2^B, leading<=B-1. B+scale<=172 yields leading+scale<=171. scale<149; source UInt64 addition cannot wrap below172.",
+  "guards": [
+    {
+      "scale": 124,
+      "strict_product_bound_bits": 48,
+      "literal_rse_shift": 25,
+      "checks": 310
+    },
+    {
+      "scale": 125,
+      "strict_product_bound_bits": 47,
+      "literal_rse_shift": 24,
+      "checks": 304
+    },
+    {
+      "scale": 126,
+      "strict_product_bound_bits": 46,
+      "literal_rse_shift": 23,
+      "checks": 298
+    }
+  ],
+  "counterexamples": [
+    {
+      "scale": 125,
+      "product": 140737505132544,
+      "correct": "0x800001",
+      "incorrect_unconditional_low": "0x1",
+      "note": "arbitrary UInt64: cannot widen48-bit bound to scale125"
+    },
+    {
+      "scale": 125,
+      "product": 140737513521150,
+      "correct": "0x800001",
+      "incorrect_unconditional_low": "0x1",
+      "note": "valid normal mantissas; raw exponent sum127"
+    },
+    {
+      "scale": 126,
+      "product": 70368773537790,
+      "correct": "0x800003",
+      "incorrect_unconditional_low": "0x3",
+      "note": "valid subnormal/normal mantissas; exponents0 and127"
+    }
+  ],
+  "elapsed_seconds": 0.0010639000101946294,
+  "external_timeout_ms": 5000,
+  "script_sha256": "016d67064b343eebe000cf548e1ff6bc7d0cb9e19be4259a349073b5c3e86cda",
+  "scope": "Existing exposed mathematical boundary cases. Independent exact-dyadic encoding compared to low-round branch. Not universal Lean acceptance, CPU timing, candidate performance or formal admission."
+}

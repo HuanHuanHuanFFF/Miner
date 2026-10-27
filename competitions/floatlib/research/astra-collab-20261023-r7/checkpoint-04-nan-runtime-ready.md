@@ -1,0 +1,15 @@
+# Exact NaN replay runtime ready, complementary to c760
+
+2026-10-22 19:06 UTC. **f01-r7-nan-replay-fullpath**, SHA9a2a05cd8e033d3cc079744ade77dd42464926d04ef5c9a8e7c050a1605ec854,159605bytes, full-gate, NOT_RUN. Static hash/size/import/BANNED PASS. c7605688 non-NaN runtime remains the first priority ready item; this is a second independent change against exact8eb, for D's next available paired public-suite validation.
+
+Concrete mathematical dependency is now supplied: W01 proves actual Model.Spec.mul is never signaling, quieting preserves the exact quiet word, Spec.add(q,mul(x,y))=q for quietq, and the actual ExecFloat codec bridge. R reviewed the real theorem bodies (including roundDyadicGeneral→actual roundDyadic, concrete zero/overflow/invalid constructors) and the supplied raw Lean4.34 compile/27axiom outputs. R independently verified original source hashes, matching fixed contracts,71ZIP manifest entries and CRC. This is strong supplied proof evidence, not an inherited official full gate for our new source.
+
+New runtime is an ordered Nat loop with termination n-k and a proof to the **actual Fin.foldl.loop**, not the webpage's preallocated List.finRange wrapper. It retains optimized Submission.add/mul for each prefix step, stops before any further input reads/multiply/add when the exact accumulator is quietNaN, and allocates no index list. Ordinary sum is unchanged. The extra loop guard is used only for already-NaN native endpoints; finite and infinity endpoints retain parent behavior.
+
+The shared R7NaNReplay helper is wired into **both Packed10.finish and NativeFinal.dot**, so it covers the current packed path and D's direct-small composition later. finish_eq_dot remains definitionally connected, dot_eq uses the new exact replay theorem, and final bmm_spec depends on it. The earlier044c43d2 packed-only draft is preserved but **not requested as another queue item**.
+
+Expected savings UNKNOWN until whole-call timing: quiet classification checks add work to the finite prefix; late-poisoned cases may gain nothing or regress. Native endpoint check, exact prefix arithmetic, unchanged preparations and all output costs must remain in timing. Different source improvements cannot simply be added. If both this and c760 pass and are promising, their combination must itself get a new complete gate and confirmation.
+
+E originals: R7-W01.zip SHA d586f6369189bed85325c452001a78eac4d69d8e7373f87340e1c3d5849efd94,132231bytes; R7-W01-report.md SHA a30d9d54eb48feb088c9c13565c5ce01860ccba66c741064003c9153c103da4e. Original R7W01.lean9f534421 retained. Derived candidate removes15audit commands from used prefix and sanitizes the dependency keyword in comments; scope of global open statements is bounded with a section. Arithmetic proof bodies unchanged.
+
+Web follow-up W01b now independently proves a pure UInt32 quiet predicate and actual Binary32 equivalence using only public definitions, to avoid repeated generic-model classification in this loop if actual compiler/cost evidence justifies it. It is not blocking this ready candidate and no performance benefit is presumed.

@@ -1,0 +1,33 @@
+{
+  "reviewed_utc": "2026-10-25T05:54:25.262100+00:00",
+  "candidate_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "candidate_bytes": 226829,
+  "parent_sha256": "b116067185626ccb758fbadd608ce7514cb1ddef70ddd0a07e1596f8c776952b",
+  "exact_byte_inverse_to_b116": true,
+  "paper_review": "Read all new PackedB2 definitions and equality proofs. tileIndex chooses b*groups+g; packB_get preserves both raw addresses even for odd unobserved lane; generic read-invariant loops project to exact old ascending-k chains; group/row/output equality recovers parent reference for every shape. No concrete missing hypothesis found.",
+  "pinned_API_checks": [
+    {
+      "source": "Lean293d src/Init/Data/Nat/Lemmas.lean",
+      "line": 1563,
+      "name": "Nat.mul_add_div",
+      "signature": "{m} -> m>0 -> (x y:Nat) -> (m*x+y)/m = x+y/m"
+    },
+    {
+      "source": "same",
+      "line": 1580,
+      "name": "Nat.mul_add_mod_of_lt",
+      "signature": "c<b -> (a*b+c)%b=c"
+    }
+  ],
+  "representation_evidence": "Worker checked fixed lean_box_float32 and existing scalar-record C constructors; newB2 generated C not yet observed.",
+  "cost_risks": [
+    "Added outer tile and inner vector containers/closures/lifetime",
+    "Odd p extra B conversion and unused MAC chain",
+    "Packing now gathers strided B while hot B becomes contiguous; actual bandwidth/cache/RC costs unknown",
+    "Div/mod/base calculation outside inner k in source; C caller must confirm hoisting",
+    "No claim of halved total allocation bytes/time"
+  ],
+  "finite_checks": "worker90720 chains,7560 packed reads,2772 output layouts; not floating or all-input proof",
+  "status": "READY_FOR_D_MINIMAL_STATEMENT_CHECK; Lean/full gate/performance NOT_RUN",
+  "local_lean": false
+}

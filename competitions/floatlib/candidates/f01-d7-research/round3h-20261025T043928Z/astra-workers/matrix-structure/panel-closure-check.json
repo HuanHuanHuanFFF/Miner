@@ -1,0 +1,46 @@
+{
+  "at_utc": "2026-10-25T05:21:29.880758+00:00",
+  "status": "BOUNDED_TEXTUAL_CLOSURE_CHECK_PASS",
+  "bundle_sha256": "523beed6c51a3e7c8337c45b22ffc3e5667d388d12b5fe5c417597268e7d294e",
+  "declaration_count": 58,
+  "duplicate_declarations": [],
+  "new_namespaces": [
+    "Submission.Panel4",
+    "Submission.Panel4Bridge",
+    "Submission.Panel4Tail",
+    "Submission.R11WideLayout",
+    "Submission.R11WideRows4",
+    "Submission.R15PanelEntry"
+  ],
+  "namespace_collisions_with_ec82": [],
+  "new_entry_runtime": [
+    {
+      "name": "Submission.R15PanelEntry.buildTiles",
+      "source_sha256": "1a86198d2235f8811fefd8c794cb9fdfcb87c4e94439febfae83c594717a9bed",
+      "contains_global_A_map_text": false
+    },
+    {
+      "name": "Submission.R15PanelEntry.writeBatch",
+      "source_sha256": "70d2e15c347aa102ac836249af4bcd14c449365493e93500f43bee60fa9f3be2",
+      "contains_global_A_map_text": false
+    },
+    {
+      "name": "Submission.R15PanelEntry.output",
+      "source_sha256": "ce872e7c9f720152b990b17b1b4425bd095852db4b4aea58fe91d0c1bbd4ed14",
+      "contains_global_A_map_text": false
+    },
+    {
+      "name": "Submission.R15PanelEntry.core",
+      "source_sha256": "f5bb9797d2deef77d5b77a2436afe00694734e20bbb1ad7cf5972b162797e3cd",
+      "contains_global_A_map_text": false
+    }
+  ],
+  "runtime_call_route": [
+    "R15PanelEntry.core -> output -> packedB once + batch fold",
+    "writeBatch -> complete block fold(buildTiles -> Panel4.block -> local packA once perblock) + Panel4Tail.tail",
+    "complete block emitter -> existing inline emitBlock/emitRow -> original Packed10.finish",
+    "tail -> local0..3row prepare -> shifted numeric dot -> original global raw finish base"
+  ],
+  "remaining": "Text audit is not Lean name resolution, proof acceptance, compiler liveness, allocation/lifetime observation or performance.",
+  "elapsed_seconds": 0.0058858999982476234
+}

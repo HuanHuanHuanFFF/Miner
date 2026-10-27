@@ -1,0 +1,58 @@
+LEAN_EXPORT uint32_t lp_competition_R19Base_R19Jam17_normalCore(uint32_t v_sum_14696_, uint32_t v_u_14697_, uint32_t v_v_14698_){
+_start:
+{
+uint32_t v___x_14699_; uint32_t v___x_14700_; uint32_t v___x_14701_; uint32_t v___y_14703_; uint32_t v_a_14722_; uint32_t v___x_14723_; uint32_t v_b_14724_; uint64_t v___x_14725_; uint64_t v___x_14726_; uint64_t v_product_14727_; uint64_t v___x_14728_; uint64_t v___x_14729_; uint32_t v___x_14730_; uint64_t v___x_14731_; uint64_t v___x_14732_; uint64_t v___x_14733_; uint8_t v___x_14734_; 
+v___x_14699_ = 8388607;
+v___x_14700_ = lean_uint32_land(v_u_14697_, v___x_14699_);
+v___x_14701_ = 8388608;
+v_a_14722_ = lean_uint32_lor(v___x_14700_, v___x_14701_);
+v___x_14723_ = lean_uint32_land(v_v_14698_, v___x_14699_);
+v_b_14724_ = lean_uint32_lor(v___x_14723_, v___x_14701_);
+v___x_14725_ = lean_uint32_to_uint64(v_a_14722_);
+v___x_14726_ = lean_uint32_to_uint64(v_b_14724_);
+v_product_14727_ = lean_uint64_mul(v___x_14725_, v___x_14726_);
+v___x_14728_ = 17ULL;
+v___x_14729_ = lean_uint64_shift_right(v_product_14727_, v___x_14728_);
+v___x_14730_ = lean_uint64_to_uint32(v___x_14729_);
+v___x_14731_ = 131071ULL;
+v___x_14732_ = lean_uint64_land(v_product_14727_, v___x_14731_);
+v___x_14733_ = 0ULL;
+v___x_14734_ = lean_uint64_dec_eq(v___x_14732_, v___x_14733_);
+if (v___x_14734_ == 0)
+{
+uint32_t v___x_14735_; uint32_t v___x_14736_; 
+v___x_14735_ = 1;
+v___x_14736_ = lean_uint32_lor(v___x_14730_, v___x_14735_);
+v___y_14703_ = v___x_14736_;
+goto v___jp_14702_;
+}
+else
+{
+v___y_14703_ = v___x_14730_;
+goto v___jp_14702_;
+}
+v___jp_14702_:
+{
+float v___x_14704_; uint32_t v_r_14705_; uint32_t v___x_14706_; uint32_t v_high_14707_; uint32_t v___x_14708_; uint32_t v___x_14709_; uint32_t v_q_14710_; uint32_t v___x_14711_; uint32_t v___x_14712_; uint32_t v_e_14713_; uint32_t v___x_14714_; uint32_t v___x_14715_; uint32_t v___x_14716_; uint32_t v___x_14717_; uint32_t v___x_14718_; uint32_t v___x_14719_; uint32_t v___x_14720_; uint32_t v___x_14721_; 
+v___x_14704_ = lean_uint32_to_float32(v___y_14703_);
+v_r_14705_ = lean_float32_to_uint32(v___x_14704_);
+v___x_14706_ = 30;
+v_high_14707_ = lean_uint32_shift_right(v_r_14705_, v___x_14706_);
+v___x_14708_ = 6;
+v___x_14709_ = lean_uint32_add(v___x_14708_, v_high_14707_);
+v_q_14710_ = lean_uint32_shift_right(v_r_14705_, v___x_14709_);
+v___x_14711_ = 127;
+v___x_14712_ = lean_uint32_sub(v_sum_14696_, v___x_14711_);
+v_e_14713_ = lean_uint32_add(v___x_14712_, v_high_14707_);
+v___x_14714_ = lean_uint32_xor(v_u_14697_, v_v_14698_);
+v___x_14715_ = 2147483648;
+v___x_14716_ = lean_uint32_land(v___x_14714_, v___x_14715_);
+v___x_14717_ = 23;
+v___x_14718_ = lean_uint32_shift_left(v_e_14713_, v___x_14717_);
+v___x_14719_ = lean_uint32_lor(v___x_14716_, v___x_14718_);
+v___x_14720_ = lean_uint32_sub(v_q_14710_, v___x_14701_);
+v___x_14721_ = lean_uint32_lor(v___x_14719_, v___x_14720_);
+return v___x_14721_;
+}
+}
+}

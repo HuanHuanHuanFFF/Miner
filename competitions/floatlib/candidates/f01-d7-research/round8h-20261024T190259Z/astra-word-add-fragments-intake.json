@@ -1,0 +1,60 @@
+{
+  "timestamp_utc": "2026-10-25T00:08:12.119635+00:00",
+  "state": "SOURCE_GROUNDED_DRAFT_NOT_COMPILED",
+  "requested_by": "20261024T230553016Z-r14-development-word-add-domain-and-headroom.md",
+  "files": [
+    {
+      "path": "astra-biased-rne2.lean",
+      "bytes": 2484,
+      "sha256": "e9abe15eaebf5dab13f717558292f49871f8fdde07b3075145915a493bb5db0a",
+      "git_blob_sha1": "717e23a695925ad633d9a32c10c61d297dbe7ce5"
+    },
+    {
+      "path": "astra-small-shift-bias1.lean",
+      "bytes": 3173,
+      "sha256": "cc00612794e473d1e404606df2b502cda0321f0c6ac086bfb542dfed8dd03b66",
+      "git_blob_sha1": "f37c8e1e3c05f7d715011a421c709568fd9a53e8"
+    },
+    {
+      "path": "astra-word-add-alignment1.lean",
+      "bytes": 4007,
+      "sha256": "3628f637670621b049cfb3935e3e782ea2aa8403193f461a060082cb3a7ff5ca",
+      "git_blob_sha1": "aafa54af60f76d29e86c0e4e9e1ad99a7707adc8"
+    }
+  ],
+  "original_bias1": {
+    "path": "astra-biased-rne1.lean",
+    "bytes": 2468,
+    "sha256": "3515b1819897ad3d230f53d12375b85987fcf8678779e7428f4a78e693b65b0c",
+    "git_blob_sha1": "cdb01476518c20f64dc2d21abb873afd9331c09f"
+  },
+  "original_preserved": true,
+  "bias2_delta": "Unfold local let parity with dsimp, then rewrite UInt64.toNat_and/hshift. Runtime definition and theorem statements unchanged.",
+  "static_error_evidence": {
+    "lean_ref": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+    "sources": [
+      {
+        "path": "astra-upstream-lean/src/Lean/Elab/Tactic/Rewrite.lean",
+        "bytes": 5239,
+        "sha256": "d072c610028bc67357d9c8b3b692a6d22fd59d039ed2c711f3187702ef7c2bd7",
+        "git_blob_sha1": "1b3cfa8902e2f3e11457f1b8e71f6a088f72432d"
+      },
+      {
+        "path": "astra-upstream-lean/src/Lean/Meta/Tactic/Rewrite.lean",
+        "bytes": 5490,
+        "sha256": "8aa6f695124588cf3a847052a6c69d46fd73801a50c0fe556c7a7aad092c050d",
+        "git_blob_sha1": "f616c869ab7dd86e771fc22918303ab8b7aa2998"
+      }
+    ],
+    "local_ident_behavior": "Elab withRWRulesSeq sends a local identifier directly to elabRewrite; no global definition equation theorem is generated.",
+    "equality_requirement": "Meta MVarId.rewrite infers its type and matches Eq/Iff; local parity has type UInt64, so rw [parity] is not an equality rewrite.",
+    "status": "CONFIRMED_BY_PINNED_SOURCE_NOT_A_COMPILER_RECEIPT"
+  },
+  "dependencies": {
+    "floatlib_ref": "0d91825727839f597fd06b22fdd038ea21480f0c",
+    "alignment": "astra-add-upstream-index.json",
+    "small_shift": "FixedWord.roundShiftRightEven_toNat and existing Nat roundQuotientEven API"
+  },
+  "scope": "Only astra fragments; no full candidate, runtime change, extra CI dispatch, Git index or publication.",
+  "next": "D integrates fresh fragments into a new exact candidate. Compiler/public gate/performance all NOT_RUN."
+}

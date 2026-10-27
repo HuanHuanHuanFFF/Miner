@@ -1,0 +1,9 @@
+# 已通过完整gate的ADD2：生成C观察与负结果
+
+绑定：f958071e，CI40151550349 statement层的Submission C SHA3d6eb627d1941452ae17eaf56160a09571cf06e1bb1cf74048b130b90e5d390a；Full gate另在40152158687通过。此C不是cleaned timed对象，不把C行数当汇编或周期。
+
+public add导出为uint32_t输入/返回，27349..28761共1413行；函数内无lean_alloc_closure、lean_alloc_ctor、lean_apply或lean_box_uint64直接调用。28255..28283的整数块在28274只计算一次uint64 q，28278作carry、28317作fraction，没有通过高阶回调重新计算q。入口已内联固定fallback，不能把generic guardedAdd函数的closure签名当作实际public add每次调用分配。
+
+这个未优化C函数有3份float32_add出现，来自展开的回退路径；旧DF诊断public add为335行。是否合并冷分支、真实代码体积和I-cache影响仍需优化后对象，不能据此认定退化原因。固定lean.h中的uint32_to_float32、float32_add/mul均static inline，table index是64位immediate Nat；旧路径也没有所谓软件浮点解码或必然heap索引成本。
+
+实际完整D（1425016）加法项对同场DF约1.5621，whole约1.1893；数学正确不等于更快。其他BMM机制同时变化，whole不能归因单个add，但add本项明确回退，按原判据停放，不换seed重选。下一轮若研究相同数学域，应先按真实caller/优化后汇编确定主成本，当前冻结窗口不再做新变体。

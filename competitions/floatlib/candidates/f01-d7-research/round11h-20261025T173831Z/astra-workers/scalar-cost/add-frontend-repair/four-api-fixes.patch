@@ -1,0 +1,33 @@
+--- public7e/Kernel.lean
++++ public7e/Kernel.lean
+@@ -4808,7 +4808,7 @@
+       rw [roundShiftRightEven_one]
+       split <;> omega
+     · have hr := roundShiftRightEven_le_shiftRight_add1 (a * 2 ^ d + b) (d + 1)
+-      rw [Nat.shiftRight_eq_div_pow] at hr
++      rw [Nat.shiftRight_eq', Nat.shiftRight_eq_div_pow] at hr
+       interval_cases d <;> norm_num at hr ⊢ <;> omega
+   have hne : N18.rounded (a * 2 ^ d + b) ≠ 16777216 := by omega
+   simp [N18.carry, hne]
+@@ -4820,7 +4820,7 @@
+     N18.carry (a * 2 ^ d - b) = 0 := by
+   have hs : 23 + d - 23 = d := by omega
+   have hr := roundShiftRightEven_le_shiftRight_add1 (a * 2 ^ d - b) d
+-  rw [Nat.shiftRight_eq_div_pow] at hr
++  rw [Nat.shiftRight_eq', Nat.shiftRight_eq_div_pow] at hr
+   have hq : N18.rounded (a * 2 ^ d - b) < 16777216 := by
+     unfold N18.rounded
+     rw [hh, hs]
+@@ -5349,10 +5349,10 @@
+   split
+   · rename_i hd
+     have hg : d.toNat ≤ 7 := by
+-      have h := (Bool.and_eq_true.mp hd).1
++      have h := (Bool.and_eq_true_iff.mp hd).1
+       exact UInt32.le_iff_toNat_le.mp (of_decide_eq_true h)
+     have had : adj.toNat ≤ d.toNat := by
+-      have h := (Bool.and_eq_true.mp hd).2
++      have h := (Bool.and_eq_true_iff.mp hd).2
+       exact UInt32.le_iff_toNat_le.mp (of_decide_eq_true h)
+     have hdom : R2W01c.wordSign hi = R2W01c.wordSign lo ∨ 1 ≤ d.toNat := by
+       by_cases hs : R2W01c.wordSign hi = R2W01c.wordSign lo

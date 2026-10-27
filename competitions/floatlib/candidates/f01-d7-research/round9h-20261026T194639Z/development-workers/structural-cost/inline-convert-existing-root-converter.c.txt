@@ -1,0 +1,52 @@
+LEAN_EXPORT float lp_competition_R2W01b_convert(uint32_t v_u_3299_){
+_start:
+{
+uint8_t v___y_3301_; uint32_t v___x_3315_; uint32_t v_a_3316_; uint32_t v___x_3317_; uint32_t v___x_3318_; uint32_t v___x_3319_; uint8_t v___x_3320_; 
+v___x_3315_ = 2147483647;
+v_a_3316_ = lean_uint32_land(v_u_3299_, v___x_3315_);
+v___x_3317_ = 201326591;
+v___x_3318_ = 1;
+v___x_3319_ = lean_uint32_sub(v_a_3316_, v___x_3318_);
+v___x_3320_ = lean_uint32_dec_le(v___x_3317_, v___x_3319_);
+if (v___x_3320_ == 0)
+{
+v___y_3301_ = v___x_3320_;
+goto v___jp_3300_;
+}
+else
+{
+uint32_t v___x_3321_; uint8_t v___x_3322_; 
+v___x_3321_ = 2139095040;
+v___x_3322_ = lean_uint32_dec_lt(v_a_3316_, v___x_3321_);
+v___y_3301_ = v___x_3322_;
+goto v___jp_3300_;
+}
+v___jp_3300_:
+{
+if (v___y_3301_ == 0)
+{
+float v___x_3302_; 
+v___x_3302_ = lean_float32_of_bits(v_u_3299_);
+return v___x_3302_;
+}
+else
+{
+uint32_t v___x_3303_; uint32_t v___x_3304_; uint32_t v___x_3305_; uint32_t v___x_3306_; float v___x_3307_; lean_object* v___x_3308_; uint32_t v___x_3309_; uint32_t v___x_3310_; lean_object* v___x_3311_; lean_object* v___x_3312_; float v___x_3313_; float v___x_3314_; 
+v___x_3303_ = 8388607;
+v___x_3304_ = lean_uint32_land(v_u_3299_, v___x_3303_);
+v___x_3305_ = 8388608;
+v___x_3306_ = lean_uint32_lor(v___x_3304_, v___x_3305_);
+v___x_3307_ = lean_uint32_to_float32(v___x_3306_);
+v___x_3308_ = lp_competition_R2W01b_scaleTable;
+v___x_3309_ = 23;
+v___x_3310_ = lean_uint32_shift_right(v_u_3299_, v___x_3309_);
+v___x_3311_ = lean_uint32_to_nat(v___x_3310_);
+v___x_3312_ = lean_array_fget_borrowed(v___x_3308_, v___x_3311_);
+lean_dec(v___x_3311_);
+v___x_3313_ = lean_unbox_float32(v___x_3312_);
+v___x_3314_ = lean_float32_mul(v___x_3307_, v___x_3313_);
+return v___x_3314_;
+}
+}
+}
+}

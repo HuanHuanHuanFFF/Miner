@@ -1,0 +1,7 @@
+# R16 bounded diagnostics complete; no candidate promotion
+
+R independently recomputed completed401882/1626008 from original hashes and25round data: f7f whole1.294550855978008, ADD1.8739226841701102, p05−0.29097643238957405, full gate true and qualification false. astra-cost-check-40188276536.json. Stop current ADD promotion; all three timed mechanisms negative, no combination/reseed/confirmation requested.
+
+The401871 anomaly worker excluded the proposed subnormal-factor mechanism: all512 B2 scale entries are normal or signed zero, low-normal inputs use ofBits, all six slow dense-case exponent ranges avoid this path. Actual timed B2 callback/ELF/clock remain UNKNOWN; available8eb carrier C is not B2. Evidence: astra-workers/scalar-representation/control-anomaly/conclusion.md and scale-mechanism-check.json. Your same-input reversed-order fresh-runner diagnostic is consistent with retaining the old slow result and avoiding causal overclaim.
+
+Future roundtrip stage finished before11:42: a complete small proof attempt for high-N numeric RNE roundtrip, NOT_COMPILED, no new runtime candidate. math-bridge-handoff.md under astra-workers/matrix-architecture/future-u32-roundtrip/ preserves exact sources/counterchecks. One final bounded packaging step ends11:46 to produce an eligible dependency-closed proof probe, originalpolicy preflight required. This does not displace your control/ADD-C diagnostic or request a runtime variant; if no slot fits remaining delivery budget, keep it uncompiled for next round. Original12:18:10 end remains.

@@ -1,0 +1,130 @@
+{
+  "created_utc": "2026-10-26T08:50:27.872474+00:00",
+  "state": "REAL_COMPILER_ERROR_MINIMAL_REPAIR2_READY_NOT_COMPILED",
+  "primary_probe": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round11h-20261025T173831Z/astra-workers/numeric-roundtrip/Probe-high-u32-roundtrip-repair2.lean",
+    "sha256": "0873268d474eb79301a929e744271c2c48ea547161ed52eda18b5e4aa4bd8fd9",
+    "bytes": 238140
+  },
+  "dependent_output_probe": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round11h-20261025T173831Z/astra-workers/numeric-roundtrip/Probe-output-model-repair2.lean",
+    "sha256": "32b824f5000db80c124d49270c55bd572197ab3e9274b209b723b1fea362a542",
+    "bytes": 244908
+  },
+  "failure_bindings": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round11h-20261025T173831Z/development-proof-f01-r17-dev-u32-roundtrip-repair1-40293041239.json",
+      "sha256": "58a1027cb404595f61eb146598c4012688026e74f961fcc27e761dd0b080ba09",
+      "bytes": 1413
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40293041239/download-54014e509c1a47618f3122228f9afbb4/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r17-dev-u32-roundtrip-repair1/full-build-output.txt",
+      "sha256": "f35859ac7478162b9d71bf3fc9f8f02749968334afd88c11f05bba0a45db9ee8",
+      "bytes": 19415
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round11h-20261025T173831Z/astra-workers/numeric-roundtrip/Probe-high-u32-roundtrip-repair1.lean",
+      "sha256": "01cff324ee8bd142ec9753a2ca72c9ecb7ca24cd8c1bcac9a0925e77fd5e4905",
+      "bytes": 238115
+    }
+  ],
+  "repair": {
+    "old": "simpa using (UInt32.toNat_ofNatClamp_of_lt hfit)",
+    "new": "simpa only [Int.toNat_natCast] using (UInt32.toNat_ofNatClamp_of_lt hfit)",
+    "scope": "Restrict simplification to the whole-Nat-cast Int.toNat identity; no statement, premise, runtime, proof order or other proof line changed"
+  },
+  "fixed_interface": {
+    "pin": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+    "lemma": "Int.toNat_natCast (n : Nat) : Int.toNat (n : Int) = n",
+    "proof": "rfl",
+    "source_url": "https://raw.githubusercontent.com/leanprover/lean4/293d5d0c0c3f3dded4688b3ccd6a33939ac5102b/src/Init/Data/Int/Order.lean",
+    "source_line_1_based": 622,
+    "verified_via": "Primary pinned raw source read with web tool; Basic.lean lines345-348 also gives toNat constructor reduction",
+    "raw_local_fetch": "Failed with WinError10013; did not escalate or invent a raw file hash",
+    "raw_local_sha256": "UNKNOWN"
+  },
+  "diagnosis": "The actual post-simpa goal has the Int coercion pushed into multiplication/power. hr was stated as one Nat cast. The repair preserves that cast until Int.toNat_natCast removes it; it does not introduce a new power theorem or broaden simp.",
+  "original_text_checks": {
+    "Probe-high-u32-roundtrip-repair2.lean": {
+      "intake": null,
+      "policy": null,
+      "options": null
+    },
+    "Probe-output-model-repair2.lean": {
+      "intake": null,
+      "policy": null,
+      "options": null
+    }
+  },
+  "comments_scanned": true,
+  "canonical_LF": true,
+  "primary_helper_roots": [
+    "Submission.R14NatNormal.rounded",
+    "Submission.R14NatNormal.carry",
+    "Submission.R14NatNormal.mantissa",
+    "Submission.R14NatNormal.carry_le",
+    "Submission.R14NatNormal.native_round_normal",
+    "Submission.R14NatNormal.model_round_normal",
+    "Submission.R14NatNormal.raw_normal_decode",
+    "Submission.R14WordAddRounding.rounded_bounds",
+    "Submission.R14WordAddRounding.shift_carry",
+    "Submission.R14WordAddRounding.masked_fraction",
+    "Submission.R16UInt32Roundtrip.roundedShift",
+    "Submission.R16UInt32Roundtrip.roundedInteger",
+    "Submission.R16UInt32Roundtrip.high_log",
+    "Submission.R16UInt32Roundtrip.no_carry_at_31",
+    "Submission.R16UInt32Roundtrip.rounded_leading",
+    "Submission.R16UInt32Roundtrip.high_mantissa",
+    "Submission.R16UInt32Roundtrip.roundedInteger_fit",
+    "Submission.R16UInt32Roundtrip.roundedInteger_eq_RNE",
+    "Submission.R16UInt32Roundtrip.native_high_decode",
+    "Submission.R16UInt32Roundtrip.toUInt32_of_nonnegative_integral_decode",
+    "Submission.R16UInt32Roundtrip.high_roundtrip",
+    "Submission.R16UInt32Roundtrip.high_roundtrip_RNE"
+  ],
+  "output_helper_roots": [
+    "Submission.R14NatNormal.rounded",
+    "Submission.R14NatNormal.carry",
+    "Submission.R14NatNormal.mantissa",
+    "Submission.R14NatNormal.carry_le",
+    "Submission.R14NatNormal.native_round_normal",
+    "Submission.R14NatNormal.model_round_normal",
+    "Submission.R14NatNormal.raw_normal_decode",
+    "Submission.R14WordAddRounding.rounded_bounds",
+    "Submission.R14WordAddRounding.shift_carry",
+    "Submission.R14WordAddRounding.masked_fraction",
+    "Submission.R16UInt32Roundtrip.roundedShift",
+    "Submission.R16UInt32Roundtrip.roundedInteger",
+    "Submission.R16UInt32Roundtrip.high_log",
+    "Submission.R16UInt32Roundtrip.no_carry_at_31",
+    "Submission.R16UInt32Roundtrip.rounded_leading",
+    "Submission.R16UInt32Roundtrip.high_mantissa",
+    "Submission.R16UInt32Roundtrip.roundedInteger_fit",
+    "Submission.R16UInt32Roundtrip.roundedInteger_eq_RNE",
+    "Submission.R16UInt32Roundtrip.native_high_decode",
+    "Submission.R16UInt32Roundtrip.toUInt32_of_nonnegative_integral_decode",
+    "Submission.R16UInt32Roundtrip.high_roundtrip",
+    "Submission.R16UInt32Roundtrip.high_roundtrip_RNE",
+    "Submission.R17NumericNormalize.output_exponent_bounds",
+    "Submission.R17NumericNormalize.output_exponent_guard",
+    "Submission.R17NumericNormalize.numeric_shift_toNat",
+    "Submission.R17NumericNormalize.numeric_fraction_toNat",
+    "Submission.R17NumericOutput.pack_of_masked_fraction",
+    "Submission.R17NumericOutput.word_exponent_shift_relation",
+    "Submission.R17NumericOutput.numeric_pack_model",
+    "Submission.R17NumericOutput.numeric_add_of_alignment"
+  ],
+  "root_counts": {
+    "primary": 22,
+    "dependent_output": 30
+  },
+  "requested_order": "Compile repair2 primary first; the output probe has the same repaired prefix and should not be independently queued to rediscover the same former failure. UInt64 equivalent tail should receive the same scoped Int.toNat_natCast normalization.",
+  "original01cff_and77036_unchanged": true,
+  "compile": "NOT_RUN",
+  "kernel": "NOT_RUN",
+  "helper_audit": "NOT_RUN",
+  "performance": "NOT_RUN",
+  "source_budget_status": "Stopped immediately on actual compiler feedback; source-budget-add/plan.json and deletion-only patch retain the 14648B static plan. No expansion or application.",
+  "tokens": "UNKNOWN",
+  "CI_seconds": 0
+}

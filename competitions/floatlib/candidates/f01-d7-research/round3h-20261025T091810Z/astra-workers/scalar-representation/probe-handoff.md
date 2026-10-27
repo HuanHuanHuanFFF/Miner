@@ -1,0 +1,13 @@
+# R16 native MUL repack — minimal proof probe
+
+`Kernel-native-repack.lean`, **247533 B**, SHA256 **c972fd72694d4d7db4660d2dbcd640d766d013d58bd9c9a27a6c68d47010b7ac** is the current draft. Baseline is exact B2 `622d8394…`; original ADD/SUM/BMM source retained, public MUL adds a normal-domain arm with the original B2 MUL as fallback. No Lean or performance result is claimed.
+
+Mechanism: two exact UInt32 mantissa conversions → one actual Float32 product → toBits → read the rounded exponent/fraction → add original exponent sum −300 and sign → raw pack. This removes both scale-table reads, two floating scale multiplications and result NaN check on the normal-domain arm. It does not run software integer product/RSE. Conditions are both original raw exponents1..254 and sum128..380; domain exit retains the full original operation, including NaN payload, Inf, subnormal and signed zero.
+
+Proof change from failed R14 913d: no modular whole-word addition proof, no concrete unfolding of native multiplication into huge nested terms. `first_product_bits` instantiates the later full-gated `model_mul_normal_fields` at150/150; official exact field-extraction lemmas support a small no-wrap Nat transport; full-gated R14 core_model/guard/fallback proofs are reused unchanged. Recursion8192 is scoped only to the inserted proof section, matching the old accepted source; official caps/tools remain unchanged. The source manifest hashes all copied modules.
+
+Minimum useful next action by D is statement/full original gate on this exact source under the existing public one-slot schedule. In particular inspect `first_product_bits`, `packed_ex_nat`, `packed_frac_nat`, `outputExponent_nat`, and the actual public `mul_spec`; the new helpers all enter the public proof cone. If it compiles, inspect selected scalar caller for actual one-multiply/zero-table lowering and then complete the original paired D measurement. There is no independent test or source-acceptance result yet.
+
+Finite screen: 10502 directed/random finite pairs, 8448 eligible, independent exact-integer versus host C pack4 rounding, zero mismatches; worker timeout actually enforced at5s, controller elapsed0.149s. This only rejects small counterexamples, not a Lean proof. Explicit excluded witnesses are S127 (subnormal output) and S381 (overflow); unguarded repack is wrong on both. Raw report/script and source SHA are in `native-repack-model.json` and `source-manifest.json`.
+
+Budget still through ~10:13UTC, target decisive feedback10:08; token usage UNKNOWN and CI occupancy0 for this worker. Await compile-specific evidence before any repair; continue bounded coverage/cost investigation meanwhile. No current R16 confirmation input/result has been read.

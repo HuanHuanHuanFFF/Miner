@@ -1,0 +1,61 @@
+--- a/Kernel.lean
++++ b/Kernel.lean
+@@ -6398,6 +6398,26 @@
+ 
+ /- R11 cross-row p=2 kernel. Four independent row instances, including across
+    batch boundaries; each output retains its own ordered mul/add chain. -/
++/- Source proposal only: reuse the already present exact native self-BEq theorem.
++   The opportunity is one fewer foreign classifier call, not a new UInt32 ABI. -/
++namespace Submission.R11FinishWord
++open FloatLib.Floats Competition
++
++@[inline] def finishWord (n baseA baseB p : Nat) (A B : Array Binary32)
++    (x : Float32) : UInt32 :=
++  if R7W04.nonNaN x then x.toBits
++  else (R7NaNReplay.replayEarly n baseA baseB p A B).raw.1
++
++theorem finishWord_eq_raw (n baseA baseB p : Nat) (A B : Array Binary32)
++    (x : Float32) :
++    finishWord n baseA baseB p A B x = (Packed10.finish n baseA baseB p A B x).raw.1 := by
++  unfold finishWord Packed10.finish
++  rw [R7W04.nonNaN_eq_not_isNaN]
++  cases hn : x.isNaN <;> simp [hn] <;> rfl
++
++end Submission.R11FinishWord
++
++
+ namespace Submission.R11CrossRows
+ open FloatLib.Floats Competition
+ 
+@@ -6691,14 +6711,14 @@
+   ExecFloat.Binary.ofBits32_toBits32 q
+ 
+ def finish8 (n p a0 a1 a2 a3 b0 b1 b2 b3 : Nat) (A B : Array Binary32) (s : F8) : W8 :=
+-  ⟨(Packed10.finish n a0 b0 p A B s.s0).raw.1,
+-   (Packed10.finish n a0 (b0+1) p A B s.s4).raw.1,
+-   (Packed10.finish n a1 b1 p A B s.s1).raw.1,
+-   (Packed10.finish n a1 (b1+1) p A B s.s5).raw.1,
+-   (Packed10.finish n a2 b2 p A B s.s2).raw.1,
+-   (Packed10.finish n a2 (b2+1) p A B s.s6).raw.1,
+-   (Packed10.finish n a3 b3 p A B s.s3).raw.1,
+-   (Packed10.finish n a3 (b3+1) p A B s.s7).raw.1⟩
++  ⟨R11FinishWord.finishWord n a0 b0 p A B s.s0,
++   R11FinishWord.finishWord n a0 (b0+1) p A B s.s4,
++   R11FinishWord.finishWord n a1 b1 p A B s.s1,
++   R11FinishWord.finishWord n a1 (b1+1) p A B s.s5,
++   R11FinishWord.finishWord n a2 b2 p A B s.s2,
++   R11FinishWord.finishWord n a2 (b2+1) p A B s.s6,
++   R11FinishWord.finishWord n a3 b3 p A B s.s3,
++   R11FinishWord.finishWord n a3 (b3+1) p A B s.s7⟩
+ 
+ theorem finish8_word (n p a0 a1 a2 a3 b0 b1 b2 b3 : Nat) (A B : Array Binary32)
+     (s : F8) (r : Fin 4) (j : Fin 2) :
+@@ -6709,7 +6729,7 @@
+   have h : r=0 ∨ r=1 ∨ r=2 ∨ r=3 := by omega
+   have hc : j=0 ∨ j=1 := by omega
+   rcases h with rfl|rfl|rfl|rfl <;> rcases hc with rfl|rfl <;>
+-    simp [finish8, wordAt, select4, lane, laneIndex, rebuild]
++    simp [finish8, R11FinishWord.finishWord_eq_raw, wordAt, select4, lane, laneIndex, rebuild]
+ 
+ def blockAt (n p a0 a1 a2 a3 b0 b1 b2 b3 : Nat) (A B : Array Binary32)
+     (hn : n<USize.size) : W8 :=

@@ -1,0 +1,69 @@
+{
+  "checked_utc": "2026-10-25T12:08:38.719536+00:00",
+  "state": "EXACT_F7F_SELECTED_ADD_C_REVIEW_COMPLETE",
+  "input": {
+    "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40189703522\\download-6480abc393984675972cc19005e1e7f9\\diagnostics\\f01-d7-public-suite\\public-suite\\inputs\\f01-r16-dev-native-add-high3\\Kernel.lean",
+    "bytes": 255992,
+    "sha256": "f7f4702f9191061bb70a274610c9b735967ce4460ca2ef6ae121b9264fad18dd"
+  },
+  "C_sources": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40189703522\\download-6480abc393984675972cc19005e1e7f9\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r16-dev-native-add-high3\\candidate-generated-0.c",
+      "bytes": 2064305,
+      "sha256": "c7c17bb0257d60a9ce3df6ffa9ef44bb3f183c62382ababaedbb6315a80be8bf"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40189703522\\download-6480abc393984675972cc19005e1e7f9\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r16-dev-native-add-high3\\candidate-generated-1.c",
+      "bytes": 199826,
+      "sha256": "90b632c8d102312a511e39246a32fbe6d0fb338572515d2f3c842b8b336c0040"
+    }
+  ],
+  "selection": {
+    "BENCH_PLAN_argument": "v___f_2490_",
+    "closure": "lp_competition_main___closed__5",
+    "boxed": "lp_competition_main___lam__2___boxed",
+    "unboxed": "lp_competition_main___lam__2",
+    "original_line": 3597
+  },
+  "selected_C_bytes": 52081,
+  "selected_C_sha256": "4e21dc0bc54b8bc1a9badfde27ee604c0bff323c49b8db1f0d6cc1670939fd89",
+  "whole_body_static_sites": {
+    "lean_uint32_to_float32": 9,
+    "lean_float32_to_bits": 5,
+    "lean_float32_add": 4,
+    "lean_float32_mul": 8,
+    "lean_array_fget_borrowed": 8,
+    "lean_alloc_ctor": 0,
+    "lean_alloc_closure": 0,
+    "lean_apply_2": 0
+  },
+  "Nat_calls": [],
+  "allocation_calls": [],
+  "closure_apply_calls": [],
+  "eligible_arm": {
+    "native_casts": 1,
+    "toBits_calls": 1,
+    "native_float_add_mul": 0,
+    "scale_table_reads": 0,
+    "magnitude_evaluations_on_path": 1,
+    "same_sign_accepted_path_repeated_exponent_order_compare_C_sites": [
+      1918,
+      1901,
+      1835,
+      1827,
+      1814,
+      1800,
+      1766,
+      1743
+    ],
+    "toBits_postwork": "Re-extract both original input exponents and compare to select low exponent; E guard; re-extract/compare again to select high input sign; repack. Original u/v remain live across call."
+  },
+  "fallback": "Four static inlined fallback ADD copies at distinct rejection paths; at most one fallback executes per call. Late E rejection pays conversion/toBits before fallback. No evidence of repeated fallback execution.",
+  "scalar_ASM": "NOT_CAPTURED; archived symbols are matrix loops only",
+  "archived_ASM_symbols": [
+    "lp_competition_Submission_Packed10Index_loop",
+    "lp_competition_Submission_Packed10Index_loop___redArg",
+    "lp_competition_Submission_R15PackedB2_loop"
+  ],
+  "limitations": "Generated C is not instruction/cycle attribution or timed ELF identity. Clang CSE, branch lowering, spills, machine code size and dominant cycle cost UNKNOWN. No new experiment or source change."
+}

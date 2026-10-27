@@ -1,0 +1,29 @@
+--- parent-23ad/Kernel.lean
++++ repaired/Kernel.lean
+@@ -6846,7 +6846,7 @@
+   have hq := shift_recovery a b (shiftWord a b) ha0 ha hb0 hb
+     (shiftWord_nat a b ha0 ha hb0 hb)
+   unfold mantissaWord numericProduct
+-  rw [FastMul.toUInt32_eq,UInt32.toNat_ofNat,hq]
++  simp only [FastMul.toUInt32_eq,UInt32.toNat_ofNat',hq]
+   exact Nat.mod_eq_of_lt (by omega)
+ 
+ theorem fractionWord_nat (a b : UInt32)
+@@ -6870,7 +6870,7 @@
+       R14ExponentShift.middleExponent (R14ExponentShift.product a b)-173 := by
+   have hp := R14ExponentShift.product_bounds a b ha0 ha hb0 hb
+   have he := R14ExponentShift.middle_bounds _ hp.1 hp.2
+-  rw [FastMul.toUInt32_eq,UInt32.toNat_ofNat,highWord_nat a b ha0 ha hb0 hb]
++  simp only [FastMul.toUInt32_eq,UInt32.toNat_ofNat',highWord_nat a b ha0 ha hb0 hb]
+   exact Nat.mod_eq_of_lt (by omega)
+ 
+ theorem exponentWord_nat (sum a b : UInt32)
+@@ -6904,7 +6904,7 @@
+ theorem low_mask_eq_self (n : UInt32) (k : Nat) (hk : k < 32) (hn : n.toNat < 2^k) :
+     n &&& UInt32.ofNat (2^k-1) = n := by
+   apply UInt32.toNat.inj
+-  rw [UInt32.toNat_and,UInt32.toNat_ofNat]
++  simp only [UInt32.toNat_and,UInt32.toNat_ofNat']
+   have hmask : 2^k-1 < 4294967296 := by
+     have hpow : 2^k ≤ 2^31 := Nat.pow_le_pow_right (by decide) (by omega)
+     norm_num at hpow

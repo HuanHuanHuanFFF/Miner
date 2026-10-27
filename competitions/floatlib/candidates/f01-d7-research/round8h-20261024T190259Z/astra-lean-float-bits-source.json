@@ -1,0 +1,27 @@
+{
+  "repository": "leanprover/lean4",
+  "ref": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+  "source_path": "src/runtime/object.cpp",
+  "git_blob_sha1": "49213d7be079e11589f1efcfe880dba44622a6e7",
+  "bytes": 100916,
+  "sha256": "b53499ae7db8ed722a489ae5a79a394b93f6fda2e6663a3784d886867583985a",
+  "url": "https://github.com/leanprover/lean4/blob/293d5d0c0c3f3dded4688b3ccd6a33939ac5102b/src/runtime/object.cpp",
+  "functions": {
+    "lean_float32_of_bits": {
+      "lines": [
+        1987,
+        1993
+      ],
+      "behavior": "bit_cast<float> then canonicalize any NaN using quiet_NaN"
+    },
+    "lean_float32_to_bits": {
+      "lines": [
+        2000,
+        2004
+      ],
+      "behavior": "canonical0x7fc00000 for any NaN, otherwise bit_cast<uint32_t>"
+    }
+  },
+  "license_local": "astra-upstream-lean/LICENSE",
+  "scope": "Primary runtime implementation, not a benchmark. Externcall/link/inlining cost still needs actual generated caller and target machine evidence."
+}

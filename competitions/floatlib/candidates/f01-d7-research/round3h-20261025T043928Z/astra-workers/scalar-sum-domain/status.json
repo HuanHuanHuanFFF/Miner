@@ -1,0 +1,52 @@
+{
+  "status": "SOURCE_READY_FOR_ROOT_REVIEW_NOT_LEAN_VERIFIED",
+  "updated_at_utc": "2026-10-25T05:34:46.541492+00:00",
+  "model_requested": "gpt-6-astra/xhigh",
+  "first_priority": "priority-first.md",
+  "domain_evidence": "domain-screen.json",
+  "mechanism": "Inside existing ex+ey<128 only: if ex+ey<=84, exact XOR-signed zero; otherwise unchanged LowScale.mul; native main path untouched.",
+  "new_vs_R14": "Conservative exponent-only shortcut reusing already full-gated arbitrary-product roundP_zero, not whole integer add/mul or untested bias RNE.",
+  "proof_status": "WRITTEN_NOT_RUN",
+  "performance_status": "UNKNOWN",
+  "handoff": "handoff-cutoff84.md",
+  "candidate": "Kernel-cutoff84.lean",
+  "candidate_sha256": "837341a52575cffa9b5dfee6a44ba9369d1ee7ae4f6bb47fa47af11ae1f5831b",
+  "candidate_bytes": 253562,
+  "candidate_manifest": "cutoff84-manifest.json",
+  "finite_model": "cutoff84-model.json; 6256 checks; not a proof",
+  "next_action": "Root independent source review, then development-owned exact compile/full D if selected",
+  "limits": {
+    "local_lean": false,
+    "CI": false,
+    "git": false,
+    "model_external_timeout_ms": 5000
+  },
+  "sum_decision": "PARK_REVERSE_SNAN_SUFFIX_FOR_SMALL_CURRENT_SCORED_COST; existing MR03 reserve, not a new theorem claim",
+  "secondary_review": "far-add-second-review.md",
+  "secondary_decision": "NO_SECOND_RUNTIME_CANDIDATE; old full negative confirmed; new prefilter only finite guard model",
+  "cutoff_runtime_frozen": true,
+  "candidate_sha256_observed": "837341a52575cffa9b5dfee6a44ba9369d1ee7ae4f6bb47fa47af11ae1f5831b",
+  "followup_state": "TIGHT_LITERAL_RSE_DELIVERED_LOW_PRIORITY_NOT_RUN",
+  "adversarial_review": "cutoff84-adversarial-review.md",
+  "adversarial_result": "No concrete premise gap found; Lean remains NOT_RUN",
+  "frozen_source_sha256": "837341a52575cffa9b5dfee6a44ba9369d1ee7ae4f6bb47fa47af11ae1f5831b",
+  "followup_findings": [
+    "R6 gap26 already full gate PASS and 1.0774068 add ratio, 1.2946282 dense ratio; R14 new math chain unnecessary for that domain",
+    "Single near-range prefilter checked on all65536 exponent pairs but no runtime timing basis; not submitted as second candidate",
+    "Cutoff84 adversarial source audit found no concrete premise gap; no source edits"
+  ],
+  "lowzero_review": "lowzero-residual-handoff.md",
+  "lowzero_model": "lowzero-residual-screen.json",
+  "lowzero_optional_fragment": "ResidualLowZero-reserve-fragment.lean",
+  "lowzero_fragment_status": "NOT_COMPILED_COMPOSITION; math copied from exact old full-gated e139",
+  "lowzero_old_negative": {
+    "run": 39904491256,
+    "mul_normalized": 1.0709083050820591,
+    "whole_normalized": 1.0243151644675506
+  },
+  "lowzero_decision": "Do not enqueue on present evidence; optional later small-scope integration if root D feedback warrants",
+  "tight_rse_handoff": "tight-literal-rse-handoff.md",
+  "tight_rse_manifest": "tight-literal-rse-manifest-v2.json",
+  "tight_rse_candidate_sha256": "bb51244607512ca3fa1f6a4456f44cf4b538885142e2b76f61b690ad9c191676",
+  "tight_rse_decision": "Reserve; nonzero hits9/31/23 per21504 sampled scalar calls; added zero-path comparisons are material uncertainty; no D requested"
+}

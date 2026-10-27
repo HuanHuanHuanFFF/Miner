@@ -1,0 +1,21 @@
+{
+  "at_utc": "2026-10-25T05:38:38.165452+00:00",
+  "parent": "competitions/floatlib/candidates/f01-r15-dev-column-pairs2/Kernel.lean",
+  "parent_sha256": "b116067185626ccb758fbadd608ce7514cb1ddef70ddd0a07e1596f8c776952b",
+  "fragment": "PackedB2.lean",
+  "fragment_sha256": "f7eb16da2047172b5b6c054bb74f7015633be393fa2fdebe2239825c3dc16047",
+  "fragment_bytes": 9458,
+  "candidate": "Kernel-b2.lean",
+  "candidate_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "candidate_bytes": 226829,
+  "state": "SINGLE_LAYOUT_VARIANT_SOURCE_READY_NOT_COMPILED",
+  "proof_status": "COMPLETE_ATTEMPT_UNCOMPILED",
+  "runtime_scope": "Same2<=p<=8,n>1,m>=4 and outer underflow guard as parent. Only preparedB layout and loop B accesses change; A decoding, two chains, F2 terminal result, emit, finish and raw replay remain semantically the parent via output_eq.",
+  "layout": "Vector(Vector B2 n)(batch*ceil(p/2)); one outer tile vector and one inner k-vector per batch/pair. B2 aliases the existing two-native-Float32 F2. Tile base/div/mod computed before k preparation callback.",
+  "odd_tail": "Preserves even the parent unobserved second lane exactly through total raw getD, including cross-row/batch reads and final+0 default. Therefore oddp prepares2*ceil(p/2) native fields per B row rather thanp.",
+  "proof_route": "packB_get -> generic loop_s0/loop_s1 -> loop_eq_original -> group_eq/row_eq/output_eq -> existing Prefix/reference -> dispatch_spec",
+  "new_generated_C": "UNKNOWN",
+  "new_full_gate": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "elapsed_seconds": 0.0033327999990433455
+}

@@ -1,0 +1,11 @@
+--- Probe-high-u32-roundtrip-repair1.lean
++++ Probe-high-u32-roundtrip-repair2.lean
+@@ -6833,7 +6833,7 @@
+   change (UInt32.ofNatClamp
+     ((x.toModel.unpack.toInt 0 (UInt32.size-1)).toNat)).toNat = _
+   rw [hi,hr]
+-  simpa using (UInt32.toNat_ofNatClamp_of_lt hfit)
++  simpa only [Int.toNat_natCast] using (UInt32.toNat_ofNatClamp_of_lt hfit)
+ 
+ /-- Target numeric bridge. No shape or cast behavior is left as a hypothesis. -/
+ theorem high_roundtrip (n : UInt32)
