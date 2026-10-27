@@ -100,7 +100,9 @@ def main():
             hashes={p.relative_to(stage).as_posix():{'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size} for p in stage.rglob('*') if p.is_file()}
             save(target/'original-artifact-hashes.json',{'artifact':artifact,'directory':stage.name,'files':hashes})
             for s in stage.rglob('summary.json'):
-                summary=json.loads(s.read_text());assert summary['source_commit']==meta['headSha'];print(json.dumps(summary,ensure_ascii=False)[:12000])
+                summary=json.loads(s.read_text())
+                if 'source_commit' not in summary:continue  # Diagnostic sub-summaries stay in the authenticated artifact.
+                assert summary['source_commit']==meta['headSha'];print(json.dumps(summary,ensure_ascii=False)[:12000])
         (target/'ci.log').write_bytes(gh(['run','view',args.run,'--repo',REPO,'--log'],e).encode('utf-8'))
 
 if __name__=='__main__':main()
