@@ -18,6 +18,7 @@
 3. [R18 结果与经验](competitions/floatlib/candidates/f01-d7-research/round11h-20261025T173831Z/README.md)：U32／U64往返接口已验；真正ADD／MUL重构完整正确但成本为负，避免仅换seed重跑。
 4. [DeepSeek 最终总结](competitions/floatlib/research/deepseek-20261025/SUMMARY.md)：p≤8连续输出路由及原始CI已合入。其首个D未过，后续组仅作输入泛化诊断；相对旧df5c的收益不能继承为相对B2的收益或完整采用。
 5. 准备新候选前查对应历史负结果；新一轮另定预算、命名、精确源和验证计划。公共入口[测试计划](competitions/floatlib/candidates/f01-d7-public-suite/suite-plan.json)现为HOLD，无排队候选；先冻结新计划，再按实际分支和远端精确提交派发。
+6. [R19 六小时总结](competitions/floatlib/research/deepseek-20261025/R19-SUMMARY.md)：B2 分派放宽、逐行闭包、dot/finish 内联、convert→ofBits 均为负；mul 去低尺度分支在 EPYC 上 mul −8%—−12%，但 Intel 很小且整包不稳，确认失败已 REJECTED。**经验**：C 证据须确认 selected body；Xeon 单 run 标量可漂 ±10%；去 denormal 软件分支的候选必须记录 runner CPU 并做同 seed 对照。
 
 原始证据保留在 Codex 的 `competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/` 和 DeepSeek 的 `competitions/floatlib/research/deepseek-20261025/ci-runs/`，不合并改写原回执。历史环境命令和分支名需按当前入口核对。
 

@@ -1,0 +1,16 @@
+{
+  "candidate": "f01-deepseek-loopdc1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "5b2ca4e9ef7798b194adc3c14f1c91030a93f7a6d23354456075d9f66d075acd",
+  "candidate_bytes": 227932,
+  "created_at_utc": "2026-10-26T20:02:27.490354+00:00",
+  "parent": "competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean",
+  "parent_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "mechanism": "DirectContinuous.row iterates outputs with a first-order recursive emitLoop instead of RowStream.emit with a capturing lambda, removing one closure allocation (alloc_closure + closure_set + refcount traffic) per row. Arithmetic, order, NativeFinal.dot and the writer's push semantics are unchanged.",
+  "proof": "emitLoop_eq shows the loop equals Fin.foldl.loop over the same step; row_emit_eq bridges row to the previous RowStream.emit form, so row_prefix/output_prefix/core_eq_reference keep their meaning.",
+  "validation_mode": "statement-only",
+  "proof_status": "STATIC_PATCH_NOT_COMPILED",
+  "performance": "NOT_RUN",
+  "hypothesis": "Per-row closure allocation is a measurable part of BMM cost; removing it should improve shapes with many rows.",
+  "formal_submission": "NOT_SUBMITTED"
+}

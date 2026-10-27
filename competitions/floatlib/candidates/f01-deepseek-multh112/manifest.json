@@ -1,0 +1,16 @@
+{
+  "candidate": "f01-deepseek-multh112",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "9e09d1320ce19902616a6d716d40862a324c9fe1e033e2e4e1508d22350ff4c0",
+  "candidate_bytes": 226829,
+  "created_at_utc": "2026-10-26T20:35:04.368287+00:00",
+  "parent": "competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean",
+  "parent_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "mechanism": "Only the mul low-scale dispatch constant changes 128 -> 112: only products with ex+ey<112 use the software low-scale rounder. Both branches keep their proofs; no other runtime byte changes.",
+  "proof": "mul_spec splits on the same predicate; LowScale.mul_spec and nativeMul_spec are unconditional.",
+  "validation_mode": "full-gate",
+  "proof_status": "NOT_RUN_STATIC_CONSTANT_ONLY",
+  "performance": "NOT_RUN",
+  "hypothesis": "Whether the software low-scale rounder still pays off on the current runner CPU, or native denormal handling is cheaper.",
+  "formal_submission": "NOT_SUBMITTED"
+}

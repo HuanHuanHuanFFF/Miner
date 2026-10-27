@@ -1,0 +1,82 @@
+﻿# R19：mul 去掉低尺度软件分支（发现组，2026-10-26T21:05Z）
+
+## 候选
+
+`f01-deepseek-multh0`，SHA `14a6ae2f9afd31cd584b5087fe24e001663d16222856515c9a4c4e10c1322ea5`。
+父本 B2 `622d8394`。唯一改动：`mul` 的低尺度分派常数 `128` → `0`，
+即 `if ex + ey < 0 then LowScale.mul else nativeMul` 恒走 `nativeMul`。
+两支原证明不变，**0 新证明**；编译器可 DCE 掉 `expField` 提取与整个软件分支。
+
+## 发现组（run 40397668271，seed 1826011，AMD EPYC 7763）
+
+| 指标 | 值 |
+|---|---:|
+| whole/B2 | **0.9691** |
+| mul/B2 | **0.9228** |
+| add / sum / bmm /B2 | 1.0001 / 1.0000 / 1.0009 |
+| p05（本地 bootstrap） | **+0.021156** |
+| headline ≤0.97 | 是（0.96905） |
+
+mul 各类/B2：sparse **0.812**、specials 0.900、dense 0.948、ml 0.946、paired 0.946、
+extremes 0.958、subnormal 0.964。标量其它项与 bmm 是干净的 1.000 控制。
+
+## 解释
+
+- 当前 runner 是 AMD EPYC（Zen 3/5 系），denormal 结果没有 Intel 那种明显惩罚；
+  `LowScale` 软件舍入对多数输入已是净开销。
+- 常数 0 让整个 `ex+ey<128` 分支、`expField` 提取与 `LowScale` 代码被优化器删除，
+  因此连 dense/ml 也快约 5%（不只是 subnormal）。
+- 与 R14 的 `low-zero`（零操作数分支）不同：那次是加数据相关分支，这次是删分支。
+
+## 边界
+
+- 官方验证硬件 CPU 未知；若为有 denormal 惩罚的 Intel，本改动可能反向。
+  确认组必须记录每次 runner CPU，并在不同 CPU 上复现。
+- 单 seed 发现组；正在 seed 1826012 起做独立确认（B2 anchor + th0，2 候选）。
+
+## 确认组 1（失败）与 CPU 依赖
+
+run 40400995011，seed 1826012，runner **INTEL XEON PLATINUM 8573C**：
+
+| 指标（对 B2） | 值 |
+|---|---:|
+| whole | 0.9940 |
+| mul | 0.9854 |
+| p05 | **−0.020359** |
+| add / sum / bmm | 0.9939 / 1.0168 / 1.0008 |
+
+mul 各类/B2：dense 1.034、extremes 1.060、**subnormal 1.229**；
+ml 0.928、sparse 0.934、specials 0.726。
+
+**结论**：该改动与 CPU 相关（两 run seed 也不同，未分离因果）。EPYC 上 native denormal 没有明显惩罚、且 DCE 掉整条分派，
+mul −7.7%；Intel 上 subnormal 慢 23%，净收益消失且整包未过 0.97。
+官方验证硬件未知，**不能把 th0 作为通用候选**；不进入确认组 2，也不组合。
+保留为“CPU 敏感”负结果，确认组 1 失败原样记录。
+## 同 seed 复跑（CPU 分离诊断）
+
+同 seed 1826011 再跑一次（run 40410071271，runner **AMD EPYC 9V74**，与首次 EPYC 7763 不同型号）：
+
+| 指标（对 B2） | 值 |
+|---|---:|
+| whole | **0.9544** |
+| mul | **0.8837** |
+| add / sum / bmm | 0.9992 / 0.9998 / 1.0002 |
+| p05 | **+0.044995** |
+
+同一 seed 下，两次 EPYC 型号都给 mul −8.8%—−11.6%、whole −3.1%—−4.6%，控制项干净；
+说明该收益在 AMD EPYC 家族内可复现，且不是 seed 偶然。Intel 侧（不同 seed）mul 仅 −1.5%、whole −0.6%。
+仍缺“同一 seed × Intel”的最后一格，正在补跑 seed 1826012 以观察是否落在 EPYC。
+## CPU × seed 矩阵（诊断完成）
+
+| seed | runner CPU | whole/B2 | mul/B2 | p05 | 备注 |
+|---|---|---|---:|---:|---:|---|
+| 1826011 | EPYC 7763 | 0.9691 | 0.9228 | +0.0212 | 首次发现 |
+| 1826011 | EPYC 9V74 | 0.9544 | 0.8837 | +0.0450 | 同 seed 复跑 |
+| 1826012 | Xeon 8573C | 0.9940 | 0.9854 | −0.0204 | 确认组 1（失败） |
+| 1826012 | EPYC 9V74 | 0.9784 | 0.9400 | −0.0301 | 同 seed 复跑 |
+
+同 seed 1826012 对比：EPYC 的 mul 收益比 Intel 多约 4.5pp、whole 多约 1.6pp；
+CPU 关联现在有 seed 对照支持（仍是单 seed，属关联不是严格因果）。
+但即使 EPYC，1826012 的 whole 0.9784 也未过 0.97、p05 为负 → th0 只是“小 mul 收益”，
+不满足采用门槛，结论维持 REJECTED。
+> 口径说明（2026-10-26T23:32Z 更正）：本文中若标注 raw 的 op 比值仅作诊断；采用口径为归一化 (sub/inc)_cand ÷ (sub/inc)_B2。归一化值见 R19-SUMMARY.md 的更正表与 messages/20261026T233200000Z-r19-normalized-correction.md。
