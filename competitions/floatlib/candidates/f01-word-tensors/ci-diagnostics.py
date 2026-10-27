@@ -125,7 +125,7 @@ def statement(src,verdict):
             pm.run(g,kernel,out)
     return reason
 g.STAGES=[('intake',g.intake),('policy',g.policy),('statement',statement)]
-if kernel.parent.name.startswith('f01-r20-'):
+if kernel.parent.name.startswith(('f01-r20-', 'f01-r21-')):
     manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
     helper_manifest=json.loads(manifest_path.read_bytes())
     if helper_manifest.get('helper_audit_module_sha256'):
