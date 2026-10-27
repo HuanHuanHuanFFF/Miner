@@ -50,6 +50,9 @@ def main():
             if (ROOT/manifest).is_file():
                 paths.append(manifest)
                 data=json.loads((ROOT/manifest).read_bytes())
+                helper=data.get('helper_audit_module')
+                if name.startswith('f01-r22-') and helper in ('development-cost-audit.py','development-cost2-audit.py'):
+                    paths.append('competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/'+helper)
                 for component in data.get('components',[]):
                     component_path=component['path'];resolved=(ROOT/component_path).resolve()
                     assert resolved.is_relative_to(ROOT/'competitions/floatlib/candidates')
