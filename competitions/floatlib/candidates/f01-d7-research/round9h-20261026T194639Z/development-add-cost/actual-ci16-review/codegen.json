@@ -1,0 +1,291 @@
+{
+  "actual_entry": {
+    "control": "closed__11 -> r19CostControlAdd___boxed -> typed r19CostControlAdd",
+    "guarded": "closed__10 -> r19CostGuardedAdd___boxed -> typed r19CostGuardedAdd",
+    "arity": 2,
+    "captures": 0,
+    "Suite_calls": 1,
+    "shared_MUL_SUM_BMM": "closed__1/closed__2/closed__3 in common join"
+  },
+  "boxed_wrappers_identical_after_only_call_target_rename": true,
+  "typed_sizes": {
+    "lp_competition_r19CostControlAdd": 448,
+    "lp_competition_r19CostControlAdd___boxed": 116,
+    "lp_competition_r19CostGuardedAdd": 1189,
+    "lp_competition_r19CostGuardedAdd___boxed": 116
+  },
+  "typed_static_instruction_count": {
+    "control": 130,
+    "guarded": 313
+  },
+  "guarded_normal_nonzero_success": {
+    "le31_same": {
+      "instruction_count": 79,
+      "ranges": [
+        [
+          "0x0",
+          "0x25"
+        ],
+        [
+          "0x54",
+          "0x75"
+        ],
+        [
+          "0x10a",
+          "0x141"
+        ],
+        [
+          "0x17b",
+          "0x188"
+        ],
+        [
+          "0x33c",
+          "0x348"
+        ],
+        [
+          "0x36f",
+          "0x38d"
+        ],
+        [
+          "0x437",
+          "0x445"
+        ],
+        [
+          "0x143",
+          "0x178"
+        ],
+        [
+          "0x18e",
+          "0x191"
+        ]
+      ],
+      "call_sites": [
+        "0x381"
+      ],
+      "rsp_memory_sites": 0
+    },
+    "le31_opposite_nonzero": {
+      "instruction_count": 79,
+      "ranges": [
+        [
+          "0x0",
+          "0x25"
+        ],
+        [
+          "0x54",
+          "0x75"
+        ],
+        [
+          "0x10a",
+          "0x141"
+        ],
+        [
+          "0x17b",
+          "0x188"
+        ],
+        [
+          "0x33c",
+          "0x348"
+        ],
+        [
+          "0x36f",
+          "0x38d"
+        ],
+        [
+          "0x437",
+          "0x445"
+        ],
+        [
+          "0x143",
+          "0x178"
+        ],
+        [
+          "0x333",
+          "0x336"
+        ]
+      ],
+      "call_sites": [
+        "0x381"
+      ],
+      "rsp_memory_sites": 0
+    },
+    "ge32_same": {
+      "instruction_count": 65,
+      "ranges": [
+        [
+          "0x0",
+          "0x25"
+        ],
+        [
+          "0x54",
+          "0x75"
+        ],
+        [
+          "0x10a",
+          "0x141"
+        ],
+        [
+          "0x17b",
+          "0x188"
+        ],
+        [
+          "0x33c",
+          "0x348"
+        ],
+        [
+          "0x36f",
+          "0x38d"
+        ],
+        [
+          "0x437",
+          "0x445"
+        ],
+        [
+          "0x18e",
+          "0x191"
+        ]
+      ],
+      "call_sites": [
+        "0x381"
+      ],
+      "rsp_memory_sites": 0
+    },
+    "ge32_opposite_nonzero": {
+      "instruction_count": 65,
+      "ranges": [
+        [
+          "0x0",
+          "0x25"
+        ],
+        [
+          "0x54",
+          "0x75"
+        ],
+        [
+          "0x10a",
+          "0x141"
+        ],
+        [
+          "0x17b",
+          "0x188"
+        ],
+        [
+          "0x33c",
+          "0x348"
+        ],
+        [
+          "0x36f",
+          "0x38d"
+        ],
+        [
+          "0x437",
+          "0x445"
+        ],
+        [
+          "0x333",
+          "0x336"
+        ]
+      ],
+      "call_sites": [
+        "0x381"
+      ],
+      "rsp_memory_sites": 0
+    }
+  },
+  "control_R2_numeric_ordinary_nonNaN": {
+    "instruction_count": 54,
+    "call_sites": 0,
+    "tail_jump_to_codec": "0xd4 -> lean_float32_to_bits",
+    "rsp_memory_sites": 0
+  },
+  "prologue": {
+    "control": {
+      "callee_save_registers": [
+        "rbp",
+        "r14",
+        "rbx"
+      ],
+      "local_alignment_bytes": 16,
+      "total_below_entry_rsp_bytes": 40
+    },
+    "guarded": {
+      "callee_save_registers": [
+        "rbp",
+        "r15",
+        "r14",
+        "r13",
+        "r12",
+        "rbx"
+      ],
+      "local_alignment_bytes": 8,
+      "total_below_entry_rsp_bytes": 56
+    }
+  },
+  "success_mechanism": "D3 input normal guards, magnitude cmov ordering, <=31 variable-shift/sticky arm or >=32 sticky1, sign add/sub and zero branch, pre-guard25..253, cvtsi2ss, one non-tail codec call, integer bias and return. No temporary [rsp] memory on nonzero accepted path.",
+  "fallback_mechanism": "Failed input-normal guard or failed pre-guard uses inlined original B2 native ADD/cold software fallback; retains scaleTable numeric conversions/ofBits calls and conditional xmm spill/reload. C has three fallback softwareAdd sites, LLVM shares some bodies; not three calls per input.",
+  "allocation": "No explicit ctor/closure/apply in either typed ADD. Success has no heap allocation. Boxed return is immediate lea tag, common generic input RC slow branches identical. Cold software helper may allocate internally; not measured.",
+  "C_static_sites": {
+    "control": {
+      "lean_float32_of_bits": 2,
+      "lean_float32_to_bits": 1,
+      "lean_uint32_to_float32": 2,
+      "lean_alloc_ctor": 0,
+      "lean_alloc_closure": 0,
+      "lean_apply_2": 0
+    },
+    "guarded": {
+      "lean_float32_of_bits": 6,
+      "lean_float32_to_bits": 4,
+      "lean_uint32_to_float32": 7,
+      "lean_alloc_ctor": 0,
+      "lean_alloc_closure": 0,
+      "lean_apply_2": 0
+    }
+  },
+  "flags": {
+    "compile": {
+      "argument_count": 22,
+      "equal_after_root_target_paths_only": true,
+      "original_sha256": "fd10a513a3cc82c5684b4146d8116788117e8333adcd29cad5eebd341fb9fac5",
+      "new_sha256": "7ace6d3458537912e5bbfe8be237c05f3719ac5cbb5a282cdc0da2cd9e40869b"
+    },
+    "link": {
+      "argument_count": 4,
+      "equal_after_root_target_paths_only": true,
+      "original_sha256": "3ccd369b88572331254ec23295ab9bf1ddb30c437b39e6d3e9d39d08df8ae345",
+      "new_sha256": "da7562c388fffc978c155be35be1562cb14d60b9b6d57e6fa704215a490da428"
+    },
+    "link_response": {
+      "argument_count": 4156,
+      "equal_after_root_target_paths_only": true,
+      "original_sha256": "4a6c83cdba76b5a8e1cf18f3e20076907aba4c3efb18157b8809a7627d16c8ae",
+      "new_sha256": "2e75c12bd919e01ef99197e59b44c480260210fae668fd78d66a0b42c81efb1e"
+    }
+  },
+  "identities": {
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/bin/r19AddCost": "b7aba7ddd6c94f4705dba5f7d461f09802fb18e8370d521df2acdbf78c4c5cb7",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/ir/R19AddCostMain.c": "7e1a7c77085bd281e05bcb9d1eb314d1f8ee907235840f2223c64c4bc4507539",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/ir/R19AddCostMain.c.o.export.trace": "7ace6d3458537912e5bbfe8be237c05f3719ac5cbb5a282cdc0da2cd9e40869b",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/bin/r19AddCost.trace": "da7562c388fffc978c155be35be1562cb14d60b9b6d57e6fa704215a490da428",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/bin/r19AddCost.rsp": "2e75c12bd919e01ef99197e59b44c480260210fae668fd78d66a0b42c81efb1e",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/ir/R19AddCostMain.c.o.export": "20ce12043c6ba05d5bf670452c24637597b2126e4e786593296a2391eec812e8"
+  },
+  "original_build_before": {
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/bin/benchFull": "b8f8b3a66be6fc4df72b436d798d34b96e8cb55dd0b27b9921249fc39876ee8f",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/MainFull.c": "94f69ed19083e0fbb5d4b540d16d4575b82d4aac75779ce88043ef4f908bfecb",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/Submission.c": "b4891fdc3a9239e44ea1a84f46deda435af12c912d0ee14d999f08ae136e68fb",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/MainFull.c.o.export": "7ab237954778ea0dd4a154d31cd17923a098fd84ccc853c9c4e8caeafa3bd24a",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/Submission.c.o.export": "b6be638945241503adff3b3caaec4650c593908a6a3abe65ab7bdb3b84541bf3",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/bin/benchFull.trace": "3ccd369b88572331254ec23295ab9bf1ddb30c437b39e6d3e9d39d08df8ae345",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/bin/benchFull.rsp": "4a6c83cdba76b5a8e1cf18f3e20076907aba4c3efb18157b8809a7627d16c8ae",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/MainFull.c.o.export.trace": "fd10a513a3cc82c5684b4146d8116788117e8333adcd29cad5eebd341fb9fac5",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/Contract.c.o.export": "5c1eda6c45ceef499af57eca72f4ed71e4ae79a8e09cc67f4dcd1967d4f8a9a3",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/Bench.c.o.export": "3a9f28e29febbf01b98b0cfb8f6c1132d2218c74adee562afb7da19f9d800dd6",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/BenchTensor.c.o.export": "11ee12605cbe8e80e7b10695ce78f7f8a52189eb6c5f5a33db9b69784be8bfeb",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/BenchBmm.c.o.export": "269085e8141087f94d369742cc317cfc1fc1517185535f33c6b0e393281da6d0",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/BenchFull.c.o.export": "aca0f9a70ab767a5890fca95bbb2c0c9a833d9c7886f7a4ab38d1a87ae17a104",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/BenchSuite.c.o.export": "5f9647fdd7f2864a78942e51d6d3117754f4a97a58182cd295f26a53edbdb374",
+    "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/lean/.lake/build/ir/ContractTensor.c.o.export": "a23e21efa685ffeeb773aba98dfd5771e682de8f98e0b5bb4d17da7cfc398c3f"
+  },
+  "evidence_limits": "C/ASM are saved bytes from measured new object; raw ELF not exported. Identity unchanged is remote recorded assertion. Static path instruction counts are not cycle costs or observed path weights; eligible fractions UNKNOWN."
+}

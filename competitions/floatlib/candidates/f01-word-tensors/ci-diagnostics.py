@@ -82,6 +82,11 @@ def statement(src,verdict):
                 comparators = ('lp_competition_Submission_NativeFinal_dotLoop',
                     'lp_competition_Fin_foldl_loop___at___00Submission_R19DCRawPair_output_spec__2')
                 names += [name for name in all_names if name in comparators and name not in names]
+                new_core_functions = [line.split()[-1] for line in symbols.stdout.splitlines()
+                    if len(line.split()) >= 3 and line.split()[-2] in ('T','t')]
+                names += [name for name in new_core_functions if name not in names and 'boxed' not in name
+                    and name.startswith('lp_competition_Submission_R19Column4Temporal_')
+                    and any(part in name for part in ('loop','runDot','pack'))]
             for symbol in names:
                 result=optional_object_tool(['objdump','-dr','--no-show-raw-insn','-Mintel','--disassemble='+symbol,str(path)],data,capture_output=True,timeout=15)
                 if result is None:
