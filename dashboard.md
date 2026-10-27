@@ -1,14 +1,14 @@
 # FloatLib 冲冠看板
 
-冠军核对：[2026-10-27 12:42 北京时间](competitions/floatlib/candidates/f01-d7-research/official-20261027T044250Z/receipts.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。
+官方核对：[2026-10-27 18:29 北京时间](competitions/floatlib/evidence/formal-b2-336/comparison.json)｜冠军为1.00×；四项显示官方各输入组的耗时比范围，越低越好。
 
-| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时（预估） | 验证 |
+| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时（官方各组） | 验证 |
 | --- | --- | --- | ---: | --- |
-| 加法 add | [#323](https://conjectures.io/v1/competitions/floatlib/submissions/323) | [原生加法＋特殊值选择](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **约 1.03×** | 完整通过16次 |
-| 乘法 mul | #323 | [数值转换＋特殊值选择](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **约 1.16×** | 完整通过16次 |
-| 求和 sum | #323 | [单遍求和＋快速修复](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **约 1.17×** | 完整通过16次 |
-| 矩阵乘法 bmm | #323 | [双列复用＋B2成对存储](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **约 3.00×** | 完整通过16次；[新循环证明通过，整包待测](competitions/floatlib/candidates/f01-d7-research/round45m-20261027T074758Z/development-round-result.json) |
+| 加法 add | #323 | [原生加法＋特殊值选择](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **1.35–1.53×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336) |
+| 乘法 mul | #323 | [数值转换＋特殊值选择](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **1.52–1.65×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336) |
+| 求和 sum | #323 | [单遍求和＋快速修复](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **1.03–1.61×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336) |
+| 矩阵乘法 bmm | #323 | [双列复用＋B2成对存储](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **2.23–4.73×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336) |
 
-整包预估耗时：冠军的 **约 1.25×**。
+整包官方耗时：冠军的 **1.63×**；原预估1.25×，实际比预估慢 **30.4%**。
 
-**结论：预估暂不能取代#323；主要差距在矩阵乘法（约3.00倍耗时）。** [计算依据](competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json)
+**结论：官方验证通过，当前第13；尚不能取代#323，主要差距仍在矩阵乘法。**

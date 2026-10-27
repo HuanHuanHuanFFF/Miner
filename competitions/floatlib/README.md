@@ -4,7 +4,7 @@
 
 新公开／付费私有套件适用范围先看[套件变更](docs/suite-transition-20261022.md)。
 
-正式包是一个 `Kernel.lean`，包含 add、mul、sum、bmm 及四个全输入等价证明。开发比较统一以评测时的现任冠军为基准；当前尚未正式上传。
+正式包是一个 `Kernel.lean`，包含 add、mul、sum、bmm 及四个全输入等价证明。B2已正式提交为 **#336**，官方完整验证通过，当前第13，整包耗时为冠军#323的 **1.6287×**，未晋升。[原始官方报告及预估对照](evidence/formal-b2-336/comparison.json)取代该精确源在本次评估中的旧1.25×预估；历史模型保留原字节。
 
 - [冲冠看板](../../dashboard.md)：按 add、mul、sum、bmm 四项查看现任冠军与我方首选。
 - [当前开发状态](coordination/development-status.json)：当前比较口径、候选选择及证据入口。

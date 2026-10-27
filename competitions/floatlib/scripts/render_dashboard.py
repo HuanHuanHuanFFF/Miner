@@ -9,9 +9,51 @@ ROOT = Path(__file__).resolve().parents[3]
 DATA = ROOT / "competitions/floatlib/candidates/f01-d7-research"
 
 
+def render_official(view, state):
+    entry = view.get("official_submission")
+    if not entry:
+        return False
+    path = ROOT / entry["evidence"]
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == entry["evidence_sha256"]
+    result = json.loads(path.read_bytes())
+    assert result["kernel_sha256"] == state["kernel_sha256"] == view["kernel_sha256"]
+    assert hashlib.sha256((ROOT / state["kernel"]).read_bytes()).hexdigest() == result["kernel_sha256"]
+    assert result["passed"] and result["state"] == "accepted" and result["same_champion_digest"]
+    receipts = json.loads((path.parent / "receipts.json").read_bytes())
+    for name in ("status", "report", "leaderboard"):
+        assert hashlib.sha256((path.parent / (name + ".raw")).read_bytes()).hexdigest() == receipts[name]["sha256"]
+    envelope = json.loads((path.parent / "report.raw").read_bytes())
+    report = envelope["report"]
+    report = json.loads(report) if isinstance(report, str) else report
+    assert report["passed"] and report["ratio"] == result["official_whole_ratio"]
+    assert report["mode"] == "gate" and report["stage"] == "score"
+    assert report["verifier_fingerprint"] == report["verifier_fingerprint_end"]
+    assert report["champion_sha256"] == view["champion"]["digest"]
+    champion, submission = result["champion"], result["submission"]
+    checked = datetime.fromisoformat(result["checked_at_utc"]).astimezone(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M")
+    labels = view["dashboard_policy"]["candidate_labels_by_operation"]
+    lines = ["# FloatLib 冲冠看板", "",
+             f"官方核对：[{checked} 北京时间]({entry['evidence']})｜冠军为1.00×；四项显示官方各输入组的耗时比范围，越低越好。", "",
+             "| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时（官方各组） | 验证 |",
+             "| --- | --- | --- | ---: | --- |"]
+    for op, name in (("add", "加法 add"), ("mul", "乘法 mul"), ("sum", "求和 sum"), ("bmm", "矩阵乘法 bmm")):
+        ratios = [cell["ratio"] for key, cell in report["classes"].items() if key.startswith(op + ":")]
+        assert ratios and all(math.isfinite(value) and value > 0 for value in ratios)
+        official = result["operations"][op]
+        assert min(ratios) == official["official_group_ratio_min"] and max(ratios) == official["official_group_ratio_max"]
+        lines.append(f"| {name} | #{champion} | [{labels[op]}]({state['kernel']}) | **{min(ratios):.2f}–{max(ratios):.2f}×** | [#{submission} 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/{submission}) |")
+    ratio = result["official_whole_ratio"]
+    lines += ["", f"整包官方耗时：冠军的 **{ratio:.2f}×**；原预估{result['previous_estimated_whole_ratio']:.2f}×，实际比预估慢 **{result['additional_time_vs_estimate_pct']:.1f}%**。", "",
+              f"**结论：官方验证通过，当前第{result['rank']}；尚不能取代#{champion}，主要差距仍在矩阵乘法。**", ""]
+    (ROOT / "dashboard.md").write_text("\n".join(lines), encoding="utf-8")
+    return True
+
+
 def main():
     view = json.loads((DATA / "multiplier-comparison.json").read_bytes())
     state = json.loads((ROOT / "competitions/floatlib/coordination/development-status.json").read_bytes())
+    if render_official(view, state):
+        return
     snapshot = json.loads((DATA / "current-official-snapshot.json").read_bytes())
     source = ROOT / state["kernel"]
     assert hashlib.sha256(source.read_bytes()).hexdigest() == view["kernel_sha256"] == state["kernel_sha256"]

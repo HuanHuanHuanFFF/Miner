@@ -13,6 +13,8 @@
 
 ## FloatLib 接续顺序
 
+正式校准：B2的[#336官方回执](competitions/floatlib/evidence/formal-b2-336/comparison.json)完整通过，当前第13、耗时1.6287×冠军；旧1.2487×预估低估本次耗时，实际高30.4%。看板优先显示官方结果，四项列各输入组范围。后续更换源必须清除或替换旧`official_submission`绑定，不能把#336的结果继承给新候选。
+
 当前先看[R20四十五分钟交接](competitions/floatlib/candidates/f01-d7-research/round45m-20261027T074758Z/README.md)：八列广播9根、终端写出8根通过；完整终端候选39626d已接原public入口但尚未编译，下一轮先验该精确源。保留版仍为B2。
 
 1. 读[赛道入口](competitions/floatlib/README.md)、技术规则及当前开发状态，确定保留版与验收缺项。
