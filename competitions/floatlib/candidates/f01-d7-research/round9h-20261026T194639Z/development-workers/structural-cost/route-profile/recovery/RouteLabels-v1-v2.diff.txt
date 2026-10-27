@@ -1,0 +1,28 @@
+--- executed-v1
++++ v2
+@@ -5,13 +5,19 @@
+ 
+ open FloatLib.Floats Competition Lean
+ 
++def allSmallFrom (c : Bench.Suite.Case) (count role row k : Nat) : Bool :=
++  if hk : k < count then
++    if Submission.UnderflowZero.small
++        (Bench.Suite.float (Bench.Suite.element c k role row)) then
++      allSmallFrom c count role row (k + 1)
++    else false
++  else true
++termination_by count - k
++decreasing_by omega
++
+ def routeLabel (c : Bench.Suite.Case) : String × Bool × Bool :=
+-  let a := Vector.ofFn (n := c.batch * c.m * c.n) fun i =>
+-    Bench.Suite.float (Bench.Suite.element c i.val 0 c.n)
+-  let b := Vector.ofFn (n := c.batch * c.n * c.p) fun i =>
+-    Bench.Suite.float (Bench.Suite.element c i.val 1 c.p)
+-  let aSmall := a.toArray.all Submission.UnderflowZero.small
+-  let bSmall := b.toArray.all Submission.UnderflowZero.small
++  let aSmall := allSmallFrom c (c.batch * c.m * c.n) 0 c.n 0
++  let bSmall := allSmallFrom c (c.batch * c.n * c.p) 1 c.p 0
+   let route :=
+     if aSmall && bSmall then "UnderflowZero"
+     else if 2 ≤ c.p ∧ c.p ≤ 8 ∧ 1 < c.n ∧ 4 ≤ c.m then "B2"

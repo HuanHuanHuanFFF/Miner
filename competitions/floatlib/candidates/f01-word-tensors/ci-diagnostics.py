@@ -132,7 +132,7 @@ elif kernel.parent.name.startswith('f01-r19-dev-'):
     helper_manifest=json.loads(manifest_path.read_bytes())
     if helper_manifest.get('helper_audit_module_sha256'):
         helper_name=helper_manifest.get('helper_audit_module','development-helper-audit.py')
-        assert helper_name in ('development-helper-audit.py', 'development-helper-audit-v4.py', 'development-helper-audit-v5.py', 'development-helper-audit-v7.py', 'development-resource-audit.py', 'development-resource-audit-v2.py', 'development-route-audit.py')
+        assert helper_name in ('development-helper-audit.py', 'development-helper-audit-v4.py', 'development-helper-audit-v5.py', 'development-helper-audit-v7.py', 'development-resource-audit.py', 'development-resource-audit-v2.py', 'development-route-audit.py', 'development-route-audit-v2.py', 'development-math-outlet-audit.py')
         helper_path=profiler.parent.parent/'f01-d7-research/round9h-20261026T194639Z'/helper_name
         assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
         hs=importlib.util.spec_from_file_location('r19_explicit_math_helper_audit',helper_path)
@@ -152,7 +152,7 @@ sys.exit(0 if verdict.passed else 1)
             try:
                 profiler=Path(__file__).resolve().parent.parent/'f01-d5-costsplit/profile-native.py'
                 p=subprocess.Popen([str(a.upstream/'.venv/bin/python'),'-c',code,str(a.upstream),str(a.kernel),str(out),str(profiler)],cwd=a.upstream,env=os.environ.copy(),stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
-                replay_timeout=1800 if a.name=='f01-d13-cost-profile' else 2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 120
+                replay_timeout=1800 if a.name=='f01-d13-cost-profile' else 2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 170 if a.name=='f01-r19-dev-math-outlet-isolation1' else 120
                 report['replay_exit_code']=p.wait(timeout=replay_timeout)
             except subprocess.TimeoutExpired:
                 os.killpg(p.pid,signal.SIGKILL);p.wait();report['replay']=f'diagnostic-only replay process group timed out at {replay_timeout}s'

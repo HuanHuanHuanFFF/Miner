@@ -1,0 +1,11 @@
+--- executed-v1
++++ v2
+@@ -112,7 +112,7 @@
+             plan_file.write_bytes(raw);owned_plan=True;save(f"seen-{rec['seed']}-plan.json",raw)
+             progress('metadata-pending',seed=rec['seed'],process=None)
+             code,log=call(f"labels-{rec['seed']}",lambda:g.own([g.LAKE,'env','lean','--run','work/R19RouteLabels.lean','work/R19RoutePlan.json'],remaining(90),build='read'))
+-            require(code==0,'metadata failed');labels=parse_labels(log,plan);save(f"labels-{rec['seed']}.json",labels)
++            require(code==0,f"metadata seed={rec['seed']} failed exit={code}; elapsed={time.monotonic()-started:.3f}s");labels=parse_labels(log,plan);save(f"labels-{rec['seed']}.json",labels)
+             env={'BENCH_PLAN':json.dumps(plan,separators=(',',':')),'BENCH_SEED':str(rec['seed']),'BENCH_PAIRS':'500000','BENCH_INNER':'3','LEAN_ABORT_ON_PANIC':'1'}
+             processes=[]
+             for process in range(2):

@@ -1,0 +1,560 @@
+{
+  "status": "VERIFIED_FIRST_SEEN_PLAN_RAW_NS_AND_GENERATED_C_BOUNDARY",
+  "verified_at_utc": "2026-10-27T00:53:23.551822+00:00",
+  "run": 40425497337,
+  "source_commit": "e0cee8772259a3823cafbe575d8a82f064b7d236",
+  "seed": 1927003,
+  "plan_sha256": "b3d19580bc8d5c6674edcbfa4eda0c405d0f83bcef9064af827243503e5bb6a9",
+  "case_count": 156,
+  "timed_case_count": 152,
+  "timed_BMM_cases": 34,
+  "route_timed_case_counts": {
+    "DirectContinuous": 12,
+    "Packed10": 6,
+    "B1": 3,
+    "B2": 10,
+    "UnderflowZero": 3
+  },
+  "raw_processes": [
+    {
+      "whole_ns": 180101077,
+      "operations_ns": {
+        "add": 63275408,
+        "mul": 69310714,
+        "sum": 16417532,
+        "bmm": 31097423
+      },
+      "routes_ns": {
+        "B1": 2073574,
+        "B2": 10522374,
+        "DirectContinuous": 12742931,
+        "Packed10": 5618165,
+        "UnderflowZero": 140379
+      },
+      "routes": {
+        "B1": {
+          "ns": 2073574,
+          "BMM_share": 0.06667993035950277,
+          "whole_share": 0.011513390339137172
+        },
+        "B2": {
+          "ns": 10522374,
+          "BMM_share": 0.3383680377631291,
+          "whole_share": 0.058424825521726335
+        },
+        "DirectContinuous": {
+          "ns": 12742931,
+          "BMM_share": 0.4097745012504734,
+          "whole_share": 0.07075432980336925
+        },
+        "Packed10": {
+          "ns": 5618165,
+          "BMM_share": 0.1806633623628556,
+          "whole_share": 0.031194510846817423
+        },
+        "UnderflowZero": {
+          "ns": 140379,
+          "BMM_share": 0.004514168264039113,
+          "whole_share": 0.0007794456442922882
+        }
+      }
+    },
+    {
+      "whole_ns": 332941149,
+      "operations_ns": {
+        "add": 120582922,
+        "mul": 128300926,
+        "sum": 31947069,
+        "bmm": 52110232
+      },
+      "routes_ns": {
+        "B1": 4168909,
+        "B2": 18461563,
+        "DirectContinuous": 24148916,
+        "Packed10": 5054371,
+        "UnderflowZero": 276473
+      },
+      "routes": {
+        "B1": {
+          "ns": 4168909,
+          "BMM_share": 0.0800017355516667,
+          "whole_share": 0.012521459160339475
+        },
+        "B2": {
+          "ns": 18461563,
+          "BMM_share": 0.35427904063063853,
+          "whole_share": 0.05544992878005596
+        },
+        "DirectContinuous": {
+          "ns": 24148916,
+          "BMM_share": 0.4634198519783984,
+          "whole_share": 0.07253208584319507
+        },
+        "Packed10": {
+          "ns": 5054371,
+          "BMM_share": 0.09699383030956377,
+          "whole_share": 0.015180974220762361
+        },
+        "UnderflowZero": {
+          "ns": 276473,
+          "BMM_share": 0.005305541529732587,
+          "whole_share": 0.0008303960049107658
+        }
+      }
+    }
+  ],
+  "mean": {
+    "whole_ns": 256521113.0,
+    "BMM_ns": 41603827.5,
+    "BMM_whole_share": 0.16218480815651226,
+    "routes": {
+      "B1": {
+        "mean_ns": 3121241.5,
+        "BMM_share": 0.07502294109838813,
+        "whole_share": 0.012167581309379396
+      },
+      "B2": {
+        "mean_ns": 14491968.5,
+        "BMM_share": 0.34833257829462927,
+        "whole_share": 0.05649425238537773
+      },
+      "DirectContinuous": {
+        "mean_ns": 18445923.5,
+        "BMM_share": 0.44337082928247407,
+        "whole_share": 0.0719080128893718
+      },
+      "Packed10": {
+        "mean_ns": 5336268.0,
+        "BMM_share": 0.12826387187573066,
+        "whole_share": 0.020802451453576846
+      },
+      "UnderflowZero": {
+        "mean_ns": 208426.0,
+        "BMM_share": 0.00500977944877788,
+        "whole_share": 0.0008125101188064781
+      }
+    }
+  },
+  "process1_over_process0": {
+    "whole": 1.8486349695732247,
+    "BMM": 1.6757090129301069,
+    "routes": {
+      "B1": 2.0104944409989707,
+      "B2": 1.75450549467259,
+      "DirectContinuous": 1.8950833210977913,
+      "Packed10": 0.8996480167456812,
+      "UnderflowZero": 1.9694754913484211
+    }
+  },
+  "conservation_exact": true,
+  "shares_are_ratio_of_mean_case_ns_not_mean_of_percentages": true,
+  "DC_cases_by_mean_ns": [
+    {
+      "name": "bmm:ml:1",
+      "shape": {
+        "batch": 5882,
+        "m": 2,
+        "n": 3,
+        "p": 5,
+        "work": 176460
+      },
+      "output_elements": 58820,
+      "process_ns": [
+        1645480,
+        3184273
+      ],
+      "mean_ns": 2414876.5,
+      "whole_share": 0.009413948316994866,
+      "BMM_share": 0.05804457534586211,
+      "process1_over_process0": 1.935163599679121
+    },
+    {
+      "name": "bmm:subnormal:3",
+      "shape": {
+        "batch": 2714,
+        "m": 1,
+        "n": 13,
+        "p": 5,
+        "work": 176410
+      },
+      "output_elements": 13570,
+      "process_ns": [
+        1425362,
+        2438902
+      ],
+      "mean_ns": 1932132.0,
+      "whole_share": 0.007532058384605559,
+      "BMM_share": 0.046441207843196636,
+      "process1_over_process0": 1.7110755022232949
+    },
+    {
+      "name": "bmm:dense:5",
+      "shape": {
+        "batch": 204,
+        "m": 1,
+        "n": 432,
+        "p": 2,
+        "work": 176256
+      },
+      "output_elements": 408,
+      "process_ns": [
+        1260807,
+        2135849
+      ],
+      "mean_ns": 1698328.0,
+      "whole_share": 0.006620616837881879,
+      "BMM_share": 0.040821436441154366,
+      "process1_over_process0": 1.6940332659955093
+    },
+    {
+      "name": "bmm:sparse:5",
+      "shape": {
+        "batch": 4201,
+        "m": 1,
+        "n": 14,
+        "p": 3,
+        "work": 176442
+      },
+      "output_elements": 12603,
+      "process_ns": [
+        1133882,
+        2206119
+      ],
+      "mean_ns": 1670000.5,
+      "whole_share": 0.006510187331052162,
+      "BMM_share": 0.04014054956842612,
+      "process1_over_process0": 1.9456336726396575
+    },
+    {
+      "name": "bmm:dense:0",
+      "shape": {
+        "batch": 1730,
+        "m": 3,
+        "n": 34,
+        "p": 1,
+        "work": 176460
+      },
+      "output_elements": 5190,
+      "process_ns": [
+        1068171,
+        2067132
+      ],
+      "mean_ns": 1567651.5,
+      "whole_share": 0.006111198730063205,
+      "BMM_share": 0.03768046341409333,
+      "process1_over_process0": 1.9352070033730555
+    },
+    {
+      "name": "bmm:specials:3",
+      "shape": {
+        "batch": 2205,
+        "m": 2,
+        "n": 40,
+        "p": 1,
+        "work": 176400
+      },
+      "output_elements": 4410,
+      "process_ns": [
+        1045378,
+        2039150
+      ],
+      "mean_ns": 1542264.0,
+      "whole_share": 0.006012230268157304,
+      "BMM_share": 0.03707024311645365,
+      "process1_over_process0": 1.950634124689825
+    },
+    {
+      "name": "bmm:ml:2",
+      "shape": {
+        "batch": 319,
+        "m": 3,
+        "n": 23,
+        "p": 8,
+        "work": 176088
+      },
+      "output_elements": 7656,
+      "process_ns": [
+        1028467,
+        2019834
+      ],
+      "mean_ns": 1524150.5,
+      "whole_share": 0.005941618146651344,
+      "BMM_share": 0.03663486250153306,
+      "process1_over_process0": 1.963926893133178
+    },
+    {
+      "name": "bmm:sparse:1",
+      "shape": {
+        "batch": 474,
+        "m": 2,
+        "n": 62,
+        "p": 3,
+        "work": 176328
+      },
+      "output_elements": 2844,
+      "process_ns": [
+        998010,
+        1947180
+      ],
+      "mean_ns": 1472595.0,
+      "whole_share": 0.00574063858829429,
+      "BMM_share": 0.03539566161310519,
+      "process1_over_process0": 1.95106261460306
+    },
+    {
+      "name": "bmm:ml:6",
+      "shape": {
+        "batch": 542,
+        "m": 1,
+        "n": 65,
+        "p": 5,
+        "work": 176150
+      },
+      "output_elements": 2710,
+      "process_ns": [
+        990836,
+        1933354
+      ],
+      "mean_ns": 1462095.0,
+      "whole_share": 0.005699706284994951,
+      "BMM_share": 0.035143280987788926,
+      "process1_over_process0": 1.9512351186270986
+    },
+    {
+      "name": "bmm:ml:4",
+      "shape": {
+        "batch": 157,
+        "m": 2,
+        "n": 80,
+        "p": 7,
+        "work": 175840
+      },
+      "output_elements": 2198,
+      "process_ns": [
+        986188,
+        1913838
+      ],
+      "mean_ns": 1450013.0,
+      "whole_share": 0.005652606847998512,
+      "BMM_share": 0.03485287501492501,
+      "process1_over_process0": 1.9406421493670578
+    },
+    {
+      "name": "bmm:ml:5",
+      "shape": {
+        "batch": 94,
+        "m": 3,
+        "n": 208,
+        "p": 3,
+        "work": 175968
+      },
+      "output_elements": 846,
+      "process_ns": [
+        954439,
+        1883301
+      ],
+      "mean_ns": 1418870.0,
+      "whole_share": 0.005531201636412672,
+      "BMM_share": 0.03410431408023697,
+      "process1_over_process0": 1.973202059010581
+    },
+    {
+      "name": "bmm:extremes:1",
+      "shape": {
+        "batch": 9,
+        "m": 3,
+        "n": 72,
+        "p": 2,
+        "work": 3888
+      },
+      "output_elements": 54,
+      "process_ns": [
+        205911,
+        379984
+      ],
+      "mean_ns": 292947.5,
+      "whole_share": 0.0011420015162650569,
+      "BMM_share": 0.007041359355698704,
+      "process1_over_process0": 1.8453798000106842
+    }
+  ],
+  "generated_C": {
+    "functions": {
+      "lp_competition_Bench_Suite_runBmm___lam__2": {
+        "start_line": 8698,
+        "end_line": 8709
+      },
+      "lp_competition_Bench_Suite_runBmm___lam__2___boxed": {
+        "start_line": 8710,
+        "end_line": 8719
+      },
+      "lp_competition_Bench_Suite_runBmm": {
+        "start_line": 8720,
+        "end_line": 8758
+      },
+      "lp_competition_Bench_Suite_measure": {
+        "start_line": 8190,
+        "end_line": 8368
+      },
+      "lp_competition___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00Bench_Suite_measure_spec__0___redArg": {
+        "start_line": 7984,
+        "end_line": 8171
+      }
+    },
+    "output_local_ref_drop_before_pass_return": true,
+    "stop_clock_after_pass_and_IO_wrapper_drop": true,
+    "input_generation_before_measure": true,
+    "scope": "C/source ownership boundary verified; actual final free conditional on reference ownership; exact native schedule/cycles not verified."
+  },
+  "timer_scope": "Original best-of3 whole-case pass: full kernel route/guards/preparation/allocation + checksum output traversal + local output ref drop + pass/IO return overhead. Input generation, untimed warmup, final retained input-closure destruction and printing outside the measured pass.",
+  "native_limit": "BenchSuite object/binary hashes are original metadata attestation; raw object/LLVM IR/BenchSuite ASM not retained here. No independent native cleanup or cycle-cost claim.",
+  "build_identity_before": {
+    "binary": {
+      "bytes": 148066856,
+      "sha256": "b8f8b3a66be6fc4df72b436d798d34b96e8cb55dd0b27b9921249fc39876ee8f"
+    },
+    "Submission_object": {
+      "bytes": 602224,
+      "sha256": "35c1b157576a1e936886665a24b179b6a9c8afc30bc99a53bbb6619ee5b91409"
+    },
+    "MainFull_object": {
+      "bytes": 13912,
+      "sha256": "7ab237954778ea0dd4a154d31cd17923a098fd84ccc853c9c4e8caeafa3bd24a"
+    },
+    "BenchSuite_object": {
+      "bytes": 287352,
+      "sha256": "5f9647fdd7f2864a78942e51d6d3117754f4a97a58182cd295f26a53edbdb374"
+    },
+    "Submission_C": {
+      "bytes": 1422258,
+      "sha256": "0e3c1fc9ee2b91c326fffa847a60350031e7260bb860ed8a6f62df5f2eee7268"
+    },
+    "MainFull_C": {
+      "bytes": 103511,
+      "sha256": "94f69ed19083e0fbb5d4b540d16d4575b82d4aac75779ce88043ef4f908bfecb"
+    },
+    "BenchSuite_C": {
+      "bytes": 393988,
+      "sha256": "959b8a6c43010728275d57b3087f4b15a14035dc40832ed713439073cad8a1a7"
+    }
+  },
+  "post_first_plan_identity": "Inferred from successful original driver assertions after both processes; no independent raw object rehash possible",
+  "second_seen_plan_status": "METADATA_TIMEOUT_124_NO_COMPLETE_ROUTE_TIMINGS",
+  "cross_seed_stability": "UNKNOWN",
+  "score_or_adoption": false,
+  "budget_inference": {
+    "DC_assigned_whole_cost_share_this_plan": 0.0719080128893718,
+    "all_BMM_assigned_whole_share_this_plan": 0.16218480815651226,
+    "conditional_fraction_of_all_BMM_cost_to_remove_for_10percent_whole": 0.6165805610072775,
+    "scope": "Conditional accounting ceiling only if other cases unchanged; includes irreducible benchmark overhead. Not a universal speed limit or gain prediction.",
+    "next_route": "Prefer shared BMM output/construction/lifetime or batch/row costs over DC-only threshold tuning; keep long-inner counter-cases. No threshold grid proposed."
+  },
+  "reviewed_original_files_rehashed": 21,
+  "inputs": [
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/request.json",
+      "bytes": 2531,
+      "sha256": "8ff8865843549b3eaa9abcb52f718273aa44e5dfb76f689edcaad9bda511997c"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/config.json",
+      "bytes": 2692,
+      "sha256": "df4e1203aa9901a56b19b3aa1cd9de4e79d874e69de1b6760905931662484511"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/build-identity-before.json",
+      "bytes": 900,
+      "sha256": "75e18508ef6910f0a16cc79be989c97aa1a840f55d59e01525073e901b7c4002"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/driver-source.py",
+      "bytes": 10760,
+      "sha256": "e36de35775022600644075632af02f7fb743017f3734f6718b6ed3949e6b9fd9"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/Kernel.lean",
+      "bytes": 226829,
+      "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/RouteLabels.lean",
+      "bytes": 1691,
+      "sha256": "c09f5eebfa5b8d9b59027f0bd086c87ceded83bd44f49152975051edf200e4b5"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/BenchSuite_C.c",
+      "bytes": 393988,
+      "sha256": "959b8a6c43010728275d57b3087f4b15a14035dc40832ed713439073cad8a1a7"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/MainFull_C.c",
+      "bytes": 103511,
+      "sha256": "94f69ed19083e0fbb5d4b540d16d4575b82d4aac75779ce88043ef4f908bfecb"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/Submission_C.c",
+      "bytes": 1422258,
+      "sha256": "0e3c1fc9ee2b91c326fffa847a60350031e7260bb860ed8a6f62df5f2eee7268"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/seen-1927003-plan.json",
+      "bytes": 99914,
+      "sha256": "b3d19580bc8d5c6674edcbfa4eda0c405d0f83bcef9064af827243503e5bb6a9"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/labels-1927003.log",
+      "bytes": 1482,
+      "sha256": "4b04a797a806577e88d6337f4986d1328ca6ffc0831ddc427e0dabe93f370888"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/labels-1927003.json",
+      "bytes": 3200,
+      "sha256": "b211139dc3f792c89d2f377a5c3b5131bbaac16fc08181b203524ec6df91ab85"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/whole-1927003-0.log",
+      "bytes": 5557,
+      "sha256": "66876a5503e74d171fec4f092f1df772ac876994d1b8b7f4a17f336ced929600"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/whole-1927003-1.log",
+      "bytes": 5577,
+      "sha256": "21e0ce0475266017396d1ea73b5c345aa8edac8680f34ec779457768a62ac60b"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/rows-1927003-0.json",
+      "bytes": 14608,
+      "sha256": "67a2390c34a04352b0768c94cdf34efbda673d63a8791ba6735f1a1d4dcb7575"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/rows-1927003-1.json",
+      "bytes": 14628,
+      "sha256": "cd72664598bc8b29edde4e71eccb42643d4f90167f092a6abda1e68d472995d2"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/result-1927003.json",
+      "bytes": 45494,
+      "sha256": "5b7fff2b56de81c39cf34808d22b2d8c3b86a6b6a0b7eacce7b9116f9bcd74a1"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/partial-progress.json",
+      "bytes": 53600,
+      "sha256": "a8f128276b73d96fafceb70d0ded8cecee513d4ccb35623239f2b9ea57f6d87f"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-profile/error.json",
+      "bytes": 54431,
+      "sha256": "ad14023e1c0f8f31ca9bfb953f99adc59bf2435cdaa1d09cd16767d3ee5b6885"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/route-audit.json",
+      "bytes": 1659,
+      "sha256": "bf01bcdbf5e6d792adba888a7b723724d7b410570f8c95710b8250a0be1129b3"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40425497337/download-7864aa0826ad4b229a60800f85179f67/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-route-profile1/native-assembly-index.json",
+      "bytes": 8430,
+      "sha256": "43c7089a1589fb6276807908418c94987fe649050949d1c365dc9df8af255311"
+    }
+  ]
+}

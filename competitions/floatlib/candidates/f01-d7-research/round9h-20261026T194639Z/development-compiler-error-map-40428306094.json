@@ -1,0 +1,189 @@
+{
+  "at_utc": "2026-10-27T00:51:51.110301+00:00",
+  "run": 40428306094,
+  "candidates": [
+    {
+      "candidate": "f01-r19-dev-direct-bias-public1",
+      "kernel_sha256": "fa6529613fe10bd431ead1511900be989c2b80976423b31d90747f8651f37ac5",
+      "source_commit": "a92abea11a0a21e76df44a1a93114801dd3085a8",
+      "source_path": "competitions/floatlib/candidates/f01-r19-dev-direct-bias-public1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40428306094/download-c800c9d7532147a99a39807e35f52f19/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-direct-bias-public1/full-build-output.txt",
+      "original_output_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "statement_pass": false,
+      "errors": []
+    },
+    {
+      "candidate": "f01-r19-dev-dual-equation-diagnostic1",
+      "kernel_sha256": "c5981413680244f3d93d79a372a09b36dcbe22028a942b8a35fd2cd18d5f0cf7",
+      "source_commit": "a92abea11a0a21e76df44a1a93114801dd3085a8",
+      "source_path": "competitions/floatlib/candidates/f01-r19-dev-dual-equation-diagnostic1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40428306094/download-c800c9d7532147a99a39807e35f52f19/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-dual-equation-diagnostic1/full-build-output.txt",
+      "original_output_sha256": "989ce574c1f933281937109414fa76fc360183b4eaab99d4e89efaa298ec6f1d",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 6769,
+          "column": 14,
+          "declaration": "Submission.R19DualTemporal.loop_eq",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6767,
+              "text": "      by_cases h1 : 4*t+1<n"
+            },
+            {
+              "line": 6768,
+              "text": "      · by_cases h2 : 4*t+2<n"
+            },
+            {
+              "line": 6769,
+              "text": "        · rw [loop]"
+            },
+            {
+              "line": 6770,
+              "text": "          conv_rhs => unfold R19Temporal.loop"
+            },
+            {
+              "line": 6771,
+              "text": "          simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true]"
+            }
+          ],
+          "message": "Failed to rewrite using equation theorems for `loop`"
+        },
+        {
+          "line": 6774,
+          "column": 14,
+          "declaration": "Submission.R19DualTemporal.loop_eq",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6772,
+              "text": "          simp only [hread ⟨t,ht⟩]"
+            },
+            {
+              "line": 6773,
+              "text": "          simp only [packetA, h0, h1, h2, ite_true]"
+            },
+            {
+              "line": 6774,
+              "text": "        · rw [loop]"
+            },
+            {
+              "line": 6775,
+              "text": "          conv_rhs => unfold R19Temporal.loop"
+            },
+            {
+              "line": 6776,
+              "text": "          simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true, ite_false]"
+            }
+          ],
+          "message": "Failed to rewrite using equation theorems for `loop`"
+        },
+        {
+          "line": 6779,
+          "column": 12,
+          "declaration": "Submission.R19DualTemporal.loop_eq",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6777,
+              "text": "          simp only [hread ⟨t,ht⟩]"
+            },
+            {
+              "line": 6778,
+              "text": "          simp only [packetA, h0, h1, ite_true]"
+            },
+            {
+              "line": 6779,
+              "text": "      · rw [loop]"
+            },
+            {
+              "line": 6780,
+              "text": "        conv_rhs => unfold R19Temporal.loop"
+            },
+            {
+              "line": 6781,
+              "text": "        simp only [h3, h0, h1, dite_false, dite_true, ite_false]"
+            }
+          ],
+          "message": "Failed to rewrite using equation theorems for `loop`"
+        },
+        {
+          "line": 6784,
+          "column": 10,
+          "declaration": "Submission.R19DualTemporal.loop_eq",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6782,
+              "text": "        simp only [hread ⟨t,ht⟩]"
+            },
+            {
+              "line": 6783,
+              "text": "        simp only [packetA, h0, ite_true]"
+            },
+            {
+              "line": 6784,
+              "text": "    · rw [loop]"
+            },
+            {
+              "line": 6785,
+              "text": "      conv_rhs => unfold R19Temporal.loop"
+            },
+            {
+              "line": 6786,
+              "text": "      simp only [h3, h0, dite_false]"
+            }
+          ],
+          "message": "Failed to rewrite using equation theorems for `loop`\ninfo: work/Submission.lean:6752:4: case pos\nn basePacket baseA : ℕ\nAraw : Array Binary32\nA : Array A4\nB : Vector R19Temporal.B8 ((n + 3) / 4)\nhA : basePacket + (n + 3) / 4 ≤ A.size\nhread : ∀ (i : Fin ((n + 3) / 4)), A[basePacket + ↑i] = packetA n baseA (↑i) Araw\nt : ℕ\ns0 s1 : Float32\nh3 : 4 * t + 3 < n\nh0 : 4 * t < n\nh1 : 4 * t + 1 < n\nh2 : 4 * t + 2 < n\nht : t < blocks n\n⊢ loop n basePacket A B hA t s0 s1 = R19Temporal.loop n baseA Araw B t s0 s1\ninfo: work/Submission.lean:6757:4: case pos\nn basePacket baseA : ℕ\nAraw : Array Binary32\nA : Array A4\nB : Vector R19Temporal.B8 ((n + 3) / 4)\nhA : basePacket + (n + 3) / 4 ≤ A.size\nhread : ∀ (i : Fin ((n + 3) / 4)), A[basePacket + ↑i] = packetA n baseA (↑i) Araw\nt : ℕ\ns0 s1 : Float32\nh3 : 4 * t + 3 < n\nh0 : 4 * t < n\nh1 : 4 * t + 1 < n\nh2 : 4 * t + 2 < n\nht : t < blocks n\ndual_p3_new_eq :\n  loop n basePacket A B hA t s0 s1 =\n    let k := 4 * t;\n    if h3 : k + 3 < n then\n      have ht := ⋯;\n      have a := A[basePacket + t];\n      have b := B.get ⟨t, ht⟩;\n      have s0 := s0 + a.a0 * b.k0c0;\n      have s1 := s1 + a.a0 * b.k0c1;\n      have s0 := s0 + a.a1 * b.k1c0;\n      have s1 := s1 + a.a1 * b.k1c1;\n      have s0 := s0 + a.a2 * b.k2c0;\n      have s1 := s1 + a.a2 * b.k2c1;\n      loop n basePacket A B hA (t + 1) (s0 + a.a3 * b.k3c0) (s1 + a.a3 * b.k3c1)\n    else\n      if h0 : k < n then\n        have ht := ⋯;\n        have a := A[basePacket + t];\n        have b := B.get ⟨t, ht⟩;\n        have s0 := s0 + a.a0 * b.k0c0;\n        have s1 := s1 + a.a0 * b.k0c1;\n        if k + 1 < n then\n          have s0 := s0 + a.a1 * b.k1c0;\n          have s1 := s1 + a.a1 * b.k1c1;\n          if k + 2 < n then { s0 := s0 + a.a2 * b.k2c0, s1 := s1 + a.a2 * b.k2c1 } else { s0 := s0, s1 := s1 }\n        else { s0 := s0, s1 := s1 }\n      else { s0 := s0, s1 := s1 }\ndual_p3_old_eq :\n  R19Temporal.loop n baseA Araw B t s0 s1 =\n    let k := 4 * t;\n    if h3 : k + 3 < n then\n      have ht := ⋯;\n      have b := B.get ⟨t, ht⟩;\n      have a0 := R19Temporal.read Araw (baseA + k);\n      have s0 := s0 + a0 * b.k0c0;\n      have s1 := s1 + a0 * b.k0c1;\n      have a1 := R19Temporal.read Araw (baseA + k + 1);\n      have s0 := s0 + a1 * b.k1c0;\n      have s1 := s1 + a1 * b.k1c1;\n      have a2 := R19Temporal.read Araw (baseA + k + 2);\n      have s0 := s0 + a2 * b.k2c0;\n      have s1 := s1 + a2 * b.k2c1;\n      have a3 := R19Temporal.read Araw (baseA + k + 3);\n      R19Temporal.loop n baseA Araw B (t + 1) (s0 + a3 * b.k3c0) (s1 + a3 * b.k3c1)\n    else\n      if h0 : k < n then\n        have ht := ⋯;\n        have b := B.get ⟨t, ht⟩;\n        have a0 := R19Temporal.read Araw (baseA + k);\n        have s0 := s0 + a0 * b.k0c0;\n        have s1 := s1 + a0 * b.k0c1;\n        if k + 1 < n then\n          have a1 := R19Temporal.read Araw (baseA + k + 1);\n          have s0 := s0 + a1 * b.k1c0;\n          have s1 := s1 + a1 * b.k1c1;\n          if k + 2 < n then\n            have a2 := R19Temporal.read Araw (baseA + k + 2);\n            { s0 := s0 + a2 * b.k2c0, s1 := s1 + a2 * b.k2c1 }\n          else { s0 := s0, s1 := s1 }\n        else { s0 := s0, s1 := s1 }\n      else { s0 := s0, s1 := s1 }\n⊢ loop n basePacket A B hA t s0 s1 = R19Temporal.loop n baseA Araw B t s0 s1\ninfo: work/Submission.lean:6759:4: case pos\nn basePacket baseA : ℕ\nAraw : Array Binary32\nA : Array A4\nB : Vector R19Temporal.B8 ((n + 3) / 4)\nhA : basePacket + (n + 3) / 4 ≤ A.size\nhread : ∀ (i : Fin ((n + 3) / 4)), A[basePacket + ↑i] = packetA n baseA (↑i) Araw\nt : ℕ\ns0 s1 : Float32\nh3 : 4 * t + 3 < n\nh0 : 4 * t < n\nh1 : 4 * t + 1 < n\nh2 : 4 * t + 2 < n\nht : t < blocks n\ndual_p3_new_eq :\n  loop n basePacket A B hA t s0 s1 =\n    let k := 4 * t;\n    if h3 : k + 3 < n then\n      have ht := ⋯;\n      have a := A[basePacket + t];\n      have b := B.get ⟨t, ht⟩;\n      have s0 := s0 + a.a0 * b.k0c0;\n      have s1 := s1 + a.a0 * b.k0c1;\n      have s0 := s0 + a.a1 * b.k1c0;\n      have s1 := s1 + a.a1 * b.k1c1;\n      have s0 := s0 + a.a2 * b.k2c0;\n      have s1 := s1 + a.a2 * b.k2c1;\n      loop n basePacket A B hA (t + 1) (s0 + a.a3 * b.k3c0) (s1 + a.a3 * b.k3c1)\n    else\n      if h0 : k < n then\n        have ht := ⋯;\n        have a := A[basePacket + t];\n        have b := B.get ⟨t, ht⟩;\n        have s0 := s0 + a.a0 * b.k0c0;\n        have s1 := s1 + a.a0 * b.k0c1;\n        if k + 1 < n then\n          have s0 := s0 + a.a1 * b.k1c0;\n          have s1 := s1 + a.a1 * b.k1c1;\n          if k + 2 < n then { s0 := s0 + a.a2 * b.k2c0, s1 := s1 + a.a2 * b.k2c1 } else { s0 := s0, s1 := s1 }\n        else { s0 := s0, s1 := s1 }\n      else { s0 := s0, s1 := s1 }\ndual_p3_old_eq :\n  R19Temporal.loop n baseA Araw B t s0 s1 =\n    let k := 4 * t;\n    if h3 : k + 3 < n then\n      have ht := ⋯;\n      have b := B.get ⟨t, ht⟩;\n      have a0 := R19Temporal.read Araw (baseA + k);\n      have s0 := s0 + a0 * b.k0c0;\n      have s1 := s1 + a0 * b.k0c1;\n      have a1 := R19Temporal.read Araw (baseA + k + 1);\n      have s0 := s0 + a1 * b.k1c0;\n      have s1 := s1 + a1 * b.k1c1;\n      have a2 := R19Temporal.read Araw (baseA + k + 2);\n      have s0 := s0 + a2 * b.k2c0;\n      have s1 := s1 + a2 * b.k2c1;\n      have a3 := R19Temporal.read Araw (baseA + k + 3);\n      R19Temporal.loop n baseA Araw B (t + 1) (s0 + a3 * b.k3c0) (s1 + a3 * b.k3c1)\n    else\n      if h0 : k < n then\n        have ht := ⋯;\n        have b := B.get ⟨t, ht⟩;\n        have a0 := R19Temporal.read Araw (baseA + k);\n        have s0 := s0 + a0 * b.k0c0;\n        have s1 := s1 + a0 * b.k0c1;\n        if k + 1 < n then\n          have a1 := R19Temporal.read Araw (baseA + k + 1);\n          have s0 := s0 + a1 * b.k1c0;\n          have s1 := s1 + a1 * b.k1c1;\n          if k + 2 < n then\n            have a2 := R19Temporal.read Araw (baseA + k + 2);\n            { s0 := s0 + a2 * b.k2c0, s1 := s1 + a2 * b.k2c1 }\n          else { s0 := s0, s1 := s1 }\n        else { s0 := s0, s1 := s1 }\n      else { s0 := s0, s1 := s1 }\n⊢ (let k := 4 * t;\n    if h3 : k + 3 < n then\n      have ht := ⋯;\n      have a := A[basePacket + t];\n      have b := B.get ⟨t, ht⟩;\n      have s0 := s0 + a.a0 * b.k0c0;\n      have s1 := s1 + a.a0 * b.k0c1;\n      have s0 := s0 + a.a1 * b.k1c0;\n      have s1 := s1 + a.a1 * b.k1c1;\n      have s0 := s0 + a.a2 * b.k2c0;\n      have s1 := s1 + a.a2 * b.k2c1;\n      loop n basePacket A B hA (t + 1) (s0 + a.a3 * b.k3c0) (s1 + a.a3 * b.k3c1)\n    else\n      if h0 : k < n then\n        have ht := ⋯;\n        have a := A[basePacket + t];\n        have b := B.get ⟨t, ht⟩;\n        have s0 := s0 + a.a0 * b.k0c0;\n        have s1 := s1 + a.a0 * b.k0c1;\n        if k + 1 < n then\n          have s0 := s0 + a.a1 * b.k1c0;\n          have s1 := s1 + a.a1 * b.k1c1;\n          if k + 2 < n then { s0 := s0 + a.a2 * b.k2c0, s1 := s1 + a.a2 * b.k2c1 } else { s0 := s0, s1 := s1 }\n        else { s0 := s0, s1 := s1 }\n      else { s0 := s0, s1 := s1 }) =\n    R19Temporal.loop n baseA Araw B t s0 s1"
+        }
+      ]
+    },
+    {
+      "candidate": "f01-r19-dev-grs-add-runtime1",
+      "kernel_sha256": "35347e37e2c8d593d868c80522659b4fb18bda7604fc830a9f14eb7d39be33c5",
+      "source_commit": "a92abea11a0a21e76df44a1a93114801dd3085a8",
+      "source_path": "competitions/floatlib/candidates/f01-r19-dev-grs-add-runtime1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40428306094/download-c800c9d7532147a99a39807e35f52f19/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-grs-add-runtime1/full-build-output.txt",
+      "original_output_sha256": "f39743788488176f9a2f65c4118b8864e8758272e72aabd3a86dc02b4ccf8bdf",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 6629,
+          "column": 24,
+          "declaration": "Submission.R19GRS32Add.guardedAdd",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6627,
+              "text": "      let e := (mid >>> 23) + eh - (153 : UInt32)"
+            },
+            {
+              "line": 6628,
+              "text": "      if e - 1 ≤ (253 : UInt32) then"
+            },
+            {
+              "line": 6629,
+              "text": "        R7W02.fromRaw ((hi &&& 0x80000000) ||| (e <<< 23) ||| (mid &&& 0x7fffff))"
+            },
+            {
+              "line": 6630,
+              "text": "      else fallback x y"
+            },
+            {
+              "line": 6631,
+              "text": "  else fallback x y"
+            }
+          ],
+          "message": "failed to synthesize instance of type class\n  HAnd UInt32 ℕ ?m.226\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command."
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}
