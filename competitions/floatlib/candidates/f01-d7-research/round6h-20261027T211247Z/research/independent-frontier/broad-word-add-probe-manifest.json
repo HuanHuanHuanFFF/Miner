@@ -1,0 +1,50 @@
+{
+  "at_utc": "2026-10-27T23:05:18.380331+00:00",
+  "status": "COST_DISCRIMINATOR_NOT_RUN",
+  "kernel": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\independent-frontier\\Kernel-broad-word-add-probe.lean",
+  "kernel_sha256": "0274763264d760775e6a447848e873db418adc2e6fb651d117c5fc04b4b5d4a5",
+  "kernel_bytes": 228297,
+  "base_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "base_prefix_byte_equal": true,
+  "runtime_sha256": "5655df5c8a8fbfbf40101bba782788d4a59ee716a95ab8e2bd58bff05e715bf9",
+  "runtime_bytes": 1467,
+  "actual_complete_entry": "Submission.R22BroadWordAdd.diagnosticEntry",
+  "roots": [
+    "Submission.add_spec",
+    "Submission.mul_spec",
+    "Submission.sum_spec",
+    "Submission.bmm_spec",
+    "Submission.R22BroadWordAdd.core",
+    "Submission.R22BroadWordAdd.diagnosticEntry"
+  ],
+  "root_accounting": "Four unchanged B2 public specs plus two runtime definitions. Not a new add_spec.",
+  "public_functions": "All four remain B2; selected diagnostic caller must explicitly use new entry for ADD.",
+  "domain": "Both raw exponents1..254, same sign, all gaps0..253. All other inputs exact B2 fallback; arbitrary NaN payload/Inf/subnormal/+-zero remain outside.",
+  "mechanism": "UInt32 GRS with one product-free sum; d>=25 absorption; <=24 sticky alignment, at most one leading carry, bias RNE, add-based packing carries rounded mantissa into exponent, direct signed overflow.",
+  "history": "Old6bef/39575344774 truly bench-tested no-FP same-sign normal GRS:UInt64, exponent+fraction sorting, tuples, d>27 cutoff, explicit second carry, overflow ExecFloat.add fallback, logically unreachable opposite-sign branch. Whole/oldreference1.096087; no fullproof due explicit placeholder. Those bytes/results preserved; this is a restricted changed-runtime revisit, not new algorithm discovery. R19 cast GRS is separate.",
+  "first_model": "broad-word-add-model.json,6480 fixed directed cases/no differences; not all-input or native-host proof",
+  "proof_status": "NOT_RUN; only proof interfaces in BROAD-WORD-ADD-HANDOFF.md, no large proof constructed",
+  "performance": "UNKNOWN; complete guarded caller+miss+fallback cost required; no code-site speed prediction",
+  "files": {
+    "Kernel-broad-word-add-probe.lean": {
+      "bytes": 228297,
+      "sha256": "0274763264d760775e6a447848e873db418adc2e6fb651d117c5fc04b4b5d4a5"
+    },
+    "Runtime-broad-word-add.lean.inc": {
+      "bytes": 1467,
+      "sha256": "5655df5c8a8fbfbf40101bba782788d4a59ee716a95ab8e2bd58bff05e715bf9"
+    },
+    "HelperAudit-broad-word-add.lean.inc": {
+      "bytes": 253,
+      "sha256": "3ac60f9171bffc21611ae74421a1ea9c4a02a827d0dda21928af3e6fe8abb145"
+    },
+    "check_broad_word_add.py": {
+      "bytes": 4177,
+      "sha256": "4e89556009034ec2130dd39d1c1265415dd90925f876c94f7207de16ea7ce35c"
+    },
+    "broad-word-add-model.json": {
+      "bytes": 2307,
+      "sha256": "2c06ba009f20e864bfe0a12af05767484ca5314b7e689a36abc63d59ce30355e"
+    }
+  }
+}

@@ -49,7 +49,7 @@ def render_official(view, state):
             validation += f"；[{progress['text']}]({progress['evidence']})"
         lines.append(f"| {name} | #{champion} | [{labels[op]}]({state['kernel']}) | **{min(ratios):.2f}–{max(ratios):.2f}×** | {validation} |")
     ratio = result["official_whole_ratio"]
-    lines += ["", f"整包官方耗时：冠军的 **{ratio:.2f}×**；原预估{result['previous_estimated_whole_ratio']:.2f}×，实际比预估慢 **{result['additional_time_vs_estimate_pct']:.1f}%**。", "",
+    lines += ["", f"整包官方耗时：冠军的 **{ratio:.2f}×**。", "",
               f"**结论：官方验证通过，当前第{result['rank']}；尚不能取代#{champion}，主要差距仍在矩阵乘法。**", ""]
     (ROOT / "dashboard.md").write_text("\n".join(lines), encoding="utf-8")
     return True
