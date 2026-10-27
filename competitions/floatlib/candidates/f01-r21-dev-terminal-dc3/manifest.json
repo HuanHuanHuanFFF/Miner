@@ -1,0 +1,39 @@
+{
+  "candidate": "f01-r21-dev-terminal-dc3",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "2021ce5f2e26711314f9a21c6503be40e89c2fb8c052d0f9f90230bd40abe394",
+  "candidate_bytes": 237695,
+  "created_at_utc": "2026-10-27T10:52:27.779874+00:00",
+  "parent": "f01-r21-dev-terminal-dc2",
+  "parent_sha256": "0f389fa7f9237b446dbc7faad56040e884367fd5751af4345b648b7971bb4ba3",
+  "validation_mode": "statement-only",
+  "proof_status": "PROOF_ONLY_EXPLICIT_COUNT_EMIT_NORMALIZATION_NOT_RUN",
+  "performance": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "mechanism": "Complete two-column DC groups consume the dot accumulators directly into finish/push; odd tail keeps original single-dot path. Public BMM now reaches the new loop through original dispatch. Other operations and guards unchanged.",
+  "inverse_splice_exact": true,
+  "explicit_helper_audit": [
+    "Submission.add_spec",
+    "Submission.mul_spec",
+    "Submission.sum_spec",
+    "Submission.bmm_spec",
+    "Submission.R19DCRawPair.loop_s0",
+    "Submission.R19DCRawPair.loop_s1",
+    "Submission.R19DCRawPair.loopEmit_eq",
+    "Submission.R19DCRawPair.groupFrom_eq_original",
+    "Submission.R19DCRawPair.core_eq_reference"
+  ],
+  "helper_audit_expected_count": 9,
+  "helper_audit_required_endpoints": [
+    "Submission.bmm_spec",
+    "Submission.R19DCRawPair.groupFrom_eq_original"
+  ],
+  "helper_audit_source_sha256": "2021ce5f2e26711314f9a21c6503be40e89c2fb8c052d0f9f90230bd40abe394",
+  "helper_audit_module": "development-helper-audit-v8.py",
+  "helper_audit_module_sha256": "5b58eece211bd9cdaa270fc82bef624a5974c7d056732e19f54547c0fe6ef975",
+  "diagnostic_evaluations": [],
+  "next_gate": "First statement + original whole-module replay + explicit nine roots. Inspect actual new public selected caller and lost/reintroduced closure/array lifetime. Only then buy complete full-call performance D against B2; new A/B confirmations remain required.",
+  "source_producer": "R21 D exact CI40489842934 error",
+  "runtime_unchanged_vs_parent": true,
+  "repair": "Use explicit count equality rewrite, then reduce the actual two-element Fin.foldl via its finRange theorem. Runtime unchanged."
+}
