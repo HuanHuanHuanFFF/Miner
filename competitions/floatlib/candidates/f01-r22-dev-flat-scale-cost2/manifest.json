@@ -1,0 +1,65 @@
+{
+  "candidate": "f01-r22-dev-flat-scale-cost2",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "ef1fa46164ecce62cb27c7f101d488eff386c03f21c19636760832f79c04926b",
+  "candidate_bytes": 237614,
+  "created_at_utc": "2026-10-27T22:33:15.386739+00:00",
+  "parent_sha256": "7a77ec4a5cc4e628bc461c1d9a8414c59cbb77ecb3ac6f283c1279fc3a0a0eda",
+  "validation_mode": "statement-only",
+  "diagnostic_only": true,
+  "diagnostic_timeout_seconds": 600,
+  "proof_status": "NOT_RUN_NAMESPACE_RESOLUTION_FIX_ONLY",
+  "performance": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "official_submission_inherited": false,
+  "helper_audit_module": "development-flat-cost2-audit.py",
+  "helper_audit_module_sha256": "3685698f5d54f7191fd3ddc50d631a0d16fc8b849a9bcfb06f0a83fd4795afd0",
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-flat-scale2/driver.py",
+      "sha256": "9fb3cd4ac6e71163db88c6a780fb2428d18741df44cde64684333766d73dcbc8",
+      "bytes": 18027
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-flat-scale2/FlatScale.lean.inc",
+      "sha256": "f5fbc6d85d18ebfacabd1ac19a65633f1c973459b057673c8f85bb4320c28b44",
+      "bytes": 10784
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-flat-scale2/R22FlatCost2Main.lean",
+      "sha256": "d1af1810088918f364c53525010aaf26d0799571ad36f9162996ba25863033e5",
+      "bytes": 583
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-flat-scale2/source-premise.json",
+      "sha256": "ae3dfd96a7801c82d0512e03a50bd9bbb4e535cd107883515967279e2701545c",
+      "bytes": 704
+    }
+  ],
+  "runtime_cost": {
+    "overall_budget_seconds_from_stage_registration": 580,
+    "build_cap_seconds": 180,
+    "measure_phase_cap_seconds": 300,
+    "seeds": [
+      2220001,
+      2220003
+    ],
+    "order_per_seed": [
+      "control",
+      "flatadd",
+      "flatadd",
+      "control",
+      "control",
+      "flatmul",
+      "flatmul",
+      "control"
+    ],
+    "processes": 16,
+    "pairs": 500000,
+    "inner": 3,
+    "observer": false
+  },
+  "premise": "Direct four128-Float32 records remove original Array slot-pointer lookup; unknownselector cost must be measured. No ArrayF4 retest or Float64 cast. Static512Float32single record rejected:scalar2048 >= fixed1024 runtime cap. Each chosenBlock512bytes <1024.",
+  "scope": "Only source-level exact-table-shape cost discriminator; no new lookup/ADD/MUL full proof or gate. Original initialization/memory, guards andfallback costs retained.",
+  "repair": "Only open FloatLib.Floats added to newnamespace; lookup/numeric algorithm/guards/inputs unchanged. Oldsource unknown ExecFloat.Binary.ofFloat32, not runtime failure."
+}
