@@ -1,0 +1,173 @@
+--- unpruned
++++ public-v1
+@@ -396,19 +396,6 @@
+   | i :: is, acc =>
+       if quietGuard acc then acc
+       else modelDotEarly a b is (Model.Spec.add acc (Model.Spec.mul (a i) (b i)))
+-
+-theorem modelDotFold_absorb {ι : Type} (a b : ι → M32) (indices : List ι)
+-    (q : M32) (hn : q.isNaN = true) (hs : q.isSNaN = false) :
+-    modelDotFold a b indices q = q := by
+-  induction indices generalizing q with
+-  | nil => rfl
+-  | cons i is ih =>
+-      change modelDotFold a b is (Model.Spec.add q (Model.Spec.mul (a i) (b i))) = q
+-      rw [add_mul_absorb q (a i) (b i) hn hs]
+-      exact ih q hn hs
+-
+-
+-
+ 
+ theorem exec_toModel_add (x y : Competition.Binary32) :
+     ExecFloat.Binary.toModel (ExecFloat.add x y) =
+@@ -912,21 +899,6 @@
+ theorem scaleAt_eq (u : UInt32) :
+     scaleAt u = Float32.ofBits (scaleBits (tableIndex u)) := by
+   simp only [scaleAt, scaleTable, Array.getElem_ofFn, UInt32.ofNat_toNat]
+-
+-theorem zero_fields (u : UInt32) (h : magnitude u = 0) :
+-    (u = 0 ∧ tableIndex u = 0 ∧ mantissa u = 0x800000 ∧
+-      scaleBits (tableIndex u) = 0) ∨
+-    (u = 0x80000000 ∧ tableIndex u = 256 ∧ mantissa u = 0x800000 ∧
+-      scaleBits (tableIndex u) = 0x80000000) := by
+-  cases (magnitude_zero_iff u).mp h with
+-  | inl hu =>
+-    subst u
+-    left
+-    decide
+-  | inr hu =>
+-    subst u
+-    right
+-    decide
+ 
+ theorem scaleAt_positive_zero : scaleAt 0 = Float32.ofBits 0 := by
+   rw [scaleAt_eq]
+@@ -1419,19 +1391,6 @@
+       congrArg ExecFloat.Binary.toFloat32 hw
+     _ = Float32.ofBits u := rfl
+ 
+-theorem native_mul_bits_eq_of_raw_model_mul_eq
+-    (x y : Float32) (u : UInt32)
+-    (hx : x.isFinite = true) (hy : y.isFinite = true)
+-    (hm : Model.mul (nativeModel x) (nativeModel y) = rawModel u) :
+-    (x * y).toBits = u := by
+-  have hw : ExecFloat.Binary.ofFloat32 (x * y) = ExecFloat.Binary.ofBits32 u := by
+-    apply ExecFloat.Binary.toModel_inj.mp
+-    rw [NativeBridge.toModelNativeMul x y hx hy]
+-    exact hm
+-  have hn := congrArg ExecFloat.Binary.toBits32 hw
+-  simpa only [ExecFloat.Binary.toBits32_ofFloat32,
+-    ExecFloat.Binary.toBits32_ofBits32] using hn
+-
+ theorem native_mul_eq_of_decoded_raw_model_mul_eq
+     (x y : Float32) (u : UInt32)
+     {dx dy : FloatLib.Numerics.Dyadic}
+@@ -3133,16 +3092,6 @@
+ 
+ 
+ 
+-theorem mul_finite_inputs (x y : Float32) (h : (x * y).isFinite = true) :
+-    x.isFinite = true ∧ y.isFinite = true := by
+-  change (Float32.Model.pack
+-    (Float.Model.UnpackedFloat.mul Float.Model.Format.binary32
+-      x.toModel.unpack y.toModel.unpack)).isFinite = true at h
+-  change x.toModel.unpack.isFinite = true ∧ y.toModel.unpack.isFinite = true
+-  cases hx : x.toModel.unpack <;> cases hy : y.toModel.unpack <;>
+-    simp_all [Float.Model.UnpackedFloat.mul, Float.Model.UnpackedFloat.isFinite,
+-      packNaN_notFinite, packInfinity_notFinite]
+-
+ end FinalFinite
+ 
+ 
+@@ -4496,15 +4445,6 @@
+   have hd := Model.toDyadic?_eq_none_of_isNaN canonicalNaN_is_nan
+   simp [Model.Spec.mul, hd, chooseCanonicalNaN_left q hs]
+ 
+-theorem model_mul_canonical_right (q : Model FloatFormat.binary32)
+-    (hn : Model.isNaN q = false) :
+-    Model.Spec.mul q (Model.canonicalNaN FloatFormat.binary32) =
+-      Model.canonicalNaN FloatFormat.binary32 := by
+-  have hd := Model.toDyadic?_eq_none_of_isNaN canonicalNaN_is_nan
+-  cases hq : Model.toDyadic? q <;>
+-    simp [Model.Spec.mul, hd, hq, chooseCanonicalNaN_right q hn]
+-
+-
+ theorem exec_add_import_nan_left (x : Float32) :
+     ExecFloat.add (ExecFloat.Binary.ofFloat32 Float32.nan) (ExecFloat.Binary.ofFloat32 x) =
+       ExecFloat.Binary.ofFloat32 Float32.nan := by
+@@ -4529,32 +4469,6 @@
+   change Model.Spec.add (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x))
+     (Model.canonicalNaN FloatFormat.binary32) = Model.canonicalNaN FloatFormat.binary32
+   exact model_add_canonical_right _ ((ofFloat32_isNaN x).trans hx)
+-
+-theorem exec_mul_import_nan_left (x : Float32) :
+-    ExecFloat.mul (ExecFloat.Binary.ofFloat32 Float32.nan) (ExecFloat.Binary.ofFloat32 x) =
+-      ExecFloat.Binary.ofFloat32 Float32.nan := by
+-  apply Configured.Family.toModel_injective
+-  change ExecFloat.Binary.toModel
+-    (ExecFloat.mul (ExecFloat.Binary.ofFloat32 Float32.nan) (ExecFloat.Binary.ofFloat32 x)) =
+-      ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 Float32.nan)
+-  rw [R19BiasBase.NativeBridge.toModelExecMul]
+-  change Model.Spec.mul (Model.canonicalNaN FloatFormat.binary32)
+-    (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x)) =
+-      Model.canonicalNaN FloatFormat.binary32
+-  exact model_mul_canonical_left _ (ofFloat32_not_snan x)
+-
+-theorem exec_mul_import_nan_right (x : Float32) (hx : x.isNaN = false) :
+-    ExecFloat.mul (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 Float32.nan) =
+-      ExecFloat.Binary.ofFloat32 Float32.nan := by
+-  apply Configured.Family.toModel_injective
+-  change ExecFloat.Binary.toModel
+-    (ExecFloat.mul (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 Float32.nan)) =
+-      ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 Float32.nan)
+-  rw [R19BiasBase.NativeBridge.toModelExecMul]
+-  change Model.Spec.mul (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x))
+-    (Model.canonicalNaN FloatFormat.binary32) = Model.canonicalNaN FloatFormat.binary32
+-  exact model_mul_canonical_right _ ((ofFloat32_isNaN x).trans hx)
+-
+ 
+ theorem ofFloat32_add (a b : Float32) :
+     ExecFloat.Binary.ofFloat32 (a + b) =
+@@ -4569,23 +4483,6 @@
+   | true =>
+       rw [R7W05.native_add_nan_left a b ha, R7W05.native_eq_nan_of_isNaN a ha]
+       exact (exec_add_import_nan_left b).symm
+-
+-
+-theorem ofFloat32_mul (a b : Float32) :
+-    ExecFloat.Binary.ofFloat32 (a * b) =
+-      ExecFloat.mul (ExecFloat.Binary.ofFloat32 a) (ExecFloat.Binary.ofFloat32 b) := by
+-  cases ha : a.isNaN with
+-  | false =>
+-      cases hb : b.isNaN with
+-      | false => exact R19BiasBase.R7Native.ofFloat32Mul a b ha hb
+-      | true =>
+-          rw [R7W05.native_mul_nan_right a b hb, R7W05.native_eq_nan_of_isNaN b hb]
+-          exact (exec_mul_import_nan_right a ha).symm
+-  | true =>
+-      rw [R7W05.native_mul_nan_left a b ha, R7W05.native_eq_nan_of_isNaN a ha]
+-      exact (exec_mul_import_nan_left b).symm
+-
+-
+ 
+ 
+ end R7W12
+@@ -4754,18 +4651,6 @@
+ def replay (n baseA baseB p : Nat) (Araw Braw : Array Binary32) (result : Float32) : Binary32 :=
+   if result.isNaN then replayEarly n baseA baseB p Araw Braw
+   else Fin.foldl n (replayStep n baseA baseB p Araw Braw) posZero
+-
+-theorem replay_eq (n baseA baseB p : Nat) (Araw Braw : Array Binary32) (result : Float32) :
+-    replay n baseA baseB p Araw Braw result =
+-      Fin.foldl n (fun acc i => R19BiasBase.add acc
+-        (R19BiasBase.mul (Araw.getD (baseA + i.val) posZero)
+-          (Braw.getD (baseB + i.val * p) posZero))) posZero := by
+-  unfold replay
+-  split
+-  · exact replayEarly_eq n baseA baseB p Araw Braw
+-  · rfl
+-
+-
+ 
+ end R7NaNReplay
+ 

@@ -1,0 +1,110 @@
+0:	push   rbp
+   1:	push   rbx
+   2:	push   rax
+   3:	mov    ebp,esi
+   5:	mov    ebx,edi
+   7:	mov    eax,edi
+   9:	and    eax,0x7fffffff
+   e:	lea    ecx,[rax-0x1]
+  11:	cmp    ecx,0xbffffff
+  17:	setb   cl
+  1a:	cmp    eax,0x7f800000
+  1f:	setae  al
+  22:	xor    al,cl
+  24:	je     32 <lp_competition_Submission_nativeMul+0x32>
+  26:	mov    edi,ebx
+  28:	call   2d <lp_competition_Submission_nativeMul+0x2d>
+  2d:	movaps xmm1,xmm0
+  30:	jmp    5b <lp_competition_Submission_nativeMul+0x5b>
+  32:	mov    eax,ebx
+  34:	and    eax,0x7fffff
+  39:	or     eax,0x800000
+  3e:	cvtsi2ss xmm1,eax
+  42:	mov    rax,QWORD PTR [rip+0x0]        # 49 <lp_competition_Submission_nativeMul+0x49>
+  49:	mov    rax,QWORD PTR [rax]
+  4c:	mov    ecx,ebx
+  4e:	shr    ecx,0x17
+  51:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  56:	mulss  xmm1,DWORD PTR [rax+0x8]
+  5b:	mov    eax,ebp
+  5d:	and    eax,0x7fffffff
+  62:	lea    ecx,[rax-0x1]
+  65:	cmp    ecx,0xbffffff
+  6b:	setb   cl
+  6e:	cmp    eax,0x7f800000
+  73:	setae  al
+  76:	xor    al,cl
+  78:	je     8f <lp_competition_Submission_nativeMul+0x8f>
+  7a:	mov    edi,ebp
+  7c:	movss  DWORD PTR [rsp+0x4],xmm1
+  82:	call   87 <lp_competition_Submission_nativeMul+0x87>
+  87:	movss  xmm1,DWORD PTR [rsp+0x4]
+  8d:	jmp    bb <lp_competition_Submission_nativeMul+0xbb>
+  8f:	mov    eax,ebp
+  91:	and    eax,0x7fffff
+  96:	or     eax,0x800000
+  9b:	xorps  xmm0,xmm0
+  9e:	cvtsi2ss xmm0,eax
+  a2:	mov    rax,QWORD PTR [rip+0x0]        # a9 <lp_competition_Submission_nativeMul+0xa9>
+  a9:	mov    rax,QWORD PTR [rax]
+  ac:	mov    ecx,ebp
+  ae:	shr    ecx,0x17
+  b1:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  b6:	mulss  xmm0,DWORD PTR [rax+0x8]
+  bb:	mulss  xmm1,xmm0
+  bf:	ucomiss xmm1,xmm1
+  c2:	jp     d2 <lp_competition_Submission_nativeMul+0xd2>
+  c4:	movaps xmm0,xmm1
+  c7:	add    rsp,0x8
+  cb:	pop    rbx
+  cc:	pop    rbp
+  cd:	jmp    d2 <lp_competition_Submission_nativeMul+0xd2>
+  d2:	mov    eax,ebx
+  d4:	and    eax,0x7f800000
+  d9:	cmp    eax,0x7f800000
+  de:	jne    f6 <lp_competition_Submission_nativeMul+0xf6>
+  e0:	test   ebx,0x7fffff
+  e6:	setne  cl
+  e9:	test   ebx,0x400000
+  ef:	sete   dl
+  f2:	test   cl,dl
+  f4:	jne    163 <lp_competition_Submission_nativeMul+0x163>
+  f6:	mov    ecx,ebp
+  f8:	not    ecx
+  fa:	test   ecx,0x7f800000
+ 100:	jne    13f <lp_competition_Submission_nativeMul+0x13f>
+ 102:	test   ebp,0x7fffff
+ 108:	setne  cl
+ 10b:	test   ebp,0x400000
+ 111:	sete   dl
+ 114:	test   cl,dl
+ 116:	jne    135 <lp_competition_Submission_nativeMul+0x135>
+ 118:	cmp    eax,0x7f800000
+ 11d:	setne  al
+ 120:	test   ebx,0x7fffff
+ 126:	sete   cl
+ 129:	or     cl,al
+ 12b:	je     163 <lp_competition_Submission_nativeMul+0x163>
+ 12d:	test   ebp,0x7fffff
+ 133:	je     154 <lp_competition_Submission_nativeMul+0x154>
+ 135:	or     ebp,0x400000
+ 13b:	mov    ebx,ebp
+ 13d:	jmp    169 <lp_competition_Submission_nativeMul+0x169>
+ 13f:	cmp    eax,0x7f800000
+ 144:	setne  al
+ 147:	test   ebx,0x7fffff
+ 14d:	sete   cl
+ 150:	or     cl,al
+ 152:	je     163 <lp_competition_Submission_nativeMul+0x163>
+ 154:	mov    edi,ebx
+ 156:	mov    esi,ebp
+ 158:	add    rsp,0x8
+ 15c:	pop    rbx
+ 15d:	pop    rbp
+ 15e:	jmp    163 <lp_competition_Submission_nativeMul+0x163>
+ 163:	or     ebx,0x400000
+ 169:	mov    eax,ebx
+ 16b:	add    rsp,0x8
+ 16f:	pop    rbx
+ 170:	pop    rbp
+ 171:	ret

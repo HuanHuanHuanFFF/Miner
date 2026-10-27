@@ -1,0 +1,47 @@
+{
+  "run": 40414394748,
+  "status": "VERIFIED_ORIGINAL_BYTES_AND_EXACT_COMMIT_SOURCE; DIAGNOSTIC_REPLICATION_ONLY",
+  "head": "437407ad78deabaac7faa1b3ceaa375ec234cb27",
+  "seed": 1826017,
+  "original_files_verified": 43,
+  "artifact_index_sha256": "cecd4c388c7302bc401be95817df1deb2f96d1144c225bb7543cb586f74eeab4",
+  "whole": {
+    "raw_vs_B2": 1.0459788413991986,
+    "reference_drift": 1.0590915984013434,
+    "normalized_vs_B2": 0.9876188641077523,
+    "gain_p05": 0.006733797248170021
+  },
+  "operations": {
+    "add": {
+      "candidate_ns": 35450742.0,
+      "B2_ns": 33861050.0,
+      "raw_vs_B2": 1.0469475104877137,
+      "reference_drift": 1.0604023933936249,
+      "normalized_vs_B2": 0.9873115309907485
+    },
+    "mul": {
+      "candidate_ns": 39409312.0,
+      "B2_ns": 37094865.0,
+      "raw_vs_B2": 1.0623926519209599,
+      "reference_drift": 1.062515341731113,
+      "normalized_vs_B2": 0.9998845289048219
+    },
+    "sum": {
+      "candidate_ns": 5023239.0,
+      "B2_ns": 4713038.0,
+      "raw_vs_B2": 1.065817631854443,
+      "reference_drift": 1.0649175807845397,
+      "normalized_vs_B2": 1.0008451837833687
+    },
+    "bmm": {
+      "candidate_ns": 15653221.0,
+      "B2_ns": 15667994.0,
+      "raw_vs_B2": 0.9990571224369884,
+      "reference_drift": 1.0541929852900955,
+      "normalized_vs_B2": 0.9476985109724149
+    }
+  },
+  "interpretation": "Raw source times and normalized ratios answer different questions. Reference drift accounts algebraically for normalized whole<1 while raw operation times>=~1. No causal assignment or source adoption. Existing c70 firstD failed0.97 remains failed.",
+  "formula": "time=sum(class_ns*public_cell_work); normalized=(candidate_sub/B2_sub)/(candidate_ref/B2_ref)",
+  "verification_limit": "No formal admission; this packet checks indexed originals, full-score verdict fields, fixed source bytes, and original commit source. It does not invoke adoption guard or certify later unseen groups."
+}

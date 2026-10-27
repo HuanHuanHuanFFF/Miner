@@ -1,0 +1,42 @@
+   0:	push   rbp
+   1:	push   r14
+   3:	push   rbx
+   4:	sub    rsp,0x10
+   8:	mov    ebx,esi
+   a:	mov    ebp,edi
+   c:	mov    eax,edi
+   e:	and    eax,0x7fffffff
+  13:	lea    ecx,[rax-0x1]
+  16:	cmp    ecx,0xbffffff
+  1c:	setb   cl
+  1f:	cmp    eax,0x7f800000
+  24:	setae  al
+  27:	or     al,cl
+  29:	je     37 <lp_competition_main___lam__0+0x37>
+  2b:	mov    edi,ebp
+  2d:	call   32 <lp_competition_main___lam__0+0x32>
+  32:	movaps xmm1,xmm0
+  35:	jmp    60 <lp_competition_main___lam__0+0x60>
+  60:	mov    eax,ebx
+  62:	and    eax,0x7fffffff
+  67:	lea    ecx,[rax-0x1]
+  6a:	cmp    ecx,0xbffffff
+  70:	setb   cl
+  73:	cmp    eax,0x7f800000
+  78:	setae  al
+  7b:	or     al,cl
+  7d:	je     94 <lp_competition_main___lam__0+0x94>
+  7f:	mov    edi,ebx
+  81:	movss  DWORD PTR [rsp+0xc],xmm1
+  87:	call   8c <lp_competition_main___lam__0+0x8c>
+  8c:	movss  xmm1,DWORD PTR [rsp+0xc]
+  92:	jmp    c0 <lp_competition_main___lam__0+0xc0>
+  c0:	addss  xmm1,xmm0
+  c4:	ucomiss xmm1,xmm1
+  c7:	jp     d9 <lp_competition_main___lam__0+0xd9>
+  c9:	movaps xmm0,xmm1
+  cc:	add    rsp,0x10
+  d0:	pop    rbx
+  d1:	pop    r14
+  d3:	pop    rbp
+  d4:	jmp    d9 <lp_competition_main___lam__0+0xd9>

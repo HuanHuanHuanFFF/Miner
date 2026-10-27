@@ -1,0 +1,70 @@
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r13
+   7:	push   r12
+   9:	push   rbx
+   a:	sub    rsp,0x18
+   e:	mov    r14d,esi
+  11:	mov    r15d,edi
+  14:	mov    r12d,edi
+  17:	shr    r12d,0x17
+  1b:	movzx  ebp,r12b
+  1f:	lea    eax,[rbp-0xff]
+  25:	cmp    eax,0xffffff01
+  2a:	ja     5c <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x5c>
+  5c:	mov    r10d,r14d
+  5f:	shr    r10d,0x17
+  63:	movzx  r13d,r10b
+  67:	lea    eax,[r13-0xff]
+  6e:	mov    ebx,r15d
+  71:	and    ebx,0x7fffffff
+  77:	cmp    eax,0xffffff01
+  7c:	ja     119 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x119>
+  82:	lea    eax,[rbx-0x1]
+  85:	cmp    eax,0xbffffff
+  8a:	setb   al
+  8d:	cmp    ebx,0x7f800000
+  93:	setae  cl
+  96:	or     cl,al
+  98:	je     257 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x257>
+ 257:	mov    eax,r15d
+ 25a:	and    eax,0x7fffff
+ 25f:	or     eax,0x800000
+ 264:	cvtsi2ss xmm1,eax
+ 268:	mov    rax,QWORD PTR [rip+0x0]        # 26f <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x26f>
+ 26f:	mov    rax,QWORD PTR [rax]
+ 272:	mov    ecx,r12d
+ 275:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 27a:	mulss  xmm1,DWORD PTR [rax+0x8]
+ 27f:	mov    eax,r14d
+ 282:	and    eax,0x7fffffff
+ 287:	lea    ecx,[rax-0x1]
+ 28a:	cmp    ecx,0xbffffff
+ 290:	setb   cl
+ 293:	cmp    eax,0x7f800000
+ 298:	setae  al
+ 29b:	or     al,cl
+ 29d:	je     2b5 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x2b5>
+ 2b5:	mov    eax,r14d
+ 2b8:	and    eax,0x7fffff
+ 2bd:	or     eax,0x800000
+ 2c2:	xorps  xmm0,xmm0
+ 2c5:	cvtsi2ss xmm0,eax
+ 2c9:	mov    rax,QWORD PTR [rip+0x0]        # 2d0 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x2d0>
+ 2d0:	mov    rax,QWORD PTR [rax]
+ 2d3:	mov    ecx,r10d
+ 2d6:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 2db:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 2e0:	addss  xmm1,xmm0
+ 2e4:	ucomiss xmm1,xmm1
+ 2e7:	jnp    465 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x465>
+ 465:	movaps xmm0,xmm1
+ 468:	add    rsp,0x18
+ 46c:	pop    rbx
+ 46d:	pop    r12
+ 46f:	pop    r13
+ 471:	pop    r14
+ 473:	pop    r15
+ 475:	pop    rbp
+ 476:	jmp    47b <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x47b>

@@ -1,0 +1,192 @@
+info: work/Submission.lean:6752:4: case pos
+n basePacket baseA : ℕ
+Araw : Array Binary32
+A : Array A4
+B : Vector R19Temporal.B8 ((n + 3) / 4)
+hA : basePacket + (n + 3) / 4 ≤ A.size
+hread : ∀ (i : Fin ((n + 3) / 4)), A[basePacket + ↑i] = packetA n baseA (↑i) Araw
+t : ℕ
+s0 s1 : Float32
+h3 : 4 * t + 3 < n
+h0 : 4 * t < n
+h1 : 4 * t + 1 < n
+h2 : 4 * t + 2 < n
+ht : t < blocks n
+⊢ loop n basePacket A B hA t s0 s1 = R19Temporal.loop n baseA Araw B t s0 s1
+info: work/Submission.lean:6757:4: case pos
+n basePacket baseA : ℕ
+Araw : Array Binary32
+A : Array A4
+B : Vector R19Temporal.B8 ((n + 3) / 4)
+hA : basePacket + (n + 3) / 4 ≤ A.size
+hread : ∀ (i : Fin ((n + 3) / 4)), A[basePacket + ↑i] = packetA n baseA (↑i) Araw
+t : ℕ
+s0 s1 : Float32
+h3 : 4 * t + 3 < n
+h0 : 4 * t < n
+h1 : 4 * t + 1 < n
+h2 : 4 * t + 2 < n
+ht : t < blocks n
+dual_p3_new_eq :
+  loop n basePacket A B hA t s0 s1 =
+    let k := 4 * t;
+    if h3 : k + 3 < n then
+      have ht := ⋯;
+      have a := A[basePacket + t];
+      have b := B.get ⟨t, ht⟩;
+      have s0 := s0 + a.a0 * b.k0c0;
+      have s1 := s1 + a.a0 * b.k0c1;
+      have s0 := s0 + a.a1 * b.k1c0;
+      have s1 := s1 + a.a1 * b.k1c1;
+      have s0 := s0 + a.a2 * b.k2c0;
+      have s1 := s1 + a.a2 * b.k2c1;
+      loop n basePacket A B hA (t + 1) (s0 + a.a3 * b.k3c0) (s1 + a.a3 * b.k3c1)
+    else
+      if h0 : k < n then
+        have ht := ⋯;
+        have a := A[basePacket + t];
+        have b := B.get ⟨t, ht⟩;
+        have s0 := s0 + a.a0 * b.k0c0;
+        have s1 := s1 + a.a0 * b.k0c1;
+        if k + 1 < n then
+          have s0 := s0 + a.a1 * b.k1c0;
+          have s1 := s1 + a.a1 * b.k1c1;
+          if k + 2 < n then { s0 := s0 + a.a2 * b.k2c0, s1 := s1 + a.a2 * b.k2c1 } else { s0 := s0, s1 := s1 }
+        else { s0 := s0, s1 := s1 }
+      else { s0 := s0, s1 := s1 }
+dual_p3_old_eq :
+  R19Temporal.loop n baseA Araw B t s0 s1 =
+    let k := 4 * t;
+    if h3 : k + 3 < n then
+      have ht := ⋯;
+      have b := B.get ⟨t, ht⟩;
+      have a0 := R19Temporal.read Araw (baseA + k);
+      have s0 := s0 + a0 * b.k0c0;
+      have s1 := s1 + a0 * b.k0c1;
+      have a1 := R19Temporal.read Araw (baseA + k + 1);
+      have s0 := s0 + a1 * b.k1c0;
+      have s1 := s1 + a1 * b.k1c1;
+      have a2 := R19Temporal.read Araw (baseA + k + 2);
+      have s0 := s0 + a2 * b.k2c0;
+      have s1 := s1 + a2 * b.k2c1;
+      have a3 := R19Temporal.read Araw (baseA + k + 3);
+      R19Temporal.loop n baseA Araw B (t + 1) (s0 + a3 * b.k3c0) (s1 + a3 * b.k3c1)
+    else
+      if h0 : k < n then
+        have ht := ⋯;
+        have b := B.get ⟨t, ht⟩;
+        have a0 := R19Temporal.read Araw (baseA + k);
+        have s0 := s0 + a0 * b.k0c0;
+        have s1 := s1 + a0 * b.k0c1;
+        if k + 1 < n then
+          have a1 := R19Temporal.read Araw (baseA + k + 1);
+          have s0 := s0 + a1 * b.k1c0;
+          have s1 := s1 + a1 * b.k1c1;
+          if k + 2 < n then
+            have a2 := R19Temporal.read Araw (baseA + k + 2);
+            { s0 := s0 + a2 * b.k2c0, s1 := s1 + a2 * b.k2c1 }
+          else { s0 := s0, s1 := s1 }
+        else { s0 := s0, s1 := s1 }
+      else { s0 := s0, s1 := s1 }
+⊢ loop n basePacket A B hA t s0 s1 = R19Temporal.loop n baseA Araw B t s0 s1
+info: work/Submission.lean:6759:4: case pos
+n basePacket baseA : ℕ
+Araw : Array Binary32
+A : Array A4
+B : Vector R19Temporal.B8 ((n + 3) / 4)
+hA : basePacket + (n + 3) / 4 ≤ A.size
+hread : ∀ (i : Fin ((n + 3) / 4)), A[basePacket + ↑i] = packetA n baseA (↑i) Araw
+t : ℕ
+s0 s1 : Float32
+h3 : 4 * t + 3 < n
+h0 : 4 * t < n
+h1 : 4 * t + 1 < n
+h2 : 4 * t + 2 < n
+ht : t < blocks n
+dual_p3_new_eq :
+  loop n basePacket A B hA t s0 s1 =
+    let k := 4 * t;
+    if h3 : k + 3 < n then
+      have ht := ⋯;
+      have a := A[basePacket + t];
+      have b := B.get ⟨t, ht⟩;
+      have s0 := s0 + a.a0 * b.k0c0;
+      have s1 := s1 + a.a0 * b.k0c1;
+      have s0 := s0 + a.a1 * b.k1c0;
+      have s1 := s1 + a.a1 * b.k1c1;
+      have s0 := s0 + a.a2 * b.k2c0;
+      have s1 := s1 + a.a2 * b.k2c1;
+      loop n basePacket A B hA (t + 1) (s0 + a.a3 * b.k3c0) (s1 + a.a3 * b.k3c1)
+    else
+      if h0 : k < n then
+        have ht := ⋯;
+        have a := A[basePacket + t];
+        have b := B.get ⟨t, ht⟩;
+        have s0 := s0 + a.a0 * b.k0c0;
+        have s1 := s1 + a.a0 * b.k0c1;
+        if k + 1 < n then
+          have s0 := s0 + a.a1 * b.k1c0;
+          have s1 := s1 + a.a1 * b.k1c1;
+          if k + 2 < n then { s0 := s0 + a.a2 * b.k2c0, s1 := s1 + a.a2 * b.k2c1 } else { s0 := s0, s1 := s1 }
+        else { s0 := s0, s1 := s1 }
+      else { s0 := s0, s1 := s1 }
+dual_p3_old_eq :
+  R19Temporal.loop n baseA Araw B t s0 s1 =
+    let k := 4 * t;
+    if h3 : k + 3 < n then
+      have ht := ⋯;
+      have b := B.get ⟨t, ht⟩;
+      have a0 := R19Temporal.read Araw (baseA + k);
+      have s0 := s0 + a0 * b.k0c0;
+      have s1 := s1 + a0 * b.k0c1;
+      have a1 := R19Temporal.read Araw (baseA + k + 1);
+      have s0 := s0 + a1 * b.k1c0;
+      have s1 := s1 + a1 * b.k1c1;
+      have a2 := R19Temporal.read Araw (baseA + k + 2);
+      have s0 := s0 + a2 * b.k2c0;
+      have s1 := s1 + a2 * b.k2c1;
+      have a3 := R19Temporal.read Araw (baseA + k + 3);
+      R19Temporal.loop n baseA Araw B (t + 1) (s0 + a3 * b.k3c0) (s1 + a3 * b.k3c1)
+    else
+      if h0 : k < n then
+        have ht := ⋯;
+        have b := B.get ⟨t, ht⟩;
+        have a0 := R19Temporal.read Araw (baseA + k);
+        have s0 := s0 + a0 * b.k0c0;
+        have s1 := s1 + a0 * b.k0c1;
+        if k + 1 < n then
+          have a1 := R19Temporal.read Araw (baseA + k + 1);
+          have s0 := s0 + a1 * b.k1c0;
+          have s1 := s1 + a1 * b.k1c1;
+          if k + 2 < n then
+            have a2 := R19Temporal.read Araw (baseA + k + 2);
+            { s0 := s0 + a2 * b.k2c0, s1 := s1 + a2 * b.k2c1 }
+          else { s0 := s0, s1 := s1 }
+        else { s0 := s0, s1 := s1 }
+      else { s0 := s0, s1 := s1 }
+⊢ (let k := 4 * t;
+    if h3 : k + 3 < n then
+      have ht := ⋯;
+      have a := A[basePacket + t];
+      have b := B.get ⟨t, ht⟩;
+      have s0 := s0 + a.a0 * b.k0c0;
+      have s1 := s1 + a.a0 * b.k0c1;
+      have s0 := s0 + a.a1 * b.k1c0;
+      have s1 := s1 + a.a1 * b.k1c1;
+      have s0 := s0 + a.a2 * b.k2c0;
+      have s1 := s1 + a.a2 * b.k2c1;
+      loop n basePacket A B hA (t + 1) (s0 + a.a3 * b.k3c0) (s1 + a.a3 * b.k3c1)
+    else
+      if h0 : k < n then
+        have ht := ⋯;
+        have a := A[basePacket + t];
+        have b := B.get ⟨t, ht⟩;
+        have s0 := s0 + a.a0 * b.k0c0;
+        have s1 := s1 + a.a0 * b.k0c1;
+        if k + 1 < n then
+          have s0 := s0 + a.a1 * b.k1c0;
+          have s1 := s1 + a.a1 * b.k1c1;
+          if k + 2 < n then { s0 := s0 + a.a2 * b.k2c0, s1 := s1 + a.a2 * b.k2c1 } else { s0 := s0, s1 := s1 }
+        else { s0 := s0, s1 := s1 }
+      else { s0 := s0, s1 := s1 }) =
+    R19Temporal.loop n baseA Araw B t s0 s1

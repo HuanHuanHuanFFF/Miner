@@ -1,0 +1,13 @@
+#print axioms Submission.R19PostguardMul.pairOK
+#print axioms Submission.R19PostguardMul.normal_of_shift
+#print axioms Submission.R19PostguardMul.pairOK_normal
+#print axioms Submission.R19PostguardMul.finite_of_fastOK
+#print axioms Submission.R19PostguardMul.finiteRoundtrip
+#print axioms Submission.R19PostguardMul.table_eq_native
+#print axioms Submission.R19PostguardMul.native_finite
+#print axioms Submission.mulBeforePostguard
+#print axioms Submission.mulBeforePostguard_spec
+#print axioms Submission.add_spec
+#print axioms Submission.mul_spec
+#print axioms Submission.sum_spec
+#print axioms Submission.bmm_spec

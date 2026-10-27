@@ -1,0 +1,60 @@
+/-
+Copyright (c) 2024 Lean FRO, LLC. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Kyle Miller
+-/
+module
+
+-- Fixed Lean 293d5d0c; src/Lean/Elab/BuiltinEvalCommand.lean, lines 225-259.
+225:       -- `evalConst` may emit IO, but this is collected by `withIsolatedStreams` below.
+226:       let r ← toMessageData <$> evalConst t declName (checkMeta := !Elab.inServer.get (← getOptions))
+227:       return { eval := pure r, printVal := some (← inferType e) }
+228:   let (output, exOrRes) ← IO.FS.withIsolatedStreams (isolateStderr := Core.stderrAsMessages.get (← getOptions)) do
+229:     try
+230:       -- Generate an action without executing it. We use `withoutModifyingEnv` to ensure
+231:       -- we don't pollute the environment with auxiliary declarations.
+232:       let act : EvalAction ← withoutModifyingEnv <| runTermElabM fun _ => do Term.withDeclName (mkPrivateName (← getEnv) declName) do
+233:         withSaveInfoContext do -- save the environment post-elaboration (for matchers, let rec, etc.)
+234:           let e ← elabTermForEval term expectedType?
+235:           -- If there is an elaboration error, don't evaluate!
+236:           if e.hasSyntheticSorry then throwAbortTerm
+237:           if e.hasFVar then
+238:             let fvarIds := (Lean.collectFVars {} e).fvarIds
+239:             let fvarMsg := MessageData.andList (fvarIds.map fun fvarId => m!"`{Expr.fvar fvarId}`").toList
+240:             throwError m!"Cannot evaluate, contains free variable{fvarIds.size.plural} {fvarMsg}"
+241:           -- We want `#eval` to work even in the core library, so if `ofFormat` isn't available,
+242:           -- we fall back on a `Format`-based approach.
+243:           if (← getEnv).contains ``Lean.MessageData.ofFormat then
+244:             mkAct id (mkMessageData ·) e
+245:           else
+246:             mkAct Lean.MessageData.ofFormat (mkFormat ·) e
+247:       let res ← act.eval
+248:       return Sum.inr (res, act.printVal)
+249:     catch ex =>
+250:       return Sum.inl ex
+251:   if !output.isEmpty then logInfoAt tk output
+252:   match exOrRes with
+253:   | .inl ex => logException ex
+254:   | .inr (_, none) => pure ()
+255:   | .inr (res, some type) =>
+256:     if eval.type.get (← getOptions) then
+257:       logInfo m!"{res} : {type}"
+258:     else
+259:       logInfo res
+
+-- src/Lean/Elab/Frontend.lean, lines 288-292 and 336-344.
+288:   -- default `cmdlineSnapshots` to true (not done as default value for API back-compat reasons)
+289:   -- except when full-snapshotting so that enough information for resumption is available
+290:   let opts := Lean.internal.cmdlineSnapshots.setIfNotSet opts incrSaveFileName?.isNone
+291:   -- default to async elaboration; see also `Elab.async` docs
+292:   let opts := Elab.async.setIfNotSet opts true
+336:   let snap ← processor setup old? ctx
+337:   let snaps := Language.toSnapshotTree snap
+338:   let severityOverrides := errorOnKinds.foldl (·.insert · .error) {}
+339: 
+340:   -- reporting should be done before any early exit from the function
+341:   let hasErrors ← snaps.runAndReport opts jsonOutput severityOverrides
+342: 
+343:   let some cmdState := Language.Lean.waitForFinalCmdState? snap
+344:     | return none
+

@@ -1,0 +1,62 @@
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r12
+   7:	push   rbx
+   8:	sub    rsp,0x10
+   c:	mov    ebx,esi
+   e:	mov    eax,edi
+  10:	shr    eax,0x17
+  13:	movzx  r15d,al
+  17:	lea    ecx,[r15-0xff]
+  1e:	mov    ebp,esi
+  20:	shr    ebp,0x17
+  23:	movzx  r12d,bpl
+  27:	cmp    ecx,0xffffff01
+  2d:	ja     74 <lp_competition_main___lam__3+0x74>
+  74:	lea    ecx,[r12-0xff]
+  7c:	lea    esi,[r12+r15*1]
+  80:	cmp    ecx,0xffffff01
+  86:	ja     266 <lp_competition_main___lam__3+0x266>
+ 266:	lea    ecx,[rsi-0x17d]
+ 26c:	cmp    ecx,0xffffff02
+ 272:	ja     45b <lp_competition_main___lam__3+0x45b>
+ 45b:	mov    eax,edi
+ 45d:	and    eax,0x7fffff
+ 462:	or     eax,0x800000
+ 467:	mov    ecx,ebx
+ 469:	and    ecx,0x7fffff
+ 46f:	or     ecx,0x800000
+ 475:	imul   rcx,rax
+ 479:	mov    rax,rcx
+ 47c:	shr    rax,0x11
+ 480:	xor    edx,edx
+ 482:	test   ecx,0x1ffff
+ 488:	setne  dl
+ 48b:	or     edx,eax
+ 48d:	cvtsi2ss xmm0,edx
+ 491:	movss  xmm1,DWORD PTR [rip+0x0]        # 499 <lp_competition_main___lam__3+0x499>
+ 499:	ucomiss xmm1,xmm0
+ 49c:	cvttss2si rcx,xmm0
+ 4a1:	mov    eax,0xffffffff
+ 4a6:	cmova  eax,ecx
+ 4a9:	mov    edx,eax
+ 4ab:	shr    edx,0x1e
+ 4ae:	lea    ecx,[rdx+0x6]
+ 4b1:	shr    eax,cl
+ 4b3:	add    esi,edx
+ 4b5:	shl    esi,0x17
+ 4b8:	xor    ebx,edi
+ 4ba:	and    ebx,0x80000000
+ 4c0:	add    esi,0xc0800000
+ 4c6:	or     esi,ebx
+ 4c8:	add    eax,0xff800000
+ 4cd:	or     eax,esi
+ 4cf:	jmp    b59 <lp_competition_main___lam__3+0xb59>
+ b59:	add    rsp,0x10
+ b5d:	pop    rbx
+ b5e:	pop    r12
+ b60:	pop    r14
+ b62:	pop    r15
+ b64:	pop    rbp
+ b65:	ret

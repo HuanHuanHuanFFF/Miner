@@ -1,0 +1,61 @@
+--- actual-ci11-c598.lean
++++ proof4.lean
+@@ -6748,15 +6748,11 @@
+     have h1 : 4*t+1<n := by omega
+     have h2 : 4*t+2<n := by omega
+     have ht : t<blocks n := by unfold blocks; omega
+-    -- Diagnostic P3: exact failing target and explicit one-step equations, first branch only.
+-    trace_state
+     have dual_p3_new_eq :=
+       @Submission.R19DualTemporal.loop.eq_def n basePacket A B hA t s0 s1
+     have dual_p3_old_eq :=
+       @Submission.R19Temporal.loop.eq_def n baseA Araw B t s0 s1
+-    trace_state
+     rw [dual_p3_new_eq]
+-    trace_state
+     conv_rhs => unfold R19Temporal.loop
+     simp only [h3, dite_true]
+     simp only [hread ⟨t,ht⟩]
+@@ -6766,22 +6762,38 @@
+     · have ht : t<blocks n := by unfold blocks; omega
+       by_cases h1 : 4*t+1<n
+       · by_cases h2 : 4*t+2<n
+-        · rw [loop]
++        · have dual_p3_new_eq :=
++            @Submission.R19DualTemporal.loop.eq_def n basePacket A B hA t s0 s1
++          have dual_p3_old_eq :=
++            @Submission.R19Temporal.loop.eq_def n baseA Araw B t s0 s1
++          rw [dual_p3_new_eq]
+           conv_rhs => unfold R19Temporal.loop
+           simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true]
+           simp only [hread ⟨t,ht⟩]
+           simp only [packetA, h0, h1, h2, ite_true]
+-        · rw [loop]
++        · have dual_p3_new_eq :=
++            @Submission.R19DualTemporal.loop.eq_def n basePacket A B hA t s0 s1
++          have dual_p3_old_eq :=
++            @Submission.R19Temporal.loop.eq_def n baseA Araw B t s0 s1
++          rw [dual_p3_new_eq]
+           conv_rhs => unfold R19Temporal.loop
+           simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true, ite_false]
+           simp only [hread ⟨t,ht⟩]
+           simp only [packetA, h0, h1, ite_true]
+-      · rw [loop]
++      · have dual_p3_new_eq :=
++          @Submission.R19DualTemporal.loop.eq_def n basePacket A B hA t s0 s1
++        have dual_p3_old_eq :=
++          @Submission.R19Temporal.loop.eq_def n baseA Araw B t s0 s1
++        rw [dual_p3_new_eq]
+         conv_rhs => unfold R19Temporal.loop
+         simp only [h3, h0, h1, dite_false, dite_true, ite_false]
+         simp only [hread ⟨t,ht⟩]
+         simp only [packetA, h0, ite_true]
+-    · rw [loop]
++    · have dual_p3_new_eq :=
++        @Submission.R19DualTemporal.loop.eq_def n basePacket A B hA t s0 s1
++      have dual_p3_old_eq :=
++        @Submission.R19Temporal.loop.eq_def n baseA Araw B t s0 s1
++      rw [dual_p3_new_eq]
+       conv_rhs => unfold R19Temporal.loop
+       simp only [h3, h0, dite_false]
+ termination_by n-4*t

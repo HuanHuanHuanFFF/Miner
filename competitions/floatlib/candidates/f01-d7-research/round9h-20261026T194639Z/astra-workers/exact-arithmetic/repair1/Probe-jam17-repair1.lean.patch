@@ -1,0 +1,20 @@
+--- Probe-jam17-v1.lean
++++ Probe-jam17-repair1.lean
+@@ -6883,6 +6883,7 @@
+     norm_num <;>
+     unfold jamNat roundQuotientEven <;>
+     dsimp only <;>
++    simp only [beq_iff_eq] <;>
+     split_ifs <;> omega
+ 
+ theorem jam_bounds (p : Nat)
+@@ -6942,7 +6943,8 @@
+       rfl
+     · intro h
+       apply UInt64.toNat.inj
+-      simpa only [hm] using h
++      change (p &&& 131071).toNat = 0
++      exact hm.trans h
+   rw [jamNat_eq]
+   by_cases h : p.toNat % 131072 = 0
+   · have hh := hz.mpr h

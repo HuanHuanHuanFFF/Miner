@@ -1,0 +1,327 @@
+0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r12
+   7:	push   rbx
+   8:	sub    rsp,0x10
+   c:	mov    ebx,esi
+   e:	mov    eax,edi
+  10:	shr    eax,0x17
+  13:	movzx  r15d,al
+  17:	mov    ebp,esi
+  19:	shr    ebp,0x17
+  1c:	movzx  r12d,bpl
+  20:	lea    ecx,[r12+r15*1]
+  24:	cmp    ecx,0x80
+  2a:	jb     61 <lp_competition_Submission_mul+0x61>
+  2c:	mov    ecx,edi
+  2e:	and    ecx,0x7fffffff
+  34:	lea    edx,[rcx-0x1]
+  37:	cmp    edx,0xbffffff
+  3d:	setb   dl
+  40:	cmp    ecx,0x7f800000
+  46:	setae  cl
+  49:	or     cl,dl
+  4b:	mov    r14,rdi
+  4e:	je     1eb <lp_competition_Submission_mul+0x1eb>
+  54:	call   59 <lp_competition_Submission_mul+0x59>
+  59:	movaps xmm1,xmm0
+  5c:	jmp    213 <lp_competition_Submission_mul+0x213>
+  61:	lea    eax,[rdi+rdi*1]
+  64:	cmp    eax,0xff000000
+  69:	setb   al
+  6c:	lea    ecx,[rbx+rbx*1]
+  6f:	cmp    ecx,0xff000000
+  75:	setb   cl
+  78:	test   al,cl
+  7a:	je     247 <lp_competition_Submission_mul+0x247>
+  80:	mov    esi,edi
+  82:	xor    esi,ebx
+  84:	and    edi,0x7fffff
+  8a:	and    ebx,0x7fffff
+  90:	lea    eax,[rdi+0x800000]
+  96:	mov    ecx,r15d
+  99:	dec    rcx
+  9c:	xor    r8d,r8d
+  9f:	test   r15d,r15d
+  a2:	cmove  eax,edi
+  a5:	cmove  rcx,r8
+  a9:	lea    edi,[rbx+0x800000]
+  af:	mov    edx,r12d
+  b2:	dec    rdx
+  b5:	test   r12d,r12d
+  b8:	cmove  edi,ebx
+  bb:	cmove  rdx,r8
+  bf:	imul   rdi,rax
+  c3:	add    rdx,rcx
+  c6:	cmp    rdx,0x7b
+  ca:	jbe    2d5 <lp_competition_Submission_mul+0x2d5>
+  d0:	test   rdi,rdi
+  d3:	je     346 <lp_competition_Submission_mul+0x346>
+  d9:	xor    eax,eax
+  db:	mov    rcx,rdi
+  de:	shr    rcx,0x20
+  e2:	cmove  rcx,rdi
+  e6:	setne  al
+  e9:	shl    eax,0x5
+  ec:	mov    r8,rcx
+  ef:	shr    r8,0x10
+  f3:	test   r8,r8
+  f6:	cmove  r8,rcx
+  fa:	lea    rcx,[rax+0x10]
+  fe:	cmove  rcx,rax
+ 102:	mov    rax,r8
+ 105:	shr    rax,0x8
+ 109:	test   rax,rax
+ 10c:	cmove  rax,r8
+ 110:	lea    r8,[rcx+0x8]
+ 114:	cmove  r8,rcx
+ 118:	mov    rcx,rax
+ 11b:	shr    rcx,0x4
+ 11f:	test   rcx,rcx
+ 122:	cmove  rcx,rax
+ 126:	lea    r9,[r8+0x4]
+ 12a:	cmove  r9,r8
+ 12e:	mov    r8,rcx
+ 131:	shr    r8,0x2
+ 135:	test   r8,r8
+ 138:	cmove  r8,rcx
+ 13c:	lea    rax,[r9+0x2]
+ 140:	cmove  rax,r9
+ 144:	cmp    r8,0x2
+ 148:	sbb    rax,0xffffffffffffffff
+ 14c:	lea    r8,[rax+rdx*1]
+ 150:	cmp    r8,0xab
+ 157:	jbe    2e8 <lp_competition_Submission_mul+0x2e8>
+ 15d:	cmp    rax,0x17
+ 161:	jb     37b <lp_competition_Submission_mul+0x37b>
+ 167:	mov    rcx,rax
+ 16a:	add    rcx,0xffffffffffffffe9
+ 16e:	je     382 <lp_competition_Submission_mul+0x382>
+ 174:	mov    rdx,rdi
+ 177:	shr    rdx,cl
+ 17a:	mov    r9,0xffffffffffffffff
+ 181:	shl    r9,cl
+ 184:	not    r9
+ 187:	and    r9,rdi
+ 18a:	add    al,0x28
+ 18c:	mov    edi,0x1
+ 191:	mov    ecx,eax
+ 193:	shl    rdi,cl
+ 196:	cmp    r9,rdi
+ 199:	jb     1a4 <lp_competition_Submission_mul+0x1a4>
+ 19b:	jbe    3d5 <lp_competition_Submission_mul+0x3d5>
+ 1a1:	inc    rdx
+ 1a4:	mov    rdi,rdx
+ 1a7:	cmp    rdi,0x1000000
+ 1ae:	je     38f <lp_competition_Submission_mul+0x38f>
+ 1b4:	test   esi,esi
+ 1b6:	mov    ecx,0x7f800000
+ 1bb:	mov    eax,0xff800000
+ 1c0:	cmovns eax,ecx
+ 1c3:	cmp    r8,0x1aa
+ 1ca:	jae    34e <lp_competition_Submission_mul+0x34e>
+ 1d0:	add    r8d,0xffffff55
+ 1d7:	xor    eax,eax
+ 1d9:	cmp    rdi,0x800000
+ 1e0:	jb     3bf <lp_competition_Submission_mul+0x3bf>
+ 1e6:	jmp    3b7 <lp_competition_Submission_mul+0x3b7>
+ 1eb:	mov    ecx,edi
+ 1ed:	and    ecx,0x7fffff
+ 1f3:	or     ecx,0x800000
+ 1f9:	cvtsi2ss xmm1,ecx
+ 1fd:	mov    rcx,QWORD PTR [rip+0x0]        # 204 <lp_competition_Submission_mul+0x204>
+ 204:	mov    rcx,QWORD PTR [rcx]
+ 207:	mov    eax,eax
+ 209:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+ 20e:	mulss  xmm1,DWORD PTR [rax+0x8]
+ 213:	mov    eax,ebx
+ 215:	and    eax,0x7fffffff
+ 21a:	lea    ecx,[rax-0x1]
+ 21d:	cmp    ecx,0xbffffff
+ 223:	setb   cl
+ 226:	cmp    eax,0x7f800000
+ 22b:	setae  al
+ 22e:	xor    al,cl
+ 230:	je     28b <lp_competition_Submission_mul+0x28b>
+ 232:	mov    edi,ebx
+ 234:	movss  DWORD PTR [rsp+0xc],xmm1
+ 23a:	call   23f <lp_competition_Submission_mul+0x23f>
+ 23f:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 245:	jmp    2b4 <lp_competition_Submission_mul+0x2b4>
+ 247:	mov    eax,edi
+ 249:	lea    rsi,[rax*2+0x1]
+ 251:	mov    eax,ebx
+ 253:	lea    rdx,[rax*2+0x1]
+ 25b:	lea    rdi,[rip+0x0]        # 262 <lp_competition_Submission_mul+0x262>
+ 262:	call   267 <lp_competition_Submission_mul+0x267>
+ 267:	mov    rbx,rax
+ 26a:	test   bl,0x1
+ 26d:	jne    2e1 <lp_competition_Submission_mul+0x2e1>
+ 26f:	mov    rdi,rbx
+ 272:	call   277 <lp_competition_Submission_mul+0x277>
+ 277:	mov    ecx,DWORD PTR [rbx]
+ 279:	cmp    ecx,0x2
+ 27c:	jl     3eb <lp_competition_Submission_mul+0x3eb>
+ 282:	dec    ecx
+ 284:	mov    DWORD PTR [rbx],ecx
+ 286:	jmp    34e <lp_competition_Submission_mul+0x34e>
+ 28b:	mov    eax,ebx
+ 28d:	and    eax,0x7fffff
+ 292:	or     eax,0x800000
+ 297:	xorps  xmm0,xmm0
+ 29a:	cvtsi2ss xmm0,eax
+ 29e:	mov    rax,QWORD PTR [rip+0x0]        # 2a5 <lp_competition_Submission_mul+0x2a5>
+ 2a5:	mov    rax,QWORD PTR [rax]
+ 2a8:	mov    ecx,ebp
+ 2aa:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 2af:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 2b4:	mulss  xmm1,xmm0
+ 2b8:	ucomiss xmm1,xmm1
+ 2bb:	jp     402 <lp_competition_Submission_mul+0x402>
+ 2c1:	movaps xmm0,xmm1
+ 2c4:	add    rsp,0x10
+ 2c8:	pop    rbx
+ 2c9:	pop    r12
+ 2cb:	pop    r14
+ 2cd:	pop    r15
+ 2cf:	pop    rbp
+ 2d0:	jmp    2d5 <lp_competition_Submission_mul+0x2d5>
+ 2d5:	test   rdi,rdi
+ 2d8:	je     346 <lp_competition_Submission_mul+0x346>
+ 2da:	cmp    edx,0x56
+ 2dd:	jb     346 <lp_competition_Submission_mul+0x346>
+ 2df:	jmp    2fd <lp_competition_Submission_mul+0x2fd>
+ 2e1:	shr    rbx,1
+ 2e4:	mov    eax,ebx
+ 2e6:	jmp    34e <lp_competition_Submission_mul+0x34e>
+ 2e8:	cmp    edx,0x95
+ 2ee:	jb     2fd <lp_competition_Submission_mul+0x2fd>
+ 2f0:	add    dl,0x2b
+ 2f3:	mov    ecx,edx
+ 2f5:	shl    rdi,cl
+ 2f8:	mov    rax,rdi
+ 2fb:	jmp    328 <lp_competition_Submission_mul+0x328>
+ 2fd:	mov    cl,0x15
+ 2ff:	sub    cl,dl
+ 301:	mov    rax,rdi
+ 304:	shr    rax,cl
+ 307:	mov    r8,0xffffffffffffffff
+ 30e:	shl    r8,cl
+ 311:	not    r8
+ 314:	and    r8,rdi
+ 317:	mov    cl,0x14
+ 319:	sub    cl,dl
+ 31b:	mov    edx,0x1
+ 320:	shl    rdx,cl
+ 323:	cmp    r8,rdx
+ 326:	jae    35b <lp_competition_Submission_mul+0x35b>
+ 328:	test   rax,rax
+ 32b:	je     346 <lp_competition_Submission_mul+0x346>
+ 32d:	cmp    rax,0x800000
+ 333:	jne    36c <lp_competition_Submission_mul+0x36c>
+ 335:	test   esi,esi
+ 337:	mov    ecx,0x800000
+ 33c:	mov    eax,0x80800000
+ 341:	cmovns eax,ecx
+ 344:	jmp    34e <lp_competition_Submission_mul+0x34e>
+ 346:	and    esi,0x80000000
+ 34c:	mov    eax,esi
+ 34e:	add    rsp,0x10
+ 352:	pop    rbx
+ 353:	pop    r12
+ 355:	pop    r14
+ 357:	pop    r15
+ 359:	pop    rbp
+ 35a:	ret
+ 35b:	ja     361 <lp_competition_Submission_mul+0x361>
+ 35d:	test   al,0x1
+ 35f:	je     328 <lp_competition_Submission_mul+0x328>
+ 361:	inc    rax
+ 364:	cmp    rax,0x800000
+ 36a:	je     335 <lp_competition_Submission_mul+0x335>
+ 36c:	and    esi,0x80000000
+ 372:	and    eax,0x7fffff
+ 377:	or     eax,esi
+ 379:	jmp    34e <lp_competition_Submission_mul+0x34e>
+ 37b:	mov    cl,0x17
+ 37d:	sub    cl,al
+ 37f:	shl    rdi,cl
+ 382:	cmp    rdi,0x1000000
+ 389:	jne    1b4 <lp_competition_Submission_mul+0x1b4>
+ 38f:	lea    rcx,[r8+0x1]
+ 393:	test   esi,esi
+ 395:	mov    edx,0x7f800000
+ 39a:	mov    eax,0xff800000
+ 39f:	cmovns eax,edx
+ 3a2:	cmp    rcx,0x1a9
+ 3a9:	ja     34e <lp_competition_Submission_mul+0x34e>
+ 3ab:	add    r8d,0xffffff56
+ 3b2:	mov    edi,0x800000
+ 3b7:	and    edi,0x7fffff
+ 3bd:	mov    eax,edi
+ 3bf:	and    esi,0x80000000
+ 3c5:	or     esi,eax
+ 3c7:	movzx  eax,r8b
+ 3cb:	shl    eax,0x17
+ 3ce:	or     eax,esi
+ 3d0:	jmp    34e <lp_competition_Submission_mul+0x34e>
+ 3d5:	mov    edi,edx
+ 3d7:	and    edi,0x1
+ 3da:	add    rdi,rdx
+ 3dd:	cmp    rdi,0x1000000
+ 3e4:	je     38f <lp_competition_Submission_mul+0x38f>
+ 3e6:	jmp    1b4 <lp_competition_Submission_mul+0x1b4>
+ 3eb:	mov    r14,rax
+ 3ee:	test   ecx,ecx
+ 3f0:	je     3fa <lp_competition_Submission_mul+0x3fa>
+ 3f2:	mov    rdi,rbx
+ 3f5:	call   3fa <lp_competition_Submission_mul+0x3fa>
+ 3fa:	mov    rax,r14
+ 3fd:	jmp    34e <lp_competition_Submission_mul+0x34e>
+ 402:	cmp    r15d,0xff
+ 409:	jne    422 <lp_competition_Submission_mul+0x422>
+ 40b:	mov    rax,r14
+ 40e:	test   eax,0x7fffff
+ 413:	setne  cl
+ 416:	test   eax,0x400000
+ 41b:	sete   al
+ 41e:	test   cl,al
+ 420:	jne    49c <lp_competition_Submission_mul+0x49c>
+ 422:	cmp    r12d,0xff
+ 429:	jne    46e <lp_competition_Submission_mul+0x46e>
+ 42b:	test   ebx,0x7fffff
+ 431:	setne  al
+ 434:	test   ebx,0x400000
+ 43a:	sete   cl
+ 43d:	test   al,cl
+ 43f:	jne    461 <lp_competition_Submission_mul+0x461>
+ 441:	cmp    r15d,0xff
+ 448:	setne  al
+ 44b:	test   r14d,0x7fffff
+ 452:	sete   cl
+ 455:	or     cl,al
+ 457:	je     49c <lp_competition_Submission_mul+0x49c>
+ 459:	test   ebx,0x7fffff
+ 45f:	je     486 <lp_competition_Submission_mul+0x486>
+ 461:	or     ebx,0x400000
+ 467:	mov    eax,ebx
+ 469:	jmp    34e <lp_competition_Submission_mul+0x34e>
+ 46e:	cmp    r15d,0xff
+ 475:	setne  al
+ 478:	test   r14d,0x7fffff
+ 47f:	sete   cl
+ 482:	or     cl,al
+ 484:	je     49c <lp_competition_Submission_mul+0x49c>
+ 486:	mov    edi,r14d
+ 489:	mov    esi,ebx
+ 48b:	add    rsp,0x10
+ 48f:	pop    rbx
+ 490:	pop    r12
+ 492:	pop    r14
+ 494:	pop    r15
+ 496:	pop    rbp
+ 497:	jmp    49c <lp_competition_Submission_mul+0x49c>
+ 49c:	mov    rax,r14
+ 49f:	or     eax,0x400000
+ 4a4:	jmp    34e <lp_competition_Submission_mul+0x34e>

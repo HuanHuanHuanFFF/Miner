@@ -1,0 +1,44 @@
+{
+  "created_utc": "2026-10-26T20:02:39.058993+00:00",
+  "state": "COMPLETE_SOURCE_PROOF_ATTEMPT_NOT_RUN",
+  "baseline": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-r15-dev-packed-b2-1\\Kernel.lean",
+    "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+    "bytes": 226829
+  },
+  "candidate": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\astra-workers\\runtime-representation\\Kernel-eager-classifier.lean",
+    "sha256": "cc9268820d3c9b3c4e664d6a659a12ef259c7c8443db61980a686cad974ea5a5",
+    "bytes": 228099
+  },
+  "mechanism": "Eager Bool.beq replaces short-circuit Bool.and for exactly the same full fastOK domain; disjoint rejects prove equality.",
+  "scope": "Actual selected scalar add/nativeMul and their fallback uses of convert. SUM manual classification and BMM layout/dispatch remain byte-identical.",
+  "edits": [
+    "one runtime && to ==",
+    "three bridge lemmas",
+    "one fastOK_iff rewrite"
+  ],
+  "inverse_splice_restores_exact_baseline": true,
+  "model": {
+    "samples": 100015,
+    "mismatches": 0,
+    "scope": "guard Boolean identity only; not Lean or float validation"
+  },
+  "lean": "NOT_RUN",
+  "full_gate": "NOT_RUN",
+  "timing": "NOT_RUN",
+  "codegen": "UNKNOWN: Clang may already compile old conjunction eagerly; candidate must show a real selected-path difference before timing.",
+  "early_stop": "If selected MainFull ADD/MUL accepted paths are identical, park without full timing. If branch removed, D decides one complete discovery with all preparation/codec/fallback costs.",
+  "not_claimed": [
+    "10 percent whole gain",
+    "compiler branch removal",
+    "new numerical method",
+    "formal admission"
+  ],
+  "resources": {
+    "local_compiler_runs": 0,
+    "ci_runs": 0,
+    "tokens": "UNKNOWN",
+    "cached_input_tokens": "UNKNOWN"
+  }
+}

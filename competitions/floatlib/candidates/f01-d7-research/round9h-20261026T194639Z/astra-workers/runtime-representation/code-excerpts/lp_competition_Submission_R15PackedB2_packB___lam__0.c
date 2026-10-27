@@ -1,0 +1,63 @@
+LEAN_EXPORT lean_object* lp_competition_Submission_R15PackedB2_packB___lam__0(lean_object* v_p_14161_, lean_object* v_base_14162_, lean_object* v___x_14163_, lean_object* v_B_14164_, lean_object* v_k_14165_){
+_start:
+{
+float v___y_14167_; uint32_t v___y_14168_; lean_object* v___x_14171_; lean_object* v___x_14172_; uint32_t v___x_14173_; uint32_t v___y_14175_; lean_object* v___x_14183_; uint8_t v___x_14184_; 
+v___x_14171_ = lean_nat_mul(v_k_14165_, v_p_14161_);
+v___x_14172_ = lean_nat_add(v_base_14162_, v___x_14171_);
+v___x_14173_ = lean_uint32_once(&lp_competition_Submission_referenceSum___redArg___closed__0, &lp_competition_Submission_referenceSum___redArg___closed__0_once, _init_lp_competition_Submission_referenceSum___redArg___closed__0);
+v___x_14183_ = lean_array_get_size(v_B_14164_);
+v___x_14184_ = lean_nat_dec_lt(v___x_14172_, v___x_14183_);
+if (v___x_14184_ == 0)
+{
+lean_dec(v___x_14172_);
+v___y_14175_ = v___x_14173_;
+goto v___jp_14174_;
+}
+else
+{
+lean_object* v___x_14185_; uint32_t v___x_14186_; 
+v___x_14185_ = lean_array_fget_borrowed(v_B_14164_, v___x_14172_);
+lean_dec(v___x_14172_);
+v___x_14186_ = lean_unbox_uint32(v___x_14185_);
+v___y_14175_ = v___x_14186_;
+goto v___jp_14174_;
+}
+v___jp_14166_:
+{
+float v___x_14169_; lean_object* v___x_14170_; 
+v___x_14169_ = lean_float32_of_bits(v___y_14168_);
+v___x_14170_ = lean_alloc_ctor(0, 0, 8);
+lean_ctor_set_float32(v___x_14170_, 0, v___y_14167_);
+lean_ctor_set_float32(v___x_14170_, 4, v___x_14169_);
+return v___x_14170_;
+}
+v___jp_14174_:
+{
+float v___x_14176_; lean_object* v___x_14177_; lean_object* v___x_14178_; lean_object* v___x_14179_; uint8_t v___x_14180_; 
+v___x_14176_ = lean_float32_of_bits(v___y_14175_);
+v___x_14177_ = lean_nat_add(v_base_14162_, v___x_14163_);
+v___x_14178_ = lean_nat_add(v___x_14177_, v___x_14171_);
+lean_dec(v___x_14171_);
+lean_dec(v___x_14177_);
+v___x_14179_ = lean_array_get_size(v_B_14164_);
+v___x_14180_ = lean_nat_dec_lt(v___x_14178_, v___x_14179_);
+if (v___x_14180_ == 0)
+{
+lean_dec(v___x_14178_);
+v___y_14167_ = v___x_14176_;
+v___y_14168_ = v___x_14173_;
+goto v___jp_14166_;
+}
+else
+{
+lean_object* v___x_14181_; uint32_t v___x_14182_; 
+v___x_14181_ = lean_array_fget_borrowed(v_B_14164_, v___x_14178_);
+lean_dec(v___x_14178_);
+v___x_14182_ = lean_unbox_uint32(v___x_14181_);
+v___y_14167_ = v___x_14176_;
+v___y_14168_ = v___x_14182_;
+goto v___jp_14166_;
+}
+}
+}
+}

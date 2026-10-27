@@ -1,0 +1,109 @@
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r13
+   7:	push   r12
+   9:	push   rbx
+   a:	sub    rsp,0x18
+   e:	mov    r14d,esi
+  11:	mov    r15d,edi
+  14:	mov    r12d,edi
+  17:	shr    r12d,0x17
+  1b:	movzx  ebp,r12b
+  1f:	lea    eax,[rbp-0xff]
+  25:	cmp    eax,0xffffff01
+  2a:	ja     5c <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x5c>
+  5c:	mov    r10d,r14d
+  5f:	shr    r10d,0x17
+  63:	movzx  r13d,r10b
+  67:	lea    eax,[r13-0xff]
+  6e:	mov    ebx,r15d
+  71:	and    ebx,0x7fffffff
+  77:	cmp    eax,0xffffff01
+  7c:	ja     119 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x119>
+ 119:	mov    r11d,r14d
+ 11c:	and    r11d,0x7fffffff
+ 123:	cmp    ebx,r11d
+ 126:	mov    rax,rbp
+ 129:	mov    ebp,r15d
+ 12c:	cmovb  ebp,r14d
+ 130:	mov    r9d,r14d
+ 133:	mov    r14d,eax
+ 136:	cmovb  r14d,r13d
+ 13a:	cmovb  r13d,eax
+ 13e:	mov    eax,ebp
+ 140:	and    eax,0x7fffff
+ 145:	mov    ecx,r14d
+ 148:	sub    ecx,r13d
+ 14b:	mov    edx,0x1
+ 150:	cmp    ecx,0x1f
+ 153:	ja     186 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x186>
+ 155:	cmp    ebx,r11d
+ 158:	mov    edx,r9d
+ 15b:	cmovb  edx,r15d
+ 15f:	and    edx,0x7fffff
+ 165:	lea    esi,[rdx*8+0x4000000]
+ 16c:	mov    edi,esi
+ 16e:	shr    edi,cl
+ 170:	mov    r8d,0xffffffff
+ 176:	shl    r8d,cl
+ 179:	not    r8d
+ 17c:	xor    edx,edx
+ 17e:	test   esi,r8d
+ 181:	setne  dl
+ 184:	or     edx,edi
+ 186:	lea    eax,[rax*8+0x4000000]
+ 18d:	mov    DWORD PTR [rsp+0xc],r9d
+ 192:	mov    ecx,r9d
+ 195:	xor    ecx,r15d
+ 198:	js     35c <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x35c>
+ 35c:	sub    eax,edx
+ 35e:	je     47b <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x47b>
+ 364:	mov    QWORD PTR [rsp+0x10],r11
+ 369:	mov    r13d,r10d
+ 36c:	mov    eax,eax
+ 36e:	cvtsi2ss xmm0,rax
+ 373:	call   378 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x378>
+ 378:	mov    ecx,eax
+ 37a:	shr    ecx,0x17
+ 37d:	lea    edx,[rcx+r14*1]
+ 381:	add    edx,0xfffffe68
+ 387:	cmp    edx,0xffffff01
+ 38d:	ja     3b4 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x3b4>
+ 38f:	lea    eax,[rbx-0x1]
+ 392:	cmp    eax,0xbffffff
+ 397:	setb   al
+ 39a:	cmp    ebx,0x7f800000
+ 3a0:	setae  cl
+ 3a3:	or     cl,al
+ 3a5:	je     3d4 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x3d4>
+ 3a7:	mov    edi,r15d
+ 3aa:	call   3af <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x3af>
+ 3af:	movaps xmm1,xmm0
+ 3b2:	jmp    3fc <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x3fc>
+ 3fc:	mov    ebx,DWORD PTR [rsp+0xc]
+ 400:	mov    rcx,QWORD PTR [rsp+0x10]
+ 405:	lea    eax,[rcx-0x1]
+ 408:	cmp    eax,0xbffffff
+ 40d:	setb   al
+ 410:	cmp    ecx,0x7f800000
+ 416:	setae  cl
+ 419:	or     cl,al
+ 41b:	je     432 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x432>
+ 41d:	mov    edi,ebx
+ 41f:	movss  DWORD PTR [rsp+0xc],xmm1
+ 425:	call   42a <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x42a>
+ 42a:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 430:	jmp    45c <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x45c>
+ 45c:	addss  xmm1,xmm0
+ 460:	ucomiss xmm1,xmm1
+ 463:	jp     4a2 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x4a2>
+ 465:	movaps xmm0,xmm1
+ 468:	add    rsp,0x18
+ 46c:	pop    rbx
+ 46d:	pop    r12
+ 46f:	pop    r13
+ 471:	pop    r14
+ 473:	pop    r15
+ 475:	pop    rbp
+ 476:	jmp    47b <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x47b>

@@ -1,0 +1,39 @@
+{
+  "created_utc": "2026-10-26T23:48:04.470010+00:00",
+  "state": "FROZEN_COST_DIAGNOSTIC_NOT_RUN",
+  "file": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\astra-grs-add-runtime-only.lean",
+  "bytes": 228696,
+  "sha256": "35347e37e2c8d593d868c80522659b4fb18bda7604fc830a9f14eb7d39be33c5",
+  "B2_prefix_bytes": 226829,
+  "fragment": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\astra-workers\\runtime-representation\\grs-add-cost-frontier\\Runtime-grs32-add.lean.inc",
+  "fragment_bytes": 1867,
+  "fragment_sha256": "e4833e4e8b41c7fe50cb8dfa91dbd639fc4cc6aa926fb7b5498e4dda1a2be45a",
+  "roots": [
+    "Submission.add_spec",
+    "Submission.mul_spec",
+    "Submission.sum_spec",
+    "Submission.bmm_spec",
+    "Submission.R19GRS32Add.alignNonzero",
+    "Submission.R19GRS32Add.guardedAdd",
+    "Submission.R19GRS32Add.diagnosticEntry"
+  ],
+  "public_algorithm": "Exact originalB2 fouroperations/specs; no new publicADD equivalence/performance claim",
+  "change_vs_old_GRS": "Normal allsigns/allgaps,UInt32 T with hardware RNE/leading/carry instead of old same-sign UInt64 softwareRNE",
+  "change_vs_R16_f7f": "Same oneUInt32 cast/one toBits count as actual f7f. New differences are broad sticky domain, lowT cancellation, shared raw order/fields; no claim that removing log2 improves f7f execution",
+  "static_review": "Root read exact1867B body; d0 mask0,d>=32 sticky1; field range andTbounds inpaper; no placeholders in appended fragment",
+  "finite_checks": [
+    "astra-grs-add-model.json",
+    "astra-grs-add-oracle-review.json",
+    "astra-workers/runtime-representation/grs-add-cost-frontier/model-and-exposure.json"
+  ],
+  "math_review": "astra-workers/exact-arithmetic/grs-add-review.md",
+  "acceptance": "Statement/whole-module replay/7 roots and explicit diagnosticEntry actual C/ASM only. MainFull remainsB2. New final publicsource/fullgate/timing must be proven separately.",
+  "CI_priority": "D sole owner; combine with already justified diagnostic if slot and budget allow; do not interrupt current jobs or preempt ready adoption confirmations",
+  "missing": [
+    "actual fixedLean typecheck",
+    "GRS→originalModel.add allinput bridge",
+    "actual selected caller costs",
+    "public integratedfullgate",
+    "timing/confirmation"
+  ]
+}

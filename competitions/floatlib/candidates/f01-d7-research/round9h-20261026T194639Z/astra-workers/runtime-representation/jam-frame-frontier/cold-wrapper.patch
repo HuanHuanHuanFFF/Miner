@@ -1,0 +1,18 @@
+--- frozen-b271/Kernel.lean
++++ jam-cold-fallback/Kernel.lean
+@@ -7042,9 +7042,13 @@
+ open FloatLib.Floats Competition
+ @[inline] def add := R19Base.add
+ theorem add_spec : ∀ x y : Binary32, add x y = ExecFloat.Spec.add x y := R19Base.add_spec
+-@[inline] def mul (x y : Binary32) : Binary32 := R19Base.R19Jam17.guardedMul R19Base.mul x y
++/- R19: isolate the exact old fallback; Jam arithmetic and guards are unchanged. -/
++@[noinline] def jamColdFallback (x y : Binary32) : Binary32 := R19Base.mul x y
++theorem jamColdFallback_spec (x y : Binary32) :
++    jamColdFallback x y = ExecFloat.Spec.mul x y := R19Base.mul_spec x y
++@[inline] def mul (x y : Binary32) : Binary32 := R19Base.R19Jam17.guardedMul jamColdFallback x y
+ theorem mul_spec (x y : Binary32) : mul x y = ExecFloat.Spec.mul x y :=
+-  R19Base.R19Jam17.guardedMul_spec R19Base.mul R19Base.mul_spec x y
++  R19Base.R19Jam17.guardedMul_spec jamColdFallback jamColdFallback_spec x y
+ @[inline] def sum {n : Nat} (x : Vector Binary32 n) : Binary32 := R19Base.sum x
+ theorem sum_spec : ∀ (n : Nat) (x : Vector Binary32 n), sum x = sumSpec x.get := R19Base.sum_spec
+ @[inline] def bmm := R19Base.bmm

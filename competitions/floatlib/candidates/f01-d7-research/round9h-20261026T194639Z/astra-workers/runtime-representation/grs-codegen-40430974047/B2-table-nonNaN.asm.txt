@@ -1,0 +1,54 @@
+   0:	push   rbp
+   1:	push   r14
+   3:	push   rbx
+   4:	sub    rsp,0x10
+   8:	mov    ebx,esi
+   a:	mov    ebp,edi
+   c:	mov    eax,edi
+   e:	and    eax,0x7fffffff
+  13:	lea    ecx,[rax-0x1]
+  16:	cmp    ecx,0xbffffff
+  1c:	setb   cl
+  1f:	cmp    eax,0x7f800000
+  24:	setae  al
+  27:	or     al,cl
+  29:	je     37 <lp_competition_main___lam__0+0x37>
+  37:	mov    eax,ebp
+  39:	and    eax,0x7fffff
+  3e:	or     eax,0x800000
+  43:	cvtsi2ss xmm1,eax
+  47:	mov    rax,QWORD PTR [rip+0x0]        # 4e <lp_competition_main___lam__0+0x4e>
+  4e:	mov    rax,QWORD PTR [rax]
+  51:	mov    ecx,ebp
+  53:	shr    ecx,0x17
+  56:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  5b:	mulss  xmm1,DWORD PTR [rax+0x8]
+  60:	mov    eax,ebx
+  62:	and    eax,0x7fffffff
+  67:	lea    ecx,[rax-0x1]
+  6a:	cmp    ecx,0xbffffff
+  70:	setb   cl
+  73:	cmp    eax,0x7f800000
+  78:	setae  al
+  7b:	or     al,cl
+  7d:	je     94 <lp_competition_main___lam__0+0x94>
+  94:	mov    eax,ebx
+  96:	and    eax,0x7fffff
+  9b:	or     eax,0x800000
+  a0:	xorps  xmm0,xmm0
+  a3:	cvtsi2ss xmm0,eax
+  a7:	mov    rax,QWORD PTR [rip+0x0]        # ae <lp_competition_main___lam__0+0xae>
+  ae:	mov    rax,QWORD PTR [rax]
+  b1:	mov    ecx,ebx
+  b3:	shr    ecx,0x17
+  b6:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  bb:	mulss  xmm0,DWORD PTR [rax+0x8]
+  c0:	addss  xmm1,xmm0
+  c4:	ucomiss xmm1,xmm1
+  c7:	jp     d9 <lp_competition_main___lam__0+0xd9>
+  c9:	movaps xmm0,xmm1
+  cc:	add    rsp,0x10
+  d0:	pop    rbx
+  d1:	pop    r14
+  d3:	pop    rbp
+  d4:	jmp    d9 <lp_competition_main___lam__0+0xd9>

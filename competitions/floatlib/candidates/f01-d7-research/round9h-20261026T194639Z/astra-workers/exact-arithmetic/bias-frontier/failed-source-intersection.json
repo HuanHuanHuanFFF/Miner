@@ -1,0 +1,106 @@
+{
+  "state": "SOURCE_INTERSECTION_ONLY_NOT_CAUSAL_DIAGNOSIS",
+  "sources": [
+    {
+      "run": 40410895344,
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40410895344\\download-9af980463e0648dabd2d03b5c409c96e\\diagnostics\\f01-d7-public-suite\\public-suite\\inputs\\f01-r19-dev-direct-bias-probe1\\Kernel.lean",
+      "bytes": 235339,
+      "sha256": "1180c82c69ded5619978a2673f47ce9ed6d94a80930099429fc0b7cd5b0044bd"
+    },
+    {
+      "run": 40415182202,
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40415182202\\download-595ae8280ebf4d01b726010cbd272fcb\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r19-dev-seed-isolation1\\seed-isolation-source.lean",
+      "bytes": 9697,
+      "sha256": "92dfb51fc5eed1c0e9b159410db8b6eb585378d006cecb7d788844f69a866158"
+    },
+    {
+      "run": 40428306094,
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40428306094\\download-c800c9d7532147a99a39807e35f52f19\\diagnostics\\f01-d7-public-suite\\public-suite\\inputs\\f01-r19-dev-direct-bias-public1\\Kernel.lean",
+      "bytes": 255311,
+      "sha256": "fa6529613fe10bd431ead1511900be989c2b80976423b31d90747f8651f37ac5"
+    }
+  ],
+  "common_theorems": [
+    {
+      "name": "quotient_bias",
+      "body_sha256": "2c95286432a5ef1e8a8aa618da871c6d270f45df98946a9a3c1c2baaac5aa891",
+      "present_exact_in_each_source": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "nat_bias",
+      "body_sha256": "86c59aed23a668ad34219fe9fb2f2459f9a270c6a2f42fdb3d2988f376d2b495",
+      "present_exact_in_each_source": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "nat_grouped_bias",
+      "body_sha256": "c7cfc89bc702c4c9ded1b4ec883f3687c7e6e6d61f59fb5fa43cfbb53e944f61",
+      "present_exact_in_each_source": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "biased_quotient",
+      "body_sha256": "ce24e84c1c54c82f889673768864bbac3343f29bddfdd097fa0752fe665dd5ba",
+      "present_exact_in_each_source": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "biased_bounds",
+      "body_sha256": "bebbd227b9c8ffebc818d5eb70cff56a403893ccad06f70426ae6fe7a88278d6",
+      "present_exact_in_each_source": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "name": "normalized_quotient",
+      "body_sha256": "ce48674198f427070ea8f0e072e566f74548ecae2c097ed730e26ae7543ca0eb",
+      "present_exact_in_each_source": [
+        true,
+        true,
+        true
+      ]
+    }
+  ],
+  "already_completed_independently": "quotient_bias original complete module014acd in CI10 exit0; not wholehelper replay/audit",
+  "not_common": [
+    "old unused UInt64 word_grouped/grouped_eq_existing_rse absent from fa652",
+    "new WordBias/typed/public outlet absent from1180 andCI7",
+    "runtime absent fromCI7 seed+PostBias helper"
+  ],
+  "remaining_common_math": [
+    "nat_bias",
+    "nat_grouped_bias",
+    "R19PostBias.biased_quotient",
+    "R19PostBias.biased_bounds",
+    "R19PostBias.normalized_quotient",
+    "Copied UInt64 no-wrap subproof: old word_grouped / new biased_sum_nat"
+  ],
+  "limits": "Repeated -15 can have different causes/context; onlyCI7 hasactualscopeOOM. Common-source intersection does not locate a failing declaration. Keepnext2177singlemoduleunchanged; no extra prefix/proofvariant requested. IMPORTANT CORRECTION: old named word_grouped is absent infa652 but its no-wrap proof prefix is copied into biased_sum_nat, so it remains a shared resource-suspect block.",
+  "common_shared_subproof": {
+    "old_declaration": "BranchlessRNESeed.word_grouped",
+    "new_declaration": "R19BiasBase.R19DirectBiasWord.biased_sum_nat",
+    "exact_bytes": 1338,
+    "sha256": "bfa7d6f5c83f89f300f34efbaf359dac762f92c21a58c3a69ee00216f087824c",
+    "present_exact_in_each_source": [
+      true,
+      true,
+      true
+    ],
+    "scope": "The entire no-wrap prefix from let half through hsum; same proof subblock under different declaration name. Theorem-name intersection alone must not exclude it."
+  }
+}

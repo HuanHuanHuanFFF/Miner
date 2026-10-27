@@ -1,0 +1,11 @@
+--- 3534-original/Kernel.lean
++++ typed-repair1/Kernel.lean
+@@ -6626,7 +6626,7 @@
+       let mid := t.toFloat32.toBits
+       let e := (mid >>> 23) + eh - (153 : UInt32)
+       if e - 1 ≤ (253 : UInt32) then
+-        R7W02.fromRaw ((hi &&& 0x80000000) ||| (e <<< 23) ||| (mid &&& 0x7fffff))
++        R7W02.fromRaw ((hi &&& (0x80000000 : UInt32)) ||| (e <<< 23) ||| (mid &&& 0x7fffff))
+       else fallback x y
+   else fallback x y
+ 

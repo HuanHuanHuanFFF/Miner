@@ -1,0 +1,30 @@
+name = "mpfx"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["Mpfx", "Fpy"]
+testDriver = "MpfxTest"
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.29.0"
+
+[[lean_lib]]
+name = "Mpfx"
+
+[[lean_lib]]
+name = "MpfxTest"
+globs = ["MpfxTest.+"]
+
+[[lean_lib]]
+name = "Fpy"
+
+[[lean_lib]]
+name = "FpyTest"
+globs = ["FpyTest.+"]

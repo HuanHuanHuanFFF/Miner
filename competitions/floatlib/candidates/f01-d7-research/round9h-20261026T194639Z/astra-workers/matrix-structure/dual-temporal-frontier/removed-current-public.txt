@@ -1,0 +1,24 @@
+
+namespace Submission
+open FloatLib.Floats Competition
+
+def bmm (batch m n p : Nat) (A : Vector Binary32 (batch*m*n))
+    (B : Vector Binary32 (batch*n*p)) : Vector Binary32 (batch*m*p) :=
+  if A.toArray.all UnderflowZero.small && B.toArray.all UnderflowZero.small then
+    UnderflowZero.zeros batch m p
+  else R19Temporal.dispatch batch m n p A B
+
+theorem bmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch*m*n))
+    (B : Vector Binary32 (batch*n*p)),
+    (bmm batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+  intro batch m n p A B
+  unfold bmm
+  split
+  · rename_i h
+    have hh : A.toArray.all UnderflowZero.small = true ∧
+        B.toArray.all UnderflowZero.small = true := by
+      simpa only [Bool.and_eq_true] using h
+    rw [UnderflowZero.zeros_eq_reference batch m n p A B hh.1 hh.2]
+    exact referenceBmm_spec batch m n p A B
+  · exact R19Temporal.dispatch_spec batch m n p A B
+end Submission

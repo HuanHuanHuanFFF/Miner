@@ -1,0 +1,20 @@
+/-
+Copyright (c) 2024 Lean FRO, LLC. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Joe Hendrix
+-/
+
+
+/- Exact source excerpt lines 624-634 from Lean293d5d0c, src/Init/Data/Nat/Bitwise/Lemmas.lean. -/
+@[simp] theorem or_mod_two_eq_one : (a ||| b) % 2 = 1 ↔ a % 2 = 1 ∨ b % 2 = 1 := by
+  simp only [mod_two_eq_one_iff_testBit_zero]
+  rw [testBit_or]
+  simp
+
+theorem or_div_two_pow : (a ||| b) / 2 ^ n = a / 2 ^ n ||| b / 2 ^ n :=
+  bitwise_div_two_pow
+
+theorem or_div_two : (a ||| b) / 2 = a / 2 ||| b / 2 :=
+  or_div_two_pow (n := 1)
+
+

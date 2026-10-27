@@ -1,0 +1,69 @@
+{
+  "created_utc": "2026-10-26T20:39:08.871495+00:00",
+  "state": "FIVE_ACTUAL_ERRORS_PROOF_ONLY_REPAIR_READY_NOT_RUN",
+  "run": 40395429076,
+  "log": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40395429076\\download-01d3ee43e7ff4ae088ca57488a71a0b2\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r19-dev-jam17-probe1\\full-build-output.txt",
+  "log_sha256": "8b95821e2003650d3eecd4b992d00fb1eab623ecaebb9444a93c61f9f51df909",
+  "errors": [
+    "error: work/Submission.lean:6886:18: omega could not prove the goal:",
+    "error: work/Submission.lean:6886:18: omega could not prove the goal:",
+    "error: work/Submission.lean:6886:18: omega could not prove the goal:",
+    "error: work/Submission.lean:6886:18: omega could not prove the goal:",
+    "error: work/Submission.lean:6945:6: Type mismatch: After simplification, term"
+  ],
+  "changes": [
+    {
+      "old": "    dsimp only <;>\n    split_ifs <;> omega",
+      "new": "    dsimp only <;>\n    simp only [beq_iff_eq] <;>\n    split_ifs <;> omega",
+      "reason": "Normalize both exact-tie Bool parity conditions before arithmetic splitting."
+    },
+    {
+      "old": "      apply UInt64.toNat.inj\n      simpa only [hm] using h",
+      "new": "      apply UInt64.toNat.inj\n      change (p &&& 131071).toNat = 0\n      exact hm.trans h",
+      "reason": "Normalize the actual UInt64.toNat0 target toNat0; compose the existing exact low-mask equation."
+    }
+  ],
+  "files": [
+    {
+      "old": "Probe-jam17-v1.lean",
+      "old_sha256": "f78490eb6a2c2aa7a8b68ebdf54c43d68a39c8bd3bea43e9ee462bcc3cd68679",
+      "new": "Probe-jam17-repair1.lean",
+      "bytes": 243828,
+      "sha256": "12341d5b5ddaa82e234a6da3ac1868a59634c9d99d6f6c621d4ee413a315b182",
+      "inverse_exact": true,
+      "all_statement_headers_identical": true,
+      "all_runtime_declarations_identical": true,
+      "original_static_gate": "PASS"
+    },
+    {
+      "old": "Kernel-jam17-public-v1.draft.lean",
+      "old_sha256": "a26bca4df7c8b6643f5d09c4be27ed6b49d5a25e4d293827374d7553bc8ad3f4",
+      "new": "Kernel-jam17-public-repair1.lean",
+      "bytes": 254875,
+      "sha256": "71b648dcd7111ad59798ffa4e4ec0aec0d5874d066455f43bac36558c899f1ce",
+      "inverse_exact": true,
+      "all_statement_headers_identical": true,
+      "all_runtime_declarations_identical": true,
+      "original_static_gate": "PASS"
+    },
+    {
+      "old": "Jam17.lean.inc",
+      "old_sha256": "25020a633413a8a4a5c19f03051639f619cece6a203a86d01b6a55d4163d6a29",
+      "new": "Jam17-repair1.lean.inc",
+      "bytes": 5687,
+      "sha256": "514c9f51877f3b01fc1d9251cf39711da7a55d693a62dbe98f9f28a3154e2dfe",
+      "inverse_exact": true,
+      "all_statement_headers_identical": true,
+      "all_runtime_declarations_identical": true
+    }
+  ],
+  "probe_roots": 7,
+  "public_roots": 40,
+  "root_lists_byte_identical": true,
+  "runtime_guard_premise_changes": false,
+  "statement": "NOT_RUN",
+  "helper_audit": "NOT_RUN",
+  "kernel_replay": "NOT_RUN",
+  "fullgate": "NOT_RUN",
+  "performance": "NOT_RUN"
+}

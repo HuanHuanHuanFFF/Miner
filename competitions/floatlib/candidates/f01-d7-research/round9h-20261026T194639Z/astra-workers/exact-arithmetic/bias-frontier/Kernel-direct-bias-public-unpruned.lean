@@ -1,0 +1,7382 @@
+import ContractTensor
+
+namespace R7W04
+
+
+@[inline] def nonNaN (x : Float32) : Bool := x == x
+
+private theorem unpacked_self_beq_eq_not_isNaN (x : Float.Model.UnpackedFloat) :
+    x.beq x = !x.isNaN := by
+  cases x with
+  | infinity sign => cases sign <;> rfl
+  | notANumber => rfl
+  | zero sign => cases sign <;> rfl
+  | finite sign mantissa exponent positive =>
+      cases sign <;>
+        simp [Float.Model.UnpackedFloat.beq, Float.Model.UnpackedFloat.compare,
+          Float.Model.UnpackedFloat.isNaN]
+
+
+theorem model_self_beq_eq_not_isNaN (x : Float32.Model) :
+    (x == x) = !x.isNaN := by
+  change x.unpack.beq x.unpack = !x.unpack.isNaN
+  exact unpacked_self_beq_eq_not_isNaN x.unpack
+
+
+theorem self_beq_eq_not_isNaN (x : Float32) :
+    (x == x) = !x.isNaN := by
+  change (x.toModel == x.toModel) = !x.toModel.isNaN
+  exact model_self_beq_eq_not_isNaN x.toModel
+
+
+theorem nonNaN_eq_not_isNaN (x : Float32) : nonNaN x = !x.isNaN :=
+  self_beq_eq_not_isNaN x
+
+
+theorem nonNaN_eq_true_iff (x : Float32) :
+    nonNaN x = true ↔ x.isNaN = false := by
+  rw [nonNaN_eq_not_isNaN]
+  simp
+
+
+
+
+end R7W04
+
+section R7NaNProof
+
+
+
+
+
+
+namespace R7W01
+open FloatLib.Floats.Formats.BinaryInterchange
+open FloatLib.Floats.Formats.BinaryInterchange.Model
+
+abbrev F32 := FloatFormat.binary32
+abbrev M32 := Model F32
+
+@[inline] def bits32 (x : M32) : BitVec 32 := x.bits
+@[inline] def fromBits32 (b : BitVec 32) : M32 := ofBits (fmt := F32) b
+
+private theorem quietMask_getLsbD (i : Nat) :
+    (4194304#32 : BitVec 32).getLsbD i = decide (i = 22) := by
+  rw [BitVec.getLsbD_ofNat]
+  by_cases hi : i < 32
+  · simp only [hi, decide_true, Bool.true_and]
+    change (2 ^ 22).testBit i = decide (i = 22)
+    simpa [eq_comm] using (Nat.testBit_two_pow (n := 22) (m := i))
+  · have : i ≠ 22 := by omega
+    simp [hi, this]
+
+theorem set_quietMask (bits : BitVec 32) :
+    (bits ||| (4194304#32)) &&& (4194304#32) = (4194304#32) := by
+  apply BitVec.eq_of_getLsbD_eq
+  intro i hi
+  simp only [BitVec.getLsbD_and, BitVec.getLsbD_or]
+  cases bits.getLsbD i <;> cases (4194304#32 : BitVec 32).getLsbD i <;> rfl
+
+theorem or_quietMask_eq_self (bits : BitVec 32)
+    (h : bits &&& (4194304#32) ≠ 0) :
+    bits ||| (4194304#32) = bits := by
+  have hbit : bits.getLsbD 22 = true := by
+    cases hb : bits.getLsbD 22
+    · have hz : bits &&& (4194304#32) = 0 := by
+        apply BitVec.eq_of_getLsbD_eq
+        intro i hi
+        by_cases heq : i = 22
+        · subst i
+          rw [BitVec.getLsbD_and]
+          change (bits.getLsbD 22 && true) = false
+          rw [hb]
+          rfl
+        · simp [BitVec.getLsbD_and, quietMask_getLsbD, heq]
+      exact (h hz).elim
+    · rfl
+  apply BitVec.eq_of_getLsbD_eq
+  intro i hi
+  by_cases heq : i = 22
+  · subst i
+    rw [BitVec.getLsbD_or]
+    change (bits.getLsbD 22 || true) = bits.getLsbD 22
+    rw [hbit]
+    rfl
+  · simp [BitVec.getLsbD_or, quietMask_getLsbD, heq]
+
+
+theorem quietNaN32_not_snan (x : M32) :
+    isSNaN (quietNaN x) = false := by
+  change IEEE.isSNaN
+    (if IEEE.isNaN x then fromBits32 (bits32 x ||| (4194304#32)) else x) = false
+  cases hn : IEEE.isNaN x
+  · simp [hn, IEEE.isSNaN]
+  · simp only [hn, Bool.true_eq, ite_true]
+    change (IEEE.isNaN (fromBits32 (bits32 x ||| (4194304#32)) : M32) &&
+      (((bits32 x ||| (4194304#32)) &&& (4194304#32)) == 0)) = false
+    rw [set_quietMask]
+    simp
+
+
+theorem quietNaN32_eq_self (q : M32)
+    (hq : isNaN q = true) (hs : isSNaN q = false) :
+    quietNaN q = q := by
+  change IEEE.isNaN q = true at hq
+  change (IEEE.isNaN q && (bits32 q &&& (4194304#32) == 0)) = false at hs
+  have hmask : bits32 q &&& (4194304#32) ≠ 0 := by
+    intro hz
+    simpa [hq, hz] using hs
+  change (if IEEE.isNaN q then fromBits32 (bits32 q ||| (4194304#32)) else q) = q
+  simp only [hq, Bool.true_eq, ite_true]
+  rw [or_quietMask_eq_self (bits32 q) hmask]
+  cases q
+  rfl
+
+
+theorem expField32_set_quietBit (x : M32) :
+    expField (fromBits32 (bits32 x ||| (4194304#32)) : M32) = expField x := by
+  change (((bits32 x ||| (4194304#32)) >>> 23) &&& (255#32)).toNat =
+    ((bits32 x >>> 23) &&& (255#32)).toNat
+  rw [BitVec.ushiftRight_or_distrib]
+  have hzero : (4194304#32 : BitVec 32) >>> 23 = 0 := by decide
+  rw [hzero]
+  exact congrArg (fun b : BitVec 32 => (b &&& (255#32)).toNat)
+    (BitVec.or_zero (x := bits32 x >>> 23))
+
+
+theorem fracField32_set_quietBit_ne_zero (x : M32) :
+    fracField (fromBits32 (bits32 x ||| (4194304#32)) : M32) ≠ 0 := by
+  intro hz
+  have hword : (bits32 x ||| (4194304#32)) &&& (8388607#32) = 0 := by
+    apply BitVec.eq_of_toNat_eq
+    exact hz
+  have hbit := congrArg (fun b : BitVec 32 => b.getLsbD 22) hword
+  rw [BitVec.getLsbD_and, BitVec.getLsbD_or] at hbit
+  change (((bits32 x).getLsbD 22 || true) && true) = false at hbit
+  simp at hbit
+
+
+theorem quietNaN32_is_nan (x : M32) (hx : isNaN x = true) :
+    isNaN (quietNaN x) = true := by
+  have hn : IEEE.isNaN x = true := hx
+  have he : expField x = 255 := by
+    change (expField x == 255 && fracField x != 0) = true at hx
+    simp only [Bool.and_eq_true, beq_iff_eq, bne_iff_ne] at hx
+    exact hx.1
+  change IEEE.isNaN
+    (if IEEE.isNaN x then fromBits32 (bits32 x ||| (4194304#32)) else x) = true
+  simp only [hn, Bool.true_eq, ite_true]
+  change (expField (fromBits32 (bits32 x ||| (4194304#32)) : M32) == 255 &&
+    fracField (fromBits32 (bits32 x ||| (4194304#32)) : M32) != 0) = true
+  rw [expField32_set_quietBit, he]
+  simp [fracField32_set_quietBit_ne_zero]
+
+
+theorem quietNaN32_is_qnan (x : M32) (hx : isNaN x = true) :
+    isQNaN (quietNaN x) = true := by
+  rw [isQNaN_eq_nan_and_not_signaling]
+  rw [quietNaN32_is_nan x hx, quietNaN32_not_snan x]
+  rfl
+
+
+
+
+theorem zero32_not_snan (sign : Bool) :
+    isSNaN (zero F32 sign) = false := by
+  exact isSNaN_eq_false_of_isNaN_eq_false _ (isNaN_zero F32 sign)
+
+
+theorem invalidResult32_not_snan :
+    isSNaN (invalidResult F32) = false := by decide
+
+
+
+theorem chooseNaN2_32_not_snan (x y n : M32)
+    (h : chooseNaN2 x y = some n) : isSNaN n = false := by
+  unfold chooseNaN2 at h
+  split at h
+  · have hn : quietNaN x = n := Option.some.inj h
+    rw [← hn]
+    exact quietNaN32_not_snan x
+  · split at h
+    · have hn : quietNaN y = n := Option.some.inj h
+      rw [← hn]
+      exact quietNaN32_not_snan y
+    · split at h
+      · have hn : quietNaN x = n := Option.some.inj h
+        rw [← hn]
+        exact quietNaN32_not_snan x
+      · split at h
+        · have hn : quietNaN y = n := Option.some.inj h
+          rw [← hn]
+          exact quietNaN32_not_snan y
+        · contradiction
+
+end R7W01
+
+
+
+
+
+
+
+namespace R7W01
+
+open FloatLib.Floats.Formats.BinaryInterchange
+open FloatLib.Floats.Formats.BinaryInterchange.Model
+
+
+
+
+theorem fields32_not_nan (sign : Bool) (exponent fraction : Nat)
+    (he : exponent < 255) :
+    isNaN (ofFields F32 sign exponent fraction) = false := by
+  apply isNaN_eq_false_of_isFinite_eq_true
+  apply isFinite_ofFields_ieee F32 (by decide) sign exponent fraction
+  exact he
+
+
+theorem nativeOverflow32_not_nan (sign : Bool) :
+    isNaN (nativeOverflow F32 sign) = false := by
+  rw [nativeOverflow_eq_signedInf_of_isIEEE F32 (by decide)]
+  cases sign
+  · exact isNaN_posInf F32 (by decide)
+  · exact isNaN_negInf F32 (by decide)
+
+
+
+theorem packRoundedSubnormal32_not_nan (sign : Bool) (z : M32)
+    (hz : isNaN z = false) (fraction : Nat) :
+    isNaN (packRoundedSubnormal F32 sign z fraction) = false := by
+  unfold packRoundedSubnormal
+  split
+  · exact hz
+  · split
+    · exact fields32_not_nan sign 1 0 (by decide)
+    · exact fields32_not_nan sign 0 fraction (by decide)
+
+
+
+theorem packRoundedNormal32_not_nan (sign : Bool) (overflow : M32)
+    (hoverflow : isNaN overflow = false) (totalExponent : Int)
+    (roundedMantissa : Nat) :
+    isNaN (packRoundedNormal F32 sign overflow totalExponent roundedMantissa) = false := by
+  have hfinish (e : Int) (m : Nat) :
+      isNaN
+        (if e > F32.maxNormalExponent then overflow else
+          if Int.toNat (e + Int.ofNat F32.exponentBias) > F32.maxFiniteExpField ||
+              (Int.toNat (e + Int.ofNat F32.exponentBias) == F32.maxFiniteExpField &&
+                m - pow2 F32.fracWidth > F32.maxFiniteFracField) then
+            overflow
+          else
+            ofFields F32 sign (Int.toNat (e + Int.ofNat F32.exponentBias))
+              (m - pow2 F32.fracWidth)) = false := by
+    split
+    · exact hoverflow
+    · split
+      · exact hoverflow
+      · apply fields32_not_nan
+        rename_i hguard
+        have hmax : F32.maxFiniteExpField = 254 := by decide
+        rw [hmax] at hguard
+        simp only [Bool.or_eq_true, decide_eq_true_eq, beq_iff_eq] at hguard
+        omega
+  exact hfinish _ _
+
+
+
+theorem roundDyadicGeneral32_not_nan (d : FloatLib.Numerics.Dyadic) :
+    isNaN (roundDyadicGeneral F32 d) = false := by
+  unfold roundDyadicGeneral
+  split
+  · exact isNaN_zero F32 d.negative
+  · dsimp only
+    split
+    · exact nativeOverflow32_not_nan d.negative
+    · split
+      · exact packRoundedSubnormal32_not_nan d.negative _
+          (isNaN_zero F32 d.negative) _
+      · exact packRoundedNormal32_not_nan d.negative _
+          (nativeOverflow32_not_nan d.negative) _ _
+
+
+theorem roundDyadic32_not_nan (d : FloatLib.Numerics.Dyadic) :
+    isNaN (roundDyadic F32 d) = false := by
+  rw [← roundDyadicGeneral_eq_roundDyadic F32 d]
+  exact roundDyadicGeneral32_not_nan d
+
+
+theorem roundDyadic32_not_snan (d : FloatLib.Numerics.Dyadic) :
+    isSNaN (roundDyadic F32 d) = false := by
+  exact isSNaN_eq_false_of_isNaN_eq_false _ (roundDyadic32_not_nan d)
+
+theorem nativeOverflow32_not_snan (sign : Bool) :
+    isSNaN (nativeOverflow F32 sign) = false := by
+  exact isSNaN_eq_false_of_isNaN_eq_false _ (nativeOverflow32_not_nan sign)
+
+
+end R7W01
+
+
+
+
+namespace R7W01
+open FloatLib.Floats.Formats.BinaryInterchange
+open FloatLib.Floats.Formats.BinaryInterchange.Model
+
+
+theorem mul32_not_snan (x y : M32) :
+    isSNaN (Spec.mul x y) = false := by
+  unfold Spec.mul
+  split
+  · dsimp only
+    split
+    · exact zero32_not_snan _
+    · exact roundDyadic32_not_snan _
+  · split
+    · rename_i n hn
+      exact chooseNaN2_32_not_snan x y n hn
+    · split
+      · split
+        · exact invalidResult32_not_snan
+        · exact nativeOverflow32_not_snan _
+      · split
+        · split
+          · exact invalidResult32_not_snan
+          · exact nativeOverflow32_not_snan _
+        · exact invalidResult32_not_snan
+
+
+theorem add_absorb_of_not_snan (q r : M32)
+    (hq : isNaN q = true) (hs : isSNaN q = false)
+    (hr : isSNaN r = false) : Spec.add q r = q := by
+  have hd : toDyadic? q = none := toDyadic?_eq_none_of_isNaN hq
+  have hc : chooseNaN2 q r = some q := by
+    simp [chooseNaN2, hs, hr, hq, quietNaN32_eq_self q hq hs]
+  simp [Spec.add, hd, hc]
+
+
+theorem add_mul_absorb (q x y : M32)
+    (hq : isNaN q = true) (hs : isSNaN q = false) :
+    Spec.add q (Spec.mul x y) = q := by
+  exact add_absorb_of_not_snan q (Spec.mul x y) hq hs (mul32_not_snan x y)
+
+
+end R7W01
+
+
+
+
+
+
+
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+
+namespace R7W01
+
+
+@[inline] def quietGuard (q : M32) : Bool := q.isNaN && !q.isSNaN
+
+theorem quietGuard_nan (q : M32) (h : quietGuard q = true) :
+    q.isNaN = true := by
+  cases hn : q.isNaN <;> simp_all [quietGuard]
+
+theorem quietGuard_not_signaling (q : M32) (h : quietGuard q = true) :
+    q.isSNaN = false := by
+  cases hs : q.isSNaN <;> simp_all [quietGuard]
+
+
+def modelDotFold {ι : Type} (a b : ι → M32) (indices : List ι) (acc : M32) : M32 :=
+  indices.foldl (fun q i => Model.Spec.add q (Model.Spec.mul (a i) (b i))) acc
+
+
+def modelDotEarly {ι : Type} (a b : ι → M32) : List ι → M32 → M32
+  | [], acc => acc
+  | i :: is, acc =>
+      if quietGuard acc then acc
+      else modelDotEarly a b is (Model.Spec.add acc (Model.Spec.mul (a i) (b i)))
+
+theorem modelDotFold_absorb {ι : Type} (a b : ι → M32) (indices : List ι)
+    (q : M32) (hn : q.isNaN = true) (hs : q.isSNaN = false) :
+    modelDotFold a b indices q = q := by
+  induction indices generalizing q with
+  | nil => rfl
+  | cons i is ih =>
+      change modelDotFold a b is (Model.Spec.add q (Model.Spec.mul (a i) (b i))) = q
+      rw [add_mul_absorb q (a i) (b i) hn hs]
+      exact ih q hn hs
+
+
+
+
+theorem exec_toModel_add (x y : Competition.Binary32) :
+    ExecFloat.Binary.toModel (ExecFloat.add x y) =
+      Model.Spec.add (ExecFloat.Binary.toModel x) (ExecFloat.Binary.toModel y) := by
+  rw [ExecFloat.Proof.add_eq_spec]
+  change Configured.Family.toModel
+    (ExecFloat.ModelCodec.liftBinary Model.Spec.add x y) = _
+  simp [Configured.Family.toModel, ExecFloat.Binary.toModel]
+
+theorem exec_toModel_mul (x y : Competition.Binary32) :
+    ExecFloat.Binary.toModel (ExecFloat.mul x y) =
+      Model.Spec.mul (ExecFloat.Binary.toModel x) (ExecFloat.Binary.toModel y) := by
+  rw [ExecFloat.Proof.mul_eq_spec]
+  change Configured.Family.toModel
+    (ExecFloat.ModelCodec.liftBinary Model.Spec.mul x y) = _
+  simp [Configured.Family.toModel, ExecFloat.Binary.toModel]
+
+theorem exec_add_mul_absorb (q x y : Competition.Binary32)
+    (hn : (ExecFloat.Binary.toModel q).isNaN = true)
+    (hs : (ExecFloat.Binary.toModel q).isSNaN = false) :
+    ExecFloat.add q (ExecFloat.mul x y) = q := by
+  apply Configured.Family.toModel_injective
+  change ExecFloat.Binary.toModel (ExecFloat.add q (ExecFloat.mul x y)) =
+    ExecFloat.Binary.toModel q
+  rw [exec_toModel_add, exec_toModel_mul]
+  exact add_mul_absorb _ _ _ hn hs
+
+@[inline] def execQuietGuard (q : Competition.Binary32) : Bool :=
+  quietGuard (ExecFloat.Binary.toModel q)
+
+
+end R7W01
+
+end R7NaNProof
+
+section R7SumProof
+
+
+namespace R7W02
+open FloatLib.Floats.Formats.BinaryInterchange
+
+@[inline] def rawSNaN (u : UInt32) : Bool :=
+  ((u &&& 0x7fc00000) == 0x7f800000) && ((u &&& 0x003fffff) != 0)
+
+@[inline] def quietRaw (u : UInt32) : UInt32 :=
+  u ||| 0x00400000
+
+private theorem mask_split (bits : BitVec 32) :
+    bits &&& (2143289344#32) =
+      ((((bits >>> 23) &&& (255#32)) <<< 23) ||| (bits &&& (4194304#32))) := by
+  apply BitVec.eq_of_getLsbD_eq
+  intro i hi
+  interval_cases i <;> simp
+
+private theorem fraction_split (bits : BitVec 32) :
+    bits &&& (8388607#32) =
+      (bits &&& (4194303#32)) ||| (bits &&& (4194304#32)) := by
+  have hm : (8388607#32 : BitVec 32) = (4194303#32) ||| (4194304#32) := by decide
+  rw [hm, BitVec.and_or_distrib_left]
+
+private theorem mask_snan_classification (bits : BitVec 32) :
+    ((bits &&& (2143289344#32) = (2139095040#32)) ∧
+      (bits &&& (4194303#32)) ≠ 0) ↔
+      ((((bits >>> 23) &&& (255#32)).toNat = 255 ∧
+        (bits &&& (8388607#32)).toNat ≠ 0) ∧
+        bits &&& (4194304#32) = 0) := by
+  constructor
+  · rintro ⟨hm, hp⟩
+    have he : (bits >>> 23) &&& (255#32) = (255#32) := by
+      have hh := congrArg (fun b : BitVec 32 => b >>> 23) hm
+      rw [BitVec.ushiftRight_and_distrib] at hh
+      exact hh
+    have hq : bits &&& (4194304#32) = 0 := by
+      have hh := congrArg (fun b : BitVec 32 => b &&& (4194304#32)) hm
+      rw [BitVec.and_assoc] at hh
+      exact hh
+    have hf : (bits &&& (8388607#32)).toNat ≠ 0 := by
+      intro hz
+      have hzword : bits &&& (8388607#32) = 0 := BitVec.eq_of_toNat_eq hz
+      rw [fraction_split, hq] at hzword
+      exact hp (by simpa using hzword)
+    exact ⟨⟨congrArg BitVec.toNat he, hf⟩, hq⟩
+  · rintro ⟨⟨he, hf⟩, hq⟩
+    have heword : (bits >>> 23) &&& (255#32) = (255#32) := by
+      apply BitVec.eq_of_toNat_eq
+      exact he
+    constructor
+    · rw [mask_split, heword, hq]
+      decide
+    · intro hp
+      have hz : bits &&& (8388607#32) = 0 := by
+        rw [fraction_split, hq, hp]
+        decide
+      exact hf (by rw [hz]; rfl)
+
+
+theorem rawSNaN_eq_isSNaN (u : UInt32) :
+    rawSNaN u = Model.isSNaN (Model.NativeBinary32.ofUInt32 u) := by
+  apply Bool.eq_iff_iff.mpr
+  simp only [rawSNaN, Bool.and_eq_true, beq_iff_eq, bne_iff_ne]
+  simp only [ne_eq, ← UInt32.toBitVec_inj, UInt32.toBitVec_and]
+  change ((u.toBitVec &&& (2143289344#32) = (2139095040#32)) ∧
+      (u.toBitVec &&& (4194303#32)) ≠ 0) ↔
+    (((((u.toBitVec >>> 23) &&& (255#32)).toNat == 255 &&
+      (u.toBitVec &&& (8388607#32)).toNat != 0) &&
+      (u.toBitVec &&& (4194304#32)) == 0) = true)
+  simp only [Bool.and_eq_true, beq_iff_eq, bne_iff_ne]
+  exact mask_snan_classification u.toBitVec
+
+
+theorem quietRaw_eq_quietNaN (u : UInt32) (h : rawSNaN u = true) :
+    Model.NativeBinary32.ofUInt32 (quietRaw u) =
+      Model.quietNaN (Model.NativeBinary32.ofUInt32 u) := by
+  have hs : Model.isSNaN (Model.NativeBinary32.ofUInt32 u) = true := by
+    rw [← rawSNaN_eq_isSNaN]
+    exact h
+  have hn := Model.isNaN_of_isSNaN hs
+  have hn' : Model.IEEE.isNaN (Model.NativeBinary32.ofUInt32 u) = true := hn
+  change Model.ofBits (fmt := FloatFormat.binary32) (u ||| (0x00400000 : UInt32)).toBitVec =
+    (if Model.IEEE.isNaN (Model.NativeBinary32.ofUInt32 u) then
+      Model.ofBits (fmt := FloatFormat.binary32) (u.toBitVec ||| (4194304#32))
+      else Model.NativeBinary32.ofUInt32 u)
+  simp only [hn', Bool.true_eq, ite_true, UInt32.toBitVec_or]
+  rfl
+
+private theorem quietMask_getLsbD (i : Nat) :
+    (4194304#32 : BitVec 32).getLsbD i = decide (i = 22) := by
+  rw [BitVec.getLsbD_ofNat]
+  by_cases hi : i < 32
+  · simp only [hi, decide_true, Bool.true_and]
+    change (2 ^ 22).testBit i = decide (i = 22)
+    simpa [eq_comm] using (Nat.testBit_two_pow (n := 22) (m := i))
+  · have : i ≠ 22 := by omega
+    simp [hi, this]
+
+
+theorem quietRaw_preserves_bit (u : UInt32) (i : Nat) (hi : i ≠ 22) :
+    (quietRaw u).toBitVec.getLsbD i = u.toBitVec.getLsbD i := by
+  unfold quietRaw
+  rw [UInt32.toBitVec_or]
+  change (u.toBitVec ||| (4194304#32)).getLsbD i = u.toBitVec.getLsbD i
+  rw [BitVec.getLsbD_or, quietMask_getLsbD]
+  simp [hi]
+
+
+theorem quietRaw_bit22 (u : UInt32) :
+    (quietRaw u).toBitVec.getLsbD 22 = true := by
+  unfold quietRaw
+  rw [UInt32.toBitVec_or, BitVec.getLsbD_or]
+  change (u.toBitVec.getLsbD 22 || true) = true
+  simp
+
+
+theorem quietRaw_isQNaN (u : UInt32) (h : rawSNaN u = true) :
+    Model.isQNaN (Model.NativeBinary32.ofUInt32 (quietRaw u)) = true := by
+  have hs : Model.isSNaN (Model.NativeBinary32.ofUInt32 u) = true := by
+    rw [← rawSNaN_eq_isSNaN]
+    exact h
+  have he : ((u.toBitVec >>> 23) &&& (255#32)).toNat = 255 := by
+    change (((((u.toBitVec >>> 23) &&& (255#32)).toNat == 255 &&
+      (u.toBitVec &&& (8388607#32)).toNat != 0) &&
+      (u.toBitVec &&& (4194304#32)) == 0) = true) at hs
+    simp only [Bool.and_eq_true, beq_iff_eq, bne_iff_ne] at hs
+    exact hs.1.1
+  have he' : ((((quietRaw u).toBitVec >>> 23) &&& (255#32)).toNat) = 255 := by
+    unfold quietRaw
+    rw [UInt32.toBitVec_or, BitVec.ushiftRight_or_distrib]
+    change (((u.toBitVec >>> 23 ||| (0#32)) &&& (255#32)).toNat) = 255
+    rw [BitVec.or_zero]
+    exact he
+  have hq : (quietRaw u).toBitVec &&& (4194304#32) ≠ 0 := by
+    intro hz
+    have hh := congrArg (fun b : BitVec 32 => b.getLsbD 22) hz
+    rw [BitVec.getLsbD_and, quietRaw_bit22] at hh
+    change (true && true) = false at hh
+    cases hh
+  have hf : ((quietRaw u).toBitVec &&& (8388607#32)).toNat ≠ 0 := by
+    intro hz
+    have hzword : (quietRaw u).toBitVec &&& (8388607#32) = 0 :=
+      BitVec.eq_of_toNat_eq hz
+    have hh := congrArg (fun b : BitVec 32 => b.getLsbD 22) hzword
+    rw [BitVec.getLsbD_and, quietRaw_bit22] at hh
+    change (true && true) = false at hh
+    cases hh
+  change (((((quietRaw u).toBitVec >>> 23) &&& (255#32)).toNat == 255 &&
+      ((quietRaw u).toBitVec &&& (8388607#32)).toNat != 0) &&
+      ((quietRaw u).toBitVec &&& (4194304#32)) != 0) = true
+  simp only [Bool.and_eq_true, beq_iff_eq, bne_iff_ne]
+  exact ⟨⟨he', hf⟩, hq⟩
+
+end R7W02
+
+
+
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+
+namespace R7W02
+
+
+
+theorem model_add_qnan_left (q x : Model FloatFormat.binary32)
+    (hq : Model.isQNaN q = true) :
+    Model.Spec.add q x =
+      if Model.isSNaN x then Model.quietNaN x else q := by
+  have hclass : Model.isNaN q = true ∧ Model.isSNaN q = false := by
+    simpa [Model.isQNaN_eq_nan_and_not_signaling] using hq
+  have hd : Model.toDyadic? q = none :=
+    Model.toDyadic?_eq_none_of_isNaN hclass.1
+  cases hx : Model.isSNaN x <;>
+    simp [Model.Spec.add, hd, Model.chooseNaN2, hclass.1, hclass.2, hx,
+      R7W01.quietNaN32_eq_self q hclass.1 hclass.2]
+
+
+
+@[inline] def fromRaw (u : UInt32) : Competition.Binary32 :=
+  ExecFloat.ofRaw ⟨u, u.toNat_lt⟩
+
+@[simp] theorem fromRaw_raw (u : UInt32) : (fromRaw u).raw.1 = u := rfl
+
+
+theorem exec_toModel_eq_rawModel (q : Competition.Binary32) :
+    ExecFloat.Binary.toModel q = Model.NativeBinary32.ofUInt32 q.raw.1 := by
+  change Model.ofBits (fmt := FloatFormat.binary32)
+      (BitVec.ofNatLT q.raw.1.toNat q.raw.2) =
+    Model.ofBits (fmt := FloatFormat.binary32) q.raw.1.toBitVec
+  apply congrArg (Model.ofBits (fmt := FloatFormat.binary32))
+  apply BitVec.eq_of_toNat_eq
+  rfl
+
+@[simp] theorem fromRaw_toModel (u : UInt32) :
+    ExecFloat.Binary.toModel (fromRaw u) =
+      Model.NativeBinary32.ofUInt32 u := by
+  rw [exec_toModel_eq_rawModel, fromRaw_raw]
+
+
+theorem exec_toModel_bits_eq_raw (q : Competition.Binary32) :
+    (ExecFloat.Binary.toModel q).bits = q.raw.1.toBitVec := by
+  rw [exec_toModel_eq_rawModel]
+  rfl
+
+
+theorem exec_toModel_add (x y : Competition.Binary32) :
+    ExecFloat.Binary.toModel (ExecFloat.add x y) =
+      Model.Spec.add (ExecFloat.Binary.toModel x) (ExecFloat.Binary.toModel y) := by
+  rw [ExecFloat.Proof.add_eq_spec]
+  change Configured.Family.toModel
+    (ExecFloat.ModelCodec.liftBinary Model.Spec.add x y) = _
+  simp [Configured.Family.toModel, ExecFloat.Binary.toModel]
+
+
+@[inline] def step (q x : Competition.Binary32) : Competition.Binary32 :=
+  if rawSNaN x.raw.1 then fromRaw (quietRaw x.raw.1) else q
+
+
+theorem step_raw (q x : Competition.Binary32) :
+    (step q x).raw.1 =
+      if rawSNaN x.raw.1 then quietRaw x.raw.1 else q.raw.1 := by
+  cases h : rawSNaN x.raw.1 <;> simp [step, h]
+
+
+theorem step_eq_add (q x : Competition.Binary32)
+    (hq : Model.isQNaN (ExecFloat.Binary.toModel q) = true) :
+    step q x = ExecFloat.add q x := by
+  let addResult : Competition.Binary32 := ExecFloat.add q x
+  apply Configured.Family.toModel_injective
+  change @Eq (Model FloatFormat.binary32)
+    (ExecFloat.Binary.toModel (step q x))
+    (ExecFloat.Binary.toModel addResult)
+  let qm : Model FloatFormat.binary32 := ExecFloat.Binary.toModel q
+  let xm : Model FloatFormat.binary32 := ExecFloat.Binary.toModel x
+  have hq' : Model.isQNaN qm = true := hq
+  refine Eq.trans ?_ (exec_toModel_add q x).symm
+  refine Eq.trans ?_ (model_add_qnan_left qm xm hq').symm
+  have hx : rawSNaN x.raw.1 = Model.isSNaN xm :=
+    (rawSNaN_eq_isSNaN x.raw.1).trans
+      (congrArg (fun m : Model FloatFormat.binary32 => Model.isSNaN m)
+        (exec_toModel_eq_rawModel x)).symm
+  cases hr : rawSNaN x.raw.1
+  · have hs : Model.isSNaN xm = false := hx.symm.trans hr
+    simp [step, hr, hs, qm]
+  · have hs : Model.isSNaN xm = true := hx.symm.trans hr
+    simp only [step, hr, Bool.true_eq, ite_true, hs]
+    exact (fromRaw_toModel (quietRaw x.raw.1)).trans
+      ((quietRaw_eq_quietNaN x.raw.1 hr).trans
+        (congrArg (fun m : Model FloatFormat.binary32 => Model.quietNaN m)
+          (exec_toModel_eq_rawModel x)).symm)
+
+
+theorem step_isQNaN (q x : Competition.Binary32)
+    (hq : Model.isQNaN (ExecFloat.Binary.toModel q) = true) :
+    Model.isQNaN (ExecFloat.Binary.toModel (step q x)) = true := by
+  cases hr : rawSNaN x.raw.1
+  · simpa [step, hr] using hq
+  · simp only [step, hr, Bool.true_eq, ite_true]
+    rw [fromRaw_toModel]
+    exact quietRaw_isQNaN x.raw.1 hr
+
+end R7W02
+
+
+end R7SumProof
+
+
+
+/-
+MIT License
+
+Copyright (c) 2026 Conjectures.io
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+# Third-party notices
+
+This repository is under the MIT licence in [LICENSE](LICENSE). Some of its files reproduce, adapt
+or restate code from the projects below, whose licences ask that their notices travel with that
+code; those notices are reproduced here in full. [REUSE.toml](REUSE.toml) records, file by file,
+which notices apply, and `reuse lint` checks it.
+
+If you copy a shipped kernel, contract or migration file into your own work, a submission
+included, keep the notices that apply to it.
+
+## Included in this repository
+
+### FloatLib
+
+[FloatLib](https://github.com/lean-dojo/FloatLib), MIT licence. The contract
+(`lean/contract/`) restates FloatLib's IEEE 754 specification as the obligations a kernel must meet,
+and the kernels (`kernels/`) and stage 2 (`lean/stage2/`) reproduce or adapt FloatLib's certified
+binary32 word kernels and their helpers: `kernels/add/mirror` runs FloatLib's word addition step
+for step on bare words, and the faster kernels are built from it.
+
+```text
+MIT License
+
+Copyright (c) 2026 FloatLib
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+### TorchLean
+
+[TorchLean](https://github.com/lean-dojo/TorchLean), MIT licence. The tensor contract
+(`lean/contract/ContractTensor.lean`) restates TorchLean's `reduceSumLeftSpec` and `bmmSpec`, and
+the `sum`, `bmmR4` and full-entry kernels and `lean/stage2/` are written against those definitions;
+`lean/stage2/Stage2/Link.lean` proves the restatements equal to TorchLean's own.
+
+```text
+MIT License
+
+Copyright (c) 2026 TorchLean
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+
+-/
+
+
+
+
+
+
+
+
+
+namespace R2W01b
+
+@[inline] def magnitude (u : UInt32) : UInt32 :=
+  u &&& 0x7fffffff
+
+@[inline] def fastOK (u : UInt32) : Bool :=
+  let a := magnitude u
+  decide (0x0bffffff ≤ a - 1) && decide (a < 0x7f800000)
+
+def NormalBand (u : UInt32) : Prop :=
+  0x0c000000 ≤ magnitude u ∧ magnitude u < 0x7f800000
+
+theorem wrap_gate_iff (a : UInt32) :
+    (decide (0x0bffffff ≤ a - 1) && decide (a < 0x7f800000)) = true ↔
+      a = 0 ∨ (0x0c000000 ≤ a ∧ a < 0x7f800000) := by
+  have ha := a.toNat_lt_size
+  simp only [Bool.and_eq_true, decide_eq_true_eq, UInt32.le_iff_toNat_le,
+    UInt32.lt_iff_toNat_lt, UInt32.toNat_sub, ← UInt32.toNat_inj]
+  change a.toNat < 4294967296 at ha
+  change
+    (201326591 ≤ (4294967295 + a.toNat) % 4294967296 ∧
+      a.toNat < 2139095040) ↔
+    (a.toNat = 0 ∨ (201326592 ≤ a.toNat ∧ a.toNat < 2139095040))
+  omega
+
+theorem fastOK_iff (u : UInt32) :
+    fastOK u = true ↔ magnitude u = 0 ∨ NormalBand u := by
+  exact wrap_gate_iff (magnitude u)
+
+theorem magnitude_toNat (u : UInt32) :
+    (magnitude u).toNat = u.toNat % 2147483648 := by
+  rw [magnitude, UInt32.toNat_and]
+  change u.toNat &&& (2 ^ 31 - 1) = u.toNat % 2 ^ 31
+  exact Nat.and_two_pow_sub_one_eq_mod u.toNat 31
+
+theorem magnitude_zero_iff (u : UInt32) :
+    magnitude u = 0 ↔ u = 0 ∨ u = 0x80000000 := by
+  have hu := u.toNat_lt_size
+  simp only [← UInt32.toNat_inj, magnitude_toNat]
+  change u.toNat < 4294967296 at hu
+  change
+    u.toNat % 2147483648 = 0 ↔ u.toNat = 0 ∨ u.toNat = 2147483648
+  omega
+
+
+
+@[inline] def tableIndex (u : UInt32) : UInt32 :=
+  u >>> 23
+
+@[inline] def mantissa (u : UInt32) : UInt32 :=
+  (u &&& 0x7fffff) ||| 0x800000
+
+@[inline] def scaleBits (j : UInt32) : UInt32 :=
+  let e := j &&& 255
+  let s := (j &&& 256) <<< 23
+  if decide (24 ≤ e) && decide (e ≤ 254) then
+    s ||| ((e - 23) <<< 23)
+  else
+    s
+
+theorem tableIndex_toNat_lt (u : UInt32) :
+    (tableIndex u).toNat < 512 := by
+  have hu := u.toNat_lt_size
+  rw [tableIndex, UInt32.toNat_shiftRight]
+  change u.toNat >>> 23 < 512
+  rw [Nat.shiftRight_eq_div_pow]
+  change u.toNat < 4294967296 at hu
+  change u.toNat / 8388608 < 512
+  omega
+
+def scaleTable : Array Float32 :=
+  Array.ofFn fun j : Fin 512 => Float32.ofBits (scaleBits (UInt32.ofNat j.val))
+
+theorem scaleTable_size : scaleTable.size = 512 := by
+  simp only [scaleTable, Array.size_ofFn]
+
+theorem scaleTable_entry (j : Fin 512) :
+    scaleTable[j.val]'(by rw [scaleTable_size]; exact j.isLt) =
+      Float32.ofBits (scaleBits (UInt32.ofNat j.val)) := by
+  simp only [scaleTable, Array.getElem_ofFn]
+
+@[inline] def scaleAt (u : UInt32) : Float32 :=
+  scaleTable[(tableIndex u).toNat]'(by
+    rw [scaleTable_size]
+    exact tableIndex_toNat_lt u)
+
+theorem scaleAt_eq (u : UInt32) :
+    scaleAt u = Float32.ofBits (scaleBits (tableIndex u)) := by
+  simp only [scaleAt, scaleTable, Array.getElem_ofFn, UInt32.ofNat_toNat]
+
+theorem zero_fields (u : UInt32) (h : magnitude u = 0) :
+    (u = 0 ∧ tableIndex u = 0 ∧ mantissa u = 0x800000 ∧
+      scaleBits (tableIndex u) = 0) ∨
+    (u = 0x80000000 ∧ tableIndex u = 256 ∧ mantissa u = 0x800000 ∧
+      scaleBits (tableIndex u) = 0x80000000) := by
+  cases (magnitude_zero_iff u).mp h with
+  | inl hu =>
+    subst u
+    left
+    decide
+  | inr hu =>
+    subst u
+    right
+    decide
+
+theorem scaleAt_positive_zero : scaleAt 0 = Float32.ofBits 0 := by
+  rw [scaleAt_eq]
+  exact congrArg Float32.ofBits (by decide : scaleBits (tableIndex 0) = 0)
+
+theorem scaleAt_negative_zero :
+    scaleAt 0x80000000 = Float32.ofBits 0x80000000 := by
+  rw [scaleAt_eq]
+  exact congrArg Float32.ofBits
+    (by decide : scaleBits (tableIndex 0x80000000) = 0x80000000)
+
+
+@[inline] def tableProduct (u : UInt32) : Float32 :=
+  (mantissa u).toFloat32 * scaleAt u
+
+theorem tableProduct_positive_zero : tableProduct 0 = Float32.ofBits 0 := by
+  rw [tableProduct, scaleAt_positive_zero]
+  decide
+
+theorem tableProduct_negative_zero :
+    tableProduct 0x80000000 = Float32.ofBits 0x80000000 := by
+  rw [tableProduct, scaleAt_negative_zero]
+  decide
+
+theorem tableProduct_zero_eq (u : UInt32) (h : magnitude u = 0) :
+    tableProduct u = Float32.ofBits u := by
+  cases (magnitude_zero_iff u).mp h with
+  | inl hu =>
+    subst u
+    exact tableProduct_positive_zero
+  | inr hu =>
+    subst u
+    exact tableProduct_negative_zero
+
+theorem tableProduct_zero_bits_eq (u : UInt32) (h : magnitude u = 0) :
+    (tableProduct u).toBits = (Float32.ofBits u).toBits := by
+  exact congrArg Float32.toBits (tableProduct_zero_eq u h)
+
+theorem zero_ofBits_toBits (u : UInt32) (h : magnitude u = 0) :
+    (Float32.ofBits u).toBits = u := by
+  cases (magnitude_zero_iff u).mp h with
+  | inl hu => subst u; decide
+  | inr hu => subst u; decide
+
+
+theorem float32_eq_of_toBits_eq {x y : Float32} (h : x.toBits = y.toBits) :
+    x = y := by
+  cases x with
+  | ofModel xm =>
+    cases y with
+    | ofModel ym =>
+      cases xm with
+      | mk xb xv =>
+        cases ym with
+        | mk yb yv =>
+          change xb = yb at h
+          cases h
+          rfl
+
+theorem float32_ofBits_toBits (x : Float32) : Float32.ofBits x.toBits = x := by
+  simpa only [FloatLib.Floats.ExecFloat.Binary.toFloat32,
+    FloatLib.Floats.ExecFloat.Binary.toBits32_ofFloat32] using
+    FloatLib.Floats.ExecFloat.Binary.toFloat32_ofFloat32 x
+
+theorem float32_eq_of_raw_bits {x : Float32} {u : UInt32} (h : x.toBits = u) :
+    x = Float32.ofBits u := by
+  calc
+    x = Float32.ofBits x.toBits := (float32_ofBits_toBits x).symm
+    _ = Float32.ofBits u := congrArg Float32.ofBits h
+
+theorem normal_value_of_bits
+    (hNormalBits : ∀ u, NormalBand u →
+      (tableProduct u).toBits = (Float32.ofBits u).toBits) :
+    ∀ u, NormalBand u → tableProduct u = Float32.ofBits u := by
+  intro u hn
+  exact float32_eq_of_toBits_eq (hNormalBits u hn)
+
+theorem normal_value_of_raw_bits
+    (hNormalRawBits : ∀ u, NormalBand u → (tableProduct u).toBits = u) :
+    ∀ u, NormalBand u → tableProduct u = Float32.ofBits u := by
+  intro u hn
+  exact float32_eq_of_raw_bits (hNormalRawBits u hn)
+
+theorem tableProduct_of_fastOK
+    (hNormal : ∀ u, NormalBand u → tableProduct u = Float32.ofBits u)
+    (u : UInt32) (h : fastOK u = true) :
+    tableProduct u = Float32.ofBits u := by
+  cases (fastOK_iff u).mp h with
+  | inl hz => exact tableProduct_zero_eq u hz
+  | inr hn => exact hNormal u hn
+
+@[inline] def convert (u : UInt32) : Float32 :=
+  if fastOK u then tableProduct u else Float32.ofBits u
+
+
+theorem convert_fallback (u : UInt32) (h : fastOK u = false) :
+    convert u = Float32.ofBits u := by
+  simp [convert, h]
+
+theorem convert_eq
+    (hNormal : ∀ u, NormalBand u → tableProduct u = Float32.ofBits u)
+    (u : UInt32) : convert u = Float32.ofBits u := by
+  by_cases h : fastOK u = true
+  · rw [convert, if_pos h]
+    exact tableProduct_of_fastOK hNormal u h
+  · rw [convert, if_neg h]
+
+theorem convert_bits_eq
+    (hNormal : ∀ u, NormalBand u → tableProduct u = Float32.ofBits u)
+    (u : UInt32) : (convert u).toBits = (Float32.ofBits u).toBits := by
+  exact congrArg Float32.toBits (convert_eq hNormal u)
+
+
+
+theorem replace_decoder {α : Sort _}
+    (hNormal : ∀ u, NormalBand u → tableProduct u = Float32.ofBits u)
+    (core : (UInt32 → Float32) → α) : core convert = core Float32.ofBits := by
+  exact congrArg core (funext (convert_eq hNormal))
+
+theorem foldl_convert_eq
+    (hNormal : ∀ u, NormalBand u → tableProduct u = Float32.ofBits u)
+    (xs : List UInt32) (step : Float32 → Float32 → Float32) (acc : Float32) :
+    xs.foldl (fun z u => step z (convert u)) acc =
+      xs.foldl (fun z u => step z (Float32.ofBits u)) acc := by
+  induction xs generalizing acc with
+  | nil => rfl
+  | cons u us ih =>
+    simp only [List.foldl_cons, convert_eq hNormal u]
+    exact ih _
+
+end R2W01b
+
+/-
+MIT License
+
+Copyright (c) 2026 Conjectures.io
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+# Third-party notices
+
+This repository is under the MIT licence in [LICENSE](LICENSE). Some of its files reproduce, adapt
+or restate code from the projects below, whose licences ask that their notices travel with that
+code; those notices are reproduced here in full. [REUSE.toml](REUSE.toml) records, file by file,
+which notices apply, and `reuse lint` checks it.
+
+If you copy a shipped kernel, contract or migration file into your own work, a submission
+included, keep the notices that apply to it.
+
+## Included in this repository
+
+### FloatLib
+
+[FloatLib](https://github.com/lean-dojo/FloatLib), MIT licence. The contract
+(`lean/contract/`) restates FloatLib's IEEE 754 specification as the obligations a kernel must meet,
+and the kernels (`kernels/`) and stage 2 (`lean/stage2/`) reproduce or adapt FloatLib's certified
+binary32 word kernels and their helpers: `kernels/add/mirror` runs FloatLib's word addition step
+for step on bare words, and the faster kernels are built from it.
+
+```text
+MIT License
+
+Copyright (c) 2026 FloatLib
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+### TorchLean
+
+[TorchLean](https://github.com/lean-dojo/TorchLean), MIT licence. The tensor contract
+(`lean/contract/ContractTensor.lean`) restates TorchLean's `reduceSumLeftSpec` and `bmmSpec`, and
+the `sum`, `bmmR4` and full-entry kernels and `lean/stage2/` are written against those definitions;
+`lean/stage2/Stage2/Link.lean` proves the restatements equal to TorchLean's own.
+
+```text
+MIT License
+
+Copyright (c) 2026 TorchLean
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+
+-/
+
+namespace R2W01c
+
+namespace NativeBridge
+
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+open Float.Model.UnpackedFloat
+open FloatLib.Floats.Formats.BinaryInterchange.Model
+
+
+
+
+
+
+theorem le_targetExponent_totalExponent_iff (spec : Float.Model.Format)
+    (mantissa : Nat) (exponent : Int) :
+    exponent ≤ spec.targetExponent (Float.Model.totalExponent mantissa exponent) ↔
+      exponent ≤ spec.minExponent ∨ 2 ^ spec.mantissaBitsWithoutImplicit ≤ mantissa := by
+  have hlog : spec.mantissaBitsWithoutImplicit ≤ mantissa.log2 ↔
+      2 ^ spec.mantissaBitsWithoutImplicit ≤ mantissa := by
+    rcases Nat.eq_zero_or_pos mantissa with rfl | hmantissa
+    · have hwidth := spec.hm
+      have hpow := Nat.two_pow_pos spec.mantissaBitsWithoutImplicit
+      rw [Nat.log2_zero]
+      omega
+    · exact Nat.le_log2 hmantissa.ne'
+  rw [← hlog]
+  simp only [Float.Model.Format.targetExponent, Float.Model.totalExponent,
+    Float.Model.Format.mantissaBits]
+  omega
+
+
+
+
+
+theorem add_le_targetExponent_totalExponent_mul (spec : Float.Model.Format)
+    {mantissa₁ mantissa₂ : Nat} {exponent₁ exponent₂ : Int}
+    (hmantissa₁ : 0 < mantissa₁) (hmantissa₂ : 0 < mantissa₂)
+    (hle₁ :
+      exponent₁ ≤ spec.targetExponent (Float.Model.totalExponent mantissa₁ exponent₁))
+    (hle₂ :
+      exponent₂ ≤ spec.targetExponent (Float.Model.totalExponent mantissa₂ exponent₂)) :
+    exponent₁ + exponent₂ ≤
+      spec.targetExponent
+        (Float.Model.totalExponent (mantissa₁ * mantissa₂) (exponent₁ + exponent₂)) := by
+  rw [le_targetExponent_totalExponent_iff] at hle₁ hle₂ ⊢
+  have hmin : spec.minExponent ≤ 0 := by
+    have hwidth := spec.hm
+    have hpow : (1 : Int) ≤ 2 ^ (spec.exponentBits - 1) := by
+      exact_mod_cast Nat.two_pow_pos (spec.exponentBits - 1)
+    simp only [Float.Model.Format.minExponent, Float.Model.Format.mantissaBits]
+    omega
+  rcases hle₁ with hle₁ | hle₁
+  · rcases hle₂ with hle₂ | hle₂
+    · exact Or.inl (by omega)
+    · exact Or.inr (hle₂.trans (Nat.le_mul_of_pos_left mantissa₂ hmantissa₁))
+  · exact Or.inr (hle₁.trans (Nat.le_mul_of_pos_right mantissa₁ hmantissa₂))
+
+
+
+
+
+theorem le_targetExponent_totalExponent_of_toModel_eq_finite {fmt : FloatFormat} (x : Model fmt)
+    {sign : Sign} {mantissa : Nat} {exponent : Int} {hmantissa : 0 < mantissa}
+    (hx : toModel x = .finite sign mantissa exponent hmantissa) :
+    exponent ≤
+      (FloatFormat.toModel fmt).targetExponent (Float.Model.totalExponent mantissa exponent) := by
+  rw [le_targetExponent_totalExponent_iff, toModel_minExponent]
+  change exponent ≤ FloatFormat.ieeeMinSubnormalExponent fmt ∨ 2 ^ fmt.fracWidth ≤ mantissa
+  have hdecode := ieeeToDyadic?_eq_unpackedToDyadic?_toModel x
+  rw [hx] at hdecode
+  simp only [unpackedToDyadic?, ieeeToDyadic?] at hdecode
+  split_ifs at hdecode
+  · simp only [Option.some.injEq, FloatLib.Numerics.Dyadic.mk.injEq] at hdecode
+    exact absurd hdecode.2.1.symm hmantissa.ne'
+  · simp only [Option.some.injEq, FloatLib.Numerics.Dyadic.mk.injEq] at hdecode
+    exact Or.inl hdecode.2.2.symm.le
+  · simp only [Option.some.injEq, FloatLib.Numerics.Dyadic.mk.injEq] at hdecode
+    refine Or.inr ?_
+    rw [← hdecode.2.1, pow2_eq_two_pow]
+    exact Nat.le_add_right _ _
+
+
+
+theorem modelMulFinite {fmt : FloatFormat} (hfmt : fmt.isIEEE = true)
+    (x y : Model fmt) (hx : (Model.toModel x).isFinite = true)
+    (hy : (Model.toModel y).isFinite = true) :
+    Model.mul x y =
+      Model.ofModel fmt
+        (Float.Model.UnpackedFloat.mul (FloatFormat.toModel fmt)
+          (Model.toModel x) (Model.toModel y)) := by
+  have hzero := FloatFormat.supportsSignedZero_eq_true_of_isIEEE fmt hfmt
+  cases hxmodel : Model.toModel x <;> cases hymodel : Model.toModel y <;>
+    simp only [hxmodel, hymodel, Float.Model.UnpackedFloat.isFinite,
+      Bool.false_eq_true] at hx hy
+  case zero.zero sign₁ sign₂ =>
+    rw [Model.Proof.mul_eq_spec, Model.Spec.mul,
+      Model.toDyadic?_ieee_eq_model fmt hfmt x,
+      Model.toDyadic?_ieee_eq_model fmt hfmt y, hxmodel, hymodel]
+    cases sign₁ <;> cases sign₂ <;>
+      simp [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.mul,
+        Model.modelSignBit, Model.zero, Model.posZero_eq_ofModel_zero,
+        Model.negZero_eq_ofModel_zero, hzero,
+        show Sign.negative * Sign.negative = Sign.positive from rfl,
+        show Sign.negative * Sign.positive = Sign.negative from rfl,
+        show Sign.positive * Sign.negative = Sign.negative from rfl,
+        show Sign.positive * Sign.positive = Sign.positive from rfl]
+  case zero.finite sign₁ sign₂ mantissa₂ exponent₂ hmantissa₂ =>
+    rw [Model.Proof.mul_eq_spec, Model.Spec.mul,
+      Model.toDyadic?_ieee_eq_model fmt hfmt x,
+      Model.toDyadic?_ieee_eq_model fmt hfmt y, hxmodel, hymodel]
+    cases sign₁ <;> cases sign₂ <;>
+      simp [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.mul,
+        Model.modelSignBit, Model.zero, Model.posZero_eq_ofModel_zero,
+        Model.negZero_eq_ofModel_zero, hzero,
+        show Sign.negative * Sign.negative = Sign.positive from rfl,
+        show Sign.negative * Sign.positive = Sign.negative from rfl,
+        show Sign.positive * Sign.negative = Sign.negative from rfl,
+        show Sign.positive * Sign.positive = Sign.positive from rfl]
+  case finite.zero sign₁ mantissa₁ exponent₁ hmantissa₁ sign₂ =>
+    rw [Model.Proof.mul_eq_spec, Model.Spec.mul,
+      Model.toDyadic?_ieee_eq_model fmt hfmt x,
+      Model.toDyadic?_ieee_eq_model fmt hfmt y, hxmodel, hymodel]
+    cases sign₁ <;> cases sign₂ <;>
+      simp [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.mul,
+        Model.modelSignBit, Model.zero, Model.posZero_eq_ofModel_zero,
+        Model.negZero_eq_ofModel_zero, hzero,
+        show Sign.negative * Sign.negative = Sign.positive from rfl,
+        show Sign.negative * Sign.positive = Sign.negative from rfl,
+        show Sign.positive * Sign.negative = Sign.negative from rfl,
+        show Sign.positive * Sign.positive = Sign.positive from rfl]
+  case finite.finite sign₁ mantissa₁ exponent₁ hmantissa₁ sign₂ mantissa₂ exponent₂ hmantissa₂ =>
+    have hle := add_le_targetExponent_totalExponent_mul (FloatFormat.toModel fmt)
+      hmantissa₁ hmantissa₂
+      (le_targetExponent_totalExponent_of_toModel_eq_finite x hxmodel)
+      (le_targetExponent_totalExponent_of_toModel_eq_finite y hymodel)
+    have hr (sign : Sign) :
+        Float.Model.UnpackedFloat.roundWithAccuracy (FloatFormat.toModel fmt) sign
+          (mantissa₁ * mantissa₂) (exponent₁ + exponent₂) .exact =
+        Float.Model.UnpackedFloat.round (FloatFormat.toModel fmt) sign
+          (mantissa₁ * mantissa₂) (exponent₁ + exponent₂) :=
+      Model.roundWithAccuracy_exact_eq_round_of_le_targetExponent _ _ _ _ hle
+    rw [Model.Proof.mul_eq_spec, Model.Spec.mul,
+      Model.toDyadic?_ieee_eq_model fmt hfmt x,
+      Model.toDyadic?_ieee_eq_model fmt hfmt y, hxmodel, hymodel]
+    cases sign₁ <;> cases sign₂ <;>
+      simp [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.mul,
+        Model.roundDyadic, hfmt, Model.ieeeRoundDyadic,
+        Model.modelSignBit, Model.modelSign, hmantissa₁.ne', hmantissa₂.ne',
+        hr,
+        show Sign.negative * Sign.negative = Sign.positive from rfl,
+        show Sign.negative * Sign.positive = Sign.negative from rfl,
+        show Sign.positive * Sign.negative = Sign.negative from rfl,
+        show Sign.positive * Sign.positive = Sign.positive from rfl]
+
+theorem toModelNativeMul (x y : Float32)
+    (hx : x.isFinite = true) (hy : y.isFinite = true) :
+    ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 (x * y)) =
+      Model.mul (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x))
+        (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 y)) := by
+  rw [ExecFloat.Binary.toModel_ofFloat32, ExecFloat.Binary.toModel_ofFloat32,
+    ExecFloat.Binary.toModel_ofFloat32]
+  change Model.ofFloat32Model (Float32.Model.mul x.toModel y.toModel) = _
+  rw [Float32.Model.mul, Model.ofFloat32Model_pack]
+  have h := modelMulFinite (fmt := FloatFormat.binary32)
+    (by decide) (Model.ofFloat32Model x.toModel) (Model.ofFloat32Model y.toModel)
+    (by simpa only [Model.toModel_ofFloat32Model, Float32.isFinite,
+      Float32.Model.isFinite] using hx)
+    (by simpa only [Model.toModel_ofFloat32Model, Float32.isFinite,
+      Float32.Model.isFinite] using hy)
+  rw [Model.toModel_ofFloat32Model, Model.toModel_ofFloat32Model] at h
+  exact h.symm
+
+end NativeBridge
+
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+
+abbrev nativeModel (x : Float32) : Model FloatFormat.binary32 :=
+  Model.ofFloat32Model x.toModel
+
+abbrev rawModel (u : UInt32) : Model FloatFormat.binary32 :=
+  ExecFloat.Binary.toModel (ExecFloat.Binary.ofBits32 u)
+
+theorem rawModel_eq_native32 (u : UInt32) :
+    rawModel u = Model.NativeBinary32.ofUInt32 u := rfl
+
+theorem rawModel_eq_ofUInt32 (u : UInt32) :
+    rawModel u = Model.ofUInt32 (fmt := FloatFormat.binary32) u := by
+  change Model.ofModelBits (fmt := FloatFormat.binary32) u.toBitVec =
+    Model.ofModelBits (fmt := FloatFormat.binary32) (BitVec.ofNat 32 u.toBitVec.toNat)
+  simp [BitVec.ofNat_toNat]
+
+theorem modelCanonicalOfFinite {fmt : FloatFormat} (x : Model fmt)
+    (hx : (Model.toModel x).isFinite = true) : Model.IsModelCanonical x := by
+  constructor
+  intro he hm
+  have hnan : Model.toModel x = Float.Model.UnpackedFloat.notANumber := by
+    simp only [Model.toModel, Float.Model.UnpackedFloat.unpack, he, hm, ite_true, ite_false]
+  rw [hnan] at hx
+  cases hx
+
+theorem modelCanonical_of_decode {fmt : FloatFormat}
+    (hfmt : fmt.isIEEE = true) (x : Model fmt) {d : FloatLib.Numerics.Dyadic}
+    (hd : Model.toDyadic? x = some d) : Model.IsModelCanonical x := by
+  apply modelCanonicalOfFinite
+  rw [Model.toDyadic?_ieee_eq_model fmt hfmt x] at hd
+  cases hx : Model.toModel x <;>
+    simp_all [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.isFinite]
+
+theorem nativeModel_ofBits_of_decode (u : UInt32) {d : FloatLib.Numerics.Dyadic}
+    (hd : Model.toDyadic? (rawModel u) = some d) :
+    nativeModel (Float32.ofBits u) = rawModel u := by
+  have hc : Model.IsModelCanonical (rawModel u) :=
+    modelCanonical_of_decode (by decide) (rawModel u) hd
+  change Model.ofFloat32Model
+    (ExecFloat.Binary.toFloat32 (ExecFloat.Binary.ofBits32 u)).toModel = rawModel u
+  rw [ExecFloat.Binary.toModel_toFloat32_eq, Model.ofFloat32Model_toFloat32Model]
+  exact Model.canonicalizeModel_eq_self _ hc
+
+theorem nativeModel_ofBits_decode (u : UInt32) {d : FloatLib.Numerics.Dyadic}
+    (hd : Model.toDyadic? (rawModel u) = some d) :
+    Model.toDyadic? (nativeModel (Float32.ofBits u)) = some d := by
+  rw [nativeModel_ofBits_of_decode u hd]
+  exact hd
+
+theorem nativeFinite_of_decode (x : Float32) {d : FloatLib.Numerics.Dyadic}
+    (hd : Model.toDyadic? (nativeModel x) = some d) :
+    x.isFinite = true := by
+  rw [Model.toDyadic?_ieee_eq_model FloatFormat.binary32 (by decide)
+    (nativeModel x)] at hd
+  rw [nativeModel, Model.toModel_ofFloat32Model] at hd
+  change x.toModel.unpack.isFinite = true
+  cases hx : x.toModel.unpack <;>
+    simp_all [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.isFinite]
+
+theorem native_eq_of_model_eq (x y : Float32)
+    (h : nativeModel x = nativeModel y) : x = y := by
+  have hw : ExecFloat.Binary.ofFloat32 x = ExecFloat.Binary.ofFloat32 y :=
+    ExecFloat.Binary.toModel_inj.mp h
+  have hn := congrArg ExecFloat.Binary.toFloat32 hw
+  simpa only [ExecFloat.Binary.toFloat32_ofFloat32] using hn
+
+theorem native_mul_eq_of_raw_model_mul_eq
+    (x y : Float32) (u : UInt32)
+    (hx : x.isFinite = true) (hy : y.isFinite = true)
+    (hm : Model.mul (nativeModel x) (nativeModel y) = rawModel u) :
+    x * y = Float32.ofBits u := by
+  have hw : ExecFloat.Binary.ofFloat32 (x * y) = ExecFloat.Binary.ofBits32 u := by
+    apply ExecFloat.Binary.toModel_inj.mp
+    rw [NativeBridge.toModelNativeMul x y hx hy]
+    exact hm
+  calc
+    x * y = ExecFloat.Binary.toFloat32 (ExecFloat.Binary.ofFloat32 (x * y)) :=
+      (ExecFloat.Binary.toFloat32_ofFloat32 _).symm
+    _ = ExecFloat.Binary.toFloat32 (ExecFloat.Binary.ofBits32 u) :=
+      congrArg ExecFloat.Binary.toFloat32 hw
+    _ = Float32.ofBits u := rfl
+
+theorem native_mul_bits_eq_of_raw_model_mul_eq
+    (x y : Float32) (u : UInt32)
+    (hx : x.isFinite = true) (hy : y.isFinite = true)
+    (hm : Model.mul (nativeModel x) (nativeModel y) = rawModel u) :
+    (x * y).toBits = u := by
+  have hw : ExecFloat.Binary.ofFloat32 (x * y) = ExecFloat.Binary.ofBits32 u := by
+    apply ExecFloat.Binary.toModel_inj.mp
+    rw [NativeBridge.toModelNativeMul x y hx hy]
+    exact hm
+  have hn := congrArg ExecFloat.Binary.toBits32 hw
+  simpa only [ExecFloat.Binary.toBits32_ofFloat32,
+    ExecFloat.Binary.toBits32_ofBits32] using hn
+
+theorem native_mul_eq_of_decoded_raw_model_mul_eq
+    (x y : Float32) (u : UInt32)
+    {dx dy : FloatLib.Numerics.Dyadic}
+    (hx : Model.toDyadic? (nativeModel x) = some dx)
+    (hy : Model.toDyadic? (nativeModel y) = some dy)
+    (hm : Model.mul (nativeModel x) (nativeModel y) = rawModel u) :
+    x * y = Float32.ofBits u :=
+  native_mul_eq_of_raw_model_mul_eq x y u
+    (nativeFinite_of_decode x hx) (nativeFinite_of_decode y hy) hm
+
+end R2W01c
+
+namespace R2W01c
+
+open FloatLib.Floats.Formats.BinaryInterchange
+open FloatLib.Numerics
+
+theorem uint32_model_eq_roundDyadic (n : UInt32) :
+    Model.ofFloat32Model n.toFloat32.toModel =
+      Model.roundDyadic FloatFormat.binary32
+        { negative := false, significand := n.toNat, exponent := 0 } := by
+  change Model.ofFloat32Model
+      (Float32.Model.pack
+        (Float.Model.UnpackedFloat.ofUInt32 Float.Model.Format.binary32 n)) = _
+  rw [Model.ofFloat32Model_pack]
+  change Model.ofModel FloatFormat.binary32
+      (Float.Model.UnpackedFloat.ofInt FloatFormat.binary32.toModel
+        (n.toNat : Int)) = _
+  have hn : ¬ (n.toNat : Int) < 0 := by omega
+  simpa [Dyadic.ofScaledInt, hn] using
+    Model.ofModel_ofInt_eq_roundDyadic FloatFormat.binary32
+      (by decide) (n.toNat : Int)
+
+theorem uint32_model_eq_of_decode (n : UInt32)
+    (z : Model FloatFormat.binary32)
+    (hz : Model.toDyadic? z =
+      some { negative := false, significand := n.toNat, exponent := 0 }) :
+    Model.ofFloat32Model n.toFloat32.toModel = z := by
+  rw [uint32_model_eq_roundDyadic]
+  change Model.roundDyadicWithRounding FloatFormat.binary32 .nearestEven
+    { negative := false, significand := n.toNat, exponent := 0 } = z
+  exact Model.roundDyadicWithRounding_toDyadic? (by decide) .nearestEven hz
+
+theorem fields32_toDyadic (s : Bool) (e f : Nat)
+    (he0 : 0 < e) (he : e < 255) (hf : f < 8388608) :
+    Model.toDyadic? (Model.ofFields FloatFormat.binary32 s e f) =
+      some ⟨s, 8388608 + f, (e : Int) - 150⟩ := by
+  have h := Model.toDyadic?_ofFields_normal FloatFormat.binary32 s e f
+    (Nat.ne_of_gt he0) he hf
+  change Model.toDyadic? (Model.ofFields FloatFormat.binary32 s e f) =
+    some ⟨s, 8388608 + f, (e : Int) - 127 - 23⟩ at h
+  have hexp : (e : Int) - 127 - 23 = (e : Int) - 150 := by omega
+  simpa only [hexp] using h
+
+theorem uint32_mantissa_model_eq_fields (n : UInt32)
+    (hlo : 8388608 ≤ n.toNat) (hhi : n.toNat < 16777216) :
+    Model.ofFloat32Model n.toFloat32.toModel =
+      Model.ofFields FloatFormat.binary32 false 150 (n.toNat - 8388608) := by
+  apply uint32_model_eq_of_decode
+  have hf : n.toNat - 8388608 < 8388608 := by omega
+  have hsum : 8388608 + (n.toNat - 8388608) = n.toNat := by omega
+  simpa [hsum] using
+    fields32_toDyadic false 150 (n.toNat - 8388608) (by decide) (by decide) hf
+
+theorem uint32_mantissa_model_decode (n : UInt32)
+    (hlo : 8388608 ≤ n.toNat) (hhi : n.toNat < 16777216) :
+    Model.toDyadic? (Model.ofFloat32Model n.toFloat32.toModel) =
+      some { negative := false, significand := n.toNat, exponent := 0 } := by
+  rw [uint32_mantissa_model_eq_fields n hlo hhi]
+  have hf : n.toNat - 8388608 < 8388608 := by omega
+  have hsum : 8388608 + (n.toNat - 8388608) = n.toNat := by omega
+  simpa [hsum] using
+    fields32_toDyadic false 150 (n.toNat - 8388608) (by decide) (by decide) hf
+
+
+
+end R2W01c
+
+namespace R2W01cModel
+
+open FloatLib
+open FloatLib.Floats.Formats.BinaryInterchange
+open Model
+
+theorem mul_eq_of_finite_value
+    {fmt : FloatFormat} (x y z : Model fmt)
+    (hfmt : fmt.isIEEE = true)
+    (hx : isFinite x = true) (hy : isFinite y = true)
+    (hz : isFinite z = true) (hz0 : toReal z ≠ 0)
+    (hvalue : toReal x * toReal y = toReal z) :
+    mul x y = z := by
+  have hbound : |toReal x| * |toReal y| ≤ toReal (posMaxFinite fmt) := by
+    rw [← abs_mul, hvalue]
+    exact abs_toReal_le_posMaxFinite_of_isIEEE_of_isFinite z hfmt hz
+  have hmulfinite : isFinite (mul x y) = true :=
+    isFinite_mul_of_abs_mul_le_posMaxFinite x y hfmt hx hy hbound
+  have hmulvalue : toReal (mul x y) = toReal z := by
+    rw [toReal_mul_eq_roundAt x y hfmt hx hy hmulfinite,
+      hvalue, roundAt_toReal_eq z hz]
+  exact eq_of_toReal_eq_of_nonzero hmulfinite hz hmulvalue
+    (by rw [hmulvalue]; exact hz0)
+
+theorem dyadic_scale_value (sign : Bool) (m k : Nat) (e : Int) :
+    (Numerics.Dyadic.mk false m 0).toReal *
+      (Numerics.Dyadic.mk sign (2 ^ k) e).toReal =
+      (Numerics.Dyadic.mk sign m (e + (k : Int))).toReal := by
+  cases sign <;>
+    simp [Numerics.Dyadic.toReal, Numerics.Dyadic.signedSignificand,
+      zpow_add₀ (by norm_num : (2 : ℝ) ≠ 0)] <;> ring <;> simp
+
+theorem mul_eq_of_scale_decodes
+    {fmt : FloatFormat} (x y z : Model fmt)
+    (hfmt : fmt.isIEEE = true) (sign : Bool) (m k : Nat) (e : Int)
+    (hm : m ≠ 0)
+    (hx : toDyadic? x = some ⟨false, m, 0⟩)
+    (hy : toDyadic? y = some ⟨sign, 2 ^ k, e⟩)
+    (hz : toDyadic? z = some ⟨sign, m, e + (k : Int)⟩) :
+    mul x y = z := by
+  have hxfinite : isFinite x = true := isFinite_eq_true_of_toDyadic?_some hx
+  have hyfinite : isFinite y = true := isFinite_eq_true_of_toDyadic?_some hy
+  have hzfinite : isFinite z = true := isFinite_eq_true_of_toDyadic?_some hz
+  have hz0 : toReal z ≠ 0 := by
+    have hd0 : (Numerics.Dyadic.mk sign m (e + (k : Int))).toReal ≠ 0 :=
+      (Dyadic.toReal_eq_zero_iff _).not.mpr hm
+    simpa only [toReal_eq, hz] using hd0
+  apply mul_eq_of_finite_value x y z hfmt hxfinite hyfinite hzfinite hz0
+  simpa only [toReal_eq, hx, hy, hz] using dyadic_scale_value sign m k e
+
+theorem binary32_mantissa_scale_mul
+    (x y z : Model FloatFormat.binary32) (sign : Bool) (m E : Nat)
+    (hm : m ≠ 0)
+    (hx : toDyadic? x = some ⟨false, m, 0⟩)
+    (hy : toDyadic? y = some ⟨sign, 2 ^ 23, (E : Int) - 173⟩)
+    (hz : toDyadic? z = some ⟨sign, m, (E : Int) - 150⟩) :
+    mul x y = z := by
+  apply mul_eq_of_scale_decodes x y z (by decide)
+    sign m 23 ((E : Int) - 173) hm hx hy
+  have he : (E : Int) - 173 + ((23 : Nat) : Int) = (E : Int) - 150 := by
+    omega
+  simpa only [he] using hz
+
+end R2W01cModel
+
+namespace R2W01c
+
+open FloatLib.Floats.Formats.BinaryInterchange
+open R2W01b
+
+abbrev raw32 (u : UInt32) : Model FloatFormat.binary32 :=
+  Model.ofUInt32 u
+
+def wordSign (u : UInt32) : Bool :=
+  decide (2147483648 ≤ u.toNat)
+
+def wordExp (u : UInt32) : Nat :=
+  u.toNat / 8388608 % 256
+
+def wordFrac (u : UInt32) : Nat :=
+  u.toNat % 8388608
+
+theorem raw32_bits (u : UInt32) : (raw32 u).bits = u.toBitVec := by
+  change BitVec.ofNat 32 u.toNat = u.toBitVec
+  exact BitVec.ofNat_uInt32ToNat u
+
+theorem raw32_sign (u : UInt32) : Model.signBit (raw32 u) = wordSign u := by
+  rw [Model.signBit_eq_msb, raw32_bits]
+  exact BitVec.msb_eq_decide u.toBitVec
+
+theorem raw32_exp (u : UInt32) : Model.expField (raw32 u) = wordExp u := by
+  unfold Model.expField
+  rw [raw32_bits]
+  change ((u.toBitVec >>> 23) &&& (BitVec.ofNat 32 255)).toNat = wordExp u
+  rw [BitVec.toNat_and, BitVec.toNat_ushiftRight]
+  change (u.toNat >>> 23) &&& (2 ^ 8 - 1) = u.toNat / 8388608 % 256
+  rw [Nat.and_two_pow_sub_one_eq_mod, Nat.shiftRight_eq_div_pow]
+
+theorem raw32_frac (u : UInt32) : Model.fracField (raw32 u) = wordFrac u := by
+  unfold Model.fracField
+  rw [raw32_bits]
+  change (u.toBitVec &&& (BitVec.ofNat 32 8388607)).toNat = wordFrac u
+  rw [BitVec.toNat_and]
+  change u.toNat &&& (2 ^ 23 - 1) = u.toNat % 2 ^ 23
+  exact Nat.and_two_pow_sub_one_eq_mod u.toNat 23
+
+theorem raw32_eq_fields (u : UInt32) :
+    raw32 u = Model.ofFields FloatFormat.binary32 (wordSign u) (wordExp u)
+      (wordFrac u) := by
+  rw [← raw32_sign, ← raw32_exp, ← raw32_frac]
+  exact (Model.ofFields_signBit_expField_fracField (raw32 u)).symm
+
+theorem wordFrac_lt (u : UInt32) : wordFrac u < 8388608 :=
+  Nat.mod_lt _ (by decide)
+
+theorem mantissa_toNat (u : UInt32) :
+    (mantissa u).toNat = 8388608 + wordFrac u := by
+  rw [mantissa, UInt32.toNat_or, UInt32.toNat_and]
+  change (u.toNat &&& (2 ^ 23 - 1)) ||| 2 ^ 23 = 8388608 + wordFrac u
+  rw [Nat.and_two_pow_sub_one_eq_mod,
+    Nat.or_two_pow_eq_add_of_lt (Nat.mod_lt u.toNat (by decide : 0 < 2 ^ 23))]
+  exact Nat.add_comm _ _
+
+theorem mantissa_bounds (u : UInt32) :
+    8388608 ≤ (mantissa u).toNat ∧ (mantissa u).toNat < 16777216 := by
+  rw [mantissa_toNat]
+  have hf := wordFrac_lt u
+  omega
+
+theorem normal_wordExp_bounds (u : UInt32) (hn : NormalBand u) :
+    24 ≤ wordExp u ∧ wordExp u < 255 := by
+  rcases hn with ⟨hl, hh⟩
+  rw [UInt32.le_iff_toNat_le, magnitude_toNat] at hl
+  rw [UInt32.lt_iff_toNat_lt, magnitude_toNat] at hh
+  change 201326592 ≤ u.toNat % 2147483648 at hl
+  change u.toNat % 2147483648 < 2139095040 at hh
+  have hu := u.toNat_lt_size
+  change u.toNat < 4294967296 at hu
+  unfold wordExp
+  omega
+
+theorem tableIndex_nat (u : UInt32) :
+    (tableIndex u).toNat = u.toNat / 8388608 := by
+  rw [tableIndex, UInt32.toNat_shiftRight]
+  change u.toNat >>> 23 = u.toNat / 8388608
+  exact Nat.shiftRight_eq_div_pow u.toNat 23
+
+theorem tableExp_nat (u : UInt32) :
+    (tableIndex u &&& 255).toNat = wordExp u := by
+  rw [UInt32.toNat_and, tableIndex_nat]
+  change (u.toNat / 8388608) &&& (2 ^ 8 - 1) =
+    u.toNat / 8388608 % 2 ^ 8
+  exact Nat.and_two_pow_sub_one_eq_mod _ 8
+
+theorem high_bit_of_lt512 (n : Nat) (hn : n < 512) :
+    n &&& 256 = n / 256 * 256 := by
+  change n &&& 2 ^ 8 = n / 256 * 256
+  rw [Nat.and_two_pow, Nat.testBit_eq_decide_div_mod_eq]
+  change (decide (n / 256 % 2 = 1)).toNat * 256 = n / 256 * 256
+  by_cases h : n < 256
+  · have hd : n / 256 = 0 := Nat.div_eq_of_lt h
+    simp [hd]
+  · have hd : n / 256 = 1 := by omega
+    simp [hd]
+
+theorem tableSign_nat (u : UInt32) :
+    ((tableIndex u &&& 256) <<< 23).toNat =
+      u.toNat / 2147483648 * 2147483648 := by
+  have hu := u.toNat_lt_size
+  change u.toNat < 4294967296 at hu
+  have hj : u.toNat / 8388608 < 512 := by omega
+  rw [UInt32.toNat_shiftLeft, UInt32.toNat_and, tableIndex_nat]
+  change (((u.toNat / 8388608) &&& 256) <<< 23) % 4294967296 = _
+  rw [high_bit_of_lt512 _ hj, Nat.shiftLeft_eq]
+  change (u.toNat / 8388608 / 256 * 256 * 8388608) % 4294967296 = _
+  omega
+
+theorem scaleBits_nat (u : UInt32) (hn : NormalBand u) :
+    (scaleBits (tableIndex u)).toNat =
+      u.toNat / 2147483648 * 2147483648 + (wordExp u - 23) * 8388608 := by
+  have he := normal_wordExp_bounds u hn
+  have het := tableExp_nat u
+  have helo : (24 : UInt32) ≤ (tableIndex u &&& 255) := by
+    rw [UInt32.le_iff_toNat_le, het]
+    exact he.1
+  have hehi : (tableIndex u &&& 255) ≤ (254 : UInt32) := by
+    rw [UInt32.le_iff_toNat_le, het]
+    change wordExp u ≤ 254
+    omega
+  have hg :
+      (decide (24 ≤ (tableIndex u &&& 255)) &&
+        decide ((tableIndex u &&& 255) ≤ 254)) = true := by
+    simp only [Bool.and_eq_true, decide_eq_true_eq]
+    exact ⟨helo, hehi⟩
+  have hsub : ((tableIndex u &&& 255) - 23).toNat = wordExp u - 23 := by
+    have hle : (23 : UInt32) ≤ (tableIndex u &&& 255) := by
+      rw [UInt32.le_iff_toNat_le, het]
+      change 23 ≤ wordExp u
+      omega
+    have h := UInt32.toNat_sub_of_le (tableIndex u &&& 255) 23 hle
+    change ((tableIndex u &&& 255) - 23).toNat = (tableIndex u &&& 255).toNat - 23 at h
+    simpa only [het] using h
+  have hshift : (((tableIndex u &&& 255) - 23) <<< 23).toNat =
+      (wordExp u - 23) * 8388608 := by
+    rw [UInt32.toNat_shiftLeft, hsub]
+    change ((wordExp u - 23) <<< 23) % 4294967296 = _
+    rw [Nat.shiftLeft_eq]
+    change ((wordExp u - 23) * 8388608) % 4294967296 = _
+    exact Nat.mod_eq_of_lt (by omega)
+  unfold scaleBits
+  dsimp only
+  rw [if_pos hg, UInt32.toNat_or, tableSign_nat, hshift]
+  have hlo : (wordExp u - 23) * 8388608 < 2 ^ 31 := by
+    change (wordExp u - 23) * 8388608 < 2147483648
+    omega
+  rw [Nat.mul_comm (u.toNat / 2147483648) 2147483648]
+  exact (Nat.two_pow_add_eq_or_of_lt hlo (u.toNat / 2147483648)).symm
+
+theorem scale_wordSign (u : UInt32) (hn : NormalBand u) :
+    wordSign (scaleBits (tableIndex u)) = wordSign u := by
+  have hu := u.toNat_lt_size
+  change u.toNat < 4294967296 at hu
+  have he := normal_wordExp_bounds u hn
+  apply Bool.eq_iff_iff.mpr
+  simp only [wordSign, decide_eq_true_eq]
+  rw [scaleBits_nat u hn]
+  omega
+
+theorem scale_wordExp (u : UInt32) (hn : NormalBand u) :
+    wordExp (scaleBits (tableIndex u)) = wordExp u - 23 := by
+  have hu := u.toNat_lt_size
+  change u.toNat < 4294967296 at hu
+  have he := normal_wordExp_bounds u hn
+  change (scaleBits (tableIndex u)).toNat / 8388608 % 256 = wordExp u - 23
+  rw [scaleBits_nat u hn]
+  omega
+
+theorem scale_wordFrac (u : UInt32) (hn : NormalBand u) :
+    wordFrac (scaleBits (tableIndex u)) = 0 := by
+  have hu := u.toNat_lt_size
+  change u.toNat < 4294967296 at hu
+  have he := normal_wordExp_bounds u hn
+  change (scaleBits (tableIndex u)).toNat % 8388608 = 0
+  rw [scaleBits_nat u hn]
+  omega
+
+theorem normal_raw32_decode (u : UInt32) (hn : NormalBand u) :
+    Model.toDyadic? (raw32 u) =
+      some ⟨wordSign u, (mantissa u).toNat, (wordExp u : Int) - 150⟩ := by
+  have he := normal_wordExp_bounds u hn
+  rw [raw32_eq_fields, mantissa_toNat]
+  exact fields32_toDyadic (wordSign u) (wordExp u) (wordFrac u)
+    (by omega) he.2 (wordFrac_lt u)
+
+theorem scale_raw32_decode (u : UInt32) (hn : NormalBand u) :
+    Model.toDyadic? (raw32 (scaleBits (tableIndex u))) =
+      some ⟨wordSign u, 8388608, (wordExp u : Int) - 173⟩ := by
+  have he := normal_wordExp_bounds u hn
+  rw [raw32_eq_fields, scale_wordSign u hn, scale_wordExp u hn, scale_wordFrac u hn]
+  have hd := fields32_toDyadic (wordSign u) (wordExp u - 23) 0
+    (by omega) (by omega) (by decide)
+  have hexp : ((wordExp u - 23 : Nat) : Int) - 150 =
+      (wordExp u : Int) - 173 := by omega
+  simpa only [Nat.add_zero, hexp] using hd
+
+end R2W01c
+
+namespace R2W01c
+
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+open R2W01b
+
+theorem mantissa_native_decode (u : UInt32) :
+    Model.toDyadic? (nativeModel (mantissa u).toFloat32) =
+      some ⟨false, (mantissa u).toNat, 0⟩ := by
+  have hm := mantissa_bounds u
+  simpa only [nativeModel] using
+    uint32_mantissa_model_decode (mantissa u) hm.1 hm.2
+
+theorem scale_native_decode (u : UInt32) (hn : NormalBand u) :
+    Model.toDyadic? (nativeModel (scaleAt u)) =
+      some ⟨wordSign u, 2 ^ 23, (wordExp u : Int) - 173⟩ := by
+  rw [scaleAt_eq]
+  apply nativeModel_ofBits_decode
+  rw [rawModel_eq_ofUInt32]
+  exact scale_raw32_decode u hn
+
+theorem target_raw_decode (u : UInt32) (hn : NormalBand u) :
+    Model.toDyadic? (rawModel u) =
+      some ⟨wordSign u, (mantissa u).toNat, (wordExp u : Int) - 150⟩ := by
+  rw [rawModel_eq_ofUInt32]
+  exact normal_raw32_decode u hn
+
+theorem normal_model_mul (u : UInt32) (hn : NormalBand u) :
+    Model.mul (nativeModel (mantissa u).toFloat32) (nativeModel (scaleAt u)) =
+      rawModel u := by
+  apply R2W01cModel.binary32_mantissa_scale_mul
+    (nativeModel (mantissa u).toFloat32) (nativeModel (scaleAt u)) (rawModel u)
+    (wordSign u) (mantissa u).toNat (wordExp u)
+  · have hm := (mantissa_bounds u).1
+    omega
+  · exact mantissa_native_decode u
+  · exact scale_native_decode u hn
+  · exact target_raw_decode u hn
+
+theorem normal_eq (u : UInt32) (hn : NormalBand u) :
+    tableProduct u = Float32.ofBits u := by
+  exact native_mul_eq_of_decoded_raw_model_mul_eq
+    (mantissa u).toFloat32 (scaleAt u) u
+    (mantissa_native_decode u) (scale_native_decode u hn) (normal_model_mul u hn)
+
+
+
+theorem convert_eq (u : UInt32) : convert u = Float32.ofBits u := by
+  exact R2W01b.convert_eq normal_eq u
+
+theorem convert_bits_eq (u : UInt32) :
+    (convert u).toBits = (Float32.ofBits u).toBits := by
+  exact congrArg Float32.toBits (convert_eq u)
+
+theorem replace_decoder {α : Sort _}
+    (core : (UInt32 → Float32) → α) : core convert = core Float32.ofBits := by
+  exact congrArg core (funext convert_eq)
+
+theorem foldl_convert_eq
+    (xs : List UInt32) (step : Float32 → Float32 → Float32) (acc : Float32) :
+    xs.foldl (fun z u => step z (convert u)) acc =
+      xs.foldl (fun z u => step z (Float32.ofBits u)) acc := by
+  exact R2W01b.foldl_convert_eq normal_eq xs step acc
+
+end R2W01c
+
+
+namespace R19BiasBase
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+namespace FastMul
+
+open FloatLib.Floats Competition
+open FloatLib.Floats.Formats.BinaryInterchange
+open Model.NativeBinary32
+
+
+@[inline] def sx (k x : UInt64) : UInt64 := bif x >>> k == 0 then x else x >>> k
+
+
+@[inline] def sr (k x r : UInt64) : UInt64 := bif x >>> k == 0 then r else r + k
+
+
+@[inline] def fastLog2 (x0 : UInt64) : UInt64 :=
+  let x1 := sx 32 x0
+  let r1 := sr 32 x0 0
+  let x2 := sx 16 x1
+  let r2 := sr 16 x1 r1
+  let x3 := sx 8 x2
+  let r3 := sr 8 x2 r2
+  let x4 := sx 4 x3
+  let r4 := sr 4 x3 r3
+  let x5 := sx 2 x4
+  let r5 := sr 2 x4 r4
+  sr 1 x5 r5
+
+
+@[inline] def rse (value shift : UInt64) : UInt64 :=
+  let quotient := value >>> shift
+  let remainder := value &&& ((1 <<< shift) - 1)
+  let half := (1 : UInt64) <<< (shift - 1)
+  if remainder < half then quotient
+  else if remainder > half then quotient + 1
+  else if (quotient &&& 1) == 0 then quotient
+  else quotient + 1
+
+
+@[inline] def rseAny (value shift : UInt64) : UInt64 :=
+  if shift == 0 then value
+  else if shift < 64 then rse value shift
+  else if shift == 64 then (if value > 0x8000000000000000 then 1 else 0)
+  else 0
+
+
+@[inline] def mkW (sign : Bool) (e f : UInt32) : UInt32 :=
+  (if sign then (0x80000000 : UInt32) else 0) ||| ((e &&& 0xff) <<< 23) ||| (f &&& 0x007fffff)
+
+
+@[inline] def fracW (n : UInt64) : UInt32 :=
+  (if n < 0x800000 then 0 else n - 0x800000).toUInt32
+
+
+@[inline] def roundP (sign : Bool) (product scale : UInt64) : UInt32 :=
+  if product == 0 then
+    if sign then 0x80000000 else 0
+  else
+    let leading := fastLog2 product
+    let position := leading + scale
+    if position < 172 then
+      let fraction :=
+        if scale < 149 then
+          rseAny product (149 - scale)
+        else
+          product <<< (scale - 149)
+      if fraction == 0 then
+        if sign then 0x80000000 else 0
+      else if fraction == 0x800000 then
+        mkW sign 1 0
+      else
+        mkW sign 0 fraction.toUInt32
+    else
+      let roundedMantissa :=
+        if leading < 23 then
+          product <<< (23 - leading)
+        else
+          rseAny product (leading - 23)
+      let carry := roundedMantissa == 0x1000000
+      let normalizedPosition := if carry then position + 1 else position
+      if normalizedPosition > 425 then
+        if sign then 0xff800000 else 0x7f800000
+      else
+        let normalizedMantissa := if carry then 0x800000 else roundedMantissa
+        let encodedExponent := normalizedPosition - 171
+        mkW sign encodedExponent.toUInt32 (fracW normalizedMantissa)
+
+
+@[inline] def core (xBits yBits : UInt32) : UInt32 :=
+  let xExponent := expField xBits
+  let yExponent := expField yBits
+  let sign := Bool.xor (signBit xBits) (signBit yBits)
+  let xFraction := fracField xBits
+  let yFraction := fracField yBits
+  let xMantissa := finiteMantissa xExponent xFraction
+  let yMantissa := finiteMantissa yExponent yFraction
+  let xScale := finiteScale xExponent
+  let yScale := finiteScale yExponent
+  roundP sign (xMantissa * yMantissa) (xScale + yScale)
+
+
+@[inline] def sm1 (a : UInt32) : Bool := a <<< 1 ≥ 0xff000000
+
+
+@[inline] def special (a b : UInt32) : Bool := sm1 a || sm1 b
+
+
+@[inline] def ofBits (w : UInt32) : Binary32 := Configured.NativeFPU.ofBinary32Bits w
+
+
+def mul (x y : Binary32) : Binary32 :=
+  if special x.raw.1 y.raw.1 then ExecFloat.mul x y
+  else ofBits (core x.raw.1 y.raw.1)
+
+
+abbrev Fmt := ExecFloat.Binary.format (exponentBits := 8) (fractionBits := 23)
+abbrev Plan := Configured.StoragePlan.forKnownWidth Fmt (1 + 8 + 23) (by rfl)
+abbrev Fam := Configured.Family Fmt (Configured.Code Plan) Plan
+
+
+def dec (z : Binary32) : Model Fmt :=
+  ExecFloat.ModelCodec.decode (F := Fam) (plan := Plan) (Model := Model Fmt) z
+
+
+theorem dec_eq (z : Binary32) : dec z = ofUInt32 z.raw.1 := rfl
+
+
+theorem dec_ofBits (w : UInt32) : dec (ofBits w) = ofUInt32 w := rfl
+
+
+theorem word32 (a b : Model Fmt) :
+    Model.MulBackend.word a b =
+      match mulFiniteImpl? a b with
+      | some s => s
+      | none => Model.MulBackend.generic a b := by
+  unfold Model.MulBackend.word
+  rw [dif_pos (by decide)]
+  rfl
+
+
+theorem dec_word (x y : Binary32) :
+    dec (Configured.Backend.wordMul x y) = Model.MulBackend.word (dec x) (dec y) :=
+  ExecFloat.ModelCodec.decode_liftBinary (F := Fam) (plan := Plan) (Model := Model Fmt) _ x y
+
+
+theorem toUInt32_ofUInt32 (b : UInt32) : toUInt32 (ofUInt32 b) = b := by
+  simp [toUInt32, ofUInt32, Model.ofBits]
+
+
+theorem log2_shift (n k : Nat) (h : n >>> k ≠ 0) : n.log2 = k + (n >>> k).log2 := by
+  have hn : n ≠ 0 := by rintro rfl; simp at h
+  rw [Nat.log2_eq_iff hn]
+  rw [Nat.shiftRight_eq_div_pow] at h ⊢
+  have h1 := Nat.log2_self_le h
+  have h2 := Nat.lt_log2_self (n := n / 2 ^ k)
+  have hk : 0 < 2 ^ k := Nat.two_pow_pos k
+  constructor
+  · calc 2 ^ (k + (n / 2 ^ k).log2) = 2 ^ k * 2 ^ (n / 2 ^ k).log2 := Nat.pow_add 2 _ _
+      _ ≤ 2 ^ k * (n / 2 ^ k) := Nat.mul_le_mul_left _ h1
+      _ ≤ n := Nat.mul_div_le n (2 ^ k)
+  · calc n < 2 ^ k * (n / 2 ^ k + 1) := Nat.lt_mul_div_succ n hk
+      _ ≤ 2 ^ k * 2 ^ ((n / 2 ^ k).log2 + 1) := Nat.mul_le_mul_left _ h2
+      _ = 2 ^ (k + (n / 2 ^ k).log2 + 1) := by rw [← Nat.pow_add]; ring_nf
+
+
+theorem log2_lt_64 (x : UInt64) : x.toNat.log2 < 64 := by
+  rcases Nat.eq_zero_or_pos x.toNat with h | h
+  · simp [h]
+  · exact (Nat.log2_lt (by omega)).mpr x.toNat_lt
+
+
+theorem step (x0 r x k : UInt64) (hk : k.toNat ≤ 32) (hk0 : 0 < k.toNat)
+    (hinv : x0.toNat.log2 = r.toNat + x.toNat.log2) (hb : x.toNat < 2 ^ (2 * k.toNat)) :
+    x0.toNat.log2 = (sr k x r).toNat + (sx k x).toNat.log2 ∧ (sx k x).toNat < 2 ^ k.toNat := by
+  have hs : (x >>> k).toNat = x.toNat >>> k.toNat := by
+    rw [UInt64.toNat_shiftRight, Nat.mod_eq_of_lt (by omega)]
+  unfold sx sr
+  by_cases hz : x >>> k = 0
+  · simp only [hz, beq_self_eq_true, Bool.cond_true]
+    refine ⟨hinv, ?_⟩
+    have h0 : x.toNat >>> k.toNat = 0 := by rw [← hs, hz]; rfl
+    rw [Nat.shiftRight_eq_div_pow, Nat.div_eq_zero_iff] at h0
+    rcases h0 with h0 | h0
+    · exact absurd h0 (Nat.two_pow_pos _).ne'
+    · exact h0
+  · have hz' : (x >>> k == 0) = false := by simpa using hz
+    simp only [hz', Bool.cond_false]
+    have hne : x.toNat >>> k.toNat ≠ 0 := by
+      rw [← hs]
+      intro h
+      exact hz (UInt64.toNat_inj.mp (by simpa using h))
+    have hl := log2_shift x.toNat k.toNat hne
+    have h64 := log2_lt_64 x0
+    constructor
+    · rw [UInt64.toNat_add, Nat.mod_eq_of_lt (by omega), hs]
+      omega
+    · rw [hs, Nat.shiftRight_eq_div_pow]
+      apply Nat.div_lt_of_lt_mul
+      rw [← Nat.pow_add]
+      exact lt_of_lt_of_eq hb (by congr 1; omega)
+
+
+theorem log2_lt_two (n : Nat) (h : n < 2) : n.log2 = 0 := by
+  interval_cases n <;> decide
+
+
+theorem fastLog2_eq (x : UInt64) : fastLog2 x = x.log2 := by
+  apply UInt64.toNat_inj.mp
+  rw [show x.log2.toNat = x.toNat.log2 from rfl]
+  have b0 : x.toNat < 2 ^ (2 * (32 : UInt64).toNat) := x.toNat_lt
+  obtain ⟨e1, b1⟩ := step x 0 x 32 (by decide) (by decide) (by simp) b0
+  obtain ⟨e2, b2⟩ := step x _ _ 16 (by decide) (by decide) e1 (by simpa using b1)
+  obtain ⟨e3, b3⟩ := step x _ _ 8 (by decide) (by decide) e2 (by simpa using b2)
+  obtain ⟨e4, b4⟩ := step x _ _ 4 (by decide) (by decide) e3 (by simpa using b3)
+  obtain ⟨e5, b5⟩ := step x _ _ 2 (by decide) (by decide) e4 (by simpa using b4)
+  obtain ⟨e6, b6⟩ := step x _ _ 1 (by decide) (by decide) e5 (by simpa using b5)
+  rw [log2_lt_two (sx 1 (sx 2 (sx 4 (sx 8 (sx 16 (sx 32 x)))))).toNat (by simpa using b6)] at e6
+  unfold fastLog2
+  dsimp only
+  omega
+
+theorem expField_toNat (a : UInt32) : (expField a).toNat = a.toNat / 2 ^ 23 % 2 ^ 8 := by
+  unfold expField
+  rw [UInt32.toNat_and, UInt32.toNat_shiftRight]
+  rw [show (0xff : UInt32).toNat = 2 ^ 8 - 1 from rfl, Nat.and_two_pow_sub_one_eq_mod]
+  simp [Nat.shiftRight_eq_div_pow]
+
+
+theorem sm1_eq (a : UInt32) : sm1 a = (expField a == 0xff) := by
+  have ha := a.toNat_lt
+  have he := expField_toNat a
+  apply Bool.eq_iff_iff.mpr
+  unfold sm1
+  simp only [decide_eq_true_eq, ge_iff_le, UInt32.le_iff_toNat_le, UInt32.toNat_shiftLeft,
+    beq_iff_eq]
+  rw [← UInt32.toNat_inj, he]
+  simp only [show (0xff : UInt32).toNat = 255 from rfl]
+  simp
+  omega
+
+
+theorem rseAny_eq (value shift : UInt64) :
+    rseAny value shift = FloatLib.Numerics.FixedWord.roundShiftRightEven value shift.toNat := by
+  unfold rseAny rse FloatLib.Numerics.FixedWord.roundShiftRightEven
+  have hs := shift.toNat_lt
+  by_cases h0 : shift = 0
+  · subst h0; rfl
+  · have h0' : shift.toNat ≠ 0 := by
+      intro h; exact h0 (UInt64.toNat_inj.mp (by simpa using h))
+    simp only [h0, beq_iff_eq, h0', reduceIte]
+    have e1 : UInt64.ofNat shift.toNat = shift := UInt64.ofNat_toNat
+    have e2 : UInt64.ofNat (shift.toNat - 1) = shift - 1 := by
+      apply UInt64.toNat_inj.mp
+      have hle : (1 : UInt64) ≤ shift := by rw [UInt64.le_iff_toNat_le]; simp; omega
+      rw [UInt64.toNat_sub_of_le _ _ hle]
+      simp
+      omega
+    have c1 : (shift < 64) ↔ shift.toNat < 64 := UInt64.lt_iff_toNat_lt
+    have c2 : shift = 64 ↔ shift.toNat = 64 := by rw [← UInt64.toNat_inj]; rfl
+    simp only [e1, e2, ← c1, ← c2]
+
+
+theorem mkW_ofNat (sign : Bool) (e f : Nat) :
+    mkW sign (UInt32.ofNat e) (UInt32.ofNat f) = mkBits sign e f := by
+  unfold mkW mkBits
+  cases sign <;> rfl
+
+
+theorem toUInt32_eq (x : UInt64) : x.toUInt32 = UInt32.ofNat x.toNat := rfl
+
+
+theorem fracW_eq (n : UInt64) : fracW n = UInt32.ofNat (n.toNat - 0x800000) := by
+  unfold fracW
+  split
+  · rename_i h
+    rw [UInt64.lt_iff_toNat_lt] at h
+    simp only [toUInt32_eq]
+    rw [show n.toNat - 0x800000 = 0 by simp at h; omega]
+    rfl
+  · rename_i h
+    rw [UInt64.lt_iff_toNat_lt] at h
+    simp only [toUInt32_eq]
+    rw [UInt64.toNat_sub_of_le _ _ (by rw [UInt64.le_iff_toNat_le]; simp at h ⊢; omega)]
+    rfl
+
+
+theorem roundP_eq (sign : Bool) (product scale : UInt64) :
+    roundP sign product scale = roundProduct sign product scale := by
+  unfold roundP roundProduct
+  simp only [fastLog2_eq, rseAny_eq, fracW_eq, toUInt32_eq]
+  rw [show (1 : UInt32) = UInt32.ofNat 1 from rfl, show (0 : UInt32) = UInt32.ofNat 0 from rfl]
+  simp only [mkW_ofNat]
+
+
+theorem impl_eq (a b : UInt32) (ha : expField a ≠ 0xff) (hb : expField b ≠ 0xff) :
+    mulFiniteImpl? (ofUInt32 a) (ofUInt32 b) = some (ofUInt32 (core a b)) := by
+  unfold mulFiniteImpl? core
+  simp only [roundP_eq, toUInt32_ofUInt32, ha, hb, beq_iff_eq, Bool.or_eq_true, or_self,
+    if_false]
+
+
+theorem mul_eq_word (x y : Binary32) : mul x y = Configured.Backend.wordMul x y := by
+  unfold mul
+  split
+  · rfl
+  · rename_i h
+    simp only [special, sm1_eq, Bool.or_eq_true, beq_iff_eq, not_or] at h
+    obtain ⟨ha, hb⟩ := h
+    apply ExecFloat.ModelCodec.decode_injective (F := Fam) (plan := Plan) (Model := Model Fmt)
+    change dec (ofBits (core x.raw.1 y.raw.1)) = dec (Configured.Backend.wordMul x y)
+    rw [dec_ofBits, dec_word, word32, dec_eq x, dec_eq y, impl_eq _ _ ha hb]
+
+theorem mul_spec : ∀ x y : Binary32, mul x y = ExecFloat.Spec.mul x y := fun x y => by
+  rw [mul_eq_word]
+  exact Configured.Backend.wordMul_eq_spec x y
+
+end FastMul
+
+open FloatLib.Floats Competition
+
+namespace LowScale
+
+
+@[inline] def roundLow (sign : Bool) (product scale : UInt64) : UInt32 :=
+  if product == 0 then
+    if sign then 0x80000000 else 0
+  else
+    let fraction := FastMul.rseAny product (149 - scale)
+    if fraction == 0 then
+      if sign then 0x80000000 else 0
+    else if fraction == 0x800000 then
+      FastMul.mkW sign 1 0
+    else
+      FastMul.mkW sign 0 fraction.toUInt32
+
+theorem roundLow_eq (sign : Bool) (product scale : UInt64)
+    (hp : product.toNat < 2 ^ 48) (hs : scale.toNat ≤ 123) :
+    roundLow sign product scale = FastMul.roundP sign product scale := by
+  by_cases hz : product = 0
+  · subst product
+    simp [roundLow, FastMul.roundP]
+  · have hn : product.toNat ≠ 0 := by
+      intro h
+      apply hz
+      apply UInt64.toNat_inj.mp
+      exact h
+    have hl : (FastMul.fastLog2 product).toNat < 48 := by
+      rw [FastMul.fastLog2_eq]
+      change product.toNat.log2 < 48
+      exact (Nat.log2_lt hn).mpr hp
+    have hposition : FastMul.fastLog2 product + scale < (172 : UInt64) := by
+      rw [UInt64.lt_iff_toNat_lt, UInt64.toNat_add]
+      change ((FastMul.fastLog2 product).toNat + scale.toNat) %
+        18446744073709551616 < 172
+      rw [Nat.mod_eq_of_lt (by omega)]
+      omega
+    have hscale : scale < (149 : UInt64) := by
+      rw [UInt64.lt_iff_toNat_lt]
+      change scale.toNat < 149
+      omega
+    simp only [roundLow, FastMul.roundP, beq_iff_eq, hz, ite_false,
+      hposition, ite_true, hscale]
+
+
+@[inline] def roundSelect (sign : Bool) (product scale : UInt64) : UInt32 :=
+  if h : product < (0x1000000000000 : UInt64) ∧ scale ≤ (123 : UInt64) then
+    roundLow sign product scale
+  else FastMul.roundP sign product scale
+
+theorem roundSelect_eq (sign : Bool) (product scale : UInt64) :
+    roundSelect sign product scale = FastMul.roundP sign product scale := by
+  unfold roundSelect
+  split
+  · rename_i h
+    apply roundLow_eq
+    · have hp := h.1
+      rw [UInt64.lt_iff_toNat_lt] at hp
+      change product.toNat < 2 ^ 48 at hp
+      exact hp
+    · have hs := h.2
+      rw [UInt64.le_iff_toNat_le] at hs
+      change scale.toNat ≤ 123 at hs
+      exact hs
+  · rfl
+
+
+open FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32
+
+@[inline] def core (xBits yBits : UInt32) : UInt32 :=
+  let xExponent := expField xBits
+  let yExponent := expField yBits
+  let sign := Bool.xor (signBit xBits) (signBit yBits)
+  let xFraction := fracField xBits
+  let yFraction := fracField yBits
+  let xMantissa := finiteMantissa xExponent xFraction
+  let yMantissa := finiteMantissa yExponent yFraction
+  let xScale := finiteScale xExponent
+  let yScale := finiteScale yExponent
+  roundSelect sign (xMantissa * yMantissa) (xScale + yScale)
+
+
+theorem core_eq (a b : UInt32) : core a b = FastMul.core a b := by
+  simp only [core, FastMul.core, roundSelect_eq]
+
+@[inline] def mul (x y : Binary32) : Binary32 :=
+  if FastMul.special x.raw.1 y.raw.1 then ExecFloat.mul x y
+  else FastMul.ofBits (core x.raw.1 y.raw.1)
+
+theorem mul_eq (x y : Binary32) : mul x y = FastMul.mul x y := by
+  simp only [mul, FastMul.mul, core_eq]
+
+theorem mul_spec (x y : Binary32) : mul x y = ExecFloat.Spec.mul x y := by
+  rw [mul_eq]
+  exact FastMul.mul_spec x y
+
+end LowScale
+
+namespace GuardBridge
+
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+
+
+theorem modelCanonicalOfFinite {fmt : FloatFormat} (x : Model fmt)
+    (hx : (Model.toModel x).isFinite = true) : Model.IsModelCanonical x := by
+  constructor
+  intro he hm
+  have hnan : Model.toModel x = Float.Model.UnpackedFloat.notANumber := by
+    simp only [Model.toModel, Float.Model.UnpackedFloat.unpack, he, hm, ite_true, ite_false]
+  rw [hnan] at hx
+  cases hx
+
+
+end GuardBridge
+
+namespace WordFinite
+
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+
+theorem modelFiniteOfExp (w : UInt32)
+    (hw : FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32.expField w ≠ 0xff) :
+    (Model.toModel (Model.NativeBinary32.ofUInt32 w)).isFinite = true := by
+  have hd : ∃ d, Model.toDyadic? (Model.NativeBinary32.ofUInt32 w) = some d := by
+    rw [← Model.NativeBinary32.toDyadic_eq]
+    simp only [Model.NativeBinary32.toUInt32_ofUInt32]
+    unfold Model.NativeBinary32.toDyadic?
+    simp only [beq_iff_eq, hw, ite_false]
+    split_ifs <;> exact ⟨_, rfl⟩
+  obtain ⟨d, hd⟩ := hd
+  rw [Model.toDyadic?_ieee_eq_model FloatFormat.binary32 (by decide)] at hd
+  cases hm : Model.toModel (Model.NativeBinary32.ofUInt32 w) <;>
+    simp_all [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.isFinite]
+
+theorem nativeFiniteOfExp (x : Competition.Binary32)
+    (hx : FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32.expField x.raw.1 ≠ 0xff) :
+    (ExecFloat.Binary.toFloat32 x).isFinite = true := by
+  change ((Model.toFloat32Model (Model.NativeBinary32.ofUInt32 x.raw.1)).unpack).isFinite = true
+  rw [Model.unpack_toFloat32Model]
+  exact modelFiniteOfExp x.raw.1 hx
+
+end WordFinite
+
+
+namespace NativeBridge
+
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+open Float.Model.UnpackedFloat
+open FloatLib.Floats.Formats.BinaryInterchange.Model
+
+
+
+
+
+
+theorem le_targetExponent_totalExponent_iff (spec : Float.Model.Format)
+    (mantissa : Nat) (exponent : Int) :
+    exponent ≤ spec.targetExponent (Float.Model.totalExponent mantissa exponent) ↔
+      exponent ≤ spec.minExponent ∨ 2 ^ spec.mantissaBitsWithoutImplicit ≤ mantissa := by
+  have hlog : spec.mantissaBitsWithoutImplicit ≤ mantissa.log2 ↔
+      2 ^ spec.mantissaBitsWithoutImplicit ≤ mantissa := by
+    rcases Nat.eq_zero_or_pos mantissa with rfl | hmantissa
+    · have hwidth := spec.hm
+      have hpow := Nat.two_pow_pos spec.mantissaBitsWithoutImplicit
+      rw [Nat.log2_zero]
+      omega
+    · exact Nat.le_log2 hmantissa.ne'
+  rw [← hlog]
+  simp only [Float.Model.Format.targetExponent, Float.Model.totalExponent,
+    Float.Model.Format.mantissaBits]
+  omega
+
+
+
+
+
+theorem add_le_targetExponent_totalExponent_mul (spec : Float.Model.Format)
+    {mantissa₁ mantissa₂ : Nat} {exponent₁ exponent₂ : Int}
+    (hmantissa₁ : 0 < mantissa₁) (hmantissa₂ : 0 < mantissa₂)
+    (hle₁ :
+      exponent₁ ≤ spec.targetExponent (Float.Model.totalExponent mantissa₁ exponent₁))
+    (hle₂ :
+      exponent₂ ≤ spec.targetExponent (Float.Model.totalExponent mantissa₂ exponent₂)) :
+    exponent₁ + exponent₂ ≤
+      spec.targetExponent
+        (Float.Model.totalExponent (mantissa₁ * mantissa₂) (exponent₁ + exponent₂)) := by
+  rw [le_targetExponent_totalExponent_iff] at hle₁ hle₂ ⊢
+  have hmin : spec.minExponent ≤ 0 := by
+    have hwidth := spec.hm
+    have hpow : (1 : Int) ≤ 2 ^ (spec.exponentBits - 1) := by
+      exact_mod_cast Nat.two_pow_pos (spec.exponentBits - 1)
+    simp only [Float.Model.Format.minExponent, Float.Model.Format.mantissaBits]
+    omega
+  rcases hle₁ with hle₁ | hle₁
+  · rcases hle₂ with hle₂ | hle₂
+    · exact Or.inl (by omega)
+    · exact Or.inr (hle₂.trans (Nat.le_mul_of_pos_left mantissa₂ hmantissa₁))
+  · exact Or.inr (hle₁.trans (Nat.le_mul_of_pos_right mantissa₁ hmantissa₂))
+
+
+
+
+
+theorem le_targetExponent_totalExponent_of_toModel_eq_finite {fmt : FloatFormat} (x : Model fmt)
+    {sign : Sign} {mantissa : Nat} {exponent : Int} {hmantissa : 0 < mantissa}
+    (hx : toModel x = .finite sign mantissa exponent hmantissa) :
+    exponent ≤
+      (FloatFormat.toModel fmt).targetExponent (Float.Model.totalExponent mantissa exponent) := by
+  rw [le_targetExponent_totalExponent_iff, toModel_minExponent]
+  change exponent ≤ FloatFormat.ieeeMinSubnormalExponent fmt ∨ 2 ^ fmt.fracWidth ≤ mantissa
+  have hdecode := ieeeToDyadic?_eq_unpackedToDyadic?_toModel x
+  rw [hx] at hdecode
+  simp only [unpackedToDyadic?, ieeeToDyadic?] at hdecode
+  split_ifs at hdecode
+  · simp only [Option.some.injEq, FloatLib.Numerics.Dyadic.mk.injEq] at hdecode
+    exact absurd hdecode.2.1.symm hmantissa.ne'
+  · simp only [Option.some.injEq, FloatLib.Numerics.Dyadic.mk.injEq] at hdecode
+    exact Or.inl hdecode.2.2.symm.le
+  · simp only [Option.some.injEq, FloatLib.Numerics.Dyadic.mk.injEq] at hdecode
+    refine Or.inr ?_
+    rw [← hdecode.2.1, pow2_eq_two_pow]
+    exact Nat.le_add_right _ _
+
+
+
+theorem modelMulFinite {fmt : FloatFormat} (hfmt : fmt.isIEEE = true)
+    (x y : Model fmt) (hx : (Model.toModel x).isFinite = true)
+    (hy : (Model.toModel y).isFinite = true) :
+    Model.mul x y =
+      Model.ofModel fmt
+        (Float.Model.UnpackedFloat.mul (FloatFormat.toModel fmt)
+          (Model.toModel x) (Model.toModel y)) := by
+  have hzero := FloatFormat.supportsSignedZero_eq_true_of_isIEEE fmt hfmt
+  cases hxmodel : Model.toModel x <;> cases hymodel : Model.toModel y <;>
+    simp only [hxmodel, hymodel, Float.Model.UnpackedFloat.isFinite,
+      Bool.false_eq_true] at hx hy
+  case zero.zero sign₁ sign₂ =>
+    rw [Model.Proof.mul_eq_spec, Model.Spec.mul,
+      Model.toDyadic?_ieee_eq_model fmt hfmt x,
+      Model.toDyadic?_ieee_eq_model fmt hfmt y, hxmodel, hymodel]
+    cases sign₁ <;> cases sign₂ <;>
+      simp [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.mul,
+        Model.modelSignBit, Model.zero, Model.posZero_eq_ofModel_zero,
+        Model.negZero_eq_ofModel_zero, hzero,
+        show Sign.negative * Sign.negative = Sign.positive from rfl,
+        show Sign.negative * Sign.positive = Sign.negative from rfl,
+        show Sign.positive * Sign.negative = Sign.negative from rfl,
+        show Sign.positive * Sign.positive = Sign.positive from rfl]
+  case zero.finite sign₁ sign₂ mantissa₂ exponent₂ hmantissa₂ =>
+    rw [Model.Proof.mul_eq_spec, Model.Spec.mul,
+      Model.toDyadic?_ieee_eq_model fmt hfmt x,
+      Model.toDyadic?_ieee_eq_model fmt hfmt y, hxmodel, hymodel]
+    cases sign₁ <;> cases sign₂ <;>
+      simp [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.mul,
+        Model.modelSignBit, Model.zero, Model.posZero_eq_ofModel_zero,
+        Model.negZero_eq_ofModel_zero, hzero,
+        show Sign.negative * Sign.negative = Sign.positive from rfl,
+        show Sign.negative * Sign.positive = Sign.negative from rfl,
+        show Sign.positive * Sign.negative = Sign.negative from rfl,
+        show Sign.positive * Sign.positive = Sign.positive from rfl]
+  case finite.zero sign₁ mantissa₁ exponent₁ hmantissa₁ sign₂ =>
+    rw [Model.Proof.mul_eq_spec, Model.Spec.mul,
+      Model.toDyadic?_ieee_eq_model fmt hfmt x,
+      Model.toDyadic?_ieee_eq_model fmt hfmt y, hxmodel, hymodel]
+    cases sign₁ <;> cases sign₂ <;>
+      simp [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.mul,
+        Model.modelSignBit, Model.zero, Model.posZero_eq_ofModel_zero,
+        Model.negZero_eq_ofModel_zero, hzero,
+        show Sign.negative * Sign.negative = Sign.positive from rfl,
+        show Sign.negative * Sign.positive = Sign.negative from rfl,
+        show Sign.positive * Sign.negative = Sign.negative from rfl,
+        show Sign.positive * Sign.positive = Sign.positive from rfl]
+  case finite.finite sign₁ mantissa₁ exponent₁ hmantissa₁ sign₂ mantissa₂ exponent₂ hmantissa₂ =>
+    have hle := add_le_targetExponent_totalExponent_mul (FloatFormat.toModel fmt)
+      hmantissa₁ hmantissa₂
+      (le_targetExponent_totalExponent_of_toModel_eq_finite x hxmodel)
+      (le_targetExponent_totalExponent_of_toModel_eq_finite y hymodel)
+    have hr (sign : Sign) :
+        Float.Model.UnpackedFloat.roundWithAccuracy (FloatFormat.toModel fmt) sign
+          (mantissa₁ * mantissa₂) (exponent₁ + exponent₂) .exact =
+        Float.Model.UnpackedFloat.round (FloatFormat.toModel fmt) sign
+          (mantissa₁ * mantissa₂) (exponent₁ + exponent₂) :=
+      Model.roundWithAccuracy_exact_eq_round_of_le_targetExponent _ _ _ _ hle
+    rw [Model.Proof.mul_eq_spec, Model.Spec.mul,
+      Model.toDyadic?_ieee_eq_model fmt hfmt x,
+      Model.toDyadic?_ieee_eq_model fmt hfmt y, hxmodel, hymodel]
+    cases sign₁ <;> cases sign₂ <;>
+      simp [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.mul,
+        Model.roundDyadic, hfmt, Model.ieeeRoundDyadic,
+        Model.modelSignBit, Model.modelSign, hmantissa₁.ne', hmantissa₂.ne',
+        hr,
+        show Sign.negative * Sign.negative = Sign.positive from rfl,
+        show Sign.negative * Sign.positive = Sign.negative from rfl,
+        show Sign.positive * Sign.negative = Sign.negative from rfl,
+        show Sign.positive * Sign.positive = Sign.positive from rfl]
+
+theorem toModelNativeMul (x y : Float32)
+    (hx : x.isFinite = true) (hy : y.isFinite = true) :
+    ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 (x * y)) =
+      Model.mul (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x))
+        (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 y)) := by
+  rw [ExecFloat.Binary.toModel_ofFloat32, ExecFloat.Binary.toModel_ofFloat32,
+    ExecFloat.Binary.toModel_ofFloat32]
+  change Model.ofFloat32Model (Float32.Model.mul x.toModel y.toModel) = _
+  rw [Float32.Model.mul, Model.ofFloat32Model_pack]
+  have h := modelMulFinite (fmt := FloatFormat.binary32)
+    (by decide) (Model.ofFloat32Model x.toModel) (Model.ofFloat32Model y.toModel)
+    (by simpa only [Model.toModel_ofFloat32Model, Float32.isFinite,
+      Float32.Model.isFinite] using hx)
+    (by simpa only [Model.toModel_ofFloat32Model, Float32.isFinite,
+      Float32.Model.isFinite] using hy)
+  rw [Model.toModel_ofFloat32Model, Model.toModel_ofFloat32Model] at h
+  exact h.symm
+
+theorem toModelExecMul (x y : Competition.Binary32) :
+    ExecFloat.Binary.toModel (ExecFloat.mul x y) =
+      Model.Spec.mul (ExecFloat.Binary.toModel x) (ExecFloat.Binary.toModel y) := by
+  rw [ExecFloat.Proof.mul_eq_spec]
+  change Configured.Family.toModel
+    (ExecFloat.ModelCodec.liftBinary Model.Spec.mul x y) = _
+  simp [Configured.Family.toModel, ExecFloat.Binary.toModel]
+
+theorem ofFloat32Mul (x y : Float32)
+    (hx : x.isFinite = true) (hy : y.isFinite = true) :
+    ExecFloat.Binary.ofFloat32 (x * y) =
+      ExecFloat.mul (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 y) := by
+  apply Configured.Family.toModel_injective
+  change ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 (x * y)) =
+    ExecFloat.Binary.toModel
+      (ExecFloat.mul (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 y))
+  rw [toModelExecMul, ← Model.Proof.mul_eq_spec]
+  exact toModelNativeMul x y hx hy
+
+end NativeBridge
+
+namespace NotNaNProbe
+
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+
+
+theorem modelCanonicalOfNotNaN {fmt : FloatFormat} (x : Model fmt)
+    (hx : (Model.toModel x).isNaN = false) : Model.IsModelCanonical x := by
+  constructor
+  intro he hm
+  have hnan : Model.toModel x = Float.Model.UnpackedFloat.notANumber := by
+    simp only [Model.toModel, Float.Model.UnpackedFloat.unpack, he, hm, ite_true, ite_false]
+  rw [hnan] at hx
+  cases hx
+
+theorem roundtrip (x : Competition.Binary32)
+    (hx : (ExecFloat.Binary.toFloat32 x).isNaN = false) :
+    ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x) = x := by
+  have hcanonical : Model.IsModelCanonical (ExecFloat.Binary.toModel x) := by
+    apply modelCanonicalOfNotNaN
+    have hf := hx
+    change ((Model.toFloat32Model (ExecFloat.Binary.toModel x)).unpack).isNaN = false at hf
+    rw [Model.unpack_toFloat32Model] at hf
+    exact hf
+  apply Configured.Family.toModel_injective
+  change ExecFloat.Binary.toModel
+      (ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x)) =
+    ExecFloat.Binary.toModel x
+  rw [ExecFloat.Binary.toModel_ofFloat32, ExecFloat.Binary.toModel_toFloat32_eq,
+    Model.ofFloat32Model_toFloat32Model]
+  exact Model.canonicalizeModel_eq_self _ hcanonical
+
+theorem packNaN_isNaN :
+    (Float32.Model.pack Float.Model.UnpackedFloat.notANumber).isNaN = true := by decide
+
+theorem add_inputs (x y : Float32) (h : (x + y).isNaN = false) :
+    x.isNaN = false ∧ y.isNaN = false := by
+  change (Float32.Model.pack
+    (Float.Model.UnpackedFloat.add Float.Model.Format.binary32
+      x.toModel.unpack y.toModel.unpack)).isNaN = false at h
+  change x.toModel.unpack.isNaN = false ∧ y.toModel.unpack.isNaN = false
+  cases hx : x.toModel.unpack <;> cases hy : y.toModel.unpack <;>
+    simp_all [Float.Model.UnpackedFloat.add, Float.Model.UnpackedFloat.isNaN,
+      packNaN_isNaN]
+
+theorem mul_inputs (x y : Float32) (h : (x * y).isNaN = false) :
+    x.isNaN = false ∧ y.isNaN = false := by
+  change (Float32.Model.pack
+    (Float.Model.UnpackedFloat.mul Float.Model.Format.binary32
+      x.toModel.unpack y.toModel.unpack)).isNaN = false at h
+  change x.toModel.unpack.isNaN = false ∧ y.toModel.unpack.isNaN = false
+  cases hx : x.toModel.unpack <;> cases hy : y.toModel.unpack <;>
+    simp_all [Float.Model.UnpackedFloat.mul, Float.Model.UnpackedFloat.isNaN,
+      packNaN_isNaN]
+
+end NotNaNProbe
+
+namespace R7Native
+
+open FloatLib.Floats Competition
+open FloatLib.Floats.Formats.BinaryInterchange
+open Float.Model.UnpackedFloat
+
+abbrev F := FloatFormat.binary32
+abbrev M := Model F
+
+theorem finiteDecode (x : M) (hx : (Model.toModel x).isFinite = true) :
+    ∃ d, Model.toDyadic? x = some d := by
+  have hsome : (Model.toDyadic? x).isSome = true := by
+    rw [Model.toDyadic?_ieee_eq_model F (by decide)]
+    cases hm : Model.toModel x <;>
+      simp_all [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.isFinite]
+  cases hd : Model.toDyadic? x with
+  | none => simp [hd] at hsome
+  | some d => exact ⟨d, rfl⟩
+
+theorem nonNaNView (x : M) (hx : (Model.toModel x).isNaN = false) :
+    (Model.toModel x).isFinite = true ∨ ∃ s, Model.toModel x = .infinity s := by
+  cases hm : Model.toModel x with
+  | notANumber => simp [hm, Float.Model.UnpackedFloat.isNaN] at hx
+  | infinity s => exact Or.inr ⟨s, rfl⟩
+  | zero s => exact Or.inl rfl
+  | finite s m e h => exact Or.inl rfl
+
+theorem eqOfInfinity (x : M) (s : Sign) (hx : Model.toModel x = .infinity s) :
+    x = Model.ofModel F (.infinity s) := by
+  have hc := NotNaNProbe.modelCanonicalOfNotNaN x
+    (by simp [hx, Float.Model.UnpackedFloat.isNaN])
+  have h := Model.canonicalizeModel_eq_self x hc
+  change Model.ofModel F (Model.toModel x) = x at h
+  rw [hx] at h
+  exact h.symm
+
+theorem eqOfZero (x : M) (s : Sign) (hx : Model.toModel x = .zero s) :
+    x = Model.ofModel F (.zero s) := by
+  have hc := NotNaNProbe.modelCanonicalOfNotNaN x
+    (by simp [hx, Float.Model.UnpackedFloat.isNaN])
+  have h := Model.canonicalizeModel_eq_self x hc
+  change Model.ofModel F (Model.toModel x) = x at h
+  rw [hx] at h
+  exact h.symm
+
+theorem infinityDecode (s : Sign) :
+    Model.toDyadic? (Model.ofModel F (.infinity s)) = none := by
+  rw [Model.toDyadic?_ieee_eq_model F (by decide), Model.toModel_ofModel_infinity]
+  rfl
+
+theorem nativeOverflow_eq (b : Bool) :
+    Model.nativeOverflow F b = Model.ofModel F (.infinity (Model.modelSign b)) := by
+  cases b <;> decide
+
+theorem specAddInfLeft (s : Sign) (y : M)
+    (hn : Model.isNaN y = false) (hi : Model.isInf y = false) :
+    Model.Spec.add (Model.ofModel F (.infinity s)) y = Model.ofModel F (.infinity s) := by
+  have hxnan := Model.isNaN_ofModel_infinity F (by decide) s
+  have hxinf := Model.isInf_ofModel_infinity F (by decide) s
+  have hsel := (Model.chooseNaN2_eq_none_iff (Model.ofModel F (.infinity s)) y).mpr
+    ⟨hxnan, hn⟩
+  unfold Model.Spec.add
+  rw [infinityDecode]
+  cases hd : Model.toDyadic? y <;> simp [hd, hsel, hxinf, hi]
+
+theorem specAddInfRight (s : Sign) (x : M)
+    (hn : Model.isNaN x = false) (hi : Model.isInf x = false) :
+    Model.Spec.add x (Model.ofModel F (.infinity s)) = Model.ofModel F (.infinity s) := by
+  have hynan := Model.isNaN_ofModel_infinity F (by decide) s
+  have hyinf := Model.isInf_ofModel_infinity F (by decide) s
+  have hsel := (Model.chooseNaN2_eq_none_iff x (Model.ofModel F (.infinity s))).mpr
+    ⟨hn, hynan⟩
+  unfold Model.Spec.add
+  rw [infinityDecode]
+  cases hd : Model.toDyadic? x <;> simp [hd, hsel, hi, hyinf]
+
+theorem specMulInfLeft (s : Sign) (y : M) (d : FloatLib.Numerics.Dyadic)
+    (hd : Model.toDyadic? y = some d) (hnz : d.significand ≠ 0) :
+    Model.Spec.mul (Model.ofModel F (.infinity s)) y =
+      Model.nativeOverflow F (Model.modelSignBit s != d.negative) := by
+  have hxnan := Model.isNaN_ofModel_infinity F (by decide) s
+  have hxinf := Model.isInf_ofModel_infinity F (by decide) s
+  have hynan := Model.isNaN_eq_false_of_toDyadic?_some hd
+  have hsel := (Model.chooseNaN2_eq_none_iff (Model.ofModel F (.infinity s)) y).mpr
+    ⟨hxnan, hynan⟩
+  have hzero := Model.isZero_eq_beq_zero_of_toDyadic?_some hd
+  have hsign := Model.sign_eq_signBit_of_toDyadic?_some hd
+  simp [Model.Spec.mul, infinityDecode, hd, hsel, hxinf, hzero, hnz,
+    Model.signBit_ofModel_infinity, ← hsign]
+
+theorem specMulInfRight (s : Sign) (x : M) (d : FloatLib.Numerics.Dyadic)
+    (hd : Model.toDyadic? x = some d) (hnz : d.significand ≠ 0) :
+    Model.Spec.mul x (Model.ofModel F (.infinity s)) =
+      Model.nativeOverflow F (d.negative != Model.modelSignBit s) := by
+  have hynan := Model.isNaN_ofModel_infinity F (by decide) s
+  have hyinf := Model.isInf_ofModel_infinity F (by decide) s
+  have hxnan := Model.isNaN_eq_false_of_toDyadic?_some hd
+  have hxinf := Model.isInf_eq_false_of_toDyadic?_some hd
+  have hsel := (Model.chooseNaN2_eq_none_iff x (Model.ofModel F (.infinity s))).mpr
+    ⟨hxnan, hynan⟩
+  have hzero := Model.isZero_eq_beq_zero_of_toDyadic?_some hd
+  have hsign := Model.sign_eq_signBit_of_toDyadic?_some hd
+  simp [Model.Spec.mul, infinityDecode, hd, hsel, hxinf, hyinf, hzero, hnz,
+    Model.signBit_ofModel_infinity, ← hsign]
+
+theorem modelAdd (x y : M)
+    (hx : (Model.toModel x).isNaN = false) (hy : (Model.toModel y).isNaN = false) :
+    Model.add x y = Model.ofModel F
+      (Float.Model.UnpackedFloat.add F.toModel (Model.toModel x) (Model.toModel y)) := by
+  rcases nonNaNView x hx with hxf | ⟨sx, hxi⟩
+  · rcases nonNaNView y hy with hyf | ⟨sy, hyi⟩
+    · exact Model.add_eq_ofModel_add_of_isFinite (by decide) x y hxf hyf
+    · obtain ⟨dx, hdx⟩ := finiteDecode x hxf
+      rw [eqOfInfinity y sy hyi, Model.Proof.add_eq_spec,
+        specAddInfRight sy x (Model.isNaN_eq_false_of_toDyadic?_some hdx)
+          (Model.isInf_eq_false_of_toDyadic?_some hdx)]
+      cases hm : Model.toModel x <;>
+        simp_all [Float.Model.UnpackedFloat.isFinite, Float.Model.UnpackedFloat.add]
+  · rcases nonNaNView y hy with hyf | ⟨sy, hyi⟩
+    · obtain ⟨dy, hdy⟩ := finiteDecode y hyf
+      rw [eqOfInfinity x sx hxi, Model.Proof.add_eq_spec,
+        specAddInfLeft sx y (Model.isNaN_eq_false_of_toDyadic?_some hdy)
+          (Model.isInf_eq_false_of_toDyadic?_some hdy)]
+      cases hm : Model.toModel y <;>
+        simp_all [Float.Model.UnpackedFloat.isFinite, Float.Model.UnpackedFloat.add]
+    · rw [eqOfInfinity x sx hxi, eqOfInfinity y sy hyi]
+      cases sx <;> cases sy <;> decide
+
+theorem modelMulInfLeft (s : Sign) (y : M)
+    (hy : (Model.toModel y).isFinite = true) :
+    Model.mul (Model.ofModel F (.infinity s)) y = Model.ofModel F
+      (Float.Model.UnpackedFloat.mul F.toModel (.infinity s) (Model.toModel y)) := by
+  cases hm : Model.toModel y with
+  | notANumber => simp [hm, Float.Model.UnpackedFloat.isFinite] at hy
+  | infinity t => simp [hm, Float.Model.UnpackedFloat.isFinite] at hy
+  | zero t =>
+      rw [eqOfZero y t hm]
+      cases s <;> cases t <;> decide
+  | finite t m e hp =>
+      have hd : Model.toDyadic? y = some ⟨Model.modelSignBit t, m, e⟩ := by
+        rw [Model.toDyadic?_ieee_eq_model F (by decide), hm]
+        rfl
+      rw [Model.Proof.mul_eq_spec, specMulInfLeft s y _ hd (Nat.ne_of_gt hp),
+        nativeOverflow_eq]
+      cases s <;> cases t <;> rfl
+
+theorem modelMulInfRight (s : Sign) (x : M)
+    (hx : (Model.toModel x).isFinite = true) :
+    Model.mul x (Model.ofModel F (.infinity s)) = Model.ofModel F
+      (Float.Model.UnpackedFloat.mul F.toModel (Model.toModel x) (.infinity s)) := by
+  cases hm : Model.toModel x with
+  | notANumber => simp [hm, Float.Model.UnpackedFloat.isFinite] at hx
+  | infinity t => simp [hm, Float.Model.UnpackedFloat.isFinite] at hx
+  | zero t =>
+      rw [eqOfZero x t hm]
+      cases s <;> cases t <;> decide
+  | finite t m e hp =>
+      have hd : Model.toDyadic? x = some ⟨Model.modelSignBit t, m, e⟩ := by
+        rw [Model.toDyadic?_ieee_eq_model F (by decide), hm]
+        rfl
+      rw [Model.Proof.mul_eq_spec, specMulInfRight s x _ hd (Nat.ne_of_gt hp),
+        nativeOverflow_eq]
+      cases s <;> cases t <;> rfl
+
+theorem modelMul (x y : M)
+    (hx : (Model.toModel x).isNaN = false) (hy : (Model.toModel y).isNaN = false) :
+    Model.mul x y = Model.ofModel F
+      (Float.Model.UnpackedFloat.mul F.toModel (Model.toModel x) (Model.toModel y)) := by
+  rcases nonNaNView x hx with hxf | ⟨sx, hxi⟩
+  · rcases nonNaNView y hy with hyf | ⟨sy, hyi⟩
+    · exact NativeBridge.modelMulFinite (by decide) x y hxf hyf
+    · rw [eqOfInfinity y sy hyi, Model.toModel_ofModel_infinity]
+      exact modelMulInfRight sy x hxf
+  · rcases nonNaNView y hy with hyf | ⟨sy, hyi⟩
+    · rw [eqOfInfinity x sx hxi, Model.toModel_ofModel_infinity]
+      exact modelMulInfLeft sx y hyf
+    · rw [eqOfInfinity x sx hxi, eqOfInfinity y sy hyi]
+      cases sx <;> cases sy <;> decide
+
+theorem toModelExecAdd (x y : Binary32) :
+    ExecFloat.Binary.toModel (ExecFloat.add x y) =
+      Model.Spec.add (ExecFloat.Binary.toModel x) (ExecFloat.Binary.toModel y) := by
+  rw [ExecFloat.Proof.add_eq_spec]
+  change Configured.Family.toModel
+    (ExecFloat.ModelCodec.liftBinary Model.Spec.add x y) = _
+  simp [Configured.Family.toModel, ExecFloat.Binary.toModel]
+
+theorem ofFloat32Add (x y : Float32) (hx : x.isNaN = false) (hy : y.isNaN = false) :
+    ExecFloat.Binary.ofFloat32 (x + y) =
+      ExecFloat.add (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 y) := by
+  apply Configured.Family.toModel_injective
+  change ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 (x + y)) =
+    ExecFloat.Binary.toModel
+      (ExecFloat.add (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 y))
+  rw [toModelExecAdd, ← Model.Proof.add_eq_spec]
+  rw [ExecFloat.Binary.toModel_ofFloat32, ExecFloat.Binary.toModel_ofFloat32,
+    ExecFloat.Binary.toModel_ofFloat32]
+  change Model.ofFloat32Model (Float32.Model.add x.toModel y.toModel) = _
+  rw [Float32.Model.add, Model.ofFloat32Model_pack]
+  have h := modelAdd (Model.ofFloat32Model x.toModel) (Model.ofFloat32Model y.toModel)
+    (by simpa only [Model.toModel_ofFloat32Model, Float32.isNaN, Float32.Model.isNaN] using hx)
+    (by simpa only [Model.toModel_ofFloat32Model, Float32.isNaN, Float32.Model.isNaN] using hy)
+  rw [Model.toModel_ofFloat32Model, Model.toModel_ofFloat32Model] at h
+  exact h.symm
+
+theorem ofFloat32Mul (x y : Float32) (hx : x.isNaN = false) (hy : y.isNaN = false) :
+    ExecFloat.Binary.ofFloat32 (x * y) =
+      ExecFloat.mul (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 y) := by
+  apply Configured.Family.toModel_injective
+  change ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 (x * y)) =
+    ExecFloat.Binary.toModel
+      (ExecFloat.mul (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 y))
+  rw [NativeBridge.toModelExecMul, ← Model.Proof.mul_eq_spec]
+  rw [ExecFloat.Binary.toModel_ofFloat32, ExecFloat.Binary.toModel_ofFloat32,
+    ExecFloat.Binary.toModel_ofFloat32]
+  change Model.ofFloat32Model (Float32.Model.mul x.toModel y.toModel) = _
+  rw [Float32.Model.mul, Model.ofFloat32Model_pack]
+  have h := modelMul (Model.ofFloat32Model x.toModel) (Model.ofFloat32Model y.toModel)
+    (by simpa only [Model.toModel_ofFloat32Model, Float32.isNaN, Float32.Model.isNaN] using hx)
+    (by simpa only [Model.toModel_ofFloat32Model, Float32.isNaN, Float32.Model.isNaN] using hy)
+  rw [Model.toModel_ofFloat32Model, Model.toModel_ofFloat32Model] at h
+  exact h.symm
+
+end R7Native
+
+
+
+namespace DWordNaN
+
+open FloatLib.Floats.Formats.BinaryInterchange
+abbrev M := Model FloatFormat.binary32
+
+@[inline] def rawNaN (u : UInt32) : Bool :=
+  Model.NativeBinary32.expField u == 0xff && Model.NativeBinary32.fracField u != 0
+
+@[inline] def rawSNaN (u : UInt32) : Bool :=
+  rawNaN u && (u &&& 0x00400000) == 0
+
+theorem rawNaN_eq (u : UInt32) :
+    rawNaN u = Model.isNaN (Model.NativeBinary32.ofUInt32 u) := by
+  apply Bool.eq_iff_iff.mpr
+  change ((Model.NativeBinary32.expField u == 0xff && Model.NativeBinary32.fracField u != 0) = true) ↔
+    ((Model.expField (Model.NativeBinary32.ofUInt32 u) == 255 &&
+      Model.fracField (Model.NativeBinary32.ofUInt32 u) != 0) = true)
+  simp only [Bool.and_eq_true, beq_iff_eq, bne_iff_ne]
+  have he : Model.NativeBinary32.expField u = 0xff ↔
+      Model.expField (Model.NativeBinary32.ofUInt32 u) = 255 := by
+    change Model.NativeBinary32.expField u = 0xff ↔
+      (Model.NativeBinary32.expField u).toNat = 255
+    exact UInt32.toNat_inj.symm
+  have hf : Model.NativeBinary32.fracField u = 0 ↔
+      Model.fracField (Model.NativeBinary32.ofUInt32 u) = 0 := by
+    change Model.NativeBinary32.fracField u = 0 ↔
+      (Model.NativeBinary32.fracField u).toNat = 0
+    exact UInt32.toNat_inj.symm
+  exact and_congr he (not_congr hf)
+
+theorem rawSNaN_eq (u : UInt32) :
+    rawSNaN u = Model.isSNaN (Model.NativeBinary32.ofUInt32 u) := by
+  unfold rawSNaN
+  rw [rawNaN_eq]
+  change (Model.isNaN (Model.NativeBinary32.ofUInt32 u) && ((u &&& 0x00400000) == 0)) =
+    (Model.isNaN (Model.NativeBinary32.ofUInt32 u) &&
+      ((u.toBitVec &&& (4194304#32)) == 0))
+  apply congrArg (fun b : Bool => Model.isNaN (Model.NativeBinary32.ofUInt32 u) && b)
+  apply Bool.eq_iff_iff.mpr
+  simp only [beq_iff_eq]
+  rw [← UInt32.toBitVec_inj, UInt32.toBitVec_and]
+  rfl
+
+theorem quietWord_eq (u : UInt32) (hu : rawNaN u = true) :
+    Model.NativeBinary32.ofUInt32 (u ||| 0x00400000) =
+      Model.quietNaN (Model.NativeBinary32.ofUInt32 u) := by
+  have hm : Model.isNaN (Model.NativeBinary32.ofUInt32 u) = true := by
+    rw [← rawNaN_eq]
+    exact hu
+  have h := Model.NativeBinary32.ofUInt32_or_quietBit
+    (Model.NativeBinary32.ofUInt32 u)
+  simp only [Model.NativeBinary32.toUInt32_ofUInt32] at h
+  rw [h]
+  change _ = if Model.isNaN (Model.NativeBinary32.ofUInt32 u) then
+    Model.ofBits ((Model.NativeBinary32.ofUInt32 u).bits |||
+      FloatFormat.quietBit FloatFormat.binary32)
+    else Model.NativeBinary32.ofUInt32 u
+  rw [hm]
+  rfl
+
+theorem quietWord_eq_snan (u : UInt32) (hu : rawSNaN u = true) :
+    Model.NativeBinary32.ofUInt32 (u ||| 0x00400000) =
+      Model.quietNaN (Model.NativeBinary32.ofUInt32 u) := by
+  apply quietWord_eq
+  change (rawNaN u && ((u &&& 0x00400000) == 0)) = true at hu
+  have hh : rawNaN u = true ∧ ((u &&& 0x00400000) == 0) = true := by
+    simpa only [Bool.and_eq_true] using hu
+  exact hh.1
+
+@[inline] def rawChoose (a b : UInt32) : Option UInt32 :=
+  if rawSNaN a then some (a ||| 0x00400000)
+  else if rawSNaN b then some (b ||| 0x00400000)
+  else if rawNaN a then some (a ||| 0x00400000)
+  else if rawNaN b then some (b ||| 0x00400000)
+  else none
+
+theorem rawChoose_eq (a b : UInt32) :
+    (rawChoose a b).map Model.NativeBinary32.ofUInt32 =
+      Model.chooseNaN2 (Model.NativeBinary32.ofUInt32 a)
+        (Model.NativeBinary32.ofUInt32 b) := by
+  unfold rawChoose Model.chooseNaN2
+  rw [← rawSNaN_eq a, ← rawSNaN_eq b, ← rawNaN_eq a, ← rawNaN_eq b]
+  by_cases ha : rawSNaN a = true
+  · simp only [ha, ite_true, Option.map_some]
+    exact congrArg some (quietWord_eq_snan a ha)
+  · by_cases hb : rawSNaN b = true
+    · simp only [ha, hb, ite_false, ite_true, Option.map_some]
+      exact congrArg some (quietWord_eq_snan b hb)
+    · by_cases hna : rawNaN a = true
+      · simp only [ha, hb, hna, ite_false, ite_true, Option.map_some]
+        exact congrArg some (quietWord_eq a hna)
+      · by_cases hnb : rawNaN b = true
+        · simp only [ha, hb, hna, hnb, ite_false, ite_true, Option.map_some]
+          exact congrArg some (quietWord_eq b hnb)
+        · simp only [ha, hb, hna, hnb, Bool.false_eq_true, ite_false, Option.map_none]
+
+theorem rawNaN_exp (u : UInt32) (hu : rawNaN u = true) :
+    Model.NativeBinary32.expField u = 0xff := by
+  have hh : Model.NativeBinary32.expField u = 0xff ∧
+      Model.NativeBinary32.fracField u ≠ 0 := by
+    simpa only [rawNaN, Bool.and_eq_true, beq_iff_eq, bne_iff_ne] using hu
+  exact hh.1
+
+theorem rawChoose_nonfinite (a b w : UInt32) (hw : rawChoose a b = some w) :
+    Model.NativeBinary32.expField a = 0xff ∨ Model.NativeBinary32.expField b = 0xff := by
+  unfold rawChoose at hw
+  split at hw
+  · rename_i ha
+    have hh : rawNaN a = true ∧ ((a &&& 0x00400000) == 0) = true := by
+      simpa only [rawSNaN, Bool.and_eq_true] using ha
+    exact Or.inl (rawNaN_exp a hh.1)
+  · split at hw
+    · rename_i hb
+      have hh : rawNaN b = true ∧ ((b &&& 0x00400000) == 0) = true := by
+        simpa only [rawSNaN, Bool.and_eq_true] using hb
+      exact Or.inr (rawNaN_exp b hh.1)
+    · split at hw
+      · rename_i ha
+        exact Or.inl (rawNaN_exp a ha)
+      · split at hw
+        · rename_i hb
+          exact Or.inr (rawNaN_exp b hb)
+        · cases hw
+
+theorem specialDecode (u : UInt32) (hu : Model.NativeBinary32.expField u = 0xff) :
+    Model.toDyadic? (Model.NativeBinary32.ofUInt32 u) = none := by
+  rw [← Model.NativeBinary32.toDyadic_eq]
+  simp only [Model.NativeBinary32.toUInt32_ofUInt32]
+  unfold Model.NativeBinary32.toDyadic?
+  simp [hu]
+
+theorem selected_model_add (a b w : UInt32) (hw : rawChoose a b = some w) :
+    Model.NativeBinary32.ofUInt32 w = Model.Spec.add
+      (Model.NativeBinary32.ofUInt32 a) (Model.NativeBinary32.ofUInt32 b) := by
+  have hc : Model.chooseNaN2 (Model.NativeBinary32.ofUInt32 a)
+      (Model.NativeBinary32.ofUInt32 b) = some (Model.NativeBinary32.ofUInt32 w) := by
+    rw [← rawChoose_eq, hw]
+    rfl
+  rcases rawChoose_nonfinite a b w hw with ha | hb
+  · unfold Model.Spec.add
+    rw [specialDecode a ha]
+    cases Model.toDyadic? (Model.NativeBinary32.ofUInt32 b) <;> simp only [hc]
+  · unfold Model.Spec.add
+    rw [specialDecode b hb]
+    cases Model.toDyadic? (Model.NativeBinary32.ofUInt32 a) <;> simp only [hc]
+
+theorem selected_model_mul (a b w : UInt32) (hw : rawChoose a b = some w) :
+    Model.NativeBinary32.ofUInt32 w = Model.Spec.mul
+      (Model.NativeBinary32.ofUInt32 a) (Model.NativeBinary32.ofUInt32 b) := by
+  have hc : Model.chooseNaN2 (Model.NativeBinary32.ofUInt32 a)
+      (Model.NativeBinary32.ofUInt32 b) = some (Model.NativeBinary32.ofUInt32 w) := by
+    rw [← rawChoose_eq, hw]
+    rfl
+  rcases rawChoose_nonfinite a b w hw with ha | hb
+  · unfold Model.Spec.mul
+    rw [specialDecode a ha]
+    cases Model.toDyadic? (Model.NativeBinary32.ofUInt32 b) <;> simp only [hc]
+  · unfold Model.Spec.mul
+    rw [specialDecode b hb]
+    cases Model.toDyadic? (Model.NativeBinary32.ofUInt32 a) <;> simp only [hc]
+
+open FloatLib.Floats Competition
+
+theorem selected_add (x y : Binary32) (w : UInt32)
+    (hw : rawChoose x.raw.1 y.raw.1 = some w) :
+    R19BiasBase.FastMul.ofBits w = ExecFloat.Spec.add x y := by
+  rw [← ExecFloat.Proof.add_eq_spec]
+  apply Configured.Family.toModel_injective
+  change Model.NativeBinary32.ofUInt32 w = ExecFloat.Binary.toModel (ExecFloat.add x y)
+  rw [R19BiasBase.R7Native.toModelExecAdd]
+  exact selected_model_add x.raw.1 y.raw.1 w hw
+
+theorem selected_mul (x y : Binary32) (w : UInt32)
+    (hw : rawChoose x.raw.1 y.raw.1 = some w) :
+    R19BiasBase.FastMul.ofBits w = ExecFloat.Spec.mul x y := by
+  rw [← ExecFloat.Proof.mul_eq_spec]
+  apply Configured.Family.toModel_injective
+  change Model.NativeBinary32.ofUInt32 w = ExecFloat.Binary.toModel (ExecFloat.mul x y)
+  rw [R19BiasBase.NativeBridge.toModelExecMul]
+  exact selected_model_mul x.raw.1 y.raw.1 w hw
+
+end DWordNaN
+
+namespace ScalarNaN
+
+@[inline] def add (x y : Binary32) : Binary32 :=
+  match DWordNaN.rawChoose x.raw.1 y.raw.1 with
+  | some w => FastMul.ofBits w
+  | none => ExecFloat.add x y
+
+theorem add_spec (x y : Binary32) : add x y = ExecFloat.Spec.add x y := by
+  unfold add
+  split
+  · rename_i w hw
+    exact DWordNaN.selected_add x y w hw
+  · exact ExecFloat.Proof.add_eq_spec x y
+
+@[inline] def mul (x y : Binary32) : Binary32 :=
+  match DWordNaN.rawChoose x.raw.1 y.raw.1 with
+  | some w => FastMul.ofBits w
+  | none => FastMul.mul x y
+
+theorem mul_spec (x y : Binary32) : mul x y = ExecFloat.Spec.mul x y := by
+  unfold mul
+  split
+  · rename_i w hw
+    exact DWordNaN.selected_mul x y w hw
+  · exact FastMul.mul_spec x y
+
+end ScalarNaN
+
+
+
+@[inline] def add (x y : Binary32) : Binary32 :=
+  let result := R2W01b.convert x.raw.1 + R2W01b.convert y.raw.1
+  if hn : R7W04.nonNaN result = true then ExecFloat.Binary.ofFloat32 result
+  else ScalarNaN.add x y
+
+theorem add_spec : ∀ x y : Binary32, add x y = ExecFloat.Spec.add x y := by
+  intro x y
+  unfold add
+  dsimp only
+  split
+  · rename_i hn
+    rw [R2W01c.convert_eq, R2W01c.convert_eq] at hn ⊢
+    change R7W04.nonNaN (ExecFloat.Binary.toFloat32 x + ExecFloat.Binary.toFloat32 y) = true at hn
+    have hi := NotNaNProbe.add_inputs _ _ ((R7W04.nonNaN_eq_true_iff _).mp hn)
+    change ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x + ExecFloat.Binary.toFloat32 y) = _
+    rw [R7Native.ofFloat32Add _ _ hi.1 hi.2,
+      NotNaNProbe.roundtrip x hi.1, NotNaNProbe.roundtrip y hi.2]
+    exact ExecFloat.Proof.add_eq_spec x y
+  · exact ScalarNaN.add_spec x y
+
+
+@[inline] def nativeMul (x y : Binary32) : Binary32 :=
+  let result := R2W01b.convert x.raw.1 * R2W01b.convert y.raw.1
+  if hn : R7W04.nonNaN result = true then ExecFloat.Binary.ofFloat32 result
+  else ScalarNaN.mul x y
+
+theorem nativeMul_spec : ∀ x y : Binary32, nativeMul x y = ExecFloat.Spec.mul x y := by
+  intro x y
+  unfold nativeMul
+  dsimp only
+  split
+  · rename_i hn
+    rw [R2W01c.convert_eq, R2W01c.convert_eq] at hn ⊢
+    change R7W04.nonNaN (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y) = true at hn
+    have hi := NotNaNProbe.mul_inputs _ _ ((R7W04.nonNaN_eq_true_iff _).mp hn)
+    change ExecFloat.Binary.ofFloat32 (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y) = _
+    rw [R7Native.ofFloat32Mul _ _ hi.1 hi.2,
+      NotNaNProbe.roundtrip x hi.1, NotNaNProbe.roundtrip y hi.2]
+    exact ExecFloat.Proof.mul_eq_spec x y
+  · exact ScalarNaN.mul_spec x y
+
+@[inline] def mul (x y : Binary32) : Binary32 :=
+  let ex := FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32.expField x.raw.1
+  let ey := FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32.expField y.raw.1
+  if ex + ey < (128 : UInt32) then LowScale.mul x y else nativeMul x y
+
+theorem mul_spec (x y : Binary32) : mul x y = ExecFloat.Spec.mul x y := by
+  unfold mul
+  dsimp only
+  split
+  · exact LowScale.mul_spec x y
+  · exact nativeMul_spec x y
+
+
+
+
+theorem add_eq : add = ExecFloat.add := by
+  funext x y
+  rw [add_spec, ExecFloat.Proof.add_eq_spec]
+
+theorem mul_eq : mul = ExecFloat.mul := by
+  funext x y
+  rw [mul_spec, ExecFloat.Proof.mul_eq_spec]
+
+
+def referenceSum {n : Nat} (x : Vector Binary32 n) : Binary32 := x.foldl add posZero
+
+
+
+def referenceBmm (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  Vector.ofFn fun q =>
+    let (b, i, j) := bmmDecodeC m p q.val
+    Fin.foldl n
+      (fun acc k =>
+        add acc (mul (A.toArray.getD ((b * m + i) * n + k.val) posZero)
+          (B.toArray.getD ((b * n + k.val) * p + j) posZero)))
+      posZero
+
+
+theorem toArray_getD {N : Nat} (A : Vector Binary32 N) (i : Nat) :
+    A.toArray.getD i posZero = getD A.get i := by
+  unfold getD
+  split <;> simp_all [Array.getD, Vector.get]
+
+theorem referenceBmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)),
+    (referenceBmm batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+  intro batch m n p A B
+  funext q
+  simp only [referenceBmm, add_eq, mul_eq, Vector.get, Vector.toArray_ofFn, Array.getElem_ofFn,
+    Fin.foldl_eq_finRange_foldl, toArray_getD]
+  rfl
+
+
+namespace FinalFinite
+
+
+
+
+
+
+theorem packNaN_notFinite :
+    (Float32.Model.pack Float.Model.UnpackedFloat.notANumber).isFinite = false := by
+  decide
+
+theorem packInfinity_notFinite (sign : Float.Model.UnpackedFloat.Sign) :
+    (Float32.Model.pack (Float.Model.UnpackedFloat.infinity sign)).isFinite = false := by
+  cases sign <;> decide
+
+
+
+
+theorem mul_finite_inputs (x y : Float32) (h : (x * y).isFinite = true) :
+    x.isFinite = true ∧ y.isFinite = true := by
+  change (Float32.Model.pack
+    (Float.Model.UnpackedFloat.mul Float.Model.Format.binary32
+      x.toModel.unpack y.toModel.unpack)).isFinite = true at h
+  change x.toModel.unpack.isFinite = true ∧ y.toModel.unpack.isFinite = true
+  cases hx : x.toModel.unpack <;> cases hy : y.toModel.unpack <;>
+    simp_all [Float.Model.UnpackedFloat.mul, Float.Model.UnpackedFloat.isFinite,
+      packNaN_notFinite, packInfinity_notFinite]
+
+end FinalFinite
+
+
+
+
+
+
+
+
+namespace R7W03
+open FloatLib.Floats.Formats.BinaryInterchange
+open FloatLib.Floats.Formats.BinaryInterchange.Model
+
+private theorem chooseNaN2_none_not_snan
+    (x y : Model FloatFormat.binary32) (h : chooseNaN2 x y = none) :
+    isSNaN x = false ∧ isSNaN y = false := by
+  have hn := (chooseNaN2_eq_none_iff x y).mp h
+  exact ⟨isSNaN_eq_false_of_isNaN_eq_false x hn.1,
+    isSNaN_eq_false_of_isNaN_eq_false y hn.2⟩
+
+
+
+theorem model_add_not_snan (x y : Model FloatFormat.binary32) :
+    isSNaN (Spec.add x y) = false := by
+  unfold Spec.add
+  split
+  · exact R7W01.roundDyadic32_not_snan _
+  · split
+    · rename_i n hn
+      exact R7W01.chooseNaN2_32_not_snan x y n hn
+    · rename_i hnone
+      have hxy := chooseNaN2_none_not_snan x y hnone
+      split
+      · split
+        · split
+          · exact hxy.1
+          · exact R7W01.invalidResult32_not_snan
+        · exact hxy.1
+      · split
+        · exact hxy.2
+        · exact R7W01.invalidResult32_not_snan
+
+
+
+
+
+theorem model_add_of_right_snan (x y : Model FloatFormat.binary32)
+    (hx : isSNaN x = false) (hy : isSNaN y = true) :
+    Spec.add x y = quietNaN y := by
+  have hny : isNaN y = true := isNaN_of_isSNaN hy
+  have hdy : toDyadic? y = none := toDyadic?_eq_none_of_isNaN hny
+  have hc : chooseNaN2 x y = some (quietNaN y) := by
+    simp [chooseNaN2, hx, hy]
+  cases hdx : toDyadic? x <;> simp [Spec.add, hdx, hdy, hc]
+
+
+theorem model_add_of_right_snan_isQNaN (x y : Model FloatFormat.binary32)
+    (hx : isSNaN x = false) (hy : isSNaN y = true) :
+    isQNaN (Spec.add x y) = true := by
+  rw [model_add_of_right_snan x y hx hy]
+  exact R7W01.quietNaN32_is_qnan y (isNaN_of_isSNaN hy)
+
+
+
+end R7W03
+
+
+
+namespace R7W03
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+
+
+theorem exec_add_not_snan (x y : Competition.Binary32) :
+    Model.isSNaN (ExecFloat.Binary.toModel (ExecFloat.add x y)) = false := by
+  exact (congrArg (fun m : Model FloatFormat.binary32 => Model.isSNaN m)
+    (R19BiasBase.R7Native.toModelExecAdd x y)).trans
+      (model_add_not_snan (ExecFloat.Binary.toModel x) (ExecFloat.Binary.toModel y))
+
+
+end R7W03
+
+namespace R7W05
+
+
+open FloatLib.Floats Competition
+
+
+open FloatLib.Floats.Formats.BinaryInterchange
+
+
+open Float.Model.UnpackedFloat
+
+
+
+
+
+
+
+
+theorem model_toModel_isNaN (x : Model FloatFormat.binary32) :
+
+
+    (Model.toModel x).isNaN = Model.isNaN x := by
+
+
+  have he : unpackExponent (Model.toModelBits x) = -1#(FloatFormat.binary32.toModel.exponentBits) ↔
+
+
+      Model.expField x = FloatFormat.binary32.expAllOnesNat := by
+
+
+    rw [← BitVec.toNat_inj, Model.unpackExponent_toNat,
+
+
+      Model.toNat_neg_one_exponentBits]
+
+
+  have hm : unpackMantissa (Model.toModelBits x) = 0#(FloatFormat.binary32.toModel.mantissaBitsWithoutImplicit) ↔
+
+
+      Model.fracField x = 0 := by
+
+
+    rw [← BitVec.toNat_inj, Model.unpackMantissa_toNat]
+
+
+    rfl
+
+
+  change (Model.toModel x).isNaN = Model.IEEE.isNaN x
+
+
+  unfold Model.toModel unpack
+
+
+  dsimp only
+
+
+  split_ifs <;>
+
+
+    simp_all [Float.Model.UnpackedFloat.isNaN, Model.IEEE.isNaN]
+
+
+
+
+
+
+
+
+theorem toFloat32_isNaN (x : Binary32) :
+
+
+    (ExecFloat.Binary.toFloat32 x).isNaN = Model.isNaN (ExecFloat.Binary.toModel x) := by
+
+
+  change ((Model.toFloat32Model (ExecFloat.Binary.toModel x)).unpack).isNaN = _
+
+
+  rw [Model.unpack_toFloat32Model]
+
+
+  exact model_toModel_isNaN _
+
+
+
+
+
+
+
+
+theorem native_eq_nan_of_isNaN (x : Float32) (hx : x.isNaN = true) :
+
+
+    x = Float32.nan := by
+
+
+  have hunpack : x.toModel.unpack = .notANumber := by
+
+
+    change x.toModel.unpack.isNaN = true at hx
+
+
+    cases h : x.toModel.unpack <;> simp_all [Float.Model.UnpackedFloat.isNaN]
+
+
+  cases x with
+
+
+  | ofModel m =>
+
+
+      apply congrArg Float32.ofModel
+
+
+      change m = Float32.Model.pack .notANumber
+
+
+      have hr := Model.toFloat32Model_ofFloat32Model m
+
+
+      change Float32.Model.pack m.unpack = m at hr
+
+
+      change m.unpack = .notANumber at hunpack
+
+
+      rw [← hr, hunpack]
+
+
+
+
+
+
+
+
+theorem toFloat32_eq_nan_of_model_nan (x : Binary32)
+
+
+    (hx : Model.isNaN (ExecFloat.Binary.toModel x) = true) :
+
+
+    ExecFloat.Binary.toFloat32 x = Float32.nan := by
+
+
+  apply native_eq_nan_of_isNaN
+
+
+  rw [toFloat32_isNaN]
+
+
+  exact hx
+
+
+
+
+
+
+
+
+theorem chooseNaN2_some_nan (x y z : Model FloatFormat.binary32)
+
+
+    (h : Model.chooseNaN2 x y = some z) : Model.isNaN z = true := by
+
+
+  unfold Model.chooseNaN2 at h
+
+
+  split_ifs at h with hsx hsy hnx hny
+
+
+  · simp only [Option.some.injEq] at h
+
+
+    cases h
+
+
+    exact R7W01.quietNaN32_is_nan x (Model.isNaN_of_isSNaN hsx)
+
+
+  · simp only [Option.some.injEq] at h
+
+
+    cases h
+
+
+    exact R7W01.quietNaN32_is_nan y (Model.isNaN_of_isSNaN hsy)
+
+
+  · simp only [Option.some.injEq] at h
+
+
+    cases h
+
+
+    exact R7W01.quietNaN32_is_nan x hnx
+
+
+  · simp only [Option.some.injEq] at h
+
+
+    cases h
+
+
+    exact R7W01.quietNaN32_is_nan y hny
+
+
+
+
+
+
+
+
+theorem model_add_nan_left (x y : Model FloatFormat.binary32)
+
+
+    (hx : Model.isNaN x = true) : Model.isNaN (Model.Spec.add x y) = true := by
+
+
+  have hd := Model.toDyadic?_eq_none_of_isNaN hx
+
+
+  cases hc : Model.chooseNaN2 x y with
+
+
+  | none =>
+
+
+      have hn := (Model.chooseNaN2_eq_none_iff x y).mp hc
+
+
+      simp [hx] at hn
+
+
+  | some z =>
+
+
+      have hout : Model.Spec.add x y = z := by
+
+
+        cases hdy : Model.toDyadic? y <;> simp [Model.Spec.add, hd, hdy, hc]
+
+
+      rw [hout]
+
+
+      exact chooseNaN2_some_nan x y z hc
+
+
+
+
+
+
+
+
+theorem model_add_nan_right (x y : Model FloatFormat.binary32)
+
+
+    (hy : Model.isNaN y = true) : Model.isNaN (Model.Spec.add x y) = true := by
+
+
+  have hd := Model.toDyadic?_eq_none_of_isNaN hy
+
+
+  cases hc : Model.chooseNaN2 x y with
+
+
+  | none =>
+
+
+      have hn := (Model.chooseNaN2_eq_none_iff x y).mp hc
+
+
+      simp [hy] at hn
+
+
+  | some z =>
+
+
+      have hout : Model.Spec.add x y = z := by
+
+
+        cases hdx : Model.toDyadic? x <;> simp [Model.Spec.add, hd, hdx, hc]
+
+
+      rw [hout]
+
+
+      exact chooseNaN2_some_nan x y z hc
+
+
+
+
+
+
+
+
+theorem native_add_nan_left (x y : Float32) (hx : x.isNaN = true) :
+
+
+    x + y = Float32.nan := by
+
+
+  apply native_eq_nan_of_isNaN
+
+
+  cases h : (x + y).isNaN with
+
+
+  | true => rfl
+
+
+  | false =>
+
+
+      have hn := R19BiasBase.NotNaNProbe.add_inputs x y h
+
+
+      simp [hx] at hn
+
+
+
+
+
+
+
+
+theorem native_add_nan_right (x y : Float32) (hy : y.isNaN = true) :
+
+
+    x + y = Float32.nan := by
+
+
+  apply native_eq_nan_of_isNaN
+
+
+  cases h : (x + y).isNaN with
+
+
+  | true => rfl
+
+
+  | false =>
+
+
+      have hn := R19BiasBase.NotNaNProbe.add_inputs x y h
+
+
+      simp [hy] at hn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+theorem add_toFloat32 (x y : Binary32) :
+
+
+    ExecFloat.Binary.toFloat32 (ExecFloat.add x y) =
+
+
+      ExecFloat.Binary.toFloat32 x + ExecFloat.Binary.toFloat32 y := by
+
+
+  cases hx : (ExecFloat.Binary.toFloat32 x).isNaN with
+
+
+  | false =>
+
+
+      cases hy : (ExecFloat.Binary.toFloat32 y).isNaN with
+
+
+      | false =>
+
+
+          have h := R19BiasBase.R7Native.ofFloat32Add
+
+
+            (ExecFloat.Binary.toFloat32 x) (ExecFloat.Binary.toFloat32 y) hx hy
+
+
+          rw [R19BiasBase.NotNaNProbe.roundtrip x hx,
+
+
+            R19BiasBase.NotNaNProbe.roundtrip y hy] at h
+
+
+          have hp := congrArg ExecFloat.Binary.toFloat32 h
+
+
+          simpa only [ExecFloat.Binary.toFloat32_ofFloat32] using hp.symm
+
+
+      | true =>
+
+
+          have hmy : Model.isNaN (ExecFloat.Binary.toModel y) = true := by
+
+
+            rw [← toFloat32_isNaN]
+
+
+            exact hy
+
+
+          have hz : Model.isNaN (ExecFloat.Binary.toModel (ExecFloat.add x y)) = true := by
+
+
+            rw [R19BiasBase.R7Native.toModelExecAdd]
+
+
+            exact model_add_nan_right _ _ hmy
+
+
+          rw [toFloat32_eq_nan_of_model_nan _ hz,
+
+
+            native_add_nan_right _ _ hy]
+
+
+  | true =>
+
+
+      have hmx : Model.isNaN (ExecFloat.Binary.toModel x) = true := by
+
+
+        rw [← toFloat32_isNaN]
+
+
+        exact hx
+
+
+      have hz : Model.isNaN (ExecFloat.Binary.toModel (ExecFloat.add x y)) = true := by
+
+
+        rw [R19BiasBase.R7Native.toModelExecAdd]
+
+
+        exact model_add_nan_left _ _ hmx
+
+
+      rw [toFloat32_eq_nan_of_model_nan _ hz,
+
+
+        native_add_nan_left _ _ hx]
+
+
+
+
+
+end R7W05
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+namespace R7W05
+
+
+open FloatLib.Floats
+
+
+open FloatLib.Floats.Formats.BinaryInterchange
+
+
+
+
+
+
+
+
+theorem add_isNaN_eq_native (x y : Competition.Binary32) :
+
+
+    ExecFloat.Binary.isNaN (ExecFloat.add x y) =
+
+
+      (ExecFloat.Binary.toFloat32 x + ExecFloat.Binary.toFloat32 y).isNaN := by
+
+
+  change Model.isNaN (ExecFloat.Binary.toModel (ExecFloat.add x y)) = _
+
+
+  rw [← toFloat32_isNaN, add_toFloat32]
+
+
+
+
+
+
+
+
+theorem add_model_isNaN_eq_native (x y : Competition.Binary32) :
+
+
+    Model.isNaN (ExecFloat.Binary.toModel (ExecFloat.add x y)) =
+
+
+      (ExecFloat.Binary.toFloat32 x + ExecFloat.Binary.toFloat32 y).isNaN :=
+
+
+  add_isNaN_eq_native x y
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+theorem add_isNaN_false_iff (x y : Competition.Binary32) :
+
+
+    ExecFloat.Binary.isNaN (ExecFloat.add x y) = false ↔
+
+
+      (ExecFloat.Binary.toFloat32 x + ExecFloat.Binary.toFloat32 y).isNaN = false := by
+
+
+  rw [add_isNaN_eq_native]
+
+
+
+
+
+end R7W05
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+namespace R7W05
+
+
+open FloatLib.Floats
+
+
+open FloatLib.Floats.Formats.BinaryInterchange
+
+
+
+
+
+private theorem mul_unpack_of_isNaN (x : Float32) (hx : x.isNaN = true) :
+
+
+    x.toModel.unpack = Float.Model.UnpackedFloat.notANumber := by
+
+
+  change x.toModel.unpack.isNaN = true at hx
+
+
+  cases h : x.toModel.unpack <;>
+
+
+    simp_all [Float.Model.UnpackedFloat.isNaN]
+
+
+
+
+
+
+
+
+theorem native_mul_nan_left (x y : Float32) (hx : x.isNaN = true) :
+
+
+    x * y = Float32.nan := by
+
+
+  change Float32.ofModel (Float32.Model.pack
+
+
+    (Float.Model.UnpackedFloat.mul Float.Model.Format.binary32
+
+
+      x.toModel.unpack y.toModel.unpack)) = Float32.nan
+
+
+  rw [mul_unpack_of_isNaN x hx]
+
+
+  rfl
+
+
+
+
+
+
+
+
+theorem native_mul_nan_right (x y : Float32) (hy : y.isNaN = true) :
+
+
+    x * y = Float32.nan := by
+
+
+  change Float32.ofModel (Float32.Model.pack
+
+
+    (Float.Model.UnpackedFloat.mul Float.Model.Format.binary32
+
+
+      x.toModel.unpack y.toModel.unpack)) = Float32.nan
+
+
+  rw [mul_unpack_of_isNaN y hy]
+
+
+  cases x.toModel.unpack <;> rfl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+theorem mul_toFloat32_of_not_nan (x y : Competition.Binary32)
+
+
+    (hx : (ExecFloat.Binary.toFloat32 x).isNaN = false)
+
+
+    (hy : (ExecFloat.Binary.toFloat32 y).isNaN = false) :
+
+
+    ExecFloat.Binary.toFloat32 (ExecFloat.mul x y) =
+
+
+      ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y := by
+
+
+  have h := R19BiasBase.R7Native.ofFloat32Mul
+
+
+    (ExecFloat.Binary.toFloat32 x) (ExecFloat.Binary.toFloat32 y) hx hy
+
+
+  rw [R19BiasBase.NotNaNProbe.roundtrip x hx,
+
+
+    R19BiasBase.NotNaNProbe.roundtrip y hy] at h
+
+
+  have hn := congrArg (fun v : Competition.Binary32 => ExecFloat.Binary.toFloat32 v) h.symm
+
+
+  simpa only [ExecFloat.Binary.toFloat32_ofFloat32] using hn
+
+
+
+
+
+
+
+
+
+
+
+theorem model_mul_nan_left (x y : Model FloatFormat.binary32)
+
+
+    (hx : Model.isNaN x = true) : Model.isNaN (Model.Spec.mul x y) = true := by
+
+
+  have hdx := Model.toDyadic?_eq_none_of_isNaN hx
+
+
+  cases hchoose : Model.chooseNaN2 x y with
+
+
+  | none =>
+
+
+      have hnot := ((Model.chooseNaN2_eq_none_iff x y).mp hchoose).1
+
+
+      simp [hx] at hnot
+
+
+  | some z =>
+
+
+      have hz := chooseNaN2_some_nan x y z hchoose
+
+
+      cases hd : Model.toDyadic? y <;>
+
+
+        simpa only [Model.Spec.mul, hdx, hd, hchoose] using hz
+
+
+
+
+
+
+
+
+theorem model_mul_nan_right (x y : Model FloatFormat.binary32)
+
+
+    (hy : Model.isNaN y = true) : Model.isNaN (Model.Spec.mul x y) = true := by
+
+
+  have hdy := Model.toDyadic?_eq_none_of_isNaN hy
+
+
+  cases hchoose : Model.chooseNaN2 x y with
+
+
+  | none =>
+
+
+      have hnot := ((Model.chooseNaN2_eq_none_iff x y).mp hchoose).2
+
+
+      simp [hy] at hnot
+
+
+  | some z =>
+
+
+      have hz := chooseNaN2_some_nan x y z hchoose
+
+
+      cases hd : Model.toDyadic? x <;>
+
+
+        simpa only [Model.Spec.mul, hdy, hd, hchoose] using hz
+
+
+
+
+
+
+
+
+
+
+
+theorem mul_toFloat32 (x y : Competition.Binary32) :
+
+
+    ExecFloat.Binary.toFloat32 (ExecFloat.mul x y) =
+
+
+      ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y := by
+
+
+  cases hx : (ExecFloat.Binary.toFloat32 x).isNaN with
+
+
+  | false =>
+
+
+      cases hy : (ExecFloat.Binary.toFloat32 y).isNaN with
+
+
+      | false => exact mul_toFloat32_of_not_nan x y hx hy
+
+
+      | true =>
+
+
+          rw [native_mul_nan_right _ _ hy]
+
+
+          apply toFloat32_eq_nan_of_model_nan
+
+
+          rw [R19BiasBase.NativeBridge.toModelExecMul]
+
+
+          exact model_mul_nan_right _ _ ((toFloat32_isNaN y).symm.trans hy)
+
+
+  | true =>
+
+
+      rw [native_mul_nan_left _ _ hx]
+
+
+      apply toFloat32_eq_nan_of_model_nan
+
+
+      rw [R19BiasBase.NativeBridge.toModelExecMul]
+
+
+      exact model_mul_nan_left _ _ ((toFloat32_isNaN x).symm.trans hx)
+
+
+
+
+
+
+
+
+theorem mul_isNaN_eq_native (x y : Competition.Binary32) :
+
+
+    ExecFloat.Binary.isNaN (ExecFloat.mul x y) =
+
+
+      (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y).isNaN := by
+
+
+  change Model.isNaN (ExecFloat.Binary.toModel (ExecFloat.mul x y)) = _
+
+
+  rw [← toFloat32_isNaN, mul_toFloat32]
+
+
+
+
+
+
+
+
+theorem mul_model_isNaN_eq_native (x y : Competition.Binary32) :
+
+
+    Model.isNaN (ExecFloat.Binary.toModel (ExecFloat.mul x y)) =
+
+
+      (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y).isNaN :=
+
+
+  mul_isNaN_eq_native x y
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+theorem mul_isNaN_false_iff (x y : Competition.Binary32) :
+
+
+    ExecFloat.Binary.isNaN (ExecFloat.mul x y) = false ↔
+
+
+      (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y).isNaN = false := by
+
+
+  rw [mul_isNaN_eq_native]
+
+
+
+
+
+end R7W05
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+namespace R7W05
+
+
+open FloatLib.Floats
+
+
+open FloatLib.Floats.Formats.BinaryInterchange
+
+
+
+
+
+@[inline] def nativeSumStep (acc : Float32) (x : Competition.Binary32) : Float32 :=
+
+
+  acc + ExecFloat.Binary.toFloat32 x
+
+
+
+
+
+
+
+
+@[inline] def nativeDotStep (acc : Float32) (x y : Competition.Binary32) : Float32 :=
+
+
+  acc + (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y)
+
+
+
+
+
+@[inline] def repairSumStep (acc : Float32) (x : Competition.Binary32) : Competition.Binary32 :=
+
+
+  ExecFloat.add (ExecFloat.Binary.ofFloat32 acc) x
+
+
+
+
+
+@[inline] def repairDotStep (acc : Float32) (x y : Competition.Binary32) : Competition.Binary32 :=
+
+
+  ExecFloat.add (ExecFloat.Binary.ofFloat32 acc) (ExecFloat.mul x y)
+
+
+
+
+
+
+
+
+
+
+
+theorem native_acc_roundtrip (q : Competition.Binary32) (acc : Float32)
+
+
+    (hmatch : ExecFloat.Binary.toFloat32 q = acc) (hacc : acc.isNaN = false) :
+
+
+    ExecFloat.Binary.ofFloat32 acc = q := by
+
+
+  rw [← hmatch]
+
+
+  apply R19BiasBase.NotNaNProbe.roundtrip
+
+
+  simpa only [hmatch] using hacc
+
+
+
+
+
+
+
+
+theorem dot_toFloat32 (q x y : Competition.Binary32) :
+
+
+    ExecFloat.Binary.toFloat32 (ExecFloat.add q (ExecFloat.mul x y)) =
+
+
+      nativeDotStep (ExecFloat.Binary.toFloat32 q) x y := by
+
+
+  rw [add_toFloat32, mul_toFloat32]
+
+
+  rfl
+
+
+
+
+
+
+
+
+theorem native_sum_isNaN_eq_raw (q x : Competition.Binary32) :
+
+
+    (nativeSumStep (ExecFloat.Binary.toFloat32 q) x).isNaN =
+
+
+      Model.isNaN (ExecFloat.Binary.toModel (ExecFloat.add q x)) := by
+
+
+  exact (congrArg Float32.isNaN (add_toFloat32 q x)).symm.trans
+
+
+    (toFloat32_isNaN (ExecFloat.add q x))
+
+
+
+
+
+
+
+
+theorem native_dot_isNaN_eq_raw (q x y : Competition.Binary32) :
+
+
+    (nativeDotStep (ExecFloat.Binary.toFloat32 q) x y).isNaN =
+
+
+      Model.isNaN (ExecFloat.Binary.toModel (ExecFloat.add q (ExecFloat.mul x y))) := by
+
+
+  exact (congrArg Float32.isNaN (dot_toFloat32 q x y)).symm.trans
+
+
+    (toFloat32_isNaN (ExecFloat.add q (ExecFloat.mul x y)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+theorem repairDotStep_eq_original (q : Competition.Binary32) (acc : Float32)
+
+
+    (x y : Competition.Binary32)
+
+
+    (hmatch : ExecFloat.Binary.toFloat32 q = acc) (hacc : acc.isNaN = false) :
+
+
+    repairDotStep acc x y = ExecFloat.add q (ExecFloat.mul x y) := by
+
+
+  unfold repairDotStep
+
+
+  rw [native_acc_roundtrip q acc hmatch hacc]
+
+
+
+
+
+
+
+
+theorem repairSumStep_isNaN_eq (acc : Float32) (x : Competition.Binary32) :
+
+
+    Model.isNaN (ExecFloat.Binary.toModel (repairSumStep acc x)) =
+
+
+      (nativeSumStep acc x).isNaN := by
+
+
+  have h := native_sum_isNaN_eq_raw (ExecFloat.Binary.ofFloat32 acc) x
+
+
+  simpa only [ExecFloat.Binary.toFloat32_ofFloat32, repairSumStep] using h.symm
+
+
+
+
+
+
+
+
+theorem repairDotStep_isNaN_eq (acc : Float32) (x y : Competition.Binary32) :
+
+
+    Model.isNaN (ExecFloat.Binary.toModel (repairDotStep acc x y)) =
+
+
+      (nativeDotStep acc x y).isNaN := by
+
+
+  have h := native_dot_isNaN_eq_raw (ExecFloat.Binary.ofFloat32 acc) x y
+
+
+  simpa only [ExecFloat.Binary.toFloat32_ofFloat32, repairDotStep] using h.symm
+
+
+
+
+
+
+
+
+theorem repairSumStep_isQNaN (acc : Float32) (x : Competition.Binary32)
+
+
+    (hevent : (nativeSumStep acc x).isNaN = true) :
+
+
+    Model.isQNaN (ExecFloat.Binary.toModel (repairSumStep acc x)) = true := by
+
+
+  rw [Model.isQNaN_eq_nan_and_not_signaling]
+
+
+  have hn := (repairSumStep_isNaN_eq acc x).trans hevent
+
+
+  have hs := R19BiasBase.R7W03.exec_add_not_snan (ExecFloat.Binary.ofFloat32 acc) x
+
+
+  change Model.isSNaN (ExecFloat.Binary.toModel (repairSumStep acc x)) = false at hs
+
+
+  rw [hn, hs]
+
+
+  rfl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end R7W05
+
+
+
+
+namespace R7W12
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+
+
+
+theorem ofFloat32_nan_toModel :
+    ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 Float32.nan) =
+      Model.canonicalNaN FloatFormat.binary32 := rfl
+
+
+theorem ofFloat32_isNaN (x : Float32) :
+    Model.isNaN (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x)) = x.isNaN := by
+  have h := (R7W05.toFloat32_isNaN (ExecFloat.Binary.ofFloat32 x)).symm
+  simpa only [ExecFloat.Binary.toFloat32_ofFloat32] using h
+
+
+theorem ofFloat32_not_snan (x : Float32) :
+    Model.isSNaN (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x)) = false := by
+  cases hx : x.isNaN with
+  | false =>
+      exact Model.isSNaN_eq_false_of_isNaN_eq_false _ ((ofFloat32_isNaN x).trans hx)
+  | true =>
+      rw [R7W05.native_eq_nan_of_isNaN x hx, ofFloat32_nan_toModel]
+      decide
+
+theorem canonicalNaN_is_nan :
+    Model.isNaN (Model.canonicalNaN FloatFormat.binary32) = true := by decide
+
+theorem canonicalNaN_not_snan :
+    Model.isSNaN (Model.canonicalNaN FloatFormat.binary32) = false := by decide
+
+theorem canonicalNaN_quiet_self :
+    Model.quietNaN (Model.canonicalNaN FloatFormat.binary32) =
+      Model.canonicalNaN FloatFormat.binary32 := by decide
+
+
+
+
+theorem chooseCanonicalNaN_left (q : Model FloatFormat.binary32)
+    (hs : Model.isSNaN q = false) :
+    Model.chooseNaN2 (Model.canonicalNaN FloatFormat.binary32) q =
+      some (Model.canonicalNaN FloatFormat.binary32) := by
+  simp [Model.chooseNaN2, canonicalNaN_is_nan, canonicalNaN_not_snan,
+    canonicalNaN_quiet_self, hs]
+
+
+theorem chooseCanonicalNaN_right (q : Model FloatFormat.binary32)
+    (hn : Model.isNaN q = false) :
+    Model.chooseNaN2 q (Model.canonicalNaN FloatFormat.binary32) =
+      some (Model.canonicalNaN FloatFormat.binary32) := by
+  have hs := Model.isSNaN_eq_false_of_isNaN_eq_false q hn
+  simp [Model.chooseNaN2, canonicalNaN_is_nan, canonicalNaN_not_snan,
+    canonicalNaN_quiet_self, hs, hn]
+
+theorem model_add_canonical_left (q : Model FloatFormat.binary32)
+    (hs : Model.isSNaN q = false) :
+    Model.Spec.add (Model.canonicalNaN FloatFormat.binary32) q =
+      Model.canonicalNaN FloatFormat.binary32 := by
+  have hd := Model.toDyadic?_eq_none_of_isNaN canonicalNaN_is_nan
+  simp [Model.Spec.add, hd, chooseCanonicalNaN_left q hs]
+
+theorem model_add_canonical_right (q : Model FloatFormat.binary32)
+    (hn : Model.isNaN q = false) :
+    Model.Spec.add q (Model.canonicalNaN FloatFormat.binary32) =
+      Model.canonicalNaN FloatFormat.binary32 := by
+  have hd := Model.toDyadic?_eq_none_of_isNaN canonicalNaN_is_nan
+  cases hq : Model.toDyadic? q <;>
+    simp [Model.Spec.add, hd, hq, chooseCanonicalNaN_right q hn]
+
+theorem model_mul_canonical_left (q : Model FloatFormat.binary32)
+    (hs : Model.isSNaN q = false) :
+    Model.Spec.mul (Model.canonicalNaN FloatFormat.binary32) q =
+      Model.canonicalNaN FloatFormat.binary32 := by
+  have hd := Model.toDyadic?_eq_none_of_isNaN canonicalNaN_is_nan
+  simp [Model.Spec.mul, hd, chooseCanonicalNaN_left q hs]
+
+theorem model_mul_canonical_right (q : Model FloatFormat.binary32)
+    (hn : Model.isNaN q = false) :
+    Model.Spec.mul q (Model.canonicalNaN FloatFormat.binary32) =
+      Model.canonicalNaN FloatFormat.binary32 := by
+  have hd := Model.toDyadic?_eq_none_of_isNaN canonicalNaN_is_nan
+  cases hq : Model.toDyadic? q <;>
+    simp [Model.Spec.mul, hd, hq, chooseCanonicalNaN_right q hn]
+
+
+theorem exec_add_import_nan_left (x : Float32) :
+    ExecFloat.add (ExecFloat.Binary.ofFloat32 Float32.nan) (ExecFloat.Binary.ofFloat32 x) =
+      ExecFloat.Binary.ofFloat32 Float32.nan := by
+  apply Configured.Family.toModel_injective
+  change ExecFloat.Binary.toModel
+    (ExecFloat.add (ExecFloat.Binary.ofFloat32 Float32.nan) (ExecFloat.Binary.ofFloat32 x)) =
+      ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 Float32.nan)
+  rw [R19BiasBase.R7Native.toModelExecAdd]
+  change Model.Spec.add (Model.canonicalNaN FloatFormat.binary32)
+    (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x)) =
+      Model.canonicalNaN FloatFormat.binary32
+  exact model_add_canonical_left _ (ofFloat32_not_snan x)
+
+theorem exec_add_import_nan_right (x : Float32) (hx : x.isNaN = false) :
+    ExecFloat.add (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 Float32.nan) =
+      ExecFloat.Binary.ofFloat32 Float32.nan := by
+  apply Configured.Family.toModel_injective
+  change ExecFloat.Binary.toModel
+    (ExecFloat.add (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 Float32.nan)) =
+      ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 Float32.nan)
+  rw [R19BiasBase.R7Native.toModelExecAdd]
+  change Model.Spec.add (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x))
+    (Model.canonicalNaN FloatFormat.binary32) = Model.canonicalNaN FloatFormat.binary32
+  exact model_add_canonical_right _ ((ofFloat32_isNaN x).trans hx)
+
+theorem exec_mul_import_nan_left (x : Float32) :
+    ExecFloat.mul (ExecFloat.Binary.ofFloat32 Float32.nan) (ExecFloat.Binary.ofFloat32 x) =
+      ExecFloat.Binary.ofFloat32 Float32.nan := by
+  apply Configured.Family.toModel_injective
+  change ExecFloat.Binary.toModel
+    (ExecFloat.mul (ExecFloat.Binary.ofFloat32 Float32.nan) (ExecFloat.Binary.ofFloat32 x)) =
+      ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 Float32.nan)
+  rw [R19BiasBase.NativeBridge.toModelExecMul]
+  change Model.Spec.mul (Model.canonicalNaN FloatFormat.binary32)
+    (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x)) =
+      Model.canonicalNaN FloatFormat.binary32
+  exact model_mul_canonical_left _ (ofFloat32_not_snan x)
+
+theorem exec_mul_import_nan_right (x : Float32) (hx : x.isNaN = false) :
+    ExecFloat.mul (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 Float32.nan) =
+      ExecFloat.Binary.ofFloat32 Float32.nan := by
+  apply Configured.Family.toModel_injective
+  change ExecFloat.Binary.toModel
+    (ExecFloat.mul (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 Float32.nan)) =
+      ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 Float32.nan)
+  rw [R19BiasBase.NativeBridge.toModelExecMul]
+  change Model.Spec.mul (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x))
+    (Model.canonicalNaN FloatFormat.binary32) = Model.canonicalNaN FloatFormat.binary32
+  exact model_mul_canonical_right _ ((ofFloat32_isNaN x).trans hx)
+
+
+theorem ofFloat32_add (a b : Float32) :
+    ExecFloat.Binary.ofFloat32 (a + b) =
+      ExecFloat.add (ExecFloat.Binary.ofFloat32 a) (ExecFloat.Binary.ofFloat32 b) := by
+  cases ha : a.isNaN with
+  | false =>
+      cases hb : b.isNaN with
+      | false => exact R19BiasBase.R7Native.ofFloat32Add a b ha hb
+      | true =>
+          rw [R7W05.native_add_nan_right a b hb, R7W05.native_eq_nan_of_isNaN b hb]
+          exact (exec_add_import_nan_right a ha).symm
+  | true =>
+      rw [R7W05.native_add_nan_left a b ha, R7W05.native_eq_nan_of_isNaN a ha]
+      exact (exec_add_import_nan_left b).symm
+
+
+theorem ofFloat32_mul (a b : Float32) :
+    ExecFloat.Binary.ofFloat32 (a * b) =
+      ExecFloat.mul (ExecFloat.Binary.ofFloat32 a) (ExecFloat.Binary.ofFloat32 b) := by
+  cases ha : a.isNaN with
+  | false =>
+      cases hb : b.isNaN with
+      | false => exact R19BiasBase.R7Native.ofFloat32Mul a b ha hb
+      | true =>
+          rw [R7W05.native_mul_nan_right a b hb, R7W05.native_eq_nan_of_isNaN b hb]
+          exact (exec_mul_import_nan_right a ha).symm
+  | true =>
+      rw [R7W05.native_mul_nan_left a b ha, R7W05.native_eq_nan_of_isNaN a ha]
+      exact (exec_mul_import_nan_left b).symm
+
+
+
+
+end R7W12
+namespace R7W12
+open FloatLib.Floats
+open FloatLib.Floats.Formats.BinaryInterchange
+
+
+
+def rawNotNaN (u : UInt32) : Bool :=
+  decide ((u &&& 0x7fffffff) ≤ (0x7f800000 : UInt32))
+
+
+theorem magnitude_le_infinity_iff (n : Nat) :
+    n % 2147483648 ≤ 2139095040 ↔
+      (n / 8388608) % 256 ≠ 255 ∨ n % 8388608 = 0 := by
+  omega
+
+
+theorem rawNotNaN_true_iff_isNaN_false (u : UInt32) :
+    rawNotNaN u = true ↔
+      Model.isNaN (Model.NativeBinary32.ofUInt32 u) = false := by
+  unfold rawNotNaN
+  rw [decide_eq_true_eq, UInt32.le_iff_toNat_le]
+  change (u.toNat &&& 2147483647 ≤ 2139095040) ↔
+    (((((u.toBitVec >>> 23) &&& (255#32)).toNat == 255) &&
+      ((u.toBitVec &&& (8388607#32)).toNat != 0)) = false)
+  simp only [BitVec.toNat_and, BitVec.toNat_ushiftRight,
+    BitVec.toNat_ofNat, UInt32.toNat_toBitVec]
+  change (u.toNat &&& 2147483647 ≤ 2139095040) ↔
+    ((((u.toNat >>> 23) &&& 255) == 255 &&
+      (u.toNat &&& 8388607) != 0) = false)
+  have h31 : u.toNat &&& 2147483647 = u.toNat % 2147483648 :=
+    Nat.and_two_pow_sub_one_eq_mod u.toNat 31
+  have h23 : u.toNat &&& 8388607 = u.toNat % 8388608 :=
+    Nat.and_two_pow_sub_one_eq_mod u.toNat 23
+  have h8 : (u.toNat >>> 23) &&& 255 = (u.toNat >>> 23) % 256 :=
+    Nat.and_two_pow_sub_one_eq_mod (u.toNat >>> 23) 8
+  rw [h31, h23, h8, Nat.shiftRight_eq_div_pow]
+  simp only [Bool.and_eq_false_iff, beq_eq_false_iff_ne, bne_eq_false_iff_eq]
+  exact magnitude_le_infinity_iff u.toNat
+
+
+theorem rawNotNaN_eq_not_isNaN (u : UInt32) :
+    rawNotNaN u = !Model.isNaN (Model.NativeBinary32.ofUInt32 u) := by
+  apply Bool.eq_iff_iff.mpr
+  simpa using rawNotNaN_true_iff_isNaN_false u
+
+
+theorem rawNotNaN_eq_exec_model (q : Competition.Binary32) :
+    rawNotNaN q.raw.1 = !Model.isNaN (ExecFloat.Binary.toModel q) := by
+  rw [R7W02.exec_toModel_eq_rawModel]
+  exact rawNotNaN_eq_not_isNaN q.raw.1
+
+
+
+
+
+theorem rawNotNaN_eq_native_classifier (q : Competition.Binary32) :
+    rawNotNaN q.raw.1 = !(ExecFloat.Binary.toFloat32 q).isNaN := by
+  rw [R7W05.toFloat32_isNaN]
+  exact rawNotNaN_eq_exec_model q
+
+end R7W12
+namespace R7SumRepair
+
+open FloatLib.Floats Competition
+open FloatLib.Floats.Formats.BinaryInterchange
+
+@[inline] def step {n : Nat} (x : Vector Binary32 n)
+    (acc : Binary32) (i : Fin n) : Binary32 := R19BiasBase.add acc (x.get i)
+
+
+def suffixLoop {n : Nat} (x : Vector Binary32 n) (k : Nat) (acc : Binary32) : Binary32 :=
+  if hk : k < n then
+    suffixLoop x (k + 1) (R7W02.step acc (x.get ⟨k, hk⟩))
+  else acc
+termination_by n - k
+
+theorem suffixLoop_eq {n : Nat} (x : Vector Binary32 n) (k : Nat) (acc : Binary32)
+    (hq : Model.isQNaN (ExecFloat.Binary.toModel acc) = true) :
+    suffixLoop x k acc = Fin.foldl.loop n (step x) acc k := by
+  rw [suffixLoop]
+  split
+  · rename_i hk
+    rw [Fin.foldl.loop, dif_pos hk]
+    have ih := suffixLoop_eq x (k + 1) (R7W02.step acc (x.get ⟨k, hk⟩))
+      (R7W02.step_isQNaN acc (x.get ⟨k, hk⟩) hq)
+    have hs : R7W02.step acc (x.get ⟨k, hk⟩) = step x acc ⟨k, hk⟩ := by
+      simpa only [step, R19BiasBase.add_eq] using
+        R7W02.step_eq_add acc (x.get ⟨k, hk⟩) hq
+    exact ih.trans (congrArg
+      (fun a : Binary32 => Fin.foldl.loop n (step x) a (k + 1)) hs)
+  · rename_i hk
+    rw [Fin.foldl.loop, dif_neg hk]
+termination_by n - k
+
+
+end R7SumRepair
+
+
+namespace R7NaNReplay
+
+open FloatLib.Floats Competition
+
+
+@[inline] def replayStep (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
+    (acc : Binary32) (i : Fin n) : Binary32 :=
+  R19BiasBase.add acc (R19BiasBase.mul (Araw.getD (baseA + i.val) posZero)
+    (Braw.getD (baseB + i.val * p) posZero))
+
+theorem replayStep_absorb (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
+    (acc : Binary32) (i : Fin n) (hq : R7W01.execQuietGuard acc = true) :
+    replayStep n baseA baseB p Araw Braw acc i = acc := by
+  unfold replayStep
+  rw [R19BiasBase.add_eq, R19BiasBase.mul_eq]
+  exact R7W01.exec_add_mul_absorb _ _ _
+    (R7W01.quietGuard_nan _ hq) (R7W01.quietGuard_not_signaling _ hq)
+
+theorem replayFold_absorb (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
+    (k : Nat) (acc : Binary32) (hq : R7W01.execQuietGuard acc = true) :
+    Fin.foldl.loop n (replayStep n baseA baseB p Araw Braw) acc k = acc := by
+  rw [Fin.foldl.loop]
+  split
+  · rename_i hk
+    rw [replayStep_absorb n baseA baseB p Araw Braw acc ⟨k, hk⟩ hq]
+    exact replayFold_absorb n baseA baseB p Araw Braw (k + 1) acc hq
+  · rfl
+termination_by n - k
+
+
+def replayLoop (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
+    (k : Nat) (acc : Binary32) : Binary32 :=
+  if hk : k < n then
+    if R7W01.execQuietGuard acc then acc
+    else replayLoop n baseA baseB p Araw Braw (k + 1)
+      (replayStep n baseA baseB p Araw Braw acc ⟨k, hk⟩)
+  else acc
+termination_by n - k
+
+theorem replayLoop_eq (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
+    (k : Nat) (acc : Binary32) :
+    replayLoop n baseA baseB p Araw Braw k acc =
+      Fin.foldl.loop n (replayStep n baseA baseB p Araw Braw) acc k := by
+  rw [replayLoop]
+  split
+  · rename_i hk
+    split
+    · rename_i hq
+      exact (replayFold_absorb n baseA baseB p Araw Braw k acc hq).symm
+    · rw [Fin.foldl.loop, dif_pos hk]
+      exact replayLoop_eq n baseA baseB p Araw Braw (k + 1) _
+  · rename_i hk
+    rw [Fin.foldl.loop, dif_neg hk]
+termination_by n - k
+
+def replayEarly (n baseA baseB p : Nat) (Araw Braw : Array Binary32) : Binary32 :=
+  replayLoop n baseA baseB p Araw Braw 0 posZero
+
+theorem replayEarly_eq (n baseA baseB p : Nat) (Araw Braw : Array Binary32) :
+    replayEarly n baseA baseB p Araw Braw =
+      Fin.foldl n (replayStep n baseA baseB p Araw Braw) posZero := by
+  exact replayLoop_eq n baseA baseB p Araw Braw 0 posZero
+
+
+def replay (n baseA baseB p : Nat) (Araw Braw : Array Binary32) (result : Float32) : Binary32 :=
+  if result.isNaN then replayEarly n baseA baseB p Araw Braw
+  else Fin.foldl n (replayStep n baseA baseB p Araw Braw) posZero
+
+theorem replay_eq (n baseA baseB p : Nat) (Araw Braw : Array Binary32) (result : Float32) :
+    replay n baseA baseB p Araw Braw result =
+      Fin.foldl n (fun acc i => R19BiasBase.add acc
+        (R19BiasBase.mul (Araw.getD (baseA + i.val) posZero)
+          (Braw.getD (baseB + i.val * p) posZero))) posZero := by
+  unfold replay
+  split
+  · exact replayEarly_eq n baseA baseB p Araw Braw
+  · rfl
+
+
+
+end R7NaNReplay
+
+namespace NativeFinal
+
+
+def dotLoop (n baseA baseB p : Nat) (A B : Array Binary32)
+    (k : Nat) (acc : Float32) : Float32 :=
+  if hk : k < n then
+    let fa := ExecFloat.Binary.toFloat32 (A.getD (baseA + k) posZero)
+    let fb := ExecFloat.Binary.toFloat32 (B.getD (baseB + k * p) posZero)
+    dotLoop n baseA baseB p A B (k + 1) (acc + fa * fb)
+  else acc
+termination_by n - k
+
+theorem dotLoop_eq (n baseA baseB p : Nat) (A B : Array Binary32)
+    (k : Nat) (acc result : Float32)
+    (hs : dotLoop n baseA baseB p A B k acc = result) (hf : result.isNaN = false) :
+    acc.isNaN = false ∧ ExecFloat.Binary.ofFloat32 result =
+      Fin.foldl.loop n
+        (fun a i => ExecFloat.add a
+          (ExecFloat.mul (A.getD (baseA + i.val) posZero)
+            (B.getD (baseB + i.val * p) posZero)))
+        (ExecFloat.Binary.ofFloat32 acc) k := by
+  rw [dotLoop] at hs
+  split at hs
+  · rename_i hk
+    dsimp only at hs
+    have ih := dotLoop_eq n baseA baseB p A B (k + 1)
+      (acc + ExecFloat.Binary.toFloat32 (A.getD (baseA + k) posZero) *
+        ExecFloat.Binary.toFloat32 (B.getD (baseB + k * p) posZero)) result hs hf
+    have ha := NotNaNProbe.add_inputs acc
+      (ExecFloat.Binary.toFloat32 (A.getD (baseA + k) posZero) *
+        ExecFloat.Binary.toFloat32 (B.getD (baseB + k * p) posZero)) ih.1
+    have hm := NotNaNProbe.mul_inputs
+      (ExecFloat.Binary.toFloat32 (A.getD (baseA + k) posZero))
+      (ExecFloat.Binary.toFloat32 (B.getD (baseB + k * p) posZero)) ha.2
+    refine ⟨ha.1, ?_⟩
+    rw [Fin.foldl.loop, dif_pos hk]
+    have hnext := ih.2
+    rw [R7Native.ofFloat32Add _ _ ha.1 ha.2,
+      R7Native.ofFloat32Mul _ _ hm.1 hm.2,
+      NotNaNProbe.roundtrip _ hm.1, NotNaNProbe.roundtrip _ hm.2] at hnext
+    exact hnext
+  · rename_i hk
+    refine ⟨?_, ?_⟩
+    · simpa only [hs] using hf
+    · rw [Fin.foldl.loop, dif_neg hk]
+      exact congrArg ExecFloat.Binary.ofFloat32 hs.symm
+termination_by n - k
+
+def dot (n baseA baseB p : Nat) (A B : Array Binary32) : Binary32 :=
+  let result := dotLoop n baseA baseB p A B 0 (Float32.ofBits 0)
+  if hf : R7W04.nonNaN result = true then ExecFloat.Binary.ofFloat32 result
+  else R7NaNReplay.replayEarly n baseA baseB p A B
+
+theorem dot_eq (n baseA baseB p : Nat) (A B : Array Binary32) :
+    dot n baseA baseB p A B = Fin.foldl n
+      (fun a i => ExecFloat.add a (ExecFloat.mul (A.getD (baseA + i.val) posZero)
+        (B.getD (baseB + i.val * p) posZero))) posZero := by
+  unfold dot
+  dsimp only
+  split
+  · rename_i hf
+    have hnon := (R7W04.nonNaN_eq_true_iff _).mp hf
+    have h := (dotLoop_eq n baseA baseB p A B 0 (Float32.ofBits 0) _ rfl hnon).2
+    change ExecFloat.Binary.ofFloat32 _ = Fin.foldl n _ posZero at h
+    exact h
+  · refine (R7NaNReplay.replayEarly_eq n baseA baseB p A B).trans ?_
+    apply congrArg (fun step : Binary32 → Fin n → Binary32 => Fin.foldl n step posZero)
+    funext acc i
+    simp only [R7NaNReplay.replayStep, R19BiasBase.add_eq, R19BiasBase.mul_eq]
+
+end NativeFinal
+
+
+theorem index_address (a b c d : Nat) : (a + b) * c + d = (a * c + d) + b * c := by
+  rw [Nat.add_mul]
+  omega
+
+namespace Packed10
+
+structure F10 where
+  s0 : Float32
+  s1 : Float32
+  s2 : Float32
+  s3 : Float32
+  s4 : Float32
+  s5 : Float32
+  s6 : Float32
+  s7 : Float32
+  s8 : Float32
+  s9 : Float32
+
+@[inline] def zero32 : Float32 := Float32.ofBits 0
+
+@[inline] def zero10 : F10 := ⟨zero32, zero32, zero32, zero32, zero32, zero32, zero32, zero32, zero32, zero32⟩
+
+@[inline] def lane (v : F10) (l : Fin 10) : Float32 :=
+  match l.val with
+  | 0 => v.s0
+  | 1 => v.s1
+  | 2 => v.s2
+  | 3 => v.s3
+  | 4 => v.s4
+  | 5 => v.s5
+  | 6 => v.s6
+  | 7 => v.s7
+  | 8 => v.s8
+  | _ => v.s9
+
+@[inline] def packet (read : Nat → Float32) (col : Nat) : F10 :=
+  ⟨read col, read (col + 1), read (col + 2), read (col + 3), read (col + 4), read (col + 5), read (col + 6), read (col + 7), read (col + 8), read (col + 9)⟩
+
+@[inline] def update (acc : F10) (a : Float32) (v : F10) : F10 :=
+  ⟨acc.s0 + a * v.s0, acc.s1 + a * v.s1, acc.s2 + a * v.s2, acc.s3 + a * v.s3, acc.s4 + a * v.s4, acc.s5 + a * v.s5, acc.s6 + a * v.s6, acc.s7 + a * v.s7, acc.s8 + a * v.s8, acc.s9 + a * v.s9⟩
+
+theorem lane_packet (read : Nat → Float32) (col : Nat) (l : Fin 10) :
+    lane (packet read col) l = read (col + l.val) := by
+  rcases l with ⟨l, hl⟩
+  have h : l = 0 ∨ l = 1 ∨ l = 2 ∨ l = 3 ∨ l = 4 ∨ l = 5 ∨ l = 6 ∨ l = 7 ∨ l = 8 ∨ l = 9 := by omega
+  rcases h with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;> rfl
+
+theorem lane_zero10 (l : Fin 10) : lane zero10 l = zero32 := by
+  rcases l with ⟨l, hl⟩
+  have h : l = 0 ∨ l = 1 ∨ l = 2 ∨ l = 3 ∨ l = 4 ∨ l = 5 ∨ l = 6 ∨ l = 7 ∨ l = 8 ∨ l = 9 := by omega
+  rcases h with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;> rfl
+
+
+theorem lane_update (acc : F10) (a : Float32) (v : F10) (l : Fin 10) :
+    lane (update acc a v) l = lane acc l + a * lane v l := by
+  rcases l with ⟨l, hl⟩
+  have h : l = 0 ∨ l = 1 ∨ l = 2 ∨ l = 3 ∨ l = 4 ∨ l = 5 ∨ l = 6 ∨ l = 7 ∨ l = 8 ∨ l = 9 := by omega
+  rcases h with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;> rfl
+
+@[inline] def groups (p : Nat) : Nat := (p + 9) / 10
+
+
+theorem vector_get_ofFn {α : Type} {n : Nat}
+    (f : Fin n → α) (i : Fin n) : (Vector.ofFn f).get i = f i := by
+  change (Vector.ofFn f)[i.val]'i.isLt = f i
+  exact Vector.getElem_ofFn i.isLt
+
+def packB (batch n p : Nat) (B : Vector Binary32 (batch * n * p)) :
+    Vector (Vector (Vector F10 n) (groups p)) batch :=
+  Vector.ofFn fun b =>
+    Vector.ofFn fun g =>
+      Vector.ofFn fun k =>
+        let base := (b.val * n + k.val) * p
+        packet (fun j =>
+          if hj : j < p then
+            have hbn : (b.val + 1) * n ≤ batch * n := Nat.mul_le_mul_right n b.isLt
+            have hbk : b.val * n + k.val < batch * n := by
+              rw [Nat.add_mul] at hbn
+              omega
+            have hp : (b.val * n + k.val + 1) * p ≤ batch * n * p :=
+              Nat.mul_le_mul_right p (Nat.succ_le_of_lt hbk)
+            have hi : base + j < B.toArray.size := by
+              rw [B.size_toArray]
+              dsimp [base]
+              rw [Nat.add_mul] at hp
+              omega
+            ExecFloat.Binary.toFloat32 B.toArray[base + j]
+          else zero32) (10 * g.val)
+
+theorem packB_get (batch n p : Nat)
+    (B : Vector Binary32 (batch * n * p))
+    (b : Fin batch) (g : Fin (groups p)) (k : Fin n) :
+    (((packB batch n p B).get b).get g).get k =
+      packet (fun j =>
+        if j < p then
+          ExecFloat.Binary.toFloat32
+            (B.toArray.getD ((b.val * n + k.val) * p + j) posZero)
+        else zero32) (10 * g.val) := by
+  simp only [packB, vector_get_ofFn]
+  congr 1
+  funext j
+  split
+  · rename_i hj
+    have hbn : (b.val + 1) * n ≤ batch * n := Nat.mul_le_mul_right n b.isLt
+    have hbk : b.val * n + k.val < batch * n := by
+      rw [Nat.add_mul] at hbn
+      omega
+    have hp : (b.val * n + k.val + 1) * p ≤ batch * n * p :=
+      Nat.mul_le_mul_right p (Nat.succ_le_of_lt hbk)
+    have hi : (b.val * n + k.val) * p + j < B.toArray.size := by
+      rw [B.size_toArray]
+      rw [Nat.add_mul] at hp
+      omega
+    have hidx : (b.val * n + k.val) * p + j < batch * n * p := by
+      simpa only [B.size_toArray] using hi
+    simp [Array.getD, hidx, hj]
+  · rename_i hj
+    simp only [dif_neg hj, if_neg hj]
+
+theorem packB_lane (batch n p : Nat)
+    (B : Vector Binary32 (batch * n * p))
+    (b : Fin batch) (g : Fin (groups p)) (k : Fin n) (l : Fin 10)
+    (hcol : 10 * g.val + l.val < p) :
+    lane ((((packB batch n p B).get b).get g).get k) l =
+      ExecFloat.Binary.toFloat32
+        (B.toArray.getD
+          ((b.val * n + k.val) * p + (10 * g.val + l.val)) posZero) := by
+  rw [packB_get, lane_packet, if_pos hcol]
+
+end Packed10
+
+
+namespace Packed10
+
+open FloatLib.Floats Competition
+
+
+theorem nativeA_getD (Araw : Array Binary32) (i : Nat) :
+    (Araw.map ExecFloat.Binary.toFloat32).getD i zero32 =
+      ExecFloat.Binary.toFloat32 (Araw.getD i posZero) := by
+  by_cases hi : i < Araw.size
+  · simp [Array.getD, hi, zero32]
+  · simp [Array.getD, hi, zero32] <;> rfl
+
+
+def dot10 (n baseA : Nat) (A : Array Float32) (B : Vector F10 n)
+    (k : Nat) (s0 s1 s2 s3 s4 s5 s6 s7 s8 s9 : Float32) : F10 :=
+  if hk : k < n then
+    let sharedA := A.getD (baseA + k) zero32
+    let v := B.get ⟨k, hk⟩
+    dot10 n baseA A B (k + 1)
+      (s0 + sharedA * v.s0)
+      (s1 + sharedA * v.s1)
+      (s2 + sharedA * v.s2)
+      (s3 + sharedA * v.s3)
+      (s4 + sharedA * v.s4)
+      (s5 + sharedA * v.s5)
+      (s6 + sharedA * v.s6)
+      (s7 + sharedA * v.s7) (s8 + sharedA * v.s8) (s9 + sharedA * v.s9)
+  else ⟨s0, s1, s2, s3, s4, s5, s6, s7, s8, s9⟩
+termination_by n - k
+
+theorem dot10_lane (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
+    (B : Vector F10 n) (l : Fin 10)
+    (hb : ∀ i : Fin n, lane (B.get i) l =
+      ExecFloat.Binary.toFloat32 (Braw.getD (baseB + i.val * p) posZero))
+    (k : Nat) (s0 s1 s2 s3 s4 s5 s6 s7 s8 s9 : Float32) :
+    lane (dot10 n baseA (Araw.map ExecFloat.Binary.toFloat32) B k s0 s1 s2 s3 s4 s5 s6 s7 s8 s9) l =
+      NativeFinal.dotLoop n baseA baseB p Araw Braw k (lane ⟨s0, s1, s2, s3, s4, s5, s6, s7, s8, s9⟩ l) := by
+  by_cases hk : k < n
+  · rw [dot10, NativeFinal.dotLoop]
+    simp only [dif_pos hk, if_pos hk]
+    try dsimp only
+    have ih := dot10_lane n baseA baseB p Araw Braw B l hb (k + 1)
+      (s0 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s0)
+      (s1 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s1)
+      (s2 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s2)
+      (s3 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s3)
+      (s4 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s4)
+      (s5 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s5)
+      (s6 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s6)
+      (s7 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s7)
+      (s8 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s8)
+      (s9 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s9)
+    have hacc :
+        lane ⟨s0 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s0, s1 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s1, s2 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s2, s3 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s3, s4 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s4, s5 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s5, s6 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s6, s7 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s7, s8 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s8, s9 + (Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32 * (B.get ⟨k, hk⟩).s9⟩ l =
+          lane ⟨s0, s1, s2, s3, s4, s5, s6, s7, s8, s9⟩ l +
+            ExecFloat.Binary.toFloat32 (Araw.getD (baseA + k) posZero) *
+              ExecFloat.Binary.toFloat32 (Braw.getD (baseB + k * p) posZero) := by
+      change lane (update ⟨s0, s1, s2, s3, s4, s5, s6, s7, s8, s9⟩
+        ((Araw.map ExecFloat.Binary.toFloat32).getD (baseA + k) zero32)
+        (B.get ⟨k, hk⟩)) l = _
+      rw [lane_update, nativeA_getD, hb ⟨k, hk⟩]
+    rw [hacc] at ih
+    exact ih
+  · rw [dot10, NativeFinal.dotLoop]
+    simp only [dif_neg hk, if_neg hk]
+termination_by n - k
+
+
+def finish (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
+    (result : Float32) : Binary32 :=
+  if hf : R7W04.nonNaN result = true then ExecFloat.Binary.ofFloat32 result
+  else R7NaNReplay.replayEarly n baseA baseB p Araw Braw
+
+theorem finish_eq_dot (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
+    (result : Float32)
+    (hs : result = NativeFinal.dotLoop n baseA baseB p Araw Braw 0 zero32) :
+    finish n baseA baseB p Araw Braw result =
+      NativeFinal.dot n baseA baseB p Araw Braw := by
+  rw [hs] <;> rfl
+
+
+theorem finish_dot10_lane (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
+    (B : Vector F10 n) (l : Fin 10)
+    (hb : ∀ i : Fin n, lane (B.get i) l =
+      ExecFloat.Binary.toFloat32 (Braw.getD (baseB + i.val * p) posZero)) :
+    finish n baseA baseB p Araw Braw
+        (lane (dot10 n baseA (Araw.map ExecFloat.Binary.toFloat32) B 0
+          zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32) l) =
+      NativeFinal.dot n baseA baseB p Araw Braw := by
+  have hs := dot10_lane n baseA baseB p Araw Braw B l hb 0
+    zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32
+  have hz : lane (⟨zero32, zero32, zero32, zero32, zero32, zero32, zero32, zero32, zero32, zero32⟩ : F10) l = zero32 :=
+    lane_zero10 l
+  rw [hz] at hs
+  exact finish_eq_dot n baseA baseB p Araw Braw _ hs
+
+
+end Packed10
+
+
+
+
+namespace Packed10Index
+
+open Packed10
+
+theorem addNat (a b : USize) (h : a.toNat + b.toNat < USize.size) :
+    (a + b).toNat = a.toNat + b.toNat := by
+  rw [USize.toNat_add]
+  exact Nat.mod_eq_of_lt h
+
+theorem stepNat {n k : USize} (hk : k < n) : (k + 1).toNat = k.toNat + 1 := by
+  rw [USize.toNat_add, USize.toNat_one]
+  have hkn := USize.lt_iff_toNat_lt.mp hk
+  have hn := USize.toNat_lt_size n
+  apply Nat.mod_eq_of_lt
+  change k.toNat + 1 < USize.size
+  omega
+
+theorem next_decreases {n k : USize} (hk : k < n) :
+    n.toNat - (k + 1).toNat < n.toNat - k.toNat := by
+  rw [stepNat hk]
+  have hkn := USize.lt_iff_toNat_lt.mp hk
+  omega
+
+theorem boundA (base n k size : Nat) (h : base + (n - 1) < size) (hk : k < n) :
+    base + k < size := by omega
+
+theorem ugetA_getD (A : Array Float32) (i : USize) (h : i.toNat < A.size) :
+    A.uget i h = A.getD i.toNat zero32 := by
+  simp [Array.uget, Array.getD, h]
+
+theorem ugetB_get {n : Nat} (B : Vector F10 n) (i : USize)
+    (hi : i.toNat < n) :
+    B.toArray.uget i (by simpa only [B.size_toArray] using hi) =
+      B.get ⟨i.toNat, hi⟩ := by
+  rfl
+
+
+def loop {n : Nat} (count baseA : USize) (A : Array Float32) (B : Vector F10 n)
+    (hn : count.toNat = n)
+    (hA : baseA.toNat + (count.toNat - 1) < A.size)
+    (hAS : A.size < USize.size)
+    (k : USize) (s0 s1 s2 s3 s4 s5 s6 s7 s8 s9 : Float32) : F10 :=
+  if hk : k < count then
+    have hkn : k.toNat < n := by
+      rw [← hn]
+      exact USize.lt_iff_toNat_lt.mp hk
+    have ha := boundA baseA.toNat count.toNat k.toNat A.size hA
+      (USize.lt_iff_toNat_lt.mp hk)
+    let a := A.uget (baseA + k)
+      (by rw [addNat baseA k (Nat.lt_trans ha hAS)]; exact ha)
+    let v := B.toArray.uget k (by simpa only [B.size_toArray] using hkn)
+    loop count baseA A B hn hA hAS (k + 1)
+      (s0 + a * v.s0) (s1 + a * v.s1)
+      (s2 + a * v.s2) (s3 + a * v.s3)
+      (s4 + a * v.s4) (s5 + a * v.s5)
+      (s6 + a * v.s6) (s7 + a * v.s7) (s8 + a * v.s8) (s9 + a * v.s9)
+  else ⟨s0, s1, s2, s3, s4, s5, s6, s7, s8, s9⟩
+termination_by count.toNat - k.toNat
+decreasing_by
+  apply next_decreases
+  assumption
+
+theorem loop_eq {n : Nat} (count baseA : USize) (A : Array Float32) (B : Vector F10 n)
+    (hn : count.toNat = n)
+    (hA : baseA.toNat + (count.toNat - 1) < A.size)
+    (hAS : A.size < USize.size)
+    (k : USize) (s0 s1 s2 s3 s4 s5 s6 s7 s8 s9 : Float32) :
+    loop count baseA A B hn hA hAS k s0 s1 s2 s3 s4 s5 s6 s7 s8 s9 =
+      Packed10.dot10 n baseA.toNat A B k.toNat s0 s1 s2 s3 s4 s5 s6 s7 s8 s9 := by
+  rw [loop]
+  split
+  · rename_i hk
+    have hkn : k.toNat < n := by
+      rw [← hn]
+      exact USize.lt_iff_toNat_lt.mp hk
+    have ha := boundA baseA.toNat count.toNat k.toNat A.size hA
+      (USize.lt_iff_toNat_lt.mp hk)
+    rw [Packed10.dot10, dif_pos hkn]
+    dsimp only
+    rw [loop_eq, stepNat hk]
+    simp only [ugetA_getD, addNat baseA k (Nat.lt_trans ha hAS), ugetB_get]
+    rfl
+  · rename_i hk
+    have hkn : ¬ k.toNat < n := by
+      rw [← hn]
+      simpa only [USize.lt_iff_toNat_lt] using hk
+    rw [Packed10.dot10, dif_neg hkn]
+termination_by count.toNat - k.toNat
+decreasing_by
+  apply next_decreases
+  assumption
+
+@[inline] def within (n baseA : Nat) (A : Array Float32) (B : Vector F10 n)
+    (hn : n < USize.size) (ha : baseA < USize.size)
+    (hA : baseA + (n - 1) < A.size) (hAS : A.size < USize.size) : F10 :=
+  loop (USize.ofNat n) (USize.ofNat baseA) A B
+    (USize.toNat_ofNat_of_lt' hn)
+    (by simpa only [USize.toNat_ofNat_of_lt' hn, USize.toNat_ofNat_of_lt' ha] using hA)
+    hAS 0 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32
+
+theorem within_eq (n baseA : Nat) (A : Array Float32) (B : Vector F10 n)
+    (hn : n < USize.size) (ha : baseA < USize.size)
+    (hA : baseA + (n - 1) < A.size) (hAS : A.size < USize.size) :
+    within n baseA A B hn ha hA hAS =
+      Packed10.dot10 n baseA A B 0 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 := by
+  simp only [within, loop_eq, USize.toNat_ofNat_of_lt' hn,
+    USize.toNat_ofNat_of_lt' ha, USize.toNat_zero]
+
+@[inline] def runDot (n baseA : Nat) (A : Array Float32) (B : Vector F10 n) : F10 :=
+  if h : n < USize.size ∧ baseA < USize.size ∧
+      baseA + (n - 1) < A.size ∧ A.size < USize.size then
+    within n baseA A B h.1 h.2.1 h.2.2.1 h.2.2.2
+  else Packed10.dot10 n baseA A B 0 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32
+
+theorem runDot_eq (n baseA : Nat) (A : Array Float32) (B : Vector F10 n) :
+    runDot n baseA A B =
+      Packed10.dot10 n baseA A B 0 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 zero32 := by
+  unfold runDot
+  split
+  · rename_i h
+    exact within_eq n baseA A B h.1 h.2.1 h.2.2.1 h.2.2.2
+  · rfl
+
+end Packed10Index
+
+
+
+
+end R19BiasBase
+
+
+
+
+
+
+
+
+namespace R19BiasBase.RowStream
+
+open FloatLib.Floats Competition
+
+
+def Prefix (f : Nat → Binary32) (k : Nat) (out : Array Binary32) : Prop :=
+  out.size = k ∧ ∀ j (hj : j < out.size), out[j] = f j
+
+theorem prefix_push (f : Nat → Binary32) (k : Nat) (out : Array Binary32)
+    (h : Prefix f k out) : Prefix f (k + 1) (out.push (f k)) := by
+  refine ⟨by simp only [Array.size_push, h.1], ?_⟩
+  intro j hj
+  have hj' : j < out.size + 1 := by simpa only [Array.size_push] using hj
+  by_cases hlt : j < out.size
+  · rw [Array.getElem_push_lt hlt]
+    exact h.2 j hlt
+  · have he : j = out.size := by omega
+    subst j
+    rw [Array.getElem_push_eq, h.1]
+
+
+theorem foldl_loop_inv {β : Type} (count : Nat) (step : β → Fin count → β)
+    (P : Nat → β → Prop)
+    (hstep : ∀ (i : Fin count) (x : β), P i.val x → P (i.val + 1) (step x i))
+    (k : Nat) (hk : k ≤ count) (x : β) (hx : P k x) :
+    P count (Fin.foldl.loop count step x k) := by
+  by_cases hi : k < count
+  · rw [Fin.foldl.loop, dif_pos hi]
+    exact foldl_loop_inv count step P hstep (k + 1) (by omega)
+      (step x ⟨k, hi⟩) (hstep ⟨k, hi⟩ x hx)
+  · have he : k = count := by omega
+    subst k
+    rw [Fin.foldl.loop, dif_neg (Nat.lt_irrefl count)]
+    exact hx
+termination_by count - k
+
+theorem foldl_inv {β : Type} (count : Nat) (step : β → Fin count → β)
+    (P : Nat → β → Prop)
+    (hstep : ∀ (i : Fin count) (x : β), P i.val x → P (i.val + 1) (step x i))
+    (x : β) (hx : P 0 x) : P count (Fin.foldl count step x) := by
+  exact foldl_loop_inv count step P hstep 0 (Nat.zero_le count) x hx
+
+
+@[inline] def emit (count : Nat) (read : Fin count → Binary32)
+    (out : Array Binary32) : Array Binary32 :=
+  Fin.foldl count (fun acc l => acc.push (read l)) out
+
+theorem emit_prefix (f : Nat → Binary32) (k count : Nat)
+    (read : Fin count → Binary32) (out : Array Binary32)
+    (hout : Prefix f k out) (hread : ∀ l, read l = f (k + l.val)) :
+    Prefix f (k + count) (emit count read out) := by
+  apply foldl_inv count (fun acc l => acc.push (read l))
+    (fun i acc => Prefix f (k + i) acc)
+  · intro l acc hacc
+    rw [hread l]
+    simpa only [Nat.add_assoc] using prefix_push f (k + l.val) acc hacc
+  · simpa only [Nat.add_zero] using hout
+
+def point (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (q : Nat) : Binary32 :=
+  let (b, i, j) := bmmDecodeC m p q
+  NativeFinal.dot n ((b * m + i) * n) (b * n * p + j) p A.toArray B.toArray
+
+theorem decode_row (m p r j : Nat) (hm : 0 < m) (hp : 0 < p) (hj : j < p) :
+    bmmDecodeC m p (r * p + j) = (r / m, r % m, j) := by
+  have hmp : m * p ≠ 0 := Nat.ne_of_gt (Nat.mul_pos hm hp)
+  have hp0 : p ≠ 0 := Nat.ne_of_gt hp
+  have hd : (r * p + j) / p = r := by
+    rw [Nat.mul_comm r p, Nat.mul_add_div hp, Nat.div_eq_of_lt hj, Nat.add_zero]
+  have hb : (r * p + j) / (m * p) = r / m := by
+    rw [Nat.mul_comm m p, ← Nat.div_div_eq_div_mul, hd]
+  simp only [bmmDecodeC, hmp, hp0, if_false, hb,
+    Nat.mod_mul_left_div_self, Nat.mod_mul_left_mod, hd,
+    Nat.mul_add_mod_of_lt hj]
+
+theorem point_row (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (r j : Nat)
+    (hm : 0 < m) (hp : 0 < p) (hj : j < p) :
+    point batch m n p A B (r * p + j) =
+      NativeFinal.dot n (r * n) (r / m * n * p + j) p A.toArray B.toArray := by
+  simp only [point, decode_row m p r j hm hp hj, Nat.div_add_mod']
+
+@[inline] def group (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (nativeA : Array Float32)
+    (packedB : Vector (Vector (Vector Packed10.F10 n) (Packed10.groups p)) batch)
+    (r : Fin (batch * m)) (out : Array Binary32) (g : Fin (Packed10.groups p)) :
+    Array Binary32 :=
+  have hm : 0 < m := Nat.pos_of_lt_mul_left r.isLt
+  let b : Fin batch := ⟨r.val / m, (Nat.div_lt_iff_lt_mul hm).2 r.isLt⟩
+  let result := Packed10Index.runDot n (r.val * n) nativeA ((packedB.get b).get g)
+  let count := min 10 (p - 10 * g.val)
+  emit count (fun l =>
+    let j := 10 * g.val + l.val
+    Packed10.finish n (r.val * n) (b.val * n * p + j) p A.toArray B.toArray
+      (Packed10.lane result ⟨l.val, Nat.lt_of_lt_of_le l.isLt (Nat.min_le_left _ _)⟩)) out
+
+theorem group_prefix (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (r : Fin (batch * m))
+    (g : Fin (Packed10.groups p)) (out : Array Binary32)
+    (hout : Prefix (point batch m n p A B) (r.val * p + min (10 * g.val) p) out) :
+    Prefix (point batch m n p A B) (r.val * p + min (10 * (g.val + 1)) p)
+      (group batch m n p A B (A.toArray.map ExecFloat.Binary.toFloat32)
+        (Packed10.packB batch n p B) r out g) := by
+  have hm : 0 < m := Nat.pos_of_lt_mul_left r.isLt
+  have hg : 10 * g.val < p := by
+    have h := g.isLt
+    unfold Packed10.groups at h
+    omega
+  have hp : 0 < p := by omega
+  have hstart : min (10 * g.val) p = 10 * g.val := by omega
+  have hend : r.val * p + min (10 * (g.val + 1)) p =
+      (r.val * p + 10 * g.val) + min 10 (p - 10 * g.val) := by omega
+  rw [hend]
+  unfold group
+  dsimp only
+  apply emit_prefix
+  · simpa only [hstart] using hout
+  · intro l
+    have hcol : 10 * g.val + l.val < p := by
+      have hl := l.isLt
+      omega
+    rw [show r.val * p + 10 * g.val + l.val =
+      r.val * p + (10 * g.val + l.val) by omega,
+      point_row batch m n p A B r.val (10 * g.val + l.val) hm hp hcol,
+      Packed10Index.runDot_eq]
+    apply Packed10.finish_dot10_lane
+    intro k
+    rw [Packed10.packB_lane batch n p B
+      ⟨r.val / m, (Nat.div_lt_iff_lt_mul hm).2 r.isLt⟩ g k
+      ⟨l.val, Nat.lt_of_lt_of_le l.isLt (Nat.min_le_left _ _)⟩ hcol]
+    rw [index_address (r.val / m * n) k.val p (10 * g.val + l.val)]
+
+@[inline] def row (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (nativeA : Array Float32)
+    (packedB : Vector (Vector (Vector Packed10.F10 n) (Packed10.groups p)) batch)
+    (out : Array Binary32) (r : Fin (batch * m)) : Array Binary32 :=
+  Fin.foldl (Packed10.groups p) (group batch m n p A B nativeA packedB r) out
+
+theorem row_prefix (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (r : Fin (batch * m)) (out : Array Binary32)
+    (hout : Prefix (point batch m n p A B) (r.val * p) out) :
+    Prefix (point batch m n p A B) ((r.val + 1) * p)
+      (row batch m n p A B (A.toArray.map ExecFloat.Binary.toFloat32)
+        (Packed10.packB batch n p B) out r) := by
+  have hlast : min (10 * Packed10.groups p) p = p := by
+    unfold Packed10.groups
+    omega
+  have h := foldl_inv (Packed10.groups p)
+    (group batch m n p A B (A.toArray.map ExecFloat.Binary.toFloat32)
+      (Packed10.packB batch n p B) r)
+    (fun g acc => Prefix (point batch m n p A B) (r.val * p + min (10 * g) p) acc)
+    (fun g acc hacc => group_prefix batch m n p A B r g acc hacc) out
+    (by simpa only [Nat.mul_zero, Nat.zero_min, Nat.add_zero] using hout)
+  simpa only [row, hlast, Nat.add_mul, Nat.one_mul] using h
+
+def output (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Array Binary32 :=
+  let nativeA := A.toArray.map ExecFloat.Binary.toFloat32
+  let packedB := Packed10.packB batch n p B
+  Fin.foldl (batch * m) (row batch m n p A B nativeA packedB)
+    (Array.mkEmpty (batch * m * p))
+
+theorem output_prefix (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    Prefix (point batch m n p A B) (batch * m * p) (output batch m n p A B) := by
+  exact foldl_inv (batch * m)
+    (row batch m n p A B (A.toArray.map ExecFloat.Binary.toFloat32)
+      (Packed10.packB batch n p B))
+    (fun r acc => Prefix (point batch m n p A B) (r * p) acc)
+    (fun r acc hacc => row_prefix batch m n p A B r acc hacc)
+    (Array.mkEmpty (batch * m * p))
+    ⟨by simp, by intro j hj; simp at hj⟩
+
+def core (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  ⟨output batch m n p A B, (output_prefix batch m n p A B).1⟩
+
+
+theorem prefix_vector_eq_ofFn (f : Nat → Binary32) (count : Nat)
+    (out : Array Binary32) (h : Prefix f count out) :
+    (Vector.mk out h.1 : Vector Binary32 count) =
+      Vector.ofFn (fun q : Fin count => f q.val) := by
+  apply Vector.ext
+  intro q hq
+  rw [Vector.getElem_mk, Vector.getElem_ofFn]
+  exact h.2 q (by rw [h.1]; exact hq)
+
+
+theorem points_eq_reference (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    Vector.ofFn (fun q : Fin (batch * m * p) => point batch m n p A B q.val) =
+      referenceBmm batch m n p A B := by
+  unfold referenceBmm
+  apply congrArg (fun (f : Fin (batch * m * p) → Binary32) => Vector.ofFn f)
+  funext q
+  dsimp only [point]
+  rw [NativeFinal.dot_eq]
+  simp only [add_eq, mul_eq]
+  apply congrArg (fun (f : Binary32 → Fin n → Binary32) => Fin.foldl n f posZero)
+  funext acc k
+  rw [index_address ((bmmDecodeC m p q.val).1 * n) k.val p
+    (bmmDecodeC m p q.val).2.2]
+
+theorem core_eq_reference (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    core batch m n p A B = referenceBmm batch m n p A B := by
+  exact (prefix_vector_eq_ofFn (point batch m n p A B) (batch * m * p)
+    (output batch m n p A B) (output_prefix batch m n p A B)).trans
+    (points_eq_reference batch m n p A B)
+
+
+end R19BiasBase.RowStream
+
+namespace R19BiasBase
+
+open FloatLib.Floats Competition
+
+def bmmPackedBase (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  if batch * m * p = 0 then referenceBmm batch m n p A B
+  else if n = 0 then referenceBmm batch m n p A B
+  else RowStream.core batch m n p A B
+
+theorem bmmPackedBase_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)),
+    (bmmPackedBase batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+  intro batch m n p A B
+  have h : bmmPackedBase batch m n p A B = referenceBmm batch m n p A B := by
+    unfold bmmPackedBase
+    split
+    · rfl
+    · split
+      · rfl
+      · exact RowStream.core_eq_reference batch m n p A B
+  exact (congrArg (fun v : Vector Binary32 (batch * m * p) => v.get) h).trans
+    (referenceBmm_spec batch m n p A B)
+
+end R19BiasBase
+
+
+namespace R19BiasBase.DirectSmall
+
+open FloatLib.Floats Competition
+
+def core (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  Vector.ofFn fun q =>
+    let (b, i, j) := bmmDecodeC m p q.val
+    NativeFinal.dot n ((b * m + i) * n) (b * n * p + j) p A.toArray B.toArray
+
+theorem core_eq_reference (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    core batch m n p A B = referenceBmm batch m n p A B := by
+  unfold core referenceBmm
+  apply congrArg (fun (f : Fin (batch * m * p) → Binary32) => Vector.ofFn f)
+  funext q
+  dsimp only
+  rw [NativeFinal.dot_eq]
+  simp only [add_eq, mul_eq]
+  apply congrArg (fun (f : Binary32 → Fin n → Binary32) => Fin.foldl n f posZero)
+  funext acc k
+  have hi := index_address ((bmmDecodeC m p q.val).1 * n) k.val p
+    (bmmDecodeC m p q.val).2.2
+  rw [hi]
+
+end R19BiasBase.DirectSmall
+
+namespace R19BiasBase
+
+open FloatLib.Floats Competition
+
+def bmmBeforeDirectRows (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  if n ≤ 4 ∨ p ≤ 2 then DirectSmall.core batch m n p A B
+  else bmmPackedBase batch m n p A B
+
+theorem bmmBeforeDirectRows_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)),
+    (bmmBeforeDirectRows batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+  intro batch m n p A B
+  unfold bmmBeforeDirectRows
+  split
+  · rw [DirectSmall.core_eq_reference]
+    exact referenceBmm_spec batch m n p A B
+  · exact bmmPackedBase_spec batch m n p A B
+
+end R19BiasBase
+
+
+namespace R19BiasBase
+
+namespace R7SinglePassSum
+
+open FloatLib.Floats Competition
+open FloatLib.Floats.Formats.BinaryInterchange
+
+
+theorem low_reject_finite (a : UInt32)
+    (h : ¬ ((0x0bffffff : UInt32) ≤ a - 1)) :
+    a < (0x7f800000 : UInt32) := by
+  by_cases hz : a = 0
+  · subst a
+    exact False.elim (h (by decide))
+  · have hpos : 0 < a := UInt32.pos_iff_ne_zero.mpr hz
+    have hone : (1 : UInt32) ≤ a := by
+      change 1 ≤ a.toNat
+      change 0 < a.toNat at hpos
+      omega
+    have hnat : ¬ 201326591 ≤ (a - 1).toNat := h
+    rw [UInt32.toNat_sub_of_le a 1 hone] at hnat
+    change a.toNat < 2139095040
+    change ¬ 201326591 ≤ a.toNat - 1 at hnat
+    omega
+
+theorem raw_nonNaN_of_le (u : UInt32)
+    (h : R2W01b.magnitude u ≤ (0x7f800000 : UInt32)) :
+    R7W12.rawNotNaN u = true := by
+  unfold R7W12.rawNotNaN
+  rw [decide_eq_true_eq]
+  exact h
+
+theorem raw_nan_of_high_reject (u : UInt32)
+    (h : ¬ R2W01b.magnitude u < (0x7f800000 : UInt32))
+    (hi : R2W01b.magnitude u ≠ (0x7f800000 : UInt32)) :
+    R7W12.rawNotNaN u = false := by
+  have hgt : ¬ R2W01b.magnitude u ≤ (0x7f800000 : UInt32) := by
+    intro hle
+    exact hi (UInt32.le_antisymm hle (UInt32.not_lt.mp h))
+  exact decide_eq_false hgt
+
+theorem table_eq (u : UInt32)
+    (hl : (0x0bffffff : UInt32) ≤ R2W01b.magnitude u - 1)
+    (hh : R2W01b.magnitude u < (0x7f800000 : UInt32)) :
+    R2W01b.tableProduct u = Float32.ofBits u := by
+  have h := R2W01c.convert_eq u
+  have hg : R2W01b.fastOK u = true := by simp [R2W01b.fastOK, hl, hh]
+  simpa only [R2W01b.convert, if_pos hg] using h
+
+
+theorem native_step_eq (acc : Float32) (q : Binary32) (value : Float32)
+    (hv : value = ExecFloat.Binary.toFloat32 q)
+    (hq : R7W12.rawNotNaN q.raw.1 = true) :
+    ExecFloat.Binary.ofFloat32 (acc + value) =
+      R19BiasBase.add (ExecFloat.Binary.ofFloat32 acc) q := by
+  have hn : (ExecFloat.Binary.toFloat32 q).isNaN = false := by
+    apply Bool.not_inj
+    exact (R7W12.rawNotNaN_eq_native_classifier q).symm.trans hq
+  rw [hv, R7W12.ofFloat32_add, NotNaNProbe.roundtrip q hn, R19BiasBase.add_eq]
+
+
+theorem repair_quiet (acc : Float32) (q : Binary32)
+    (hq : R7W12.rawNotNaN q.raw.1 = false) :
+    Model.isQNaN (ExecFloat.Binary.toModel
+      (R19BiasBase.add (ExecFloat.Binary.ofFloat32 acc) q)) = true := by
+  have hn : (ExecFloat.Binary.toFloat32 q).isNaN = true := by
+    apply Bool.not_inj
+    exact (R7W12.rawNotNaN_eq_native_classifier q).symm.trans hq
+  have he : (R7W05.nativeSumStep acc q).isNaN = true := by
+    unfold R7W05.nativeSumStep
+    rw [R7W05.native_add_nan_right _ _ hn]
+    rfl
+  simpa only [R7W05.repairSumStep, R19BiasBase.add_eq] using
+    R7W05.repairSumStep_isQNaN acc q he
+
+
+def natLoop {n : Nat} (x : Vector Binary32 n) (k : Nat) (acc : Float32) : Binary32 :=
+  if hk : k < n then
+    let q := x.get ⟨k, hk⟩
+    let u := q.raw.1
+    let a := R2W01b.magnitude u
+    if hl : (0x0bffffff : UInt32) ≤ a - 1 then
+      if hh : a < (0x7f800000 : UInt32) then
+        natLoop x (k + 1) (acc + R2W01b.tableProduct u)
+      else if hi : a = (0x7f800000 : UInt32) then
+        natLoop x (k + 1) (acc + Float32.ofBits u)
+      else R7SumRepair.suffixLoop x (k + 1)
+        (R19BiasBase.add (ExecFloat.Binary.ofFloat32 acc) q)
+    else natLoop x (k + 1) (acc + Float32.ofBits u)
+  else ExecFloat.Binary.ofFloat32 acc
+termination_by n - k
+
+theorem natLoop_eq {n : Nat} (x : Vector Binary32 n) (k : Nat) (acc : Float32) :
+    natLoop x k acc =
+      Fin.foldl.loop n (R7SumRepair.step x) (ExecFloat.Binary.ofFloat32 acc) k := by
+  rw [natLoop]
+  split
+  · rename_i hk
+    rw [Fin.foldl.loop, dif_pos hk]
+    dsimp only
+    split
+    · rename_i hl
+      split
+      · rename_i hh
+        have ih := natLoop_eq x (k + 1)
+          (acc + R2W01b.tableProduct (x.get ⟨k, hk⟩).raw.1)
+        have hv : R2W01b.tableProduct (x.get ⟨k, hk⟩).raw.1 =
+            ExecFloat.Binary.toFloat32 (x.get ⟨k, hk⟩) := by
+          simpa only [ExecFloat.Binary.toFloat32, ExecFloat.Binary.toBits32] using
+            table_eq (x.get ⟨k, hk⟩).raw.1 hl hh
+        have hs := native_step_eq acc (x.get ⟨k, hk⟩)
+          (R2W01b.tableProduct (x.get ⟨k, hk⟩).raw.1) hv
+          (raw_nonNaN_of_le _ (UInt32.le_of_lt hh))
+        exact ih.trans (congrArg
+          (fun a : Binary32 => Fin.foldl.loop n (R7SumRepair.step x) a (k + 1)) hs)
+      · rename_i hh
+        split
+        · rename_i hinf
+          have hle : R2W01b.magnitude (x.get ⟨k, hk⟩).raw.1 ≤
+              (0x7f800000 : UInt32) := UInt32.le_of_eq hinf
+          have ih := natLoop_eq x (k + 1)
+            (acc + Float32.ofBits (x.get ⟨k, hk⟩).raw.1)
+          have hs := native_step_eq acc (x.get ⟨k, hk⟩)
+            (Float32.ofBits (x.get ⟨k, hk⟩).raw.1) rfl (raw_nonNaN_of_le _ hle)
+          exact ih.trans (congrArg
+            (fun a : Binary32 => Fin.foldl.loop n (R7SumRepair.step x) a (k + 1)) hs)
+        · rename_i hinf
+          exact R7SumRepair.suffixLoop_eq x (k + 1) _
+            (repair_quiet acc (x.get ⟨k, hk⟩) (raw_nan_of_high_reject _ hh hinf))
+    · rename_i hl
+      have hle := UInt32.le_of_lt (low_reject_finite _ hl)
+      have ih := natLoop_eq x (k + 1)
+        (acc + Float32.ofBits (x.get ⟨k, hk⟩).raw.1)
+      have hs := native_step_eq acc (x.get ⟨k, hk⟩)
+        (Float32.ofBits (x.get ⟨k, hk⟩).raw.1) rfl (raw_nonNaN_of_le _ hle)
+      exact ih.trans (congrArg
+        (fun a : Binary32 => Fin.foldl.loop n (R7SumRepair.step x) a (k + 1)) hs)
+  · rename_i hk
+    rw [Fin.foldl.loop, dif_neg hk]
+termination_by n - k
+
+
+def loop {n : Nat} (x : Vector Binary32 n) (count : USize)
+    (hn : count.toNat = n) (k : USize) (acc : Float32) : Binary32 :=
+  if hk : k < count then
+    have hkn : k.toNat < n := by rw [← hn]; exact USize.lt_iff_toNat_lt.mp hk
+    let q := x.toArray.uget k (by simpa only [x.size_toArray] using hkn)
+    let u := q.raw.1
+    let a := R2W01b.magnitude u
+    if hl : (0x0bffffff : UInt32) ≤ a - 1 then
+      if hh : a < (0x7f800000 : UInt32) then
+        loop x count hn (k + 1) (acc + R2W01b.tableProduct u)
+      else if hi : a = (0x7f800000 : UInt32) then
+        loop x count hn (k + 1) (acc + Float32.ofBits u)
+      else R7SumRepair.suffixLoop x (k.toNat + 1)
+        (R19BiasBase.add (ExecFloat.Binary.ofFloat32 acc) q)
+    else loop x count hn (k + 1) (acc + Float32.ofBits u)
+  else ExecFloat.Binary.ofFloat32 acc
+termination_by count.toNat - k.toNat
+decreasing_by all_goals exact Packed10Index.next_decreases (by assumption)
+
+theorem loop_eq {n : Nat} (x : Vector Binary32 n) (count : USize)
+    (hn : count.toNat = n) (k : USize) (acc : Float32) :
+    loop x count hn k acc = natLoop x k.toNat acc := by
+  rw [loop]
+  split
+  · rename_i hk
+    have hkn : k.toNat < n := by rw [← hn]; exact USize.lt_iff_toNat_lt.mp hk
+    rw [natLoop, dif_pos hkn]
+    dsimp only
+    have hread : x.toArray.uget k (by simpa only [x.size_toArray] using hkn) =
+        x.get ⟨k.toNat, hkn⟩ := by rfl
+    rw [hread]
+    by_cases hl : (0x0bffffff : UInt32) ≤ R2W01b.magnitude (x.get ⟨k.toNat, hkn⟩).raw.1 - 1
+    · simp only [dif_pos hl, if_pos hl]
+      by_cases hh : R2W01b.magnitude (x.get ⟨k.toNat, hkn⟩).raw.1 < (0x7f800000 : UInt32)
+      · simp only [dif_pos hh, if_pos hh]
+        rw [loop_eq, Packed10Index.stepNat hk]
+      · simp only [dif_neg hh, if_neg hh]
+        by_cases hi : R2W01b.magnitude (x.get ⟨k.toNat, hkn⟩).raw.1 = (0x7f800000 : UInt32)
+        · simp only [dif_pos hi, if_pos hi]
+          rw [loop_eq, Packed10Index.stepNat hk]
+        · simp only [dif_neg hi, if_neg hi]
+    · simp only [dif_neg hl, if_neg hl]
+      rw [loop_eq, Packed10Index.stepNat hk]
+  · rename_i hk
+    have hkn : ¬ k.toNat < n := by
+      rw [← hn]
+      simpa only [USize.lt_iff_toNat_lt] using hk
+    rw [natLoop, dif_neg hkn]
+termination_by count.toNat - k.toNat
+decreasing_by all_goals exact Packed10Index.next_decreases (by assumption)
+
+@[inline] def run {n : Nat} (x : Vector Binary32 n) : Binary32 :=
+  if hn : n < USize.size then
+    loop x (USize.ofNat n) (USize.toNat_ofNat_of_lt' hn) 0 (Float32.ofBits 0)
+  else natLoop x 0 (Float32.ofBits 0)
+
+theorem run_spec : ∀ (n : Nat) (x : Vector Binary32 n), run x = sumSpec x.get := by
+  intro n x
+  have hrun : run x = natLoop x 0 (Float32.ofBits 0) := by
+    unfold run
+    split
+    · rw [loop_eq, USize.toNat_zero]
+    · rfl
+  rw [hrun, natLoop_eq]
+  have hstep : R7SumRepair.step x = fun (acc : Binary32) (i : Fin n) =>
+      ExecFloat.add acc (x.get i) := by
+    funext acc i
+    exact congrArg (fun f : Binary32 → Binary32 → Binary32 => f acc (x.get i))
+      R19BiasBase.add_eq
+  change Fin.foldl n (R7SumRepair.step x) posZero = sumSpec x.get
+  rw [hstep, Fin.foldl_eq_finRange_foldl]
+  rfl
+
+end R7SinglePassSum
+
+open FloatLib.Floats Competition
+
+def sum {n : Nat} (x : Vector Binary32 n) : Binary32 := R7SinglePassSum.run x
+
+theorem sum_spec : ∀ (n : Nat) (x : Vector Binary32 n), sum x = sumSpec x.get := R7SinglePassSum.run_spec
+
+end R19BiasBase
+
+
+namespace R19BiasBase.DirectRows
+open FloatLib.Floats Competition
+
+def core (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  (Vector.ofFn fun r : Fin (batch * m) => r).flatMap fun r =>
+    let b := r.val / m
+    let i := r.val % m
+    let baseA := (b * m + i) * n
+    let baseB := b * n * p
+    Vector.ofFn fun j : Fin p =>
+      NativeFinal.dot n baseA (baseB + j.val) p A.toArray B.toArray
+
+theorem core_eq (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    core batch m n p A B = DirectSmall.core batch m n p A B := by
+  apply Vector.ext
+  intro q hq
+  have hmp : m * p ≠ 0 := by
+    intro h
+    have hq' : q < batch * (m * p) := by simpa only [Nat.mul_assoc] using hq
+    rw [h, Nat.mul_zero] at hq'
+    omega
+  have hp : p ≠ 0 := by
+    intro h
+    apply hmp
+    simp only [h, Nat.mul_zero]
+  simp only [core, DirectSmall.core, Vector.getElem_flatMap,
+    Vector.getElem_ofFn, bmmDecodeC, hmp, hp, if_false,
+    Nat.div_div_eq_div_mul, Nat.mul_comm p m,
+    Nat.mod_mul_left_div_self, Nat.mod_mul_left_mod]
+
+end R19BiasBase.DirectRows
+
+namespace R19BiasBase.DirectContinuous
+
+open FloatLib.Floats Competition
+
+
+@[inline] def row (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p))
+    (out : Array Binary32) (r : Fin (batch * m)) : Array Binary32 :=
+  let baseA := r.val * n
+  let baseB := r.val / m * n * p
+  RowStream.emit p (fun j =>
+    NativeFinal.dot n baseA (baseB + j.val) p A.toArray B.toArray) out
+
+theorem row_prefix (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p))
+    (out : Array Binary32) (r : Fin (batch * m))
+    (hout : RowStream.Prefix (RowStream.point batch m n p A B) (r.val * p) out) :
+    RowStream.Prefix (RowStream.point batch m n p A B) ((r.val + 1) * p)
+      (row batch m n p A B out r) := by
+  have hm : 0 < m := Nat.pos_of_lt_mul_left r.isLt
+  have h := RowStream.emit_prefix (RowStream.point batch m n p A B)
+    (r.val * p) p
+    (fun j : Fin p => NativeFinal.dot n (r.val * n)
+      (r.val / m * n * p + j.val) p A.toArray B.toArray) out hout
+    (by
+      intro j
+      have hp : 0 < p := Nat.zero_lt_of_lt j.isLt
+      exact (RowStream.point_row batch m n p A B r.val j.val hm hp j.isLt).symm)
+  simpa only [row, Nat.add_mul, Nat.one_mul] using h
+
+def output (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Array Binary32 :=
+  Fin.foldl (batch * m) (row batch m n p A B)
+    (Array.mkEmpty (batch * m * p))
+
+theorem output_prefix (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    RowStream.Prefix (RowStream.point batch m n p A B) (batch * m * p)
+      (output batch m n p A B) := by
+  exact RowStream.foldl_inv (batch * m) (row batch m n p A B)
+    (fun r acc => RowStream.Prefix (RowStream.point batch m n p A B) (r * p) acc)
+    (fun r acc hacc => row_prefix batch m n p A B acc r hacc)
+    (Array.mkEmpty (batch * m * p))
+    ⟨by simp, by intro j hj; simp at hj⟩
+
+def core (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  ⟨output batch m n p A B, (output_prefix batch m n p A B).1⟩
+
+theorem core_eq_reference (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    core batch m n p A B = referenceBmm batch m n p A B := by
+  exact (RowStream.prefix_vector_eq_ofFn (RowStream.point batch m n p A B)
+    (batch * m * p) (output batch m n p A B) (output_prefix batch m n p A B)).trans
+    (RowStream.points_eq_reference batch m n p A B)
+
+end R19BiasBase.DirectContinuous
+
+namespace R19BiasBase
+open FloatLib.Floats Competition
+
+def bmmBeforeR11Cross (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 8 then DirectContinuous.core batch m n p A B
+  else bmmBeforeDirectRows batch m n p A B
+
+theorem bmmBeforeR11Cross_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)),
+    (bmmBeforeR11Cross batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+  intro batch m n p A B
+  unfold bmmBeforeR11Cross
+  split
+  · rw [DirectContinuous.core_eq_reference]
+    exact referenceBmm_spec batch m n p A B
+  · exact bmmBeforeDirectRows_spec batch m n p A B
+
+end R19BiasBase
+
+
+
+
+/- R14 developer component. Reuse B across multiple rows of thin outputs.
+   Earlier M29 only cached n=1,p>2; this route keeps n=1 unchanged and
+   targets n>1,p<=2 with m>=4. Original raw arrays remain for exact replay. -/
+namespace R19BiasBase.R14ThinBCache
+
+open FloatLib.Floats Competition
+
+def loop (n baseA baseB p : Nat) (A : Array Binary32) (B : Array Float32)
+    (k : Nat) (acc : Float32) : Float32 :=
+  if hk : k < n then
+    let fa := ExecFloat.Binary.toFloat32 (A.getD (baseA + k) posZero)
+    let fb := B.getD (baseB + k * p) Packed10.zero32
+    loop n baseA baseB p A B (k + 1) (acc + fa * fb)
+  else acc
+termination_by n - k
+
+theorem loop_eq (n baseA baseB p : Nat) (A B : Array Binary32)
+    (k : Nat) (acc : Float32) :
+    loop n baseA baseB p A (B.map ExecFloat.Binary.toFloat32) k acc =
+      NativeFinal.dotLoop n baseA baseB p A B k acc := by
+  by_cases hk : k < n
+  · rw [loop, NativeFinal.dotLoop]
+    simp only [dif_pos hk]
+    rw [Packed10.nativeA_getD]
+    exact loop_eq n baseA baseB p A B (k + 1) _
+  · rw [loop, NativeFinal.dotLoop]
+    simp only [dif_neg hk]
+termination_by n - k
+
+def dot (n baseA baseB p : Nat) (Araw Braw : Array Binary32)
+    (preparedB : Array Float32) : Binary32 :=
+  Packed10.finish n baseA baseB p Araw Braw
+    (loop n baseA baseB p Araw preparedB 0 Packed10.zero32)
+
+theorem dot_eq (n baseA baseB p : Nat) (A B : Array Binary32) :
+    dot n baseA baseB p A B (B.map ExecFloat.Binary.toFloat32) =
+      NativeFinal.dot n baseA baseB p A B := by
+  unfold dot
+  apply Packed10.finish_eq_dot
+  exact loop_eq n baseA baseB p A B 0 Packed10.zero32
+
+@[inline] def row (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (preparedB : Array Float32)
+    (out : Array Binary32) (r : Fin (batch * m)) : Array Binary32 :=
+  let baseA := r.val * n
+  let baseB := r.val / m * n * p
+  RowStream.emit p (fun j => dot n baseA (baseB + j.val) p A.toArray B.toArray preparedB) out
+
+theorem row_eq (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p))
+    (out : Array Binary32) (r : Fin (batch * m)) :
+    row batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32) out r =
+      DirectContinuous.row batch m n p A B out r := by
+  dsimp only [row, DirectContinuous.row]
+  apply congrArg (fun read : Fin p → Binary32 => RowStream.emit p read out)
+  funext j
+  exact dot_eq _ _ _ _ _ _
+
+def output (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p)) : Array Binary32 :=
+  let preparedB := B.toArray.map ExecFloat.Binary.toFloat32
+  Fin.foldl (batch * m) (row batch m n p A B preparedB) (Array.mkEmpty (batch * m * p))
+
+theorem output_eq (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p)) :
+    output batch m n p A B = DirectContinuous.output batch m n p A B := by
+  unfold output DirectContinuous.output
+  apply congrArg (fun step : Array Binary32 → Fin (batch * m) → Array Binary32 =>
+    Fin.foldl (batch * m) step (Array.mkEmpty (batch * m * p)))
+  funext out r
+  exact row_eq batch m n p A B out r
+
+theorem output_prefix (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p)) :
+    RowStream.Prefix (RowStream.point batch m n p A B) (batch * m * p) (output batch m n p A B) := by
+  rw [output_eq]
+  exact DirectContinuous.output_prefix batch m n p A B
+
+def core (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  ⟨output batch m n p A B, (output_prefix batch m n p A B).1⟩
+
+theorem core_eq_reference (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p)) :
+    core batch m n p A B = referenceBmm batch m n p A B := by
+  exact (RowStream.prefix_vector_eq_ofFn (RowStream.point batch m n p A B)
+    (batch * m * p) (output batch m n p A B) (output_prefix batch m n p A B)).trans
+    (RowStream.points_eq_reference batch m n p A B)
+
+def dispatch (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  if 4 ≤ m ∧ 1 < n ∧ 0 < p ∧ p ≤ 2 then core batch m n p A B
+  else bmmBeforeR11Cross batch m n p A B
+
+theorem dispatch_spec : ∀ (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p)),
+    (dispatch batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+  intro batch m n p A B
+  unfold dispatch
+  split
+  · rw [core_eq_reference]
+    exact referenceBmm_spec batch m n p A B
+  · exact bmmBeforeR11Cross_spec batch m n p A B
+
+end R19BiasBase.R14ThinBCache
+
+namespace R19BiasBase
+open FloatLib.Floats Competition
+
+def bmmBeforeUnderflowZero (batch m n p : Nat) (A : Vector Binary32 (batch*m*n))
+    (B : Vector Binary32 (batch*n*p)) : Vector Binary32 (batch*m*p) :=
+  R14ThinBCache.dispatch batch m n p A B
+
+theorem bmmBeforeUnderflowZero_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch*m*n))
+    (B : Vector Binary32 (batch*n*p)),
+    (bmmBeforeUnderflowZero batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+  intro batch m n p A B
+  exact R14ThinBCache.dispatch_spec batch m n p A B
+
+end R19BiasBase
+
+
+namespace R19BiasBase.UnderflowZero
+
+open FloatLib.Floats Competition
+open FloatLib.Floats.Formats.BinaryInterchange
+open Model.NativeBinary32
+
+
+@[inline] def small (x : Binary32) : Bool :=
+  R2W01b.magnitude x.raw.1 < (0x16000000 : UInt32)
+
+theorem small_exp (x : Binary32) (h : small x = true) :
+    (expField x.raw.1).toNat ≤ 43 := by
+  unfold small at h
+  simp only [decide_eq_true_eq, UInt32.lt_iff_toNat_lt, R2W01b.magnitude_toNat] at h
+  have hw := x.raw.1.toNat_lt
+  rw [FastMul.expField_toNat]
+  change x.raw.1.toNat / 8388608 % 256 ≤ 43
+  change x.raw.1.toNat % 2147483648 < 369098752 at h
+  omega
+
+theorem small_posZero : small posZero = true := by decide
+
+theorem small_getD (a : Array Binary32) (ha : a.all small = true) (i : Nat) :
+    small (a.getD i posZero) = true := by
+  by_cases hi : i < a.size
+  · simpa [Array.getD, hi] using (Array.all_eq_true.mp ha) i hi
+  · simp [Array.getD, hi, small_posZero]
+
+
+
+theorem finiteScale_toNat (exponent : UInt32) :
+    (finiteScale exponent).toNat =
+      if exponent = 0 then 0 else exponent.toNat - 1 := by
+  by_cases hexponent : exponent = 0
+  · subst exponent
+    simp [finiteScale, FloatLib.Numerics.FixedWord.finiteScale]
+  · have hwidened : exponent.toUInt64 ≠ 0 := by
+      intro hzero
+      apply hexponent
+      apply UInt32.toNat_inj.mp
+      have := congrArg UInt64.toNat hzero
+      simpa using this
+    rw [finiteScale, FloatLib.Numerics.FixedWord.finiteScale_toNat]
+    simp [hexponent, hwidened]
+
+theorem scale_small (e : UInt32) (he : e.toNat ≤ 43) :
+    (finiteScale e).toNat ≤ 42 := by
+  rw [finiteScale_toNat]
+  split <;> omega
+
+theorem scale_sum_small (x y : Binary32) (hx : small x = true) (hy : small y = true) :
+    (finiteScale (expField x.raw.1) + finiteScale (expField y.raw.1)).toNat ≤ 84 := by
+  have hsx := scale_small _ (small_exp x hx)
+  have hsy := scale_small _ (small_exp y hy)
+  rw [UInt64.toNat_add]
+  change ((finiteScale (expField x.raw.1)).toNat +
+    (finiteScale (expField y.raw.1)).toNat) % 18446744073709551616 ≤ 84
+  rw [Nat.mod_eq_of_lt (by omega)]
+  omega
+
+
+theorem rseAny_zero (product scale : UInt64) (hs : scale.toNat ≤ 84) :
+    FastMul.rseAny product (149 - scale) = 0 := by
+  have hscale : scale ≤ (149 : UInt64) := by
+    rw [UInt64.le_iff_toNat_le]
+    change scale.toNat ≤ 149
+    omega
+  have ht : (149 - scale).toNat = 149 - scale.toNat := by
+    rw [UInt64.toNat_sub_of_le _ _ hscale]
+    rfl
+  have h0 : (149 - scale : UInt64) ≠ 0 := by
+    intro h
+    have hh := congrArg UInt64.toNat h
+    rw [ht] at hh
+    change 149 - scale.toNat = 0 at hh
+    omega
+  have h64 : ¬ (149 - scale : UInt64) < 64 := by
+    rw [UInt64.lt_iff_toNat_lt, ht]
+    change ¬ 149 - scale.toNat < 64
+    omega
+  have he64 : (149 - scale : UInt64) ≠ 64 := by
+    intro h
+    have hh := congrArg UInt64.toNat h
+    rw [ht] at hh
+    change 149 - scale.toNat = 64 at hh
+    omega
+  simp [FastMul.rseAny, h0, h64, he64]
+
+
+theorem roundP_zero (sign : Bool) (product scale : UInt64) (hs : scale.toNat ≤ 84) :
+    FastMul.roundP sign product scale = (if sign then 0x80000000 else 0) := by
+  have hl : (FastMul.fastLog2 product).toNat < 64 := by
+    rw [FastMul.fastLog2_eq]
+    exact FastMul.log2_lt_64 product
+  have hposition : FastMul.fastLog2 product + scale < (172 : UInt64) := by
+    rw [UInt64.lt_iff_toNat_lt, UInt64.toNat_add]
+    change ((FastMul.fastLog2 product).toNat + scale.toNat) %
+      18446744073709551616 < 172
+    rw [Nat.mod_eq_of_lt (by omega)]
+    omega
+  have hscale : scale < (149 : UInt64) := by
+    rw [UInt64.lt_iff_toNat_lt]
+    change scale.toNat < 149
+    omega
+  have hf := rseAny_zero product scale hs
+  simp [FastMul.roundP, hposition, hscale, hf]
+
+theorem mul_signed_zero (x y : Binary32) (hx : small x = true) (hy : small y = true) :
+    ExecFloat.mul x y = FastMul.ofBits
+      (if Bool.xor (signBit x.raw.1) (signBit y.raw.1) then 0x80000000 else 0) := by
+  have hxe : expField x.raw.1 ≠ 0xff := by
+    intro h
+    have hs := small_exp x hx
+    have hh := congrArg UInt32.toNat h
+    change (expField x.raw.1).toNat = 255 at hh
+    omega
+  have hye : expField y.raw.1 ≠ 0xff := by
+    intro h
+    have hs := small_exp y hy
+    have hh := congrArg UInt32.toNat h
+    change (expField y.raw.1).toNat = 255 at hh
+    omega
+  have hspecial : FastMul.special x.raw.1 y.raw.1 = false := by
+    simp [FastMul.special, FastMul.sm1_eq, hxe, hye]
+  have heq : ExecFloat.mul x y = FastMul.mul x y :=
+    (ExecFloat.Proof.mul_eq_spec x y).trans (FastMul.mul_spec x y).symm
+  rw [heq]
+  simp only [FastMul.mul, hspecial, Bool.false_eq_true, ite_false, FastMul.core]
+  congr 1
+  exact roundP_zero _ _ _ (scale_sum_small x y hx hy)
+
+theorem add_signed_zero (sign : Bool) :
+    ExecFloat.add posZero (FastMul.ofBits (if sign then 0x80000000 else 0)) = posZero := by
+  cases sign <;> decide
+
+theorem add_mul_zero (x y : Binary32) (hx : small x = true) (hy : small y = true) :
+    ExecFloat.add posZero (ExecFloat.mul x y) = posZero := by
+  rw [mul_signed_zero x y hx hy]
+  exact add_signed_zero _
+
+theorem foldl_loop_zero (n : Nat) (step : Binary32 → Fin n → Binary32)
+    (hstep : ∀ i, step posZero i = posZero) (k : Nat) :
+    Fin.foldl.loop n step posZero k = posZero := by
+  rw [Fin.foldl.loop]
+  split
+  · rename_i hk
+    rw [hstep ⟨k, hk⟩]
+    exact foldl_loop_zero n step hstep (k + 1)
+  · rfl
+termination_by n - k
+
+theorem foldl_zero (n : Nat) (step : Binary32 → Fin n → Binary32)
+    (hstep : ∀ i, step posZero i = posZero) :
+    Fin.foldl n step posZero = posZero :=
+  foldl_loop_zero n step hstep 0
+
+def zeros (batch m p : Nat) : Vector Binary32 (batch * m * p) :=
+  Vector.replicate (batch * m * p) posZero
+
+theorem zeros_eq_reference (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p))
+    (ha : A.toArray.all small = true) (hb : B.toArray.all small = true) :
+    zeros batch m p = referenceBmm batch m n p A B := by
+  apply Vector.ext
+  intro q hq
+  simp only [zeros, Vector.getElem_replicate, referenceBmm, Vector.getElem_ofFn,
+    R19BiasBase.add_eq, R19BiasBase.mul_eq]
+  symm
+  apply foldl_zero
+  intro k
+  exact add_mul_zero _ _ (small_getD A.toArray ha _) (small_getD B.toArray hb _)
+
+end R19BiasBase.UnderflowZero
+
+/- R15 matrix worker: pair independent columns while reusing one prepared B; all odd tails preserved.
+   Based on this repository's NativeFinal, Packed10 and DirectContinuous proofs.
+   No external implementation code copied. UNCOMPILED proof attempt. -/
+namespace R19BiasBase.R15ThinPairs
+open FloatLib.Floats Competition
+
+structure F2 where
+  s0 : Float32
+  s1 : Float32
+
+def loop (n baseA baseB p : Nat) (A : Array Binary32) (B : Array Float32)
+    (k : Nat) (s0 s1 : Float32) : F2 :=
+  if hk : k < n then
+    let a := ExecFloat.Binary.toFloat32 (A.getD (baseA + k) posZero)
+    let b0 := B.getD (baseB + k * p) Packed10.zero32
+    let b1 := B.getD (baseB + 1 + k * p) Packed10.zero32
+    loop n baseA baseB p A B (k + 1) (s0 + a * b0) (s1 + a * b1)
+  else ⟨s0, s1⟩
+termination_by n - k
+
+theorem loop_s0 (n baseA baseB p : Nat) (A B : Array Binary32)
+    (k : Nat) (s0 s1 : Float32) :
+    (loop n baseA baseB p A (B.map ExecFloat.Binary.toFloat32) k s0 s1).s0 =
+      NativeFinal.dotLoop n baseA baseB p A B k s0 := by
+  by_cases hk : k < n
+  · rw [loop, NativeFinal.dotLoop]
+    simp only [dif_pos hk]
+    simp only [Packed10.nativeA_getD]
+    exact loop_s0 n baseA baseB p A B (k + 1) _ _
+  · rw [loop, NativeFinal.dotLoop]
+    simp only [dif_neg hk]
+termination_by n - k
+
+theorem loop_s1 (n baseA baseB p : Nat) (A B : Array Binary32)
+    (k : Nat) (s0 s1 : Float32) :
+    (loop n baseA baseB p A (B.map ExecFloat.Binary.toFloat32) k s0 s1).s1 =
+      NativeFinal.dotLoop n baseA (baseB + 1) p A B k s1 := by
+  by_cases hk : k < n
+  · rw [loop, NativeFinal.dotLoop]
+    simp only [dif_pos hk]
+    simp only [Packed10.nativeA_getD]
+    exact loop_s1 n baseA baseB p A B (k + 1) _ _
+  · rw [loop, NativeFinal.dotLoop]
+    simp only [dif_neg hk]
+termination_by n - k
+
+@[inline] def select (v : F2) (j : Nat) : Float32 :=
+  if j = 0 then v.s0 else v.s1
+
+theorem finish_select (n baseA baseB p : Nat) (A B : Array Binary32)
+    (j : Nat) (hj : j < 2) :
+    Packed10.finish n baseA (baseB + j) p A B
+      (select (loop n baseA baseB p A (B.map ExecFloat.Binary.toFloat32)
+        0 Packed10.zero32 Packed10.zero32) j) =
+      NativeFinal.dot n baseA (baseB + j) p A B := by
+  apply Packed10.finish_eq_dot
+  have h : j = 0 ∨ j = 1 := by omega
+  rcases h with rfl | rfl
+  · simpa only [select, Nat.add_zero, ↓reduceIte] using
+      loop_s0 n baseA baseB p A B 0 Packed10.zero32 Packed10.zero32
+  · simpa only [select, if_neg Nat.one_ne_zero] using
+      loop_s1 n baseA baseB p A B 0 Packed10.zero32 Packed10.zero32
+
+@[inline] def groups (p : Nat) : Nat := (p + 1) / 2
+
+@[inline] def group (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (preparedB : Array Float32)
+    (r : Fin (batch * m)) (out : Array Binary32) (g : Fin (groups p)) :
+    Array Binary32 :=
+  let baseA := r.val * n
+  let baseB := r.val / m * n * p + 2 * g.val
+  let result := loop n baseA baseB p A.toArray preparedB
+    0 Packed10.zero32 Packed10.zero32
+  let count := min 2 (p - 2 * g.val)
+  RowStream.emit count (fun l =>
+    Packed10.finish n baseA (baseB + l.val) p A.toArray B.toArray
+      (select result l.val)) out
+
+theorem group_prefix (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (r : Fin (batch * m))
+    (g : Fin (groups p)) (out : Array Binary32)
+    (hout : RowStream.Prefix (RowStream.point batch m n p A B)
+      (r.val * p + min (2 * g.val) p) out) :
+    RowStream.Prefix (RowStream.point batch m n p A B)
+      (r.val * p + min (2 * (g.val + 1)) p)
+      (group batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32) r out g) := by
+  have hm : 0 < m := Nat.pos_of_lt_mul_left r.isLt
+  have hg : 2 * g.val < p := by
+    have h := g.isLt
+    unfold groups at h
+    omega
+  have hp : 0 < p := by omega
+  have hstart : min (2 * g.val) p = 2 * g.val := by omega
+  have hend : r.val * p + min (2 * (g.val + 1)) p =
+      (r.val * p + 2 * g.val) + min 2 (p - 2 * g.val) := by omega
+  rw [hend]
+  unfold group
+  dsimp only
+  apply RowStream.emit_prefix
+  · simpa only [hstart] using hout
+  · intro l
+    have hcol : 2 * g.val + l.val < p := by
+      have hl := l.isLt
+      omega
+    rw [show r.val * p + 2 * g.val + l.val =
+      r.val * p + (2 * g.val + l.val) by omega,
+      RowStream.point_row batch m n p A B r.val (2 * g.val + l.val) hm hp hcol]
+    have h := finish_select n (r.val * n) (r.val / m * n * p + 2 * g.val) p
+      A.toArray B.toArray l.val (Nat.lt_of_lt_of_le l.isLt (Nat.min_le_left _ _))
+    simpa only [Nat.add_assoc] using h
+
+@[inline] def row (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (preparedB : Array Float32)
+    (out : Array Binary32) (r : Fin (batch * m)) : Array Binary32 :=
+  Fin.foldl (groups p) (group batch m n p A B preparedB r) out
+
+theorem row_prefix (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (r : Fin (batch * m))
+    (out : Array Binary32)
+    (hout : RowStream.Prefix (RowStream.point batch m n p A B) (r.val * p) out) :
+    RowStream.Prefix (RowStream.point batch m n p A B) ((r.val + 1) * p)
+      (row batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32) out r) := by
+  have hlast : min (2 * groups p) p = p := by
+    unfold groups
+    omega
+  have h := RowStream.foldl_inv (groups p)
+    (group batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32) r)
+    (fun g acc => RowStream.Prefix (RowStream.point batch m n p A B)
+      (r.val * p + min (2 * g) p) acc)
+    (fun g acc hacc => group_prefix batch m n p A B r g acc hacc) out
+    (by simpa only [Nat.mul_zero, Nat.zero_min, Nat.add_zero] using hout)
+  simpa only [row, hlast, Nat.add_mul, Nat.one_mul] using h
+
+def output (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Array Binary32 :=
+  let preparedB := B.toArray.map ExecFloat.Binary.toFloat32
+  Fin.foldl (batch * m) (row batch m n p A B preparedB)
+    (Array.mkEmpty (batch * m * p))
+
+theorem output_prefix (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    RowStream.Prefix (RowStream.point batch m n p A B) (batch * m * p)
+      (output batch m n p A B) := by
+  exact RowStream.foldl_inv (batch * m)
+    (row batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32))
+    (fun r acc => RowStream.Prefix (RowStream.point batch m n p A B) (r * p) acc)
+    (fun r acc hacc => row_prefix batch m n p A B r acc hacc)
+    (Array.mkEmpty (batch * m * p))
+    ⟨by simp, by intro j hj; simp at hj⟩
+
+def core (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  ⟨output batch m n p A B, (output_prefix batch m n p A B).1⟩
+
+theorem core_eq_reference (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    core batch m n p A B = referenceBmm batch m n p A B := by
+  exact (RowStream.prefix_vector_eq_ofFn (RowStream.point batch m n p A B)
+    (batch * m * p) (output batch m n p A B) (output_prefix batch m n p A B)).trans
+    (RowStream.points_eq_reference batch m n p A B)
+
+def dispatch (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  if 2 ≤ p ∧ p ≤ 8 ∧ 1 < n ∧ 4 ≤ m then core batch m n p A B
+  else bmmBeforeUnderflowZero batch m n p A B
+
+theorem dispatch_spec : ∀ (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p)),
+    (dispatch batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+  intro batch m n p A B
+  unfold dispatch
+  split
+  · rw [core_eq_reference]
+    exact referenceBmm_spec batch m n p A B
+  · exact bmmBeforeUnderflowZero_spec batch m n p A B
+
+end R19BiasBase.R15ThinPairs
+
+/- R15 worker packed-B2 prototype. New data layout only; original IEEE loops,
+   two independent k chains and original raw replay are preserved by equality.
+   Preparation, nested vectors, odd-tail extra reads and destruction are timed.
+   COMPLETE PROOF ATTEMPT, NOT_COMPILED. No external implementation copied. -/
+namespace R19BiasBase.R15PackedB2
+open FloatLib.Floats Competition
+
+abbrev B2 := R15ThinPairs.F2
+
+def tileIndex (batch p : Nat) (b : Fin batch) (g : Fin (R15ThinPairs.groups p)) :
+    Fin (batch * R15ThinPairs.groups p) :=
+  ⟨b.val * R15ThinPairs.groups p + g.val, by
+    have h := Nat.mul_le_mul_right (R15ThinPairs.groups p) b.isLt
+    rw [Nat.succ_mul] at h
+    have hg := g.isLt
+    omega⟩
+
+def packB (batch n p : Nat) (B : Vector Binary32 (batch * n * p)) :
+    Vector (Vector B2 n) (batch * R15ThinPairs.groups p) :=
+  Vector.ofFn fun t =>
+    let b := t.val / R15ThinPairs.groups p
+    let g := t.val % R15ThinPairs.groups p
+    let base := b * n * p + 2 * g
+    Vector.ofFn fun k =>
+      ⟨ExecFloat.Binary.toFloat32 (B.toArray.getD (base + k.val * p) posZero),
+       ExecFloat.Binary.toFloat32 (B.toArray.getD (base + 1 + k.val * p) posZero)⟩
+
+theorem packB_get (batch n p : Nat) (B : Vector Binary32 (batch * n * p))
+    (b : Fin batch) (g : Fin (R15ThinPairs.groups p)) (k : Fin n) :
+    ((packB batch n p B).get (tileIndex batch p b g)).get k =
+      (⟨ExecFloat.Binary.toFloat32
+          (B.toArray.getD (b.val * n * p + 2 * g.val + k.val * p) posZero),
+        ExecFloat.Binary.toFloat32
+          (B.toArray.getD (b.val * n * p + 2 * g.val + 1 + k.val * p) posZero)⟩ : B2) := by
+  have hG : 0 < R15ThinPairs.groups p := Nat.zero_lt_of_lt g.isLt
+  have hd : (b.val * R15ThinPairs.groups p + g.val) / R15ThinPairs.groups p = b.val := by
+    rw [Nat.mul_comm b.val (R15ThinPairs.groups p), Nat.mul_add_div hG,
+      Nat.div_eq_of_lt g.isLt, Nat.add_zero]
+  have hm : (b.val * R15ThinPairs.groups p + g.val) % R15ThinPairs.groups p = g.val :=
+    Nat.mul_add_mod_of_lt g.isLt
+  simp only [packB, tileIndex, Packed10.vector_get_ofFn, hd, hm]
+
+def loop (n baseA : Nat) (A : Array Binary32) (packed : Vector B2 n)
+    (k : Nat) (s0 s1 : Float32) : R15ThinPairs.F2 :=
+  if hk : k < n then
+    let a := ExecFloat.Binary.toFloat32 (A.getD (baseA + k) posZero)
+    let b := packed.get ⟨k, hk⟩
+    loop n baseA A packed (k + 1) (s0 + a * b.s0) (s1 + a * b.s1)
+  else ⟨s0, s1⟩
+termination_by n - k
+
+theorem loop_s0 (n baseA baseB p : Nat) (A B : Array Binary32)
+    (packed : Vector B2 n)
+    (hread : ∀ i : Fin n, (packed.get i).s0 =
+      ExecFloat.Binary.toFloat32 (B.getD (baseB + i.val * p) posZero))
+    (k : Nat) (s0 s1 : Float32) :
+    (loop n baseA A packed k s0 s1).s0 =
+      NativeFinal.dotLoop n baseA baseB p A B k s0 := by
+  by_cases hk : k < n
+  · rw [loop, NativeFinal.dotLoop]
+    simp only [dif_pos hk]
+    rw [hread ⟨k, hk⟩]
+    exact loop_s0 n baseA baseB p A B packed hread (k + 1) _ _
+  · rw [loop, NativeFinal.dotLoop]
+    simp only [dif_neg hk]
+termination_by n - k
+
+theorem loop_s1 (n baseA baseB p : Nat) (A B : Array Binary32)
+    (packed : Vector B2 n)
+    (hread : ∀ i : Fin n, (packed.get i).s1 =
+      ExecFloat.Binary.toFloat32 (B.getD (baseB + i.val * p) posZero))
+    (k : Nat) (s0 s1 : Float32) :
+    (loop n baseA A packed k s0 s1).s1 =
+      NativeFinal.dotLoop n baseA baseB p A B k s1 := by
+  by_cases hk : k < n
+  · rw [loop, NativeFinal.dotLoop]
+    simp only [dif_pos hk]
+    rw [hread ⟨k, hk⟩]
+    exact loop_s1 n baseA baseB p A B packed hread (k + 1) _ _
+  · rw [loop, NativeFinal.dotLoop]
+    simp only [dif_neg hk]
+termination_by n - k
+
+theorem pair_eq (x y : R15ThinPairs.F2) (h0 : x.s0 = y.s0) (h1 : x.s1 = y.s1) : x = y := by
+  cases x
+  cases y
+  cases h0
+  cases h1
+  rfl
+
+theorem loop_eq_original (n baseA baseB p : Nat) (A B : Array Binary32)
+    (packed : Vector B2 n)
+    (h0 : ∀ i : Fin n, (packed.get i).s0 =
+      ExecFloat.Binary.toFloat32 (B.getD (baseB + i.val * p) posZero))
+    (h1 : ∀ i : Fin n, (packed.get i).s1 =
+      ExecFloat.Binary.toFloat32 (B.getD (baseB + 1 + i.val * p) posZero))
+    (k : Nat) (s0 s1 : Float32) :
+    loop n baseA A packed k s0 s1 =
+      R15ThinPairs.loop n baseA baseB p A (B.map ExecFloat.Binary.toFloat32) k s0 s1 := by
+  apply pair_eq
+  · exact (loop_s0 n baseA baseB p A B packed h0 k s0 s1).trans
+      (R15ThinPairs.loop_s0 n baseA baseB p A B k s0 s1).symm
+  · exact (loop_s1 n baseA (baseB + 1) p A B packed h1 k s0 s1).trans
+      (R15ThinPairs.loop_s1 n baseA baseB p A B k s0 s1).symm
+
+theorem packed_loop_eq (batch n p baseA : Nat) (A : Array Binary32)
+    (B : Vector Binary32 (batch * n * p))
+    (b : Fin batch) (g : Fin (R15ThinPairs.groups p))
+    (k : Nat) (s0 s1 : Float32) :
+    loop n baseA A ((packB batch n p B).get (tileIndex batch p b g)) k s0 s1 =
+      R15ThinPairs.loop n baseA (b.val * n * p + 2 * g.val) p A
+        (B.toArray.map ExecFloat.Binary.toFloat32) k s0 s1 := by
+  apply loop_eq_original
+  · intro i
+    simp only [packB_get]
+  · intro i
+    simp only [packB_get]
+
+@[inline] def group (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p))
+    (packedB : Vector (Vector B2 n) (batch * R15ThinPairs.groups p))
+    (r : Fin (batch * m)) (out : Array Binary32) (g : Fin (R15ThinPairs.groups p)) :
+    Array Binary32 :=
+  have hm : 0 < m := Nat.pos_of_lt_mul_left r.isLt
+  let b : Fin batch := ⟨r.val / m, (Nat.div_lt_iff_lt_mul hm).2 r.isLt⟩
+  let baseA := r.val * n
+  let baseB := b.val * n * p + 2 * g.val
+  let result := loop n baseA A.toArray (packedB.get (tileIndex batch p b g))
+    0 Packed10.zero32 Packed10.zero32
+  let count := min 2 (p - 2 * g.val)
+  RowStream.emit count (fun l =>
+    Packed10.finish n baseA (baseB + l.val) p A.toArray B.toArray
+      (R15ThinPairs.select result l.val)) out
+
+theorem group_eq (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p))
+    (r : Fin (batch * m)) (out : Array Binary32) (g : Fin (R15ThinPairs.groups p)) :
+    group batch m n p A B (packB batch n p B) r out g =
+      R15ThinPairs.group batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32) r out g := by
+  simp only [group, R15ThinPairs.group, packed_loop_eq]
+
+@[inline] def row (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p))
+    (packedB : Vector (Vector B2 n) (batch * R15ThinPairs.groups p))
+    (out : Array Binary32) (r : Fin (batch * m)) : Array Binary32 :=
+  Fin.foldl (R15ThinPairs.groups p) (group batch m n p A B packedB r) out
+
+theorem row_eq (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) (out : Array Binary32) (r : Fin (batch * m)) :
+    row batch m n p A B (packB batch n p B) out r =
+      R15ThinPairs.row batch m n p A B (B.toArray.map ExecFloat.Binary.toFloat32) out r := by
+  unfold row R15ThinPairs.row
+  apply congrArg (fun step : Array Binary32 → Fin (R15ThinPairs.groups p) → Array Binary32 =>
+    Fin.foldl (R15ThinPairs.groups p) step out)
+  funext acc g
+  exact group_eq batch m n p A B r acc g
+
+def output (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Array Binary32 :=
+  let packedB := packB batch n p B
+  Fin.foldl (batch * m) (row batch m n p A B packedB)
+    (Array.mkEmpty (batch * m * p))
+
+theorem output_eq (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    output batch m n p A B = R15ThinPairs.output batch m n p A B := by
+  unfold output R15ThinPairs.output
+  apply congrArg (fun step : Array Binary32 → Fin (batch * m) → Array Binary32 =>
+    Fin.foldl (batch * m) step (Array.mkEmpty (batch * m * p)))
+  funext out r
+  exact row_eq batch m n p A B out r
+
+theorem output_prefix (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    RowStream.Prefix (RowStream.point batch m n p A B) (batch * m * p)
+      (output batch m n p A B) := by
+  rw [output_eq]
+  exact R15ThinPairs.output_prefix batch m n p A B
+
+def core (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  ⟨output batch m n p A B, (output_prefix batch m n p A B).1⟩
+
+theorem core_eq_reference (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) :
+    core batch m n p A B = referenceBmm batch m n p A B := by
+  exact (RowStream.prefix_vector_eq_ofFn (RowStream.point batch m n p A B)
+    (batch * m * p) (output batch m n p A B) (output_prefix batch m n p A B)).trans
+    (RowStream.points_eq_reference batch m n p A B)
+
+def dispatch (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  if 2 ≤ p ∧ p ≤ 8 ∧ 1 < n ∧ 4 ≤ m then core batch m n p A B
+  else bmmBeforeUnderflowZero batch m n p A B
+
+theorem dispatch_spec : ∀ (batch m n p : Nat)
+    (A : Vector Binary32 (batch * m * n)) (B : Vector Binary32 (batch * n * p)),
+    (dispatch batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+  intro batch m n p A B
+  unfold dispatch
+  split
+  · rw [core_eq_reference]
+    exact referenceBmm_spec batch m n p A B
+  · exact bmmBeforeUnderflowZero_spec batch m n p A B
+
+end R19BiasBase.R15PackedB2
+
+
+
+namespace R19BiasBase
+open FloatLib.Floats Competition
+
+
+def bmm (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+  if A.toArray.all UnderflowZero.small && B.toArray.all UnderflowZero.small then
+    UnderflowZero.zeros batch m p
+  else R15PackedB2.dispatch batch m n p A B
+
+theorem bmm_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+    (B : Vector Binary32 (batch * n * p)),
+    (bmm batch m n p A B).get = bmmSpec batch m n p A.get B.get := by
+  intro batch m n p A B
+  unfold bmm
+  split
+  · rename_i h
+    have hh : A.toArray.all UnderflowZero.small = true ∧
+        B.toArray.all UnderflowZero.small = true := by
+      simpa only [Bool.and_eq_true] using h
+    rw [UnderflowZero.zeros_eq_reference batch m n p A B hh.1 hh.2]
+    exact referenceBmm_spec batch m n p A B
+  · exact R15PackedB2.dispatch_spec batch m n p A B
+
+end R19BiasBase
+
+
+namespace BranchlessRNESeed
+open FloatLib.Numerics
+
+private theorem quotient_bias (p half : Nat) (hhalf : 0 < half) :
+    roundQuotientEven p (2 * half) =
+      (p + half - 1 + (p / (2 * half)) % 2) / (2 * half) := by
+  let q := p / (2 * half)
+  let r := p % (2 * half)
+  have hr : r < 2 * half := Nat.mod_lt _ (by omega)
+  have hparity : q % 2 < 2 := Nat.mod_lt _ (by decide)
+  have hp : p = (2 * half) * q + r := (Nat.div_add_mod p (2 * half)).symm
+  have hb : p + half - 1 + q % 2 =
+      (r + half - 1 + q % 2) + (2 * half) * q := by omega
+  change (if 2 * r < 2 * half then q
+    else if 2 * half < 2 * r then q + 1
+    else if q % 2 == 0 then q else q + 1) =
+      (p + half - 1 + q % 2) / (2 * half)
+  rw [hb, Nat.add_mul_div_left _ _ (by omega)]
+  simp only [beq_iff_eq]
+  split_ifs with hbelow habove heven
+  · have hd : (r + half - 1 + q % 2) / (2 * half) = 0 :=
+      Nat.div_eq_of_lt (by omega)
+    rw [hd]
+    omega
+  · have hd : (r + half - 1 + q % 2) / (2 * half) = 1 :=
+      Nat.div_eq_of_lt_le (by omega) (by omega)
+    rw [hd]
+    omega
+  · have hd : (r + half - 1 + q % 2) / (2 * half) = 0 :=
+      Nat.div_eq_of_lt (by omega)
+    rw [hd]
+    omega
+  · have hd : (r + half - 1 + q % 2) / (2 * half) = 1 :=
+      Nat.div_eq_of_lt_le (by omega) (by omega)
+    rw [hd]
+    omega
+
+theorem nat_bias (p t : Nat) (ht : t = 23 ∨ t = 24) :
+    roundShiftRightEven p t =
+      (p + 2 ^ (t - 1) - 1 + (p >>> t) % 2) >>> t := by
+  rcases ht with rfl | rfl
+  · simpa [roundShiftRightEven_eq_roundQuotientEven, Nat.shiftRight_eq_div_pow] using
+      quotient_bias p 4194304 (by decide)
+  · simpa [roundShiftRightEven_eq_roundQuotientEven, Nat.shiftRight_eq_div_pow] using
+      quotient_bias p 8388608 (by decide)
+
+
+theorem nat_grouped_bias (p t : Nat) (ht : t=23 ∨ t=24) :
+    roundShiftRightEven p t =
+      (p+(2^(t-1)-1)+(p >>> t)%2) >>> t := by
+  have hpos := Nat.two_pow_pos (t-1)
+  have he : p+2^(t-1)-1 = p+(2^(t-1)-1) := by omega
+  simpa only [he] using nat_bias p t ht
+
+end BranchlessRNESeed
+
+
+namespace R19PostBias
+open FloatLib.Numerics
+
+def shift (p : Nat) : Nat := if p < 140737488355328 then 23 else 24
+def biased (p : Nat) : Nat := p + (2 ^ (shift p - 1) - 1) + (p >>> shift p) % 2
+
+/-- Uses the retained uncompiled bias proof, not an independent new proof. -/
+theorem biased_quotient (p : Nat) :
+    biased p >>> shift p = roundShiftRightEven p (shift p) := by
+  have hk : shift p = 23 ∨ shift p = 24 := by
+    unfold shift
+    split <;> simp_all
+  exact (BranchlessRNESeed.nat_grouped_bias p (shift p) hk).symm
+
+theorem biased_bounds (p : Nat)
+    (hlo : 70368744177664 ≤ p) (hhi : p ≤ 281474943156225) :
+    70368744177664 ≤ biased p ∧ biased p ≤ 281474951544833 := by
+  have hpar : (p >>> shift p) % 2 < 2 := Nat.mod_lt _ (by decide)
+  unfold biased
+  by_cases hp : p < 140737488355328
+  · simp only [shift,if_pos hp]
+    norm_num only [Nat.reduceSub,Nat.reducePow]
+    simp only [shift,if_pos hp] at hpar
+    omega
+  · simp only [shift,if_neg hp]
+    norm_num only [Nat.reduceSub,Nat.reducePow]
+    simp only [shift,if_neg hp] at hpar
+    omega
+
+/-- The actual product cap prevents a second carry beyond bit47. -/
+theorem normalized_quotient (p : Nat)
+    (hlo : 70368744177664 ≤ p) (hhi : p ≤ 281474943156225) :
+    let q := roundShiftRightEven p (shift p)
+    let h := biased p >>> 47
+    h = (if p < 140737488355328 then 0 else 1) + (if q = 16777216 then 1 else 0) ∧
+      biased p >>> (23 + h) = (if q = 16777216 then 8388608 else q) := by
+  have hb := biased_bounds p hlo hhi
+  have hq := biased_quotient p
+  dsimp only
+  by_cases hp : p < 140737488355328
+  · have hk : shift p = 23 := by simp [shift,hp]
+    have hsmall : biased p < 140737496743936 := by
+      have hpar : (p >>> 23) % 2 < 2 := Nat.mod_lt _ (by decide)
+      unfold biased
+      rw [hk]
+      norm_num only [Nat.reduceSub,Nat.reducePow]
+      omega
+    rw [hk] at hq ⊢
+    rw [← hq]
+    simp only [hp,↓reduceIte,Nat.shiftRight_eq_div_pow]
+    have hh : biased p / 140737488355328 = 0 ∨ biased p / 140737488355328 = 1 := by omega
+    rcases hh with hh | hh
+    · rw [hh]
+      norm_num only [Nat.reduceAdd,Nat.reducePow]
+      have hn : biased p / 8388608 ≠ 16777216 := by omega
+      simp [hn]
+    · rw [hh]
+      norm_num only [Nat.reduceAdd,Nat.reducePow]
+      have he : biased p / 8388608 = 16777216 := by omega
+      simp only [he,↓reduceIte]
+      constructor <;> omega
+  · have hk : shift p = 24 := by simp [shift,hp]
+    have hlarge : 140737488355328 ≤ biased p := by
+      unfold biased
+      omega
+    rw [hk] at hq ⊢
+    rw [← hq]
+    simp only [hp,↓reduceIte,Nat.shiftRight_eq_div_pow]
+    have hh : biased p / 140737488355328 = 1 := by omega
+    rw [hh]
+    norm_num only [Nat.reduceAdd,Nat.reducePow]
+    have hn : biased p / 16777216 ≠ 16777216 := by omega
+    simp [hn]
+
+end R19PostBias
+
+
+namespace R19BiasBase.R19DirectBiasWord
+open FloatLib.Numerics
+
+/-- Exact unrounded bias sum; body reuses the retained seed's no-wrap proof. -/
+theorem biased_sum_nat (p t : UInt64) (hp : p.toNat ≤ 281474943156225)
+    (ht : t=23 ∨ t=24) :
+    (p+(((1 : UInt64) <<< (t-1))-1)+((p >>> t) &&& 1)).toNat =
+      p.toNat+(2^(t.toNat-1)-1)+(p.toNat >>> t.toNat)%2 := by
+  let half : UInt64 := (1 : UInt64) <<< (t-1)
+  let bias : UInt64 := half-1
+  let parity : UInt64 := (p >>> t) &&& 1
+  have htNat : t.toNat=23 ∨ t.toNat=24 := by
+    rcases ht with rfl | rfl <;> norm_num
+  have ht64 : t.toNat < 64 := by omega
+  have hhalf : half.toNat=2^(t.toNat-1) := by
+    rcases ht with rfl | rfl <;> decide
+  have hb : 4194304 ≤ half.toNat ∧ half.toNat ≤ 8388608 := by
+    rcases ht with rfl | rfl <;> decide
+  have hone : (1 : UInt64) ≤ half := by
+    rw [UInt64.le_iff_toNat_le]
+    change 1 ≤ half.toNat
+    omega
+  have hminus : bias.toNat=half.toNat-1 := by
+    dsimp only [bias]
+    rw [UInt64.toNat_sub_of_le _ _ hone]
+    rfl
+  have hshift : (p >>> t).toNat=p.toNat >>> t.toNat := by
+    rw [UInt64.toNat_shiftRight,Nat.mod_eq_of_lt ht64]
+  have hparity : parity.toNat=(p.toNat >>> t.toNat)%2 := by
+    dsimp only [parity]
+    rw [UInt64.toNat_and,hshift]
+    change (p.toNat >>> t.toNat) &&& (2^1-1) = (p.toNat >>> t.toNat)%2
+    exact Nat.and_two_pow_sub_one_eq_mod _ 1
+  have hparityBound : parity.toNat ≤ 1 := by rw [hparity]; omega
+  have hplus : (p+bias).toNat=p.toNat+(half.toNat-1) := by
+    rw [UInt64.toNat_add,hminus,Nat.mod_eq_of_lt (by omega)]
+  have hsum : (p+bias+parity).toNat=p.toNat+(half.toNat-1)+parity.toNat := by
+    rw [UInt64.toNat_add,hplus,Nat.mod_eq_of_lt (by omega)]
+  change (p+bias+parity).toNat = _
+  rw [hsum,hhalf,hparity]
+
+def biasedWord (p : UInt64) : UInt64 :=
+  if p < (140737488355328 : UInt64) then p+4194303+((p >>> 23) &&& 1)
+  else p+8388607+((p >>> 24) &&& 1)
+
+theorem biasedWord_nat (p : UInt64) (hp : p.toNat ≤ 281474943156225) :
+    (biasedWord p).toNat = R19PostBias.biased p.toNat := by
+  have hc : p < (140737488355328 : UInt64) ↔ p.toNat < 140737488355328 := by
+    rw [UInt64.lt_iff_toNat_lt] <;> rfl
+  by_cases hn : p.toNat < 140737488355328
+  · have hw := hc.mpr hn
+    have h := biased_sum_nat p 23 hp (Or.inl rfl)
+    change (p+4194303+((p >>> 23) &&& 1)).toNat =
+      p.toNat+4194303+(p.toNat >>> 23)%2 at h
+    simpa only [biasedWord,if_pos hw,R19PostBias.biased,R19PostBias.shift,if_pos hn,
+      Nat.reduceSub,Nat.reducePow] using h
+  · have hw : ¬ p < (140737488355328 : UInt64) := fun h => hn (hc.mp h)
+    have h := biased_sum_nat p 24 hp (Or.inr rfl)
+    change (p+8388607+((p >>> 24) &&& 1)).toNat =
+      p.toNat+8388607+(p.toNat >>> 24)%2 at h
+    simpa only [biasedWord,if_neg hw,R19PostBias.biased,R19PostBias.shift,if_neg hn,
+      Nat.reduceSub,Nat.reducePow] using h
+
+def highWord (p : UInt64) : UInt64 := biasedWord p >>> 47
+def shiftWord (p : UInt64) : UInt64 := 23+highWord p
+def mantissaWord (p : UInt64) : UInt32 := (biasedWord p >>> shiftWord p).toUInt32
+
+theorem highWord_nat (p : UInt64) (hp : p.toNat ≤ 281474943156225) :
+    (highWord p).toNat = R19PostBias.biased p.toNat >>> 47 := by
+  rw [highWord,UInt64.toNat_shiftRight,biasedWord_nat p hp] <;> rfl
+
+theorem highWord_le_one (p : UInt64)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225) :
+    (highWord p).toNat ≤ 1 := by
+  have hb := R19PostBias.biased_bounds p.toNat hlo hhi
+  rw [highWord_nat p hhi,Nat.shiftRight_eq_div_pow]
+  omega
+
+theorem shiftWord_nat (p : UInt64)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225) :
+    (shiftWord p).toNat = 23+(R19PostBias.biased p.toNat >>> 47) := by
+  have hh := highWord_le_one p hlo hhi
+  rw [shiftWord,UInt64.toNat_add,highWord_nat p hhi]
+  change (23+(R19PostBias.biased p.toNat >>> 47)) % 18446744073709551616 = _
+  rw [highWord_nat p hhi] at hh
+  exact Nat.mod_eq_of_lt (by omega)
+
+theorem mantissaWord_nat (p : UInt64)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225) :
+    (mantissaWord p).toNat =
+      if roundShiftRightEven p.toNat (R19PostBias.shift p.toNat) = 16777216 then 8388608
+      else roundShiftRightEven p.toNat (R19PostBias.shift p.toNat) := by
+  have hh := highWord_le_one p hlo hhi
+  have hn := highWord_nat p hhi
+  have hs := shiftWord_nat p hlo hhi
+  have hb := R19PostBias.biased_bounds p.toNat hlo hhi
+  have hr := R19PostBias.normalized_quotient p.toNat hlo hhi
+  have hs64 : (shiftWord p).toNat < 64 := by omega
+  have hw : (biasedWord p >>> shiftWord p).toNat =
+      R19PostBias.biased p.toNat >>> (23+(R19PostBias.biased p.toNat >>> 47)) := by
+    rw [UInt64.toNat_shiftRight,Nat.mod_eq_of_lt hs64,biasedWord_nat p hhi,hs]
+  have hfit : (biasedWord p >>> shiftWord p).toNat < 4294967296 := by
+    rw [hw]
+    have hc : R19PostBias.biased p.toNat >>> 47 = 0 ∨ R19PostBias.biased p.toNat >>> 47 = 1 := by omega
+    rcases hc with hc | hc <;>
+      rw [hc] <;>
+      norm_num only [Nat.reduceAdd,Nat.shiftRight_eq_div_pow,Nat.reducePow] <;> omega
+  unfold mantissaWord
+  simp only [R19BiasBase.FastMul.toUInt32_eq,UInt32.toNat_ofNat']
+  rw [Nat.mod_eq_of_lt hfit,hw]
+  exact hr.2
+
+end R19BiasBase.R19DirectBiasWord
+
+
+namespace R19BiasBase.R19BiasShape
+open FloatLib.Numerics
+
+def rounded (p : Nat) : Nat := roundShiftRightEven p (p.log2-23)
+def carry (p : Nat) : Nat := if rounded p=16777216 then 1 else 0
+def mantissa (p : Nat) : Nat := if rounded p=16777216 then 8388608 else rounded p
+
+theorem carry_le (p : Nat) : carry p ≤ 1 := by
+  unfold carry
+  split <;> omega
+
+theorem leading_bounds (p : Nat)
+    (hlo : 70368744177664 ≤ p) (hhi : p < 281474976710656) :
+    46 ≤ p.log2 ∧ p.log2 ≤ 47 := by
+  have hn : p ≠ 0 := by omega
+  have hl : 46 ≤ p.log2 := (Nat.le_log2 hn).2 (by norm_num; exact hlo)
+  have hh : p.log2 < 48 := (Nat.log2_lt hn).2 (by norm_num; exact hhi)
+  omega
+
+theorem no_carry_at_47 (p : Nat)
+    (hmax : p ≤ 281474943156225) (hlog : p.log2 = 47) : carry p = 0 := by
+  have hq : p / 16777216 ≤ 16777214 := by omega
+  have hr := roundShiftRightEven_le_shiftRight_add1 p 24
+  norm_num [Nat.shiftRight_eq_div_pow] at hr
+  have hb : rounded p ≤ 16777215 := by
+    unfold rounded
+    rw [hlog]
+    change roundShiftRightEven p 24 ≤ 16777215
+    omega
+  have hn : rounded p ≠ 16777216 := by omega
+  simp [carry, hn]
+
+theorem mantissa_bounds (p : Nat)
+    (hlo : 70368744177664 ≤ p) (hhi : p < 281474976710656) :
+    8388608 ≤ mantissa p ∧ mantissa p < 16777216 := by
+  have hn : p ≠ 0 := by omega
+  have hl := leading_bounds p hlo hhi
+  have hlow := Nat.log2_self_le hn
+  have hupp := Nat.lt_log2_self (n := p)
+  have hquotient :
+      8388608 ≤ Nat.shiftRight p (p.log2 - 23) ∧
+      Nat.shiftRight p (p.log2 - 23) < 16777216 := by
+    have hc : p.log2 = 46 ∨ p.log2 = 47 := by omega
+    rcases hc with hc | hc <;>
+      simp only [hc] at hlow hupp ⊢ <;>
+      norm_num [Nat.shiftRight_eq_div_pow] at hlow hupp ⊢ <;> omega
+  have hrlo := shiftRight_le_roundShiftRightEven p (p.log2 - 23)
+  have hrhi := roundShiftRightEven_le_shiftRight_add1 p (p.log2 - 23)
+  by_cases hc : rounded p = 16777216
+  · simp [mantissa, hc]
+  · simp only [mantissa, hc, ↓reduceIte]
+    change roundShiftRightEven p (p.log2 - 23) ≠ 16777216 at hc
+    unfold rounded
+    omega
+
+theorem literal_shift_eq (p : Nat)
+    (hlo : 70368744177664 ≤ p) (hhi : p ≤ 281474943156225) :
+    R19PostBias.shift p = p.log2-23 := by
+  have hn : p ≠ 0 := by omega
+  have hl := leading_bounds p hlo (by omega)
+  by_cases hp : p < 140737488355328
+  · have h47 : p.log2 < 47 := (Nat.log2_lt hn).2 (by norm_num; exact hp)
+    simp only [R19PostBias.shift,if_pos hp]
+    omega
+  · have h47 : 47 ≤ p.log2 := (Nat.le_log2 hn).2 (by norm_num; omega)
+    simp only [R19PostBias.shift,if_neg hp]
+    omega
+
+theorem normal_scale_nat (s : UInt32) (hs : 128 ≤ s.toNat) :
+    (s.toUInt64-2).toNat = s.toNat-2 := by
+  have hle : (2 : UInt64) ≤ s.toUInt64 := by
+    rw [UInt64.le_iff_toNat_le,UInt32.toNat_toUInt64]
+    change 2 ≤ s.toNat
+    omega
+  rw [UInt64.toNat_sub_of_le _ _ hle,UInt32.toNat_toUInt64]
+  all_goals rfl
+
+theorem leading_nat (p : UInt64) :
+    (FastMul.fastLog2 p).toNat = p.toNat.log2 := by
+  rw [FastMul.fastLog2_eq] <;> rfl
+
+theorem position_nat (p : UInt64) (s : UInt32)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225)
+    (hs0 : 128 ≤ s.toNat) (hs1 : s.toNat ≤ 380) :
+    (FastMul.fastLog2 p+(s.toUInt64-2)).toNat = p.toNat.log2+s.toNat-2 := by
+  have hl := leading_bounds p.toNat hlo (by omega)
+  rw [UInt64.toNat_add,leading_nat,normal_scale_nat s hs0]
+  change (p.toNat.log2+(s.toNat-2)) % 18446744073709551616 = _
+  rw [Nat.mod_eq_of_lt (by omega)]
+  omega
+
+theorem shift_word_nat (p : UInt64)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225) :
+    (FastMul.fastLog2 p-23).toNat = p.toNat.log2-23 := by
+  have hl := leading_bounds p.toNat hlo (by omega)
+  have hle : (23 : UInt64) ≤ FastMul.fastLog2 p := by
+    rw [UInt64.le_iff_toNat_le,leading_nat]
+    change 23 ≤ p.toNat.log2
+    omega
+  rw [UInt64.toNat_sub_of_le _ _ hle,leading_nat]
+  all_goals rfl
+
+theorem rounded_word_nat (p : UInt64)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225) :
+    (FastMul.rseAny p (FastMul.fastLog2 p-23)).toNat = rounded p.toNat := by
+  rw [FastMul.rseAny_eq,FixedWord.roundShiftRightEven_toNat,shift_word_nat p hlo hhi]
+  all_goals rfl
+
+theorem normalized_position_le (p : UInt64) (s : UInt32)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225)
+    (hs0 : 128 ≤ s.toNat) (hs1 : s.toNat ≤ 380) :
+    let r := FastMul.rseAny p (FastMul.fastLog2 p-23)
+    let position := FastMul.fastLog2 p+(s.toUInt64-2)
+    (if r == 16777216 then position+1 else position).toNat ≤ 425 := by
+  have hl := leading_bounds p.toNat hlo (by omega)
+  have hp := position_nat p s hlo hhi hs0 hs1
+  have hr := rounded_word_nat p hlo hhi
+  dsimp only
+  split
+  · rename_i hc
+    have hw : FastMul.rseAny p (FastMul.fastLog2 p-23) = (16777216 : UInt64) := by
+      exact beq_iff_eq.mp hc
+    have hn : rounded p.toNat = 16777216 := by
+      rw [← hr,hw] <;> rfl
+    have h46 : p.toNat.log2 = 46 := by
+      by_contra h
+      have h47 : p.toNat.log2 = 47 := by omega
+      have hz := no_carry_at_47 p.toNat hhi h47
+      simp [carry,hn] at hz
+    rw [UInt64.toNat_add,hp]
+    change (p.toNat.log2+s.toNat-2+1) % 18446744073709551616 ≤ 425
+    rw [Nat.mod_eq_of_lt (by omega)]
+    omega
+  · rw [hp]
+    omega
+
+theorem roundP_normal (sign : Bool) (p : UInt64) (s : UInt32)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225)
+    (hs0 : 128 ≤ s.toNat) (hs1 : s.toNat ≤ 380) :
+    FastMul.roundP sign p (s.toUInt64-2) =
+      let r := FastMul.rseAny p (FastMul.fastLog2 p-23)
+      let position := FastMul.fastLog2 p+(s.toUInt64-2)
+      let normalizedPosition := if r == 16777216 then position+1 else position
+      let normalizedMantissa := if r == 16777216 then 8388608 else r
+      FastMul.mkW sign (normalizedPosition-171).toUInt32 (FastMul.fracW normalizedMantissa) := by
+  have hl := leading_bounds p.toNat hlo (by omega)
+  have hp := position_nat p s hlo hhi hs0 hs1
+  have hz : p ≠ 0 := by
+    intro h
+    subst p
+    norm_num at hlo
+  have hposition : ¬ FastMul.fastLog2 p+(s.toUInt64-2) < (172 : UInt64) := by
+    rw [UInt64.lt_iff_toNat_lt,hp]
+    change ¬ p.toNat.log2+s.toNat-2 < 172
+    omega
+  have hleading : ¬ FastMul.fastLog2 p < (23 : UInt64) := by
+    rw [UInt64.lt_iff_toNat_lt,leading_nat]
+    change ¬ p.toNat.log2 < 23
+    omega
+  have hover := normalized_position_le p s hlo hhi hs0 hs1
+  have hnoOverflow : ¬ (if FastMul.rseAny p (FastMul.fastLog2 p-23) == 16777216 then
+      FastMul.fastLog2 p+(s.toUInt64-2)+1 else FastMul.fastLog2 p+(s.toUInt64-2)) > (425 : UInt64) := by
+    rw [UInt64.lt_iff_toNat_lt]
+    change ¬ 425 < (if FastMul.rseAny p (FastMul.fastLog2 p-23) == 16777216 then
+      FastMul.fastLog2 p+(s.toUInt64-2)+1 else FastMul.fastLog2 p+(s.toUInt64-2)).toNat
+    exact Nat.not_lt_of_ge hover
+  simp only [beq_iff_eq] at hnoOverflow
+  simp only [FastMul.roundP,beq_iff_eq,hz,if_false,hposition,hleading,hnoOverflow]
+
+end R19BiasBase.R19BiasShape
+
+
+
+namespace R19BiasBase.R19DirectBias
+open Competition
+
+/-- Existing ties-to-even bias formula; new retained-product caller shape.
+    No change to normal/S128..380 domain or fallback. NOT_COMPILED. -/
+@[inline] def normalCore (sum u v : UInt32) : UInt32 :=
+  let a := (u &&& (0x7fffff : UInt32)) ||| (0x800000 : UInt32)
+  let b := (v &&& (0x7fffff : UInt32)) ||| (0x800000 : UInt32)
+  let p : UInt64 := a.toUInt64 * b.toUInt64
+  let biased := if p < (0x800000000000 : UInt64) then
+      p + (0x3fffff : UInt64) + ((p >>> 23) &&& 1)
+    else p + (0x7fffff : UInt64) + ((p >>> 24) &&& 1)
+  let high := biased >>> 47
+  let q := (biased >>> ((23 : UInt64) + high)).toUInt32
+  let e := sum - (127 : UInt32) + high.toUInt32
+  ((u ^^^ v) &&& (0x80000000 : UInt32)) ||| (e <<< 23) ||| (q - (0x800000 : UInt32))
+
+@[inline] def guardedMul (fallback : Binary32 → Binary32 → Binary32)
+    (x y : Binary32) : Binary32 :=
+  let u := x.raw.1
+  let v := y.raw.1
+  let eu := (u >>> 23) &&& (255 : UInt32)
+  let ev := (v >>> 23) &&& (255 : UInt32)
+  if eu - 1 ≤ (253 : UInt32) ∧ ev - 1 ≤ (253 : UInt32) then
+    let s := eu + ev
+    if s - 128 ≤ (252 : UInt32) then R7W02.fromRaw (normalCore s u v)
+    else fallback x y
+  else fallback x y
+
+@[noinline] def diagnosticEntry (x y : Binary32) : Binary32 :=
+  guardedMul R19BiasBase.mul x y
+end R19BiasBase.R19DirectBias
+
+
+namespace R19BiasBase.R19BiasShape
+open FloatLib.Numerics
+open R19DirectBiasWord
+
+theorem high_nat (p : UInt64)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225) :
+    (highWord p).toNat = p.toNat.log2-46+carry p.toNat := by
+  have h := (R19PostBias.normalized_quotient p.toNat hlo hhi).1
+  have hl := leading_bounds p.toNat hlo (by omega)
+  have hk := literal_shift_eq p.toNat hlo hhi
+  rw [highWord_nat p hhi]
+  rw [hk] at h
+  change (R19PostBias.biased p.toNat >>> 47) =
+    p.toNat.log2-46+(if rounded p.toNat=16777216 then 1 else 0)
+  change (R19PostBias.biased p.toNat >>> 47) =
+    (if p.toNat < 140737488355328 then 0 else 1)+
+      (if rounded p.toNat=16777216 then 1 else 0) at h
+  have hp0 : p.toNat ≠ 0 := by omega
+  by_cases hp : p.toNat < 140737488355328
+  · have hl47 : p.toNat.log2 < 47 := (Nat.log2_lt hp0).2 (by norm_num; exact hp)
+    simp only [if_pos hp] at h
+    omega
+  · have hl47 : 47 ≤ p.toNat.log2 := (Nat.le_log2 hp0).2 (by norm_num; omega)
+    simp only [if_neg hp] at h
+    omega
+
+def oldMantissa (p : UInt64) : UInt64 :=
+  let r := FastMul.rseAny p (FastMul.fastLog2 p-23)
+  if r == 16777216 then 8388608 else r
+
+def oldPosition (p : UInt64) (s : UInt32) : UInt64 :=
+  let r := FastMul.rseAny p (FastMul.fastLog2 p-23)
+  let n := FastMul.fastLog2 p+(s.toUInt64-2)
+  if r == 16777216 then n+1 else n
+
+theorem oldMantissa_nat (p : UInt64)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225) :
+    (oldMantissa p).toNat = mantissa p.toNat := by
+  have hr := rounded_word_nat p hlo hhi
+  have hc : FastMul.rseAny p (FastMul.fastLog2 p-23) = (16777216 : UInt64) ↔
+      rounded p.toNat=16777216 := by
+    rw [← UInt64.toNat_inj,hr]
+    rfl
+  simp only [oldMantissa,mantissa,beq_iff_eq,hc]
+  split <;> simp_all only [hr]
+
+theorem oldPosition_nat (p : UInt64) (s : UInt32)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225)
+    (hs0 : 128 ≤ s.toNat) (hs1 : s.toNat ≤ 380) :
+    (oldPosition p s).toNat = p.toNat.log2+s.toNat-2+carry p.toNat := by
+  have hl := leading_bounds p.toNat hlo (by omega)
+  have hp := position_nat p s hlo hhi hs0 hs1
+  have hr := rounded_word_nat p hlo hhi
+  have hc : FastMul.rseAny p (FastMul.fastLog2 p-23) = (16777216 : UInt64) ↔
+      rounded p.toNat=16777216 := by
+    rw [← UInt64.toNat_inj,hr]
+    rfl
+  simp only [oldPosition,carry,beq_iff_eq,hc]
+  split
+  · rw [UInt64.toNat_add,hp]
+    change (p.toNat.log2+s.toNat-2+1) % 18446744073709551616 = _
+    exact Nat.mod_eq_of_lt (by omega)
+  · simpa only [Nat.add_zero] using hp
+
+theorem mantissaWord_eq_old (p : UInt64)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225) :
+    mantissaWord p = (oldMantissa p).toUInt32 := by
+  have hm := mantissa_bounds p.toNat hlo (by omega)
+  apply UInt32.toNat.inj
+  rw [mantissaWord_nat p hlo hhi,literal_shift_eq p.toNat hlo hhi]
+  change mantissa p.toNat = (oldMantissa p).toUInt32.toNat
+  rw [FastMul.toUInt32_eq,UInt32.toNat_ofNat',oldMantissa_nat p hlo hhi,
+    Nat.mod_eq_of_lt (by omega)]
+
+def exponentWord (s : UInt32) (p : UInt64) : UInt32 := s-127+(highWord p).toUInt32
+
+theorem exponentWord_nat (p : UInt64) (s : UInt32)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225)
+    (hs0 : 128 ≤ s.toNat) (hs1 : s.toNat ≤ 380) :
+    (exponentWord s p).toNat = s.toNat-127+(highWord p).toNat := by
+  have hh := highWord_le_one p hlo hhi
+  have hle : (127 : UInt32) ≤ s := by
+    rw [UInt32.le_iff_toNat_le]
+    change 127 ≤ s.toNat
+    omega
+  rw [exponentWord,UInt32.toNat_add,UInt32.toNat_sub_of_le _ _ hle,
+    FastMul.toUInt32_eq,UInt32.toNat_ofNat',Nat.mod_eq_of_lt (by omega)]
+  change (s.toNat-127+(highWord p).toNat) % 4294967296 = _
+  exact Nat.mod_eq_of_lt (by omega)
+
+theorem exponentWord_eq_old (p : UInt64) (s : UInt32)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225)
+    (hs0 : 128 ≤ s.toNat) (hs1 : s.toNat ≤ 380) :
+    exponentWord s p = (oldPosition p s-171).toUInt32 := by
+  have hl := leading_bounds p.toNat hlo (by omega)
+  have hc := carry_le p.toNat
+  have hp := oldPosition_nat p s hlo hhi hs0 hs1
+  have hle : (171 : UInt64) ≤ oldPosition p s := by
+    rw [UInt64.le_iff_toNat_le,hp]
+    change 171 ≤ p.toNat.log2+s.toNat-2+carry p.toNat
+    omega
+  apply UInt32.toNat.inj
+  rw [exponentWord_nat p s hlo hhi hs0 hs1,high_nat p hlo hhi,
+    FastMul.toUInt32_eq,UInt32.toNat_ofNat',UInt64.toNat_sub_of_le _ _ hle,hp]
+  change s.toNat-127+(p.toNat.log2-46+carry p.toNat) =
+    (p.toNat.log2+s.toNat-2+carry p.toNat-171) % 4294967296
+  rw [Nat.mod_eq_of_lt (by omega)]
+  omega
+
+theorem fractionWord_eq_old (p : UInt64)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225) :
+    mantissaWord p-8388608 = FastMul.fracW (oldMantissa p) := by
+  have hm := mantissa_bounds p.toNat hlo (by omega)
+  have hn := oldMantissa_nat p hlo hhi
+  have hq : (mantissaWord p).toNat = mantissa p.toNat := by
+    rw [mantissaWord_nat p hlo hhi,literal_shift_eq p.toNat hlo hhi]
+    rfl
+  have hle : (8388608 : UInt32) ≤ mantissaWord p := by
+    rw [UInt32.le_iff_toNat_le,hq]
+    exact hm.1
+  apply UInt32.toNat.inj
+  rw [UInt32.toNat_sub_of_le _ _ hle,hq,FastMul.fracW_eq,UInt32.toNat_ofNat',hn]
+  change mantissa p.toNat-8388608 = (mantissa p.toNat-8388608) % 4294967296
+  exact (Nat.mod_eq_of_lt (by omega)).symm
+
+theorem output_bounds (p : UInt64) (s : UInt32)
+    (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225)
+    (hs0 : 128 ≤ s.toNat) (hs1 : s.toNat ≤ 380) :
+    (exponentWord s p).toNat < 256 ∧ (mantissaWord p-8388608).toNat < 8388608 := by
+  have hh := highWord_le_one p hlo hhi
+  have hm := mantissa_bounds p.toNat hlo (by omega)
+  have hq : (mantissaWord p).toNat = mantissa p.toNat := by
+    rw [mantissaWord_nat p hlo hhi,literal_shift_eq p.toNat hlo hhi]
+    rfl
+  have hle : (8388608 : UInt32) ≤ mantissaWord p := by
+    rw [UInt32.le_iff_toNat_le,hq]
+    exact hm.1
+  rw [exponentWord_nat p s hlo hhi hs0 hs1,UInt32.toNat_sub_of_le _ _ hle,hq]
+  change s.toNat-127+(highWord p).toNat < 256 ∧ mantissa p.toNat-8388608 < 8388608
+  omega
+
+end R19BiasBase.R19BiasShape
+
+
+namespace R19BiasBase.R19DirectBias
+open FloatLib.Floats Competition
+open FloatLib.Floats.Formats.BinaryInterchange
+open Model.NativeBinary32 R19DirectBiasWord R19BiasShape
+
+theorem low_mask_eq_self (n : UInt32) (k : Nat) (hk : k < 32) (hn : n.toNat < 2^k) :
+    n &&& UInt32.ofNat (2^k-1) = n := by
+  apply UInt32.toNat.inj
+  simp only [UInt32.toNat_and,UInt32.toNat_ofNat']
+  have hmask : 2^k-1 < 4294967296 := by
+    have hpow : 2^k ≤ 2^31 := Nat.pow_le_pow_right (by decide) (by omega)
+    norm_num at hpow
+    omega
+  rw [Nat.mod_eq_of_lt hmask,Nat.and_two_pow_sub_one_eq_mod,Nat.mod_eq_of_lt hn]
+
+theorem mkW_eq_unmasked (sign : Bool) (e f : UInt32)
+    (he : e.toNat < 256) (hf : f.toNat < 8388608) :
+    FastMul.mkW sign e f =
+      (if sign then (0x80000000 : UInt32) else 0) ||| (e <<< 23) ||| f := by
+  have hem := low_mask_eq_self e 8 (by decide) he
+  have hfm := low_mask_eq_self f 23 (by decide) hf
+  change e &&& (255 : UInt32) = e at hem
+  change f &&& (8388607 : UInt32) = f at hfm
+  unfold FastMul.mkW
+  rw [hem,hfm]
+
+theorem product_bounds (u v : UInt32) :
+    let p := (R2W01b.mantissa u).toUInt64 * (R2W01b.mantissa v).toUInt64
+    70368744177664 ≤ p.toNat ∧ p.toNat ≤ 281474943156225 := by
+  have hu := R2W01c.mantissa_bounds u
+  have hv := R2W01c.mantissa_bounds v
+  have hl := Nat.mul_le_mul hu.1 hv.1
+  have hh := Nat.mul_le_mul (show (R2W01b.mantissa u).toNat ≤ 16777215 by omega)
+    (show (R2W01b.mantissa v).toNat ≤ 16777215 by omega)
+  norm_num at hl hh
+  dsimp only
+  rw [UInt64.toNat_mul,UInt32.toNat_toUInt64,UInt32.toNat_toUInt64,
+    Nat.mod_eq_of_lt (by omega)]
+  exact ⟨hl,hh⟩
+
+theorem normalCore_eq_roundP (s u v : UInt32) (sign : Bool)
+    (hs0 : 128 ≤ s.toNat) (hs1 : s.toNat ≤ 380)
+    (hsign : ((u ^^^ v) &&& (0x80000000 : UInt32)) =
+      (if sign then (0x80000000 : UInt32) else 0)) :
+    normalCore s u v = FastMul.roundP sign
+      ((R2W01b.mantissa u).toUInt64 * (R2W01b.mantissa v).toUInt64) (s.toUInt64-2) := by
+  let p := (R2W01b.mantissa u).toUInt64 * (R2W01b.mantissa v).toUInt64
+  have hp := product_bounds u v
+  have hb := output_bounds p s hp.1 hp.2 hs0 hs1
+  rw [roundP_normal sign p s hp.1 hp.2 hs0 hs1]
+  change ((u ^^^ v) &&& (0x80000000 : UInt32)) |||
+      (exponentWord s p <<< 23) ||| (mantissaWord p-8388608) =
+    FastMul.mkW sign (oldPosition p s-171).toUInt32 (FastMul.fracW (oldMantissa p))
+  rw [hsign,← mkW_eq_unmasked sign _ _ hb.1 hb.2,
+    exponentWord_eq_old p s hp.1 hp.2 hs0 hs1,fractionWord_eq_old p hp.1 hp.2]
+
+theorem finiteMantissa_eq (u : UInt32) (hu : expField u ≠ 0) :
+    finiteMantissa (expField u) (fracField u) = (R2W01b.mantissa u).toUInt64 := by
+  apply UInt64.toNat.inj
+  simp only [finiteMantissa,beq_iff_eq,hu,if_false,UInt64.toNat_or,
+    UInt32.toNat_toUInt64]
+  rw [R2W01b.mantissa,UInt32.toNat_or]
+  rfl
+
+theorem exp_bound (u : UInt32) : (expField u).toNat < 256 := by
+  rw [FastMul.expField_toNat]
+  exact Nat.mod_lt _ (by decide)
+
+theorem finiteScale_sum (u v : UInt32)
+    (hu : 0 < (expField u).toNat) (hv : 0 < (expField v).toNat)
+    (hs : 128 ≤ (expField u+expField v).toNat) :
+    finiteScale (expField u)+finiteScale (expField v) =
+      (expField u+expField v).toUInt64-2 := by
+  have hub := exp_bound u
+  have hvb := exp_bound v
+  have hu0 : expField u ≠ 0 := by intro h; rw [h] at hu; norm_num at hu
+  have hv0 : expField v ≠ 0 := by intro h; rw [h] at hv; norm_num at hv
+  have hsum : (expField u+expField v).toNat = (expField u).toNat+(expField v).toNat := by
+    rw [UInt32.toNat_add,Nat.mod_eq_of_lt (by omega)]
+  apply UInt64.toNat.inj
+  rw [normal_scale_nat _ hs,UInt64.toNat_add,UnderflowZero.finiteScale_toNat,
+    UnderflowZero.finiteScale_toNat,if_neg hu0,if_neg hv0,hsum]
+  rw [Nat.mod_eq_of_lt (by omega)]
+  omega
+
+theorem signBit_eq_bit (u : UInt32) : signBit u = u.toBitVec.getLsbD 31 := by
+  have hm : u &&& (0x80000000 : UInt32) =
+      if u.toBitVec.getLsbD 31 then (0x80000000 : UInt32) else 0 := by
+    apply UInt32.toBitVec_inj.mp
+    rw [UInt32.toBitVec_and]
+    change u.toBitVec &&& BitVec.twoPow 32 31 = _
+    rw [BitVec.and_twoPow]
+    cases u.toBitVec.getLsbD 31 <;> rfl
+  unfold signBit
+  rw [hm]
+  cases u.toBitVec.getLsbD 31 <;> rfl
+
+theorem sign_word_eq (u v : UInt32) :
+    ((u ^^^ v) &&& (0x80000000 : UInt32)) =
+      (if Bool.xor (signBit u) (signBit v) then (0x80000000 : UInt32) else 0) := by
+  apply UInt32.toBitVec_inj.mp
+  rw [UInt32.toBitVec_and,UInt32.toBitVec_xor]
+  change (u.toBitVec ^^^ v.toBitVec) &&& BitVec.twoPow 32 31 = _
+  rw [BitVec.and_twoPow]
+  have hm : (u.toBitVec ^^^ v.toBitVec).getLsbD 31 = Bool.xor (signBit u) (signBit v) := by
+    calc
+      _ = (u.toBitVec ^^^ v.toBitVec).msb := by
+        simpa using (BitVec.msb_eq_getLsbD_last (u.toBitVec ^^^ v.toBitVec)).symm
+      _ = _ := by
+        rw [BitVec.msb_xor,signBit_eq_bit,signBit_eq_bit]
+        congr 1 <;> simpa using BitVec.msb_eq_getLsbD_last _
+  rw [hm]
+  cases Bool.xor (signBit u) (signBit v) <;> rfl
+
+theorem normalCore_eq_core (u v : UInt32)
+    (hu : 0 < (expField u).toNat) (hv : 0 < (expField v).toNat)
+    (hs0 : 128 ≤ (expField u+expField v).toNat)
+    (hs1 : (expField u+expField v).toNat ≤ 380) :
+    normalCore (expField u+expField v) u v = FastMul.core u v := by
+  have hu0 : expField u ≠ 0 := by intro h; rw [h] at hu; norm_num at hu
+  have hv0 : expField v ≠ 0 := by intro h; rw [h] at hv; norm_num at hv
+  rw [normalCore_eq_roundP _ u v _ hs0 hs1 (sign_word_eq u v)]
+  simp only [FastMul.core]
+  rw [finiteMantissa_eq u hu0,finiteMantissa_eq v hv0,finiteScale_sum u v hu hv hs0]
+
+theorem normal_guard (e : UInt32) (h : e-1 ≤ (253 : UInt32)) :
+    0 < e.toNat ∧ e.toNat < 255 := by
+  have he := e.toNat_lt
+  rw [UInt32.le_iff_toNat_le,UInt32.toNat_sub] at h
+  change (4294967295+e.toNat) % 4294967296 ≤ 253 at h
+  omega
+
+theorem sum_guard (s : UInt32) (h : s-128 ≤ (252 : UInt32)) :
+    128 ≤ s.toNat ∧ s.toNat ≤ 380 := by
+  have hs := s.toNat_lt
+  rw [UInt32.le_iff_toNat_le,UInt32.toNat_sub] at h
+  change (4294967168+s.toNat) % 4294967296 ≤ 252 at h
+  omega
+
+theorem guardedMul_spec (fallback : Binary32 → Binary32 → Binary32)
+    (hf : ∀ x y, fallback x y = ExecFloat.Spec.mul x y) (x y : Binary32) :
+    guardedMul fallback x y = ExecFloat.Spec.mul x y := by
+  unfold guardedMul
+  dsimp only
+  split
+  · rename_i hn
+    have hu := normal_guard _ hn.1
+    have hv := normal_guard _ hn.2
+    split
+    · rename_i hs
+      have hb := sum_guard _ hs
+      change 0 < (expField x.raw.1).toNat ∧ (expField x.raw.1).toNat < 255 at hu
+      change 0 < (expField y.raw.1).toNat ∧ (expField y.raw.1).toNat < 255 at hv
+      change 128 ≤ (expField x.raw.1+expField y.raw.1).toNat ∧
+        (expField x.raw.1+expField y.raw.1).toNat ≤ 380 at hb
+      change R7W02.fromRaw (normalCore (expField x.raw.1+expField y.raw.1) x.raw.1 y.raw.1) = _
+      rw [normalCore_eq_core _ _ hu.1 hv.1 hb.1 hb.2]
+      have hu255 : expField x.raw.1 ≠ (255 : UInt32) := by
+        intro h; rw [h] at hu; norm_num at hu
+      have hv255 : expField y.raw.1 ≠ (255 : UInt32) := by
+        intro h; rw [h] at hv; norm_num at hv
+      have hspecial : FastMul.special x.raw.1 y.raw.1 = false := by
+        simp [FastMul.special,FastMul.sm1_eq,hu255,hv255]
+      calc
+        _ = FastMul.ofBits (FastMul.core x.raw.1 y.raw.1) := by
+          apply Configured.Family.toModel_injective
+          rfl
+        _ = FastMul.mul x y := by simp only [FastMul.mul,hspecial,Bool.false_eq_true,if_false]
+        _ = ExecFloat.Spec.mul x y := FastMul.mul_spec x y
+    · exact hf x y
+  · exact hf x y
+
+end R19BiasBase.R19DirectBias
+
+namespace Submission
+open FloatLib.Floats Competition
+@[inline] def add := R19BiasBase.add
+theorem add_spec : ∀ x y : Binary32, add x y = ExecFloat.Spec.add x y := R19BiasBase.add_spec
+@[inline] def mul (x y : Binary32) : Binary32 := R19BiasBase.R19DirectBias.guardedMul R19BiasBase.mul x y
+theorem mul_spec (x y : Binary32) : mul x y = ExecFloat.Spec.mul x y :=
+  R19BiasBase.R19DirectBias.guardedMul_spec R19BiasBase.mul R19BiasBase.mul_spec x y
+@[inline] def sum {n : Nat} (x : Vector Binary32 n) : Binary32 := R19BiasBase.sum x
+theorem sum_spec : ∀ (n : Nat) (x : Vector Binary32 n), sum x = sumSpec x.get := R19BiasBase.sum_spec
+@[inline] def bmm := R19BiasBase.bmm
+theorem bmm_spec : ∀ (batch m n p : Nat)
+    (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p)),
+    (bmm batch m n p A B).get = bmmSpec batch m n p A.get B.get := R19BiasBase.bmm_spec
+end Submission

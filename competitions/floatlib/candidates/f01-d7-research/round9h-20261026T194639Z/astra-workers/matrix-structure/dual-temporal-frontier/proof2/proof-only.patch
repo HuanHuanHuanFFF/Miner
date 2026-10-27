@@ -1,0 +1,55 @@
+--- original-9a5.lean
++++ proof2.lean
+@@ -6742,12 +6742,14 @@
+       A[basePacket+i.val]'(by have := i.isLt; omega) = packetA n baseA i.val Araw)
+     (t : Nat) (s0 s1 : Float32) :
+     loop n basePacket A B hA t s0 s1 = R19Temporal.loop n baseA Araw B t s0 s1 := by
++  unfold blocks at *
+   by_cases h3 : 4*t+3<n
+   · have h0 : 4*t<n := by omega
+     have h1 : 4*t+1<n := by omega
+     have h2 : 4*t+2<n := by omega
+     have ht : t<blocks n := by unfold blocks; omega
+-    rw [loop, R19Temporal.loop]
++    rw [loop]
++    conv_rhs => unfold R19Temporal.loop
+     simp only [h3, dite_true]
+     simp only [hread ⟨t,ht⟩]
+     simp only [packetA, h0, h1, h2, h3, ite_true]
+@@ -6756,19 +6758,23 @@
+     · have ht : t<blocks n := by unfold blocks; omega
+       by_cases h1 : 4*t+1<n
+       · by_cases h2 : 4*t+2<n
+-        · rw [loop, R19Temporal.loop]
++        · rw [loop]
++          conv_rhs => unfold R19Temporal.loop
+           simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true]
+           simp only [hread ⟨t,ht⟩]
+           simp only [packetA, h0, h1, h2, ite_true]
+-        · rw [loop, R19Temporal.loop]
++        · rw [loop]
++          conv_rhs => unfold R19Temporal.loop
+           simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true, ite_false]
+           simp only [hread ⟨t,ht⟩]
+           simp only [packetA, h0, h1, ite_true]
+-      · rw [loop, R19Temporal.loop]
++      · rw [loop]
++        conv_rhs => unfold R19Temporal.loop
+         simp only [h3, h0, h1, dite_false, dite_true, ite_false]
+         simp only [hread ⟨t,ht⟩]
+         simp only [packetA, h0, ite_true]
+-    · rw [loop, R19Temporal.loop]
++    · rw [loop]
++      conv_rhs => unfold R19Temporal.loop
+       simp only [h3, h0, dite_false]
+ termination_by n-4*t
+ decreasing_by all_goals omega
+@@ -6808,7 +6814,7 @@
+     (r : Fin (batch*m)) (out : Array Binary32) (g : Fin (R15ThinPairs.groups p)) :
+     group batch m n p A B (packA (batch*m) n A.toArray) packedB r out g =
+       R19Temporal.group batch m n p A B packedB r out g := by
+-  simp only [group, R19Temporal.group, runDot_eq]
++  simp only [group, R19Temporal.group, runDot_eq] <;> rfl
+ 
+ @[inline] def row (batch m n p : Nat)
+     (A : Vector Binary32 (batch*m*n)) (B : Vector Binary32 (batch*n*p))

@@ -1,0 +1,131 @@
+0:	push   rbp
+   1:	push   r14
+   3:	push   rbx
+   4:	sub    rsp,0x10
+   8:	mov    ebx,esi
+   a:	mov    ebp,edi
+   c:	mov    eax,edi
+   e:	and    eax,0x7fffffff
+  13:	lea    ecx,[rax-0x1]
+  16:	cmp    ecx,0xbffffff
+  1c:	setb   cl
+  1f:	cmp    eax,0x7f800000
+  24:	setae  al
+  27:	or     al,cl
+  29:	je     37 <lp_competition_Submission_add+0x37>
+  2b:	mov    edi,ebp
+  2d:	call   32 <lp_competition_Submission_add+0x32>
+  32:	movaps xmm1,xmm0
+  35:	jmp    60 <lp_competition_Submission_add+0x60>
+  37:	mov    eax,ebp
+  39:	and    eax,0x7fffff
+  3e:	or     eax,0x800000
+  43:	cvtsi2ss xmm1,eax
+  47:	mov    rax,QWORD PTR [rip+0x0]        # 4e <lp_competition_Submission_add+0x4e>
+  4e:	mov    rax,QWORD PTR [rax]
+  51:	mov    ecx,ebp
+  53:	shr    ecx,0x17
+  56:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  5b:	mulss  xmm1,DWORD PTR [rax+0x8]
+  60:	mov    eax,ebx
+  62:	and    eax,0x7fffffff
+  67:	lea    ecx,[rax-0x1]
+  6a:	cmp    ecx,0xbffffff
+  70:	setb   cl
+  73:	cmp    eax,0x7f800000
+  78:	setae  al
+  7b:	or     al,cl
+  7d:	je     94 <lp_competition_Submission_add+0x94>
+  7f:	mov    edi,ebx
+  81:	movss  DWORD PTR [rsp+0xc],xmm1
+  87:	call   8c <lp_competition_Submission_add+0x8c>
+  8c:	movss  xmm1,DWORD PTR [rsp+0xc]
+  92:	jmp    c0 <lp_competition_Submission_add+0xc0>
+  94:	mov    eax,ebx
+  96:	and    eax,0x7fffff
+  9b:	or     eax,0x800000
+  a0:	xorps  xmm0,xmm0
+  a3:	cvtsi2ss xmm0,eax
+  a7:	mov    rax,QWORD PTR [rip+0x0]        # ae <lp_competition_Submission_add+0xae>
+  ae:	mov    rax,QWORD PTR [rax]
+  b1:	mov    ecx,ebx
+  b3:	shr    ecx,0x17
+  b6:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  bb:	mulss  xmm0,DWORD PTR [rax+0x8]
+  c0:	addss  xmm1,xmm0
+  c4:	ucomiss xmm1,xmm1
+  c7:	jp     d9 <lp_competition_Submission_add+0xd9>
+  c9:	movaps xmm0,xmm1
+  cc:	add    rsp,0x10
+  d0:	pop    rbx
+  d1:	pop    r14
+  d3:	pop    rbp
+  d4:	jmp    d9 <lp_competition_Submission_add+0xd9>
+  d9:	mov    eax,ebp
+  db:	and    eax,0x7f800000
+  e0:	cmp    eax,0x7f800000
+  e5:	jne    101 <lp_competition_Submission_add+0x101>
+  e7:	test   ebp,0x7fffff
+  ed:	setne  cl
+  f0:	test   ebp,0x400000
+  f6:	sete   dl
+  f9:	test   cl,dl
+  fb:	jne    196 <lp_competition_Submission_add+0x196>
+ 101:	mov    ecx,ebx
+ 103:	and    ecx,0x7f800000
+ 109:	cmp    ecx,0x7f800000
+ 10f:	jne    129 <lp_competition_Submission_add+0x129>
+ 111:	test   ebx,0x7fffff
+ 117:	setne  dl
+ 11a:	test   ebx,0x400000
+ 120:	sete   sil
+ 124:	test   dl,sil
+ 127:	jne    1a0 <lp_competition_Submission_add+0x1a0>
+ 129:	cmp    eax,0x7f800000
+ 12e:	setne  al
+ 131:	test   ebp,0x7fffff
+ 137:	sete   dl
+ 13a:	or     dl,al
+ 13c:	je     196 <lp_competition_Submission_add+0x196>
+ 13e:	cmp    ecx,0x7f800000
+ 144:	setne  al
+ 147:	test   ebx,0x7fffff
+ 14d:	sete   cl
+ 150:	or     cl,al
+ 152:	je     1a0 <lp_competition_Submission_add+0x1a0>
+ 154:	mov    eax,ebp
+ 156:	lea    rsi,[rax*2+0x1]
+ 15e:	mov    eax,ebx
+ 160:	lea    rdx,[rax*2+0x1]
+ 168:	lea    rdi,[rip+0x0]        # 16f <lp_competition_Submission_add+0x16f>
+ 16f:	call   174 <lp_competition_Submission_add+0x174>
+ 174:	mov    r14,rax
+ 177:	test   r14b,0x1
+ 17b:	jne    1b1 <lp_competition_Submission_add+0x1b1>
+ 17d:	mov    rdi,r14
+ 180:	call   185 <lp_competition_Submission_add+0x185>
+ 185:	mov    ebx,eax
+ 187:	mov    eax,DWORD PTR [r14]
+ 18a:	cmp    eax,0x2
+ 18d:	jl     1b9 <lp_competition_Submission_add+0x1b9>
+ 18f:	dec    eax
+ 191:	mov    DWORD PTR [r14],eax
+ 194:	jmp    1a6 <lp_competition_Submission_add+0x1a6>
+ 196:	or     ebp,0x400000
+ 19c:	mov    ebx,ebp
+ 19e:	jmp    1a6 <lp_competition_Submission_add+0x1a6>
+ 1a0:	or     ebx,0x400000
+ 1a6:	mov    eax,ebx
+ 1a8:	add    rsp,0x10
+ 1ac:	pop    rbx
+ 1ad:	pop    r14
+ 1af:	pop    rbp
+ 1b0:	ret
+ 1b1:	shr    r14,1
+ 1b4:	mov    ebx,r14d
+ 1b7:	jmp    1a6 <lp_competition_Submission_add+0x1a6>
+ 1b9:	test   eax,eax
+ 1bb:	je     1a6 <lp_competition_Submission_add+0x1a6>
+ 1bd:	mov    rdi,r14
+ 1c0:	call   1c5 <lp_competition_Submission_add+0x1c5>
+ 1c5:	jmp    1a6 <lp_competition_Submission_add+0x1a6>

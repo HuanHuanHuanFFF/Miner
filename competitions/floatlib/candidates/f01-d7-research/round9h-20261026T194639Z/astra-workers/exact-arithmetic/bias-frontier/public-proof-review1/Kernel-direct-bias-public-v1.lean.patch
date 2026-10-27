@@ -1,0 +1,12 @@
+--- Kernel-direct-bias-public-v1.lean
++++ review1/Kernel-direct-bias-public-v1.lean
+@@ -7019,7 +7019,8 @@
+     change 127 ≤ s.toNat
+     omega
+   rw [exponentWord,UInt32.toNat_add,UInt32.toNat_sub_of_le _ _ hle,
+-    FastMul.toUInt32_eq,UInt32.toNat_ofNat',Nat.mod_eq_of_lt (by omega)]
++    FastMul.toUInt32_eq,UInt32.toNat_ofNat',
++    Nat.mod_eq_of_lt (show (highWord p).toNat < 4294967296 by omega)]
+   change (s.toNat-127+(highWord p).toNat) % 4294967296 = _
+   exact Nat.mod_eq_of_lt (by omega)
+ 

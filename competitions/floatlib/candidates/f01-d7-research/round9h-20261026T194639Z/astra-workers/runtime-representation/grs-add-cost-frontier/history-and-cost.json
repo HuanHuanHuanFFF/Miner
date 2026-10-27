@@ -1,0 +1,82 @@
+{
+  "utc": "2026-10-26T23:46:32.632100+00:00",
+  "status": "BOUND_HISTORY_AND_COST_HYPOTHESIS_NO_NEW_COMPILE",
+  "sources": [
+    {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\astra-grs-add-paper.md",
+      "sha256": "dccfca59b369ad1af982c35a28d02bb770136b4ecfb4be41d18fe650f69b1faa",
+      "bytes": 5808
+    },
+    {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\astra-grs-add-model.py",
+      "sha256": "fa67751710189dfae3c48751a2c271a5cf5de3247974c231018260d33fb70303",
+      "bytes": 4750
+    },
+    {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\astra-workers\\exact-arithmetic\\grs-add-review.md",
+      "sha256": "0afd0293192477fe83b49884a1d7ca683075529bb4eaab0b238ddcc2c1783170",
+      "bytes": 2258
+    },
+    {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-r15-dev-packed-b2-1\\Kernel.lean",
+      "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+      "bytes": 226829
+    },
+    {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-r16-dev-native-add-high3\\Kernel.lean",
+      "sha256": "f7f4702f9191061bb70a274610c9b735967ce4460ca2ef6ae121b9264fad18dd",
+      "bytes": 255992
+    },
+    {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\astra-workers\\runtime-representation\\grs-add-cost-frontier\\Runtime-grs32-add.lean.inc",
+      "sha256": "e4833e4e8b41c7fe50cb8dfa91dbd639fc4cc6aa926fb7b5498e4dda1a2be45a",
+      "bytes": 1867
+    }
+  ],
+  "old_GRS": {
+    "source_sha256": "6bef4c4b6835c31260cf0d0fdd1163905f0bb38338b189f90e6bde7c8bc215c8",
+    "bytes": 35105,
+    "benchmark_run": 39575344774,
+    "verdict_sha256": "7d931a925d004fefe3806cdbdaac4ca4779188c0b5bc634c5a04dca27469749b",
+    "mode": "bench",
+    "ratio_to_old_reference": 1.0960870878965316,
+    "has_explicit_placeholder": true,
+    "reachable_domain": "same-sign normal only; opposite-sign log2 branch dead under outer guard",
+    "scope": "Old legacy benchmark-only result, not B2/current public-v2 or full-gate acceptance. No source copied into new Kernel."
+  },
+  "R16": {
+    "input_sha256": "f7f4702f9191061bb70a274610c9b735967ce4460ca2ef6ae121b9264fad18dd",
+    "C_sources": [
+      {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40189703522\\download-6480abc393984675972cc19005e1e7f9\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r16-dev-native-add-high3\\candidate-generated-0.c",
+        "sha256": "c7c17bb0257d60a9ce3df6ffa9ef44bb3f183c62382ababaedbb6315a80be8bf",
+        "module": "Submission"
+      },
+      {
+        "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-mul-log2-proof1\\ci-runs\\40189703522\\download-6480abc393984675972cc19005e1e7f9\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r16-dev-native-add-high3\\candidate-generated-1.c",
+        "sha256": "90b632c8d102312a511e39246a32fbe6d0fb338572515d2f3c842b8b336c0040",
+        "module": "MainFull"
+      }
+    ],
+    "selected": {
+      "closure": "lp_competition_main___closed__5",
+      "boxed": "lp_competition_main___lam__2___boxed",
+      "unboxed": "lp_competition_main___lam__2"
+    },
+    "selected_body_sha256": "4e21dc0bc54b8bc1a9badfde27ee604c0bff323c49b8db1f0d6cc1670939fd89",
+    "accepted_native_shape": "One U32.toFloat32 plus one toBits already present; no table or FPadd/mul on accepted arm.",
+    "prior_negative": "Full whole/B2 1.29455085598,ADD/B2 1.87392268417 retained; repeated ordering is C evidence, not scalarASM attribution."
+  },
+  "new_actual_differences": [
+    "UInt32 <2^28 GRS rather than UInt64 hand-round",
+    "All normal signs/gaps rather than same-sign only or gap<=7/highN only",
+    "Raw magnitude order once, carry eBig/sign values explicitly",
+    "No asserted hardware reduction before actual C/ASM"
+  ],
+  "semantic_bridge_reuse": "B2 R2W01c.uint32_model_eq_roundDyadic is forall UInt32 without high-N premise; lowT raw field/carry and original normal/postE bridges still unproved.",
+  "next": "No largeKernel/CI. A true concrete diagnostic caller may check sort/FFI/postguard costs after higher-priority proof work permits; public spec remains unproved.",
+  "lean": "NOT_RUN",
+  "codegen": "NOT_RUN",
+  "full_gate": "NOT_RUN",
+  "performance": "UNKNOWN"
+}

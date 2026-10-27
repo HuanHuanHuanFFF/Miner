@@ -1,0 +1,19 @@
+--- failed-d765.lean
++++ proof3-diagnostic.lean
+@@ -6748,7 +6748,15 @@
+     have h1 : 4*t+1<n := by omega
+     have h2 : 4*t+2<n := by omega
+     have ht : t<blocks n := by unfold blocks; omega
+-    rw [loop]
++    -- Diagnostic P3: exact failing target and explicit one-step equations, first branch only.
++    trace_state
++    have dual_p3_new_eq :=
++      @Submission.R19DualTemporal.loop.eq_def n basePacket A B hA t s0 s1
++    have dual_p3_old_eq :=
++      @Submission.R19Temporal.loop.eq_def n baseA Araw B t s0 s1
++    trace_state
++    rw [dual_p3_new_eq]
++    trace_state
+     conv_rhs => unfold R19Temporal.loop
+     simp only [h3, dite_true]
+     simp only [hread ⟨t,ht⟩]

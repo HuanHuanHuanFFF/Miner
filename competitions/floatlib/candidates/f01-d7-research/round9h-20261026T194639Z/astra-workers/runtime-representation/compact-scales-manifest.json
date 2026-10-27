@@ -1,0 +1,49 @@
+{
+  "created_utc": "2026-10-26T20:17:24.865339+00:00",
+  "state": "COMPLETE_SOURCE_PROOF_ATTEMPT_NOT_RUN",
+  "candidate": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\astra-workers\\runtime-representation\\Kernel-compact-scales.lean",
+    "bytes": 229293,
+    "sha256": "9c4e9505702231fdb93f47f8d767ba0b2b0c2ad7ec48d8894b5a53ba87657645"
+  },
+  "baseline": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-r15-dev-packed-b2-1\\Kernel.lean",
+    "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58"
+  },
+  "fragment": {
+    "path": "Compact-scales.lean.inc",
+    "sha256": "d1fd88875bb0b79b50c145fa02a43bb2599e51c69255b8e43067dd7bd0f76cdf"
+  },
+  "inverse_splice_exact": true,
+  "scope": "Selected scalar add/nativeMul decoder calls and any transitive tensor repair calls through them. SUM/BMM bodies and LowScale source are preserved; this is not a claim of identical generated tensor code.",
+  "mechanism": "Globally checked 512-entry FloatArray scale table: remove one boxed-element pointer chase per table read; add one double-to-float cast and one global validity guard per scalar call.",
+  "complete_costs": [
+    "512 original widening operations to build packed table",
+    "512 widening/narrowing/raw equality validations",
+    "original scaleTable remains live",
+    "global flag/initialization checks",
+    "packed global access and Float64 narrowing per hit",
+    "unchanged original fallback if valid=false",
+    "unchanged input classifier, mantissa conversion, scale multiply, arithmetic, output codec and NaN fallback"
+  ],
+  "initialization_boundary": "Static module constants under the unchanged official build/bench. No input preprocessing. Actual eager/lazy initialization and first-call inclusion must be recorded from candidate C and official benchmark boundary.",
+  "model": {
+    "entries": 512,
+    "raw_roundtrip_mismatches": 0,
+    "engine": "Python struct host binary32/double; not Lean proof or pinned runtime test"
+  },
+  "lean": "NOT_RUN",
+  "codegen": "NOT_RUN",
+  "full_gate": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "stop_conditions": [
+    "Cannot prove checked_entry using imported safe FloatArray definitions",
+    "Hot path calls FloatArray.data or builds/checks table repeatedly",
+    "Extra branch/initialization/cast work removes plausible pointer-load savings",
+    "Original full discovery fails"
+  ],
+  "CI_owner": "D",
+  "CI_occupancy": 0,
+  "tokens": "UNKNOWN",
+  "cached_input_tokens": "UNKNOWN"
+}

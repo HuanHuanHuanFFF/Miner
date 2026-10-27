@@ -1,0 +1,13 @@
+--- Kernel-jam17-public-repair1.lean
++++ Kernel-jam17-public-repair1-parser.lean
+@@ -6746,8 +6746,8 @@
+       r / 2 ^ (6 + r / 1073741824) = R14NatNormal.mantissa p := by
+   have hl := R14NatNormal.leading_bounds p hlo (by omega)
+   have hb := R14WordAddRounding.rounded_bounds p (by omega) (by omega)
+-  have cases : p.log2 = 46 ∨ p.log2 = 47 := by omega
+-  rcases cases with he | he
++  have hcases : p.log2 = 46 ∨ p.log2 = 47 := by omega
++  rcases hcases with he | he
+   · by_cases hc : R14NatNormal.rounded p = 16777216
+     · norm_num [he,hc,R14ExponentShift.middleExponent,R14NatNormal.carry,R14NatNormal.mantissa]
+     · have hr : (R14NatNormal.rounded p * 64) / 1073741824 = 0 := by omega

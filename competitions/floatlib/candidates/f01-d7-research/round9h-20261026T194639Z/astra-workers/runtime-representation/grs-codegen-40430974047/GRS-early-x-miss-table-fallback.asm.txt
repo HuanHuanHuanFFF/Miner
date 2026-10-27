@@ -1,0 +1,65 @@
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r13
+   7:	push   r12
+   9:	push   rbx
+   a:	sub    rsp,0x18
+   e:	mov    r14d,esi
+  11:	mov    r15d,edi
+  14:	mov    r12d,edi
+  17:	shr    r12d,0x17
+  1b:	movzx  ebp,r12b
+  1f:	lea    eax,[rbp-0xff]
+  25:	cmp    eax,0xffffff01
+  2a:	ja     5c <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x5c>
+  2c:	mov    eax,r15d
+  2f:	and    eax,0x7fffffff
+  34:	lea    ecx,[rax-0x1]
+  37:	cmp    ecx,0xbffffff
+  3d:	setb   cl
+  40:	cmp    eax,0x7f800000
+  45:	setae  al
+  48:	or     al,cl
+  4a:	je     b4 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0xb4>
+  b4:	mov    eax,r15d
+  b7:	and    eax,0x7fffff
+  bc:	or     eax,0x800000
+  c1:	cvtsi2ss xmm1,eax
+  c5:	mov    rax,QWORD PTR [rip+0x0]        # cc <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0xcc>
+  cc:	mov    rax,QWORD PTR [rax]
+  cf:	mov    ecx,r12d
+  d2:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  d7:	mulss  xmm1,DWORD PTR [rax+0x8]
+  dc:	mov    eax,r14d
+  df:	and    eax,0x7fffffff
+  e4:	lea    ecx,[rax-0x1]
+  e7:	cmp    ecx,0xbffffff
+  ed:	setb   cl
+  f0:	cmp    eax,0x7f800000
+  f5:	setae  al
+  f8:	or     al,cl
+  fa:	je     1a5 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x1a5>
+ 1a5:	mov    eax,r14d
+ 1a8:	and    eax,0x7fffff
+ 1ad:	or     eax,0x800000
+ 1b2:	xorps  xmm0,xmm0
+ 1b5:	cvtsi2ss xmm0,eax
+ 1b9:	mov    rax,QWORD PTR [rip+0x0]        # 1c0 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x1c0>
+ 1c0:	mov    rax,QWORD PTR [rax]
+ 1c3:	mov    ecx,r14d
+ 1c6:	shr    ecx,0x17
+ 1c9:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 1ce:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 1d3:	addss  xmm1,xmm0
+ 1d7:	ucomiss xmm1,xmm1
+ 1da:	jnp    465 <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x465>
+ 465:	movaps xmm0,xmm1
+ 468:	add    rsp,0x18
+ 46c:	pop    rbx
+ 46d:	pop    r12
+ 46f:	pop    r13
+ 471:	pop    r14
+ 473:	pop    r15
+ 475:	pop    rbp
+ 476:	jmp    47b <lp_competition_Submission_R19GRS32Add_diagnosticEntry+0x47b>
