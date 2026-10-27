@@ -124,14 +124,32 @@ def statement(src,verdict):
             adapter=profiler.parent.parent/research_dir/'public-suite.py'
             if kernel.parent.name=='f01-d7-public-suite':
                 request=json.loads((profiler.parent.parent/'f01-d7-public-suite/suite-plan.json').read_bytes())
-                if request.get('profile_current'):
+                if request.get('r22_cost_diagnostic'):
+                    assert not request.get('profile_current') and not request.get('confirmation_candidates')
+                    adapter=profiler.parent.parent/research_dir/'round6h-20261027T211247Z/development-cost-suite.py'
+                elif request.get('profile_current'):
                     adapter=profiler.parent.parent/research_dir/'round2h-20261023T170031Z/profile-wrapper.py'
             ps=importlib.util.spec_from_file_location('current_public_suite',adapter)
             pm=importlib.util.module_from_spec(ps);ps.loader.exec_module(pm)
             pm.run(g,kernel,out)
     return reason
 g.STAGES=[('intake',g.intake),('policy',g.policy),('statement',statement)]
-if kernel.parent.name.startswith(('f01-r20-', 'f01-r21-')):
+if kernel.parent.name.startswith('f01-r22-'):
+    manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
+    helper_manifest=json.loads(manifest_path.read_bytes())
+    if helper_manifest.get('helper_audit_module_sha256'):
+        helper_name=helper_manifest['helper_audit_module']
+        if kernel.parent.name == 'f01-r22-dev-runtime-cost1':
+            assert helper_name == 'development-cost-audit.py'
+            helper_path=profiler.parent.parent/'f01-d7-research/round6h-20261027T211247Z'/helper_name
+        else:
+            assert helper_name == 'development-helper-audit-v8.py'
+            helper_path=profiler.parent.parent/'f01-d7-research/round9h-20261026T194639Z'/helper_name
+        assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
+        hs=importlib.util.spec_from_file_location('r22_explicit_diagnostic_audit',helper_path)
+        hm=importlib.util.module_from_spec(hs);hs.loader.exec_module(hm)
+        g.STAGES += hm.stages(g,kernel,out,helper_manifest)
+elif kernel.parent.name.startswith(('f01-r20-', 'f01-r21-')):
     manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
     helper_manifest=json.loads(manifest_path.read_bytes())
     if helper_manifest.get('helper_audit_module_sha256'):
@@ -186,7 +204,7 @@ sys.exit(0 if verdict.passed else 1)
             try:
                 profiler=Path(__file__).resolve().parent.parent/'f01-d5-costsplit/profile-native.py'
                 p=subprocess.Popen([str(a.upstream/'.venv/bin/python'),'-c',code,str(a.upstream),str(a.kernel),str(out),str(profiler)],cwd=a.upstream,env=os.environ.copy(),stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
-                replay_timeout=1800 if a.name=='f01-d13-cost-profile' else 2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 580 if a.name in ('f01-r19-dev-runtime-cost1', 'f01-r19-dev-add-cost1') else 170 if a.name=='f01-r19-dev-math-outlet-isolation1' else 120
+                replay_timeout=1800 if a.name=='f01-d13-cost-profile' else 2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 580 if a.name in ('f01-r19-dev-runtime-cost1', 'f01-r19-dev-add-cost1', 'f01-r22-dev-runtime-cost1') else 170 if a.name=='f01-r19-dev-math-outlet-isolation1' else 120
                 report['replay_exit_code']=p.wait(timeout=replay_timeout)
             except subprocess.TimeoutExpired:
                 os.killpg(p.pid,signal.SIGKILL);p.wait();report['replay']=f'diagnostic-only replay process group timed out at {replay_timeout}s'
