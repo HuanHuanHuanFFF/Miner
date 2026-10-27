@@ -1,0 +1,7 @@
+# R20 representation — ACCEPTED
+
+Actual start UTC2026-10-27 **07:55:53**, common window07:47:58–08:32:58; late joining does not extend deadline. Astra research role, parent/root coordinates and D alone owns Git/index/CI/integration. No child agents, local Lean/compiler, total-status edits or actor-file edits. Write only this representation directory (and a specifically handed-off f01-r20-r-repr-* candidate if needed). First decision near08:00; seek measurable source/key interface by08:08; after freezing one candidate continue a different direction in a separate subdirectory until08:32:58.
+
+Task: seek a genuinely different matrix representation/preparation structure removing packing, repeated conversions or output lifecycle work, including major routes outsideB2. Preserve each Float32 rounding step, allNaN/Inf/subnormal/±0 semantics and dot-product order. Historical B2-only4–6percent observations are sample-local, not global impossibility bounds.
+
+Method: huan-open-research. Read currentB2 and R19 actual cost/negative boundaries before implementation; use actual selectedC/ASM for cost claims. Restore only needed large evidence by approved restore-evidence tool; no newCI or benchmark changes. First discriminator distinguishes whole-path work removal from moved/repeated work. Tokens and cachedinputUNKNOWN; directCI0. All new code isNOT_RUN until fixedLean/standardgate evidence arrives.

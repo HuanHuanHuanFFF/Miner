@@ -13,6 +13,8 @@
 
 ## FloatLib 接续顺序
 
+当前先看[R20四十五分钟交接](competitions/floatlib/candidates/f01-d7-research/round45m-20261027T074758Z/README.md)：八列广播9根、终端写出8根通过；完整终端候选39626d已接原public入口但尚未编译，下一轮先验该精确源。保留版仍为B2。
+
 1. 读[赛道入口](competitions/floatlib/README.md)、技术规则及当前开发状态，确定保留版与验收缺项。
 2. [数学结论](competitions/floatlib/research/RESULTS.md)索引可复用证明；当前保留 B2 的三组采用证据在 [R15](competitions/floatlib/candidates/f01-d7-research/round3h-20261025T043928Z/development-final-three-group-verification.json)。
 3. [R18 结果与经验](competitions/floatlib/candidates/f01-d7-research/round11h-20261025T173831Z/README.md)：U32／U64往返接口已验；真正ADD／MUL重构完整正确但成本为负，避免仅换seed重跑。
