@@ -1,0 +1,19 @@
+--- pre-guard/Runtime.lean.inc
++++ 7737/Runtime.lean.inc
+@@ -30,11 +30,12 @@
+     let same := (u ^^^ v) &&& (0x80000000 : UInt32) == 0
+     let t := if same then a + j else a - j
+     if t == 0 then R7W02.fromRaw 0
+-    else if eh - (25 : UInt32) ≤ (228 : UInt32) then
+-      let delta := ((eh - (153 : UInt32)) <<< 23) + (hi &&& (0x80000000 : UInt32))
++    else
+       let mid := t.toFloat32.toBits
+-      R7W02.fromRaw (mid + delta)
+-    else fallback x y
++      let e := (mid >>> 23) + eh - (153 : UInt32)
++      if e - 1 ≤ (253 : UInt32) then
++        R7W02.fromRaw ((hi &&& (0x80000000 : UInt32)) ||| (e <<< 23) ||| (mid &&& 0x7fffff))
++      else fallback x y
+   else fallback x y
+ 
+ def diagnosticEntry (x y : Binary32) : Binary32 := guardedAdd Submission.add x y

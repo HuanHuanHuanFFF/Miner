@@ -132,7 +132,7 @@ elif kernel.parent.name.startswith('f01-r19-dev-'):
     helper_manifest=json.loads(manifest_path.read_bytes())
     if helper_manifest.get('helper_audit_module_sha256'):
         helper_name=helper_manifest.get('helper_audit_module','development-helper-audit.py')
-        assert helper_name in ('development-helper-audit.py', 'development-helper-audit-v4.py', 'development-helper-audit-v5.py', 'development-helper-audit-v7.py', 'development-resource-audit.py', 'development-resource-audit-v2.py', 'development-route-audit.py', 'development-route-audit-v2.py', 'development-math-outlet-audit.py', 'development-runtime-cost-audit.py')
+        assert helper_name in ('development-helper-audit.py', 'development-helper-audit-v4.py', 'development-helper-audit-v5.py', 'development-helper-audit-v7.py', 'development-helper-audit-v8.py', 'development-resource-audit.py', 'development-resource-audit-v2.py', 'development-route-audit.py', 'development-route-audit-v2.py', 'development-math-outlet-audit.py', 'development-runtime-cost-audit.py')
         helper_path=profiler.parent.parent/'f01-d7-research/round9h-20261026T194639Z'/helper_name
         assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
         hs=importlib.util.spec_from_file_location('r19_explicit_math_helper_audit',helper_path)

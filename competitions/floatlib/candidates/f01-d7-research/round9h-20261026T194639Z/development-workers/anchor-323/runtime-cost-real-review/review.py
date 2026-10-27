@@ -61,6 +61,10 @@ def main():
     save(HERE/'all-originals.json',{'run':40432634558,'head_sha':inventory['artifact']['workflow_run']['head_sha'],'archive_digest':inventory['artifact']['digest'],
         'receipt_sha256':sha(RUN/'original-artifact-hashes.json'),'count':len(binding),'files':binding})
     stored=json.loads((COST/'result.json').read_bytes());runs=stored['runs'];assert len(runs)==8
+    manifest_path=ROOT/'competitions/floatlib/candidates/f01-r19-dev-runtime-cost1/manifest.json'
+    manifest=json.loads(manifest_path.read_bytes());assert sha(manifest_path)=='0c27f9afba70575fafcb514a1e3307b889dc801cd3d96f3abfef3306f8d78757'
+    for item in manifest['components']:
+        p=ROOT/item['path'];assert sha(p)==item['sha256'] and p.stat().st_size==item['bytes']
     parsed={};samples=[];blocks=[];case_pairs=[]
     for seed in (1927003,1927005):
         plan=json.loads((COST/f'plan-{seed}.json').read_bytes());subset=[]
@@ -105,6 +109,8 @@ def main():
     input_source=next(p for p in RAW.rglob('Kernel.lean') if 'f01-r19-dev-runtime-cost1' in str(p))
     assert sha(input_source)==stored['source_sha256']=='74899988939a056a40675aefe8c63f2f9db1c7b4728f3d496bf140ede6ad85dc'
     c=(COST/'build-product-0-R19RuntimeCostMain.c').read_text();assert 'diagnosticEntry' not in c
+    selected=c[c.index('LEAN_EXPORT uint32_t lp_competition_main___lam__1(uint8_t v_'):c.index('LEAN_EXPORT lean_object* lp_competition_main___lam__1___boxed(lean_object* v_')]
+    assert not re.search(r'lp_competition_r19CostGuardedMul\s*\(',selected)
     functions=asm_functions((COST/'own-object-0-asm.txt').read_text());guard=functions['lp_competition_main___lam__1'];control=functions['lp_competition_main___lam__3']
     ranges=[(0,0x2d),(0x76,0x88),(0x122,0x12f),(0x33d,0x3a4),(0xc06,0xc12)]
     fast=[i for i in guard if any(lo<=i['address']<=hi for lo,hi in ranges)]
@@ -123,6 +129,7 @@ def main():
         'harness_versus_official_caller_difference':'Both harness MUL closures have arity3 with one fixed capturedtrue Bool produced by variant comparison; original MainFull Suite MUL is a static arity2 closure. Shared captured parameter unboxing and register allocation are not exact official caller identity.',
         'closure_allocation_boundary':'One closure allocation/variant branch before Bench.Suite.run; capturedtrue Bool is still a dynamic typed parameter each scalar call.',
         'alias_symbol_exists_but_selected_lambda_inlines_body':True,'no_diagnosticEntry_reference_in_caller_C':True,
+        'selected_lambda_no_alias_call_verified_from_C':True,
         'native_ELF_locally_retained':False,'boundary':'Disassembly of new caller object bound by remote object hash; physical final linked binary was not exported'}
     save(HERE/'callback-asm.json',asm);save(HERE/'raw-recomputed.json',{'samples':samples,'blocks':blocks,'all_four_blocks_pooled':aggregate,'case_pairs':case_pairs})
     statement_index=json.loads((COST.parent/'native-assembly-index.json').read_bytes())
@@ -132,6 +139,8 @@ def main():
     assert len(official_control)==326 and len(control)==345
     anomaly={op:sorted([x for x in case_pairs if x['seed']==1927003 and x['block']==1 and x['kernel']==op],key=lambda x:x['delta_ns'],reverse=True)[:5] for op in ('add','mul','sum')}
     review={'created_at_utc':datetime.now(timezone.utc).isoformat(),'run':40432634558,'head':'93fe24bf105ed11fd5e56f262adef82be9129b44','all121_original_hashes_verified':True,
+        'dispatch_manifest':{'path':manifest_path.relative_to(ROOT).as_posix(),'sha256':sha(manifest_path),'components_checked':len(manifest['components']),
+            'audit_sha256':manifest['helper_audit_module_sha256'],'scope':'Current byte-identical packaged manifest0c27; standalone manifest is not among CI13 archive121. Run binds source_commit, exact compiledsource, caller, captured config and C/trace/rsp independently.'},
         'source_sha256':sha(input_source),'harness_source_sha256':sha(COST/'caller.lean'),'actual_C_sha256':sha(COST/'build-product-0-R19RuntimeCostMain.c'),
         'ASM_sha256':sha(COST/'own-object-0-asm.txt'),'raw_result_sha256':sha(COST/'result.json'),'flags_link_rsp':flags,
         'measurement_and_originals_remote_assertions':{k:stored[k] for k in ('complete','measurement_complete','official_originals_unchanged','build_seconds','build_identities')},
@@ -142,6 +151,7 @@ def main():
             'extra_dynamic_captured_bool_in_both_harness_variants':True,'original_MainFull_was_timed_in_this_experiment':False,
             'original_benchFull_sha256':prepare['original_build_before'][next(n for n in prepare['original_build_before'] if n.endswith('/bin/benchFull'))]},
         'resource_metadata':{'build_memory_mb':stored['execution_config']['build_memory_mb'],'bench_memory_mb':stored['execution_config']['benchmark_memory_mb'],
+            'CPU_model':'AMD EPYC 7763 64-Core Processor','cpuinfo_sha256':sha(COST/'cpuinfo.txt'),
             'cpu':stored['execution_config']['requested_benchmark_cpu'],'recorded_entry_budget_remaining_before':stored['execution_config']['original_entry_budget_remaining_before'],
             'recorded_entry_budget_remaining_after':stored['original_entry_budget_remaining_after'],'inner_deadline_seconds':580,
             'note':'Remaining entry budget exceeds600; do not describe actual enclosing entry budget as default600. Diagnostic580s absolute deadline is separately recorded.'},

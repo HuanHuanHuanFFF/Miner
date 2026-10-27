@@ -2,7 +2,7 @@
 
 结论：**停放精确748999运行体，当前成本证据不支持继续购买昂贵public MUL证明。** 这不证明其算术机制必然慢；只说明当前实现、当前诊断形态未给出充分正收益证据。本任务未Git/CI/Lean，未改候选、Harness或范围外文件。
 
-`review.py`独立解析原log，不调用原driver/原parser；重算8次全部156唯一行、152正ns timed行及4零ns非timed行，对照派生rows、同seed四次checksum、metadata环境和四项/whole守恒均通过。CI13的121原件逐字节SHA全部核过，绑定见`all-originals.json`；head为93fe24bf105ed11fd5e56f262adef82be9129b44。
+`review.py`独立解析原log，不调用原driver/原parser；重算8次全部156唯一行、152正ns timed行及4零ns非timed行，对照派生rows、同seed四次checksum、metadata环境和四项/whole守恒均通过。CI13的121原件逐字节SHA全部核过，绑定见`all-originals.json`；head为93fe24bf105ed11fd5e56f262adef82be9129b44。当前派发manifest仍逐字节0c27f9af及16组件hash，已核；该独立manifest未包含在121归档原件内，此处明确作为现有冻结包绑定，run原件另外绑定source_commit/真实源/caller/C/config/trace/rsp。
 
 | 已见seed / block | MUL guarded/control | whole guarded/control | SUM guarded/control |
 |---|---:|---:|---:|
@@ -21,4 +21,4 @@
 
 可本地独立重核的是保留下来的source/C/trace/rsp原字节；原object/binary before-after不变为远端成功断言，ELF未导出，不能在本地再逐字节复核。测量的是新binary0be26877内两分支；单独statement的benchFull b8f8b3a6未在这8次内计时，原MainFull对象7ab23795与新对象9a8e527a分列。保持原4GiB build/512MiB bench、CPU0；实际entry remaining记录为864→834秒，不能声称实际外层entry预算等于默认600，独立580秒deadline另有记录。
 
-这是一个runner、两份已见计划的完整Suite pass ns，含原timer/pass/checksum/cleanup边界；不是原D、确认、原25轮gate或新public MUL证明。当前停放证明投入；重开需不同runtime机制、可验证热域改进，或低成本验证无共同Bool捕获的新caller条件。不得仅换已见seed、删慢样本或从指令数量推收益。
+这是一个runner、两份已见计划的完整Suite pass ns，含原timer/pass/checksum/cleanup边界；whole是152个case原best_ns的和，并非约2.4秒的进程wall time，也不是纯算术指令耗时。不是原D、确认、原25轮gate或新public MUL证明。当前停放证明投入；重开需不同runtime机制、可验证热域改进，或低成本验证无共同Bool捕获的新caller条件。不得仅换已见seed、删慢样本或从指令数量推收益。

@@ -1,0 +1,29 @@
+--- actual-ci12-b92d.lean
++++ proof5.lean
+@@ -6770,7 +6770,7 @@
+           conv_rhs => unfold R19Temporal.loop
+           simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true]
+           simp only [hread ⟨t,ht⟩]
+-          simp only [packetA, h0, h1, h2, ite_true]
++          simp only [packetA, h0, h1, h2, ite_true] <;> rfl
+         · have dual_p3_new_eq :=
+             @Submission.R19DualTemporal.loop.eq_def n basePacket A B hA t s0 s1
+           have dual_p3_old_eq :=
+@@ -6779,7 +6779,7 @@
+           conv_rhs => unfold R19Temporal.loop
+           simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true, ite_false]
+           simp only [hread ⟨t,ht⟩]
+-          simp only [packetA, h0, h1, ite_true]
++          simp only [packetA, h0, h1, ite_true] <;> rfl
+       · have dual_p3_new_eq :=
+           @Submission.R19DualTemporal.loop.eq_def n basePacket A B hA t s0 s1
+         have dual_p3_old_eq :=
+@@ -6788,7 +6788,7 @@
+         conv_rhs => unfold R19Temporal.loop
+         simp only [h3, h0, h1, dite_false, dite_true, ite_false]
+         simp only [hread ⟨t,ht⟩]
+-        simp only [packetA, h0, ite_true]
++        simp only [packetA, h0, ite_true] <;> rfl
+     · have dual_p3_new_eq :=
+         @Submission.R19DualTemporal.loop.eq_def n basePacket A B hA t s0 s1
+       have dual_p3_old_eq :=
