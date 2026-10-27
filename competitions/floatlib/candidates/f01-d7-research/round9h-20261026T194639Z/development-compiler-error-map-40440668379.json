@@ -1,0 +1,78 @@
+{
+  "at_utc": "2026-10-27T02:59:12.046398+00:00",
+  "run": 40440668379,
+  "candidates": [
+    {
+      "candidate": "f01-r19-dev-column4-core1",
+      "kernel_sha256": "8adff3a04e9f30b6416b4c192276d704b88ea20b34d2bbafcbaa6987d20df9ef",
+      "source_commit": "932a1ab5718791cb1812c9d080b116325c6f95d7",
+      "source_path": "competitions/floatlib/candidates/f01-r19-dev-column4-core1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40440668379/download-63278b5c14e6432fb4b0ae072cc3a18e/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-column4-core1/full-build-output.txt",
+      "original_output_sha256": "ffffa14c0da7dad1e2383633f9f2db595038b4827f0651915d84e5b64908dbf0",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 7000,
+          "column": 75,
+          "declaration": "Submission.R19Column4Temporal.pack_low",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6998,
+              "text": ""
+            },
+            {
+              "line": 6999,
+              "text": "theorem pack_low (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :"
+            },
+            {
+              "line": 7000,
+              "text": "    low ((pack n base p B).get t) = (R19Temporal.pack n base p B).get t := by"
+            },
+            {
+              "line": 7001,
+              "text": "  simp only [pack, R19Temporal.pack, Packed10.vector_get_ofFn, low_packet]"
+            },
+            {
+              "line": 7002,
+              "text": ""
+            }
+          ],
+          "message": "unsolved goals\nn base p : ℕ\nB : Array Binary32\nt : Fin (blocks n)\n⊢ R19Temporal.packet n base p (4 * ↑t) B = (Vector.ofFn fun t => R19Temporal.packet n base p (4 * ↑t) B).get t"
+        },
+        {
+          "line": 7004,
+          "column": 80,
+          "declaration": "Submission.R19Column4Temporal.pack_high",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7002,
+              "text": ""
+            },
+            {
+              "line": 7003,
+              "text": "theorem pack_high (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :"
+            },
+            {
+              "line": 7004,
+              "text": "    high ((pack n base p B).get t) = (R19Temporal.pack n (base+2) p B).get t := by"
+            },
+            {
+              "line": 7005,
+              "text": "  simp only [pack, R19Temporal.pack, Packed10.vector_get_ofFn, high_packet]"
+            },
+            {
+              "line": 7006,
+              "text": ""
+            }
+          ],
+          "message": "unsolved goals\nn base p : ℕ\nB : Array Binary32\nt : Fin (blocks n)\n⊢ R19Temporal.packet n (base + 2) p (4 * ↑t) B =\n    (Vector.ofFn fun t => R19Temporal.packet n (base + 2) p (4 * ↑t) B).get t"
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}

@@ -1,0 +1,18 @@
+--- Kernel-core-probe.lean
++++ Kernel-core-repair1.lean
+@@ -6998,11 +6998,13 @@
+ 
+ theorem pack_low (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :
+     low ((pack n base p B).get t) = (R19Temporal.pack n base p B).get t := by
+-  simp only [pack, R19Temporal.pack, Packed10.vector_get_ofFn, low_packet]
++  rw [R19Temporal.pack_get]
++  simp only [pack, Packed10.vector_get_ofFn, low_packet]
+ 
+ theorem pack_high (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :
+     high ((pack n base p B).get t) = (R19Temporal.pack n (base+2) p B).get t := by
+-  simp only [pack, R19Temporal.pack, Packed10.vector_get_ofFn, high_packet]
++  rw [R19Temporal.pack_get]
++  simp only [pack, Packed10.vector_get_ofFn, high_packet]
+ 
+ def loop (n basePacket : Nat) (A : Array A4) (B : Vector B16 (blocks n))
+     (hA : basePacket+blocks n ≤ A.size)

@@ -1,0 +1,187 @@
+/- R19 single-row four-column temporal core. NOT_RUN / NOT_COMPILED.
+   Append to exact c36bc250 parent only. Public bmm remains byte-identical.
+   This is a core/packing equivalence probe, not a complete routed candidate.
+   No result cache, new A packing, FloatArray, USize, or padded k MAC. -/
+namespace Submission.R19Column4Temporal
+open FloatLib.Floats Competition
+open R19DualTemporal (A4 blocks)
+
+structure F4 where
+  s0 : Float32
+  s1 : Float32
+  s2 : Float32
+  s3 : Float32
+
+structure B16 where
+  k0c0 : Float32
+  k0c1 : Float32
+  k0c2 : Float32
+  k0c3 : Float32
+  k1c0 : Float32
+  k1c1 : Float32
+  k1c2 : Float32
+  k1c3 : Float32
+  k2c0 : Float32
+  k2c1 : Float32
+  k2c2 : Float32
+  k2c3 : Float32
+  k3c0 : Float32
+  k3c1 : Float32
+  k3c2 : Float32
+  k3c3 : Float32
+
+@[inline] def low (b : B16) : R19Temporal.B8 :=
+  ⟨b.k0c0, b.k0c1, b.k1c0, b.k1c1, b.k2c0, b.k2c1, b.k3c0, b.k3c1⟩
+
+@[inline] def high (b : B16) : R19Temporal.B8 :=
+  ⟨b.k0c2, b.k0c3, b.k1c2, b.k1c3, b.k2c2, b.k2c3, b.k3c2, b.k3c3⟩
+
+@[inline] def join (lo hi : R15ThinPairs.F2) : F4 :=
+  ⟨lo.s0, lo.s1, hi.s0, hi.s1⟩
+
+@[inline] def packet (n base p k : Nat) (B : Array Binary32) : B16 :=
+  ⟨if k<n then R19Temporal.read B (base+k*p) else Packed10.zero32,
+   if k<n then R19Temporal.read B (base+1+k*p) else Packed10.zero32,
+   if k<n then R19Temporal.read B ((base+2)+k*p) else Packed10.zero32,
+   if k<n then R19Temporal.read B ((base+2)+1+k*p) else Packed10.zero32,
+   if (k+1)<n then R19Temporal.read B (base+(k+1)*p) else Packed10.zero32,
+   if (k+1)<n then R19Temporal.read B (base+1+(k+1)*p) else Packed10.zero32,
+   if (k+1)<n then R19Temporal.read B ((base+2)+(k+1)*p) else Packed10.zero32,
+   if (k+1)<n then R19Temporal.read B ((base+2)+1+(k+1)*p) else Packed10.zero32,
+   if (k+2)<n then R19Temporal.read B (base+(k+2)*p) else Packed10.zero32,
+   if (k+2)<n then R19Temporal.read B (base+1+(k+2)*p) else Packed10.zero32,
+   if (k+2)<n then R19Temporal.read B ((base+2)+(k+2)*p) else Packed10.zero32,
+   if (k+2)<n then R19Temporal.read B ((base+2)+1+(k+2)*p) else Packed10.zero32,
+   if (k+3)<n then R19Temporal.read B (base+(k+3)*p) else Packed10.zero32,
+   if (k+3)<n then R19Temporal.read B (base+1+(k+3)*p) else Packed10.zero32,
+   if (k+3)<n then R19Temporal.read B ((base+2)+(k+3)*p) else Packed10.zero32,
+   if (k+3)<n then R19Temporal.read B ((base+2)+1+(k+3)*p) else Packed10.zero32⟩
+
+theorem low_packet (n base p k : Nat) (B : Array Binary32) :
+    low (packet n base p k B) = R19Temporal.packet n base p k B := by rfl
+
+theorem high_packet (n base p k : Nat) (B : Array Binary32) :
+    high (packet n base p k B) = R19Temporal.packet n (base+2) p k B := by rfl
+
+def pack (n base p : Nat) (B : Array Binary32) : Vector B16 (blocks n) :=
+  Vector.ofFn fun t => packet n base p (4*t.val) B
+
+theorem pack_low (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :
+    low ((pack n base p B).get t) = (R19Temporal.pack n base p B).get t := by
+  rw [R19Temporal.pack_get]
+  simp only [pack, Packed10.vector_get_ofFn, low_packet]
+
+theorem pack_high (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :
+    high ((pack n base p B).get t) = (R19Temporal.pack n (base+2) p B).get t := by
+  rw [R19Temporal.pack_get]
+  simp only [pack, Packed10.vector_get_ofFn, high_packet]
+
+def loop (n basePacket : Nat) (A : Array A4) (B : Vector B16 (blocks n))
+    (hA : basePacket+blocks n ≤ A.size)
+    (t : Nat) (s0 s1 s2 s3 : Float32) : F4 :=
+  let k := 4*t
+  if h3 : k+3<n then
+    have ht : t<blocks n := by dsimp [k] at h3; unfold blocks; omega
+    let a := A[basePacket+t]'(by omega)
+    let b := B.get ⟨t,ht⟩
+    let s0 := s0+a.a0*b.k0c0
+    let s1 := s1+a.a0*b.k0c1
+    let s2 := s2+a.a0*b.k0c2
+    let s3 := s3+a.a0*b.k0c3
+    let s0 := s0+a.a1*b.k1c0
+    let s1 := s1+a.a1*b.k1c1
+    let s2 := s2+a.a1*b.k1c2
+    let s3 := s3+a.a1*b.k1c3
+    let s0 := s0+a.a2*b.k2c0
+    let s1 := s1+a.a2*b.k2c1
+    let s2 := s2+a.a2*b.k2c2
+    let s3 := s3+a.a2*b.k2c3
+    loop n basePacket A B hA (t+1) (s0+a.a3*b.k3c0) (s1+a.a3*b.k3c1) (s2+a.a3*b.k3c2) (s3+a.a3*b.k3c3)
+  else if h0 : k<n then
+    have ht : t<blocks n := by dsimp [k] at h0; unfold blocks; omega
+    let a := A[basePacket+t]'(by omega)
+    let b := B.get ⟨t,ht⟩
+    let s0 := s0+a.a0*b.k0c0
+    let s1 := s1+a.a0*b.k0c1
+    let s2 := s2+a.a0*b.k0c2
+    let s3 := s3+a.a0*b.k0c3
+    if k+1<n then
+      let s0 := s0+a.a1*b.k1c0
+      let s1 := s1+a.a1*b.k1c1
+      let s2 := s2+a.a1*b.k1c2
+      let s3 := s3+a.a1*b.k1c3
+      if k+2<n then ⟨s0+a.a2*b.k2c0, s1+a.a2*b.k2c1, s2+a.a2*b.k2c2, s3+a.a2*b.k2c3⟩ else ⟨s0,s1,s2,s3⟩
+    else ⟨s0,s1,s2,s3⟩
+  else ⟨s0,s1,s2,s3⟩
+termination_by n-4*t
+decreasing_by all_goals omega
+
+theorem loop_eq (n basePacket : Nat) (A : Array A4) (B : Vector B16 (blocks n))
+    (L H : Vector R19Temporal.B8 (blocks n))
+    (hA : basePacket+blocks n ≤ A.size)
+    (hL : ∀ i : Fin (blocks n), low (B.get i) = L.get i)
+    (hH : ∀ i : Fin (blocks n), high (B.get i) = H.get i)
+    (t : Nat) (s0 s1 s2 s3 : Float32) :
+    loop n basePacket A B hA t s0 s1 s2 s3 =
+      join (R19DualTemporal.loop n basePacket A L hA t s0 s1)
+        (R19DualTemporal.loop n basePacket A H hA t s2 s3) := by
+  have eL := @R19DualTemporal.loop.eq_def n basePacket A L hA t s0 s1
+  have eH := @R19DualTemporal.loop.eq_def n basePacket A H hA t s2 s3
+  have eN := @loop.eq_def n basePacket A B hA t s0 s1 s2 s3
+  by_cases h3 : 4*t+3<n
+  · have ht : t<blocks n := by unfold blocks; omega
+    rw [eN, eL, eH]
+    simp only [h3, dite_true]
+    simp only [← hL ⟨t,ht⟩, ← hH ⟨t,ht⟩, low, high]
+    exact loop_eq n basePacket A B L H hA hL hH (t+1) _ _ _ _
+  · by_cases h0 : 4*t<n
+    · have ht : t<blocks n := by unfold blocks; omega
+      by_cases h1 : 4*t+1<n
+      · by_cases h2 : 4*t+2<n
+        · rw [eN, eL, eH]
+          simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true]
+          simp only [← hL ⟨t,ht⟩, ← hH ⟨t,ht⟩, low, high, join]
+        · rw [eN, eL, eH]
+          simp only [h3, h0, h1, h2, dite_false, dite_true, ite_true, ite_false]
+          simp only [← hL ⟨t,ht⟩, ← hH ⟨t,ht⟩, low, high, join]
+      · rw [eN, eL, eH]
+        simp only [h3, h0, h1, dite_false, dite_true, ite_true, ite_false]
+        simp only [← hL ⟨t,ht⟩, ← hH ⟨t,ht⟩, low, high, join]
+    · rw [eN, eL, eH]
+      simp only [h3, h0, dite_false, join]
+termination_by n-4*t
+decreasing_by all_goals omega
+
+theorem loop_pack_eq (n basePacket baseB p : Nat) (A : Array A4) (B : Array Binary32)
+    (hA : basePacket+blocks n ≤ A.size) (t : Nat) (s0 s1 s2 s3 : Float32) :
+    loop n basePacket A (pack n baseB p B) hA t s0 s1 s2 s3 =
+      join (R19DualTemporal.loop n basePacket A (R19Temporal.pack n baseB p B) hA t s0 s1)
+        (R19DualTemporal.loop n basePacket A (R19Temporal.pack n (baseB+2) p B) hA t s2 s3) := by
+  apply loop_eq
+  · exact pack_low n baseB p B
+  · exact pack_high n baseB p B
+
+@[inline] def runDot (rows n : Nat) (r : Fin rows)
+    (A : Vector A4 (rows*blocks n)) (B : Vector B16 (blocks n)) : F4 :=
+  loop n (r.val*blocks n) A.toArray B (R19DualTemporal.row_bound rows n A r)
+    0 Packed10.zero32 Packed10.zero32 Packed10.zero32 Packed10.zero32
+
+theorem runDot_pack_eq (rows n : Nat) (r : Fin rows)
+    (A : Vector A4 (rows*blocks n)) (baseB p : Nat) (B : Array Binary32) :
+    runDot rows n r A (pack n baseB p B) =
+      join (R19DualTemporal.runDot rows n r A (R19Temporal.pack n baseB p B))
+        (R19DualTemporal.runDot rows n r A (R19Temporal.pack n (baseB+2) p B)) := by
+  unfold runDot R19DualTemporal.runDot
+  exact loop_pack_eq n (r.val*blocks n) baseB p A.toArray B
+    (R19DualTemporal.row_bound rows n A r) 0 _ _ _ _
+
+/- Structural coverage only: no new phantom column MACs relative to B8 pairs.
+   This guard is NOT wired into public dispatch in this probe. -/
+def samePaddedWidth (p : Nat) : Prop := 4*((p+3)/4) = 2*((p+1)/2)
+
+theorem samePaddedWidth_small (p : Nat) (hp : 3≤p ∧ p≤8) :
+    samePaddedWidth p ↔ p=3 ∨ p=4 ∨ p=7 ∨ p=8 := by
+  unfold samePaddedWidth
+  omega
+
+end Submission.R19Column4Temporal
