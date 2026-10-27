@@ -80,3 +80,12 @@
 
 - B2 `622d8394`（226829 B，三组采用证据）不变。
 - 本轮所有候选源码保留在分支，作负结果/机制证据，不进入采用。
+
+## 七、额外独立验证：peer jam 数学探针（编译失败）
+
+- 复制 `astra-grs-jam-proof-probe.lean`（`5d0f2e8b…`，230284 B）到
+  `candidates/f01-deepseek-peercheck-jam-probe/`，statement-only。
+- run **40429425157** 失败：`Submission.lean:6618` whnf 心跳超时（200000）；
+  随后 `R19JamVariableProbe.low_states` unknown constant。
+- 结论：该探针原样在官方 statement 预算下不可编译；`low_states` 需拆分或减少展开。
+  未改动探针字节、未放宽 gate 参数。已回执 R。

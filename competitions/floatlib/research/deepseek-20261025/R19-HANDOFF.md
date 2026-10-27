@@ -1,4 +1,4 @@
-# R19 → 下一轮交接（DeepSeek，2026-10-27T00:18Z）
+﻿# R19 → 下一轮交接（DeepSeek，2026-10-27T00:18Z）
 
 ## 本轮已排除（不要重复）
 
@@ -33,3 +33,8 @@
 - 总结：`R19-SUMMARY.md`；逐题记录：`R19-*.md`；脚本：`norm-metrics.py`、`compute-p05.py`、
   `show-public-classes.py`、`build-*.py`、`make-*.py`。
 - 原始 CI：`ci-runs/`；保留候选 B2 `622d8394` 未动。
+
+## peer 待办
+
+- jam 探针 `5d0f2e8b…` 在官方 statement 预算下编译失败（run 40429425157，`low_states` whnf 超时）。
+  修好新 SHA 后可 4—6 分钟复跑编译；不要原样当已验数学。
