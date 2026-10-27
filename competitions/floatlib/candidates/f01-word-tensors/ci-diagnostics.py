@@ -121,7 +121,18 @@ def statement(src,verdict):
             pm.run(g,kernel,out)
     return reason
 g.STAGES=[('intake',g.intake),('policy',g.policy),('statement',statement)]
-if kernel.parent.name == 'f01-r16-dev-u32-roundtrip-probe1':
+if kernel.parent.name.startswith('f01-r20-'):
+    manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
+    helper_manifest=json.loads(manifest_path.read_bytes())
+    if helper_manifest.get('helper_audit_module_sha256'):
+        helper_name='development-helper-audit-v8.py'
+        assert helper_manifest['helper_audit_module']==helper_name
+        helper_path=profiler.parent.parent/'f01-d7-research/round9h-20261026T194639Z'/helper_name
+        assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
+        hs=importlib.util.spec_from_file_location('r20_explicit_math_helper_audit',helper_path)
+        hm=importlib.util.module_from_spec(hs);hs.loader.exec_module(hm)
+        g.STAGES += hm.stages(g,kernel,out,helper_manifest)
+elif kernel.parent.name == 'f01-r16-dev-u32-roundtrip-probe1':
     manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
     helper_manifest=json.loads(manifest_path.read_bytes())
     helper_path=profiler.parent.parent/'f01-d7-research/round3h-20261025T091810Z/development-helper-audit.py'
