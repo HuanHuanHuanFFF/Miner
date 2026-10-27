@@ -1,0 +1,16 @@
+--- before
++++ after
+@@ -5990,12 +5990,7 @@
+       (r.val * p + min (2 * g) p) acc)
+     (fun g acc hacc => group_prefix batch m n p A B r g acc hacc) out
+     (by simpa only [Nat.mul_zero, Nat.zero_min, Nat.add_zero] using hout)
+-  have hgroup : group batch m n p A B r =
+-      groupFrom n (r.val * n) (r.val / m * n * p) p A.toArray B.toArray := by
+-    funext acc g
+-    rfl
+-  rw [hgroup] at h
+-  simpa only [row, hlast, Nat.add_mul, Nat.one_mul] using h
++  simpa only [row, group, hlast, Nat.add_mul, Nat.one_mul] using h
+ 
+ def output (batch m n p : Nat)
+     (A : Vector Binary32 (batch * m * n))

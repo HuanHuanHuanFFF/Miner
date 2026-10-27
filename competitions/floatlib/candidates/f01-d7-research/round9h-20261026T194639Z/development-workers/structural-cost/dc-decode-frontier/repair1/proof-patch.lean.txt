@@ -1,0 +1,6 @@
+  have hgroup : group batch m n p A B r =
+      groupFrom n (r.val * n) (r.val / m * n * p) p A.toArray B.toArray := by
+    funext acc g
+    rfl
+  rw [hgroup] at h
+  simpa only [row, hlast, Nat.add_mul, Nat.one_mul] using h

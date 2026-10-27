@@ -1,0 +1,48 @@
+{
+  "at_utc": "2026-10-27T01:36:52.693514+00:00",
+  "run": 40432634558,
+  "candidates": [
+    {
+      "candidate": "f01-r19-dev-dc-rawpair1",
+      "kernel_sha256": "8134696db068ceb0c969c7c896199e9c019a7cd375bfe34ab2712eb8d2464365",
+      "source_commit": "93fe24bf105ed11fd5e56f262adef82be9129b44",
+      "source_path": "competitions/floatlib/candidates/f01-r19-dev-dc-rawpair1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40432634558/download-884dd1b31e484d1cb852942081f1d275/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-dc-rawpair1/full-build-output.txt",
+      "original_output_sha256": "1044bcd6d9e12d5108e5d466833c09eabd80047091f42aa8b5e37213053b6fb0",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 5993,
+          "column": 2,
+          "declaration": "Submission.R19DCRawPair.row_prefix",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 5991,
+              "text": "    (fun g acc hacc => group_prefix batch m n p A B r g acc hacc) out"
+            },
+            {
+              "line": 5992,
+              "text": "    (by simpa only [Nat.mul_zero, Nat.zero_min, Nat.add_zero] using hout)"
+            },
+            {
+              "line": 5993,
+              "text": "  simpa only [row, group, hlast, Nat.add_mul, Nat.one_mul] using h"
+            },
+            {
+              "line": 5994,
+              "text": ""
+            },
+            {
+              "line": 5995,
+              "text": "def output (batch m n p : Nat)"
+            }
+          ],
+          "message": "Type mismatch: After simplification, term\n  h\n has type\n  RowStream.Prefix (RowStream.point batch m n p A B) (↑r * p + p) (Fin.foldl (groups p) (group batch m n p A B r) out)\nbut is expected to have type\n  RowStream.Prefix (RowStream.point batch m n p A B) (↑r * p + p)\n    (Fin.foldl (groups p) (groupFrom n (↑r * n) (↑r / m * n * p) p A.toArray B.toArray) out)"
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}
