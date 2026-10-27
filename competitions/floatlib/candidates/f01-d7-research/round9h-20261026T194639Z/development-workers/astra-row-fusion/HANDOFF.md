@@ -1,5 +1,7 @@
 # 单行四列 B16：窄域停；广域草稿交D作typed判别
 
+**03:36最新接口修复：** `repair3/HANDOFF.md`。CI20 pack_low/high及广域finish_select都报implicit透明度长度别名不匹配；仅将唯一 `R19DualTemporal.blocks` 的inline def改为inline abbrev。core4=`c7e7ad38…` /249694B；retained broad2=`bb058c75…` /255724B，余276B。RHS、inline属性、全部proof2脚本及其它字节相同，正逆patch已核；新typed/C均NOT_RUN。追加截止03:44:35。
+
 **03:19追加修复窗当前入口：** `repair2/HANDOFF.md`。CI19实际类型错误已定位；两proof显式规范化blocks及两pack producer。core3=`036372fd…` /249691B；保留D的B2回退广域副本=`386b5fec…` /255721B，余279B。二者NOT_RUN，D母本7f1d4ec3原件未动，运行体及其余证明全字节相同。03:31追加截止；新DC奇列phantom MAC不是免费工作。
 
 **03:05最新交付：** 根据父方新增广域范围证据与授权，组装 `broad-draft/Kernel-column4-broad.draft.lean`，255600B，SHA `a87f560a5944a778ca93dfb9a9d2dcd59895edc56b0ae7e498dbcf873fce8f19`，余400B；NOT_RUN。guard为m>0,n>1,p≥3及同ceil MAC等式，fallback c36；UnderflowZero外层逐字保留。一次A4+B16准备/连续writer/19根/正逆patch已具备，但新增DC域的A4/B16成本不能当作父本已有工作。当前决定与接手入口见 `broad-draft/HANDOFF.md`。
