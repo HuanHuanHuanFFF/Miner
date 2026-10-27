@@ -7,7 +7,7 @@
 | 加法 add | #323 | [原生加法＋特殊值选择](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **1.35–1.53×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336) |
 | 乘法 mul | #323 | [数值转换＋特殊值选择](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **1.52–1.65×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336) |
 | 求和 sum | #323 | [单遍求和＋快速修复](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **1.03–1.61×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336) |
-| 矩阵乘法 bmm | #323 | [双列复用＋B2成对存储](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **2.23–4.73×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336) |
+| 矩阵乘法 bmm | #323 | [双列复用＋B2成对存储](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **2.23–4.73×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336)；[新终端公开耗时−5.7%，未采用](competitions/floatlib/candidates/f01-d7-research/round1h-20261027T103538Z/development-result-40493865047-f01-r21-dev-terminal-dc4.json) |
 
 整包官方耗时：冠军的 **1.63×**；原预估1.25×，实际比预估慢 **30.4%**。
 

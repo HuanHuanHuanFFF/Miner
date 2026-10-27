@@ -1,0 +1,20 @@
+import Submission
+#print axioms Submission.add_spec
+#print axioms Submission.mul_spec
+#print axioms Submission.sum_spec
+#print axioms Submission.bmm_spec
+#print axioms Submission.R20WideRowRefinement.storageLoop_lane
+#print axioms Submission.R20WideRowRefinement.finish_lane
+#print axioms Submission.R21StreamingPair.advance_get
+#print axioms Submission.R21StreamingPair.advance_view0
+#print axioms Submission.R21StreamingPair.advance_view1
+#print axioms Submission.R21StreamingPair.initial_view0
+#print axioms Submission.R21StreamingPair.initial_view1
+#print axioms Submission.R21StreamingPair.loop_eq_storage
+#print axioms Submission.R21StreamingPair.finish0
+#print axioms Submission.R21StreamingPair.finish1
+#print axioms Submission.R21StreamingPair.streamedRows_eq_control
+#print axioms Submission.R21StreamingPair.emit_size
+#print axioms Submission.R21StreamingPair.controlRows_size
+#print axioms Submission.R21StreamingPair.streamedRows_size
+#print axioms Submission.R21StreamingPair.streamedPair_eq_control

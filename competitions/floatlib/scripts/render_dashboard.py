@@ -41,7 +41,13 @@ def render_official(view, state):
         assert ratios and all(math.isfinite(value) and value > 0 for value in ratios)
         official = result["operations"][op]
         assert min(ratios) == official["official_group_ratio_min"] and max(ratios) == official["official_group_ratio_max"]
-        lines.append(f"| {name} | #{champion} | [{labels[op]}]({state['kernel']}) | **{min(ratios):.2f}–{max(ratios):.2f}×** | [#{submission} 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/{submission}) |")
+        validation = f"[#{submission} 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/{submission})"
+        progress = view["dashboard_policy"].get("research_progress_by_operation", {}).get(op)
+        if progress:
+            progress_path = ROOT / progress["evidence"]
+            assert hashlib.sha256(progress_path.read_bytes()).hexdigest() == progress["evidence_sha256"]
+            validation += f"；[{progress['text']}]({progress['evidence']})"
+        lines.append(f"| {name} | #{champion} | [{labels[op]}]({state['kernel']}) | **{min(ratios):.2f}–{max(ratios):.2f}×** | {validation} |")
     ratio = result["official_whole_ratio"]
     lines += ["", f"整包官方耗时：冠军的 **{ratio:.2f}×**；原预估{result['previous_estimated_whole_ratio']:.2f}×，实际比预估慢 **{result['additional_time_vs_estimate_pct']:.1f}%**。", "",
               f"**结论：官方验证通过，当前第{result['rank']}；尚不能取代#{champion}，主要差距仍在矩阵乘法。**", ""]

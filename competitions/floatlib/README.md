@@ -11,7 +11,7 @@
 - [继续开发与双 worktree](../../DEVELOPMENT.md)：双方最新提交已合入main；开发分支重建、研究资产和新一轮冻结入口。
 - [数学结论与可复用证明](research/RESULTS.md)：按四项运算整理已验结论、数学储备、反例，索引R1–R6十二包、R11三份网页交付及全部候选证据。
 - [R11资料与开发承接](research/materials/20261024-r11/README.md)：97份原件、数学与性能提炼、来源哈希和许可证；保留原始未验证状态及后续负结果。
-- [当前研究记录](candidates/f01-d7-research/round45m-20261027T074758Z/README.md)：R20四十五分钟协作，两条矩阵机制完成证明探针，完整终端写出候选待验。[R19](candidates/f01-d7-research/round9h-20261026T194639Z/README.md)及[历史轮次](candidates/f01-d7-research/README.md)保留原验收。
+- [当前研究记录](candidates/f01-d7-research/round1h-20261027T103538Z/README.md)：R21一小时，完整终端BMM已过全gate并取得首D矩阵耗时−5.68%、整包未达门槛；新流式19根及同宽缩放桥15根通过，6批CI全收齐。[R20](candidates/f01-d7-research/round45m-20261027T074758Z/README.md)、[R19](candidates/f01-d7-research/round9h-20261026T194639Z/README.md)及[历史轮次](candidates/f01-d7-research/README.md)保留原验收。
 - [DeepSeek已合并研究](research/deepseek-20261025/SUMMARY.md)：p≤8路由、输入异质性、word-add边界检查及完整原件；首D未达标，作为研究储备，不替换当前B2。
 - [前轮Astra／开发一小时协作](candidates/f01-d1-inline-all/window1h/README.md)：原生算术证明起点、逐项验收与原始回执。
 

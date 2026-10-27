@@ -1,0 +1,96 @@
+{
+  "at_utc": "2026-10-27T11:18:34.406824+00:00",
+  "scope": "Finite exact counterexample to a proposed global-row pairing transport, not to frozenstreamingPair/controlPair or existingB2. All products, partials and outputs <=66 and integral, so Float32 rounding cannot explain the mismatch.",
+  "shape": {
+    "batch": 2,
+    "m": 3,
+    "n": 2,
+    "p": 3
+  },
+  "A": [
+    1,
+    1,
+    2,
+    2,
+    3,
+    3,
+    4,
+    4,
+    5,
+    5,
+    6,
+    6
+  ],
+  "B": [
+    7,
+    7,
+    7,
+    0,
+    0,
+    0,
+    11,
+    11,
+    11,
+    0,
+    0,
+    0
+  ],
+  "reference": [
+    7,
+    7,
+    7,
+    14,
+    14,
+    14,
+    21,
+    21,
+    21,
+    44,
+    44,
+    44,
+    55,
+    55,
+    55,
+    66,
+    66,
+    66
+  ],
+  "globally_paired": [
+    7,
+    7,
+    7,
+    14,
+    14,
+    14,
+    21,
+    21,
+    21,
+    28,
+    28,
+    28,
+    55,
+    55,
+    55,
+    66,
+    66,
+    66
+  ],
+  "differences": [
+    {
+      "output_index": 9,
+      "reference": 44,
+      "naive": 28
+    },
+    {
+      "output_index": 10,
+      "reference": 44,
+      "naive": 28
+    },
+    {
+      "output_index": 11,
+      "reference": 44,
+      "naive": 28
+    }
+  ],
+  "decision": "A two-row publicBMM dispatcher must form pairs inside eachbatch, with an odd localrow fallback. It must not use total row parity across batch boundaries; sharingB requires floor(r/m)=floor((r+1)/m). No threshold/value grid or newCI."
+}
