@@ -1,0 +1,179 @@
+{
+  "at_utc": "2026-10-27T03:31:34.301610+00:00",
+  "run": 40443955689,
+  "candidates": [
+    {
+      "candidate": "f01-r19-dev-column4-broad1",
+      "kernel_sha256": "386b5fec7a2595b1fa7e47b283abb3bdbd75066a4591ab3a5740e1cf0106741d",
+      "source_commit": "3400d81e4bec45345f022655d68e5d839f98b2ad",
+      "source_path": "competitions/floatlib/candidates/f01-r19-dev-column4-broad1/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40443955689/download-499e562a2b2a403e95869602f2cfd5c4/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-column4-broad1/full-build-output.txt",
+      "original_output_sha256": "56a5a577e130880a15b64ebaf171f22af2edae4505fc08f516686b39dfe7e3d4",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 6997,
+          "column": 2,
+          "declaration": "Submission.R19Column4Temporal.pack_low",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 6995,
+              "text": "    low ((pack n base p B).get t) = (R19Temporal.pack n base p B).get t := by"
+            },
+            {
+              "line": 6996,
+              "text": "  dsimp only [R19DualTemporal.blocks, pack, R19Temporal.pack] at *"
+            },
+            {
+              "line": 6997,
+              "text": "  simp only [Packed10.vector_get_ofFn, low_packet]"
+            },
+            {
+              "line": 6998,
+              "text": ""
+            },
+            {
+              "line": 6999,
+              "text": "theorem pack_high (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :"
+            }
+          ],
+          "message": "`simp` made no progress\n\nNote: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    t\n  has type\n    Fin (blocks n)\n  but is expected to have type\n    Fin ((n + 3) / 4)\n  in the application\n    (Vector.ofFn fun t => packet n base p (4 * ↑t) B).get t"
+        },
+        {
+          "line": 7002,
+          "column": 2,
+          "declaration": "Submission.R19Column4Temporal.pack_high",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7000,
+              "text": "    high ((pack n base p B).get t) = (R19Temporal.pack n (base+2) p B).get t := by"
+            },
+            {
+              "line": 7001,
+              "text": "  dsimp only [R19DualTemporal.blocks, pack, R19Temporal.pack] at *"
+            },
+            {
+              "line": 7002,
+              "text": "  simp only [Packed10.vector_get_ofFn, high_packet]"
+            },
+            {
+              "line": 7003,
+              "text": ""
+            },
+            {
+              "line": 7004,
+              "text": "def loop (n basePacket : Nat) (A : Array A4) (B : Vector B16 (blocks n))"
+            }
+          ],
+          "message": "`simp` made no progress\n\nNote: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    t\n  has type\n    Fin (blocks n)\n  but is expected to have type\n    Fin ((n + 3) / 4)\n  in the application\n    (Vector.ofFn fun t => packet n base p (4 * ↑t) B).get t"
+        },
+        {
+          "line": 7144,
+          "column": 2,
+          "declaration": "Submission.R19Column4Temporal.finish_select",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7142,
+              "text": "    NativeFinal.dot n (r.val*n) (base+j) p A B := by"
+            },
+            {
+              "line": 7143,
+              "text": "  rw [runDot_pack_eq]"
+            },
+            {
+              "line": 7144,
+              "text": "  simp only [R19DualTemporal.runDot_eq, R19Temporal.loop_eq, Nat.mul_zero]"
+            },
+            {
+              "line": 7145,
+              "text": "  have h : j=0 ∨ j=1 ∨ j=2 ∨ j=3 := by omega"
+            },
+            {
+              "line": 7146,
+              "text": "  rcases h with h|h|h|h <;> subst j"
+            }
+          ],
+          "message": "`simp` made no progress\n\nNote: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    R19Temporal.pack n base p B\n  has type\n    Vector R19Temporal.B8 ((n + 3) / 4)\n  but is expected to have type\n    Vector R19Temporal.B8 (blocks n)\n  in the application\n    R19DualTemporal.runDot rows n r (R19DualTemporal.packA rows n A) (R19Temporal.pack n base p B)"
+        }
+      ]
+    },
+    {
+      "candidate": "f01-r19-dev-column4-core3",
+      "kernel_sha256": "036372fd3fdca079ef36e6ee2773c9ce27d8aeddc3f29d01257772f29c931e20",
+      "source_commit": "3400d81e4bec45345f022655d68e5d839f98b2ad",
+      "source_path": "competitions/floatlib/candidates/f01-r19-dev-column4-core3/Kernel.lean",
+      "original_output": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40443955689/download-499e562a2b2a403e95869602f2cfd5c4/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-column4-core3/full-build-output.txt",
+      "original_output_sha256": "025cc7fa89f33d3271090ccb6758010394f2d1736d7f537fd701336af9d4a2ad",
+      "statement_pass": false,
+      "errors": [
+        {
+          "line": 7002,
+          "column": 2,
+          "declaration": "Submission.R19Column4Temporal.pack_low",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7000,
+              "text": "    low ((pack n base p B).get t) = (R19Temporal.pack n base p B).get t := by"
+            },
+            {
+              "line": 7001,
+              "text": "  dsimp only [R19DualTemporal.blocks, pack, R19Temporal.pack] at *"
+            },
+            {
+              "line": 7002,
+              "text": "  simp only [Packed10.vector_get_ofFn, low_packet]"
+            },
+            {
+              "line": 7003,
+              "text": ""
+            },
+            {
+              "line": 7004,
+              "text": "theorem pack_high (n base p : Nat) (B : Array Binary32) (t : Fin (blocks n)) :"
+            }
+          ],
+          "message": "`simp` made no progress\n\nNote: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    t\n  has type\n    Fin (blocks n)\n  but is expected to have type\n    Fin ((n + 3) / 4)\n  in the application\n    (Vector.ofFn fun t => packet n base p (4 * ↑t) B).get t"
+        },
+        {
+          "line": 7007,
+          "column": 2,
+          "declaration": "Submission.R19Column4Temporal.pack_high",
+          "owner": "development",
+          "occurrences": 1,
+          "source_context": [
+            {
+              "line": 7005,
+              "text": "    high ((pack n base p B).get t) = (R19Temporal.pack n (base+2) p B).get t := by"
+            },
+            {
+              "line": 7006,
+              "text": "  dsimp only [R19DualTemporal.blocks, pack, R19Temporal.pack] at *"
+            },
+            {
+              "line": 7007,
+              "text": "  simp only [Packed10.vector_get_ofFn, high_packet]"
+            },
+            {
+              "line": 7008,
+              "text": ""
+            },
+            {
+              "line": 7009,
+              "text": "def loop (n basePacket : Nat) (A : Array A4) (B : Vector B16 (blocks n))"
+            }
+          ],
+          "message": "`simp` made no progress\n\nNote: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    t\n  has type\n    Fin (blocks n)\n  but is expected to have type\n    Fin ((n + 3) / 4)\n  in the application\n    (Vector.ofFn fun t => packet n base p (4 * ↑t) B).get t"
+        }
+      ]
+    }
+  ],
+  "scope": "Original byte-hashed build output and immutable Git source only. Repeated identical errors deduplicated with counts; ownership is a routing hint, never permission. No compilation, repair or correctness claim."
+}
