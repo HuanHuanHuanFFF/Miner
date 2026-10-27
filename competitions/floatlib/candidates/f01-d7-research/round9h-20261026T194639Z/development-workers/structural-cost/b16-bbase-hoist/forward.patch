@@ -1,0 +1,13 @@
+--- bb05/Kernel.lean
++++ draft/Kernel.lean
+@@ -7159,8 +7159,9 @@
+   have hm : 0<m := Nat.pos_of_lt_mul_left r.isLt
+   let bi : Fin b := ⟨r.val/m,(Nat.div_lt_iff_lt_mul hm).2 r.isLt⟩
+   let v := runDot (b*m) n r PA (PB.get (ix b p bi g))
++  let baseB := bi.val*n*p+4*g.val
+   RowStream.emit (min 4 (p-4*g.val)) (fun j =>
+-    Packed10.finish n (r.val*n) (bi.val*n*p+4*g.val+j.val) p A.toArray B.toArray
++    Packed10.finish n (r.val*n) (baseB+j.val) p A.toArray B.toArray
+       (select v j.val)) out
+ theorem group_prefix (r : Fin (b*m)) (g : Fin (groups p)) (out : Array Binary32)
+     (ho : RowStream.Prefix (RowStream.point b m n p A B) (r.val*p+min (4*g.val) p) out) :

@@ -1,0 +1,9 @@
+@[inline] def group (PA : AC (b*m) n) (PB : BC b n p)
+    (r : Fin (b*m)) (out : Array Binary32) (g : Fin (groups p)) : Array Binary32 :=
+  have hm : 0<m := Nat.pos_of_lt_mul_left r.isLt
+  let bi : Fin b := ⟨r.val/m,(Nat.div_lt_iff_lt_mul hm).2 r.isLt⟩
+  let v := runDot (b*m) n r PA (PB.get (ix b p bi g))
+  let baseB := bi.val*n*p+4*g.val
+  RowStream.emit (min 4 (p-4*g.val)) (fun j =>
+    Packed10.finish n (r.val*n) (baseB+j.val) p A.toArray B.toArray
+      (select v j.val)) out

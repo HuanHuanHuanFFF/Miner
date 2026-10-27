@@ -1,0 +1,57 @@
+{
+  "at_utc": "2026-10-27T04:03:25.148419+00:00",
+  "input_run": 40445341829,
+  "source_sha256": "bb058c75f59ca36b4952cffae0c943fd296de02cb3e83d164409736b0252c061",
+  "scope": "ExistingCI21 selectedemit/group C+ASM only; reuse130-file binding and accepted source audit, no math/fullraw repeat and no D22 read.",
+  "bound_files": [
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40445341829/download-41554c5bc7e9461dbeb887ed8d86d23f/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-column4-broad2/candidate-generated-0.c",
+      "sha256": "5513c606ad8e8757d147a8cf205d635785d04c0de035f39ca83809475b179ddd"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40445341829/download-41554c5bc7e9461dbeb887ed8d86d23f/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-column4-broad2/native-loop-13.asm.txt",
+      "sha256": "b26984908c88552229c15af5c2272ef0c7b8f06c1c53de27efdc8d4d3c9a2f20"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40445341829/download-41554c5bc7e9461dbeb887ed8d86d23f/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-column4-broad2/native-loop-15.asm.txt",
+      "sha256": "3c0ce40e711a0b176a41e4f07a2944a34dba0c95ef9520c5e962c37cb9b3d557"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-mul-log2-proof1/ci-runs/40445341829/download-41554c5bc7e9461dbeb887ed8d86d23f/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r19-dev-column4-broad2/native-assembly-index.json",
+      "sha256": "8bf6aaa5e2a80e4a3d4ebf038413e96da53b500b95c7aab7b84946811cb0baf8"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/development-workers/anchor-323/b16-ci21-codegen/review.json",
+      "sha256": "f92a14d7add628141df5e7a57e532c5717d1fab97bceed390ca6b71523e73eb2"
+    }
+  ],
+  "C_edges": {
+    "group_line": 49176,
+    "emit_line": 49063,
+    "finish_line": 38100,
+    "behavior": "Cemit eagerly computes r*n,bi*n,(bi*n)*p+4g+j before selecting lane andcalling Packed10.finish. FinishC only uses addresses in NaN branch. Nativefinish has been inlined intoemit."
+  },
+  "native_partial_CSE": {
+    "r_times_n": "mul0x28 inpreheader, taggedcache rsp+0x68@0xad; ordinary smallNat no overflow reused everylane",
+    "bi_times_n": "mul0x47 inpreheader, taggedcache rsp+0x60@0xd0; reused ordinarylane loop",
+    "residual_hot": "mul0x182=(bi*n)*p inside loop@f0 before everylaneNaN test; add4g@1c6 thenj@1f4 alsohot. Backedge3d8→f0 repeats it; no fullproduct cache store.",
+    "bi_zero_exception": "Ifbi*n==0, branch17d→1b0 skips residualmul; do not claim allfinite outputs repeat multiplication. Ordinarynonzero-batch addresses do.",
+    "bigNat_boundary": "Perlane big/overflow helper calls remain beforeNaN tests; ordinaryCSE claims above are limited to smallNat/nonoverflow, not allNat execution."
+  },
+  "normal_and_nan": {
+    "lane_tests": [
+      "0x36d lane0",
+      "0x47d lane1",
+      "0x230 lane2",
+      "0x4fd lane3"
+    ],
+    "finite": "NonNaN joins376→lean_float32_to_bits(rel377)→array_push3b7(rel3b8)→backedge3d8; addresswork precedes tests andexecutes withoutreplay.",
+    "NaN": "Unorderedtests enter486; actualreplayLoop call4bb(rel4bc), usingbaseA/baseB alreadycomputed. No finite callto replayLoop.",
+    "conclusion": "Threeperlane Csites is not three repeatednativemuls: twoordinary products alreadyhoisted. Only residualBbase product/adds are a live hot-sharing opportunity."
+  },
+  "decision": "SCOPED_GO_GROUP_BBASE_CACHE_ONLY_NO_GO_R_TIMES_N_REWRITE_OR_THREE_REPEATED_MUL_CLAIM",
+  "minimal_followup_design": "In a separate future unfrozen source, bind baseB=bi.val*n*p+4*g.val once in group just before RowStream.emit; callback passes baseB+j.val to unchanged Packed10.finish. Leave r*n optimization alone because nativealreadyhoists it. Do not invokeNaN replay earlier or add a finish/helper noinline hotcall.",
+  "why_no_cold_work_is_pulled_forward": "Currentselected validFin group has>=1 output andalready executes the sameBbase workbeforefinite/NaN tests. Moving it fromeverylane tooncegroup does not introduce workcurrentlyguardedbyNaN. Keep originalfinish branch unchanged.",
+  "lifecycle_and_codegen_obligations": "One NatBbase lives across up to4emit iterations; ordinarysmallNat is taggedimmediate, but bigNat allocation/RC/free lifetime mustbecharged. Callbackcapture set changes: specialization could erase it or produce a newclosure/stackpressure; mustinspect exactfuture selectedcaller, not assume. CurrentrawA/B/F4 lifetime andfinish/output/checksum/destruction remain.",
+  "not_authorized_or_claimed": "No source written,no newCI,no change toD22 frozen source/no D22inputs/results read. ThisGO is one localized implementation opportunity forD toselect later, not measuredspeed or completeD/adoption advice."
+}
