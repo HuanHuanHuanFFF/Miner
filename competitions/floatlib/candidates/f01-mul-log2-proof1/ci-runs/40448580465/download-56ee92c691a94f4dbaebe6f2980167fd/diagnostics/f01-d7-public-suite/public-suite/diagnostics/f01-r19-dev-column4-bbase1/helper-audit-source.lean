@@ -1,0 +1,21 @@
+import Submission
+#print axioms Submission.R19Column4Temporal.low_packet
+#print axioms Submission.R19Column4Temporal.high_packet
+#print axioms Submission.R19Column4Temporal.pack_low
+#print axioms Submission.R19Column4Temporal.pack_high
+#print axioms Submission.R19Column4Temporal.loop_eq
+#print axioms Submission.R19Column4Temporal.loop_pack_eq
+#print axioms Submission.R19Column4Temporal.runDot_pack_eq
+#print axioms Submission.R19Column4Temporal.samePaddedWidth_small
+#print axioms Submission.R19Column4Temporal.packB_get
+#print axioms Submission.R19Column4Temporal.finish_select
+#print axioms Submission.R19Column4Temporal.group_prefix
+#print axioms Submission.R19Column4Temporal.row_prefix
+#print axioms Submission.R19Column4Temporal.output_prefix
+#print axioms Submission.R19Column4Temporal.core_eq_reference
+#print axioms Submission.R19Column4Temporal.dispatch_spec
+#print axioms Submission.add_spec
+#print axioms Submission.mul_spec
+#print axioms Submission.sum_spec
+#print axioms Submission.bmm_spec
+#print axioms Submission.R19DualTemporal.blocks
