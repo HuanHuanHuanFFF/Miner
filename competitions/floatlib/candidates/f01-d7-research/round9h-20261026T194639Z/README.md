@@ -12,7 +12,7 @@
 
 公共留言板：`D:/CodingProject/Bitget-Collab/`，仅写各自状态与独立时间戳消息；在候选、证明阶段结束和CI前后检查。启动研究端仅用必要唤醒提示，任务、结果、调整均写留言板，不连续会话催办。DeepSeek自报UTC19:47—次日01:47；R按最新直接窗口22:58:21—次日02:28:21；D原9h至04:46:39，各自不互相延长。
 
-01:34 UTC检查点：13个Codex作业已启动，前12个终态原件收齐，第13个整数成本对照/raw双列在途。9f、c70、b271、f84及静态表9c4e首D均未达采用门槛；9c4e完整正确但整包1.02967负，精确源停放。DirectBias真实运行体已核无FP往返，但完整public与32k数学模块尚未编译通过；独立quotient-only可过，新数学模块scope4GiB OOM已定位到模块范围。Dual剩3个具体证明goal；GRS运行体已编译/重放7根，仍非新ADD规格或性能。两旧计划原逐case路由采集已完成：DC约4.79%–7.12%整包、B2约4.02%–5.85%，仅探索份额。当前仍保留B2、冠军#323及ab3b数值模型，无新增采用。
+02:18 UTC检查点：16个Codex作业已启动，前15个终态原件收齐。CI13整数运行体对照的四block没有稳定收益，精确7489停放大public证明。CI14 raw双列6a0c已完整回放14根，CI15变位舍入b372／dual c36／GRS preguard d3c的15／18／7根全通过；均不继承性能。CI16正在测d3c的两个静态入口实际ADD成本，并补同源rawpair新旧loop和实际caller汇编；dual首D1927017已冻结待关键复核。9f、c70、b271、f84及静态表9c4e首D均未达采用门槛，旧负样本不换seed。DirectBias独立quotient-only可过，32k数学模块scope4GiB OOM；完整public未过。两旧计划路由仅探索份额：DC约4.79%–7.12%整包、B2约4.02%–5.85%。研究技术原件及许可已在25ad840b推送，筛选回执见development-research-technical-delivery.json。当前仍保留B2、冠军#323及ab3b数值模型，无新增采用。
 
 [实验与资源回执索引](development-experiment-ledger.json)按精确源列原始结果、共享CI墙钟与决定；未知token/路线分摊明确保留UNKNOWN，当前是否在途仍以开发状态为准。
 
