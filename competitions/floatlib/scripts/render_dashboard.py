@@ -23,6 +23,9 @@ def main():
     assert champion["official_normalized_self_time"] == 1.0
     policy = view["dashboard_policy"]
     assert policy["layout"] == "legacy_four_operations"
+    progress = policy.get("research_progress_by_operation", {})
+    for item in progress.values():
+        assert hashlib.sha256((ROOT / item["evidence"]).read_bytes()).hexdigest() == item["evidence_sha256"]
     run_count = len(set(view["full_gate_runs"]))
     labels = policy["candidate_labels_by_operation"]
     receipt = champion["receipts"]
@@ -70,7 +73,11 @@ def main():
             display = f"**约 {value:.2f}×**"
         champion_link = f"[#{number}](https://conjectures.io/v1/competitions/floatlib/submissions/{number})" if op == "add" else f"#{number}"
         candidate_link = f"[{labels[op]}]({source.relative_to(ROOT).as_posix()})"
-        lines.append(f"| {name} | {champion_link} | {candidate_link} | {display} | 完整通过{run_count}次 |")
+        validation = f"完整通过{run_count}次"
+        if op in progress:
+            item = progress[op]
+            validation += f"；[{item['text']}]({item['evidence']})"
+        lines.append(f"| {name} | {champion_link} | {candidate_link} | {display} | {validation} |")
     if estimate and policy.get("use_estimates_when_direct_unknown"):
         whole = estimate["whole"]["ratio_median"]
         worst = max(estimate["operations"], key=lambda op: estimate["operations"][op]["ratio_median"])
