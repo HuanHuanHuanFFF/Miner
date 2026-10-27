@@ -92,6 +92,9 @@ for name in args.candidates:
     assert digest(kernel)==meta['candidate_sha256'] and kernel.stat().st_size==meta['candidate_bytes']<=256000
     row={'candidate':name,'sha256':digest(kernel),'capture_codegen':name in args.capture_codegen}
     if name in args.statement_only: row['validation_mode']='statement-only'
+    if meta.get('diagnostic_timeout_seconds'):
+        assert name=='f01-r19-dev-runtime-cost1' and meta['diagnostic_timeout_seconds']==600 and name in args.statement_only and args.role=='STATEMENT_DIAGNOSTIC'
+        row['diagnostic_timeout_seconds']=600
     rows.append(row)
     for p in [kernel,manifest]:files[p.relative_to(ROOT).as_posix()]={'sha256':digest(p),'bytes':p.stat().st_size}
 if args.role != 'STATEMENT_DIAGNOSTIC':

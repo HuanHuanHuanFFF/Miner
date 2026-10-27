@@ -1,0 +1,234 @@
+--- 622d/Kernel.lean
++++ DRAFT/rawpair
+@@ -5839,12 +5839,221 @@
+ 
+ end Submission.DirectContinuous
+ 
++/- R19 diagnostic draft: no prepared A/B. Full raw pairs share one A decode;
++   odd tail uses original NativeFinal.dot. New proofs/whole source NOT_RUN. -/
++namespace Submission.R19DCRawPair
++open FloatLib.Floats Competition
++
++structure F2 where
++  s0 : Float32
++  s1 : Float32
++
++def loop (n baseA baseB p : Nat) (A B : Array Binary32)
++    (k : Nat) (s0 s1 : Float32) : F2 :=
++  if hk : k < n then
++    let a := ExecFloat.Binary.toFloat32 (A.getD (baseA + k) posZero)
++    let b0 := ExecFloat.Binary.toFloat32 (B.getD (baseB + k * p) posZero)
++    let b1 := ExecFloat.Binary.toFloat32 (B.getD (baseB + 1 + k * p) posZero)
++    loop n baseA baseB p A B (k + 1) (s0 + a * b0) (s1 + a * b1)
++  else ⟨s0, s1⟩
++termination_by n - k
++
++theorem loop_s0 (n baseA baseB p : Nat) (A B : Array Binary32)
++    (k : Nat) (s0 s1 : Float32) :
++    (loop n baseA baseB p A B k s0 s1).s0 =
++      NativeFinal.dotLoop n baseA baseB p A B k s0 := by
++  by_cases hk : k < n
++  · rw [loop, NativeFinal.dotLoop]
++    simp only [dif_pos hk]
++    exact loop_s0 n baseA baseB p A B (k + 1) _ _
++  · rw [loop, NativeFinal.dotLoop]
++    simp only [dif_neg hk]
++termination_by n - k
++
++theorem loop_s1 (n baseA baseB p : Nat) (A B : Array Binary32)
++    (k : Nat) (s0 s1 : Float32) :
++    (loop n baseA baseB p A B k s0 s1).s1 =
++      NativeFinal.dotLoop n baseA (baseB + 1) p A B k s1 := by
++  by_cases hk : k < n
++  · rw [loop, NativeFinal.dotLoop]
++    simp only [dif_pos hk]
++    exact loop_s1 n baseA baseB p A B (k + 1) _ _
++  · rw [loop, NativeFinal.dotLoop]
++    simp only [dif_neg hk]
++termination_by n - k
++
++@[inline] def select (v : F2) (j : Nat) : Float32 :=
++  if j = 0 then v.s0 else v.s1
++
++theorem finish_select (n baseA baseB p : Nat) (A B : Array Binary32)
++    (j : Nat) (hj : j < 2) :
++    Packed10.finish n baseA (baseB + j) p A B
++      (select (loop n baseA baseB p A B
++        0 Packed10.zero32 Packed10.zero32) j) =
++      NativeFinal.dot n baseA (baseB + j) p A B := by
++  apply Packed10.finish_eq_dot
++  have h : j = 0 ∨ j = 1 := by omega
++  rcases h with rfl | rfl
++  · simpa only [select, Nat.add_zero, ↓reduceIte] using
++      loop_s0 n baseA baseB p A B 0 Packed10.zero32 Packed10.zero32
++  · simpa only [select, if_neg Nat.one_ne_zero] using
++      loop_s1 n baseA baseB p A B 0 Packed10.zero32 Packed10.zero32
++
++@[inline] def groups (p : Nat) : Nat := (p + 1) / 2
++
++@[inline] def groupFrom (n baseA baseB p : Nat) (A B : Array Binary32)
++    (out : Array Binary32) (g : Fin (groups p)) : Array Binary32 :=
++  let count := min 2 (p - 2 * g.val)
++  if count = 1 then
++    RowStream.emit count (fun l =>
++      NativeFinal.dot n baseA ((baseB + 2 * g.val) + l.val) p A B) out
++  else
++    let result := loop n baseA (baseB + 2 * g.val) p A B
++      0 Packed10.zero32 Packed10.zero32
++    RowStream.emit count (fun l =>
++      Packed10.finish n baseA ((baseB + 2 * g.val) + l.val) p A B
++        (select result l.val)) out
++
++@[inline] def group (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p))
++    (r : Fin (batch * m)) (out : Array Binary32) (g : Fin (groups p)) :
++    Array Binary32 :=
++  groupFrom n (r.val * n) (r.val / m * n * p) p A.toArray B.toArray out g
++
++theorem group_prefix (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p)) (r : Fin (batch * m))
++    (g : Fin (groups p)) (out : Array Binary32)
++    (hout : RowStream.Prefix (RowStream.point batch m n p A B)
++      (r.val * p + min (2 * g.val) p) out) :
++    RowStream.Prefix (RowStream.point batch m n p A B)
++      (r.val * p + min (2 * (g.val + 1)) p)
++      (group batch m n p A B r out g) := by
++  have hm : 0 < m := Nat.pos_of_lt_mul_left r.isLt
++  have hg : 2 * g.val < p := by
++    have h := g.isLt
++    unfold groups at h
++    omega
++  have hp : 0 < p := by omega
++  have hstart : min (2 * g.val) p = 2 * g.val := by omega
++  have hend : r.val * p + min (2 * (g.val + 1)) p =
++      (r.val * p + 2 * g.val) + min 2 (p - 2 * g.val) := by omega
++  rw [hend]
++  unfold group groupFrom
++  dsimp only
++  split
++  · apply RowStream.emit_prefix
++    · simpa only [hstart] using hout
++    · intro l
++      have hcol : 2 * g.val + l.val < p := by
++        have hl := l.isLt
++        omega
++      rw [show r.val * p + 2 * g.val + l.val =
++        r.val * p + (2 * g.val + l.val) by omega,
++        RowStream.point_row batch m n p A B r.val (2 * g.val + l.val) hm hp hcol]
++      simp only [Nat.add_assoc]
++  · apply RowStream.emit_prefix
++    · simpa only [hstart] using hout
++    · intro l
++      have hcol : 2 * g.val + l.val < p := by
++        have hl := l.isLt
++        omega
++      rw [show r.val * p + 2 * g.val + l.val =
++        r.val * p + (2 * g.val + l.val) by omega,
++        RowStream.point_row batch m n p A B r.val (2 * g.val + l.val) hm hp hcol]
++      have h := finish_select n (r.val * n) (r.val / m * n * p + 2 * g.val) p
++        A.toArray B.toArray l.val (Nat.lt_of_lt_of_le l.isLt (Nat.min_le_left _ _))
++      simpa only [Nat.add_assoc] using h
++
++@[inline] def row (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p))
++    (out : Array Binary32) (r : Fin (batch * m)) : Array Binary32 :=
++  let baseA := r.val * n
++  let baseB := r.val / m * n * p
++  Fin.foldl (groups p) (groupFrom n baseA baseB p A.toArray B.toArray) out
++
++theorem row_prefix (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p)) (r : Fin (batch * m))
++    (out : Array Binary32)
++    (hout : RowStream.Prefix (RowStream.point batch m n p A B) (r.val * p) out) :
++    RowStream.Prefix (RowStream.point batch m n p A B) ((r.val + 1) * p)
++      (row batch m n p A B out r) := by
++  have hlast : min (2 * groups p) p = p := by
++    unfold groups
++    omega
++  have h := RowStream.foldl_inv (groups p)
++    (group batch m n p A B r)
++    (fun g acc => RowStream.Prefix (RowStream.point batch m n p A B)
++      (r.val * p + min (2 * g) p) acc)
++    (fun g acc hacc => group_prefix batch m n p A B r g acc hacc) out
++    (by simpa only [Nat.mul_zero, Nat.zero_min, Nat.add_zero] using hout)
++  simpa only [row, group, hlast, Nat.add_mul, Nat.one_mul] using h
++
++def output (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p)) : Array Binary32 :=
++  Fin.foldl (batch * m) (row batch m n p A B)
++    (Array.mkEmpty (batch * m * p))
++
++theorem output_prefix (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p)) :
++    RowStream.Prefix (RowStream.point batch m n p A B) (batch * m * p)
++      (output batch m n p A B) := by
++  exact RowStream.foldl_inv (batch * m)
++    (row batch m n p A B)
++    (fun r acc => RowStream.Prefix (RowStream.point batch m n p A B) (r * p) acc)
++    (fun r acc hacc => row_prefix batch m n p A B r acc hacc)
++    (Array.mkEmpty (batch * m * p))
++    ⟨by simp, by intro j hj; simp at hj⟩
++
++def pairCore (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
++  ⟨output batch m n p A B, (output_prefix batch m n p A B).1⟩
++
++theorem pairCore_eq_reference (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p)) :
++    pairCore batch m n p A B = referenceBmm batch m n p A B := by
++  exact (RowStream.prefix_vector_eq_ofFn (RowStream.point batch m n p A B)
++    (batch * m * p) (output batch m n p A B) (output_prefix batch m n p A B)).trans
++    (RowStream.points_eq_reference batch m n p A B)
++
++/-- Keep old n=0/1 and p=0/1 runtime; target complete pairs with n>1. -/
++def core (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
++  if n ≤ 1 ∨ p ≤ 1 then DirectContinuous.core batch m n p A B
++  else pairCore batch m n p A B
++
++theorem core_eq_reference (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p)) :
++    core batch m n p A B = referenceBmm batch m n p A B := by
++  unfold core
++  split
++  · exact DirectContinuous.core_eq_reference batch m n p A B
++  · exact pairCore_eq_reference batch m n p A B
++
++theorem core_eq_direct (batch m n p : Nat)
++    (A : Vector Binary32 (batch * m * n))
++    (B : Vector Binary32 (batch * n * p)) :
++    core batch m n p A B = DirectContinuous.core batch m n p A B :=
++  (core_eq_reference batch m n p A B).trans
++    (DirectContinuous.core_eq_reference batch m n p A B).symm
++
++end Submission.R19DCRawPair
++
+ namespace Submission
+ open FloatLib.Floats Competition
+ 
+ def bmmBeforeR11Cross (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+     (B : Vector Binary32 (batch * n * p)) : Vector Binary32 (batch * m * p) :=
+-  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 8 then DirectContinuous.core batch m n p A B
++  if (n ≤ 4 ∧ 2 < p) ∨ p ≤ 8 then R19DCRawPair.core batch m n p A B
+   else bmmBeforeDirectRows batch m n p A B
+ 
+ theorem bmmBeforeR11Cross_spec : ∀ (batch m n p : Nat) (A : Vector Binary32 (batch * m * n))
+@@ -5853,7 +6062,7 @@
+   intro batch m n p A B
+   unfold bmmBeforeR11Cross
+   split
+-  · rw [DirectContinuous.core_eq_reference]
++  · rw [R19DCRawPair.core_eq_reference]
+     exact referenceBmm_spec batch m n p A B
+   · exact bmmBeforeDirectRows_spec batch m n p A B
+ 

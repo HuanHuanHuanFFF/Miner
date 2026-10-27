@@ -1,0 +1,75 @@
+LEAN_EXPORT float lp_competition_Submission_NativeFinal_dotLoop(lean_object* v_n_11647_, lean_object* v_baseA_11648_, lean_object* v_baseB_11649_, lean_object* v_p_11650_, lean_object* v_A_11651_, lean_object* v_B_11652_, lean_object* v_k_11653_, float v_acc_11654_){
+_start:
+{
+float v___y_11656_; uint32_t v___y_11657_; uint8_t v___x_11664_; 
+v___x_11664_ = lean_nat_dec_lt(v_k_11653_, v_n_11647_);
+if (v___x_11664_ == 0)
+{
+lean_dec(v_k_11653_);
+return v_acc_11654_;
+}
+else
+{
+lean_object* v___x_11665_; uint32_t v___x_11666_; uint32_t v___y_11668_; lean_object* v___x_11676_; uint8_t v___x_11677_; 
+v___x_11665_ = lean_nat_add(v_baseA_11648_, v_k_11653_);
+v___x_11666_ = lean_uint32_once(&lp_competition_Submission_referenceSum___redArg___closed__0, &lp_competition_Submission_referenceSum___redArg___closed__0_once, _init_lp_competition_Submission_referenceSum___redArg___closed__0);
+v___x_11676_ = lean_array_get_size(v_A_11651_);
+v___x_11677_ = lean_nat_dec_lt(v___x_11665_, v___x_11676_);
+if (v___x_11677_ == 0)
+{
+lean_dec(v___x_11665_);
+v___y_11668_ = v___x_11666_;
+goto v___jp_11667_;
+}
+else
+{
+lean_object* v___x_11678_; uint32_t v___x_11679_; 
+v___x_11678_ = lean_array_fget_borrowed(v_A_11651_, v___x_11665_);
+lean_dec(v___x_11665_);
+v___x_11679_ = lean_unbox_uint32(v___x_11678_);
+v___y_11668_ = v___x_11679_;
+goto v___jp_11667_;
+}
+v___jp_11667_:
+{
+float v_fa_11669_; lean_object* v___x_11670_; lean_object* v___x_11671_; lean_object* v___x_11672_; uint8_t v___x_11673_; 
+v_fa_11669_ = lean_float32_of_bits(v___y_11668_);
+v___x_11670_ = lean_nat_mul(v_k_11653_, v_p_11650_);
+v___x_11671_ = lean_nat_add(v_baseB_11649_, v___x_11670_);
+lean_dec(v___x_11670_);
+v___x_11672_ = lean_array_get_size(v_B_11652_);
+v___x_11673_ = lean_nat_dec_lt(v___x_11671_, v___x_11672_);
+if (v___x_11673_ == 0)
+{
+lean_dec(v___x_11671_);
+v___y_11656_ = v_fa_11669_;
+v___y_11657_ = v___x_11666_;
+goto v___jp_11655_;
+}
+else
+{
+lean_object* v___x_11674_; uint32_t v___x_11675_; 
+v___x_11674_ = lean_array_fget_borrowed(v_B_11652_, v___x_11671_);
+lean_dec(v___x_11671_);
+v___x_11675_ = lean_unbox_uint32(v___x_11674_);
+v___y_11656_ = v_fa_11669_;
+v___y_11657_ = v___x_11675_;
+goto v___jp_11655_;
+}
+}
+}
+v___jp_11655_:
+{
+float v_fb_11658_; lean_object* v___x_11659_; lean_object* v___x_11660_; float v___x_11661_; float v___x_11662_; 
+v_fb_11658_ = lean_float32_of_bits(v___y_11657_);
+v___x_11659_ = lean_unsigned_to_nat(1u);
+v___x_11660_ = lean_nat_add(v_k_11653_, v___x_11659_);
+lean_dec(v_k_11653_);
+v___x_11661_ = lean_float32_mul(v___y_11656_, v_fb_11658_);
+v___x_11662_ = lean_float32_add(v_acc_11654_, v___x_11661_);
+v_k_11653_ = v___x_11660_;
+v_acc_11654_ = v___x_11662_;
+goto _start;
+}
+}
+}

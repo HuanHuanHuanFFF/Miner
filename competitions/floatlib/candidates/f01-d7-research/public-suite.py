@@ -55,6 +55,8 @@ def run(g,kernel,out):
         verdict=stage/(name+'-verdict.json'); logname=name+'-gate.log'
         validation_mode=entry.get('validation_mode','full-gate')
         assert validation_mode in ('full-gate','statement-only')
+        diagnostic_timeout=entry.get('diagnostic_timeout_seconds',180)
+        assert diagnostic_timeout==180 or (name=='f01-r19-dev-runtime-cost1' and diagnostic_timeout==600 and validation_mode=='statement-only' and plan.get('sample_role')=='STATEMENT_DIAGNOSTIC')
         argv=[str(upstream/'.venv/bin/python'),'gate.py','--slot','full',str(dst),'--verdict',str(verdict)]
         if validation_mode=='statement-only':
             diagnostic=repo/'competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py'
@@ -72,7 +74,7 @@ def run(g,kernel,out):
             codegen={'requested':True,'state':record['state'],'kernel_sha256':record['kernel_sha256'],'capture_module_sha256':hashlib.sha256(capture_path.read_bytes()).hexdigest(),'errors':record.get('errors',[]),'directory':directory.relative_to(stage).as_posix() if directory else None,'metadata':metadata.relative_to(stage).as_posix() if metadata and metadata.exists() else None,'metadata_sha256':hashlib.sha256(metadata.read_bytes()).hexdigest() if metadata and metadata.exists() else None,'original_stage_log':record.get('original_stage_log'),'performance_observer_overhead':record.get('performance_observer_overhead'),'private_objects_outside_artifacts':record.get('private_objects_outside_artifact_output'),'private_objects_removed':record.get('private_objects_removed'),'scope':'Original gate actual statement output, read-only observer; discovery only, independent confirmation must disable capture. Capture status never replaces original verdict.'}
         else:
             with (stage/logname).open('wb') as log:
-                p=subprocess.run(argv,cwd=upstream,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=960 if validation_mode=='full-gate' else 180)
+                p=subprocess.run(argv,cwd=upstream,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=960 if validation_mode=='full-gate' else diagnostic_timeout)
         v=json.loads(verdict.read_bytes()) if verdict.exists() else {}
         full=bool(p.returncode==0 and v.get('passed') and v.get('mode')=='gate' and v.get('stage')=='score')
         statement_pass=bool(validation_mode=='statement-only' and p.returncode==0 and v.get('passed') and v.get('mode')=='diagnostic-statement-only')

@@ -74,7 +74,7 @@ def statement(src,verdict):
             if symbols is None:
                 continue
             names=[line.split()[-1] for line in symbols.stdout.splitlines() if line.split()]
-            names=[name for name in names if 'boxed' not in name and ((name.startswith('lp_competition_Submission_') and (('loop' in name.lower() and ('Packed' in name or 'NativeDecodeSum' in name or 'Tile' in name or 'R19Temporal' in name or 'R19DualTemporal' in name)) or name in ('lp_competition_Submission_R17NumericMulInteger_normalCore','lp_competition_Submission_R17NumericMulInteger_diagnosticEntry','lp_competition_Submission_R19Jam17_normalCore','lp_competition_Submission_R19Jam17_diagnosticEntry','lp_competition_Submission_R19DirectBias_normalCore','lp_competition_Submission_R19DirectBias_diagnosticEntry','lp_competition_Submission_R19GRS32Add_alignNonzero','lp_competition_Submission_R19GRS32Add_guardedAdd','lp_competition_Submission_R19GRS32Add_diagnosticEntry','lp_competition_Submission_add','lp_competition_Submission_mul','lp_competition_Submission_nativeMul'))) or name in ('lp_competition_R2W01b_fastOK','lp_competition_R2W01b_convert','lp_competition_main___lam__0','lp_competition_main___lam__1','lp_competition_main___lam__3'))]
+            names=[name for name in names if 'boxed' not in name and ((name.startswith('lp_competition_Submission_') and (('loop' in name.lower() and ('Packed' in name or 'NativeDecodeSum' in name or 'Tile' in name or 'R19Temporal' in name or 'R19DualTemporal' in name or 'R19DCRawPair' in name)) or name in ('lp_competition_Submission_R17NumericMulInteger_normalCore','lp_competition_Submission_R17NumericMulInteger_diagnosticEntry','lp_competition_Submission_R19Jam17_normalCore','lp_competition_Submission_R19Jam17_diagnosticEntry','lp_competition_Submission_R19DirectBias_normalCore','lp_competition_Submission_R19DirectBias_diagnosticEntry','lp_competition_Submission_R19GRS32Add_alignNonzero','lp_competition_Submission_R19GRS32Add_guardedAdd','lp_competition_Submission_R19GRS32Add_diagnosticEntry','lp_competition_Submission_add','lp_competition_Submission_mul','lp_competition_Submission_nativeMul'))) or name in ('lp_competition_R2W01b_fastOK','lp_competition_R2W01b_convert','lp_competition_main___lam__0','lp_competition_main___lam__1','lp_competition_main___lam__3'))]
             for symbol in names:
                 result=optional_object_tool(['objdump','-d','--no-show-raw-insn','-Mintel','--disassemble='+symbol,str(path)],data,capture_output=True,timeout=15)
                 if result is None:
@@ -132,7 +132,7 @@ elif kernel.parent.name.startswith('f01-r19-dev-'):
     helper_manifest=json.loads(manifest_path.read_bytes())
     if helper_manifest.get('helper_audit_module_sha256'):
         helper_name=helper_manifest.get('helper_audit_module','development-helper-audit.py')
-        assert helper_name in ('development-helper-audit.py', 'development-helper-audit-v4.py', 'development-helper-audit-v5.py', 'development-helper-audit-v7.py', 'development-resource-audit.py', 'development-resource-audit-v2.py', 'development-route-audit.py', 'development-route-audit-v2.py', 'development-math-outlet-audit.py')
+        assert helper_name in ('development-helper-audit.py', 'development-helper-audit-v4.py', 'development-helper-audit-v5.py', 'development-helper-audit-v7.py', 'development-resource-audit.py', 'development-resource-audit-v2.py', 'development-route-audit.py', 'development-route-audit-v2.py', 'development-math-outlet-audit.py', 'development-runtime-cost-audit.py')
         helper_path=profiler.parent.parent/'f01-d7-research/round9h-20261026T194639Z'/helper_name
         assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
         hs=importlib.util.spec_from_file_location('r19_explicit_math_helper_audit',helper_path)
@@ -152,7 +152,7 @@ sys.exit(0 if verdict.passed else 1)
             try:
                 profiler=Path(__file__).resolve().parent.parent/'f01-d5-costsplit/profile-native.py'
                 p=subprocess.Popen([str(a.upstream/'.venv/bin/python'),'-c',code,str(a.upstream),str(a.kernel),str(out),str(profiler)],cwd=a.upstream,env=os.environ.copy(),stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
-                replay_timeout=1800 if a.name=='f01-d13-cost-profile' else 2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 170 if a.name=='f01-r19-dev-math-outlet-isolation1' else 120
+                replay_timeout=1800 if a.name=='f01-d13-cost-profile' else 2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 580 if a.name=='f01-r19-dev-runtime-cost1' else 170 if a.name=='f01-r19-dev-math-outlet-isolation1' else 120
                 report['replay_exit_code']=p.wait(timeout=replay_timeout)
             except subprocess.TimeoutExpired:
                 os.killpg(p.pid,signal.SIGKILL);p.wait();report['replay']=f'diagnostic-only replay process group timed out at {replay_timeout}s'
