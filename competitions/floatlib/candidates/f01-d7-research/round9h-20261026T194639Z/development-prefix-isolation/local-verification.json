@@ -1,0 +1,86 @@
+{
+  "status": "PASS_AST_HASH_AND_MOCK_ONLY",
+  "verified_at_utc": "2026-10-26T23:40:50.902037+00:00",
+  "v2_sha256": "60b0d6ecca09304f27c88c3bfcd601f20df959144f3a1ca815504b39f9b5434f",
+  "manifest_sha256": "1bf78abe599c746a9b6f69f6cc439baf14b199f9d62f90b7838173c90e5bfa42",
+  "carrier_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "AST_parse": true,
+  "stages_functions": 1,
+  "source_modules": [
+    {
+      "file": "ImportOnly.lean",
+      "bytes": 18,
+      "sha256": "239175fe9907a272f0b9816f700dbc310b5b3e33ffca567fde220339d93ffa70"
+    },
+    {
+      "file": "QuotientOnly.lean",
+      "bytes": 1341,
+      "sha256": "014acd413d37ee012bdc55fb813591815ccb5dce0adf09f27dac9a17fd68573d"
+    }
+  ],
+  "cases": [
+    {
+      "case": "both-zero",
+      "kernel_replay_calls": 1,
+      "four_root_own_calls": 1,
+      "prefix_process_calls": 2,
+      "states": [
+        "TYPECHECK_PROCESS_EXIT_ZERO",
+        "TYPECHECK_PROCESS_EXIT_ZERO"
+      ],
+      "reason": null,
+      "scope": "MOCK ONLY; no Lean/process/cgroup measurement was executed."
+    },
+    {
+      "case": "control-failed",
+      "kernel_replay_calls": 1,
+      "four_root_own_calls": 1,
+      "prefix_process_calls": 1,
+      "states": [
+        "PROCESS_NONZERO_CAUSE_UNCLASSIFIED",
+        "NOT_RUN_IMPORT_CONTROL_FAILED_OR_BUDGET"
+      ],
+      "reason": "ImportOnly positive control incomplete; QuotientOnly NOT_RUN",
+      "scope": "MOCK ONLY; no Lean/process/cgroup measurement was executed."
+    },
+    {
+      "case": "quotient-nonzero",
+      "kernel_replay_calls": 1,
+      "four_root_own_calls": 1,
+      "prefix_process_calls": 2,
+      "states": [
+        "TYPECHECK_PROCESS_EXIT_ZERO",
+        "PROCESS_NONZERO_CAUSE_UNCLASSIFIED"
+      ],
+      "reason": "QuotientOnly independent prefix incomplete: PROCESS_NONZERO_CAUSE_UNCLASSIFIED",
+      "scope": "MOCK ONLY; no Lean/process/cgroup measurement was executed."
+    },
+    {
+      "case": "budget-exhausted",
+      "kernel_replay_calls": 1,
+      "four_root_own_calls": 1,
+      "prefix_process_calls": 0,
+      "states": [
+        "NOT_RUN_OVERALL_BUDGET_EXHAUSTED",
+        "NOT_RUN_IMPORT_CONTROL_FAILED_OR_BUDGET"
+      ],
+      "reason": "ImportOnly positive control incomplete; QuotientOnly NOT_RUN",
+      "scope": "MOCK ONLY; no Lean/process/cgroup measurement was executed."
+    },
+    {
+      "case": "quotient-timeout",
+      "kernel_replay_calls": 1,
+      "four_root_own_calls": 1,
+      "prefix_process_calls": 2,
+      "states": [
+        "TYPECHECK_PROCESS_EXIT_ZERO",
+        "PROCESS_EXCEPTION"
+      ],
+      "reason": "QuotientOnly independent prefix incomplete: PROCESS_EXCEPTION",
+      "scope": "MOCK ONLY; no Lean/process/cgroup measurement was executed."
+    }
+  ],
+  "real_Lean_execution": "NOT_RUN",
+  "CI": "NOT_DISPATCHED",
+  "scope": "Mocks verify control ordering, strict stop, per-prefix persistence, partial failure output, base audit once, and immutable bytes. No prefix theorem acceptance claimed."
+}

@@ -4,6 +4,8 @@
 
 下一1927009只做statement/完整模块及明确根：
 
+实际已启动40420540388／ce3e26f9c6efaf3a7435570d46a13db93cf8c463，23:33:13 UTC，单槽登记完成。下一独立prefix control与route-profile由D两个实现子任务并行包装，暂未派发；原`#eval` raw-marker草稿不采用。
+
 - `f01-r19-dev-direct-bias-runtime1`，74899988939a056a40675aefe8c63f2f9db1c7b4728f3d496bf140ede6ad85dc，228187B，4原public根＋3诊断定义。原1180运行尾1358B逐字保留，省去所有新数学片段；只能判断完整diagnosticEntry/normalCore的实际C/ASM成本，public四项仍B2，不能报新MUL性能或规格通过。
 - `f01-r19-dev-dual-temporal-a4-2`，d765bd41234a26640eaa6df6c7134e0d4d8dca760e50eaef3aa82eff1fac0847，240398B，18根。只修原9a5的loop_eq/group_eq两证明体，运行体/域/陈述不改，旧失败及逆补丁保留。
 
