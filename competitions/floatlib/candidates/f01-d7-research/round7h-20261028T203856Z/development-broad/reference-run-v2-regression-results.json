@@ -1,0 +1,271 @@
+{
+  "reviewed_profile_sha256": "3530deb6578aa60832065f09e31366f4386c835da62b1e1f9ee86b4703f1dd6c",
+  "source_sha256": "f6b622bd0dee1aa69cda974413d0990a70795561ac65629dca50f250aa87a540",
+  "scope": "Only run() AST executed with fake Popen/systemctl/killpg. No native build, network or process.",
+  "tests": [
+    {
+      "mode": "cleanup_command_timeout",
+      "caught": "ObservationTimeout",
+      "workload_still_alive": false,
+      "descendant_can_remain_alive": false,
+      "wait_calls": 3,
+      "killpg_calls": 2,
+      "command_record_saved_before_verified_exit": true,
+      "cleanup_confirmed": false,
+      "abort_after_timeout": "No subsequent reference, build or profile is allowed",
+      "abort_after_process_failure": null,
+      "log_receipt": "FROZEN_PARTIAL_PREFIX_LIVE_TAIL_UNKNOWN",
+      "later_append_invalidates_recorded_log_hash": false,
+      "events": [
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "--property=ControlGroup",
+            "--value",
+            "r24-ref-mock-2b1b9e01c8.scope"
+          ]
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGTERM",
+            "r24-ref-mock-2b1b9e01c8.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGTERM"
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGKILL",
+            "r24-ref-mock-2b1b9e01c8.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGKILL"
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "0"
+        }
+      ]
+    },
+    {
+      "mode": "kill_does_not_finish_workload",
+      "caught": "ObservationTimeout",
+      "workload_still_alive": true,
+      "descendant_can_remain_alive": true,
+      "wait_calls": 3,
+      "killpg_calls": 2,
+      "command_record_saved_before_verified_exit": true,
+      "cleanup_confirmed": false,
+      "abort_after_timeout": "No subsequent reference, build or profile is allowed",
+      "abort_after_process_failure": null,
+      "log_receipt": "FROZEN_PARTIAL_PREFIX_LIVE_TAIL_UNKNOWN",
+      "later_append_invalidates_recorded_log_hash": false,
+      "events": [
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "--property=ControlGroup",
+            "--value",
+            "r24-ref-mock-50955a3e7b.scope"
+          ]
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGTERM",
+            "r24-ref-mock-50955a3e7b.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGTERM"
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGKILL",
+            "r24-ref-mock-50955a3e7b.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGKILL"
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "0"
+        }
+      ]
+    },
+    {
+      "mode": "nonzero_parent_child_alive",
+      "caught": "ObservationFailure",
+      "workload_still_alive": false,
+      "descendant_can_remain_alive": true,
+      "wait_calls": 3,
+      "killpg_calls": 2,
+      "command_record_saved_before_verified_exit": true,
+      "cleanup_confirmed": false,
+      "abort_after_timeout": null,
+      "abort_after_process_failure": "No subsequent reference, build or profile is allowed",
+      "log_receipt": "FROZEN_PARTIAL_PREFIX_LIVE_TAIL_UNKNOWN",
+      "later_append_invalidates_recorded_log_hash": false,
+      "events": [
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "--property=ControlGroup",
+            "--value",
+            "r24-ref-mock-609c51e05d.scope"
+          ]
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGTERM",
+            "r24-ref-mock-609c51e05d.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGTERM"
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGKILL",
+            "r24-ref-mock-609c51e05d.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGKILL"
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "0"
+        }
+      ]
+    },
+    {
+      "mode": "late_log_append",
+      "caught": "ObservationTimeout",
+      "workload_still_alive": true,
+      "descendant_can_remain_alive": false,
+      "wait_calls": 3,
+      "killpg_calls": 2,
+      "command_record_saved_before_verified_exit": true,
+      "cleanup_confirmed": false,
+      "abort_after_timeout": "No subsequent reference, build or profile is allowed",
+      "abort_after_process_failure": null,
+      "log_receipt": "FROZEN_PARTIAL_PREFIX_LIVE_TAIL_UNKNOWN",
+      "later_append_invalidates_recorded_log_hash": false,
+      "events": [
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "--property=ControlGroup",
+            "--value",
+            "r24-ref-mock-a86c3e8291.scope"
+          ]
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGTERM",
+            "r24-ref-mock-a86c3e8291.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGTERM"
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGKILL",
+            "r24-ref-mock-a86c3e8291.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGKILL"
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "0"
+        }
+      ]
+    }
+  ]
+}

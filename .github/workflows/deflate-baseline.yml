@@ -81,7 +81,7 @@ jobs:
     defaults:
       run:
         working-directory: .
-    if: github.event_name == 'workflow_dispatch' && inputs.competition == 'floatlib' && (github.event.repository.private == false || inputs.allow_private == true)
+    if: github.event_name == 'workflow_dispatch' && inputs.competition == 'floatlib' && inputs.candidates != '__torchlean_readonly_profile__' && (github.event.repository.private == false || inputs.allow_private == true)
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
@@ -120,6 +120,52 @@ jobs:
         with:
           name: floatlib-${{ github.run_id }}-receipts
           path: ${{ runner.temp }}/floatlib-reports/
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 9
+
+  readonly_reference:
+    # Research observation of immutable upstream references, never a new entry.
+    defaults:
+      run:
+        working-directory: .
+    if: github.event_name == 'workflow_dispatch' && inputs.competition == 'floatlib' && inputs.candidates == '__torchlean_readonly_profile__' && github.event.repository.private == false && inputs.allow_private == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Reject late queue acquisition before toolchain work
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import datetime, json, os
+          end=datetime.datetime(2026,10,29,3,38,56,tzinfo=datetime.timezone.utc)
+          if (end-datetime.datetime.now(datetime.timezone.utc)).total_seconds()<600:
+              out=Path(os.environ['RUNNER_TEMP'])/'r24-reference-profile-reports'
+              out.mkdir(parents=True,exist_ok=True)
+              (out/'summary.json').write_text(json.dumps({'source_commit':os.environ['GITHUB_SHA'],'complete':False,'state':'NOT_STARTED_WINDOW_CLOSED_OR_INSUFFICIENT_AFTER_QUEUE'})+'\n')
+              raise SystemExit(1)
+          PY
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: competitions/floatlib
+      - name: Prepare isolated research runner
+        run: bash competitions/floatlib/scripts/ci-prepare.sh
+      - name: Restore existing pinned dependency cache
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684
+        with:
+          path: |
+            ~/.elan
+            ${{ runner.temp }}/floatlib-upstream/lean/.lake
+          key: floatlib-${{ runner.os }}-978cc5b445edb9943fd9953b0a9037d97a9f33a8
+      - name: Observe immutable public reference profiles
+        run: python3 competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/readonly-reference-profile.py
+      - name: Preserve original observation receipts only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: floatlib-${{ github.run_id }}-receipts
+          path: ${{ runner.temp }}/r24-reference-profile-reports/
           if-no-files-found: error
           retention-days: 7
           compression-level: 9
