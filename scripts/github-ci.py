@@ -41,6 +41,10 @@ def main():
             plan_path='competitions/floatlib/candidates/f01-d7-public-suite/suite-plan.json'
             plan=json.loads((ROOT/plan_path).read_bytes());assert plan.get('dispatch_state','READY')=='READY'
             assert plan['seed']==int(args.seed),'Nested public plan seed differs before dispatch'
+            if not plan.get('r22_cost_diagnostic'):
+                for entry in plan['candidates']:
+                    timeout=entry.get('diagnostic_timeout_seconds',180)
+                    assert timeout==180 or (entry['candidate'] in ('f01-r19-dev-runtime-cost1','f01-r19-dev-add-cost1') and timeout==600 and entry.get('validation_mode')=='statement-only' and plan.get('sample_role')=='STATEMENT_DIAGNOSTIC'),'Original public adapter rejects this diagnostic timeout'
             paths += [plan_path,'competitions/floatlib/candidates/f01-d7-research/public-suite.py']
             if plan.get('r22_cost_diagnostic'):paths += ['competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-cost-suite.py','competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-cost-audit.py']
             candidates += [e['candidate'] for e in plan['candidates'] if e['candidate']!='baseline']
