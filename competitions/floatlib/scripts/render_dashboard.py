@@ -9,6 +9,25 @@ ROOT = Path(__file__).resolve().parents[3]
 DATA = ROOT / "competitions/floatlib/candidates/f01-d7-research"
 
 
+def load_development_forecast(entry, result, champion):
+    path = ROOT / entry["evidence"]
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == entry["evidence_sha256"]
+    forecast = json.loads(path.read_bytes())
+    assert forecast["status"] == "INFERRED"
+    assert forecast["kernel_sha256"] == entry["kernel_sha256"]
+    assert hashlib.sha256((ROOT / forecast["kernel"]).read_bytes()).hexdigest() == forecast["kernel_sha256"]
+    assert forecast["baseline_kernel_sha256"] == result["kernel_sha256"]
+    assert forecast["champion_submission"] == result["champion"]
+    assert forecast["champion_digest"] == champion["digest"]
+    for key in ("baseline_official_comparison", "public_discovery"):
+        evidence = ROOT / forecast[key]
+        assert hashlib.sha256(evidence.read_bytes()).hexdigest() == forecast[key + "_sha256"]
+    discovery = json.loads((ROOT / forecast["public_discovery"]).read_bytes())
+    assert discovery["full_gate_both"] and discovery["paired_rounds_each"] == 25
+    assert discovery["sha256"] == forecast["kernel_sha256"]
+    return forecast
+
+
 def render_official(view, state):
     entry = view.get("official_submission")
     if not entry:
@@ -32,6 +51,30 @@ def render_official(view, state):
     champion, submission = result["champion"], result["submission"]
     checked = datetime.fromisoformat(result["checked_at_utc"]).astimezone(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M")
     labels = view["dashboard_policy"]["candidate_labels_by_operation"]
+    development = view["dashboard_policy"].get("development_forecast")
+    if development:
+        forecast = load_development_forecast(development, result, view["champion"])
+        names = {"add": "加法 add", "mul": "乘法 mul", "sum": "求和 sum", "bmm": "矩阵乘法 bmm"}
+        dev_labels = {"add": "原生冷尾加法", "mul": "原生冷尾乘法", "sum": "保留单遍求和", "bmm": "保留B2双列"}
+        lines = ["# FloatLib 冲冠看板", "",
+                 f"冠军核对：[{checked} 北京时间]({entry['evidence']})；冠军为 **1.00×**，耗时越低越好。", "",
+                 "| 运算 | 现任冠军 | 当前开发 | 开发／冠军（预估） | 保留版／冠军（官方） |",
+                 "| --- | --- | --- | ---: | ---: |"]
+        for op, name in names.items():
+            values = forecast["operations"][op]
+            low, high = values["ratio_min"], values["ratio_max"]
+            assert all(type(x) in (int, float) and math.isfinite(x) and x > 0 for x in (low, high)) and low <= high
+            base = result["operations"][op]
+            candidate = f"[{dev_labels[op]}]({forecast['kernel']})"
+            progress = view["dashboard_policy"].get("research_progress_by_operation", {}).get(op)
+            if progress:
+                assert hashlib.sha256((ROOT / progress["evidence"]).read_bytes()).hexdigest() == progress["evidence_sha256"]
+                candidate += f"；[{progress['text']}]({progress['evidence']})"
+            lines.append(f"| {name} | #{champion} | {candidate} | **{low:.2f}–{high:.2f}×** | {base['official_group_ratio_min']:.2f}–{base['official_group_ratio_max']:.2f}× |")
+        lines += ["", f"整包：保留版官方 **{result['official_whole_ratio']:.2f}×**；当前开发预估 **{forecast['whole']['ratio_point']:.2f}×**。[依据]({development['evidence']})", "",
+                  f"**结论：仍不能取代#{champion}；开发组合完整验证通过，稳定性门槛未过，保留B2。**", ""]
+        (ROOT / "dashboard.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
+        return True
     lines = ["# FloatLib 冲冠看板", "",
              f"官方核对：[{checked} 北京时间]({entry['evidence']})｜冠军为1.00×；四项显示官方各输入组的耗时比范围，越低越好。", "",
              "| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时（官方各组） | 验证 |",
@@ -51,7 +94,7 @@ def render_official(view, state):
     ratio = result["official_whole_ratio"]
     lines += ["", f"整包官方耗时：冠军的 **{ratio:.2f}×**。", "",
               f"**结论：官方验证通过，当前第{result['rank']}；尚不能取代#{champion}，主要差距仍在矩阵乘法。**", ""]
-    (ROOT / "dashboard.md").write_text("\n".join(lines), encoding="utf-8")
+    (ROOT / "dashboard.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
     return True
 
 
@@ -136,7 +179,7 @@ def main():
                   "", f"**结论：{result}；主要差距在{names[worst]}（约{gap:.2f}倍耗时）。** [计算依据]({estimate['evidence']})", ""]
     else:
         lines += ["", f"**结论：尚无取代#{number}的已验方案。** [数据](competitions/floatlib/candidates/f01-d7-research/multiplier-comparison.json)", ""]
-    (ROOT / "dashboard.md").write_text("\n".join(lines), encoding="utf-8")
+    (ROOT / "dashboard.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":

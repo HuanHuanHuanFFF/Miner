@@ -1,0 +1,9 @@
+# SUM input-decoder wrapper: no new removal established
+
+The parent accepted closure during the01:18 bounded inquiry. Current622d/actual generated Submission C already inlines the normal fastOK input path into the USize SinglePass loop: mantissa cast, table scale multiplication, then native acc addition. It does not call ofBits for those ordinary inputs. Low nonzero magnitudes and infinity use ofBits; raw NaN switches to payload repair/suffix processing. R2.convert_eq and +0/ordered-fold facts are already part of the retained implementation.
+
+Wrapping the existing rare `UInt32 -> Float32` external import in another noinline leaf would keep a non-tail decoder call in the same branch and keep acc live across it. It does not supply a new removal. A genuinely tail continuation would have to take the remaining loop state, decode and continue the fold itself; that is a new control-flow design, not a decoder wrapper, and no current spill evidence justifies it here.
+
+The retained assembly search did not find the exact current SinglePass loop/redArg body; the available current C and old runtime-audit describe it but cannot establish current per-k acc stack traffic. W14's older Nat research loop retained warm spill due a once-constant branch; W14b's fixed-table version removed that warm spill. Neither is the current Vector/USize SinglePass context, and neither is a new full-cost result for this proposal. Do not promote the missing current ASM into zero spill or into demonstrated spill.
+
+Decision: CLOSED normal-call-elimination premise; current spill detail UNKNOWN. No source, Kernel, proof, CI or replacement seed. The hypothetical larger continuation design stays unfunded unless an already necessary future capture supplies the exact selected current loop and demonstrates a removable problem. No new confirmation data was read.

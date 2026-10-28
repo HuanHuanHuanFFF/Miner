@@ -31,6 +31,8 @@ theorem emitRows_prefix (f : Nat → Binary32) (start rows p : Nat)
 
 theorem block_row_valid (width m : Nat) (g : Fin (m / width)) (lane : Fin width) :
     width * g.val + lane.val < m := by
+  have hg0 := g.isLt
+  have hlane := lane.isLt
   have hg : g.val + 1 ≤ m / width := by omega
   have hmul := Nat.mul_le_mul_left width hg
   have hdiv := Nat.div_add_mod m width
@@ -39,6 +41,7 @@ theorem block_row_valid (width m : Nat) (g : Fin (m / width)) (lane : Fin width)
 
 theorem tail_row_valid (width m : Nat) (lane : Fin (m % width)) :
     width * (m / width) + lane.val < m := by
+  have hlane := lane.isLt
   have hdiv := Nat.div_add_mod m width
   omega
 
@@ -59,6 +62,7 @@ theorem emitRows_point_prefix (batch m n p offset rows : Nat)
     ((bi.val * m + offset) * p) rows p read out hout (by
       intro lane j
       rw [hread lane j]
+      have hlane := lane.isLt
       have hi : offset + lane.val < m := by omega
       have hm : 0 < m := by omega
       have hp : 0 < p := Nat.zero_lt_of_lt j.isLt

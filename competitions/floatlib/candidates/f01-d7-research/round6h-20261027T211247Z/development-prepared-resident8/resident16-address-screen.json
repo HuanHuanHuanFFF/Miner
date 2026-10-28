@@ -1,0 +1,139 @@
+{
+  "status": "FINITE_SYMBOLIC_PASS",
+  "fragment_sha256": "be17fefd81fabf72519a3b26e43afedeb981655a888c5c37223556e01d73393f",
+  "shape_count": 4704,
+  "eligible_shape_count": 1600,
+  "output_count": 252252,
+  "ordered_mac_count": 756756,
+  "ranges": {
+    "batch": [
+      0,
+      3
+    ],
+    "m": [
+      0,
+      11
+    ],
+    "n": [
+      0,
+      6
+    ],
+    "p": [
+      0,
+      13
+    ]
+  },
+  "checks": [
+    "one A decode per full-row element",
+    "one B decode per real element",
+    "B4 group,k continuity",
+    "batch/rowblock/row stride",
+    "all 16 independent ascending-k chains",
+    "row-major output",
+    "original finish bases",
+    "no phantom finish",
+    "tail0..3 raw bases"
+  ],
+  "mutations": {
+    "A_crossbatch": {
+      "caught": true,
+      "first_shape": [
+        2,
+        4,
+        1,
+        1
+      ]
+    },
+    "A_rowstride": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        1,
+        1
+      ]
+    },
+    "B_crossbatch": {
+      "caught": true,
+      "first_shape": [
+        2,
+        4,
+        1,
+        1
+      ]
+    },
+    "B_colgroup": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        1,
+        5
+      ]
+    },
+    "B_stride": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        2,
+        5
+      ]
+    },
+    "reverse_k": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        2,
+        1
+      ]
+    },
+    "word_row": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        1,
+        1
+      ]
+    },
+    "word_column": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        1,
+        1
+      ]
+    },
+    "phantom_finish": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        0,
+        1
+      ]
+    },
+    "finish_local_base": {
+      "caught": true,
+      "first_shape": [
+        1,
+        8,
+        1,
+        1
+      ]
+    },
+    "tail_local_base": {
+      "caught": true,
+      "first_shape": [
+        1,
+        5,
+        1,
+        1
+      ]
+    }
+  },
+  "limitations": "Finite Python symbolic model only. Float32/NaN/Lean/native/lifetime/cost UNKNOWN."
+}

@@ -1,0 +1,95 @@
+{
+  "created_at_utc": "2026-10-28T02:15:19.633109+00:00",
+  "phase_start_utc": "2026-10-28T02:11:13Z",
+  "phase_limit_utc": "2026-10-28T02:21:13Z",
+  "shared_deadline_utc": "2026-10-28T03:12:47Z",
+  "source": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\streaming-public\\floatarray-expected-variant\\Kernel-probe.lean",
+    "bytes": 237426,
+    "sha256": "f59d12dc43b6b16737c70a9cea864f61b2613904b709b305acc72a961092d980"
+  },
+  "runtime": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\streaming-public\\floatarray-expected-variant\\Runtime.lean.inc",
+    "bytes": 6439,
+    "sha256": "855bdc5451882b59cb48753575525478b897be10a2243285b60123ae28ce3225"
+  },
+  "check": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\streaming-public\\floatarray-expected-variant\\ExpectedCheck.lean.inc",
+    "bytes": 679,
+    "sha256": "d1f0f723a3941c75025da529961604d2d00ed55b7871003ac1b616c688746da1"
+  },
+  "dependencies": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-r15-dev-packed-b2-1\\Kernel.lean",
+      "bytes": 226829,
+      "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\streaming-public\\PairEmitSizeOnly.lean.inc",
+      "bytes": 547,
+      "sha256": "53ea2b908fc63d644650427f84d85373a8f997de0206df3d0b5abfac852befff"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\floatarray-bridge-review\\NativeTarget.lean.inc",
+      "bytes": 1225,
+      "sha256": "fb7d71540db5b0fee7ae9a9b73440b10224713ebd646c4cd812d145c4dfbc1b1"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\streaming-public\\floatarray-expected-variant\\ExpectedNativeWord-policy.lean.inc",
+      "bytes": 1702,
+      "sha256": "b439ffea64e890069c3d07e8465819fe29f124de1faeb3b47597616507d2c82c"
+    }
+  ],
+  "expected_original": {
+    "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\streaming-public\\expected-native-word\\ExpectedNativeWord.lean.inc",
+    "bytes": 1700,
+    "sha256": "37cd4435b62e306d08923ecca2fc8f9dabb0e39c84a2f8f583e65bbe49ef097f"
+  },
+  "expected_comment_only_policy_projection": {
+    "old_text": "expected native import word",
+    "new_text": "expected native readback word",
+    "exact_inverse_sha256": "37cd4435b62e306d08923ecca2fc8f9dabb0e39c84a2f8f583e65bbe49ef097f"
+  },
+  "callback": "Submission.R22FloatArrayB2Expected.guarded",
+  "helper_audit_roots": [
+    "Submission.add_spec",
+    "Submission.mul_spec",
+    "Submission.sum_spec",
+    "Submission.bmm_spec",
+    "Submission.R21StreamingPair.emit_size",
+    "Submission.R22FloatArrayBridgeReview.checked_import",
+    "Submission.R22FloatArrayBridgeReview.checked_native",
+    "Submission.R22FloatArrayBridgeReview.checked_convert",
+    "Submission.R22ExpectedNativeWord.canonical_nan_raw",
+    "Submission.R22ExpectedNativeWord.import_raw_eq_expected",
+    "Submission.R22ExpectedNativeWord.checkNative_eq_expected",
+    "Submission.R22ExpectedB2Check.check_eq_native",
+    "Submission.R22FloatArrayB2Expected.push_size",
+    "Submission.R22FloatArrayB2Expected.group_size",
+    "Submission.R22FloatArrayB2Expected.row_size",
+    "Submission.R22FloatArrayB2Expected.output_size"
+  ],
+  "root_count": 16,
+  "public_bmm_still": "Original622d Submission.bmm; new callback has no public bmm_spec",
+  "raw_binding_counts": {
+    "old_field_getD_sites": 2,
+    "new_field_getD_sites": 2,
+    "old_field_decode_sites": 2,
+    "new_field_decode_sites": 2
+  },
+  "exact_inverse_runtime_sha256": "f5a6cbc6a89ccccd1e08cb861ce483d447d9b8dc30feed21ef24a2f30e5cacf8",
+  "exact_inverse_kernel_sha256": "303a239716b2521a72093453f7d363553055bc2702f481a09837a6ed53724da1",
+  "only_runtime_changes": "Namespace plus naming existing raw read before one decode; check uses raw expected-word target. All remaining producer, layout, loop, size/writer/guard/odd/fallback bytes inverse-identical.",
+  "check_equivalence": "check_eq_native uses37cd full Bool equality for any stored value; NOT_RUN",
+  "policy_preflight": {
+    "intake": null,
+    "policy": null
+  },
+  "formal": "NOT_RUN",
+  "native_cost": "UNKNOWN",
+  "actual_codegen": "UNKNOWN",
+  "CI": false,
+  "frozen_parent_modified": false,
+  "confirmation_inputs_read": false,
+  "cost_scope": "One source-side toBits expression removed per stored field; actual CSE/FFI/calls/spills/time UNKNOWN. No inherited measurement fromf5a/303a."
+}

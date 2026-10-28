@@ -1,0 +1,114 @@
+{
+  "checked_utc": "2026-10-27T22:11:59.199263+00:00",
+  "state": "COLUMN_ROW_CONSERVATISM_AND_ADDRESS_DISCRIMINATORS",
+  "prototype_sha256": "14e59b3f19fac62d45589ae37039571b746bd767caad972b9f31cf7c4fa85055",
+  "structural_configurations": 355,
+  "wrong_batch_flag_counterexample": {
+    "batch": 2,
+    "n": 1,
+    "p": 1,
+    "NaN_flat_index": 1,
+    "expected": [
+      true,
+      false
+    ],
+    "wrong": [
+      false,
+      true
+    ]
+  },
+  "actual_quad_guard_coverage_example": {
+    "batch": 1,
+    "m": 4,
+    "n": 2,
+    "p": 2,
+    "A": [
+      "7f800000",
+      "3f800000",
+      "7f800000",
+      "3f800000",
+      "7f800000",
+      "3f800000",
+      "7f800000",
+      "3f800000"
+    ],
+    "B": [
+      "ffc01234",
+      "00000000",
+      "3f800000",
+      "3f800000"
+    ],
+    "global_B_safe": false,
+    "column_safe": [
+      false,
+      true
+    ],
+    "row_mask": 15,
+    "outputs": [
+      {
+        "row": 0,
+        "col": 0,
+        "certificate": false,
+        "raw": "ffc01234",
+        "native_import_model": "7fc00000"
+      },
+      {
+        "row": 0,
+        "col": 1,
+        "certificate": true,
+        "raw": "7fc00000",
+        "native_import_model": "7fc00000"
+      },
+      {
+        "row": 1,
+        "col": 0,
+        "certificate": false,
+        "raw": "ffc01234",
+        "native_import_model": "7fc00000"
+      },
+      {
+        "row": 1,
+        "col": 1,
+        "certificate": true,
+        "raw": "7fc00000",
+        "native_import_model": "7fc00000"
+      },
+      {
+        "row": 2,
+        "col": 0,
+        "certificate": false,
+        "raw": "ffc01234",
+        "native_import_model": "7fc00000"
+      },
+      {
+        "row": 2,
+        "col": 1,
+        "certificate": true,
+        "raw": "7fc00000",
+        "native_import_model": "7fc00000"
+      },
+      {
+        "row": 3,
+        "col": 0,
+        "certificate": false,
+        "raw": "ffc01234",
+        "native_import_model": "7fc00000"
+      },
+      {
+        "row": 3,
+        "col": 1,
+        "certificate": true,
+        "raw": "7fc00000",
+        "native_import_model": "7fc00000"
+      }
+    ]
+  },
+  "row_mask_AND_required": {
+    "initial": 15,
+    "after_bad_row0": 14,
+    "next_inputs_all_safe_mask": 15,
+    "correct": 14,
+    "wrong_OR_restores_bad_row": 15
+  },
+  "scope": "GlobalBool remains correct but is less selective: the example refutes equivalent coverage, not correctness. Symbolic indices/old source-word model only; no current workload coverage, native/Lean execution, or performance."
+}

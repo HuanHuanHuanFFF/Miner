@@ -1,11 +1,12 @@
-# R22 A：完整公共 streaming BMM 与固定 guard
+# R22 A：唯一当前交接
 
-实际起时 **2026-10-27 21:17:47 UTC**，共同截止 **2026-10-28 03:12:47 UTC**。仅写本目录；D 唯一 Git / CI / push。应用 huan-open-research 与 prompt-entropy；持续研究，不因本交接停止。
+共同窗口 **2026-10-27 21:12:47—2026-10-28 03:12:47 UTC**，A首工具 **21:17:47**；截止不重置。共同窗口已结束；03:12:47后仅完成metadata收尾。最新可核实工具UTC：**2026-10-28T03:14:29.011125+00:00**。A自身容量中断 **UNKNOWN**（未见A工具返回容量终止；不能审计后台连续活跃时长）；root的02:39:15—02:47:58空档不替其补计。
 
-- **当前交 D 源**：[v2-guarded/Kernel.lean](v2-guarded/Kernel.lean)，SHA **ebfb6408b3ee5639ff1d800fa1385f87b40a891bb649311449caa9418b9a26ef**，**254601 B / 38 根 / 1399 B 余量**。逐字引入 D 先定的 `BmmCost.lean.inc`（8790cda2），唯一运行源替换是旧 B2 fallback 名称改为 `bmmBeforeR22Streaming`；保留 `1<n ∧ 2≤m ∧ 2≤p` eligibility、`emit ((m%2)*p)` 奇尾及其原基址。追加 proof-only 的 rows / output / core 运输和 guarded_spec，再绑定公开 bmm。**全部新组合 NOT_RUN，不继承 19 根 PASS 或 cost 性能。**
-- 可单独取 [CostCallerProof.lean.inc](CostCallerProof.lean.inc) 和 [GuardedPublicEntry.lean.inc](GuardedPublicEntry.lean.inc)。依赖 c3c3 的 matrix 前缀证明；若直接在原 4e36 包中使用，先补 c3c3 writer。首稿 [v1/Kernel.lean](v1/Kernel.lean) 的 **059f0401 / 252031 B / 36 根**已冻结保留，不改它。
-- 组合原本 **256254 B 超限**，原字节保留 `v2-guarded/pretrim-Kernel.lean`（76b685f1）。仅删 4 个无引用 theorem（emit_finish_eq、emit_two_rows_eq、adjacent_A_base、odd_tail_valid），共 1653 B；运行体不动，删除项/hash 在 manifest。新 MUL 如超过 1399 B 仍需做有依据的依赖裁剪；目前没有大规模整理。
-- [schedule-check.json](schedule-check.json)：batch 0..4、m 0..9、n 0..7、p 0..9 共 4000 个形状，按每输出的原始 A/B 地址及 k 顺序逐项相等；旧 batch=2,m=3,n=2,p=3 反例现在通过；故意跨批的变异在输出 9/10/11 被拦截。它不证明 Float32 / Lean 正确性。
-- **成本仍 UNKNOWN**：固定 Array.mapIdx 实现已复核，安全入口落到原库清槽/写回后端；首次 replicate 共享 Cell、稳态复用、closure / RC / COW / 输出释放等待 D 的真实双行 caller 数据。未见确认组，也不据结构推算速度。
+- **已验公共双行BMM桥**：`v3-proof-repair/Kernel.lean` **77a61e91 /255283B**，40590900980的statement、Submission/VerifyFull回放、38允许公理根PASS；[身份回执](accepted-77a61e91.json)。运行体PARK，未继承新速度/采用/正式提交。批内配对、奇尾、原k序及raw NaN回放均在该公共证明内。
+- **下轮可选诊断源，全部NOT_RUN**：原FloatArray **303a2397 /235009B**（runtime **f5a6cbc6 /6405B**）；独立整数目标检查变体 **f59d12dc /237426B**（runtime **855bdc54 /6439B**）。后者只有raw绑定与check改动，精确逆回旧两源；读/解码次数不增。原四public仍B2，新callback无public bmm_spec，实际C/ASM/cost UNKNOWN。[原体](floatarray-storage/HANDOFF.md)／[变体与逆patch](floatarray-expected-variant/HANDOFF.md)。
+- **小数学储备，全部NOT_RUN**：native期望word **37cd4435 /1700B/3根**，含NaN/sNaN/±0/Inf且只证check Bool相等；prefix append **91ac9aa7 /4559B/4根**，未扩recursive builder/loop/public证明。B分别关键静态复核未见确定错，不升级为Lean通过。原37cd含import字样注释触发静态policy，只有新装配副本改措辞，失败67ed与原件均保留。
+- **旧储备/负面保留**：Quad、Pair8、broad-word与native-scale数学源状态/完整SHA见[A-OUTPUT-INDEX.json](A-OUTPUT-INDEX.json)；父运行体负结果不转成数学失败，也不作为新variant已测。word-carry纸面保持在../wordcarry-review/；无A新增公共MUL源。
+- **最新独立判断**：BEq筛未找到现成两变量native→word桥，停止实现；±0/NaN反例保留。UInt64→F32→bits直接重定位未找到同体完整成本，R16/R17/本轮邻近负面与非尾toBits风险并列，未造候选。[BEq](native-beq-screen/HANDOFF.md)／[product bits](product-bits-history/HANDOFF.md)。
+- **截止前小反例**：预合成signed delta不能OR sign；S128可把80800000错成00800000，−1×+1也会丢负号。正确模加法字段恒等式及4048有限word筛保存在[反例](product-bits-history/DELTA-COUNTEREXAMPLE.md)，不涉及旧冻结源修改或新增计时。
 
-下一决定：若真实调用成本支持，D 编译 ebfb 精确稿，首错回传我处理；若表示已被成本否定，保留完整 bridge 并转向不依赖这份表示的布局，不调阈值追分。
+本轮已停止新研究，未读新确认输入/结果；后续仅由D收齐已启动作业。D唯一Git/push/CI/主验收，本方CI=0、本机Lean/native build=0；token、缓存输入与精确计算活跃时长均UNKNOWN。当前不为储备增加CI或扩public证明。

@@ -1,0 +1,20 @@
+--- f01-r19-dev-direct-bias-runtime1/Kernel.lean
++++ development-outline-mul/Kernel.lean
+@@ -6622,3 +6622,17 @@
+ @[noinline] def diagnosticEntry (x y : Binary32) : Binary32 :=
+   guardedMul Submission.mul x y
+ end Submission.R19DirectBias
++
++namespace Submission.R22OutlineMul
++open Competition
++
++/-- Diagnostic only: cold B2 fallback is isolated; no new public MUL theorem. -/
++@[noinline] def retainedMul (x y : Binary32) : Binary32 :=
++  Submission.mul x y
++
++@[inline] def guardedMul (x y : Binary32) : Binary32 :=
++  Submission.R19DirectBias.guardedMul retainedMul x y
++
++@[inline] def diagnosticEntry (x y : Binary32) : Binary32 :=
++  guardedMul x y
++end Submission.R22OutlineMul

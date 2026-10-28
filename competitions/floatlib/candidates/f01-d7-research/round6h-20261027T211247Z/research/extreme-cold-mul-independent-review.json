@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-28T01:04:03.464701+00:00",
+  "cases": 98496,
+  "differences": 0,
+  "trace_sha256": "6134a26b18d52a49a8b2f60be478617e4bde19ea4fb0c96d8a19038d98453d24",
+  "source_sha256": "ac7c9df8aee30277befe4b6aae2e7f43fbf81043d6e00ab35127126f0f3ebd59",
+  "counterexamples": [
+    {
+      "mutation": "zero_threshold103",
+      "u": "0x19ffffff",
+      "v": "0x1a7fffff",
+      "correct": "0x1",
+      "wrong": "0x0"
+    },
+    {
+      "mutation": "infinity_threshold381",
+      "u": "0x5f000000",
+      "v": "0x5f800000",
+      "correct": "0x7f000000",
+      "wrong": "0x7f800000"
+    }
+  ],
+  "reference": "Exact binary64 product of binary32 finite inputs (at most48 significant bits), then binary32 RNE packing",
+  "scope": "Finite boundary model plus endpoint paper proof. No actual Lean/CPU callback or performance. Every excluded special remains old B2 fallback; no NaN payload claim from host arithmetic."
+}

@@ -1,16 +1,14 @@
 # R22：六小时协作推进
 
-共同窗口：北京时间2026-10-28 **05:12:47—11:12:47**。当前进行中，[本轮计划](round-plan.json)。D统一Git、推送与CI；R与Astra持续研究，普通交流走留言板。
+窗口：北京时间2026-10-28 **05:12:47—11:12:47**。D统一Git／CI，R及Astra研究通过留言板交接。[本轮结果](development-round-result.json)、[原始作业索引](development-jobs.json)。
 
-| 方向 | 已收结论 | 当前推进 |
+| 方向 | 本轮结论 | 后续入口 |
 | --- | --- | --- |
-| 乘法 | 冷尾外提诊断MUL约−3%～−6%；真实热callback45指令、无frame。直接native乘积缩放慢3%～10% | 新public88cdf原门禁statement−15空输出；两个历史共享证明块做原4GiB资源隔离。implicitcarry代数融合待一次成本 |
-| 矩阵 | raw4矩阵局部−5%～−9%；Pair8整包小收益；resident8/16均未有稳定整包优势 | 已见resident8热acc落栈；仅做一个USize/uget索引和cursor判别，原算法/codec/后备不改 |
-| 加法 | 同指数慢13%～15%；宽GRS慢41%～45%；far-only慢5%～8%，均停放 | 旧native算术与fastOK域保持，只判别冷尾边界完整成本 |
-| 转换布局 | 四个128字段直接记录已测，ADD/MUL慢约2.4～2.6倍 | 停放精确体，不重开选择器参数网格 |
+| 加乘原生冷尾 | f7ba完整原版四义务、两模块回放、公理、25轮通过；公开整包相对B2为0.95550，p05−0.00417，固定采用门槛未过 | [完整原版结果](development-nativecombo-full-discovery.json)；保留正确性成果，不换seed追分 |
+| 矩阵机字索引 | 删除Nat地址开销，框架栈减小；q仍每k落栈。行／lane投影4根、机字→Nat3根均通过回放和选定公理；公共BMM规格未闭 | [7根证据](development-matrix-proof-status.json)、development-prepared-resident8/HANDOFF.md |
+| 乘法数学 | 原nat_bias最小段4GiB OOM，经仅调整证明简化方式后约5秒通过；轻量归一化约6秒通过。完整Math尚有具体rewrite／字面量／heartbeats目标，最后修订未验 | development-outline-mul/HANDOFF.md及math-repair/，失败恢复产生的sorryAx不算证明 |
+| 大布局与冷端点 | raw4局部改善但整包不足；Flat2、宽GRS、nativeProduct、resident8/16、farOnly等停放。新冷miss端点16进程完整完成，无整包采用证据 | [端点完整成本](development-endpoint-first-summary.json)；其余原样负结果见作业索引 |
 
-[作业索引](development-jobs.json)统一绑定所有原件、精确版本、失利与资源记录。当前40611570030独立执行两小证明块、nativecold32进程、indexed8/raw8的16进程；前项失败不跳过后项。e055 wordcarry已做独立数学复核与有限整数检查，尚无Lean/性能成绩。
+保留 **B2/622d**；正式#336仍第13、现任冠军#323、官方耗时1.6287×。当前开发预估见根[看板](../../../../../dashboard.md)，没有新正式上传。所有已启动CI原件已收齐并逐文件重新核验；研究主控容量中断523秒后恢复，实际时段另记，截止没有重设。
 
-40609195034中B2原版四义务／回放／公理／25轮通过，新公开乘法未进入计时。88cdf终止原因保持UNKNOWN；旧fa652已记录同症状、旧2177数学隔离确证4GiB OOM，不能互相回填因果。
-
-保留B2，正式#336／冠军#323的**1.6287×**不跨源继承。所有慢样本及未改算子异常块保留。到期停新研究，收齐已启动CI；研究侧在开发验收时继续下一轮方向探索至共同截止。
+下轮优先：完成矩阵producer／Prefix公共链，依据真实codec／acc spill选能消除工作的结构；数学只按最后具体目标修；不复跑已停放同体。未验草稿、已验组件、完整包和正式成绩保持分列。

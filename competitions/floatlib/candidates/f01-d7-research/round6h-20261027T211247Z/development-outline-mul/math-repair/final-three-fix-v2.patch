@@ -1,0 +1,27 @@
+--- fbd94MathOutletLightExplicit
++++ ThreeFixV2PatchToMergeOnD8
+@@ -466,6 +466,8 @@
+   have hover := normalized_position_le p s hlo hhi hs0 hs1
+   have hnoOverflow : ¬ (if FastMul.rseAny p (FastMul.fastLog2 p-23) == 16777216 then
+       FastMul.fastLog2 p+(s.toUInt64-2)+1 else FastMul.fastLog2 p+(s.toUInt64-2)) > (425 : UInt64) := by
++    change ¬ (425 : UInt64) < (if FastMul.rseAny p (FastMul.fastLog2 p-23) == 16777216 then
++      FastMul.fastLog2 p+(s.toUInt64-2)+1 else FastMul.fastLog2 p+(s.toUInt64-2))
+     rw [UInt64.lt_iff_toNat_lt]
+     change ¬ 425 < (if FastMul.rseAny p (FastMul.fastLog2 p-23) == 16777216 then
+       FastMul.fastLog2 p+(s.toUInt64-2)+1 else FastMul.fastLog2 p+(s.toUInt64-2)).toNat
+@@ -556,6 +558,7 @@
+     rfl
+   simp only [oldMantissa,mantissa,beq_iff_eq,hc]
+   split <;> simp_all only [hr]
++  all_goals rfl
+ 
+ theorem oldPosition_nat (p : UInt64) (s : UInt32)
+     (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225)
+@@ -696,6 +699,7 @@
+     Nat.mod_eq_of_lt (by omega)]
+   exact ⟨hl,hh⟩
+ 
++set_option maxHeartbeats 1000000 in
+ theorem normalCore_eq_roundP (s u v : UInt32) (sign : Bool)
+     (hs0 : 128 ≤ s.toNat) (hs1 : s.toNat ≤ 380)
+     (hsign : ((u ^^^ v) &&& (0x80000000 : UInt32)) =

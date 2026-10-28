@@ -1,0 +1,89 @@
+{
+  "fragment": "Nat8Projection-v1.lean.inc",
+  "sha256": "79574fb1b64febf7d3cd328fe41c2f11ac2172e81177fd2cb057aa74e574d6dd",
+  "bytes": 4601,
+  "runtime_sha256": "8e27baf70ce7e3f10b669cc9f59d66d5fffaa17ee3dc6df934f3229139a5b0dd",
+  "runtime_unchanged": true,
+  "append_bytes_in_memory_only": 254643,
+  "append_headroom_bytes": 1357,
+  "namespace": "Submission.R22Resident8Projection",
+  "roots": [
+    "Submission.R22Resident8Projection.cacheView_get",
+    "Submission.R22Resident8Projection.decode_eq",
+    "Submission.R22Resident8Projection.loop_row",
+    "Submission.R22Resident8Projection.loop_lane"
+  ],
+  "interfaces": {
+    "loop_row": "All four arbitrary row bases, arbitrary8 Float32 seeds, anyNat k; one Fin4 projection into existingR15PackedB2.loop over exactrow-major cacheView.",
+    "loop_lane": "One Fin2 selected-field read premise; then existingloop_s0/s1 yieldsNativeFinal.dotLoop. No phantom/raw-B equivalence assumed."
+  },
+  "symbolic_cases": 12960,
+  "finite_symbolic_projection_pass": true,
+  "first_falsifier": {
+    "shape": [
+      1,
+      4,
+      2,
+      3
+    ],
+    "group": 1,
+    "baseC": 1,
+    "cache_view": [
+      [
+        [
+          "raw",
+          2
+        ],
+        [
+          "POS_ZERO"
+        ]
+      ],
+      [
+        [
+          "raw",
+          5
+        ],
+        [
+          "POS_ZERO"
+        ]
+      ]
+    ],
+    "valid_left_raw_reads": [
+      [
+        "raw",
+        2
+      ],
+      [
+        "raw",
+        5
+      ]
+    ],
+    "invalid_right_raw_reads": [
+      [
+        "raw",
+        3
+      ],
+      [
+        "POS_ZERO"
+      ]
+    ],
+    "invalid_right_agreement_rejected": true,
+    "Lean_checkpoint": "First compile loop_row with n3,p3,row3,k1 arbitraryseeds; it must normalizeC+kG+G correctly. Then loop_lane requires theactualselected-field hread, never an invalid second-column raw premise."
+  },
+  "dependencies": [
+    "Exact8e runtime",
+    "R2W01c.convert_eq",
+    "Packed10.vector_get_ofFn",
+    "R15PackedB2.loop_s0",
+    "R15PackedB2.loop_s1"
+  ],
+  "status": "NOT_COMPILED_NOT_RUN",
+  "new_kernel_emitted": false,
+  "local_Lean_native_CI_Git": false,
+  "prior_v0": {
+    "path": "Nat8Projection.lean.inc",
+    "sha256": "be85f2c769cd30554600209efba3a55c4518f57ca14602f62d40c4b1163a133c",
+    "status": "NOT_RUN; v1 reuses acceptedR13 explicit decoder simp form to avoid possible redundantrfl afterrw"
+  },
+  "scope": "Source API/symbolic check only. Not IEEE arithmetic, Lean typing, kernel replay, cache producer or full public correctness."
+}

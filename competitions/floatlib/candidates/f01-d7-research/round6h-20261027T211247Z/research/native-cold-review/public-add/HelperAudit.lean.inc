@@ -1,0 +1,11 @@
+#print axioms Submission.add_spec
+#print axioms Submission.mul_spec
+#print axioms Submission.sum_spec
+#print axioms Submission.bmm_spec
+#print axioms R22NativeAddBase.Submission.R22NativeColdReview.fastOK_notNaN
+#print axioms R22NativeAddBase.Submission.R22NativeColdReview.native_add_spec_of_fastOK
+#print axioms R22NativeAddBase.Submission.R22NativeColdReview.native_mul_spec_of_fastOK
+#print axioms R22NativeAddBase.Submission.R22NativeColdAdd.coldAdd
+#print axioms R22NativeAddBase.Submission.R22NativeColdAdd.diagnosticEntry
+#print axioms R22NativeAddBase.Submission.R22NativeColdAdd.diagnosticEntry_spec
+#print axioms R22NativeAddBase.Submission.R22NativeColdAdd.diagnosticEntry_eq_B2_add

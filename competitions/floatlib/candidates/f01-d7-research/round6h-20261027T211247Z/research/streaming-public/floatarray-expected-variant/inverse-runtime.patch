@@ -1,0 +1,36 @@
+--- Runtime-expected.lean.inc
++++ Runtime-f5a6.lean.inc
+@@ -1,7 +1,7 @@
+ /- R22 B-only checked FloatArray. Runtime/size helpers only; NOT_RUN.
+    Dependencies: retained622d; R21StreamingPair.emit_size; B fb7d NativeTarget.
+    Each tile stores exactly the old B2 left/right reads, including odd padding. -/
+-namespace Submission.R22FloatArrayB2Expected
++namespace Submission.R22FloatArrayB2
+ open FloatLib.Floats Competition
+ 
+ abbrev Tile (n : Nat) := { data : FloatArray // data.size = 2 * n }
+@@ -15,14 +15,12 @@
+     (k : Nat) (hk : k ≤ n) (out : FloatArray) (hs : out.size = 2 * k) :
+     Option (Tile n) :=
+   if h : k < n then
+-    let raw0 := B.getD (base + k * p) posZero
+-    let f0 := ExecFloat.Binary.toFloat32 raw0
++    let f0 := ExecFloat.Binary.toFloat32 (B.getD (base + k * p) posZero)
+     let d0 := f0.toFloat
+-    if R22ExpectedB2Check.check raw0 d0 then
+-      let raw1 := B.getD (base + 1 + k * p) posZero
+-      let f1 := ExecFloat.Binary.toFloat32 raw1
++    if R22FloatArrayBridgeReview.checkNative f0 d0 then
++      let f1 := ExecFloat.Binary.toFloat32 (B.getD (base + 1 + k * p) posZero)
+       let d1 := f1.toFloat
+-      if R22ExpectedB2Check.check raw1 d1 then
++      if R22FloatArrayBridgeReview.checkNative f1 d1 then
+         packTileLoop n base p B (k + 1) (by omega) ((out.push d0).push d1)
+           (by rw [push_size, push_size, hs]; omega)
+       else none
+@@ -142,4 +140,4 @@
+         output_size batch m n p A B packedB⟩
+   else Submission.bmm batch m n p A B
+ 
+-end Submission.R22FloatArrayB2Expected
++end Submission.R22FloatArrayB2

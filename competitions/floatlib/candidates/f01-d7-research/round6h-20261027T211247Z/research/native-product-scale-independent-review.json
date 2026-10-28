@@ -1,0 +1,38 @@
+{
+  "verified_utc": "2026-10-27T23:35:09.201321+00:00",
+  "cases": 19872,
+  "differences": 0,
+  "reference": "Host binary64 exact product of two binary32 inputs then binary32 RNE packing",
+  "candidate_model": "Exact48bit UInt64 product rounded to32 then multiplied by signed exact normal power2",
+  "runtime_sha256": "e51a67d6188b2ec4c8701cd991e942296fdc7d6158fdb8d92c4e42852bd01709",
+  "kernel_sha256": "92ff7182e76609c72a3f2a77a326e2fee86e70aad1c24fa4247e590e74b20f31",
+  "base_exact_prefix": true,
+  "trace_sha256": "0aedc63c60ec039d270e9c0bec4efebcaac3c6f49978a9a4d2bdbe1723043ad6",
+  "mutations_detected": [
+    {
+      "kind": "double_scale",
+      "u": "0x2b800000",
+      "v": "0x2b800000",
+      "reference": "0x17800000",
+      "mutant": "0x18000000"
+    },
+    {
+      "kind": "OR_input_signs",
+      "u": "0xab800000",
+      "v": "0xab800000",
+      "reference": "0x17800000",
+      "mutant": "0x97800000"
+    },
+    {
+      "kind": "truncate_product",
+      "u": "0x2b800001",
+      "v": "0x2bfffffe",
+      "reference": "0x18000000",
+      "mutant": "0x17ffffff"
+    }
+  ],
+  "Lean": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "public_MUL_spec": "MISSING",
+  "scope": "Finite directed normal-input cases across every admitted exponent sum; no all-input or timing claim"
+}

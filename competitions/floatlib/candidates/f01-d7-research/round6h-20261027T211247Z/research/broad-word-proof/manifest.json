@@ -1,0 +1,80 @@
+{
+  "at_utc": "2026-10-27T23:42:07.709101+00:00",
+  "phase_start_utc": "2026-10-27T23:30:40Z",
+  "phase_limit_utc": "2026-10-27T23:45:40Z",
+  "proof_sha256": "24efa3a758c5e767eb688316997cb075714183de75bd450ee508b17fa8c46ef2",
+  "proof_bytes": 2956,
+  "roots": [
+    "Submission.R22BroadWordMath.nat_bias3",
+    "Submission.R22BroadWordMath.u32_bias3_correct",
+    "Submission.R22BroadWordMath.far_round_absorb"
+  ],
+  "formal": "NOT_RUN",
+  "runtime_5655_unchanged": true,
+  "new_candidate": false,
+  "CI": false,
+  "bias_fixed_inputs": 4608,
+  "bias_mismatches": 0,
+  "far_boundary_cases": 120,
+  "far_mismatches": 0,
+  "bias2_mutant_first": 5,
+  "bias4_mutant_first": 4,
+  "d24_counterexample": {
+    "hi": 8388609,
+    "lo": 8388608,
+    "expected_round": 8388610
+  },
+  "out_of_domain_wrap": {
+    "n": 4294967292,
+    "word_result": 0,
+    "Nat_RSE": 536870912
+  },
+  "second_carry_examples": [
+    {
+      "input_hi_raw": "0x3fffffff",
+      "input_lo_raw": "0x33800000",
+      "T": 134217724,
+      "first_carry": 0,
+      "rounded_m": 16777216,
+      "add_pack": "0x40000000",
+      "wrong_mask_pack": "0x3f800000"
+    },
+    {
+      "input_hi_raw": "0x7f7fffff",
+      "input_lo_raw": "0x73000000",
+      "T": 134217724,
+      "first_carry": 0,
+      "rounded_m": 16777216,
+      "add_pack": "0x7f800000",
+      "wrong_mask_pack": "0x7f000000"
+    }
+  ],
+  "limits": [
+    "Finite exact integer checks only, not Lean or complete Float32 ADD proof",
+    "far_round_absorb closes Nat RSE only; normal dyadic/Model.add bridge remains",
+    "n<2^28 proves bias addition no-wrap, not m<=2^24 without normalized n bound"
+  ],
+  "source_receipts": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\independent-frontier\\Runtime-broad-word-add.lean.inc",
+      "bytes": 1467,
+      "sha256": "5655df5c8a8fbfbf40101bba782788d4a59ee716a95ab8e2bd58bff05e715bf9"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\independent-frontier\\Kernel-broad-word-add-probe.lean",
+      "bytes": 228297,
+      "sha256": "0274763264d760775e6a447848e873db418adc2e6fb651d117c5fc04b4b5d4a5"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\astra-workers\\exact-arithmetic\\bias-frontier\\Retained-BranchlessRNE-seed.lean.inc",
+      "bytes": 4307,
+      "sha256": "5a06c12700e015d3aecbfdbcd2abe879d2bbd68f0d7ed8d75f29289806652279"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\astra-workers\\exact-arithmetic\\bias-frontier\\prefix-review-40425497337.json",
+      "bytes": 6965,
+      "sha256": "4276e38b7a8438c2fab82141ebe7db3d527fcaeaabe04220b89f5bdea5bd1aad"
+    }
+  ],
+  "completed_at_utc": "2026-10-27T23:44:00.192549+00:00"
+}

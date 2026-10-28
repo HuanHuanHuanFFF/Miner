@@ -1,0 +1,168 @@
+work/R22MathOutletLightExplicit.lean:86:21: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+work/R22MathOutletLightExplicit.lean:88:21: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+work/R22MathOutletLightExplicit.lean:90:21: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:92:21: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:143:22: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:143:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+work/R22MathOutletLightExplicit.lean:144:22: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:144:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+work/R22MathOutletLightExplicit.lean:147:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+work/R22MathOutletLightExplicit.lean:158:22: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:158:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+work/R22MathOutletLightExplicit.lean:159:22: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:159:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+work/R22MathOutletLightExplicit.lean:171:51: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+work/R22MathOutletLightExplicit.lean:179:16: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+work/R22MathOutletLightExplicit.lean:180:51: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:188:16: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:234:41: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HAdd UInt64 ℕ ?m.23
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+work/R22MathOutletLightExplicit.lean:235:7: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HAdd UInt64 ℕ ?m.41
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+work/R22MathOutletLightExplicit.lean:244:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HAdd UInt64 ℕ ?m.92
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+work/R22MathOutletLightExplicit.lean:250:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HAdd UInt64 ℕ ?m.157
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+work/R22MathOutletLightExplicit.lean:261:60: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+work/R22MathOutletLightExplicit.lean:369:33: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+work/R22MathOutletLightExplicit.lean:372:33: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:386:27: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+work/R22MathOutletLightExplicit.lean:430:19: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+work/R22MathOutletLightExplicit.lean:469:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.214 < ?m.215
+in the target expression
+  ¬(if (FastMul.rseAny p (FastMul.fastLog2 p - 23) == 16777216) = true then FastMul.fastLog2 p + (s.toUInt64 - 2) + 1
+      else FastMul.fastLog2 p + (s.toUInt64 - 2)) >
+      425
+
+sign : Bool
+p : UInt64
+s : UInt32
+hlo : 70368744177664 ≤ p.toNat
+hhi : p.toNat ≤ 281474943156225
+hs0 : 128 ≤ s.toNat
+hs1 : s.toNat ≤ 380
+hl : 46 ≤ p.toNat.log2 ∧ p.toNat.log2 ≤ 47
+hp : (FastMul.fastLog2 p + (s.toUInt64 - 2)).toNat = p.toNat.log2 + s.toNat - 2
+hz : p ≠ 0
+hposition : ¬FastMul.fastLog2 p + (s.toUInt64 - 2) < 172
+hleading : ¬FastMul.fastLog2 p < 23
+hover :
+  have r := FastMul.rseAny p (FastMul.fastLog2 p - 23);
+  have position := FastMul.fastLog2 p + (s.toUInt64 - 2);
+  (if (r == 16777216) = true then position + 1 else position).toNat ≤ 425
+⊢ ¬(if (FastMul.rseAny p (FastMul.fastLog2 p - 23) == 16777216) = true then FastMul.fastLog2 p + (s.toUInt64 - 2) + 1
+      else FastMul.fastLog2 p + (s.toUInt64 - 2)) >
+      425
+work/R22MathOutletLightExplicit.lean:474:42: warning: `if_false` has been deprecated: Use `ite_false` instead
+work/R22MathOutletLightExplicit.lean:534:15: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+work/R22MathOutletLightExplicit.lean:537:15: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:551:48: error: unsolved goals
+case isTrue
+p : UInt64
+hlo : 70368744177664 ≤ p.toNat
+hhi : p.toNat ≤ 281474943156225
+hr : (FastMul.rseAny p (FastMul.fastLog2 p - 23)).toNat = 16777216
+hc : FastMul.rseAny p (FastMul.fastLog2 p - 23) = 16777216 ↔ True
+h✝ : rounded p.toNat = 16777216
+⊢ UInt64.toNat 8388608 = 8388608
+work/R22MathOutletLightExplicit.lean:558:27: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  [apply] simp_all only
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+work/R22MathOutletLightExplicit.lean:699:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+work/R22MathOutletLightExplicit.lean:718:42: warning: `if_false` has been deprecated: Use `ite_false` instead
+work/R22MathOutletLightExplicit.lean:740:36: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:740:47: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R22MathOutletLightExplicit.lean:769:20: warning: Unused tactic linter: `simpa using BitVec.msb_eq_getLsbD_last _` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+work/R22MathOutletLightExplicit.lean:769:20: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+work/R22MathOutletLightExplicit.lean:773:8: error: (kernel) unknown constant 'Submission.R19DirectBias.normalCore_eq_roundP'
+work/R22MathOutletLightExplicit.lean:826:85: warning: `if_false` has been deprecated: Use `ite_false` instead
+'Submission.add_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.mul_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.sum_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.bmm_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BranchlessRNESeed.nat_bias' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BranchlessRNESeed.nat_grouped_bias' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R19PostBias.biased_quotient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R19PostBias.biased_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R19PostBias.normalized_quotient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19DirectBiasWord.biased_sum_nat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19DirectBiasWord.biasedWord_nat' depends on axioms: [propext, sorryAx]
+'Submission.R19DirectBiasWord.highWord_nat' depends on axioms: [propext, sorryAx]
+'Submission.R19DirectBiasWord.highWord_le_one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Submission.R19DirectBiasWord.shiftWord_nat' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Submission.R19DirectBiasWord.mantissaWord_nat' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.carry_le' depends on axioms: [propext, Quot.sound]
+'Submission.R19BiasShape.leading_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.no_carry_at_47' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.mantissa_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.literal_shift_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.normal_scale_nat' depends on axioms: [propext, Quot.sound]
+'Submission.R19BiasShape.leading_nat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.position_nat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.shift_word_nat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.rounded_word_nat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.normalized_position_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.roundP_normal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.high_nat' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.oldMantissa_nat' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.oldPosition_nat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.mantissaWord_eq_old' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.exponentWord_nat' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.exponentWord_eq_old' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.fractionWord_eq_old' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Submission.R19BiasShape.output_bounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Submission.R19DirectBias.low_mask_eq_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19DirectBias.mkW_eq_unmasked' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19DirectBias.product_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19DirectBias.normalCore_eq_roundP' does not depend on any axioms
+'Submission.R19DirectBias.finiteMantissa_eq' depends on axioms: [propext, Quot.sound]
+'Submission.R19DirectBias.exp_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19DirectBias.finiteScale_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19DirectBias.signBit_eq_bit' depends on axioms: [propext, Quot.sound]
+'Submission.R19DirectBias.sign_word_eq' depends on axioms: [propext, Quot.sound]
+'Submission.R19DirectBias.normalCore_eq_core' depends on axioms: [propext,
+ Quot.sound,
+ Submission.R19DirectBias.normalCore_eq_core]
+'Submission.R19DirectBias.normal_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19DirectBias.sum_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Submission.R19DirectBias.guardedMul_spec' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ Submission.R19DirectBias.normalCore_eq_core]

@@ -1,4 +1,13 @@
-# FloatLib 首次环境与开发交接
+# FloatLib 当前协作交接
+
+当前分支`huan/codex-gpt`，D统一Git／公共CI；普通消息走`D:/CodingProject/Bitget-Collab`。本轮R22共同窗口UTC2026-10-27 21:12:47—2026-10-28 03:12:47，晚加入不延期。
+
+- 唯一当前状态：[开发状态](development-status.json)；[R22结果与恢复入口](../candidates/f01-d7-research/round6h-20261027T211247Z/README.md)。历史分支名和旧授权不替代根AGENTS与本轮记录。
+- 保留B2/622d；f7ba加乘完整原版25轮通过，公开整包0.95550×B2，但p05−0.00417，未采用。现任冠军#323，#336仍第13／1.6287×冠军，开发估算见根看板。
+- 矩阵行／lane和机字→Nat共7个selected根通过两模块回放和公理；公共BMM仍未闭。Nat最小OOM已修到typing，完整Math仍有具体goal；所有未验草稿保留NOT_RUN。
+- 本轮16个已启动CI已终态，原始2489文件244140044B逐项重新核验，见本轮作业索引；不盲重跑负体、不从组件通过继承整包或正式成绩。没有本机Lean／新正式上传／资金操作。
+
+## 历史：首次环境与开发交接
 
 用户要求两个独立会话并行：环境会话整理多赛道目录、通用根规则和 GitHub CI；开发验证会话使用 GPT-6.1 Sol / xhigh 准备首个候选及证明。交接按 writing-for-agents 与 prompt-entropy 编写；共同授权以根 AGENTS.md 和用户当前请求为准。
 

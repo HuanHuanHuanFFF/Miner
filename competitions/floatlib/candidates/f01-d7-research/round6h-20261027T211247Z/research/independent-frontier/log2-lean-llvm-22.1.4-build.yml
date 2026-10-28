@@ -1,0 +1,139 @@
+name: Build LLVM
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  Build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: ${{ matrix.shell || 'bash -euxo pipefail {0}' }}
+    strategy:
+      matrix:
+        include:
+          - name: x86_64-linux-gnu
+            os: nscloud-ubuntu-20.04-amd64-4x8  # for old glibc
+            # LLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON normally set by llvm/CMakeLists.txt but doesn't propagate to our separate runtimes build
+            more-opts: -DCMAKE_C_COMPILER=clang-19 -DCMAKE_CXX_COMPILER=clang++-19 -DCMAKE_INSTALL_RPATH='$ORIGIN/../lib' -DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON
+          - name: aarch64-linux-gnu
+            os: nscloud-ubuntu-20.04-arm64-4x8  # for old glibc
+            more-opts: -DCMAKE_C_COMPILER=clang-19 -DCMAKE_CXX_COMPILER=clang++-19 -DCMAKE_INSTALL_RPATH='$ORIGIN/../lib' -DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON
+          - name: x86_64-apple-darwin
+            os: macos-15-intel  # still x64
+            # ld64.lld: warning: Option `-reexported_symbols_list' is not yet implemented. Stay tuned...
+            more-opts: -DLLVM_USE_LINKER=ld -DCMAKE_INSTALL_RPATH='@loader_path/../lib' -DCMAKE_INSTALL_NAME_DIR='@rpath' -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 -DCOMPILER_RT_ENABLE_IOS=false
+          - name: aarch64-apple-darwin
+            os: macos-latest
+            # ld64.lld: warning: Option `-reexported_symbols_list' is not yet implemented. Stay tuned...
+            more-opts: -DLLVM_USE_LINKER=ld -DCMAKE_INSTALL_RPATH='@loader_path/../lib' -DCMAKE_INSTALL_NAME_DIR='@rpath' -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 -DCOMPILER_RT_ENABLE_IOS=false
+          - name: x86_64-w64-windows-gnu
+            os: windows-latest
+            shell: msys2 {0}
+            # from https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-clang/PKGBUILD
+            # from https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-libc%2B%2B/PKGBUILD
+            # Ninja doesn't seem to work w/ ccache
+            more-opts: |
+              -DCMAKE_SYSTEM_IGNORE_PATH=/usr/lib -DLLVM_HOST_TRIPLE=x86_64-w64-windows-gnu -DLLD_DEFAULT_LD_LLD_IS_MINGW=ON \
+              -DLIBCXX_HAS_WIN32_THREAD_API=ON -DLIBCXXABI_HAS_WIN32_THREAD_API=ON -DLIBCXX_ENABLE_SHARED=OFF -DLIBCXXABI_ENABLE_SHARED=OFF -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON \
+              -G "Unix Makefiles" -DCMAKE_INSTALL_LIBDIR=lib -DLIBUNWIND_ENABLE_SHARED=OFF
+      # complete all jobs
+      fail-fast: false
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      LLVM_CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_COMPRESS: true
+      # current cache limit
+      CCACHE_MAXSIZE: 200M
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare Linux x86
+        if: contains(matrix.os, 'ubuntu') && contains(matrix.os, 'amd64')
+        run: |
+          # multilib necessary for building compiler-rt
+          sudo apt-get update -y
+          sudo apt-get install -y gcc-multilib
+      - name: Prepare
+        if: contains(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get install -y ninja-build lld ccache
+          curl https://apt.llvm.org/llvm.sh | sudo bash -s -- 19
+          sudo apt-get install -y clang-19 libc++-19-dev libc++abi-19-dev
+      - name: Prepare
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          brew install ninja ccache zstd
+      - name: Prepare
+        if: matrix.os == 'windows-latest'
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: clang64
+          install: mingw-w64-clang-x86_64-clang mingw-w64-clang-x86_64-ccache git mingw-w64-clang-x86_64-cmake make tar zstd
+      - name: Restore Cache
+        id: restore-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .ccache
+          key: ${{ matrix.name }}-build-${{ github.sha }}
+          # fall back to (latest) previous cache
+          restore-keys: |
+            ${{ matrix.name }}-build
+      - name: Build
+        run: |
+          set -euxo pipefail
+          git clone -q --depth 1 -b llvmorg-22.1.4 --recursive https://github.com/llvm/llvm-project
+          cmake llvm-project/llvm -G Ninja -B build/llvm -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/lean-llvm -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++\
+            -DLLVM_ENABLE_PROJECTS="llvm;clang;lld;compiler-rt;bolt" -DLLVM_LINK_LLVM_DYLIB=ON -DLLVM_CCACHE_BUILD=ON\
+            -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_ENABLE_ZSTD=OFF -DLLVM_ENABLE_TERMINFO=OFF -DLLVM_ENABLE_LIBCXX=ON -DLLVM_ENABLE_FFI=OFF\
+            `# https://boxbase.org/entries/2018/jun/11/minimal-llvm-build/`\
+            -DLLVM_TARGETS_TO_BUILD='AArch64;WebAssembly;X86'\
+            -DCLANG_DEFAULT_CXX_STDLIB=libc++ -DCLANG_DEFAULT_LINKER=lld -DCLANG_DEFAULT_RTLIB=compiler-rt -DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON\
+            -DCOMPILER_RT_BUILD_SANITIZERS=OFF\
+            -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON\
+            -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_BENCHMARKS=OFF\
+            ${{ matrix.more-opts }}
+          cmake --build build/llvm -j$(nproc)
+          cmake --install build/llvm
+          # LLVM wants to build the runtimes using the bootstrapped compiler via LLVM_ENABLE_RUNTIMES but that breaks horribly on Windows,
+          # build as a separate project using msys LLVM as before
+          cmake llvm-project/runtimes -G Ninja -B build/runtimes -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/lean-llvm -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++\
+            -DLLVM_ENABLE_RUNTIMES="libunwind;libcxxabi;pstl;libcxx" -DLLVM_LINK_LLVM_DYLIB=ON -DLLVM_CCACHE_BUILD=ON\
+            -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_ENABLE_ZSTD=OFF -DLLVM_ENABLE_TERMINFO=OFF -DLLVM_ENABLE_LIBCXX=ON -DLLVM_ENABLE_FFI=OFF\
+            `# https://libcxx.llvm.org/BuildingLibcxx.html`\
+            -DLIBCXX_USE_COMPILER_RT=ON -DLIBCXXABI_USE_COMPILER_RT=ON -DLIBCXXABI_USE_LLVM_UNWINDER=ON -DLIBUNWIND_USE_COMPILER_RT=ON\
+            `# hide libc++ symbols in libleanshared`\
+            -DLIBCXX_HERMETIC_STATIC_LIBRARY=ON -DLIBCXXABI_HERMETIC_STATIC_LIBRARY=ON\
+            -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON\
+            -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_BENCHMARKS=OFF\
+            `# https://github.com/llvm/llvm-project/pull/84750`\
+            -DLLVM_ENABLE_PIC=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON\
+            ${{ matrix.more-opts }}
+          cmake --build build/runtimes -j$(nproc)
+          cmake --install build/runtimes
+          tar cf lean-llvm-${{ matrix.name }}.tar.zst --use-compress-program="zstd -19" lean-llvm/
+      - name: Sanity test
+        run: lean-llvm/bin/clang -v
+      - name: CCache stats
+        run: ccache -s
+      - name: Save Cache
+        if: always() && steps.restore-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .ccache
+          key: ${{ matrix.name }}-build-${{ github.sha }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-llvm-${{ matrix.name }}
+          path: '*.tar.*'
+      - uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: '*.tar.*'

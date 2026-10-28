@@ -1,0 +1,11 @@
+# SUM block-composition premise: already satisfied by retained B2
+
+Closed at the current-source prerequisite, no block candidate/proof/CI. Exact622d public sum is R7SinglePassSum.run. It starts with Float32.ofBits0, uses the USize loop when size permits and an equivalent Nat fallback otherwise, and preserves one native addition per input in original order. `loop_eq`, `natLoop_eq` and `run_spec` already connect this to original sumSpec with its leading +0.
+
+The actual generated Submission C in bound discovery40602369221 has `R7SinglePassSum_loop___redArg(..., float acc)`. Its ordinary-normal, low-value and infinity backedges each compute native float32_add, assign that float back to acc, and goto the loop head. There is no per-step accumulator-toBits→ofBits roundtrip. The two textual toBits(acc) sites are the terminal return and the first raw-NaN repair transition. The latter invokes the original payload-sensitive scalar repair, then suffixLoop. Removing it or skipping later sNaN words would change semantics; native input imports on low-exponent/Inf elements are separate work, not accumulator encoding.
+
+Actual Main dispatch's SUM closure points to Submission.sum___boxed; that wrapper calls the same native loop. The input source is exact0274, whose entire622d prefix and all public SUM source remain byte-identical. This is generated-C/call-chain evidence for the current computation; it is not a new per-stage cycle measurement or an assertion that every input decoder call disappears in optimized machine code.
+
+Historical native accumulator and later single-pass/raw-NaN work therefore cannot be sold again as a block-fusion gain. The archived generalK32 checkpoint route also explicitly remains a parked runtime/missing composition and reported only0.21946% potentially skippable native suffix steps on its old807 model; it is not evidence of a current per-step codec cost. Existing low-normal decoder and scalar/batched storage negatives retain their own scopes.
+
+Decision: no new SUM specialized-block source. A different candidate must identify work that is actually still executed, such as a proven cheaper input representation/qualification or loop scheduling change, and pay its full guards/preparation/fallback cost. Merely composing equivalent block functions does not establish any deletion from this already-native accumulator.

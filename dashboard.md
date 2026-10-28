@@ -1,14 +1,14 @@
 # FloatLib 冲冠看板
 
-官方核对：[2026-10-27 18:29 北京时间](competitions/floatlib/evidence/formal-b2-336/comparison.json)｜冠军为1.00×；四项显示官方各输入组的耗时比范围，越低越好。
+冠军核对：[2026-10-28 10:45 北京时间](competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/official-close-20261028T024503Z/comparison.json)；冠军为 **1.00×**，耗时越低越好。
 
-| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时（官方各组） | 验证 |
-| --- | --- | --- | ---: | --- |
-| 加法 add | #323 | [原生加法＋特殊值选择](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **1.35–1.53×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336) |
-| 乘法 mul | #323 | [数值转换＋特殊值选择](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **1.52–1.65×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336) |
-| 求和 sum | #323 | [单遍求和＋快速修复](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **1.03–1.61×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336) |
-| 矩阵乘法 bmm | #323 | [双列复用＋B2成对存储](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **2.23–4.73×** | [#336 官方通过](https://conjectures.io/v1/competitions/floatlib/submissions/336)；[公开四行耗时−5%～−9%，未采用](competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-cost3-summary.json) |
+| 运算 | 现任冠军 | 当前开发 | 开发／冠军（预估） | 保留版／冠军（官方） |
+| --- | --- | --- | ---: | ---: |
+| 加法 add | #323 | [原生冷尾加法](competitions/floatlib/candidates/f01-r22-dev-nativecombo-public1/Kernel.lean) | **1.25–1.42×** | 1.35–1.53× |
+| 乘法 mul | #323 | [原生冷尾乘法](competitions/floatlib/candidates/f01-r22-dev-nativecombo-public1/Kernel.lean) | **1.46–1.58×** | 1.52–1.65× |
+| 求和 sum | #323 | [保留单遍求和](competitions/floatlib/candidates/f01-r22-dev-nativecombo-public1/Kernel.lean) | **1.03–1.61×** | 1.03–1.61× |
+| 矩阵乘法 bmm | #323 | [保留B2双列](competitions/floatlib/candidates/f01-r22-dev-nativecombo-public1/Kernel.lean)；[索引候选7根核心桥已验](competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-matrix-proof-status.json) | **2.23–4.73×** | 2.23–4.73× |
 
-整包官方耗时：冠军的 **1.63×**。
+整包：保留版官方 **1.63×**；当前开发预估 **1.56×**。[依据](competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-dashboard-forecast.json)
 
-**结论：官方验证通过，当前第13；尚不能取代#323，主要差距仍在矩阵乘法。**
+**结论：仍不能取代#323；开发组合完整验证通过，稳定性门槛未过，保留B2。**

@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-28T00:53:34.774613+00:00",
+  "run": 40609195034,
+  "head": "686a992fc3a9e34a7d78dfdb35bb9545a926651a",
+  "original_files": 61,
+  "original_bytes": 1851654,
+  "index_sha256": "b1f5aef2ceddc1517c035c23711b969edc6e5c694d664177d0b8667c52a027eb",
+  "candidate_source_sha256": "88cdf318d952d74df95ecabed5e2bbadeab76d4827af1c4e5fd88e43d9d8f054",
+  "B2_control": "Original fullgate25round PASS; exact new source has no timing/adoption",
+  "released_symptom": "lake build VerifyFull exit=-15 in28.7s; complete build output empty; original statement rejected",
+  "capture_timed_out": false,
+  "gate_source_sha256": "1eb74ef7479b0023c721e776cc5e4073af21c6662b4afffcf16a48a124d27194",
+  "known_timeout_semantics": "Pinned run() timeout kills process group withSIGKILL and returns124. Adapter entry budget900s/build cap1800s, no evidence of a30s cap.",
+  "loop_state": "Original fullgate and failure-only compiler replay both red. This command verifies saved evidence only, not a fresh compile. Minimal real compiler/process/resource feedback loop belongs to D runner diagnostics.",
+  "cause": "UNKNOWN",
+  "no_type_error_identified": true,
+  "ranked_falsifiable_hypotheses": [
+    {
+      "rank": 1,
+      "cause": "Build resource pressure / scope termination",
+      "prediction": "Same-source diagnostic shows cgroupOOM event or memory peak reaching the actual cap before SIGTERM; a declaration prefix narrows it."
+    },
+    {
+      "rank": 2,
+      "cause": "External process/session lifecycle termination",
+      "prediction": "NoOOM event; process/scope exit evidence identifies parent termination or signal sender. Failure also without codegen observer already weakens observer-only explanation."
+    },
+    {
+      "rank": 3,
+      "cause": "Specific proof elaboration or compile expansion",
+      "prediction": "A deterministic prefix or declaration boundary fails while its predecessor completes, with phase/resource evidence. A type error, if present, must be captured rather than inferred from empty text."
+    }
+  ],
+  "rules": "Do not raise/relax gate caps, replace original gate, or call diagnostic completion formal acceptance. Separate candidate-only proof repair from runtime changes."
+}

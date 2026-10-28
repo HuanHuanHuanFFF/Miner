@@ -1,0 +1,203 @@
+
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r13
+   7:	push   r12
+   9:	push   rbx
+   a:	sub    rsp,0x78
+   e:	mov    r14,rdi
+  11:	mov    rax,QWORD PTR [rsp+0xc0]
+  19:	unpcklps xmm2,xmm3
+  1c:	unpcklps xmm0,xmm1
+  1f:	movlhps xmm0,xmm2
+  22:	movaps XMMWORD PTR [rsp],xmm0
+  26:	unpcklps xmm6,xmm7
+  29:	unpcklps xmm4,xmm5
+  2c:	movlhps xmm4,xmm6
+  2f:	movaps XMMWORD PTR [rsp+0x10],xmm4
+  34:	sub    r14,rax
+  37:	jbe    2d2 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x2d2>
+  3d:	mov    rdi,QWORD PTR [rsp+0xc8]
+  45:	mov    r11,QWORD PTR [rsp+0xb8]
+  4d:	mov    r10,QWORD PTR [rsp+0xb0]
+  55:	shl    r8,0x3
+  59:	lea    r8,[r8+rax*8]
+  5d:	add    r8,r10
+  60:	add    r8,0x18
+  64:	mov    QWORD PTR [rsp+0x38],r8
+  69:	shl    rcx,0x3
+  6d:	lea    rcx,[rcx+rax*8]
+  71:	add    rcx,r10
+  74:	add    rcx,0x18
+  78:	mov    QWORD PTR [rsp+0x30],rcx
+  7d:	shl    rdx,0x3
+  81:	lea    rcx,[rdx+rax*8]
+  85:	add    rcx,r10
+  88:	add    rcx,0x18
+  8c:	mov    QWORD PTR [rsp+0x28],rcx
+  91:	shl    rsi,0x3
+  95:	lea    rax,[rsi+rax*8]
+  99:	lea    rbp,[r10+rax*1]
+  9d:	add    rbp,0x18
+  a1:	lea    rbx,[r11+rdi*8]
+  a5:	add    rbx,0x18
+  a9:	shl    r9,0x3
+  ad:	xor    r15d,r15d
+  b0:	mov    r12,QWORD PTR [rip+0x0]        # b7 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0xb7>
+			b3: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  b7:	mov    r13,r9
+  ba:	jmp    13c <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x13c>
+  bf:	nop
+  c0:	and    edi,0x7fffff
+  c6:	or     edi,0x800000
+  cc:	xorps  xmm0,xmm0
+  cf:	cvtsi2ss xmm0,edi
+  d3:	mov    rcx,QWORD PTR [r12]
+  d7:	shr    rax,0x18
+  db:	and    eax,0x1ff
+  e0:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+  e5:	mulss  xmm0,DWORD PTR [rax+0x8]
+  ea:	unpcklps xmm1,xmm0
+  ed:	mov    rax,QWORD PTR [rbx]
+  f0:	movaps xmm3,XMMWORD PTR [rsp+0x50]
+  f5:	unpcklps xmm3,XMMWORD PTR [rsp+0x40]
+  fa:	movlhps xmm3,xmm1
+  fd:	movss  xmm0,DWORD PTR [rax+0x8]
+ 102:	movss  xmm1,DWORD PTR [rax+0xc]
+ 107:	shufps xmm0,xmm0,0x0
+ 10b:	mulps  xmm0,xmm3
+ 10e:	movaps xmm2,XMMWORD PTR [rsp]
+ 112:	addps  xmm2,xmm0
+ 115:	movaps XMMWORD PTR [rsp],xmm2
+ 119:	shufps xmm1,xmm1,0x0
+ 11d:	mulps  xmm1,xmm3
+ 120:	movaps xmm0,XMMWORD PTR [rsp+0x10]
+ 125:	addps  xmm0,xmm1
+ 128:	movaps XMMWORD PTR [rsp+0x10],xmm0
+ 12d:	inc    r15
+ 130:	add    rbx,r13
+ 133:	cmp    r14,r15
+ 136:	je     2d2 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x2d2>
+ 13c:	mov    rax,QWORD PTR [rbp+r15*8+0x0]
+ 141:	mov    rdi,rax
+ 144:	shr    rdi,1
+ 147:	mov    ecx,edi
+ 149:	and    ecx,0x7fffffff
+ 14f:	lea    edx,[rcx-0x1]
+ 152:	cmp    edx,0xbffffff
+ 158:	setb   dl
+ 15b:	cmp    ecx,0x7f800000
+ 161:	setae  cl
+ 164:	or     cl,dl
+ 166:	cmp    cl,0x1
+ 169:	jne    180 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x180>
+ 16b:	call   170 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x170>
+			16c: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 170:	jmp    1aa <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x1aa>
+ 172:	data16 data16 data16 data16 cs nop WORD PTR [rax+rax*1+0x0]
+ 180:	and    edi,0x7fffff
+ 186:	or     edi,0x800000
+ 18c:	xorps  xmm0,xmm0
+ 18f:	cvtsi2ss xmm0,edi
+ 193:	mov    rcx,QWORD PTR [r12]
+ 197:	shr    rax,0x18
+ 19b:	and    eax,0x1ff
+ 1a0:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+ 1a5:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 1aa:	movaps XMMWORD PTR [rsp+0x50],xmm0
+ 1af:	mov    rax,QWORD PTR [rsp+0x28]
+ 1b4:	mov    rax,QWORD PTR [rax+r15*8]
+ 1b8:	mov    rdi,rax
+ 1bb:	shr    rdi,1
+ 1be:	mov    ecx,edi
+ 1c0:	and    ecx,0x7fffffff
+ 1c6:	lea    edx,[rcx-0x1]
+ 1c9:	cmp    edx,0xbffffff
+ 1cf:	setb   dl
+ 1d2:	cmp    ecx,0x7f800000
+ 1d8:	setae  cl
+ 1db:	or     cl,dl
+ 1dd:	je     1f0 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x1f0>
+ 1df:	call   1e4 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x1e4>
+			1e0: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 1e4:	jmp    21a <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x21a>
+ 1e6:	cs nop WORD PTR [rax+rax*1+0x0]
+ 1f0:	and    edi,0x7fffff
+ 1f6:	or     edi,0x800000
+ 1fc:	xorps  xmm0,xmm0
+ 1ff:	cvtsi2ss xmm0,edi
+ 203:	mov    rcx,QWORD PTR [r12]
+ 207:	shr    rax,0x18
+ 20b:	and    eax,0x1ff
+ 210:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+ 215:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 21a:	movaps XMMWORD PTR [rsp+0x40],xmm0
+ 21f:	mov    rax,QWORD PTR [rsp+0x30]
+ 224:	mov    rax,QWORD PTR [rax+r15*8]
+ 228:	mov    rdi,rax
+ 22b:	shr    rdi,1
+ 22e:	mov    ecx,edi
+ 230:	and    ecx,0x7fffffff
+ 236:	lea    edx,[rcx-0x1]
+ 239:	cmp    edx,0xbffffff
+ 23f:	setb   dl
+ 242:	cmp    ecx,0x7f800000
+ 248:	setae  cl
+ 24b:	or     cl,dl
+ 24d:	je     260 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x260>
+ 24f:	call   254 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x254>
+			250: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 254:	movaps xmm1,xmm0
+ 257:	jmp    28a <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x28a>
+ 259:	nop    DWORD PTR [rax+0x0]
+ 260:	and    edi,0x7fffff
+ 266:	or     edi,0x800000
+ 26c:	xorps  xmm1,xmm1
+ 26f:	cvtsi2ss xmm1,edi
+ 273:	mov    rcx,QWORD PTR [r12]
+ 277:	shr    rax,0x18
+ 27b:	and    eax,0x1ff
+ 280:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+ 285:	mulss  xmm1,DWORD PTR [rax+0x8]
+ 28a:	mov    rax,QWORD PTR [rsp+0x38]
+ 28f:	mov    rax,QWORD PTR [rax+r15*8]
+ 293:	mov    rdi,rax
+ 296:	shr    rdi,1
+ 299:	mov    ecx,edi
+ 29b:	and    ecx,0x7fffffff
+ 2a1:	lea    edx,[rcx-0x1]
+ 2a4:	cmp    edx,0xbffffff
+ 2aa:	setb   dl
+ 2ad:	cmp    ecx,0x7f800000
+ 2b3:	setae  cl
+ 2b6:	or     cl,dl
+ 2b8:	je     c0 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0xc0>
+ 2be:	movaps XMMWORD PTR [rsp+0x60],xmm1
+ 2c3:	call   2c8 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x2c8>
+			2c4: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 2c8:	movaps xmm1,XMMWORD PTR [rsp+0x60]
+ 2cd:	jmp    ea <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0xea>
+ 2d2:	call   2d7 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x2d7>
+			2d3: R_X86_64_PLT32	lean_inc_heartbeat-0x4
+ 2d7:	mov    edi,0x28
+ 2dc:	call   2e1 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x2e1>
+			2dd: R_X86_64_PLT32	mi_malloc_small-0x4
+ 2e1:	test   rax,rax
+ 2e4:	je     313 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x313>
+ 2e6:	movabs rcx,0x2800000001
+ 2f0:	mov    QWORD PTR [rax],rcx
+ 2f3:	movaps xmm0,XMMWORD PTR [rsp]
+ 2f7:	movups XMMWORD PTR [rax+0x8],xmm0
+ 2fb:	movaps xmm0,XMMWORD PTR [rsp+0x10]
+ 300:	movups XMMWORD PTR [rax+0x18],xmm0
+ 304:	add    rsp,0x78
+ 308:	pop    rbx
+ 309:	pop    r12
+ 30b:	pop    r13
+ 30d:	pop    r14
+ 30f:	pop    r15
+ 311:	pop    rbp
+ 312:	ret
+ 313:	call   318 <lp_competition_Submission_R22IndexedResident8_wordLoop___redArg+0x318>
+			314: R_X86_64_PLT32	lean_internal_panic_out_of_memory-0x4

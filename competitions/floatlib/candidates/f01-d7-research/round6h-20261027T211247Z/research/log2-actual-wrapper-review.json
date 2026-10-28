@@ -1,0 +1,27 @@
+{
+  "utc": "2026-10-28T02:32:33.772185+00:00",
+  "state": "VERIFIED_GENERIC_PUBLIC_LOG2_WRAPPERS_ARE_SHIFT_COUNTER_LOOPS",
+  "run": 40611570030,
+  "rows": [
+    {
+      "symbol": "lp_competition_R22Log2SourceProbe_word32",
+      "file": "diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r22-dev-nativecold-cost1/native-loop-10.asm.txt",
+      "sha256": "7ccc3eba418e1fcc168be3f79cc86297bb2ca61236eebba9d1cfdf7d89ef6b9b",
+      "object_sha256": "190a5c8de22f2b93a3131650f814503b846b08546c2f80151871f96d1130f0d5",
+      "kernel_sha256": "5d610468556f5660c0b80551be22149c9d086badbe10342ddecc3f6509ea8d93",
+      "body": "0000000000000000 <lp_competition_R22Log2SourceProbe_word32>:\n   0:\txor    eax,eax\n   2:\tcmp    edi,0x2\n   5:\tjb     1b <lp_competition_R22Log2SourceProbe_word32+0x1b>\n   7:\txor    eax,eax\n   9:\tmov    ecx,edi\n   b:\tnop    DWORD PTR [rax+rax*1+0x0]\n  10:\tinc    eax\n  12:\tshr    ecx,1\n  14:\tcmp    edi,0x3\n  17:\tmov    edi,ecx\n  19:\tja     10 <lp_competition_R22Log2SourceProbe_word32+0x10>\n  1b:\tret",
+      "original_scope": "Diagnostic statement replay using the unchanged pinned build; this is not the cleaned-up timed gate object."
+    },
+    {
+      "symbol": "lp_competition_R22Log2SourceProbe_word64",
+      "file": "diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r22-dev-nativecold-cost1/native-loop-11.asm.txt",
+      "sha256": "95599f8f96de4d57789d883c7572f3ba6027ec0f1931f6dc1bbfbfcf1c8e09d8",
+      "object_sha256": "190a5c8de22f2b93a3131650f814503b846b08546c2f80151871f96d1130f0d5",
+      "kernel_sha256": "5d610468556f5660c0b80551be22149c9d086badbe10342ddecc3f6509ea8d93",
+      "body": "0000000000000000 <lp_competition_R22Log2SourceProbe_word64>:\n   0:\txor    eax,eax\n   2:\tcmp    rdi,0x2\n   6:\tjb     1f <lp_competition_R22Log2SourceProbe_word64+0x1f>\n   8:\tmov    rcx,rdi\n   b:\tnop    DWORD PTR [rax+rax*1+0x0]\n  10:\tinc    rax\n  13:\tshr    rcx,1\n  16:\tcmp    rdi,0x3\n  1a:\tmov    rdi,rcx\n  1d:\tja     10 <lp_competition_R22Log2SourceProbe_word64+0x10>\n  1f:\tret",
+      "original_scope": "Diagnostic statement replay using the unchanged pinned build; this is not the cleaned-up timed gate object."
+    }
+  ],
+  "limits": "Actual replay object under unchanged pinned compiler, not cleaned-up timed object or a timed ADD normalizer. No CPU cycle claim. Range-specialized inlined callers remain unmeasured; originalLLVMsource recognizer inference and earlierUNKNOWN remain historical, not machine evidence.",
+  "next": "Do not assume a one-instruction leading operation for new general cancellation ADD. Existing binary-search FastMul.fastLog2 or another legal source needs its own actual caller cost."
+}

@@ -1,0 +1,20 @@
+# Continuous-k unroll: one conditional interface, no full candidate
+
+Stage first tool01:04:25Z,20minute maximum. Current B2's pair loop is not already unrolled across k. In the actual bound406073 Submission object, `R15PackedB2.loop` performs one A import at0x151, one paired mulps0x172/addps0x17a, and one backedge0x189 per k. Its two packed lanes are two output columns, not two k iterations. It retains the Nat tag/range/address work at0x40..0x90 and one B2 record load at0x140. There are2 XMM stores and2 loads per in-range/small-Nat iteration, around the input codec and persistent accumulator; frame72B. This source/runtime premise is real, but is not a cycle profile.
+
+Selected route is static runControl's BMM closure→Submission.bmm→R15PackedB2.dispatch→core/output/group→loop. Original UnderflowZero and shape dispatch `2≤p≤8,1<n,4≤m` remain relevant; whole BMM cost cannot be assigned to this branch. This is not an audit of D's new indexed8 loop, whose source is untouched.
+
+History distinctions:
+
+- R10 d70 fixed n0..4 ordered-chain unroll passed full39994942866 and was about0.7% slower in BMM. Short-k specialization alone is old, and n2/3 offer little or no loop-test amortization here.
+- R12 Packed4Index's native-input/USize loop actually had compiler two-k unroll and four-lane arithmetic. That is not the current raw-A/Nat B2 function; don't borrow its result as evidence of this callback's unroll.
+- R19 c70c temporal B2 grouped four k positions into new B8 storage. Full40398675395 passed, whole0.990205/BMM0.922129/p05+0.007791, below adoption. It retained four input codecs and strict per-lane order. New frame200B vs72B did not mean more dynamic spills: both normal full4 paths had8 XMM stores/8 loads. Preparation, padding, closures and packet layout changed. This constrains optimism but does not measure a plain-layout two-step loop.
+- R19 dual A4+B8 and B16 add preparation/layout changes; old row/column-width and row-closure negatives are not this exact body. No exact measured same-layout arbitrary-n k2 body was found in the bounded history search.
+
+`PairK2-interface.lean.inc` supplies only one Nat loop with full2 steps and an explicit0/1-step tail. It retains the exact B2 vector, raw A/getD behavior, two scalar accumulators, original initial+0, and one terminal F2. No per-block packet/state object, new cache, different arithmetic algorithm, reassociation, FMA, width/shape grid or Nat→USize conversion is introduced. Four independent products are explicit before the ordered trees `(s0+p00)+p10` and `(s1+p01)+p11`; actual compiler scheduling is UNKNOWN. Both original per-element RNEs are still required.
+
+The new proof interface would be equality to `R15PackedB2.loop n baseA A packed k s0 s1` for arbitrary n/baseA/k/inputs/starting accumulators. Unfolding the old loop twice closes the full2 induction step without a floating associativity law; tail unfolds once or returns. Then reuse current lane/read/finish/whole-output transport. No such new equality has been compiled, and public BMM is not wired to this interface.
+
+Only potential deleted hot work established here is loop control/backedges across pairs. Input reads, B record reads, both imports and both scalar address expressions remain; do not claim their elimination. The literal loop-condition count changes from n+1 to floor(n/2)+2, but this is source structure, not optimized branch counts or elapsed time. New Nat(k+1) work and a larger live set may erase that benefit.
+
+Smallest falsifier, if later selected: same current B2 packing/output/guard, exact new reachable loop C/ASM. A full2 hot path must execute two imports/four original MACs with one loop backedge, no per-block allocation and no increase in dynamic save/reload work that defeats the control reduction. Otherwise close before full proof. If D's independent indexed8 work already produces an automatically unrolled word loop, this Nat-only interface loses priority. **HOLD_NO_CI** while that existing test is in flight; no competing whole source or unroll4 variant is built.

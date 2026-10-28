@@ -1,0 +1,173 @@
+{
+  "checked_utc": "2026-10-27T22:03:04.107394+00:00",
+  "state": "TEN_DIRECTED_OLD_MODEL_WITNESSES_CHECKED",
+  "oracle_path": "competitions/floatlib/research/astra-collab-20261023-r7/nonfinite-oracle.py",
+  "oracle_sha256": "3dfaeec2bde1364a4f06abd292f0ba265376da79e678d3827aa88bd33219ad72",
+  "rows": [
+    {
+      "name": "inf_times_zero",
+      "A": [
+        "7f800000"
+      ],
+      "B": [
+        "00000000"
+      ],
+      "A_safe": true,
+      "B_safe": true,
+      "raw_dot": "7fc00000",
+      "native_import_model": "7fc00000",
+      "equal": true
+    },
+    {
+      "name": "opposite_infinity_products",
+      "A": [
+        "7f800000",
+        "ff800000"
+      ],
+      "B": [
+        "3f800000",
+        "3f800000"
+      ],
+      "A_safe": true,
+      "B_safe": true,
+      "raw_dot": "7fc00000",
+      "native_import_model": "7fc00000",
+      "equal": true
+    },
+    {
+      "name": "overflow_then_opposite_overflow",
+      "A": [
+        "7f7fffff",
+        "ff7fffff"
+      ],
+      "B": [
+        "7f7fffff",
+        "7f7fffff"
+      ],
+      "A_safe": true,
+      "B_safe": true,
+      "raw_dot": "7fc00000",
+      "native_import_model": "7fc00000",
+      "equal": true
+    },
+    {
+      "name": "signed_zero_initial_add",
+      "A": [
+        "80000000"
+      ],
+      "B": [
+        "3f800000"
+      ],
+      "A_safe": true,
+      "B_safe": true,
+      "raw_dot": "00000000",
+      "native_import_model": "00000000",
+      "equal": true
+    },
+    {
+      "name": "empty",
+      "A": [],
+      "B": [],
+      "A_safe": true,
+      "B_safe": true,
+      "raw_dot": "00000000",
+      "native_import_model": "00000000",
+      "equal": true
+    },
+    {
+      "name": "qnan_payload_first",
+      "A": [
+        "ffc01234"
+      ],
+      "B": [
+        "3f800000"
+      ],
+      "A_safe": false,
+      "B_safe": true,
+      "raw_dot": "ffc01234",
+      "native_import_model": "7fc00000",
+      "equal": false
+    },
+    {
+      "name": "snan_payload_first",
+      "A": [
+        "ff800011"
+      ],
+      "B": [
+        "3f800000"
+      ],
+      "A_safe": false,
+      "B_safe": true,
+      "raw_dot": "ffc00011",
+      "native_import_model": "7fc00000",
+      "equal": false
+    },
+    {
+      "name": "invalid_then_later_snan",
+      "A": [
+        "00000000",
+        "ff800011"
+      ],
+      "B": [
+        "7f800000",
+        "3f800000"
+      ],
+      "A_safe": false,
+      "B_safe": true,
+      "raw_dot": "7fc00000",
+      "native_import_model": "7fc00000",
+      "equal": true
+    },
+    {
+      "name": "payload_then_invalid",
+      "A": [
+        "ffc01234",
+        "00000000"
+      ],
+      "B": [
+        "3f800000",
+        "7f800000"
+      ],
+      "A_safe": false,
+      "B_safe": true,
+      "raw_dot": "ffc01234",
+      "native_import_model": "7fc00000",
+      "equal": false
+    },
+    {
+      "name": "canonical_qnan_input",
+      "A": [
+        "7fc00000"
+      ],
+      "B": [
+        "3f800000"
+      ],
+      "A_safe": false,
+      "B_safe": true,
+      "raw_dot": "7fc00000",
+      "native_import_model": "7fc00000",
+      "equal": true
+    }
+  ],
+  "arbitrary_raw_seed_counterexample": {
+    "empty_raw_seed": "ffc01234",
+    "raw_empty_result": "ffc01234",
+    "native_import": "7fc00000"
+  },
+  "summary_does_not_stop_conversion": {
+    "raw_B": [
+      "ff800011",
+      "3f800000",
+      "40000000"
+    ],
+    "required_prepared_values": [
+      "7fc00000",
+      "3f800000",
+      "40000000"
+    ],
+    "required_summary": false,
+    "wrong_early_stop_size": 1,
+    "required_size": 3
+  },
+  "scope": "Ten exact source-model cases plus exact empty-seed/array-length counterexamples. No new native execution, Lean result, timing, full-domain empirical claim or changed T19 proof."
+}

@@ -1,0 +1,25 @@
+{
+  "first_tool_utc": "2026-10-28T02:11:52Z",
+  "checked_utc": "2026-10-28T02:14:12.498834+00:00",
+  "source": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/research/streaming-public/expected-native-word/ExpectedNativeWord.lean.inc",
+    "sha256": "37cd4435b62e306d08923ecca2fc8f9dabb0e39c84a2f8f583e65bbe49ef097f",
+    "bytes": 1700
+  },
+  "finding": "NO_DEFINITE_TYPING_OR_MATHEMATICAL_ERROR_FOUND_STATIC_ONLY",
+  "checked": [
+    "canonical_nan_raw uses logical Float32.nan, not opaque Float64 conversion; consistent with existing B2 R7W12.ofFloat32_nan_toModel rfl and pinned expMask OR quietBit constant",
+    "false rawNotNaN classifier yields native isNaN=true via Bool.not_inj; true yields native isNaN=false",
+    "nonNaN roundtrip includes both signed zeros and signed infinities; false branch erases raw NaN sign/payload only in native import target",
+    "checkNative_eq_expected rewrites only the source-side imported word; stored is arbitrary and no successful cast/check premise is used"
+  ],
+  "not_claimed": [
+    "successful decide elaboration",
+    "opaque widening/narrowing always passes",
+    "runtime improvement",
+    "full public BMM correctness"
+  ],
+  "Lean": "NOT_RUN",
+  "CI": "NOT_RUN",
+  "source_mutation": "NONE"
+}

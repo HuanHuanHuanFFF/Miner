@@ -1,0 +1,41 @@
+{
+  "at_utc": "2026-10-27T22:51:06.737158+00:00",
+  "reviewer": "R22 A",
+  "scope": "One independent bounded static interface review, no source edits, no case expansion, no Lean/CI/cost.",
+  "result": "NO_DEFINITE_INTERFACE_ERROR_FOUND_STATIC_ONLY",
+  "evidence": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\flat-scale-bridge\\FlatScaleBridge.lean.inc",
+      "sha256": "808cecb4502910d4060f942211fadbc2f1544ce46400d74a3ef52a255fc4d674",
+      "bytes": 4430
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\development-flat-scale2\\FlatScale.lean.inc",
+      "sha256": "f5fbc6d85d18ebfacabd1ac19a65633f1c973459b057673c8f85bb4320c28b44",
+      "bytes": 10784
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-r22-dev-flat-scale-cost2\\Kernel.lean",
+      "sha256": "ef1fa46164ecce62cb27c7f101d488eff386c03f21c19636760832f79c04926b",
+      "bytes": 237614
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-r15-dev-packed-b2-1\\Kernel.lean",
+      "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+      "bytes": 226829
+    }
+  ],
+  "checked": [
+    "tableIndex bound512 yields g<4 and s<128; shift7/mask127 reconstruct j through Nat.div_add_mod",
+    "h0/h1/h2/h3 remain explicit all128slot premises; group offsets0/128/256/384 and UInt32.ofNat_toNat match",
+    "seed definition and existing R2W01b.scaleAt_eq exactly align",
+    "convert preserves original fastOK/mantissa/ofBits fallback, only scaleAt replaced",
+    "add/nativeMul fallback and nonNaN result branch match old Submission endpoints; mul keeps LowScale guard",
+    "current component namespace opening repair matches ef1fa carrier; bridge root names unchanged"
+  ],
+  "limits": [
+    "NOT_RUN typing/replay/axiom audit",
+    "Four block-wide pick equations are not closed by this review",
+    "No512case proof or new performance/adoption conclusion"
+  ]
+}

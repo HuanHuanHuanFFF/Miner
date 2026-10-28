@@ -1,0 +1,24 @@
+{
+  "at_utc": "2026-10-28T03:05:41.616055+00:00",
+  "cases": 4048,
+  "counterexample": {
+    "S": 128,
+    "Ep": 173,
+    "sign": "0x80000000",
+    "frac": 0,
+    "mid": "0x56800000",
+    "shifted": "0xaa000000",
+    "additive_delta": "0x2a000000",
+    "wrong_or_delta": "0xaa000000",
+    "correct": "0x80800000",
+    "wrong": "0x800000",
+    "raw_input_witness": [
+      "0xa0000000",
+      "0x20000000"
+    ]
+  },
+  "scope": "Pure UInt32 wrap/shift/add model. A generic field identity, not a new native product implementation or Lean proof. No confirmation data/CI.",
+  "universal_paper_argument": "mid=Ep*B+f; signed delta=(S-300)*B+sign; total=sign+(S+Ep-300)*B+f lies in [0,2^32), so modulo2^32 equals target. OR sign is invalid when negative delta already has bit31 set.",
+  "formal": "NOT_RUN",
+  "native_cost": "UNKNOWN"
+}

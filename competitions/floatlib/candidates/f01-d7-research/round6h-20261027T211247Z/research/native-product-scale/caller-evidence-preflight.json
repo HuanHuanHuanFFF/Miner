@@ -1,0 +1,19 @@
+{
+  "checked_utc": "2026-10-28T00:18:57Z",
+  "scope": "One read-only evidence-boundary check; no driver/candidate/CI mutation",
+  "driver": "competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-multistatic/driver.py",
+  "driver_sha256": "d7f718c61642f6a523185c7e382f9fd2264b2f63489d3d252d241a42554691ab",
+  "driver_bytes": 19822,
+  "candidate_sha256": "fd4e5b5144d00f3413b0b367a748e9be8f55d51017b4a8aaa5be53d404b1d6c1",
+  "native_product_runtime_sha256": "e51a67d6188b2ec4c8701cd991e942296fdc7d6158fdb8d92c4e42852bd01709",
+  "findings": [
+    "Original_build at lines 106-113 includes Submission.c.o.export and response-file link objects; pre/post original build identity is checked. No new binding gap was found.",
+    "Objects at line 237 and ASM loop at 287-290 cover only owned R22MultiStaticCostMain objects. Statement Submission.c is saved, but this driver does not itself save Submission object ASM.",
+    "nativeprod uses an inline wrapper and inline guardedMul directly in owned Main; its fast body can be inspected in owned Main ASM.",
+    "outline calls noinline Submission.R22OutlineMul.diagnosticEntry; resident16 calls Submission.R22Resident16.guarded. Their external body ASM needs separate existing-object capture if no outer capture supplies it.",
+    "The current plan sets capture_codegen=false. The parent was notified before asserting any actual-body mechanism or timing conclusion. This is an evidence-retention concern, not a claim that the timed source or mathematical semantics are wrong."
+  ],
+  "next": "D check outer capture; otherwise bounded nm/objdump of already-bound actual Submission object, no recompile or rerun for this check",
+  "actual_run_status": "NOT_INSPECTED",
+  "performance": "UNKNOWN"
+}

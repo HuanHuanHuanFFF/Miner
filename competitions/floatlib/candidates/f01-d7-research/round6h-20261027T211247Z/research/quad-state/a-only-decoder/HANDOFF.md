@@ -1,0 +1,9 @@
+# R22 B: A-only decoder premise
+
+Started **22:18:35 UTC**, bound **22:33:35 UTC**; shared deadline unchanged. No runtime/candidate/CI/local Lean; writes only this proof/investigation subdirectory.
+
+- **Critical history correction:** f65 remains an unmeasured standalone component, but later **f84ea2db A-only indexed/USize B2 was fully measured**. 40404258098 selected warm loop has0calls/0rsp accesses (original ASM bytes freshly recovered in memory via the maintenance Git-blob index); 40407333869/1927005 full25 gate passed, whole **0.995854643**, BMM **0.966864998**, p05 **−0.006708170**. It failed adoption. Do not call the A-only mechanism untested.
+- d5e3512f changed both direct-dot operands, BMM1.173127/whole1.040345 versus old41; its scope is different. f65's cb7 combination also does not isolate decoder cost. `history-binding.json` binds exact source/input/verdict/ASM evidence and preserves these boundaries.
+- New F8 can differ in live-value geometry, four A call placement and packed-B sharing without an A panel. The actual F8 source/caller is not yet bound here. If decoding precedes Cell-state loads, eight accumulators may never span the calls; do not infer spills from field count or C sites.
+- `DecoderNormalization.lean.inc`: four **NOT_RUN proof-only roots**, all via existing unconditional `R2W01c.convert_eq`. They normalize raw carrier/getD and exactly four A values of any A4B2 state update, leaving B, state, ordering, guard and raw fallback untouched. Exact hashes are in `manifest.json`.
+- Next: D binds the actual timed callback to the concrete F8 loop, checks eligible/cold/merge paths for calls and stack traffic, then decides a complete same-F8 cost comparison. Old f84 remains parked without reseeding. Full checks are in `investigation.md`; original quad257d stays frozen.
