@@ -51,6 +51,14 @@ def main():
                 paths.append(manifest)
                 data=json.loads((ROOT/manifest).read_bytes())
                 helper=data.get('helper_audit_module')
+                if name.startswith('f01-r23-') and data.get('helper_audit_module_path'):
+                    helper_path='competitions/floatlib/candidates/'+data['helper_audit_module_path']
+                    resolved_helper=(ROOT/helper_path).resolve()
+                    allowed_helper_root=ROOT/'competitions/floatlib/candidates/f01-d7-research/round40m-20261028T142626Z'
+                    legacy_helper=ROOT/'competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/development-helper-audit-v8.py'
+                    assert resolved_helper.is_relative_to(allowed_helper_root) or resolved_helper==legacy_helper
+                    assert hashlib.sha256(resolved_helper.read_bytes()).hexdigest()==data['helper_audit_module_sha256']
+                    paths.append(helper_path)
                 if name.startswith('f01-r22-') and helper in ('development-cost-audit.py','development-cost2-audit.py','development-cost3-audit.py','development-flat-cost-audit.py','development-flat-cost2-audit.py','development-pair8-cost-audit.py','development-resident8-cost-audit.py','development-broadword-cost-audit.py','development-multistatic-cost-audit.py','development-farstatic-cost-audit.py','development-nativecold-cost-audit.py','development-indexed8-cost-audit.py','development-outline-isolation-audit.py','development-wordcarry-cost-audit.py','development-nat-prefix-audit.py','development-nat-bias-repair-audit.py','development-endpoint-cost-audit.py','development-nat-light-repair-audit.py'):
                     paths.append('competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/'+helper)
                 for component in data.get('components',[]):

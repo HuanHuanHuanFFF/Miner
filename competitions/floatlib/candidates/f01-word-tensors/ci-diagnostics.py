@@ -140,7 +140,21 @@ def statement(src,verdict):
             pm.run(g,kernel,out)
     return reason
 g.STAGES=[('intake',g.intake),('policy',g.policy),('statement',statement)]
-if kernel.parent.name.startswith('f01-r22-'):
+if kernel.parent.name.startswith('f01-r23-'):
+    manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
+    helper_manifest=json.loads(manifest_path.read_bytes())
+    if helper_manifest.get('helper_audit_module_sha256'):
+        helper_relative=Path(helper_manifest['helper_audit_module_path'])
+        assert not helper_relative.is_absolute() and '..' not in helper_relative.parts
+        helper_path=(profiler.parent.parent/helper_relative).resolve()
+        allowed_root=(profiler.parent.parent/'f01-d7-research/round40m-20261028T142626Z').resolve()
+        legacy=(profiler.parent.parent/'f01-d7-research/round9h-20261026T194639Z/development-helper-audit-v8.py').resolve()
+        assert helper_path.is_relative_to(allowed_root) or helper_path==legacy
+        assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
+        hs=importlib.util.spec_from_file_location('r23_explicit_diagnostic_audit',helper_path)
+        hm=importlib.util.module_from_spec(hs);hs.loader.exec_module(hm)
+        g.STAGES += hm.stages(g,kernel,out,helper_manifest)
+elif kernel.parent.name.startswith('f01-r22-'):
     manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
     helper_manifest=json.loads(manifest_path.read_bytes())
     if helper_manifest.get('helper_audit_module_sha256'):
