@@ -1,0 +1,12 @@
+# Directed source/guard review of f90d42e3 public Kernel
+
+Scope: exact new `f01-r23-dev-outline-public1/Kernel.lean` SHA f90d42e3… / 253978B against exact old 88cdf318… / 255520B, plus exact 159e0633… helper. **No Lean, replay, whole-input multiplication or performance acceptance is claimed.**
+
+- `map_public_lines.py` found the complete 51-theorem helper body exactly once in the public source after only `Submission.`→`R19BiasBase.` substitution. Every theorem statement remains unchanged. Line shift +6380; the likely old timeout is now public line 7083 (`normalCore_eq_roundP`).
+- `audit_guard_coverage.py` freshly confirmed byte-identical `normalCore`, `guardedMul`, `diagnosticEntry`, `retainedMul`, `normal_guard`, `sum_guard`, `guardedMul_spec` and the entire final `Submission` namespace. No runtime guard, fallback, theorem domain or exposed-wrapper change is hidden in the repair.
+- For exponent fields eu,ev in 0..255, `eu-1≤253 ∧ ev-1≤253` under UInt32 wrap is exactly `1≤eu,ev≤254`. Their sum is at most 508, so the addition does not wrap. The second UInt32 test `s-128≤252` is exactly `128≤eu+ev≤380` for these values. The guard uses neither sign nor fraction.
+- The complete 256×256 exponent table matched that domain in every entry: 48259 selected pairs, 8001 lower-sum fallbacks, 8256 upper-sum fallbacks, and 1020 pairs involving zero/subnormal or nonfinite exponent fields. These are field-combination counts, not workload frequency or speed estimates. Every fallback still invokes retainedMul→original R19BiasBase.mul and the generic original hf specialization.
+- Actual product bounds remain exactly `(2^23)^2=70368744177664` and `(2^24-1)^2=281474943156225`. The normal path therefore uses leading 46..47 and s−2 in126..378, matching the original `roundP_normal` position interval172..425; its existing no-carry-at-47 argument controls the upper normalization endpoint. CI still has to accept those proofs.
+- Public `sum` and `bmm` remain the original R19BiasBase aliases. A new exposed `Submission.mul` result cannot be reported as a new sum/bmm implementation or their speedup.
+
+Evidence: `guard-coverage.json`, `public-line-map.json`; both scripts are lightweight and read-only outside this scope. No further broad review is requested. First CI40707444710 stopped in the adapter's diagnostic-timeout preflight before this source compiled; the 600→original180s plan correction is an execution repair, not mathematical evidence.

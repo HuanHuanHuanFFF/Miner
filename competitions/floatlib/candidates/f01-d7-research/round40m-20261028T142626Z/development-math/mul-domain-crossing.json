@@ -1,0 +1,122 @@
+{
+  "native_source_sha256": "f7ba2ddb12939f518e5beb60daf927d9d9d80d24262edd740eefd5e8e917cc03",
+  "integer_source_sha256": "f90d42e346a1634ffeb537ea7e9980e0a91baea8499dc6c2235da5ab8fe0e85f",
+  "exponent_pair_counts": {
+    "neither": 17274,
+    "integer_only": 31878,
+    "both": 16381,
+    "native_only": 3
+  },
+  "native_only_pairs": [
+    [
+      190,
+      191
+    ],
+    [
+      191,
+      190
+    ],
+    [
+      191,
+      191
+    ]
+  ],
+  "examples": [
+    {
+      "u": "0x800000",
+      "v": "0x3f800000",
+      "sum": 128,
+      "native_guard": false,
+      "integer_guard": true,
+      "normalCore_if_unconditionally_used": "0x800000",
+      "exact_RNE_overflow_proved_by_integer_threshold": false,
+      "reference_if_overflow": "not inferred here"
+    },
+    {
+      "u": "0x7f000000",
+      "v": "0x800000",
+      "sum": 255,
+      "native_guard": false,
+      "integer_guard": true,
+      "normalCore_if_unconditionally_used": "0x40000000",
+      "exact_RNE_overflow_proved_by_integer_threshold": false,
+      "reference_if_overflow": "not inferred here"
+    },
+    {
+      "u": "0x5f000000",
+      "v": "0x5f800000",
+      "sum": 381,
+      "native_guard": true,
+      "integer_guard": false,
+      "normalCore_if_unconditionally_used": "0x7f000000",
+      "exact_RNE_overflow_proved_by_integer_threshold": false,
+      "reference_if_overflow": "not inferred here"
+    },
+    {
+      "u": "0x5f7fffff",
+      "v": "0x5fffffff",
+      "sum": 381,
+      "native_guard": true,
+      "integer_guard": false,
+      "normalCore_if_unconditionally_used": "0x7ffffffe",
+      "exact_RNE_overflow_proved_by_integer_threshold": true,
+      "reference_if_overflow": "0x7f800000"
+    },
+    {
+      "u": "0x5fffffff",
+      "v": "0x5fffffff",
+      "sum": 382,
+      "native_guard": true,
+      "integer_guard": false,
+      "normalCore_if_unconditionally_used": "0x807ffffe",
+      "exact_RNE_overflow_proved_by_integer_threshold": true,
+      "reference_if_overflow": "0x7f800000"
+    }
+  ],
+  "guard_scope": "All 65536 exponent pairs, exact source guard algebra; fractions endpoint checked; signs masked. Counts are not workload probabilities.",
+  "new_f90_actual_MainFull": {
+    "asm_sha256": "b423a001683156c2b3ea08a825f4694ec54a9196db1f4c262b4b478e2f65584d",
+    "main_C_sha256": "caa09b979fe9035b6256ab0c5b619721641f5cc34a3ac86efff4493991e5e8c7",
+    "object_sha256": "4369cfa6812d4fd3dbab6189c0d73aca555c9555fe7786011b54fb0eb89a9579",
+    "typed_instructions": 45,
+    "no_push_pop_call": true,
+    "boxed_boundary": "2 unbox + 2 lean_dec + typed call + 1 lean_box_uint32; actual Bench.Suite.run selected closure",
+    "scope": "Diagnostic statement replay using the unchanged pinned build; this is not the cleaned-up timed gate object."
+  },
+  "old_integer_diagnostic_cost": [
+    {
+      "seed": 2220001,
+      "block": 0,
+      "mul_share_in_old_diagnostic": 0.3667245241309082,
+      "mul_ratio": 0.9392334383839912,
+      "whole_ratio": 0.9802605234970879
+    },
+    {
+      "seed": 2220001,
+      "block": 1,
+      "mul_share_in_old_diagnostic": 0.368155523100474,
+      "mul_ratio": 0.962190504814526,
+      "whole_ratio": 0.9867711211731567
+    },
+    {
+      "seed": 2220003,
+      "block": 0,
+      "mul_share_in_old_diagnostic": 0.3838980924628397,
+      "mul_ratio": 0.9409869561454642,
+      "whole_ratio": 0.9675669827823906
+    },
+    {
+      "seed": 2220003,
+      "block": 1,
+      "mul_share_in_old_diagnostic": 0.38793513176506317,
+      "mul_ratio": 0.9674150572923128,
+      "whole_ratio": 1.0021123157404077
+    }
+  ],
+  "native_F7_stability": "40615975642 25 rounds: ratio0.9555001521; p05=-0.0041730576; NOT_ADOPTED; no same-source seed chase",
+  "new_f90_performance": "UNKNOWN; 40708758777 statement/replay/49AX passed, no checksum/timing gate",
+  "minimal_composition_interface": "guardedMul fallback (hf : forall x y, fallback x y = Spec.mul x y); can use an already proved native fallback, but new assembled source needs cap/AX/replay/runtime/timing checks",
+  "composition_cap": "UNKNOWN until exact deduplicated assembly; f90 has2022B headroom, cannot append full F7 source",
+  "decision": "Native-first may service31878 additional integer-only field pairs; integer-first leaves only3 native-only field pairs. Both have large overlap and common boxed ABI. Measure actual selected callbacks, full guard/miss cost and whole boundary before proof expansion or full25.",
+  "benefit_bound": "Whole reduction = f_changed_path * local reduction only under fixed remaining costs. Current public sum/BMM retained; no addition of old F7 and old integer ratios."
+}

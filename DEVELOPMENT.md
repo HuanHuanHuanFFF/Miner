@@ -15,7 +15,7 @@
 
 正式校准：B2的[#336官方回执](competitions/floatlib/evidence/formal-b2-336/comparison.json)完整通过，当前第13、耗时1.6287×冠军；旧1.2487×预估低估本次耗时，实际高30.4%。看板优先显示官方结果，四项列各输入组范围。后续更换源必须清除或替换旧`official_submission`绑定，不能把#336的结果继承给新候选。
 
-当前先看[R21一小时结果](competitions/floatlib/candidates/f01-d7-research/round1h-20261027T103538Z/README.md)：完整终端7de已过原public全gate，首D矩阵耗时−5.68%／整包−0.85%，p05负，停放。任意p双行流式4e36的19根、同宽缩放桥56cd的15根通过；下一步先关闭完整两行成本、实际U64 product和公共接线。保留版仍为B2，不能继承正式#336成绩给后继源。
+当前先看[R23四十分钟结果](competitions/floatlib/candidates/f01-d7-research/round40m-20261028T142626Z/README.md)：整数乘法 f90d 原四义务、两模块回放及49根公理通过，尚无新计时；矩阵循环输出与条件Prefix新增6根通过，实际producer新增5根通过，reader仍有right-lane finish目标，全部3run已收齐。完整新publicBMM仍未闭，保留B2；下一轮先读实际原件与投入决定，不重追旧同体seed。
 
 1. 读[赛道入口](competitions/floatlib/README.md)、技术规则及当前开发状态，确定保留版与验收缺项。
 2. [数学结论](competitions/floatlib/research/RESULTS.md)索引可复用证明；当前保留 B2 的三组采用证据在 [R15](competitions/floatlib/candidates/f01-d7-research/round3h-20261025T043928Z/development-final-three-group-verification.json)。

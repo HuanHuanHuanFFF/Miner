@@ -1,11 +1,12 @@
 # FloatLib 当前协作交接
 
-当前分支`huan/codex-gpt`，D统一Git／公共CI；普通消息走`D:/CodingProject/Bitget-Collab`。本轮R22共同窗口UTC2026-10-27 21:12:47—2026-10-28 03:12:47，晚加入不延期。
+当前分支`huan/codex-gpt`，D统一Git／公共CI；普通消息走`D:/CodingProject/Bitget-Collab`。R23共同窗口UTC2026-10-28 14:26:26—15:06:26已结束，只回收已启动CI及交付，不新增研究。
 
-- 唯一当前状态：[开发状态](development-status.json)；[R22结果与恢复入口](../candidates/f01-d7-research/round6h-20261027T211247Z/README.md)。历史分支名和旧授权不替代根AGENTS与本轮记录。
-- 保留B2/622d；f7ba加乘完整原版25轮通过，公开整包0.95550×B2，但p05−0.00417，未采用。现任冠军#323，#336仍第13／1.6287×冠军，开发估算见根看板。
-- 矩阵行／lane和机字→Nat共7个selected根通过两模块回放和公理；公共BMM仍未闭。Nat最小OOM已修到typing，完整Math仍有具体goal；所有未验草稿保留NOT_RUN。
-- 本轮16个已启动CI已终态，原始2489文件244140044B逐项重新核验，见本轮作业索引；不盲重跑负体、不从组件通过继承整包或正式成绩。没有本机Lean／新正式上传／资金操作。
+- 当前状态：[开发状态](development-status.json)；[R23结果及恢复入口](../candidates/f01-d7-research/round40m-20261028T142626Z/README.md)。
+- 保留B2/622d；F7观测整包0.95550×B2但稳定性FAIL，固定体不追seed。现任冠军#323、#336仍13/官方1.6287×；开发预估1.56×见根看板，没有新正式成绩。
+- f90d整数乘法原四义务、Submission/VerifyFull回放、49根公理PASS；尚未跑新源checksum/25轮。矩阵transport3、conditionalPrefix3已验，不能据此前提性结果称完整publicBMM。
+- 全部3run已收394原件22258107B；末批producer2五根PASS，reader2右lane与FloatArray长度目标未过；原件/精确源/终态由R23作业索引登记。旧原件和失败保留，不继承不同源成绩；无本机Lean、正式上传、资金或reset。
+- 后续投入：旧indexed入口仅整包7.87–8.62%耗时，只约束旧公共样本；完成实际连接后优先更广热点/codec/accspill与正确native-first组合，不能相加旧收益。详R侧ALLOCATION-DECISION及D数学NEXT-MUL-INTERFACE。
 
 ## 历史：首次环境与开发交接
 

@@ -1,6 +1,6 @@
 # FloatLib 数学结论
 
-资料整理更新至 2026-10-26，纳入R18与已合并DeepSeek成果；R1–R6归档、R11原件及历史状态保留。四项性能与冠军见[看板](../../../dashboard.md)，当前保留版本及研究候选见[开发状态](../coordination/development-status.json)。
+最新证明增量至2026-10-28 R23；完整资料整理至2026-10-26，纳入R18与已合并DeepSeek成果；R1–R6归档、R11原件及历史状态保留。四项性能与冠军见[看板](../../../dashboard.md)，当前保留版本及研究候选见[开发状态](../coordination/development-status.json)。
 
 **已建立原生算术、精确解码、有序累加、机器字索引、连续矩阵输出和独立点积链的证明链；按“耗时占比 × 可实现降耗”，结合开发和完整验证成本选路。** 最近采用的是[B2完整包](../candidates/f01-r15-dev-packed-b2-1/Kernel.lean)，SHA `622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58`；D/40168687803、A/40169957447、B/40171180249完整通过并满足冻结三组门槛，见[R15统一验收](../candidates/f01-d7-research/round3h-20261025T043928Z/development-final-three-group-verification.json)。当前冠军估算从开发状态进入，后续同源控制只补原证据；换冠军的参照转换另有回执。
 
@@ -10,6 +10,8 @@
 
 | 资产 | 精确证据 | 接续边界 |
 |---|---|---|
+| 整数乘法宽正常域与回退闭合 | [f90d公共源](../candidates/f01-r23-dev-outline-public1/Kernel.lean)，40708758777原四义务、两模块、49根公理通过；[精确回执](../candidates/f01-d7-research/round40m-20261028T142626Z/development-probe2-accepted.json) | 未跑新源checksum/25轮，不能继承旧性能；[原生/整数域交叉与两处溢出反例](../candidates/f01-d7-research/round40m-20261028T142626Z/development-math/NEXT-MUL-INTERFACE.md)只约束假想放宽guard，当前guard正确回退 |
+| 实际矩阵缓存与输出连接 | [R23分源验收](../candidates/f01-d7-research/round40m-20261028T142626Z/development-matrix-proof-status.json)：producer5、机字输出→Nat3、条件Prefix3根分别重放及公理通过 | 无条件reader仍4处right-lane finish目标，完整新publicBMM未闭，不能把不同源片段通过视作组合已验 |
 | UInt32精确数值往返 | [0873268d探针](../candidates/f01-r17-dev-u32-roundtrip-repair2/Kernel.lean)，40296747927整模块重放与22根显式审计 | 只覆盖该源及其前提，不等于新的ADD入口或收益 |
 | UInt64精确往返与lowering | [9be1162e探针](../candidates/f01-r17-dev-u64-roundtrip-repair1/Kernel.lean)、[876864bd诊断](../candidates/f01-r17-dev-u64-lowering1/Kernel.lean)，同批28／3根审计 | 诊断caller的C／ASM不能替代实际MainFull成本 |
 | 真正public MUL／ADD接线 | [R18完整原件与结果](../candidates/f01-d7-research/round11h-20261025T173831Z/development-round-results.json)，00ab／93cc原完整gate通过 | 对B2整包分别慢1.4%／24.2%，保留证明、停放这两个精确运行稿 |

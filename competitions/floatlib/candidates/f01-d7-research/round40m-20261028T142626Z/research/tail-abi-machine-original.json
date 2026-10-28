@@ -1,0 +1,59 @@
+{
+  "verified_at_utc": "2026-10-28T15:12:54.975344+00:00",
+  "run": 40711515352,
+  "source_commit": "a3d92aca7fa49ee4905f786838bc2fb08bec4500",
+  "kernel_sha256": "b0efef1ee1a532efcd2e0a49c99aa1dccef6b8c613ea03073016865dd17d821b",
+  "object_sha256": "8fd09ad2cca7a1ac9022c0e2a24052302ce63acf26fe810b41e033333d0b52cf",
+  "observations": [
+    {
+      "kind": "actual-built-object-disassembly",
+      "source": "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/ir/Submission.c.o.export",
+      "object_sha256": "8fd09ad2cca7a1ac9022c0e2a24052302ce63acf26fe810b41e033333d0b52cf",
+      "symbol": "lp_competition_Submission_R22IndexedResident8TailABI_coldMul",
+      "file": "native-loop-9.asm.txt",
+      "sha256": "8559795ea1a82978d52e73f375bf6e0950a7468a90e9fae1862195248b7b10cf",
+      "exit_code": 0,
+      "kernel_sha256": "b0efef1ee1a532efcd2e0a49c99aa1dccef6b8c613ea03073016865dd17d821b",
+      "scope": "Diagnostic statement replay using the unchanged pinned build; this is not the cleaned-up timed gate object.",
+      "exact_body_sha256": "55a82b74d4271f5335a66d8a87c3c2b214be2aff66326470d0c07c31ce222162",
+      "cross_edges": [
+        {
+          "target": "lp_competition_Submission_R22IndexedResident8TailABI_hotMul",
+          "instruction": {
+            "address": "fa",
+            "mnemonic": "call",
+            "operands": "ff <lp_competition_Submission_R22IndexedResident8TailABI_coldMul+0xff>"
+          },
+          "relocation": "fb: R_X86_64_PLT32\tlp_competition_Submission_R22IndexedResident8TailABI_hotMul-0x4"
+        }
+      ],
+      "direct_reference_management_calls": []
+    },
+    {
+      "kind": "actual-built-object-disassembly",
+      "source": "/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/ir/Submission.c.o.export",
+      "object_sha256": "8fd09ad2cca7a1ac9022c0e2a24052302ce63acf26fe810b41e033333d0b52cf",
+      "symbol": "lp_competition_Submission_R22IndexedResident8TailABI_hotMul",
+      "file": "native-loop-10.asm.txt",
+      "sha256": "710591f3cee202157df288740632d517e5e8d11fa618443af161f04e63d2aa35",
+      "exit_code": 0,
+      "kernel_sha256": "b0efef1ee1a532efcd2e0a49c99aa1dccef6b8c613ea03073016865dd17d821b",
+      "scope": "Diagnostic statement replay using the unchanged pinned build; this is not the cleaned-up timed gate object.",
+      "exact_body_sha256": "50ca25618b00f908d61f1de514ba8e2857c4b41e93826841b5ca461cae70c9ff",
+      "cross_edges": [
+        {
+          "target": "lp_competition_Submission_R22IndexedResident8TailABI_coldMul",
+          "instruction": {
+            "address": "2a3",
+            "mnemonic": "jmp",
+            "operands": "2a8 <lp_competition_Submission_R22IndexedResident8TailABI_hotMul+0x2a8>"
+          },
+          "relocation": "2a4: R_X86_64_PLT32\tlp_competition_Submission_R22IndexedResident8TailABI_coldMul-0x4"
+        }
+      ],
+      "direct_reference_management_calls": []
+    }
+  ],
+  "decision": "The two-sided-tail-jump premise FAILS for this exact toy: hot→cold jmp, cold→hot ordinary call plus caller cleanup/return. No direct array inc/dec relocation is present in either exact body. Do not assume borrowed same ABI guarantees both machine tail edges.",
+  "scope": "Already-launched original diagnostic replay object; not a new experiment, not actual BMM, no cleaned timed object or performance conclusion. Toy constant-index reads can be hoisted; hot-loop register appearance is not a BMM register-residency proof."
+}

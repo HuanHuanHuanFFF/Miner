@@ -1,0 +1,54 @@
+--- MathOutlet-fbd94.lean
++++ MathOutletR23Fix1.lean
+@@ -231,8 +231,8 @@
+   rw [hsum,hhalf,hparity]
+ 
+ def biasedWord (p : UInt64) : UInt64 :=
+-  if p < (140737488355328 : UInt64) then p+4194303+((p >>> 23) &&& 1)
+-  else p+8388607+((p >>> 24) &&& 1)
++  if p < (140737488355328 : UInt64) then p+(4194303 : UInt64)+((p >>> (23 : UInt64)) &&& (1 : UInt64))
++  else p+(8388607 : UInt64)+((p >>> (24 : UInt64)) &&& (1 : UInt64))
+ 
+ theorem biasedWord_nat (p : UInt64) (hp : p.toNat ≤ 281474943156225) :
+     (biasedWord p).toNat = R19PostBias.biased p.toNat := by
+@@ -241,13 +241,13 @@
+   by_cases hn : p.toNat < 140737488355328
+   · have hw := hc.mpr hn
+     have h := biased_sum_nat p 23 hp (Or.inl rfl)
+-    change (p+4194303+((p >>> 23) &&& 1)).toNat =
++    change (p+(4194303 : UInt64)+((p >>> (23 : UInt64)) &&& (1 : UInt64))).toNat =
+       p.toNat+4194303+(p.toNat >>> 23)%2 at h
+     simpa only [biasedWord,if_pos hw,R19PostBias.biased,R19PostBias.shift,if_pos hn,
+       Nat.reduceSub,Nat.reducePow] using h
+   · have hw : ¬ p < (140737488355328 : UInt64) := fun h => hn (hc.mp h)
+     have h := biased_sum_nat p 24 hp (Or.inr rfl)
+-    change (p+8388607+((p >>> 24) &&& 1)).toNat =
++    change (p+(8388607 : UInt64)+((p >>> (24 : UInt64)) &&& (1 : UInt64))).toNat =
+       p.toNat+8388607+(p.toNat >>> 24)%2 at h
+     simpa only [biasedWord,if_neg hw,R19PostBias.biased,R19PostBias.shift,if_neg hn,
+       Nat.reduceSub,Nat.reducePow] using h
+@@ -466,6 +466,8 @@
+   have hover := normalized_position_le p s hlo hhi hs0 hs1
+   have hnoOverflow : ¬ (if FastMul.rseAny p (FastMul.fastLog2 p-23) == 16777216 then
+       FastMul.fastLog2 p+(s.toUInt64-2)+1 else FastMul.fastLog2 p+(s.toUInt64-2)) > (425 : UInt64) := by
++    change ¬ (425 : UInt64) < (if FastMul.rseAny p (FastMul.fastLog2 p-23) == 16777216 then
++      FastMul.fastLog2 p+(s.toUInt64-2)+1 else FastMul.fastLog2 p+(s.toUInt64-2))
+     rw [UInt64.lt_iff_toNat_lt]
+     change ¬ 425 < (if FastMul.rseAny p (FastMul.fastLog2 p-23) == 16777216 then
+       FastMul.fastLog2 p+(s.toUInt64-2)+1 else FastMul.fastLog2 p+(s.toUInt64-2)).toNat
+@@ -556,6 +558,7 @@
+     rfl
+   simp only [oldMantissa,mantissa,beq_iff_eq,hc]
+   split <;> simp_all only [hr]
++  all_goals rfl
+ 
+ theorem oldPosition_nat (p : UInt64) (s : UInt32)
+     (hlo : 70368744177664 ≤ p.toNat) (hhi : p.toNat ≤ 281474943156225)
+@@ -696,6 +699,7 @@
+     Nat.mod_eq_of_lt (by omega)]
+   exact ⟨hl,hh⟩
+ 
++set_option maxHeartbeats 1000000 in
+ theorem normalCore_eq_roundP (s u v : UInt32) (sign : Bool)
+     (hs0 : 128 ≤ s.toNat) (hs1 : s.toNat ≤ 380)
+     (hsign : ((u ^^^ v) &&& (0x80000000 : UInt32)) =
