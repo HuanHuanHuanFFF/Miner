@@ -1,0 +1,456 @@
+readonly_reference	Set up job	﻿2026-10-28T23:16:52.8982711Z Current runner version: '2.338.0'
+readonly_reference	Set up job	2026-10-28T23:16:52.9020612Z ##[group]Runner Image Provisioner
+readonly_reference	Set up job	2026-10-28T23:16:52.9022050Z Hosted Compute Agent
+readonly_reference	Set up job	2026-10-28T23:16:52.9023024Z Version: 20261021.618
+readonly_reference	Set up job	2026-10-28T23:16:52.9024129Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+readonly_reference	Set up job	2026-10-28T23:16:52.9025520Z Build Date: 2026-10-21T00:45:21Z
+readonly_reference	Set up job	2026-10-28T23:16:52.9026681Z Worker ID: {19d65620-d747-4b5c-9fe0-40b9d8396864}
+readonly_reference	Set up job	2026-10-28T23:16:52.9028233Z Region: eastus
+readonly_reference	Set up job	2026-10-28T23:16:52.9029159Z Cloud: Azure
+readonly_reference	Set up job	2026-10-28T23:16:52.9030156Z ##[endgroup]
+readonly_reference	Set up job	2026-10-28T23:16:52.9032363Z ##[group]Operating System
+readonly_reference	Set up job	2026-10-28T23:16:52.9033406Z Ubuntu
+readonly_reference	Set up job	2026-10-28T23:16:52.9034397Z 24.04.5
+readonly_reference	Set up job	2026-10-28T23:16:52.9035199Z LTS
+readonly_reference	Set up job	2026-10-28T23:16:52.9036190Z ##[endgroup]
+readonly_reference	Set up job	2026-10-28T23:16:52.9037184Z ##[group]Runner Image
+readonly_reference	Set up job	2026-10-28T23:16:52.9038457Z Image: ubuntu-24.04
+readonly_reference	Set up job	2026-10-28T23:16:52.9039528Z Version: 20261025.353.1
+readonly_reference	Set up job	2026-10-28T23:16:52.9041417Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+readonly_reference	Set up job	2026-10-28T23:16:52.9045130Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+readonly_reference	Set up job	2026-10-28T23:16:52.9046922Z ##[endgroup]
+readonly_reference	Set up job	2026-10-28T23:16:52.9049043Z ##[group]GITHUB_TOKEN Permissions
+readonly_reference	Set up job	2026-10-28T23:16:52.9051945Z Contents: read
+readonly_reference	Set up job	2026-10-28T23:16:52.9053026Z Metadata: read
+readonly_reference	Set up job	2026-10-28T23:16:52.9054038Z ##[endgroup]
+readonly_reference	Set up job	2026-10-28T23:16:52.9057171Z Secret source: Actions
+readonly_reference	Set up job	2026-10-28T23:16:52.9058937Z Cache mode: write
+readonly_reference	Set up job	2026-10-28T23:16:52.9060879Z Prepare workflow directory
+readonly_reference	Set up job	2026-10-28T23:16:52.9821486Z Prepare all required actions
+readonly_reference	Set up job	2026-10-28T23:16:52.9872907Z Getting action download info
+readonly_reference	Set up job	2026-10-28T23:16:53.1597841Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+readonly_reference	Set up job	2026-10-28T23:16:53.2934907Z Download action repository 'actions/cache@5a3ec84eff668545956fd18022155c47e93e2684' (SHA:5a3ec84eff668545956fd18022155c47e93e2684)
+readonly_reference	Set up job	2026-10-28T23:16:53.7833110Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+readonly_reference	Set up job	2026-10-28T23:16:53.9929489Z Complete job name: readonly_reference
+readonly_reference	Reject late queue acquisition before toolchain work	﻿2026-10-28T23:16:54.0684999Z ##[group]Run python3 - <<'PY'
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0685747Z ^[[36;1mpython3 - <<'PY'^[[0m
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0686336Z ^[[36;1mfrom pathlib import Path^[[0m
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0686962Z ^[[36;1mimport datetime, json, os^[[0m
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0688177Z ^[[36;1mend=datetime.datetime(2026,10,29,3,38,56,tzinfo=datetime.timezone.utc)^[[0m
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0689384Z ^[[36;1mif (end-datetime.datetime.now(datetime.timezone.utc)).total_seconds()<600:^[[0m
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0690551Z ^[[36;1m    out=Path(os.environ['RUNNER_TEMP'])/'r24-reference-profile-reports'^[[0m
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0691622Z ^[[36;1m    out.mkdir(parents=True,exist_ok=True)^[[0m
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0693226Z ^[[36;1m    (out/'summary.json').write_text(json.dumps({'source_commit':os.environ['GITHUB_SHA'],'complete':False,'state':'NOT_STARTED_WINDOW_CLOSED_OR_INSUFFICIENT_AFTER_QUEUE'})+'\n')^[[0m
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0694804Z ^[[36;1m    raise SystemExit(1)^[[0m
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0695351Z ^[[36;1mPY^[[0m
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0720219Z shell: /usr/bin/bash -e {0}
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0721163Z env:
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0721874Z   DEFLATE_WORKSPACE: /home/runner/work/Miner/Miner/competitions/deflate
+readonly_reference	Reject late queue acquisition before toolchain work	2026-10-28T23:16:54.0722694Z ##[endgroup]
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	﻿2026-10-28T23:16:54.1345247Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1346149Z with:
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1346593Z   persist-credentials: false
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1347175Z   sparse-checkout: competitions/floatlib
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1348013Z   repository: HuanHuanHuanFFF/Miner
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1352115Z   token: ***
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1352576Z   ssh-strict: true
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1353072Z   ssh-user: git
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1353509Z   clean: true
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1353968Z   sparse-checkout-cone-mode: true
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1354521Z   fetch-depth: 1
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1355249Z   fetch-tags: false
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1355738Z   show-progress: true
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1356243Z   lfs: false
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1356675Z   submodules: false
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1357150Z   set-safe-directory: true
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1357939Z   allow-unsafe-pr-checkout: false
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1358572Z env:
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1359219Z   DEFLATE_WORKSPACE: /home/runner/work/Miner/Miner/competitions/deflate
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.1360106Z ##[endgroup]
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8516229Z Syncing repository: HuanHuanHuanFFF/Miner
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8519445Z ##[group]Getting Git version info
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8520783Z Working directory is '/home/runner/work/Miner/Miner'
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8522777Z [command]/usr/bin/git version
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8779570Z git version 2.56.0
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8803479Z ##[endgroup]
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8826115Z Temporarily overriding HOME='/home/runner/work/_temp/8acf167d-b369-4f46-b637-bfbe09fb7812' before making global git config changes
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8832303Z Adding repository directory to the temporary git global config as a safe directory
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8836572Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Miner/Miner
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8881847Z Deleting the contents of '/home/runner/work/Miner/Miner'
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8890212Z ##[group]Initializing the repository
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.8894321Z [command]/usr/bin/git init /home/runner/work/Miner/Miner
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9443009Z hint: Using 'master' as the name for the initial branch. This default branch name
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9447321Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9452885Z hint: to use in all of your new repositories, which will suppress this warning,
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9456081Z hint: call:
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9458063Z hint:
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9460085Z hint: 	git config --global init.defaultBranch <name>
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9462603Z hint:
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9465244Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9469456Z hint: 'development'. The just-created branch can be renamed via this command:
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9472661Z hint:
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9474262Z hint: 	git branch -m <name>
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9476176Z hint:
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9478914Z hint: Disable this message with "git config set advice.defaultBranchName false"
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9483775Z Initialized empty Git repository in /home/runner/work/Miner/Miner/.git/
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9491293Z [command]/usr/bin/git remote add origin https://github.com/HuanHuanHuanFFF/Miner
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9560380Z ##[endgroup]
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9563200Z ##[group]Disabling automatic garbage collection
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9569004Z [command]/usr/bin/git config --local gc.auto 0
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9625900Z ##[endgroup]
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9629770Z ##[group]Setting up auth
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9634632Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:54.9797158Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.0369734Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.0418521Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.0661594Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.0706687Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.0952542Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.1002748Z ##[endgroup]
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.1004906Z ##[group]Fetching the repository
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.1015540Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --filter=blob:none --depth=1 origin +c839fd40ab06520f1786d00dd3d3e2f5fca26ae9:refs/remotes/origin/huan/codex-gpt
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.5305085Z From https://github.com/HuanHuanHuanFFF/Miner
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.5307592Z  * [new ref]         c839fd40ab06520f1786d00dd3d3e2f5fca26ae9 -> origin/huan/codex-gpt
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.5313742Z ##[endgroup]
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.5315571Z ##[group]Determining the checkout info
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.5317879Z ##[endgroup]
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.5319787Z ##[group]Setting up sparse checkout
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.5321897Z [command]/usr/bin/git sparse-checkout set competitions/floatlib
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.5382553Z ##[endgroup]
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.5384177Z ##[group]Checking out the ref
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:16:55.5387257Z [command]/usr/bin/git checkout --progress --force -B huan/codex-gpt refs/remotes/origin/huan/codex-gpt
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.2271773Z Updating files:   0% (1/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.2549436Z Updating files:   1% (298/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.2936163Z Updating files:   2% (596/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.3091687Z Updating files:   3% (894/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.3271691Z Updating files:   4% (1192/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.3609093Z Updating files:   5% (1490/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.3983774Z Updating files:   6% (1788/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.4157379Z Updating files:   7% (2086/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.4426265Z Updating files:   8% (2384/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.4627381Z Updating files:   9% (2681/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.4805917Z Updating files:  10% (2979/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.5181775Z Updating files:  11% (3277/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.5412990Z Updating files:  12% (3575/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.5718444Z Updating files:  13% (3873/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.5896453Z Updating files:  14% (4171/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.6167349Z Updating files:  14% (4369/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.6469574Z Updating files:  15% (4469/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.6959741Z Updating files:  16% (4767/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.7387014Z Updating files:  17% (5064/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.7839391Z Updating files:  18% (5362/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.8224297Z Updating files:  19% (5660/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.8608956Z Updating files:  20% (5958/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.8928053Z Updating files:  21% (6256/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.9241299Z Updating files:  22% (6554/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.9445467Z Updating files:  23% (6852/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.9642909Z Updating files:  24% (7150/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:06.9842517Z Updating files:  25% (7447/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.0057555Z Updating files:  26% (7745/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.0378057Z Updating files:  27% (8043/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.0651601Z Updating files:  28% (8341/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.0863504Z Updating files:  29% (8639/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.1053981Z Updating files:  30% (8937/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.1263836Z Updating files:  31% (9235/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.1478688Z Updating files:  32% (9533/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.1679881Z Updating files:  33% (9831/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.1933425Z Updating files:  34% (10128/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.2200853Z Updating files:  35% (10426/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.2399658Z Updating files:  36% (10724/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.2614155Z Updating files:  37% (11022/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.2795181Z Updating files:  38% (11320/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.2976067Z Updating files:  39% (11618/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.3175871Z Updating files:  40% (11916/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.3370050Z Updating files:  41% (12214/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.3549264Z Updating files:  42% (12511/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.3724849Z Updating files:  43% (12809/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.3921839Z Updating files:  44% (13107/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.4077926Z Updating files:  45% (13405/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.4264130Z Updating files:  46% (13703/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.4424535Z Updating files:  47% (14001/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.4607593Z Updating files:  48% (14299/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.4795544Z Updating files:  49% (14597/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.4976746Z Updating files:  50% (14894/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.5155816Z Updating files:  51% (15192/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.5345597Z Updating files:  52% (15490/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.5538327Z Updating files:  53% (15788/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.5738752Z Updating files:  54% (16086/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.5889962Z Updating files:  55% (16384/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.5934260Z Updating files:  55% (16607/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.6118041Z Updating files:  56% (16682/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.6314722Z Updating files:  57% (16980/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.6543504Z Updating files:  58% (17278/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.6735106Z Updating files:  59% (17575/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.6925133Z Updating files:  60% (17873/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.7108489Z Updating files:  61% (18171/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.7293979Z Updating files:  62% (18469/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.7500027Z Updating files:  63% (18767/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.7688283Z Updating files:  64% (19065/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.7833580Z Updating files:  65% (19363/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.7981278Z Updating files:  66% (19661/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.8151293Z Updating files:  67% (19958/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.8275476Z Updating files:  68% (20256/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.8453795Z Updating files:  69% (20554/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.8644926Z Updating files:  70% (20852/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.8847454Z Updating files:  71% (21150/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.9043672Z Updating files:  72% (21448/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.9236247Z Updating files:  73% (21746/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.9419505Z Updating files:  74% (22044/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.9606027Z Updating files:  75% (22341/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.9813469Z Updating files:  76% (22639/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:07.9996256Z Updating files:  77% (22937/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.0184075Z Updating files:  78% (23235/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.0365066Z Updating files:  79% (23533/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.0546425Z Updating files:  80% (23831/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.0721621Z Updating files:  81% (24129/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.0880447Z Updating files:  82% (24427/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.1047734Z Updating files:  83% (24725/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.1219170Z Updating files:  84% (25022/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.1413579Z Updating files:  85% (25320/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.1566527Z Updating files:  86% (25618/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.1717657Z Updating files:  87% (25916/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.2011960Z Updating files:  88% (26214/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.2408902Z Updating files:  89% (26512/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.2755660Z Updating files:  90% (26810/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.2962070Z Updating files:  91% (27108/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.3135283Z Updating files:  92% (27405/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.3318171Z Updating files:  93% (27703/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.3493836Z Updating files:  94% (28001/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.3687543Z Updating files:  95% (28299/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.3878594Z Updating files:  96% (28597/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.4106244Z Updating files:  97% (28895/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.4329991Z Updating files:  98% (29193/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.4703251Z Updating files:  99% (29491/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.4703757Z Updating files: 100% (29788/29788)
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.4704153Z Updating files: 100% (29788/29788), done.
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.5364409Z Switched to a new branch 'huan/codex-gpt'
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.5370225Z branch 'huan/codex-gpt' set up to track 'origin/huan/codex-gpt'.
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.5470189Z ##[endgroup]
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.5529531Z [command]/usr/bin/git log -1 --format=%H
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.5566175Z c839fd40ab06520f1786d00dd3d3e2f5fca26ae9
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.5576281Z ##[group]Removing auth
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.5580827Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.5628288Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.5982317Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.6020970Z http.https://github.com/.extraheader
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.6031500Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.6077118Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.6429693Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.6475088Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+readonly_reference	Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:17:08.6822417Z ##[endgroup]
+readonly_reference	Prepare isolated research runner	﻿2026-10-28T23:17:08.6972407Z ##[group]Run bash competitions/floatlib/scripts/ci-prepare.sh
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.6972919Z ^[[36;1mbash competitions/floatlib/scripts/ci-prepare.sh^[[0m
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.6994030Z shell: /usr/bin/bash -e {0}
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.6994294Z env:
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.6994605Z   DEFLATE_WORKSPACE: /home/runner/work/Miner/Miner/competitions/deflate
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.6994993Z ##[endgroup]
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7334114Z hint: Using 'master' as the name for the initial branch. This default branch name
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7334750Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7335589Z hint: to use in all of your new repositories, which will suppress this warning,
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7336268Z hint: call:
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7336573Z hint:
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7336983Z hint: 	git config --global init.defaultBranch <name>
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7337494Z hint:
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7338201Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7339233Z hint: 'development'. The just-created branch can be renamed via this command:
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7339823Z hint:
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7340061Z hint: 	git branch -m <name>
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7340344Z hint:
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7340667Z hint: Disable this message with "git config set advice.defaultBranchName false"
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:08.7341234Z Initialized empty Git repository in /home/runner/work/_temp/floatlib-upstream/.git/
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:09.0123633Z From https://github.com/conjectures-io/conjectures-optimisation-float-kernels
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:09.0124334Z  * branch            978cc5b445edb9943fd9953b0a9037d97a9f33a8 -> FETCH_HEAD
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:09.0309608Z HEAD is now at 978cc5b Revert "Add the exact-runtime slot: thirteen proved neural-network kernels scored on a calibrated model suite, with fixtures, tests, a showcase benchmark and its guide."
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.6459037Z Reading package lists...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.8398849Z Building dependency tree...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.8406092Z Reading state information...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.9820940Z python3-venv is already the newest version (3.12.3-0ubuntu2.1).
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.9821735Z curl is already the newest version (8.5.0-2ubuntu10.16).
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.9822335Z git is already the newest version (1:2.56.0-0ppa1~ubuntu24.04.2).
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.9822919Z git set to manually installed.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.9823531Z util-linux is already the newest version (2.39.3-9ubuntu6.6).
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.9824365Z pkg-config is already the newest version (1.8.1-2build1).
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.9825026Z dbus-user-session is already the newest version (1.14.10-4ubuntu4.1).
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.9825571Z dbus-user-session set to manually installed.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.9825951Z Suggested packages:
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:13.9826219Z   manpages-dev
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.0014002Z The following NEW packages will be installed:
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.0020749Z   build-essential libcap-dev meson ninja-build
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.0220725Z 0 upgraded, 4 newly installed, 0 to remove and 5 not upgraded.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.0221495Z Need to get 1333 kB of archives.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.0221852Z After this operation, 7160 kB of additional disk space will be used.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.0222269Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.0674112Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 build-essential amd64 12.10ubuntu1 [4928 B]
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.0822422Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libcap-dev amd64 1:2.66-5ubuntu2.4 [596 kB]
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.1686205Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 ninja-build amd64 1.11.1-2 [129 kB]
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.1844104Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 meson all 1.3.2-1ubuntu1 [604 kB]
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.4599712Z Fetched 1333 kB in 0s (7217 kB/s)
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.4848620Z Selecting previously unselected package build-essential.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5120530Z (Reading database ... 
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5121595Z (Reading database ... 5%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5122336Z (Reading database ... 10%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5122807Z (Reading database ... 15%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5123206Z (Reading database ... 20%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5123457Z (Reading database ... 25%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5123778Z (Reading database ... 30%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5124026Z (Reading database ... 35%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5124261Z (Reading database ... 40%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5124780Z (Reading database ... 45%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5125185Z (Reading database ... 50%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.5172529Z (Reading database ... 55%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.6283106Z (Reading database ... 60%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.7768323Z (Reading database ... 65%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:14.9737260Z (Reading database ... 70%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.1843100Z (Reading database ... 75%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.2810438Z (Reading database ... 80%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.3887547Z (Reading database ... 85%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.4567104Z (Reading database ... 90%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.5769313Z (Reading database ... 95%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.5769844Z (Reading database ... 100%
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.5770413Z (Reading database ... 215504 files and directories currently installed.)
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.5813117Z Preparing to unpack .../build-essential_12.10ubuntu1_amd64.deb ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.5856535Z Unpacking build-essential (12.10ubuntu1) ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.6094398Z Selecting previously unselected package libcap-dev:amd64.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.6232812Z Preparing to unpack .../libcap-dev_1%3a2.66-5ubuntu2.4_amd64.deb ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.6241252Z Unpacking libcap-dev:amd64 (1:2.66-5ubuntu2.4) ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.6707247Z Selecting previously unselected package ninja-build.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.6846644Z Preparing to unpack .../ninja-build_1.11.1-2_amd64.deb ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.6853258Z Unpacking ninja-build (1.11.1-2) ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.7177267Z Selecting previously unselected package meson.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.7316233Z Preparing to unpack .../meson_1.3.2-1ubuntu1_all.deb ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.7324716Z Unpacking meson (1.3.2-1ubuntu1) ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.8166850Z Setting up ninja-build (1.11.1-2) ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.8189857Z Setting up build-essential (12.10ubuntu1) ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.8212112Z Setting up libcap-dev:amd64 (1:2.66-5ubuntu2.4) ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:15.8232930Z Setting up meson (1.3.2-1ubuntu1) ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:16.5715811Z Processing triggers for man-db (2.12.0-4build2) ...
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:16.5770056Z Not building database; man-db/auto-update is not 'true'.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:18.2750175Z 
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:18.2750804Z Running kernel seems to be up-to-date.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:18.2751302Z 
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:18.2751665Z No services need to be restarted.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:18.2752028Z 
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:18.2752207Z No containers need to be restarted.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:18.2752503Z 
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:18.2752707Z No user sessions are running outdated binaries.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:18.2753072Z 
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:18.2753412Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:19.2282826Z kernel.apparmor_restrict_unprivileged_userns = 0
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:19.2886281Z Running as unit: run-u0.service; invocation ID: 40862951dc06419abe6539f4d54ca161
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:19.2927173Z Finished with result: success
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:19.2928303Z Main processes terminated with: code=exited/status=0
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:19.2929054Z Service runtime: 3ms
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:19.2929571Z CPU time consumed: 1ms
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:19.2930087Z Memory peak: 256.0K
+readonly_reference	Prepare isolated research runner	2026-10-28T23:17:19.2930617Z Memory swap peak: 0B
+readonly_reference	Restore existing pinned dependency cache	﻿2026-10-28T23:17:19.3690575Z ##[group]Run actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3691007Z with:
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3691299Z   path: ~/.elan
+readonly_reference	Restore existing pinned dependency cache	/home/runner/work/_temp/floatlib-upstream/lean/.lake
+readonly_reference	Restore existing pinned dependency cache	
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3691760Z   key: floatlib-Linux-978cc5b445edb9943fd9953b0a9037d97a9f33a8
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3692121Z   enableCrossOsArchive: false
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3692372Z   fail-on-cache-miss: false
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3692631Z   lookup-only: false
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3692834Z env:
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3693136Z   DEFLATE_WORKSPACE: /home/runner/work/Miner/Miner/competitions/deflate
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3693572Z   FLOATLIB_ROOT: /home/runner/work/_temp/floatlib-upstream
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3693965Z   FLOATLIB_REPORTS: /home/runner/work/_temp/floatlib-reports
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3694282Z   BENCH_CPU: 0
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3694477Z   BENCH_ROUNDS: 25
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3694678Z   BENCH_PAIRS: 500000
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3694903Z   XDG_RUNTIME_DIR: /run/user/1001
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3695205Z   DBUS_SESSION_BUS_ADDRESS: unix:path=/run/user/1001/bus
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3695554Z   GIT_TERMINAL_PROMPT: 0
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.3695767Z ##[endgroup]
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.4837309Z (node:2901) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.4838792Z (Use `node --trace-deprecation ...` to show where the warning was created)
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.5758687Z Cache hit for: floatlib-Linux-978cc5b445edb9943fd9953b0a9037d97a9f33a8
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:19.5888175Z (node:2901) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:20.6274058Z Received 167772160 of 4105777318 (4.1%), 158.3 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:21.6486565Z Received 402653184 of 4105777318 (9.8%), 189.1 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:22.6525079Z Received 641728512 of 4105777318 (15.6%), 201.8 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:23.6530719Z Received 792723456 of 4105777318 (19.3%), 187.4 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:24.6538244Z Received 1006632960 of 4105777318 (24.5%), 190.6 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:25.6546096Z Received 1203765248 of 4105777318 (29.3%), 190.1 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:26.6555029Z Received 1417674752 of 4105777318 (34.5%), 192.1 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:27.6556858Z Received 1669332992 of 4105777318 (40.7%), 198.0 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:28.6584016Z Received 1887436800 of 4105777318 (46.0%), 199.1 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:29.6588576Z Received 2126512128 of 4105777318 (51.8%), 202.0 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:30.6689638Z Received 2344615936 of 4105777318 (57.1%), 202.3 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:31.6690620Z Received 2592079872 of 4105777318 (63.1%), 205.1 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:32.6770026Z Received 2814377984 of 4105777318 (68.5%), 205.5 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:33.6845113Z Received 2986344448 of 4105777318 (72.7%), 202.4 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:34.6847914Z Received 3204448256 of 4105777318 (78.0%), 202.8 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:35.6844275Z Received 3414163456 of 4105777318 (83.2%), 202.6 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:36.6903029Z Received 3632267264 of 4105777318 (88.5%), 202.9 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:37.6938920Z Received 3883925504 of 4105777318 (94.6%), 204.9 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:38.6948439Z Received 4089446400 of 4105777318 (99.6%), 204.4 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:38.7871119Z Received 4105777318 of 4105777318 (100.0%), 204.3 MBs/sec
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:38.7873982Z Cache Size: ~3916 MB (4105777318 B)
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:17:38.7989153Z [command]/usr/bin/tar -xf /home/runner/work/_temp/76dfacd4-1eea-4ae6-b7a3-d998e6eb5f4f/cache.tzst -P -C /home/runner/work/Miner/Miner --use-compress-program unzstd
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:18:17.4187227Z Cache restored successfully
+readonly_reference	Restore existing pinned dependency cache	2026-10-28T23:18:17.4488201Z Cache restored from key: floatlib-Linux-978cc5b445edb9943fd9953b0a9037d97a9f33a8
+readonly_reference	Observe immutable public reference profiles	﻿2026-10-28T23:18:17.4754665Z ##[group]Run python3 competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/readonly-reference-profile.py
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.4755863Z ^[[36;1mpython3 competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/readonly-reference-profile.py^[[0m
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5377227Z shell: /usr/bin/bash -e {0}
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5377580Z env:
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5378200Z   DEFLATE_WORKSPACE: /home/runner/work/Miner/Miner/competitions/deflate
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5378817Z   FLOATLIB_ROOT: /home/runner/work/_temp/floatlib-upstream
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5379377Z   FLOATLIB_REPORTS: /home/runner/work/_temp/floatlib-reports
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5379815Z   BENCH_CPU: 0
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5380075Z   BENCH_ROUNDS: 25
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5380344Z   BENCH_PAIRS: 500000
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5380650Z   XDG_RUNTIME_DIR: /run/user/1001
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5381061Z   DBUS_SESSION_BUS_ADDRESS: unix:path=/run/user/1001/bus
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5381497Z   GIT_TERMINAL_PROMPT: 0
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:18:17.5381784Z ##[endgroup]
+readonly_reference	Observe immutable public reference profiles	2026-10-28T23:31:24.4419590Z {"complete": true, "references": [["former2", true], ["shipped", true]], "scope": "IMMUTABLE_PUBLIC_REFERENCE_OBSERVATION_ONLY_NOT_NEW_CANDIDATE_OR_SCORE", "error": null}
+readonly_reference	Preserve original observation receipts only	﻿2026-10-28T23:31:24.4602932Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4603382Z with:
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4603593Z   name: floatlib-40786223288-receipts
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4603959Z   path: /home/runner/work/_temp/r24-reference-profile-reports/
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4604329Z   if-no-files-found: error
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4604583Z   retention-days: 7
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4604799Z   compression-level: 9
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4605019Z   overwrite: false
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4605243Z   include-hidden-files: false
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4605483Z env:
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4605776Z   DEFLATE_WORKSPACE: /home/runner/work/Miner/Miner/competitions/deflate
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4606219Z   FLOATLIB_ROOT: /home/runner/work/_temp/floatlib-upstream
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4606615Z   FLOATLIB_REPORTS: /home/runner/work/_temp/floatlib-reports
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4606939Z   BENCH_CPU: 0
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4607136Z   BENCH_ROUNDS: 25
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4607340Z   BENCH_PAIRS: 500000
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4607567Z   XDG_RUNTIME_DIR: /run/user/1001
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4608270Z   DBUS_SESSION_BUS_ADDRESS: unix:path=/run/user/1001/bus
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4608601Z   GIT_TERMINAL_PROMPT: 0
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.4608825Z ##[endgroup]
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.6465441Z (node:22734) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.6466822Z (Use `node --trace-deprecation ...` to show where the warning was created)
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.6600339Z With the provided path, there will be 22 files uploaded
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.6605798Z Artifact name is valid!
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.6606780Z Root directory input is valid!
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.8600662Z Beginning upload of artifact content to blob storage
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.9057492Z (node:22734) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.9543499Z Uploaded bytes 23245
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.9724284Z Finished uploading artifact content to blob storage!
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.9725503Z SHA256 digest of uploaded artifact zip is 0a73626a371c36f7c6732022a9556fb7800d9d1b3dccba522931c7c6c423f3d7
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:24.9726547Z Finalizing artifact upload
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:25.3870997Z Artifact floatlib-40786223288-receipts.zip successfully finalized. Artifact ID 12859987768
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:25.3873349Z Artifact floatlib-40786223288-receipts has been successfully uploaded! Final size is 23245 bytes. Artifact ID is 12859987768
+readonly_reference	Preserve original observation receipts only	2026-10-28T23:31:25.3880393Z Artifact download URL: https://github.com/HuanHuanHuanFFF/Miner/actions/runs/40786223288/artifacts/12859987768
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	﻿2026-10-28T23:31:25.4099525Z Post job cleanup.
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:31:25.4992558Z [command]/usr/bin/git version
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:31:25.5038933Z git version 2.56.0
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:31:25.5079060Z Temporarily overriding HOME='/home/runner/work/_temp/fb9ce2a2-628f-4815-a805-15139afabe19' before making global git config changes
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:31:25.5081022Z Adding repository directory to the temporary git global config as a safe directory
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:31:25.5085354Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Miner/Miner
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:31:25.5130092Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:31:25.5168778Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:31:25.5642195Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:31:25.5692157Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:31:25.6058535Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+readonly_reference	Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262	2026-10-28T23:31:25.6107546Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+readonly_reference	Complete job	﻿2026-10-28T23:31:25.6620656Z Cleaning up orphan processes
+readonly_reference	Complete job	2026-10-28T23:31:25.7068780Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684, actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

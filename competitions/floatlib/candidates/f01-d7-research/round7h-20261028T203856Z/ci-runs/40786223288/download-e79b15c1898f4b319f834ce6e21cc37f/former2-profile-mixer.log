@@ -1,0 +1,13 @@
+| mixer layer | µs |
+|---|---:|
+| save | 0 |
+| layernorm 8×46 | 59 |
+| gemm 8×8·8×46 | 30 |
+| addRelu | 6 |
+| save | 0 |
+| layernorm 8×46 | 62 |
+| linear 8×46→92 | 148 |
+| linear 8×92→46 | 132 |
+| addRelu | 6 |
+| linear 1×368→10 | 16 |
+| total | 464 |

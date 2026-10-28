@@ -1,0 +1,16 @@
+| mnet layer | µs |
+|---|---:|
+| conv2d 3×3 3→5 on 16×16 | 103 |
+| scaleShift 5×256 | 18 |
+| depthwise 3×3 5 on 16×16 | 56 |
+| scaleShift 5×256 | 16 |
+| conv2d 1×1 5→13 on 16×16 | 110 |
+| scaleShift 13×256 | 47 |
+| avgpool 2×2 13×16×16 | 53 |
+| depthwise 3×3 13 on 8×8 | 38 |
+| scaleShift 13×64 | 10 |
+| conv2d 1×1 13→13 on 8×8 | 44 |
+| scaleShift 13×64 | 10 |
+| avgpool 8×8 13×8×8 | 21 |
+| linear 1×13→10 | 1 |
+| total | 534 |
