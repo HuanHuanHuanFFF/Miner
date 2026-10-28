@@ -56,7 +56,7 @@ def run(g,kernel,out):
         validation_mode=entry.get('validation_mode','full-gate')
         assert validation_mode in ('full-gate','statement-only')
         diagnostic_timeout=entry.get('diagnostic_timeout_seconds',180)
-        assert diagnostic_timeout==180 or (name in ('f01-r19-dev-runtime-cost1', 'f01-r19-dev-add-cost1', 'f01-r22-dev-runtime-cost1', 'f01-r22-dev-runtime-cost2', 'f01-r22-dev-runtime-cost3', 'f01-r22-dev-flat-scale-cost1', 'f01-r22-dev-flat-scale-cost2', 'f01-r22-dev-pair8-cost1', 'f01-r22-dev-resident8-cost1', 'f01-r22-dev-broadword-cost1', 'f01-r22-dev-multistatic-cost1', 'f01-r22-dev-farstatic-cost1', 'f01-r22-dev-nativecold-cost1', 'f01-r22-dev-indexed8-cost1', 'f01-r22-dev-outline-isolation1') and diagnostic_timeout==600 and validation_mode=='statement-only' and plan.get('sample_role')=='STATEMENT_DIAGNOSTIC')
+        assert diagnostic_timeout==180 or (name in ('f01-r19-dev-runtime-cost1', 'f01-r19-dev-add-cost1', 'f01-r22-dev-runtime-cost1', 'f01-r22-dev-runtime-cost2', 'f01-r22-dev-runtime-cost3', 'f01-r22-dev-flat-scale-cost1', 'f01-r22-dev-flat-scale-cost2', 'f01-r22-dev-pair8-cost1', 'f01-r22-dev-resident8-cost1', 'f01-r22-dev-broadword-cost1', 'f01-r22-dev-multistatic-cost1', 'f01-r22-dev-farstatic-cost1', 'f01-r22-dev-nativecold-cost1', 'f01-r22-dev-indexed8-cost1', 'f01-r22-dev-outline-isolation1', 'f01-r22-dev-wordcarry-cost1') and diagnostic_timeout==600 and validation_mode=='statement-only' and plan.get('sample_role')=='STATEMENT_DIAGNOSTIC')
         argv=[str(upstream/'.venv/bin/python'),'gate.py','--slot','full',str(dst),'--verdict',str(verdict)]
         if validation_mode=='statement-only':
             diagnostic=repo/'competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py'

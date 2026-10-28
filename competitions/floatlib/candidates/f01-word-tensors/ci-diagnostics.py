@@ -99,7 +99,7 @@ def statement(src,verdict):
                     and name.startswith('lp_competition_Submission_R21ScaledU32_')
                     and any(part in name for part in ('normalCore', 'guardedMul', 'diagnosticEntry'))]
                 names += [name for name in new_core_functions if name not in names and 'boxed' not in name
-                    and any(part in name for part in ('R22StreamingQuad', 'R22PreparedQuad', 'R22Pair8', 'R22Resident8', 'R22Resident16', 'R22IndexedResident8', 'R22OutlineMul', 'R22NativeProductScale', 'R22NativeCold', 'R22FarOnlyAdd', 'R22Log2SourceProbe', 'R22BroadWordAdd', 'R22FloatProduct', 'R22SameExponent'))
+                    and any(part in name for part in ('R22StreamingQuad', 'R22PreparedQuad', 'R22Pair8', 'R22Resident8', 'R22Resident16', 'R22IndexedResident8', 'R22OutlineMul', 'R22WordCarry', 'R22NativeProductScale', 'R22NativeCold', 'R22FarOnlyAdd', 'R22Log2SourceProbe', 'R22BroadWordAdd', 'R22FloatProduct', 'R22SameExponent'))
                     and any(part in name for part in ('loop', 'advance', 'update', 'rows4', 'guarded', 'normalCore', 'core', 'diagnosticEntry', 'retainedMul', 'packRow', 'packB', 'packA', 'tile', 'wordLoop', 'runDot', 'word32', 'word64', 'hotMul', 'inlineMul', 'coldMul', 'coldAdd'))]
                 names += [name for name in new_core_functions if name not in names and 'boxed' not in name
                     and 'R22FlatScale' in name
@@ -145,7 +145,7 @@ if kernel.parent.name.startswith('f01-r22-'):
     helper_manifest=json.loads(manifest_path.read_bytes())
     if helper_manifest.get('helper_audit_module_sha256'):
         helper_name=helper_manifest['helper_audit_module']
-        if kernel.parent.name in ('f01-r22-dev-runtime-cost1', 'f01-r22-dev-runtime-cost2', 'f01-r22-dev-runtime-cost3', 'f01-r22-dev-flat-scale-cost1', 'f01-r22-dev-flat-scale-cost2', 'f01-r22-dev-pair8-cost1', 'f01-r22-dev-resident8-cost1', 'f01-r22-dev-broadword-cost1', 'f01-r22-dev-multistatic-cost1', 'f01-r22-dev-farstatic-cost1', 'f01-r22-dev-nativecold-cost1', 'f01-r22-dev-indexed8-cost1', 'f01-r22-dev-outline-isolation1'):
+        if kernel.parent.name in ('f01-r22-dev-runtime-cost1', 'f01-r22-dev-runtime-cost2', 'f01-r22-dev-runtime-cost3', 'f01-r22-dev-flat-scale-cost1', 'f01-r22-dev-flat-scale-cost2', 'f01-r22-dev-pair8-cost1', 'f01-r22-dev-resident8-cost1', 'f01-r22-dev-broadword-cost1', 'f01-r22-dev-multistatic-cost1', 'f01-r22-dev-farstatic-cost1', 'f01-r22-dev-nativecold-cost1', 'f01-r22-dev-indexed8-cost1', 'f01-r22-dev-outline-isolation1', 'f01-r22-dev-wordcarry-cost1'):
             assert helper_name == {'f01-r22-dev-runtime-cost1':'development-cost-audit.py',
                                    'f01-r22-dev-runtime-cost2':'development-cost2-audit.py',
                                    'f01-r22-dev-runtime-cost3':'development-cost3-audit.py',
@@ -158,7 +158,8 @@ if kernel.parent.name.startswith('f01-r22-'):
                                    'f01-r22-dev-farstatic-cost1':'development-farstatic-cost-audit.py',
                                    'f01-r22-dev-nativecold-cost1':'development-nativecold-cost-audit.py',
                                    'f01-r22-dev-indexed8-cost1':'development-indexed8-cost-audit.py',
-                                   'f01-r22-dev-outline-isolation1':'development-outline-isolation-audit.py'}[kernel.parent.name]
+                                   'f01-r22-dev-outline-isolation1':'development-outline-isolation-audit.py',
+                                   'f01-r22-dev-wordcarry-cost1':'development-wordcarry-cost-audit.py'}[kernel.parent.name]
             helper_path=profiler.parent.parent/'f01-d7-research/round6h-20261027T211247Z'/helper_name
         else:
             assert helper_name == 'development-helper-audit-v8.py'
@@ -222,7 +223,7 @@ sys.exit(0 if verdict.passed else 1)
             try:
                 profiler=Path(__file__).resolve().parent.parent/'f01-d5-costsplit/profile-native.py'
                 p=subprocess.Popen([str(a.upstream/'.venv/bin/python'),'-c',code,str(a.upstream),str(a.kernel),str(out),str(profiler)],cwd=a.upstream,env=os.environ.copy(),stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
-                replay_timeout=1800 if a.name=='f01-d13-cost-profile' else 2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 580 if a.name in ('f01-r19-dev-runtime-cost1', 'f01-r19-dev-add-cost1', 'f01-r22-dev-runtime-cost1', 'f01-r22-dev-runtime-cost2', 'f01-r22-dev-runtime-cost3', 'f01-r22-dev-flat-scale-cost1', 'f01-r22-dev-flat-scale-cost2', 'f01-r22-dev-pair8-cost1', 'f01-r22-dev-resident8-cost1', 'f01-r22-dev-broadword-cost1', 'f01-r22-dev-multistatic-cost1', 'f01-r22-dev-farstatic-cost1', 'f01-r22-dev-nativecold-cost1', 'f01-r22-dev-indexed8-cost1', 'f01-r22-dev-outline-isolation1') else 240 if a.name.startswith('f01-r22-') else 170 if a.name=='f01-r19-dev-math-outlet-isolation1' else 120
+                replay_timeout=1800 if a.name=='f01-d13-cost-profile' else 2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 580 if a.name in ('f01-r19-dev-runtime-cost1', 'f01-r19-dev-add-cost1', 'f01-r22-dev-runtime-cost1', 'f01-r22-dev-runtime-cost2', 'f01-r22-dev-runtime-cost3', 'f01-r22-dev-flat-scale-cost1', 'f01-r22-dev-flat-scale-cost2', 'f01-r22-dev-pair8-cost1', 'f01-r22-dev-resident8-cost1', 'f01-r22-dev-broadword-cost1', 'f01-r22-dev-multistatic-cost1', 'f01-r22-dev-farstatic-cost1', 'f01-r22-dev-nativecold-cost1', 'f01-r22-dev-indexed8-cost1', 'f01-r22-dev-outline-isolation1', 'f01-r22-dev-wordcarry-cost1') else 240 if a.name.startswith('f01-r22-') else 170 if a.name=='f01-r19-dev-math-outlet-isolation1' else 120
                 report['replay_exit_code']=p.wait(timeout=replay_timeout)
             except subprocess.TimeoutExpired:
                 os.killpg(p.pid,signal.SIGKILL);p.wait();report['replay']=f'diagnostic-only replay process group timed out at {replay_timeout}s'
