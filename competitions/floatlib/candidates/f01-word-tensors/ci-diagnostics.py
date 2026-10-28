@@ -130,7 +130,10 @@ def statement(src,verdict):
             adapter=profiler.parent.parent/research_dir/'public-suite.py'
             if kernel.parent.name=='f01-d7-public-suite':
                 request=json.loads((profiler.parent.parent/'f01-d7-public-suite/suite-plan.json').read_bytes())
-                if request.get('r22_cost_diagnostic'):
+                if request.get('r24_cost_diagnostic'):
+                    assert not request.get('profile_current') and not request.get('confirmation_candidates')
+                    adapter=profiler.parent.parent/research_dir/'round7h-20261028T203856Z/development-cost-suite.py'
+                elif request.get('r22_cost_diagnostic'):
                     assert not request.get('profile_current') and not request.get('confirmation_candidates')
                     adapter=profiler.parent.parent/research_dir/'round6h-20261027T211247Z/development-cost-suite.py'
                 elif request.get('profile_current'):
@@ -140,14 +143,15 @@ def statement(src,verdict):
             pm.run(g,kernel,out)
     return reason
 g.STAGES=[('intake',g.intake),('policy',g.policy),('statement',statement)]
-if kernel.parent.name.startswith('f01-r23-'):
+if kernel.parent.name.startswith(('f01-r23-', 'f01-r24-')):
     manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
     helper_manifest=json.loads(manifest_path.read_bytes())
     if helper_manifest.get('helper_audit_module_sha256'):
         helper_relative=Path(helper_manifest['helper_audit_module_path'])
         assert not helper_relative.is_absolute() and '..' not in helper_relative.parts
         helper_path=(profiler.parent.parent/helper_relative).resolve()
-        allowed_root=(profiler.parent.parent/'f01-d7-research/round40m-20261028T142626Z').resolve()
+        round_dir='round7h-20261028T203856Z' if kernel.parent.name.startswith('f01-r24-') else 'round40m-20261028T142626Z'
+        allowed_root=(profiler.parent.parent/'f01-d7-research'/round_dir).resolve()
         legacy=(profiler.parent.parent/'f01-d7-research/round9h-20261026T194639Z/development-helper-audit-v8.py').resolve()
         assert helper_path.is_relative_to(allowed_root) or helper_path==legacy
         assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']

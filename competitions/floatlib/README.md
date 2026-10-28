@@ -2,6 +2,8 @@
 
 共同约束见根 [AGENTS.md](../../AGENTS.md)，赛道技术要求见 [track-rules.md](docs/track-rules.md)。官方固定版本见 [pins.json](pins.json)。
 
+**2026-10-29已核：FloatLib停止接收新提交。** [官方状态原件](candidates/f01-d7-research/round7h-20261028T203856Z/competition-state-check/floatlib.raw)明确`submissions_open=false`；下列#323/#336及四算子成绩作为旧赛道记录保留。新开放TorchLean采用12算子与不同契约；R24正等待用户确认是否迁移，截止不变。[本轮入口](candidates/f01-d7-research/round7h-20261028T203856Z/README.md)。
+
 新公开／付费私有套件适用范围先看[套件变更](docs/suite-transition-20261022.md)。
 
 正式包是一个 `Kernel.lean`，包含 add、mul、sum、bmm 及四个全输入等价证明。B2已正式提交为 **#336**，官方完整验证通过，当前第13，整包耗时为冠军#323的 **1.6287×**，未晋升。[原始官方报告及预估对照](evidence/formal-b2-336/comparison.json)取代该精确源在本次评估中的旧1.25×预估；历史模型保留原字节。

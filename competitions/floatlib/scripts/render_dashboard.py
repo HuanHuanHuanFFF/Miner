@@ -35,6 +35,14 @@ def render_official(view, state):
     path = ROOT / entry["evidence"]
     assert hashlib.sha256(path.read_bytes()).hexdigest() == entry["evidence_sha256"]
     result = json.loads(path.read_bytes())
+    closed = False
+    if view.get("competition_state"):
+        status_entry = view["competition_state"]
+        status_bytes = (ROOT / status_entry["evidence"]).read_bytes()
+        assert hashlib.sha256(status_bytes).hexdigest() == status_entry["evidence_sha256"]
+        competition = json.loads(status_bytes)
+        assert competition["slug"] == "floatlib"
+        closed = competition["submissions_open"] is False
     assert result["kernel_sha256"] == state["kernel_sha256"] == view["kernel_sha256"]
     assert hashlib.sha256((ROOT / state["kernel"]).read_bytes()).hexdigest() == result["kernel_sha256"]
     assert result["passed"] and result["state"] == "accepted" and result["same_champion_digest"]
@@ -72,7 +80,7 @@ def render_official(view, state):
                 candidate += f"；[{progress['text']}]({progress['evidence']})"
             lines.append(f"| {name} | #{champion} | {candidate} | **{low:.2f}–{high:.2f}×** | {base['official_group_ratio_min']:.2f}–{base['official_group_ratio_max']:.2f}× |")
         lines += ["", f"整包：保留版官方 **{result['official_whole_ratio']:.2f}×**；当前开发预估 **{forecast['whole']['ratio_point']:.2f}×**。[依据]({development['evidence']})", "",
-                  f"**结论：仍不能取代#{champion}；开发组合完整验证通过，稳定性门槛未过，保留B2。**", ""]
+                  (f"**结论：FloatLib已关闭新提交；当前方案未取代#{champion}，保留B2记录。**" if closed else f"**结论：仍不能取代#{champion}；开发组合完整验证通过，稳定性门槛未过，保留B2。**"), ""]
         (ROOT / "dashboard.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
         return True
     lines = ["# FloatLib 冲冠看板", "",

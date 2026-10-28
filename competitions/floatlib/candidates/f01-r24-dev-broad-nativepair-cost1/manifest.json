@@ -1,0 +1,78 @@
+{
+  "candidate": "f01-r24-dev-broad-nativepair-cost1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "223426ecbed8690a1b5823f5ab8f22fb9dfcecab997455a9a762bc37b9a24234",
+  "candidate_bytes": 237409,
+  "parent_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "validation_mode": "statement-only",
+  "diagnostic_only": true,
+  "diagnostic_timeout_seconds": 600,
+  "proof_status": "NOT_RUN_PUBLIC_ENDPOINTS_B2_NEW_BMM_NOT_PROVED",
+  "performance": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "official_submission_inherited": false,
+  "helper_audit_module": "runtime_cost_audit.py",
+  "helper_audit_module_path": "f01-d7-research/round7h-20261028T203856Z/development-broad/runtime_cost_audit.py",
+  "helper_audit_module_sha256": "50142b7fddc88d3f84b76d79ab0c1aab7d79701ca5977ccb3d43e03aadcbdc49",
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-broad/driver.py",
+      "sha256": "2e0b8e7950019e667c6b6110a4548da16856b3d8a4656e229a42b56e146c266c",
+      "bytes": 18733
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-broad/R24BroadCostMain.lean",
+      "sha256": "6c60671d07867b847e615ae187615eb23aedaeafccf5b8ffe1c7ed1bea62ead5",
+      "bytes": 805
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-broad/static_runner_audit.py",
+      "sha256": "1806bb3c9a6aa4285a22a7a811d070c3257537d92295b9c8b79be832ce1efe00",
+      "bytes": 9804
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-broad/BroadNativePair.lean.inc",
+      "sha256": "85d236b07d0981b65ed9fa34bf63113ba5fd24629f896b6b49c70074d34a96d1",
+      "bytes": 10580
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-broad/build_candidate.py",
+      "sha256": "395cb859d23915a409ab4a3ad17960867c781ec11c301757e928f471638d4e85",
+      "bytes": 8176
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-broad/package_diagnostic.py",
+      "sha256": "200e69196231d6361e784a5ed184c86b4787cf916cc6b0bb784e4c20c93f80f5",
+      "bytes": 4945
+    }
+  ],
+  "runtime_cost": {
+    "overall_budget_seconds_from_stage_registration": 580,
+    "build_cap_seconds": 180,
+    "measure_phase_cap_seconds": 300,
+    "seeds": [
+      2428001,
+      2428003
+    ],
+    "order_per_seed": [
+      "control",
+      "nativearray",
+      "nativearray",
+      "control",
+      "control",
+      "checkedflat",
+      "checkedflat",
+      "control"
+    ],
+    "processes": 16,
+    "pairs": 500000,
+    "inner": 3,
+    "observer": false
+  },
+  "scope": "One structural broad BMM diagnostic, no shape/guard sweep. Original B2 underflow shortcut, n<=1 full fallback; n>1 all shapes. Array native scalar caches versus checked contiguous F64 storage with F32 operations. Whole callback includes preparation/checking/failed prefix release/fallback, original raw NaN replay, odd single tail and output release. Numerical correctness UNKNOWN before complete endpoint proof.",
+  "sources": {
+    "base": "competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean",
+    "base_prefix_exact": true,
+    "new_fragment": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-broad/BroadNativePair.lean.inc"
+  }
+}
