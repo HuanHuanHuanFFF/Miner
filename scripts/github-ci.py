@@ -51,7 +51,7 @@ def main():
                 paths.append(manifest)
                 data=json.loads((ROOT/manifest).read_bytes())
                 helper=data.get('helper_audit_module')
-                if name.startswith('f01-r22-') and helper in ('development-cost-audit.py','development-cost2-audit.py','development-cost3-audit.py','development-flat-cost-audit.py','development-flat-cost2-audit.py','development-pair8-cost-audit.py','development-resident8-cost-audit.py','development-broadword-cost-audit.py','development-multistatic-cost-audit.py','development-farstatic-cost-audit.py','development-nativecold-cost-audit.py','development-indexed8-cost-audit.py','development-outline-isolation-audit.py','development-wordcarry-cost-audit.py','development-nat-prefix-audit.py'):
+                if name.startswith('f01-r22-') and helper in ('development-cost-audit.py','development-cost2-audit.py','development-cost3-audit.py','development-flat-cost-audit.py','development-flat-cost2-audit.py','development-pair8-cost-audit.py','development-resident8-cost-audit.py','development-broadword-cost-audit.py','development-multistatic-cost-audit.py','development-farstatic-cost-audit.py','development-nativecold-cost-audit.py','development-indexed8-cost-audit.py','development-outline-isolation-audit.py','development-wordcarry-cost-audit.py','development-nat-prefix-audit.py','development-nat-bias-repair-audit.py'):
                     paths.append('competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/'+helper)
                 for component in data.get('components',[]):
                     component_path=component['path'];resolved=(ROOT/component_path).resolve()
