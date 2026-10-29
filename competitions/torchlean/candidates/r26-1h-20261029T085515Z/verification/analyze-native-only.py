@@ -46,8 +46,12 @@ def select_review(plan_sha, run_id):
         if h==plan_sha and (rid is None or str(rid)==str(run_id)): hits.append((p,d,rid is not None))
     bound=[x for x in hits if x[2]]
     use=bound or hits
-    if len(use)!=1: raise AuditError(f'expected one matching saved preflight, found {len(use)}')
-    return use[0][0],use[0][1]
+    if len(use)>1:
+        sigs={(x[1].get('actual_dispatch',{}).get('plan_sha256'),x[1].get('actual_dispatch',{}).get('runner_sha256'),x[1].get('actual_dispatch',{}).get('source_commit')) for x in use}
+        if len(sigs)!=1: raise AuditError('conflicting saved preflights match this plan/run')
+        use=sorted(use,key=lambda x: x[1].get('reviewed_utc',''))
+    if not use: raise AuditError(f'no matching saved preflight for {run_id}')
+    return use[-1][0],use[-1][1]
 
 def select_review_run(run_id):
     hits=[]
@@ -240,11 +244,22 @@ def analyze(run_dir):
         if len(pairs)!=2 or any(cpu[0].get(k)!=cpu[1].get(k) for k in ('identity','machine','architecture','cpu_affinity')): raise AuditError('same CPU provenance mismatch')
         scoring_plan=dict(board); scoring_plan['strata']=[{'environment':q['environment'],'identity':q['identity'],'seed':q['seed'],'weight':1/len(pairs),'timing':q['timing']} for q,_ in pairs]
         score=modules['scoring'].assess(scoring_plan,pairs)
-        score_rows.append({'candidate':cand['name'],'candidate_source':{'path':cand['path'],'filename':'Kernel.lean','sha256':cand['sha256']},'reference':{'path':plan['reference']['path'],'filename':'Kernel.lean','sha256':plan['reference']['sha256']},'proof':'NOT_RUN_NOT_CLAIMED_UNPROVED_NATIVE_RESEARCH_ONLY','flags':flags,'per_seed':measured,'total_pairs':sum(x['pairs'] for x in measured),'total_ns_values':sum(x['ns_values'] for x in measured),'total_checksum_pairs':sum(x['checksum_pairs'] for x in measured),'cpu':cpu,'score_vs_saved_reference':score,'status':'NATIVE_ONLY_DIAGNOSTIC'})
+        guard_limit=board['admission']['guard']; guard_rows=[]
+        for st in score.get('strata',[]):
+            values=st.get('guards',{}); bad=[(k,v) for k,v in values.items() if v>guard_limit]; worst=max(values.items(),key=lambda kv:kv[1]) if values else (None,None)
+            guard_rows.append({'seed':st.get('seed'),'cells_over_guard':len(bad),'worst_cell':worst[0],'worst_ratio':worst[1]})
+        score_rows.append({'candidate':cand['name'],'candidate_source':{'path':cand['path'],'filename':'Kernel.lean','sha256':cand['sha256']},'reference':{'path':plan['reference']['path'],'filename':'Kernel.lean','sha256':plan['reference']['sha256']},'proof':'NOT_RUN_NOT_CLAIMED_UNPROVED_NATIVE_RESEARCH_ONLY','flags':flags,'per_seed':measured,'total_pairs':sum(x['pairs'] for x in measured),'total_ns_values':sum(x['ns_values'] for x in measured),'total_checksum_pairs':sum(x['checksum_pairs'] for x in measured),'cpu':cpu,'score_vs_saved_reference':score,'guard_limit':guard_limit,'guard_diagnostics':guard_rows,'status':'NATIVE_ONLY_DIAGNOSTIC'})
     if len({tuple(x.get(k) for k in ('identity','machine','architecture','cpu_affinity')) for x in cpu_all})>1: raise AuditError('CPU provenance differs across candidates')
     diag=diagnostics(plan,summary,folder)
     ci_ok=ci.get('conclusion')=='success' and jobs[0].get('conclusion')=='success'
-    return {'round':'R26','run_id':run_id,'status':'COMPLETE_NATIVE_ONLY_DIAGNOSTIC' if ci_ok else 'COMPLETE_NATIVE_ONLY_DIAGNOSTIC_CI_FAILURE','ci':{'status':ci.get('status'),'conclusion':ci.get('conclusion'),'head_sha':ci.get('headSha')},'artifact_plan_sha256':sha(plan_bytes),'plan_source':'downloaded plan.json; no live-plan fallback','preflight_review':str(review_path),'dispatch_receipt':str(dp),'pinned_scoring_sources':pins,'outer_file_hashes':hashes,'runner_file_hashes':inside,'command_argv':cmds,'owned_target_argv_from_frozen_runner':'g.LAKE -f work/R26NativeLake.lean build r26Native (the summary does not separately record the resolved g.LAKE executable path)','MainExact_sha256':summary['owned_main_equals_original_sha256'],'MainExact_identity':'runner copied official bytes and asserted byte equality; raw Lean files not included separately','candidate_comparisons':score_rows,'proof_diagnostics':diag,'reference_scope':'retained only; no same-run originalshipped pair','candidate_proof':'NOT_RUN_NOT_CLAIMED','claim_boundary':'Original quick scorer plus finite checksums only; not full proof, original gate, current champion comparison, or promotion.','usage':{'tokens':'UNKNOWN','cached_input_tokens':'UNKNOWN','continuous_model_cpu':'UNKNOWN'}}
+    window=dict(review.get('window_scope',{}))
+    if window:
+        window.update(observed_runner_start_utc=summary['started_at_utc'],observed_runner_finish_utc=summary['finished_at_utc'],time_source='Original artifact summary timestamps; supersedes preflight transcription')
+        window['inside_original_stop_window']=utc(summary['started_at_utc']) < utc(window['original_stop_new_long_experiments_utc'])
+    post_cutoff=window.get('inside_original_stop_window') is False
+    status='COMPLETE_NATIVE_ONLY_DIAGNOSTIC' if ci_ok else 'COMPLETE_NATIVE_ONLY_DIAGNOSTIC_CI_FAILURE'
+    if post_cutoff: status+='_POST_CUTOFF'
+    return {'round':'R26','run_id':run_id,'status':status,'ci':{'status':ci.get('status'),'conclusion':ci.get('conclusion'),'head_sha':ci.get('headSha')},'artifact_plan_sha256':sha(plan_bytes),'plan_source':'downloaded plan.json; no live-plan fallback','preflight_review':str(review_path),'window_scope':window,'dispatch_receipt':str(dp),'pinned_scoring_sources':pins,'outer_file_hashes':hashes,'runner_file_hashes':inside,'command_argv':cmds,'owned_target_argv_from_frozen_runner':'g.LAKE -f work/R26NativeLake.lean build r26Native (the summary does not separately record the resolved g.LAKE executable path)','MainExact_sha256':summary['owned_main_equals_original_sha256'],'MainExact_identity':'runner copied official bytes and asserted byte equality; raw Lean files not included separately','candidate_comparisons':score_rows,'proof_diagnostics':diag,'reference_scope':'retained only; no same-run originalshipped pair','candidate_proof':'NOT_RUN_NOT_CLAIMED','claim_boundary':'Original quick scorer plus finite checksums only; not full proof, original gate, current champion comparison, or promotion.','usage':{'tokens':'UNKNOWN','cached_input_tokens':'UNKNOWN','continuous_model_cpu':'UNKNOWN'}}
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__); ap.add_argument('--run-dir',type=Path,required=True); ap.add_argument('--output',type=Path); a=ap.parse_args()
@@ -254,5 +269,5 @@ def main():
     except Exception as e: report={'round':'R26','run_id':run_id,'status':'FAILED_OR_INCOMPLETE_NATIVE_ONLY_AUDIT','error_type':type(e).__name__,'error':str(e),'score':'UNKNOWN','candidate_proof':'NOT_RUN_NOT_CLAIMED'}
     out.parent.mkdir(parents=True,exist_ok=True); out.write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
     print(json.dumps({'output':str(out),'status':report.get('status'),'error':report.get('error')}))
-    return 0 if report.get('status')=='COMPLETE_NATIVE_ONLY_DIAGNOSTIC' else 1
+    return 0 if report.get('status') in {'COMPLETE_NATIVE_ONLY_DIAGNOSTIC','COMPLETE_NATIVE_ONLY_DIAGNOSTIC_POST_CUTOFF'} else 1
 if __name__=='__main__': raise SystemExit(main())
