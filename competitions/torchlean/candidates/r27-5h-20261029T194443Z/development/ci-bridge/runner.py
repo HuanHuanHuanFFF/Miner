@@ -2,7 +2,9 @@
 from pathlib import Path
 import datetime,hashlib,json,os,re,shlex,shutil,subprocess,sys,time,urllib.request,urllib.error,importlib.util
 ROOT=Path(os.environ['GITHUB_WORKSPACE']);UP=Path(os.environ['TORCHLEAN_ROOT']);OUT=Path(os.environ['TORCHLEAN_REPORTS']);OUT.mkdir(exist_ok=True)
-PLAN=ROOT/'competitions/torchlean/candidates/r27-5h-20261029T194443Z/ci-plan.json';plan=json.loads(PLAN.read_bytes());START=time.monotonic();END=START+1800
+PLAN=ROOT/'competitions/torchlean/candidates/r27-5h-20261029T194443Z/ci-plan.json';plan=json.loads(PLAN.read_bytes());START=time.monotonic()
+driver_seconds=plan.get('driver_seconds',1800);assert isinstance(driver_seconds,int) and 60<=driver_seconds<=1800
+END=START+driver_seconds
 ENV=os.environ.copy();ENV.update(PATH=str(Path.home()/'.elan/bin')+os.pathsep+ENV.get('PATH',''),PYTHONPATH='.:validator',GATE_BUDGET_SECONDS='600',GATE_BUILD_MEMORY_MB='4096',GATE_BENCH_MEMORY_MB='512')
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
 record={'source_commit':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'official_commit':plan['official_commit'],'scope':plan['scope'],'primary_board':plan['board'],'complete':False,'results':[],'commands':[],'started_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'current_champion_measurement':False}
