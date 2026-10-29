@@ -46,7 +46,7 @@ def analyze(run):
     assert summary['originals_unchanged'] and summary['protected_before']==summary['protected_after']
     for command in summary['commands']:
         assert sha(folder/(command['label']+'.log'))==command['log_sha256']
-        if command['label'] in {'setup','setup-check','quick-config'}:
+        if command['label'] in {'setup','setup-check','quick-config','standard-config'}:
             assert command['exit_code']==0
     _,modules,pins=base.r25_tools()
     cfg=modules['config'].Config.load(folder/'overall-config.toml');board=cfg.plan(plan['board'])
@@ -79,6 +79,9 @@ def analyze(run):
             assert request['workloads']==modules['multiseed'].workloads(seed)
             assert request['benchmark_identity']==board['benchmark_identity']
             assert request['identity']==cfg.environments['local']['identity']
+            if plan.get('measurement_mode')=='standard':
+                assert (request['timing']['rounds'],request['timing']['inner'],request['timing']['cell_ms'])==(11,3,50)
+                assert request['timing']==cfg.timing|board['timing']|cfg.environments['local']['timing']
             modules['scoring'].validate_result(request,result,board['cells'])
             base.raw_rounds(folder,entry['name'],seed,request,result)
             assert len(result['rounds'])==request['timing']['rounds']

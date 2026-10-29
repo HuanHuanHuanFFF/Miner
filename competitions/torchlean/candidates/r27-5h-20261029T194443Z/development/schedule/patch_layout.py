@@ -14,7 +14,7 @@ def transform(data, submission, variant):
         edits=[
             ('lemma ZB6 (c a:', 'lemma ZB6 {q:ف} (c a:'),
             ('(if c<2 then Yak4', '(if q then Yak4'),
-            ('if rows<2 then Yak4', 'if rows<2||(BX.any λ x=>(x&&&ޅ)-(x>>>16)<8)&&(BX.any λ x=>8<=(x&&&ޅ)-(x>>>16)) then Yak4'),
+            ('if rows<2 then Yak4', 'if rows<2||(BX.any λ x=>((x&&&(65535:ؼ))-(x>>>16)).toNat<8)&&(BX.any λ x=>8<=((x&&&(65535:ؼ))-(x>>>16)).toNat) then Yak4'),
         ]
         for old,new in edits:
             assert text.count(old)==1,(old,text.count(old))

@@ -63,7 +63,9 @@ def main():
   dest=folder/(entry['name']+'-Kernel.lean');dest.write_bytes(raw);assert sha(dest)==entry['sha256'];assert len(raw)==entry['bytes'];return dest
  reference=materialize(plan['reference']);refdir=UP/'r27-reference';refdir.mkdir();(refdir/'Kernel.lean').write_bytes(reference.read_bytes());py=UP/'.venv/bin/python'
  record['reference_proof']={'scope':'Official public predecessor declared Correct; full original replay not run in this native exploration'};save()
- assert run([py,'scripts/exact-config.py','--quick','--board',plan['board'],'--reference',refdir/'Kernel.lean','--output',OUT/'overall-config.toml'],'quick-config',30)==0
+ measurement_mode=plan.get('measurement_mode','quick');assert measurement_mode in {'quick','standard'}
+ config_args=[py,'scripts/exact-config.py']+(['--quick'] if measurement_mode=='quick' else [])+['--board',plan['board'],'--reference',refdir/'Kernel.lean','--output',OUT/'overall-config.toml']
+ assert run(config_args,measurement_mode+'-config',30)==0
  config=cfg.Config.load(OUT/'overall-config.toml');baseconfig=(g.LIB/'lakefile.lean').read_bytes();mainbytes=(g.LIB/'bench/MainExact.lean').read_bytes();record['owned_main_equals_original_sha256']=hashlib.sha256(mainbytes).hexdigest()
  target=re.search(rb'^lean_exe benchExact where\s*\n((?:[ \t]+[^\n]*\n|\n)*)',baseconfig,re.M);assert target
  assert {x.strip() for x in target[1].decode().splitlines() if x.strip()}=={'srcDir := "bench"','root := `MainExact'}
@@ -112,9 +114,11 @@ def main():
   try:
    binary,info=build(entry)
    for seed in plan['seeds']:
-    timing=config.timing|config.plan(plan['board'])['timing']|config.environments['local']['timing'];timing.update(build_seconds=300,cached_build_seconds=180,benchmark_seconds=300,run_seconds=120)
+    timing=config.timing|config.plan(plan['board'])['timing']|config.environments['local']['timing']
+    if measurement_mode=='quick':timing.update(build_seconds=300,cached_build_seconds=180,benchmark_seconds=300,run_seconds=120)
+    else:assert (timing['rounds'],timing['inner'],timing['cell_ms'])==(11,3,50)
     request={'environment':'local','identity':bm.machine_identity(),'seed':seed,'candidate_hash':entry['sha256'],'reference_hash':refentry['sha256'],'cells':list(config.plan(plan['board'])['cells']),'timing':timing,'benchmark_identity':fp.benchmark(),'workloads':ms.workloads(seed)};cfg.MeasurementRequest.parse(request);request_path=OUT/(entry['name']+'-'+str(seed)+'-request.json');request_path.write_text(json.dumps(request,indent=2)+'\n')
-    clock=bm.Deadline('benchmark',min(300,max(1,END-time.monotonic()-20)));initial=bm.run_binary(refbin,request,{},3,'reference',clock);reps=ms.calibrated_counts(initial,timing['cell_ms']);checked=bm.run_binary(refbin,request,reps,3,'reference',clock);reps=ms.calibrated_counts(checked,timing['cell_ms'],reps);clock.share();rounds=[]
+    clock=bm.Deadline('benchmark',min(timing['benchmark_seconds'],max(1,END-time.monotonic()-20)));initial=bm.run_binary(refbin,request,{},3,'reference',clock);reps=ms.calibrated_counts(initial,timing['cell_ms']);checked=bm.run_binary(refbin,request,reps,3,'reference',clock);reps=ms.calibrated_counts(checked,timing['cell_ms'],reps);clock.share();rounds=[]
     for i in range(timing['rounds']):
      sides=[('reference',refbin),('candidate',binary)];sides.reverse() if i%2 else None;observed={}
      for side,exe in sides:
