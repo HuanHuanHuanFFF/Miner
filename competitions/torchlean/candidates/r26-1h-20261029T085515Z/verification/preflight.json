@@ -1,0 +1,82 @@
+{
+  "round": "R26",
+  "phase": "single static bridge preflight",
+  "status": "STATIC_REVIEW_COMPLETE_RUNTIME_PENDING_WITH_SCOPE_NOTE",
+  "reviewed_utc": "2026-10-29T09:17:40Z",
+  "bridge_ready_request": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/requests/CI-BRIDGE-READY.json",
+  "bridge_source_hashes": {
+    "runner.py": "9759a967c2763d626fa904fc591224082868b486cdeff1e5e4d85c70df28c790",
+    "client.py": "c4e3497d8b52089945d79e49a8b658aed65a1b60fe95d4fe991b64e7ad85f8be"
+  },
+  "plan_binding": {
+    "runner_and_client_load": "ci-plan.json",
+    "ready_request_names": "ci-plan-batch1.json",
+    "ci_plan_json_sha256": "2cc6a756be52376f34d85c05ed303ac74cf712be4023601c0ebd5213d93a3c9c",
+    "batch1_plan_sha256": "2cc6a756be52376f34d85c05ed303ac74cf712be4023601c0ebd5213d93a3c9c",
+    "exact_bytes_equal": true,
+    "status": "CURRENTLY_SAME_BYTES_BUT_READY_NAME_MISMATCH",
+    "note": "client freezes ci-plan.json; runner loads ci-plan.json. Keep READY metadata aligned before dispatch."
+  },
+  "frozen_plan": {
+    "sha256": "2cc6a756be52376f34d85c05ed303ac74cf712be4023601c0ebd5213d93a3c9c",
+    "official_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+    "scope": "UNPROVED_NATIVE_RESEARCH_ONLY",
+    "allow_private": false,
+    "seeds": [26102901, 26102903],
+    "reference": {
+      "name": "retained",
+      "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/development/contract-port/norm-cache-proof1/Kernel.lean",
+      "bytes": 42013,
+      "sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+      "proof_boundary": "previous full original 12-obligation gate pass; runner replays original verification on this reference"
+    },
+    "candidates": [
+      {"name": "fp1", "bytes": 49755, "sha256": "e6fbf94185f69c152e8058acd8ca593fb0f9814e74b6cf1383270ce49296d034", "label": "UNPROVED_NATIVE_RESEARCH_ONLY"},
+      {"name": "fp-word-conv3", "bytes": 60137, "sha256": "08d876ca77e33cd247cc5cba173df49eac54829ed4baed6088eca9bf0a40fe64", "label": "UNPROVED_NATIVE_RESEARCH_ONLY"}
+    ],
+    "batch_timing": "official quick config, 5 rounds, inner 3, 2 ms target, 30 cells x 6 workloads per seed"
+  },
+  "workflow": {
+    "path": ".github/workflows/deflate-baseline.yml",
+    "job": "torchlean_r26",
+    "dispatch_inputs": {"competition": "floatlib", "candidates": "__torchlean_r26__", "allow_private": false},
+    "condition": "public repository and allow_private=false",
+    "runner": "ubuntu-24.04 standard public runner",
+    "status": "STATIC_MATCH"
+  },
+  "target_and_proof_boundary": {
+    "official_source": "ci-prepare.sh fetches and checks pinned official commit",
+    "reference_proof": "original python -m verification invocation, fingerprint start/end equality checked",
+    "prototype_gate": "no original verification/Correct invocation; official intake and policy only, then owned native target",
+    "owned_target": "one added lean_exe r26Native in work/R26NativeLake.lean",
+    "main_source": "copies official bench/MainExact.lean byte-for-byte to R26NativeMain.lean and asserts copy equality",
+    "original_gate_and_sources": "base lakefile and original MainExact.lean are asserted unchanged at runner exit",
+    "candidate_theorem_scan": "only retainedCorrect : Obligation retainedKernels found in both selected sources; no theorem correct, originalVerifyExact, fastkernels, AX6, or #print axioms match",
+    "claim_boundary": "MainExact/native target does not establish original full proof for prototype; its kernel is unproved"
+  },
+  "argv_and_flags": {
+    "environment": "same PATH/PYTHONPATH/GATE_* values as ci-r25.py; runner also enforces sandbox, 4096 MB build and 512 MB benchmark caps",
+    "build_command": "original lake executable with -f work/R26NativeLake.lean build r26Native",
+    "reference_command": "original python -m verification <retained target> --verdict <path>",
+    "measurement": "original config and multiseed workload generator; benchmark.run_binary for reference calibration and paired reference/candidate rounds",
+    "order": "alternates reference-first each round; code sets reference_first=i%2==0",
+    "flags_check": "captures original/owned compile, link and response arguments; asserts equality after only MainExact/R26NativeMain and benchExact/r26Native name mapping",
+    "status": "STATIC_CHECKS_PRESENT; RAW_RUNNER_ARGS_AND_FLAGS_PENDING"
+  },
+  "measurement_and_analysis": {
+    "per_seed": "5 x 180 = 900 paired rows",
+    "complete_two_seed_pair_cohort": "1800 paired rows, 3600 ns values, 1800 checksum pairs",
+    "checksum": "runner asserts reference and candidate checksums equal; verifier must independently recompute against saved round files",
+    "score": "runner does not call scoring.assess; R26 analyzer must use pinned R25 config/multiseed/scoring modules by exact blob SHA",
+    "runtime_evidence": "NOT_RUN_OR_COLLECTED_AT_PREFLIGHT"
+  },
+  "scope_note": {
+    "current_reference": "retained only",
+    "original_shipped_direct_comparison": "NOT_IN_THIS_PLAN",
+    "rationale": "The local R25 retained record separately shows a historical shipped comparison; no same-run R26 shipped pair exists in this plan.",
+    "classification": "scope gap to surface; not a checksum or source identity failure"
+  },
+  "main_exact_runtime_hash": "PENDING_RUNNER_ARTIFACT",
+  "full_proof_for_prototypes": "NOT_RUN_NOT_CLAIMED",
+  "current_ci_state": "NOT_CONFIRMED_BY_THIS_REVIEWER"
+}

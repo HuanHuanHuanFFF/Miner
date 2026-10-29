@@ -1,0 +1,207 @@
+{
+  "updated_utc": "2026-10-29T09:23:27.065265+00:00",
+  "deadline_utc": "2026-10-29T09:55:15Z",
+  "first_source": {
+    "id": "fp1",
+    "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp1/Kernel.lean",
+    "bytes": 49755,
+    "sha256": "e6fbf94185f69c152e8058acd8ca593fb0f9814e74b6cf1383270ce49296d034",
+    "status": "RUNTIME_PROBE_UNPROVED_NOT_COMPILED",
+    "retained_prefix": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/development/contract-port/norm-cache-proof1/Kernel.lean",
+    "retained_original_sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+    "fp_original_sha256": "fd21440e37dcb8264899f291ca32299bb9a44b708ac61197f2048694dba26123",
+    "entry": "Submission.kernels",
+    "proof_entry": "Submission.retainedCorrect",
+    "proof_covers": "Submission.retainedKernels only",
+    "changes": [
+      "retained norm-cache runtime and original twelve proof retained",
+      "FP64 prepared row/column caches for linear and gemm",
+      "bias included as final term of the same inW+1 dot",
+      "cold FP64 dot for conv/depthwise, original dotFn on miss",
+      "empty dense output extents return before cache preparation"
+    ],
+    "next_gate": "owned native-only target; finite checksum versus golden retained/source; no adoption claim"
+  },
+  "second_source": {
+    "id": "fp-word2",
+    "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp-word2/Kernel.lean",
+    "bytes": 58532,
+    "sha256": "549a1d6c52e975e25356c0a0cfd0fea475b57604b8bcb2437a06d0873fa0ac57",
+    "status": "RUNTIME_PROBE_UNPROVED_NOT_COMPILED",
+    "retained_original_sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+    "entry": "Submission.kernels",
+    "proof_entry": "Submission.retainedCorrect",
+    "proof_covers": "Submission.retainedKernels only",
+    "changes": [
+      "FP64 attempt then exact signed62 or structural four-word128 fallback",
+      "row/column FP and word caches shared across dense dots",
+      "word loops use multiple UInt64 recursive arguments; no Id/tuple MAC state",
+      "nonfinite, subnormal nonzero, mismatched, or too-wide cases use original dotFn",
+      "old canonical-NaN research replay omitted entirely"
+    ],
+    "next_gate": "native full official-model finite checksums/timing; UNPROVED"
+  },
+  "third_source": {
+    "id": "fp-word-conv3",
+    "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp-word-conv3/Kernel.lean",
+    "bytes": 60137,
+    "sha256": "08d876ca77e33cd247cc5cba173df49eac54829ed4baed6088eca9bf0a40fe64",
+    "status": "RUNTIME_PROBE_UNPROVED_NOT_COMPILED",
+    "retained_original_sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+    "entry": "Submission.kernels",
+    "proof_entry": "Submission.retainedCorrect",
+    "proof_covers": "Submission.retainedKernels only",
+    "parent_runtime": "549a1d6c52e975e25356c0a0cfd0fea475b57604b8bcb2437a06d0873fa0ac57",
+    "changes": [
+      "same arithmetic as fp-word2",
+      "conv2d prepared input windows reused across output filters",
+      "conv2d/depthwise prepared filters reused across positions",
+      "unchanged ContractExact windowAt, term order, bias as last exact term",
+      "zero output extent returns before preparation"
+    ],
+    "next_gate": "full official-model finite checksum/timing; UNPROVED"
+  },
+  "fourth_source": {
+    "id": "fp-raw4",
+    "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp-raw4/Kernel.lean",
+    "bytes": 63485,
+    "sha256": "f8a0008b7ab9974069a32f5e2199d4735686f53261c372b6dd36b704b712f50b",
+    "status": "RUNTIME_PROBE_UNPROVED_NOT_COMPILED",
+    "retained_original_sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+    "entry": "Submission.kernels",
+    "proof_entry": "Submission.retainedCorrect",
+    "proof_covers": "Submission.retainedKernels only",
+    "parent_runtime": "08d876ca77e33cd247cc5cba173df49eac54829ed4baed6088eca9bf0a40fe64",
+    "changes": [
+      "fused FloatArray and min/max preparation",
+      "no encoded UInt32 data array materialized",
+      "raw mantissa/index loops support all finite subnormal inputs inside width bound",
+      "same structural word64/128 and FP64 certificate; original dotFn outside bound",
+      "same shared dense/conv caller layouts"
+    ],
+    "queue": "SUPERSEDED_BY_FP_RAW5_EXPLICIT_BOOL",
+    "next_gate": "fresh raw-word Python model then official-model finite checksum/timing; UNPROVED"
+  },
+  "next_raw_source": {
+    "id": "fp-raw5",
+    "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp-raw5/Kernel.lean",
+    "bytes": 63503,
+    "sha256": "79a74c90e45747f6597ed478e78174e4530062af49526ff03ea0d438d9acf778",
+    "status": "RUNTIME_PROBE_UNPROVED_NOT_COMPILED",
+    "retained_original_sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+    "entry": "Submission.kernels",
+    "proof_entry": "Submission.retainedCorrect",
+    "proof_covers": "Submission.retainedKernels only",
+    "parent_runtime": "f8a0008b7ab9974069a32f5e2199d4735686f53261c372b6dd36b704b712f50b",
+    "changes": [
+      "same raw4 runtime, explicit decide in two Bool-or guards",
+      "preventive source elaboration fix; raw4 original preserved"
+    ],
+    "queue": "NEXT_DISCRIMINATOR_ONLY_IF_CI_THROUGHPUT_PERMITS",
+    "next_gate": "official-model finite checksum/timing; UNPROVED"
+  },
+  "replacement_for_first_queue": {
+    "id": "fp-word-conv6-local",
+    "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp-word-conv6-local/Kernel.lean",
+    "bytes": 60479,
+    "sha256": "ad9bde3e9e8490df15f3d8d15c08805f85d4451e0a5f2d20977632c0b4b22540",
+    "status": "RUNTIME_PROBE_UNPROVED_NOT_COMPILED",
+    "retained_original_sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+    "entry": "Submission.kernels",
+    "proof_entry": "Submission.retainedCorrect",
+    "proof_covers": "Submission.retainedKernels only",
+    "parent_runtime": "08d876ca77e33cd247cc5cba173df49eac54829ed4baed6088eca9bf0a40fe64",
+    "changes": [
+      "global Inhabited instance replaced by local instances in exact use scopes",
+      "same arithmetic/layout as fp-word-conv3"
+    ],
+    "queue": "REPLACE_FP_WORD_CONV3_POLICY_REJECTION",
+    "next_gate": "pinned original intake/policy, then native build/full-model checksums/timing"
+  },
+  "next_raw_source_policy_fixed": {
+    "id": "fp-raw7-local",
+    "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp-raw7-local/Kernel.lean",
+    "bytes": 63751,
+    "sha256": "890eb4da6097f9515d71859f9a4d3c98e4e62c12985fa606c7882db3dc0bd639",
+    "status": "RUNTIME_PROBE_UNPROVED_NOT_COMPILED",
+    "retained_original_sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+    "entry": "Submission.kernels",
+    "proof_entry": "Submission.retainedCorrect",
+    "proof_covers": "Submission.retainedKernels only",
+    "parent_runtime": "79a74c90e45747f6597ed478e78174e4530062af49526ff03ea0d438d9acf778",
+    "changes": [
+      "global Inhabited instance replaced by local instances in exact use scopes",
+      "same fused raw5 runtime"
+    ],
+    "queue": "NEXT_DISCRIMINATOR_ONLY_IF_CI_THROUGHPUT_PERMITS",
+    "next_gate": "pinned original intake/policy, then native build/full-model checksums/timing"
+  },
+  "current_policy_valid_sources": [
+    {
+      "id": "fp1",
+      "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp1/Kernel.lean",
+      "bytes": 49755,
+      "sha256": "e6fbf94185f69c152e8058acd8ca593fb0f9814e74b6cf1383270ce49296d034",
+      "status": "RUNTIME_PROBE_UNPROVED_NOT_COMPILED",
+      "retained_prefix": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/development/contract-port/norm-cache-proof1/Kernel.lean",
+      "retained_original_sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+      "fp_original_sha256": "fd21440e37dcb8264899f291ca32299bb9a44b708ac61197f2048694dba26123",
+      "entry": "Submission.kernels",
+      "proof_entry": "Submission.retainedCorrect",
+      "proof_covers": "Submission.retainedKernels only",
+      "changes": [
+        "retained norm-cache runtime and original twelve proof retained",
+        "FP64 prepared row/column caches for linear and gemm",
+        "bias included as final term of the same inW+1 dot",
+        "cold FP64 dot for conv/depthwise, original dotFn on miss",
+        "empty dense output extents return before cache preparation"
+      ],
+      "next_gate": "owned native-only target; finite checksum versus golden retained/source; no adoption claim"
+    },
+    {
+      "id": "fp-word-conv6-local",
+      "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp-word-conv6-local/Kernel.lean",
+      "bytes": 60479,
+      "sha256": "ad9bde3e9e8490df15f3d8d15c08805f85d4451e0a5f2d20977632c0b4b22540",
+      "status": "RUNTIME_PROBE_UNPROVED_NOT_COMPILED",
+      "retained_original_sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+      "entry": "Submission.kernels",
+      "proof_entry": "Submission.retainedCorrect",
+      "proof_covers": "Submission.retainedKernels only",
+      "parent_runtime": "08d876ca77e33cd247cc5cba173df49eac54829ed4baed6088eca9bf0a40fe64",
+      "changes": [
+        "global Inhabited instance replaced by local instances in exact use scopes",
+        "same arithmetic/layout as fp-word-conv3"
+      ],
+      "queue": "REPLACE_FP_WORD_CONV3_POLICY_REJECTION",
+      "next_gate": "pinned original intake/policy, then native build/full-model checksums/timing"
+    },
+    {
+      "id": "fp-raw7-local",
+      "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp-raw7-local/Kernel.lean",
+      "bytes": 63751,
+      "sha256": "890eb4da6097f9515d71859f9a4d3c98e4e62c12985fa606c7882db3dc0bd639",
+      "status": "RUNTIME_PROBE_UNPROVED_NOT_COMPILED",
+      "retained_original_sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+      "entry": "Submission.kernels",
+      "proof_entry": "Submission.retainedCorrect",
+      "proof_covers": "Submission.retainedKernels only",
+      "parent_runtime": "79a74c90e45747f6597ed478e78174e4530062af49526ff03ea0d438d9acf778",
+      "changes": [
+        "global Inhabited instance replaced by local instances in exact use scopes",
+        "same fused raw5 runtime"
+      ],
+      "queue": "NEXT_DISCRIMINATOR_ONLY_IF_CI_THROUGHPUT_PERMITS",
+      "next_gate": "pinned original intake/policy, then native build/full-model checksums/timing"
+    }
+  ],
+  "known_policy_rejected_sources": [
+    "fp-word2",
+    "fp-word-conv3",
+    "fp-raw4",
+    "fp-raw5"
+  ],
+  "compile": "NOT_RUN_LOCAL_BY_INSTRUCTION",
+  "communication": "FILE_ONLY",
+  "active_next": "word128 structural fallback integration"
+}
