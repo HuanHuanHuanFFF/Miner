@@ -34,7 +34,13 @@ def analyze(run):
     summary=j(folder/'summary.json');plan=j(folder/'plan.json')
     dispatch_path,dispatch=base.find_dispatch(ROUND/'evidence',run)
     assert summary['source_commit']==ci['headSha']==dispatch['source_commit']
-    assert summary['official_commit']==plan['official_commit']=='accb82b6e2adeda1b41a57a260d68fb3879c427e'
+    known_benchmarks={
+      'accb82b6e2adeda1b41a57a260d68fb3879c427e':'a91ee5653e770f54b2ce4d1b81d5a090e4e10cec5f58ee76f6b79d20d1515e57',
+      '27fb1d19c712ead50ad34b4ad0d4ba597161e616':'6df065ba88f41fef36907eae008f839e5ffd7c0bb408a242daebafcaf3faa5cd',
+    }
+    assert summary['official_commit']==plan['official_commit']
+    assert summary['benchmark_identity']==known_benchmarks[plan['official_commit']]
+    assert summary['proof_identity']=='3a69968c7210ab18b325047e518ddfa942e642e21268a241e8693b075377bee6'
     plan_path=ROUND.relative_to(ROOT).as_posix()+'/ci-plan.json'
     assert dispatch['frozen_files'][plan_path]==sha(folder/'plan.json')
     assert summary['originals_unchanged'] and summary['protected_before']==summary['protected_after']
@@ -92,7 +98,8 @@ def analyze(run):
                      'counts':counts,'cpu':cpus,'score_vs_calibration_internal':scored,
                      'candidate_time_over_current_champion_estimate':scored['score']/factor,
                      'champion_comparison':'INFERRED_SCREEN_CROSS_ENV_AND_SEEDS; direct current-source measurement unavailable',
-                     'candidate_proof':current['proof_state'],'eligibility':'NOT_ESTABLISHED_NO_ORIGINAL_FULL_GATE_REPLAY',
+                     'candidate_proof':current['proof_state'],
+                     'eligibility':'SOURCE_ORIGINAL_GATE_PASS_PERFORMANCE_AND_OFFICIAL_PROMOTION_NOT_ESTABLISHED' if entry.get('full_gate') else 'NOT_ESTABLISHED_NO_ORIGINAL_FULL_GATE_REPLAY',
                      'status':'NATIVE_ONLY_EXPLORATION_AUDITED'})
     return {'run':run,'source_commit':ci['headSha'],'ci_conclusion':ci['conclusion'],
             'status':'AUDITED_NATIVE_ONLY_EXPLORATION','board':plan['board'],'outer_hashes':outer,'inner_hashes':inside,
