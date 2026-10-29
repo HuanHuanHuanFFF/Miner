@@ -1,0 +1,8 @@
+# Radius/endpoints v1 — fragment only
+
+Component `research/rounding-review/RadiusEndpoints-v1.lean.inc`, SHA**c4932d4138e966d98028ec0b1ab27adad0b7cbcfdab63bf8b37a13db01c3f119**,9828B. No full Kernel or CI queue was created. Source/receipt: `notes/radius-endpoints-v1.json`; fixed Subtraction API original is under `notes/radius-endpoint-sources/` (Gitblob e1539e337d4d2904035b5b9b81de51ee435e1319).
+
+- Two roots: `Submission.R24RadiusEndpoints.radius_finite_value` and `native_endpoints_finite_real`. Radius expression exactly matches the observed PortableF64Dot body, with UInt64 H,L and guards H.toNat<=506,L.toNat<=30. Arithmetic no-wrap gives exponent720..1286, finite positive Float.ofBits value2^(H+2L-303).
+- Endpoint root additionally assumes s.isFinite=true and abs(rval s)<=2^286. It proves radius<=2^263 and abs(s)+radius<=2^287<=max64, then actual native subtraction/addition finiteness and their respective Model.roundAt equalities. It neither assumes endpoint finiteness nor outward rounding, and does not use A's narrower2^286 add-bound theorem.
+- Uses direct catalog Float.Model ADD/SUB/ofBits bridges. The only retained B2 helper dependency is `R2W01c.modelCanonical_of_decode`; other interfaces are public fixed FloatLib/Lean. No dependency on an unverified A helper body is required. Input H/L bounds and the actual sum magnitude bound must be supplied by the caller/cache/fold proofs.
+- Four new extremal bit-layout checks pass; **Lean/replay/axiom status NOT_RUN**. Next action is coordinator integration after the current exact-source CI feedback, with no independent queue. Keep the fragment frozen until actual diagnostics. Deadline remains2026-10-29 03:38:56UTC; first C clock01:20:05, source receipt01:38:03.

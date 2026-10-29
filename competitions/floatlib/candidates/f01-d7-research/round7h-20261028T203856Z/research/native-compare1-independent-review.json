@@ -1,0 +1,34 @@
+{
+  "at_utc": "2026-10-29T00:00:10.962715+00:00",
+  "candidate": "f01-r24-research-native-compare-bridge1",
+  "sha256": "8c7a1509ac9ba7e3d1e5b34cf7dd395f48645f1b4db954a1f737e8d97d76d805",
+  "bytes": 235559,
+  "checks": {
+    "hash_match": true,
+    "bytes_match": true,
+    "prefix_identical": true,
+    "components_match": true,
+    "helper_matches": true,
+    "deadline": "2026-10-29T03:38:56Z"
+  },
+  "review_kind": "One independent critical semantic review; not typing/kernel/axiom acceptance",
+  "checked_logic": [
+    "Finite actual native inputs unpack as signed zeros or positive-mantissa finite values; generic arbitrary unpack tuples are not assumed canonical.",
+    "Model.cexp_toDyadic? proves the actual decoded nonzero exponent equals the format canonical exponent; cexp_mono_abs with fltMonotoneExp yields numerical strict order from distinct encoded exponents.",
+    "Same-exponent scaling is positive and preserves mantissa order. Negative values swap comparison; zeros/sign cases match strict real order.",
+    "The top statement is actual Float.lt=true iff real-model strict less-than. It introduces no software runtime comparator or opaque-cast accuracy premise.",
+    "Bool-to-Prop coercion/change and final sign-branch simp are plausible but require real Lean elaboration."
+  ],
+  "limitations": [
+    "NOT_RUN Lean/module replay/allowed-axiom audit.",
+    "No codegen/ASM comparison or measured runtime cost.",
+    "No full midpoint/checker/candidate result."
+  ],
+  "decision": "READY_FOR_D_COMPONENT_CI_AFTER_EXACT_POLICY_PREFLIGHT",
+  "later_targeted_source_check": {
+    "source": "controller/model-sources/IEEE754-Native-Model.lean.raw",
+    "lines": "105-120",
+    "git_blob": "71befdb856ae76a9bf09b02ad000d1c7a08c209f",
+    "finding": "Model.toModel_ofFloatModel is rfl; rejected a speculative need to replace decode change with rewrite. Kernel left frozen."
+  }
+}

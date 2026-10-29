@@ -1,0 +1,140 @@
+0000000000000000 <lp_competition_runF64Boxed___lam__0>:
+   0:	push   r15
+   2:	push   r14
+   4:	push   r12
+   6:	push   rbx
+   7:	sub    rsp,0x18
+   b:	mov    eax,edi
+   d:	and    eax,0x7f800000
+  12:	cmp    eax,0x7f800000
+  17:	je     29 <lp_competition_runF64Boxed___lam__0+0x29>
+  19:	mov    ebx,esi
+  1b:	and    ebx,0x7f800000
+  21:	cmp    ebx,0x7f800000
+  27:	jne    39 <lp_competition_runF64Boxed___lam__0+0x39>
+  29:	add    rsp,0x18
+  2d:	pop    rbx
+  2e:	pop    r12
+  30:	pop    r14
+  32:	pop    r15
+  34:	jmp    39 <lp_competition_runF64Boxed___lam__0+0x39>
+			35: R_X86_64_PLT32	lp_competition_Submission_R24F64Add_retainedAdd-0x4
+  39:	mov    ecx,edi
+  3b:	and    ecx,0x7fffff
+  41:	lea    edx,[rcx+0x800000]
+  47:	test   eax,eax
+  49:	cmove  edx,ecx
+  4c:	cvtsi2sd xmm0,edx
+  50:	mov    rax,QWORD PTR [rip+0x0]        # 57 <lp_competition_runF64Boxed___lam__0+0x57>
+			53: R_X86_64_REX_GOTPCRELX	lp_competition_Submission_R24F64Add_boxedScales-0x4
+  57:	mov    r14,QWORD PTR [rax]
+  5a:	shr    edi,0x17
+  5d:	mov    r15,QWORD PTR [rip+0x0]        # 64 <lp_competition_runF64Boxed___lam__0+0x64>
+			60: R_X86_64_REX_GOTPCRELX	lp_competition_runF64Boxed___lam__0___boxed__const__1-0x4
+  64:	mov    rdx,rdi
+  67:	mov    rdi,QWORD PTR [r15]
+  6a:	mov    rcx,QWORD PTR [r14+0x8]
+  6e:	cmp    rcx,rdx
+  71:	jbe    7a <lp_competition_runF64Boxed___lam__0+0x7a>
+  73:	mov    rax,QWORD PTR [r14+rdx*8+0x18]
+  78:	jmp    ac <lp_competition_runF64Boxed___lam__0+0xac>
+  7a:	movsd  QWORD PTR [rsp+0x8],xmm0
+  80:	mov    r12,rsi
+  83:	test   dil,0x1
+  87:	jne    97 <lp_competition_runF64Boxed___lam__0+0x97>
+  89:	mov    eax,DWORD PTR [rdi]
+  8b:	test   eax,eax
+  8d:	jle    1be <lp_competition_runF64Boxed___lam__0+0x1be>
+  93:	inc    eax
+  95:	mov    DWORD PTR [rdi],eax
+  97:	call   9c <lp_competition_runF64Boxed___lam__0+0x9c>
+			98: R_X86_64_PLT32	lean_array_get_panic-0x4
+  9c:	mov    rdi,QWORD PTR [r15]
+  9f:	mov    rcx,QWORD PTR [r14+0x8]
+  a3:	mov    rsi,r12
+  a6:	movsd  xmm0,QWORD PTR [rsp+0x8]
+  ac:	mulsd  xmm0,QWORD PTR [rax+0x8]
+  b1:	mov    eax,esi
+  b3:	and    eax,0x7fffff
+  b8:	lea    edx,[rax+0x800000]
+  be:	test   ebx,ebx
+  c0:	cmove  edx,eax
+  c3:	cvtsi2sd xmm1,edx
+  c7:	shr    esi,0x17
+  ca:	cmp    rcx,rsi
+  cd:	jbe    d6 <lp_competition_runF64Boxed___lam__0+0xd6>
+  cf:	mov    rax,QWORD PTR [r14+rsi*8+0x18]
+  d4:	jmp    107 <lp_competition_runF64Boxed___lam__0+0x107>
+  d6:	movsd  QWORD PTR [rsp+0x10],xmm1
+  dc:	movsd  QWORD PTR [rsp+0x8],xmm0
+  e2:	test   dil,0x1
+  e6:	jne    f6 <lp_competition_runF64Boxed___lam__0+0xf6>
+  e8:	mov    eax,DWORD PTR [rdi]
+  ea:	test   eax,eax
+  ec:	jle    1d1 <lp_competition_runF64Boxed___lam__0+0x1d1>
+  f2:	inc    eax
+  f4:	mov    DWORD PTR [rdi],eax
+  f6:	call   fb <lp_competition_runF64Boxed___lam__0+0xfb>
+			f7: R_X86_64_PLT32	lean_array_get_panic-0x4
+  fb:	movsd  xmm0,QWORD PTR [rsp+0x8]
+ 101:	movsd  xmm1,QWORD PTR [rsp+0x10]
+ 107:	mulsd  xmm1,QWORD PTR [rax+0x8]
+ 10c:	addsd  xmm0,xmm1
+ 110:	call   115 <lp_competition_runF64Boxed___lam__0+0x115>
+			111: R_X86_64_PLT32	lean_float_to_bits-0x4
+ 115:	mov    rcx,rax
+ 118:	shr    rax,0x20
+ 11c:	and    eax,0x80000000
+ 121:	mov    rsi,rcx
+ 124:	shr    rsi,0x34
+ 128:	mov    edi,esi
+ 12a:	and    edi,0x7ff
+ 130:	cmp    rdi,0x368
+ 137:	jbe    1b2 <lp_competition_runF64Boxed___lam__0+0x1b2>
+ 139:	cmp    edi,0x47e
+ 13f:	ja     17d <lp_competition_runF64Boxed___lam__0+0x17d>
+ 141:	movabs r8,0xfffffffffffff
+ 14b:	mov    rdx,rcx
+ 14e:	and    rdx,r8
+ 151:	cmp    edi,0x381
+ 157:	jb     184 <lp_competition_runF64Boxed___lam__0+0x184>
+ 159:	add    r8,0x10000000
+ 160:	bt     ecx,0x1d
+ 164:	adc    rdx,r8
+ 167:	shr    rdx,0x1d
+ 16b:	shl    esi,0x17
+ 16e:	lea    ecx,[rsi+rdx*1]
+ 171:	add    ecx,0x3f800000
+ 177:	or     ecx,eax
+ 179:	mov    eax,ecx
+ 17b:	jmp    1b2 <lp_competition_runF64Boxed___lam__0+0x1b2>
+ 17d:	or     eax,0x7f800000
+ 182:	jmp    1b2 <lp_competition_runF64Boxed___lam__0+0x1b2>
+ 184:	lea    rdi,[r8+rdx*1]
+ 188:	inc    rdi
+ 18b:	mov    edx,0x1e
+ 190:	sub    edx,esi
+ 192:	mov    cl,0x1d
+ 194:	sub    cl,sil
+ 197:	mov    rsi,0xffffffffffffffff
+ 19e:	shl    rsi,cl
+ 1a1:	not    rsi
+ 1a4:	bt     rdi,rdx
+ 1a8:	adc    rsi,rdi
+ 1ab:	mov    ecx,edx
+ 1ad:	shr    rsi,cl
+ 1b0:	or     eax,esi
+ 1b2:	add    rsp,0x18
+ 1b6:	pop    rbx
+ 1b7:	pop    r12
+ 1b9:	pop    r14
+ 1bb:	pop    r15
+ 1bd:	ret
+ 1be:	cmp    eax,0x90000001
+ 1c3:	jb     97 <lp_competition_runF64Boxed___lam__0+0x97>
+ 1c9:	lock dec DWORD PTR [rdi]
+ 1cc:	jmp    97 <lp_competition_runF64Boxed___lam__0+0x97>
+ 1d1:	cmp    eax,0x90000001
+ 1d6:	jb     f6 <lp_competition_runF64Boxed___lam__0+0xf6>
+ 1dc:	lock dec DWORD PTR [rdi]
+ 1df:	jmp    f6 <lp_competition_runF64Boxed___lam__0+0xf6>

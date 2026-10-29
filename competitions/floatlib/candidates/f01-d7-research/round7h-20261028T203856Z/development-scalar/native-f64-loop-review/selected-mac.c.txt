@@ -1,0 +1,88 @@
+LEAN_EXPORT lean_object* lp_competition___private_Init_While_0__repeatM_erased___at___00Submission_R24PortableF64_attemptPrepared_spec__0___redArg(lean_object* v_n_8073_, lean_object* v_x_8074_, lean_object* v_y_8075_, lean_object* v_a_8076_){
+_start:
+{
+lean_object* v_fst_8077_; lean_object* v_snd_8078_; lean_object* v___x_8080_; uint8_t v_isShared_8081_; uint8_t v_isSharedCheck_8100_; 
+v_fst_8077_ = lean_ctor_get(v_a_8076_, 0);
+v_snd_8078_ = lean_ctor_get(v_a_8076_, 1);
+v_isSharedCheck_8100_ = !lean_is_exclusive(v_a_8076_);
+if (v_isSharedCheck_8100_ == 0)
+{
+v___x_8080_ = v_a_8076_;
+v_isShared_8081_ = v_isSharedCheck_8100_;
+goto v_resetjp_8079_;
+}
+else
+{
+lean_inc(v_snd_8078_);
+lean_inc(v_fst_8077_);
+lean_dec(v_a_8076_);
+v___x_8080_ = lean_box(0);
+v_isShared_8081_ = v_isSharedCheck_8100_;
+goto v_resetjp_8079_;
+}
+v_resetjp_8079_:
+{
+uint8_t v___x_8082_; 
+v___x_8082_ = lean_nat_dec_lt(v_snd_8078_, v_n_8073_);
+if (v___x_8082_ == 0)
+{
+lean_object* v___x_8084_; 
+if (v_isShared_8081_ == 0)
+{
+v___x_8084_ = v___x_8080_;
+goto v_reusejp_8083_;
+}
+else
+{
+lean_object* v_reuseFailAlloc_8085_; 
+v_reuseFailAlloc_8085_ = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(v_reuseFailAlloc_8085_, 0, v_fst_8077_);
+lean_ctor_set(v_reuseFailAlloc_8085_, 1, v_snd_8078_);
+v___x_8084_ = v_reuseFailAlloc_8085_;
+goto v_reusejp_8083_;
+}
+v_reusejp_8083_:
+{
+return v___x_8084_;
+}
+}
+else
+{
+lean_object* v_values_8086_; lean_object* v_values_8087_; double v___x_8088_; double v___x_8089_; double v___x_8090_; double v___x_8091_; double v___x_8092_; lean_object* v___x_8093_; lean_object* v___x_8094_; lean_object* v___x_8095_; lean_object* v___x_8097_; 
+v_values_8086_ = lean_ctor_get(v_x_8074_, 1);
+v_values_8087_ = lean_ctor_get(v_y_8075_, 1);
+v___x_8088_ = lean_float_array_get(v_values_8086_, v_snd_8078_);
+v___x_8089_ = lean_float_array_get(v_values_8087_, v_snd_8078_);
+v___x_8090_ = lean_float_mul(v___x_8088_, v___x_8089_);
+v___x_8091_ = lean_unbox_float(v_fst_8077_);
+lean_dec(v_fst_8077_);
+v___x_8092_ = lean_float_add(v___x_8091_, v___x_8090_);
+v___x_8093_ = lean_unsigned_to_nat(1u);
+v___x_8094_ = lean_nat_add(v_snd_8078_, v___x_8093_);
+lean_dec(v_snd_8078_);
+v___x_8095_ = lean_box_float(v___x_8092_);
+if (v_isShared_8081_ == 0)
+{
+lean_ctor_set(v___x_8080_, 1, v___x_8094_);
+lean_ctor_set(v___x_8080_, 0, v___x_8095_);
+v___x_8097_ = v___x_8080_;
+goto v_reusejp_8096_;
+}
+else
+{
+lean_object* v_reuseFailAlloc_8099_; 
+v_reuseFailAlloc_8099_ = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(v_reuseFailAlloc_8099_, 0, v___x_8095_);
+lean_ctor_set(v_reuseFailAlloc_8099_, 1, v___x_8094_);
+v___x_8097_ = v_reuseFailAlloc_8099_;
+goto v_reusejp_8096_;
+}
+v_reusejp_8096_:
+{
+v_a_8076_ = v___x_8097_;
+goto _start;
+}
+}
+}
+}
+}

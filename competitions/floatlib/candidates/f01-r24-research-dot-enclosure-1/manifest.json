@@ -1,0 +1,113 @@
+{
+  "candidate": "f01-r24-research-dot-enclosure-1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "90a15eac9afb5b7f56ad7ff65d5b50fcc4ce3864263c26d08e8e8ff10236b300",
+  "candidate_bytes": 255765,
+  "created_at_utc": "2026-10-28T23:29:00.431699+00:00",
+  "validation_mode": "statement-only",
+  "diagnostic_only": true,
+  "diagnostic_timeout_seconds": 180,
+  "proof_status": "NOT_RUN",
+  "performance": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "official_submission_inherited": false,
+  "helper_audit_module": "development-helper-audit-v8.py",
+  "helper_audit_module_path": "f01-d7-research/round9h-20261026T194639Z/development-helper-audit-v8.py",
+  "helper_audit_module_sha256": "5b58eece211bd9cdaa270fc82bef624a5974c7d056732e19f54547c0fe6ef975",
+  "explicit_helper_audit": [
+    "Submission.R24RepresentationWiden.native_value",
+    "Submission.R24RepresentationSum.sum_enclosure",
+    "Submission.R24DotEnclosure.native_mul",
+    "Submission.R24DotEnclosure.f32_product_grid",
+    "Submission.R24DotEnclosure.raw_abs_bound",
+    "Submission.R24DotEnclosure.raw_product_bound",
+    "Submission.R24DotEnclosure.product_exact",
+    "Submission.R24DotEnclosure.actual_dot_enclosure"
+  ],
+  "helper_audit_required_endpoints": [
+    "Submission.R24RepresentationWiden.native_value",
+    "Submission.R24RepresentationSum.sum_enclosure",
+    "Submission.R24DotEnclosure.native_mul",
+    "Submission.R24DotEnclosure.f32_product_grid",
+    "Submission.R24DotEnclosure.raw_abs_bound",
+    "Submission.R24DotEnclosure.raw_product_bound",
+    "Submission.R24DotEnclosure.product_exact",
+    "Submission.R24DotEnclosure.actual_dot_enclosure"
+  ],
+  "helper_audit_expected_count": 8,
+  "helper_audit_source_sha256": "90a15eac9afb5b7f56ad7ff65d5b50fcc4ce3864263c26d08e8e8ff10236b300",
+  "diagnostic_evaluations": [],
+  "runtime_base_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "runtime_base_prefix_bytes": 226829,
+  "byte_identical_base_prefix_verified": true,
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/representation/DotSharedSum.lean.inc",
+      "sha256": "095bed6e35b643f818722aea6750d061e3440e480e0538f958d8e849b3e55bbe",
+      "bytes": 10124
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/representation/DotSharedWiden.lean.inc",
+      "sha256": "e4b1143117c43ead073cc1af2586a60f0f2a768e0449f488ee60339791061a8c",
+      "bytes": 10528
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/representation/DotProductGrid.lean.inc",
+      "sha256": "2bef9df0dc7380e419e2f3f7cdd84654cca7fdfba11f0ca98430525a89f08835",
+      "bytes": 2535
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/representation/DotComposition.lean.inc",
+      "sha256": "8ddb284a707002de9ac2ef7b7a7be91a37088acfa32ba6c75c59fb8c5f7d884f",
+      "bytes": 5745
+    }
+  ],
+  "public_endpoints": "All four B2 public endpoints and proofs are unchanged byte-for-byte in the complete prefix.",
+  "scope": "Portable old ContractTensor/B2 raw32-pair to actual Native64 exact product and actual native SUM enclosure. No ContractExact kernels or benchmark.",
+  "semantic_endpoint": "Given H<=506,L<=30,length<=2^L and each pair Domain(a),Domain(b),(E(a)-1)+(E(b)-1)<=H, dot is finite and actual model real error from exact raw32 dot <=2^(H+2L-303). Products are proved finite/exact/bounded, not external hypotheses.",
+  "guard_scope": "Domain excludes all nonzero subnormals and exponent255 words. Nat exponent index truncates at zero, conservatively checks zero products too.",
+  "omissions": "Comments and unused presentation-only W.actual_native_value/signed_zero_bits and S.actual_sum_enclosure wrappers omitted; W.native_finite shares S.native_finite_eq; C native_mul uses the shared native model alias directly, omitting redundant Binary adapter rewrites; grid proof unchanged. Old source artifacts remain unchanged.",
+  "widen_internal_proof_name_map": {
+    "expWord_toNat": "eNat",
+    "fracWord_toNat": "fNat",
+    "signWord_toNat": "sNat",
+    "expWide_toNat": "ewNat",
+    "expWide_shift_toNat": "esNat",
+    "fracWide_shift_toNat": "fsNat",
+    "widenBits_normal_toNat": "wideNat",
+    "raw64_bits": "bits",
+    "raw64_sign": "sign",
+    "raw64_exp": "exp",
+    "raw64_frac": "frac",
+    "raw64_eq_fields": "fields",
+    "widenBits_normal_fields": "wideFields",
+    "wordExp_lt": "eLt",
+    "widenBits_posZero": "wideZ",
+    "widenBits_negZero": "wideNZ",
+    "shift29_toReal": "shiftReal",
+    "native_ofBits_of_decode": "ofBitsModel"
+  },
+  "runtime_limit": "List.map product then native left fold is an executable proof probe; no optimized kernel or codegen/performance claim.",
+  "source_inputs": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round3h30m-20261028T230130Z/research/representation/WidenNormal.lean.inc",
+      "sha256": "5e09ce0e1222074c48896394285796b276faf13b7c686c2e2eaa67548cf97fa3"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/representation/NativeSumEnclosure.lean.inc",
+      "sha256": "99d69cc98d96662d2daab76a907af18fdd263136881d62f8947d76795b3bee73"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-r24-research-native-mul-bridge2/NativeMul.lean.inc",
+      "sha256": "b016c09f334131935918e3858b244e3d4106e0036d42e68d71dfbbfa630ffc8b"
+    }
+  ],
+  "local_Lean": false,
+  "CI_owner": "D",
+  "window_start_utc": "2026-10-28T20:38:56Z",
+  "shared_deadline_utc": "2026-10-29T03:38:56Z",
+  "actual_phase_first_utc": "2026-10-28T23:20:48Z",
+  "tokens": "UNKNOWN",
+  "cached_input_tokens": "UNKNOWN",
+  "source_of_authorization": "Parent R24 portable mathematical composition task; no new track implementation"
+}

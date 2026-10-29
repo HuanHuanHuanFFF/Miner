@@ -1,0 +1,31 @@
+# R24 broad tensor research
+
+UTC start 2026-10-28T20:41:30Z; common window 20:38:56–2026-10-29T03:38:56Z. No new long CI requests after03:15. Actual tokens/cache/reasoning/output: UNKNOWN. Model Sol/xhigh; no child delegation. D/root owns Git, CI and adoption.
+
+Scope: only this directory and `f01-r24-dev-broad-*`; all old frozen material read-only. No local Lean/native build, formal upload or funds. Current task: derive exact historical operation/category/shape shares; then eliminate repeated native tensor decode/boxing or spills with broad coverage. Parent's scalar native-first route is separate.
+
+State 20:44 UTC: inspected current B2/622d, R22 indexed8, Pair8, resident8, Flat2 and broadword negative results; R23 narrow shape exposure7.87–8.62% is an old-public bound. Old all-A/B FloatArray single-output cost approximately1.003–1.004 versus Array Float32 is explicitly retained. Need a new structural reason, not a retest label.
+
+## Frozen cost package
+
+Historical frontier is in `cost-frontier.json` (four old B2 control blocks): ADD36.27–38.80%, MUL36.07–38.49%, SUM6.85–7.76%, BMM15.59–20.81% whole. The proposed broad `n>1` route touches14.91–16.58% whole after excluding n1. This corrects an initial manual15.12–16.18 range; the script now computes the exact range. These are loose whole-case exposure bounds; actual data-dependent zero bypass unknown, private workload UNKNOWN.
+
+New exact source `../../../f01-r24-dev-broad-nativepair-cost1/Kernel.lean` SHA223426ecbed8690a1b5823f5ab8f22fb9dfcecab997455a9a762bc37b9a24234,237409B, exact retained622d prefix. Manifest and all helper/component hashes generated; no local Lean/native compile. Static Suite wrappers are in `R24BroadCostMain.lean`, two fresh discovery seeds2428001/2428003 declared, all cost/lifecycle builds NOT_RUN.
+
+Mechanism: prepare native A and B once; compare Array Float32 versus checked contiguous FloatArray backing; pair adjacent outputs, single odd tail, keep F32 multiply then F32 add and original finish/raw NaN replay. All n>1 shapes are covered, n<=1 retainsB2. New relative to old single-output all-A/B FloatArray1.003–1.004: two independent accumulators share native A read, B2 raw A conversion removed, one flat cache per input rather than nested B packets, and native-target check admits source NaN canonicalization. NativeArray version is an attribution control. Old DualTemporal A4/B8 failure remains relevant; no performance predicted from removed work.
+
+**Parent's official-state discovery changes allocation:** FloatLib submissions closed; new TorchLean contract uses exact round-once dot. Package frozenNOT_RUN; no old-target CI requested and no numerical endpoint proof started. This is a target/policy stop, not a performance or correctness negative. Main thread owns fresh official source evidence and user migration decision. Continue read-only contract/ABI migration analysis within this directory until directed; no new-track implementation or compilation.
+
+## 20:55 UTC checkpoint
+
+Read-only migration assessment is `MIGRATION-ASSESSMENT.md`; nine official pinned source blobs independently fetched and Git/SHA-256 verified under `torchlean-source/receipt.json`. Two exact representable counterexamples in `rounding-boundary-falsifier.json` demonstrate that old per-MAC F32 cannot implement new round-once dot. Former2's source only inspected at parent's snapshot, no body copied, license UNKNOWN. It already has bounded multiword accumulators, activation/weight exponent summaries, signed prepared tables/sparse indexes and convolution offset preparation; these are not new routes. Stable norms bypass the dot parameter on their finite domain. New actual layer costs and champion5 source remain UNKNOWN.
+
+`freeze-verification.json` freshly verifies candidate byte cap, exact kernel/manifest/component hashes and owned Python syntax. Lean typing/numerical proof/runtime cost/actual caller C/ASM all NOT_RUN. Active broad execution2026-10-28T20:41:30–20:55:32Z (14m02s); common7h budget not claimed complete. This scoped subtask is at its authorization boundary pending parent/user's target decision; agent available for follow-up without changing common cutoff.
+
+## Resumed21:15 UTC evidence checkpoint
+
+Parent explicitly resumed independent read-only work20:57:50 through common03:38:56. Current evidence package `CERTIFICATE-ROUTES.md` / `certificate-model-results.json` / `certificate-evidence.json`: A binary64 interval exact-dot filter accepted384/384 ordinary synthetic cases and caught double cancellation/midpoint; pureF32 conservative filter accepted0/384. New distinction: a299-bit-span dot is certifiable without fitting the exact low tail. B preserves former2's existing integer moments and instead certifies native guesses using squared root midpoints or a division-free exact affine residual. Ordinary16128 norm outputs certified; a deliberately inaccurate mean loses one output and is rejected there. Cases do not establish timing or production success probability.
+
+Pinned Float.add/mul/ofBits/sqrt have logical models; native cross-width cast can be bypassed by exact raw32→raw64 bit expansion. Norm guess certificates need no native-float accuracy proof at all. Source anchors/former2 prior mechanisms and full-cost falsifiers in the note. Root/new source hashes verified, old223426ec source unchanged. All Lean/native/new-target proof/cost/gate remainNOT_RUN. Continue tightening certificate counterexamples/interfaces, no Kernel or CI while migration scope pending; tokens/cache totalsUNKNOWN.
+
+21:23 refinement: `NORM-DENOMINATOR-LEMMA.md` gives a universal paper proof that stable denominators are positive normal with exponent52..254, so per-output bad-denominator branches can be removed logically. `MOMENT-WIDTH-LEMMA.md` / `moment-width-results.json` identify a separate actual former2 work deletion: its norm moments still use18-limb Nat arrays and separate sum/square scans; guarded scalar S128/Q192 with`48+2R+2ceilLog2n≤192` keepsT exact and fuses one pass.192-bit bounds cover all192 own finite rows;128-bit rejects much of the wide group, so a blanket128-bit promise is false. Naive double variance loses255·2^-62 in a near-constant row; squared certificate rejects the wrong root guess. Guess from exact integerT instead. All new lemmas paper/model only, no new Kernel/CI or measured whole gain.

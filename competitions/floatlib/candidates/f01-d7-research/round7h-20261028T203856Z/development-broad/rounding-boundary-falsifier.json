@@ -1,0 +1,69 @@
+{
+  "scope": "Two small representable rational counterexamples to reusing old per-MAC F32 semantics for an exact round-once dot. Python finite arithmetic, not Lean proof or new-target runtime.",
+  "examples": [
+    {
+      "name": "prefix_rounding_loses_half_ulp",
+      "a_words": [
+        "3f800000",
+        "33800000",
+        "bf800000"
+      ],
+      "b_words": [
+        "3f800000",
+        "3f800000",
+        "3f800000"
+      ],
+      "exact_rational": "1/16777216",
+      "round_once_word": "33800000",
+      "per_product_and_prefix_word": "00000000",
+      "trace": [
+        {
+          "a": "3f800000",
+          "b": "3f800000",
+          "rounded_product": "3f800000",
+          "rounded_prefix": "3f800000"
+        },
+        {
+          "a": "33800000",
+          "b": "3f800000",
+          "rounded_product": "33800000",
+          "rounded_prefix": "3f800000"
+        },
+        {
+          "a": "bf800000",
+          "b": "3f800000",
+          "rounded_product": "bf800000",
+          "rounded_prefix": "00000000"
+        }
+      ]
+    },
+    {
+      "name": "product_rounding_loses_low_product",
+      "a_words": [
+        "3f800001",
+        "bf800000"
+      ],
+      "b_words": [
+        "3f7ffffe",
+        "3f800000"
+      ],
+      "exact_rational": "-1/70368744177664",
+      "round_once_word": "a8800000",
+      "per_product_and_prefix_word": "00000000",
+      "trace": [
+        {
+          "a": "3f800001",
+          "b": "3f7ffffe",
+          "rounded_product": "3f800000",
+          "rounded_prefix": "3f800000"
+        },
+        {
+          "a": "bf800000",
+          "b": "3f800000",
+          "rounded_product": "bf800000",
+          "rounded_prefix": "00000000"
+        }
+      ]
+    }
+  ]
+}

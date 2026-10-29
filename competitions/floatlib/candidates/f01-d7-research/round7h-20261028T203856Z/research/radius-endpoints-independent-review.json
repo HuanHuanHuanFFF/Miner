@@ -1,0 +1,23 @@
+{
+  "at_utc": "2026-10-29T02:06:09.098197+00:00",
+  "source": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/rounding-review/RadiusEndpoints-v1.lean.inc",
+  "sha256": "c4932d4138e966d98028ec0b1ab27adad0b7cbcfdab63bf8b37a13db01c3f119",
+  "bytes": 9828,
+  "review_kind": "First independent critical mathematical/source review only",
+  "checked_logic": [
+    "Actual H/L UInt64 radius additions do not wrap under H<=506,L<=30; exponent720..1286 is finite normal64.",
+    "The power-word decode and native model map prove finite/positive radius with value2^(H+2L-303).",
+    "Endpoint proof first derives abs(s)+B<=2^287<=max64, then actual catalog native ADD/SUB and public real semantics; endpoint finiteness is a conclusion.",
+    "No outward enclosure or opaque-cast accuracy premise. Input s finite/abs<=2^286 is an explicit interface derivable from the existing actual loop bound."
+  ],
+  "typing_risks": [
+    "Large-coefficient omega, closed casts and simp/defeq closure have not been executed by Lean; no claim that all resources suffice."
+  ],
+  "verification": {
+    "Lean": "NOT_RUN",
+    "kernel_replay": "NOT_RUN",
+    "axioms": "NOT_RUN",
+    "performance": "NOT_RUN"
+  },
+  "decision": "READY_FOR_D_FUTURE_COMPONENT_TYPING_NOT_NEW_FULL_KERNEL"
+}

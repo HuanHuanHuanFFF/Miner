@@ -1,0 +1,272 @@
+{
+  "observed_at_utc": "2026-10-29T02:20:19.168776+00:00",
+  "round_start_utc": "2026-10-28T20:38:56Z",
+  "round_deadline_utc": "2026-10-29T03:38:56Z",
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/NativeSignOr.lean.inc",
+      "bytes": 2740,
+      "sha256": "0ea8f87918d4aa3e364ae6d945a0378e241edcc53cb9552cf8e8735dcaf830e0"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/RawMidpoint.lean.inc",
+      "bytes": 8937,
+      "sha256": "85a54ce35d770ee8978fe70d00aff3971f7ecf2a312c5b0de8fc939ba561dfbe"
+    }
+  ],
+  "roots": [
+    "Submission.R24RawMidpoint.signed_endpoint_reals",
+    "Submission.R24RawMidpoint.roundRatScaled_of_endpoint_bounds"
+  ],
+  "supporting_word_equality": "Submission.R24NativeSignOr.raw_eq_neg",
+  "dependencies": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/controller/MidpointWords.lean.inc",
+      "bytes": 6156,
+      "sha256": "f5dbbdaf457823ba26857f5804184583e47e64d540629b45a1c7319ea554bd12"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/representation/WidenNormal4.lean.inc",
+      "bytes": 12225,
+      "sha256": "abe567751440563b142cf1b479681f81f8afe5b0ca9bd3038efcbde5e1fb4c5d"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/MidpointReal.lean.inc",
+      "bytes": 3879,
+      "sha256": "96050a50bcbc1d00bd062fbeedfaa69bea779100cfbb208e1ba008bc3519f0a2"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/NormalCell.lean.inc",
+      "bytes": 10125,
+      "sha256": "43958f8bb657966dcf05b328dc7bd38ac8ddb1f81a228cfcf7eee8636dddebd4"
+    }
+  ],
+  "runtime_source_readonly": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/PortableF64Dot.lean.inc",
+    "bytes": 4338,
+    "sha256": "dd775683cade6e575dc6f0684f9216742e1c772c3cf7460b0c53c54e4e3eff04"
+  },
+  "runtime_expression_strings_checked": [
+    "let magnitude := guess &&& 0x7fffffff",
+    "let base := ((e.toUInt64 + 896) <<< 52) ||| ((magnitude &&& 0x7fffff).toUInt64 <<< 29)",
+    "let lowerDelta : UInt64 := if magnitude == 0x00800000 then 0x20000000 else 0x10000000",
+    "let negative := guess &&& 0x80000000 != 0",
+    "let lower := if negative then above ||| 0x8000000000000000 else below",
+    "let upper := if negative then below ||| 0x8000000000000000 else above"
+  ],
+  "normal_words": 24,
+  "exact_endpoint_equalities": 48,
+  "out_of_domain_words_field_adapter_only": 10,
+  "witnesses": [
+    {
+      "raw32": "0x00800000",
+      "lower_word": "0x380fffffe0000000",
+      "upper_word": "0x3810000010000000",
+      "e": 1,
+      "f": 0,
+      "negative": false
+    },
+    {
+      "raw32": "0x80800000",
+      "lower_word": "0xb810000010000000",
+      "upper_word": "0xb80fffffe0000000",
+      "e": 1,
+      "f": 0,
+      "negative": true
+    },
+    {
+      "raw32": "0x00800001",
+      "lower_word": "0x3810000010000000",
+      "upper_word": "0x3810000030000000",
+      "e": 1,
+      "f": 1,
+      "negative": false
+    },
+    {
+      "raw32": "0x80800001",
+      "lower_word": "0xb810000030000000",
+      "upper_word": "0xb810000010000000",
+      "e": 1,
+      "f": 1,
+      "negative": true
+    },
+    {
+      "raw32": "0x00ffffff",
+      "lower_word": "0x381fffffd0000000",
+      "upper_word": "0x381ffffff0000000",
+      "e": 1,
+      "f": 8388607,
+      "negative": false
+    },
+    {
+      "raw32": "0x80ffffff",
+      "lower_word": "0xb81ffffff0000000",
+      "upper_word": "0xb81fffffd0000000",
+      "e": 1,
+      "f": 8388607,
+      "negative": true
+    },
+    {
+      "raw32": "0x01000000",
+      "lower_word": "0x381ffffff0000000",
+      "upper_word": "0x3820000010000000",
+      "e": 2,
+      "f": 0,
+      "negative": false
+    },
+    {
+      "raw32": "0x81000000",
+      "lower_word": "0xb820000010000000",
+      "upper_word": "0xb81ffffff0000000",
+      "e": 2,
+      "f": 0,
+      "negative": true
+    },
+    {
+      "raw32": "0x01000001",
+      "lower_word": "0x3820000010000000",
+      "upper_word": "0x3820000030000000",
+      "e": 2,
+      "f": 1,
+      "negative": false
+    },
+    {
+      "raw32": "0x81000001",
+      "lower_word": "0xb820000030000000",
+      "upper_word": "0xb820000010000000",
+      "e": 2,
+      "f": 1,
+      "negative": true
+    },
+    {
+      "raw32": "0x017fffff",
+      "lower_word": "0x382fffffd0000000",
+      "upper_word": "0x382ffffff0000000",
+      "e": 2,
+      "f": 8388607,
+      "negative": false
+    },
+    {
+      "raw32": "0x817fffff",
+      "lower_word": "0xb82ffffff0000000",
+      "upper_word": "0xb82fffffd0000000",
+      "e": 2,
+      "f": 8388607,
+      "negative": true
+    },
+    {
+      "raw32": "0x3f800000",
+      "lower_word": "0x3feffffff0000000",
+      "upper_word": "0x3ff0000010000000",
+      "e": 127,
+      "f": 0,
+      "negative": false
+    },
+    {
+      "raw32": "0xbf800000",
+      "lower_word": "0xbff0000010000000",
+      "upper_word": "0xbfeffffff0000000",
+      "e": 127,
+      "f": 0,
+      "negative": true
+    },
+    {
+      "raw32": "0x3f800001",
+      "lower_word": "0x3ff0000010000000",
+      "upper_word": "0x3ff0000030000000",
+      "e": 127,
+      "f": 1,
+      "negative": false
+    },
+    {
+      "raw32": "0xbf800001",
+      "lower_word": "0xbff0000030000000",
+      "upper_word": "0xbff0000010000000",
+      "e": 127,
+      "f": 1,
+      "negative": true
+    },
+    {
+      "raw32": "0x3fffffff",
+      "lower_word": "0x3fffffffd0000000",
+      "upper_word": "0x3ffffffff0000000",
+      "e": 127,
+      "f": 8388607,
+      "negative": false
+    },
+    {
+      "raw32": "0xbfffffff",
+      "lower_word": "0xbffffffff0000000",
+      "upper_word": "0xbfffffffd0000000",
+      "e": 127,
+      "f": 8388607,
+      "negative": true
+    },
+    {
+      "raw32": "0x7f000000",
+      "lower_word": "0x47dffffff0000000",
+      "upper_word": "0x47e0000010000000",
+      "e": 254,
+      "f": 0,
+      "negative": false
+    },
+    {
+      "raw32": "0xff000000",
+      "lower_word": "0xc7e0000010000000",
+      "upper_word": "0xc7dffffff0000000",
+      "e": 254,
+      "f": 0,
+      "negative": true
+    },
+    {
+      "raw32": "0x7f000001",
+      "lower_word": "0x47e0000010000000",
+      "upper_word": "0x47e0000030000000",
+      "e": 254,
+      "f": 1,
+      "negative": false
+    },
+    {
+      "raw32": "0xff000001",
+      "lower_word": "0xc7e0000030000000",
+      "upper_word": "0xc7e0000010000000",
+      "e": 254,
+      "f": 1,
+      "negative": true
+    },
+    {
+      "raw32": "0x7f7fffff",
+      "lower_word": "0x47efffffd0000000",
+      "upper_word": "0x47effffff0000000",
+      "e": 254,
+      "f": 8388607,
+      "negative": false
+    },
+    {
+      "raw32": "0xff7fffff",
+      "lower_word": "0xc7effffff0000000",
+      "upper_word": "0xc7efffffd0000000",
+      "e": 254,
+      "f": 8388607,
+      "negative": true
+    }
+  ],
+  "status": "COMPLETE_PROOF_SOURCE_AND_FIXED_WORD_MODELS_PENDING_TYPING",
+  "scope": "Actual native sign-OR word model equality, finite native value negation, magnitude fields, UInt64 OR/add base equality, minimum-normal predicate, sign swap, and a thin existing NormalCell rational-rounder composition.",
+  "remaining": [
+    "Public typing/replay/AX of every exact source dependency",
+    "Runtime orderKey comparison boolean to endpoint real inequalities",
+    "Native radius and exact-sum enclosure composition",
+    "Any full checker correctness, measurement, or target adoption"
+  ],
+  "verification": {
+    "Lean": "NOT_RUN",
+    "replay": "NOT_RUN",
+    "axioms": "NOT_RUN",
+    "performance": "NOT_RUN"
+  },
+  "script_sha256": "c534864ce3e11093524a51e9d3400d3260f345be8e399d862ff2441bd6ce26ae",
+  "token_usage": "UNKNOWN",
+  "cached_input_tokens": "UNKNOWN",
+  "CI_owner": "D only"
+}

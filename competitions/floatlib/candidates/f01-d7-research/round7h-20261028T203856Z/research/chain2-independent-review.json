@@ -1,0 +1,25 @@
+{
+  "at_utc": "2026-10-29T00:18:27.781843+00:00",
+  "candidate": "f01-r24-research-representation-chain2-1",
+  "sha256": "b2f408029b08d1cb471d8a806b042985de0b144b298643efe2dc1c245056d9ab",
+  "bytes": 233157,
+  "checks": {
+    "hash_match": true,
+    "prefix_equal": true,
+    "components_match": true
+  },
+  "checked_math": [
+    "Manual merge is related to fixedMIT add128.value; its public carry identity yields full modular correctness with no signed-overflow premise.",
+    "Sign-extension encodes native64 two-complement words into128bit residues, including zero and negative values.",
+    "Loop swaps scalar banks on each term; its invariant preserves the complete exact integer sum modulo2^128; only final range is needed for signed uniqueness.",
+    "Final abs sum<2^82 follows strict term bound2^62 and length<2^20, safely within signed128.",
+    "No per-term UInt128 construction appears in executable loop. Proof-only next tuple is erased; final merge returns one UInt128."
+  ],
+  "unverified": [
+    "Lean/elaboration/replay/allowed axioms NOT_RUN",
+    "Runtime bank-swap moves, tailcall, allocation, actual caller, registers/spills and speed UNKNOWN",
+    "Current helper consumes already encoded List UInt64; original indexed/getter/encoder/B0/bias/sentinel terminal integration is not closed",
+    "Formal term bounds do not establish real raw32 dot output or newtrack kernel correctness"
+  ],
+  "decision": "STATIC_CRITICAL_REVIEW_READY_BUT_NOT_QUEUED_D_PRIORITY_TYPED_REPAIRS"
+}

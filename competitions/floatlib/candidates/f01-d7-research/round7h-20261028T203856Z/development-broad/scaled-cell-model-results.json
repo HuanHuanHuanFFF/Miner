@@ -1,0 +1,45 @@
+{
+  "scope": "Exact rational/word model only. No Lean, native cost, workload probability or adoption.",
+  "groups": [
+    {
+      "seed": 24293429,
+      "normal_cases": 2500,
+      "scaled_accepted": 2493,
+      "power_boundaries_rejected": 6,
+      "raw_normalized_helper_accept": 7,
+      "logical_normalized_denominator_exceeds64": 1482,
+      "adjacent_wrong_mantissa_rejected": 2494
+    },
+    {
+      "seed": 24293431,
+      "normal_cases": 2500,
+      "scaled_accepted": 2498,
+      "power_boundaries_rejected": 2,
+      "raw_normalized_helper_accept": 6,
+      "logical_normalized_denominator_exceeds64": 1461,
+      "adjacent_wrong_mantissa_rejected": 2498
+    }
+  ],
+  "capacity_counterexample": {
+    "num": 29710560942849126597578981376,
+    "den": 1073741825,
+    "source": -64,
+    "target": -23,
+    "mant": 12582912,
+    "num_bits": 95,
+    "den_bits": 31,
+    "normalized_denominator_bits": 72,
+    "midpoint_coefficient_bits": 55,
+    "word": "3fc00000"
+  },
+  "mutants_caught": [
+    "drop_denominator_cap_causes_wrapped_midpoint_false_accept",
+    "ignore_source_vs_target_scale_doubles_output"
+  ],
+  "large_wrong_exponent_rejects_before_public_small_word_Nat_fallback": true,
+  "source_sha256": "0af85d588646d4c8801cee86d194a688b25b539e835d5f63bab3ce76acc64a60",
+  "lean_sources": {
+    "ScaledCell.lean.inc": "ccd159940f6d07bcd2f5187021a6da0c49eae0df2147d70c8ed9ec511d4e49bb",
+    "ScaledWord128.lean.inc": "4a44009121362742d1e4aae9a4f189055a225dc076a9f2c80f5766c84ecf6c19"
+  }
+}

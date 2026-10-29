@@ -1,0 +1,51 @@
+{
+  "candidate": "f01-r24-research-native-compare-bridge1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "8c7a1509ac9ba7e3d1e5b34cf7dd395f48645f1b4db954a1f737e8d97d76d805",
+  "candidate_bytes": 235559,
+  "created_at_utc": "2026-10-28T23:54:43.926731+00:00",
+  "validation_mode": "statement-only",
+  "diagnostic_only": true,
+  "diagnostic_timeout_seconds": 180,
+  "proof_status": "NOT_RUN_ACTUAL_NATIVE64_STRICT_ORDER_BRIDGE",
+  "performance": "NOT_RUN_NO_CHANGED_PUBLIC_ENDPOINTS",
+  "formal_submission": "NOT_SUBMITTED",
+  "official_submission_inherited": false,
+  "helper_audit_module": "development-helper-audit-v8.py",
+  "helper_audit_module_path": "f01-d7-research/round9h-20261026T194639Z/development-helper-audit-v8.py",
+  "helper_audit_module_sha256": "5b58eece211bd9cdaa270fc82bef624a5974c7d056732e19f54547c0fe6ef975",
+  "explicit_helper_audit": [
+    "Submission.R24NativeCompare.native_lt_iff_real"
+  ],
+  "helper_audit_required_endpoints": [
+    "Submission.R24NativeCompare.native_lt_iff_real"
+  ],
+  "helper_audit_expected_count": 1,
+  "helper_audit_source_sha256": "8c7a1509ac9ba7e3d1e5b34cf7dd395f48645f1b4db954a1f737e8d97d76d805",
+  "diagnostic_evaluations": [],
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-r24-research-native-compare-bridge1/NativeCompare.lean.inc",
+      "sha256": "34769149311e8784001883fbb3a4341d7b12526ac5cdaf40398335758f1a4920",
+      "bytes": 8729
+    }
+  ],
+  "runtime_prefix": {
+    "path": "competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean",
+    "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+    "bytes": 226829,
+    "byte_identical": true
+  },
+  "scope": "One actual Float.lt=true iff strict real order root, for finite native binary64 inputs. Includes both signed zeros and finite subnormals. Old B2 public endpoints unchanged.",
+  "proof_route": "Native unpack comparison is lexicographic only on numerical canonical forms. Model.cexp_toDyadic? supplies exact decoded exponents; cexp_mono_abs with fltMonotoneExp proves the unequal-exponent order. Same-exponent mantissas, signs and zero cases finish the actual native Boolean bridge.",
+  "missing": [
+    "New source not compiled, replayed or axiom-audited",
+    "No combined midpoint/error checker implementation",
+    "No native caller/ASM/timing or whole-model speed claim"
+  ],
+  "runtime_policy": "No runtime Model.compare/totalOrder/ExecFloat.compare/raw-key algorithm is introduced. No new extern/unsafe/axiom or opaque cast correctness premise.",
+  "window_start_utc": "2026-10-28T20:38:56Z",
+  "shared_deadline_utc": "2026-10-29T03:38:56Z",
+  "CI_owner": "D",
+  "local_Lean": false
+}

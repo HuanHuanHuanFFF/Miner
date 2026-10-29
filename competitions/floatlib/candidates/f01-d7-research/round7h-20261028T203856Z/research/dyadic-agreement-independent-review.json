@@ -1,0 +1,26 @@
+{
+  "at_utc": "2026-10-29T02:02:40.426760+00:00",
+  "sources": {
+    "agreement_sha256": "ef4efc523d303afcba1cb3f9e6dc41e203b132b1f814a0eb4706e5406ea2cf8b",
+    "cell_sha256": "27dc56cbddec4779fd7eedccec750e916c54446f8b74acfe7c432156bc6ef789",
+    "agreement_bytes": 6876,
+    "cell_bytes": 1388
+  },
+  "review_kind": "One independent critical branch/semantic review, not Lean acceptance",
+  "checked_logic": [
+    "Denominator-one scaled quotient reduces to left shift or roundShiftRightEven on both signs of the source exponent.",
+    "For nonzero num, floorLog2(num,1)=Nat.log2(num); totalExponent matches the dyadic rounder.",
+    "The total<-150 early zero branch is proved against the actual shift-rounder early-zero branch; total=-150 remains the ordinary subnormal rounding case and retains ties.",
+    "In the subnormal domain the rounded fraction is <=2^23. This makes dyadic equality-to2^23 packing agree with rational Nat.decLe2^23 packing, including crossing to minimum normal.",
+    "Normal and overflow branches share the same normalized quotient/carry logic; num0 preserves either signed zero.",
+    "The thin raw dyadic-cell corollary uses actual rounder equality and the new signed raw32 normal-cell theorem; no finite-output premise excludes the maxfinite upper half-cell."
+  ],
+  "source_policy": "The reused normalized denominator-one proof is attributed to fixed FloatLib Team MIT source 0f79753745f67a8e29e539570b2c66139cc29313; full license retained in research/representation/notes/FLOATLIB-MIT-LICENSE.txt.",
+  "limitations": [
+    "NOT_RUN typing/kernel replay/allowed-axiom audit",
+    "Nat pattern normalization, public theorem signatures and simp closure need actual compiler verification",
+    "No full raw-input producer/checker/actual FloatLib.dot caller theorem or new target kernel",
+    "No performance/adoption result"
+  ],
+  "decision": "READY_FOR_D_FUTURE_MINIMAL_CARRIER_TYPING_NOT_NEW_BIG_PREFIX"
+}

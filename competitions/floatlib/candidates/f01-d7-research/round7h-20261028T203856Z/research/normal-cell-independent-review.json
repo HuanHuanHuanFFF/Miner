@@ -1,0 +1,34 @@
+{
+  "at_utc": "2026-10-29T00:59:23.131330+00:00",
+  "source": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/NormalCell.lean.inc",
+  "sha256": "43958f8bb657966dcf05b328dc7bd38ac8ddb1f81a228cfcf7eee8636dddebd4",
+  "bytes": 10125,
+  "checks": {
+    "source_hash_match": true,
+    "source_bytes_match": true,
+    "frozen_dependencies_match": true
+  },
+  "review_kind": "One independent critical mathematical/interface review; no Lean execution",
+  "verified_logic": [
+    "Real lower/upper magnitudes match ordinary and non-minnormal-power cells; minimum normal uses symmetric half-ULP cell.",
+    "Ordinary fields reuse strict scaled-Nat quotient and exact Native32 rescale; power lower side retains quarter-ULP bound after a deliberately weaker half-cell normalization used only for common Nat facts.",
+    "Min-normal branch calls the separately proved subnormal-to-normal native word lemma; upper exponent254/fractionmax remains ordinary with strict upper excluding overflow carry. No abs<=maxFinite premise is added.",
+    "Signed raw wrapper derives source sign equals proposal sign from nonnegative magnitude and positive lower cell; no opaque cast accuracy is assumed.",
+    "Raw word field reconstruction uses public Native32 conversion/ofFields laws. The proof target is actual roundRatScaled bits, not only real nearest-point existence.",
+    "All shifted numerator/denominator sizes are logical ghost values; no runtime64bit denominator bound is introduced."
+  ],
+  "known_dependencies": [
+    "DCellPrimitive-v2",
+    "PowerCell-v3 source authored dependency; new v4 has identical public statements and must be freshly composed/audited in the new island",
+    "DScaledCell.normalize_strict",
+    "DRescaleNative32.roundRatScaled_rescale"
+  ],
+  "limitations": [
+    "NOT_RUN Lean elaboration/kernel replay/allowed axiom audit",
+    "No raw64 midpoint value/native comparison/error-checker composition in this fragment",
+    "Arbitrary-exponent dyadic adapter is a separate newly authored ef4ef fragment, not accepted here",
+    "Pro5b2b independent interface review covers e<=253; largestfinite e254 was independently checked by this R review and finite witnesses, not covered by its stated range",
+    "No newtarget kernel, speed or adoption result"
+  ],
+  "decision": "READY_FOR_D_FUTURE_COMPONENT_TYPING_WITH_EXACT_NEW_DEPENDENCIES"
+}

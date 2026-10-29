@@ -1,0 +1,31 @@
+LEAN_EXPORT double lp_competition_Submission_R24PortableF64_sumRemaining(lean_object* v_a_8073_, lean_object* v_b_8074_, lean_object* v_index_8075_, double v_acc_8076_, lean_object* v_remaining_8077_){
+_start:
+{
+lean_object* v_zero_8078_; uint8_t v_isZero_8079_; 
+v_zero_8078_ = lean_unsigned_to_nat(0u);
+v_isZero_8079_ = lean_nat_dec_eq(v_remaining_8077_, v_zero_8078_);
+if (v_isZero_8079_ == 1)
+{
+lean_dec(v_remaining_8077_);
+lean_dec(v_index_8075_);
+return v_acc_8076_;
+}
+else
+{
+lean_object* v_one_8080_; lean_object* v_n_8081_; lean_object* v___x_8082_; double v___x_8083_; double v___x_8084_; double v___x_8085_; double v___x_8086_; 
+v_one_8080_ = lean_unsigned_to_nat(1u);
+v_n_8081_ = lean_nat_sub(v_remaining_8077_, v_one_8080_);
+lean_dec(v_remaining_8077_);
+v___x_8082_ = lean_nat_add(v_index_8075_, v_one_8080_);
+v___x_8083_ = lean_float_array_get(v_a_8073_, v_index_8075_);
+v___x_8084_ = lean_float_array_get(v_b_8074_, v_index_8075_);
+lean_dec(v_index_8075_);
+v___x_8085_ = lean_float_mul(v___x_8083_, v___x_8084_);
+v___x_8086_ = lean_float_add(v_acc_8076_, v___x_8085_);
+v_index_8075_ = v___x_8082_;
+v_acc_8076_ = v___x_8086_;
+v_remaining_8077_ = v_n_8081_;
+goto _start;
+}
+}
+}

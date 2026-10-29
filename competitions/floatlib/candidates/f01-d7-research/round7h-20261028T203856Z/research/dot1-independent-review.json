@@ -1,0 +1,31 @@
+{
+  "reviewed_at_utc": "2026-10-28T23:31:29.416738+00:00",
+  "candidate": "f01-r24-research-dot-enclosure-1",
+  "sha256": "90a15eac9afb5b7f56ad7ff65d5b50fcc4ce3864263c26d08e8e8ff10236b300",
+  "bytes": 255765,
+  "checks": {
+    "kernel_hash_match": true,
+    "kernel_bytes_match": true,
+    "base_prefix_equal": true,
+    "cap_spare": 235,
+    "components_match": true,
+    "helper_match": true,
+    "deadline": "2026-10-29T03:38:56Z"
+  },
+  "review_kind": "One independent critical composition review; component/source checks are not compiler acceptance",
+  "checked_logic": [
+    "The original raw32 Domain (normal or signed zero) is retained and raw model finiteness is derived.",
+    "Normal raw magnitude uses significand<2^24; zero branches have real value0. Product bound uses actual guard indices including Nat-truncated zero exponents.",
+    "Native widening finite/value facts connect to actual native MUL, its format-polymorphic old B2 semantics, and public48bit genericFormat exactness. Native product finite and exact are conclusions, not input hypotheses.",
+    "Actual List map product feeds the actual Float.add fold; exact map sums are related by each product theorem, then count and k=H-250 instantiate the original enclosure.",
+    "Shared native-model aliases and omitted unused wrappers do not change stated semantic endpoint. All exact original four B2 endpoints remain in unchanged full prefix."
+  ],
+  "limitations": [
+    "NOT_RUN Lean elaboration/public module replay/allowed axioms; no inherited PASS from separate sources.",
+    "The guard currently checks exponent indices even for zero products. It is stronger than a runtime H summary that ignores zero products; such a summary is not yet linked by this theorem.",
+    "No nonzero subnormal/NaN/Inf input coverage; no final raw32 RNE cell, word certificate, array traversal or optimized dot implementation.",
+    "Only235B headroom; repairs need byte preflight and new frozen version.",
+    "No runtime or whole-model performance result."
+  ],
+  "decision": "READY_FOR_D_COMPONENT_CI_WITH_EXPLICIT_GUARD_SCOPE"
+}

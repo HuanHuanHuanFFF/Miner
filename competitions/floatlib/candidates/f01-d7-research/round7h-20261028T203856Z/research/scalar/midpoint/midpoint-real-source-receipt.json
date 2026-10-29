@@ -1,0 +1,143 @@
+{
+  "observed_at_utc": "2026-10-29T01:26:27.470027+00:00",
+  "round_start_utc": "2026-10-28T20:38:56Z",
+  "round_deadline_utc": "2026-10-29T03:38:56Z",
+  "component": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/MidpointReal.lean.inc",
+    "bytes": 3879,
+    "sha256": "96050a50bcbc1d00bd062fbeedfaa69bea779100cfbb208e1ba008bc3519f0a2"
+  },
+  "roots": [
+    "Submission.R24MidpointReal.upper_real",
+    "Submission.R24MidpointReal.lower_real"
+  ],
+  "dependencies": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/controller/MidpointWords.lean.inc",
+      "bytes": 6156,
+      "sha256": "f5dbbdaf457823ba26857f5804184583e47e64d540629b45a1c7319ea554bd12"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/representation/WidenNormal3.lean.inc",
+      "bytes": 12131,
+      "sha256": "9a1e894c10c9e8bcc160133d1d2aab084c358a24a04a5f78e11361ae0be8a517"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/NormalCell.lean.inc",
+      "bytes": 10125,
+      "sha256": "43958f8bb657966dcf05b328dc7bd38ac8ddb1f81a228cfcf7eee8636dddebd4"
+    }
+  ],
+  "declaration_dependencies": [
+    "R24MidpointWords.upper_decode",
+    "R24MidpointWords.lower_inner_decode",
+    "R24MidpointWords.lower_power_decode",
+    "R24MidpointWords.lower_minNormal_decode",
+    "R24RepresentationWiden.native_ofBits_of_decode",
+    "R24NormalCell.lowerMagnitude",
+    "R24NormalCell.upperMagnitude",
+    "Model.toReal_eq",
+    "Dyadic.toReal_mk_false",
+    "Model.bpow_add"
+  ],
+  "status": "SOURCE_COMPLETE_TERMS_AND_8_FIXED_WORD_MODELS_PENDING_TYPING",
+  "fixed_cases": 8,
+  "equalities_checked": 16,
+  "witnesses": [
+    {
+      "e": 1,
+      "f": 0,
+      "lower_word": "0x380fffffe0000000",
+      "upper_word": "0x3810000010000000",
+      "lower_exact": "16777215/1427247692705959881058285969449495136382746624",
+      "upper_exact": "16777217/1427247692705959881058285969449495136382746624",
+      "lower_branch": "minnormal"
+    },
+    {
+      "e": 1,
+      "f": 1,
+      "lower_word": "0x3810000010000000",
+      "upper_word": "0x3810000030000000",
+      "lower_exact": "16777217/1427247692705959881058285969449495136382746624",
+      "upper_exact": "16777219/1427247692705959881058285969449495136382746624",
+      "lower_branch": "inner"
+    },
+    {
+      "e": 1,
+      "f": 8388607,
+      "lower_word": "0x381fffffd0000000",
+      "upper_word": "0x381ffffff0000000",
+      "lower_exact": "33554429/1427247692705959881058285969449495136382746624",
+      "upper_exact": "33554431/1427247692705959881058285969449495136382746624",
+      "lower_branch": "inner"
+    },
+    {
+      "e": 2,
+      "f": 0,
+      "lower_word": "0x381ffffff0000000",
+      "upper_word": "0x3820000010000000",
+      "lower_exact": "33554431/1427247692705959881058285969449495136382746624",
+      "upper_exact": "16777217/713623846352979940529142984724747568191373312",
+      "lower_branch": "power"
+    },
+    {
+      "e": 127,
+      "f": 0,
+      "lower_word": "0x3feffffff0000000",
+      "upper_word": "0x3ff0000010000000",
+      "lower_exact": "33554431/33554432",
+      "upper_exact": "16777217/16777216",
+      "lower_branch": "power"
+    },
+    {
+      "e": 127,
+      "f": 1,
+      "lower_word": "0x3ff0000010000000",
+      "upper_word": "0x3ff0000030000000",
+      "lower_exact": "16777217/16777216",
+      "upper_exact": "16777219/16777216",
+      "lower_branch": "inner"
+    },
+    {
+      "e": 254,
+      "f": 0,
+      "lower_word": "0x47dffffff0000000",
+      "upper_word": "0x47e0000010000000",
+      "lower_exact": "170141178389866830818769697729071284224",
+      "upper_exact": "170141193601674033557522515689509748736",
+      "lower_branch": "power"
+    },
+    {
+      "e": 254,
+      "f": 8388607,
+      "lower_word": "0x47efffffd0000000",
+      "upper_word": "0x47effffff0000000",
+      "lower_exact": "340282336497324057985868971510891282432",
+      "upper_exact": "340282356779733661637539395458142568448",
+      "lower_branch": "inner"
+    }
+  ],
+  "exact_source_scope": "For UInt64 e/f with 0<e.toNat<255 and f.toNat<2^23, real semantics of actual Float.ofBits midpoint words equal the positive NormalCell endpoints. Includes maxfinite upper endpoint.",
+  "explicit_remaining": [
+    "Raw32 q extraction/conversion into the UInt64 e/f arguments",
+    "Actual negative native-word endpoint reflection/swap",
+    "Caller strict comparison and full source-to-cell composition",
+    "Acceptance of all dependent source artifacts"
+  ],
+  "not_claimed": [
+    "Model.toReal equality as native-bit injectivity",
+    "Native runtime execution",
+    "Speed or hit rate",
+    "Any new target implementation"
+  ],
+  "verification": {
+    "Lean": "NOT_RUN",
+    "replay": "NOT_RUN",
+    "axioms": "NOT_RUN",
+    "performance": "NOT_RUN"
+  },
+  "script_sha256": "a1d332164c8301f7fdae3d9c8d120b41de0d15e100ade55d50f291e9c4afe788",
+  "token_usage": "UNKNOWN",
+  "cached_input_tokens": "UNKNOWN",
+  "CI_owner": "D only"
+}

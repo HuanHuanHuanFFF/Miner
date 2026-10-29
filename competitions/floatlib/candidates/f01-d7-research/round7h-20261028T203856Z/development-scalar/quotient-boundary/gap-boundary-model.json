@@ -1,0 +1,50 @@
+{
+  "status": "FINITE_WORD_GUARD_EQUIVALENCE_PASS_MUTANTS_REJECTED",
+  "script_sha256": "a6640908cfabc143f1dc93417d22b826171297a99774156356b1a64460cc03df",
+  "cases": 153246,
+  "accepted": 45091,
+  "trace_sha256": "856b4d82baeed54b29da07ec6695bed19edb62403408b89a2e49c02624aae3ae",
+  "mutants": [
+    {
+      "mutant": "low_only",
+      "num": "18446744073743106048",
+      "den": "4",
+      "E": 128,
+      "gap": "18446744073709551616",
+      "twice_gap_mod2^64": "0",
+      "actual_word": "0x53800000",
+      "wrong_power_word": "0x40000000"
+    },
+    {
+      "mutant": "missing_gap_lt_den",
+      "num": "9223372036863164416",
+      "den": "1",
+      "E": 128,
+      "gap": "9223372036854775808",
+      "twice_gap_mod2^64": "0",
+      "actual_word": "0x54000000",
+      "wrong_power_word": "0x40000000"
+    },
+    {
+      "mutant": "quarter_without_half",
+      "num": "154742495687300497499226112",
+      "den": "18446744073709551615",
+      "E": 128,
+      "gap": "9223372036854775808",
+      "twice_gap_mod2^64": "0",
+      "actual_word": "0x3fffffff",
+      "wrong_power_word": "0x40000000"
+    },
+    {
+      "mutant": "closed_generic_half_without_even_or_power_guard",
+      "mantissa": 8388609,
+      "num": 16777219,
+      "den": 2,
+      "E": 128,
+      "actual_word": "0x40000002",
+      "wrong_odd_mantissa_word": "0x40000001"
+    }
+  ],
+  "required_guard_order": "D>0; full128 absolute gap; gap.high=0; gap.low<D; gap<=D-gap. Only then twiceGap=gap+gap; lower side and E>=2 require twiceGap<=D-twiceGap. M fixed2^23/even.",
+  "scope": "Finite arithmetic model only. No native runtime, Lean proof, timing, new-track kernel, or success probability. Native boundary implementation waits for power-cell2 and broad WordGap128 actual typing."
+}
