@@ -1,12 +1,18 @@
-# TorchLean overall 冲冠看板
+# TorchLean 冲冠看板
 
-冠军基准：[最近有效快照，10月29日04:49](competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/competition-state-check/torchlean-champions.raw) **#5 = 1.00×**。
+主目标 **overall**。按10月29日04:49有效快照及官方报告链粗估；各榜冠军均为 **1.00×**，耗时越低越好。
 
-| 目标／方向 | 当前进展 | 我方／冠军耗时 |
+| 榜单 | 冠军基准 | 我方／冠军耗时（估算） |
 | --- | --- | ---: |
-| **overall：原生FP64＋精确证书** | normal位扩展6项已验；完整运行时待闭合 | 待整包比较 |
-| 共享解码／窗口／归一化缓存 | 归一化缓存已通过全12证明及两组整体测试 | 待整包比较 |
+| **overall** | #5 | **15.9×** |
+| MLP | #5 | **8.0×** |
+| ResNet | #5 | **21.6×** |
+| MobileNet | #5 | **24.5×** |
+| 归一化MLP | #5 | **11.5×** |
+| Mixer | 当前身份待核 | 未取得当前对照 |
 
-**结论：当前尚不能取代 overall 冠军。**
+**结论：目前整体约需冠军16倍时间，所有已能换算的榜单均不能取代冠军。**
 
-[本轮1.5h进展](competitions/torchlean/candidates/r25-90m-20261029T064916Z/README.md) · [FloatLib历史四运算](competitions/floatlib/DASHBOARD-R24.md)
+Mixer对已知前冠军#2约18.0×，尚不作为现任冠军乘数。
+
+[计算依据](competitions/torchlean/champion-comparison.json) · [本轮完整结果](competitions/torchlean/candidates/r25-90m-20261029T064916Z/README.md) · [FloatLib历史四运算](competitions/floatlib/DASHBOARD-R24.md)
