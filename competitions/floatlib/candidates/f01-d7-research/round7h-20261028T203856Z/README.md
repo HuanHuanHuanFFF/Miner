@@ -12,4 +12,10 @@ FloatLib当前`submissions_open=false`，TorchLean为true；[原件与回执](co
 
 公开前冠军2的原程序分层观察已完成：[精确回执与分析](development-reference-first-result.json)，[重算脚本](analyze-readonly-reference.py)。五个固定normal模型中，点积相关层占约66%—100%；归一化在nmlp只占6.2%、Mixer占26.1%。主攻原生双精度累加加精确证书，覆盖线性／矩阵／卷积共用路径；归一化作为补充。层计时包含hash/touch，当前冠军5源码未知；不据此生成新成绩。
 
-[95KB自包含数学包](../../f01-r24-dev-portable-island2/manifest.json)含36个明确审计根，验证实际位扩展、精确乘法、累计误差及舍入边界；CI `40788628582` 运行中。旧六份父Kernel保留各自未运行状态，只给精确组合源记验收。新增[直接读取循环](development-read-fold/ReadFold.lean.inc)连接实际尾递归与已审的List数学接口，原生代码和成本待验。所有新增数学目前尚无整包提速／采用结论。
+| 大路线 | 当前证据 | 下一步 |
+| --- | --- | --- |
+| 原生双精度累加＋精确检查，消除逐项装箱 | [64进程完整对照](development-dot-cost/timeout-review/full-408048-findings.md)：Tail混合输入完整调用／自建整数参照为 **0.67–0.72×**；缓存已准备为 **0.60–0.69×**。普通指数缓存点积为 **0.36–0.41×**。实际C／汇编确认普通累加回边不再每项分配16字节Float | 多行、多列共用缓存，测完整调用；补齐运行时证明 |
+| 原生64／128位整数精确多链 | 已有循环、编码和终端运输源码；先前标量直接转换无明显收益，不能替代点积测量 | [研究交接](research/HANDOFF.md)，仍需原输入到完整输出的闭合调用与实际成本 |
+| 精确舍入与误差证明 | [精确core源](../../f01-r24-dev-core-certificate1/manifest.json)的 **9个新增helper＋4个原公开义务**已通过statement、kernel replay及13项公理审计；[35根组合第8版](development-math8-results.json)仍余两个转换问题 | 研究侧定点修复；父源不继承组合验收 |
+
+以上点积成本的参照是本轮自建64／128位整数实现，**不是冠军**；混合输入为固定MAC样本之逐项中位数求和。新运行时仅通过有限原生检查，尚无全输入证明或新runner独立采用确认；旧FloatLib逐次舍入BMM未因此提速。新赛道选择仍待用户答复。全部已启动作业及原件见[作业索引](development-jobs.json)。
