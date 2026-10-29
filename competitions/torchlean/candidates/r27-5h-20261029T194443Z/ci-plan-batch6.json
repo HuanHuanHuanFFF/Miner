@@ -1,0 +1,114 @@
+{
+  "round": "R27",
+  "batch": 6,
+  "scope": "PUBLIC23_EXACT_RECIPROCAL_FULL_GATE_PLUS_SEPARATE_UNPROVED_NATIVE_COST",
+  "board": "normalized_mlp",
+  "official_commit": "27fb1d19c712ead50ad34b4ad0d4ba597161e616",
+  "start_cutoff_utc": "2026-10-30T00:44:43+00:00",
+  "dispatch_not_after_utc": "2026-10-30T00:00:00+00:00",
+  "round_deadline_utc": "2026-10-30T00:44:43Z",
+  "dispatch_seed": 27102961,
+  "seeds": [
+    27102961,
+    27102963
+  ],
+  "reference": {
+    "name": "public23-calibration",
+    "path": "official-released-submission23/Kernel.lean",
+    "fetch": {
+      "submission": 23,
+      "url": "https://conjectures.io/v1/competitions/torchlean/submissions/23/source",
+      "sha256": "1010c0744f0506974c64601e8ce7335bea56d0cb21b655543d390794df0665fe"
+    },
+    "sha256": "1010c0744f0506974c64601e8ce7335bea56d0cb21b655543d390794df0665fe",
+    "bytes": 252639,
+    "comparison_role": "Retired public champion23 calibration carrier, current target43"
+  },
+  "candidates": [
+    {
+      "name": "public23-row-reciprocal23-v3",
+      "path": "owned-public23-row-reciprocal23-v3/Kernel.lean",
+      "fetch": {
+        "submission": 23,
+        "url": "https://conjectures.io/v1/competitions/torchlean/submissions/23/source",
+        "sha256": "1010c0744f0506974c64601e8ce7335bea56d0cb21b655543d390794df0665fe"
+      },
+      "sha256": "9654b727badce93d0727ece982a0ccedce99107ce98235b18e0e5cdc79e8944e",
+      "bytes": 253499,
+      "variant": "row-reciprocal23-v3",
+      "patch_script": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch6/public23_reciprocal_v3.py",
+      "patch_script_sha256": "080584fa0e222c95db517c92802177a405810aaca5020178f9934d08da3c9bb6",
+      "full_gate": true,
+      "declares_correct": true,
+      "proof_state": "ACTUAL_ALL12_NOT_COMPILED"
+    },
+    {
+      "name": "public23-reciprocal-cost",
+      "path": "owned-public23-reciprocal-cost/Kernel.lean",
+      "fetch": {
+        "submission": 23,
+        "url": "https://conjectures.io/v1/competitions/torchlean/submissions/23/source",
+        "sha256": "1010c0744f0506974c64601e8ce7335bea56d0cb21b655543d390794df0665fe"
+      },
+      "sha256": "abd3182f89760bd018444d4bb06f1b03987a28463dcf2430a9f2a1997e9eccc8",
+      "bytes": 255492,
+      "variant": "reciprocal-cost",
+      "patch_script": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch6/patch_cost.py",
+      "patch_script_sha256": "6ddbea93502139d2562cdd2f526962daf555eb8cb2daed2e7e8a61d5c0fd4a24",
+      "full_gate": false,
+      "declares_correct": false,
+      "proof_state": "NO_NEW_CORRECT_NATIVE_COST_ONLY"
+    }
+  ],
+  "helpers": [
+    {
+      "name": "reciprocal_u64_v4",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch6/ReciprocalUInt64ContractOnly-v4.lean",
+      "sha256": "013a5fd2e87c4da32bf791529564b587d67f8a94d096fe9f058826f2a8873dda",
+      "seconds": 150,
+      "helper_roots": [
+        "R27ReciprocalProof.reciprocal_estimate_bounds",
+        "R27ReciprocalProof.reciprocal_divrem",
+        "R27Reciprocal.mulHigh_toNat",
+        "R27Reciprocal.divRem_correct"
+      ]
+    },
+    {
+      "name": "guarded_nonzero_v2",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch6/GuardedNonzeroContractOnly-v2.lean",
+      "sha256": "fdb7fc1e77abbfbf03b9d0a0ed9a917d270c3fafd16f1ba9f8d2b7b491c938a0",
+      "seconds": 150,
+      "helper_roots": [
+        "Submission.R25OrderKey.orderKey_lt_real",
+        "Submission.R25Checker.actual_acceptance_bounds",
+        "Submission.R27GuardedEndpoints.accepted_endpoint_equations",
+        "Submission.R27GuardedEndpoints.actual_acceptance_contains_exact_of_error",
+        "Submission.R27GuardedEndpoints.actual_accepted_exact_nonzero",
+        "Submission.R27GuardedEndpoints.actual_accepted_total_nonzero"
+      ]
+    }
+  ],
+  "proof_diagnostics": [],
+  "owned_sources": [
+    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch6/public23_reciprocal_v3.py",
+    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch6/public23_reciprocal.py",
+    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch6/ReciprocalUInt64ContractOnly-v4.lean",
+    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch6/frozen_compact_public23.py",
+    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch6/patch_cost.py"
+  ],
+  "champion": {
+    "board": "normalized_mlp",
+    "submission": 43,
+    "source_sha256": "4fef6fd4dbb39fe6fbf8fa85407228d6ebce9fb98dfbecf0d378e6f3b0df7c8b",
+    "promotion_id": 28,
+    "current_champion_over_calibration": 0.9072362322024092,
+    "current_report": "competition-state/submission43-report.raw",
+    "score_formula": "candidate/public23 divided by current43/public23; inferred current-champion time multiplier"
+  },
+  "output_policy": "Do not upload full unknown-license released Kernel or generated C/ASM; publish own patch, exact source/output hashes, flags, raw times, proof/helper failures.",
+  "allow_private": false,
+  "human_performance_target": "Current43 only; no new originalshipped comparison",
+  "mode": "native",
+  "prepare_script": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/prepare-current.sh",
+  "profile_control": false
+}
