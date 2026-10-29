@@ -32,15 +32,28 @@ def check():
         if not kernel.is_file() or hashlib.sha256(kernel.read_bytes()).hexdigest()!=data.get('candidate_sha256'):failures.append(str(manifest.parent.relative_to(ROOT))+': Kernel digest mismatch')
         candidates+=1
     torchlean_candidates=0
+    torchlean_remote_recipes=0
     for plan in (ROOT/'competitions/torchlean/candidates').glob('*/ci-plan.json'):
         data=json.loads(plan.read_bytes())
         for entry in data['candidates']:
             path=ROOT/entry['path']
-            if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest()!=entry['sha256']:failures.append('TorchLean candidate digest: '+entry['name'])
+            if 'fetch' in entry:
+                # These sources are intentionally not redistributed. This is metadata validation;
+                # the runner must fetch, reconstruct and verify the exact output bytes before use.
+                pin=entry['fetch']; recipe=ROOT/entry.get('patch_script','')
+                valid=(re.fullmatch(r'https://conjectures\.io/v1/competitions/torchlean/submissions/[1-9][0-9]*/source',pin.get('url',''))
+                       and re.fullmatch(r'[0-9a-f]{64}',pin.get('sha256',''))
+                       and re.fullmatch(r'[0-9a-f]{64}',entry.get('sha256',''))
+                       and type(entry.get('bytes')) is int and 0<entry['bytes']<=256000
+                       and recipe.is_file() and recipe.resolve().is_relative_to(ROOT.resolve())
+                       and hashlib.sha256(recipe.read_bytes()).hexdigest()==entry.get('patch_script_sha256'))
+                if not valid:failures.append('TorchLean remote recipe metadata: '+entry['name'])
+                torchlean_remote_recipes+=1
+            elif not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest()!=entry['sha256']:failures.append('TorchLean candidate digest: '+entry['name'])
             torchlean_candidates+=1
     old=subprocess.run([sys.executable,str(ROOT/'competitions/deflate/scripts/project.py'),'check'],cwd=ROOT/'competitions/deflate')
     if old.returncode:failures.append('DEFLATE local check failed')
-    result={'status':'PASS' if not failures else 'FAIL','tracks':['deflate','floatlib','torchlean'],'manual_workflows':len(workflows),'root_links':links,'floatlib_candidates':candidates,'torchlean_candidates':torchlean_candidates,'failures':failures,'scope':'Local links, syntax, manifests and workflow configuration. No CI or chain operation.'}
+    result={'status':'PASS' if not failures else 'FAIL','tracks':['deflate','floatlib','torchlean'],'manual_workflows':len(workflows),'root_links':links,'floatlib_candidates':candidates,'torchlean_candidates':torchlean_candidates,'torchlean_remote_recipe_metadata_only':torchlean_remote_recipes,'failures':failures,'scope':'Local links, syntax, manifests and workflow configuration. Remote recipe metadata does not verify fetched or reconstructed output bytes. No CI or chain operation.'}
     print(json.dumps(result,indent=2,ensure_ascii=False));return 1 if failures else 0
 
 def main():
