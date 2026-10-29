@@ -5,7 +5,7 @@ ROOT=Path(os.environ['GITHUB_WORKSPACE']);UP=Path(os.environ['TORCHLEAN_ROOT']);
 PLAN=ROOT/'competitions/torchlean/candidates/r27-5h-20261029T194443Z/ci-plan.json';plan=json.loads(PLAN.read_bytes());START=time.monotonic();END=START+1800
 ENV=os.environ.copy();ENV.update(PATH=str(Path.home()/'.elan/bin')+os.pathsep+ENV.get('PATH',''),PYTHONPATH='.:validator',GATE_BUDGET_SECONDS='600',GATE_BUILD_MEMORY_MB='4096',GATE_BENCH_MEMORY_MB='512')
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
-record={'source_commit':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'official_commit':plan['official_commit'],'scope':'UNPROVED_NATIVE_RESEARCH_ONLY_NO_ORIGINAL_GATE_PASS_FOR_PROTOTYPE','primary_board':plan['board'],'complete':False,'results':[],'commands':[],'started_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'current_champion_measurement':False}
+record={'source_commit':os.environ['GITHUB_SHA'],'run_id':os.environ['GITHUB_RUN_ID'],'official_commit':plan['official_commit'],'scope':plan['scope'],'primary_board':plan['board'],'complete':False,'results':[],'commands':[],'started_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'current_champion_measurement':False}
 def save(): (OUT/'summary.json').write_text(json.dumps(record,indent=2)+'\n')
 def run(args,label,cap,cwd=None):
  left=END-time.monotonic();assert left>10,'Runnerbudgetexhausted';cap=min(cap,left-5)
@@ -80,7 +80,14 @@ def main():
    c=visible(g.BUILD/'ir'/(stem+'.c'));assert c.is_file();obj=visible(g.BUILD/'ir'/(stem+'.c.o.export'));generated[stem]={'c_sha256':sha(c),'c_bytes':c.stat().st_size,'object_sha256':sha(obj)}
   (folder/'generated-code-hashes.json').write_text(json.dumps(generated,indent=2)+'\n')
   binary=g.LIB/'work/r27-binaries'/name;binary.parent.mkdir(exist_ok=True);shutil.copy2(visible(g.BUILD/'bin/r27Native'),binary);assert binary.stat().st_size<512*2**20
-  info={'name':name,'source_sha256':entry['sha256'],'source_path':entry['path'],'proof_state':'FULL_ORIGINAL_GATE_REPLAYED' if entry.get('full_gate') else 'DECLARED_CORRECT_TYPECHECKED_NO_FULL_ORIGINAL_REPLAY' if entry.get('fetch') else 'NOT_PROVED_NATIVE_ONLY','binary_sha256':sha(binary),'foreign':foreign,'flags_pass':True,'measurements':[],'measurement_state':'NOT_RUN'};record['results'].append(info);save();g.wipe(g.LAYER);return binary,info
+  info={'name':name,'source_sha256':entry['sha256'],'source_path':entry['path'],'proof_state':'FULL_ORIGINAL_GATE_REPLAYED' if entry.get('full_gate') else 'DECLARED_CORRECT_TYPECHECKED_NO_FULL_ORIGINAL_REPLAY' if entry.get('fetch') else 'NOT_PROVED_NATIVE_ONLY','binary_sha256':sha(binary),'foreign':foreign,'flags_pass':True,'measurements':[],'measurement_state':'NOT_RUN'};record['results'].append(info);save()
+  if plan.get('profile_control') and entry.get('reference'):
+   try:
+    profile_script=ROOT/plan['profile_adapter'];assert sha(profile_script)==plan['profile_adapter_sha256'];spec=importlib.util.spec_from_file_location('r27_owned_entry_profile',profile_script);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);profile=module.run_profile(g,bm,visible,config,binary,entry['sha256'],OUT/'cost-profile',END);record['cost_profile']=profile
+   except Exception as error:
+    record['cost_profile']={'state':'INCOMPLETE_DIAGNOSTIC_ONLY','error_type':type(error).__name__,'error':str(error)}
+   save()
+  g.wipe(g.LAYER);return binary,info
  refentry={**plan['reference'],'name':'calibration','reference':True};refbin,refinfo=build(refentry)
  for entry in plan['candidates']:
   try:
@@ -97,7 +104,7 @@ def main():
      for cell in reps:
       a,b=observed['reference'][cell],observed['candidate'][cell];assert a[1]==b[1],'CHECKSUM_MISMATCH:'+str(seed)+':'+cell+':ref='+str(a[1])+':candidate='+str(b[1]);cells[cell]={'reference_ns':a[0],'candidate_ns':b[0],'reference_checksum':a[1],'candidate_checksum':b[1]}
      rounds.append({'reference_first':i%2==0,'cells':cells})
-    value={'request_hash':cfg.measurement_hash(request),'workloads':request['workloads'],'provenance':{'identity':bm.machine_identity(),'machine':__import__('socket').gethostname(),'architecture':__import__('platform').machine(),'cpu_affinity':g._BENCH_CPU,'load':os.getloadavg(),'candidate_binary':sha(binary),'reference_binary':sha(refbin)},'calibration':{c:v[0] for c,v in initial.items()},'repetitions':reps,'rounds':rounds,'timing_seconds':clock.elapsed(),'preparation':{'mode':'OWN_NATIVE_ONLY_TARGET','original_full_gate_not_called_for_exploration':True}}
+    value={'request_hash':cfg.measurement_hash(request),'workloads':request['workloads'],'provenance':{'identity':bm.machine_identity(),'machine':__import__('socket').gethostname(),'architecture':__import__('platform').machine(),'cpu_affinity':g._BENCH_CPU,'load':os.getloadavg(),'candidate_binary':sha(binary),'reference_binary':sha(refbin)},'calibration':{c:v[0] for c,v in initial.items()},'repetitions':reps,'rounds':rounds,'timing_seconds':clock.elapsed(),'preparation':{'mode':'OWN_NATIVE_ONLY_TARGET','original_full_gate_not_called_for_exploration':not entry.get('full_gate',False)}}
     (OUT/(entry['name']+'-'+str(seed)+'-measurement.json')).write_text(json.dumps({'result':value},indent=2)+'\n');info['measurements'].append({'seed':seed,'complete':True,'paired_rows':len(rounds)*len(reps)});save()
    info['measurement_state']='COMPLETE_NATIVE_ONLY_EXPLORATION';save()
   except Exception as error:

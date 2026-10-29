@@ -39,7 +39,9 @@ def analyze(run):
     assert dispatch['frozen_files'][plan_path]==sha(folder/'plan.json')
     assert summary['originals_unchanged'] and summary['protected_before']==summary['protected_after']
     for command in summary['commands']:
-        assert command['exit_code']==0 and sha(folder/(command['label']+'.log'))==command['log_sha256']
+        assert sha(folder/(command['label']+'.log'))==command['log_sha256']
+        if command['label'] in {'setup','setup-check','quick-config'}:
+            assert command['exit_code']==0
     _,modules,pins=base.r25_tools()
     cfg=modules['config'].Config.load(folder/'overall-config.toml');board=cfg.plan(plan['board'])
     expected=6 if plan['board']!='overall' else 30
@@ -52,7 +54,16 @@ def analyze(run):
             rows.append({'candidate':entry['name'],'status':'BUILD_FAILED_OR_NOT_RUN','score':'UNKNOWN'})
             continue
         current=results[entry['name']];assert current['source_sha256']==entry['sha256']
-        assert current['measurement_state']=='COMPLETE_NATIVE_ONLY_EXPLORATION'
+        if current['measurement_state']!='COMPLETE_NATIVE_ONLY_EXPLORATION':
+            rows.append({'candidate':entry['name'],'status':'MEASUREMENT_INCOMPLETE','score':'UNKNOWN'})
+            continue
+        if entry.get('full_gate'):
+            gate=next(x for x in summary['full_gates'] if x['name']==entry['name'])
+            verdict=gate['verdict']
+            assert gate['source_sha256']==entry['sha256'] and gate['exit_code']==0
+            assert verdict['passed'] and verdict['stage']=='axioms'
+            assert verdict['verifier_fingerprint']==verdict['verifier_fingerprint_end']
+            assert current['proof_state']=='FULL_ORIGINAL_GATE_REPLAYED'
         checked_flags=flags(folder/entry['name']);pairs=[];cpus=[];counts=[]
         for seed in plan['seeds']:
             request=j(folder/f"{entry['name']}-{seed}-request.json")
@@ -87,7 +98,8 @@ def analyze(run):
             'status':'AUDITED_NATIVE_ONLY_EXPLORATION','board':plan['board'],'outer_hashes':outer,'inner_hashes':inside,
             'reference_flags':reference_flags,'source_preservation':'PASS','MainExact_sha256':summary['owned_main_equals_original_sha256'],
             'pinned_scorer':pins,'dispatch':dispatch_path.relative_to(ROOT).as_posix(),'helpers':summary.get('helper_diagnostics',[]),
-            'results':rows,'scope':'Pure original quick scorer and finite checksums; no full proof/official ranking/adoption claim. Full unknown-license source/C not redistributed.'}
+            'full_gates':summary.get('full_gates',[]),'candidate_errors':summary.get('candidate_errors',[]),
+            'results':rows,'scope':'Pure original scorer/finite checksums; full original gate only where separately recorded. No official ranking/adoption claim. Full unknown-license source/C not redistributed.'}
 
 if __name__=='__main__':
     ap=argparse.ArgumentParser();ap.add_argument('--run',type=int,required=True);ap.add_argument('--output',type=Path,required=True);args=ap.parse_args()
