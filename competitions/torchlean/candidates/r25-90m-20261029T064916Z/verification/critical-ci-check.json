@@ -1,0 +1,80 @@
+{
+  "round": "R25",
+  "review_at_utc": "2026-10-29T07:14:21Z",
+  "review_scope": [
+    "competitions/torchlean/scripts/ci-r25.py",
+    "competitions/torchlean/scripts/ci-prepare.sh",
+    ".github/workflows/deflate-baseline.yml",
+    "competitions/torchlean/candidates/r25-90m-20261029T064916Z/ci-plan.json",
+    "competitions/torchlean/candidates/r25-90m-20261029T064916Z/development/CI-REVIEW-REQUEST.md"
+  ],
+  "official_ref": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+  "checks": {
+    "candidate_inputs": {
+      "checked": 4,
+      "sha256_and_bytes_match_plan": true,
+      "all_under_official_256000_byte_limit": true,
+      "primary_board": "overall",
+      "reference": "unchanged shipped entry, not current champion",
+      "sample_role": "EXPLORATION"
+    },
+    "original_verifier_argv": {
+      "status": "MATCH",
+      "argv": ["<python>", "-m", "verification", "<entry-directory>", "--verdict", "<verdict-path>"],
+      "exit_codes": {"0": "pass", "1": "candidate rejection", "2": "infrastructure"}
+    },
+    "dynamic_request_builder": {
+      "outer_python_ast": "PASS",
+      "generated_python_ast": "PASS",
+      "request_file_trailing_newline": "PASS: one newline byte, not literal backslash-n",
+      "official_request_parser": "PASS by source inspection at pinned Config.MeasurementRequest.parse",
+      "fields": ["environment", "identity", "seed", "candidate_hash", "reference_hash", "cells", "timing", "benchmark_identity", "workloads"],
+      "builder_validates": ["exact field set", "unique valid cells", "sha256 identities", "32-bit seed", "pinned workloads(seed)", "timing constraints"]
+    },
+    "measurement_cli": {
+      "status": "MATCH",
+      "argv": ["<python>", "-m", "benchmark", "--request", "<request>", "--candidate", "<Kernel.lean>", "--reference", "<shipped Kernel.lean>", "--result", "<result.json>"],
+      "cpu_affinity": "BENCH_CPU is set by preparation and consumed by the pinned official sandbox"
+    },
+    "workflow_and_runner": {
+      "manual_trigger_only": true,
+      "runner": "ubuntu-24.04 public hosted runner",
+      "allow_private_default_false": true,
+      "torchlean_job_requires_public_repo_and_allow_private_false": true,
+      "job_timeout_minutes": 45,
+      "start_cutoff_utc": "2026-10-29T08:00:00Z",
+      "inner_cap_seconds": 2200
+    },
+    "source_protection": {
+      "status": "PASS_BY_SOURCE_REVIEW",
+      "prepare_fetches_and_asserts_exact_commit": true,
+      "toolchain_asserted": "leanprover/lean4:v4.34.0",
+      "protected_before_after": "SHA-256 of all tracked upstream files except mutable lean/work/Submission.lean",
+      "report_artifacts_hashed": "all files in report directory before file-hashes.json is written"
+    },
+    "timeout_handling": {
+      "bounded_per_command_and_total": true,
+      "timeout_kills_scope_and_process_group": true,
+      "incomplete_commands_fail_job": true,
+      "started_ci_may_finish_after_deadline": "Compatible with collect-started-CI rule; actual terminal receipt still required"
+    }
+  },
+  "findings": [
+    {
+      "id": "complete-flag-omits-requested-measurements",
+      "severity": "P2 evidence semantics",
+      "file": "competitions/torchlean/scripts/ci-r25.py",
+      "lines": [88, 90, 96, 97],
+      "evidence": "When a requested benchmark exits nonzero, measurement_state becomes FAILED_PARTIAL_RETAINED and the final job correctly exits 1 via all_requested_measurements_complete. However summary.complete is still computed only from results count, and the printed summary omits all_requested_measurements_complete; it can print complete=true and all_proofs=true for an incomplete overall measurement.",
+      "action": "Set complete to include all_requested_measurements_complete (and originals_unchanged); print the measurement-complete flag alongside proof status. The exit code already fails safely."
+    }
+  ],
+  "conclusion": {
+    "entry_and_cli_blockers": [],
+    "remaining_before_acceptance": [
+      "Resolve the complete-flag semantics finding before using summary.complete as a completion receipt.",
+      "Collect the public CI terminal result, original logs/artifacts, every raw-file hash, and each available checksum/measurement result; this review did not run CI."
+    ],
+    "not_claimed": ["proof gate pass", "full measurement completion", "official score", "current champion comparison"]
+  }
+}

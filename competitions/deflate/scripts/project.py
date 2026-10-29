@@ -144,7 +144,7 @@ def check():
             if inputs.get('allow_private', {}).get('default') is not False:
                 failures.append(path.name + ': 私有运行开关默认不正确')
             for script in re.findall(r'\bscripts/[A-Za-z0-9._/-]+', path.read_text(encoding='utf-8')):
-                if not (ROOT / script).is_file() and not (REPO / 'competitions/floatlib' / script).is_file():
+                if not (ROOT / script).is_file() and not any((REPO / 'competitions' / track / script).is_file() for track in ('floatlib', 'torchlean')):
                     failures.append(path.name + ': 脚本缺失 ' + script)
         counts['manual_workflows'] = len(workflows)
     manifests = 0
