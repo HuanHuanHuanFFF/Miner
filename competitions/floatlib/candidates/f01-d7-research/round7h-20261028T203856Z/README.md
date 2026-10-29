@@ -22,3 +22,5 @@ FloatLib当前`submissions_open=false`，TorchLean为true；[原件与回执](co
 以上点积成本的参照是本轮自建64／128位整数实现，**不是冠军**；混合输入为固定MAC样本之逐项中位数求和。新运行时仅通过有限原生检查，尚无全输入证明或新runner独立采用确认；旧FloatLib逐次舍入BMM未因此提速。新赛道选择仍待用户答复。全部已启动作业及原件见[作业索引](development-jobs.json)。
 
 官方末次刷新：UTC03:20的6次只读GET均403，最新状态UNKNOWN；[失败原字节](official-final-20261029T032046Z/receipts.json)保留，以上关闭状态及旧成绩来自更早成功响应。未重试或更换身份绕过限制。
+
+本轮7小时窗口已完成；12个已启动CI均终态收齐，原件共1090文件／97841924字节。时长与模型CPU分别记账，详[最终收据](development-closeout.json)。本轮未产生新冠军，未采用新运行时。

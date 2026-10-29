@@ -20,6 +20,9 @@ def main():
                                 capture_output=True, text=True, check=False)
         assert result.returncode in (0, 1), result.stderr
         paths.extend(Path(line) for line in result.stdout.splitlines())
+    # Explicitly inventory local Pro originals even after Git ignores them.
+    # They remain excluded below; rg's ignore rules must not erase the receipt.
+    paths.extend(p for p in (HERE / 'pro-results').rglob('*') if p.is_file())
     # Historical wrong-window directory contains a frozen mathematical input.
     # Include the necessary source only; its mistaken plan/private transcript
     # reference is not part of the public research export.
