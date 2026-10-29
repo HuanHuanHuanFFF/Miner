@@ -3,13 +3,24 @@ import argparse, hashlib, json
 from pathlib import Path
 
 PIN = 'f92ee2c9a29de78dc434ad158b7141c0e4b5a67a5a198a353d59a4703481aa67'
-VARIANTS = {'columns-all':65536, 'columns-medium':17, 'rows-all':0}
+VARIANTS = {'columns-all':65536, 'columns-medium':17, 'rows-all':0, 'adaptive':None}
 
 def transform(data, submission, variant):
     assert submission == 27 and hashlib.sha256(data).hexdigest() == PIN
     assert variant in VARIANTS
     threshold = VARIANTS[variant]
     text = data.decode('utf-8')
+    if variant == 'adaptive':
+        edits=[
+            ('lemma ZB6 (c a:', 'lemma ZB6 {q:ف} (c a:'),
+            ('(if c<2 then Yak4', '(if q then Yak4'),
+            ('if rows<2 then Yak4', 'if rows<2||(BX.any λ x=>(x&&&ޅ)-(x>>>16)<8)&&(BX.any λ x=>8<=(x&&&ޅ)-(x>>>16)) then Yak4'),
+        ]
+        for old,new in edits:
+            assert text.count(old)==1,(old,text.count(old))
+            text=text.replace(old,new,1)
+        result=text.encode('utf-8');assert len(result)<=256000
+        return result
     # Both schedulers already compute the same scalar outputs for all sizes.
     # Change the runtime selector and its generic scheduler equality together.
     # The existing theorem still needs actual Lean compilation and kernel replay.

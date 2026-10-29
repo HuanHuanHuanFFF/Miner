@@ -1,0 +1,111 @@
+work/R27Helper_reciprocal_u64_v3.lean:21:4: error: linarith failed to find a contradiction
+base numerator divisor : ℕ
+base_pos : 0 < base
+numerator_bound : numerator < base
+divisor_pos : 0 < divisor
+reciprocal : ℕ := (base - 1) / divisor
+estimate : ℕ := numerator * reciprocal / base
+reciprocal_low : reciprocal * divisor ≤ base - 1
+remainder_bound : (base - 1) % divisor < divisor
+decomposition : divisor * ((base - 1) / divisor) + (base - 1) % divisor = base - 1
+a✝ : ((base - 1) / divisor + 1) * divisor < base
+⊢ False
+failed
+work/R27Helper_reciprocal_u64_v3.lean:32:4: error: linarith failed to find a contradiction
+case left
+base numerator divisor : ℕ
+base_pos : 0 < base
+numerator_bound : numerator < base
+divisor_pos : 0 < divisor
+reciprocal : ℕ := (base - 1) / divisor
+estimate : ℕ := numerator * reciprocal / base
+reciprocal_low : reciprocal * divisor ≤ base - 1
+reciprocal_high : base ≤ (reciprocal + 1) * divisor
+estimate_low : estimate * base ≤ numerator * reciprocal
+estimate_high : numerator * reciprocal < (estimate + 1) * base
+h1 : estimate * base * divisor ≤ numerator * reciprocal * divisor
+h2 : numerator * (reciprocal * divisor) ≤ numerator * (base - 1)
+a✝ : numerator < numerator * ((base - 1) / divisor) / base * divisor
+⊢ False
+failed
+work/R27Helper_reciprocal_u64_v3.lean:36:4: error: linarith failed to find a contradiction
+case right
+base numerator divisor : ℕ
+base_pos : 0 < base
+numerator_bound : numerator < base
+divisor_pos : 0 < divisor
+reciprocal : ℕ := (base - 1) / divisor
+estimate : ℕ := numerator * reciprocal / base
+reciprocal_low : reciprocal * divisor ≤ base - 1
+reciprocal_high : base ≤ (reciprocal + 1) * divisor
+estimate_low : estimate * base ≤ numerator * reciprocal
+estimate_high : numerator * reciprocal < (estimate + 1) * base
+h1 : numerator * base ≤ numerator * ((reciprocal + 1) * divisor)
+h2 : numerator * reciprocal * divisor < (estimate + 1) * base * divisor
+h3 : numerator * divisor < base * divisor
+a✝ : (numerator * ((base - 1) / divisor) / base + 2) * divisor ≤ numerator
+⊢ False
+failed
+work/R27Helper_reciprocal_u64_v3.lean:56:8: warning: `if_pos` has been deprecated: Use `ite_eq_left` instead
+work/R27Helper_reciprocal_u64_v3.lean:66:8: error: linarith failed to find a contradiction
+case pos.h1
+base numerator divisor : ℕ
+base_pos : 0 < base
+numerator_bound : numerator < base
+divisor_pos : 0 < divisor
+reciprocal : ℕ := (base - 1) / divisor
+estimate : ℕ := numerator * reciprocal / base
+lower : estimate * divisor ≤ numerator
+upper : numerator < (estimate + 2) * divisor
+decomposition : divisor * (numerator / divisor) + numerator % divisor = numerator
+remainder_bound : numerator % divisor < divisor
+correction : divisor ≤ numerator - estimate * divisor
+original_subtraction : numerator - estimate * divisor + estimate * divisor = numerator
+correction_subtraction : numerator - estimate * divisor - divisor + divisor = numerator - estimate * divisor
+equation : numerator = (estimate + 1) * divisor + (numerator - estimate * divisor - divisor)
+small : numerator - estimate * divisor - divisor < divisor
+left : estimate + 1 < numerator / divisor
+gap : estimate + 2 ≤ numerator / divisor
+scaled : (estimate + 2) * divisor ≤ numerator / divisor * divisor
+a✝ : estimate + 1 < numerator / divisor
+⊢ False
+failed
+work/R27Helper_reciprocal_u64_v3.lean:72:4: error: `simp` made no progress
+work/R27Helper_reciprocal_u64_v3.lean:75:8: warning: `if_neg` has been deprecated: Use `ite_eq_right` instead
+work/R27Helper_reciprocal_u64_v3.lean:84:8: error: linarith failed to find a contradiction
+case pos.h1
+base numerator divisor : ℕ
+base_pos : 0 < base
+numerator_bound : numerator < base
+divisor_pos : 0 < divisor
+reciprocal : ℕ := (base - 1) / divisor
+estimate : ℕ := numerator * reciprocal / base
+lower : estimate * divisor ≤ numerator
+upper : numerator < (estimate + 2) * divisor
+decomposition : divisor * (numerator / divisor) + numerator % divisor = numerator
+remainder_bound : numerator % divisor < divisor
+correction : ¬divisor ≤ numerator - estimate * divisor
+original_subtraction : numerator - estimate * divisor + estimate * divisor = numerator
+equation : numerator = estimate * divisor + (numerator - estimate * divisor)
+small : numerator - estimate * divisor < divisor
+left : estimate < numerator / divisor
+gap : estimate + 1 ≤ numerator / divisor
+scaled : (estimate + 1) * divisor ≤ numerator / divisor * divisor
+a✝ : estimate < numerator / divisor
+⊢ False
+failed
+work/R27Helper_reciprocal_u64_v3.lean:90:4: error: `simp` made no progress
+work/R27Helper_reciprocal_u64_v3.lean:236:69: error: unsolved goals
+numerator denominator : UInt64
+nonzero : ¬(denominator == 0) = true
+denominator_ne : denominator ≠ 0
+denominator_pos : 0 < denominator.toNat
+estimate : UInt64 := mulHigh numerator (prepare denominator)
+remainder : UInt64 := numerator - estimate * denominator
+⊢ numerator.toNat * ((2 ^ 64 - 1) / denominator.toNat) / 2 ^ 64 =
+    numerator.toNat * (18446744073709551615 / denominator.toNat) / 18446744073709551616
+work/R27Helper_reciprocal_u64_v3.lean:241:4: error: `dsimp` made no progress
+'R27ReciprocalProof.reciprocal_estimate_bounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R27ReciprocalProof.reciprocal_divrem' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R27Reciprocal.mulHigh_toNat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R27Reciprocal.divRem_correct' depends on axioms: [propext, sorryAx, Quot.sound]

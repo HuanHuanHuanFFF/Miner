@@ -1,0 +1,99 @@
+{
+  "round": "R27",
+  "batch": 4,
+  "scope": "CURRENT_OFFICIAL_HELPER_DIAGNOSTICS_ONLY_NO_CANDIDATE_OR_PERFORMANCE_ACCEPTANCE",
+  "board": "normalized_mlp",
+  "official_commit": "27fb1d19c712ead50ad34b4ad0d4ba597161e616",
+  "start_cutoff_utc": "2026-10-30T00:44:43+00:00",
+  "dispatch_not_after_utc": "2026-10-30T00:00:00+00:00",
+  "round_deadline_utc": "2026-10-30T00:44:43Z",
+  "dispatch_seed": 27102941,
+  "seeds": [
+    27102921,
+    27102923
+  ],
+  "reference": {
+    "name": "public12-calibration",
+    "path": "official-released-submission12/Kernel.lean",
+    "fetch": {
+      "submission": 12,
+      "url": "https://conjectures.io/v1/competitions/torchlean/submissions/12/source",
+      "sha256": "e2c1f1f1ba52e32563fb193ceea7e2a271b989fd3ba2eb16cff747987879b521"
+    },
+    "sha256": "e2c1f1f1ba52e32563fb193ceea7e2a271b989fd3ba2eb16cff747987879b521",
+    "bytes": 218232,
+    "comparison_role": "Current23 calibration carrier, not current champion"
+  },
+  "candidates": [],
+  "helpers": [
+    {
+      "name": "reciprocal_u64_v3",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-helpers/ReciprocalUInt64ContractOnly-v3.lean",
+      "sha256": "032dd2d40779f88b49cc28a23d5dc2bf4f1b9f371b0b7c071f5b36fe482ae97f",
+      "seconds": 120,
+      "helper_roots": [
+        "R27ReciprocalProof.reciprocal_estimate_bounds",
+        "R27ReciprocalProof.reciprocal_divrem",
+        "R27Reciprocal.mulHigh_toNat",
+        "R27Reciprocal.divRem_correct"
+      ]
+    },
+    {
+      "name": "prepareagreementcontractonly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-helpers/PrepareAgreementContractOnly.lean",
+      "sha256": "ab8b70b9db08c74a806e73b0fa0cf1b7bd94b34eb235aed5b4caeba7eb4ede72",
+      "seconds": 120,
+      "helper_roots": [
+        "Submission.R25PrepareAgreement.body_yields",
+        "Submission.R25PrepareAgreement.prepare_overflow",
+        "Submission.R25PrepareAgreement.prepare_eq_forIn",
+        "Submission.R25PrepareAgreement.prepare_eq_fold",
+        "Submission.R25PrepareAgreement.prepare_getter_interface"
+      ]
+    },
+    {
+      "name": "guardednonzerocontractonly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-helpers/GuardedNonzeroContractOnly.lean",
+      "sha256": "dfa924adaf6931f9886f0128d152ac8771e5cdb5dd62a392a9a5602f417b05c5",
+      "seconds": 120,
+      "helper_roots": [
+        "Submission.R25OrderKey.orderKey_lt_real",
+        "Submission.R25Checker.actual_acceptance_bounds",
+        "Submission.R27GuardedEndpoints.accepted_endpoint_equations",
+        "Submission.R27GuardedEndpoints.actual_acceptance_contains_exact_of_error",
+        "Submission.R27GuardedEndpoints.actual_accepted_exact_nonzero",
+        "Submission.R27GuardedEndpoints.actual_accepted_total_nonzero"
+      ]
+    },
+    {
+      "name": "word_modular64_v3",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-helpers/WordBlockModular64-v3.lean",
+      "sha256": "c21efe437d955f7356671ef35c2a642634baa2f7a63e7b20d31fdfdf1102ba83",
+      "seconds": 120,
+      "helper_roots": [
+        "Submission.R26WordBlock.mul_represents64",
+        "Submission.R26WordBlock.block_represents",
+        "Submission.R26WordBlock.exactTerms_abs_le",
+        "Submission.R26WordBlock.block_exact"
+      ]
+    }
+  ],
+  "proof_diagnostics": [],
+  "owned_sources": [],
+  "champion": {
+    "board": "normalized_mlp",
+    "submission": 43,
+    "source_sha256": "4fef6fd4dbb39fe6fbf8fa85407228d6ebce9fb98dfbecf0d378e6f3b0df7c8b",
+    "promotion_id": 28,
+    "current_champion_over_calibration": 0.8687437742531416,
+    "current_report": "competition-state/submission43-report.raw",
+    "score_formula": "Local candidate/calibration divided by current23/calibration official ratio; INFERRED screen, no direct current-source pair"
+  },
+  "output_policy": "Do not upload full unknown-license released Kernel or generated C/ASM; publish own patch, exact source/output hashes, flags, raw times, proof/helper failures.",
+  "allow_private": false,
+  "human_performance_target": "Anycurrentchampion; no performancecomparison inthis helperonlybatch",
+  "priority_reason": "Native128 variance/sqrt from proved public27 composed with public12 stronger dense/RMS; full model discriminator before reciprocal proof expansion.",
+  "profile_control": false,
+  "mode": "helpers-only",
+  "prepare_script": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/prepare-current.sh"
+}
