@@ -1,0 +1,61 @@
+{
+  "old_sha256": "bddffa3746a6d36045538d4ec5a57928d81a3d9b23bc52e9bd782c8e932153cf",
+  "new_sha256": "f6f9e58e80b538453321c06ff04d802a6018e5f59941b56989e39d559a1fbf58",
+  "old_bytes": 52855,
+  "new_bytes": 55567,
+  "records": [
+    {
+      "kernel": "linearCached",
+      "prior_body_identical_after_name_change": true,
+      "guard_is_first_runtime_expression": true,
+      "output_size": "rows * outW",
+      "old_definition_sha256": "2190072689d6919f963079124089198a581869466dc69b7106677ec502a4a11e",
+      "new_prior_definition_sha256": "4c099519847b6f6cb3132cc1319a6f1323bd4e25851b696b07becf9ec9b31c3e"
+    },
+    {
+      "kernel": "gemmCached",
+      "prior_body_identical_after_name_change": true,
+      "guard_is_first_runtime_expression": true,
+      "output_size": "batch * (m * n)",
+      "old_definition_sha256": "de04a416b3c50e28c3fc9af6127a52ef9e499b107ee09e25abb7247f30248ea7",
+      "new_prior_definition_sha256": "e6edd514fba9f354c559cc381755cfd370dabe32980779d1651de354fc02016b"
+    },
+    {
+      "kernel": "conv2dCached",
+      "prior_body_identical_after_name_change": true,
+      "guard_is_first_runtime_expression": true,
+      "output_size": "s.cout * (s.ho * s.wo)",
+      "old_definition_sha256": "720010239113ecc9f5629af54fd0603c74aa17ef7d01fb712e6c4c5e4323ecf9",
+      "new_prior_definition_sha256": "9b0a52b71676f5e2bc37f1eb71c8b55c6ffa45d0f453dec63f108128e6d0a7fb"
+    },
+    {
+      "kernel": "depthwiseCached",
+      "prior_body_identical_after_name_change": true,
+      "guard_is_first_runtime_expression": true,
+      "output_size": "s.cin * (s.ho * s.wo)",
+      "old_definition_sha256": "dc5e6d8801c50fd5d529b9bc265be65ef7ec29045881ae20f3f9d81a9dbb2c90",
+      "new_prior_definition_sha256": "d877ce93b08f084ccb2f0f612c2ee13bdf37a65665c190274dfba58292747abe"
+    },
+    {
+      "kernel": "rmsnormCached",
+      "prior_body_identical_after_name_change": true,
+      "guard_is_first_runtime_expression": true,
+      "output_size": "rows * n",
+      "old_definition_sha256": "0b288c7c66952ec0e3781dd69c7be3638b96aa606e45c3b4eb8c82e571bd9faf",
+      "new_prior_definition_sha256": "03d889216cab7dee839d925b8bf8d5f831e4a33c18145fb09949b3e3ae911ef2"
+    },
+    {
+      "kernel": "layernormCached",
+      "prior_body_identical_after_name_change": true,
+      "guard_is_first_runtime_expression": true,
+      "output_size": "rows * n",
+      "old_definition_sha256": "f60e92e5a36f3fadefb452e2167e121eae548aa7e8f798a9485bb3fe1899a381",
+      "new_prior_definition_sha256": "af608cdcb607fc4aa423afc8eb0deacfcb58c3061b1e8afaac6b2df1f4226723"
+    }
+  ],
+  "unified_diff_sha256": "dc194709f65097dd620d4ec15650f43a9395ef9e78350d41e6ed73ba2084c3de",
+  "changes": "Six original cached implementations retained under renamed definitions; only output-empty wrappers and proofs added",
+  "original_gate_policy": "PASS_SEPARATE_POLICY_CHECK",
+  "lean": "NOT_RUN",
+  "native_empty_case": "NOT_RUN"
+}

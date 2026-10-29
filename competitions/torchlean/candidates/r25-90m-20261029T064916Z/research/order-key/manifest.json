@@ -1,0 +1,97 @@
+{
+  "source_created_at_utc": "2026-10-29T07:03:04.383143+00:00",
+  "round": "R25",
+  "role": "order-key",
+  "first_tool_utc": "2026-10-29T06:52:57Z",
+  "deadline_utc": "2026-10-29T08:19:16Z",
+  "status": "READY_FOR_FIRST_PINNED_TYPECHECK",
+  "proof_status": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "kernel_replay": "NOT_RUN",
+  "official_full_gate": "NOT_RUN",
+  "timing": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "local_Lean": false,
+  "local_native_build": false,
+  "CI_owner": "Droot",
+  "official_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+  "FloatLib_commit": "0d91825727839f597fd06b22fdd038ea21480f0c",
+  "Lean": "v4.34.0",
+  "tokens": "UNKNOWN",
+  "cached_input_tokens": "UNKNOWN",
+  "reasoning_not_double_counted": true,
+  "carrier": {
+    "kind": "independent proof probe, not a Kernel submission",
+    "command": "lake env lean OrderKeyContractOnly.lean",
+    "prerequisite": "Pinned official TorchLean lean project and built ContractExact import.",
+    "allowed_imports": [
+      "ContractExact"
+    ],
+    "exploratory_probe_imports": [
+      "ContractExact",
+      "FloatLib.Floats.Formats.BinaryInterchange.Model.Fields.Proof",
+      "FloatLib.Floats.Formats.IEEE754.Native.Representation",
+      "Mathlib.Tactic"
+    ],
+    "import_status": "Additional imports only retained in original exploratory probe; ContractOnly and no-import include have no broadened import permission."
+  },
+  "files": [
+    {
+      "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/research/order-key/OrderKeyCore.lean",
+      "bytes": 7504,
+      "sha256": "b709c3356e088828051197f8ca6100e8e8cf0f71e75e27ed786d5272836124b8"
+    },
+    {
+      "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/research/order-key/OrderKey.lean",
+      "bytes": 15965,
+      "sha256": "f8fe6b3d0d01e841ecb74f5f349ca45d503bebd6c16857fce19e0f00dc51603d"
+    },
+    {
+      "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/research/order-key/OrderKeyContractOnly.lean",
+      "bytes": 15814,
+      "sha256": "f4786166a8c6d7a27a8461e4461916a77a83bdf9f5d95285dbda64b44facce67"
+    },
+    {
+      "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/research/order-key/OrderKeyCoreContractOnly.lean",
+      "bytes": 7353,
+      "sha256": "738cf7df47233be1fcf2ad516676c260f3741d1e17158f5e182cff298ffc3885"
+    },
+    {
+      "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/research/order-key/OrderKey.lean.inc",
+      "bytes": 15793,
+      "sha256": "89c6a0492b36159cf593a4a2927e79f1736bc3054a089c849e2a9901c331e47e"
+    }
+  ],
+  "explicit_axiom_roots": [
+    "Submission.R25OrderKey.raw_sign",
+    "Submission.R25OrderKey.raw_exp",
+    "Submission.R25OrderKey.raw_frac",
+    "Submission.R25OrderKey.raw_fields",
+    "Submission.R25OrderKey.field_bounds",
+    "Submission.R25OrderKey.magnitude_fields",
+    "Submission.R25OrderKey.magnitude_div",
+    "Submission.R25OrderKey.magnitude_mod",
+    "Submission.R25OrderKey.finite64_iff_exp",
+    "Submission.R25OrderKey.finite64_model",
+    "Submission.R25OrderKey.orderKey_nat",
+    "Submission.R25OrderKey.orderKey_lt_cases",
+    "Submission.R25OrderKey.magnitudeReal_strictMono",
+    "Submission.R25OrderKey.magnitudeReal_pos_iff",
+    "Submission.R25OrderKey.raw_value",
+    "Submission.R25OrderKey.orderKey_lt_real",
+    "Submission.R25OrderKey.value_toBits",
+    "Submission.R25OrderKey.orderKey_toBits_lt_real",
+    "Submission.R25OrderKey.native_ofBits",
+    "Submission.R25OrderKey.value_ofBits",
+    "Submission.R25OrderKey.orderKey_native_endpoints"
+  ],
+  "allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "invariant": "The orderKey and finite64 definitions are the exact expressions from PortableF64Dot, modulo namespace.",
+  "semantic_endpoint": "finite64 x && finite64 y; magnitude x != 0 OR magnitude y != 0; actual UInt64 key x < key y implies real(raw x) < real(raw y).",
+  "included": "Raw fields, actual UInt64 XOR branch, normal/subnormal/signed-zero decode, native toBits and finite ofBits bridge.",
+  "omitted": "Producer loop, midpoint construction, radius derivation, full certify soundness, actual Kernel obligations, model timing."
+}

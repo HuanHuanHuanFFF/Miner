@@ -66,13 +66,14 @@
       "file": "competitions/torchlean/scripts/ci-r25.py",
       "lines": [88, 90, 96, 97],
       "evidence": "When a requested benchmark exits nonzero, measurement_state becomes FAILED_PARTIAL_RETAINED and the final job correctly exits 1 via all_requested_measurements_complete. However summary.complete is still computed only from results count, and the printed summary omits all_requested_measurements_complete; it can print complete=true and all_proofs=true for an incomplete overall measurement.",
-      "action": "Set complete to include all_requested_measurements_complete (and originals_unchanged); print the measurement-complete flag alongside proof status. The exit code already fails safely."
+      "action": "Set complete to include all_requested_measurements_complete (and originals_unchanged); print the measurement-complete flag alongside proof status. The exit code already fails safely.",
+      "status": "RESOLVED_IN_DISPATCHED_SOURCE",
+      "resolution": "The dispatched source commit 823aa68b6672f48703d734e0034d24accc169e01 has frozen ci-r25.py SHA-256 fa6ee7cfd202f1962b3cabc9ee8a1e325e2a8bb7bb3b537fce6c6791b704f213, matching the current file. Its complete flag includes all_requested_measurements_complete and originals_unchanged, and its printed summary includes all_measurements."
     }
   ],
   "conclusion": {
     "entry_and_cli_blockers": [],
     "remaining_before_acceptance": [
-      "Resolve the complete-flag semantics finding before using summary.complete as a completion receipt.",
       "Collect the public CI terminal result, original logs/artifacts, every raw-file hash, and each available checksum/measurement result; this review did not run CI."
     ],
     "not_claimed": ["proof gate pass", "full measurement completion", "official score", "current champion comparison"]

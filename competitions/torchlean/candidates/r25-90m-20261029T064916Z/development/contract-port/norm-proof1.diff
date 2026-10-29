@@ -1,0 +1,11 @@
+--- norm-cache/Kernel.lean
++++ norm-cache-proof1/Kernel.lean
+@@ -806,7 +806,7 @@
+   by_cases h : i < a.size
+   · simp [cacheRats, getElem!_pos, h]
+   · have hc : ¬i < (cacheRats a).size := by simpa [cacheRats] using h
+-    rw [getElem!_neg _ _ hc, getElem!_neg _ _ h]
++    rw [getElem!_neg (cacheRats a) i hc, getElem!_neg a i h]
+     exact rationalWord_zero.symm
+ 
+ def rowMeanCached (n : Nat) (x : Array ℚ) (row : Nat) : ℚ :=

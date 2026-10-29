@@ -11,10 +11,19 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[5]
 SOURCE = ROOT / "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/source-snapshot/torchlean/kernels/exact/incumbent/Kernel.lean"
 OFFICIAL_COMMIT = "accb82b6e2adeda1b41a57a260d68fb3879c427e"
+EXPECTED_SHIPPED_SHA = "9b2d940338dfcc42a38443324d63041a27cc9b5df1b18675103c7d67934d1df8"
 
 
 def sha(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def write_source_once(path: Path, data: bytes) -> None:
+    if path.exists():
+        if path.read_bytes() != data:
+            raise RuntimeError(f"Preserving existing source {path}; choose a fresh --variant")
+        return
+    path.write_bytes(data)
 
 
 def main() -> None:
@@ -27,13 +36,15 @@ def main() -> None:
     args = parser.parse_args()
     assert args.variant.replace("-", "").isalnum()
     raw = SOURCE.read_bytes()
+    assert sha(raw) == EXPECTED_SHIPPED_SHA, "Pinned shipped source changed"
     baseline = HERE / "baseline"
     baseline.mkdir(parents=True, exist_ok=True)
-    (baseline / "Kernel.lean").write_bytes(raw)
+    write_source_once(baseline / "Kernel.lean", raw)
     out = {"official_commit": OFFICIAL_COMMIT, "source": str(SOURCE.relative_to(ROOT)),
            "source_sha256": sha(raw), "source_bytes": len(raw),
            "baseline_exact_byte_copy": True, "lean": "NOT_RUN", "native": "NOT_RUN"}
-    addition = HERE / args.addition
+    addition = (HERE / args.addition).resolve()
+    assert addition.is_relative_to(HERE), "Addition must stay in this role's directory"
     if addition.exists():
         body = raw.decode("utf-8")
         marker = "/-! ## The entry -/"
@@ -56,7 +67,7 @@ def main() -> None:
         candidate = HERE / args.variant
         candidate.mkdir(parents=True, exist_ok=True)
         encoded = body.encode("utf-8")
-        (candidate / "Kernel.lean").write_bytes(encoded)
+        write_source_once(candidate / "Kernel.lean", encoded)
         out["candidate"] = {"path": str((candidate / "Kernel.lean").relative_to(ROOT)),
                             "sha256": sha(encoded), "bytes": len(encoded),
                             "preserved_families": [family for family in ["dense", "conv", "norm"] if getattr(args, "preserve_" + family)],

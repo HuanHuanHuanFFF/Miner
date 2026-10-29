@@ -1,0 +1,31 @@
+{
+  "retrieved_at_utc": "2026-10-29T07:49:21Z",
+  "repository": "leanprover/lean4",
+  "ref": "v4.34.0",
+  "path": "src/include/lean/lean.h",
+  "source_full_blob_sha": "910ecae72a7d1c149d4ccc8111ee438c8b4551dd",
+  "scope": "Pinned primary source excerpts only; not a generated candidate C/ASM or native corner test",
+  "excerpts": [
+    {
+      "lines": [
+        941,
+        1006
+      ],
+      "content": "static inline lean_obj_res lean_alloc_array(size_t size, size_t capacity) {\n    lean_array_object * o = (lean_array_object*)lean_alloc_object(lean_usize_add_checked(sizeof(lean_array_object), lean_usize_mul_checked(sizeof(void*), capacity)));\n    lean_set_st_header((lean_object*)o, LeanArray, 0);\n    o->m_size = size;\n    o->m_capacity = capacity;\n    return (lean_object*)o;\n}\nstatic inline size_t lean_array_size(b_lean_obj_arg o) { return lean_to_array(o)->m_size; }\nstatic inline size_t lean_array_capacity(b_lean_obj_arg o) { return lean_to_array(o)->m_capacity; }\nstatic inline size_t lean_array_byte_size(lean_object * o) {\n    return sizeof(lean_array_object) + sizeof(void*)*lean_array_capacity(o);\n}\nstatic inline size_t lean_array_data_byte_size(lean_object * o) {\n    return sizeof(lean_array_object) + sizeof(void*)*lean_array_size(o);\n}\nstatic inline lean_object ** lean_array_cptr(lean_object * o) { return lean_to_array(o)->m_data; }\nstatic inline void lean_array_set_size(u_lean_obj_arg o, size_t sz) {\n    assert(lean_is_array(o));\n    assert(lean_is_exclusive(o));\n    assert(sz <= lean_array_capacity(o));\n    lean_to_array(o)->m_size = sz;\n}\nstatic inline b_lean_obj_res lean_array_get_core(b_lean_obj_arg o, size_t i) {\n    assert(i < lean_array_size(o));\n    return lean_to_array(o)->m_data[i];\n}\nstatic inline void lean_array_set_core(u_lean_obj_arg o, size_t i, lean_obj_arg v) {\n    /* Remark: we use this procedure to update non shared arrays in the heap,\n       and when copying objects to compact region at compact.cpp */\n    assert(!lean_has_rc(o) || lean_is_exclusive(o));\n    assert(i < lean_array_size(o));\n    lean_to_array(o)->m_data[i] = v;\n}\nLEAN_EXPORT lean_object * lean_array_mk(lean_obj_arg l);\nLEAN_EXPORT lean_object * lean_array_to_list(lean_obj_arg a);\n\n/* Arrays of objects (high level API) */\n\nstatic inline lean_object * lean_array_sz(lean_obj_arg a) {\n    lean_object * r = lean_box(lean_array_size(a));\n    lean_dec(a);\n    return r;\n}\n\nstatic inline lean_object * lean_array_get_size(b_lean_obj_arg a) {\n    return lean_box(lean_array_size(a));\n}\n\nstatic inline lean_object * lean_mk_empty_array() {\n    return lean_alloc_array(0, 0);\n}\n\nstatic inline lean_object * lean_mk_empty_array_with_capacity(b_lean_obj_arg capacity) {\n    if (!lean_is_scalar(capacity)) lean_internal_panic_out_of_memory();\n    return lean_alloc_array(0, lean_unbox(capacity));\n}\n\nstatic inline lean_object * lean_array_uget(b_lean_obj_arg a, size_t i) {\n    lean_object * r = lean_array_get_core(a, i); lean_inc(r);\n    return r;\n}\n\nstatic inline b_lean_obj_res lean_array_uget_borrowed(b_lean_obj_arg a, size_t i) {\n    return lean_array_get_core(a, i);\n}\n"
+    },
+    {
+      "lines": [
+        399,
+        413
+      ],
+      "content": "#else\n    o->m_rc -= sub;\n#endif\n}\n\nLEAN_EXPORT void lean_set_exit_on_panic(bool flag);\n/* Enable/disable panic messages */\nLEAN_EXPORT void lean_set_panic_messages(bool flag);\n\nLEAN_EXPORT void lean_panic(char const * msg, bool force_stderr);\nLEAN_EXPORT lean_object * lean_panic_fn(lean_object * default_val, lean_object * msg);\nLEAN_EXPORT lean_object * lean_panic_fn_borrowed(b_lean_obj_arg default_val, lean_object * msg);\n\nLEAN_EXPORT LEAN_NORETURN void lean_internal_panic(char const * msg);\nLEAN_EXPORT LEAN_NORETURN void lean_internal_panic_out_of_memory(void);"
+    },
+    {
+      "lines": [
+        1007,
+        1059
+      ],
+      "content": "static inline lean_obj_res lean_array_fget(b_lean_obj_arg a, b_lean_obj_arg i) {\n    return lean_array_uget(a, lean_unbox(i));\n}\n\nstatic inline lean_obj_res lean_array_fget_borrowed(b_lean_obj_arg a, b_lean_obj_arg i) {\n    return lean_array_get_core(a, lean_unbox(i));\n}\n\nLEAN_EXPORT lean_obj_res lean_array_get_panic(lean_obj_arg def_val);\n\nstatic inline lean_object * lean_array_get(b_lean_obj_arg def_val, b_lean_obj_arg a, b_lean_obj_arg i) {\n    if (lean_is_scalar(i)) {\n        size_t idx = lean_unbox(i);\n        if (idx < lean_array_size(a)) {\n            return lean_array_uget(a, idx);\n        }\n    }\n    /* Recall that if `i` is not a scalar, then it must be out of bounds because\n       i > LEAN_MAX_SMALL_NAT == MAX_UNSIGNED >> 1\n       but each array entry is 8 bytes in 64-bit machines and 4 in 32-bit ones.\n       In both cases, we would be out-of-memory. */\n    lean_inc(def_val);\n    return lean_array_get_panic(def_val);\n}\n\nstatic inline lean_object * lean_array_get_borrowed(b_lean_obj_arg def_val, b_lean_obj_arg a, b_lean_obj_arg i) {\n    if (lean_is_scalar(i)) {\n        size_t idx = lean_unbox(i);\n        if (idx < lean_array_size(a)) {\n            return lean_array_get_core(a, idx);\n        }\n    }\n    /* Recall that if `i` is not a scalar, then it must be out of bounds because\n       i > LEAN_MAX_SMALL_NAT == MAX_UNSIGNED >> 1\n       but each array entry is 8 bytes in 64-bit machines and 4 in 32-bit ones.\n       In both cases, we would be out-of-memory. */\n    lean_inc(def_val);\n    return lean_array_get_panic(def_val);\n}\n\nLEAN_EXPORT lean_obj_res lean_copy_expand_array(lean_obj_arg a, bool expand);\n// Equivalent to `lean_copy_expand_array` but used as a gadget to spot `Array` non-linearities in\n// profiles.\nLEAN_EXPORT lean_obj_res lean_copy_expand_array_nonlinear(lean_obj_arg a, bool expand);\n\nstatic inline lean_obj_res lean_ensure_exclusive_array(lean_obj_arg a) {\n    if (lean_is_exclusive(a)) return a;\n    return lean_copy_expand_array_nonlinear(a, false);\n}\n\nstatic inline lean_object * lean_array_uset(lean_obj_arg a, size_t i, lean_obj_arg v) {\n    lean_object * r   = lean_ensure_exclusive_array(a);\n    lean_object ** it = lean_array_cptr(r) + i;"
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+--- patch-norm-cache-policy1/Kernel.lean
++++ patch-norm-cache-guarded/Kernel.lean
+@@ -879,7 +879,7 @@
+   apply congrArg (act relu)
+   apply dotCached_eq <;> intro t <;> split_ifs <;> simp only [cacheWords_get]
+ 
+-def gemmCached (batch m k n : Nat) (A B : Array Word) : Array Word :=
++def gemmPreGuard (batch m k n : Nat) (A B : Array Word) : Array Word :=
+   let da := cacheWords A
+   let db := cacheWords B
+   Array.ofFn (n := batch * (m * n)) fun q =>
+@@ -889,9 +889,9 @@
+     dotCached k (fun t => A[(β * m + i) * k + t]!) (fun t => B[(β * k + t) * n + j]!)
+       (fun t => da[(β * m + i) * k + t]!) (fun t => db[(β * k + t) * n + j]!)
+ 
+-theorem gemmCached_eq : gemmCached = gemmWith dotFn := by
++theorem gemmPreGuard_eq : gemmPreGuard = gemmWith dotFn := by
+   funext batch m k n A B
+-  unfold gemmCached gemmWith
++  unfold gemmPreGuard gemmWith
+   apply congrArg (fun f : Fin (batch * (m * n)) → Word => Array.ofFn f)
+   funext q
+   dsimp only
+@@ -934,7 +934,7 @@
+   apply congrArg (act relu)
+   apply dotCached_eq <;> intro t <;> split_ifs <;> simp only [windowCached_eq, cacheWords_get]
+ 
+-def depthwiseCached (s : ConvShape) (relu : Bool) (inp wts b : Array Word) : Array Word :=
++def depthwisePreGuard (s : ConvShape) (relu : Bool) (inp wts b : Array Word) : Array Word :=
+   let dinp := cacheWords inp
+   let dwts := cacheWords wts
+   let k := s.kh * s.kw
+@@ -948,9 +948,9 @@
+       (fun t => if t < k then windowCached s dinp y x (c * k + t) else decodeWord oneW)
+       (fun t => if t < k then dwts[c * k + t]! else decodeWord b[c]!)
+ 
+-theorem depthwiseCached_eq : depthwiseCached = depthwiseWith dotFn := by
++theorem depthwisePreGuard_eq : depthwisePreGuard = depthwiseWith dotFn := by
+   funext s relu inp wts b
+-  unfold depthwiseCached depthwiseWith
++  unfold depthwisePreGuard depthwiseWith
+   apply congrArg (fun f : Fin (s.cin * (s.ho * s.wo)) → Word => Array.ofFn f)
+   funext q
+   dsimp only
+@@ -982,13 +982,13 @@
+     split_ifs <;> simp only [cacheWords_get]
+   · intro t; rfl
+ 
+-def linearCached (rows inW outW : Nat) (relu : Bool) (X W b : Array Word) : Array Word :=
++def linearPreGuard (rows inW outW : Nat) (relu : Bool) (X W b : Array Word) : Array Word :=
+   if rows ≤ 1 then linearInputCached rows inW outW relu X W b
+   else linearBothCached rows inW outW relu X W b
+ 
+-theorem linearCached_eq : linearCached = linearWith dotFn := by
++theorem linearPreGuard_eq : linearPreGuard = linearWith dotFn := by
+   funext rows inW outW relu X W b
+-  simp only [linearCached, linearInputCached_eq, linearBothCached_eq, ite_self]
++  simp only [linearPreGuard, linearInputCached_eq, linearBothCached_eq, ite_self]
+ 
+ /-! Precompute each spatial input window once, sharing its indices across output channels.
+ The patch arrays hold references to the shared decoded input words.
+@@ -1012,7 +1012,7 @@
+ theorem patch_col (q h w : Nat) : (q % (h * w)) % w = q % w := by
+   rw [Nat.mul_comm h w, Nat.mod_mul_right_mod]
+ 
+-def conv2dCached (s : ConvShape) (relu : Bool) (inp wts b : Array Word) : Array Word :=
++def conv2dPreGuard (s : ConvShape) (relu : Bool) (inp wts b : Array Word) : Array Word :=
+   let patches := patchWords s inp
+   let dwts := cacheWords wts
+   let k := s.cin * s.kh * s.kw
+@@ -1027,9 +1027,9 @@
+       (fun t => if t < k then dp[t]! else decodeWord oneW)
+       (fun t => if t < k then dwts[o * k + t]! else decodeWord b[o]!)
+ 
+-theorem conv2dCached_eq : conv2dCached = conv2dWith dotFn := by
++theorem conv2dPreGuard_eq : conv2dPreGuard = conv2dWith dotFn := by
+   funext s relu inp wts b
+-  unfold conv2dCached conv2dWith
++  unfold conv2dPreGuard conv2dWith
+   apply congrArg (fun f : Fin (s.cout * (s.ho * s.wo)) → Word => Array.ofFn f)
+   funext q
+   have hsize : 0 < s.ho * s.wo := by
+@@ -1112,22 +1112,95 @@
+   simp only [layernormStableCached, layernormStable, rowMeanCached_eq,
+     rowVarianceCached_eq, cacheRats_get]
+ 
+-def rmsnormCached (rows n : Nat) (eps : Word) (x g : Array Word) : Array Word :=
++def rmsnormPreGuard (rows n : Nat) (eps : Word) (x g : Array Word) : Array Word :=
+   if stableNormDomain rows n eps x g then rmsnormStableCached rows n eps x g
+   else rmsnormLegacyWith dotFn rows n eps x g
+ 
+-theorem rmsnormCached_eq : rmsnormCached = rmsnormWith dotFn := by
++theorem rmsnormPreGuard_eq : rmsnormPreGuard = rmsnormWith dotFn := by
+   funext rows n eps x g
+-  simp only [rmsnormCached, rmsnormWith, rmsnormStableCached_eq]
+-
+-def layernormCached (rows n : Nat) (eps : Word) (x g b : Array Word) : Array Word :=
++  simp only [rmsnormPreGuard, rmsnormWith, rmsnormStableCached_eq]
++
++def layernormPreGuard (rows n : Nat) (eps : Word) (x g b : Array Word) : Array Word :=
+   if stableNormDomain rows n eps x g && b.size == n && b.all finiteWord then
+     layernormStableCached rows n eps x g b
+   else layernormLegacyWith dotFn rows n eps x g b
+ 
++theorem layernormPreGuard_eq : layernormPreGuard = layernormWith dotFn := by
++  funext rows n eps x g b
++  simp only [layernormPreGuard, layernormWith, layernormStableCached_eq]
++
++/-! Return empty outputs before constructing caches or input windows. -/
++
++theorem array_empty_of_size (a : Array Word) (h : a.size = 0) : a = #[] := by
++  apply Array.ext (by simpa using h)
++  intro i h1 h2
++  simp at h2
++
++def linearCached (rows inW outW : Nat) (relu : Bool) (X W b : Array Word) : Array Word :=
++  if rows * outW = 0 then #[] else linearPreGuard rows inW outW relu X W b
++
++theorem linearCached_eq : linearCached = linearWith dotFn := by
++  funext rows inW outW relu X W b
++  unfold linearCached
++  split_ifs with hz
++  · symm; apply array_empty_of_size; simp [linearWith, hz]
++  · rw [linearPreGuard_eq]
++
++def gemmCached (batch m k n : Nat) (A B : Array Word) : Array Word :=
++  if batch * (m * n) = 0 then #[] else gemmPreGuard batch m k n A B
++
++theorem gemmCached_eq : gemmCached = gemmWith dotFn := by
++  funext batch m k n A B
++  unfold gemmCached
++  split_ifs with hz
++  · symm; apply array_empty_of_size; simp [gemmWith, hz]
++  · rw [gemmPreGuard_eq]
++
++def conv2dCached (s : ConvShape) (relu : Bool) (inp wts b : Array Word) : Array Word :=
++  if s.cout * (s.ho * s.wo) = 0 then #[] else conv2dPreGuard s relu inp wts b
++
++theorem conv2dCached_eq : conv2dCached = conv2dWith dotFn := by
++  funext s relu inp wts b
++  unfold conv2dCached
++  split_ifs with hz
++  · symm; apply array_empty_of_size; simp [conv2dWith, hz]
++  · rw [conv2dPreGuard_eq]
++
++def depthwiseCached (s : ConvShape) (relu : Bool) (inp wts b : Array Word) : Array Word :=
++  if s.cin * (s.ho * s.wo) = 0 then #[] else depthwisePreGuard s relu inp wts b
++
++theorem depthwiseCached_eq : depthwiseCached = depthwiseWith dotFn := by
++  funext s relu inp wts b
++  unfold depthwiseCached
++  split_ifs with hz
++  · symm; apply array_empty_of_size; simp [depthwiseWith, hz]
++  · rw [depthwisePreGuard_eq]
++
++def rmsnormCached (rows n : Nat) (eps : Word) (x g : Array Word) : Array Word :=
++  if rows * n = 0 then #[] else rmsnormPreGuard rows n eps x g
++
++theorem rmsnormCached_eq : rmsnormCached = rmsnormWith dotFn := by
++  funext rows n eps x g
++  unfold rmsnormCached
++  split_ifs with hz
++  · symm
++    apply array_empty_of_size
++    simp only [rmsnormWith]
++    split_ifs <;> simp [rmsnormStable, rmsnormLegacyWith, hz]
++  · rw [rmsnormPreGuard_eq]
++
++def layernormCached (rows n : Nat) (eps : Word) (x g b : Array Word) : Array Word :=
++  if rows * n = 0 then #[] else layernormPreGuard rows n eps x g b
++
+ theorem layernormCached_eq : layernormCached = layernormWith dotFn := by
+   funext rows n eps x g b
+-  simp only [layernormCached, layernormWith, layernormStableCached_eq]
++  unfold layernormCached
++  split_ifs with hz
++  · symm
++    apply array_empty_of_size
++    simp only [layernormWith]
++    split_ifs <;> simp [layernormStable, layernormLegacyWith, hz]
++  · rw [layernormPreGuard_eq]
+ 
+ /-! ## The entry -/
+ 

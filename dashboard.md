@@ -1,16 +1,12 @@
-# FloatLib 冲冠看板
+# TorchLean overall 冲冠看板
 
-冠军核对：[2026-10-28 23:15 北京时间](competitions/floatlib/candidates/f01-d7-research/round40m-20261028T142626Z/official-final-20261028T151511Z/comparison.json)；冠军为 **1.00×**，耗时越低越好。
+冠军基准：[最近有效快照，10月29日04:49](competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/competition-state-check/torchlean-champions.raw) **#5 = 1.00×**。
 
-| 运算 | 现任冠军 | 当前开发 | 开发／冠军（预估） | 保留版／冠军（官方） |
-| --- | --- | --- | ---: | ---: |
-| 加法 add | #323 | [原生冷尾加法](competitions/floatlib/candidates/f01-r22-dev-nativecombo-public1/Kernel.lean) | **1.25–1.42×** | 1.35–1.53× |
-| 乘法 mul | #323 | [原生冷尾乘法](competitions/floatlib/candidates/f01-r22-dev-nativecombo-public1/Kernel.lean) | **1.46–1.58×** | 1.52–1.65× |
-| 求和 sum | #323 | [保留单遍求和](competitions/floatlib/candidates/f01-r22-dev-nativecombo-public1/Kernel.lean) | **1.03–1.61×** | 1.03–1.61× |
-| 矩阵乘法 bmm | #323 | [保留B2双列](competitions/floatlib/candidates/f01-r22-dev-nativecombo-public1/Kernel.lean)；[缓存与输出连接已验](competitions/floatlib/candidates/f01-d7-research/round40m-20261028T142626Z/development-matrix-proof-status.json) | **2.23–4.73×** | 2.23–4.73× |
+| 目标／方向 | 当前进展 | 我方／冠军耗时 |
+| --- | --- | ---: |
+| **overall：原生FP64＋精确证书** | normal位扩展6项已验；完整运行时待闭合 | 待整包比较 |
+| 共享解码／窗口／归一化缓存 | 归一化缓存已通过全12证明及两组整体测试 | 待整包比较 |
 
-整包：保留版官方 **1.63×**；当前开发预估 **1.56×**。[依据](competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-dashboard-forecast.json)
+**结论：当前尚不能取代 overall 冠军。**
 
-**结论：最后成功核对时FloatLib已关闭新提交；当前方案未取代#323，保留B2记录。**
-
-[本轮大优化研究](competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/README.md)。11:20刷新受限，以上冠军成绩沿用已核对记录。
+[本轮1.5h进展](competitions/torchlean/candidates/r25-90m-20261029T064916Z/README.md) · [FloatLib历史四运算](competitions/floatlib/DASHBOARD-R24.md)
