@@ -1,6 +1,6 @@
 """Owned native-only diagnostic target; original tools and source remain unchanged."""
 from pathlib import Path
-import datetime,hashlib,json,os,re,shlex,shutil,subprocess,sys,time,urllib.request,importlib.util
+import datetime,hashlib,json,os,re,shlex,shutil,subprocess,sys,time,urllib.request,urllib.error,importlib.util
 ROOT=Path(os.environ['GITHUB_WORKSPACE']);UP=Path(os.environ['TORCHLEAN_ROOT']);OUT=Path(os.environ['TORCHLEAN_REPORTS']);OUT.mkdir(exist_ok=True)
 PLAN=ROOT/'competitions/torchlean/candidates/r27-5h-20261029T194443Z/ci-plan.json';plan=json.loads(PLAN.read_bytes());START=time.monotonic();END=START+1800
 ENV=os.environ.copy();ENV.update(PATH=str(Path.home()/'.elan/bin')+os.pathsep+ENV.get('PATH',''),PYTHONPATH='.:validator',GATE_BUDGET_SECONDS='600',GATE_BUILD_MEMORY_MB='4096',GATE_BENCH_MEMORY_MB='512')
@@ -32,12 +32,28 @@ def main():
  g,bm,fp,cfg,ms=load_tools();assert g._SANDBOX and g._BUILD_MEMORY_MB==4096 and g._BENCH_MEMORY_MB==512
  for entry in plan.get('helpers',[]):
   source=ROOT/entry['path'];assert sha(source)==entry['sha256'];g.wipe(g.LAYER);(g.LAYER/'upper').mkdir(parents=True);(g.LAYER/'work').mkdir();target=g.LIB/'work'/('R27Helper_'+entry['name']+'.lean');diagnostic=source.read_bytes()+b'\n'+('\n'.join('#print axioms '+x for x in entry.get('helper_roots',[]))+'\n').encode();target.write_bytes(diagnostic);g._budget.reset(entry.get('seconds',120));code,log=g.own([g.LAKE,'env','lean','work/'+target.name],entry.get('seconds',120),build='write');(OUT/(entry['name']+'-helper.log')).write_text(log);record.setdefault('helper_diagnostics',[]).append({'name':entry['name'],'source_sha256':entry['sha256'],'exit_code':code,'scope':'Standalone helper elaboration only; not original all12 gate or replay'});save();g.wipe(g.LAYER)
+ failed_fetches={}
+ def public_source(pin):
+  folder=UP/'r27-source-private';folder.mkdir(exist_ok=True);original=folder/('official-'+str(pin['submission'])+'.lean')
+  if original.exists():
+   assert sha(original)==pin['sha256'];return original
+  if pin['submission'] in failed_fetches:raise RuntimeError('Priorpublicsourcefetchfailed:'+str(pin['submission']))
+  began=datetime.datetime.now(datetime.timezone.utc).isoformat()
+  try:
+   request=urllib.request.Request(pin['url'],headers={'Accept':'text/plain','User-Agent':'TorchLean-research-readonly/1.0'})
+   with urllib.request.urlopen(request,timeout=45) as response:data=response.read();status=response.status
+   assert hashlib.sha256(data).hexdigest()==pin['sha256'],'Officialreleasedsourcehashmismatch'
+   original.write_bytes(data);receipt={'submission':pin['submission'],'url':pin['url'],'at_utc':began,'status':status,'sha256':pin['sha256'],'bytes':len(data),'client':'Stabletransparentprojectclient; no auth/proxy/alternateendpoint'}
+  except Exception as error:
+   failed_fetches[pin['submission']]=str(error);receipt={'submission':pin['submission'],'url':pin['url'],'at_utc':began,'error_type':type(error).__name__,'error':str(error),'retry':False}
+   if isinstance(error,urllib.error.HTTPError):
+    data=error.read();raw=OUT/('source-fetch-'+str(pin['submission'])+'-failure.raw');raw.write_bytes(data);receipt.update(status=error.code,body_sha256=hashlib.sha256(data).hexdigest(),bytes=len(data))
+   (OUT/('source-fetch-'+str(pin['submission'])+'.json')).write_text(json.dumps(receipt,indent=2)+'\n');raise
+  (OUT/('source-fetch-'+str(pin['submission'])+'.json')).write_text(json.dumps(receipt,indent=2)+'\n');return original
  def materialize(entry):
   if 'fetch' not in entry:return ROOT/entry['path']
-  pin=entry['fetch'];folder=UP/'r27-source-private';folder.mkdir(exist_ok=True);original=folder/('official-'+str(pin['submission'])+'.lean')
-  if not original.exists():
-   with urllib.request.urlopen(urllib.request.Request(pin['url'],headers={'User-Agent':'TorchLean-research-readonly/1.0'}),timeout=45) as response:original.write_bytes(response.read())
-  assert sha(original)==pin['sha256'],'Official released source hash mismatch'
+  pin=entry['fetch'];original=public_source(pin);folder=original.parent
+  for extra in entry.get('extra_fetches',[]):public_source(extra)
   raw=original.read_bytes()
   if entry.get('variant'):
    patch=ROOT/entry['patch_script'];assert sha(patch)==entry['patch_script_sha256'];spec=importlib.util.spec_from_file_location('r27_owned_patch',patch);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);raw=module.transform(raw,pin['submission'],entry['variant'])
@@ -80,7 +96,7 @@ def main():
    c=visible(g.BUILD/'ir'/(stem+'.c'));assert c.is_file();obj=visible(g.BUILD/'ir'/(stem+'.c.o.export'));generated[stem]={'c_sha256':sha(c),'c_bytes':c.stat().st_size,'object_sha256':sha(obj)}
   (folder/'generated-code-hashes.json').write_text(json.dumps(generated,indent=2)+'\n')
   binary=g.LIB/'work/r27-binaries'/name;binary.parent.mkdir(exist_ok=True);shutil.copy2(visible(g.BUILD/'bin/r27Native'),binary);assert binary.stat().st_size<512*2**20
-  info={'name':name,'source_sha256':entry['sha256'],'source_path':entry['path'],'proof_state':'FULL_ORIGINAL_GATE_REPLAYED' if entry.get('full_gate') else 'DECLARED_CORRECT_TYPECHECKED_NO_FULL_ORIGINAL_REPLAY' if entry.get('fetch') else 'NOT_PROVED_NATIVE_ONLY','binary_sha256':sha(binary),'foreign':foreign,'flags_pass':True,'measurements':[],'measurement_state':'NOT_RUN'};record['results'].append(info);save()
+  info={'name':name,'source_sha256':entry['sha256'],'source_path':entry['path'],'proof_state':'FULL_ORIGINAL_GATE_REPLAYED' if entry.get('full_gate') else 'DECLARED_CORRECT_TYPECHECKED_NO_FULL_ORIGINAL_REPLAY' if entry.get('fetch') and entry.get('declares_correct',True) else 'NOT_PROVED_NATIVE_ONLY','binary_sha256':sha(binary),'foreign':foreign,'flags_pass':True,'measurements':[],'measurement_state':'NOT_RUN'};record['results'].append(info);save()
   if plan.get('profile_control') and entry.get('reference'):
    try:
     profile_script=ROOT/plan['profile_adapter'];assert sha(profile_script)==plan['profile_adapter_sha256'];spec=importlib.util.spec_from_file_location('r27_owned_entry_profile',profile_script);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);profile=module.run_profile(g,bm,visible,config,binary,entry['sha256'],OUT/'cost-profile',END);record['cost_profile']=profile

@@ -1,6 +1,6 @@
 {
   "round": "R27",
-  "batch": 3,
+  "batch": 4,
   "scope": "MIXED_PER_CANDIDATE_ORIGINAL_GATE_AND_NATIVE_EXPLORATION",
   "board": "normalized_mlp",
   "official_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
@@ -34,63 +34,67 @@
         "sha256": "e2c1f1f1ba52e32563fb193ceea7e2a271b989fd3ba2eb16cff747987879b521"
       },
       "variant": "native-layer-stats-v1-hb",
-      "patch_script": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch3/variants.py",
-      "patch_script_sha256": "1715a07f38e44e7f07896a823047cda236ef5e5ca19a80069b5253f5b57a35a5",
+      "patch_script": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-norm/adapter.py",
+      "patch_script_sha256": "6ff1c338889ed80aa275975ac61932644c5c93d4bab875a0d329fb62382cc769",
       "sha256": "1bd6e15375a83e59ca1ec276fac0b2898cadd07abf560ef7140e1f6bf4463e8b",
       "bytes": 255969,
       "full_gate": false,
-      "proof_state": "ACTUAL_ORIGINAL12_CORRECT_WITH_EXACT_REFINEMENT_UNCOMPILED"
+      "proof_state": "ACTUAL_ORIGINAL12_CORRECT_WITH_EXACT_REFINEMENT_UNCOMPILED",
+      "extra_fetches": [
+        {
+          "submission": 27,
+          "url": "https://conjectures.io/v1/competitions/torchlean/submissions/27/source",
+          "sha256": "f92ee2c9a29de78dc434ad158b7141c0e4b5a67a5a198a353d59a4703481aa67"
+        }
+      ]
     },
     {
-      "name": "public12-guard26-v2",
-      "path": "owned-public12-guard26-v2/Kernel.lean",
+      "name": "public12-norm-prep-proof3",
+      "path": "owned-public12-norm-prep-proof3/Kernel.lean",
       "fetch": {
         "submission": 12,
         "url": "https://conjectures.io/v1/competitions/torchlean/submissions/12/source",
         "sha256": "e2c1f1f1ba52e32563fb193ceea7e2a271b989fd3ba2eb16cff747987879b521"
       },
-      "variant": "guard26-v2",
-      "patch_script": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch3/variants.py",
-      "patch_script_sha256": "1715a07f38e44e7f07896a823047cda236ef5e5ca19a80069b5253f5b57a35a5",
-      "sha256": "dced7848655a50a136750c1837b46f084a25ec26d13df72fe907d4a162bf1cb9",
-      "bytes": 218583,
-      "full_gate": true,
-      "proof_state": "ACTUAL_ORIGINAL12_CORRECT_WITH_EXACT_REFINEMENT_UNCOMPILED"
-    },
-    {
-      "name": "public12-norm-prep-proof2",
-      "path": "owned-public12-norm-prep-proof2/Kernel.lean",
-      "fetch": {
-        "submission": 12,
-        "url": "https://conjectures.io/v1/competitions/torchlean/submissions/12/source",
-        "sha256": "e2c1f1f1ba52e32563fb193ceea7e2a271b989fd3ba2eb16cff747987879b521"
-      },
-      "variant": "norm-prep-proof2",
-      "patch_script": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch3/variants.py",
-      "patch_script_sha256": "1715a07f38e44e7f07896a823047cda236ef5e5ca19a80069b5253f5b57a35a5",
-      "sha256": "40b17282cebbd1d97256f4a945edb041de5e5a00023369e235c11d8e048a3a8e",
-      "bytes": 222258,
-      "full_gate": false,
-      "proof_state": "ACTUAL_ORIGINAL12_CORRECT_WITH_EXACT_REFINEMENT_UNCOMPILED"
+      "variant": "norm-prep-proof3",
+      "patch_script": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-norm/adapter.py",
+      "patch_script_sha256": "6ff1c338889ed80aa275975ac61932644c5c93d4bab875a0d329fb62382cc769",
+      "sha256": "39f377f9dad7fa358d08ea2035327527b32caa7d5f97b08244d59ffdc6e2160a",
+      "bytes": 222247,
+      "proof_state": "ACTUAL12_ONE_TACTIC_REPAIR_NOT_COMPILED",
+      "full_gate": false
     }
   ],
   "helpers": [
     {
-      "name": "prepare_core_v2",
-      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch3/helpers/PrepareCoreContractOnly.lean",
-      "sha256": "b8251fbbfcec6c9caefb0e6fe41720348d05d70cc4b3e916a12181366fb3279f",
+      "name": "reciprocal_u64_v3",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-norm/helpers/ReciprocalUInt64ContractOnly-v3.lean",
+      "sha256": "032dd2d40779f88b49cc28a23d5dc2bf4f1b9f371b0b7c071f5b36fe482ae97f",
+      "seconds": 120,
+      "helper_roots": [
+        "R27ReciprocalProof.reciprocal_estimate_bounds",
+        "R27ReciprocalProof.reciprocal_divrem",
+        "R27Reciprocal.mulHigh_toNat",
+        "R27Reciprocal.divRem_correct"
+      ]
+    },
+    {
+      "name": "prepare_getters_v2",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-norm/helpers/PrepareAgreementContractOnly.lean",
+      "sha256": "ab8b70b9db08c74a806e73b0fa0cf1b7bd94b34eb235aed5b4caeba7eb4ede72",
       "seconds": 120,
       "helper_roots": [
         "Submission.R25PrepareAgreement.body_yields",
         "Submission.R25PrepareAgreement.prepare_overflow",
         "Submission.R25PrepareAgreement.prepare_eq_forIn",
-        "Submission.R25PrepareAgreement.prepare_eq_fold"
+        "Submission.R25PrepareAgreement.prepare_eq_fold",
+        "Submission.R25PrepareAgreement.prepare_getter_interface"
       ]
     },
     {
-      "name": "word_modular64_v2",
-      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch3/helpers/WordBlockModular64-v2.lean",
-      "sha256": "40bd2cd7fdc74f67f6e7a73a688c609fdde00096561394019ae8fc5186e76b1b",
+      "name": "word_modular64_v3",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-norm/helpers/WordBlockModular64-v3.lean",
+      "sha256": "c21efe437d955f7356671ef35c2a642634baa2f7a63e7b20d31fdfdf1102ba83",
       "seconds": 120,
       "helper_roots": [
         "Submission.R26WordBlock.mul_represents64",
@@ -102,12 +106,11 @@
   ],
   "proof_diagnostics": [],
   "owned_sources": [
-    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch3/adapter.py",
-    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch3/graft_native_stats_v1.py",
-    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch3/patch_norm_guard_v2.py",
-    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch3/repair_norm_prep_v2.py",
-    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch3/variants.py",
-    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/profile_control.py",
+    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-norm/adapter.py",
+    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-norm/graft_native_stats_v1.py",
+    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-norm/repair_norm_prep_v2.py",
+    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch4-norm/repair_norm_prep_v3.py",
+    "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/profile_control_v2.py",
     "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch2/adapter.py",
     "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch2/MinIndexLoop.lean.inc",
     "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/batch2/patch_norm_guard.py",
@@ -126,8 +129,8 @@
   "output_policy": "Do not upload full unknown-license released Kernel or generated C/ASM; publish own patch, exact source/output hashes, flags, raw times, proof/helper failures.",
   "allow_private": false,
   "human_performance_target": "Only current normalized_mlp champion23; source12 is a calibration carrier",
-  "priority_reason": "Native128 variance/sqrt from proved public27 composed with public12 stronger dense/RMS; full model discriminator before reciprocal proof expansion.",
+  "priority_reason": "Actualnative128graft was notcompiled dueinconsistent urllibUA; use same transparentpublicdriverclient for allpublicfetches. Prep3 fixesone exactfailedtactic. No duplicatefullgate on proven guard26.",
   "profile_control": true,
-  "profile_adapter": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/profile_control.py",
-  "profile_adapter_sha256": "03035270a3291d6b7bcba31e9d4611d23364937033c0e26c9528b84048e3cc8f"
+  "profile_adapter": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/profile_control_v2.py",
+  "profile_adapter_sha256": "920aa99570681f9cfe1f87c9ae3d284cbed453471367573bc9d8859f700a5e08"
 }
