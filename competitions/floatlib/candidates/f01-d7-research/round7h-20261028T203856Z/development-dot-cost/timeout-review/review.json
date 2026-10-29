@@ -1,0 +1,45 @@
+{
+  "status": "READY",
+  "scope": "Independent bounded review of r24_statement_replay_timeout and its use immediately before p.wait",
+  "verdict": "No bug found in the reviewed guard. It allows only the exact f01-r24 candidate, matching Kernel SHA, diagnostic_only=true, statement-only, timeout=600, and compile_only=true; it returns 590.",
+  "limits": {
+    "stage_seconds": 580,
+    "monitor_wait_seconds": 590,
+    "reviewed_outer_seconds": 600,
+    "prior_stage_wait_seconds": 580,
+    "public_suite_wait_seconds": 2400,
+    "full_gate_or_adoption_extension": false
+  },
+  "verification": {
+    "direct_positive": "PASS: actual candidate manifest and Kernel returned 590",
+    "mocked_call_site": "PASS: actual main path supplied 590 to p.wait; child process was mocked and not started",
+    "negative_controls": [
+      "wrong Kernel SHA",
+      "manifest timeout 180",
+      "fullgate mode",
+      "diagnostic_only=false",
+      "wrong candidate id",
+      "missing manifest",
+      "compile_only=false",
+      "non-R24 name"
+    ],
+    "negative_controls_passed": 8,
+    "legacy_timeout_preserved": "PASS: f01-r22 diagnostic still supplied 580",
+    "public_suite_timeout_preserved": "PASS: public suite path still supplied 2400",
+    "import_side_effect": "PASS: importing module under non-main name did not invoke subprocess.Popen",
+    "stage_budget": "PASS: manifest and audit helper retain an absolute 580-second stage cap"
+  },
+  "hashes_sha256": {
+    "ci-diagnostics.py": "855f2ca1e8588d6f48e2b611552514c310975028ef42d6af96fedd43fc364cfb",
+    "Kernel.lean": "5bf2a8893b01a5ed44393e80065fbd91e9b3686133e9ddd5d4dfb633379d4d2a",
+    "manifest.json": "f604bad1374ef6879cda95ccbd7225f2cc02d52ed59af58ac866209a247013a6",
+    "audit-stage.py": "c5851f6ff3bad39d8a81f436fc961c45bd3964f7c83ee01aa455df1325f83df9",
+    "repro_timeout_guard.py": "59d75b02ac6eaf8d8d1d17c8486111ad392a3cde01f52356f9ea35e319bd3cb5",
+    "test-results.json": "8213d615ad28fcf4a6453702113f5ddfb5ffb8d0101612fa29aa7a2c205149d5"
+  },
+  "boundaries": [
+    "No Lean/native build, full gate, CI, or runtime benchmark was run by this review.",
+    "This READY applies to the timeout guard only; it is not a proof, performance, adoption, or submission result.",
+    "Only files in this timeout-review directory were written."
+  ]
+}
