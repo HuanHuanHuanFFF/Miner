@@ -42,27 +42,7 @@ def main():
  inputs=UP/'r25-inputs';inputs.mkdir(exist_ok=False)
  reference=UP/'kernels/exact/incumbent/Kernel.lean';assert sha(reference.read_bytes())==plan['shipped_sha256']
  ready=[]
- for entry in plan['candidates']:
-  source=ROOT/entry['path'];assert sha(source.read_bytes())==entry['sha256'];target=inputs/entry['name'];target.mkdir();(target/'Kernel.lean').write_bytes(source.read_bytes())
-  result={'name':entry['name'],'sha256':entry['sha256'],'source_path':entry['path'],'proof_state':'NOT_RUN','measurement_state':'NOT_RUN'};summary['results'].append(result);save()
-  verdict=OUT/(entry['name']+'-verdict.json');code=run([py,'-m','verification',target,'--verdict',verdict],entry['name']+'-proof',650)
-  result['proof_exit_code']=code
-  if verdict.exists():result['verdict']=json.loads(verdict.read_bytes())
-  ok=code==0 and result.get('verdict',{}).get('passed') is True and result['verdict'].get('verifier_fingerprint')==result['verdict'].get('verifier_fingerprint_end')
-  result['proof_state']='FULL_ORIGINAL_PROOF_GATE_PASS' if ok else 'REJECTED_OR_INFRASTRUCTURE';save()
-  assert protected()==before,'Protectedsourcechanged'
-  if entry.get('baseline') and not ok:raise RuntimeError('Unchangedbaselinefailed')
-  if ok and entry.get('measure'):ready.append((entry,target,result))
-  if ok and entry.get('helper_roots'):
-   extra=source.read_text()+ '\n'+ '\n'.join('#print axioms '+n for n in entry['helper_roots'])+'\n'
-   audit=UP/'lean/work/R25HelperAudit.lean';audit.write_text(extra)
-   code=run([str(Path.home()/'.elan/bin/lake'),'env','lean',audit],'helper-'+entry['name'],180,cwd=UP/'lean')
-   text=(OUT/('helper-'+entry['name']+'.log')).read_text(errors='replace')
-   import re
-   roots=re.findall(r'(?:depends on axioms: \[([^\]]*)\]|does not depend on any axioms)',text.replace('\n',' '))
-   result['helper_audit']={'exit_code':code,'expected':len(entry['helper_roots']),'printed':len(roots),'allowed_only':all(set(x.strip() for x in row.split(',') if x.strip())<={'propext','Classical.choice','Quot.sound'} for row in roots)}
-   result['helper_audit']['pass']=code==0 and len(roots)==len(entry['helper_roots']) and result['helper_audit']['allowed_only'];save()
- for entry,target,result in ready:
+ def measure_one(entry,target,result):
   results=[]
   for seed in plan['seeds']:
    request=OUT/(entry['name']+'-'+str(seed)+'-request.json');output=OUT/(entry['name']+'-'+str(seed)+'-measurement.json')
@@ -86,6 +66,26 @@ Path(sys.argv[5]).write_text(json.dumps(r,indent=2)+'\\n')
    results.append({'seed':seed,'process_exit_code':code,'result_file':output.name,'has_result':isinstance(data.get('result'),dict),'error':data.get('error')});result['measurements']=results;save()
    if code!=0 or not isinstance(data.get('result'),dict):break
   result['measurement_state']='COMPLETE_ORIGINAL_QUICK_OVERALL' if len(results)==len(plan['seeds']) and all(x['has_result'] and x['process_exit_code']==0 for x in results) else 'FAILED_PARTIAL_RETAINED';save()
+ for entry in plan['candidates']:
+  source=ROOT/entry['path'];assert sha(source.read_bytes())==entry['sha256'];target=inputs/entry['name'];target.mkdir();(target/'Kernel.lean').write_bytes(source.read_bytes())
+  result={'name':entry['name'],'sha256':entry['sha256'],'source_path':entry['path'],'proof_state':'NOT_RUN','measurement_state':'NOT_RUN'};summary['results'].append(result);save()
+  verdict=OUT/(entry['name']+'-verdict.json');code=run([py,'-m','verification',target,'--verdict',verdict],entry['name']+'-proof',650)
+  result['proof_exit_code']=code
+  if verdict.exists():result['verdict']=json.loads(verdict.read_bytes())
+  ok=code==0 and result.get('verdict',{}).get('passed') is True and result['verdict'].get('verifier_fingerprint')==result['verdict'].get('verifier_fingerprint_end')
+  result['proof_state']='FULL_ORIGINAL_PROOF_GATE_PASS' if ok else 'REJECTED_OR_INFRASTRUCTURE';save()
+  assert protected()==before,'Protectedsourcechanged'
+  if entry.get('baseline') and not ok:raise RuntimeError('Unchangedbaselinefailed')
+  if ok and entry.get('measure'):measure_one(entry,target,result)
+  if ok and entry.get('helper_roots'):
+   extra=source.read_text()+ '\n'+ '\n'.join('#print axioms '+n for n in entry['helper_roots'])+'\n'
+   audit=UP/'lean/work/R25HelperAudit.lean';audit.write_text(extra)
+   code=run([str(Path.home()/'.elan/bin/lake'),'env','lean',audit],'helper-'+entry['name'],180,cwd=UP/'lean')
+   text=(OUT/('helper-'+entry['name']+'.log')).read_text(errors='replace')
+   import re
+   roots=re.findall(r'(?:depends on axioms: \[([^\]]*)\]|does not depend on any axioms)',text.replace('\n',' '))
+   result['helper_audit']={'exit_code':code,'expected':len(entry['helper_roots']),'printed':len(roots),'allowed_only':all(set(x.strip() for x in row.split(',') if x.strip())<={'propext','Classical.choice','Quot.sound'} for row in roots)}
+   result['helper_audit']['pass']=code==0 and len(roots)==len(entry['helper_roots']) and result['helper_audit']['allowed_only'];save()
  summary['protected_after']=protected();assert summary['protected_after']==before
  summary['all_requested_measurements_complete']=all(not entry.get('measure') or any(x['name']==entry['name'] and x['measurement_state']=='COMPLETE_ORIGINAL_QUICK_OVERALL' for x in summary['results']) for entry in plan['candidates']);summary['originals_unchanged']=True;summary['complete']=len(summary['results'])==len(plan['candidates']) and summary['all_requested_measurements_complete'] and summary['originals_unchanged'];summary['all_requested_proofs_pass']=all(x['proof_state']=='FULL_ORIGINAL_PROOF_GATE_PASS' and x.get('helper_audit',{'pass':True})['pass'] for x in summary['results']);save()
 try:main()

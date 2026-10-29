@@ -196,8 +196,21 @@ jobs:
             floatlib-${{ runner.os }}-978cc5b445edb9943fd9953b0a9037d97a9f33a8
       - name: Original twelve-kernel proof and overall paired experiment
         run: python3 competitions/torchlean/scripts/ci-r25.py
+      - name: Check original setup completion
+        if: always()
+        id: setupready
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import os,json
+          p=Path(os.environ['RUNNER_TEMP'])/'torchlean-reports/summary.json'
+          d=json.loads(p.read_text()) if p.is_file() else {}
+          ok=all(any(c['label']==n and c['exit_code']==0 for c in d.get('commands',[])) for n in ['setup','setup-check'])
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('ready='+str(ok).lower()+'\n')
+          PY
       - name: Save successfully prepared pinned dependencies
-        if: success() && steps.tlcache.outputs.cache-hit != 'true'
+        if: always() && steps.setupready.outputs.ready == 'true' && steps.tlcache.outputs.cache-hit != 'true'
         uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684
         with:
           path: |
