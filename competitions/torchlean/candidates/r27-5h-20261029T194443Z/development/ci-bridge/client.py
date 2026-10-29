@@ -12,7 +12,7 @@ def main():
   assert json.loads(gh(['api','repos/'+REPO]))['private'] is False
   assert json.loads(gh(['api','repos/'+REPO+'/commits/'+branch]))['sha']==sha
   plan=json.loads((ROUND/'ci-plan.json').read_bytes());assert datetime.datetime.now(datetime.timezone.utc)<datetime.datetime.fromisoformat(plan['dispatch_not_after_utc'])
-  paths=['.github/workflows/deflate-baseline.yml','competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/runner.py','competitions/torchlean/scripts/ci-prepare.sh',(ROUND/'ci-plan.json').relative_to(ROOT).as_posix()]+[x['path'] for x in plan.get('helpers',[])]+plan.get('owned_sources',[]);hashes={}
+  paths=['.github/workflows/deflate-baseline.yml','competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/runner.py',plan.get('prepare_script','competitions/torchlean/scripts/ci-prepare.sh'),(ROUND/'ci-plan.json').relative_to(ROOT).as_posix()]+[x['path'] for x in plan.get('helpers',[])]+plan.get('owned_sources',[]);hashes={}
   for p in paths:
    blob=subprocess.check_output(['git','show',sha+':'+p],cwd=ROOT);assert blob==(ROOT/p).read_bytes(),p;hashes[p]=hashlib.sha256(blob).hexdigest()
   listing=['run','list','--repo',REPO,'--workflow','deflate-baseline.yml','--branch',branch,'--limit','25','--json','databaseId,headSha,status,createdAt,url'];prior=json.loads(gh(listing));assert not any(x['status']!='completed' for x in prior),'ExistingDbranchCIstillactive';seen={x['databaseId'] for x in prior}

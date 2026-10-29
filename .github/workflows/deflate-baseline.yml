@@ -297,7 +297,7 @@ jobs:
           persist-credentials: false
           sparse-checkout: competitions/torchlean
       - name: Prepare immutable TorchLean source and capped public runner
-        run: bash competitions/torchlean/scripts/ci-prepare.sh
+        run: bash competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/prepare-current.sh
       - name: Restore pinned dependency cache
         id: tlcache
         uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684
@@ -305,8 +305,9 @@ jobs:
           path: |
             ~/.elan
             ${{ runner.temp }}/floatlib-upstream/lean/.lake
-          key: torchlean-${{ runner.os }}-accb82b6e2adeda1b41a57a260d68fb3879c427e
+          key: torchlean-${{ runner.os }}-27fb1d19c712ead50ad34b4ad0d4ba597161e616
           restore-keys: |
+            torchlean-${{ runner.os }}-accb82b6e2adeda1b41a57a260d68fb3879c427e
             floatlib-${{ runner.os }}-978cc5b445edb9943fd9953b0a9037d97a9f33a8
       - name: Champion-calibrated board model and exact proof diagnostics
         run: python3 competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/ci-bridge/runner.py
@@ -330,7 +331,7 @@ jobs:
           path: |
             ~/.elan
             ${{ runner.temp }}/floatlib-upstream/lean/.lake
-          key: torchlean-${{ runner.os }}-accb82b6e2adeda1b41a57a260d68fb3879c427e
+          key: torchlean-${{ runner.os }}-27fb1d19c712ead50ad34b4ad0d4ba597161e616
       - name: Preserve original proof and measurement records
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

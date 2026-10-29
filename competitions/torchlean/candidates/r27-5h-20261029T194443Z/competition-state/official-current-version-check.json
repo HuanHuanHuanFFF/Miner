@@ -1,0 +1,48 @@
+{
+  "at_utc": "2026-10-29T21:57:30.007006+00:00",
+  "old_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+  "new_commit": "27fb1d19c712ead50ad34b4ad0d4ba597161e616",
+  "compare_status": "ahead",
+  "commits": [
+    {
+      "sha": "18fb5adc65d28a42ea338f8e27b756038ffa689f",
+      "date": "2026-10-28T19:58:17Z",
+      "message": "Blame a shared benchmark deadline on the side that used it\n\nPaired rounds share one measurement deadline between the candidate and\nthe reference, and a run that hit it was blamed on whichever side was\nrunning. A slow candidate's overrun therefore landed on the reference\nabout half the time; a reference failure is retried as infrastructure\nwithout limit and pauses the board while it waits.\n\nIn production on 2026-10-28 one slow entry kept the overall board paused\nfor over an hour, blocking every later entry's overall evaluation, until\nan operator marked the job as the candidate's failure.\n\nThe rounds now charge each run to its side, and running out of the\nshared deadline is blamed on the side that has used more of it. The\nper-run cap and the reference-only calibration keep their attribution.\nThis changes the benchmark identity.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+    },
+    {
+      "sha": "4aff677c0b80b11a9a7b923478c6f47474c91cf7",
+      "date": "2026-10-29T14:55:19Z",
+      "message": "Compare the sides' time per run, not their totals, when a shared deadline runs out\n\nWhen the shared benchmark deadline strikes, one side may have finished one run more than the\nother. Comparing total time then counts that run against it: a reference at 2s a run with three\nruns done (6s) outweighed a candidate at 2.4s a run with two done and a third stopped (5.5s),\nand the timeout was blamed on the faster side.\n\nEach finished run is now kept with its side, and the side with the higher mean run time is at\nfault. The stopped run only bounds its own side's from below. A tie, or no evidence, still stays\nwith the side that was running.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+    },
+    {
+      "sha": "5f7b8395bdb2115373de5a7a30d89d4ee6884546",
+      "date": "2026-10-29T14:56:53Z",
+      "message": "Keep a comment within the line limit\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+    },
+    {
+      "sha": "27fb1d19c712ead50ad34b4ad0d4ba597161e616",
+      "date": "2026-10-29T15:24:10Z",
+      "message": "Merge pull request #26 from conjectures-io/fix/benchmark-deadline-blame\n\nBlame a shared benchmark deadline on the side that used it"
+    }
+  ],
+  "files": [
+    {
+      "filename": "tests/test_benchmark_budgets.py",
+      "status": "modified",
+      "sha": "bd3890a4b5ad00beb421d537dc714c046f152b4f",
+      "additions": 47,
+      "deletions": 0,
+      "changes": 47
+    },
+    {
+      "filename": "validator/benchmark.py",
+      "status": "modified",
+      "sha": "9c485a158d066221801709eec62358d500698d9a",
+      "additions": 46,
+      "deletions": 5,
+      "changes": 51
+    }
+  ],
+  "raw_sha256": "aa8c121b4c9b63c3a6b172ecfab12436d83692d613a44ed8e552ba1532357837",
+  "raw_path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/competition-state/source-private/official-compare-current.json"
+}

@@ -32,6 +32,9 @@ def main():
  g,bm,fp,cfg,ms=load_tools();assert g._SANDBOX and g._BUILD_MEMORY_MB==4096 and g._BENCH_MEMORY_MB==512
  for entry in plan.get('helpers',[]):
   source=ROOT/entry['path'];assert sha(source)==entry['sha256'];g.wipe(g.LAYER);(g.LAYER/'upper').mkdir(parents=True);(g.LAYER/'work').mkdir();target=g.LIB/'work'/('R27Helper_'+entry['name']+'.lean');diagnostic=source.read_bytes()+b'\n'+('\n'.join('#print axioms '+x for x in entry.get('helper_roots',[]))+'\n').encode();target.write_bytes(diagnostic);g._budget.reset(entry.get('seconds',120));code,log=g.own([g.LAKE,'env','lean','work/'+target.name],entry.get('seconds',120),build='write');(OUT/(entry['name']+'-helper.log')).write_text(log);record.setdefault('helper_diagnostics',[]).append({'name':entry['name'],'source_sha256':entry['sha256'],'exit_code':code,'scope':'Standalone helper elaboration only; not original all12 gate or replay'});save();g.wipe(g.LAYER)
+ record['proof_identity']=fp.proof();record['benchmark_identity']=fp.benchmark();save()
+ if plan.get('mode')=='helpers-only':
+  assert protected()==before;record['protected_after']=protected();record['originals_unchanged']=True;record['diagnostics_complete']=len(record.get('helper_diagnostics',[]))==len(plan.get('helpers',[]));record['all_helpers_compile_passed']=all(x['exit_code']==0 for x in record.get('helper_diagnostics',[]));record['complete']=record['diagnostics_complete'];save();return
  failed_fetches={}
  def public_source(pin):
   folder=UP/'r27-source-private';folder.mkdir(exist_ok=True);original=folder/('official-'+str(pin['submission'])+'.lean')
@@ -111,7 +114,7 @@ def main():
    for seed in plan['seeds']:
     timing=config.timing|config.plan(plan['board'])['timing']|config.environments['local']['timing'];timing.update(build_seconds=300,cached_build_seconds=180,benchmark_seconds=300,run_seconds=120)
     request={'environment':'local','identity':bm.machine_identity(),'seed':seed,'candidate_hash':entry['sha256'],'reference_hash':refentry['sha256'],'cells':list(config.plan(plan['board'])['cells']),'timing':timing,'benchmark_identity':fp.benchmark(),'workloads':ms.workloads(seed)};cfg.MeasurementRequest.parse(request);request_path=OUT/(entry['name']+'-'+str(seed)+'-request.json');request_path.write_text(json.dumps(request,indent=2)+'\n')
-    clock=bm.Deadline('benchmark',min(300,max(1,END-time.monotonic()-20)));initial=bm.run_binary(refbin,request,{},3,'reference',clock);reps=ms.calibrated_counts(initial,timing['cell_ms']);checked=bm.run_binary(refbin,request,reps,3,'reference',clock);reps=ms.calibrated_counts(checked,timing['cell_ms'],reps);rounds=[]
+    clock=bm.Deadline('benchmark',min(300,max(1,END-time.monotonic()-20)));initial=bm.run_binary(refbin,request,{},3,'reference',clock);reps=ms.calibrated_counts(initial,timing['cell_ms']);checked=bm.run_binary(refbin,request,reps,3,'reference',clock);reps=ms.calibrated_counts(checked,timing['cell_ms'],reps);clock.share();rounds=[]
     for i in range(timing['rounds']):
      sides=[('reference',refbin),('candidate',binary)];sides.reverse() if i%2 else None;observed={}
      for side,exe in sides:
