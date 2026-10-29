@@ -58,6 +58,13 @@ def main():
  def norm(args):return [re.sub(r'(?<=/)(?:MainExact|R27NativeMain)(?=\.)','<MAIN>',re.sub(r'(?<=/)(?:benchExact|r27Native)(?=\.|$)','<BIN>',x)) for x in args]
  def build(entry):
   name=entry['name'];source=materialize(entry);assert sha(source)==entry['sha256'];folder=OUT/name;folder.mkdir()
+  if entry.get('full_gate'):
+   gate_dir=UP/'r27-full-gates'/name;gate_dir.mkdir(parents=True);(gate_dir/'Kernel.lean').write_bytes(source.read_bytes());verdict_file=folder/'full-gate-verdict.json'
+   gate_code=run([py,'-m','verification',gate_dir,'--verdict',verdict_file],name+'-full-gate',650)
+   verdict=json.loads(verdict_file.read_bytes()) if verdict_file.is_file() else {};record.setdefault('full_gates',[]).append({'name':name,'source_sha256':entry['sha256'],'exit_code':gate_code,'verdict':verdict});save()
+   if gate_code!=0 or not verdict.get('passed'):
+    g.wipe(g.LAYER);(g.LAYER/'upper').mkdir(parents=True);(g.LAYER/'work').mkdir();g.WORK.write_bytes(source.read_bytes());g._budget.reset(150,deadline=min(END-20,time.monotonic()+150));raw_code,raw_log=g.own([g.LAKE,'build','VerifyExact'],150,build='write');(folder/'full-gate-raw-statement.log').write_text(raw_log);raise AssertionError('Originalfullgaterejected:'+name+':'+str(verdict.get('reason')))
+   assert verdict['stage']=='axioms' and verdict['verifier_fingerprint']==verdict['verifier_fingerprint_end']
   g.wipe(g.LAYER);(g.LAYER/'upper').mkdir(parents=True);(g.LAYER/'work').mkdir();g.WORK.write_bytes(source.read_bytes());v=g.Verdict(submission=name)
   assert g.intake(g.WORK,v) is None and g.policy(g.WORK,v) is None,'Originalintakepolicyrejected'
   g._budget.reset(300,deadline=min(END-30,time.monotonic()+300));code,log=g.own([g.LAKE,'-f','work/R27NativeLake.lean','build','r27Native'],300,build='write');(folder/'build.log').write_text(log);assert code==0,'Ownednativebuildfailed:'+name
@@ -73,7 +80,7 @@ def main():
    c=visible(g.BUILD/'ir'/(stem+'.c'));assert c.is_file();obj=visible(g.BUILD/'ir'/(stem+'.c.o.export'));generated[stem]={'c_sha256':sha(c),'c_bytes':c.stat().st_size,'object_sha256':sha(obj)}
   (folder/'generated-code-hashes.json').write_text(json.dumps(generated,indent=2)+'\n')
   binary=g.LIB/'work/r27-binaries'/name;binary.parent.mkdir(exist_ok=True);shutil.copy2(visible(g.BUILD/'bin/r27Native'),binary);assert binary.stat().st_size<512*2**20
-  info={'name':name,'source_sha256':entry['sha256'],'source_path':entry['path'],'proof_state':'DECLARED_CORRECT_TYPECHECKED_NO_FULL_ORIGINAL_REPLAY' if entry.get('fetch') else 'NOT_PROVED_NATIVE_ONLY','binary_sha256':sha(binary),'foreign':foreign,'flags_pass':True,'measurements':[],'measurement_state':'NOT_RUN'};record['results'].append(info);save();g.wipe(g.LAYER);return binary,info
+  info={'name':name,'source_sha256':entry['sha256'],'source_path':entry['path'],'proof_state':'FULL_ORIGINAL_GATE_REPLAYED' if entry.get('full_gate') else 'DECLARED_CORRECT_TYPECHECKED_NO_FULL_ORIGINAL_REPLAY' if entry.get('fetch') else 'NOT_PROVED_NATIVE_ONLY','binary_sha256':sha(binary),'foreign':foreign,'flags_pass':True,'measurements':[],'measurement_state':'NOT_RUN'};record['results'].append(info);save();g.wipe(g.LAYER);return binary,info
  refentry={**plan['reference'],'name':'calibration','reference':True};refbin,refinfo=build(refentry)
  for entry in plan['candidates']:
   try:

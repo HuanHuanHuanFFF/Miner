@@ -1,0 +1,58 @@
+work/R27Helper_old_prepare_core.lean:103:2: error: Tactic `split_ifs` failed: no if-then-else conditions to split
+
+word : UInt32
+s : State
+⊢ (have e := word >>> 23 &&& 255;
+    if (e == 255) = true then pure (ForInStep.yield (s.1.push (Float.ofBits 0), s.2.1, false))
+    else
+      have idx := if (e == 0) = true then 0 else e - 1;
+      if s.2.1 < idx then pure (ForInStep.yield (s.1.push (Float.ofBits (widenBits word)), idx, s.2.2))
+      else pure (ForInStep.yield (s.1.push (Float.ofBits (widenBits word)), s.2.1, s.2.2))) =
+    pure
+      (ForInStep.yield
+        (have e := word >>> 23 &&& 255;
+            if (e == 255) = true then pure (ForInStep.yield (s.1.push (Float.ofBits 0), s.2.1, false))
+            else
+              have idx := if (e == 0) = true then 0 else e - 1;
+              if s.2.1 < idx then pure (ForInStep.yield (s.1.push (Float.ofBits (widenBits word)), idx, s.2.2))
+              else pure (ForInStep.yield (s.1.push (Float.ofBits (widenBits word)), s.2.1, s.2.2))).run.value)
+work/R27Helper_old_prepare_core.lean:106:69: error: unsolved goals
+raw : Array UInt32
+h : 1073741824 < raw.size
+⊢ (pure { raw := raw, values := FloatArray.emptyWithCapacity 0, maxIndex := 0, valid := false }).run =
+    { raw := raw, values := FloatArray.emptyWithCapacity 0, maxIndex := 0, valid := false }
+work/R27Helper_old_prepare_core.lean:124:2: error: Tactic `assumption` failed
+
+raw : Array UInt32
+h : raw.size ≤ 1073741824
+hlarge : ¬1073741824 < raw.size
+⊢ (do
+        let __s ←
+          forIn raw (FloatArray.emptyWithCapacity raw.size, 0, true) fun word __s =>
+              if (word >>> 23 &&& 255 == 255) = true then
+                pure (ForInStep.yield (__s.1.push (Float.ofBits 0), __s.2.1, false))
+              else
+                if __s.2.1 < if (word >>> 23 &&& 255 == 0) = true then 0 else (word >>> 23 &&& 255) - 1 then
+                  pure
+                    (ForInStep.yield
+                      (__s.1.push (Float.ofBits (widenBits word)),
+                        if (word >>> 23 &&& 255 == 0) = true then 0 else (word >>> 23 &&& 255) - 1, __s.2.2))
+                else pure (ForInStep.yield (__s.1.push (Float.ofBits (widenBits word)), __s.2.1, __s.2.2))
+        pure { raw := raw, values := __s.1, maxIndex := __s.2.1, valid := __s.2.2 }).run =
+    { raw := raw, values := (forIn raw (FloatArray.emptyWithCapacity raw.size, 0, true) body).run.1,
+      maxIndex := (forIn raw (FloatArray.emptyWithCapacity raw.size, 0, true) body).run.2.1,
+      valid := (forIn raw (FloatArray.emptyWithCapacity raw.size, 0, true) body).run.2.2 }
+work/R27Helper_old_prepare_core.lean:134:2: error: Tactic `assumption` failed
+
+raw : Array UInt32
+h : raw.size ≤ 1073741824
+hb : body = fun word s => pure (ForInStep.yield (step s word))
+⊢ { raw := raw,
+      values := (pure (Array.foldl (fun b a => step b a) (FloatArray.emptyWithCapacity raw.size, 0, true) raw)).run.1,
+      maxIndex :=
+        (pure (Array.foldl (fun b a => step b a) (FloatArray.emptyWithCapacity raw.size, 0, true) raw)).run.2.1,
+      valid :=
+        (pure (Array.foldl (fun b a => step b a) (FloatArray.emptyWithCapacity raw.size, 0, true) raw)).run.2.2 } =
+    { raw := raw, values := (Array.foldl step (FloatArray.emptyWithCapacity raw.size, 0, true) raw).1,
+      maxIndex := (Array.foldl step (FloatArray.emptyWithCapacity raw.size, 0, true) raw).2.1,
+      valid := (Array.foldl step (FloatArray.emptyWithCapacity raw.size, 0, true) raw).2.2 }

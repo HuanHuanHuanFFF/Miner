@@ -2,7 +2,7 @@
 
 共同执行约束见根目录 [AGENTS.md](AGENTS.md)。先选赛道，再读取该赛道的规则、当前记录和验证入口。
 
-**主目标：TorchLean overall 冠军。** 先看[冲冠看板 dashboard.md](dashboard.md)及[TorchLean当前开发](competitions/torchlean/README.md)；旧FloatLib四运算成绩保留历史。
+**当前目标：拿下任意 TorchLean 赛道冠军。** 各榜只与现任冠军比较；先看[冲冠看板 dashboard.md](dashboard.md)及[TorchLean当前开发](competitions/torchlean/README.md)。旧FloatLib四运算成绩保留历史。
 
 继续开发读[双 worktree 开发入口](DEVELOPMENT.md)：当前保留版、Codex／DeepSeek成果、验证计划与交接路径集中在此导航。
 
@@ -10,7 +10,7 @@ FloatLib 的数学成果统一从[数学结论与可复用证明](competitions/f
 
 | 赛道 | 状态与入口 | 验证与证据 |
 |---|---|---|
-| [TorchLean 完整模型](competitions/torchlean/README.md) | 用户已转攻overall；[R25窗口](competitions/torchlean/candidates/r25-90m-20261029T064916Z/README.md) | 原完整12义务与完整模型计时分别验证 |
+| [TorchLean 完整模型](competitions/torchlean/README.md) | 任意分榜争冠；[R27五小时](competitions/torchlean/candidates/r27-5h-20261029T194443Z/README.md) | 原完整12义务与完整模型计时分别验证 |
 | [FloatLib 浮点内核](competitions/floatlib/README.md) | 历史正式提交#336验证通过，第13；[开发状态](competitions/floatlib/coordination/development-status.json) | 官方原始报告、候选与研究记录由赛道入口索引 |
 | [DEFLATE 压缩](competitions/deflate/README.md) | 官方已关闭新提交，保留全部研究与历史结果；[任务索引](competitions/deflate/docs/TASK_INDEX.md) | [赛道技术规则](competitions/deflate/docs/track-rules.md)、[历史提交看板](competitions/deflate/DASHBOARD.md)、[验证入口](competitions/deflate/docs/validation.md) |
 
