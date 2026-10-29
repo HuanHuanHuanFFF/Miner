@@ -15,6 +15,10 @@ def run(args,label,cap,cwd=None):
 def protected():
  return {x.decode():sha(UP/x.decode()) for x in subprocess.check_output(['git','ls-files','-z'],cwd=UP).split(b'\0') if x and (UP/x.decode()).is_file() and x.decode()!='lean/work/Submission.lean'}
 def load_tools():
+ import site
+ original_site=UP/'.venv/lib'/('python'+str(sys.version_info.major)+'.'+str(sys.version_info.minor))/'site-packages'
+ assert original_site.is_dir(),'PinnedvenvABIcannotloadunderhostinterpreter'
+ site.addsitedir(str(original_site))
  os.chdir(UP);sys.path[:0]=[str(UP),str(UP/'validator')]
  import sandbox as g,benchmark as bm,fingerprint,config,multiseed
  return g,bm,fingerprint,config,multiseed
