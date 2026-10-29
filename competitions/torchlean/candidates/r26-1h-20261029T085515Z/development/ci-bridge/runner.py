@@ -24,7 +24,7 @@ def load_tools():
  return g,bm,fingerprint,config,multiseed
 
 def main():
- assert datetime.datetime.now(datetime.timezone.utc)<datetime.datetime.fromisoformat(plan['start_cutoff_utc'])
+ assert datetime.datetime.now(datetime.timezone.utc)<datetime.datetime.fromisoformat(plan['start_cutoff_utc']), 'QUEUE_ACQUIRED_AFTER_EXISTING_EXPERIMENT_START_LIMIT'
  assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=UP,text=True).strip()==plan['official_commit']
  before=protected();record['protected_before']=before;(OUT/'plan.json').write_bytes(PLAN.read_bytes());(OUT/'cpuinfo.raw').write_bytes(Path('/proc/cpuinfo').read_bytes());save()
  assert run(['systemd-run','--user','--scope','--quiet','-p','MemoryMax=4096M','-p','MemorySwapMax=0','bash','setup.sh','--benchmark-worker'],'setup',600)==0
