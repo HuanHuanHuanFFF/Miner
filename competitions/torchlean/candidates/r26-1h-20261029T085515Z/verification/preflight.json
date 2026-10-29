@@ -6,7 +6,9 @@
   "bridge_ready_request": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/requests/CI-BRIDGE-READY.json",
   "bridge_source_hashes": {
     "runner.py": "9759a967c2763d626fa904fc591224082868b486cdeff1e5e4d85c70df28c790",
-    "client.py": "c4e3497d8b52089945d79e49a8b658aed65a1b60fe95d4fe991b64e7ad85f8be"
+    "client.py": "c4e3497d8b52089945d79e49a8b658aed65a1b60fe95d4fe991b64e7ad85f8be",
+    "workflow": "1935c9fe74391d7d3de19e9cdd8c7e043a6e04e5845d3f3074a77a6a7d3d24b5",
+    "ci_prepare": "5ee136d53c2b0e8fcd66fb2c3810788f113232588f589b68ea018970fbb5efdb"
   },
   "plan_binding": {
     "runner_and_client_load": "ci-plan.json",
@@ -22,7 +24,10 @@
     "official_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
     "scope": "UNPROVED_NATIVE_RESEARCH_ONLY",
     "allow_private": false,
-    "seeds": [26102901, 26102903],
+    "seeds": [
+      26102901,
+      26102903
+    ],
     "reference": {
       "name": "retained",
       "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/development/contract-port/norm-cache-proof1/Kernel.lean",
@@ -31,15 +36,29 @@
       "proof_boundary": "previous full original 12-obligation gate pass; runner replays original verification on this reference"
     },
     "candidates": [
-      {"name": "fp1", "bytes": 49755, "sha256": "e6fbf94185f69c152e8058acd8ca593fb0f9814e74b6cf1383270ce49296d034", "label": "UNPROVED_NATIVE_RESEARCH_ONLY"},
-      {"name": "fp-word-conv3", "bytes": 60137, "sha256": "08d876ca77e33cd247cc5cba173df49eac54829ed4baed6088eca9bf0a40fe64", "label": "UNPROVED_NATIVE_RESEARCH_ONLY"}
+      {
+        "name": "fp1",
+        "bytes": 49755,
+        "sha256": "e6fbf94185f69c152e8058acd8ca593fb0f9814e74b6cf1383270ce49296d034",
+        "label": "UNPROVED_NATIVE_RESEARCH_ONLY"
+      },
+      {
+        "name": "fp-word-conv3",
+        "bytes": 60137,
+        "sha256": "08d876ca77e33cd247cc5cba173df49eac54829ed4baed6088eca9bf0a40fe64",
+        "label": "UNPROVED_NATIVE_RESEARCH_ONLY"
+      }
     ],
     "batch_timing": "official quick config, 5 rounds, inner 3, 2 ms target, 30 cells x 6 workloads per seed"
   },
   "workflow": {
     "path": ".github/workflows/deflate-baseline.yml",
     "job": "torchlean_r26",
-    "dispatch_inputs": {"competition": "floatlib", "candidates": "__torchlean_r26__", "allow_private": false},
+    "dispatch_inputs": {
+      "competition": "floatlib",
+      "candidates": "__torchlean_r26__",
+      "allow_private": false
+    },
     "condition": "public repository and allow_private=false",
     "runner": "ubuntu-24.04 standard public runner",
     "status": "STATIC_MATCH"
@@ -78,5 +97,11 @@
   },
   "main_exact_runtime_hash": "PENDING_RUNNER_ARTIFACT",
   "full_proof_for_prototypes": "NOT_RUN_NOT_CLAIMED",
-  "current_ci_state": "NOT_CONFIRMED_BY_THIS_REVIEWER"
+  "current_ci_state": "NOT_CONFIRMED_BY_THIS_REVIEWER",
+  "native_build_argv_receipt": {
+    "summary_commands": "NOT_EMITTED_BY_RUNNER_FOR_OWNED_BUILD",
+    "compiler_flags": "raw compile/link/response traces are stored and equality-asserted",
+    "runtime_verification": "PENDING",
+    "static_argv": "g.own([g.LAKE, -f, work/R26NativeLake.lean, build, r26Native],...)"
+  }
 }

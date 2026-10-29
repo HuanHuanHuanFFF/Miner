@@ -57,3 +57,54 @@ Static review is complete; runtime confirmations remain pending.
 - `runner.py` does not compute the overall score. Once immutable runner output is collected, the R26 analyzer must use the pinned R25 `scoring.assess` path and independently check all 1,800 pairs / 3,600 ns values / 1,800 checksums per complete candidate-reference cohort across both seeds. Actual source hashes, `MainExact` hash, raw flag args, CPU identity/order, and every output file hash are still runtime checks.
 
 Detailed fields and file hashes are in `preflight.json`. No CI or local build was started by this role.
+
+## Revised frozen input and dispatch (delta review at 09:30 UTC)
+
+The first review's plan and runner were replaced before the dispatch receipt was written. The active public workflow dispatch used run `40849705068`, source commit `9a2e9451fc0ab16bfea3584423e9ff5f16afe214`, plan SHA `f2b3bc9e…b9cc6de1`, and runner SHA `2029d04d…ed8411a8`. At dispatch the receipt said `in_progress`; the root status file still showed `active_CI: []`, so that status file was stale. I did not query GitHub or send a message.
+
+This run freezes one candidate, `fp-word-conv6` (`fp-word-conv6-local/Kernel.lean`, 60,479 B, SHA `ad9bde3e…b4b22540`) against retained R25 `norm-cache-proof1` (42,013 B, SHA `bcb81723…ca1ea7`). The candidate receipt says its only theorem is `retainedCorrect` over `retainedKernels`; the source now uses local instances after the prior `fp-word-conv3` global-instance policy rejection. My direct source scan found no new `correct`, `originalVerifyExact`, `fastkernels`, `AX6`, or `#print axioms` occurrence. It remains unproved.
+
+The revised plan adds `order-key-policy1` and `finite-widen` as `measure:false` proof diagnostics. The runner compiles `VerifyExact` for those sources after the native cohort, emits raw statement logs, and labels the rows `RAW_STATEMENT_DIAGNOSTIC_ONLY_NOT_FULL_GATE`; it does not pass them through as candidate proofs or helper-axiom acceptance. They are separate from the measured candidate and retained reference.
+
+The revised native target, original `MainExact` copy assertion, flags trace checks, benchmark generator/`run_binary` path, alternating paired order and checksum assertion remain as reviewed. The scorer still needs to be run from saved artifacts; the bridge itself does not aggregate the overall score. This batch still has no direct `originalshipped` pair.
+
+The R26 analyzer's first preflight hash anchors are now historical. I am switching its current-run anchors to `preflight-delta.json`; the saved artifact plan remains the only scoring input. Full runtime verification awaits a terminal CI receipt and the downloaded artifact.
+- Plan filename metadata remains inconsistent: `CI-BRIDGE-READY.json` says `ci-plan-batch1.json`, while `runner.py` and `client.py` read/freeze `ci-plan.json`. At the delta review both files were exactly byte-identical (5,435 B; SHA-256 `f2b3bc9e…b9cc6de1`), and the runner artifact plan is copied from `ci-plan.json`.
+- R26-specific analyzer entry is `verification/analyze-native-only.py`; it selects a saved preflight by the artifact plan hash/run ID, uses only pinned R25 `config`/`multiseed`/`scoring` blobs, validates outer and inner hashes, raw per-side round files, all 30×6×5×2 timing/checksum rows, same CPU identity/affinity, and computes the original quick score against the saved reference. It also records optional old-source `proof_diagnostics` separately as raw statement diagnostics. Syntax parsing passed at 09:32 UTC; no R26 result data has been analyzed yet, and the analyzer does not launch CI or Lean.
+- Analyzer refactor after the frozen-plan delta review now imports only the pinned R25 `load_pinned_modules` and generic `measurement_check`/score functions instead of duplicating the R25 framework. The R26-specific entry is 20,808 bytes; its syntax was parsed at 09:35 UTC. It has not been run because the first R26 artifact is not collected yet.
+
+## First CI terminal audit (run 40849705068)
+
+The saved terminal receipt and both raw hash layers were verified. The workflow and `torchlean_r26` job concluded `failure`; the artifact's outer 7-file manifest and runner's inner 6-file manifest both match exactly. `summary.json` records `ModuleNotFoundError: No module named 'loguru'` while loading the original benchmark modules after setup.
+
+Only `setup` and `setup-check` ran successfully. `summary.results` is empty; the reference proof, candidate native compilation, and candidate measurements are all `NOT_RUN`. No candidate score was computed (`UNKNOWN`), and the runner did not produce `originals_unchanged` post-check evidence. This is a bridge import failure, not a candidate algorithm result. Full receipt: `verification/analysis-40849705068.json`.
+
+A second dispatch receipt appeared at `evidence/dispatch-20261029T093711Z`; it was created before the 09:38 experiment cutoff. Its run and revised runner need their own frozen-source hash check before the collected result can be analyzed.
+
+## Second dispatch delta review (09:40 UTC)
+
+Run `40851060907` was identified at 09:37:13 UTC on commit `edd41c939a772d634dc118a9201dc1946351369d`; its dispatch receipt said `in_progress`. The new runner resolves the first failure by adding the official venv's ABI-specific `site-packages` directory before importing the original benchmark modules and asserts that directory exists. The change does not modify the original proof gate, target, measured source, or compiler/linker flag checks. The current selected source and retained reference hashes are unchanged, and both old sources remain `measure:false` raw diagnostics.
+
+One metadata issue remains: `CI-BRIDGE-READY.json` still names `ci-plan-batch1.json`, while the runner/client read and freeze `ci-plan.json`. The two files are no longer byte-identical, though the reviewed fields selecting the source, reference, seeds, public billing, and separate proof diagnostics match. The current run's actual frozen input is `ci-plan.json` at SHA `65028ca5…a6f6599`; analysis will use its downloaded artifact copy only.
+
+The first run's original artifact files all passed both hash layers, and its failure receipt is saved as `analysis-40849705068.json`: import failed before reference proof, native compilation, or measurement. No score was produced. The second run remains pending; there is no result to analyze yet.
+- Final failure audit receipt for run `40849705068` is `analysis-40849705068-v3.json` (the earlier derived JSON attempts are preserved). The final receipt reports exact outer/inner hash PASS, `loguru` import failure, reference proof `NOT_RUN`, candidate build `NOT_RUN`, measurements `NOT_RUN`, score `UNKNOWN`, and original-source postcheck `UNKNOWN`.
+
+## Second CI terminal audit (run 40851060907)
+
+The terminal `ci-run.json` is `failure`; it was collected into `evidence/40851060907`. Both outer and inner file hash manifests pass (3 outer files, 2 runner files). The artifact contains no `plan.json`, so the audit explicitly did not fall back to the live workspace plan. Its expected frozen plan hash is recorded from the dispatch receipt/preflight as `65028ca5…a6f6599`.
+
+`summary.json` has `error_type: AssertionError`, an empty error string, zero commands and zero result rows, with `started_at_utc=2026-10-29T09:39:19.382887Z`. The frozen run cutoff was `2026-10-29T09:38:00Z`. The runner's first `main()` action asserts the current time is before that cutoff, so the timestamp and empty command list match a cutoff rejection before reference proof, tool imports, native compilation, or measurement. The venv `loguru` import fix was therefore not exercised. Score remains `UNKNOWN`; no missing sample values were filled.
+
+The final no-plan receipt is `verification/analysis-40851060907-v2.json`. `development-status.json` still said `NATIVE_ENV_REPAIR_CI_RUNNING` at 09:46 even though the local terminal receipt and downloaded artifact already showed failure; that status was stale. Root's last status said new experiments were closed at 09:38. No third dispatch is present in the evidence tree at this checkpoint.
+
+## Final verification checkpoint (09:48 UTC)
+
+Fresh final audits now exist at `analysis-40849705068-final.json` and `analysis-40851060907-final.json`; the prior derived attempts remain preserved. Both receipts independently rechecked the original downloaded bytes. Run 40849705068 has outer/inner hash `PASS`, the exact `loguru` import failure, and no reference proof/native compile/measurements. Run 40851060907 has outer/inner hash `PASS`, no saved artifact plan, a recorded runner start after the frozen cutoff, empty command/result arrays, and no proof/native compile/measurements. The final analyzer syntax and every verification JSON parse successfully. Neither run produced a score; both remain `UNKNOWN`.
+
+The second run was submitted at 09:37:13 but the runner began at 09:39:19, after the 09:38 cutoff, and hit its early assertion before saving `plan.json`. The missing-plan audit used the matching frozen preflight receipt only to verify the expected plan hash; it did not read the live plan or substitute any model results.
+
+## Post-cutoff dispatch observed (09:52 UTC)
+
+A third public workflow dispatch was created at `2026-10-29T09:50:23Z` (run `40852769757`), after the frozen 09:38 stop-new-experiments cutoff. Its dispatch receipt says `in_progress`, `allow_private=false`, plan SHA `985f2bbf…e6ee1e`, and runner SHA `bf1c8d49…40e93d42`. This is outside the stated window; it is not covered by either preflight review. I did not dispatch or cancel it. No terminal artifact exists in the local evidence tree at this checkpoint, so it cannot be scored. Any later artifact should be reported as an unreviewed post-cutoff run with score `UNKNOWN` unless a corresponding preflight receipt is present.
+- At 09:54, root status classifies run `40852769757` as an already-launched same-source/same-input repair and marks it `IN_PROGRESS_NATIVE_STEP`; it is still collecting no artifact locally. The dispatch receipt is a distinct run with new source commit `12e6d73f…a74c0043`, runner SHA `bf1c8d49…40e93d42`, and plan SHA `985f2bbf…e6ee1e`, while candidate/reference/seed inputs match the preceding batch. It has no matching verification preflight receipt yet, so any eventual output remains unscored until its raw terminal artifact is checked against that new frozen version.

@@ -1,0 +1,29 @@
+{
+  "scope": "Recovered structured command results from this role; not original terminal byte capture. Failed source hashes were not recorded and remain UNKNOWN.",
+  "failures": [
+    {
+      "command": "python replay_words.py",
+      "exit_code": 1,
+      "error": "ModuleNotFoundError: No module named 'model_span_probe'",
+      "cause": "R25 parent directory selected with parents[3] instead of parents[2]",
+      "source_sha256_at_failure": "UNKNOWN",
+      "classification": "HARNESS_PATH_FAILURE_NOT_ALGORITHM_FAILURE",
+      "repair": "Resolve R25 sibling from candidates directory; rerun succeeded and receipt is word-replay.json"
+    },
+    {
+      "command": "python cost_preflight.py",
+      "exit_code": 1,
+      "error": "AssertionError at model_span_probe.py decode assertion e != 255",
+      "cause": "Finite-only R25 decoder was used for deliberate nonfinite prepare rejection cases",
+      "source_sha256_at_failure": "UNKNOWN",
+      "classification": "HARNESS_DOMAIN_FAILURE_NOT_ALGORITHM_FAILURE",
+      "repair": "Use original mantOf/idxOf-compatible raw field decoding for nonfinite scan; finite flag rejects; rerun succeeded in cost-preflight.json"
+    }
+  ],
+  "unrelated_external_CI_event_read": {
+    "run": 40849705068,
+    "event": "CI-RESULTS-BATCH1.json",
+    "classification": "D_BRIDGE_DEPENDENCY_NO_LOGURU; candidate compilation and measurement NOT_RUN",
+    "response": "No frozen source modified due to this event; no direct message or own CI action"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "round": "R26",
+  "review_kind": "second frozen-run delta review after Python venv import failure",
+  "reviewed_utc": "2026-10-29T09:40:39Z",
+  "status": "DELTA_STATIC_REVIEW_COMPLETE_CI_IN_PROGRESS_AT_LAST_RECEIPT",
+  "actual_dispatch": {
+    "run_id": 40851060907,
+    "recorded_status_at_dispatch": "in_progress",
+    "created_at_utc": "2026-10-29T09:37:13Z",
+    "source_commit": "edd41c939a772d634dc118a9201dc1946351369d",
+    "plan_sha256": "65028ca52b0d98b5730d798345bd494335827c071437136037a904ac5a6f6599",
+    "runner_sha256": "5395093097ea8eb069f93069b0c4f8a73a373cb562e2db3495c1a4a6830b5b9c",
+    "dispatch_inputs": {
+      "competition": "floatlib",
+      "candidates": "__torchlean_r26__",
+      "seed": "26102901",
+      "allow_private": false
+    }
+  },
+  "plan_binding": {
+    "runtime_input": "ci-plan.json",
+    "CI-BRIDGE-READY metadata": "ci-plan-batch1.json",
+    "runtime_plan_sha256": "65028ca52b0d98b5730d798345bd494335827c071437136037a904ac5a6f6599",
+    "ready_named_plan_sha256": "f2b3bc9e425626f51ec93fe73b0924c4f796cd31325d3d6174ca91ecb9cc6de1",
+    "exact_bytes_equal": false,
+    "selected_fields_equal": [
+      "scope",
+      "official_commit",
+      "seeds",
+      "reference source",
+      "candidate source/hash",
+      "proof diagnostic entries",
+      "allow_private"
+    ],
+    "assessment": "The executable and frozen dispatch use ci-plan.json. The READY alias is stale; it does not alter the run input, but should be corrected before a later batch."
+  },
+  "frozen_sources": {
+    "workflow_sha256": "1935c9fe74391d7d3de19e9cdd8c7e043a6e04e5845d3f3074a77a6a7d3d24b5",
+    "ci_prepare_sha256": "5ee136d53c2b0e8fcd66fb2c3810788f113232588f589b68ea018970fbb5efdb",
+    "candidate": {
+      "name": "fp-word-conv6",
+      "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp-word-conv6-local/Kernel.lean",
+      "bytes": 60479,
+      "sha256": "ad9bde3e9e8490df15f3d8d15c08805f85d4451e0a5f2d20977632c0b4b22540",
+      "proof_state": "UNPROVED_NATIVE_RESEARCH_ONLY"
+    },
+    "reference": {
+      "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/development/contract-port/norm-cache-proof1/Kernel.lean",
+      "bytes": 42013,
+      "sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7"
+    },
+    "proof_diagnostics": [
+      {
+        "name": "order-key-policy1",
+        "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/research/order-key/policy1/Kernel.lean",
+        "sha256": "82399ee3da291a1ad82dbb0432bc2c5bd2a4097db9dcc37bdbca111ff4867111",
+        "measure": false
+      },
+      {
+        "name": "finite-widen",
+        "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/research/widen/finite-bridge/Kernel.lean",
+        "sha256": "e5613ee190d4185d665b0cd52482e37dc0770ac468c19ee676cac7a6ba964ab6",
+        "measure": false
+      }
+    ]
+  },
+  "runner_delta": {
+    "sole_functional_change_reviewed": "load_tools() adds official venv's pythonX.Y/site-packages via site.addsitedir, then imports official sandbox/benchmark/config/fingerprint/multiseed",
+    "fail_closed": "asserts the ABI-specific venv site-packages directory exists; no gate or proof checks are disabled",
+    "native_target": "unchanged one-target R26NativeLake using original MainExact bytes",
+    "compile_flags": "same raw compile/link/response argument comparisons; only expected target names are normalized",
+    "candidate_gate": "intake/policy then native target only; no prototype original proof gate or Correct claim",
+    "reference_gate": "full original proof replay on retained reference only",
+    "benchmark": "same pinned official quick config/workload generator/run_binary path and full two-seed paired order/checksum checks",
+    "proof_diagnostics": "same measure=false raw VerifyExact statement logs for two old R25 sources; no helper acceptance",
+    "candidate_source_scan": "same local-instance fp-word-conv6-local source; retainedCorrect only; no new Correct/originalVerifyExact/fastkernels/AX6/#print axioms match"
+  },
+  "runtime_status": "PENDING; no second-run terminal artifact at review time",
+  "measurement_or_score": "UNKNOWN",
+  "plan_cutoff_utc": "2026-10-29T17:38:00+08:00"
+}
