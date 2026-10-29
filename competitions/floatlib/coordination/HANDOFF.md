@@ -1,12 +1,12 @@
 # FloatLib 当前协作交接
 
-当前分支`huan/codex-gpt`，D统一Git／公共CI；普通消息走`D:/CodingProject/Bitget-Collab`。R23共同窗口UTC2026-10-28 14:26:26—15:06:26已结束，只回收已启动CI及交付，不新增研究。
+当前分支`huan/codex-gpt`，D统一Git／公共CI；普通消息走`D:/CodingProject/Bitget-Collab`。R24共同窗口UTC2026-10-28 20:38:56—2026-10-29 03:38:56；全部12个已启动CI均已收齐终态，剩余窗口整理证明接口与下一确认计划。
 
-- 当前状态：[开发状态](development-status.json)；[R23结果及恢复入口](../candidates/f01-d7-research/round40m-20261028T142626Z/README.md)。
-- 保留B2/622d；F7观测整包0.95550×B2但稳定性FAIL，固定体不追seed。现任冠军#323、#336仍13/官方1.6287×；开发预估1.56×见根看板，没有新正式成绩。
-- f90d整数乘法原四义务、Submission/VerifyFull回放、49根公理PASS；尚未跑新源checksum/25轮。矩阵transport3、conditionalPrefix3已验，不能据此前提性结果称完整publicBMM。
-- 全部3run已收394原件22258107B；末批producer2五根PASS，reader2右lane与FloatArray长度目标未过；原件/精确源/终态由R23作业索引登记。旧原件和失败保留，不继承不同源成绩；无本机Lean、正式上传、资金或reset。
-- 后续投入：旧indexed入口仅整包7.87–8.62%耗时，只约束旧公共样本；完成实际连接后优先更广热点/codec/accspill与正确native-first组合，不能相加旧收益。详R侧ALLOCATION-DECISION及D数学NEXT-MUL-INTERFACE。
+- 当前入口：[R24结果](../candidates/f01-d7-research/round7h-20261028T203856Z/README.md)、[精确作业版本](../candidates/f01-d7-research/round7h-20261028T203856Z/development-jobs.json)、[开发状态](development-status.json)。
+- FloatLib本轮成功响应已关闭新提交；TorchLean为不同的12算子接口，目标选择待用户回复。03:20末次GET全403，最新状态UNKNOWN，保留早前原件；不绕过限制、不据旧值称刚核验。旧四运算看板及保留B2/622d不套用新点积成本。
+- 主路线为原生双精度累加＋精确证书／整数回退。Tail去掉普通MAC每项Float装箱，64进程完整点积对照已独立重算。多行、多列共用缓存的完整调用在40811305126通过464输出及16进程成本检查；eager耗时／自建整数参照0.2723–0.2892，包含每行列准备、所有输出和释放。它是通用一次舍入点积实验，不是旧逐次舍入BMM、冠军成绩或已采用代码。
+- 精确core049b：9新增helper＋4原公开义务，共13项statement/kernelReplay/AX通过。35根组合island9仍余常量cast；Widen7修复为NOT_RUN。运行时完整证明仍缺prepare／Tail／orderKey／实际rounder连接，见[R研究前沿](../candidates/f01-d7-research/round7h-20261028T203856Z/research/CERTIFICATE-INTEGRATION-FRONTIER.md)。
+- 下一轮先确认目标，再按[研究交接](../candidates/f01-d7-research/round7h-20261028T203856Z/research/HANDOFF.md)完成最小checker及实际完整调用；采用前另冻结新确认输入／runner。两链精确整数为独立备选。R23乘法和矩阵接口记录保留在[R23入口](../candidates/f01-d7-research/round40m-20261028T142626Z/README.md)，不继承为新源正确性／速度。无本机Lean、正式上传、资金或reset。
 
 ## 历史：首次环境与开发交接
 

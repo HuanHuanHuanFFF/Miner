@@ -1,0 +1,89 @@
+{
+  "status": "PASS_SELECTED_ACTUAL_C_ASM",
+  "utc": "2026-10-29T03:21:51.198810+00:00",
+  "run": "40810384656",
+  "input_base": "competitions\\floatlib\\candidates\\f01-d7-research\\round7h-20261028T203856Z\\ci-runs\\40810384656\\download-6c7109bdbdb3400881dc0741a5ac7384\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r24-dev-dot-bank-cost1\\runtime-cost",
+  "sha256": {
+    "Submission.c": "864f5c50522df164ab69dba34eb1e64bd1c477871ed8910533d0832384883569",
+    "Submission-asm.txt": "ddcd0dedc75b15b443a683da61ff405072508afd48306a0f3a1aa14d8ab65201",
+    "R24DotCostMain.c": "10b92f27c5eb74f961ab99b3c572631054a8a1b46d45adcc738e1c25dff83663",
+    "R24DotCostMain-asm.txt": "4a681c896900572df4f7765f035c5ae6602823224dcf624966a36e06d0f023af"
+  },
+  "passes": [
+    {
+      "kind": "Exact",
+      "c_line": 3286,
+      "output_var": "v_out_970_",
+      "def_use_and_drop": "PASS",
+      "asm": "0x40 barrier;0x84/0xa7 two-arg bank; result rax->r13;0xde observer rdi=r13;0xe2 refcount(r13),0x145 cold release rdi=r13;0xf9->0x20 backedge"
+    },
+    {
+      "kind": "Eager",
+      "c_line": 4077,
+      "output_var": "v_out_1284_",
+      "def_use_and_drop": "PASS",
+      "asm": "0x40 barrier;0x84/0xa7 two-arg bank; result rax->r13;0xde observer rdi=r13;0xe2 refcount(r13),0x145 cold release rdi=r13;0xf9->0x20 backedge"
+    },
+    {
+      "kind": "Lazy",
+      "c_line": 4840,
+      "output_var": "v_out_1583_",
+      "def_use_and_drop": "PASS",
+      "asm": "0x40 barrier;0x84/0xa7 two-arg bank; result rax->r13;0xde observer rdi=r13;0xe2 refcount(r13),0x145 cold release rdi=r13;0xf9->0x20 backedge"
+    }
+  ],
+  "banks": [
+    {
+      "kind": "Exact",
+      "c_line": 24857,
+      "prep_helper": "lp_competition___private_Init_Data_Array_Basic_0__Array_forIn_x27Unsafe_loop___at___00Submission_R24GenericDotBank_exactBank_spec__0",
+      "prep_helper_line": 24820,
+      "primary_cache_passes": 2,
+      "per_row_preparer": "R24ExactDotCost_prepareOperand",
+      "primary_cache_work": "O(rowsA+rowsB) calls, each row preparation scans its row",
+      "output_allocate_and_primary_cache_release_inside_bank": true,
+      "pair_helper": "lp_competition___private_Init_Data_Array_Basic_0__Array_forIn_x27Unsafe_loop___at___00Submission_R24GenericDotBank_exactBank_spec__1"
+    },
+    {
+      "kind": "Eager",
+      "c_line": 25006,
+      "prep_helper": "lp_competition___private_Init_Data_Array_Basic_0__Array_forIn_x27Unsafe_loop___at___00Submission_R24GenericDotBank_eagerBank_spec__0",
+      "prep_helper_line": 24890,
+      "primary_cache_passes": 2,
+      "per_row_preparer": "R24DotProbe_prepareEagerOperand",
+      "primary_cache_work": "O(rowsA+rowsB) calls, each row preparation scans its row",
+      "output_allocate_and_primary_cache_release_inside_bank": true,
+      "pair_helper": "lp_competition___private_Init_Data_Array_Basic_0__Array_forIn_x27Unsafe_loop___at___00Submission_R24GenericDotBank_eagerBank_spec__1"
+    },
+    {
+      "kind": "Lazy",
+      "c_line": 25155,
+      "prep_helper": "lp_competition___private_Init_Data_Array_Basic_0__Array_forIn_x27Unsafe_loop___at___00Submission_R24GenericDotBank_lazyBank_spec__0",
+      "prep_helper_line": 25039,
+      "primary_cache_passes": 2,
+      "per_row_preparer": "R24PortableF64_prepare",
+      "primary_cache_work": "O(rowsA+rowsB) calls, each row preparation scans its row",
+      "output_allocate_and_primary_cache_release_inside_bank": true,
+      "pair_helper": "lp_competition___private_Init_Data_Array_Basic_0__Array_forIn_x27Unsafe_loop___at___00Submission_R24GenericDotBank_lazyBank_spec__1"
+    }
+  ],
+  "observer": {
+    "c_line": 2179,
+    "all_elements": "array_get_borrowed/unbox_uint32/add/backedge",
+    "asm": "0x20 indexed element load;0x28 add;0x7c backedge to0x20; finite out.size starts hashAll; caller drops identical output"
+  },
+  "fp": {
+    "worker_line": 23423,
+    "actual_attempt_line": 23467,
+    "double_arg_result": true,
+    "no_per_MAC_float_or_tuple_allocation": true,
+    "asm": "0xb6/0xc2 unboxed loads;0xc8->0x60 mulsd;0x64 addsd xmm0;0x6b counter; no allocator in worker; cold bigNat counter paths remain"
+  },
+  "scope": [
+    "Selected exact artifact witnesses plus independent manual review; not a universal C verifier.",
+    "O(rows+cols) is primary operand cache construction; lazy miss performs paid exact fullv2 preparation per pair.",
+    "All outputs are allocated, traversed and released in timed pass; bank primary caches released before bank return.",
+    "Finite oracle acceptance is separate from universal equivalence, target adoption, official BMM and rank.",
+    "This run overall failed in Python driver after first exact process; speed/stability remains UNKNOWN here."
+  ]
+}

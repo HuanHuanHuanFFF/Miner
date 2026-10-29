@@ -11,4 +11,6 @@
 
 整包：保留版官方 **1.63×**；当前开发预估 **1.56×**。[依据](competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-dashboard-forecast.json)
 
-**结论：FloatLib已关闭新提交；当前方案未取代#323，保留B2记录。**
+**结论：最后成功核对时FloatLib已关闭新提交；当前方案未取代#323，保留B2记录。**
+
+[本轮大优化研究](competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/README.md)。11:20刷新受限，以上冠军成绩沿用已核对记录。

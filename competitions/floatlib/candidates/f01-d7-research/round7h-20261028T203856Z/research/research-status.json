@@ -1,7 +1,7 @@
 {
   "round": "R24",
   "owner": "R",
-  "state": "RUNNING_FINAL_SOURCE_REPAIRS_AND_RAW_COST_REVIEW",
+  "state": "RUNNING_UNTIL_COMMON_CUTOFF_FINAL_EVIDENCE_AND_HANDOFF",
   "first_observed_root_tool_utc": "2026-10-28T20:40:53Z",
   "shared_start_utc": "2026-10-28T20:38:56Z",
   "deadline_utc": "2026-10-29T03:38:56Z",
@@ -24,21 +24,27 @@
       "model": "gpt-6-astra",
       "effort": "xhigh",
       "scope": "representation/",
-      "current_work": "Widen6 exact nested Nat/Int/Real cast repair delivered; last final source validation owned by D"
+      "current_work": "Widen7 NOT_RUN and HighCompat NOT_RUN delivered, sourceindex hash verification observed03:20",
+      "state": "COMPLETED_ASSIGNED_SOURCE_OR_REVIEW_PHASE",
+      "time_accounting": "Actual phases/observations only; completed-turn gaps not active modelCPU; token/cache UNKNOWN"
     },
     {
       "name": "r24_scalar_frontier",
       "model": "gpt-6-astra",
       "effort": "xhigh",
       "scope": "scalar/",
-      "current_work": "First independent critical review of existing SubnormalWiden fragment"
+      "current_work": "SubnormalWiden first independent static review completed03:08:43, no compiled acceptance",
+      "state": "COMPLETED_ASSIGNED_SOURCE_OR_REVIEW_PHASE",
+      "time_accounting": "Actual phases/observations only; completed-turn gaps not active modelCPU; token/cache UNKNOWN"
     },
     {
       "name": "r24_rounding_review",
       "model": "gpt-6-astra",
       "effort": "xhigh",
       "scope": "controller/",
-      "current_work": "First independent critical review of existing NativeSignOr and RawMidpoint fragments"
+      "current_work": "RawMidpoint/NativeSignOr first independent static review completed03:12:51, 51seconds later than internal03:12 checkpoint",
+      "state": "COMPLETED_ASSIGNED_SOURCE_OR_REVIEW_PHASE",
+      "time_accounting": "Actual phases/observations only; completed-turn gaps not active modelCPU; token/cache UNKNOWN"
     }
   ],
   "resource_policy": {
@@ -124,7 +130,7 @@
     }
   },
   "remaining": "Whole measured >10% mechanism and newchampion notyetachieved",
-  "updated_at_utc": "2026-10-29T03:17:15.429672+00:00",
+  "updated_at_utc": "2026-10-29T03:30:57.188723+00:00",
   "active_goal": "OriginalFloatLib optimization; targetchange pendinghumanquestion fromD",
   "new_scope_authorized": false,
   "target_state_receipt": "../competition-state-check/receipts.json",
@@ -134,7 +140,7 @@
   "concurrency": {
     "cap": 5,
     "reserved_D": 2,
-    "active_R": "Stage-specific actual state via collaboration tool; do not infer old-stage continuous execution",
+    "active_R": "0 child executors; root controller validating handoff through shared cutoff",
     "completed_R": "B and C completed first independent static reviews; A continues one final small cast draft to03:23; no new math CI",
     "web_reserved": 0,
     "planned_total": 5,
@@ -193,10 +199,15 @@
     "bytes": 45684,
     "run": 40793795026,
     "kernel_replay": true,
-    "axiom_total": 13,
     "original_public_roots": 4,
     "new_helpers": 9,
-    "scope": "Exact accepted core only, no parent/fullgate/performance inheritance"
+    "scope": "Exact accepted core only, no parent/fullgate/performance inheritance",
+    "audited_roots": 13,
+    "allowed_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ]
   },
   "latest_typed_failure": {
     "run": 40810384656,
@@ -205,7 +216,9 @@
     "remaining_errors": 2,
     "source": "Widen6 removed Int constructor cast; residual is only Real cast of Nat numeral536870912 versus native Real numeral in both sign branches",
     "repair": "representation/WidenNormal7.lean.inc",
-    "status": "DRAFT_REPAIR_IN_PROGRESS_NO_NEW_MATH_CI_THIS_WINDOW"
+    "status": "NOT_RUN_REPAIR_DELIVERED_NO_FURTHER_MATH_CI_THIS_WINDOW",
+    "repair_sha256": "336b8bbc19a206b2d485a8d047c88854be492493c1daf0d6a77f604884027cd7",
+    "repair_bytes": 12412
   },
   "public_source_policy": "Private Pro URLs/originals retained in E and local pro-results; public version uses technical summaries/code/evidence only.",
   "complete_cost": {
@@ -227,5 +240,40 @@
     "subnormal_widen": "subnormal-widen-independent-review.json",
     "raw_midpoint": "raw-midpoint-independent-review.json",
     "status": "Static only; no Lean/kernelReplay/AX acceptance"
+  },
+  "next_route_decision": "NEXT-ROUND-DECISION.md",
+  "integer64_screen": {
+    "source": "aligned-integer-discriminator.json",
+    "cases": 148,
+    "eligible": 25,
+    "eligible_timed": 12,
+    "eligible_timed_max_n": 2,
+    "long_narrow_timed_rejected": 12,
+    "conclusion": "Do not prioritize this conservative64bit-aligned route for wholemodel10percent; wider/nativecodegen opportunities remain UNKNOWN"
+  },
+  "bank_cost": {
+    "run": 40811305126,
+    "source_sha256": "b2855ceccccde7f8416a6210a635a3785107b010a12d009f29292607c9c580e8",
+    "processes": 16,
+    "ns_values": 144,
+    "finite_output_words": 464,
+    "backends": 3,
+    "eager_elapsed_reduction_range": [
+      0.7107968221475677,
+      0.7277307141142422
+    ],
+    "lazy_elapsed_reduction_range": [
+      0.6244439695369072,
+      0.6342800338085055
+    ],
+    "independent_receipt": "bank-cost-independent-review.json",
+    "scope": "Whole generic synthetic bank full call versus own integer tier only; UNPROVED runtime, no oldBMM/champion/fullmodel/official score"
+  },
+  "next_round_allocation_plan": {
+    "exploration": 0.2,
+    "implementation_and_proof": 0.6,
+    "critical_review": 0.15,
+    "coordination": 0.05,
+    "evidence": "Shared bank full call shows stable exploratory gain; certificate runtime interfaces now dominate adoption risk. Conservative aligned64 long-narrow coverage screen negative. Actual future target requires existing human scope decision; plan is not measured tokens."
   }
 }

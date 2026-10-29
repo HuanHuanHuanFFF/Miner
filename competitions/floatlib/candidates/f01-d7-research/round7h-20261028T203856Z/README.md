@@ -15,7 +15,10 @@ FloatLib当前`submissions_open=false`，TorchLean为true；[原件与回执](co
 | 大路线 | 当前证据 | 下一步 |
 | --- | --- | --- |
 | 原生双精度累加＋精确检查，消除逐项装箱 | [64进程完整对照](development-dot-cost/timeout-review/full-408048-findings.md)：Tail混合输入完整调用／自建整数参照为 **0.67–0.72×**；缓存已准备为 **0.60–0.69×**。普通指数缓存点积为 **0.36–0.41×**。实际C／汇编确认普通累加回边不再每项分配16字节Float | 多行、多列共用缓存，测完整调用；补齐运行时证明 |
+| 多行、多列共享缓存的完整调用 | [补跑40811305126](https://github.com/HuanHuanHuanFFF/Miner/actions/runs/40811305126)成功：464个输出×3后端逐字检查；16进程、两组输入×三尺寸。eager耗时／自建整数参照 **0.2723–0.2892×**，lazy为 **0.3657–0.3756×**，包含准备、全部输出及释放 | 新运行时全证明；随后另冻新输入和新runner确认 |
 | 原生64／128位整数精确多链 | 已有循环、编码和终端运输源码；先前标量直接转换无明显收益，不能替代点积测量 | [研究交接](research/HANDOFF.md)，仍需原输入到完整输出的闭合调用与实际成本 |
-| 精确舍入与误差证明 | [精确core源](../../f01-r24-dev-core-certificate1/manifest.json)的 **9个新增helper＋4个原公开义务**已通过statement、kernel replay及13项公理审计；[35根组合第8版](development-math8-results.json)仍余两个转换问题 | 研究侧定点修复；父源不继承组合验收 |
+| 精确舍入与误差证明 | [精确core源](../../f01-r24-dev-core-certificate1/manifest.json)的 **9个新增helper＋4个原公开义务**已通过statement、kernel replay及13项公理审计；[35根组合第9版](development-math9-and-bank1-results.json)仍余两个常量转换问题 | Widen7仅常量cast修复已交接NOT_RUN；父源不继承组合验收 |
 
 以上点积成本的参照是本轮自建64／128位整数实现，**不是冠军**；混合输入为固定MAC样本之逐项中位数求和。新运行时仅通过有限原生检查，尚无全输入证明或新runner独立采用确认；旧FloatLib逐次舍入BMM未因此提速。新赛道选择仍待用户答复。全部已启动作业及原件见[作业索引](development-jobs.json)。
+
+官方末次刷新：UTC03:20的6次只读GET均403，最新状态UNKNOWN；[失败原字节](official-final-20261029T032046Z/receipts.json)保留，以上关闭状态及旧成绩来自更早成功响应。未重试或更换身份绕过限制。

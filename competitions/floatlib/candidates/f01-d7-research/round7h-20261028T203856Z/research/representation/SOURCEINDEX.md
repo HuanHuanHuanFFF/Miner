@@ -6,10 +6,10 @@ Original window: **2026-10-28 20:38:56 → 2026-10-29 03:38:56 UTC**. D owns Git
 
 | Source | Bytes | SHA-256 | Status |
 |---|---:|---|---|
-| `WidenNormal6.lean.inc` | 12322 | `2eb9c43ba1bd5803bb2f2f5c851b24e7462ee15151eaec8dc38a9e614874160f` | NOT_RUN; 5 unchanged roots |
+| `WidenNormal7.lean.inc` | 12412 | `336b8bbc19a206b2d485a8d047c88854be492493c1daf0d6a77f604884027cd7` | NOT_RUN; 5 unchanged roots; no further math CI this window |
 | `NativeSumEnclosure3.lean.inc` | 11580 | `c788a5c83818ab99425f0d9d4acec15fc1142f80bf3185ce18df4198e30874ee` | No error in prior island diagnostics; whole-module/replay/AX acceptance still not inherited |
 
-Widen6 is the03:04:47 diagnostic-driven repair for run40808593616: a local explicit `Int.ofNat → Real` equality rewrites the entire constructor cast before multiplying the Nat casts. Original hp, runtime and public interfaces are unchanged. See `widen6-repair-receipt.json`. All Widen1–5, SUM1–2, prior candidates and original failure bytes remain preserved. Only D's exact accepted source/result may update this status; a zero-error subregion is not module acceptance.
+Widen7 is the03:18:08 untested checkpoint for run40810384656: one closed Nat-numeral-to-Real equality is added to the two existing sign branches. Math9's exact replay log SHA `409da1638682a3435ded27c92168c48755a332c08a78433201b89a5446931265` confirms that Widen6 removed the outer Int cast and left only `↑536870912` versus the Real numeral in two goals; it still rejected the module. Widen6 SHA `2eb9c43ba1bd5803bb2f2f5c851b24e7462ee15151eaec8dc38a9e614874160f` is preserved as real diagnostic progress, not a pass. See `widen7-repair-receipt.json` and preceding repair receipts. Original hp, runtime, public interfaces and resources are unchanged. All Widen1–6, SUM1–2, prior candidates and original failure bytes remain preserved. D decided not to start another math CI this window. Only an exact accepted source/result may update this status; a zero-error subregion is not module acceptance.
 
 **Frozen independent exact128 sources, all NOT_RUN / NOT_QUEUED:**
 
