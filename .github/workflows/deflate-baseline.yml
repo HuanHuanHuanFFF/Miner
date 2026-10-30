@@ -81,7 +81,7 @@ jobs:
     defaults:
       run:
         working-directory: .
-    if: github.event_name == 'workflow_dispatch' && inputs.competition == 'floatlib' && inputs.candidates != '__torchlean_readonly_profile__' && inputs.candidates != '__torchlean_r25__' && inputs.candidates != '__torchlean_r26__' && inputs.candidates != '__torchlean_r27__' && (github.event.repository.private == false || inputs.allow_private == true)
+    if: github.event_name == 'workflow_dispatch' && inputs.competition == 'floatlib' && inputs.candidates != '__torchlean_readonly_profile__' && inputs.candidates != '__torchlean_r25__' && inputs.candidates != '__torchlean_r26__' && inputs.candidates != '__torchlean_r27__' && inputs.candidates != '__torchlean_r28__' && (github.event.repository.private == false || inputs.allow_private == true)
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
@@ -332,6 +332,64 @@ jobs:
             ~/.elan
             ${{ runner.temp }}/floatlib-upstream/lean/.lake
           key: torchlean-${{ runner.os }}-27fb1d19c712ead50ad34b4ad0d4ba597161e616
+      - name: Preserve original proof and measurement records
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: torchlean-${{ github.run_id }}-receipts
+          path: ${{ runner.temp }}/torchlean-reports/
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 9
+
+  torchlean_r28:
+    defaults:
+      run:
+        working-directory: .
+    if: github.event_name == 'workflow_dispatch' && inputs.competition == 'floatlib' && inputs.candidates == '__torchlean_r28__' && github.event.repository.private == false && inputs.allow_private == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: competitions/torchlean
+      - name: Prepare immutable TorchLean source and capped public runner
+        run: bash competitions/torchlean/candidates/r28-3h-20261030T171558Z/development/ci-bridge/prepare-current.sh
+      - name: Restore pinned dependency cache
+        id: tlcache
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684
+        with:
+          path: |
+            ~/.elan
+            ${{ runner.temp }}/floatlib-upstream/lean/.lake
+          key: torchlean-${{ runner.os }}-9d4640e4d92b7f29611643e54601d5a114dc70b1
+          restore-keys: |
+            torchlean-${{ runner.os }}-accb82b6e2adeda1b41a57a260d68fb3879c427e
+            floatlib-${{ runner.os }}-978cc5b445edb9943fd9953b0a9037d97a9f33a8
+      - name: Champion-calibrated board model and exact proof diagnostics
+        run: python3 competitions/torchlean/candidates/r28-3h-20261030T171558Z/development/ci-bridge/runner.py
+      - name: Check original setup completion
+        if: always()
+        id: setupready
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import os,json
+          p=Path(os.environ['RUNNER_TEMP'])/'torchlean-reports/summary.json'
+          d=json.loads(p.read_text()) if p.is_file() else {}
+          ok=all(any(c['label']==n and c['exit_code']==0 for c in d.get('commands',[])) for n in ['setup','setup-check'])
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('ready='+str(ok).lower()+'\n')
+          PY
+      - name: Save successfully prepared pinned dependencies
+        if: always() && steps.setupready.outputs.ready == 'true' && steps.tlcache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684
+        with:
+          path: |
+            ~/.elan
+            ${{ runner.temp }}/floatlib-upstream/lean/.lake
+          key: torchlean-${{ runner.os }}-9d4640e4d92b7f29611643e54601d5a114dc70b1
       - name: Preserve original proof and measurement records
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
