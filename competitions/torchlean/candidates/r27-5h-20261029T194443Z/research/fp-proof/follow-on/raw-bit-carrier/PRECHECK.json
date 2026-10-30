@@ -1,0 +1,38 @@
+{
+  "at_utc": "2026-10-30T00:00:32.530651+00:00",
+  "state": "PREFLIGHT_FINITE_RAWBIT_CARRIER_ONLY_NO_FP_ARITHMETIC",
+  "scope": "A actual bit roundtrip/FloatArray getter interface and proofcost; B owns actualpublic23QPpayload layout/work reduction. No newCI orcandidate.",
+  "history_checked": [
+    "R24 f64-cost/PLAN.md andactual407745-review.md: numericFloatArray scale+FPADD+GRS, not arawpayload-onlycarrier; itsnegativecost doesnotdirectlysettlethisnewstorageproposal",
+    "ScopedsearchofR24research/development andmemoryregistryfoundnoreadilyreusable raw52bitcarrier proof. Searchscopeonly, notproof ofabsence."
+  ],
+  "logical_frontier": {
+    "range": "payload.toNat<2^52",
+    "why_finite": "Binary64 exponentfieldis0, sign0; +0 orsubnormal, neverNaN",
+    "accepted_prior": "R27 RealStrict/e004d3d7 native_ofBits forfiniteword alreadyaccepted; projectingmodelbits shouldyieldUInt64roundtrip. Newminimalprojection/arraywrapper NOTCOMPILED.",
+    "unrestricted_uint64": "Cannotinheritall64bitroundtrip because Lean logical Float canonicalizes distinctNaNpayloads."
+  },
+  "cost_frontier": {
+    "pinned_header_git_blob": "910ecae72a7d1c149d4ccc8111ee438c8b4551dd",
+    "UInt64_boxing": "lean_box_uint64 alwaysallocates a scalarconstructor in thisheader",
+    "Nat_control": "payload<2^52 fits smallNat on64bitrunner; ArrayNat stores an immediateword, noUInt64heapbox. PackedArrayNat is a requiredsame-payloadcontrol, not merelyoldtwo-cachebaseline.",
+    "bitcast_calls": "lean_float_of_bits/to_bits are LEAN_EXPORT declarations, notheaderstaticinline. Oldactualsame-version ASM explicitlycallslean_float_to_bits; a storageonlyhotread canaddthiscall unlessnewcodegen removesit.",
+    "old_actual_toBits_call_evidence": {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/f64-cost/actual407745-runF64Native-selected.asm.txt",
+      "sha256": "33b0a6e8f591df2bd28c2a760086ee84fb1be8b9193dd28ad288cb851cc93446",
+      "lines": [
+        42,
+        43
+      ]
+    },
+    "new_storage_candidate_codegen": "UNKNOWN",
+    "possible_gain": "Combiningtwoactualcaches orremovinggenuineUInt64boxing mayhelp, butpackingbenefitmustnotbeassignedtoFloatArrayalone."
+  },
+  "minimal_next": "Onefinite-roundtrip+publicpush/fold/getter lemma, then actualQPwidth/bound fromB. IfitonlytradesNatshift forbitcastcall, stopbeforecostCI.",
+  "source_URLs": [
+    "https://github.com/leanprover/lean4/blob/v4.34.0/src/include/lean/lean.h",
+    "https://github.com/leanprover/lean4/blob/v4.34.0/src/Init/Data/FloatArray/Basic.lean"
+  ],
+  "native_timing": "UNKNOWN",
+  "complete_kernel_proof": "NOT_IMPLEMENTED"
+}

@@ -1,0 +1,38 @@
+{
+  "at_utc": "2026-10-29T21:45:51.923170+00:00",
+  "state": "CONDITIONAL_PROOF_COST_OPTION_NOT_IMPLEMENTED_OR_QUEUED",
+  "problem": "Full finite widening and extreme RN32 cells may dominate FP proof/integration size even though public inference data rarely needs those fast paths. Goal is a correct total kernel and any board, not maximal fast-path coverage.",
+  "runtime_option": {
+    "operand_guard": "Accept only exponent1..254 or signedzero(exp0,frac0). Nonzero subnormal/nonfinite must actually clear prepared.valid and go to known-correct exact fallback.",
+    "proposal_guard": "Require2<=exp32(q)<=253 and fraction(q)!=0 before accepting certificate. All excluded guesses go to exact fallback. This eliminates min-normal, max-finite and exact-power midpoint cases from the fast soundness theorem.",
+    "all_input_contract": "All original arrays/shapes/NaNs/infinities/subnormals/zeros remain in the actual kernel domain through exact fallback. No new global hNormal assumption in Submission.correct; derive subset premises from runtime guard.",
+    "do_not_mutate_frozen": "Create a separate source/version only if selected. Current FP-only7cc98e2b and known exact recipes stay unchanged."
+  },
+  "proof_leverage": {
+    "normal_widening_receipt": "competitions\\torchlean\\candidates\\r25-90m-20261029T064916Z\\research\\widen7-independent-acceptance.json",
+    "accepted_carrier_sha256": "a88c70e52a12c7c9e60bdd3e021323772353fc1e5e46290bdd71c1db97185bd3",
+    "helper_roots": [
+      "Submission.R24RepresentationWiden.normal_decode",
+      "Submission.R24RepresentationWiden.native_model",
+      "Submission.R24RepresentationWiden.native_finite",
+      "Submission.R24RepresentationWiden.actual_native_value",
+      "Submission.R24RepresentationWiden.signed_zero_bits",
+      "Submission.R24RepresentationWiden.shift29_toReal"
+    ],
+    "scope": "Exact normal and signedzero roots only; can be reused after actual guard and implementation-equivalence link, not inherited by the old total-finite recipe",
+    "uniform_cell": "For nonpower fraction and interior exponents, both midpoint raw64 fields remain in a simple uniform bin and upper cell stays below maxFinite32; no abs(S)<=maxFinite shortcut on an unrestricted maxFinite cell.",
+    "remaining": [
+      "Actual normalOnly-preparer validity and fields relation",
+      "Forward-error/radius and actual caller/bias/fallback",
+      "Actual RN32 cell-to-official-finishWord closure, full12 gate, native whole-call cost"
+    ]
+  },
+  "finite_old_fixture_check": {
+    "sample": "Root160oldnormal/sparsefirst-layer only",
+    "new_proposal_rejections": 0,
+    "raw_input_nonzero_subnormal": "Old finite fixture widening match checked; public generator uses normal/zero but fullcaller census must confirm all layers",
+    "not_probability": true
+  },
+  "decision": "A should compare this smaller accepted-domain proof against current fullFinite progress only after source feedback/cost signal. Do not fan out a second large closure by default.",
+  "comparison": "No current champion performance inferred; no originalshipped timing run"
+}

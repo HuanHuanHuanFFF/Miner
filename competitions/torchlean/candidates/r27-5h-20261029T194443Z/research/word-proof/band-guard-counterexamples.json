@@ -1,0 +1,96 @@
+{
+  "at_utc": "2026-10-29T22:53:37.946875+00:00",
+  "state": "DIRECTED_FINITE_OUTER_GUARD_AND_CALLBACK_TESTS",
+  "cases": [
+    {
+      "name": "one_minus_one_plus_minsubnormal",
+      "actual_word": 1,
+      "expected_word": 1,
+      "branch": "outer_range_fallback",
+      "original_callback_calls": 1
+    },
+    {
+      "name": "negative_zero_callback",
+      "actual_word": 2147483648,
+      "expected_word": 2147483648,
+      "branch": "exact_zero_fallback",
+      "original_callback_calls": 1
+    },
+    {
+      "name": "nonzero_cancellation_callback",
+      "actual_word": 0,
+      "expected_word": 0,
+      "branch": "exact_zero_fallback",
+      "original_callback_calls": 1
+    },
+    {
+      "name": "YL_bias_rebase_23bit_boundary",
+      "actual_word": 1065361408,
+      "expected_word": 1065361408,
+      "branch": "single_round",
+      "original_callback_calls": 0
+    },
+    {
+      "name": "two_minsubnormals",
+      "actual_word": 2,
+      "expected_word": 2,
+      "branch": "single_round",
+      "original_callback_calls": 0
+    },
+    {
+      "name": "nonfinite_callback_identity",
+      "actual_word": 2143289361,
+      "expected_word": 2143289361,
+      "branch": "outer_shape_or_finite_fallback",
+      "original_callback_calls": 1
+    },
+    {
+      "name": "weight_span7_fallback",
+      "actual_word": 1065418753,
+      "expected_word": 1065418753,
+      "branch": "outer_range_fallback",
+      "original_callback_calls": 1
+    },
+    {
+      "name": "wide_span58_edge",
+      "actual_word": 1325400065,
+      "expected_word": 1325400065,
+      "branch": "single_round",
+      "original_callback_calls": 0
+    },
+    {
+      "name": "wide_span59_fallback",
+      "actual_word": 1333788673,
+      "expected_word": 1333788673,
+      "branch": "outer_range_fallback",
+      "original_callback_calls": 1
+    }
+  ],
+  "negative_controls": {
+    "bias_shift_clipped_to_zero": 679477248,
+    "missing_zero_shift_arm": {
+      "correct": [
+        3,
+        5
+      ],
+      "incorrect": [
+        3,
+        7
+      ]
+    }
+  },
+  "bounds": {
+    "reject_n_above": 1048576,
+    "max_weight_span": 6,
+    "max_terminal_range": 58
+  },
+  "limitations": [
+    "Negative-zero and nonfinite expected values are supplied callback identities; this checks preservation, not a proof of FloatLib special-value semantics.",
+    "No Lean/native execution; the general partition, guards and endpoint proof remain outstanding."
+  ],
+  "source_hashes": {
+    "band_guard_counterexamples.py": "54eee9f263d23bcb618584e2f8490dccb3890ede8e7bbf6cc486125ce68ee23b",
+    "band_full_model_census_v3.py": "079147825ee2820b80099e1893b03e9ad92d12f91eb329850235d484e515cb15",
+    "norm_frontier.py": "e35e08d6387847160aaa4387fef3c78e8e07ca6440ff0bde7be5b81e2bf3dede"
+  }
+}

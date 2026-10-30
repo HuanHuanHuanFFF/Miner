@@ -1,0 +1,53 @@
+{
+  "at_utc": "2026-10-29T23:57:56.792711+00:00",
+  "state": "INTEGER_FORMAT_SOURCE_ONLY_NOT_COMPILED_NOT_QUEUED",
+  "source_sha256": "ab40998386816c84b6236bdb770f962cdc7ae0d0f77da8e8f003e13b1bb6d735",
+  "bytes": 1255,
+  "policy": {
+    "intake": null,
+    "policy": null,
+    "passed": true,
+    "sources": {
+      "sandbox.py": {
+        "git_blob_sha": "13c4f7b71e678a27d024613e5198e0d75667de4e",
+        "bytes": 21304,
+        "sha256": "ba8e1a0f23692928f080ad278c35b36493199fb90e3768f90710b85ffef84126"
+      },
+      "duplicates.py": {
+        "git_blob_sha": "3e8eb21d1a50cce44090e29a816e3b55c0ad3fd9",
+        "bytes": 1759,
+        "sha256": "e1859b11011797b5012795d067383ef619a291769ea40dd0cd017791f127f4f8"
+      }
+    }
+  },
+  "premises": [
+    "dense: magnitude<2^39, actual old span<=15",
+    "indexed aligned: actual input span<=7 gives signedFactor magnitude<2^31; index<2^20",
+    "shifted: mantissa<2^24,delta<=15,index<2^20"
+  ],
+  "Float_scope": "No Float arithmetic or FloatArray code here. A owns finite raw-bit transport and actual array getter proof. No default newCI request.",
+  "old_source_binding": {
+    "submission23_sha256": "1010c0744f0506974c64601e8ce7335bea56d0cb21b655543d390794df0665fe",
+    "names": [
+      "QPb",
+      "QPD",
+      "QPS",
+      "QPa",
+      "C7",
+      "E2",
+      "C9",
+      "I9"
+    ],
+    "center": 4611686018427387904,
+    "max_magnitude_exclusive": 549755813888,
+    "old_values_are_64bit_smallNat": true,
+    "old_per_MAC_P_entries_read": 1
+  },
+  "C_evidence": {
+    "path": "R26/evidence/40852769757/.../fp-word-conv6/Submission.c",
+    "sha256": "103523f22ef030bfa5d3631312b2049665175a08ddb7957a20ed0dbd0846f847",
+    "observation": "Old scalar loop calls lean_float_array_get and receives double; not current payload code or proof-indexed uget codegen."
+  },
+  "pinned_array_API_evidence": "../fp-proof/follow-on/PINNED-FLOATARRAY-ACCESS.json; exact excerpt fb33ff76afeeccda45bad88a372e77070e155f47866f2f640a3616487e420774, verified separate role. Current public23 generated C unavailable locally.",
+  "decision": "Pause dense-only case absent actual eliminated work; sparse aligned52 has a genuine one-index-load opportunity but needs whole preparation/caller bounds and complete-call cost. No per-entry heap allocation claim."
+}

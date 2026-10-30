@@ -1,0 +1,127 @@
+{
+  "request_id": "R27-FP-003",
+  "updated_at_utc": "2026-10-29T19:55:27.365893+00:00",
+  "state": "PREPARED_NOT_QUEUED_AWAIT_FP001_FEEDBACK",
+  "candidates": [
+    {
+      "name": "Sum3ContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/numerics-v1/Sum3ContractOnly.lean",
+      "bytes": 11602,
+      "sha256": "dddd68ad8cb498f97001da511e462867ddb8cd93977d97931e9319140bbaa762",
+      "helper_roots": [
+        "Submission.R24RepresentationSum.round_grid",
+        "Submission.R24RepresentationSum.loop_invariant",
+        "Submission.R24RepresentationSum.sum_enclosure"
+      ],
+      "depends_on": [],
+      "purpose": "standalone actual producer numerical primitive"
+    },
+    {
+      "name": "RadiusContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/numerics-v1/RadiusContractOnly.lean",
+      "bytes": 10716,
+      "sha256": "bac402df0055373afbaec14ea7fed230a65520bb934a77ce7514aaa9e1913cab",
+      "helper_roots": [
+        "Submission.R24RadiusEndpoints.radius_finite_value",
+        "Submission.R24RadiusEndpoints.native_endpoints_finite_real"
+      ],
+      "depends_on": [],
+      "purpose": "standalone actual producer numerical primitive"
+    },
+    {
+      "name": "NativeMulContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/numerics-v1/NativeMulContractOnly.lean",
+      "bytes": 16633,
+      "sha256": "6d5f347a62a27d4ec665a59999fe0e1c0b7785189d97570031883ddc38c9ec1c",
+      "helper_roots": [
+        "Submission.R24NativeMul.native_mul_toModel",
+        "Submission.R24NativeMul.native_mul_finite_roundAt",
+        "Submission.R24NativeMul.native_mul_exact_from_raw32_values"
+      ],
+      "depends_on": [],
+      "purpose": "standalone actual producer numerical primitive"
+    },
+    {
+      "name": "ExactRawTotalContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/numerics-v1/ExactRawTotalContractOnly.lean",
+      "bytes": 2412,
+      "sha256": "103b8934463d371cb9f46fadd7702a93ea23b684e8d028b52205218a1f873bdd",
+      "helper_roots": [
+        "Submission.R26ExactRawTotal.finiteSlice_real",
+        "Submission.R26ExactRawTotal.slice_eq_scaled_dsum"
+      ],
+      "depends_on": [],
+      "purpose": "official total/finisher interface"
+    },
+    {
+      "name": "FiniteDotFinishContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/numerics-v1/FiniteDotFinishContractOnly.lean",
+      "bytes": 2847,
+      "sha256": "232c37f43d912e873040e6b6f0f0702302dd5a386000d9d28adfb5ceff9cc3d4",
+      "helper_roots": [
+        "Submission.R26FiniteDotFinish.dotSpec_eq_finishWord_nonzero"
+      ],
+      "depends_on": [],
+      "purpose": "official total/finisher interface"
+    },
+    {
+      "name": "ContractWordCore",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/numerics-v1/ContractWordCore.lean",
+      "bytes": 2626,
+      "sha256": "e52fc2d7744ae9e17851dbd93a401d8d7a7fd84b6b258fe5ab3a2fb0f7c02a7b",
+      "helper_roots": [
+        "Submission.R25ContractWordBridge.native_dyadic_word",
+        "Submission.R25ContractWordBridge.finishWord_of_native_result"
+      ],
+      "depends_on": [],
+      "purpose": "official total/finisher interface"
+    }
+  ],
+  "purpose": "Factor numerical producer and official total interfaces out of105KB old closure. No runtime rewrite or new gamma analysis; SUM3 reused unchanged. Exact independent small imports can compile without failed widening or checker prefix.",
+  "allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "allow_private": false,
+  "measurement": false,
+  "local_Lean": false,
+  "resources": {
+    "compile_seconds_per_source": 180,
+    "memory_mib": 4096
+  },
+  "verification": "NOT_RUN",
+  "decision": "D may select after initial compile feedback; not a request to expand concurrentCI or skip core fixes",
+  "optional_rounder_primitive": {
+    "at_utc": "2026-10-29T20:20:35.992865+00:00",
+    "state": "PREPARED_NOT_QUEUED_AFTER_REAL_CHECKER_PRIORITY",
+    "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/rounder-v1/RounderPrimitivesContractOnly.lean",
+    "bytes": 18780,
+    "sha256": "4dc397d900f648138b99e05c5a072137872008cafb06a0b86fe26bba86dcaad9",
+    "helper_roots": [
+      "Submission.R24CellPrimitive.quotient_strict_midpoint",
+      "Submission.R24CellPrimitive.quotient_even_closed_midpoint",
+      "Submission.R24CellPrimitive.native32_strict_cell",
+      "Submission.R24RescaleNative32.roundRatScaled_rescale",
+      "Submission.R24DyadicAgreement.roundDyadic_eq_roundRatScaled"
+    ],
+    "inputs": [
+      {
+        "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-broad/CellPrimitive-v2.lean.inc",
+        "sha256": "78bef6ff5b493648c3be18faf0b194380fbf7c7585591b15b7c587caec7d1819"
+      },
+      {
+        "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/quotient-boundary/RescaleNative32.lean.inc",
+        "sha256": "6d704ea38d73e8daadce7e6a2308dc2c25d550eba67e8de8c485b4629af25d90"
+      },
+      {
+        "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/DyadicAgreement.lean.inc",
+        "sha256": "ef4efc523d303afcba1cb3f9e6dc41e203b132b1f814a0eb4706e5406ea2cf8b"
+      }
+    ],
+    "scope": "Independent base cell/scale/dyadic rational primitives; no actual midpoint integration, normal-power cases or producer proof claimed. Avoid waiting until final closure to expose unrelated primitive type errors.",
+    "proof": "NOT_RUN",
+    "local_Lean": false,
+    "formal_submission": false
+  }
+}

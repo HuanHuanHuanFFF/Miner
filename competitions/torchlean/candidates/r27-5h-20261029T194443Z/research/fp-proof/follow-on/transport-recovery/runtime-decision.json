@@ -1,0 +1,56 @@
+{
+  "checked_at_utc": "2026-10-30T00:12:00Z",
+  "state": "PINNED_SOURCE_REVIEW_NO_LEAN_OR_NATIVE_EXECUTION",
+  "source": {
+    "repository": "leanprover/lean4",
+    "ref": "v4.34.0",
+    "path": "src/runtime/object.cpp",
+    "git_blob_sha1": "49213d7be079e11589f1efcfe880dba44622a6e7",
+    "url": "https://github.com/leanprover/lean4/blob/v4.34.0/src/runtime/object.cpp",
+    "lines": [
+      [
+        1935,
+        1952
+      ],
+      [
+        2662,
+        2700
+      ]
+    ]
+  },
+  "new_findings": [
+    "lean_float_of_bits uses std::bit_cast then an isnan check and replaces NaN with quiet_NaN.",
+    "lean_float_to_bits checks isnan then returns canonical0x7ff8000000000000 for NaN, otherwise std::bit_cast.",
+    "lean_float_array_data allocates a generic array and lean_box_float for every element; data must appear only in erased proofs.",
+    "lean_float_array_push ensures capacity/exclusivity then directly stores a double. Public push-based prepare avoids ArrayFloat intermediate."
+  ],
+  "decision": {
+    "dense": "PAUSE_COST_QUEUE: oldQPD valuesfit smallNat and oneNat entryisloadedperMAC; no newboxedUInt64elimination. RawFloatcarrier adds conversionswithNaNchecks unlesscodegenproves otherwise. Slotcompression aloneis not demonstrated fullmodel win.",
+    "sparse52": "RETAIN_CONDITIONAL: can combineactualindex+signedfactor intoone52bitpayload atspan<=7 andindex<2^20. Need actualQPIindex<n bridge, proof-indexedget/uget, samepayloadpackedArrayNat control, preparation+access+destruction evidence.",
+    "not_claimed": [
+      "No new Lean theorem was compiled.",
+      "No new native cost was measured.",
+      "Runtime source shape is not emitted new candidate assembly.",
+      "No new fullkernel correctness or champion claim."
+    ]
+  },
+  "predecessor": {
+    "roundtrip": "../raw-bit-carrier/RawPayloadCarrierContractOnly.lean",
+    "sha256": "4e239ff05bf47d340502da2f913a02d6bbb1b3e3df142b61fdbf0a3c0a92d330",
+    "state": "NOT_COMPILED"
+  },
+  "word_side": {
+    "format": "../../../../word-proof/follow-on/float-payload/FORMAT-AND-COST.md",
+    "source": "WordPayload-v2.lean",
+    "sha256": "ebe7db2a93e4af92850a87d1c8b53cdca89c73fe87725d690482fc21c0ddf4d1"
+  },
+  "failed_lookup": {
+    "path": "src/runtime/float.cpp",
+    "result": "GitHub404; directory showed runtime/object.cpp; no repeated retries or bypass."
+  },
+  "no_new_CI": true,
+  "no_local_Lean": true,
+  "no_local_native": true,
+  "no_direct_messages": true,
+  "deadline_utc": "2026-10-30T00:44:43Z"
+}

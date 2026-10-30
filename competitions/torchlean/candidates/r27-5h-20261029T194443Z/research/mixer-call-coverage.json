@@ -1,0 +1,68 @@
+{
+  "at_utc": "2026-10-29T20:34:26.148641+00:00",
+  "source": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/accb82b6e2adeda1b41a57a260d68fb3879c427e/lean/bench/ExactSuite.lean",
+  "status": "PINNED_MODEL_CALL_GRAPH_AND_OPERATION_COUNTS_NOT_RUNTIME_PROFILE",
+  "mixer_call_graph": [
+    "layernorm T C",
+    "gemm T T C",
+    "addSaved",
+    "layernorm T C",
+    "linear T C 2C relu",
+    "linear T 2C C",
+    "addSaved",
+    "linear1 TC 10 classifier"
+  ],
+  "arithmetic_counts_per_sample": {
+    "token_gemm": "T*T*C",
+    "channel_linears": "4*T*C*C",
+    "classifier": "10*T*C",
+    "channel_share_among_these_MACs": "4*C/(T+4*C+10)"
+  },
+  "profiles": [
+    {
+      "profile": "typical",
+      "tokens_range": [
+        8,
+        16
+      ],
+      "channels_range": [
+        16,
+        48
+      ],
+      "channel_linear_MAC_share_lower": 0.7111111111111111,
+      "channel_linear_MAC_share_upper": 0.9142857142857143
+    },
+    {
+      "profile": "scale",
+      "tokens_range": [
+        20,
+        32
+      ],
+      "channels_range": [
+        12,
+        20
+      ],
+      "channel_linear_MAC_share_lower": 0.5333333333333333,
+      "channel_linear_MAC_share_upper": 0.7272727272727273
+    },
+    {
+      "profile": "boundary",
+      "tokens_range": [
+        9,
+        17
+      ],
+      "channels_range": [
+        15,
+        33
+      ],
+      "channel_linear_MAC_share_lower": 0.6896551724137931,
+      "channel_linear_MAC_share_upper": 0.8741721854304636
+    }
+  ],
+  "coverage": "All three current profiles have T>=8, so a rows>=8 dense.linear wrapper reaches both channel MLP layers and bypasses rows1 classifier. It does not automatically affect predecessor27 Ya3Q direct calls to YaV for GEMM.",
+  "limits": [
+    "These are mathematical multiply counts, not measured time, memory or Amdahl lower bounds. Norm, metadata, fallback, packing, extraction, output and sample-loop costs remain.",
+    "Python cost fixture shapes do not fully cover smallest actual scale k12/out24 workloads; full Mixer probe must retain them.",
+    "No new performance comparison or current champion multiplier is inferred from counts."
+  ]
+}

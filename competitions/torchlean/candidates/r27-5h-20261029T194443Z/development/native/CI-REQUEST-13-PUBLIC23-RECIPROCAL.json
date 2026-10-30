@@ -1,0 +1,53 @@
+{
+  "at_utc": "2026-10-29T22:30:55.161559+00:00",
+  "request": "public23-row-reciprocal-v2",
+  "priority": "Primary norm mechanism after actual batch4 proof repair; original all12 gate required",
+  "ci_owner": "Droot only",
+  "official_commit": "27fb1d19c712ead50ad34b4ad0d4ba597161e616",
+  "source": "competition-state/source-private/submission23-Kernel.lean",
+  "source_sha256": "1010c0744f0506974c64601e8ce7335bea56d0cb21b655543d390794df0665fe",
+  "recipe": "development/native/public23_reciprocal_v3.py",
+  "recipe_sha256": "080584fa0e222c95db517c92802177a405810aaca5020178f9934d08da3c9bb6",
+  "interface": "transform(data:bytes, submission=23, variant='row-reciprocal23-v3')->bytes",
+  "candidate": {
+    "name": "public23-row-reciprocal-v2",
+    "sha256": "9654b727badce93d0727ece982a0ccedce99107ce98235b18e0e5cdc79e8944e",
+    "bytes": 253499,
+    "free_bytes": 2501,
+    "intake_policy": "PASS",
+    "state": "ACTUAL_ALL12_DECLARED_NOT_COMPILED"
+  },
+  "runtime_changes": "Cache one reciprocal per norm row; replace three UInt64 q/r pairs with multiply-high and one correction; final rounding/fallback retained",
+  "proof_changes": "Reuse m64/m64_v; B explicit Nat cancellation replaces failed nlinarith paths; normalize word estimate; update actual Ya7Ge/Zdt",
+  "all12_correct": "Original entry preserved and connected to actual changed functions, but NOT_COMPILED; no accepted gate claim",
+  "stage": "Source compile/full original all12 gate, then whole normalized_mlp paired screen only if gate passes",
+  "dependencies": [
+    {
+      "path": "development/native/public23_reciprocal.py",
+      "sha256": "884e9bb53ec4fb4bc051860a969dbde4e679af5678ec64e0ebb6bd0de5dfa8b8"
+    },
+    {
+      "path": "development/native/ReciprocalUInt64ContractOnly-v4.lean",
+      "sha256": "013a5fd2e87c4da32bf791529564b587d67f8a94d096fe9f058826f2a8873dda"
+    },
+    {
+      "path": "development/native/frozen_compact_public23.py",
+      "sha256": "4c3dd79284f6701d3b128687f9f973f47d9236f8d9db502d398e2eb4d131e129"
+    }
+  ],
+  "helper_only_optional": {
+    "path": "ReciprocalUInt64ContractOnly-v4.lean",
+    "sha256": "013a5fd2e87c4da32bf791529564b587d67f8a94d096fe9f058826f2a8873dda",
+    "bytes": 12500,
+    "state": "BATCH4_ACTUAL_REPAIR_NOT_COMPILED"
+  },
+  "old_v3_result": "Helper elaboration failed; printed sorryAx is not accepted",
+  "current_target": {
+    "board": "normalized_mlp",
+    "champion": 43,
+    "current43_over_public23_time": 0.9072362322024092,
+    "scope": "Cross-environment exact report chain only; direct source43 UNKNOWN"
+  },
+  "supersedes": "Old source12+27 native-stat graft; no further old graft queue",
+  "publication": "Own recipes/helpers/receipts only; reconstructed whole source private/ephemeral, never public artifacts"
+}

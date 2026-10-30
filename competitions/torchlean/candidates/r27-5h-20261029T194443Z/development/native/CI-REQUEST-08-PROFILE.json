@@ -1,0 +1,17 @@
+{
+  "request_id": "R27-native08-norm-layer-discriminator",
+  "created_at_utc": "2026-10-29T20:35:00Z",
+  "owner": "Droot",
+  "priority": "Optional cheap profile on next norm build if no original layer timings/ASM are available; do not delay queuedactualproof/nativecandidate for generic tooling",
+  "source": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/native/NormProfileMain.lean",
+  "source_sha256": "6af2284710d1ebc1d3fa8d43e81123e4219fafb245d8e4961be26009939c0e13",
+  "compile_context": "SamepinnedExactSuite+actualcandidateSubmission overlay as existing native build. New own non-Kernel root only; do not alter protectedbench/gate/contracts/lakefile. Own targetfile may extend copiedlakefile as current MainExact target does.",
+  "run_args": ["27102901","7"],
+  "expected": "18normalized_mlp cells x5layers x8rawsamples including1warmup=720rawrows. B1/B8,normal/wide/sparse,typical/scale/boundary. Inputstates follow actualcandidate layer.apply pipeline.",
+  "boundary": "Preparationoutside; each layer includes kernel internalprepare/cache/fallback/output plus hash/lifetime via officialIO.lazyPure/touch pattern. This is existing devprofile-style diagnostic, not original fullmodel scorer or currentchampion gain. Preserve allrawtimes.",
+  "question": "What fraction ofactualcomplete-layer work lies in RMS andlayernorm? Nativegraft removes moment/sqrt cost; reciprocal removes per-outputdivision. Missingfraction staysUNKNOWN.",
+  "parser": "parse_norm_profile.py --input <rawstdout> --metadata <source/bench/CPUidentityjson> --output <profilejson>",
+  "licensing": "Own diagnostic code/data may be public; wholeunknown-license Kernel/C/ASM remains ephemeral. Hashes/counters only.",
+  "allow_private": false,
+  "local_build": false
+}

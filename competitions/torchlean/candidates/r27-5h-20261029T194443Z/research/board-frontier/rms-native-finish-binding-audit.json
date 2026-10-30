@@ -1,0 +1,91 @@
+{
+  "at_utc": "2026-10-29T22:38:05.082447+00:00",
+  "state": "STATIC_CALLER_BINDING_AND_TARGETED_WORD_AUDIT",
+  "base_sha256": "1010c0744f0506974c64601e8ce7335bea56d0cb21b655543d390794df0665fe",
+  "candidate_sha256": "d0e60a6e1757c6947ec6e5700e6ce5f489d5c30c6489105527643944fdf7838b",
+  "base_runtime_declarations": 160,
+  "changed_runtime": [
+    "Ybb2"
+  ],
+  "new_runtime": [
+    "R27RmsFinish"
+  ],
+  "all_other_runtime_bytes_identical": true,
+  "original_correct_retained": true,
+  "proof_changed": [
+    "T4b"
+  ],
+  "proof_added": [
+    "R27RmsFinish_eq"
+  ],
+  "native_stats_sqrt_and_layernorm_identical": true,
+  "targeted_cases": [
+    {
+      "case": "unit",
+      "w": "3f800000",
+      "g": "3f800000",
+      "d": "3f800000",
+      "newpath": "native_output",
+      "fastresult": "3f800000"
+    },
+    {
+      "case": "negative_zero_exact",
+      "w": "80000000",
+      "g": "3f800000",
+      "d": "3f800000",
+      "newpath": "native_exact_zero",
+      "fastresult": "00000000"
+    },
+    {
+      "case": "opposite_gamma_zero",
+      "w": "00000000",
+      "g": "bf800000",
+      "d": "3f800000",
+      "newpath": "native_exact_zero",
+      "fastresult": "00000000"
+    },
+    {
+      "case": "negative_denominator",
+      "w": "3f800000",
+      "g": "3f800000",
+      "d": "bf800000",
+      "newpath": "denominator_fallback",
+      "fastresult": null
+    },
+    {
+      "case": "tiny_product",
+      "w": "00000001",
+      "g": "00000001",
+      "d": "3f800000",
+      "newpath": "small_or_zero_product_fallback",
+      "fastresult": null
+    },
+    {
+      "case": "max_product",
+      "w": "7f7fffff",
+      "g": "7f7fffff",
+      "d": "00800000",
+      "newpath": "normal_range_fallback",
+      "fastresult": null
+    },
+    {
+      "case": "tie_to_even",
+      "w": "3f800001",
+      "g": "3f800001",
+      "d": "3f800000",
+      "newpath": "native_output",
+      "fastresult": "3f800002"
+    }
+  ],
+  "counterexample_notes": [
+    "Using V=idxD+23 instead of+22 makes unit1 result0.5; indexoffset is correctness-critical",
+    "Returning signedinputzero rather than+0 breaks originalYa7 exactrationalzero",
+    "D!=0 alone insufficient: negative denominator must originalfallback",
+    "Do not remove D<=N guard merely from normal benchmarkcoverage"
+  ],
+  "limits": [
+    "Static source and finite words only",
+    "Original full12 gate still required",
+    "Not time measurement"
+  ]
+}

@@ -1,0 +1,67 @@
+Lean v4.34.0 runtime excerpts. Copyright Microsoft Corporation / Lean FRO LLC; Apache-2.0.
+Repository: leanprover/lean4; ref: v4.34.0
+Path: src/runtime/object.cpp
+Git blob: 49213d7be079e11589f1efcfe880dba44622a6e7
+URL: https://github.com/leanprover/lean4/blob/v4.34.0/src/runtime/object.cpp
+
+Lines1935-1952:
+extern "C" LEAN_EXPORT double lean_float_of_bits(uint64_t u)
+{
+    static_assert(sizeof(double) == sizeof(u), "`double` unexpected size.");
+    double ret = std::bit_cast<double>(u);
+    if (isnan(ret)) return std::numeric_limits<double>::quiet_NaN();
+    return ret;
+}
+
+// We use a specific bit pattern instead of `std::numeric_limits<double>::quiet_NaN()` because
+// the returned bit pattern needs to match exactly with what we return in the logical model and
+// the exact value of `quiet_NaN` is implementation-defined.
+constexpr uint64_t quietNaN64 = 0x7ff8000000000000;
+
+extern "C" LEAN_EXPORT uint64_t lean_float_to_bits(double d)
+{
+    if (isnan(d)) return quietNaN64;
+    return std::bit_cast<uint64_t>(d);
+}
+
+Lines2662-2700:
+extern "C" LEAN_EXPORT obj_res lean_copy_float_array(obj_arg a) {
+    return lean_copy_sarray(a, lean_sarray_capacity(a));
+}
+
+extern "C" LEAN_EXPORT obj_res lean_float_array_mk(obj_arg a) {
+    usize sz      = lean_array_size(a);
+    obj_res r     = lean_alloc_sarray(sizeof(double), sz, sz); // NOLINT
+    object ** it  = lean_array_cptr(a);
+    object ** end = it + sz;
+    double * dest = reinterpret_cast<double*>(lean_sarray_cptr(r));
+    for (; it != end; ++it, ++dest) {
+        *dest = lean_unbox_float(*it);
+    }
+    lean_dec(a);
+    return r;
+}
+
+extern "C" LEAN_EXPORT obj_res lean_float_array_data(obj_arg a) {
+    usize sz       = lean_sarray_size(a);
+    obj_res r      = lean_alloc_array(sz, sz);
+    double * it    = reinterpret_cast<double*>(lean_sarray_cptr(a));
+    double * end   = it+sz;
+    object ** dest = lean_array_cptr(r);
+    for (; it != end; ++it, ++dest) {
+        *dest = lean_box_float(*it);
+    }
+    lean_dec(a);
+    return r;
+}
+
+extern "C" LEAN_EXPORT obj_res lean_float_array_push(obj_arg a, double d) {
+    object * r = lean_sarray_ensure_exclusive(lean_sarray_ensure_capacity(a, lean_sarray_size(a) + 1, /* exact */ false));
+    size_t & sz  = lean_to_sarray(r)->m_size;
+    double * it  = reinterpret_cast<double*>(lean_sarray_cptr(r)) + sz;
+    *it = d;
+    sz++;
+    return r;
+}
+
+

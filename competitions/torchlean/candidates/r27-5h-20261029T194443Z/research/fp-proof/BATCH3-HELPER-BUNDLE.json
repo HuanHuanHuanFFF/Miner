@@ -1,0 +1,162 @@
+{
+  "at_utc": "2026-10-29T20:25:03.079042+00:00",
+  "state": "SCHEDULING_OPTION_NOT_DISPATCHED",
+  "owner": "fp-proof",
+  "executor": "Droot",
+  "purpose": "After batch2 feedback, diagnose7independent small proof blocks in onepublicrunner rather than delaying every independent block until the final160KBclosure. Each source<=38493B. Do not queue knownbroken Realprefix unchanged if batch2 exposes one; update exact dependent hashes first.",
+  "helpers": [
+    {
+      "name": "GuardedNonzeroContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/boundary-v1/GuardedNonzeroContractOnly.lean",
+      "bytes": 36599,
+      "sha256": "dfa924adaf6931f9886f0128d152ac8771e5cdb5dd62a392a9a5602f417b05c5",
+      "helper_roots": [
+        "Submission.R25OrderKey.orderKey_lt_real",
+        "Submission.R25Checker.actual_acceptance_bounds",
+        "Submission.R27GuardedEndpoints.accepted_endpoint_equations",
+        "Submission.R27GuardedEndpoints.actual_acceptance_contains_exact_of_error",
+        "Submission.R27GuardedEndpoints.actual_accepted_exact_nonzero",
+        "Submission.R27GuardedEndpoints.actual_accepted_total_nonzero"
+      ],
+      "depends_on": [
+        "batch1 old_key_core accepted"
+      ],
+      "seconds": 120
+    },
+    {
+      "name": "FiniteWidenContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/producer-v1/FiniteWidenContractOnly.lean",
+      "bytes": 38493,
+      "sha256": "2f07e19355ab4eff8d91d081d9b1d9cd50f531a818f457e5d2a1556708587f64",
+      "helper_roots": [
+        "Submission.R25ActualWiden.actual_widenBits_eq",
+        "Submission.R24SubnormalWiden.subnormal_finite_value",
+        "Submission.R25FiniteWiden.finite_actual_value"
+      ],
+      "stage": 1,
+      "depends_on": [],
+      "seconds": 120
+    },
+    {
+      "name": "PreparePeakContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/producer-v2/PreparePeakContractOnly.lean",
+      "bytes": 13246,
+      "sha256": "169fc73b25980a29a965e92964c188ec3798ee5ba9d7caaba43484823f5320f0",
+      "helper_roots": [
+        "Submission.R25PrepareAgreement.body_yields",
+        "Submission.R25PrepareAgreement.prepare_overflow",
+        "Submission.R25PrepareAgreement.prepare_eq_forIn",
+        "Submission.R25PrepareAgreement.prepare_eq_fold",
+        "Submission.R25PrepareAgreement.prepare_getter_interface",
+        "Submission.R26PreparePeak.prepare_full_interface"
+      ],
+      "depends_on": [
+        "PrepareCoreContractOnly"
+      ],
+      "seconds": 120
+    },
+    {
+      "name": "Sum3ContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/numerics-v1/Sum3ContractOnly.lean",
+      "bytes": 11602,
+      "sha256": "dddd68ad8cb498f97001da511e462867ddb8cd93977d97931e9319140bbaa762",
+      "helper_roots": [
+        "Submission.R24RepresentationSum.round_grid",
+        "Submission.R24RepresentationSum.loop_invariant",
+        "Submission.R24RepresentationSum.sum_enclosure"
+      ],
+      "depends_on": [],
+      "purpose": "standalone actual producer numerical primitive",
+      "seconds": 120
+    },
+    {
+      "name": "RadiusContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/numerics-v1/RadiusContractOnly.lean",
+      "bytes": 10716,
+      "sha256": "bac402df0055373afbaec14ea7fed230a65520bb934a77ce7514aaa9e1913cab",
+      "helper_roots": [
+        "Submission.R24RadiusEndpoints.radius_finite_value",
+        "Submission.R24RadiusEndpoints.native_endpoints_finite_real"
+      ],
+      "depends_on": [],
+      "purpose": "standalone actual producer numerical primitive",
+      "seconds": 120
+    },
+    {
+      "name": "NativeMulContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/numerics-v1/NativeMulContractOnly.lean",
+      "bytes": 16633,
+      "sha256": "6d5f347a62a27d4ec665a59999fe0e1c0b7785189d97570031883ddc38c9ec1c",
+      "helper_roots": [
+        "Submission.R24NativeMul.native_mul_toModel",
+        "Submission.R24NativeMul.native_mul_finite_roundAt",
+        "Submission.R24NativeMul.native_mul_exact_from_raw32_values"
+      ],
+      "depends_on": [],
+      "purpose": "standalone actual producer numerical primitive",
+      "seconds": 120
+    },
+    {
+      "name": "RounderPrimitivesContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/rounder-v1/RounderPrimitivesContractOnly.lean",
+      "bytes": 18780,
+      "sha256": "4dc397d900f648138b99e05c5a072137872008cafb06a0b86fe26bba86dcaad9",
+      "helper_roots": [
+        "Submission.R24CellPrimitive.quotient_strict_midpoint",
+        "Submission.R24CellPrimitive.quotient_even_closed_midpoint",
+        "Submission.R24CellPrimitive.native32_strict_cell",
+        "Submission.R24RescaleNative32.roundRatScaled_rescale",
+        "Submission.R24DyadicAgreement.roundDyadic_eq_roundRatScaled"
+      ],
+      "seconds": 120
+    }
+  ],
+  "aggregate_helper_budget_seconds": 600,
+  "cap_enforced_by_executor": "UNKNOWN_Droot_decision",
+  "runtime_per_helper_seconds": "UNKNOWN; firstbatch logs omit individual helpertimings",
+  "allow_private": false,
+  "local_build": false,
+  "full_gate": false,
+  "measurement": false,
+  "priority": "Optional after active norm batch; main current request remains CI-REQUEST.json, D selects by throughput",
+  "independent_of_real": [
+    "FiniteWidenContractOnly",
+    "PreparePeakContractOnly",
+    "Sum3ContractOnly",
+    "RadiusContractOnly",
+    "NativeMulContractOnly",
+    "RounderPrimitivesContractOnly"
+  ],
+  "next_after_checker": {
+    "at_utc": "2026-10-29T20:44:03.972151+00:00",
+    "state": "PREPARED_PENDING_ACTUAL_CHECKER",
+    "name": "MidpointDirectContractOnly",
+    "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/boundary-v1/MidpointDirectContractOnly.lean",
+    "bytes": 35331,
+    "sha256": "70a73a3845d63004f196d93241f4b6e5dbee7d0135ebb9360a739c0af2374e3d",
+    "helper_roots": [
+      "Submission.R25Checker.unsigned_midpoint_values",
+      "Submission.R25Checker.signed_midpoint_values",
+      "Submission.R25Checker.eWord_eq_native",
+      "Submission.R25Checker.fWord_eq_native"
+    ],
+    "dependencies": "RealStrict exacte004 accepted; actualchecker24KB pending; no finitewiden producer dependency",
+    "source_origins": [
+      {
+        "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/research/key/follow-on/MidpointFields.lean.inc",
+        "sha256": "f4b1e12023f9234ad3497e772b0a21f70905efb54dabd0ced2476354360f3825"
+      },
+      {
+        "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/research/key/follow-on/MidpointRealDirect.lean.inc",
+        "sha256": "4122031a65ee7372d353ab79f0a1008f9f5179bc4b9b9d506dc35003476d163a"
+      },
+      {
+        "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/research/key/follow-on/MidpointSignedDirect.lean.inc",
+        "sha256": "24e1b4fbc29bb154171bb0dfcbed8e1754ff988452c269de7ff12680af013404"
+      }
+    ],
+    "proof": "NOT_RUN",
+    "finite_model_boundary": "R26 existing3048word/6096endpoint model not promoted to Lean",
+    "formal_submission": false
+  }
+}

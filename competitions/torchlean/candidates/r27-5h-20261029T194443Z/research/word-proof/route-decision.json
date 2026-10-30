@@ -1,0 +1,31 @@
+{
+  "at_utc": "2026-10-29T19:51:47.795026+00:00",
+  "runtime_source": {
+    "saved_source": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round45m-20261027T074758Z\\research\\source-intake\\lean-runtime-293d5d0c\\lean.h",
+    "sha256": "982c731a1fbacc7688006f44f9f7af9d9e3e0247d310a728827f49e7f1466c13",
+    "bytes": 136786,
+    "live_tag_url": "https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/include/lean/lean.h",
+    "live_read": "web opened v4.34.0; exact downloaded byte identity UNKNOWN because local urllib was blocked WinError10013",
+    "copyright": "Microsoft Corporation; Apache-2.0 per source header"
+  },
+  "rejected_int_route": {
+    "observation": "LEAN_MAX_SMALL_INT is INT_MAX on64bit; 24bit by24bit products exceed it",
+    "effect": "Do not claim no-allocation Int MAC. No native timing was performed."
+  },
+  "nat_route": {
+    "observation": "LEAN_MAX_SMALL_NAT is SIZE_MAX>>1; positive and negative block sums separately <=16*ma*mb<2^63",
+    "soundness": "Unbounded Nat arithmetic remains exact if guard fails; small-int boundary is only a performance condition",
+    "remaining": [
+      "Actual compiler call shape and specialization",
+      "Array preparation and sign extraction costs",
+      "Original dotOf/finishWord bridge",
+      "Native fullmodel comparison to current champion"
+    ]
+  },
+  "source": {
+    "file": "NatBlockCore.lean",
+    "bytes": 4166,
+    "sha256": "c116460e744305a229c40e187c2af1b579f6b5180d650a219bc46aab043eb710",
+    "status": "NOT_COMPILED"
+  }
+}

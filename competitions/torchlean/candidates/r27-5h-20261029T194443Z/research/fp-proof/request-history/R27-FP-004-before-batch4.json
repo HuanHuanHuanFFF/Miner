@@ -1,0 +1,110 @@
+{
+  "request_id": "R27-FP-004",
+  "updated_at_utc": "2026-10-29T21:44:18.736664+00:00",
+  "state": "READY_CHECKER_PLUS_GETTER_CORE_ACCEPTED",
+  "owner": "fp-proof",
+  "executor": "Droot",
+  "purpose": "Next exact small helper diagnostic wave. Prioritize guarded actual checker36.6KB once core passes, finite-widen38.5KB and prepare agreement8.1KB once rawfeedback supports. Do not cancel or modify batch1.",
+  "candidates": [
+    {
+      "name": "GuardedNonzeroContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/boundary-v1/GuardedNonzeroContractOnly.lean",
+      "bytes": 36599,
+      "sha256": "dfa924adaf6931f9886f0128d152ac8771e5cdb5dd62a392a9a5602f417b05c5",
+      "helper_roots": [
+        "Submission.R25OrderKey.orderKey_lt_real",
+        "Submission.R25Checker.actual_acceptance_bounds",
+        "Submission.R27GuardedEndpoints.accepted_endpoint_equations",
+        "Submission.R27GuardedEndpoints.actual_acceptance_contains_exact_of_error",
+        "Submission.R27GuardedEndpoints.actual_accepted_exact_nonzero",
+        "Submission.R27GuardedEndpoints.actual_accepted_total_nonzero"
+      ],
+      "depends_on": [
+        "batch1 old_key_core accepted"
+      ]
+    },
+    {
+      "name": "FiniteWidenContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/producer-v1/FiniteWidenContractOnly.lean",
+      "bytes": 38493,
+      "sha256": "2f07e19355ab4eff8d91d081d9b1d9cd50f531a818f457e5d2a1556708587f64",
+      "helper_roots": [
+        "Submission.R25ActualWiden.actual_widenBits_eq",
+        "Submission.R24SubnormalWiden.subnormal_finite_value",
+        "Submission.R25FiniteWiden.finite_actual_value"
+      ],
+      "stage": 1,
+      "depends_on": []
+    },
+    {
+      "name": "TailContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/producer-v1/TailContractOnly.lean",
+      "bytes": 1618,
+      "sha256": "1156d745db74fd3fd21d11051937ef9464d1328a8db8271a87a0f7ee5a3ccd18",
+      "helper_roots": [
+        "Submission.R26TailAgreement.sumRemaining_eq_loop",
+        "Submission.R26TailAgreement.sumRemaining_zero_eq_sum"
+      ],
+      "stage": 1,
+      "depends_on": []
+    },
+    {
+      "name": "PrepareAgreementContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/producer-v2/PrepareAgreementContractOnly.lean",
+      "bytes": 8163,
+      "sha256": "ab8b70b9db08c74a806e73b0fa0cf1b7bd94b34eb235aed5b4caeba7eb4ede72",
+      "helper_roots": [
+        "Submission.R25PrepareAgreement.body_yields",
+        "Submission.R25PrepareAgreement.prepare_overflow",
+        "Submission.R25PrepareAgreement.prepare_eq_forIn",
+        "Submission.R25PrepareAgreement.prepare_eq_fold",
+        "Submission.R25PrepareAgreement.prepare_getter_interface"
+      ],
+      "depends_on": [
+        "PrepareCoreContractOnly"
+      ]
+    }
+  ],
+  "independent_optional": "CI-REQUEST-003.json numerical primitives prepared; producer-v2/PreparePeak after agreement passes",
+  "completed_requests": "First source request delivered19:49, core/prepcore selected unchanged inD run40945451009; initial request archived request-history/R27-FP-001.json",
+  "new_result": "Actual checker finite guards imply native endpoint RNE equations; derive exact total nonzero from accepted strict normalcell. No producer endpoint-real or outward premise remains in final new helper root.",
+  "allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "official_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+  "toolchain": "leanprover/lean4:v4.34.0",
+  "resources": {
+    "compile_seconds_per_source": 180,
+    "memory_mib": 4096,
+    "local_Lean": false
+  },
+  "allow_private": false,
+  "measurement": false,
+  "formal_submission": false,
+  "proof": "NOT_RUN",
+  "command": "Standalone import ContractExact: preserve complete stdout/goals; exact helper axioms append to same source; no all12/gate claim.",
+  "independent_priority_probe": {
+    "name": "EndpointCoreContractOnly",
+    "at_utc": "2026-10-29T20:15:38.865363+00:00",
+    "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/boundary-v2/EndpointCoreContractOnly.lean",
+    "sha256": "b2a1747a2415c3b13bcc2dd399b51d2bc91b2baebf4c811c2a862f6ea3e004bf",
+    "bytes": 13434,
+    "helper_roots": [
+      "Submission.R27EndpointCore.actual_finite_guards",
+      "Submission.R27EndpointCore.accepted_endpoint_equations"
+    ],
+    "depends_on": [
+      "KeyCore exact4e1ed0b4 included"
+    ],
+    "scope": "Isolates new guard-derived endpoint equations from still-uncompiled Real-strict and midpoint chain.",
+    "proof": "NOT_RUN",
+    "revision": "Expose actual certify local lets before split, same known let class as batch1 prepare. v1 retained."
+  },
+  "first_batch_result": "key core4roots PASS allowed-only; prepare core4let/Id.run errors logged",
+  "priority": "Actualguardedchecker36.6KB + PrepareAgreement8.2KB or fullPreparePeak13.2KB next. CostnativeThin preferred beforelargeproducerintegration; otherindependenthelper bundles optional.",
+  "batch2_result": "RealStrict e004d3d7 exit0,5roots allowed-only; do not repeat unchangedReal standalone",
+  "batch3_result": "PrepareCore exactb825 exit0 fourroots allowedonly; removeunchangedPrepareCore fromqueue",
+  "read_before_fp_native_cost_dispatch": "NATIVE-COST-STATIC-BLOCKER.json"
+}

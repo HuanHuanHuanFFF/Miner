@@ -1,0 +1,21 @@
+{
+  "at_utc": "2026-10-29T21:25:20.551313+00:00",
+  "source": "competitions\\torchlean\\candidates\\r26-1h-20261029T085515Z\\evidence\\40852769757\\download-988ea0459868494bb525e3d8f8795129\\fp-word-conv6\\Submission-asm.txt",
+  "source_sha256": "0093a67d3b60cb10435b6817ddf1110ee69de87152029121f5d91d4f65772617",
+  "function_sha256": "f7bfa5424da4e3cc1eb8f864bcac88fcb6c5328048471c794ef0a7335882ee50",
+  "kind": "Historical actualASM mechanism audit, not new performance comparison",
+  "observed": [
+    "Small-Nat fast path directly loads two doubles, mulsd/addsd, no FloatArray_get call and no BigNat runtime call.",
+    "Remaining/index must be scalar and in bounds; old ncap2^30 and preparation-length invariant make this the intended path.",
+    "Object contains BigNat/cold refcount calls on separate non-scalar/large/cold branches; their mere presence does not prove per-MAC allocation.",
+    "The accumulator is one dependent addsd chain; existing strong exact kernels exploit4independent rows. FourFP chains could change hardware utilization, not established latency or speed."
+  ],
+  "conditional_followon": {
+    "path": "fp-cost/FourFloatScalarEq.lean",
+    "bytes": 1443,
+    "sha256": "c53925fb1d400f9f2609dbff550bbc133c1d159b25023c1b88fb9275ccc62a59",
+    "proof": "NOT_RUN, intended componentwise same-operation-order equality; no FP reassociation premise",
+    "priority": "Deferred behind first full-cost FP-only probe; not a second independent route or newadmissibleKernel",
+    "cost_requirement": "If used, emittedC/ASM must show scalar state and specialized continuation without per-MAC tuple allocation; include final continuation/output writes and cleanup"
+  }
+}

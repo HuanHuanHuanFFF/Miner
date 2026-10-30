@@ -1,0 +1,98 @@
+{
+  "request_id": "R27-FP-001",
+  "updated_at_utc": "2026-10-29T19:49:17.608680+00:00",
+  "owner": "fp-proof",
+  "executor": "Droot",
+  "state": "READY_FOR_PUBLIC_CI",
+  "priority": "compile core first; Real then checker if preceding source passes; StrictEnclosure is independent",
+  "purpose": "Small raw-statement proof diagnostics plus exact helper axiom audit. Not candidate full gate or measurement.",
+  "official_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+  "toolchain": "leanprover/lean4:v4.34.0",
+  "candidates": [
+    {
+      "name": "KeyCoreContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/sources-v1/KeyCoreContractOnly.lean",
+      "bytes": 7648,
+      "sha256": "4e1ed0b471a74b5c6f019c956c2d564dadf91736a295900dba7ef5aa6a80b26b",
+      "helper_roots": [
+        "Submission.R25OrderKey.orderKey_nat",
+        "Submission.R25OrderKey.orderKey_lt_cases",
+        "Submission.R25OrderKey.finite64_iff_exp",
+        "Submission.R25OrderKey.finite64_model"
+      ],
+      "depends_on": [],
+      "imports": [
+        "ContractExact"
+      ]
+    },
+    {
+      "name": "RealStrictContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/sources-v1/RealStrictContractOnly.lean",
+      "bytes": 16126,
+      "sha256": "e004d3d726e3aa0ac342488853bdadcfa10fb2838a4374b876bf62d20c53dcb9",
+      "helper_roots": [
+        "Submission.R25OrderKey.raw_value",
+        "Submission.R25OrderKey.magnitudeReal_strictMono",
+        "Submission.R25OrderKey.orderKey_lt_real",
+        "Submission.R25OrderKey.native_ofBits",
+        "Submission.R25OrderKey.orderKey_native_endpoints"
+      ],
+      "depends_on": [
+        "KeyCoreContractOnly"
+      ],
+      "imports": [
+        "ContractExact"
+      ]
+    },
+    {
+      "name": "ActualCheckerContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/sources-v1/ActualCheckerContractOnly.lean",
+      "bytes": 24261,
+      "sha256": "ef3a02544f8b184ec0a3b3b0bd3a2399f92984071eb68b626e3904c95882082e",
+      "helper_roots": [
+        "Submission.R25Checker.accepted_components",
+        "Submission.R25Checker.midpoint_finite_nonzero",
+        "Submission.R25Checker.accepted_native_bounds"
+      ],
+      "depends_on": [
+        "RealStrictContractOnly"
+      ],
+      "imports": [
+        "ContractExact"
+      ]
+    },
+    {
+      "name": "StrictEnclosureContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/sources-v1/StrictEnclosureContractOnly.lean",
+      "bytes": 1924,
+      "sha256": "3c0468bb0510c19bf752a63f84c7616caa43d3abae1229f9c803a56c15c3e10f",
+      "helper_roots": [
+        "Submission.R24StrictEnclosure.strict_lower_pullback",
+        "Submission.R24StrictEnclosure.strict_upper_pullback",
+        "Submission.R24StrictEnclosure.strict_enclosure_of_rounded_bounds"
+      ],
+      "depends_on": [],
+      "imports": [
+        "ContractExact"
+      ]
+    }
+  ],
+  "command": "Copy each exact source to lean/work/Submission.lean, lake build Submission with full untruncated diagnostics, then lake env lean audit file appending #print axioms for all named roots; preserve original contract/gate/bench.",
+  "allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "allow_private": false,
+  "measurement": false,
+  "formal_submission": false,
+  "resources": {
+    "compile_seconds_per_source": 180,
+    "memory_mib": 4096,
+    "local_Lean": false
+  },
+  "full_gate": "NOT_REQUESTED_HELPER_ONLY",
+  "request_full_logs": true,
+  "negative_evidence": "R26 run40852769757 full order-key-policy1 and finite-widen logs read. v1 recovers explicit UInt64.toNat bridge/Nat-mod casts/Bool cases, adds ring to residual signed normal decoding.",
+  "completion": "All named roots compile and axiom audit exact-source; failure preserve full goal/source hash. D reports to research/inbox/fp-proof.md or request/evidence."
+}

@@ -1,0 +1,11 @@
+# Paired-product matrix route — low-cost decision evidence
+
+Distinct mechanism from packed outputs: for each pair,
+`a0*b0+a1*b1 = (a0+b1)*(a1+b0)-a0*a1-b0*b1`.
+Precompute the row and column self-products once, leaving one cross-product per pair/output. All operations are on exact aligned integers and final bias/rounding remain unchanged. The established family is described by the FLINT team's [integer matrix multiplication documentation](https://flintlib.org/doc/fmpz_mat.html); this is an independently written model, not copied source.
+
+Native feasibility needs a real width guard: row maximum magnitude plus column maximum magnitude <2^32 makes both signed sums have magnitude<2^32, hence their unsigned64 product is exact. This **does not** permit interpreting the product as a signed63-bit integer. Sign-magnitude product plus exact128-bit accumulation/correction is required. Different row/column exponents are compatible: the identity is in their dimensionless aligned integers and the complete dot gets the shared row+column scale afterward.
+
+`winograd-discriminator-result.json` verifies576 finite integer identity cases, including k0/odd k and up to277-bit operands. On the same27 exact-formula Mixer cells, 12507/17094 first-linear outputs and7215/8547 second-linear outputs satisfy the native factor bound. The ratios are coverage, not success probabilities. Counting row/column preparation products and scalar fallback for other outputs gives a hypothetical multiplication-count reduction of roughly30% across the two channel-MLP stages; additions, conversion, bounds, allocation, signed carries and terminal cost are still UNKNOWN, so this is not a runtime/Amdahl bound.
+
+Decision: keep this as a second algorithmic option if packed-output native cost fails. Do not add a large Lean package or displace the current guard26 gate/packed native queue before the first actual cost arrives. A future minimal native implementation should use immediate cached signed-magnitude factors and native64 products, not allocating Int at each MAC. Both exact-zero sign replay and bias alignment must match the complete packed caller boundary. Initial Python syntax failure was preserved under `history/`; it was repaired before these results and is not an algorithm negative.

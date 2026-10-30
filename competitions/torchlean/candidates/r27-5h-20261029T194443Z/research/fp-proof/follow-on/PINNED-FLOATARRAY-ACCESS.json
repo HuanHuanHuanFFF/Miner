@@ -1,0 +1,34 @@
+{
+  "at_utc": "2026-10-29T23:18:28.228158+00:00",
+  "state": "PINNED_SOURCE_API_VERIFIED_NO_NEW_CANDIDATE_OR_CI",
+  "ref": "leanprover/lean4:v4.34.0",
+  "sources": [
+    {
+      "path": "src/Init/Data/FloatArray/Basic.lean",
+      "git_blob_sha1": "29eb263dfd77c1be05e3cd3d45b94023b4188ed9",
+      "lines": [
+        54,
+        65
+      ],
+      "url": "https://github.com/leanprover/lean4/blob/v4.34.0/src/Init/Data/FloatArray/Basic.lean"
+    },
+    {
+      "path": "src/include/lean/lean.h",
+      "git_blob_sha1": "910ecae72a7d1c149d4ccc8111ee438c8b4551dd",
+      "lines": [
+        1243,
+        1260
+      ],
+      "url": "https://github.com/leanprover/lean4/blob/v4.34.0/src/include/lean/lean.h"
+    }
+  ],
+  "excerpt": "PINNED-FLOATARRAY-ACCESS-EXCERPT.txt",
+  "excerpt_sha256": "fb33ff76afeeccda45bad88a372e77070e155f47866f2f640a3616487e420774",
+  "excerpt_bytes": 1526,
+  "license": "Lean upstream Apache-2.0; attributed reference excerpts only",
+  "verified": "FloatArray.get takes a proof i<size and maps to lean_float_array_fget, which unboxes i and directly calls uget. get! maps to lean_float_array_get with scalar/index-size branches. uget takes USize plus proof and directly indexes the data pointer.",
+  "implication": "A checked-once wrapper can call proof-indexed get inside the loop and retain old sumRemaining for failing size checks, preserving all-array semantics by conditional scalar equality. Actual codegen and wholecall gain remainUNKNOWN.",
+  "no_custom_unsafe": true,
+  "no_custom_axioms": true,
+  "not_compiled": true
+}
