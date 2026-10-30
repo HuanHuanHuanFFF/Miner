@@ -1,0 +1,29 @@
+{
+  "at_utc": "2026-10-30T18:18:41.219444+00:00",
+  "state": "KEY_INTERFACE_REVIEW_PASS_NATIVE_ONLY_NOT_ALL_INPUT_PROOF",
+  "candidate_sha256": "a498d9b70f9892a671943c6a726c36e2e745baae33fb986b899012ccf3f8b6c2",
+  "bytes": 252237,
+  "recipe_sha256": "0ce2c751a776ee5957e9ecefdfbea4b5fd484944128284d612d2c03d5b2f7c07",
+  "runtime_sha256": "18f1fb2097e55be175990a7b95312c524ad8b7024fcff5e5ba923c02fe63ce99",
+  "compactor_sha256": "8863afd1e3d0ec254ad0ac5a55250e18916848c6a6e6ee340a3f9c517a11c167",
+  "checks": [
+    "Exact frozen3-dependency rebuild matchesa498d9b7/252237B",
+    "NativeOnly flags mandatory: original theorem renamedbaseCorrect only, noSubmission.correct for new kernels",
+    "Shape3x3/stride1/pad1 givesho=h,wo=w and actualpadding dimensionsh+2,w+2; original finite/numerical/size guards retained, unsupported calls originalYbp",
+    "K<128 yields originaltermindex<128; originalnarrow magnitude<2^55 gives strictlypositive56bitbiasedpayload; index+payload<2^63, sentinel0 disjoint",
+    "packWindows preserves c,dy,dx order and appends exactly onezero sentinel per output position; actual prep input offset matches CHW padded layout",
+    "remaining decreases with every record/sentinel; p increases only per sentinel; all four accumulators reset after finalization",
+    "Output pair concatenation first currentchannel then second afterallpositions preservesCHW, including oddCout",
+    "Odd tail useso1=o forvalidcontextloads; weights forunusedsecond channel areencodedzero0x80000000; no secondfinish orout2 push whentwo=false",
+    "Whole support cache, oldP2/W2 prep, zero-density scan, pairloops, finaloutput appends anddrop remaininsidekernel call",
+    "Biascontexts/Yq5 andrawzW replay retained; finite zero omission doesnot remove signedzero provenance"
+  ],
+  "risks": [
+    "Fullwindow duplication ~kh*kw*density vsoldpaddedcache",
+    "Natiterator/indexdecode/branch/sentinel/layout costUNKNOWN",
+    "Compactor elaborationUNKNOWN",
+    "No actual getter/fold/refinement/all12proof",
+    "No native orchampion speed established"
+  ],
+  "candidate_data_boundary": "Only frozen source plus oldseen ownmodels; no R28 independent confirmation data"
+}

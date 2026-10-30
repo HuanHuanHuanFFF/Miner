@@ -1,0 +1,10 @@
+# Adversarial model corrections, not native candidate changes
+
+AtUTC18:01–18:04, raw-word extension found two Python assumptions outside the initial18 formula models. Their original raw inputs and historical model bytes are retained. Neither finding changed the zero53, local-channel128, or pointwise arithmetic source.
+
+1. `adversarial-first-failure.json`, case501: global narrow guard is true but one cached context has bias shift79. Original qCtx2 fast condition allows at most78, whereas Ybg permits `<80`. The candidate already calls the original qCtx2, including its YL general fallback. The model's `assert cf` was wrong; it now records this fallback and still checks complete exact output. History keeps the original model/receipt bytes. Current2000-case sweep observes8 such output finishes.
+2. `adversarial-failure-1239.json`: Python Ybh returned `xm=-19` after `xb-wm`, then incorrectly admitted a narrow path. Actual UInt64 subtraction gives `2^64-19`, and the real guard rejects `xm<=input_min`. The model now applies modulo2^64 to every Ybh/Ybg subtraction/addition. This is not a source53 or new-candidate counterexample. Historical negative-xm receipt preserves its then-unresolved status.
+
+Corrected `adversarial-preparation.json`:2000 finite raw cases,1217 admitted,783 original fallbacks;19290 admitted numeric outputs including12614 single-product outputs/100320 products all match;15 explicit NaN/Inf placements reject the fast path. Eight signed-zero sign combinations check the preserved raw Ybz predicate separately. These remain finite model evidence, not proof or native checksum parity.
+
+After correction, the original18 formula-model census and both full finite replays were rerun. Original aggregate zero-density/guard coverage and full-model checksums are unchanged; current source hashes are in the receipts. Unmeasured pointwise v1 remains preserved; v2 `build_pointwise128_nat.py` only changes bounded per-pixel scales from Array UInt64 to Array Nat and cache indices, not arithmetic or guards. Prefer v2 for a selected cost experiment; do not queue v1 as another blind variant.

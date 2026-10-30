@@ -1,0 +1,66 @@
+{
+  "state": "SOURCE_DOMAIN_TRANSFER_COUNTEREXAMPLE_AND_LENGTH_ENDPOINT_REVIEW",
+  "source_domain": "Preferred spatial ce1a narrow/finite/even/row-nonzero guard; Python modeled admission, not actual Lean execution",
+  "shape": {
+    "cin": 1,
+    "h": 6,
+    "w": 6,
+    "cout": 4,
+    "kh": 3,
+    "kw": 3,
+    "stride": 1,
+    "pad": 1
+  },
+  "raw_input_hi": "4c7fffff",
+  "raw_input_low_at_bottom_right": "3cffffff",
+  "raw_weights": "3cffffff",
+  "bias": "00000000",
+  "tile": "output origin(2,2), input rows/cols1..4, allhi",
+  "xm": 120,
+  "wm": 120,
+  "new_scale": 238,
+  "transformed_product": "21760662158990017088716800",
+  "product_bits": 85,
+  "truncated_u64": "15852670765653557248",
+  "exact_output_word": "4b8fffff",
+  "wrong_unsigned_overlap_word": "415c0000",
+  "wrong_signed_overlap_word": "c0100000",
+  "interpretation": "Overlap32 is valid only if each supplied64-bit product is exact in the stipulated signed/unsigned sense. It cannot recover the missing highbits of this85-bit spatial product, even withone term. This does not refute overlap32 or source11/ce1a; those spatial sources retain split25 products.",
+  "inclusive_endpoint": "The paper n<2^32 condition can conservatively be strengthened to n<=2^32: Q>=-2^63 inclusive,Q<2^63,andR<=2^64-2^32. Current kernels are far smaller; no current performance gain is implied.",
+  "endpoint_checks": [
+    {
+      "p": "-9223372036854775808",
+      "n": 4294967296,
+      "sum": "-39614081257132168796771975168"
+    },
+    {
+      "p": "-1",
+      "n": 4294967296,
+      "sum": "-4294967296"
+    },
+    {
+      "p": "0",
+      "n": 4294967296,
+      "sum": "0"
+    },
+    {
+      "p": "1",
+      "n": 4294967296,
+      "sum": "4294967296"
+    },
+    {
+      "p": "9223372036854775807",
+      "n": 4294967296,
+      "sum": "39614081257132168792477007872"
+    }
+  ],
+  "first_outside_closed_counterexample": {
+    "n": 4294967297,
+    "p": "-9223372036854775808",
+    "expected": "-39614081266355540833626750976",
+    "wrong": "39614081247908796759917199360"
+  },
+  "actual_compile_native": "NOT_RUN",
+  "new_CI_or_kernel": false,
+  "script_sha256": "7562d6cc260ade1bc789d93316e288d6d1486c595417653bb52eb783def7320c"
+}

@@ -1,0 +1,55 @@
+{
+  "state": "COMPLETE_LOW10_STATE_ENUMERATION_FOR_PINNED_PUBLIC_GENERATOR",
+  "official_commit": "9d4640e4d92b7f29611643e54601d5a114dc70b1",
+  "suite_path": "lean/bench/ExactSuite.lean",
+  "suite_git_blob": "f78b33ea5ac54b5210bcaa19a03b70e93f5c5f6d",
+  "generator": {
+    "a": 1664525,
+    "b": 1013904223,
+    "word_modulus": 4294967296,
+    "mask_bit": 9
+  },
+  "low10_orbit_length": 1024,
+  "distinct_states": 1024,
+  "cycle_closes": true,
+  "longest_cyclic_zero_run": 7,
+  "all_zero_windows_by_length": {
+    "1": 512,
+    "2": 255,
+    "3": 127,
+    "4": 62,
+    "5": 28,
+    "6": 11,
+    "7": 4,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "16": 0,
+    "27": 0,
+    "36": 0,
+    "45": 0,
+    "54": 0,
+    "63": 0,
+    "72": 0
+  },
+  "cnn_3x3_fanins": [
+    27,
+    36,
+    45,
+    54,
+    63,
+    72
+  ],
+  "cnn_all_zero_weight_row_from_mask": false,
+  "mathematical_scope": "The fullUInt32 LCG modulo1024 obeys this exact low10 recurrence because1024 divides2^32. The single full1024state orbit covers every starting low10 seed, including wrap. This is finite exhaustive support-mask coverage, not a random sample.",
+  "weight_scaling_scope": "For currentCNN fanin27..72, isqrt(fanIn)<=8 and scale4/isqrt>=1/2. A kept normal generator word has magnitude>=2^-6, so positive finite scaling/rounding cannot make itzero. This analytic range connection is not a compiled Lean proof.",
+  "decision": "The preferred BW.min!=511 guard retains every currentCNN sparse weight row produced by this exact generator, while still checking arbitrary kernel inputs at runtime. Do not remove the real guard or hardcode kind/seed.",
+  "not_claimed": [
+    "all-input kernel proof",
+    "future generator coverage",
+    "native timing",
+    "success probability",
+    "official score"
+  ],
+  "script_sha256": "0e139d89c0eca4908a07650542e19834b894b9708141e299e33b0f6c3f98e713"
+}

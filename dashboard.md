@@ -1,16 +1,16 @@
 # TorchLean 冲冠看板
 
-目标：任意一榜冠军。10月31日02:15官方快照；冠军耗时均为 **1.00×**，越低越好。下表为冠军倍数估算。
+目标：任意一榜冠军。10月31日04:12官方快照；冠军耗时均为 **1.00×**，越低越好。下表为冠军倍数估算。
 
 | 赛道 | 现任冠军 | 当前最强起点／候选 | 耗时／冠军 |
 | --- | --- | --- | ---: |
 | MobileNet | #57 | 已公开退任冠军 #53 | **1.05×** |
-| Mixer | #56 | norm26（完整证明通过） | **1.10×** |
+| Mixer | #56 | norm26（全证明＋标准确认通过） | **1.11×** |
 | ResNet | #64 | 已公开退任冠军 #11 | **1.20×** |
 | 归一化MLP | #51 | 已公开退任冠军 #43 | **1.32×** |
 | overall | #59 | 已公开退任冠军 #54 | **1.33×** |
 | MLP | #33 | 已公开退任冠军 #13 | **1.59×** |
 
-**结论：Mixer已有实测进步；优先验证更接近冠军的MobileNet，目前尚不能取代冠军。**
+**结论：目前尚不能取代冠军；Mixer完整证明候选标准确认为1.11×。**
 
-[本轮进展](competitions/torchlean/candidates/r28-3h-20261030T171558Z/README.md) · [冠军依据](competitions/torchlean/candidates/r28-3h-20261030T171558Z/competition-state/refresh-20261030T181518Z/receipt.json)
+[本轮进展](competitions/torchlean/candidates/r28-3h-20261030T171558Z/README.md) · [冠军依据](competitions/torchlean/candidates/r28-3h-20261030T171558Z/competition-state/refresh-20261030T201235Z/receipt.json)

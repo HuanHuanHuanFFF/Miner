@@ -1,0 +1,39 @@
+# R28 CI bridge and plan predispatch review
+
+Captured 2026-10-30 17:28:49 UTC. Read the updated request, root status and plan at this checkpoint. Root status is `ACTIVE_TWO_SUBSTANTIVE_ROUTES_FIRST_GATE_READY`; `active_CI=[]`. `research/CI-REQUEST.json` remains `NO_ACTIVE_REQUEST`. No dispatch or CI action was run. The plan hash is `52c60654a4d4d0e54acc5d9c72a2e2a0176c82d4fce22cf7c9ae8b6747593dc6`.
+
+## Static checks that pass
+
+- The new GitHub job is limited to `workflow_dispatch`, the `__torchlean_r28__` sentinel, a public repository, and `allow_private=false`. The old FloatLib job explicitly excludes that sentinel.
+- Replayed candidate construction in memory from the saved #11 source and pinned patch: base hash `ea6f582f…f605a3` matches its fetch receipt; candidate hash is exactly `49e5e2586d8aafd876b580e3e1cebe712b2077b256e74e71604f216fe6d9dafa`, 251,905 bytes, under 256,000; patch and profile hashes match the plan. The candidate source itself was not materialized or published by this audit.
+- The plan's #56 identity, source SHA, and `.968366920942257` edge match the fresh ResNet response bound to publication `0e82e0a2…774c6f`; the response body SHA is `de9d6d09…cb6047`. Current #56 source remains unavailable. The plan correctly labels the local #11 comparison `INFERRED_TIME_CHAIN`.
+- Official toolchain commit `9d4640e4…dc70b1`, benchmark fingerprint `6684da73…f9b06b`, and proof fingerprint `3a69968c…b07377` match the saved R28 fingerprint replay and the verifier's pinned mapping. The candidate plan sets `full_gate=true`; the runner binds the gate result to the transformed candidate hash before native timing. This is only planned coverage: no new proof result exists yet. The two API lemmas used by the patch exist in the saved pinned Lean 4.34 source; the official full gate remains the proof authority.
+- `audit-native.py` reuses the existing R26 raw primitives and pinned R25 scorer. The plan is quick (`5×3×2ms`) with two seeds and correctly cannot be reported as a production or independent-confirmation result.
+
+## Hold before dispatch
+
+1. **The optional profile can consume the proof and timing budget.** `runner.py:107–110` calls the profile during `build(reference)` before it builds or gates the candidate. `profile-resnet11.py:115,121` gives each of six reference runs and six instrumented runs a separate 60-second deadline; compile and link each have up to 120 seconds. That is as much as 960 seconds of the 1,500-second driver, and the per-cell calls do not clamp to the remaining global driver deadline. They can leave too little time for the planned 600-second full-gate budget and quick measurements. Disable this profile in batch 1 or put it in a separate capped run after proof and measurement.
+2. **The official current-chain input is not frozen inside the plan.** `champion` records #56, its source SHA, ratio, and timestamp, but not the boards publication hash or the exact champion response SHA. `client.py` freezes the plan and listed candidate/helper files, not the two raw board/champion bodies; `audit-native.py` divides by the embedded ratio without re-binding it to a response. Add the publication and raw-response hashes (and predecessor #11 edge/source binding) to the plan, freeze those raw files in the dispatch receipt, and have the independent audit recalculate the edge from those exact bytes.
+3. **There is no active request.** `CI-REQUEST.json` is `NO_ACTIVE_REQUEST`, although the root phase is active. `client.py` does not check this request state, so a direct invocation could dispatch while the file says there is no request. Keep dispatch stopped until the request/status files identify the exact plan and commit as the active authorized run; add the request-state assertion to the dispatch client.
+4. **This run is exploratory only.** It uses the local #11 calibration, quick timings, two seeds on one runner, and the private current #56 is not paired directly. Do not treat it as champion proof; reserve a fresh standard independent runner and new frozen confirmation group for any candidate that survives the gate and cost screen.
+5. **The queue window is narrow.** `dispatch_not_after_utc=17:40` and `start_cutoff_utc=17:50` leave ten minutes for a queued runner to start; after that the runner stops before measurement. Preserve time for a real gate/measurement run or relax the queue start cutoff.
+
+The runner's checked-in commit/frozen-file preflight is fail-closed, but the current branch still has uncommitted workflow changes and the R28 plan/adapter are untracked. They must be committed and pushed before the client can pass its exact remote-commit check. Root owns that work.
+
+**Decision:** static source construction and snapshot binding pass for this exact draft; predispatch acceptance is **HOLD** pending the profile budget change, frozen current-chain receipt binding, and an active CI request. No source/gate outcome, performance result, or promotion is claimed.
+
+See [source reconstruction and plan audit](audit-r28-plan-source.json) and [champion-chain audit](audit-champion-chain.json). This verifier did not run Lean/native compilation or CI.
+
+## Follow-up — 2026-10-30 17:31 UTC (supersedes the earlier hold)
+
+Read request `172900-batch1-audit-response.md`, the root status, and the root-owned `CI-REQUEST.json`. The research lane's separate `research/CI-REQUEST.json` remains `NO_ACTIVE_REQUEST`; it is not D's dispatch gate. The root request is `RUN_IDENTIFIED`, binding plan `b3d59bd5e960321b73ae490ff5af305e5513ec63dff98f8969d2536c065e69ef` and candidate `49e5e2586d8aafd876b580e3e1cebe712b2077b256e74e71604f216fe6d9dafa` to run `41099255272`.
+
+Reran the read-only plan/source audit against the corrected plan. The publication hash, champion response SHA-256, and boards response SHA-256 all match the raw R28 snapshot; the root request plan/candidate hashes match. The profile now has a 240-second global cap, per-call limits at 20 seconds, and runner handling that records a profile exception as diagnostic-only before continuing. Those changes resolve the earlier chain-binding and unbounded-profile holds. The complete checked plan is in `audit-r28-plan-source.json`.
+
+Independently checked `dispatch.json`, its request, current `HEAD`, all six frozen source blobs, and the active run status. All frozen hashes match the dispatched commit and workspace; repo is public, `allow_private=false`, and the run is identified/in progress. Receipt audit: [audit-dispatch-freeze.json](audit-dispatch-freeze.json).
+
+The predispatch hold is therefore **cleared for this exact run**. It remains a quick, local #11 calibration screen; it is not an independent standard confirmation or a direct measurement against private current #56. Root status at this checkpoint is `BATCH1_RUNNING_PARALLEL_CORE_EXPLORATION` with only run 41099255272 active. No run output has been reviewed yet. For terminal evidence use the fixed [R28 audit-native.py](../development/ci-bridge/audit-native.py); this verifier did not launch CI or compile locally.
+
+## Frozen-profile stop rule
+
+ResNet #11 is `1 / 0.968366920942257 = 1.032667×` the current #56 time. To reach the `.97` bar, a candidate built from #11 must reduce complete-model time by at least `1 - .97 × 0.968366920942257 = 6.0684%`. The candidate changes runtime code only in `Ybf` (`add_relu`). Once the diagnostic arrives, if its consistently measured `Ybf` exclusive time is below 6.07% of the sum of the seven profiled entry times, even eliminating all `Ybf` time cannot clear that whole-model threshold; stop this route unless the paired model rows show a separate verified effect. This is a negative screening bound from the frozen profile, not a timing or correctness claim. A profile share above 6.07% is only a necessary headroom signal; the quick whole-model pair and later standard confirmation decide performance.

@@ -1,0 +1,17 @@
+{
+  "variant": "spatial11-native",
+  "source_sha256": "8e5b27c03926667b2d4398f21519be91dc39b84a9097e24844af8657f0f1e1d3",
+  "bytes": 255962,
+  "base_sha256": "ea6f582fc7a416b8860adb5c71fe3ab670dd4add01999fac7190993110f605a3",
+  "recipe_sha256": "ef44083d1faceac3360092a3d945ba5d0d8981b60af468a19be0f48ce3826fee",
+  "runtime_sha256": "0886ec7b545380673ce4836bd4fdf8454f7de640dad68ccf97e16c9f9a62ccab",
+  "compactor_sha256": "8863afd1e3d0ec254ad0ac5a55250e18916848c6a6e6ee340a3f9c517a11c167",
+  "proof_state": "NOT_PROVED_NATIVE_ONLY_NO_SUBMISSION_CORRECT",
+  "declares_correct": false,
+  "full_gate": false,
+  "native_state": "UNKNOWN",
+  "scope": "Complete original kernels portfolio retained under base names; only new conv entry has restricted tile fast path. Every failed guard calls original Ybp. Other11kernel entries unchanged.",
+  "guards": "Original narrow/finite/size,3x3 stride1 pad1,1<=cin<=8,positive even h/w,cout>=4,real weights nonzero,B0>=2,B0<=1000,nonzero old bias shift<=76",
+  "layout": "One transformed weight cache, one16cin input cache per2x2tile, CHW out.set!, scalar128 inverse, B0-2 bias context. No ArrayUInt64 input/weight cache. Biased Nat partial caches may use bigNat at extreme valid spans; exact modulo64 decoding retained.",
+  "risk": "Source UNCOMPILED; new constructor/tuple lowering, Nat loops, partial/cache allocation and full fallback overhead need complete native cost. All12/size after full proof remains UNKNOWN."
+}

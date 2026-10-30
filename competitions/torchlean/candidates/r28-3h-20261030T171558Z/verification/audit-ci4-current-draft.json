@@ -1,0 +1,91 @@
+{
+  "round": "R28",
+  "scope": "READ_ONLY_CURRENT_CI4_DRAFT_SOURCE_AND_CONTROL_REVIEW",
+  "captured_at_utc": "2026-10-30T18:51:57.460028+00:00",
+  "draft_plan_sha256": "1c5723851152a39255b78aec7636cc04a2b9768d94e6e9ba91113bf468430290",
+  "prefix_draft_sha256": "34ae83ab11fd0378318d5948edbad7acdd5853e3b4abb275c2fa59335b034549",
+  "runner_sha256": "bbe7bbff3b0a2e6db48cfe14cef3c1dfab63b5a0b1b4fcb267c11ecbc1a45cea",
+  "latest_request_sha256": "d4dd131da5323676b06f24d09bb9a882250624c8e96b420c3b233b2928168dcf",
+  "official53_sha256": "3dbe2f708299e6ee13e512a0f639eae681497ffaf01132330d92071581f7a9cb",
+  "dispatch_state": "NOT_DISPATCHED_FROZEN_PREFIXES_AND_CONDITIONAL_WHOLE",
+  "pointwise": {
+    "sha256": "5ecfdd8cd0073e37185d4f88126db886372429b10efb429f84210710557afe5d",
+    "bytes": 245424,
+    "full_gate": false,
+    "declares_correct": false
+  },
+  "zero_whole_v2": {
+    "sha256": "85eb4a9d1f7982cb6964fe6a6af405f7ba5dc1aaa8c8a6550b3841c37d6d9c62",
+    "bytes": 255748,
+    "full_gate": true,
+    "declares_correct": true,
+    "requires_helpers": [
+      "mobile_base_q8",
+      "mobile_repair_q8"
+    ]
+  },
+  "helpers": [
+    {
+      "name": "mobile_base_q8",
+      "planned_sha256": "0161443f3c5745a131b7550aea33c962f522ae16a78e32d2f6e468afccaafaf8",
+      "recomputed_sha256": "0161443f3c5745a131b7550aea33c962f522ae16a78e32d2f6e468afccaafaf8",
+      "planned_bytes": 163658,
+      "recomputed_bytes": 163658,
+      "hash_matches": true,
+      "size_matches": true,
+      "seconds": 120,
+      "within_120": true,
+      "roots": [
+        "Submission.qCtx8"
+      ]
+    },
+    {
+      "name": "mobile_repair_q8",
+      "planned_sha256": "a74e72ac9126b031bfd0c0d2219aac7cc292b626f891b1b58fd3400a9cc2b464",
+      "recomputed_sha256": "a74e72ac9126b031bfd0c0d2219aac7cc292b626f891b1b58fd3400a9cc2b464",
+      "planned_bytes": 164271,
+      "recomputed_bytes": 164271,
+      "hash_matches": true,
+      "size_matches": true,
+      "seconds": 120,
+      "within_120": true,
+      "roots": [
+        "Submission.qCtx8"
+      ]
+    }
+  ],
+  "checks": {
+    "official53_base_hash_matches": true,
+    "pointwise_transform_rebuild_matches_plan": true,
+    "whole_v2_transform_rebuild_matches_plan": true,
+    "all_helper_transforms_rebuild": true,
+    "plan_and_prefix_helper_lists_match": true,
+    "whole_v2_has_full_gate_boundary": true,
+    "pointwise_has_nativeonly_boundary": true,
+    "pointwise_recipe_hash_matches": true,
+    "zero_recipe_hash_matches": true,
+    "probe_hash_matches_plan": true,
+    "helpers_run_before_full_candidates": true,
+    "helper_cap_hard_clamped_at_120": true,
+    "helper_exceptions_become_failed_diagnostics": true,
+    "failed_required_helper_skips_candidate": true,
+    "latest_zero_native_candidate_not_yet_present": true,
+    "latest_request_fullgate_separation_not_yet_reflected": true,
+    "latest_request_was_read": true,
+    "plan_still_unsubmitted": true
+  },
+  "checks_passed": true,
+  "latest_request_alignment": {
+    "zero_runtime_identical_nativeonly_candidate_present": false,
+    "whole_zero_v2_gate_removed_from_ci4": false,
+    "action": "Do not treat current CI4 draft as final/dispatched candidate set. Latest request asks for an added runtime-identical Zero NativeOnly candidate and defers whole proof gate to a later batch; current plan still has only pointwise NativeOnly plus conditional whole-v2 full gate. Reaudit exact new candidate before dispatch."
+  },
+  "runner_review": {
+    "hard_120s_cap": true,
+    "per_helper_exception_recorded": true,
+    "conditional_skip_marker": true,
+    "helper_log_path": "OUT/<helper-name>-helper.log",
+    "retention_boundary": "The user explicitly authorized original raw diagnostic evidence to be preserved. After collection, inspect uploaded helper logs for full prefix-source leakage; retain bytes/hash and failure evidence. Do not discard logs based on hypothetical leakage."
+  },
+  "correctness_boundary": "Helper elaboration only checks bounded prefixes. The pointwise entry is NativeOnly. Whole zero-v2 is a proof-bearing candidate and must pass original all12 if scheduled later; no helper or prior proof transfers."
+}

@@ -1,0 +1,38 @@
+{
+  "at_utc": "2026-10-30T18:30:32.840196+00:00",
+  "candidate_sha256": "002612270ce7f5a44ebb636114490936036f8b5add3cc70d674401a74ea3fde6",
+  "candidate_bytes": 253445,
+  "free_bytes": 2555,
+  "recipe_sha256": "007654614939d697ff450736ff80065f9f2773636e555dd67d2017557ddc6468",
+  "pairlinear_control_sha256": "7b6e0cbaa7165488eef9fdd2f482bef522bb9b6d165649a88494e210f2a06ae3",
+  "norm_component_sha256": "79615bd5c5c697d27631b999d7211c41dc5d0c4374cd9604324b417b1ad417d7",
+  "dependencies": {
+    "pair": {
+      "path": "development\\native\\build_gemm36_pairlinear_v2.py",
+      "sha256": "8a59c56f8c92d9f62d85375f3606224cd5bb9c756d4168519940fc4381391e08"
+    },
+    "norm": {
+      "path": "research\\cross-source\\build_norm26_36.py",
+      "sha256": "fe05b956373f898af7e09ca43924583af81c56a357e98f0b4e674f3c9de84c48"
+    },
+    "single": {
+      "path": "research\\cross-source\\build_single_row36.py",
+      "sha256": "faeae0cb57787e0a156accb8c800f033fbe05a2f9979658af0eda1bdf270dfb1"
+    }
+  },
+  "runtime_changes": [
+    "finitepositivek paired128GEMM fromv2",
+    "Ya7G guard8to26 with quotientboundproof",
+    "YaVM singleton64+ precise fastdot probe and BX.any narrowmetadata filter"
+  ],
+  "exact_filter": "BX.any (lambda v=>Yk(v&0xffff)-Yk(v>>16)<=15), unsigned64. If no inputrow passes, skip XP/WP/MVi and execute original YaU fallback over alreadycomputed BX/BV.",
+  "singleton_probe": "R28FastProbe checks original MaU finite/bias-inclusive span metadata for at least one classifier output before preparing any cache; pure Bool dispatch, no new arithmetic assertion in ZMV0.",
+  "proof": "Norm26 changes Ya7Ge with required ra/D<2^26 bound. YaVM dispatch change retains original ZMV0 theorem body, which extracts only inW<1048576; all12actualcorrect connected. NOT_COMPILED.",
+  "scope": "Do not call this public36champion or approvedgate. Complete model cost includes metadata any scan, all admitted cache prep, transpose, extraction, output and fallback.",
+  "source_choice": "After currentRes64gap grew to19.015%, preserve frozenRescombo but make this stronger complete Mixer candidate available for the planned Mixer batch; no extraCI request.",
+  "publication": "Ownrecipe/receipt only; whole upstream/reconstructed source private/ephemeral",
+  "state": "FULL_PORTFOLIO_ACTUAL_ALL12_NOT_COMPILED",
+  "gate": "UNKNOWN",
+  "native_speed": "UNKNOWN",
+  "extra_CI_request": false
+}

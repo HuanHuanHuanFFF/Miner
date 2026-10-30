@@ -1,0 +1,51 @@
+/- Original proof fragment. Insert inside Submission of exact public53 before
+   `end Submission`; relies on its actual H1/tD/tE/tC/B1/C9/Q5 interfaces.
+   UNCOMPILED. It is not a standalone module or a new all12 correctness theorem. -/
+
+lemma r28Unbias57 (q:UInt64) (X:Int) (hx:-2^55<X ∧ X<2^55)
+ (hq:(q.toNat:Int)=X+2^57):Ye (q-0x200000000000000)=X:=by
+ apply A8 _ _ (by linarith [hx.1]) (by linarith [hx.2])
+ rw[UInt64.toNat_sub,show (0x200000000000000:UInt64).toNat=2^57 from rfl]
+ push_cast
+ omega
+
+lemma r28SingleProduct (x w:UInt32) (a d:UInt64) (e f:Nat)
+ (hspan:e+f<=15) (hf:f<=6)
+ (hx:mantOf x=0 ∨ (a.toNat<=idxOf x ∧ idxOf x-a.toNat<=e))
+ (hw:mantOf w=0 ∨ (d.toNat<=idxOf w ∧ idxOf w-d.toNat<=f)):
+ Ye (((YV x a).toUInt64-0x200000000000000)*((Y4 w d).toUInt64-0x80000000))=
+  sv x*sv w*2^(idxOf x+idxOf w-(a.toNat+d.toNat)) ∧
+ |sv x*sv w*2^(idxOf x+idxOf w-(a.toNat+d.toNat))|<2^63:=by
+ obtain ⟨X,W,hX,bX,hW,bW,hprod⟩:=H1 x w a d e f (by omega) hf hx hw
+ have bX55:|X|<2^55:=lt_of_lt_of_le bX (pow_le_pow_right₀ (by norm_num) (by omega))
+ have bW31:|W|<2^31:=lt_of_lt_of_le bW (pow_le_pow_right₀ (by norm_num) (by omega))
+ have hX55:=abs_lt.mp bX55
+ have hW31:=abs_lt.mp bW31
+ have bprod:|X*W|<2^63:=by
+  rw[abs_mul]
+  calc |X|*|W|<2^(24+e)*2^(24+f):=mul_lt_mul'' bX bW (abs_nonneg _) (abs_nonneg _)
+       _=2^((24+e)+(24+f)):=by rw[pow_add]
+       _<=2^63:=pow_le_pow_right₀ (by norm_num) (by omega)
+ have hxenc:(((YV x a).toUInt64).toNat:Int)=X+2^57:=by
+  simpa only[YV] using tD (YaJ x a) X hX55 hX
+ have hwenc:(((Y4 w d).toUInt64).toNat:Int)=W+2^31:=by
+  simpa only[Y4] using tE (YaJ w d) W hW31 hW
+ have hxs:=r28Unbias57 (YV x a).toUInt64 X hX55 hxenc
+ have hws:=tC (Y4 w d).toUInt64 W hW31 hwenc
+ have bounds:=abs_lt.mp bprod
+ constructor
+ · rw[B1 _ _ (by rw[hxs,hws];linarith [bounds.1]) (by rw[hxs,hws];exact bounds.2),hxs,hws]
+   exact hprod.symm
+ · rw[hprod]
+   exact bprod
+
+lemma r28CarryMod (h l p:UInt64):
+ (((h+(0-(p>>>63))+(if l+p<l then 1 else 0)).toNat*2^64+(l+p).toNat:Int)%2^128=
+ (((h.toNat*2^64+l.toNat:Nat):Int)+Ye p)%2^128:=by
+ have hc:Int.ModEq (2^128)
+  (((h+(0-(p>>>63))+(if l+p<l then 1 else 0)).toNat*2^64+(l+p).toNat:Nat):Int)
+  ((((h.toNat*2^64+l.toNat:Nat):Int))+(((0-(p>>>63)).toNat*2^64+p.toNat:Nat):Int)):=by
+  simpa only[Nat.cast_add] using C9 h l (0-(p>>>63)) p
+ have hp:Int.ModEq (2^128) (((0-(p>>>63)).toNat*2^64+p.toNat:Nat):Int) (Ye p):=Q5 p
+ have hh:Int.ModEq (2^128) (((h.toNat*2^64+l.toNat:Nat):Int)) (((h.toNat*2^64+l.toNat:Nat):Int)):=Int.ModEq.refl _
+ simpa only[Nat.cast_add,Nat.cast_mul,Nat.cast_pow,Nat.cast_ofNat] using hc.trans (hh.add hp)

@@ -1,0 +1,13 @@
+@[inline] def R28QuotientAccepts (a:UInt64) (d q:UInt32):Bool :=
+ let product:=q.toUInt64*d.toUInt64
+ product<=a && a-product<d.toUInt64
+
+@[inline] def R28CheckedQuotient (a d:UInt64) (inverse:Float):UInt64 :=
+ if d<0x100000000 then
+  let denominator:=d.toUInt32
+  let q:=(a.toFloat*inverse).toUInt32
+  if R28QuotientAccepts a denominator q then q.toUInt64
+  else if R28QuotientAccepts a denominator (q+1) then (q+1).toUInt64
+  else if R28QuotientAccepts a denominator (q-1) then (q-1).toUInt64
+  else a/d
+ else a/d

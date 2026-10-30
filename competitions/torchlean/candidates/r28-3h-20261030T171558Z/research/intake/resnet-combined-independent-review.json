@@ -1,0 +1,64 @@
+{
+  "at_utc": "2026-10-30T18:05:40.073730+00:00",
+  "state": "KEY_COMPOSITION_SCOPE_REVIEW_PASS_NOT_LEAN_GATE",
+  "candidate_sha256": "70eed3609e3985011c7c630010d77ada49812e961f966843d71491f938ab5a63",
+  "bytes": 255847,
+  "free_bytes": 153,
+  "recipe_sha256": "bc607d887c93603fa2353a893efd0f5f1af246cc2da5078286b1215865e5d9f7",
+  "dependency_sha256": {
+    "build_resnet11_inplace_bn.py": "77b9d783d0fa5425683c87a81e8fc2b93d11e0d5957182035ad710e015f10b0a",
+    "build_zero_pair.py": "97fa0af45234ef9e19b266d45221dd207d291ac2f7dab1d06f8c1194fce61b22",
+    "mapidx_add_v2.py": "27ec14984df36fbdc2f94ff17b6c0db279ccdfab74d752b2b789183a399f5cfc"
+  },
+  "base_sha256": "ea6f582fc7a416b8860adb5c71fe3ab670dd4add01999fac7190993110f605a3",
+  "donor_sha256": "3dbe2f708299e6ee13e512a0f639eae681497ffaf01132330d92071581f7a9cb",
+  "changed_existing_runtime_definitions": [
+    "Ybf",
+    "Yt3g",
+    "kernels"
+  ],
+  "changed_existing_declarations": [
+    "Ybf",
+    "Yt3g",
+    "Yt3gL",
+    "ZdC",
+    "correct",
+    "kernels"
+  ],
+  "added_declarations": [
+    "R28BnIncrement",
+    "R28bCp",
+    "R28bMp",
+    "R28rBnChannels",
+    "R28rBnCorrect",
+    "R28rBnInplace",
+    "R28rBnMap",
+    "R28zeroPair",
+    "R28zeroPair_eq"
+  ],
+  "removed_declarations": [
+    "Ybe",
+    "Ysj",
+    "YsjL",
+    "Ysk",
+    "YskE",
+    "ZdB"
+  ],
+  "checks": [
+    "Exact reconstruction matches70eed360/255847B",
+    "Composition source regions disjoint: Ybf/ZdC, Yt3g and its proof, Ysj-through-Ybe/ZdB traversal",
+    "BN transplants only map/channel traversal and uses source11 Ysx/YaY/YsxE/ZcR/ZdBO, excluding donor YsxAct/clip semantics",
+    "Yl/Yd per-channel contexts hoisted before map; finite guard remains; nonfinite and size mismatch use source11 fallback",
+    "New in-place guard requires full x.size=c*hw, otherwise uses old YbeO; no arbitrary oversized-array output size assumption",
+    "Zero skip usesZ2^57 algebra; final bias/signedzero paths unchanged",
+    "mapIdx proof removes extra rfl responsible for prior statement failure; exact new proof not yet accepted",
+    "New R28 names avoid base collisions and combine separate original raw-index bounds",
+    "No added imports/forbidden substring, no formal source result claimed"
+  ],
+  "risks": [
+    "Only153B source slack; proof repair must use deliberate own compaction, never apply53 typealias compactor to11 without its notation context",
+    "Tuple/RC/branch cost UNKNOWN",
+    "Combined benefits cannot be added from separate mechanisms",
+    "Full original all12/actual native timing/current champion confirmation allNOT_RUN"
+  ]
+}
