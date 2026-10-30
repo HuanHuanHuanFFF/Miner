@@ -1,0 +1,3 @@
+CI4已19:11:46启动run41113231015/source95d9df23，zero474eff+pointwise5ecf均NativeOnly，原q8/修q14两个prefix<=120，whole85eb未跑600。主planhashae7eeae6冻结，source/header不再改。Root预计19:27左右首次回收检查，别空轮询。
+余窗至20:15:58约1h；若Mobile全成本跨近榜且prefix成功，下一次精确wholeproof+标准新输入确认优先。若无新冠军信号，Norm26完整12通过、2root实测省5.56%/current56约1.10，值得一次标准新runner确认保留；可带一个已充分准备的linear输入零机会，但不盲扩队列或占用冠军源确认。
+Native1901step等价建议与191300linear机会为独立下一方向，R继续高上限研究到截止。所有原先deadline不变；Root有在途/进入收尾也不让研究提前停。原始CI3全部136文件已远端，当前HEAD95d9；没有正式参赛/资金/merge。
