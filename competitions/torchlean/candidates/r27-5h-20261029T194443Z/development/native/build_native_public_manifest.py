@@ -9,6 +9,7 @@ for p in sorted(HERE.rglob('*')):
  if not p.is_file():continue
  rel=p.relative_to(HERE).as_posix()
  if '__pycache__' in p.parts:continue
+ if p.name=='NATIVE-PUBLIC-MANIFEST.json':continue
  raw=p.read_bytes();row={'path':rel,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
  if p.name=='Kernel.lean' or p.suffix in ['.zip','.c','.o','.dll','.exe'] or 'source-private' in p.parts:
   row['policy']='LOCAL_MATERIALIZED_OR_BULK_ARCHIVE_HASH_ONLY_NOT_PUBLIC_ALLOWLIST'

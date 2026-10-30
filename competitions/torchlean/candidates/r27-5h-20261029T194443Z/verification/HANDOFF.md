@@ -117,4 +117,22 @@ B11 run `40975355668` is terminal workflow failure. The frozen cost-only candida
 
 Root's [CI-RESULTS-BATCH11.json](../CI-RESULTS-BATCH11.json) agrees: terminal build failure and score UNKNOWN. The worktree's canonical `ci-plan.json` later changed for B10, so B11 audit binds to the immutable B11 source commit and dispatch hash.
 
-B10 run `40977309820` started from candidate `f60551d5…7881bea`; its current plan and dispatch hashes match. The static source reconstruction is [review-batch10-static.md](review-batch10-static.md), with details in [audit-batch10-static.json](audit-batch10-static.json). Exact transformed bytes and all owned-source hashes pass. The plan declares full gate and `correct`, but neither has passed yet; the current Mixer comparison remains source-private and report-config-inferred. B10 is in progress; its new inputs/results are acceptance-only. At the 00:06:36Z checkpoint, parent status still lagged the dispatch and listed no active run.
+B10 run `40977309820` is terminal success. Exact candidate `f60551d5…7881bea` passed the full original 12-obligation gate with stable verifier fingerprint and no exhaustion. Independent pinned-R25 audit [audit-native-run-40977309820.json](audit-native-run-40977309820.json) passes with zero failures; manifests pass 79/79 outer and 78/78 inner. Both standard roots have 396 paired rows each, 792 matching checksum pairs total, exact alternating order, matching CPU identity, and equal target-mapped compile/link/response traces. Current Mixer #36 time estimate is **1.2342594908×**, INFERRED across the old #36 report config, production/local environments, and seeds; slower, guard failed, no promotion. Strict converter remains UNKNOWN and direct #36 source is unavailable. Highest raw candidate samples were 122,237,347 ns in seed 2860084832 and 72,955,377 ns in seed 3164475393; these rows remain in the raw artifact.
+
+The independent audit ran before Droot's integrated `CI-RESULTS-BATCH10.json` was written. The root result later appeared at 00:26:51 UTC with the same exact candidate hash, all12 gate result, both complete 396-row cohorts, checksum counts, failed guard, and `1.2342594908×` current #36 estimate (INFERRED); file SHA-256 `4989d6b593b26d3e141d8b971c13792ab7f245996f7058c1503392a2bd5b3011`.
+
+At 00:28 UTC, the parent state had moved to `CLOSING12_TYPEFIX_RETEST_READY` and a C12 request was present for the two-literal B11 type repair. Dverify's current close assignment is B10 terminal source/results only; no C12 sources or results were reviewed here. Continue preserving the original cutoff `00:44:43Z` and keep the verification index current through handoff.
+
+## Verification close index — checkpoint 00:38 UTC
+
+Actual role start was `2026-10-29T19:47:12Z`; shared cutoff remains `2026-10-30T00:44:43Z`. Writes remain limited to this `verification/` directory; Dverify did not launch/cancel CI, mutate Git, compile locally, submit, retry API/source requests, or send direct messages.
+
+| Batch | Exact result | Current-champion result |
+|---|---|---|
+| B9, Mixer | Candidate `6fe5feb6…6d4ada` full original gate PASS; two standard roots fully audited | `1.7477679375×` current #36 time, INFERRED and slower; no promotion |
+| B11, normalized MLP cost screen | Candidate `4a9cb398…00b8f9b` native build failed at two Lean type errors; 20/20 outer and 19/19 inner hashes pass | No candidate timing; UNKNOWN, not zero; NativeOnly |
+| B10, Mixer | Candidate `f60551d5…7881bea` full original gate PASS; two complete standard roots, all checksums match | `1.2342594908×` current #36 time, INFERRED and slower; guard failed; no promotion |
+
+The independent raw audits are [audit-native-run-40972962791.json](audit-native-run-40972962791.json), [audit-native-run-40975355668.json](audit-native-run-40975355668.json), and [audit-native-run-40977309820.json](audit-native-run-40977309820.json). [audit-current-board-binding-230552.json](audit-current-board-binding-230552.json) records that only current Mixer submission 36 and normalized MLP submission 43 are bound to the latest saved publication; the other four board identities are UNKNOWN at that publication.
+
+The parent checkpoint at 00:38 still described `CLOSING12_TYPEFIX_RETEST_READY`, with no active CI listed. The C12 typefix request/dispatch is outside Dverify's B10-only close assignment and was not audited. Keep the original deadline and add final status only after a fresh parent/request/board read.

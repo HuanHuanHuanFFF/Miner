@@ -17,3 +17,5 @@
 NMLP真实插桩的linear占三入口时间87.8–93.2%、layer3.55–6.23%，分母并非完整模型，故是选路诊断而非严格整模界。它足以让只改layer出口的1903停止占CI；数学成果仍保留。FP4950完整native成本估计2.4052×current43；只保护b1也不能解决已见b8normal/sparse退化，见`fp-cost/failure-localization-batch8.json`。
 
 当前隔离后续为有限rawbit字缓存、完整Winograd成本与粗精度整数ReLU符号证书。仅使用冻结前材料与旧已见输入，不接触进行中的确认组来调参；已开始网页工作继续回收。依旧由D统一Git/CI，正式参赛/排名尚未建立。
+
+补充已完成：NativeAdd-only f60551d5/255666B完整原all12 gate通过，标准792pair固定验收通过，但current36报告链估计1.234259×且guard失败，不采用；它仍未恢复原smallK引擎，不称完整portfolio。`standard10-independent-fixed-audit.json`。Winograd修订包与粗整数ReLU证书分别在`pro-intake/winograd-followon/`和`pro-intake/relu-certificate/`，原模型全量重放一致；没有native成本/正式证明。父另给`follow-on/paired15/PAIR15.md`一次低乘提取两项15位量化dot的纸面恒等式和21296对有限检查，实际mask/缓存/回退接口未做，不能声称收益。

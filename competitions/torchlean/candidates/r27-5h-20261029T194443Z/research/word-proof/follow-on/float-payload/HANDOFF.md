@@ -11,7 +11,8 @@ one P entry read perMAC. No per-element big allocation or two-load claim.
   Reuse existingQPI, replace its QPD conversion; do not buildboth caches.
 - Sparse shifted49:24mant+4delta+1sign+20index supports oldspan15 but
   reintroduces inputshift perMAC. Extra prep/query cost remainsUNKNOWN.
--1255B WordPayload.lean/ab409983 is pureword source, policyPASS, uncompiled,
+-Preferred1303B WordPayload-v2.lean/ebe7db2a makes word literal types explicit;
+ old1255B/ab409983 retained. Pureword source, policyPASS, uncompiled,
   notqueued.72000 selections/36000 Python bit transports pass. ActualFloatArray
   read/write and Lean/native cost NOT_RUN. Span8 positive4294967040→-256
   is a real format counterexample; numerictoFloat is not rawofBits encoding.

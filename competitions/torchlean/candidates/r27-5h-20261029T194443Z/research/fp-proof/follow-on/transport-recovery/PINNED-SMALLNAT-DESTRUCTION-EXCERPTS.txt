@@ -1,0 +1,82 @@
+Lean v4.34.0 primary runtime excerpts; Apache-2.0. Copyright Microsoft Corporation / Lean FRO LLC.
+Object runtime: src/runtime/object.cpp; blob 49213d7be079e11589f1efcfe880dba44622a6e7
+URL https://github.com/leanprover/lean4/blob/v4.34.0/src/runtime/object.cpp
+Lines382-400:
+    case LeanClosure: {
+        object ** it  = lean_closure_arg_cptr(o);
+        object ** end = it + lean_closure_num_fixed(o);
+        for (; it != end; ++it) dec(*it, todo);
+        lean_dealloc(o, lean_closure_byte_size(o));
+        break;
+    }
+    case LeanArray: {
+        object ** it  = lean_array_cptr(o);
+        object ** end = it + lean_array_size(o);
+        for (; it != end; ++it) dec(*it, todo);
+        lean_dealloc(o, lean_array_byte_size(o));
+        break;
+    }
+    case LeanScalarArray:
+        lean_dealloc(o, lean_sarray_byte_size(o));
+        break;
+    case LeanString:
+        lean_dealloc(o, lean_string_byte_size(o));
+
+Header: src/include/lean/lean.h; blob 910ecae72a7d1c149d4ccc8111ee438c8b4551dd
+URL https://github.com/leanprover/lean4/blob/v4.34.0/src/include/lean/lean.h
+Lines1476-1511:
+#define LEAN_MAX_SMALL_NAT (SIZE_MAX >> 1)
+
+LEAN_EXPORT lean_object * lean_nat_big_succ(lean_object * a);
+LEAN_EXPORT lean_object * lean_nat_big_add(lean_object * a1, lean_object * a2);
+LEAN_EXPORT lean_object * lean_nat_big_sub(lean_object * a1, lean_object * a2);
+LEAN_EXPORT lean_object * lean_nat_big_mul(lean_object * a1, lean_object * a2);
+LEAN_EXPORT lean_object * lean_nat_overflow_mul(size_t a1, size_t a2);
+LEAN_EXPORT lean_object * lean_nat_big_div(lean_object * a1, lean_object * a2);
+LEAN_EXPORT lean_object * lean_nat_big_div_exact(lean_object * a1, lean_object * a2);
+LEAN_EXPORT lean_object * lean_nat_big_mod(lean_object * a1, lean_object * a2);
+LEAN_EXPORT bool lean_nat_big_eq(lean_object * a1, lean_object * a2);
+LEAN_EXPORT bool lean_nat_big_le(lean_object * a1, lean_object * a2);
+LEAN_EXPORT bool lean_nat_big_lt(lean_object * a1, lean_object * a2);
+LEAN_EXPORT lean_object * lean_nat_big_land(lean_object * a1, lean_object * a2);
+LEAN_EXPORT lean_object * lean_nat_big_lor(lean_object * a1, lean_object * a2);
+LEAN_EXPORT lean_object * lean_nat_big_xor(lean_object * a1, lean_object * a2);
+
+LEAN_EXPORT lean_obj_res lean_cstr_to_nat(char const * n);
+LEAN_EXPORT lean_obj_res lean_big_usize_to_nat(size_t n);
+LEAN_EXPORT lean_obj_res lean_big_uint64_to_nat(uint64_t n);
+static inline lean_obj_res lean_usize_to_nat(size_t n) {
+    if (LEAN_LIKELY(n <= LEAN_MAX_SMALL_NAT))
+        return lean_box(n);
+    else
+        return lean_big_usize_to_nat(n);
+}
+static inline lean_obj_res lean_unsigned_to_nat(unsigned n) {
+    return lean_usize_to_nat(n);
+}
+static inline lean_obj_res lean_uint64_to_nat(uint64_t n) {
+    if (LEAN_LIKELY(n <= LEAN_MAX_SMALL_NAT))
+        return lean_box(n);
+    else
+        return lean_big_uint64_to_nat(n);
+}
+
+Lines2126-2131:
+LEAN_EXPORT uint64_t lean_uint64_of_big_nat(b_lean_obj_arg a);
+static inline uint64_t lean_uint64_of_nat(b_lean_obj_arg a) { return lean_is_scalar(a) ? (uint64_t)(lean_unbox(a)) : lean_uint64_of_big_nat(a); }
+/* Remark: the following function is used to implement the constructor `UInt64.mk`. We can't annotate constructors with `@&` */
+static inline uint64_t lean_uint64_of_nat_mk(lean_obj_arg a) { uint64_t r = lean_uint64_of_nat(a); lean_dec(a); return r; }
+static inline uint64_t lean_uint64_add(uint64_t a1, uint64_t a2) { return a1+a2; }
+static inline uint64_t lean_uint64_sub(uint64_t a1, uint64_t a2) { return a1-a2; }
+Lines2977-2986:
+static inline lean_obj_res lean_box_uint64(uint64_t v) {
+    lean_obj_res r = lean_alloc_ctor(0, 0, sizeof(uint64_t));
+    lean_ctor_set_uint64(r, 0, v);
+    return r;
+}
+
+static inline uint64_t lean_unbox_uint64(b_lean_obj_arg o) {
+    return lean_ctor_get_uint64(o, 0);
+}
+
+

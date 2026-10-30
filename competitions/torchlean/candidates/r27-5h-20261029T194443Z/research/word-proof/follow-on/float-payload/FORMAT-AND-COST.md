@@ -68,3 +68,12 @@ contains only actual nonzero indices. Preparation is paid at batch1 as well
 as batch8. First buy a bounded raw-payload getter/control measurement, then
 complete-model cost only if one actual load or meaningful native work is gone.
 Do not queue it merely because it uses a specialized array or a new name.
+
+A separate reuse exists in the already-isolated band consumer: its local
+factor magnitude is below2^27 even when the full input exponent span is wide.
+Thus local signed32 factor plus20-bit raw index always fits the same52-bit
+layout there. In D's flat two-array representation this could replace separate
+factor/index loads with one raw payload load; in the tuple representation it
+could remove the pair object/indirection. It does not prove or speed up the
+current public23 QPD path, and no frozen band source is changed by this note.
+The Float bit/getter bridge and actual complete-call cost remain prerequisites.

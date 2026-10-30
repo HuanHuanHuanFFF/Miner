@@ -9,6 +9,7 @@ import subprocess
 HERE=Path(__file__).resolve().parent
 ROOT=next(p for p in HERE.parents if (p/'AGENTS.md').is_file())
 OUTPUTS={'public-research-manifest.json','public-research-allowlist.txt'}
+LOCAL_METADATA={'window-3h30m-20261029T224253Z.json'}
 PRIVATE=re.compile(r'chatgpt\.com/(?:c/|library)|rollout-[^\s\"<>]*\.jsonl|\.codex[/\\]memories',re.I)
 
 
@@ -17,6 +18,7 @@ def main():
     assert found.returncode in (0,1),found.stderr
     paths=[Path(line).resolve() for line in found.stdout.splitlines()]
     paths.extend(p.resolve() for p in HERE.rglob('.gitignore') if p.is_file())
+    paths.extend((HERE/name).resolve() for name in LOCAL_METADATA if (HERE/name).is_file())
     # Ignoring a private original must not erase its local retention record.
     paths.extend(p.resolve() for p in (HERE/'pro-results').rglob('*') if p.is_file())
     for directory in [p for p in HERE.rglob('*') if p.name in {'source-private','private','local-private'}]:
@@ -28,6 +30,9 @@ def main():
     for path in sorted(set(paths)):
         rel=path.relative_to(ROOT).as_posix()
         if path.name in OUTPUTS:continue
+        if path.name in LOCAL_METADATA:
+            local.append({'path':rel,'bytes':path.stat().st_size,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'reason':'Retracted historical authorization intake; preserve privately and publish only window-correction-independent-review.json'})
+            continue
         if any(part in {'pro-results','source-private','private','local-private'} for part in path.relative_to(HERE).parts) or path==full_upstream.resolve():
             local.append({'path':rel,'bytes':path.stat().st_size,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'reason':'Private original/reconstructed upstream payload retained locally; only own patches, technical findings and hashes published'})
             continue

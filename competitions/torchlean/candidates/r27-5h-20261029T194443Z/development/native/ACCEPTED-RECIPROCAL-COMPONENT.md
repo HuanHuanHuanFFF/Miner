@@ -4,7 +4,7 @@
 
 The printed roots are:
 
-- `R27ReciprocalProof.reciprocal_estimate_bounds`: for0<aBound B and a<B, d>0, with R=floor((B-1)/d), q=floor(a*R/B), q*d<=a<(q+2)*d. AX propext,Quot.sound.
+- `R27ReciprocalProof.reciprocal_estimate_bounds`: forB>0, a<B and d>0 in Nat, with R=floor((B-1)/d), q=floor(a*R/B), q*d<=a<(q+2)*d. AX propext,Quot.sound.
 - `R27ReciprocalProof.reciprocal_divrem`: one correction produces exact Nat quotient/remainder under those premises. Same AX.
 - `R27Reciprocal.mulHigh_toNat`: the portable four32-bit-partial UInt64 multiply returns the exact product high64 bits. AX additionallyClassical.choice.
 - `R27Reciprocal.divRem_correct`: for arbitrary UInt64a,d, cachedprepare(d) yields exactly the original pair(a/d,a%d); the d=0 branch delegates the original operations. Same allowed AX as the word multiply root.

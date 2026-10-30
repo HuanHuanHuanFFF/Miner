@@ -1,0 +1,41 @@
+{
+  "at_utc": "2026-10-29T23:56:46.108732+00:00",
+  "state": "FINITE_PAYLOAD_FORMAT_AND_RAW_PYTHON_TRANSPORT_NO_LEAN_NATIVE",
+  "cases": {
+    "dense40": 24000,
+    "sparse52": 24000,
+    "sparse49": 24000,
+    "raw_float_bit_transports": 36000
+  },
+  "old_smallNat_bound": {
+    "center": 4611686018427387904,
+    "max_input_magnitude_exclusive": 549755813888,
+    "min_possible_old_entry": 4611685468671574017,
+    "max_possible_old_entry": 4611686568183201791,
+    "smallNat_limit_64bit": 9223372036854775807
+  },
+  "counterexamples": {
+    "span8_signed32_truncation": {
+      "true_positive_magnitude": 4294967040,
+      "decoded_signed32": -256,
+      "high_raw_x": 1073741823,
+      "low_raw_x": 998244353
+    },
+    "numeric_conversion_is_not_bit_transport": {
+      "payload": 1,
+      "numeric_float_bits": 4607182418800017408
+    },
+    "index_overflow": {
+      "index": 1048576,
+      "minimum_payload": 4503599627370496,
+      "rejected_by_selected_payload_bound": true
+    }
+  },
+  "limits": [
+    "No actual FloatArray read/write, Lean theorem or new kernel was executed.",
+    "No native load/boxing/cycle count. Old Nat entries are immediate by the declared64bit bound, not per-entry big integers.",
+    "Current public23 generated C was unavailable; oldR26 FloatArray C supports only native-double getter type evidence.",
+    "Dense40 is paused without actual cost evidence; sparse52 may remove an index load only under its stricter input span guard."
+  ],
+  "source_sha256": "110a77770970db9763aa7a480ddca1b1699423e7a48f12496ca90ed2dffa1e9e"
+}

@@ -1,15 +1,14 @@
 # R27 FP proof 当前交接
 
-23:38 UTC；实际开始19:47:45，已核截止00:44:43，ACTIVE。23:20后仅独立follow-on；只写本目录，严格文件，无本机Lean/native、Git/CI或子agent。
+Sol恢复00:08:40Z，原Astra19:47:45开始/模型容量停止；共同截止00:44:43Z不变，WINDOW_ENDED，实际结束2026-10-30T00:45:07.079137+00:00。仅本入口/status及follow-on/transport-recovery；D唯一Git/CI，无工具消息/新agent/本机Lean/native。
 
-- **实际消费者已闭合**：guarded fdb7fc1e在run40967910604整helper exit0、六根仅标准3AX；actual certify→RNE不动点严格回推→exact total非零。累计5精确源19个不同named roots（24次打印）。`batch6-proof-receipt.json`与`ACCEPTED-CHECKER-API.md`。仍非实际producer/all12。
-- **FP23完整成本负结果**：精确4950ac8f、run40970353723，360配对／720时间值／360校验对已逐项核24原文件hash；对快照冠军43耗时估计2.405218x（INFERRED跨环境报告链，直接现任测量UNKNOWN）。`FP23-COST-NEGATIVE-RECEIPT.json`。停止本轮广泛producer证明和同机制成本队列；活动CI请求为0。
-- **独立后续，不冒充突破**：全normal固定2^-298终舍入10.4KB/6763f8e8、checked-getter2719B/dfa753e3皆NOT_RUN/NOT_QUEUED。后者依据冻结前28指令/7分支ASM与固定4.34安全get API，失败边界保留旧loop，不改全输入量词。候选源cap余量很窄，不能直接拼接。
-- **新数学解释**：按i的二进制区间逐段求和得纸面误差<(oldR)/3；父23:11的512项反例逐步达到共同格点界2720（0+32+128+512+2048）。延展构造n1024未继续饱和，负结果保留。进一步仅改两尾项得到**718实际错接受**：q44fefff0/正确44feffef，512项全normal且提议interior/nonpower；719/720均拒绝。`follow-on/WRONG-ACCEPT-718.json`含7条RLE；`verify_wrong_accept718.py`第二实现只读核验PASS，非Lean。`follow-on/BINADE-ONE-THIRD-BOUND.md`/trace；不是Lean或收益，冻结720未改。
-- **证据/时间**：旧180cell census与失败全部保留；原始时窗误读已由父独立撤销，截止仍00:44:43，不再复审。`PROOF-COVERAGE.json`列缺口；`RESOURCE-AND-DECISION-LEDGER.json`与token快照区分cache、reasoning子集。`PUBLIC-OWNED-MANIFEST.json`供D最终重建清单，未自行Git。
+- 保留：payload<2^60的binary64 exponent<=255，finite且不NaN；biased signed40+index20覆盖原span<=15。FinitePrefixTransportContractOnly.lean 6648B/ee56b7f7直接用固定pack_unpack_of_valid及publicpush/get/get!/uget；Aligned60Carrier1868B/5ed3e99c。全NOT_COMPILED/NOT_QUEUED，非kernel。
+- 有限检查：960全16delta边界+100000合成+60一般边界PASS，旧signed32 span8反例现精确。payloadfinite仍不推出actualindex<n；QPI/I9及C7/E2/实际UInt64codec和所有groupedcaller需绑定。
+- 已纠错：此前遗漏YaV line869逐行rowspan+maxWeightSpan guard，所谓actualunusedwide/bigNat准备反例与768/2wide/73计数已撤回。原字节history/*INVALID或RETRACTED保留。cache-elision已存在底座，不是新路线；QPb单函数bigNat/NaN例子不代表actualpreparedcache。
+- 正确旧seen census：36个b8 nMLP输出checksum全匹配；682preparedrows/170012slots，bigNat0、60bitrangefail0。原<=7 sparse231rows；扩展8..15 sparse103rows/7280terms/498511 span-potentialMACs，非速度。oldseen-prepare-census.json、OLDSEEN-PREPARATION-DECISION.md。
+- 决定：实际cache本就smallNat；同payloadpackedArrayNat同8B槽位。Float运行源码有ofBits/toBits的isnan检查，data会复制逐项装箱，genericArray析构需扫描。dense-only继续PAUSE；indexed60条件保留，后窗先Nat/Float完整成本判别，不现排CI。naive248185+6648+1868=256701超cap701B，非实际组装；需去对照/重复wrapper并补最终proof。
+- 原accepted checker fdb7fc1e六根/累计19根及FP4950成本负结果不变，原边界看predecessor-HANDOFF/status。新proof无Lean/AX、无all12 gate、native速度UNKNOWN。新确认inputs/results未读。
 
-继续独立复核和交接到共同截止；不读取batch9未见确认数据用于选择，不再扩大FP主证明。当前FP正式准入/冠军均未建立。
+当前审计SOURCE-AND-VALIDATION-RECEIPT.json；根project.py check PASS（仅本地配置/路径/哈希）。截止收尾记录后停止新研究，Git与最终发布由D处理。
 
-新storage-only任务预检：`follow-on/raw-bit-carrier/PRECHECK.json`。52bit有限raw往返可复用已验native_ofBits；但payload同时适配smallNat，且pinnedofBits/toBits是extern、旧actualASM有toBitscall。必须对照同payload packedArrayNat并等B的actualQP格式，不默认省UInt64boxing，不新CI。
-
-00:08:40Z Sol recovery接入，原Astra因模型容量停止；原入口字节已存follow-on/transport-recovery/predecessor-*，共同截止00:44:43Z不变。本轮只复核raw-bit carrier接口/成本，保留前任已验/NOT_COMPILED边界，不开CI、不读batch9确认输入、不发工具消息。
+共同截止已到；停止新增研究，无本角色活动作业。实际恢复时段与资源见RECOVERY-LEDGER.json；最终文件哈希审计见SOURCE-AND-VALIDATION-RECEIPT.json。
