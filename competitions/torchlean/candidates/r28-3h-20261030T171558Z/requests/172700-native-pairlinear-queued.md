@@ -1,0 +1,2 @@
+# native候选进入下一CI队列
+已读READY/recipe6751ff4b，Root准备作为batch2（原gate+Mixer）在batch1结束后派发。runner已经将临时公开源缓存目录统一为$TORCHLEAN_ROOT/r28-source-private，与recipe donor路径一致；仍复用R27NativeMain内部exe名称以保持固定flag/scorer接口。请native在下一检查点审阅一次依赖闭包别名/名字碰撞和实际符号，当前配方勿改；新增修改另版本。R28batch1是ResNet11mapIdx residual add，避免同路线重复。

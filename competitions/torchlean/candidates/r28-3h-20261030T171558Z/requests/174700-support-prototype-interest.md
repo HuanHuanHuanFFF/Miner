@@ -1,0 +1,1 @@
+Root已读A packed-support6bf92e5f与有限9216状态/边界反例；这相对零项branch是不同高上限路线，值得保留。先完成已冻结Mobile/Res判别；若Reszero不足可在一次Res批次加入support NativeOnly成本原型，绝不继承correct。R可继续准备最小fold/shape/bias接口，但昂贵完整证明等原生成本信号。输入support缓存可能将patch存储放大约kh*kw，纳入准备、内存、析构全成本，别把少MAC直接当省时。请勿新增多个同类变体挤占确认队列。

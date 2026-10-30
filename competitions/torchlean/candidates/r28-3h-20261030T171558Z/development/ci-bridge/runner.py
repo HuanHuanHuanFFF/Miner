@@ -102,6 +102,13 @@ def main():
   for stem in ['Submission','R27NativeMain']:
    c=visible(g.BUILD/'ir'/(stem+'.c'));assert c.is_file();obj=visible(g.BUILD/'ir'/(stem+'.c.o.export'));generated[stem]={'c_sha256':sha(c),'c_bytes':c.stat().st_size,'object_sha256':sha(obj)}
   (folder/'generated-code-hashes.json').write_text(json.dumps(generated,indent=2)+'\n')
+  if plan.get('code_probe'):
+   try:
+    probe=ROOT/plan['code_probe'];assert sha(probe)==plan['code_probe_sha256'];probe_spec=importlib.util.spec_from_file_location('r28_code_probe',probe);probe_module=importlib.util.module_from_spec(probe_spec);probe_spec.loader.exec_module(probe_module)
+    derived=probe_module.inspect(visible(g.BUILD/'ir/Submission.c').read_bytes(),plan['code_probe_symbols'])
+   except Exception as error:
+    derived={'state':'INCOMPLETE_DIAGNOSTIC_ONLY','error_type':type(error).__name__,'error':str(error),'scope':'OptionalCcounterfailuredoesnotalterprooforbenchmark'}
+   (folder/'generated-code-diagnostics.json').write_text(json.dumps(derived,indent=2)+'\n')
   binary=g.LIB/'work/r27-binaries'/name;binary.parent.mkdir(exist_ok=True);shutil.copy2(visible(g.BUILD/'bin/r27Native'),binary);assert binary.stat().st_size<512*2**20
   info={'name':name,'source_sha256':entry['sha256'],'source_path':entry['path'],'proof_state':'FULL_ORIGINAL_GATE_REPLAYED' if entry.get('full_gate') else 'DECLARED_CORRECT_TYPECHECKED_NO_FULL_ORIGINAL_REPLAY' if entry.get('fetch') and entry.get('declares_correct',True) else 'NOT_PROVED_NATIVE_ONLY','binary_sha256':sha(binary),'foreign':foreign,'flags_pass':True,'measurements':[],'measurement_state':'NOT_RUN'};record['results'].append(info);save()
   if plan.get('profile_control') and entry.get('reference'):

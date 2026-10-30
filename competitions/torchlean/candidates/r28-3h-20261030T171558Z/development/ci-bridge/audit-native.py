@@ -27,7 +27,8 @@ def flags(folder):
 
 def analyze(run):
     run_dir=ROUND/'evidence'/str(run);ci=j(run_dir/'ci-run.json')
-    assert ci['status']=='completed'
+    terminal_spec=importlib.util.spec_from_file_location('r28_terminal_evidence',Path(__file__).with_name('terminal-evidence.py'));terminal=importlib.util.module_from_spec(terminal_spec);terminal_spec.loader.exec_module(terminal)
+    assert ci['status']=='completed' or terminal.verified(run_dir,ci['headSha'])
     manifest=j(run_dir/'original-artifact-hashes.json');folder=run_dir/manifest['directory']
     outer=base.audit_tree(folder,manifest['files']);assert outer['status']=='PASS'
     inside=base.audit_tree(folder,j(folder/'file-hashes.json'),excluded=('file-hashes.json',));assert inside['status']=='PASS'
@@ -105,7 +106,7 @@ def analyze(run):
                      'candidate_proof':current['proof_state'],
                      'eligibility':'SOURCE_ORIGINAL_GATE_PASS_PERFORMANCE_AND_OFFICIAL_PROMOTION_NOT_ESTABLISHED' if entry.get('full_gate') else 'NOT_ESTABLISHED_NO_ORIGINAL_FULL_GATE_REPLAY',
                      'status':'NATIVE_ONLY_EXPLORATION_AUDITED'})
-    return {'run':run,'source_commit':ci['headSha'],'ci_conclusion':ci['conclusion'],
+    return {'run':run,'source_commit':ci['headSha'],'ci_conclusion':ci['conclusion'],'ci_metadata_status':ci['status'],'execution_reconciliation':str(run_dir/'execution-reconciliation.json') if ci['status']!='completed' else None,
             'status':'AUDITED_NATIVE_ONLY_EXPLORATION','board':plan['board'],'outer_hashes':outer,'inner_hashes':inside,
             'reference_flags':reference_flags,'source_preservation':'PASS','MainExact_sha256':summary['owned_main_equals_original_sha256'],
             'pinned_scorer':pins,'dispatch':dispatch_path.relative_to(ROOT).as_posix(),'helpers':summary.get('helper_diagnostics',[]),

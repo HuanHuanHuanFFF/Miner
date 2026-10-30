@@ -1,0 +1,367 @@
+{
+  "source_sha256": "ea6f582fc7a416b8860adb5c71fe3ab670dd4add01999fac7190993110f605a3",
+  "original_C_sha256": "95706b2294e69ff9b316f545510638d055e8b1d640fc3d0f49935a07a9f685c6",
+  "instrumented_C_sha256": "0bfa4cb41c9e4d08081ef1ea2e7290c743a1bf77c2671bce052c74ba08740f6c",
+  "control_binary_sha256": "974bab63378eed2223381eba84288bf8ad66de9487654005abb1ba6e1a49e014",
+  "profiled_binary_sha256": "cd0401288a87f315faafc23ab7bfe0ce1c87c19c72cc4d12ecd82a2f5caf5d8f",
+  "symbols": [
+    "add_relu",
+    "conv2d",
+    "depthwise",
+    "maxpool",
+    "scale_shift",
+    "avgpool",
+    "linear"
+  ],
+  "commands": [
+    {
+      "label": "profile-compile",
+      "argv": [
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/bin/clang",
+        "-c",
+        "-o",
+        ".lake/build/ir/R27EntryProfile.c.o.export",
+        "work/R27EntryProfile.c",
+        "-I",
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/include",
+        "-fstack-clash-protection",
+        "-ffp-contract=off",
+        "-fdata-sections",
+        "-ffunction-sections",
+        "-fPIC",
+        "-fvisibility=hidden",
+        "-Wno-unused-command-line-argument",
+        "--sysroot",
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0",
+        "-nostdinc",
+        "-isystem",
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/include/clang",
+        "-O3",
+        "-DNDEBUG",
+        "-DLEAN_EXPORTING",
+        "-isystem",
+        "/usr/include",
+        "-isystem",
+        "/usr/include/x86_64-linux-gnu"
+      ],
+      "exit_code": 0,
+      "seconds": 12.339224752999996
+    },
+    {
+      "label": "profile-link",
+      "argv": [
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/bin/clang",
+        "-o",
+        ".lake/build/bin/R27EntryProfile",
+        "@work/R27EntryProfile.rsp"
+      ],
+      "exit_code": 0,
+      "seconds": 2.9465114370000265
+    }
+  ],
+  "rows": [
+    {
+      "cell": "resnet:b1:normal",
+      "instrumented_kernel_entry_times": {
+        "add_relu": {
+          "calls": 192,
+          "inclusive_ns": 5254786,
+          "exclusive_ns": 5254786
+        },
+        "conv2d": {
+          "calls": 960,
+          "inclusive_ns": 85367557,
+          "exclusive_ns": 85367557
+        },
+        "depthwise": {
+          "calls": 0,
+          "inclusive_ns": 0,
+          "exclusive_ns": 0
+        },
+        "maxpool": {
+          "calls": 192,
+          "inclusive_ns": 4338464,
+          "exclusive_ns": 4338464
+        },
+        "scale_shift": {
+          "calls": 768,
+          "inclusive_ns": 14139947,
+          "exclusive_ns": 14139947
+        },
+        "avgpool": {
+          "calls": 192,
+          "inclusive_ns": 1309374,
+          "exclusive_ns": 1309374
+        },
+        "linear": {
+          "calls": 192,
+          "inclusive_ns": 673789,
+          "exclusive_ns": 14508
+        }
+      },
+      "share_within_profiled_entries": {
+        "add_relu": 0.047587080114984484,
+        "conv2d": 0.7730843414326491,
+        "depthwise": 0.0,
+        "maxpool": 0.03928891375290565,
+        "scale_shift": 0.12805065529036475,
+        "avgpool": 0.011857625684181562,
+        "linear": 0.00013138372491442943
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "resnet:b1:wide",
+      "instrumented_kernel_entry_times": {
+        "add_relu": {
+          "calls": 192,
+          "inclusive_ns": 5230552,
+          "exclusive_ns": 5230552
+        },
+        "conv2d": {
+          "calls": 960,
+          "inclusive_ns": 96923281,
+          "exclusive_ns": 96923281
+        },
+        "depthwise": {
+          "calls": 0,
+          "inclusive_ns": 0,
+          "exclusive_ns": 0
+        },
+        "maxpool": {
+          "calls": 192,
+          "inclusive_ns": 4293694,
+          "exclusive_ns": 4293694
+        },
+        "scale_shift": {
+          "calls": 768,
+          "inclusive_ns": 14312122,
+          "exclusive_ns": 14312122
+        },
+        "avgpool": {
+          "calls": 192,
+          "inclusive_ns": 1314497,
+          "exclusive_ns": 1314497
+        },
+        "linear": {
+          "calls": 192,
+          "inclusive_ns": 669443,
+          "exclusive_ns": 14738
+        }
+      },
+      "share_within_profiled_entries": {
+        "add_relu": 0.04284216407449511,
+        "conv2d": 0.7938747396527926,
+        "depthwise": 0.0,
+        "maxpool": 0.035168590778502,
+        "scale_shift": 0.11722706876409814,
+        "avgpool": 0.010766721399468276,
+        "linear": 0.00012071533064386107
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "resnet:b1:sparse",
+      "instrumented_kernel_entry_times": {
+        "add_relu": {
+          "calls": 192,
+          "inclusive_ns": 5091022,
+          "exclusive_ns": 5091022
+        },
+        "conv2d": {
+          "calls": 960,
+          "inclusive_ns": 84422285,
+          "exclusive_ns": 84422285
+        },
+        "depthwise": {
+          "calls": 0,
+          "inclusive_ns": 0,
+          "exclusive_ns": 0
+        },
+        "maxpool": {
+          "calls": 192,
+          "inclusive_ns": 4323105,
+          "exclusive_ns": 4323105
+        },
+        "scale_shift": {
+          "calls": 768,
+          "inclusive_ns": 14128224,
+          "exclusive_ns": 14128224
+        },
+        "avgpool": {
+          "calls": 192,
+          "inclusive_ns": 1293893,
+          "exclusive_ns": 1293893
+        },
+        "linear": {
+          "calls": 192,
+          "inclusive_ns": 635494,
+          "exclusive_ns": 13942
+        }
+      },
+      "share_within_profiled_entries": {
+        "add_relu": 0.04659016084664178,
+        "conv2d": 0.7725851188997089,
+        "depthwise": 0.0,
+        "maxpool": 0.03956261774294461,
+        "scale_shift": 0.12929353450788167,
+        "avgpool": 0.011840978685290278,
+        "linear": 0.00012758931753268396
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "resnet:b4:normal",
+      "instrumented_kernel_entry_times": {
+        "add_relu": {
+          "calls": 768,
+          "inclusive_ns": 24810587,
+          "exclusive_ns": 24810587
+        },
+        "conv2d": {
+          "calls": 3840,
+          "inclusive_ns": 341190540,
+          "exclusive_ns": 341190540
+        },
+        "depthwise": {
+          "calls": 0,
+          "inclusive_ns": 0,
+          "exclusive_ns": 0
+        },
+        "maxpool": {
+          "calls": 768,
+          "inclusive_ns": 17624182,
+          "exclusive_ns": 17624182
+        },
+        "scale_shift": {
+          "calls": 3072,
+          "inclusive_ns": 57717034,
+          "exclusive_ns": 57717034
+        },
+        "avgpool": {
+          "calls": 768,
+          "inclusive_ns": 5323940,
+          "exclusive_ns": 5323940
+        },
+        "linear": {
+          "calls": 768,
+          "inclusive_ns": 2697715,
+          "exclusive_ns": 57767
+        }
+      },
+      "share_within_profiled_entries": {
+        "add_relu": 0.05553895520064344,
+        "conv2d": 0.7637612973825788,
+        "depthwise": 0.0,
+        "maxpool": 0.03945205546914253,
+        "scale_shift": 0.1292006418727624,
+        "avgpool": 0.01191773758319034,
+        "linear": 0.00012931249168250512
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "resnet:b4:wide",
+      "instrumented_kernel_entry_times": {
+        "add_relu": {
+          "calls": 768,
+          "inclusive_ns": 24844225,
+          "exclusive_ns": 24844225
+        },
+        "conv2d": {
+          "calls": 3840,
+          "inclusive_ns": 388754195,
+          "exclusive_ns": 388754195
+        },
+        "depthwise": {
+          "calls": 0,
+          "inclusive_ns": 0,
+          "exclusive_ns": 0
+        },
+        "maxpool": {
+          "calls": 768,
+          "inclusive_ns": 17698273,
+          "exclusive_ns": 17698273
+        },
+        "scale_shift": {
+          "calls": 3072,
+          "inclusive_ns": 58594614,
+          "exclusive_ns": 58594614
+        },
+        "avgpool": {
+          "calls": 768,
+          "inclusive_ns": 5187501,
+          "exclusive_ns": 5187501
+        },
+        "linear": {
+          "calls": 768,
+          "inclusive_ns": 2712584,
+          "exclusive_ns": 58049
+        }
+      },
+      "share_within_profiled_entries": {
+        "add_relu": 0.050176480802761166,
+        "conv2d": 0.7851449341812985,
+        "depthwise": 0.0,
+        "maxpool": 0.03574420435439327,
+        "scale_shift": 0.11834023900991883,
+        "avgpool": 0.01047690335845873,
+        "linear": 0.00011723829316951859
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "resnet:b4:sparse",
+      "instrumented_kernel_entry_times": {
+        "add_relu": {
+          "calls": 768,
+          "inclusive_ns": 24637515,
+          "exclusive_ns": 24637515
+        },
+        "conv2d": {
+          "calls": 3840,
+          "inclusive_ns": 341630743,
+          "exclusive_ns": 341630743
+        },
+        "depthwise": {
+          "calls": 0,
+          "inclusive_ns": 0,
+          "exclusive_ns": 0
+        },
+        "maxpool": {
+          "calls": 768,
+          "inclusive_ns": 17920077,
+          "exclusive_ns": 17920077
+        },
+        "scale_shift": {
+          "calls": 3072,
+          "inclusive_ns": 58660283,
+          "exclusive_ns": 58660283
+        },
+        "avgpool": {
+          "calls": 768,
+          "inclusive_ns": 5308801,
+          "exclusive_ns": 5308801
+        },
+        "linear": {
+          "calls": 768,
+          "inclusive_ns": 2617810,
+          "exclusive_ns": 59327
+        }
+      },
+      "share_within_profiled_entries": {
+        "add_relu": 0.05496785923299707,
+        "conv2d": 0.7621998643486649,
+        "depthwise": 0.0,
+        "maxpool": 0.03998082882873814,
+        "scale_shift": 0.13087481341002818,
+        "avgpool": 0.011844271878230984,
+        "linear": 0.00013236230134070002
+      },
+      "checksum_pairs": 6
+    }
+  ],
+  "scope": "INSTRUMENTED_COST_DISCRIMINATOR_ONLY_NOT_OFFICIAL_TIMING_OR_GATE",
+  "boundary": "Pure kernel-entry wall time; nested profiled entries removed from exclusive sums. Output destruction outside these calls is excluded. Bench warmups may enter counters. One root, six cells, six workloads; no champion score or whole-model-share equality claim.",
+  "publication": "Only derived counters/own transform and hashes; whole source/C stays ephemeral"
+}
