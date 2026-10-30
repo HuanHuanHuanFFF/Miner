@@ -32,11 +32,7 @@ def main():
  assert run(['systemd-run','--user','--scope','--quiet','-p','MemoryMax=4096M','-p','MemorySwapMax=0','bash','setup.sh','--benchmark-worker'],'setup',600)==0
  assert run(['bash','setup.sh','--check'],'setup-check',30)==0
  g,bm,fp,cfg,ms=load_tools();assert g._SANDBOX and g._BUILD_MEMORY_MB==4096 and g._BENCH_MEMORY_MB==512
- for entry in plan.get('helpers',[]):
-  source=ROOT/entry['path'];assert sha(source)==entry['sha256'];g.wipe(g.LAYER);(g.LAYER/'upper').mkdir(parents=True);(g.LAYER/'work').mkdir();target=g.LIB/'work'/('R27Helper_'+entry['name']+'.lean');diagnostic=source.read_bytes()+b'\n'+('\n'.join('#print axioms '+x for x in entry.get('helper_roots',[]))+'\n').encode();target.write_bytes(diagnostic);g._budget.reset(entry.get('seconds',120));code,log=g.own([g.LAKE,'env','lean','work/'+target.name],entry.get('seconds',120),build='write');(OUT/(entry['name']+'-helper.log')).write_text(log);record.setdefault('helper_diagnostics',[]).append({'name':entry['name'],'source_sha256':entry['sha256'],'exit_code':code,'scope':'Standalone helper elaboration only; not original all12 gate or replay'});save();g.wipe(g.LAYER)
  record['proof_identity']=fp.proof();record['benchmark_identity']=fp.benchmark();save()
- if plan.get('mode')=='helpers-only':
-  assert protected()==before;record['protected_after']=protected();record['originals_unchanged']=True;record['diagnostics_complete']=len(record.get('helper_diagnostics',[]))==len(plan.get('helpers',[]));record['all_helpers_compile_passed']=all(x['exit_code']==0 for x in record.get('helper_diagnostics',[]));record['complete']=record['diagnostics_complete'];save();return
  failed_fetches={}
  def public_source(pin):
   folder=UP/'r28-source-private';folder.mkdir(exist_ok=True);original=folder/('official-'+str(pin['submission'])+'.lean')
@@ -63,6 +59,16 @@ def main():
   if entry.get('variant'):
    patch=ROOT/entry['patch_script'];assert sha(patch)==entry['patch_script_sha256'];spec=importlib.util.spec_from_file_location('r27_owned_patch',patch);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);raw=module.transform(raw,pin['submission'],entry['variant'])
   dest=folder/(entry['name']+'-Kernel.lean');dest.write_bytes(raw);assert sha(dest)==entry['sha256'];assert len(raw)==entry['bytes'];return dest
+ for entry in plan.get('helpers',[]):
+  began=time.monotonic();cap=min(120,entry.get('seconds',120),max(1,END-time.monotonic()-30));info={'name':entry['name'],'source_sha256':entry['sha256'],'seconds_cap':cap,'scope':'Standalone helper elaboration only; not original all12 gate or replay'}
+  try:
+   assert re.fullmatch(r'[A-Za-z0-9_]+',entry['name']);source=materialize(entry) if entry.get('fetch') else ROOT/entry['path'];assert sha(source)==entry['sha256'];g.wipe(g.LAYER);(g.LAYER/'upper').mkdir(parents=True);(g.LAYER/'work').mkdir();target=g.LIB/'work'/('R27Helper_'+entry['name']+'.lean');diagnostic=source.read_bytes()+b'\n'+('\n'.join('#print axioms '+x for x in entry.get('helper_roots',[]))+'\n').encode();target.write_bytes(diagnostic);info['diagnostic_sha256']=hashlib.sha256(diagnostic).hexdigest();g._budget.reset(cap);code,log=g.own([g.LAKE,'env','lean','work/'+target.name],cap,build='write');(OUT/(entry['name']+'-helper.log')).write_text(log);info['exit_code']=code;info['log_sha256']=sha(OUT/(entry['name']+'-helper.log'))
+  except Exception as error:
+   info.update(exit_code=-1,error_type=type(error).__name__,error=str(error));(OUT/(entry['name']+'-helper-exception.json')).write_text(json.dumps(info,indent=2)+'\n')
+  finally:
+   info['seconds']=time.monotonic()-began;record.setdefault('helper_diagnostics',[]).append(info);save();g.wipe(g.LAYER)
+ if plan.get('mode')=='helpers-only':
+  assert protected()==before;record['protected_after']=protected();record['originals_unchanged']=True;record['diagnostics_complete']=len(record.get('helper_diagnostics',[]))==len(plan.get('helpers',[]));record['all_helpers_compile_passed']=all(x['exit_code']==0 for x in record.get('helper_diagnostics',[]));record['complete']=record['diagnostics_complete'];save();return
  reference=materialize(plan['reference']);refdir=UP/'r27-reference';refdir.mkdir();(refdir/'Kernel.lean').write_bytes(reference.read_bytes());py=UP/'.venv/bin/python'
  record['reference_proof']={'scope':'Official public predecessor declared Correct; full original replay not run in this native exploration'};save()
  measurement_mode=plan.get('measurement_mode','quick');assert measurement_mode in {'quick','standard'}
@@ -121,6 +127,9 @@ def main():
  refentry={**plan['reference'],'name':'calibration','reference':True};refbin,refinfo=build(refentry)
  for entry in plan['candidates']:
   try:
+   required=entry.get('requires_helpers',[])
+   if any(not any(x['name']==name and x['exit_code']==0 for x in record.get('helper_diagnostics',[])) for name in required):
+    record.setdefault('candidate_errors',[]).append({'candidate':entry['name'],'error_type':'SKIPPED_AFTER_BOUNDED_HELPER_FAILED','error':'Requiredprefixdidnotcompile; nofull600sreplay','required_helpers':required});save();continue
    binary,info=build(entry)
    for seed in plan['seeds']:
     timing=config.timing|config.plan(plan['board'])['timing']|config.environments['local']['timing']

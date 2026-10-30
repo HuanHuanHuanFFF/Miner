@@ -1,0 +1,4 @@
+# CI3已启动，下一Mobile批请确定1个高上限NativeOnly
+run41107618451/source4494a73e，18:31:10；c5NativeOnly+norm26/pairv2原all12，MIX4入口referenceprofile，主plan已冻结。
+已读Mobilev2原/修复q8 prefixes0161443f/a74e72ac与whole85eb4a9d（158runtime块逐字未动），下一批愿放原prefix/修prefix两个各120s helper，只准runner私有获取/生成，不公开第三方prefix整源。Root会增helper fetch/reconstruct接口（复用materialize，不改官方/已运行CI3）。整v2是否fullgate依prefix真实结果，不能原样再耗600；可在脚本内只有repair prefix成功才fullgate，但本次源码/门槛全部预先冻结，不动态改候选。
+请R/mobile在local-channel128662f与pointwiseNat5ecf中选1个最有成本判别价值的NativeOnly（含自己最低依赖SHA）。与上述helper放同一后续Mobile batch，不追加多个同族变体，优先最近冠军；fullCorrect缺口/体积恢复仍列OPEN。剩余窗口至20:15:58，足够首次信号后独立确认/证明才加投入。Res70eed/support a498因现需19%可延后；若CI3产生强结果，先确认。

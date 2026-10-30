@@ -5,12 +5,12 @@
 | 赛道 | 现任冠军 | 当前最强起点／候选 | 耗时／冠军 |
 | --- | --- | --- | ---: |
 | MobileNet | #57 | 已公开退任冠军 #53 | **1.05×** |
-| Mixer | #56 | 已公开退任冠军 #36 | **1.17×** |
+| Mixer | #56 | norm26（完整证明通过） | **1.10×** |
 | ResNet | #64 | 已公开退任冠军 #11 | **1.20×** |
 | 归一化MLP | #51 | 已公开退任冠军 #43 | **1.32×** |
 | overall | #59 | 已公开退任冠军 #54 | **1.33×** |
 | MLP | #33 | 已公开退任冠军 #13 | **1.59×** |
 
-**结论：优先MobileNet，核心卷积候选正在验证，目前尚不能取代冠军。**
+**结论：Mixer已有实测进步；优先验证更接近冠军的MobileNet，目前尚不能取代冠军。**
 
 [本轮进展](competitions/torchlean/candidates/r28-3h-20261030T171558Z/README.md) · [冠军依据](competitions/torchlean/candidates/r28-3h-20261030T171558Z/competition-state/refresh-20261030T181518Z/receipt.json)
