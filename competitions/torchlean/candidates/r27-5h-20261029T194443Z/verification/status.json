@@ -1,14 +1,14 @@
 {
   "round": "R27",
   "role": "verification-only",
-  "status": "B9_TERMINAL_GATE_PASS_PERFORMANCE_FAIL; B11_TERMINAL_BUILD_FAILURE_NO_TIMING; B10_TERMINAL_GATE_PASS_PERFORMANCE_FAIL_INDEPENDENTLY_RECONCILED",
+  "status": "ROUND_COMPLETE_NO_NEW_CHAMPION; ALL_CI_RUNS_TERMINAL; DVERIFY_AUDITS_COMPLETE",
   "workspace": "D:/CodingProject/Bitget",
   "branch": "huan/codex-gpt",
   "actual_role_start_utc": "2026-10-29T19:47:12Z",
-  "last_updated_utc": "2026-10-30T00:38:55Z",
+  "last_updated_utc": "2026-10-30T00:48:52Z",
   "deadline_utc": "2026-10-30T00:44:43Z",
   "file_scope": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/verification/",
-  "latest_parent_checkpoint_read": "2026-10-30T00:38:04.770458Z; parent CLOSING12_TYPEFIX_RETEST_READY, active_CI empty; latest request CLOSING12-TWO-LITERAL-TYPE-RETEST; latest board unchanged.",
+  "latest_parent_checkpoint_read": "2026-10-30T00:47:27.603333Z; parent ROUND_COMPLETE_NO_NEW_CHAMPION; active_CI empty; latest CI-RESULTS-BATCH12; final live champion file champion-refresh-003007.json.",
   "batch1": {
     "status": "TERMINAL_AUDITED_NATIVE_ONLY",
     "review": "review-batch1.md",
@@ -125,7 +125,7 @@
     "active_ci": [],
     "next": "Dispatch graft native compile and prep3; helpers; standard confirmation only after profitable source"
   },
-  "next": "Maintain terminal B9/B11/B10 index and compare any late root summary only against independent audits. B10 is terminal and no work remains on its frozen inputs. Dverify closes B10 only; do not inspect C12 sources/results unless parent scope changes. Continue to common cutoff 00:44:43Z.",
+  "next": "Dverify close complete; no further actions in this role.",
   "coordination": "STRICT_FILES_ONLY; no direct messages/followup/interrupt; no additional agents; output restricted to verification/.",
   "prohibited_or_unperformed": [
     "local Lean",
@@ -360,20 +360,19 @@
     "outputs": "not read; static dispatch/source hashes only"
   },
   "current_board_binding_audit": {
-    "audit": "audit-current-board-binding-230552.json",
-    "audit_sha256": "94d2fc28e8c052fa1318bddedf6cb8979d0cb0bb70e28d8c9658be5f7aaad44c",
-    "latest_publication": "a8167e489762b43fab49513568bb2ba9d218a0713213c7e645c1cfdebf312f21",
-    "bound_current_champions": [
-      "mixer submission 36",
-      "normalized_mlp submission 43"
-    ],
-    "unknown_latest_identities": [
-      "mlp",
-      "resnet",
-      "overall",
-      "mobilenet"
-    ],
-    "reason": "their saved champion responses are absent or bound to older publication a1032722; no API request made"
+    "audit": "audit-current-board-binding-003007.json",
+    "audit_sha256": "f2ca20de5c9403be6594a331d80f7a5d286a296668304d515adcf54e11bc56c6",
+    "publication": "a8167e489762b43fab49513568bb2ba9d218a0713213c7e645c1cfdebf312f21",
+    "current_champions": {
+      "overall": 8,
+      "mlp": 33,
+      "mixer": 36,
+      "resnet": 11,
+      "mobilenet": 7,
+      "normalized_mlp": 43
+    },
+    "bound_all_six": true,
+    "all_current_sources_available": false
   },
   "latest_public_message_read": "D:/CodingProject/Bitget-Collab/codex/messages/20261030T001124000Z-r27-standard9-closed-last10-running.md",
   "budget_transition": "At 2026-10-30T00:00Z stopped initiating new long experiments; continue verification and collect any already-dispatched CI to common deadline 00:44:43Z.",
@@ -419,7 +418,7 @@
     "acceptance_barrier": "No B10 run outputs read for tuning",
     "run_state_at_2026_10_30T00_11_24Z": "in_progress"
   },
-  "latest_parent_request_read": "CLOSING12-TWO-LITERAL-TYPE-RETEST.json; one predeclared typefix retest; Dverify close request remains audit10-only.",
+  "latest_parent_request_read": "FINAL12-AND-CHAMPION-REBOUND.json; one independent B12 raw/hash/score audit and fresh six-board rebinding completed from saved bytes.",
   "batch10_terminal": {
     "run": 40977309820,
     "source_commit": "e0019e9ce2a5000ec882a963c51e55fbec1b08ae",
@@ -442,14 +441,43 @@
   },
   "closing_index": {
     "handoff": "HANDOFF.md",
-    "handoff_sha256": "59a6fb5d15a11b9ab590cc0dc5b0819826fb4e984b0d744b5643a693cbfeec13",
+    "handoff_sha256": "0e8fdd4f6f17c4b5694af01bfffd094bdc671bf0a3e127f1ba888a564e7f05ef",
     "actual_role_start_utc": "2026-10-29T19:47:12Z",
+    "actual_role_end_utc": "2026-10-30T00:48:52Z",
     "common_deadline_utc": "2026-10-30T00:44:43Z",
-    "B9": "all12 PASS, 1.7477679375x current #36 time INFERRED slower",
-    "B11": "build failed at two Lean type errors, no measurement, performance UNKNOWN",
-    "B10": "all12 PASS, 1.2342594908x current #36 time INFERRED slower, guard failed",
-    "latest_board_binding": "mixer36 and normalized_mlp43 bound; mlp/resnet/overall/mobilenet latest identities UNKNOWN",
-    "C12": "request/dispatch outside Dverify close assignment; no results reviewed"
+    "late_seconds": 249,
+    "new_champion": false,
+    "verified_candidate_count": 3,
+    "none_won": true,
+    "B12_audit": "audit-native-run-40979775217.json; score reproduced, NativeOnly, guard failed, no champion",
+    "current_champion_responses": "all six fresh champion responses bound to publication a8167e...; source unavailable for all"
   },
-  "final_audit_consistency": "All audit JSON parses and status/READY/HANDOFF SHA references pass. B9/B10 root summaries match independent scores, B11 root result confirms no measurement. No new current board raw."
+  "final_audit_consistency": "All audit JSON parses and status/READY/HANDOFF SHA references pass. B9/B10 root summaries match independent scores, B11 root result confirms no measurement. No new current board raw.",
+  "actual_role_end_utc": "2026-10-30T00:48:52Z",
+  "deadline_note": "Common cutoff was 2026-10-30T00:44:43Z. Final requested B12 audit and closing index completed at 00:48:02Z, 199 seconds after cutoff; no CI or new experiment was started after the cutoff.",
+  "previous_board_binding_audit": {
+    "audit": "audit-current-board-binding-230552.json",
+    "audit_sha256": "94d2fc28e8c052fa1318bddedf6cb8979d0cb0bb70e28d8c9658be5f7aaad44c",
+    "historical_snapshot": "Only Mixer36 and normalized_mlp43 responses were then bound."
+  },
+  "batch12_terminal": {
+    "run": 40979775217,
+    "source_commit": "5d537b5991066342a6a66f0b51e0c8f983edb133",
+    "plan_sha256": "954824cbebad085aae141fec00eec4408534451c979d782bef76033e60b72e2a",
+    "candidate_sha256": "afd08cbf53ca1fbcba790814124d4f7949b51549a20d7205b639142ff62541e9",
+    "status": "TERMINAL_QUICK_NATIVE_COST_NEGATIVE; NO_ACTUAL_CORRECT",
+    "audit": "audit-native-run-40979775217.json",
+    "audit_sha256": "f0e18511418ca707afc36ead101463b7dac174797cc7633b376cb840e0dcd910",
+    "audit_script_sha256": "6326629b6f9cf52bfc2694e4d8732cdcbfcf4b417402a4577a281c883296bd14",
+    "review": "review-batch12-terminal.md",
+    "review_sha256": "eaa0d0a66712c3516dcf9af6e92401883e52f7e8ae0e13c05accda8aaa20f6db",
+    "CI_results_sha256": "7ed159eb04c7c140075b0efc62459c3cdd4bc0a6f2a63b427908e468919222b9",
+    "artifact_sha256": "201a3503c9715c1072f003f460ef0acbaa749e4df73fb9a41b91eec42c3ea252",
+    "artifact_integrity": "52/52 outer, 51/51 inner PASS",
+    "candidate_full_gate": false,
+    "candidate_declares_correct": false,
+    "current43_time_multiplier": 2.561908726439054,
+    "classification": "INFERRED_LOCAL_QUICK_SCREEN_CROSS_ENVIRONMENTS_AND_SEEDS; slower; guard failed; strict converter UNKNOWN",
+    "request_budget_caveat": "quick schedule matches; run/cache/benchmark cap fields differ from Config defaults; disclosed"
+  }
 }

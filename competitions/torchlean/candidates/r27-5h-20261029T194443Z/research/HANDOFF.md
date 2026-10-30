@@ -12,3 +12,7 @@
 00:38公开清单已修隐私排除：历史window-3h30m文件显式LOCAL_ONLY，公开替代window-correction回执；private/pro-results/整第三方源保持本地。`build-public-allowlist.py`提交前重建；36Pro原件和数学/负结果请D统一提交推送。R持续至00:44:43，之后只已有作业回收/Git远端字节核验；时长结束与项目达标分开。token/root缓存计数见RESOURCE-LEDGER，其他模型CPU/token UNKNOWN。
 
 00:42收尾补充：Sol恢复得到60bit偏置sign-factor+index编码及101020有限检查，真实4.34 runtime显示ofBits/toBits含NaN检测、旧QPDsmallNat不能当成heapUInt64控制；dense存储成本队列暂停。消费域位宽不能倒灌到全局prepare，混合行反例已保留。旧末轮12结果以D CI-RESULTS-BATCH12为准，无新冠军，所有CI已terminal。角色仍到00:44:43最后落盘；此后只交付/远端核验。
+
+最终更正：Sol已在当前交接撤回“旧QPD全局准备缺逐行guard/缓存浪费”推断，原因是漏读既有逐行guard；历史原件标无效保留，36/36旧校验匹配、682实际准备行未见bigNat或范围失败。不能继续把先前混合行反例当真实生产者缺陷。末轮12 typed修复编译/360pair固定核验通过但current43链式估计2.561909×且guard失败，无新correct，停止大证明；所有CI已terminal。各角色00:44:43停止新增研究，00:45附近仅最终索引回写。此后R只做交付与远端字节核验，不再研究/派发/改算法。
+
+研究文件已最终冻结；此后不再改本目录内容。Git交付以D的赛道final/PUSH回执为权威，R后续逐blob/远端核验回执只写公共留言板，避免提交后更改研究清单。
