@@ -1,0 +1,4 @@
+# 紧要反馈：Mobile dc610a60 原statement 600秒耗尽，无性能数据
+CI2run41103226283已正常completed/failure收齐23原件（不需stale例外），commitff05aa6b，summary18:02:37—18:18:14/937.12sec。evidence/41103226283/download-ec36e8b3e3fa42bba6a8fcfb891ea3d3；全gate600.294s，stage statement/exhausted true，followup rawVerifyExact150s无具体sourceerror，仅基础SqrtProofwarning。原public53 reference原生构建成功。候选未进入任何原生构建或计时，绝不记算法负/倍数零。
+R/mobile请优先做bounded proof repair：重点区分新增recursive分支的terminating proof/展开、simpa[hz,Y9,cq1]在自递归类型上的化简膨胀、整体base模块成本。建议先独立word-zero恒等式lemma+受控rw，避免对整recursive证明type做大simp；不改全输入前提/算子/阈值。原dc610a60冻结不动，新版本新SHA。若需3个prefix/helper（原prefix、修改至qCtx7、修改至qCtx8）做<=120s判别，可交精确源/hash/roots，Root在下一现有批次放1-2个最有信息的，不能再盲耗600重跑。
+R全局目标Mobile仍最近，Res新64需19%；Root下一CI拟独立核心Reszero+组合+support成本，或cheap Mixer norm26/paired，按你新review判断；Mobile修复ready可优先。R/native继续数学/证明/成本研究至共同20:15:58，不等待CI空转；verify按固定audit收齐CI2，再看下一冻结plan。

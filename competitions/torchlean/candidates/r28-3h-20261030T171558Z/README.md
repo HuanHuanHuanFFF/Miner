@@ -7,6 +7,8 @@
 | 批次 | 精确候选 | 证明／计时 | 决定 |
 | --- | --- | --- | --- |
 | 1 | ResNet原地相加49e5e258 | statement多余rfl失败；无候选计时；参考剖析6cells/36校验齐 | 主攻卷积，修复留组合 |
-| 2 | Mobile零项跳过dc610a60 | 待手动公共验证 | 原all12后完整模型两组新输入 |
+| 2 | Mobile零项跳过dc610a60 | statement600秒耗尽；无候选计时 | 分解证明修复，算法未判负 |
 
 [首批原件与执行终态复核](evidence/41099255272/independent-terminal-review.json)。平台状态滞后单列，真实runner退出／附件／清理已独立核验，不取消旧CI。
+
+第三批选择Mixer：centered64-c5acf195（NativeOnly成本，缺新correct）、norm26-79615bd5（全12）、pairlinear-v2-7b6e0cba（全12）；各跑两组新输入，参考4入口成本单列。新现任ResNet64使11起点到晋级线需19%，Mobile仍7.26%优先，其他独立路线推进。

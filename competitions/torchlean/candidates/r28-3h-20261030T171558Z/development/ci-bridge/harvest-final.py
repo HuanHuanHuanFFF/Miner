@@ -30,16 +30,22 @@ def main():
     run = args.run
     out = ROUND / 'evidence' / str(run)
     out.mkdir(exist_ok=True)
-    meta = json.loads(gh(['run', 'view', str(run), '--repo', REPO, '--json',
-        'databaseId,headSha,status,conclusion,url,jobs,createdAt,updatedAt']))
     jobs = json.loads(gh(['api', f'repos/{REPO}/actions/runs/{run}/jobs']))['jobs']
     selected = [x for x in jobs if x['name'] == 'torchlean_r28']
     assert len(selected) == 1
     job = selected[0]
     assert all(x['name'] == job['name'] or x['status'] == 'completed' for x in jobs)
-    log = gh(['api', f"repos/{REPO}/actions/jobs/{job['id']}/logs"])
+    try:
+        log = gh(['api', f"repos/{REPO}/actions/jobs/{job['id']}/logs"])
+    except RuntimeError as error:
+        if 'HTTP 404' not in str(error):
+            raise
+        print(json.dumps({'run': run, 'job': job['id'], 'state': 'WAITING_FOR_FINAL_JOB_LOGS', 'release_slot': False}))
+        return
     assert f'Artifact torchlean-{run}-receipts.zip successfully finalized' in log
     assert 'Post job cleanup.' in log and 'Cleaning up orphan processes' in log
+    meta = json.loads(gh(['run', 'view', str(run), '--repo', REPO, '--json',
+        'databaseId,headSha,status,conclusion,url,jobs,createdAt,updatedAt']))
     artifact_text = gh(['api', f'repos/{REPO}/actions/runs/{run}/artifacts'])
     artifacts = json.loads(artifact_text)
     artifact = next(x for x in artifacts['artifacts']
@@ -85,6 +91,9 @@ def main():
     base.save(out / 'jobs-observed.json', jobs)
     (out / 'artifacts.response.raw').write_bytes(artifact_text.encode('utf-8'))
     (out / 'ci.log').write_bytes(log.encode('utf-8'))
+    if meta['status'] == 'completed':
+        print(json.dumps({'run': run, 'state': 'COLLECTED_PLATFORM_COMPLETED_FINAL_ARTIFACT', 'files': len(manifest['files']), 'source': meta['headSha'], 'conclusion': meta['conclusion']}))
+        return
     rec = {
         'at_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
         'state': f'RUNNER_EXECUTION_FINISHED_{state}_PLATFORM_METADATA_STALE',

@@ -1,0 +1,3 @@
+# CI3选择Mixer三机制，原地相加与singleton延后
+基于Res冠军已64/需19%、Mobile证明600s超时，下一CI选独立Mixer：第一c5acf195 centered64 NativeOnly完整成本（无correct，先买信号）；第二79615bd5 norm26全12；第三7b6e0cba pairlinear-v2全12。2freshrootquick+原生成C派生计数，完整慢样本保留。当前56快照18:15，只比冠军。均父/producer关键复核过，root冻结batch3配方重建一致。centered64wrapper直接复现producer三literal61→62改动，解决原顶层Pythonimport路径，不改候选字节。
+如果某个正面，优先冻结标准新runner确认/实质证明，而非更多变体；Mobile修复和Res70eed/support继续独立研究，不被取消。请verify核精确plan+源hash/correct边界并随后固定audit；R继续修复Mobile但不要原样再耗600s。共同cutoff20:15:58不变。

@@ -1,0 +1,1 @@
+CI3参考36加一次4入口profile（linear/gemm/add/layernorm），同已实际跑通的profile11适配器仅root名字/model名映射，仍240s全局上限/20s每call，失败不阻原gate/计时。用真实成本分辨Mixernorm26与矩阵路线份额，不把MAC/guard覆盖直接当省时。plan/helperSHA已同步，候选hash完全不变。
