@@ -66,6 +66,7 @@ static uint64_t r27_now(void) {
     return (text+'\n'+'\n'.join(wrappers)).encode(),names
 
 def run_profile(g,bm,visible,config,control_binary,source_sha,out,global_end):
+    global_end=min(global_end,time.monotonic()+240)
     out.mkdir(exist_ok=True)
     c=visible(g.BUILD/'ir/Submission.c');raw=c.read_bytes()
     patched,names=instrument(raw)
@@ -81,7 +82,7 @@ def run_profile(g,bm,visible,config,control_binary,source_sha,out,global_end):
     assert changed==1
     commands=[]
     def own(args,label):
-        cap=min(120,max(1,global_end-time.monotonic()-30));g._budget.reset(cap,deadline=time.monotonic()+cap)
+        cap=min(90,max(1,global_end-time.monotonic()-30));g._budget.reset(cap,deadline=time.monotonic()+cap)
         began=time.monotonic();code,text=g.own(args,cap,build='write')
         (out/(label+'.log')).write_text(text)
         commands.append({'label':label,'argv':args,'exit_code':code,'seconds':time.monotonic()-began})
@@ -110,15 +111,16 @@ def run_profile(g,bm,visible,config,control_binary,source_sha,out,global_end):
     cells=list(config.plan('resnet')['cells']);rows=[]
     import multiseed
     for cell in cells:
+        assert global_end-time.monotonic()>30, 'Profilebudgetexhausted'
         request={'cells':[cell],'seed':27102977,'workloads':multiseed.workloads(27102977),'timing':{'run_seconds':60}}
         reps={f"{w['id']}|{cell}":32 for w in request['workloads']}
-        baseline=bm.run_binary(control_binary,request,reps,1,'profile-control',bm.Deadline('profile-control',60))
+        baseline=bm.run_binary(control_binary,request,reps,1,'profile-control',bm.Deadline('profile-control',min(20,max(1,global_end-time.monotonic()-15))))
         extra={'BENCH_CELLS':bm.lean_cell(cell),'BENCH_SEED':str(request['seed']),'BENCH_INNER':'1','LEAN_ABORT_ON_PANIC':'1',
                'BENCH_REPS':','.join(f"{k.split('|')[0]}|{bm.lean_cell(cell)}={v}" for k,v in reps.items()),
                'BENCH_WORKLOADS':','.join(f"{w['id']}:{w['seed']}:{w['profile']}" for w in request['workloads'])}
         command=[str(profiled)]
         if g._BENCH_CPU:command=['taskset','-c',g._BENCH_CPU,*command]
-        code,output=g.run(command,60,env_extra=extra,memory_mb=g._BENCH_MEMORY_MB)
+        code,output=g.run(command,min(20,max(1,global_end-time.monotonic()-15)),env_extra=extra,memory_mb=g._BENCH_MEMORY_MB)
         (out/(cell.replace(':','_')+'.raw')).write_text(output)
         assert code==0
         metrics={};checks={}
