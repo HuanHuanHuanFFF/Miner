@@ -1,0 +1,58 @@
+{
+  "status": "COUNTEREXAMPLES",
+  "script_sha256": "cdbc01fb0783fcb0c1320709e8f1d4572964376c22aa072fd04aeddca13a95c7",
+  "cases": [
+    {
+      "x": "0x3f800001",
+      "scale": "0x3fc00000",
+      "shift": "0xa4800000",
+      "negative_shift_power": 54,
+      "exact_single_RN32": "0x3fc00001",
+      "binary64_mul_add_then_RN32": "0x3fc00002",
+      "difference": true,
+      "total_at_2^-298_units": "763888582188036577162164296049144419413989384600850421317850377176696363976690413131005952"
+    },
+    {
+      "x": "0x3f800001",
+      "scale": "0x3fc00000",
+      "shift": "0xa1800000",
+      "negative_shift_power": 60,
+      "exact_single_RN32": "0x3fc00001",
+      "binary64_mul_add_then_RN32": "0x3fc00002",
+      "difference": true,
+      "total_at_2^-298_units": "763888582188036604990005566308697610350925021301817045600721752967694954391988083489767424"
+    },
+    {
+      "x": "0x3f800001",
+      "scale": "0x3fc00000",
+      "shift": "0x97800000",
+      "negative_shift_power": 80,
+      "exact_single_RN32": "0x3fc00001",
+      "binary64_mul_add_then_RN32": "0x3fc00002",
+      "difference": true,
+      "total_at_2^-298_units": "763888582188036605431716911254127018518002604815435939875863451606218091725944616569012224"
+    },
+    {
+      "x": "0x3f800001",
+      "scale": "0x3fc00000",
+      "shift": "0x83800000",
+      "negative_shift_power": 120,
+      "exact_single_RN32": "0x3fc00001",
+      "binary64_mul_add_then_RN32": "0x3fc00002",
+      "difference": true,
+      "total_at_2^-298_units": "763888582188036605431717332503293692363625511271074459968005970399022398017704853267021824"
+    },
+    {
+      "x": "0x3f800001",
+      "scale": "0x3fc00000",
+      "shift": "0x80000001",
+      "negative_shift_power": 149,
+      "exact_single_RN32": "0x3fc00001",
+      "binary64_mul_add_then_RN32": "0x3fc00002",
+      "difference": true,
+      "total_at_2^-298_units": "763888582188036605431717332503293692746749395773922828204612786657456709197642065621549056"
+    }
+  ],
+  "mechanism": "Exact product is a binary32 halfway value with even upper neighbor. A negative tiny binary32 addend moves below that midpoint but is lost in binary64 addition; the final rounding chooses the wrong neighbor.",
+  "scope": "Exact integer finite analysis; not a Lean proof, new kernel, benchmark, or cross-width theorem."
+}

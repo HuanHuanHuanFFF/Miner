@@ -1,0 +1,78 @@
+{
+  "status": "SOURCE_FRAGMENT_ONLY_NOT_COMPILED",
+  "created_at_utc": "2026-10-29T02:32:11.178711+00:00",
+  "component_path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/rounding-review/SubnormalWiden-v1.lean.inc",
+  "sha256": "62380963f91440fc18649c56e9a7403b88a88ff0fe841fc905ddbaf0d9199782",
+  "bytes": 12003,
+  "root": "Submission.R24SubnormalWiden.subnormal_finite_value",
+  "root_count": 1,
+  "actual_runtime_definition": "Submission.R24PortableF64.widenBits",
+  "actual_runtime_source": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/PortableF64Dot.lean.inc",
+  "actual_runtime_source_sha256": "dd775683cade6e575dc6f0684f9216742e1c772c3cf7460b0c53c54e4e3eff04",
+  "domain": "((u>>>23)&&&255)=0 and0<(u&&&0x7fffff).toNat; nonzero subnormal only",
+  "derived_bounds": "ell=f.log2<=22;2^ell<=f<2^(ell+1);30<=52-ell<=52; shifted remainder<2^52; double exponent874..896",
+  "conclusion": "Actual existing widenBits followed by Float.ofBits is finite and its imported Model real value is signed f*2^-149. Private proof derives the full canonical64-bit decode.",
+  "required_retained_helpers": [
+    "Submission.FastMul.fastLog2_eq",
+    "R2W01c.modelCanonical_of_decode"
+  ],
+  "runtime_variant_added": false,
+  "cache_proof_added": false,
+  "new_full_Kernel": false,
+  "CI_queued": false,
+  "local_Lean": false,
+  "Git_mutation": false,
+  "directed_check_scope": "Six extremal/power-of-two bit-layout examples, no guard grid or benchmark; no proof acceptance inference",
+  "directed_word_cases": [
+    {
+      "u": "0x1",
+      "f": 1,
+      "leading": 0,
+      "shift": 52,
+      "widened_word": "0x36a0000000000000"
+    },
+    {
+      "u": "0x80000001",
+      "f": 1,
+      "leading": 0,
+      "shift": 52,
+      "widened_word": "0xb6a0000000000000"
+    },
+    {
+      "u": "0x400000",
+      "f": 4194304,
+      "leading": 22,
+      "shift": 30,
+      "widened_word": "0x3800000000000000"
+    },
+    {
+      "u": "0x80400000",
+      "f": 4194304,
+      "leading": 22,
+      "shift": 30,
+      "widened_word": "0xb800000000000000"
+    },
+    {
+      "u": "0x7fffff",
+      "f": 8388607,
+      "leading": 22,
+      "shift": 30,
+      "widened_word": "0x380fffffc0000000"
+    },
+    {
+      "u": "0x807fffff",
+      "f": 8388607,
+      "leading": 22,
+      "shift": 30,
+      "widened_word": "0xb80fffffc0000000"
+    }
+  ],
+  "missing": [
+    "Lean/module/replay/axiom verification",
+    "Normal-branch equivalence for the actual different sign formula",
+    "Zero-branch integration and complete finite decoder",
+    "Prepared cache construction/value proof"
+  ],
+  "shared_deadline_utc": "2026-10-29T03:38:56Z",
+  "next_action": "Root may inspect this frozen one-root fragment; actual island typing feedback remains higher priority. No independent CI queue."
+}

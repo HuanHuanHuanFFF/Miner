@@ -1,0 +1,38 @@
+// Lean4.34 fixed commit293d5d0c0c3f3dded4688b3ccd6a33939ac5102b
+// src/Init/Data/Array/Lemmas.lean Git blobfa53f40c301181ca46ba318df007e28c7ec1b712
+// Exact source lines3981..4014; Apache License 2.0, as in the pinned Lean source.
+/-! ### modify -/
+
+@[simp, grind =] theorem size_modify {xs : Array α} {i : Nat} {f : α → α} : (xs.modify i f).size = xs.size := by
+  unfold modify modifyM
+  split <;> simp
+
+@[grind =] theorem getElem_modify {xs : Array α} {j i} (h : i < (xs.modify j f).size) :
+    (xs.modify j f)[i] = if j = i then f (xs[i]'(by simpa using h)) else xs[i]'(by simpa using h) := by
+  simp only [modify, modifyM]
+  split
+  · simp only [getElem_set, Id.run_pure, Id.run_bind]; split <;> simp [*]
+  · simp only [Id.run_pure]
+    rw [ite_eq_right (mt (by rintro rfl; exact h) (by simp_all))]
+
+set_option backward.isDefEq.respectTransparency false in
+@[simp, grind =] theorem toList_modify {xs : Array α} {f : α → α} {i : Nat} :
+    (xs.modify i f).toList = xs.toList.modify i f := by
+  apply List.ext_getElem
+  · simp
+  · simp [getElem_modify, List.getElem_modify]
+
+theorem getElem_modify_self {xs : Array α} {i : Nat} (f : α → α) (h : i < (xs.modify i f).size) :
+    (xs.modify i f)[i] = f (xs[i]'(by simpa using h)) := by
+  simp [getElem_modify h]
+
+theorem getElem_modify_of_ne {xs : Array α} {i : Nat} (h : i ≠ j)
+    (f : α → α) (hj : j < (xs.modify i f).size) :
+    (xs.modify i f)[j] = xs[j]'(by simpa using hj) := by
+  simp [getElem_modify hj, h]
+
+@[grind =] theorem getElem?_modify {xs : Array α} {i : Nat} {f : α → α} {j : Nat} :
+    (xs.modify i f)[j]? = if i = j then xs[j]?.map f else xs[j]? := by
+  simp only [getElem?_def, size_modify, getElem_modify, Option.map_dite]
+  split <;> split <;> rfl
+

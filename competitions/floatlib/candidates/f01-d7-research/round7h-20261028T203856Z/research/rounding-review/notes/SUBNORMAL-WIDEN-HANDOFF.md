@@ -1,0 +1,8 @@
+# Existing-body subnormal widening — one-root source
+
+Component `research/rounding-review/SubnormalWiden-v1.lean.inc`, SHA**62380963f91440fc18649c56e9a7403b88a88ff0fe841fc905ddbaf0d9199782**,12003B. One root: `Submission.R24SubnormalWiden.subnormal_finite_value`. Receipt `notes/subnormal-widen-v1.json`; no new Kernel, runtime variant or CI queue.
+
+- This references the **existing** `Submission.R24PortableF64.widenBits`, observed source`development-scalar/PortableF64Dot.lean.inc` SHA**dd775683cade6e575dc6f0684f9216742e1c772c3cf7460b0c53c54e4e3eff04**. An integration context must include that exact existing definition; the fragment does not create another widening implementation. It also needs retained `Submission.FastMul.fastLog2_eq` and `R2W01c.modelCanonical_of_decode` from B2.
+- Domain is actual eword=((u>>>23)&&&255)=0 and positive masked fraction. The proof derives ell=f.log2<=22, shift52-ell in30..52, no word-subtraction/shift wrap, exact sign mask, disjoint OR fields, exponent874..896 and the full normal binary64 decode. It then connects actual Float.ofBits to finite native output with real value signed f*2^-149. No cast-accuracy or decode-correctness premise is supplied.
+- Only six directed min/power/max fraction words across both signs were checked independently with exact rational bit decoding. **Lean/replay/axiom status NOT_RUN.** This is source, not an accepted full finite decoder. Actual normal-branch sign-formula equivalence, zero-branch integration and prepared-cache proof remain separate.
+- First C clock02:04:38UTC; frozen receipt02:32:10. Common cutoff03:38:56 unchanged. Root prioritizes any real island typing failures; no broad re-review, local Lean, Git or new CI action was performed by C.

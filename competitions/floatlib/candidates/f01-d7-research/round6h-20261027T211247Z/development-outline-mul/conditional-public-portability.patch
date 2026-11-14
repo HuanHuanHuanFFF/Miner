@@ -1,0 +1,24 @@
+--- f01-r19-dev-direct-bias-public1/Kernel.lean
++++ CONDITIONAL-NOT_COMPILED-public-cold-outline/Kernel.lean
+@@ -7252,13 +7252,19 @@
+ 
+ end R19BiasBase.R19DirectBias
+ 
++namespace R19BiasBase.R19DirectBias
++open Competition
++@[noinline] def retainedMul (x y : Binary32) : Binary32 :=
++  R19BiasBase.mul x y
++end R19BiasBase.R19DirectBias
++
+ namespace Submission
+ open FloatLib.Floats Competition
+ @[inline] def add := R19BiasBase.add
+ theorem add_spec : ∀ x y : Binary32, add x y = ExecFloat.Spec.add x y := R19BiasBase.add_spec
+-@[inline] def mul (x y : Binary32) : Binary32 := R19BiasBase.R19DirectBias.guardedMul R19BiasBase.mul x y
++@[inline] def mul (x y : Binary32) : Binary32 := R19BiasBase.R19DirectBias.guardedMul R19BiasBase.R19DirectBias.retainedMul x y
+ theorem mul_spec (x y : Binary32) : mul x y = ExecFloat.Spec.mul x y :=
+-  R19BiasBase.R19DirectBias.guardedMul_spec R19BiasBase.mul R19BiasBase.mul_spec x y
++  R19BiasBase.R19DirectBias.guardedMul_spec R19BiasBase.R19DirectBias.retainedMul R19BiasBase.mul_spec x y
+ @[inline] def sum {n : Nat} (x : Vector Binary32 n) : Binary32 := R19BiasBase.sum x
+ theorem sum_spec : ∀ (n : Nat) (x : Vector Binary32 n), sum x = sumSpec x.get := R19BiasBase.sum_spec
+ @[inline] def bmm := R19BiasBase.bmm

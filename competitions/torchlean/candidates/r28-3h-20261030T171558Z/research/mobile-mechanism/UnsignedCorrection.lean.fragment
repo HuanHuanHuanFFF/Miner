@@ -1,0 +1,39 @@
+/- Original, uncompiled follow-on fragment inside exact public53 Submission.
+   No frozen kernel is changed. Nonnegative producer/finite guards and final
+   actual-dot refinement remain separate obligations. -/
+
+lemma r28UnsignedCarry (h l p:UInt64):
+ ((((h+(if l+p<l then 1 else 0)).toNat*2^64+(l+p).toNat:Nat):Int))%2^128=
+ ((((h.toNat*2^64+l.toNat:Nat):Int))+(p.toNat:Int))%2^128:=by
+ simpa only[UInt64.add_zero,UInt64.toNat_zero,Nat.zero_mul,Nat.zero_add,
+  Nat.cast_add] using C9 h l (0:UInt64) p
+
+lemma r28ShiftPair (a q:UInt64) (hq:0<q.toNat ∧ q.toNat<64):
+ (a>>>(64-q)).toNat*2^64+(a<<<q).toNat=a.toNat*2^q.toNat:=by
+ have hle:q<=(64:UInt64):=by
+  apply UInt64.le_iff_toNat_le.mpr
+  change q.toNat<=64
+  omega
+ have hs:(64-q).toNat=64-q.toNat:=by
+  rw[UInt64.toNat_sub_of_le _ _ hle]
+  rfl
+ have hb:64-q.toNat<64:=by omega
+ have hp:(2:Nat)^64=2^(64-q.toNat)*2^q.toNat:=by
+  rw[←pow_add]
+  congr 1
+  omega
+ rw[UInt64.toNat_shiftRight,UInt64.toNat_shiftLeft,hs,
+  Nat.mod_eq_of_lt hb,Nat.mod_eq_of_lt hq.2,
+  Nat.shiftRight_eq_div_pow,Nat.shiftLeft_eq]
+ rw[hp,Nat.mul_mod_mul_right]
+ calc a.toNat/2^(64-q.toNat)*(2^(64-q.toNat)*2^q.toNat)+
+       (a.toNat%2^(64-q.toNat))*2^q.toNat
+      =(a.toNat/2^(64-q.toNat)*2^(64-q.toNat)+a.toNat%2^(64-q.toNat))*2^q.toNat:=by ring
+      _=a.toNat*2^q.toNat:=by
+       rw[Nat.mul_comm (a.toNat/2^(64-q.toNat)) (2^(64-q.toNat)),Nat.div_add_mod]
+
+/- For q=24+sw with sw<=6, q∈[24,30]. The pair in r28ShiftPair exactly
+   encodes Q*sumX. Use existing Y5b for unsigned two-word subtraction from the
+   positive-product accumulator; do not subtract only its low word. Then
+   |body|<2^72 supplies the final signed128 range, and qCtx2/B9 retain bias and
+   exact-zero handling. No per-product sign extension appears in this route. -/

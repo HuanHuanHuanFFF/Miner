@@ -1,0 +1,37 @@
+{
+  "at_utc": "2026-10-29T23:05:02.930436+00:00",
+  "state": "PRIMARY_PINNED_RUNTIME_SOURCE_DISCRIMINATOR_NOT_ASSEMBLY_OR_TIMING",
+  "hypothesis": "Replace six-stage word Yj with a presumed one-instruction Nat.log2 primitive.",
+  "finding": "Nat.log2 is runtime-overridden, but pinned object.cpp scalar implementation is a repeated divide-by-two loop. A CLZ instruction cannot be assumed from the extern name; compiled native outcome remains UNKNOWN.",
+  "decision": "Do not create or queue a log2 swap based on that premise. Existing Yj is a bounded word search. FP-proposed exponent plus word certificate is a different possible route, but its whole-model ceiling is not established and it is not implemented.",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/Init/Data/Nat/Log2.lean",
+      "lines": [
+        25,
+        42
+      ],
+      "observation": "Logical model and extern lean_nat_log2 declaration."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/runtime/object.cpp",
+      "lines": [
+        1529,
+        1540
+      ],
+      "observation": "Scalar path loops while n>=2, returns boxed counter; big path uses mpz log2."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/leanprover/lean4/v4.34.0/src/runtime/object.cpp",
+      "lines": [
+        1471,
+        1515
+      ],
+      "observation": "Nat left shift and power pass through mpz operations; do not presume a direct machine-word shift merely because the result is small."
+    }
+  ],
+  "raw_source_byte_sha256": "UNKNOWN: primary source text read through web tool, not a separately saved exact byte download.",
+  "native_assembly": "UNKNOWN",
+  "performance": "UNKNOWN",
+  "local_native_compilation": false
+}

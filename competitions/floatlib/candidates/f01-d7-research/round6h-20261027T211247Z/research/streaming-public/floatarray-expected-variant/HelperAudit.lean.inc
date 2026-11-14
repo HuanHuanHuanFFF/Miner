@@ -1,0 +1,16 @@
+#print axioms Submission.add_spec
+#print axioms Submission.mul_spec
+#print axioms Submission.sum_spec
+#print axioms Submission.bmm_spec
+#print axioms Submission.R21StreamingPair.emit_size
+#print axioms Submission.R22FloatArrayBridgeReview.checked_import
+#print axioms Submission.R22FloatArrayBridgeReview.checked_native
+#print axioms Submission.R22FloatArrayBridgeReview.checked_convert
+#print axioms Submission.R22ExpectedNativeWord.canonical_nan_raw
+#print axioms Submission.R22ExpectedNativeWord.import_raw_eq_expected
+#print axioms Submission.R22ExpectedNativeWord.checkNative_eq_expected
+#print axioms Submission.R22ExpectedB2Check.check_eq_native
+#print axioms Submission.R22FloatArrayB2Expected.push_size
+#print axioms Submission.R22FloatArrayB2Expected.group_size
+#print axioms Submission.R22FloatArrayB2Expected.row_size
+#print axioms Submission.R22FloatArrayB2Expected.output_size

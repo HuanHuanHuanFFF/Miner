@@ -1,0 +1,1 @@
+CI1仍精确使用5bd2f0df未修改；为CI2 Mobilezero添加可选code_probe，只读取临时生成C并输出函数名/hash/if/zero常量/UInt64mul计数，不发布C正文、不改编译flags/二进制/原bench。默认关闭，CI2将开启。请verify只复核此独立变化；不需要重审其他固定协议。R Mobilezero证明若有主动修复请交新版本，原dc610a60等待一次原gate反馈。

@@ -1,0 +1,64 @@
+# Wide-dot score exposure and complete-cost boundary
+
+Read-only source assessment, UTC 2026-10-28 21:14. This note changes no target, implementation, experiment or admission policy.
+
+## Verified scoring structure
+
+The production source, not only the prototype, was independently read at official commit `accb82b6e2adeda1b41a57a260d68fb3879c427e`:
+
+- `validator/config.py`, Git blob `6743c5c0060b7babab5155ffe1e0dc94dbf8a742`, lines 17–19 and 265–273: two batches and three kinds (normal/wide/sparse), with each cell weighted `model_weight / 6`.
+- `validator/scoring.py`, blob `f5e1b500bc3976764eea0451c500907e08e17dda`, lines 102–132: per-workload per-round weighted geometric mean of cell ratios; median across rounds; geometric means across workload and environment/root-seed strata. Lines 120–125/149 retain each workload/cell/environment median regression guard.
+- `validator/multiseed.py`, blob `299b2e77db596a2720db3d54c2df46b3e5d2c3b3`, lines 5–18: two workloads for each typical/scale/boundary profile, total weights 0.5/0.3/0.2.
+- D's saved live `competition-state-check/torchlean-boards.raw` has configuration hash `d874573740b1a87b3edc34711b5a4a55d2b9ef8c8ae93d10caca3560efb9750c`. The overall board has five model weights of 0.2 and two environments, amd64 and arm64, each 0.5; promotion bar 0.97 and cell guard 1.10. This worker read that timestamped receipt, not a new unrecorded policy response.
+
+Consequently the source-defined log-score weight of all wide cells is 1/3. If, and only if, every wide cell in every workload/environment were multiplied by the same ratio `rho`, all other cells were unchanged, and this constant factor survived the aggregation, the overall score factor would be `rho^(1/3)`. Reaching 0.90 by that mechanism requires `rho = 0.9^3 = 0.729`, a 27.1% reduction of complete wide-cell time. This is an upside calculation, not measured speed, dynamic guard hit rate, affected kernel-time share, or qualification probability.
+
+If only the two convolution families improve, their wide-cell log weight is 2/15 under the saved overall weights. Only the three other families gives 1/5. Within any cell, untouched normalization, element kernels, preparation inside inference, output work and failed fast paths still limit its ratio. Old FloatLib whole-nanosecond percentages are not TorchLean score weights. The candidate must also satisfy both architectures, confidence and the 1.10 individual-cell guard.
+
+## A reachable distinction from already-optimized paths
+
+`ExactSuite.gen` emits initial wide exponents 87 through 126, support span 39; normal uses 121 through 126, span 5. Weights use the ordinary distribution and fan-in scaling. Former #2's `Ybg` fast convolution condition allows input span at most 31 and combined input/weight span at most 31. The wide support therefore contains inputs that miss this fast path; this is a real data-dependent opportunity, unlike the unreachable k≥256 shape extension. The actual miss fraction for any evaluated seed is UNKNOWN and is not inferred from the word "wide".
+
+The top convolution entry also does preparatory work before that failure: `cdQ` constructs offsets, scans raw input bounds, scans per-output weight bounds, and derives the common exponent. Falling back to `Ya0`/`dwF` constructs offsets again, pads raw inputs, and scans input/weights again. Reusing bound metadata or inserting the interval-certified worker before these repeated stages is a separate possible deletion. Its complete cost and share are UNKNOWN. Padded zeros do not require equality of the raw/padded min-max records; a conservative range certificate can be transported instead, including raw malformed-input behavior.
+
+## Fixed safety envelope for the paper interval candidate
+
+Use positive term count `n ≤ 2^20` (bias included), `n ≤ 2^L`, `L ≤ 20`, finite raw operands, and a conservative upper exponent index `H` shared across all relevant windows. Let `B=H+L-14`. The interval and signed64 bounds are as stated in `FORMER-CHAMPION-RESIDUAL.md`. Add the inexpensive metadata condition `H+L ≤ 377` to keep the exact total and both interval endpoints finite under binary32 rounding; overflow remains original fallback for the first implementation.
+
+For windows with common fan-in and shared input/weight bounds, the same H, L, B and radius n may be reused. A fresh per-output maximum scan is not required. A conservative H can reduce certificate success on smaller-magnitude windows; it does not invalidate the interval. A bias must be included in both H and n before accumulation. Padding zero terms contribute exactly zero; counting them in n is conservative and costs no separate numerical proof.
+
+For the existing packed metadata, H for products can be bounded by `max(maxExpA−1,0)+max(maxExpB−1,0)`, because a finite raw word has `idxOf=0` for exponent field zero and `idxOf=E−1` otherwise. The lower-bound half of the old min/max record is not needed by the interval scheme. This also avoids mistaking its `YR=((magnitude−1)>>23)` minimum, which deliberately ignores zeros and can be one below an ordinary exponent, for an exact exponent value. Metadata only needs to bound the actual window; it need not equal that window's extrema.
+
+Machine shift count is a correctness boundary: a right shift by 64 or more is not zero in UInt64 semantics. Since mantissas multiply to fewer than 48 bits, a separately guarded right shift distance of at least 48 can return zero safely; smaller distances use the ordinary shift. Left shifts must use the derived `m << shift < 2^(62-L)` bound. The aggregate endpoints fit signed64 because `|T| < 2^62` and `n ≤ 2^20`.
+
+The hot path need not construct an Int exponent. Store `C=H+L` once and form `J=I+14` for each term. Then `I-B=J-C`; both J and C are nonnegative and at most 526 under finite-word/count bounds. When J≥C, use left shift J−C (at most 14−L on that branch); otherwise compare C−J against 48 before the right shift. Only the final rounder needs the signed exponent `C−312`, once per endpoint. This is an algebraic lowering plan, not emitted code: whether ordinary compilation keeps these small word operations unboxed remains to be inspected.
+
+### Bias normalization and zero-tail precision
+
+Represent bias as the contract's actual product `bias * 1`: `m_bias = mantOf(bias) << 23` and `I_bias = idxOf(bias) + 126`. The integer magnitude is less than 2^47, so it satisfies the same 48-bit product bound. Using the unpadded 24-bit bias mantissa with `I_bias = idxOf(bias)+149` preserves the mathematical value but unnecessarily raises the shared H by up to 23 bits when combined with a uniform 48-bit bound. It can make a sound certificate reject far more often. A zero bias must not raise H; its exponent index is irrelevant, and the existing former-source `Yu` already excludes zero bias from its upper bound.
+
+Concrete finite arithmetic witness, with no floating-point simulation: bias is 1 (`0x3f800000`), and the other term is `(1-2^-23)*2^-24`, raw operands `0x3f7ffffe` and `0x33800000`. The exact sum is `1+2^-24-2^-47`, just below the midpoint above 1, so it rounds to 1. With n=2,L=1 and padded bias, H=252,B=239, the integer total is `2^59 + 2^35 - 2^12`; radius 2 stays below the midpoint `2^59+2^35`, and both endpoints round to 1. With the unpadded bias convention, H=275,B=262, the truncated total is `2^36+4095`; radius 2 straddles the midpoint `2^36+4096`, so that conservative version rejects. This is an acceptance-domain difference, not a wrong-output example.
+
+Adding the exact bias separately to both product-interval endpoints is mathematically valid if it occurs before the one final RNE. It can avoid increasing the product truncation scale, but creates two exact dyadic additions and may require more than one machine word when bias and product scales are far apart. A new alignment-width guard or the original fallback is then necessary. Its complete cost is UNKNOWN. The simpler initial plan uses the padded product representation and counts the bias in n; at power-of-two fan-in boundaries the extra term may increase L by one, which is a real charged loss of one bit of accumulator precision.
+
+The fixed radius n is deliberately conservative. If every discarded tail is zero, the accumulated T is the exact total in units of 2^B and only one final round is needed. A runtime `lostTail` flag could certify this, but needs an extra remainder test/OR on right-shifted terms; an exact lost-tail counter needs an additional increment and state. Sparse zero products have no lost tail, so these variants can improve acceptance, but their cost and frequency are UNKNOWN. Exact T=0 still needs original negative-zero provenance for an unactivated dot; either retain fallback, check the raw zero-sign condition separately, or use the already-proved fused ReLU +0 observation. No claim that a real zero automatically means raw +0 is permitted. The initial two-endpoint proposal does not silently assume such a flag exists.
+
+The fixed first cost must include existing shape/finite/range guards; metadata reuse or preparation; two raw reads, field extraction and UInt64 product per term; signed scale adjustment and accumulation; two exact endpoint roundings; comparison and explicit nonzero-magnitude guard; complete original replay after rejection; all allocation, cleanup, indexing, bias and output activation. No sampled prefix, ideal successful-only kernel, or dead callback is a substitute. A compiler observer must establish actual callback specialization and absence of per-term allocation/calls, not assume `[specialize]` guarantees the desired machine body.
+
+Potential later optimization is one center rounding followed by a midpoint-cell check, but a power-of-two has unequal adjacent spacing. A simple distance from one uniform midpoint is insufficient across a binade boundary; either prove both interval endpoints stay in one binade or construct the real adjacent-word boundaries. That is outside the fixed initial proposal.
+
+## Fused ReLU can certify a whole negative interval, with a different interface
+
+On finite input terms, the exact dot has no NaN. When a kernel's own `relu` parameter is true and the certified upper endpoint is nonpositive, its activated result is +0, including negative underflow, negative exact zero and negative overflow. This can accept intervals that do not identify one unactivated rounded word.
+
+Independent reviewer C confirmed the conservative sign test `T+n ≤ 0`. This activated branch can omit `H+L ≤ 377` because even a negative infinity rounds to a word that ReLU maps to +0. The finite-operand, count, interval and machine-overflow guards still apply. The generic exact-word branch keeps its finite-output guard.
+
+The published builders limit where this applies. `mlpLayers` enables the linear activation except in the last layer. `nmlpLayers` enables its first two linear layers, and `mixerLayers` enables the first of its two channel-MLP linear layers. Every convolution and depthwise call in `cnnLayers` and `mnetLayers` passes `false`; their activation is later in a scale/shift or residual-add layer. That later activation cannot be moved backward across a bias/FMA to justify a convolution shortcut. GEMM and raw core dot also have no such activation parameter.
+
+The new proof statement must reflect the changed observation: returning +0 for a negative interval does not prove `newDot = dotOf`. It only proves equality after `act true`. A ReLU-aware helper must be transported under the layer's actual `act`, or expose a separate activated-dot interface. The generic exact-dot helper retains the stricter same-raw-endpoint certificate. A bare `dotFn_eq_dotOf` rewrite cannot license the ReLU shortcut at other callers.
+
+## Located proof support, still not a compiled certificate
+
+The new pinned FloatLib revision is `0d91825727839f597fd06b22fdd038ea21480f0c`. Independently read `FloatLib/Floats/Formats/BinaryInterchange/Rounding/Proof.lean`, blob `660548ac3f19890dc4e9f96f89c06c121534920e`: `Model.roundAt_mono` at lines 85–87 and `Model.toReal_roundDyadic_eq_roundAt` at 389–392. The latter requires finite output; real equality alone is not raw-word equality. Independent reviewer C is checking the finite-output and nonzero injectivity bridges and signed-zero/tie edge cases. No all-input Lean theorem, gate, measured speed, or adopted candidate is claimed.
+
+[Production configuration](https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/accb82b6e2adeda1b41a57a260d68fb3879c427e/validator/config.py) · [production scoring](https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/accb82b6e2adeda1b41a57a260d68fb3879c427e/validator/scoring.py) · [rounding proof](https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/Formats/BinaryInterchange/Rounding/Proof.lean)

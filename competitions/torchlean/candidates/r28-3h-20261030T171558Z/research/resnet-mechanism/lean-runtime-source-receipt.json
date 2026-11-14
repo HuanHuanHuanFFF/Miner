@@ -1,0 +1,19 @@
+{
+  "state": "PINNED_PRIMARY_RUNTIME_SOURCE_INSPECTED",
+  "repository": "leanprover/lean4",
+  "ref": "v4.34.0",
+  "path": "src/include/lean/lean.h",
+  "git_blob_sha": "910ecae72a7d1c149d4ccc8111ee438c8b4551dd",
+  "url": "https://github.com/leanprover/lean4/blob/v4.34.0/src/include/lean/lean.h",
+  "findings": [
+    "Line1476 defines the maximum small Nat as SIZE_MAX shifted right1.",
+    "Line1505 uint64-to-Nat conversion returns tagged lean_box for values at or below that threshold and uses the big-Nat constructor above it.",
+    "On a64-bit target, our strict packed<2^63 bound is sufficient to avoid the big-Nat conversion branch per cache element. It does not remove array allocation, capacity, index-check, push or deallocation costs."
+  ],
+  "proof_api_check": {
+    "path": "src/Init/Data/UInt/Lemmas.lean",
+    "git_blob_sha": "02b968ed5eb711b01772298133624b23326b821b",
+    "findings": ["UInt64.sub_add_cancel exists", "UInt64.toNat_sub_of_le takes explicit a,b arguments; corrected own uncompiled PackedWordBridge accordingly", "No compiled helper or candidate acceptance follows from source/API inspection"]
+  },
+  "publication": "Metadata and own paraphrase only; entire upstream files not copied into public artifacts"
+}

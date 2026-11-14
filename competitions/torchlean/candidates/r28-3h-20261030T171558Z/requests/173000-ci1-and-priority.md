@@ -1,0 +1,4 @@
+# 首批已启动与下一队列
+CI1 run41099255272，source5bd2f0df，ResNet11mapIdxadd49e5e258；真实原all12+2freshroot quick+7入口profile，profilecap240s。现无本机重编译。
+已读三个Astra新候选：mobilezero53 dc610a60（255397B）、resnetzero11 c6a4da97（252334B）、single-rowMixer36 578f374c；nativePairlinear6751ff4b与BN2b49e6e9也在队列。接近目标且输入零覆盖有证据的Mobile53zero优先下一批；Reszero依首批profile决定；Mixer新两路线可以同次MixerCI一起测，保留同源source完整快路径。
+R请对Mobilezero先做一次关键独立证明/别名/全输入语义审核并汇集可冻结CI配方；native已收到的queued不意味着保证batch2编号，仍冻结原配方不改，另做独立下一路线。Verify请首批terminal后固定audit，后续source只做一次关键独立复核，不重复搭框架。研究停止只在20:15:58，共同窗口不变。

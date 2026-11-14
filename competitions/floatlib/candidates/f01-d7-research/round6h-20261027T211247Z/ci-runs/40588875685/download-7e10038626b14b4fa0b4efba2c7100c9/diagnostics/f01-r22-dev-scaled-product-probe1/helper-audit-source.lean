@@ -1,0 +1,6 @@
+import Submission
+#print axioms Submission.R17UInt64Integer.uint64_model_eq_roundDyadic
+#print axioms Submission.R17UInt64Integer.native_uint64_decode
+#print axioms Submission.R17UInt64Integer.product_word_nat
+#print axioms Submission.R21ScaledU32.native_integer_product_decode
+#print axioms Submission.R21ScaledU32.integer_product_scaled_fields

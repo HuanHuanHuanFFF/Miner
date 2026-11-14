@@ -1,0 +1,12 @@
+/- Uncompiled, optional index-proof fallback only. Do not alter the frozen
+   pointwise5ecf source before its actual elaboration feedback. -/
+
+lemma r28MulIndex (a b c t:Nat) (ha:a<b) (ht:t<c):a*c+t<b*c:=by
+ have hh:(a+1)*c<=b*c:=Nat.mul_le_mul_right c (Nat.succ_le_of_lt ha)
+ rw[Nat.add_mul,Nat.one_mul]at hh
+ omega
+
+/- If a native build reports nlinarith failure in r28Ix or hp, the same existing
+   premises suffice: after rw[Za _ hac], exact r28MulIndex a b c t.toNat ha htN;
+   after dsimp[p,hw], exact r28MulIndex y.toNat s.h s.w z.toNat ho.2.1 ho.2.2.
+   This is only a contingency fragment, no third native candidate/CI request. -/

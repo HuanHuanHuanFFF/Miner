@@ -1,0 +1,75 @@
+{
+  "at_utc": "2026-10-30T17:55:19.011231+00:00",
+  "state": "DIAGNOSTIC_SOURCE_COST_ROUTE_UPDATE_NOT_CHAMPION_SCORE",
+  "original_profile": "competitions\\torchlean\\candidates\\r28-3h-20261030T171558Z\\evidence\\41099255272\\download-0492d185d99c4710bcb59def8bce0d44\\cost-profile\\profile.json",
+  "profile_sha256": "f45ee39d0b479f2c2b4383ea80772d1dc194af39a1bc368acaf56afee3c21f31",
+  "reference_source_sha256": "ea6f582fc7a416b8860adb5c71fe3ab670dd4add01999fac7190993110f605a3",
+  "cells": 6,
+  "checksum_pairs": 36,
+  "exclusive_entry_share_ranges": {
+    "add_relu": {
+      "min": 0.04284216407449511,
+      "max": 0.05553895520064344
+    },
+    "conv2d": {
+      "min": 0.7621998643486649,
+      "max": 0.7938747396527926
+    },
+    "depthwise": {
+      "min": 0.0,
+      "max": 0.0
+    },
+    "maxpool": {
+      "min": 0.035168590778502,
+      "max": 0.03998082882873814
+    },
+    "scale_shift": {
+      "min": 0.11722706876409814,
+      "max": 0.13087481341002818
+    },
+    "avgpool": {
+      "min": 0.01047690335845873,
+      "max": 0.01191773758319034
+    },
+    "linear": {
+      "min": 0.00011723829316951859,
+      "max": 0.00013236230134070002
+    }
+  },
+  "required_fraction_of_entry_time_if_entry_only_changes": {
+    "add_relu": {
+      "min": 1.0926400481568228,
+      "max": 1.4164570813811261
+    },
+    "conv2d": {
+      "min": 0.0764403798911039,
+      "max": 0.07961702635156992
+    },
+    "maxpool": {
+      "min": 1.5178296314205244,
+      "max": 1.725519429175021
+    },
+    "scale_shift": {
+      "min": 0.4636804065186221,
+      "max": 0.517662749097039
+    },
+    "avgpool": {
+      "min": 5.091913315040936,
+      "max": 5.792177765581488
+    },
+    "linear": {
+      "min": 458.4695647502387,
+      "max": 517.6131880158441
+    }
+  },
+  "share_boundary": "Pure kernel-entry wall time; nested profiled entries removed from exclusive sums. Output destruction outside these calls is excluded. Bench warmups may enter counters. One root, six cells, six workloads; no champion score or whole-model-share equality claim.",
+  "decisions": [
+    "Prioritize full-path convolution core mechanisms, zero-support and local representation; about8% conv time reduction would cover saved6.07% planning gap only under unchanged remaining time and representative profile",
+    "Pure mapIdx residual add alone is capped below6.07% in every profiled entry subtotal, even if eliminated; retain as a component but no repeated standalone speed-chasing",
+    "BN-only would need about46-52% reduction of observed entry time to bridge gap; test one complete near-source composition if justified",
+    "Maxpool/avgpool/linear alone have insufficient observed exclusive headroom",
+    "CI1 gate failure is extra rfl parsing/proof-script failure, no timing result; it does not refute algorithm. RootD owns fix/terminal metadata review",
+    "Instrumentation changes runtime and excludes output destruction/outer code; ranges are not mathematical uninstrumented whole-model shares or admission guarantees"
+  ],
+  "not_read_for_research": "No independent confirmation group used; D explicitly permitted this completed diagnostic profile in requests/175000"
+}

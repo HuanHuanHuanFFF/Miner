@@ -1,0 +1,13 @@
+--- actual-CI3-dc3-2021ce.lean
++++ original-fin2-equations.lean
+@@ -5963,7 +5963,9 @@
+     simp only [groupFrom, groupFromOriginal, h, ite_false]
+     rw [loopEmit_eq]
+     rw [hc]
+-    simp [emit2, RowStream.emit, Fin.foldl_eq_finRange_foldl, select]
++    unfold emit2 RowStream.emit
++    rw [Fin.foldl_succ, Fin.foldl_succ, Fin.foldl_zero] <;>
++      simp only [select, Nat.add_zero, ↓reduceIte]
+ 
+ @[inline] def group (batch m n p : Nat)
+     (A : Vector Binary32 (batch * m * n))

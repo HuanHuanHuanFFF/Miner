@@ -1,0 +1,50 @@
+{
+  "at_utc": "2026-10-30T18:48:46.273426+00:00",
+  "wall_seconds": 0.0928323999978602,
+  "state": "FINITE_WORD_FALSIFICATION_NO_LEAN_OR_NATIVE",
+  "cases": 40000,
+  "missing_borrow_counterexamples": 20026,
+  "missing_carry_counterexamples": 19996,
+  "shifts_including_zero_and63": 3648,
+  "helpers": [
+    {
+      "path": "Unsigned128Arithmetic.lean",
+      "sha256": "32d408de08ad6e176dece46ab21a2ccd1d5c1cca8b82e47390e431a841b7484c",
+      "bytes": 1963
+    },
+    {
+      "path": "Shift64Pair.lean.inc",
+      "sha256": "1e70c9abb6a859df9ef83acf1bab4b2f9a8a9f63a2445a493d18611076b69225",
+      "bytes": 773
+    }
+  ],
+  "directed_raw_counterexamples": [
+    {
+      "case": "missingunsignedcarry",
+      "h": "0000000000000000",
+      "l": "ffffffffffffffff",
+      "a": "0000000000000000",
+      "b": "0000000000000001",
+      "expected": "00000000000000010000000000000000",
+      "withoutcarry": "00000000000000000000000000000000"
+    },
+    {
+      "case": "missingunsignedborrow",
+      "h": "0000000000000000",
+      "l": "0000000000000000",
+      "a": "0000000000000000",
+      "b": "0000000000000001",
+      "expected": "ffffffffffffffffffffffffffffffff",
+      "withoutborrow": "0000000000000000ffffffffffffffff"
+    },
+    {
+      "case": "missingzeroshiiftbranch",
+      "value": "0000000000000001",
+      "shift": 0,
+      "expected": "00000000000000000000000000000001",
+      "usingmasked64minusshift": "00000000000000010000000000000001"
+    }
+  ],
+  "use": "Potential complementary interface for crosssourceC centered64 terminal affinecorrection; no duplicateconfidence for alreadyexisting unsigned128_step or affineidentity",
+  "boundary": "Uncompiledproofdrafts only. Exact index/cacheproducer/correctionorder/globalbound/oldYLbias/sentinel/newall12 remainOPEN. NoextraCIrequest."
+}

@@ -1,0 +1,64 @@
+{
+  "at_utc": "2026-10-29T09:32:20.976662+00:00",
+  "status": "FINITE_GUARD_COUNTEREXAMPLES_AND_POLICY_REPLAY_NOT_LEAN",
+  "records": [
+    {
+      "name": "empty_body_negative_bias_zero",
+      "expected": 2147483648,
+      "zero_safe_result": 2147483648,
+      "word_if_flags_erased": 0,
+      "shipped_taken": true
+    },
+    {
+      "name": "all_terms_negative_zero",
+      "expected": 2147483648,
+      "zero_safe_result": 2147483648,
+      "word_if_flags_erased": 0,
+      "shipped_taken": true
+    },
+    {
+      "name": "negative_body_zero_positive_bias_zero",
+      "expected": 0,
+      "zero_safe_result": 0,
+      "word_if_flags_erased": 0,
+      "shipped_taken": true
+    },
+    {
+      "name": "nonzero_cancellation",
+      "expected": 0,
+      "zero_safe_result": 0,
+      "word_if_flags_erased": 0,
+      "shipped_taken": true
+    },
+    {
+      "name": "negative_bias_shift_cannot_saturate_to_zero",
+      "x": [
+        1065353216,
+        3212836864
+      ],
+      "y": [
+        1065353216,
+        1065353216
+      ],
+      "bias": 1,
+      "baseA": 126,
+      "baseB": 126,
+      "signed_shift": -103,
+      "wrong_word": 679477248,
+      "expected": 1,
+      "required": "reject this preparation before using Nat subtraction; shipped fallback"
+    }
+  ],
+  "false_guard_evaluation_counts": {
+    "fast": 0,
+    "shipped": 1
+  },
+  "sources": {
+    "guard_counterexamples.py": "aa7ed6b7b6a71a4e42073c5f766ca683e7e8f3c7c35e6215fc45d542b5134558",
+    "ZeroSafeCaller.lean.inc": "0975050e37877996bb544366ca9a4d34ca5bdfc77a4fac5f6362fa7f8fb0010e",
+    "BiasDotBridge.lean.inc": "52b5fe4f5bb998f6cc135c90f81d762123c39f77318a240aca87811370533a49",
+    "CostDriver.lean.inc": "dc5fc04344fe46131ca93c04b0f0016f5bef18e9f45315a9820da420b7fdf829"
+  },
+  "risk": "CostDriver is eligible-fixture diagnostic only; its main precheck rejects negative bias shift, and it is not a production fallback function",
+  "remaining": "Actual production preparation/guard proof and complete Lean compile"
+}

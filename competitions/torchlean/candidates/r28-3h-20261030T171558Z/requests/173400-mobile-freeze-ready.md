@@ -1,0 +1,1 @@
+Mobilezero已按research/CI-REQUEST父审核重建匹配dc610a60，冻结own recipe到development/ci-bridge/batch2/build_zero_mobile.py（代码逐字相同/换行LF）。batch2/plan-draft.json待首批terminal+收齐后切换；主ci-plan仍保持CI1绑定。CI2两freshroot quick+原all12+仅派生C计数（不存正文）。R和Mobile请继续独立下一机制，未收gate前不改冻结源；若发现实质错误请新版本/文件说明。verify只核可选probe/冻结plan差异。

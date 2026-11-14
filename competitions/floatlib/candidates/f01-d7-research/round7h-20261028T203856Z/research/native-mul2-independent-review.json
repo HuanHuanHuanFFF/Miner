@@ -1,0 +1,28 @@
+{
+  "reviewed_at_utc": "2026-10-28T23:09:00Z",
+  "candidate": "f01-r24-research-native-mul-bridge2",
+  "candidate_sha256": "ce6813a7421922e188ed779400bd6e830fde1c8f9ffcad991d47fe38d300e3eb",
+  "candidate_bytes": 234410,
+  "retained_prefix": {
+    "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+    "bytes": 226829,
+    "byte_identical": true
+  },
+  "scope": "One independent critical static review of exact emitted source and fixed library interfaces; not Lean acceptance",
+  "verified_static": [
+    "Actual native Float multiplication is exposed via Float.Model.mul and reused B2 format-polymorphic modelMulFinite; no opaque cross-width cast assumption.",
+    "model/native finite conversion is explicit; output finiteness is derived from max-finite bound before applying roundAt real semantics.",
+    "Two finite binary32 dyadics have significands below2^24; product below2^48<2^53 and exponent at least-298>-1074. The generic grid lemma requires no upper bound; separate magnitude proof supplies finite bound.",
+    "Binary32 max finite=(2^24-1)*2^104; square is below binary64 max finite=(2^53-1)*2^971.",
+    "Fixed Directed Exact/RealSemantics/Rounding Proof and Flocq round_preserves_generic signatures match invoked statements; value noncomputable annotation supplied in bridge2.",
+    "Kernel/fragment hashes and emitted prefix verified fresh; helper exists; statement-only180 diagnostic."
+  ],
+  "limitations": [
+    "NOT_RUN typing, Lean kernel replay, allowed axiom audit.",
+    "Third root proves real-valued exactness under actual finite native input values matching raw32; widening correctness is a separate component.",
+    "Signed-zero exact bits for full multiplication, native addition fold error, runtime certificate and whole-kernel adoption are not claimed by the third root.",
+    "No benchmark or speed result; no ContractExact kernel."
+  ],
+  "decision": "READY_FOR_D_COMPONENT_CI_NO_BROADENED_REVIEW",
+  "deadline_utc": "2026-10-29T03:38:56Z"
+}

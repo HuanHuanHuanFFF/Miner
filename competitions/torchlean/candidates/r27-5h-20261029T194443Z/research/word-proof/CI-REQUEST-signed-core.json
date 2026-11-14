@@ -1,0 +1,41 @@
+{
+  "at_utc": "2026-10-29T20:28:18.411508+00:00",
+  "id": "R27-WORD-SIGNED-CORE",
+  "source": {
+    "file": "SignedBlock64.lean",
+    "bytes": 1774,
+    "sha256": "6be3bc4930096f73fa03d1d7383ff5e05cef3cf84936233dbb45e3bffa880058",
+    "intake": null,
+    "policy": null
+  },
+  "priority": "Small alternative after frozenmodular64 returns; not replacement of in-flight source",
+  "roots": [
+    "Submission.R27SignedBlock.bounded_bmod",
+    "Submission.R27SignedBlock.block_bmod",
+    "Submission.R27SignedBlock.block_exact"
+  ],
+  "difference": "Same alignedblock16 mechanism but native Int32\u2192Int64 and core bmod lemmas remove handwritten signextension and multiplication witness dependencies; not a claimed independent performance innovation",
+  "api_evidence": [
+    "https://lean-lang.org/doc/api/Init/Data/SInt/Lemmas.html",
+    "https://lean-lang.org/doc/api/Init/Data/Int/DivMod/Lemmas.html"
+  ],
+  "api_version_boundary": "Current official docs inspected; availability under pinned4.34 importContractExact is exactly what this small probe must verify",
+  "native_status": "NOT_COMPILED_NO_EMITTEDC_NO_SPEED",
+  "remaining": [
+    "actualUInt64block/carry128 integration",
+    "actualalignedgetters/guardmetadata",
+    "bias/zero/full12"
+  ],
+  "deferred_followon": {
+    "file": "FactorInt32.lean",
+    "bytes": 2297,
+    "sha256": "83bd78148f1a6e6204fb10e501b7e9bfcadf41ee419ca3e448f92446c5b2e1c9",
+    "roots": [
+      "Submission.R27Factor.factor_exact",
+      "Submission.R27Factor.allValid_sound",
+      "Submission.R27Factor.prepared_get_exact"
+    ],
+    "status": "NOT_COMPILED_ONLY_AFTER_SIGNEDCORE_API_ACCEPTANCE",
+    "actual_caller_boundary": "Guard explicitly checks finite rawword, nonzero scale lowerbound and Int32 range; Array.ofFn getter links actualpreparedarray to rawgetter. Cachedmaximum and bias still separate obligations."
+  }
+}

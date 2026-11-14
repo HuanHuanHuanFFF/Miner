@@ -1,0 +1,13 @@
+# B scalar / midpoint current handoff
+
+Last actual update 2026-10-29T02:25:47.980862+00:00. Common R24 window20:38:56–03:38:56 UTC unchanged; no new long task after03:15. First B tool20:43:26; continuous activity, tokens/cache UNKNOWN. D alone owns Git/CI; no local Lean/native build or new target runtime.
+
+**Newest source:** `NativeSignOr.lean.inc` 2740B / `0ea8f879…` establishes actual sign-OR raw64 model equality before finite native real negation. `RawMidpoint.lean.inc` 8937B / `85a54ce3…` proves masked raw32 fields→UInt64 fields, exact minimum-normal predicate, runtime OR-base = retained add-center, native negative endpoint swap, and a thin rational-rounder composition. Suggested two roots: `Submission.R24RawMidpoint.signed_endpoint_reals` / `roundRatScaled_of_endpoint_bounds`. Full hashes, dependency/runtime mapping: `raw-midpoint-source-receipt.json`; public pinned MIT/Apache source receipts: `raw-midpoint-public-sources.json`. All new public Lean/replay/AX **NOT_RUN**.
+
+24 fixed normal raw32 words /48 endpoint equalities matched an independent exact-neighbor model, including both signs, power/minnormal/maxfinite. Ten excluded words were used only for field-adapter checks. No old broad model sweep or performance test was rerun. Remaining caller work is orderKey boolean→real strict comparison and radius/exact-sum enclosure composition, not native sign-word or field extraction (now complete proof-source drafts, untyped).
+
+**Retained chain:** MidpointReal3879B /`96050a50…`; NormalCell10125B /`43958f8b…` (root static review READY); DyadicAgreement6876B /`ef4efc52…` plus DyadicCell1388B /`27dc56cb…`. These source snapshots remain byte-frozen and have no observed full public acceptance. New dependencies use WidenNormal4/`abe56775…`; historical MidpointReal receipt still binds its original Widen3 snapshot.
+
+**Verified acceptance boundary:** exact core13 Kernel `049b01fa…`, run40793795026, statement/module replay/AX PASS; quotient2 fragment `5733f2e3…` is byte-exactly contained and both of its roots are audited. This does not accept quotient2's full B2 Kernel or any parent/new source. `../SOURCE-INDEX.json` binds the carrier, raw audit SHA and every current B source. Power-v4 `322eb784…` had no Power errors in failed island6; no whole-artifact PASS is inferred. Norm transport and old scalar runtime remain frozen sublines.
+
+Next: real typed feedback before further changes, root's single critical review of new source, then D's minimum carrier decision. No new Kernel or CI queue was created by B. All originals, failures, source/model receipts and prior index snapshots are preserved.

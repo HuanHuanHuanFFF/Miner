@@ -1,0 +1,97 @@
+{
+  "state": "LOW_MARGINAL_COST_RESERVE_ONLY_NOT_QUEUED",
+  "source": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-r14-dev-mul-cache-rse2\\Kernel.lean",
+    "sha256": "9038f8d653f030a8812c3187733488f70995253a1a7b284759c4f58b96378c19",
+    "bytes": 233544,
+    "historical_full_gate_run": 40155753018
+  },
+  "current_B2_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "files": [
+    {
+      "file": "Runtime.lean.inc",
+      "bytes": 2273,
+      "sha256": "908ae8d016c50bc1c72614f3d04ae95e5fd7d7d63ee0204dabd611f762156e8f"
+    },
+    {
+      "file": "ColdBoundary.lean.inc",
+      "bytes": 355,
+      "sha256": "28768c9831b6b0069019ed1ee51355c892a3b7d31b9a7eb7b8edbeafb5b89d96"
+    },
+    {
+      "file": "AcceptedMathSupport.lean.inc",
+      "bytes": 23596,
+      "sha256": "799a02a9ab1f2d56e1a07437cc15cbb99fdd8ff8e493dbc697c03860f878515b"
+    },
+    {
+      "file": "ProofTransport.lean.inc",
+      "bytes": 414,
+      "sha256": "776076b65dd9240d18b1f6af610625b6a91c86b2e14aadb595c0b8a63d63d0a5"
+    }
+  ],
+  "copied_runtime_definitions": [
+    "R14ExponentShift.ex",
+    "R14ExponentShift.sign",
+    "R14DIntegerNormal.productWord/highWord/shiftWord/roundedWord/carryWord/exponentWord/fractionWord/core",
+    "R14ExponentShift.core/eligible/guardedMul"
+  ],
+  "runtime_source_fidelity": "Each originalruntime definition body copiedexactly; onlynamespace/open wrappers andnewcoldboundary added. No retained-product rewrite, guard/domainchange, IEEEproofornewNatBias.",
+  "shared_B2_primitives": {
+    "rse": {
+      "old_text_sha256": "4792069e291af0d46bbaa7b439eae0d4e0ce2e63abf0cb66093ffb1fe018f37c",
+      "B2_text_sha256": "4792069e291af0d46bbaa7b439eae0d4e0ce2e63abf0cb66093ffb1fe018f37c",
+      "text_equal": true
+    },
+    "rseAny": {
+      "old_text_sha256": "a97799cb78dd4bd3dcbb998e1e5b39c8f04e351a63d759a6510cea05334437a0",
+      "B2_text_sha256": "a97799cb78dd4bd3dcbb998e1e5b39c8f04e351a63d759a6510cea05334437a0",
+      "text_equal": true
+    },
+    "mkW": {
+      "old_text_sha256": "c1f0701dbae8d3c8d36ff683d29f255302bb2a00bb5ba850c1f783555309fcce",
+      "B2_text_sha256": "c1f0701dbae8d3c8d36ff683d29f255302bb2a00bb5ba850c1f783555309fcce",
+      "text_equal": true
+    },
+    "mantissa": {
+      "old_text_sha256": "d0052da2b8689f3b37e840d70e610ca4bd1be2339f80017d50c7aa5aa18f71e5",
+      "B2_text_sha256": "d0052da2b8689f3b37e840d70e610ca4bd1be2339f80017d50c7aa5aa18f71e5",
+      "text_equal": true
+    }
+  },
+  "source_hot_path": "UInt64product; high=P>>47; shift23+high; rseAny; carry=rounded>>24; exponent/fraction packing. No reachablelog2/FPcast/table. rseAny stillhasgenericshift checks andrse remainder/half/2comparisons/tieparity.",
+  "historical_negative": {
+    "baseline": "df5c f01-d12-scalar-combined, notB2",
+    "whole": 1.0471437276654516,
+    "mul": 1.2908011496963538,
+    "gain_p05": -0.04566368078493384,
+    "old_source": "9038; originalfull25PASS but performancePARK. No scoretransfer."
+  },
+  "old_selected_caller_ASM": "UNKNOWN: 9038 run codegen_present=false. OtherR22ASM sectionheadings namingR14 symbols containno selectedbody andarenot evidence.",
+  "new_cost_premise": "Onlystatic noinlineB2fallback boundary maydelete sharedcallee-save/frame; old proofmodeldoesnot establish codegen orspeed. MusttraceactualselectedMain callback, samebinary staticIO control/inlineOld/outlined, fullguard/miss/Suitecost.",
+  "proof_interface": {
+    "minimal_transport_fragment": "ProofTransport.lean.inc;requiresfullMathSupport;NOT_COMPILED",
+    "normal_domain": "Both exponents1..254, sum128..380 exactly; originaleligible unchanged.",
+    "word_rounding": "R14DIntegerNormal.roundedWord_nat composesFastMul.rseAny_eq +FixedWord.roundShiftRightEven_toNat; noBranchlessRNESeed dependency.",
+    "public_transport": "R14ExponentShift.guardedMul_spec fallback hf; newnoinlineB2 fallback isdefinitionallyB2mul, so existingIEEE/model proofreused afterfreshintegration/replay.",
+    "key_roots": [
+      "Submission.R14DIntegerNormal.roundedWord_nat",
+      "Submission.R14DIntegerNormal.core_word",
+      "Submission.R14ExponentShift.core_model",
+      "Submission.R14ExponentShift.core_spec",
+      "Submission.R14ExponentShift.eligible_conditions",
+      "Submission.R14ExponentShift.guardedMul_spec"
+    ]
+  },
+  "composition": {
+    "diagnostic": "B2+Runtime fragment only; public4endpoints unchanged. Requires freshcompile. Do notalsoappendMathSupport becauseit duplicatesruntime names.",
+    "proof_later": "B2+AcceptedMathSupport+ColdBoundary, or equal-lengthrename Submission->R22RseBase thennewpublicaliases. RetainoldmaxRecDepth8192 sourceoption, nothighercap. Freshfullgate/roots mandatory.",
+    "B2_plus_support_bytes_before_wrapper": 250425,
+    "headroom_before_wrapper": 5575,
+    "recursion_guard": "On9038 existingpublicmul alreadyisRSEguard; fallbackmustbeoldmulBeforeExponent, notthatpublicmul. OnB2carrier newretainedB2maycallSubmission.mul. Neverwrapnewpublicmul asitsownfallback."
+  },
+  "decision": "No standaloneCI orlargeproofinvestment thiswindow. Notlog2-blocked, but old29%MUL negative plus heavierRSE mechanics lowerpriority; onlyone lowmarginal actualcaller/cost screen ifDselects andcurrentacceptanceunaffected.",
+  "new_typecheck": "NOT_RUN",
+  "new_caller_ASM": "NOT_RUN",
+  "new_performance": "NOT_RUN",
+  "new_public_Kernel_materialized": false
+}

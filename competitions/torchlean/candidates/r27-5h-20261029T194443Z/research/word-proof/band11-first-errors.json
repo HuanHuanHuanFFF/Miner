@@ -1,0 +1,30 @@
+{
+  "at_utc": "2026-10-30T00:06:43.087037+00:00",
+  "run": 40975355668,
+  "candidate_sha256": "4a9cb398cb45df02c977604e7968648716250af5e0a0dfa99a8068e8b00b8f9b",
+  "source_commit": "6435029b784069762d61e333ccf51405c61b844f",
+  "state": "ACTUAL_TWO_LITERAL_TYPE_ERRORS_NO_MEASUREMENT",
+  "log_sha256": "826540a56170aab0544ca08a559f45cdd8995abf539fc7e40d35b143f1f7aa29",
+  "actual_errors": [
+    "error: work/Submission.lean:2973:49: failed to synthesize instance of type class",
+    "error: work/Submission.lean:3055:69: Type mismatch",
+    "error: build failed"
+  ],
+  "minimal_repair": [
+    {
+      "source_line": 2973,
+      "before": "hi+(0-(q>>>63))",
+      "after": "hi+((0:UInt64)-(q>>>63))",
+      "reason": "The untyped0 defaults toNat at heterogeneous subtraction."
+    },
+    {
+      "source_line": 3055,
+      "before": "&& 1<=Yk (bv>>>16)",
+      "after": "&& (1:UInt64)<=Yk (bv>>>16)",
+      "reason": "The left literal1 defaults toNat, while Yk returnsUInt64."
+    }
+  ],
+  "verified_binding": "Reconstructed exact frozen4a9cb398 in memory and printed its exact2973/3055 lines; no whole source written.",
+  "boundary": "This is D-owned source; no file changed here. Dnative may archive its own minimal fix. Native speed and algorithm outcome remainUNKNOWN; do not rerun aftercutoff basedonthisreceipt.",
+  "own_followon": "Same literal-risk pattern proactively made explicit in WordPayload-v2.lean; intended operations unchanged, NOT_COMPILED. Old v1 source retained."
+}

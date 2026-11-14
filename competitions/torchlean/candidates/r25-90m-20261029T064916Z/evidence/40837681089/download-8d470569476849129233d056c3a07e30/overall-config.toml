@@ -1,0 +1,47 @@
+# Development configuration; calibrate production settings before enabling payouts.
+proof_identity = '3a69968c7210ab18b325047e518ddfa942e642e21268a241e8693b075377bee6'
+benchmark_identity = 'a91ee5653e770f54b2ce4d1b81d5a090e4e10cec5f58ee76f6b79d20d1515e57'
+seeds = [42]
+seed_mode = 'fixed'
+retry_seconds = 300
+lease_seconds = 120
+alert_seconds = 900
+verification_seconds = 1800
+dev_intake = false
+
+[timing]
+rounds = 5
+inner = 3
+cell_ms = 2
+run_seconds = 300
+# Build and measurement limits default by architecture and model count.
+
+[admission]
+bar = 0.97
+guard = 1.10
+draws = 2000
+quantile = 0.05
+min_rounds = 5
+
+[environments.local]
+weight = 1.0
+identity = '2ce5abb04d8b8d106a99eeacff32cdd36c4a2a287452e1942dd47af0516aa884'
+architecture = 'x86_64'
+
+[rewards]
+rank_shares = [1.0, 0.0]
+paused_policy = 'preserve'
+
+[rewards.board_weights]
+overall = 1.0
+
+[boards.overall.models]
+mlp = 0.2
+resnet = 0.2
+mobilenet = 0.2
+normalized_mlp = 0.2
+mixer = 0.2
+
+[boards.overall.reference]
+path = '/home/runner/work/_temp/floatlib-upstream/kernels/exact/incumbent/Kernel.lean'
+sha256 = '9b2d940338dfcc42a38443324d63041a27cc9b5df1b18675103c7d67934d1df8'

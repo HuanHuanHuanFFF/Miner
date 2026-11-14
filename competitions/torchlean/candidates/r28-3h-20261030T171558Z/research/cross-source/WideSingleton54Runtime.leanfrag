@@ -1,0 +1,74 @@
+@[inline] def R28WShift (base:UInt64) (x:UInt32):UInt64 :=
+ if Yf x=0 then 1 else Yd x-base+1
+
+@[inline] def R28WPack (base:UInt64) (x:UInt32):UInt32 :=
+ ((if ExactRuntime.signOf x then (0x1000000:UInt64)-Yf x else 0x1000000+Yf x)
+  |||(R28WShift base x<<<25)).toUInt32
+
+def R28WPrepare (X:Array UInt32) (n:Nat) (base:UInt64) (i:Nat)
+ (packed:Array UInt32) (sum:UInt64):Array UInt32 × UInt64 :=
+ if i<n then
+  let word:=X[i]!
+  R28WPrepare X n base (i+1) (packed.push (R28WPack base word)) (sum+((1:UInt64)<<<R28WShift base word))
+ else (packed,sum)
+termination_by n-i
+
+@[inline] def R28WProduct (packed:UInt64) (word:UInt32) (base:UInt64):UInt64 :=
+ let mant:=(packed&&&0x1FFFFFF)-0x1000000
+ let weight:=Yf word<<<(Yd word-base)
+ weight*(if word>>>31=0 then mant else (0:UInt64)-mant)+0x80000000000000
+
+@[specialize] def R28WLoop {β:Type} (finish:UInt64→UInt64→β)
+ (packed weights:Array UInt32) (start n:USize) (hp:n.toNat<=packed.size)
+ (hw:start.toNat+n.toNat<=weights.size) (hs:start.toNat+n.toNat<USize.size)
+ (base low high:UInt64) (i:USize):β :=
+ if h:i<n then
+  let word:=(packed.uget i (by have:=USize.lt_iff_toNat_lt.mp h;omega)).toUInt64
+  let shift:=word>>>25
+  let product:=R28WProduct word (weights.uget (start+i) (Zaa weights start n i hw hs h)) base
+  let term:=product<<<shift
+  let next:=low+term
+  R28WLoop finish packed weights start n hp hw hs base next
+   (high+(product>>>(64-shift))+(if next<term then 1 else 0)) (i+1)
+ else finish low high
+termination_by n.toNat-i.toNat
+decreasing_by exact ZI n i h
+
+@[inline] def R28WFinish (X W b:Array UInt32) (n j:Nat) (sum low high base:UInt64):UInt32 :=
+ let cl:=sum<<<55
+ let ch:=sum>>>9
+ let l:=low-cl
+ let h:=high-ch-(if low<cl then 1 else 0)
+ let result:=YL base ExactRuntime.oneW b[j]! ((0:UInt64)-(h>>>63)) h l 0
+  (fun v2 v1 v0 count=>YD v2 v1 v0 count ((base.toNat:Int)-298))
+ if result<0x100000000 then result.toUInt32 else Yai X W b n 0 j
+
+@[inline] def R28WWideOne (X W b:Array UInt32) (packed:Array UInt32) (sum:UInt64)
+ (n j:Nat) (bx bw:UInt32):UInt32 :=
+ let xm:=Yk (bx>>>16)
+ let wm:=Yk (bw>>>16)
+ let wh:=Yk (bw&&&0xFFFF)
+ let base:=xm+wm-1
+ let be:=Yd ExactRuntime.oneW+Yd b[j]!
+ if h:packed.size=n∧n<=4294967295∧j*n+n<=W.size∧j*n+n<=4294967295∧n<16384∧
+   wm<=wh∧(bw&&&0xFFFF)!=255∧wh-wm<=7∧(1:UInt64)<=wm∧ExactRuntime.expOf (b[j]!) !=255∧
+   (Yf (b[j]!) ≠ 0→base<=be∧be-base<80) then
+  R28WLoop (fun low high=>R28WFinish X W b n j sum low high base) packed W
+   (j*n).toUSize n.toUSize
+   (by rw [h.1];exact Nat.mod_le _ _)
+   (by rw [Za _ (by omega),Za _ (by omega)];exact h.2.2.1)
+   (by rw [Za _ (by omega),Za _ (by omega)];have:=USize.le_size;omega)
+   wm 0 0 0
+ else YaU X W b n 0 j bx bw
+
+def R28WideSingleton (rows n out:Nat) (relu:Bool) (X W b:Array UInt32):Array UInt32 :=
+ if rows=1 && 0<n && n<16384 && n<=X.size then
+  let bx:=Yc X n 0
+  let xm:=Yk (bx>>>16)
+  let xh:=Yk (bx&&&0xFFFF)
+  if (bx&&&0xFFFF)!=255 && xm<=xh && xh-xm<=47 then
+   let cache:=R28WPrepare X n xm 0 (Array.mkEmpty n) 0
+   let bounds:Array UInt32:=Array.ofFn (n:=out) (fun j=>Yc W n j.val)
+   YT 1 out (fun _ j=>act relu (R28WWideOne X W b cache.1 cache.2 n j bx bounds[j]!))
+  else YaVM rows n out relu X W b
+ else YaVM rows n out relu X W b

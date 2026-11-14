@@ -1,0 +1,219 @@
+{
+  "source_sha256": "1010c0744f0506974c64601e8ce7335bea56d0cb21b655543d390794df0665fe",
+  "original_C_sha256": "9786d606e6a13b5f25342ca7aec47974daf9b5ddc440158ae593655bb2068cdd",
+  "instrumented_C_sha256": "2dd5ab0dbe7de934bd3ec3fa8bac417fbfb3dac725a1cc4f06b9d376d3ca915e",
+  "control_binary_sha256": "f0f05c891497cc9da5d7636cc8b266a629310233bf937708d29c3ca2c173e1cc",
+  "profiled_binary_sha256": "718ee6346a19f529496ee5c7b3481a7d38d7f1d50f9530bbafd16f18a2790850",
+  "symbols": [
+    "linear",
+    "layernorm",
+    "rmsnorm"
+  ],
+  "commands": [
+    {
+      "label": "profile-compile",
+      "argv": [
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/bin/clang",
+        "-c",
+        "-o",
+        ".lake/build/ir/R27EntryProfile.c.o.export",
+        "work/R27EntryProfile.c",
+        "-I",
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/include",
+        "-fstack-clash-protection",
+        "-ffp-contract=off",
+        "-fdata-sections",
+        "-ffunction-sections",
+        "-fPIC",
+        "-fvisibility=hidden",
+        "-Wno-unused-command-line-argument",
+        "--sysroot",
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0",
+        "-nostdinc",
+        "-isystem",
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/include/clang",
+        "-O3",
+        "-DNDEBUG",
+        "-DLEAN_EXPORTING",
+        "-isystem",
+        "/usr/include",
+        "-isystem",
+        "/usr/include/x86_64-linux-gnu"
+      ],
+      "exit_code": 0,
+      "seconds": 33.56609934300002
+    },
+    {
+      "label": "profile-link",
+      "argv": [
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/bin/clang",
+        "-o",
+        ".lake/build/bin/R27EntryProfile",
+        "@work/R27EntryProfile.rsp"
+      ],
+      "exit_code": 0,
+      "seconds": 2.74843226400003
+    }
+  ],
+  "rows": [
+    {
+      "cell": "normalized_mlp:b1:normal",
+      "instrumented_kernel_entry_times": {
+        "linear": {
+          "calls": 576,
+          "inclusive_ns": 34055594,
+          "exclusive_ns": 34055594
+        },
+        "layernorm": {
+          "calls": 192,
+          "inclusive_ns": 1532699,
+          "exclusive_ns": 1532699
+        },
+        "rmsnorm": {
+          "calls": 192,
+          "inclusive_ns": 1348764,
+          "exclusive_ns": 1348764
+        }
+      },
+      "share_within_profiled_entries": {
+        "linear": 0.9219899138147363,
+        "layernorm": 0.04149488682869347,
+        "rmsnorm": 0.036515199356570285
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "normalized_mlp:b1:wide",
+      "instrumented_kernel_entry_times": {
+        "linear": {
+          "calls": 576,
+          "inclusive_ns": 41547048,
+          "exclusive_ns": 41547048
+        },
+        "layernorm": {
+          "calls": 192,
+          "inclusive_ns": 1648911,
+          "exclusive_ns": 1648911
+        },
+        "rmsnorm": {
+          "calls": 192,
+          "inclusive_ns": 1367451,
+          "exclusive_ns": 1367451
+        }
+      },
+      "share_within_profiled_entries": {
+        "linear": 0.9323130343930144,
+        "layernorm": 0.03700145478095146,
+        "rmsnorm": 0.030685510826034185
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "normalized_mlp:b1:sparse",
+      "instrumented_kernel_entry_times": {
+        "linear": {
+          "calls": 576,
+          "inclusive_ns": 26958445,
+          "exclusive_ns": 26958445
+        },
+        "layernorm": {
+          "calls": 192,
+          "inclusive_ns": 1404672,
+          "exclusive_ns": 1404672
+        },
+        "rmsnorm": {
+          "calls": 192,
+          "inclusive_ns": 1386689,
+          "exclusive_ns": 1386689
+        }
+      },
+      "share_within_profiled_entries": {
+        "linear": 0.9061721276434542,
+        "layernorm": 0.047216173443282286,
+        "rmsnorm": 0.0466116989132635
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "normalized_mlp:b8:normal",
+      "instrumented_kernel_entry_times": {
+        "linear": {
+          "calls": 576,
+          "inclusive_ns": 167451436,
+          "exclusive_ns": 167451436
+        },
+        "layernorm": {
+          "calls": 192,
+          "inclusive_ns": 10628871,
+          "exclusive_ns": 10628871
+        },
+        "rmsnorm": {
+          "calls": 192,
+          "inclusive_ns": 10714707,
+          "exclusive_ns": 10714707
+        }
+      },
+      "share_within_profiled_entries": {
+        "linear": 0.8869484021437134,
+        "layernorm": 0.056298473009461995,
+        "rmsnorm": 0.05675312484682461
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "normalized_mlp:b8:wide",
+      "instrumented_kernel_entry_times": {
+        "linear": {
+          "calls": 576,
+          "inclusive_ns": 268965404,
+          "exclusive_ns": 268965404
+        },
+        "layernorm": {
+          "calls": 192,
+          "inclusive_ns": 10286873,
+          "exclusive_ns": 10286873
+        },
+        "rmsnorm": {
+          "calls": 192,
+          "inclusive_ns": 10381334,
+          "exclusive_ns": 10381334
+        }
+      },
+      "share_within_profiled_entries": {
+        "linear": 0.9286401639345649,
+        "layernorm": 0.035516848215520126,
+        "rmsnorm": 0.03584298784991497
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "normalized_mlp:b8:sparse",
+      "instrumented_kernel_entry_times": {
+        "linear": {
+          "calls": 576,
+          "inclusive_ns": 155974538,
+          "exclusive_ns": 155974538
+        },
+        "layernorm": {
+          "calls": 192,
+          "inclusive_ns": 11071152,
+          "exclusive_ns": 11071152
+        },
+        "rmsnorm": {
+          "calls": 192,
+          "inclusive_ns": 10550522,
+          "exclusive_ns": 10550522
+        }
+      },
+      "share_within_profiled_entries": {
+        "linear": 0.8782537433850222,
+        "layernorm": 0.062338897183234966,
+        "rmsnorm": 0.059407359431742836
+      },
+      "checksum_pairs": 6
+    }
+  ],
+  "scope": "INSTRUMENTED_COST_DISCRIMINATOR_ONLY_NOT_OFFICIAL_TIMING_OR_GATE",
+  "boundary": "Pure kernel-entry wall time; nested profiled entries removed from exclusive sums. Output destruction outside these calls is excluded. Bench warmups may enter counters. One root, six cells, six workloads; no champion score or whole-model-share equality claim.",
+  "publication": "Only derived counters/own transform and hashes; whole source/C stays ephemeral"
+}

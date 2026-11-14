@@ -1,0 +1,35 @@
+{
+  "at_utc": "2026-10-29T20:02:08.768357+00:00",
+  "source": "competitions\\torchlean\\candidates\\r27-5h-20261029T194443Z\\research\\board-frontier\\packed_model.py",
+  "sha256": "3958d6ffb5f798372481388490b3ed6cd35336400b61f0f0a11d57a20dcc0f6a",
+  "status": "INDEPENDENT_ALGEBRA_AND_BOUND_REVIEW_NOT_LEAN_OR_NATIVE",
+  "mechanism": "Output-channel balanced digit packing; distinct from scalar block/carry scheduling",
+  "paper_argument": [
+    "For B=2^width and P_i=sum_j w[j,i]*B^j, sum_i a[i]*P_i=sum_j c_j*B^j where c_j=sum_i a[i]*w[j,i] by finite sum distributivity.",
+    "With rectangular dimensions k and bounds |a_i|<=ma, |w_ji|<=mw, |c_j|<=k*ma*mw=U. parameters chooses HALF=2^bit_length(U)>U (including U=0 via width>=2).",
+    "Offset O=HALF*sum_{j=0}^{tile-1} B^j makes every c_j+HALF in [0,B); hence total+O is nonnegative and has exactly those ordinary base-B digits. Repeated mask and right shift then subtract HALF recovers each signed coefficient without borrow leakage.",
+    "The explicit strict-bound negative control [8,-8] at width4 lies outside the proved strict domain and demonstrates carry corruption rather than a valid-input counterexample."
+  ],
+  "valid_scope": [
+    "Finite rectangular integer matrix algebra and exact digit representation. This is a paper argument checked against named source, not universal Lean acceptance.",
+    "Python cost proxy includes scan/pack/multiply/extract but excludes actual Float32 decode/common exponent/bias/round/exception and is not pinned Lean runtime cost."
+  ],
+  "integration_obligations": [
+    "Bind actual raw getters and per-row/per-column integer scale, including metadata and legal dimension/domain guards.",
+    "Bias added in same exact sum before one rounding; preserve signed zero fallback and negative bias scale-shift failure.",
+    "k=0/empty/rectangular bounds require defined actual caller behavior or exact fallback.",
+    "Benchmark actual Lean complete calls against strong public predecessor only as internal bridge to current champion; do not infer Python advantage transfers."
+  ],
+  "next_discriminator": "One small native cost source including real preparation/drop/finish costs before a large formal matrix closure; bind exact source and keep all finite evidence separate.",
+  "not_a_second_independent_route": "Tiling16 versus tiling64 and D&C packing are variants of this same packing mechanism.",
+  "runtime_followon_review": {
+    "at_utc": "2026-10-29T20:10:37.320457+00:00",
+    "path": "competitions\\torchlean\\candidates\\r27-5h-20261029T194443Z\\research\\board-frontier\\PackedLinearRuntime.lean",
+    "sha256": "2a416a233a96566f344477d9aa8999c96d0593f4528036f5e62af909dd75ec5b",
+    "body_bound": "For finite factors |factor| <2^(24+indexSpan), k<2^(floorlog2(k)+1), so |dot|<2^(49+spanX+spanW+floorlog2k)=HALF for runtime width50+spans+floorlog2k.",
+    "bias_identity": "finish chooses low=min(ax+aw,idxBias+149), so both body and bias shifts are nonnegative and the final exponent low-298 represents the same exact sum. This avoids the known negative bias shift truncation.",
+    "zero": "joined==0 replays exact dotOf(k+1) to preserve signed zero; k0/invalid/nonfinite use linearSpec",
+    "cost_risk": "Global rather than row/column min/max may enlarge packed widths across tiles; all shape/finite scans and factor arrays are in the source boundary. No native speed claim.",
+    "status": "SOURCE_ALGEBRA_REVIEW_ONLY; Lean and actual call correctness still unproved"
+  }
+}

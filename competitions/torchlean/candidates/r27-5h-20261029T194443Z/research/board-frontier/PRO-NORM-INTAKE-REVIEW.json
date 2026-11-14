@@ -1,0 +1,84 @@
+{
+  "at_utc": "2026-10-29T23:32:29.004482+00:00",
+  "state": "INDEPENDENT_CRITICAL_REVIEW_NO_ACTUAL_INTEGRATION_ERROR_FOUND_NOT_PROVED",
+  "review_scope": [
+    "ActualMYbc wiring",
+    "Completeincludingbias rationalnumerator",
+    "UInt64/UInt128 guardsandshift direction",
+    "Strictnormalcell boundaryandformalpreconditions"
+  ],
+  "source_sha256": "1903da388a65196dd8478905fc7a69ab5a1086d4bed449761cd5b3e3818bf1ca",
+  "source_bytes": 254537,
+  "recipe_sha256": "9a2884928b0b0aff4b890c310438c7c496683e0dd83f3843c2786045e9b62447",
+  "helper_sha256": "57b62a985875ea54a9ea6d227f32b492abcd1ce1ec7ff713cac7e04dc9e69866",
+  "static_binding": {
+    "all_original_runtime_definitions_except_kernel_record_byte_identical": true,
+    "copiedMYbc_only_attempt_plus_whole_oldYa7Gfallback_change": true,
+    "Ssign_argument": "!u.1 verified; u.1 originalisNOT(S1<0)",
+    "actual_correct_absent": true,
+    "retainedCorrect_proves_old_record_only": true,
+    "source_reconstructed_in_memory_only": true
+  },
+  "arithmetic_review": {
+    "center": "x<2^60; Sabs<2^60; cv<2^61; wordoperations exactunder guards",
+    "denominator": "1<=n<4096; normalpositive dw yields0<d<2^36",
+    "full_numerator": "P=sign(Cg)*cv*mg*2^(alpha-c)+sign(b)*d*mb*2^(beta-c); alpha=b0+ig,beta=ib+id; zero-awarec preservesexactexpression",
+    "value": "signedP/d *2^(c-149-id) equals full(n*X-S1)gamma/n/dw+bias; verifiedagainstindependentactualrowkeyoracle",
+    "capacity": "OriginalYa7G narrow ks<=8,bs<=37 implies<2^98. Widerattempt requiresandchecks eachterm<2^127; same-signsum<2^128, borrow exact. Do notuse98outsideoldguards.",
+    "midpoint_products": "d*(4m-delta),d*(4m+2)<2^62. delta1 onlyf=0ande>1; minnormaldelta2. Strictbound excludesalltiesandmaxfiniteoverflowtie.",
+    "alignment": "Delta=c+3-id-e; ifnonnegative shiftP, else shiftbothendpoints. Checkingfitsupperimpliesfitslower since0<L<U.",
+    "caller_ranges": "c<=508,id<=253; id+e<=507 andc+3<=511, noUInt64wrap; proposalpowerbiasedexponent621..1382."
+  },
+  "new_actionable_formal_requirement": {
+    "issue": "Standalonecertify soundness cannot beunconditionalover arbitraryUInt64c/id becauseadditionswrap. Actualattempt bounds exclude thecounterexample. Thisisformalprecondition, not aruntimebugrequest.",
+    "counterexample": {
+      "d": 1,
+      "c": 0,
+      "id": 18446744073709551492,
+      "P": 33554432,
+      "accepted_q": "3f800000",
+      "exact_floorlog2": -18446744073709551616,
+      "correct_round32": "00000000",
+      "scope": "Standalonecertify withoutcaller c/idbounds ONLY; actualattempt excludes this."
+    },
+    "required": "Carryactual c/idbounds or sufficientno-wrapfacts intowordlevelcertificate theorem, alongsideUInt128 refinement and rationaltargetequality."
+  },
+  "integration_mutant": {
+    "rows": 1,
+    "n": 1,
+    "x": [
+      "bf800000"
+    ],
+    "gamma": [
+      "3f800000"
+    ],
+    "bias": [
+      "00000000"
+    ],
+    "epsilon": "3727c5ac",
+    "S1": -8388608,
+    "aux_u1": false,
+    "correct_Ssign": true,
+    "wrong_without_bang_word": "c41e1d28",
+    "correct_word": "00000000"
+  },
+  "independent_model_summary": {
+    "old_formula_cells": 54,
+    "old_actual_LN_outputs": 18063,
+    "old_proposal_accepts": 18063,
+    "all_formed_outputs": 36991,
+    "certificate_trials": 221946,
+    "max_P_bits": 127,
+    "max_shift": 79,
+    "wrong_actual_acceptances": 0,
+    "explicit_misses": {
+      "formed": 36991,
+      "alignment_guard": 288,
+      "term127_guard": 20,
+      "outer_guard": 16384
+    }
+  },
+  "cost_boundary": "Newattempt stillpaysdivFloat/proposalcasts/tuplebuilds/guards/checker plusoldwholeelementonmiss. No costshare, speedup orcurrent43claim followsfromacceptancecounts. UseactualcompleteNMLP costonlyifprofilejustifies.",
+  "proof_boundary": "Uncompilednativecostonly; no full12correct orUInt128-to-wordRNErefinement accepted. ParentBshouldwaitpositivecostbeforelargeproof.",
+  "isolation": "Onlyoldexplorationformula/privatepublic23 andPropre-barriermaterials. No9roots/inputs/nativeoutputs read."
+}

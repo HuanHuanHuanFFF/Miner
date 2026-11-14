@@ -1,0 +1,5 @@
+/* SYNTHETIC AUDIT NEGATIVE: no native compilation or performance evidence. */
+LEAN_EXPORT uint32_t l_R24DotBankHarness_hashAll(lean_object* out){ return (uint32_t)lean_array_size(out); }
+LEAN_EXPORT uint32_t l_R24DotBankHarness_passExact(lean_object* p, uint32_t s, lean_object* n){ lean_object* last; while (n){ p=l_R24DotBarrier_touchBank(n,p); last=l_Submission_R24GenericDotBank_exactBank(p,p); n=0; } s+=l_R24DotBankHarness_hashAll(last); lean_dec_ref(p); return s; }
+LEAN_EXPORT uint32_t l_R24DotBankHarness_passEager(lean_object* p, uint32_t s, lean_object* n){ lean_object* last; while (n){ p=l_R24DotBarrier_touchBank(n,p); last=l_Submission_R24GenericDotBank_eagerBank(p,p); n=0; } s+=l_R24DotBankHarness_hashAll(last); lean_dec_ref(p); return s; }
+LEAN_EXPORT uint32_t l_R24DotBankHarness_passLazy(lean_object* p, uint32_t s, lean_object* n){ lean_object* last; while (n){ p=l_R24DotBarrier_touchBank(n,p); last=l_Submission_R24GenericDotBank_lazyBank(p,p); n=0; } s+=l_R24DotBankHarness_hashAll(last); lean_dec_ref(p); return s; }

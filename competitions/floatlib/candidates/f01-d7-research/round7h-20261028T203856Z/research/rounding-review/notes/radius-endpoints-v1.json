@@ -1,0 +1,68 @@
+{
+  "status": "SOURCE_FRAGMENT_ONLY_STATIC_CHECKED_NOT_COMPILED",
+  "created_at_utc": "2026-10-29T01:38:03.564591+00:00",
+  "component_path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/rounding-review/RadiusEndpoints-v1.lean.inc",
+  "sha256": "c4932d4138e966d98028ec0b1ab27adad0b7cbcfdab63bf8b37a13db01c3f119",
+  "bytes": 9828,
+  "roots": [
+    "Submission.R24RadiusEndpoints.radius_finite_value",
+    "Submission.R24RadiusEndpoints.native_endpoints_finite_real"
+  ],
+  "root_count": 2,
+  "actual_cost_body": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/PortableF64Dot.lean.inc",
+  "observed_cost_body_sha256": "dd775683cade6e575dc6f0684f9216742e1c772c3cf7460b0c53c54e4e3eff04",
+  "actual_radius_expression_matched": true,
+  "input_domain": "UInt64 H.toNat<=506,L.toNat<=30; endpoint root also requires native sum finite and abs(rval sum)<=2^286",
+  "conclusion_scope": "Actual Float.ofBits radius finite/positive/value, plus actual native sum-radius and sum+radius finite and equal RNE64 of the exact expressions. No endpoint-finite or outward-rounding premise.",
+  "coarse_bound": "radius<=2^263, abs(sum)+radius<=2^287<=maxFinite64; does not reuse the insufficient2^286 add bound",
+  "old_B2_helper_dependency": "R2W01c.modelCanonical_of_decode; all other proof interfaces public fixed FloatLib/Lean",
+  "new_public_API_source": {
+    "file": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/rounding-review/notes/radius-endpoint-sources/FloatLib-Subtraction.lean.raw",
+    "git_blob_sha1": "e1539e337d4d2904035b5b9b81de51ee435e1319",
+    "sha256": "67a8b9adc7d2d2a7124b35077895ac260606bdd3af4477c3e3201ed4431833cb",
+    "source_ref": "0d91825727839f597fd06b22fdd038ea21480f0c",
+    "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/Formats/BinaryInterchange/Arithmetic/SignedSemantics/Subtraction.lean",
+    "anchors": {
+      "isFinite_sub_of_abs_add_le_posMaxFinite": 50,
+      "toReal_sub_eq_roundAt": 69,
+      "toReal_sub_eq_roundAt_of_abs_add_le_posMaxFinite": 89
+    }
+  },
+  "four_extremal_word_checks": [
+    {
+      "H": 0,
+      "L": 0,
+      "word": "0x2d00000000000000",
+      "field": 720,
+      "value_exponent": -303
+    },
+    {
+      "H": 0,
+      "L": 30,
+      "word": "0x30c0000000000000",
+      "field": 780,
+      "value_exponent": -243
+    },
+    {
+      "H": 506,
+      "L": 0,
+      "word": "0x4ca0000000000000",
+      "field": 1226,
+      "value_exponent": 203
+    },
+    {
+      "H": 506,
+      "L": 30,
+      "word": "0x5060000000000000",
+      "field": 1286,
+      "value_exponent": 263
+    }
+  ],
+  "model_check_scope": "Four new exact bit-layout endpoint cases only; not a formal proof or an old model rerun",
+  "new_full_Kernel": false,
+  "CI_queued": false,
+  "local_Lean": false,
+  "Git_mutation": false,
+  "shared_deadline_utc": "2026-10-29T03:38:56Z",
+  "next_action": "Coordinator reviews this compact fragment and integrates only when the current exact-source CI feedback permits; no independent queue created."
+}

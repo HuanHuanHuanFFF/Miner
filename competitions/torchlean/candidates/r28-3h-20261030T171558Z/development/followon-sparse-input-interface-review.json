@@ -1,0 +1,30 @@
+{
+  "at_utc": "2026-10-30T20:09:13.921515+00:00",
+  "state": "INDEPENDENT_INTERFACE_AND_FINITE_REPLAY_ONLY",
+  "source_sha256": "595a90fa2b6bc5d3657434fae7d1292b27910ef653da2b7f409ed9c34c956e2b",
+  "checked_original_definitions": [
+    "MxA",
+    "MPx",
+    "MPr",
+    "MVj",
+    "MVi",
+    "YaVM"
+  ],
+  "checks": [
+    "Original MPr prepares each row using its own BX metadata base; MPx materializes per-word Nat via MxA. A narrower per-row packet can share original row base, not final dot lo.",
+    "Original MVj admits on joint dot-span and per-row nonfinite sentinels; joint span alone does not bound either input factor. Native counterexample with zero weights is an actual packing-premise witness, not an output mismatch.",
+    "New packet must add an independent row-span/finite guard, keep wide-row fallback, and restore exact signed coefficient with index bound below2^20.",
+    "12k packet cases/800 fixedword128 rows and three retained counterexamples replayed locally; this is model/interface evidence only.",
+    "A smaller numeric bit bound alone does not establish smaller per-entry storage than original Array Nat. Require actual runtime allocation/representation evidence; the proposed saving is fewer retained elements and avoiding a separate index/tuple, not an assumed 60-versus64 bit byte reduction."
+  ],
+  "cost_unknown": [
+    "actual producer/getter allocation",
+    "rowpair ILP lost in separate sparse loops",
+    "gather+packetdecode cost",
+    "restored proof bytes/all12",
+    "wholemodel timing/new confirmation"
+  ],
+  "model_receipt_sha256": "73597720a7011d627531f88c07ad3369c2de8187c27d8156c6e62e1acbcc3e09",
+  "confirmation_isolation": "No CI6 seeds/inputs/results used; old public36 only",
+  "decision": "Preserve next-round sparse prepared input route, compare once-per-row support versus union-three-loop; cost first before large proof. Root request200700."
+}

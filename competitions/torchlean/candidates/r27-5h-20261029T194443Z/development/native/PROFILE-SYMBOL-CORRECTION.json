@@ -1,0 +1,13 @@
+{
+  "id":"NATIVE_PROFILE_CONCRETE_SYMBOL_MISMATCH",
+  "at_utc":"2026-10-29T20:47:00Z",
+  "owner_to_handle":"Droot",
+  "evidence":"Exact public12/e2c1f1 source declares YaV,Ybb2,MYbc, but no Ya3 declaration/reference. Public12 dense.gemm remains kernels0.dense.2. NormalizedMLP model has no gemm layer.",
+  "affected":"development/ci-bridge/profile_control.py /03035270a3291d6b7bcba31e9d4611d23364937033c0e26c9528b84048e3cc8f",
+  "concrete_failure":"instrument() regex expects YaV|Ya3|Ybb2|MYbc and asserts4matches. On source12 C it can only get3, so optional profile will deterministically fail before measurement. Actualcandidate/main/gate/scored binaries unaffected.",
+  "minimal_fix":"Profile only3real NMLP entrypoints YaV/Ybb2/MYbc; update regex expected count and rawmetrics count4→3. Existing arrays oflength4 may safely remain; emitted symbols loop already follows actual names.",
+  "owned_patch_recipe":"profile3_patch.py applies4exact substitutions to the hash-bound own parent profiler only, returning bytes; Droot chooses how to freeze/apply. No files outside native/ edited by Dimpl.",
+  "dispatch_boundary":"If batch3 already dispatched, do not cancel or mutate its frozen recipe. Preserve optionalprofile failure and fix only the next ownedrun. Candidate/source/perf statements must not depend on profile success.",
+  "source_declarations_checked":"public12 YaV line873; MYbc2207; Ybb22246; actualrecord2254/2257",
+  "communication":"STRICT_FILES_ONLY"
+}

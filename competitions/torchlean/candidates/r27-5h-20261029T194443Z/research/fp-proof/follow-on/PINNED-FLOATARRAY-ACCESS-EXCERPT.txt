@@ -1,0 +1,42 @@
+Pinned Lean v4.34.0 upstream API excerpts (Apache-2.0; copyright Microsoft Corporation).
+Source: https://github.com/leanprover/lean4/blob/v4.34.0/src/Init/Data/FloatArray/Basic.lean
+Whole-file Git blob: 29eb263dfd77c1be05e3cd3d45b94023b4188ed9
+Lines 54-65:
+
+@[extern "lean_float_array_uget"]
+def uget : (a : @& FloatArray) → (i : USize) → i.toNat < a.size → Float
+  | ⟨ds⟩, i, h => ds[i]
+
+@[extern "lean_float_array_fget"]
+def get : (ds : @& FloatArray) → (i : @& Nat) → (h : i < ds.size := by get_elem_tactic) → Float
+  | ⟨ds⟩, i, h => ds[i]
+
+@[extern "lean_float_array_get"]
+def get! : (@& FloatArray) → (@& Nat) → Float
+  | ⟨ds⟩, i => ds[i]!
+
+
+Source: https://github.com/leanprover/lean4/blob/v4.34.0/src/include/lean/lean.h
+Whole-file Git blob: 910ecae72a7d1c149d4ccc8111ee438c8b4551dd
+Lines 1243-1260:
+
+static inline double lean_float_array_uget(b_lean_obj_arg a, size_t i) {
+    return lean_float_array_cptr(a)[i];
+}
+
+static inline double lean_float_array_fget(b_lean_obj_arg a, b_lean_obj_arg i) {
+    return lean_float_array_uget(a, lean_unbox(i));
+}
+
+static inline double lean_float_array_get(b_lean_obj_arg a, b_lean_obj_arg i) {
+    if (lean_is_scalar(i)) {
+        size_t idx = lean_unbox(i);
+        return idx < lean_sarray_size(a) ? lean_float_array_uget(a, idx) : 0.0;
+    } else {
+        /* The index must be out of bounds. Otherwise we would be out of memory. */
+        return 0.0;
+    }
+}
+
+
+These are reference excerpts, not an owned candidate source or new correctness proof.

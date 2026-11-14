@@ -1,0 +1,44 @@
+{
+  "scope": "Synthetic negative-rule fixture ONLY, not actual Lean-generated C, not a native test, not overall harness invalidity. Demonstrates weak existence predicates cannot prove traversal/drop.",
+  "root_audit_sha256": "07ee38357b7f0d6e6b27522c70bab7a5b8c63f3f9f2393fdd86fa75784de13f0",
+  "current_rule_accepts_bad_fixture": false,
+  "record_results": [
+    {
+      "pass_suffix": "Exact",
+      "pass": false
+    },
+    {
+      "pass_suffix": "Eager",
+      "pass": false
+    },
+    {
+      "pass_suffix": "Lazy",
+      "pass": false
+    }
+  ],
+  "bad_properties": [
+    "observer uses only array size, no element traversal",
+    "observer only after pass backedge",
+    "bank output has no release; input pair release satisfies old any-release predicate"
+  ],
+  "ownership_caveat": "Real hash worker may borrow array; legitimate release may be in pass after hashAll, matching bank-return variable.",
+  "action": "Root-only hardening or scoped actual-C manual witness; child changed no root files.",
+  "synthetic_files": [
+    {
+      "path": "R24DotBarrier.c",
+      "sha256": "2bed5d459e6f93b1b130f0c8535512b805772e41d1210d5d29ba5170b3c4729e"
+    },
+    {
+      "path": "R24DotCostMain-asm.txt",
+      "sha256": "01426c2610c76bf67eb061e43ebfe483b8be64232fc7b6b48ccc919e958a6f91"
+    },
+    {
+      "path": "R24DotCostMain.c",
+      "sha256": "a0967319ca54bd2af07bcc40dbdbc8e5115467bc9b79dc54f6221cb0f05f83c7"
+    },
+    {
+      "path": "Submission.c",
+      "sha256": "c301a66b552e9cf24b7103c5612e97e2e96e4de529e8e6700c9a14ca9b91d814"
+    }
+  ]
+}

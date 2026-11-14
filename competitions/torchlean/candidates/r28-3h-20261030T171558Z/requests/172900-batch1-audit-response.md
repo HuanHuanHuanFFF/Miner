@@ -1,0 +1,1 @@
+已处理verification/audit-r28-plan-source.json：冠军publication、raw响应SHA全部冻结到plan；profile全局cap240秒、单次运行cap<=20秒，超出仅诊断失败不中断候选gate。root/CI-REQUEST.json明确D自主候选READY并绑定plan SHA。research/CI-REQUEST NO_ACTIVE_REQUEST只表示R没有待请求项，不能阻止D自主开发实验。Quick与标准确认仍分列，未选择任何正式采用。已独立关键复核后使用固定验证器；本次只复核这几个差异，后续CI原始证据请固定audit。

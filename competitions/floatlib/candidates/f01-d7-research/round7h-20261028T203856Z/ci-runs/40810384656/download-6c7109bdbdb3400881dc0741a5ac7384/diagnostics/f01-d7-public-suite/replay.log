@@ -1,0 +1,39 @@
+[32m2026-10-29 03:10:56.802[0m | [1mINFO    [0m | [36mfloatlib_gate_diagnostic[0m:[36mpin[0m:[36m439[0m - [1m[pin] building benchFull from /home/runner/work/_temp/floatlib-upstream/kernels/full/incumbent/Kernel.lean, inputs 4dba6725af0b2aa5[0m
+[32m2026-10-29 03:11:15.538[0m | [34m[1mDEBUG   [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun[0m:[36m348[0m - [34m[1m[run] /home/runner/.elan/bin/lake build benchFull exit=0 in 18.7s[0m
+[32m2026-10-29 03:11:15.762[0m | [1mINFO    [0m | [36mfloatlib_gate_diagnostic[0m:[36mpin[0m:[36m459[0m - [1m[pin] full incumbent /home/runner/work/_temp/floatlib-upstream/pinned/full/bench_incumbent sha256=e0273a66e27fc649[0m
+[32m2026-10-29 03:11:15.764[0m | [1mINFO    [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m735[0m - [1m[intake] ok[0m
+[32m2026-10-29 03:11:15.801[0m | [1mINFO    [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m735[0m - [1m[policy] ok[0m
+[32m2026-10-29 03:11:29.913[0m | [34m[1mDEBUG   [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun[0m:[36m348[0m - [34m[1m[run] /home/runner/.elan/bin/lake build VerifyFull exit=0 in 14.1s[0m
+[32m2026-10-29 03:11:37.569[0m | [34m[1mDEBUG   [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun[0m:[36m348[0m - [34m[1m[run] /home/runner/.elan/bin/lake build benchFull exit=0 in 7.6s[0m
+[32m2026-10-29 03:11:37.571[0m | [34m[1mDEBUG   [0m | [36mfloatlib_gate_diagnostic[0m:[36mstatement[0m:[36m548[0m - [34m[1m[statement] layer holds 38 entries[0m
+[32m2026-10-29 03:13:00.969[0m | [31m[1mERROR   [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m729[0m - [31m[1m[statement] crashed[0m
+[33m[1mTraceback (most recent call last):[0m
+
+  File "<string>", line 224, in <module>
+
+  File "[32m/home/runner/work/_temp/floatlib-upstream/[0m[32m[1mgate.py[0m", line [33m707[0m, in [35mgate[0m
+    [1mrun_stages[0m[1m([0m[1msrc[0m[1m,[0m [1mv[0m[1m,[0m [1mBENCH_STAGES[0m [35m[1mif[0m [1mmode[0m [35m[1m==[0m [36m"bench"[0m [35m[1melse[0m [1mSTAGES[0m[1m)[0m
+    [36m│          │    │  │               │                    └ [0m[36m[1m[('intake', <function intake at 0x7fdb628e4860>), ('policy', <function policy at 0x7fdb628e4900>), ('statement', <function st...[0m
+    [36m│          │    │  │               └ [0m[36m[1m'gate'[0m
+    [36m│          │    │  └ [0m[36m[1m[('intake', <function intake at 0x7fdb628e4860>), ('statement', <function statement at 0x7fdb628e4a40>), ('score', <function ...[0m
+    [36m│          │    └ [0m[36m[1mVerdict(submission='f01-d7-public-suite', slot='full', mode='gate', stage='statement', passed=False, reason='', seed=0, ratio...[0m
+    [36m│          └ [0m[36m[1mPosixPath('/home/runner/work/_temp/floatlib-reports/inputs/f01-d7-public-suite/Kernel.lean')[0m
+    [36m└ [0m[36m[1m<function run_stages at 0x7fdb628e4ea0>[0m
+
+> File "[32m/home/runner/work/_temp/floatlib-upstream/[0m[32m[1mgate.py[0m", line [33m727[0m, in [35mrun_stages[0m
+    [1mreason[0m [35m[1m=[0m [1mstage[0m[1m([0m[1msrc[0m[1m,[0m [1mv[0m[1m)[0m
+    [36m         │     │    └ [0m[36m[1mVerdict(submission='f01-d7-public-suite', slot='full', mode='gate', stage='statement', passed=False, reason='', seed=0, ratio...[0m
+    [36m         │     └ [0m[36m[1mPosixPath('/home/runner/work/_temp/floatlib-reports/inputs/f01-d7-public-suite/Kernel.lean')[0m
+    [36m         └ [0m[36m[1m<function statement at 0x7fdb628e5080>[0m
+
+  File "<string>", line 129, in statement
+
+  File "[32m/home/runner/work/Miner/Miner/competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/[0m[32m[1mdevelopment-cost-suite.py[0m", line [33m124[0m, in [35mrun[0m
+    [35m[1mif[0m [35m[1mnot[0m [1mrows[0m [35m[1mor[0m [1mlen[0m[1m([0m[1mrows[0m[1m)[0m[35m[1m!=[0m[1mlen[0m[1m([0m[1mplan[0m[1m[[0m[36m'candidates'[0m[1m][0m[1m)[0m [35m[1mor[0m [35m[1mnot[0m [1mall[0m[1m([0m[1mr[0m[1m[[0m[36m'full_gate'[0m[1m][0m [35m[1mor[0m [1mr[0m[1m[[0m[36m'statement_pass'[0m[1m][0m [35m[1mfor[0m [1mr[0m [35m[1min[0m [1mrows[0m[1m)[0m[1m:[0m[35m[1mraise[0m [1mRuntimeError[0m[1m([0m[36m'Requested full gates or separately labeled statement probes incomplete/failed; original receipts retained'[0m[1m)[0m
+    [36m       │           │          │                                                                             └ [0m[36m[1m[{'candidate': 'f01-r24-dev-portable-island9', 'kernel_sha256': 'fdbe17b21ea7e11f6475c20b17cf358d2f2dae927342bc0eadaec218c4f5...[0m
+    [36m       │           │          └ [0m[36m[1m{'seed': 2240901, 'official_commit': '4b7e83841cc0c32c6529f533923c73d33b5ecf97', 'suite': 'suites/public-v2.json', 'dispatch_...[0m
+    [36m       │           └ [0m[36m[1m[{'candidate': 'f01-r24-dev-portable-island9', 'kernel_sha256': 'fdbe17b21ea7e11f6475c20b17cf358d2f2dae927342bc0eadaec218c4f5...[0m
+    [36m       └ [0m[36m[1m[{'candidate': 'f01-r24-dev-portable-island9', 'kernel_sha256': 'fdbe17b21ea7e11f6475c20b17cf358d2f2dae927342bc0eadaec218c4f5...[0m
+
+[31m[1mRuntimeError[0m:[1m Requested full gates or separately labeled statement probes incomplete/failed; original receipts retained[0m
+[32m2026-10-29 03:13:00.970[0m | [33m[1mWARNING [0m | [36mfloatlib_gate_diagnostic[0m:[36mrun_stages[0m:[36m733[0m - [33m[1m[statement] REJECTED f01-d7-public-suite: gate error: Requested full gates or separately labeled statement probes incomplete/failed; original receipts retained[0m

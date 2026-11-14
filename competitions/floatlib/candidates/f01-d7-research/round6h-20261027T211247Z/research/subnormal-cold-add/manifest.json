@@ -1,0 +1,132 @@
+{
+  "checked_utc": "2026-10-28T02:40:01.586635+00:00",
+  "first_tool_utc": "2026-10-28T02:32:16Z",
+  "bound_utc": "2026-10-28T02:47:16Z",
+  "common_deadline_utc": "2026-10-28T03:12:47Z",
+  "runtime": {
+    "sha256": "2292584cdf1634197d1ed505ed4fcaee3e7210aab4b7aa7c84821f82f72bf76b",
+    "bytes": 807
+  },
+  "original_primary_predicate_and_hot_body_byte_identical": true,
+  "fixed_E0_core_cases": 256,
+  "other_boundary_cases": 8,
+  "mismatches": 0,
+  "trace_sha256": "52edadf0a8e55e5beff0186a3ea1a170cbfbff27ccc463e702f691dd337dd2cf",
+  "boundary_rows": [
+    {
+      "name": "minnormal_pair",
+      "u": "00800000",
+      "v": "00800000",
+      "path": "old_cold_fallback",
+      "result": "01000000"
+    },
+    {
+      "name": "low_normal_cancel",
+      "u": "0b800001",
+      "v": "8b800000",
+      "path": "old_cold_fallback",
+      "result": "00400000"
+    },
+    {
+      "name": "normal_hot",
+      "u": "3f800000",
+      "v": "bf800000",
+      "path": "unchanged_hot",
+      "result": "00000000"
+    },
+    {
+      "name": "overflow_hot",
+      "u": "7f7fffff",
+      "v": "7f7fffff",
+      "path": "unchanged_hot",
+      "result": "7f800000"
+    },
+    {
+      "name": "infinity_invalid",
+      "u": "7f800000",
+      "v": "ff800000",
+      "path": "old_cold_fallback",
+      "result": "7fc00000"
+    },
+    {
+      "name": "qnan_payload",
+      "u": "7fc00001",
+      "v": "3f800000",
+      "path": "old_cold_fallback",
+      "result": "7fc00001"
+    },
+    {
+      "name": "snan_priority",
+      "u": "7fc00042",
+      "v": "ff800123",
+      "path": "old_cold_fallback",
+      "result": "ffc00123"
+    },
+    {
+      "name": "mixed_subnormal_normal",
+      "u": "00000001",
+      "v": "00800000",
+      "path": "old_cold_fallback",
+      "result": "00800001"
+    }
+  ],
+  "falsifiable_mutations": [
+    {
+      "name": "mask_sum_loses_normal_carry",
+      "u": "007fffff",
+      "v": "00000001",
+      "correct": "00800000",
+      "wrong": "00000000"
+    },
+    {
+      "name": "opposite_equal_keeps_left_sign",
+      "u": "80000001",
+      "v": "00000001",
+      "correct": "00000000",
+      "wrong": "80000000"
+    },
+    {
+      "name": "opposite_difference_keeps_left_sign",
+      "u": "00000001",
+      "v": "80000002",
+      "correct": "80000001",
+      "wrong": "00000001"
+    },
+    {
+      "name": "xor_exponent_guard_admits_low_normal_pair",
+      "u": "00800000",
+      "v": "00800000",
+      "correct": "01000000",
+      "wrong": "00000000"
+    }
+  ],
+  "references": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round1h-20261027T103538Z/research/scalar-frontier/LOW-LATTICE-NEXT.md",
+      "sha256": "f4d65ac2db6022c5c2d39517cbf095a076e02ef879692679f97d584d39abea30",
+      "bytes": 1566
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/research/independent-frontier/Runtime-same-exponent.lean.inc",
+      "sha256": "5bebefe9114cc06ae9444b9685a2c0d6534974d4c44ba562d370d662c545c0d5",
+      "bytes": 880
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-cost3-summary.json",
+      "sha256": "23e97633d73da556cf678fe14d1e28e5f4bb1c333be4e0c46589b0e3f465e9ae",
+      "bytes": 5499
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-nativecold/NativeColdAdd.lean.inc",
+      "sha256": "21cd91284ee5bc31fed0e7aaa3b1cf35e6a705cbe2e680d8095baf2388551f50",
+      "bytes": 490
+    }
+  ],
+  "scope": "Fixed source-derived word model, not native/Lean/exhaustive proof or timing. No random/domain/threshold sweep.",
+  "history": "R21 E0 exact integer formula paper only. Old measured R22 same-exponent source includes same-sign E0, but also normal frontdoor and inline B2 miss; its aggregate negative does not isolate E0 and is not this complete cold body.",
+  "same_complete_cold_body_negative": "NOT_FOUND_IN_BOUNDED_SEARCH; no universal novelty claim",
+  "Lean": "NOT_RUN",
+  "CI": "NOT_RUN",
+  "performance": "UNKNOWN",
+  "public_proof": "NOT_ASSEMBLED"
+}

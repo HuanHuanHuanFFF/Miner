@@ -1,0 +1,105 @@
+{
+  "at_utc": "2026-10-29T23:16:47.909600+00:00",
+  "state": "FINITE_FORMULA_TERMINAL_EDGE_REPLAY_NO_LEAN_NATIVE",
+  "cases": [
+    {
+      "case": "positive_nonzero_underflow",
+      "x": 1,
+      "w": 1,
+      "bias": 0,
+      "body_base": 0,
+      "terminal_base": 0,
+      "range": 0,
+      "total_is_nonzero": true,
+      "observed_word": 0,
+      "expected_word": 0,
+      "original_zero_fallback_needed": false
+    },
+    {
+      "case": "negative_nonzero_underflow",
+      "x": 2147483649,
+      "w": 1,
+      "bias": 0,
+      "body_base": 0,
+      "terminal_base": 0,
+      "range": 0,
+      "total_is_nonzero": true,
+      "observed_word": 2147483648,
+      "expected_word": 2147483648,
+      "original_zero_fallback_needed": false
+    },
+    {
+      "case": "positive_overflow",
+      "x": 2139095039,
+      "w": 2139095039,
+      "bias": 0,
+      "body_base": 506,
+      "terminal_base": 506,
+      "range": 0,
+      "total_is_nonzero": true,
+      "observed_word": 2139095040,
+      "expected_word": 2139095040,
+      "original_zero_fallback_needed": false
+    },
+    {
+      "case": "negative_overflow",
+      "x": 4286578687,
+      "w": 2139095039,
+      "bias": 0,
+      "body_base": 506,
+      "terminal_base": 506,
+      "range": 0,
+      "total_is_nonzero": true,
+      "observed_word": 4286578688,
+      "expected_word": 4286578688,
+      "original_zero_fallback_needed": false
+    },
+    {
+      "case": "minimum_subnormal_exact",
+      "x": 1,
+      "w": 1065353216,
+      "bias": 0,
+      "body_base": 125,
+      "terminal_base": 125,
+      "range": 1,
+      "total_is_nonzero": true,
+      "observed_word": 1,
+      "expected_word": 1,
+      "original_zero_fallback_needed": false
+    },
+    {
+      "case": "negative_minimum_subnormal_exact",
+      "x": 2147483649,
+      "w": 1065353216,
+      "bias": 0,
+      "body_base": 125,
+      "terminal_base": 125,
+      "range": 1,
+      "total_is_nonzero": true,
+      "observed_word": 2147483649,
+      "expected_word": 2147483649,
+      "original_zero_fallback_needed": false
+    },
+    {
+      "case": "power_of_two_metadata_padding",
+      "x": 1065353216,
+      "w": 1065353216,
+      "bias": 981467136,
+      "body_base": 250,
+      "terminal_base": 242,
+      "range": 10,
+      "total_is_nonzero": true,
+      "observed_word": 1065361408,
+      "expected_word": 1065361408,
+      "original_zero_fallback_needed": false
+    }
+  ],
+  "scope": "New band arithmetic permits finite subnormal coefficients that old QPa may reject. Nonzero underflow must keep its sign; it is distinct from exact-zero callback fallback.",
+  "limits": "Original Ybo/YL/YD is reused by the candidate, but this script evaluates the dyadic formula. It does not execute or prove their new connection.",
+  "source_hashes": {
+    "directed_terminal_replay.py": "4c3611b6e89b9fa841fb3f73d48d5a3f7c7e9ea49ed0e43107e105d57f53f854",
+    "BandNative.lean.inc": "f30b0bab8380e0d4b7e79a05fa28c335e4bcf0dc7471950659042227e2ea7588",
+    "word_model_coverage.py": "f9324997c748ee1286d06db43877fb0d4490d65a6ad3da723e61408ce57400a3",
+    "norm_frontier.py": "e35e08d6387847160aaa4387fef3c78e8e07ca6440ff0bde7be5b81e2bf3dede"
+  }
+}

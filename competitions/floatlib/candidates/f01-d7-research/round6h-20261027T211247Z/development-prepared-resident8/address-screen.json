@@ -1,0 +1,112 @@
+{
+  "status": "FINITE_SYMBOLIC_PASS",
+  "source_sha256": "3279414a5392846c70d3064ddafe3c0527dda72b62ae0fc67ca78c6b49c0d356",
+  "shapes": 3360,
+  "eligible_shapes": 1280,
+  "outputs": 124740,
+  "ordered_macs": 374220,
+  "ranges": {
+    "batch": [
+      0,
+      3
+    ],
+    "m": [
+      0,
+      11
+    ],
+    "n": [
+      0,
+      6
+    ],
+    "p": [
+      0,
+      9
+    ]
+  },
+  "checked": [
+    "A4 index/unique decode",
+    "B2 index/unique real decode/padding",
+    "batch stride",
+    "rowblock stride",
+    "ascending k",
+    "rowmajor output",
+    "real lane finish bases",
+    "no phantom finish",
+    "tail0..3"
+  ],
+  "mutations": {
+    "A_crossbatch": {
+      "caught": true,
+      "first_shape": [
+        2,
+        4,
+        1,
+        1
+      ]
+    },
+    "B_crossbatch": {
+      "caught": true,
+      "first_shape": [
+        2,
+        4,
+        1,
+        1
+      ]
+    },
+    "A_rowblock": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        1,
+        1
+      ]
+    },
+    "B_stride": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        2,
+        3
+      ]
+    },
+    "B_group": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        2,
+        3
+      ]
+    },
+    "reverse_k": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        2,
+        1
+      ]
+    },
+    "word_row": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        1,
+        1
+      ]
+    },
+    "phantom_finish": {
+      "caught": true,
+      "first_shape": [
+        1,
+        4,
+        0,
+        1
+      ]
+    }
+  },
+  "limitations": "Python symbolic layout only. No Float32 arithmetic/NaN/replay/Lean/native/RC/performance claim."
+}

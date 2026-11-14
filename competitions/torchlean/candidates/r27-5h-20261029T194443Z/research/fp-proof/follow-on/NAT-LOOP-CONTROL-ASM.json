@@ -1,0 +1,162 @@
+{
+  "at_utc": "2026-10-29T23:14:22.259376+00:00",
+  "status": "HISTORICAL_ACTUAL_ASM_CONTROL_PATH_AUDIT_NOT_PERFORMANCE_RESULT",
+  "source": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/evidence/40852769757/download-988ea0459868494bb525e3d8f8795129/fp-word-conv6/Submission-asm.txt",
+  "source_sha256": "0093a67d3b60cb10435b6817ddf1110ee69de87152029121f5d91d4f65772617",
+  "candidate_source_sha256": "ad9bde3e9e8490df15f3d8d15c08805f85d4451e0a5f2d20977632c0b4b22540",
+  "path_conditions": [
+    "remaining is tagged smallNat and strictly positive",
+    "index is tagged smallNat and index+1 does not cross scalar bound",
+    "index is below both FloatArray sizes"
+  ],
+  "one_mac_path": [
+    {
+      "offset": "0x6b",
+      "mnemonic": "mov"
+    },
+    {
+      "offset": "0x6e",
+      "mnemonic": "test"
+    },
+    {
+      "offset": "0x72",
+      "mnemonic": "je"
+    },
+    {
+      "offset": "0x74",
+      "mnemonic": "cmp"
+    },
+    {
+      "offset": "0x78",
+      "mnemonic": "je"
+    },
+    {
+      "offset": "0x7e",
+      "mnemonic": "mov"
+    },
+    {
+      "offset": "0x83",
+      "mnemonic": "jbe"
+    },
+    {
+      "offset": "0x85",
+      "mnemonic": "add"
+    },
+    {
+      "offset": "0x89",
+      "mnemonic": "mov"
+    },
+    {
+      "offset": "0x8c",
+      "mnemonic": "test"
+    },
+    {
+      "offset": "0x8f",
+      "mnemonic": "je"
+    },
+    {
+      "offset": "0x91",
+      "mnemonic": "shr"
+    },
+    {
+      "offset": "0x94",
+      "mnemonic": "mov"
+    },
+    {
+      "offset": "0x97",
+      "mnemonic": "inc"
+    },
+    {
+      "offset": "0x9a",
+      "mnemonic": "js"
+    },
+    {
+      "offset": "0xa0",
+      "mnemonic": "lea"
+    },
+    {
+      "offset": "0xa8",
+      "mnemonic": "xorpd"
+    },
+    {
+      "offset": "0xac",
+      "mnemonic": "xorpd"
+    },
+    {
+      "offset": "0xb0",
+      "mnemonic": "cmp"
+    },
+    {
+      "offset": "0xb4",
+      "mnemonic": "jae"
+    },
+    {
+      "offset": "0xb6",
+      "mnemonic": "movsd"
+    },
+    {
+      "offset": "0xbc",
+      "mnemonic": "cmp"
+    },
+    {
+      "offset": "0xc0",
+      "mnemonic": "jae"
+    },
+    {
+      "offset": "0xc2",
+      "mnemonic": "movsd"
+    },
+    {
+      "offset": "0xc8",
+      "mnemonic": "jmp"
+    },
+    {
+      "offset": "0x60",
+      "mnemonic": "mulsd"
+    },
+    {
+      "offset": "0x64",
+      "mnemonic": "addsd"
+    },
+    {
+      "offset": "0x68",
+      "mnemonic": "mov"
+    }
+  ],
+  "mnemonic_counts": {
+    "mov": 5,
+    "test": 2,
+    "je": 3,
+    "cmp": 3,
+    "jbe": 1,
+    "add": 1,
+    "shr": 1,
+    "inc": 1,
+    "js": 1,
+    "lea": 1,
+    "xorpd": 2,
+    "jae": 2,
+    "movsd": 2,
+    "jmp": 1,
+    "mulsd": 1,
+    "addsd": 1
+  },
+  "instruction_count": 28,
+  "conditional_jumps": 7,
+  "unconditional_jumps": 1,
+  "direct_runtime_calls": 0,
+  "interpretation": "Actual generated path checks Nat tags/fuel/index overflow and two array bounds around one dependent addsd. This is not per-MAC allocation evidence. Static instruction counts do not establish CPU cycles, prediction behavior or whole-model cost.",
+  "follow_on_hypotheses": [
+    "Four independent output interleaving preserves each scalar operation sequence while sharing loop control and one operand load; inspect actual new C/ASM before speed claims.",
+    "Proof-indexed array access may remove per-MAC checks, but pinned API and actual checked-once runtime/proof binding remain UNKNOWN; no new getter source added."
+  ],
+  "new_FP23_binary_equivalence": "UNKNOWN until new artifact inspection; identical source does not guarantee identical code generation context.",
+  "selection": "No new CI/native candidate. First frozen FP23 complete-call cost, then existing four-output scalarEq follow-on if supported.",
+  "attempt_history": [
+    {
+      "kind": "local audit script syntax error",
+      "before_any_output_file": true,
+      "fixed": "Readable multiline Python and explicit branch count"
+    }
+  ]
+}

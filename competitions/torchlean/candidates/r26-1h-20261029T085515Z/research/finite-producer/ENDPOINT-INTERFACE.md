@@ -1,0 +1,9 @@
+# Concrete A/B join: strict pullback, not outward native endpoints
+
+At 09:33 UTC, B inspected A's `follow-on/CheckerToContract.lean.inc` and `CheckerConsequencesContractOnly.lean`. Their conditional theorems are valid in scope, but the requested `henc : nativeValue(s-r) ≤ S ∧ S ≤ nativeValue(s+r)` is **stronger than B's current SUM3 error bound plus RNE endpoint semantics**. It has not been derived by this producer. Do not silently identify the two interfaces.
+
+The original R24 `research/controller/StrictEnclosure-v2.lean.inc` already supplies `Submission.R24StrictEnclosure.strict_enclosure_of_rounded_bounds`: finite raw midpoint values are exact fixed points of `roundAt`; monotonicity pulls the checker's strict comparisons back through RNE64. Combining that with `|s-S| ≤ radius` yields `lowerMidpoint < S < upperMidpoint` directly. No outward-rounding claim and no tighter SUM3 reproof is needed. This saved helper has not been newly accepted here.
+
+`ProducerCheckerJoin.lean.inc` writes the concrete combination using A's actual `certify_eq_runtime`, `accepted_components`, `midpoint_finite_nonzero`, `actual_acceptance_bounds`, and B's `actual_tail_enclosure` / `actual_endpoints_finite_real`. Its root `actual_acceptance_contains_rawSum` takes only valid actual prepares, equal raw lengths, and actual runtime acceptance; it does not take B, enclosure, midpoint finiteness, or endpoint finiteness as assumptions. **Source-only, NOTRUN; blocked by earlier finite/core proofs.** It is a follow-on fragment, not a new CI request.
+
+A's next consumer can accept the strict cell conclusion directly for nonzero and finishWord transport. Equality from this exact raw real dot to the official integer total `(T : Real) * 2^e`, including bias and signed-zero fallback, remains a separate original-contract bridge.

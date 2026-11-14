@@ -1,0 +1,16 @@
+#print axioms Submission.R21ScaledU32.native_integer_product_decode
+#print axioms Submission.R21ScaledU32.integer_product_scaled_fields
+#print axioms Submission.R22ScaledFields.highWord_nat
+#print axioms Submission.R22ScaledFields.mantissaWord_nat
+#print axioms Submission.R22ScaledFields.fractionWord_nat
+#print axioms Submission.R22ScaledFields.exponentWord_nat
+#print axioms Submission.R22ScaledFields.output_fields
+#print axioms Submission.R22ScaledFields.low_mask_eq_self
+#print axioms Submission.R22ScaledFields.mkW_eq_unmasked
+#print axioms Submission.R22ScaledFields.packed_fields
+#print axioms Submission.R22ScaledFields.normalCore_eq_fields
+#print axioms Submission.R22ScaledGuard.ex_nat
+#print axioms Submission.R22ScaledGuard.ex_bound
+#print axioms Submission.R22ScaledGuard.sum_nat
+#print axioms Submission.R22ScaledGuard.guard_conditions
+#print axioms Submission.R22ScaledGuard.guardedMul_spec_of_core_spec

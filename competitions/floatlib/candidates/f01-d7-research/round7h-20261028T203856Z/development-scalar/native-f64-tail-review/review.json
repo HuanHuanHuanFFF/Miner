@@ -1,0 +1,107 @@
+{
+  "status": "ACTUAL_SELECTED_TAIL_UNBOXED_ACC_CONFIRMED_PER_MAC_FLOAT_BOX_REMOVED",
+  "run": 40804860824,
+  "input_C": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round7h-20261028T203856Z\\ci-runs\\40804860824\\download-a29c9d41975b4c67b67aefb0158b1440\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r24-dev-dot-tail-cost1\\runtime-cost\\Submission.c",
+    "sha256": "763d12a687ac23ee252b4413b9ea33de7ea1afdabcdf39849834404c4b5636fe",
+    "bytes": 756066
+  },
+  "input_ASM": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round7h-20261028T203856Z\\ci-runs\\40804860824\\download-a29c9d41975b4c67b67aefb0158b1440\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r24-dev-dot-tail-cost1\\runtime-cost\\Submission-asm.txt",
+    "sha256": "ad7e12dd84a961a6d74485fa272cb374cb29335691627e5d27393fdfb03e70bb",
+    "bytes": 862211
+  },
+  "selected_path": [
+    {
+      "symbol": "lp_competition_Submission_R24DotProbe_eagerPrepared",
+      "header": "LEAN_EXPORT uint32_t lp_competition_Submission_R24DotProbe_eagerPrepared(lean_object* v_a_8547_, lean_object* v_b_8548_)",
+      "C_definition_line": 24588,
+      "definition_sha256": "048812da5c08a21499bdf94a228b6a8b450423a3018a4f472e68d63adfe033a2"
+    },
+    {
+      "symbol": "lp_competition_Submission_R24DotProbe_lazyPrepared",
+      "header": "LEAN_EXPORT uint32_t lp_competition_Submission_R24DotProbe_lazyPrepared(lean_object* v_a_8570_, lean_object* v_b_8571_)",
+      "C_definition_line": 24649,
+      "definition_sha256": "c30e5cc421e062a7210d2dd5197544f6fbb855e22b32ebe02fc691537d8b9cb3"
+    },
+    {
+      "symbol": "lp_competition_Submission_R24PortableF64_attemptPrepared",
+      "header": "LEAN_EXPORT uint32_t lp_competition_Submission_R24PortableF64_attemptPrepared(lean_object* v_x_8096_, lean_object* v_y_8097_)",
+      "C_definition_line": 23443,
+      "definition_sha256": "fac0b82bcae05f17ace60ae9404d02d95123c5ea83b5452136535ea769f44e27"
+    },
+    {
+      "symbol": "lp_competition_Submission_R24PortableF64_sumRemaining",
+      "header": "LEAN_EXPORT double lp_competition_Submission_R24PortableF64_sumRemaining(lean_object* v_a_8073_, lean_object* v_b_8074_, lean_object* v_index_8075_, double v_acc_8076_, lean_object* v_remaining_8077_)",
+      "C_definition_line": 23399,
+      "definition_sha256": "d0ac53280d60971eea16758ff4c5f28f64aa013eb6530a56547429967b89a1d6"
+    }
+  ],
+  "unboxed_call_line": 24353,
+  "C_evidence": "Worker returns double, accepts one double accumulator plus four object arguments; direct native FloatArray loads/mul/add and scalar backedge update. No Float box/unbox, tuple construction or dynamic apply in selected worker.",
+  "ASM_evidence": {
+    "header_line": 18559,
+    "actual_caller": "attemptPrepared ASM relocation0x99 directly targets sumRemaining, not ___boxed",
+    "normal_small_Nat_path": "0x6b remaining tag/zero check;0x85 subtracttag2;0x91 index untag/inc/retag;0xb6/0xc2 direct double loads;0xc8\u21920x60 mulsd\u21920x64 addsd xmm0\u21920x6b",
+    "allocation": "No mi_malloc/heartbeat/Float RC calls anywhere in this worker ASM. Big-Nat slow paths still call nat_big_add/sub and can allocate internally; FP caller index0,n\u22642^30 keeps counters on small-Nat path.",
+    "frame": "6 callee-save pushes plus one8-byte stack slot; accumulator remains xmm0 on normal MAC backedge, spills only around big-Nat cold calls."
+  },
+  "unused_wrapper": "sumRemaining___boxed still has one box/unbox interface, but neither actual FP C caller nor ASM calls it. Do not diagnose selected path from a whole-file grep.",
+  "mechanism_delta": "Old selected while reboxed the accumulator via surviving16B allocation per continued MAC and maintained a generic tuple state. New selected structural worker removes those Float boxes and tuple state; counters remain.",
+  "runtime_integrity": {
+    "original": {
+      "source_sha256": "5bf2a8893b01a5ed44393e80065fbd91e9b3686133e9ddd5d4dfb633379d4d2a",
+      "complete": true,
+      "processes": 32,
+      "originals_unchanged": true,
+      "native_oracle": {
+        "dots": 148,
+        "word_rounds": 1049,
+        "actual_accept": 81,
+        "known_fast_cases": 86,
+        "known_actual_accept": 51,
+        "unknown_fast_cases": 62,
+        "all_complete_words_match": true,
+        "all_expected_accept_miss_match": true,
+        "scope": "Finite native checks only, not an all-input proof."
+      },
+      "result_json_sha256": "85fdf28fd76311750b1bfb09ead68a1676d76b45e92866dc9c72a428e551e0e7"
+    },
+    "tail": {
+      "source_sha256": "e50bf8769d0bef3cc7883d9c1285fd26439282d7c1fd8c141cb84073f90a7f78",
+      "complete": true,
+      "processes": 32,
+      "originals_unchanged": true,
+      "native_oracle": {
+        "dots": 148,
+        "word_rounds": 1049,
+        "actual_accept": 81,
+        "known_fast_cases": 86,
+        "known_actual_accept": 51,
+        "unknown_fast_cases": 62,
+        "all_complete_words_match": true,
+        "all_expected_accept_miss_match": true,
+        "scope": "Finite native checks only, not an all-input proof."
+      },
+      "result_json_sha256": "5f6e1ecb8194f23c7092cb50a5815e3aedfa0f413b66e9b34233a6fa033398be"
+    }
+  },
+  "scope": "Causal implementation-work deletion verified. This report deliberately does not calculate speed, all-input correctness, competition score or adoption; root analyzes complete paired costs separately.",
+  "snippets": [
+    {
+      "path": "selected-callers.c.txt",
+      "sha256": "b9838671ce7fb3e8019a6fc53e298f325d02f5e4ce02e8e6c4d8858cc99d6575",
+      "bytes": 2267
+    },
+    {
+      "path": "selected-worker.asm.txt",
+      "sha256": "6325aa556952d03c841d14f58adb9f1ebbc0a8d395cdad3d194a26307efa5c92",
+      "bytes": 6155
+    },
+    {
+      "path": "selected-worker.c.txt",
+      "sha256": "a7ffbd48de47b8660716457f1951b265180b779424bae6fa651c12a26776b307",
+      "bytes": 1189
+    }
+  ]
+}

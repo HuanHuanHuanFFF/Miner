@@ -1,0 +1,5014 @@
+
+/home/runner/work/_temp/floatlib-r7-public-suite-upstream/.sandbox/layer/upper/ir/R22RuntimeCost3Main.c.o.export:     file format elf64-x86-64
+
+
+Disassembly of section .text.lp_competition_r22CostFloatProductMul:
+
+0000000000000000 <lp_competition_r22CostFloatProductMul>:
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r12
+   7:	push   rbx
+   8:	sub    rsp,0x10
+   c:	mov    ebx,esi
+   e:	mov    eax,edi
+  10:	shr    eax,0x17
+  13:	movzx  r15d,al
+  17:	lea    ecx,[r15-0xff]
+  1e:	mov    ebp,esi
+  20:	shr    ebp,0x17
+  23:	movzx  r12d,bpl
+  27:	cmp    ecx,0xffffff01
+  2d:	ja     74 <lp_competition_r22CostFloatProductMul+0x74>
+  2f:	lea    ecx,[r12+r15*1]
+  33:	cmp    ecx,0x80
+  39:	jb     cd <lp_competition_r22CostFloatProductMul+0xcd>
+  3f:	mov    ecx,edi
+  41:	and    ecx,0x7fffffff
+  47:	lea    edx,[rcx-0x1]
+  4a:	cmp    edx,0xbffffff
+  50:	setb   dl
+  53:	cmp    ecx,0x7f800000
+  59:	setae  cl
+  5c:	mov    r14,rdi
+  5f:	or     cl,dl
+  61:	je     2b9 <lp_competition_r22CostFloatProductMul+0x2b9>
+  67:	call   6c <lp_competition_r22CostFloatProductMul+0x6c>
+			68: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  6c:	movaps xmm1,xmm0
+  6f:	jmp    2e1 <lp_competition_r22CostFloatProductMul+0x2e1>
+  74:	lea    ecx,[r12-0xff]
+  7c:	lea    esi,[r12+r15*1]
+  80:	cmp    ecx,0xffffff01
+  86:	ja     266 <lp_competition_r22CostFloatProductMul+0x266>
+  8c:	cmp    esi,0x80
+  92:	jb     31c <lp_competition_r22CostFloatProductMul+0x31c>
+  98:	mov    ecx,edi
+  9a:	and    ecx,0x7fffffff
+  a0:	lea    edx,[rcx-0x1]
+  a3:	cmp    edx,0xbffffff
+  a9:	setb   dl
+  ac:	cmp    ecx,0x7f800000
+  b2:	setae  cl
+  b5:	mov    r14,rdi
+  b8:	or     cl,dl
+  ba:	je     53c <lp_competition_r22CostFloatProductMul+0x53c>
+  c0:	call   c5 <lp_competition_r22CostFloatProductMul+0xc5>
+			c1: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  c5:	movaps xmm1,xmm0
+  c8:	jmp    564 <lp_competition_r22CostFloatProductMul+0x564>
+  cd:	lea    eax,[rdi+rdi*1]
+  d0:	cmp    eax,0xff000000
+  d5:	setae  al
+  d8:	lea    ecx,[rbx+rbx*1]
+  db:	cmp    ecx,0xff000000
+  e1:	setae  cl
+  e4:	or     cl,al
+  e6:	jne    6d6 <lp_competition_r22CostFloatProductMul+0x6d6>
+  ec:	xor    esi,esi
+  ee:	test   ebx,ebx
+  f0:	setns  sil
+  f4:	mov    eax,ebx
+  f6:	shr    eax,0x1f
+  f9:	test   edi,edi
+  fb:	cmovns esi,eax
+  fe:	and    edi,0x7fffff
+ 104:	and    ebx,0x7fffff
+ 10a:	lea    eax,[rdi+0x800000]
+ 110:	mov    ecx,r15d
+ 113:	dec    rcx
+ 116:	xor    r8d,r8d
+ 119:	test   r15d,r15d
+ 11c:	cmove  eax,edi
+ 11f:	cmove  rcx,r8
+ 123:	lea    edi,[rbx+0x800000]
+ 129:	mov    edx,r12d
+ 12c:	dec    rdx
+ 12f:	test   r12d,r12d
+ 132:	cmove  edi,ebx
+ 135:	cmove  rdx,r8
+ 139:	imul   rdi,rax
+ 13d:	add    rdx,rcx
+ 140:	cmp    rdx,0x7b
+ 144:	jbe    59f <lp_competition_r22CostFloatProductMul+0x59f>
+ 14a:	test   rdi,rdi
+ 14d:	je     8d0 <lp_competition_r22CostFloatProductMul+0x8d0>
+ 153:	xor    eax,eax
+ 155:	mov    rcx,rdi
+ 158:	shr    rcx,0x20
+ 15c:	cmove  rcx,rdi
+ 160:	setne  al
+ 163:	shl    eax,0x5
+ 166:	mov    r8,rcx
+ 169:	shr    r8,0x10
+ 16d:	test   r8,r8
+ 170:	cmove  r8,rcx
+ 174:	lea    rcx,[rax+0x10]
+ 178:	cmove  rcx,rax
+ 17c:	mov    rax,r8
+ 17f:	shr    rax,0x8
+ 183:	test   rax,rax
+ 186:	cmove  rax,r8
+ 18a:	lea    r8,[rcx+0x8]
+ 18e:	cmove  r8,rcx
+ 192:	mov    rcx,rax
+ 195:	shr    rcx,0x4
+ 199:	test   rcx,rcx
+ 19c:	cmove  rcx,rax
+ 1a0:	lea    r9,[r8+0x4]
+ 1a4:	cmove  r9,r8
+ 1a8:	mov    r8,rcx
+ 1ab:	shr    r8,0x2
+ 1af:	test   r8,r8
+ 1b2:	cmove  r8,rcx
+ 1b6:	lea    rax,[r9+0x2]
+ 1ba:	cmove  rax,r9
+ 1be:	cmp    r8,0x2
+ 1c2:	sbb    rax,0xffffffffffffffff
+ 1c6:	lea    r8,[rax+rdx*1]
+ 1ca:	cmp    r8,0xab
+ 1d1:	jbe    86e <lp_competition_r22CostFloatProductMul+0x86e>
+ 1d7:	cmp    rax,0x17
+ 1db:	jb     909 <lp_competition_r22CostFloatProductMul+0x909>
+ 1e1:	mov    rcx,rax
+ 1e4:	add    rcx,0xffffffffffffffe9
+ 1e8:	je     910 <lp_competition_r22CostFloatProductMul+0x910>
+ 1ee:	mov    rdx,rdi
+ 1f1:	shr    rdx,cl
+ 1f4:	mov    r9,0xffffffffffffffff
+ 1fb:	shl    r9,cl
+ 1fe:	not    r9
+ 201:	and    r9,rdi
+ 204:	add    al,0x28
+ 206:	mov    edi,0x1
+ 20b:	mov    ecx,eax
+ 20d:	shl    rdi,cl
+ 210:	cmp    r9,rdi
+ 213:	jb     21e <lp_competition_r22CostFloatProductMul+0x21e>
+ 215:	jbe    b72 <lp_competition_r22CostFloatProductMul+0xb72>
+ 21b:	inc    rdx
+ 21e:	mov    rdi,rdx
+ 221:	cmp    rdi,0x1000000
+ 228:	je     91d <lp_competition_r22CostFloatProductMul+0x91d>
+ 22e:	test   sil,sil
+ 231:	mov    ecx,0x7f800000
+ 236:	mov    eax,0xff800000
+ 23b:	cmove  eax,ecx
+ 23e:	cmp    r8,0x1aa
+ 245:	jae    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ 24b:	add    r8d,0xffffff55
+ 252:	xor    eax,eax
+ 254:	cmp    rdi,0x800000
+ 25b:	jb     952 <lp_competition_r22CostFloatProductMul+0x952>
+ 261:	jmp    94a <lp_competition_r22CostFloatProductMul+0x94a>
+ 266:	lea    ecx,[rsi-0x17d]
+ 26c:	cmp    ecx,0xffffff02
+ 272:	ja     45b <lp_competition_r22CostFloatProductMul+0x45b>
+ 278:	cmp    esi,0x80
+ 27e:	jb     5b6 <lp_competition_r22CostFloatProductMul+0x5b6>
+ 284:	mov    ecx,edi
+ 286:	and    ecx,0x7fffffff
+ 28c:	lea    edx,[rcx-0x1]
+ 28f:	cmp    edx,0xbffffff
+ 295:	setb   dl
+ 298:	cmp    ecx,0x7f800000
+ 29e:	setae  cl
+ 2a1:	mov    r14,rdi
+ 2a4:	or     cl,dl
+ 2a6:	je     7b2 <lp_competition_r22CostFloatProductMul+0x7b2>
+ 2ac:	call   2b1 <lp_competition_r22CostFloatProductMul+0x2b1>
+			2ad: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 2b1:	movaps xmm1,xmm0
+ 2b4:	jmp    7da <lp_competition_r22CostFloatProductMul+0x7da>
+ 2b9:	mov    ecx,edi
+ 2bb:	and    ecx,0x7fffff
+ 2c1:	or     ecx,0x800000
+ 2c7:	cvtsi2ss xmm1,ecx
+ 2cb:	mov    rcx,QWORD PTR [rip+0x0]        # 2d2 <lp_competition_r22CostFloatProductMul+0x2d2>
+			2ce: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 2d2:	mov    rcx,QWORD PTR [rcx]
+ 2d5:	mov    eax,eax
+ 2d7:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+ 2dc:	mulss  xmm1,DWORD PTR [rax+0x8]
+ 2e1:	mov    eax,ebx
+ 2e3:	and    eax,0x7fffffff
+ 2e8:	lea    ecx,[rax-0x1]
+ 2eb:	cmp    ecx,0xbffffff
+ 2f1:	setb   cl
+ 2f4:	cmp    eax,0x7f800000
+ 2f9:	setae  al
+ 2fc:	or     al,cl
+ 2fe:	je     4d9 <lp_competition_r22CostFloatProductMul+0x4d9>
+ 304:	mov    edi,ebx
+ 306:	movss  DWORD PTR [rsp+0xc],xmm1
+ 30c:	call   311 <lp_competition_r22CostFloatProductMul+0x311>
+			30d: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 311:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 317:	jmp    502 <lp_competition_r22CostFloatProductMul+0x502>
+ 31c:	lea    eax,[rdi+rdi*1]
+ 31f:	cmp    eax,0xff000000
+ 324:	setb   al
+ 327:	lea    ecx,[rbx+rbx*1]
+ 32a:	cmp    ecx,0xff000000
+ 330:	setb   cl
+ 333:	test   al,cl
+ 335:	je     6d6 <lp_competition_r22CostFloatProductMul+0x6d6>
+ 33b:	mov    esi,edi
+ 33d:	xor    esi,ebx
+ 33f:	and    edi,0x7fffff
+ 345:	and    ebx,0x7fffff
+ 34b:	or     edi,0x800000
+ 351:	lea    eax,[rbx+0x800000]
+ 357:	mov    ecx,r12d
+ 35a:	dec    rcx
+ 35d:	xor    edx,edx
+ 35f:	test   r12d,r12d
+ 362:	cmove  eax,ebx
+ 365:	cmovne rdx,rcx
+ 369:	mov    ecx,r15d
+ 36c:	imul   rdi,rax
+ 370:	add    rdx,rcx
+ 373:	dec    rdx
+ 376:	cmp    rdx,0x7b
+ 37a:	jbe    80e <lp_competition_r22CostFloatProductMul+0x80e>
+ 380:	test   eax,eax
+ 382:	je     9c2 <lp_competition_r22CostFloatProductMul+0x9c2>
+ 388:	xor    eax,eax
+ 38a:	mov    rcx,rdi
+ 38d:	shr    rcx,0x20
+ 391:	cmove  rcx,rdi
+ 395:	setne  al
+ 398:	shl    eax,0x5
+ 39b:	mov    r8,rcx
+ 39e:	shr    r8,0x10
+ 3a2:	test   r8,r8
+ 3a5:	cmove  r8,rcx
+ 3a9:	lea    rcx,[rax+0x10]
+ 3ad:	cmove  rcx,rax
+ 3b1:	mov    rax,r8
+ 3b4:	shr    rax,0x8
+ 3b8:	test   rax,rax
+ 3bb:	cmove  rax,r8
+ 3bf:	lea    r8,[rcx+0x8]
+ 3c3:	cmove  r8,rcx
+ 3c7:	mov    rcx,rax
+ 3ca:	shr    rcx,0x4
+ 3ce:	test   rcx,rcx
+ 3d1:	cmove  rcx,rax
+ 3d5:	lea    r9,[r8+0x4]
+ 3d9:	cmove  r9,r8
+ 3dd:	mov    r8,rcx
+ 3e0:	shr    r8,0x2
+ 3e4:	test   r8,r8
+ 3e7:	cmove  r8,rcx
+ 3eb:	lea    rax,[r9+0x2]
+ 3ef:	cmove  rax,r9
+ 3f3:	cmp    r8,0x2
+ 3f7:	sbb    rax,0xffffffffffffffff
+ 3fb:	lea    r8,[rax+rdx*1]
+ 3ff:	cmp    r8,0xab
+ 406:	jbe    969 <lp_competition_r22CostFloatProductMul+0x969>
+ 40c:	cmp    rax,0x17
+ 410:	jb     a8b <lp_competition_r22CostFloatProductMul+0xa8b>
+ 416:	mov    rcx,rax
+ 419:	add    rcx,0xffffffffffffffe9
+ 41d:	je     a92 <lp_competition_r22CostFloatProductMul+0xa92>
+ 423:	mov    rdx,rdi
+ 426:	shr    rdx,cl
+ 429:	mov    r9,0xffffffffffffffff
+ 430:	shl    r9,cl
+ 433:	not    r9
+ 436:	and    r9,rdi
+ 439:	add    al,0x28
+ 43b:	mov    edi,0x1
+ 440:	mov    ecx,eax
+ 442:	shl    rdi,cl
+ 445:	cmp    r9,rdi
+ 448:	jb     453 <lp_competition_r22CostFloatProductMul+0x453>
+ 44a:	jbe    b8c <lp_competition_r22CostFloatProductMul+0xb8c>
+ 450:	inc    rdx
+ 453:	mov    rdi,rdx
+ 456:	jmp    a92 <lp_competition_r22CostFloatProductMul+0xa92>
+ 45b:	mov    rax,QWORD PTR [rip+0x0]        # 462 <lp_competition_r22CostFloatProductMul+0x462>
+			45e: R_X86_64_REX_GOTPCRELX	lp_competition_Submission_R22FloatProduct_powNeg23-0x4
+ 462:	mov    ecx,edi
+ 464:	and    ecx,0x7fffff
+ 46a:	or     ecx,0x800000
+ 470:	mov    edx,ebx
+ 472:	and    edx,0x7fffff
+ 478:	cvtsi2ss xmm0,ecx
+ 47c:	or     edx,0x800000
+ 482:	cvtsi2ss xmm1,edx
+ 486:	mulss  xmm1,xmm0
+ 48a:	mulss  xmm1,DWORD PTR [rax]
+ 48e:	movss  xmm0,DWORD PTR [rip+0x0]        # 496 <lp_competition_r22CostFloatProductMul+0x496>
+			492: R_X86_64_PC32	.LCPI0_0-0x4
+ 496:	ucomiss xmm0,xmm1
+ 499:	cvttss2si rax,xmm1
+ 49e:	mov    ecx,0xffffffff
+ 4a3:	cmova  ecx,eax
+ 4a6:	xor    eax,eax
+ 4a8:	xorps  xmm0,xmm0
+ 4ab:	ucomiss xmm1,xmm0
+ 4ae:	cmovae eax,ecx
+ 4b1:	mov    ecx,eax
+ 4b3:	shr    ecx,0x18
+ 4b6:	shr    eax,cl
+ 4b8:	add    esi,ecx
+ 4ba:	shl    esi,0x17
+ 4bd:	xor    ebx,edi
+ 4bf:	and    ebx,0x80000000
+ 4c5:	add    esi,0xc0800000
+ 4cb:	or     esi,ebx
+ 4cd:	add    eax,0xff800000
+ 4d2:	or     eax,esi
+ 4d4:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ 4d9:	mov    eax,ebx
+ 4db:	and    eax,0x7fffff
+ 4e0:	or     eax,0x800000
+ 4e5:	xorps  xmm0,xmm0
+ 4e8:	cvtsi2ss xmm0,eax
+ 4ec:	mov    rax,QWORD PTR [rip+0x0]        # 4f3 <lp_competition_r22CostFloatProductMul+0x4f3>
+			4ef: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 4f3:	mov    rax,QWORD PTR [rax]
+ 4f6:	mov    ecx,ebp
+ 4f8:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 4fd:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 502:	mulss  xmm1,xmm0
+ 506:	ucomiss xmm1,xmm1
+ 509:	jnp    85a <lp_competition_r22CostFloatProductMul+0x85a>
+ 50f:	cmp    r15d,0xff
+ 516:	jne    75a <lp_competition_r22CostFloatProductMul+0x75a>
+ 51c:	mov    rax,r14
+ 51f:	test   eax,0x7fffff
+ 524:	setne  cl
+ 527:	test   eax,0x400000
+ 52c:	sete   al
+ 52f:	test   cl,al
+ 531:	je     75a <lp_competition_r22CostFloatProductMul+0x75a>
+ 537:	jmp    be8 <lp_competition_r22CostFloatProductMul+0xbe8>
+ 53c:	mov    ecx,edi
+ 53e:	and    ecx,0x7fffff
+ 544:	or     ecx,0x800000
+ 54a:	cvtsi2ss xmm1,ecx
+ 54e:	mov    rcx,QWORD PTR [rip+0x0]        # 555 <lp_competition_r22CostFloatProductMul+0x555>
+			551: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 555:	mov    rcx,QWORD PTR [rcx]
+ 558:	mov    eax,eax
+ 55a:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+ 55f:	mulss  xmm1,DWORD PTR [rax+0x8]
+ 564:	mov    eax,ebx
+ 566:	and    eax,0x7fffffff
+ 56b:	lea    ecx,[rax-0x1]
+ 56e:	cmp    ecx,0xbffffff
+ 574:	setb   cl
+ 577:	cmp    eax,0x7f800000
+ 57c:	setae  al
+ 57f:	or     al,cl
+ 581:	je     724 <lp_competition_r22CostFloatProductMul+0x724>
+ 587:	mov    edi,ebx
+ 589:	movss  DWORD PTR [rsp+0xc],xmm1
+ 58f:	call   594 <lp_competition_r22CostFloatProductMul+0x594>
+			590: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 594:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 59a:	jmp    74d <lp_competition_r22CostFloatProductMul+0x74d>
+ 59f:	test   rdi,rdi
+ 5a2:	je     8d0 <lp_competition_r22CostFloatProductMul+0x8d0>
+ 5a8:	cmp    edx,0x56
+ 5ab:	jb     8d0 <lp_competition_r22CostFloatProductMul+0x8d0>
+ 5b1:	jmp    883 <lp_competition_r22CostFloatProductMul+0x883>
+ 5b6:	lea    eax,[rdi+rdi*1]
+ 5b9:	cmp    eax,0xff000000
+ 5be:	setb   al
+ 5c1:	lea    ecx,[rbx+rbx*1]
+ 5c4:	cmp    ecx,0xff000000
+ 5ca:	setb   cl
+ 5cd:	test   al,cl
+ 5cf:	je     6d6 <lp_competition_r22CostFloatProductMul+0x6d6>
+ 5d5:	mov    edx,edi
+ 5d7:	xor    edx,ebx
+ 5d9:	and    edi,0x7fffff
+ 5df:	and    ebx,0x7fffff
+ 5e5:	or     edi,0x800000
+ 5eb:	or     ebx,0x800000
+ 5f1:	imul   rbx,rdi
+ 5f5:	cmp    esi,0x7d
+ 5f8:	jbe    8dc <lp_competition_r22CostFloatProductMul+0x8dc>
+ 5fe:	xor    eax,eax
+ 600:	mov    rcx,rbx
+ 603:	shr    rcx,0x20
+ 607:	cmove  rcx,rbx
+ 60b:	setne  al
+ 60e:	shl    eax,0x5
+ 611:	mov    rdi,rcx
+ 614:	shr    rdi,0x10
+ 618:	test   rdi,rdi
+ 61b:	cmove  rdi,rcx
+ 61f:	lea    rcx,[rax+0x10]
+ 623:	cmove  rcx,rax
+ 627:	mov    rax,rdi
+ 62a:	shr    rax,0x8
+ 62e:	test   rax,rax
+ 631:	cmove  rax,rdi
+ 635:	lea    rdi,[rcx+0x8]
+ 639:	cmove  rdi,rcx
+ 63d:	mov    rcx,rax
+ 640:	shr    rcx,0x4
+ 644:	test   rcx,rcx
+ 647:	cmove  rcx,rax
+ 64b:	lea    r8,[rdi+0x4]
+ 64f:	cmove  r8,rdi
+ 653:	mov    rdi,rcx
+ 656:	shr    rdi,0x2
+ 65a:	test   rdi,rdi
+ 65d:	cmove  rdi,rcx
+ 661:	lea    rax,[r8+0x2]
+ 665:	cmove  rax,r8
+ 669:	cmp    rdi,0x2
+ 66d:	sbb    rax,0xffffffffffffffff
+ 671:	lea    rdi,[rsi+rax*1]
+ 675:	add    rdi,0xfffffffffffffffe
+ 679:	cmp    rdi,0xab
+ 680:	jbe    9cf <lp_competition_r22CostFloatProductMul+0x9cf>
+ 686:	cmp    rax,0x17
+ 68a:	jb     aff <lp_competition_r22CostFloatProductMul+0xaff>
+ 690:	mov    rcx,rax
+ 693:	add    rcx,0xffffffffffffffe9
+ 697:	je     b06 <lp_competition_r22CostFloatProductMul+0xb06>
+ 69d:	mov    rsi,rbx
+ 6a0:	shr    rsi,cl
+ 6a3:	mov    r8,0xffffffffffffffff
+ 6aa:	shl    r8,cl
+ 6ad:	not    r8
+ 6b0:	and    r8,rbx
+ 6b3:	add    al,0x28
+ 6b5:	mov    r9d,0x1
+ 6bb:	mov    ecx,eax
+ 6bd:	shl    r9,cl
+ 6c0:	cmp    r8,r9
+ 6c3:	jb     6ce <lp_competition_r22CostFloatProductMul+0x6ce>
+ 6c5:	jbe    b99 <lp_competition_r22CostFloatProductMul+0xb99>
+ 6cb:	inc    rsi
+ 6ce:	mov    rbx,rsi
+ 6d1:	jmp    b06 <lp_competition_r22CostFloatProductMul+0xb06>
+ 6d6:	mov    eax,edi
+ 6d8:	lea    rsi,[rax*2+0x1]
+ 6e0:	mov    eax,ebx
+ 6e2:	lea    rdx,[rax*2+0x1]
+ 6ea:	lea    rdi,[rip+0x0]        # 6f1 <lp_competition_r22CostFloatProductMul+0x6f1>
+			6ed: R_X86_64_PC32	.rodata.lp_competition_r22CostFloatProductMul___closed__0_value-0x4
+ 6f1:	call   6f6 <lp_competition_r22CostFloatProductMul+0x6f6>
+			6f2: R_X86_64_PLT32	lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_MulBackend_word-0x4
+ 6f6:	mov    rbx,rax
+ 6f9:	test   bl,0x1
+ 6fc:	jne    71a <lp_competition_r22CostFloatProductMul+0x71a>
+ 6fe:	mov    rdi,rbx
+ 701:	call   706 <lp_competition_r22CostFloatProductMul+0x706>
+			702: R_X86_64_PLT32	lean_uint32_of_big_nat-0x4
+ 706:	mov    ecx,DWORD PTR [rbx]
+ 708:	cmp    ecx,0x2
+ 70b:	jl     ba6 <lp_competition_r22CostFloatProductMul+0xba6>
+ 711:	dec    ecx
+ 713:	mov    DWORD PTR [rbx],ecx
+ 715:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ 71a:	shr    rbx,1
+ 71d:	mov    eax,ebx
+ 71f:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ 724:	mov    eax,ebx
+ 726:	and    eax,0x7fffff
+ 72b:	or     eax,0x800000
+ 730:	xorps  xmm0,xmm0
+ 733:	cvtsi2ss xmm0,eax
+ 737:	mov    rax,QWORD PTR [rip+0x0]        # 73e <lp_competition_r22CostFloatProductMul+0x73e>
+			73a: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 73e:	mov    rax,QWORD PTR [rax]
+ 741:	mov    ecx,ebp
+ 743:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 748:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 74d:	mulss  xmm1,xmm0
+ 751:	ucomiss xmm1,xmm1
+ 754:	jnp    85a <lp_competition_r22CostFloatProductMul+0x85a>
+ 75a:	cmp    r12d,0xff
+ 761:	jne    bba <lp_competition_r22CostFloatProductMul+0xbba>
+ 767:	test   ebx,0x7fffff
+ 76d:	setne  al
+ 770:	test   ebx,0x400000
+ 776:	sete   cl
+ 779:	test   al,cl
+ 77b:	jne    7a5 <lp_competition_r22CostFloatProductMul+0x7a5>
+ 77d:	cmp    r15d,0xff
+ 784:	setne  al
+ 787:	test   r14d,0x7fffff
+ 78e:	sete   cl
+ 791:	or     cl,al
+ 793:	je     be8 <lp_competition_r22CostFloatProductMul+0xbe8>
+ 799:	test   ebx,0x7fffff
+ 79f:	je     bd2 <lp_competition_r22CostFloatProductMul+0xbd2>
+ 7a5:	or     ebx,0x400000
+ 7ab:	mov    eax,ebx
+ 7ad:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ 7b2:	mov    ecx,edi
+ 7b4:	and    ecx,0x7fffff
+ 7ba:	or     ecx,0x800000
+ 7c0:	cvtsi2ss xmm1,ecx
+ 7c4:	mov    rcx,QWORD PTR [rip+0x0]        # 7cb <lp_competition_r22CostFloatProductMul+0x7cb>
+			7c7: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 7cb:	mov    rcx,QWORD PTR [rcx]
+ 7ce:	mov    eax,eax
+ 7d0:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+ 7d5:	mulss  xmm1,DWORD PTR [rax+0x8]
+ 7da:	mov    eax,ebx
+ 7dc:	and    eax,0x7fffffff
+ 7e1:	lea    ecx,[rax-0x1]
+ 7e4:	cmp    ecx,0xbffffff
+ 7ea:	setb   cl
+ 7ed:	cmp    eax,0x7f800000
+ 7f2:	setae  al
+ 7f5:	or     al,cl
+ 7f7:	je     824 <lp_competition_r22CostFloatProductMul+0x824>
+ 7f9:	mov    edi,ebx
+ 7fb:	movss  DWORD PTR [rsp+0xc],xmm1
+ 801:	call   806 <lp_competition_r22CostFloatProductMul+0x806>
+			802: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 806:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 80c:	jmp    84d <lp_competition_r22CostFloatProductMul+0x84d>
+ 80e:	test   eax,eax
+ 810:	je     9c2 <lp_competition_r22CostFloatProductMul+0x9c2>
+ 816:	cmp    edx,0x56
+ 819:	jb     9c2 <lp_competition_r22CostFloatProductMul+0x9c2>
+ 81f:	jmp    97e <lp_competition_r22CostFloatProductMul+0x97e>
+ 824:	mov    eax,ebx
+ 826:	and    eax,0x7fffff
+ 82b:	or     eax,0x800000
+ 830:	xorps  xmm0,xmm0
+ 833:	cvtsi2ss xmm0,eax
+ 837:	mov    rax,QWORD PTR [rip+0x0]        # 83e <lp_competition_r22CostFloatProductMul+0x83e>
+			83a: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 83e:	mov    rax,QWORD PTR [rax]
+ 841:	mov    ecx,ebp
+ 843:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 848:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 84d:	mulss  xmm1,xmm0
+ 851:	ucomiss xmm1,xmm1
+ 854:	jp     bd2 <lp_competition_r22CostFloatProductMul+0xbd2>
+ 85a:	movaps xmm0,xmm1
+ 85d:	add    rsp,0x10
+ 861:	pop    rbx
+ 862:	pop    r12
+ 864:	pop    r14
+ 866:	pop    r15
+ 868:	pop    rbp
+ 869:	jmp    86e <lp_competition_r22CostFloatProductMul+0x86e>
+			86a: R_X86_64_PLT32	lean_float32_to_bits-0x4
+ 86e:	cmp    edx,0x95
+ 874:	jb     883 <lp_competition_r22CostFloatProductMul+0x883>
+ 876:	add    dl,0x2b
+ 879:	mov    ecx,edx
+ 87b:	shl    rdi,cl
+ 87e:	mov    rax,rdi
+ 881:	jmp    8ae <lp_competition_r22CostFloatProductMul+0x8ae>
+ 883:	mov    cl,0x15
+ 885:	sub    cl,dl
+ 887:	mov    rax,rdi
+ 88a:	shr    rax,cl
+ 88d:	mov    r8,0xffffffffffffffff
+ 894:	shl    r8,cl
+ 897:	not    r8
+ 89a:	and    r8,rdi
+ 89d:	mov    cl,0x14
+ 89f:	sub    cl,dl
+ 8a1:	mov    edx,0x1
+ 8a6:	shl    rdx,cl
+ 8a9:	cmp    r8,rdx
+ 8ac:	jae    8ea <lp_competition_r22CostFloatProductMul+0x8ea>
+ 8ae:	test   rax,rax
+ 8b1:	je     8d0 <lp_competition_r22CostFloatProductMul+0x8d0>
+ 8b3:	cmp    rax,0x800000
+ 8b9:	jne    8fb <lp_competition_r22CostFloatProductMul+0x8fb>
+ 8bb:	test   sil,sil
+ 8be:	mov    ecx,0x800000
+ 8c3:	mov    eax,0x80800000
+ 8c8:	cmove  eax,ecx
+ 8cb:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ 8d0:	movzx  eax,sil
+ 8d4:	shl    eax,0x1f
+ 8d7:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ 8dc:	cmp    esi,0x58
+ 8df:	jb     a30 <lp_competition_r22CostFloatProductMul+0xa30>
+ 8e5:	jmp    9e2 <lp_competition_r22CostFloatProductMul+0x9e2>
+ 8ea:	ja     8f0 <lp_competition_r22CostFloatProductMul+0x8f0>
+ 8ec:	test   al,0x1
+ 8ee:	je     8ae <lp_competition_r22CostFloatProductMul+0x8ae>
+ 8f0:	inc    rax
+ 8f3:	cmp    rax,0x800000
+ 8f9:	je     8bb <lp_competition_r22CostFloatProductMul+0x8bb>
+ 8fb:	movzx  ecx,sil
+ 8ff:	shl    ecx,0x1f
+ 902:	and    eax,0x7fffff
+ 907:	jmp    962 <lp_competition_r22CostFloatProductMul+0x962>
+ 909:	mov    cl,0x17
+ 90b:	sub    cl,al
+ 90d:	shl    rdi,cl
+ 910:	cmp    rdi,0x1000000
+ 917:	jne    22e <lp_competition_r22CostFloatProductMul+0x22e>
+ 91d:	lea    rcx,[r8+0x1]
+ 921:	test   sil,sil
+ 924:	mov    edx,0x7f800000
+ 929:	mov    eax,0xff800000
+ 92e:	cmove  eax,edx
+ 931:	cmp    rcx,0x1a9
+ 938:	ja     b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ 93e:	add    r8d,0xffffff56
+ 945:	mov    edi,0x800000
+ 94a:	and    edi,0x7fffff
+ 950:	mov    eax,edi
+ 952:	movzx  ecx,sil
+ 956:	shl    ecx,0x1f
+ 959:	or     ecx,eax
+ 95b:	movzx  eax,r8b
+ 95f:	shl    eax,0x17
+ 962:	or     eax,ecx
+ 964:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ 969:	cmp    edx,0x95
+ 96f:	jb     97e <lp_competition_r22CostFloatProductMul+0x97e>
+ 971:	add    dl,0x2b
+ 974:	mov    ecx,edx
+ 976:	shl    rdi,cl
+ 979:	mov    rax,rdi
+ 97c:	jmp    9ad <lp_competition_r22CostFloatProductMul+0x9ad>
+ 97e:	mov    cl,0x15
+ 980:	sub    cl,dl
+ 982:	mov    rax,rdi
+ 985:	shr    rax,cl
+ 988:	mov    r8,0xffffffffffffffff
+ 98f:	shl    r8,cl
+ 992:	not    r8
+ 995:	and    r8,rdi
+ 998:	mov    cl,0x14
+ 99a:	sub    cl,dl
+ 99c:	mov    edx,0x1
+ 9a1:	shl    rdx,cl
+ 9a4:	cmp    r8,rdx
+ 9a7:	jae    a3d <lp_competition_r22CostFloatProductMul+0xa3d>
+ 9ad:	test   rax,rax
+ 9b0:	je     9c2 <lp_competition_r22CostFloatProductMul+0x9c2>
+ 9b2:	cmp    rax,0x800000
+ 9b8:	jne    a56 <lp_competition_r22CostFloatProductMul+0xa56>
+ 9be:	test   esi,esi
+ 9c0:	jmp    a1e <lp_competition_r22CostFloatProductMul+0xa1e>
+ 9c2:	and    esi,0x80000000
+ 9c8:	mov    eax,esi
+ 9ca:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ 9cf:	cmp    esi,0x97
+ 9d5:	jb     9e2 <lp_competition_r22CostFloatProductMul+0x9e2>
+ 9d7:	lea    ecx,[rsi+0x29]
+ 9da:	shl    rbx,cl
+ 9dd:	mov    rax,rbx
+ 9e0:	jmp    a0f <lp_competition_r22CostFloatProductMul+0xa0f>
+ 9e2:	mov    cl,0x17
+ 9e4:	sub    cl,sil
+ 9e7:	mov    rax,rbx
+ 9ea:	shr    rax,cl
+ 9ed:	mov    rdi,0xffffffffffffffff
+ 9f4:	shl    rdi,cl
+ 9f7:	not    rdi
+ 9fa:	and    rdi,rbx
+ 9fd:	mov    cl,0x16
+ 9ff:	sub    cl,sil
+ a02:	mov    esi,0x1
+ a07:	shl    rsi,cl
+ a0a:	cmp    rdi,rsi
+ a0d:	jae    a68 <lp_competition_r22CostFloatProductMul+0xa68>
+ a0f:	test   rax,rax
+ a12:	je     a30 <lp_competition_r22CostFloatProductMul+0xa30>
+ a14:	cmp    rax,0x800000
+ a1a:	jne    a79 <lp_competition_r22CostFloatProductMul+0xa79>
+ a1c:	test   edx,edx
+ a1e:	mov    ecx,0x800000
+ a23:	mov    eax,0x80800000
+ a28:	cmovns eax,ecx
+ a2b:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ a30:	and    edx,0x80000000
+ a36:	mov    eax,edx
+ a38:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ a3d:	ja     a47 <lp_competition_r22CostFloatProductMul+0xa47>
+ a3f:	test   al,0x1
+ a41:	je     9ad <lp_competition_r22CostFloatProductMul+0x9ad>
+ a47:	inc    rax
+ a4a:	cmp    rax,0x800000
+ a50:	je     9be <lp_competition_r22CostFloatProductMul+0x9be>
+ a56:	and    esi,0x80000000
+ a5c:	and    eax,0x7fffff
+ a61:	or     eax,esi
+ a63:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ a68:	ja     a6e <lp_competition_r22CostFloatProductMul+0xa6e>
+ a6a:	test   al,0x1
+ a6c:	je     a0f <lp_competition_r22CostFloatProductMul+0xa0f>
+ a6e:	inc    rax
+ a71:	cmp    rax,0x800000
+ a77:	je     a1c <lp_competition_r22CostFloatProductMul+0xa1c>
+ a79:	and    edx,0x80000000
+ a7f:	and    eax,0x7fffff
+ a84:	or     eax,edx
+ a86:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ a8b:	mov    cl,0x17
+ a8d:	sub    cl,al
+ a8f:	shl    rdi,cl
+ a92:	test   esi,esi
+ a94:	mov    ecx,0x7f800000
+ a99:	mov    eax,0xff800000
+ a9e:	cmovns eax,ecx
+ aa1:	cmp    rdi,0x1000000
+ aa8:	jne    ac5 <lp_competition_r22CostFloatProductMul+0xac5>
+ aaa:	cmp    r8,0x1a8
+ ab1:	jg     b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ ab7:	add    r8d,0xffffff56
+ abe:	mov    edi,0x800000
+ ac3:	jmp    ae4 <lp_competition_r22CostFloatProductMul+0xae4>
+ ac5:	cmp    r8,0x1aa
+ acc:	jae    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ ad2:	add    r8d,0xffffff55
+ ad9:	xor    eax,eax
+ adb:	cmp    rdi,0x800000
+ ae2:	jb     aec <lp_competition_r22CostFloatProductMul+0xaec>
+ ae4:	and    edi,0x7fffff
+ aea:	mov    eax,edi
+ aec:	and    esi,0x80000000
+ af2:	or     esi,eax
+ af4:	movzx  eax,r8b
+ af8:	shl    eax,0x17
+ afb:	or     eax,esi
+ afd:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ aff:	mov    cl,0x17
+ b01:	sub    cl,al
+ b03:	shl    rbx,cl
+ b06:	test   edx,edx
+ b08:	mov    ecx,0x7f800000
+ b0d:	mov    eax,0xff800000
+ b12:	cmovns eax,ecx
+ b15:	cmp    rbx,0x1000000
+ b1c:	jne    b34 <lp_competition_r22CostFloatProductMul+0xb34>
+ b1e:	cmp    rdi,0x1a8
+ b25:	ja     b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ b27:	add    edi,0xffffff56
+ b2d:	mov    ebx,0x800000
+ b32:	jmp    b4e <lp_competition_r22CostFloatProductMul+0xb4e>
+ b34:	cmp    rdi,0x1aa
+ b3b:	jae    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ b3d:	add    edi,0xffffff55
+ b43:	xor    eax,eax
+ b45:	cmp    rbx,0x800000
+ b4c:	jb     b56 <lp_competition_r22CostFloatProductMul+0xb56>
+ b4e:	and    ebx,0x7fffff
+ b54:	mov    eax,ebx
+ b56:	and    edx,0x80000000
+ b5c:	or     edx,eax
+ b5e:	shl    edi,0x17
+ b61:	or     edi,edx
+ b63:	mov    eax,edi
+ b65:	add    rsp,0x10
+ b69:	pop    rbx
+ b6a:	pop    r12
+ b6c:	pop    r14
+ b6e:	pop    r15
+ b70:	pop    rbp
+ b71:	ret
+ b72:	mov    edi,edx
+ b74:	and    edi,0x1
+ b77:	add    rdi,rdx
+ b7a:	cmp    rdi,0x1000000
+ b81:	je     91d <lp_competition_r22CostFloatProductMul+0x91d>
+ b87:	jmp    22e <lp_competition_r22CostFloatProductMul+0x22e>
+ b8c:	mov    edi,edx
+ b8e:	and    edi,0x1
+ b91:	add    rdi,rdx
+ b94:	jmp    a92 <lp_competition_r22CostFloatProductMul+0xa92>
+ b99:	mov    ebx,esi
+ b9b:	and    ebx,0x1
+ b9e:	add    rbx,rsi
+ ba1:	jmp    b06 <lp_competition_r22CostFloatProductMul+0xb06>
+ ba6:	mov    r14,rax
+ ba9:	test   ecx,ecx
+ bab:	je     bb5 <lp_competition_r22CostFloatProductMul+0xbb5>
+ bad:	mov    rdi,rbx
+ bb0:	call   bb5 <lp_competition_r22CostFloatProductMul+0xbb5>
+			bb1: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ bb5:	mov    rax,r14
+ bb8:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+ bba:	cmp    r15d,0xff
+ bc1:	setne  al
+ bc4:	test   r14d,0x7fffff
+ bcb:	sete   cl
+ bce:	or     cl,al
+ bd0:	je     be8 <lp_competition_r22CostFloatProductMul+0xbe8>
+ bd2:	mov    edi,r14d
+ bd5:	mov    esi,ebx
+ bd7:	add    rsp,0x10
+ bdb:	pop    rbx
+ bdc:	pop    r12
+ bde:	pop    r14
+ be0:	pop    r15
+ be2:	pop    rbp
+ be3:	jmp    be8 <lp_competition_r22CostFloatProductMul+0xbe8>
+			be4: R_X86_64_PLT32	lp_competition_Submission_FastMul_mul-0x4
+ be8:	or     r14d,0x400000
+ bef:	mov    eax,r14d
+ bf2:	jmp    b65 <lp_competition_r22CostFloatProductMul+0xb65>
+
+Disassembly of section .text.lp_competition_r22CostFloatProductMul___boxed:
+
+0000000000000000 <lp_competition_r22CostFloatProductMul___boxed>:
+   0:	push   r14
+   2:	push   rbx
+   3:	push   rax
+   4:	test   dil,0x1
+   8:	jne    15 <lp_competition_r22CostFloatProductMul___boxed+0x15>
+   a:	mov    eax,DWORD PTR [rdi]
+   c:	cmp    eax,0x2
+   f:	jl     43 <lp_competition_r22CostFloatProductMul___boxed+0x43>
+  11:	dec    eax
+  13:	mov    DWORD PTR [rdi],eax
+  15:	test   sil,0x1
+  19:	jne    26 <lp_competition_r22CostFloatProductMul___boxed+0x26>
+  1b:	mov    eax,DWORD PTR [rsi]
+  1d:	cmp    eax,0x2
+  20:	jl     5a <lp_competition_r22CostFloatProductMul___boxed+0x5a>
+  22:	dec    eax
+  24:	mov    DWORD PTR [rsi],eax
+  26:	shr    rsi,1
+  29:	shr    rdi,1
+  2c:	call   31 <lp_competition_r22CostFloatProductMul___boxed+0x31>
+			2d: R_X86_64_PLT32	lp_competition_r22CostFloatProductMul-0x4
+  31:	mov    eax,eax
+  33:	lea    rax,[rax*2+0x1]
+  3b:	add    rsp,0x8
+  3f:	pop    rbx
+  40:	pop    r14
+  42:	ret
+  43:	test   eax,eax
+  45:	je     15 <lp_competition_r22CostFloatProductMul___boxed+0x15>
+  47:	mov    rbx,rdi
+  4a:	mov    r14,rsi
+  4d:	call   52 <lp_competition_r22CostFloatProductMul___boxed+0x52>
+			4e: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  52:	mov    rdi,rbx
+  55:	mov    rsi,r14
+  58:	jmp    15 <lp_competition_r22CostFloatProductMul___boxed+0x15>
+  5a:	test   eax,eax
+  5c:	je     26 <lp_competition_r22CostFloatProductMul___boxed+0x26>
+  5e:	mov    rbx,rdi
+  61:	mov    rdi,rsi
+  64:	mov    r14,rsi
+  67:	call   6c <lp_competition_r22CostFloatProductMul___boxed+0x6c>
+			68: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  6c:	mov    rdi,rbx
+  6f:	mov    rsi,r14
+  72:	jmp    26 <lp_competition_r22CostFloatProductMul___boxed+0x26>
+
+Disassembly of section .text.lp_competition_r22CostSameExponentAdd:
+
+0000000000000000 <lp_competition_r22CostSameExponentAdd>:
+   0:	push   rbp
+   1:	push   r14
+   3:	push   rbx
+   4:	sub    rsp,0x10
+   8:	mov    ebx,esi
+   a:	mov    ebp,edi
+   c:	mov    eax,esi
+   e:	xor    eax,edi
+  10:	cmp    eax,0x7fffff
+  15:	ja     29 <lp_competition_r22CostSameExponentAdd+0x29>
+  17:	mov    eax,ebp
+  19:	and    eax,0x7f800000
+  1e:	cmp    eax,0x7f800000
+  23:	jne    f6 <lp_competition_r22CostSameExponentAdd+0xf6>
+  29:	mov    eax,ebp
+  2b:	and    eax,0x7fffffff
+  30:	lea    ecx,[rax-0x1]
+  33:	cmp    ecx,0xbffffff
+  39:	setb   cl
+  3c:	cmp    eax,0x7f800000
+  41:	setae  al
+  44:	or     al,cl
+  46:	je     54 <lp_competition_r22CostSameExponentAdd+0x54>
+  48:	mov    edi,ebp
+  4a:	call   4f <lp_competition_r22CostSameExponentAdd+0x4f>
+			4b: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  4f:	movaps xmm1,xmm0
+  52:	jmp    7d <lp_competition_r22CostSameExponentAdd+0x7d>
+  54:	mov    eax,ebp
+  56:	and    eax,0x7fffff
+  5b:	or     eax,0x800000
+  60:	cvtsi2ss xmm1,eax
+  64:	mov    rax,QWORD PTR [rip+0x0]        # 6b <lp_competition_r22CostSameExponentAdd+0x6b>
+			67: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  6b:	mov    rax,QWORD PTR [rax]
+  6e:	mov    ecx,ebp
+  70:	shr    ecx,0x17
+  73:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  78:	mulss  xmm1,DWORD PTR [rax+0x8]
+  7d:	mov    eax,ebx
+  7f:	and    eax,0x7fffffff
+  84:	lea    ecx,[rax-0x1]
+  87:	cmp    ecx,0xbffffff
+  8d:	setb   cl
+  90:	cmp    eax,0x7f800000
+  95:	setae  al
+  98:	or     al,cl
+  9a:	je     b1 <lp_competition_r22CostSameExponentAdd+0xb1>
+  9c:	mov    edi,ebx
+  9e:	movss  DWORD PTR [rsp+0xc],xmm1
+  a4:	call   a9 <lp_competition_r22CostSameExponentAdd+0xa9>
+			a5: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  a9:	movss  xmm1,DWORD PTR [rsp+0xc]
+  af:	jmp    dd <lp_competition_r22CostSameExponentAdd+0xdd>
+  b1:	mov    eax,ebx
+  b3:	and    eax,0x7fffff
+  b8:	or     eax,0x800000
+  bd:	xorps  xmm0,xmm0
+  c0:	cvtsi2ss xmm0,eax
+  c4:	mov    rax,QWORD PTR [rip+0x0]        # cb <lp_competition_r22CostSameExponentAdd+0xcb>
+			c7: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  cb:	mov    rax,QWORD PTR [rax]
+  ce:	mov    ecx,ebx
+  d0:	shr    ecx,0x17
+  d3:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  d8:	mulss  xmm0,DWORD PTR [rax+0x8]
+  dd:	addss  xmm1,xmm0
+  e1:	ucomiss xmm1,xmm1
+  e4:	jp     13f <lp_competition_r22CostSameExponentAdd+0x13f>
+  e6:	movaps xmm0,xmm1
+  e9:	add    rsp,0x10
+  ed:	pop    rbx
+  ee:	pop    r14
+  f0:	pop    rbp
+  f1:	jmp    f6 <lp_competition_r22CostSameExponentAdd+0xf6>
+			f2: R_X86_64_PLT32	lean_float32_to_bits-0x4
+  f6:	mov    ecx,ebp
+  f8:	and    ecx,0x7fffff
+  fe:	and    ebx,0x7fffff
+ 104:	add    ebx,ecx
+ 106:	and    ebp,0x80000000
+ 10c:	test   eax,eax
+ 10e:	je     132 <lp_competition_r22CostSameExponentAdd+0x132>
+ 110:	cmp    eax,0x7f000000
+ 115:	jne    121 <lp_competition_r22CostSameExponentAdd+0x121>
+ 117:	or     ebp,0x7f800000
+ 11d:	mov    ebx,ebp
+ 11f:	jmp    134 <lp_competition_r22CostSameExponentAdd+0x134>
+ 121:	bt     ebx,0x1
+ 125:	adc    ebx,0x0
+ 128:	shr    ebx,1
+ 12a:	add    ebx,eax
+ 12c:	add    ebx,0x800000
+ 132:	or     ebx,ebp
+ 134:	mov    eax,ebx
+ 136:	add    rsp,0x10
+ 13a:	pop    rbx
+ 13b:	pop    r14
+ 13d:	pop    rbp
+ 13e:	ret
+ 13f:	mov    eax,ebp
+ 141:	and    eax,0x7f800000
+ 146:	cmp    eax,0x7f800000
+ 14b:	jne    167 <lp_competition_r22CostSameExponentAdd+0x167>
+ 14d:	test   ebp,0x7fffff
+ 153:	setne  cl
+ 156:	test   ebp,0x400000
+ 15c:	sete   dl
+ 15f:	test   cl,dl
+ 161:	jne    1ff <lp_competition_r22CostSameExponentAdd+0x1ff>
+ 167:	mov    ecx,ebx
+ 169:	and    ecx,0x7f800000
+ 16f:	cmp    ecx,0x7f800000
+ 175:	jne    18f <lp_competition_r22CostSameExponentAdd+0x18f>
+ 177:	test   ebx,0x7fffff
+ 17d:	setne  dl
+ 180:	test   ebx,0x400000
+ 186:	sete   sil
+ 18a:	test   dl,sil
+ 18d:	jne    20c <lp_competition_r22CostSameExponentAdd+0x20c>
+ 18f:	cmp    eax,0x7f800000
+ 194:	setne  al
+ 197:	test   ebp,0x7fffff
+ 19d:	sete   dl
+ 1a0:	or     dl,al
+ 1a2:	je     1ff <lp_competition_r22CostSameExponentAdd+0x1ff>
+ 1a4:	cmp    ecx,0x7f800000
+ 1aa:	setne  al
+ 1ad:	test   ebx,0x7fffff
+ 1b3:	sete   cl
+ 1b6:	or     cl,al
+ 1b8:	je     20c <lp_competition_r22CostSameExponentAdd+0x20c>
+ 1ba:	mov    eax,ebp
+ 1bc:	lea    rsi,[rax*2+0x1]
+ 1c4:	mov    eax,ebx
+ 1c6:	lea    rdx,[rax*2+0x1]
+ 1ce:	lea    rdi,[rip+0x0]        # 1d5 <lp_competition_r22CostSameExponentAdd+0x1d5>
+			1d1: R_X86_64_PC32	.rodata.lp_competition_r22CostFloatProductMul___closed__0_value-0x4
+ 1d5:	call   1da <lp_competition_r22CostSameExponentAdd+0x1da>
+			1d6: R_X86_64_PLT32	lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_AddBackend_word-0x4
+ 1da:	mov    r14,rax
+ 1dd:	test   r14b,0x1
+ 1e1:	jne    217 <lp_competition_r22CostSameExponentAdd+0x217>
+ 1e3:	mov    rdi,r14
+ 1e6:	call   1eb <lp_competition_r22CostSameExponentAdd+0x1eb>
+			1e7: R_X86_64_PLT32	lean_uint32_of_big_nat-0x4
+ 1eb:	mov    ebx,eax
+ 1ed:	mov    eax,DWORD PTR [r14]
+ 1f0:	cmp    eax,0x2
+ 1f3:	jl     222 <lp_competition_r22CostSameExponentAdd+0x222>
+ 1f5:	dec    eax
+ 1f7:	mov    DWORD PTR [r14],eax
+ 1fa:	jmp    134 <lp_competition_r22CostSameExponentAdd+0x134>
+ 1ff:	or     ebp,0x400000
+ 205:	mov    ebx,ebp
+ 207:	jmp    134 <lp_competition_r22CostSameExponentAdd+0x134>
+ 20c:	or     ebx,0x400000
+ 212:	jmp    134 <lp_competition_r22CostSameExponentAdd+0x134>
+ 217:	shr    r14,1
+ 21a:	mov    ebx,r14d
+ 21d:	jmp    134 <lp_competition_r22CostSameExponentAdd+0x134>
+ 222:	test   eax,eax
+ 224:	je     134 <lp_competition_r22CostSameExponentAdd+0x134>
+ 22a:	mov    rdi,r14
+ 22d:	call   232 <lp_competition_r22CostSameExponentAdd+0x232>
+			22e: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 232:	jmp    134 <lp_competition_r22CostSameExponentAdd+0x134>
+
+Disassembly of section .text.lp_competition_r22CostSameExponentAdd___boxed:
+
+0000000000000000 <lp_competition_r22CostSameExponentAdd___boxed>:
+   0:	push   r14
+   2:	push   rbx
+   3:	push   rax
+   4:	test   dil,0x1
+   8:	jne    15 <lp_competition_r22CostSameExponentAdd___boxed+0x15>
+   a:	mov    eax,DWORD PTR [rdi]
+   c:	cmp    eax,0x2
+   f:	jl     43 <lp_competition_r22CostSameExponentAdd___boxed+0x43>
+  11:	dec    eax
+  13:	mov    DWORD PTR [rdi],eax
+  15:	test   sil,0x1
+  19:	jne    26 <lp_competition_r22CostSameExponentAdd___boxed+0x26>
+  1b:	mov    eax,DWORD PTR [rsi]
+  1d:	cmp    eax,0x2
+  20:	jl     5a <lp_competition_r22CostSameExponentAdd___boxed+0x5a>
+  22:	dec    eax
+  24:	mov    DWORD PTR [rsi],eax
+  26:	shr    rsi,1
+  29:	shr    rdi,1
+  2c:	call   31 <lp_competition_r22CostSameExponentAdd___boxed+0x31>
+			2d: R_X86_64_PLT32	lp_competition_r22CostSameExponentAdd-0x4
+  31:	mov    eax,eax
+  33:	lea    rax,[rax*2+0x1]
+  3b:	add    rsp,0x8
+  3f:	pop    rbx
+  40:	pop    r14
+  42:	ret
+  43:	test   eax,eax
+  45:	je     15 <lp_competition_r22CostSameExponentAdd___boxed+0x15>
+  47:	mov    rbx,rdi
+  4a:	mov    r14,rsi
+  4d:	call   52 <lp_competition_r22CostSameExponentAdd___boxed+0x52>
+			4e: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  52:	mov    rdi,rbx
+  55:	mov    rsi,r14
+  58:	jmp    15 <lp_competition_r22CostSameExponentAdd___boxed+0x15>
+  5a:	test   eax,eax
+  5c:	je     26 <lp_competition_r22CostSameExponentAdd___boxed+0x26>
+  5e:	mov    rbx,rdi
+  61:	mov    rdi,rsi
+  64:	mov    r14,rsi
+  67:	call   6c <lp_competition_r22CostSameExponentAdd___boxed+0x6c>
+			68: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  6c:	mov    rdi,rbx
+  6f:	mov    rsi,r14
+  72:	jmp    26 <lp_competition_r22CostSameExponentAdd___boxed+0x26>
+
+Disassembly of section .text.lp_competition_main___lam__0:
+
+0000000000000000 <lp_competition_main___lam__0>:
+   0:	push   rbp
+   1:	push   r14
+   3:	push   rbx
+   4:	sub    rsp,0x10
+   8:	mov    ebx,esi
+   a:	mov    ebp,edi
+   c:	mov    eax,esi
+   e:	xor    eax,edi
+  10:	cmp    eax,0x7fffff
+  15:	ja     29 <lp_competition_main___lam__0+0x29>
+  17:	mov    eax,ebp
+  19:	and    eax,0x7f800000
+  1e:	cmp    eax,0x7f800000
+  23:	jne    f6 <lp_competition_main___lam__0+0xf6>
+  29:	mov    eax,ebp
+  2b:	and    eax,0x7fffffff
+  30:	lea    ecx,[rax-0x1]
+  33:	cmp    ecx,0xbffffff
+  39:	setb   cl
+  3c:	cmp    eax,0x7f800000
+  41:	setae  al
+  44:	or     al,cl
+  46:	je     54 <lp_competition_main___lam__0+0x54>
+  48:	mov    edi,ebp
+  4a:	call   4f <lp_competition_main___lam__0+0x4f>
+			4b: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  4f:	movaps xmm1,xmm0
+  52:	jmp    7d <lp_competition_main___lam__0+0x7d>
+  54:	mov    eax,ebp
+  56:	and    eax,0x7fffff
+  5b:	or     eax,0x800000
+  60:	cvtsi2ss xmm1,eax
+  64:	mov    rax,QWORD PTR [rip+0x0]        # 6b <lp_competition_main___lam__0+0x6b>
+			67: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  6b:	mov    rax,QWORD PTR [rax]
+  6e:	mov    ecx,ebp
+  70:	shr    ecx,0x17
+  73:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  78:	mulss  xmm1,DWORD PTR [rax+0x8]
+  7d:	mov    eax,ebx
+  7f:	and    eax,0x7fffffff
+  84:	lea    ecx,[rax-0x1]
+  87:	cmp    ecx,0xbffffff
+  8d:	setb   cl
+  90:	cmp    eax,0x7f800000
+  95:	setae  al
+  98:	or     al,cl
+  9a:	je     b1 <lp_competition_main___lam__0+0xb1>
+  9c:	mov    edi,ebx
+  9e:	movss  DWORD PTR [rsp+0xc],xmm1
+  a4:	call   a9 <lp_competition_main___lam__0+0xa9>
+			a5: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  a9:	movss  xmm1,DWORD PTR [rsp+0xc]
+  af:	jmp    dd <lp_competition_main___lam__0+0xdd>
+  b1:	mov    eax,ebx
+  b3:	and    eax,0x7fffff
+  b8:	or     eax,0x800000
+  bd:	xorps  xmm0,xmm0
+  c0:	cvtsi2ss xmm0,eax
+  c4:	mov    rax,QWORD PTR [rip+0x0]        # cb <lp_competition_main___lam__0+0xcb>
+			c7: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  cb:	mov    rax,QWORD PTR [rax]
+  ce:	mov    ecx,ebx
+  d0:	shr    ecx,0x17
+  d3:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  d8:	mulss  xmm0,DWORD PTR [rax+0x8]
+  dd:	addss  xmm1,xmm0
+  e1:	ucomiss xmm1,xmm1
+  e4:	jp     13f <lp_competition_main___lam__0+0x13f>
+  e6:	movaps xmm0,xmm1
+  e9:	add    rsp,0x10
+  ed:	pop    rbx
+  ee:	pop    r14
+  f0:	pop    rbp
+  f1:	jmp    f6 <lp_competition_main___lam__0+0xf6>
+			f2: R_X86_64_PLT32	lean_float32_to_bits-0x4
+  f6:	mov    ecx,ebp
+  f8:	and    ecx,0x7fffff
+  fe:	and    ebx,0x7fffff
+ 104:	add    ebx,ecx
+ 106:	and    ebp,0x80000000
+ 10c:	test   eax,eax
+ 10e:	je     132 <lp_competition_main___lam__0+0x132>
+ 110:	cmp    eax,0x7f000000
+ 115:	jne    121 <lp_competition_main___lam__0+0x121>
+ 117:	or     ebp,0x7f800000
+ 11d:	mov    ebx,ebp
+ 11f:	jmp    134 <lp_competition_main___lam__0+0x134>
+ 121:	bt     ebx,0x1
+ 125:	adc    ebx,0x0
+ 128:	shr    ebx,1
+ 12a:	add    ebx,eax
+ 12c:	add    ebx,0x800000
+ 132:	or     ebx,ebp
+ 134:	mov    eax,ebx
+ 136:	add    rsp,0x10
+ 13a:	pop    rbx
+ 13b:	pop    r14
+ 13d:	pop    rbp
+ 13e:	ret
+ 13f:	mov    eax,ebp
+ 141:	and    eax,0x7f800000
+ 146:	cmp    eax,0x7f800000
+ 14b:	jne    167 <lp_competition_main___lam__0+0x167>
+ 14d:	test   ebp,0x7fffff
+ 153:	setne  cl
+ 156:	test   ebp,0x400000
+ 15c:	sete   dl
+ 15f:	test   cl,dl
+ 161:	jne    1f8 <lp_competition_main___lam__0+0x1f8>
+ 167:	mov    ecx,ebx
+ 169:	and    ecx,0x7f800000
+ 16f:	cmp    ecx,0x7f800000
+ 175:	jne    18f <lp_competition_main___lam__0+0x18f>
+ 177:	test   ebx,0x7fffff
+ 17d:	setne  dl
+ 180:	test   ebx,0x400000
+ 186:	sete   sil
+ 18a:	test   dl,sil
+ 18d:	jne    205 <lp_competition_main___lam__0+0x205>
+ 18f:	cmp    eax,0x7f800000
+ 194:	setne  al
+ 197:	test   ebp,0x7fffff
+ 19d:	sete   dl
+ 1a0:	or     dl,al
+ 1a2:	je     1f8 <lp_competition_main___lam__0+0x1f8>
+ 1a4:	cmp    ecx,0x7f800000
+ 1aa:	setne  al
+ 1ad:	test   ebx,0x7fffff
+ 1b3:	sete   cl
+ 1b6:	or     cl,al
+ 1b8:	je     205 <lp_competition_main___lam__0+0x205>
+ 1ba:	mov    eax,ebp
+ 1bc:	lea    rdi,[rax*2+0x1]
+ 1c4:	mov    eax,ebx
+ 1c6:	lea    rsi,[rax*2+0x1]
+ 1ce:	call   1d3 <lp_competition_main___lam__0+0x1d3>
+			1cf: R_X86_64_PLT32	lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_AddBackend_word___at___00FloatLib_Floats_Formats_BinaryInterchange_Configured_Plan_softwareAdd32Certified_spec__1-0x4
+ 1d3:	mov    r14,rax
+ 1d6:	test   r14b,0x1
+ 1da:	jne    210 <lp_competition_main___lam__0+0x210>
+ 1dc:	mov    rdi,r14
+ 1df:	call   1e4 <lp_competition_main___lam__0+0x1e4>
+			1e0: R_X86_64_PLT32	lean_uint32_of_big_nat-0x4
+ 1e4:	mov    ebx,eax
+ 1e6:	mov    eax,DWORD PTR [r14]
+ 1e9:	cmp    eax,0x2
+ 1ec:	jl     21b <lp_competition_main___lam__0+0x21b>
+ 1ee:	dec    eax
+ 1f0:	mov    DWORD PTR [r14],eax
+ 1f3:	jmp    134 <lp_competition_main___lam__0+0x134>
+ 1f8:	or     ebp,0x400000
+ 1fe:	mov    ebx,ebp
+ 200:	jmp    134 <lp_competition_main___lam__0+0x134>
+ 205:	or     ebx,0x400000
+ 20b:	jmp    134 <lp_competition_main___lam__0+0x134>
+ 210:	shr    r14,1
+ 213:	mov    ebx,r14d
+ 216:	jmp    134 <lp_competition_main___lam__0+0x134>
+ 21b:	test   eax,eax
+ 21d:	je     134 <lp_competition_main___lam__0+0x134>
+ 223:	mov    rdi,r14
+ 226:	call   22b <lp_competition_main___lam__0+0x22b>
+			227: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 22b:	jmp    134 <lp_competition_main___lam__0+0x134>
+
+Disassembly of section .text.lp_competition_main___lam__0___boxed:
+
+0000000000000000 <lp_competition_main___lam__0___boxed>:
+   0:	push   r14
+   2:	push   rbx
+   3:	push   rax
+   4:	test   dil,0x1
+   8:	jne    15 <lp_competition_main___lam__0___boxed+0x15>
+   a:	mov    eax,DWORD PTR [rdi]
+   c:	cmp    eax,0x2
+   f:	jl     43 <lp_competition_main___lam__0___boxed+0x43>
+  11:	dec    eax
+  13:	mov    DWORD PTR [rdi],eax
+  15:	test   sil,0x1
+  19:	jne    26 <lp_competition_main___lam__0___boxed+0x26>
+  1b:	mov    eax,DWORD PTR [rsi]
+  1d:	cmp    eax,0x2
+  20:	jl     5a <lp_competition_main___lam__0___boxed+0x5a>
+  22:	dec    eax
+  24:	mov    DWORD PTR [rsi],eax
+  26:	shr    rsi,1
+  29:	shr    rdi,1
+  2c:	call   31 <lp_competition_main___lam__0___boxed+0x31>
+			2d: R_X86_64_PLT32	lp_competition_main___lam__0-0x4
+  31:	mov    eax,eax
+  33:	lea    rax,[rax*2+0x1]
+  3b:	add    rsp,0x8
+  3f:	pop    rbx
+  40:	pop    r14
+  42:	ret
+  43:	test   eax,eax
+  45:	je     15 <lp_competition_main___lam__0___boxed+0x15>
+  47:	mov    rbx,rdi
+  4a:	mov    r14,rsi
+  4d:	call   52 <lp_competition_main___lam__0___boxed+0x52>
+			4e: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  52:	mov    rdi,rbx
+  55:	mov    rsi,r14
+  58:	jmp    15 <lp_competition_main___lam__0___boxed+0x15>
+  5a:	test   eax,eax
+  5c:	je     26 <lp_competition_main___lam__0___boxed+0x26>
+  5e:	mov    rbx,rdi
+  61:	mov    rdi,rsi
+  64:	mov    r14,rsi
+  67:	call   6c <lp_competition_main___lam__0___boxed+0x6c>
+			68: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  6c:	mov    rdi,rbx
+  6f:	mov    rsi,r14
+  72:	jmp    26 <lp_competition_main___lam__0___boxed+0x26>
+
+Disassembly of section .text.lp_competition_main___lam__1:
+
+0000000000000000 <lp_competition_main___lam__1>:
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r12
+   7:	push   rbx
+   8:	sub    rsp,0x10
+   c:	mov    ebx,edx
+   e:	mov    eax,esi
+  10:	shr    eax,0x17
+  13:	movzx  r15d,al
+  17:	mov    ebp,edx
+  19:	shr    ebp,0x17
+  1c:	movzx  r12d,bpl
+  20:	lea    ecx,[r12+r15*1]
+  24:	cmp    ecx,0x80
+  2a:	jb     5f <lp_competition_main___lam__1+0x5f>
+  2c:	mov    ecx,esi
+  2e:	and    ecx,0x7fffffff
+  34:	lea    edx,[rcx-0x1]
+  37:	cmp    edx,0xbffffff
+  3d:	setb   dl
+  40:	cmp    ecx,0x7f800000
+  46:	setae  cl
+  49:	or     cl,dl
+  4b:	mov    r14,rsi
+  4e:	je     bf <lp_competition_main___lam__1+0xbf>
+  50:	mov    edi,esi
+  52:	call   57 <lp_competition_main___lam__1+0x57>
+			53: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  57:	movaps xmm1,xmm0
+  5a:	jmp    e7 <lp_competition_main___lam__1+0xe7>
+  5f:	lea    eax,[rsi+rsi*1]
+  62:	cmp    eax,0xff000000
+  67:	setae  al
+  6a:	lea    ecx,[rbx+rbx*1]
+  6d:	cmp    ecx,0xff000000
+  73:	setae  cl
+  76:	or     cl,al
+  78:	je     122 <lp_competition_main___lam__1+0x122>
+  7e:	mov    eax,esi
+  80:	lea    rdi,[rax*2+0x1]
+  88:	mov    eax,ebx
+  8a:	lea    rsi,[rax*2+0x1]
+  92:	call   97 <lp_competition_main___lam__1+0x97>
+			93: R_X86_64_PLT32	lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_MulBackend_word___at___00FloatLib_Floats_Formats_BinaryInterchange_Configured_Plan_softwareMul32Certified_spec__1-0x4
+  97:	mov    rbx,rax
+  9a:	test   bl,0x1
+  9d:	jne    2f1 <lp_competition_main___lam__1+0x2f1>
+  a3:	mov    rdi,rbx
+  a6:	call   ab <lp_competition_main___lam__1+0xab>
+			a7: R_X86_64_PLT32	lean_uint32_of_big_nat-0x4
+  ab:	mov    ecx,DWORD PTR [rbx]
+  ad:	cmp    ecx,0x2
+  b0:	jl     419 <lp_competition_main___lam__1+0x419>
+  b6:	dec    ecx
+  b8:	mov    DWORD PTR [rbx],ecx
+  ba:	jmp    36e <lp_competition_main___lam__1+0x36e>
+  bf:	mov    ecx,esi
+  c1:	and    ecx,0x7fffff
+  c7:	or     ecx,0x800000
+  cd:	cvtsi2ss xmm1,ecx
+  d1:	mov    rcx,QWORD PTR [rip+0x0]        # d8 <lp_competition_main___lam__1+0xd8>
+			d4: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  d8:	mov    rcx,QWORD PTR [rcx]
+  db:	mov    eax,eax
+  dd:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+  e2:	mulss  xmm1,DWORD PTR [rax+0x8]
+  e7:	mov    eax,ebx
+  e9:	and    eax,0x7fffffff
+  ee:	lea    ecx,[rax-0x1]
+  f1:	cmp    ecx,0xbffffff
+  f7:	setb   cl
+  fa:	cmp    eax,0x7f800000
+  ff:	setae  al
+ 102:	or     al,cl
+ 104:	je     2a7 <lp_competition_main___lam__1+0x2a7>
+ 10a:	mov    edi,ebx
+ 10c:	movss  DWORD PTR [rsp+0xc],xmm1
+ 112:	call   117 <lp_competition_main___lam__1+0x117>
+			113: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 117:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 11d:	jmp    2d0 <lp_competition_main___lam__1+0x2d0>
+ 122:	test   esi,esi
+ 124:	setns  al
+ 127:	test   ebx,ebx
+ 129:	setns  cl
+ 12c:	test   dil,dil
+ 12f:	sete   dl
+ 132:	or     dl,al
+ 134:	xor    eax,eax
+ 136:	xor    dl,cl
+ 138:	movzx  edi,dil
+ 13c:	cmove  edi,eax
+ 13f:	and    esi,0x7fffff
+ 145:	and    ebx,0x7fffff
+ 14b:	lea    ecx,[rsi+0x800000]
+ 151:	mov    r8d,r15d
+ 154:	dec    r8
+ 157:	test   r15d,r15d
+ 15a:	cmove  ecx,esi
+ 15d:	cmove  r8,rax
+ 161:	lea    esi,[rbx+0x800000]
+ 167:	mov    edx,r12d
+ 16a:	dec    rdx
+ 16d:	test   r12d,r12d
+ 170:	cmove  esi,ebx
+ 173:	cmove  rdx,rax
+ 177:	imul   rsi,rcx
+ 17b:	add    rdx,r8
+ 17e:	cmp    rdx,0x7b
+ 182:	jbe    2f8 <lp_competition_main___lam__1+0x2f8>
+ 188:	test   rsi,rsi
+ 18b:	je     363 <lp_competition_main___lam__1+0x363>
+ 191:	xor    eax,eax
+ 193:	mov    rcx,rsi
+ 196:	shr    rcx,0x20
+ 19a:	cmove  rcx,rsi
+ 19e:	setne  al
+ 1a1:	shl    eax,0x5
+ 1a4:	mov    r8,rcx
+ 1a7:	shr    r8,0x10
+ 1ab:	test   r8,r8
+ 1ae:	cmove  r8,rcx
+ 1b2:	lea    rcx,[rax+0x10]
+ 1b6:	cmove  rcx,rax
+ 1ba:	mov    rax,r8
+ 1bd:	shr    rax,0x8
+ 1c1:	test   rax,rax
+ 1c4:	cmove  rax,r8
+ 1c8:	lea    r8,[rcx+0x8]
+ 1cc:	cmove  r8,rcx
+ 1d0:	mov    rcx,rax
+ 1d3:	shr    rcx,0x4
+ 1d7:	test   rcx,rcx
+ 1da:	cmove  rcx,rax
+ 1de:	lea    r9,[r8+0x4]
+ 1e2:	cmove  r9,r8
+ 1e6:	mov    r8,rcx
+ 1e9:	shr    r8,0x2
+ 1ed:	test   r8,r8
+ 1f0:	cmove  r8,rcx
+ 1f4:	lea    rax,[r9+0x2]
+ 1f8:	cmove  rax,r9
+ 1fc:	cmp    r8,0x2
+ 200:	sbb    rax,0xffffffffffffffff
+ 204:	lea    r8,[rax+rdx*1]
+ 208:	cmp    r8,0xab
+ 20f:	jbe    304 <lp_competition_main___lam__1+0x304>
+ 215:	cmp    rax,0x17
+ 219:	jb     3a0 <lp_competition_main___lam__1+0x3a0>
+ 21f:	mov    rcx,rax
+ 222:	add    rcx,0xffffffffffffffe9
+ 226:	je     3a7 <lp_competition_main___lam__1+0x3a7>
+ 22c:	mov    rdx,rsi
+ 22f:	shr    rdx,cl
+ 232:	mov    r9,0xffffffffffffffff
+ 239:	shl    r9,cl
+ 23c:	not    r9
+ 23f:	and    r9,rsi
+ 242:	add    al,0x28
+ 244:	mov    esi,0x1
+ 249:	mov    ecx,eax
+ 24b:	shl    rsi,cl
+ 24e:	cmp    r9,rsi
+ 251:	jb     25c <lp_competition_main___lam__1+0x25c>
+ 253:	jbe    403 <lp_competition_main___lam__1+0x403>
+ 259:	inc    rdx
+ 25c:	mov    rsi,rdx
+ 25f:	cmp    rsi,0x1000000
+ 266:	je     3b4 <lp_competition_main___lam__1+0x3b4>
+ 26c:	test   dil,dil
+ 26f:	sete   cl
+ 272:	mov    edx,0x7f800000
+ 277:	mov    eax,0xff800000
+ 27c:	cmove  eax,edx
+ 27f:	cmp    r8,0x1aa
+ 286:	jae    36e <lp_competition_main___lam__1+0x36e>
+ 28c:	add    r8d,0xffffff55
+ 293:	xor    edx,edx
+ 295:	cmp    rsi,0x800000
+ 29c:	jb     3e8 <lp_competition_main___lam__1+0x3e8>
+ 2a2:	jmp    3e0 <lp_competition_main___lam__1+0x3e0>
+ 2a7:	mov    eax,ebx
+ 2a9:	and    eax,0x7fffff
+ 2ae:	or     eax,0x800000
+ 2b3:	xorps  xmm0,xmm0
+ 2b6:	cvtsi2ss xmm0,eax
+ 2ba:	mov    rax,QWORD PTR [rip+0x0]        # 2c1 <lp_competition_main___lam__1+0x2c1>
+			2bd: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 2c1:	mov    rax,QWORD PTR [rax]
+ 2c4:	mov    ecx,ebp
+ 2c6:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 2cb:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 2d0:	mulss  xmm1,xmm0
+ 2d4:	ucomiss xmm1,xmm1
+ 2d7:	jp     430 <lp_competition_main___lam__1+0x430>
+ 2dd:	movaps xmm0,xmm1
+ 2e0:	add    rsp,0x10
+ 2e4:	pop    rbx
+ 2e5:	pop    r12
+ 2e7:	pop    r14
+ 2e9:	pop    r15
+ 2eb:	pop    rbp
+ 2ec:	jmp    2f1 <lp_competition_main___lam__1+0x2f1>
+			2ed: R_X86_64_PLT32	lean_float32_to_bits-0x4
+ 2f1:	shr    rbx,1
+ 2f4:	mov    eax,ebx
+ 2f6:	jmp    36e <lp_competition_main___lam__1+0x36e>
+ 2f8:	test   rsi,rsi
+ 2fb:	je     363 <lp_competition_main___lam__1+0x363>
+ 2fd:	cmp    edx,0x56
+ 300:	jb     363 <lp_competition_main___lam__1+0x363>
+ 302:	jmp    319 <lp_competition_main___lam__1+0x319>
+ 304:	cmp    edx,0x95
+ 30a:	jb     319 <lp_competition_main___lam__1+0x319>
+ 30c:	add    dl,0x2b
+ 30f:	mov    ecx,edx
+ 311:	shl    rsi,cl
+ 314:	mov    rax,rsi
+ 317:	jmp    344 <lp_competition_main___lam__1+0x344>
+ 319:	mov    cl,0x15
+ 31b:	sub    cl,dl
+ 31d:	mov    rax,rsi
+ 320:	shr    rax,cl
+ 323:	mov    r8,0xffffffffffffffff
+ 32a:	shl    r8,cl
+ 32d:	not    r8
+ 330:	and    r8,rsi
+ 333:	mov    cl,0x14
+ 335:	sub    cl,dl
+ 337:	mov    edx,0x1
+ 33c:	shl    rdx,cl
+ 33f:	cmp    r8,rdx
+ 342:	jae    37b <lp_competition_main___lam__1+0x37b>
+ 344:	test   rax,rax
+ 347:	je     363 <lp_competition_main___lam__1+0x363>
+ 349:	cmp    rax,0x800000
+ 34f:	jne    38c <lp_competition_main___lam__1+0x38c>
+ 351:	test   dil,dil
+ 354:	mov    ecx,0x800000
+ 359:	mov    eax,0x80800000
+ 35e:	cmove  eax,ecx
+ 361:	jmp    36e <lp_competition_main___lam__1+0x36e>
+ 363:	xor    eax,eax
+ 365:	test   dil,dil
+ 368:	setne  al
+ 36b:	shl    eax,0x1f
+ 36e:	add    rsp,0x10
+ 372:	pop    rbx
+ 373:	pop    r12
+ 375:	pop    r14
+ 377:	pop    r15
+ 379:	pop    rbp
+ 37a:	ret
+ 37b:	ja     381 <lp_competition_main___lam__1+0x381>
+ 37d:	test   al,0x1
+ 37f:	je     344 <lp_competition_main___lam__1+0x344>
+ 381:	inc    rax
+ 384:	cmp    rax,0x800000
+ 38a:	je     351 <lp_competition_main___lam__1+0x351>
+ 38c:	xor    ecx,ecx
+ 38e:	test   dil,dil
+ 391:	setne  cl
+ 394:	shl    ecx,0x1f
+ 397:	and    eax,0x7fffff
+ 39c:	or     eax,ecx
+ 39e:	jmp    36e <lp_competition_main___lam__1+0x36e>
+ 3a0:	mov    cl,0x17
+ 3a2:	sub    cl,al
+ 3a4:	shl    rsi,cl
+ 3a7:	cmp    rsi,0x1000000
+ 3ae:	jne    26c <lp_competition_main___lam__1+0x26c>
+ 3b4:	lea    rdx,[r8+0x1]
+ 3b8:	test   dil,dil
+ 3bb:	sete   cl
+ 3be:	mov    esi,0x7f800000
+ 3c3:	mov    eax,0xff800000
+ 3c8:	cmove  eax,esi
+ 3cb:	cmp    rdx,0x1a9
+ 3d2:	ja     36e <lp_competition_main___lam__1+0x36e>
+ 3d4:	add    r8d,0xffffff56
+ 3db:	mov    esi,0x800000
+ 3e0:	and    esi,0x7fffff
+ 3e6:	mov    edx,esi
+ 3e8:	xor    esi,esi
+ 3ea:	test   cl,cl
+ 3ec:	sete   sil
+ 3f0:	shl    esi,0x1f
+ 3f3:	movzx  eax,r8b
+ 3f7:	shl    eax,0x17
+ 3fa:	or     eax,esi
+ 3fc:	or     eax,edx
+ 3fe:	jmp    36e <lp_competition_main___lam__1+0x36e>
+ 403:	mov    esi,edx
+ 405:	and    esi,0x1
+ 408:	add    rsi,rdx
+ 40b:	cmp    rsi,0x1000000
+ 412:	je     3b4 <lp_competition_main___lam__1+0x3b4>
+ 414:	jmp    26c <lp_competition_main___lam__1+0x26c>
+ 419:	mov    r14,rax
+ 41c:	test   ecx,ecx
+ 41e:	je     428 <lp_competition_main___lam__1+0x428>
+ 420:	mov    rdi,rbx
+ 423:	call   428 <lp_competition_main___lam__1+0x428>
+			424: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 428:	mov    rax,r14
+ 42b:	jmp    36e <lp_competition_main___lam__1+0x36e>
+ 430:	cmp    r15d,0xff
+ 437:	jne    450 <lp_competition_main___lam__1+0x450>
+ 439:	mov    rax,r14
+ 43c:	test   eax,0x7fffff
+ 441:	setne  cl
+ 444:	test   eax,0x400000
+ 449:	sete   al
+ 44c:	test   cl,al
+ 44e:	jne    4ca <lp_competition_main___lam__1+0x4ca>
+ 450:	cmp    r12d,0xff
+ 457:	jne    49c <lp_competition_main___lam__1+0x49c>
+ 459:	test   ebx,0x7fffff
+ 45f:	setne  al
+ 462:	test   ebx,0x400000
+ 468:	sete   cl
+ 46b:	test   al,cl
+ 46d:	jne    48f <lp_competition_main___lam__1+0x48f>
+ 46f:	cmp    r15d,0xff
+ 476:	setne  al
+ 479:	test   r14d,0x7fffff
+ 480:	sete   cl
+ 483:	or     cl,al
+ 485:	je     4ca <lp_competition_main___lam__1+0x4ca>
+ 487:	test   ebx,0x7fffff
+ 48d:	je     4b4 <lp_competition_main___lam__1+0x4b4>
+ 48f:	or     ebx,0x400000
+ 495:	mov    eax,ebx
+ 497:	jmp    36e <lp_competition_main___lam__1+0x36e>
+ 49c:	cmp    r15d,0xff
+ 4a3:	setne  al
+ 4a6:	test   r14d,0x7fffff
+ 4ad:	sete   cl
+ 4b0:	or     cl,al
+ 4b2:	je     4ca <lp_competition_main___lam__1+0x4ca>
+ 4b4:	mov    edi,r14d
+ 4b7:	mov    esi,ebx
+ 4b9:	add    rsp,0x10
+ 4bd:	pop    rbx
+ 4be:	pop    r12
+ 4c0:	pop    r14
+ 4c2:	pop    r15
+ 4c4:	pop    rbp
+ 4c5:	jmp    4ca <lp_competition_main___lam__1+0x4ca>
+			4c6: R_X86_64_PLT32	lp_competition_Submission_FastMul_mul-0x4
+ 4ca:	mov    rax,r14
+ 4cd:	or     eax,0x400000
+ 4d2:	jmp    36e <lp_competition_main___lam__1+0x36e>
+
+Disassembly of section .text.lp_competition_main___lam__1___boxed:
+
+0000000000000000 <lp_competition_main___lam__1___boxed>:
+   0:	push   r15
+   2:	push   r14
+   4:	push   rbx
+   5:	test   sil,0x1
+   9:	jne    16 <lp_competition_main___lam__1___boxed+0x16>
+   b:	mov    eax,DWORD PTR [rsi]
+   d:	cmp    eax,0x2
+  10:	jl     47 <lp_competition_main___lam__1___boxed+0x47>
+  12:	dec    eax
+  14:	mov    DWORD PTR [rsi],eax
+  16:	test   dl,0x1
+  19:	jne    26 <lp_competition_main___lam__1___boxed+0x26>
+  1b:	mov    eax,DWORD PTR [rdx]
+  1d:	cmp    eax,0x2
+  20:	jl     67 <lp_competition_main___lam__1___boxed+0x67>
+  22:	dec    eax
+  24:	mov    DWORD PTR [rdx],eax
+  26:	shr    rdx,1
+  29:	shr    rsi,1
+  2c:	shr    edi,1
+  2e:	movzx  edi,dil
+  32:	call   37 <lp_competition_main___lam__1___boxed+0x37>
+			33: R_X86_64_PLT32	lp_competition_main___lam__1-0x4
+  37:	mov    eax,eax
+  39:	lea    rax,[rax*2+0x1]
+  41:	pop    rbx
+  42:	pop    r14
+  44:	pop    r15
+  46:	ret
+  47:	test   eax,eax
+  49:	je     16 <lp_competition_main___lam__1___boxed+0x16>
+  4b:	mov    rbx,rdi
+  4e:	mov    rdi,rsi
+  51:	mov    r14,rdx
+  54:	mov    r15,rsi
+  57:	call   5c <lp_competition_main___lam__1___boxed+0x5c>
+			58: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  5c:	mov    rdi,rbx
+  5f:	mov    rsi,r15
+  62:	mov    rdx,r14
+  65:	jmp    16 <lp_competition_main___lam__1___boxed+0x16>
+  67:	test   eax,eax
+  69:	je     26 <lp_competition_main___lam__1___boxed+0x26>
+  6b:	mov    rbx,rdi
+  6e:	mov    rdi,rdx
+  71:	mov    r14,rdx
+  74:	mov    r15,rsi
+  77:	call   7c <lp_competition_main___lam__1___boxed+0x7c>
+			78: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  7c:	mov    rdi,rbx
+  7f:	mov    rsi,r15
+  82:	mov    rdx,r14
+  85:	jmp    26 <lp_competition_main___lam__1___boxed+0x26>
+
+Disassembly of section .text.lp_competition_main___lam__2:
+
+0000000000000000 <lp_competition_main___lam__2>:
+   0:	push   rbp
+   1:	push   r14
+   3:	push   rbx
+   4:	sub    rsp,0x10
+   8:	mov    ebx,esi
+   a:	mov    ebp,edi
+   c:	mov    eax,edi
+   e:	and    eax,0x7fffffff
+  13:	lea    ecx,[rax-0x1]
+  16:	cmp    ecx,0xbffffff
+  1c:	setb   cl
+  1f:	cmp    eax,0x7f800000
+  24:	setae  al
+  27:	or     al,cl
+  29:	je     37 <lp_competition_main___lam__2+0x37>
+  2b:	mov    edi,ebp
+  2d:	call   32 <lp_competition_main___lam__2+0x32>
+			2e: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  32:	movaps xmm1,xmm0
+  35:	jmp    60 <lp_competition_main___lam__2+0x60>
+  37:	mov    eax,ebp
+  39:	and    eax,0x7fffff
+  3e:	or     eax,0x800000
+  43:	cvtsi2ss xmm1,eax
+  47:	mov    rax,QWORD PTR [rip+0x0]        # 4e <lp_competition_main___lam__2+0x4e>
+			4a: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  4e:	mov    rax,QWORD PTR [rax]
+  51:	mov    ecx,ebp
+  53:	shr    ecx,0x17
+  56:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  5b:	mulss  xmm1,DWORD PTR [rax+0x8]
+  60:	mov    eax,ebx
+  62:	and    eax,0x7fffffff
+  67:	lea    ecx,[rax-0x1]
+  6a:	cmp    ecx,0xbffffff
+  70:	setb   cl
+  73:	cmp    eax,0x7f800000
+  78:	setae  al
+  7b:	or     al,cl
+  7d:	je     94 <lp_competition_main___lam__2+0x94>
+  7f:	mov    edi,ebx
+  81:	movss  DWORD PTR [rsp+0xc],xmm1
+  87:	call   8c <lp_competition_main___lam__2+0x8c>
+			88: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  8c:	movss  xmm1,DWORD PTR [rsp+0xc]
+  92:	jmp    c0 <lp_competition_main___lam__2+0xc0>
+  94:	mov    eax,ebx
+  96:	and    eax,0x7fffff
+  9b:	or     eax,0x800000
+  a0:	xorps  xmm0,xmm0
+  a3:	cvtsi2ss xmm0,eax
+  a7:	mov    rax,QWORD PTR [rip+0x0]        # ae <lp_competition_main___lam__2+0xae>
+			aa: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  ae:	mov    rax,QWORD PTR [rax]
+  b1:	mov    ecx,ebx
+  b3:	shr    ecx,0x17
+  b6:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+  bb:	mulss  xmm0,DWORD PTR [rax+0x8]
+  c0:	addss  xmm1,xmm0
+  c4:	ucomiss xmm1,xmm1
+  c7:	jp     d9 <lp_competition_main___lam__2+0xd9>
+  c9:	movaps xmm0,xmm1
+  cc:	add    rsp,0x10
+  d0:	pop    rbx
+  d1:	pop    r14
+  d3:	pop    rbp
+  d4:	jmp    d9 <lp_competition_main___lam__2+0xd9>
+			d5: R_X86_64_PLT32	lean_float32_to_bits-0x4
+  d9:	mov    eax,ebp
+  db:	and    eax,0x7f800000
+  e0:	cmp    eax,0x7f800000
+  e5:	jne    101 <lp_competition_main___lam__2+0x101>
+  e7:	test   ebp,0x7fffff
+  ed:	setne  cl
+  f0:	test   ebp,0x400000
+  f6:	sete   dl
+  f9:	test   cl,dl
+  fb:	jne    18f <lp_competition_main___lam__2+0x18f>
+ 101:	mov    ecx,ebx
+ 103:	and    ecx,0x7f800000
+ 109:	cmp    ecx,0x7f800000
+ 10f:	jne    129 <lp_competition_main___lam__2+0x129>
+ 111:	test   ebx,0x7fffff
+ 117:	setne  dl
+ 11a:	test   ebx,0x400000
+ 120:	sete   sil
+ 124:	test   dl,sil
+ 127:	jne    199 <lp_competition_main___lam__2+0x199>
+ 129:	cmp    eax,0x7f800000
+ 12e:	setne  al
+ 131:	test   ebp,0x7fffff
+ 137:	sete   dl
+ 13a:	or     dl,al
+ 13c:	je     18f <lp_competition_main___lam__2+0x18f>
+ 13e:	cmp    ecx,0x7f800000
+ 144:	setne  al
+ 147:	test   ebx,0x7fffff
+ 14d:	sete   cl
+ 150:	or     cl,al
+ 152:	je     199 <lp_competition_main___lam__2+0x199>
+ 154:	mov    eax,ebp
+ 156:	lea    rdi,[rax*2+0x1]
+ 15e:	mov    eax,ebx
+ 160:	lea    rsi,[rax*2+0x1]
+ 168:	call   16d <lp_competition_main___lam__2+0x16d>
+			169: R_X86_64_PLT32	lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_AddBackend_word___at___00FloatLib_Floats_Formats_BinaryInterchange_Configured_Plan_softwareAdd32Certified_spec__1-0x4
+ 16d:	mov    r14,rax
+ 170:	test   r14b,0x1
+ 174:	jne    1aa <lp_competition_main___lam__2+0x1aa>
+ 176:	mov    rdi,r14
+ 179:	call   17e <lp_competition_main___lam__2+0x17e>
+			17a: R_X86_64_PLT32	lean_uint32_of_big_nat-0x4
+ 17e:	mov    ebx,eax
+ 180:	mov    eax,DWORD PTR [r14]
+ 183:	cmp    eax,0x2
+ 186:	jl     1b2 <lp_competition_main___lam__2+0x1b2>
+ 188:	dec    eax
+ 18a:	mov    DWORD PTR [r14],eax
+ 18d:	jmp    19f <lp_competition_main___lam__2+0x19f>
+ 18f:	or     ebp,0x400000
+ 195:	mov    ebx,ebp
+ 197:	jmp    19f <lp_competition_main___lam__2+0x19f>
+ 199:	or     ebx,0x400000
+ 19f:	mov    eax,ebx
+ 1a1:	add    rsp,0x10
+ 1a5:	pop    rbx
+ 1a6:	pop    r14
+ 1a8:	pop    rbp
+ 1a9:	ret
+ 1aa:	shr    r14,1
+ 1ad:	mov    ebx,r14d
+ 1b0:	jmp    19f <lp_competition_main___lam__2+0x19f>
+ 1b2:	test   eax,eax
+ 1b4:	je     19f <lp_competition_main___lam__2+0x19f>
+ 1b6:	mov    rdi,r14
+ 1b9:	call   1be <lp_competition_main___lam__2+0x1be>
+			1ba: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 1be:	jmp    19f <lp_competition_main___lam__2+0x19f>
+
+Disassembly of section .text.lp_competition_main___lam__2___boxed:
+
+0000000000000000 <lp_competition_main___lam__2___boxed>:
+   0:	push   r14
+   2:	push   rbx
+   3:	push   rax
+   4:	test   dil,0x1
+   8:	jne    15 <lp_competition_main___lam__2___boxed+0x15>
+   a:	mov    eax,DWORD PTR [rdi]
+   c:	cmp    eax,0x2
+   f:	jl     43 <lp_competition_main___lam__2___boxed+0x43>
+  11:	dec    eax
+  13:	mov    DWORD PTR [rdi],eax
+  15:	test   sil,0x1
+  19:	jne    26 <lp_competition_main___lam__2___boxed+0x26>
+  1b:	mov    eax,DWORD PTR [rsi]
+  1d:	cmp    eax,0x2
+  20:	jl     5a <lp_competition_main___lam__2___boxed+0x5a>
+  22:	dec    eax
+  24:	mov    DWORD PTR [rsi],eax
+  26:	shr    rsi,1
+  29:	shr    rdi,1
+  2c:	call   31 <lp_competition_main___lam__2___boxed+0x31>
+			2d: R_X86_64_PLT32	lp_competition_main___lam__2-0x4
+  31:	mov    eax,eax
+  33:	lea    rax,[rax*2+0x1]
+  3b:	add    rsp,0x8
+  3f:	pop    rbx
+  40:	pop    r14
+  42:	ret
+  43:	test   eax,eax
+  45:	je     15 <lp_competition_main___lam__2___boxed+0x15>
+  47:	mov    rbx,rdi
+  4a:	mov    r14,rsi
+  4d:	call   52 <lp_competition_main___lam__2___boxed+0x52>
+			4e: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  52:	mov    rdi,rbx
+  55:	mov    rsi,r14
+  58:	jmp    15 <lp_competition_main___lam__2___boxed+0x15>
+  5a:	test   eax,eax
+  5c:	je     26 <lp_competition_main___lam__2___boxed+0x26>
+  5e:	mov    rbx,rdi
+  61:	mov    rdi,rsi
+  64:	mov    r14,rsi
+  67:	call   6c <lp_competition_main___lam__2___boxed+0x6c>
+			68: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  6c:	mov    rdi,rbx
+  6f:	mov    rsi,r14
+  72:	jmp    26 <lp_competition_main___lam__2___boxed+0x26>
+
+Disassembly of section .text.lp_competition_main___lam__3:
+
+0000000000000000 <lp_competition_main___lam__3>:
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r12
+   7:	push   rbx
+   8:	sub    rsp,0x10
+   c:	mov    ebx,edx
+   e:	mov    eax,esi
+  10:	shr    eax,0x17
+  13:	movzx  r15d,al
+  17:	lea    ecx,[r15-0xff]
+  1e:	mov    ebp,edx
+  20:	shr    ebp,0x17
+  23:	movzx  r12d,bpl
+  27:	cmp    ecx,0xffffff01
+  2d:	ja     76 <lp_competition_main___lam__3+0x76>
+  2f:	lea    ecx,[r12+r15*1]
+  33:	cmp    ecx,0x80
+  39:	jb     d2 <lp_competition_main___lam__3+0xd2>
+  3f:	mov    ecx,esi
+  41:	and    ecx,0x7fffffff
+  47:	lea    edx,[rcx-0x1]
+  4a:	cmp    edx,0xbffffff
+  50:	setb   dl
+  53:	cmp    ecx,0x7f800000
+  59:	setae  cl
+  5c:	mov    r14,rsi
+  5f:	or     cl,dl
+  61:	je     179 <lp_competition_main___lam__3+0x179>
+  67:	mov    edi,esi
+  69:	call   6e <lp_competition_main___lam__3+0x6e>
+			6a: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  6e:	movaps xmm1,xmm0
+  71:	jmp    1a1 <lp_competition_main___lam__3+0x1a1>
+  76:	lea    ecx,[r12-0xff]
+  7e:	lea    r8d,[r12+r15*1]
+  82:	cmp    ecx,0xffffff01
+  88:	ja     122 <lp_competition_main___lam__3+0x122>
+  8e:	cmp    r8d,0x80
+  95:	jb     1dc <lp_competition_main___lam__3+0x1dc>
+  9b:	mov    ecx,esi
+  9d:	and    ecx,0x7fffffff
+  a3:	lea    edx,[rcx-0x1]
+  a6:	cmp    edx,0xbffffff
+  ac:	setb   dl
+  af:	cmp    ecx,0x7f800000
+  b5:	setae  cl
+  b8:	mov    r14,rsi
+  bb:	or     cl,dl
+  bd:	je     423 <lp_competition_main___lam__3+0x423>
+  c3:	mov    edi,esi
+  c5:	call   ca <lp_competition_main___lam__3+0xca>
+			c6: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  ca:	movaps xmm1,xmm0
+  cd:	jmp    44b <lp_competition_main___lam__3+0x44b>
+  d2:	lea    eax,[rsi+rsi*1]
+  d5:	cmp    eax,0xff000000
+  da:	jae    4a1 <lp_competition_main___lam__3+0x4a1>
+  e0:	lea    ecx,[rbx+rbx*1]
+  e3:	xor    eax,eax
+  e5:	cmp    ecx,0xff000000
+  eb:	setae  dl
+  ee:	jae    4a1 <lp_competition_main___lam__3+0x4a1>
+  f4:	test   esi,esi
+  f6:	movzx  ecx,dil
+  fa:	mov    al,dl
+  fc:	mov    r8d,eax
+  ff:	cmovs  r8d,ecx
+ 103:	test   ebx,ebx
+ 105:	mov    edx,eax
+ 107:	cmovs  edx,ecx
+ 10a:	test   r8b,r8b
+ 10d:	je     756 <lp_competition_main___lam__3+0x756>
+ 113:	mov    edi,edx
+ 115:	test   dil,dil
+ 118:	cmove  eax,ecx
+ 11b:	mov    edi,eax
+ 11d:	jmp    75e <lp_competition_main___lam__3+0x75e>
+ 122:	lea    ecx,[r8-0x17d]
+ 129:	cmp    ecx,0xffffff02
+ 12f:	ja     33d <lp_competition_main___lam__3+0x33d>
+ 135:	cmp    r8d,0x80
+ 13c:	jb     482 <lp_competition_main___lam__3+0x482>
+ 142:	mov    ecx,esi
+ 144:	and    ecx,0x7fffffff
+ 14a:	lea    edx,[rcx-0x1]
+ 14d:	cmp    edx,0xbffffff
+ 153:	setb   dl
+ 156:	cmp    ecx,0x7f800000
+ 15c:	setae  cl
+ 15f:	mov    r14,rsi
+ 162:	or     cl,dl
+ 164:	je     576 <lp_competition_main___lam__3+0x576>
+ 16a:	mov    edi,esi
+ 16c:	call   171 <lp_competition_main___lam__3+0x171>
+			16d: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 171:	movaps xmm1,xmm0
+ 174:	jmp    59e <lp_competition_main___lam__3+0x59e>
+ 179:	mov    ecx,esi
+ 17b:	and    ecx,0x7fffff
+ 181:	or     ecx,0x800000
+ 187:	cvtsi2ss xmm1,ecx
+ 18b:	mov    rcx,QWORD PTR [rip+0x0]        # 192 <lp_competition_main___lam__3+0x192>
+			18e: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 192:	mov    rcx,QWORD PTR [rcx]
+ 195:	mov    eax,eax
+ 197:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+ 19c:	mulss  xmm1,DWORD PTR [rax+0x8]
+ 1a1:	mov    eax,ebx
+ 1a3:	and    eax,0x7fffffff
+ 1a8:	lea    ecx,[rax-0x1]
+ 1ab:	cmp    ecx,0xbffffff
+ 1b1:	setb   cl
+ 1b4:	cmp    eax,0x7f800000
+ 1b9:	setae  al
+ 1bc:	or     al,cl
+ 1be:	je     3c0 <lp_competition_main___lam__3+0x3c0>
+ 1c4:	mov    edi,ebx
+ 1c6:	movss  DWORD PTR [rsp+0xc],xmm1
+ 1cc:	call   1d1 <lp_competition_main___lam__3+0x1d1>
+			1cd: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 1d1:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 1d7:	jmp    3e9 <lp_competition_main___lam__3+0x3e9>
+ 1dc:	lea    eax,[rsi+rsi*1]
+ 1df:	cmp    eax,0xff000000
+ 1e4:	setae  al
+ 1e7:	lea    ecx,[rbx+rbx*1]
+ 1ea:	cmp    ecx,0xff000000
+ 1f0:	setae  cl
+ 1f3:	or     cl,al
+ 1f5:	jne    4a1 <lp_competition_main___lam__3+0x4a1>
+ 1fb:	test   ebx,ebx
+ 1fd:	setns  cl
+ 200:	mov    r8d,esi
+ 203:	and    r8d,0x7fffff
+ 20a:	and    ebx,0x7fffff
+ 210:	or     r8d,0x800000
+ 217:	lea    eax,[rbx+0x800000]
+ 21d:	mov    edx,r12d
+ 220:	dec    rdx
+ 223:	xor    r9d,r9d
+ 226:	test   r12d,r12d
+ 229:	cmove  eax,ebx
+ 22c:	cmovne r9,rdx
+ 230:	mov    edx,r15d
+ 233:	test   dil,dil
+ 236:	sete   dil
+ 23a:	setne  r10b
+ 23e:	test   esi,esi
+ 240:	sets   sil
+ 244:	and    sil,r10b
+ 247:	xor    sil,cl
+ 24a:	or     sil,dil
+ 24d:	imul   r8,rax
+ 251:	add    rdx,r9
+ 254:	dec    rdx
+ 257:	cmp    rdx,0x7b
+ 25b:	jbe    5d9 <lp_competition_main___lam__3+0x5d9>
+ 261:	test   eax,eax
+ 263:	je     949 <lp_competition_main___lam__3+0x949>
+ 269:	xor    eax,eax
+ 26b:	mov    rcx,r8
+ 26e:	shr    rcx,0x20
+ 272:	cmove  rcx,r8
+ 276:	setne  al
+ 279:	shl    eax,0x5
+ 27c:	mov    rdi,rcx
+ 27f:	shr    rdi,0x10
+ 283:	test   rdi,rdi
+ 286:	cmove  rdi,rcx
+ 28a:	lea    rcx,[rax+0x10]
+ 28e:	cmove  rcx,rax
+ 292:	mov    rax,rdi
+ 295:	shr    rax,0x8
+ 299:	test   rax,rax
+ 29c:	cmove  rax,rdi
+ 2a0:	lea    rdi,[rcx+0x8]
+ 2a4:	cmove  rdi,rcx
+ 2a8:	mov    rcx,rax
+ 2ab:	shr    rcx,0x4
+ 2af:	test   rcx,rcx
+ 2b2:	cmove  rcx,rax
+ 2b6:	lea    r9,[rdi+0x4]
+ 2ba:	cmove  r9,rdi
+ 2be:	mov    rdi,rcx
+ 2c1:	shr    rdi,0x2
+ 2c5:	test   rdi,rdi
+ 2c8:	cmove  rdi,rcx
+ 2cc:	lea    rax,[r9+0x2]
+ 2d0:	cmove  rax,r9
+ 2d4:	cmp    rdi,0x2
+ 2d8:	sbb    rax,0xffffffffffffffff
+ 2dc:	lea    rdi,[rax+rdx*1]
+ 2e0:	cmp    rdi,0xab
+ 2e7:	jbe    8ec <lp_competition_main___lam__3+0x8ec>
+ 2ed:	cmp    rax,0x17
+ 2f1:	jb     aa7 <lp_competition_main___lam__3+0xaa7>
+ 2f7:	mov    rcx,rax
+ 2fa:	add    rcx,0xffffffffffffffe9
+ 2fe:	je     aae <lp_competition_main___lam__3+0xaae>
+ 304:	mov    rdx,r8
+ 307:	shr    rdx,cl
+ 30a:	mov    r9,0xffffffffffffffff
+ 311:	shl    r9,cl
+ 314:	not    r9
+ 317:	and    r9,r8
+ 31a:	add    al,0x28
+ 31c:	mov    r8d,0x1
+ 322:	mov    ecx,eax
+ 324:	shl    r8,cl
+ 327:	cmp    r9,r8
+ 32a:	jb     335 <lp_competition_main___lam__3+0x335>
+ 32c:	jbe    bed <lp_competition_main___lam__3+0xbed>
+ 332:	inc    rdx
+ 335:	mov    r8,rdx
+ 338:	jmp    aae <lp_competition_main___lam__3+0xaae>
+ 33d:	mov    rax,QWORD PTR [rip+0x0]        # 344 <lp_competition_main___lam__3+0x344>
+			340: R_X86_64_REX_GOTPCRELX	lp_competition_Submission_R22FloatProduct_powNeg23-0x4
+ 344:	mov    ecx,esi
+ 346:	and    ecx,0x7fffff
+ 34c:	or     ecx,0x800000
+ 352:	mov    edx,ebx
+ 354:	and    edx,0x7fffff
+ 35a:	cvtsi2ss xmm0,ecx
+ 35e:	or     edx,0x800000
+ 364:	cvtsi2ss xmm1,edx
+ 368:	mulss  xmm1,xmm0
+ 36c:	mulss  xmm1,DWORD PTR [rax]
+ 370:	movss  xmm0,DWORD PTR [rip+0x0]        # 378 <lp_competition_main___lam__3+0x378>
+			374: R_X86_64_PC32	.LCPI10_0-0x4
+ 378:	ucomiss xmm0,xmm1
+ 37b:	cvttss2si rax,xmm1
+ 380:	mov    ecx,0xffffffff
+ 385:	cmova  ecx,eax
+ 388:	xor    eax,eax
+ 38a:	xorps  xmm0,xmm0
+ 38d:	ucomiss xmm1,xmm0
+ 390:	cmovae eax,ecx
+ 393:	mov    ecx,eax
+ 395:	shr    ecx,0x18
+ 398:	shr    eax,cl
+ 39a:	add    r8d,ecx
+ 39d:	shl    r8d,0x17
+ 3a1:	xor    ebx,esi
+ 3a3:	and    ebx,0x80000000
+ 3a9:	add    r8d,0xc0800000
+ 3b0:	or     r8d,ebx
+ 3b3:	add    eax,0xff800000
+ 3b8:	or     eax,r8d
+ 3bb:	jmp    b74 <lp_competition_main___lam__3+0xb74>
+ 3c0:	mov    eax,ebx
+ 3c2:	and    eax,0x7fffff
+ 3c7:	or     eax,0x800000
+ 3cc:	xorps  xmm0,xmm0
+ 3cf:	cvtsi2ss xmm0,eax
+ 3d3:	mov    rax,QWORD PTR [rip+0x0]        # 3da <lp_competition_main___lam__3+0x3da>
+			3d6: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 3da:	mov    rax,QWORD PTR [rax]
+ 3dd:	mov    ecx,ebp
+ 3df:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 3e4:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 3e9:	mulss  xmm1,xmm0
+ 3ed:	ucomiss xmm1,xmm1
+ 3f0:	jnp    742 <lp_competition_main___lam__3+0x742>
+ 3f6:	cmp    r15d,0xff
+ 3fd:	jne    51e <lp_competition_main___lam__3+0x51e>
+ 403:	mov    rax,r14
+ 406:	test   eax,0x7fffff
+ 40b:	setne  cl
+ 40e:	test   eax,0x400000
+ 413:	sete   al
+ 416:	test   cl,al
+ 418:	je     51e <lp_competition_main___lam__3+0x51e>
+ 41e:	jmp    c68 <lp_competition_main___lam__3+0xc68>
+ 423:	mov    ecx,esi
+ 425:	and    ecx,0x7fffff
+ 42b:	or     ecx,0x800000
+ 431:	cvtsi2ss xmm1,ecx
+ 435:	mov    rcx,QWORD PTR [rip+0x0]        # 43c <lp_competition_main___lam__3+0x43c>
+			438: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 43c:	mov    rcx,QWORD PTR [rcx]
+ 43f:	mov    eax,eax
+ 441:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+ 446:	mulss  xmm1,DWORD PTR [rax+0x8]
+ 44b:	mov    eax,ebx
+ 44d:	and    eax,0x7fffffff
+ 452:	lea    ecx,[rax-0x1]
+ 455:	cmp    ecx,0xbffffff
+ 45b:	setb   cl
+ 45e:	cmp    eax,0x7f800000
+ 463:	setae  al
+ 466:	or     al,cl
+ 468:	je     4e8 <lp_competition_main___lam__3+0x4e8>
+ 46a:	mov    edi,ebx
+ 46c:	movss  DWORD PTR [rsp+0xc],xmm1
+ 472:	call   477 <lp_competition_main___lam__3+0x477>
+			473: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 477:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 47d:	jmp    511 <lp_competition_main___lam__3+0x511>
+ 482:	lea    eax,[rsi+rsi*1]
+ 485:	cmp    eax,0xff000000
+ 48a:	setae  al
+ 48d:	lea    ecx,[rbx+rbx*1]
+ 490:	cmp    ecx,0xff000000
+ 496:	setae  cl
+ 499:	or     cl,al
+ 49b:	je     5ef <lp_competition_main___lam__3+0x5ef>
+ 4a1:	mov    eax,esi
+ 4a3:	lea    rdi,[rax*2+0x1]
+ 4ab:	mov    eax,ebx
+ 4ad:	lea    rsi,[rax*2+0x1]
+ 4b5:	call   4ba <lp_competition_main___lam__3+0x4ba>
+			4b6: R_X86_64_PLT32	lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_MulBackend_word___at___00FloatLib_Floats_Formats_BinaryInterchange_Configured_Plan_softwareMul32Certified_spec__1-0x4
+ 4ba:	mov    rbx,rax
+ 4bd:	test   bl,0x1
+ 4c0:	jne    4de <lp_competition_main___lam__3+0x4de>
+ 4c2:	mov    rdi,rbx
+ 4c5:	call   4ca <lp_competition_main___lam__3+0x4ca>
+			4c6: R_X86_64_PLT32	lean_uint32_of_big_nat-0x4
+ 4ca:	mov    ecx,DWORD PTR [rbx]
+ 4cc:	cmp    ecx,0x2
+ 4cf:	jl     c23 <lp_competition_main___lam__3+0xc23>
+ 4d5:	dec    ecx
+ 4d7:	mov    DWORD PTR [rbx],ecx
+ 4d9:	jmp    b74 <lp_competition_main___lam__3+0xb74>
+ 4de:	shr    rbx,1
+ 4e1:	mov    eax,ebx
+ 4e3:	jmp    b74 <lp_competition_main___lam__3+0xb74>
+ 4e8:	mov    eax,ebx
+ 4ea:	and    eax,0x7fffff
+ 4ef:	or     eax,0x800000
+ 4f4:	xorps  xmm0,xmm0
+ 4f7:	cvtsi2ss xmm0,eax
+ 4fb:	mov    rax,QWORD PTR [rip+0x0]        # 502 <lp_competition_main___lam__3+0x502>
+			4fe: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 502:	mov    rax,QWORD PTR [rax]
+ 505:	mov    ecx,ebp
+ 507:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 50c:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 511:	mulss  xmm1,xmm0
+ 515:	ucomiss xmm1,xmm1
+ 518:	jnp    742 <lp_competition_main___lam__3+0x742>
+ 51e:	cmp    r12d,0xff
+ 525:	jne    c3a <lp_competition_main___lam__3+0xc3a>
+ 52b:	test   ebx,0x7fffff
+ 531:	setne  al
+ 534:	test   ebx,0x400000
+ 53a:	sete   cl
+ 53d:	test   al,cl
+ 53f:	jne    569 <lp_competition_main___lam__3+0x569>
+ 541:	cmp    r15d,0xff
+ 548:	setne  al
+ 54b:	test   r14d,0x7fffff
+ 552:	sete   cl
+ 555:	or     cl,al
+ 557:	je     c68 <lp_competition_main___lam__3+0xc68>
+ 55d:	test   ebx,0x7fffff
+ 563:	je     c52 <lp_competition_main___lam__3+0xc52>
+ 569:	or     ebx,0x400000
+ 56f:	mov    eax,ebx
+ 571:	jmp    b74 <lp_competition_main___lam__3+0xb74>
+ 576:	mov    ecx,esi
+ 578:	and    ecx,0x7fffff
+ 57e:	or     ecx,0x800000
+ 584:	cvtsi2ss xmm1,ecx
+ 588:	mov    rcx,QWORD PTR [rip+0x0]        # 58f <lp_competition_main___lam__3+0x58f>
+			58b: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 58f:	mov    rcx,QWORD PTR [rcx]
+ 592:	mov    eax,eax
+ 594:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+ 599:	mulss  xmm1,DWORD PTR [rax+0x8]
+ 59e:	mov    eax,ebx
+ 5a0:	and    eax,0x7fffffff
+ 5a5:	lea    ecx,[rax-0x1]
+ 5a8:	cmp    ecx,0xbffffff
+ 5ae:	setb   cl
+ 5b1:	cmp    eax,0x7f800000
+ 5b6:	setae  al
+ 5b9:	or     al,cl
+ 5bb:	je     70c <lp_competition_main___lam__3+0x70c>
+ 5c1:	mov    edi,ebx
+ 5c3:	movss  DWORD PTR [rsp+0xc],xmm1
+ 5c9:	call   5ce <lp_competition_main___lam__3+0x5ce>
+			5ca: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 5ce:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 5d4:	jmp    735 <lp_competition_main___lam__3+0x735>
+ 5d9:	test   eax,eax
+ 5db:	je     949 <lp_competition_main___lam__3+0x949>
+ 5e1:	cmp    edx,0x56
+ 5e4:	jb     949 <lp_competition_main___lam__3+0x949>
+ 5ea:	jmp    901 <lp_competition_main___lam__3+0x901>
+ 5ef:	test   ebx,ebx
+ 5f1:	setns  al
+ 5f4:	mov    ecx,esi
+ 5f6:	and    ecx,0x7fffff
+ 5fc:	and    ebx,0x7fffff
+ 602:	or     ecx,0x800000
+ 608:	or     ebx,0x800000
+ 60e:	test   dil,dil
+ 611:	sete   dil
+ 615:	setne  r9b
+ 619:	test   esi,esi
+ 61b:	sets   dl
+ 61e:	and    dl,r9b
+ 621:	xor    dl,al
+ 623:	or     dl,dil
+ 626:	imul   rbx,rcx
+ 62a:	cmp    r8d,0x7d
+ 62e:	jbe    8dd <lp_competition_main___lam__3+0x8dd>
+ 634:	xor    eax,eax
+ 636:	mov    rcx,rbx
+ 639:	shr    rcx,0x20
+ 63d:	cmove  rcx,rbx
+ 641:	setne  al
+ 644:	shl    eax,0x5
+ 647:	mov    rsi,rcx
+ 64a:	shr    rsi,0x10
+ 64e:	test   rsi,rsi
+ 651:	cmove  rsi,rcx
+ 655:	lea    rcx,[rax+0x10]
+ 659:	cmove  rcx,rax
+ 65d:	mov    rax,rsi
+ 660:	shr    rax,0x8
+ 664:	test   rax,rax
+ 667:	cmove  rax,rsi
+ 66b:	lea    rsi,[rcx+0x8]
+ 66f:	cmove  rsi,rcx
+ 673:	mov    rcx,rax
+ 676:	shr    rcx,0x4
+ 67a:	test   rcx,rcx
+ 67d:	cmove  rcx,rax
+ 681:	lea    rdi,[rsi+0x4]
+ 685:	cmove  rdi,rsi
+ 689:	mov    rsi,rcx
+ 68c:	shr    rsi,0x2
+ 690:	test   rsi,rsi
+ 693:	cmove  rsi,rcx
+ 697:	lea    rax,[rdi+0x2]
+ 69b:	cmove  rax,rdi
+ 69f:	cmp    rsi,0x2
+ 6a3:	sbb    rax,0xffffffffffffffff
+ 6a7:	lea    rsi,[r8+rax*1]
+ 6ab:	add    rsi,0xfffffffffffffffe
+ 6af:	cmp    rsi,0xab
+ 6b6:	jbe    9cd <lp_competition_main___lam__3+0x9cd>
+ 6bc:	cmp    rax,0x17
+ 6c0:	jb     b81 <lp_competition_main___lam__3+0xb81>
+ 6c6:	mov    rcx,rax
+ 6c9:	add    rcx,0xffffffffffffffe9
+ 6cd:	je     b88 <lp_competition_main___lam__3+0xb88>
+ 6d3:	mov    rdi,rbx
+ 6d6:	shr    rdi,cl
+ 6d9:	mov    r8,0xffffffffffffffff
+ 6e0:	shl    r8,cl
+ 6e3:	not    r8
+ 6e6:	and    r8,rbx
+ 6e9:	add    al,0x28
+ 6eb:	mov    r9d,0x1
+ 6f1:	mov    ecx,eax
+ 6f3:	shl    r9,cl
+ 6f6:	cmp    r8,r9
+ 6f9:	jb     704 <lp_competition_main___lam__3+0x704>
+ 6fb:	jbe    c16 <lp_competition_main___lam__3+0xc16>
+ 701:	inc    rdi
+ 704:	mov    rbx,rdi
+ 707:	jmp    b88 <lp_competition_main___lam__3+0xb88>
+ 70c:	mov    eax,ebx
+ 70e:	and    eax,0x7fffff
+ 713:	or     eax,0x800000
+ 718:	xorps  xmm0,xmm0
+ 71b:	cvtsi2ss xmm0,eax
+ 71f:	mov    rax,QWORD PTR [rip+0x0]        # 726 <lp_competition_main___lam__3+0x726>
+			722: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 726:	mov    rax,QWORD PTR [rax]
+ 729:	mov    ecx,ebp
+ 72b:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 730:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 735:	mulss  xmm1,xmm0
+ 739:	ucomiss xmm1,xmm1
+ 73c:	jp     c52 <lp_competition_main___lam__3+0xc52>
+ 742:	movaps xmm0,xmm1
+ 745:	add    rsp,0x10
+ 749:	pop    rbx
+ 74a:	pop    r12
+ 74c:	pop    r14
+ 74e:	pop    r15
+ 750:	pop    rbp
+ 751:	jmp    756 <lp_competition_main___lam__3+0x756>
+			752: R_X86_64_PLT32	lean_float32_to_bits-0x4
+ 756:	test   dl,dl
+ 758:	je     115 <lp_competition_main___lam__3+0x115>
+ 75e:	and    esi,0x7fffff
+ 764:	and    ebx,0x7fffff
+ 76a:	lea    eax,[rsi+0x800000]
+ 770:	mov    ecx,r15d
+ 773:	dec    rcx
+ 776:	xor    r8d,r8d
+ 779:	test   r15d,r15d
+ 77c:	cmove  eax,esi
+ 77f:	cmove  rcx,r8
+ 783:	lea    esi,[rbx+0x800000]
+ 789:	mov    edx,r12d
+ 78c:	dec    rdx
+ 78f:	test   r12d,r12d
+ 792:	cmove  esi,ebx
+ 795:	cmove  rdx,r8
+ 799:	imul   rsi,rax
+ 79d:	add    rdx,rcx
+ 7a0:	cmp    rdx,0x7b
+ 7a4:	jbe    8c6 <lp_competition_main___lam__3+0x8c6>
+ 7aa:	test   rsi,rsi
+ 7ad:	je     9bd <lp_competition_main___lam__3+0x9bd>
+ 7b3:	xor    eax,eax
+ 7b5:	mov    rcx,rsi
+ 7b8:	shr    rcx,0x20
+ 7bc:	cmove  rcx,rsi
+ 7c0:	setne  al
+ 7c3:	shl    eax,0x5
+ 7c6:	mov    r8,rcx
+ 7c9:	shr    r8,0x10
+ 7cd:	test   r8,r8
+ 7d0:	cmove  r8,rcx
+ 7d4:	lea    rcx,[rax+0x10]
+ 7d8:	cmove  rcx,rax
+ 7dc:	mov    rax,r8
+ 7df:	shr    rax,0x8
+ 7e3:	test   rax,rax
+ 7e6:	cmove  rax,r8
+ 7ea:	lea    r8,[rcx+0x8]
+ 7ee:	cmove  r8,rcx
+ 7f2:	mov    rcx,rax
+ 7f5:	shr    rcx,0x4
+ 7f9:	test   rcx,rcx
+ 7fc:	cmove  rcx,rax
+ 800:	lea    r9,[r8+0x4]
+ 804:	cmove  r9,r8
+ 808:	mov    r8,rcx
+ 80b:	shr    r8,0x2
+ 80f:	test   r8,r8
+ 812:	cmove  r8,rcx
+ 816:	lea    rax,[r9+0x2]
+ 81a:	cmove  rax,r9
+ 81e:	cmp    r8,0x2
+ 822:	sbb    rax,0xffffffffffffffff
+ 826:	lea    r8,[rax+rdx*1]
+ 82a:	cmp    r8,0xab
+ 831:	jbe    953 <lp_competition_main___lam__3+0x953>
+ 837:	cmp    rax,0x17
+ 83b:	jb     ae2 <lp_competition_main___lam__3+0xae2>
+ 841:	mov    rcx,rax
+ 844:	add    rcx,0xffffffffffffffe9
+ 848:	je     ae9 <lp_competition_main___lam__3+0xae9>
+ 84e:	mov    rdx,rsi
+ 851:	shr    rdx,cl
+ 854:	mov    r9,0xffffffffffffffff
+ 85b:	shl    r9,cl
+ 85e:	not    r9
+ 861:	and    r9,rsi
+ 864:	add    al,0x28
+ 866:	mov    esi,0x1
+ 86b:	mov    ecx,eax
+ 86d:	shl    rsi,cl
+ 870:	cmp    r9,rsi
+ 873:	jb     87e <lp_competition_main___lam__3+0x87e>
+ 875:	jbe    bfc <lp_competition_main___lam__3+0xbfc>
+ 87b:	inc    rdx
+ 87e:	mov    rsi,rdx
+ 881:	cmp    rsi,0x1000000
+ 888:	je     af6 <lp_competition_main___lam__3+0xaf6>
+ 88e:	test   dil,dil
+ 891:	mov    ecx,0x7f800000
+ 896:	mov    eax,0xff800000
+ 89b:	cmove  eax,ecx
+ 89e:	cmp    r8,0x1aa
+ 8a5:	jae    b74 <lp_competition_main___lam__3+0xb74>
+ 8ab:	add    r8d,0xffffff55
+ 8b2:	xor    eax,eax
+ 8b4:	cmp    rsi,0x800000
+ 8bb:	jb     b27 <lp_competition_main___lam__3+0xb27>
+ 8c1:	jmp    b1f <lp_competition_main___lam__3+0xb1f>
+ 8c6:	test   rsi,rsi
+ 8c9:	je     9bd <lp_competition_main___lam__3+0x9bd>
+ 8cf:	cmp    edx,0x56
+ 8d2:	jb     9bd <lp_competition_main___lam__3+0x9bd>
+ 8d8:	jmp    968 <lp_competition_main___lam__3+0x968>
+ 8dd:	cmp    r8d,0x58
+ 8e1:	jb     a30 <lp_competition_main___lam__3+0xa30>
+ 8e7:	jmp    9e2 <lp_competition_main___lam__3+0x9e2>
+ 8ec:	cmp    edx,0x95
+ 8f2:	jb     901 <lp_competition_main___lam__3+0x901>
+ 8f4:	add    dl,0x2b
+ 8f7:	mov    ecx,edx
+ 8f9:	shl    r8,cl
+ 8fc:	mov    rax,r8
+ 8ff:	jmp    930 <lp_competition_main___lam__3+0x930>
+ 901:	mov    cl,0x15
+ 903:	sub    cl,dl
+ 905:	mov    rax,r8
+ 908:	shr    rax,cl
+ 90b:	mov    rdi,0xffffffffffffffff
+ 912:	shl    rdi,cl
+ 915:	not    rdi
+ 918:	and    rdi,r8
+ 91b:	mov    cl,0x14
+ 91d:	sub    cl,dl
+ 91f:	mov    edx,0x1
+ 924:	shl    rdx,cl
+ 927:	cmp    rdi,rdx
+ 92a:	jae    a3f <lp_competition_main___lam__3+0xa3f>
+ 930:	test   rax,rax
+ 933:	je     949 <lp_competition_main___lam__3+0x949>
+ 935:	cmp    rax,0x800000
+ 93b:	jne    a58 <lp_competition_main___lam__3+0xa58>
+ 941:	test   sil,sil
+ 944:	jmp    a1e <lp_competition_main___lam__3+0xa1e>
+ 949:	xor    eax,eax
+ 94b:	test   sil,sil
+ 94e:	jmp    a34 <lp_competition_main___lam__3+0xa34>
+ 953:	cmp    edx,0x95
+ 959:	jb     968 <lp_competition_main___lam__3+0x968>
+ 95b:	add    dl,0x2b
+ 95e:	mov    ecx,edx
+ 960:	shl    rsi,cl
+ 963:	mov    rax,rsi
+ 966:	jmp    997 <lp_competition_main___lam__3+0x997>
+ 968:	mov    cl,0x15
+ 96a:	sub    cl,dl
+ 96c:	mov    rax,rsi
+ 96f:	shr    rax,cl
+ 972:	mov    r8,0xffffffffffffffff
+ 979:	shl    r8,cl
+ 97c:	not    r8
+ 97f:	and    r8,rsi
+ 982:	mov    cl,0x14
+ 984:	sub    cl,dl
+ 986:	mov    edx,0x1
+ 98b:	shl    rdx,cl
+ 98e:	cmp    r8,rdx
+ 991:	jae    a5f <lp_competition_main___lam__3+0xa5f>
+ 997:	test   rax,rax
+ 99a:	je     9bd <lp_competition_main___lam__3+0x9bd>
+ 99c:	cmp    rax,0x800000
+ 9a2:	jne    a78 <lp_competition_main___lam__3+0xa78>
+ 9a8:	test   dil,dil
+ 9ab:	mov    ecx,0x800000
+ 9b0:	mov    eax,0x80800000
+ 9b5:	cmove  eax,ecx
+ 9b8:	jmp    b74 <lp_competition_main___lam__3+0xb74>
+ 9bd:	xor    eax,eax
+ 9bf:	test   dil,dil
+ 9c2:	setne  al
+ 9c5:	shl    eax,0x1f
+ 9c8:	jmp    b74 <lp_competition_main___lam__3+0xb74>
+ 9cd:	cmp    r8d,0x97
+ 9d4:	jb     9e2 <lp_competition_main___lam__3+0x9e2>
+ 9d6:	lea    ecx,[r8+0x29]
+ 9da:	shl    rbx,cl
+ 9dd:	mov    rax,rbx
+ 9e0:	jmp    a0f <lp_competition_main___lam__3+0xa0f>
+ 9e2:	mov    cl,0x17
+ 9e4:	sub    cl,r8b
+ 9e7:	mov    rax,rbx
+ 9ea:	shr    rax,cl
+ 9ed:	mov    rsi,0xffffffffffffffff
+ 9f4:	shl    rsi,cl
+ 9f7:	not    rsi
+ 9fa:	and    rsi,rbx
+ 9fd:	mov    cl,0x16
+ 9ff:	sub    cl,r8b
+ a02:	mov    edi,0x1
+ a07:	shl    rdi,cl
+ a0a:	cmp    rsi,rdi
+ a0d:	jae    a82 <lp_competition_main___lam__3+0xa82>
+ a0f:	test   rax,rax
+ a12:	je     a30 <lp_competition_main___lam__3+0xa30>
+ a14:	cmp    rax,0x800000
+ a1a:	jne    a93 <lp_competition_main___lam__3+0xa93>
+ a1c:	test   dl,dl
+ a1e:	mov    ecx,0x800000
+ a23:	mov    eax,0x80800000
+ a28:	cmovne eax,ecx
+ a2b:	jmp    b74 <lp_competition_main___lam__3+0xb74>
+ a30:	xor    eax,eax
+ a32:	test   dl,dl
+ a34:	sete   al
+ a37:	shl    eax,0x1f
+ a3a:	jmp    b74 <lp_competition_main___lam__3+0xb74>
+ a3f:	ja     a49 <lp_competition_main___lam__3+0xa49>
+ a41:	test   al,0x1
+ a43:	je     930 <lp_competition_main___lam__3+0x930>
+ a49:	inc    rax
+ a4c:	cmp    rax,0x800000
+ a52:	je     941 <lp_competition_main___lam__3+0x941>
+ a58:	xor    ecx,ecx
+ a5a:	test   sil,sil
+ a5d:	jmp    a97 <lp_competition_main___lam__3+0xa97>
+ a5f:	ja     a69 <lp_competition_main___lam__3+0xa69>
+ a61:	test   al,0x1
+ a63:	je     997 <lp_competition_main___lam__3+0x997>
+ a69:	inc    rax
+ a6c:	cmp    rax,0x800000
+ a72:	je     9a8 <lp_competition_main___lam__3+0x9a8>
+ a78:	xor    ecx,ecx
+ a7a:	test   dil,dil
+ a7d:	setne  cl
+ a80:	jmp    a9a <lp_competition_main___lam__3+0xa9a>
+ a82:	ja     a88 <lp_competition_main___lam__3+0xa88>
+ a84:	test   al,0x1
+ a86:	je     a0f <lp_competition_main___lam__3+0xa0f>
+ a88:	inc    rax
+ a8b:	cmp    rax,0x800000
+ a91:	je     a1c <lp_competition_main___lam__3+0xa1c>
+ a93:	xor    ecx,ecx
+ a95:	test   dl,dl
+ a97:	sete   cl
+ a9a:	shl    ecx,0x1f
+ a9d:	and    eax,0x7fffff
+ aa2:	jmp    b72 <lp_competition_main___lam__3+0xb72>
+ aa7:	mov    cl,0x17
+ aa9:	sub    cl,al
+ aab:	shl    r8,cl
+ aae:	test   sil,sil
+ ab1:	mov    ecx,0x7f800000
+ ab6:	mov    eax,0xff800000
+ abb:	cmovne eax,ecx
+ abe:	cmp    r8,0x1000000
+ ac5:	jne    b3a <lp_competition_main___lam__3+0xb3a>
+ ac7:	cmp    rdi,0x1a8
+ ace:	jg     b74 <lp_competition_main___lam__3+0xb74>
+ ad4:	add    edi,0xffffff56
+ ada:	mov    r8d,0x800000
+ ae0:	jmp    b54 <lp_competition_main___lam__3+0xb54>
+ ae2:	mov    cl,0x17
+ ae4:	sub    cl,al
+ ae6:	shl    rsi,cl
+ ae9:	cmp    rsi,0x1000000
+ af0:	jne    88e <lp_competition_main___lam__3+0x88e>
+ af6:	lea    rcx,[r8+0x1]
+ afa:	test   dil,dil
+ afd:	mov    edx,0x7f800000
+ b02:	mov    eax,0xff800000
+ b07:	cmove  eax,edx
+ b0a:	cmp    rcx,0x1a9
+ b11:	ja     b74 <lp_competition_main___lam__3+0xb74>
+ b13:	add    r8d,0xffffff56
+ b1a:	mov    esi,0x800000
+ b1f:	and    esi,0x7fffff
+ b25:	mov    eax,esi
+ b27:	xor    ecx,ecx
+ b29:	test   dil,dil
+ b2c:	setne  cl
+ b2f:	shl    ecx,0x1f
+ b32:	or     ecx,eax
+ b34:	movzx  eax,r8b
+ b38:	jmp    b6f <lp_competition_main___lam__3+0xb6f>
+ b3a:	cmp    rdi,0x1aa
+ b41:	jae    b74 <lp_competition_main___lam__3+0xb74>
+ b43:	add    edi,0xffffff55
+ b49:	xor    eax,eax
+ b4b:	cmp    r8,0x800000
+ b52:	jb     b5e <lp_competition_main___lam__3+0xb5e>
+ b54:	and    r8d,0x7fffff
+ b5b:	mov    eax,r8d
+ b5e:	xor    ecx,ecx
+ b60:	test   sil,sil
+ b63:	sete   cl
+ b66:	shl    ecx,0x1f
+ b69:	or     ecx,eax
+ b6b:	movzx  eax,dil
+ b6f:	shl    eax,0x17
+ b72:	or     eax,ecx
+ b74:	add    rsp,0x10
+ b78:	pop    rbx
+ b79:	pop    r12
+ b7b:	pop    r14
+ b7d:	pop    r15
+ b7f:	pop    rbp
+ b80:	ret
+ b81:	mov    cl,0x17
+ b83:	sub    cl,al
+ b85:	shl    rbx,cl
+ b88:	test   dl,dl
+ b8a:	mov    ecx,0x7f800000
+ b8f:	mov    eax,0xff800000
+ b94:	cmovne eax,ecx
+ b97:	cmp    rbx,0x1000000
+ b9e:	jne    bb6 <lp_competition_main___lam__3+0xbb6>
+ ba0:	cmp    rsi,0x1a8
+ ba7:	ja     b74 <lp_competition_main___lam__3+0xb74>
+ ba9:	add    esi,0xffffff56
+ baf:	mov    ebx,0x800000
+ bb4:	jmp    bd0 <lp_competition_main___lam__3+0xbd0>
+ bb6:	cmp    rsi,0x1aa
+ bbd:	jae    b74 <lp_competition_main___lam__3+0xb74>
+ bbf:	add    esi,0xffffff55
+ bc5:	xor    eax,eax
+ bc7:	cmp    rbx,0x800000
+ bce:	jb     bd8 <lp_competition_main___lam__3+0xbd8>
+ bd0:	and    ebx,0x7fffff
+ bd6:	mov    eax,ebx
+ bd8:	xor    ecx,ecx
+ bda:	test   dl,dl
+ bdc:	sete   cl
+ bdf:	shl    ecx,0x1f
+ be2:	or     ecx,eax
+ be4:	shl    esi,0x17
+ be7:	or     esi,ecx
+ be9:	mov    eax,esi
+ beb:	jmp    b74 <lp_competition_main___lam__3+0xb74>
+ bed:	mov    r8d,edx
+ bf0:	and    r8d,0x1
+ bf4:	add    r8,rdx
+ bf7:	jmp    aae <lp_competition_main___lam__3+0xaae>
+ bfc:	mov    esi,edx
+ bfe:	and    esi,0x1
+ c01:	add    rsi,rdx
+ c04:	cmp    rsi,0x1000000
+ c0b:	je     af6 <lp_competition_main___lam__3+0xaf6>
+ c11:	jmp    88e <lp_competition_main___lam__3+0x88e>
+ c16:	mov    ebx,edi
+ c18:	and    ebx,0x1
+ c1b:	add    rbx,rdi
+ c1e:	jmp    b88 <lp_competition_main___lam__3+0xb88>
+ c23:	mov    r14,rax
+ c26:	test   ecx,ecx
+ c28:	je     c32 <lp_competition_main___lam__3+0xc32>
+ c2a:	mov    rdi,rbx
+ c2d:	call   c32 <lp_competition_main___lam__3+0xc32>
+			c2e: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ c32:	mov    rax,r14
+ c35:	jmp    b74 <lp_competition_main___lam__3+0xb74>
+ c3a:	cmp    r15d,0xff
+ c41:	setne  al
+ c44:	test   r14d,0x7fffff
+ c4b:	sete   cl
+ c4e:	or     cl,al
+ c50:	je     c68 <lp_competition_main___lam__3+0xc68>
+ c52:	mov    edi,r14d
+ c55:	mov    esi,ebx
+ c57:	add    rsp,0x10
+ c5b:	pop    rbx
+ c5c:	pop    r12
+ c5e:	pop    r14
+ c60:	pop    r15
+ c62:	pop    rbp
+ c63:	jmp    c68 <lp_competition_main___lam__3+0xc68>
+			c64: R_X86_64_PLT32	lp_competition_Submission_FastMul_mul-0x4
+ c68:	mov    rax,r14
+ c6b:	or     eax,0x400000
+ c70:	jmp    b74 <lp_competition_main___lam__3+0xb74>
+
+Disassembly of section .text.lp_competition_main___lam__3___boxed:
+
+0000000000000000 <lp_competition_main___lam__3___boxed>:
+   0:	push   r15
+   2:	push   r14
+   4:	push   rbx
+   5:	test   sil,0x1
+   9:	jne    16 <lp_competition_main___lam__3___boxed+0x16>
+   b:	mov    eax,DWORD PTR [rsi]
+   d:	cmp    eax,0x2
+  10:	jl     47 <lp_competition_main___lam__3___boxed+0x47>
+  12:	dec    eax
+  14:	mov    DWORD PTR [rsi],eax
+  16:	test   dl,0x1
+  19:	jne    26 <lp_competition_main___lam__3___boxed+0x26>
+  1b:	mov    eax,DWORD PTR [rdx]
+  1d:	cmp    eax,0x2
+  20:	jl     67 <lp_competition_main___lam__3___boxed+0x67>
+  22:	dec    eax
+  24:	mov    DWORD PTR [rdx],eax
+  26:	shr    rdx,1
+  29:	shr    rsi,1
+  2c:	shr    edi,1
+  2e:	movzx  edi,dil
+  32:	call   37 <lp_competition_main___lam__3___boxed+0x37>
+			33: R_X86_64_PLT32	lp_competition_main___lam__3-0x4
+  37:	mov    eax,eax
+  39:	lea    rax,[rax*2+0x1]
+  41:	pop    rbx
+  42:	pop    r14
+  44:	pop    r15
+  46:	ret
+  47:	test   eax,eax
+  49:	je     16 <lp_competition_main___lam__3___boxed+0x16>
+  4b:	mov    rbx,rdi
+  4e:	mov    rdi,rsi
+  51:	mov    r14,rdx
+  54:	mov    r15,rsi
+  57:	call   5c <lp_competition_main___lam__3___boxed+0x5c>
+			58: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  5c:	mov    rdi,rbx
+  5f:	mov    rsi,r15
+  62:	mov    rdx,r14
+  65:	jmp    16 <lp_competition_main___lam__3___boxed+0x16>
+  67:	test   eax,eax
+  69:	je     26 <lp_competition_main___lam__3___boxed+0x26>
+  6b:	mov    rbx,rdi
+  6e:	mov    rdi,rdx
+  71:	mov    r14,rdx
+  74:	mov    r15,rsi
+  77:	call   7c <lp_competition_main___lam__3___boxed+0x7c>
+			78: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  7c:	mov    rdi,rbx
+  7f:	mov    rsi,r15
+  82:	mov    rdx,r14
+  85:	jmp    26 <lp_competition_main___lam__3___boxed+0x26>
+
+Disassembly of section .text.lp_competition_main___lam__5:
+
+0000000000000000 <lp_competition_main___lam__5>:
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r12
+   7:	push   rbx
+   8:	sub    rsp,0x10
+   c:	mov    ebx,edx
+   e:	mov    eax,esi
+  10:	shr    eax,0x17
+  13:	movzx  r15d,al
+  17:	mov    ebp,edx
+  19:	shr    ebp,0x17
+  1c:	movzx  r12d,bpl
+  20:	lea    ecx,[r12+r15*1]
+  24:	cmp    ecx,0x80
+  2a:	jb     5f <lp_competition_main___lam__5+0x5f>
+  2c:	mov    ecx,esi
+  2e:	and    ecx,0x7fffffff
+  34:	lea    edx,[rcx-0x1]
+  37:	cmp    edx,0xbffffff
+  3d:	setb   dl
+  40:	cmp    ecx,0x7f800000
+  46:	setae  cl
+  49:	or     cl,dl
+  4b:	mov    r14,rsi
+  4e:	je     bf <lp_competition_main___lam__5+0xbf>
+  50:	mov    edi,esi
+  52:	call   57 <lp_competition_main___lam__5+0x57>
+			53: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  57:	movaps xmm1,xmm0
+  5a:	jmp    e7 <lp_competition_main___lam__5+0xe7>
+  5f:	lea    eax,[rsi+rsi*1]
+  62:	cmp    eax,0xff000000
+  67:	setae  al
+  6a:	lea    ecx,[rbx+rbx*1]
+  6d:	cmp    ecx,0xff000000
+  73:	setae  cl
+  76:	or     cl,al
+  78:	je     122 <lp_competition_main___lam__5+0x122>
+  7e:	mov    eax,esi
+  80:	lea    rdi,[rax*2+0x1]
+  88:	mov    eax,ebx
+  8a:	lea    rsi,[rax*2+0x1]
+  92:	call   97 <lp_competition_main___lam__5+0x97>
+			93: R_X86_64_PLT32	lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_MulBackend_word___at___00FloatLib_Floats_Formats_BinaryInterchange_Configured_Plan_softwareMul32Certified_spec__1-0x4
+  97:	mov    rbx,rax
+  9a:	test   bl,0x1
+  9d:	jne    2f1 <lp_competition_main___lam__5+0x2f1>
+  a3:	mov    rdi,rbx
+  a6:	call   ab <lp_competition_main___lam__5+0xab>
+			a7: R_X86_64_PLT32	lean_uint32_of_big_nat-0x4
+  ab:	mov    ecx,DWORD PTR [rbx]
+  ad:	cmp    ecx,0x2
+  b0:	jl     419 <lp_competition_main___lam__5+0x419>
+  b6:	dec    ecx
+  b8:	mov    DWORD PTR [rbx],ecx
+  ba:	jmp    36e <lp_competition_main___lam__5+0x36e>
+  bf:	mov    ecx,esi
+  c1:	and    ecx,0x7fffff
+  c7:	or     ecx,0x800000
+  cd:	cvtsi2ss xmm1,ecx
+  d1:	mov    rcx,QWORD PTR [rip+0x0]        # d8 <lp_competition_main___lam__5+0xd8>
+			d4: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  d8:	mov    rcx,QWORD PTR [rcx]
+  db:	mov    eax,eax
+  dd:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+  e2:	mulss  xmm1,DWORD PTR [rax+0x8]
+  e7:	mov    eax,ebx
+  e9:	and    eax,0x7fffffff
+  ee:	lea    ecx,[rax-0x1]
+  f1:	cmp    ecx,0xbffffff
+  f7:	setb   cl
+  fa:	cmp    eax,0x7f800000
+  ff:	setae  al
+ 102:	or     al,cl
+ 104:	je     2a7 <lp_competition_main___lam__5+0x2a7>
+ 10a:	mov    edi,ebx
+ 10c:	movss  DWORD PTR [rsp+0xc],xmm1
+ 112:	call   117 <lp_competition_main___lam__5+0x117>
+			113: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 117:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 11d:	jmp    2d0 <lp_competition_main___lam__5+0x2d0>
+ 122:	test   esi,esi
+ 124:	setns  al
+ 127:	test   ebx,ebx
+ 129:	setns  cl
+ 12c:	test   dil,dil
+ 12f:	sete   dl
+ 132:	or     dl,al
+ 134:	xor    eax,eax
+ 136:	xor    dl,cl
+ 138:	movzx  edi,dil
+ 13c:	cmove  edi,eax
+ 13f:	and    esi,0x7fffff
+ 145:	and    ebx,0x7fffff
+ 14b:	lea    ecx,[rsi+0x800000]
+ 151:	mov    r8d,r15d
+ 154:	dec    r8
+ 157:	test   r15d,r15d
+ 15a:	cmove  ecx,esi
+ 15d:	cmove  r8,rax
+ 161:	lea    esi,[rbx+0x800000]
+ 167:	mov    edx,r12d
+ 16a:	dec    rdx
+ 16d:	test   r12d,r12d
+ 170:	cmove  esi,ebx
+ 173:	cmove  rdx,rax
+ 177:	imul   rsi,rcx
+ 17b:	add    rdx,r8
+ 17e:	cmp    rdx,0x7b
+ 182:	jbe    2f8 <lp_competition_main___lam__5+0x2f8>
+ 188:	test   rsi,rsi
+ 18b:	je     363 <lp_competition_main___lam__5+0x363>
+ 191:	xor    eax,eax
+ 193:	mov    rcx,rsi
+ 196:	shr    rcx,0x20
+ 19a:	cmove  rcx,rsi
+ 19e:	setne  al
+ 1a1:	shl    eax,0x5
+ 1a4:	mov    r8,rcx
+ 1a7:	shr    r8,0x10
+ 1ab:	test   r8,r8
+ 1ae:	cmove  r8,rcx
+ 1b2:	lea    rcx,[rax+0x10]
+ 1b6:	cmove  rcx,rax
+ 1ba:	mov    rax,r8
+ 1bd:	shr    rax,0x8
+ 1c1:	test   rax,rax
+ 1c4:	cmove  rax,r8
+ 1c8:	lea    r8,[rcx+0x8]
+ 1cc:	cmove  r8,rcx
+ 1d0:	mov    rcx,rax
+ 1d3:	shr    rcx,0x4
+ 1d7:	test   rcx,rcx
+ 1da:	cmove  rcx,rax
+ 1de:	lea    r9,[r8+0x4]
+ 1e2:	cmove  r9,r8
+ 1e6:	mov    r8,rcx
+ 1e9:	shr    r8,0x2
+ 1ed:	test   r8,r8
+ 1f0:	cmove  r8,rcx
+ 1f4:	lea    rax,[r9+0x2]
+ 1f8:	cmove  rax,r9
+ 1fc:	cmp    r8,0x2
+ 200:	sbb    rax,0xffffffffffffffff
+ 204:	lea    r8,[rax+rdx*1]
+ 208:	cmp    r8,0xab
+ 20f:	jbe    304 <lp_competition_main___lam__5+0x304>
+ 215:	cmp    rax,0x17
+ 219:	jb     3a0 <lp_competition_main___lam__5+0x3a0>
+ 21f:	mov    rcx,rax
+ 222:	add    rcx,0xffffffffffffffe9
+ 226:	je     3a7 <lp_competition_main___lam__5+0x3a7>
+ 22c:	mov    rdx,rsi
+ 22f:	shr    rdx,cl
+ 232:	mov    r9,0xffffffffffffffff
+ 239:	shl    r9,cl
+ 23c:	not    r9
+ 23f:	and    r9,rsi
+ 242:	add    al,0x28
+ 244:	mov    esi,0x1
+ 249:	mov    ecx,eax
+ 24b:	shl    rsi,cl
+ 24e:	cmp    r9,rsi
+ 251:	jb     25c <lp_competition_main___lam__5+0x25c>
+ 253:	jbe    403 <lp_competition_main___lam__5+0x403>
+ 259:	inc    rdx
+ 25c:	mov    rsi,rdx
+ 25f:	cmp    rsi,0x1000000
+ 266:	je     3b4 <lp_competition_main___lam__5+0x3b4>
+ 26c:	test   dil,dil
+ 26f:	sete   cl
+ 272:	mov    edx,0x7f800000
+ 277:	mov    eax,0xff800000
+ 27c:	cmove  eax,edx
+ 27f:	cmp    r8,0x1aa
+ 286:	jae    36e <lp_competition_main___lam__5+0x36e>
+ 28c:	add    r8d,0xffffff55
+ 293:	xor    edx,edx
+ 295:	cmp    rsi,0x800000
+ 29c:	jb     3e8 <lp_competition_main___lam__5+0x3e8>
+ 2a2:	jmp    3e0 <lp_competition_main___lam__5+0x3e0>
+ 2a7:	mov    eax,ebx
+ 2a9:	and    eax,0x7fffff
+ 2ae:	or     eax,0x800000
+ 2b3:	xorps  xmm0,xmm0
+ 2b6:	cvtsi2ss xmm0,eax
+ 2ba:	mov    rax,QWORD PTR [rip+0x0]        # 2c1 <lp_competition_main___lam__5+0x2c1>
+			2bd: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 2c1:	mov    rax,QWORD PTR [rax]
+ 2c4:	mov    ecx,ebp
+ 2c6:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 2cb:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 2d0:	mulss  xmm1,xmm0
+ 2d4:	ucomiss xmm1,xmm1
+ 2d7:	jp     430 <lp_competition_main___lam__5+0x430>
+ 2dd:	movaps xmm0,xmm1
+ 2e0:	add    rsp,0x10
+ 2e4:	pop    rbx
+ 2e5:	pop    r12
+ 2e7:	pop    r14
+ 2e9:	pop    r15
+ 2eb:	pop    rbp
+ 2ec:	jmp    2f1 <lp_competition_main___lam__5+0x2f1>
+			2ed: R_X86_64_PLT32	lean_float32_to_bits-0x4
+ 2f1:	shr    rbx,1
+ 2f4:	mov    eax,ebx
+ 2f6:	jmp    36e <lp_competition_main___lam__5+0x36e>
+ 2f8:	test   rsi,rsi
+ 2fb:	je     363 <lp_competition_main___lam__5+0x363>
+ 2fd:	cmp    edx,0x56
+ 300:	jb     363 <lp_competition_main___lam__5+0x363>
+ 302:	jmp    319 <lp_competition_main___lam__5+0x319>
+ 304:	cmp    edx,0x95
+ 30a:	jb     319 <lp_competition_main___lam__5+0x319>
+ 30c:	add    dl,0x2b
+ 30f:	mov    ecx,edx
+ 311:	shl    rsi,cl
+ 314:	mov    rax,rsi
+ 317:	jmp    344 <lp_competition_main___lam__5+0x344>
+ 319:	mov    cl,0x15
+ 31b:	sub    cl,dl
+ 31d:	mov    rax,rsi
+ 320:	shr    rax,cl
+ 323:	mov    r8,0xffffffffffffffff
+ 32a:	shl    r8,cl
+ 32d:	not    r8
+ 330:	and    r8,rsi
+ 333:	mov    cl,0x14
+ 335:	sub    cl,dl
+ 337:	mov    edx,0x1
+ 33c:	shl    rdx,cl
+ 33f:	cmp    r8,rdx
+ 342:	jae    37b <lp_competition_main___lam__5+0x37b>
+ 344:	test   rax,rax
+ 347:	je     363 <lp_competition_main___lam__5+0x363>
+ 349:	cmp    rax,0x800000
+ 34f:	jne    38c <lp_competition_main___lam__5+0x38c>
+ 351:	test   dil,dil
+ 354:	mov    ecx,0x800000
+ 359:	mov    eax,0x80800000
+ 35e:	cmove  eax,ecx
+ 361:	jmp    36e <lp_competition_main___lam__5+0x36e>
+ 363:	xor    eax,eax
+ 365:	test   dil,dil
+ 368:	setne  al
+ 36b:	shl    eax,0x1f
+ 36e:	add    rsp,0x10
+ 372:	pop    rbx
+ 373:	pop    r12
+ 375:	pop    r14
+ 377:	pop    r15
+ 379:	pop    rbp
+ 37a:	ret
+ 37b:	ja     381 <lp_competition_main___lam__5+0x381>
+ 37d:	test   al,0x1
+ 37f:	je     344 <lp_competition_main___lam__5+0x344>
+ 381:	inc    rax
+ 384:	cmp    rax,0x800000
+ 38a:	je     351 <lp_competition_main___lam__5+0x351>
+ 38c:	xor    ecx,ecx
+ 38e:	test   dil,dil
+ 391:	setne  cl
+ 394:	shl    ecx,0x1f
+ 397:	and    eax,0x7fffff
+ 39c:	or     eax,ecx
+ 39e:	jmp    36e <lp_competition_main___lam__5+0x36e>
+ 3a0:	mov    cl,0x17
+ 3a2:	sub    cl,al
+ 3a4:	shl    rsi,cl
+ 3a7:	cmp    rsi,0x1000000
+ 3ae:	jne    26c <lp_competition_main___lam__5+0x26c>
+ 3b4:	lea    rdx,[r8+0x1]
+ 3b8:	test   dil,dil
+ 3bb:	sete   cl
+ 3be:	mov    esi,0x7f800000
+ 3c3:	mov    eax,0xff800000
+ 3c8:	cmove  eax,esi
+ 3cb:	cmp    rdx,0x1a9
+ 3d2:	ja     36e <lp_competition_main___lam__5+0x36e>
+ 3d4:	add    r8d,0xffffff56
+ 3db:	mov    esi,0x800000
+ 3e0:	and    esi,0x7fffff
+ 3e6:	mov    edx,esi
+ 3e8:	xor    esi,esi
+ 3ea:	test   cl,cl
+ 3ec:	sete   sil
+ 3f0:	shl    esi,0x1f
+ 3f3:	movzx  eax,r8b
+ 3f7:	shl    eax,0x17
+ 3fa:	or     eax,esi
+ 3fc:	or     eax,edx
+ 3fe:	jmp    36e <lp_competition_main___lam__5+0x36e>
+ 403:	mov    esi,edx
+ 405:	and    esi,0x1
+ 408:	add    rsi,rdx
+ 40b:	cmp    rsi,0x1000000
+ 412:	je     3b4 <lp_competition_main___lam__5+0x3b4>
+ 414:	jmp    26c <lp_competition_main___lam__5+0x26c>
+ 419:	mov    r14,rax
+ 41c:	test   ecx,ecx
+ 41e:	je     428 <lp_competition_main___lam__5+0x428>
+ 420:	mov    rdi,rbx
+ 423:	call   428 <lp_competition_main___lam__5+0x428>
+			424: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 428:	mov    rax,r14
+ 42b:	jmp    36e <lp_competition_main___lam__5+0x36e>
+ 430:	cmp    r15d,0xff
+ 437:	jne    450 <lp_competition_main___lam__5+0x450>
+ 439:	mov    rax,r14
+ 43c:	test   eax,0x7fffff
+ 441:	setne  cl
+ 444:	test   eax,0x400000
+ 449:	sete   al
+ 44c:	test   cl,al
+ 44e:	jne    4ca <lp_competition_main___lam__5+0x4ca>
+ 450:	cmp    r12d,0xff
+ 457:	jne    49c <lp_competition_main___lam__5+0x49c>
+ 459:	test   ebx,0x7fffff
+ 45f:	setne  al
+ 462:	test   ebx,0x400000
+ 468:	sete   cl
+ 46b:	test   al,cl
+ 46d:	jne    48f <lp_competition_main___lam__5+0x48f>
+ 46f:	cmp    r15d,0xff
+ 476:	setne  al
+ 479:	test   r14d,0x7fffff
+ 480:	sete   cl
+ 483:	or     cl,al
+ 485:	je     4ca <lp_competition_main___lam__5+0x4ca>
+ 487:	test   ebx,0x7fffff
+ 48d:	je     4b4 <lp_competition_main___lam__5+0x4b4>
+ 48f:	or     ebx,0x400000
+ 495:	mov    eax,ebx
+ 497:	jmp    36e <lp_competition_main___lam__5+0x36e>
+ 49c:	cmp    r15d,0xff
+ 4a3:	setne  al
+ 4a6:	test   r14d,0x7fffff
+ 4ad:	sete   cl
+ 4b0:	or     cl,al
+ 4b2:	je     4ca <lp_competition_main___lam__5+0x4ca>
+ 4b4:	mov    edi,r14d
+ 4b7:	mov    esi,ebx
+ 4b9:	add    rsp,0x10
+ 4bd:	pop    rbx
+ 4be:	pop    r12
+ 4c0:	pop    r14
+ 4c2:	pop    r15
+ 4c4:	pop    rbp
+ 4c5:	jmp    4ca <lp_competition_main___lam__5+0x4ca>
+			4c6: R_X86_64_PLT32	lp_competition_Submission_FastMul_mul-0x4
+ 4ca:	mov    rax,r14
+ 4cd:	or     eax,0x400000
+ 4d2:	jmp    36e <lp_competition_main___lam__5+0x36e>
+
+Disassembly of section .text.lp_competition_main___lam__5___boxed:
+
+0000000000000000 <lp_competition_main___lam__5___boxed>:
+   0:	push   r15
+   2:	push   r14
+   4:	push   rbx
+   5:	test   sil,0x1
+   9:	jne    16 <lp_competition_main___lam__5___boxed+0x16>
+   b:	mov    eax,DWORD PTR [rsi]
+   d:	cmp    eax,0x2
+  10:	jl     47 <lp_competition_main___lam__5___boxed+0x47>
+  12:	dec    eax
+  14:	mov    DWORD PTR [rsi],eax
+  16:	test   dl,0x1
+  19:	jne    26 <lp_competition_main___lam__5___boxed+0x26>
+  1b:	mov    eax,DWORD PTR [rdx]
+  1d:	cmp    eax,0x2
+  20:	jl     67 <lp_competition_main___lam__5___boxed+0x67>
+  22:	dec    eax
+  24:	mov    DWORD PTR [rdx],eax
+  26:	shr    rdx,1
+  29:	shr    rsi,1
+  2c:	shr    edi,1
+  2e:	movzx  edi,dil
+  32:	call   37 <lp_competition_main___lam__5___boxed+0x37>
+			33: R_X86_64_PLT32	lp_competition_main___lam__5-0x4
+  37:	mov    eax,eax
+  39:	lea    rax,[rax*2+0x1]
+  41:	pop    rbx
+  42:	pop    r14
+  44:	pop    r15
+  46:	ret
+  47:	test   eax,eax
+  49:	je     16 <lp_competition_main___lam__5___boxed+0x16>
+  4b:	mov    rbx,rdi
+  4e:	mov    rdi,rsi
+  51:	mov    r14,rdx
+  54:	mov    r15,rsi
+  57:	call   5c <lp_competition_main___lam__5___boxed+0x5c>
+			58: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  5c:	mov    rdi,rbx
+  5f:	mov    rsi,r15
+  62:	mov    rdx,r14
+  65:	jmp    16 <lp_competition_main___lam__5___boxed+0x16>
+  67:	test   eax,eax
+  69:	je     26 <lp_competition_main___lam__5___boxed+0x26>
+  6b:	mov    rbx,rdi
+  6e:	mov    rdi,rdx
+  71:	mov    r14,rdx
+  74:	mov    r15,rsi
+  77:	call   7c <lp_competition_main___lam__5___boxed+0x7c>
+			78: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  7c:	mov    rdi,rbx
+  7f:	mov    rsi,r15
+  82:	mov    rdx,r14
+  85:	jmp    26 <lp_competition_main___lam__5___boxed+0x26>
+
+Disassembly of section .text.lp_competition_main___lam__6:
+
+0000000000000000 <lp_competition_main___lam__6>:
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r12
+   7:	push   rbx
+   8:	sub    rsp,0x10
+   c:	mov    ebx,edx
+   e:	mov    eax,esi
+  10:	shr    eax,0x17
+  13:	movzx  r15d,al
+  17:	mov    ebp,edx
+  19:	shr    ebp,0x17
+  1c:	movzx  r12d,bpl
+  20:	lea    ecx,[r12+r15*1]
+  24:	cmp    ecx,0x80
+  2a:	jb     5f <lp_competition_main___lam__6+0x5f>
+  2c:	mov    ecx,esi
+  2e:	and    ecx,0x7fffffff
+  34:	lea    edx,[rcx-0x1]
+  37:	cmp    edx,0xbffffff
+  3d:	setb   dl
+  40:	cmp    ecx,0x7f800000
+  46:	setae  cl
+  49:	or     cl,dl
+  4b:	mov    r14,rsi
+  4e:	je     bf <lp_competition_main___lam__6+0xbf>
+  50:	mov    edi,esi
+  52:	call   57 <lp_competition_main___lam__6+0x57>
+			53: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  57:	movaps xmm1,xmm0
+  5a:	jmp    e7 <lp_competition_main___lam__6+0xe7>
+  5f:	lea    eax,[rsi+rsi*1]
+  62:	cmp    eax,0xff000000
+  67:	setae  al
+  6a:	lea    ecx,[rbx+rbx*1]
+  6d:	cmp    ecx,0xff000000
+  73:	setae  cl
+  76:	or     cl,al
+  78:	je     122 <lp_competition_main___lam__6+0x122>
+  7e:	mov    eax,esi
+  80:	lea    rdi,[rax*2+0x1]
+  88:	mov    eax,ebx
+  8a:	lea    rsi,[rax*2+0x1]
+  92:	call   97 <lp_competition_main___lam__6+0x97>
+			93: R_X86_64_PLT32	lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_MulBackend_word___at___00FloatLib_Floats_Formats_BinaryInterchange_Configured_Plan_softwareMul32Certified_spec__1-0x4
+  97:	mov    rbx,rax
+  9a:	test   bl,0x1
+  9d:	jne    2f1 <lp_competition_main___lam__6+0x2f1>
+  a3:	mov    rdi,rbx
+  a6:	call   ab <lp_competition_main___lam__6+0xab>
+			a7: R_X86_64_PLT32	lean_uint32_of_big_nat-0x4
+  ab:	mov    ecx,DWORD PTR [rbx]
+  ad:	cmp    ecx,0x2
+  b0:	jl     419 <lp_competition_main___lam__6+0x419>
+  b6:	dec    ecx
+  b8:	mov    DWORD PTR [rbx],ecx
+  ba:	jmp    36e <lp_competition_main___lam__6+0x36e>
+  bf:	mov    ecx,esi
+  c1:	and    ecx,0x7fffff
+  c7:	or     ecx,0x800000
+  cd:	cvtsi2ss xmm1,ecx
+  d1:	mov    rcx,QWORD PTR [rip+0x0]        # d8 <lp_competition_main___lam__6+0xd8>
+			d4: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  d8:	mov    rcx,QWORD PTR [rcx]
+  db:	mov    eax,eax
+  dd:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+  e2:	mulss  xmm1,DWORD PTR [rax+0x8]
+  e7:	mov    eax,ebx
+  e9:	and    eax,0x7fffffff
+  ee:	lea    ecx,[rax-0x1]
+  f1:	cmp    ecx,0xbffffff
+  f7:	setb   cl
+  fa:	cmp    eax,0x7f800000
+  ff:	setae  al
+ 102:	or     al,cl
+ 104:	je     2a7 <lp_competition_main___lam__6+0x2a7>
+ 10a:	mov    edi,ebx
+ 10c:	movss  DWORD PTR [rsp+0xc],xmm1
+ 112:	call   117 <lp_competition_main___lam__6+0x117>
+			113: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 117:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 11d:	jmp    2d0 <lp_competition_main___lam__6+0x2d0>
+ 122:	test   esi,esi
+ 124:	setns  al
+ 127:	test   ebx,ebx
+ 129:	setns  cl
+ 12c:	test   dil,dil
+ 12f:	sete   dl
+ 132:	or     dl,al
+ 134:	xor    eax,eax
+ 136:	xor    dl,cl
+ 138:	movzx  edi,dil
+ 13c:	cmove  edi,eax
+ 13f:	and    esi,0x7fffff
+ 145:	and    ebx,0x7fffff
+ 14b:	lea    ecx,[rsi+0x800000]
+ 151:	mov    r8d,r15d
+ 154:	dec    r8
+ 157:	test   r15d,r15d
+ 15a:	cmove  ecx,esi
+ 15d:	cmove  r8,rax
+ 161:	lea    esi,[rbx+0x800000]
+ 167:	mov    edx,r12d
+ 16a:	dec    rdx
+ 16d:	test   r12d,r12d
+ 170:	cmove  esi,ebx
+ 173:	cmove  rdx,rax
+ 177:	imul   rsi,rcx
+ 17b:	add    rdx,r8
+ 17e:	cmp    rdx,0x7b
+ 182:	jbe    2f8 <lp_competition_main___lam__6+0x2f8>
+ 188:	test   rsi,rsi
+ 18b:	je     363 <lp_competition_main___lam__6+0x363>
+ 191:	xor    eax,eax
+ 193:	mov    rcx,rsi
+ 196:	shr    rcx,0x20
+ 19a:	cmove  rcx,rsi
+ 19e:	setne  al
+ 1a1:	shl    eax,0x5
+ 1a4:	mov    r8,rcx
+ 1a7:	shr    r8,0x10
+ 1ab:	test   r8,r8
+ 1ae:	cmove  r8,rcx
+ 1b2:	lea    rcx,[rax+0x10]
+ 1b6:	cmove  rcx,rax
+ 1ba:	mov    rax,r8
+ 1bd:	shr    rax,0x8
+ 1c1:	test   rax,rax
+ 1c4:	cmove  rax,r8
+ 1c8:	lea    r8,[rcx+0x8]
+ 1cc:	cmove  r8,rcx
+ 1d0:	mov    rcx,rax
+ 1d3:	shr    rcx,0x4
+ 1d7:	test   rcx,rcx
+ 1da:	cmove  rcx,rax
+ 1de:	lea    r9,[r8+0x4]
+ 1e2:	cmove  r9,r8
+ 1e6:	mov    r8,rcx
+ 1e9:	shr    r8,0x2
+ 1ed:	test   r8,r8
+ 1f0:	cmove  r8,rcx
+ 1f4:	lea    rax,[r9+0x2]
+ 1f8:	cmove  rax,r9
+ 1fc:	cmp    r8,0x2
+ 200:	sbb    rax,0xffffffffffffffff
+ 204:	lea    r8,[rax+rdx*1]
+ 208:	cmp    r8,0xab
+ 20f:	jbe    304 <lp_competition_main___lam__6+0x304>
+ 215:	cmp    rax,0x17
+ 219:	jb     3a0 <lp_competition_main___lam__6+0x3a0>
+ 21f:	mov    rcx,rax
+ 222:	add    rcx,0xffffffffffffffe9
+ 226:	je     3a7 <lp_competition_main___lam__6+0x3a7>
+ 22c:	mov    rdx,rsi
+ 22f:	shr    rdx,cl
+ 232:	mov    r9,0xffffffffffffffff
+ 239:	shl    r9,cl
+ 23c:	not    r9
+ 23f:	and    r9,rsi
+ 242:	add    al,0x28
+ 244:	mov    esi,0x1
+ 249:	mov    ecx,eax
+ 24b:	shl    rsi,cl
+ 24e:	cmp    r9,rsi
+ 251:	jb     25c <lp_competition_main___lam__6+0x25c>
+ 253:	jbe    403 <lp_competition_main___lam__6+0x403>
+ 259:	inc    rdx
+ 25c:	mov    rsi,rdx
+ 25f:	cmp    rsi,0x1000000
+ 266:	je     3b4 <lp_competition_main___lam__6+0x3b4>
+ 26c:	test   dil,dil
+ 26f:	sete   cl
+ 272:	mov    edx,0x7f800000
+ 277:	mov    eax,0xff800000
+ 27c:	cmove  eax,edx
+ 27f:	cmp    r8,0x1aa
+ 286:	jae    36e <lp_competition_main___lam__6+0x36e>
+ 28c:	add    r8d,0xffffff55
+ 293:	xor    edx,edx
+ 295:	cmp    rsi,0x800000
+ 29c:	jb     3e8 <lp_competition_main___lam__6+0x3e8>
+ 2a2:	jmp    3e0 <lp_competition_main___lam__6+0x3e0>
+ 2a7:	mov    eax,ebx
+ 2a9:	and    eax,0x7fffff
+ 2ae:	or     eax,0x800000
+ 2b3:	xorps  xmm0,xmm0
+ 2b6:	cvtsi2ss xmm0,eax
+ 2ba:	mov    rax,QWORD PTR [rip+0x0]        # 2c1 <lp_competition_main___lam__6+0x2c1>
+			2bd: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 2c1:	mov    rax,QWORD PTR [rax]
+ 2c4:	mov    ecx,ebp
+ 2c6:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 2cb:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 2d0:	mulss  xmm1,xmm0
+ 2d4:	ucomiss xmm1,xmm1
+ 2d7:	jp     430 <lp_competition_main___lam__6+0x430>
+ 2dd:	movaps xmm0,xmm1
+ 2e0:	add    rsp,0x10
+ 2e4:	pop    rbx
+ 2e5:	pop    r12
+ 2e7:	pop    r14
+ 2e9:	pop    r15
+ 2eb:	pop    rbp
+ 2ec:	jmp    2f1 <lp_competition_main___lam__6+0x2f1>
+			2ed: R_X86_64_PLT32	lean_float32_to_bits-0x4
+ 2f1:	shr    rbx,1
+ 2f4:	mov    eax,ebx
+ 2f6:	jmp    36e <lp_competition_main___lam__6+0x36e>
+ 2f8:	test   rsi,rsi
+ 2fb:	je     363 <lp_competition_main___lam__6+0x363>
+ 2fd:	cmp    edx,0x56
+ 300:	jb     363 <lp_competition_main___lam__6+0x363>
+ 302:	jmp    319 <lp_competition_main___lam__6+0x319>
+ 304:	cmp    edx,0x95
+ 30a:	jb     319 <lp_competition_main___lam__6+0x319>
+ 30c:	add    dl,0x2b
+ 30f:	mov    ecx,edx
+ 311:	shl    rsi,cl
+ 314:	mov    rax,rsi
+ 317:	jmp    344 <lp_competition_main___lam__6+0x344>
+ 319:	mov    cl,0x15
+ 31b:	sub    cl,dl
+ 31d:	mov    rax,rsi
+ 320:	shr    rax,cl
+ 323:	mov    r8,0xffffffffffffffff
+ 32a:	shl    r8,cl
+ 32d:	not    r8
+ 330:	and    r8,rsi
+ 333:	mov    cl,0x14
+ 335:	sub    cl,dl
+ 337:	mov    edx,0x1
+ 33c:	shl    rdx,cl
+ 33f:	cmp    r8,rdx
+ 342:	jae    37b <lp_competition_main___lam__6+0x37b>
+ 344:	test   rax,rax
+ 347:	je     363 <lp_competition_main___lam__6+0x363>
+ 349:	cmp    rax,0x800000
+ 34f:	jne    38c <lp_competition_main___lam__6+0x38c>
+ 351:	test   dil,dil
+ 354:	mov    ecx,0x800000
+ 359:	mov    eax,0x80800000
+ 35e:	cmove  eax,ecx
+ 361:	jmp    36e <lp_competition_main___lam__6+0x36e>
+ 363:	xor    eax,eax
+ 365:	test   dil,dil
+ 368:	setne  al
+ 36b:	shl    eax,0x1f
+ 36e:	add    rsp,0x10
+ 372:	pop    rbx
+ 373:	pop    r12
+ 375:	pop    r14
+ 377:	pop    r15
+ 379:	pop    rbp
+ 37a:	ret
+ 37b:	ja     381 <lp_competition_main___lam__6+0x381>
+ 37d:	test   al,0x1
+ 37f:	je     344 <lp_competition_main___lam__6+0x344>
+ 381:	inc    rax
+ 384:	cmp    rax,0x800000
+ 38a:	je     351 <lp_competition_main___lam__6+0x351>
+ 38c:	xor    ecx,ecx
+ 38e:	test   dil,dil
+ 391:	setne  cl
+ 394:	shl    ecx,0x1f
+ 397:	and    eax,0x7fffff
+ 39c:	or     eax,ecx
+ 39e:	jmp    36e <lp_competition_main___lam__6+0x36e>
+ 3a0:	mov    cl,0x17
+ 3a2:	sub    cl,al
+ 3a4:	shl    rsi,cl
+ 3a7:	cmp    rsi,0x1000000
+ 3ae:	jne    26c <lp_competition_main___lam__6+0x26c>
+ 3b4:	lea    rdx,[r8+0x1]
+ 3b8:	test   dil,dil
+ 3bb:	sete   cl
+ 3be:	mov    esi,0x7f800000
+ 3c3:	mov    eax,0xff800000
+ 3c8:	cmove  eax,esi
+ 3cb:	cmp    rdx,0x1a9
+ 3d2:	ja     36e <lp_competition_main___lam__6+0x36e>
+ 3d4:	add    r8d,0xffffff56
+ 3db:	mov    esi,0x800000
+ 3e0:	and    esi,0x7fffff
+ 3e6:	mov    edx,esi
+ 3e8:	xor    esi,esi
+ 3ea:	test   cl,cl
+ 3ec:	sete   sil
+ 3f0:	shl    esi,0x1f
+ 3f3:	movzx  eax,r8b
+ 3f7:	shl    eax,0x17
+ 3fa:	or     eax,esi
+ 3fc:	or     eax,edx
+ 3fe:	jmp    36e <lp_competition_main___lam__6+0x36e>
+ 403:	mov    esi,edx
+ 405:	and    esi,0x1
+ 408:	add    rsi,rdx
+ 40b:	cmp    rsi,0x1000000
+ 412:	je     3b4 <lp_competition_main___lam__6+0x3b4>
+ 414:	jmp    26c <lp_competition_main___lam__6+0x26c>
+ 419:	mov    r14,rax
+ 41c:	test   ecx,ecx
+ 41e:	je     428 <lp_competition_main___lam__6+0x428>
+ 420:	mov    rdi,rbx
+ 423:	call   428 <lp_competition_main___lam__6+0x428>
+			424: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 428:	mov    rax,r14
+ 42b:	jmp    36e <lp_competition_main___lam__6+0x36e>
+ 430:	cmp    r15d,0xff
+ 437:	jne    450 <lp_competition_main___lam__6+0x450>
+ 439:	mov    rax,r14
+ 43c:	test   eax,0x7fffff
+ 441:	setne  cl
+ 444:	test   eax,0x400000
+ 449:	sete   al
+ 44c:	test   cl,al
+ 44e:	jne    4ca <lp_competition_main___lam__6+0x4ca>
+ 450:	cmp    r12d,0xff
+ 457:	jne    49c <lp_competition_main___lam__6+0x49c>
+ 459:	test   ebx,0x7fffff
+ 45f:	setne  al
+ 462:	test   ebx,0x400000
+ 468:	sete   cl
+ 46b:	test   al,cl
+ 46d:	jne    48f <lp_competition_main___lam__6+0x48f>
+ 46f:	cmp    r15d,0xff
+ 476:	setne  al
+ 479:	test   r14d,0x7fffff
+ 480:	sete   cl
+ 483:	or     cl,al
+ 485:	je     4ca <lp_competition_main___lam__6+0x4ca>
+ 487:	test   ebx,0x7fffff
+ 48d:	je     4b4 <lp_competition_main___lam__6+0x4b4>
+ 48f:	or     ebx,0x400000
+ 495:	mov    eax,ebx
+ 497:	jmp    36e <lp_competition_main___lam__6+0x36e>
+ 49c:	cmp    r15d,0xff
+ 4a3:	setne  al
+ 4a6:	test   r14d,0x7fffff
+ 4ad:	sete   cl
+ 4b0:	or     cl,al
+ 4b2:	je     4ca <lp_competition_main___lam__6+0x4ca>
+ 4b4:	mov    edi,r14d
+ 4b7:	mov    esi,ebx
+ 4b9:	add    rsp,0x10
+ 4bd:	pop    rbx
+ 4be:	pop    r12
+ 4c0:	pop    r14
+ 4c2:	pop    r15
+ 4c4:	pop    rbp
+ 4c5:	jmp    4ca <lp_competition_main___lam__6+0x4ca>
+			4c6: R_X86_64_PLT32	lp_competition_Submission_FastMul_mul-0x4
+ 4ca:	mov    rax,r14
+ 4cd:	or     eax,0x400000
+ 4d2:	jmp    36e <lp_competition_main___lam__6+0x36e>
+
+Disassembly of section .text.lp_competition_main___lam__6___boxed:
+
+0000000000000000 <lp_competition_main___lam__6___boxed>:
+   0:	push   r15
+   2:	push   r14
+   4:	push   rbx
+   5:	test   sil,0x1
+   9:	jne    16 <lp_competition_main___lam__6___boxed+0x16>
+   b:	mov    eax,DWORD PTR [rsi]
+   d:	cmp    eax,0x2
+  10:	jl     47 <lp_competition_main___lam__6___boxed+0x47>
+  12:	dec    eax
+  14:	mov    DWORD PTR [rsi],eax
+  16:	test   dl,0x1
+  19:	jne    26 <lp_competition_main___lam__6___boxed+0x26>
+  1b:	mov    eax,DWORD PTR [rdx]
+  1d:	cmp    eax,0x2
+  20:	jl     67 <lp_competition_main___lam__6___boxed+0x67>
+  22:	dec    eax
+  24:	mov    DWORD PTR [rdx],eax
+  26:	shr    rdx,1
+  29:	shr    rsi,1
+  2c:	shr    edi,1
+  2e:	movzx  edi,dil
+  32:	call   37 <lp_competition_main___lam__6___boxed+0x37>
+			33: R_X86_64_PLT32	lp_competition_main___lam__6-0x4
+  37:	mov    eax,eax
+  39:	lea    rax,[rax*2+0x1]
+  41:	pop    rbx
+  42:	pop    r14
+  44:	pop    r15
+  46:	ret
+  47:	test   eax,eax
+  49:	je     16 <lp_competition_main___lam__6___boxed+0x16>
+  4b:	mov    rbx,rdi
+  4e:	mov    rdi,rsi
+  51:	mov    r14,rdx
+  54:	mov    r15,rsi
+  57:	call   5c <lp_competition_main___lam__6___boxed+0x5c>
+			58: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  5c:	mov    rdi,rbx
+  5f:	mov    rsi,r15
+  62:	mov    rdx,r14
+  65:	jmp    16 <lp_competition_main___lam__6___boxed+0x16>
+  67:	test   eax,eax
+  69:	je     26 <lp_competition_main___lam__6___boxed+0x26>
+  6b:	mov    rbx,rdi
+  6e:	mov    rdi,rdx
+  71:	mov    r14,rdx
+  74:	mov    r15,rsi
+  77:	call   7c <lp_competition_main___lam__6___boxed+0x7c>
+			78: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  7c:	mov    rdi,rbx
+  7f:	mov    rsi,r15
+  82:	mov    rdx,r14
+  85:	jmp    26 <lp_competition_main___lam__6___boxed+0x26>
+
+Disassembly of section .text.lp_competition_main___lam__7:
+
+0000000000000000 <lp_competition_main___lam__7>:
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r12
+   7:	push   rbx
+   8:	sub    rsp,0x10
+   c:	mov    ebx,edx
+   e:	mov    eax,esi
+  10:	shr    eax,0x17
+  13:	movzx  r15d,al
+  17:	mov    ebp,edx
+  19:	shr    ebp,0x17
+  1c:	movzx  r12d,bpl
+  20:	lea    ecx,[r12+r15*1]
+  24:	cmp    ecx,0x80
+  2a:	jb     5f <lp_competition_main___lam__7+0x5f>
+  2c:	mov    ecx,esi
+  2e:	and    ecx,0x7fffffff
+  34:	lea    edx,[rcx-0x1]
+  37:	cmp    edx,0xbffffff
+  3d:	setb   dl
+  40:	cmp    ecx,0x7f800000
+  46:	setae  cl
+  49:	or     cl,dl
+  4b:	mov    r14,rsi
+  4e:	je     bf <lp_competition_main___lam__7+0xbf>
+  50:	mov    edi,esi
+  52:	call   57 <lp_competition_main___lam__7+0x57>
+			53: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  57:	movaps xmm1,xmm0
+  5a:	jmp    e7 <lp_competition_main___lam__7+0xe7>
+  5f:	lea    eax,[rsi+rsi*1]
+  62:	cmp    eax,0xff000000
+  67:	setae  al
+  6a:	lea    ecx,[rbx+rbx*1]
+  6d:	cmp    ecx,0xff000000
+  73:	setae  cl
+  76:	or     cl,al
+  78:	je     122 <lp_competition_main___lam__7+0x122>
+  7e:	mov    eax,esi
+  80:	lea    rdi,[rax*2+0x1]
+  88:	mov    eax,ebx
+  8a:	lea    rsi,[rax*2+0x1]
+  92:	call   97 <lp_competition_main___lam__7+0x97>
+			93: R_X86_64_PLT32	lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_MulBackend_word___at___00FloatLib_Floats_Formats_BinaryInterchange_Configured_Plan_softwareMul32Certified_spec__1-0x4
+  97:	mov    rbx,rax
+  9a:	test   bl,0x1
+  9d:	jne    2f1 <lp_competition_main___lam__7+0x2f1>
+  a3:	mov    rdi,rbx
+  a6:	call   ab <lp_competition_main___lam__7+0xab>
+			a7: R_X86_64_PLT32	lean_uint32_of_big_nat-0x4
+  ab:	mov    ecx,DWORD PTR [rbx]
+  ad:	cmp    ecx,0x2
+  b0:	jl     419 <lp_competition_main___lam__7+0x419>
+  b6:	dec    ecx
+  b8:	mov    DWORD PTR [rbx],ecx
+  ba:	jmp    36e <lp_competition_main___lam__7+0x36e>
+  bf:	mov    ecx,esi
+  c1:	and    ecx,0x7fffff
+  c7:	or     ecx,0x800000
+  cd:	cvtsi2ss xmm1,ecx
+  d1:	mov    rcx,QWORD PTR [rip+0x0]        # d8 <lp_competition_main___lam__7+0xd8>
+			d4: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  d8:	mov    rcx,QWORD PTR [rcx]
+  db:	mov    eax,eax
+  dd:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+  e2:	mulss  xmm1,DWORD PTR [rax+0x8]
+  e7:	mov    eax,ebx
+  e9:	and    eax,0x7fffffff
+  ee:	lea    ecx,[rax-0x1]
+  f1:	cmp    ecx,0xbffffff
+  f7:	setb   cl
+  fa:	cmp    eax,0x7f800000
+  ff:	setae  al
+ 102:	or     al,cl
+ 104:	je     2a7 <lp_competition_main___lam__7+0x2a7>
+ 10a:	mov    edi,ebx
+ 10c:	movss  DWORD PTR [rsp+0xc],xmm1
+ 112:	call   117 <lp_competition_main___lam__7+0x117>
+			113: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 117:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 11d:	jmp    2d0 <lp_competition_main___lam__7+0x2d0>
+ 122:	test   esi,esi
+ 124:	setns  al
+ 127:	test   ebx,ebx
+ 129:	setns  cl
+ 12c:	test   dil,dil
+ 12f:	sete   dl
+ 132:	or     dl,al
+ 134:	xor    eax,eax
+ 136:	xor    dl,cl
+ 138:	movzx  edi,dil
+ 13c:	cmove  edi,eax
+ 13f:	and    esi,0x7fffff
+ 145:	and    ebx,0x7fffff
+ 14b:	lea    ecx,[rsi+0x800000]
+ 151:	mov    r8d,r15d
+ 154:	dec    r8
+ 157:	test   r15d,r15d
+ 15a:	cmove  ecx,esi
+ 15d:	cmove  r8,rax
+ 161:	lea    esi,[rbx+0x800000]
+ 167:	mov    edx,r12d
+ 16a:	dec    rdx
+ 16d:	test   r12d,r12d
+ 170:	cmove  esi,ebx
+ 173:	cmove  rdx,rax
+ 177:	imul   rsi,rcx
+ 17b:	add    rdx,r8
+ 17e:	cmp    rdx,0x7b
+ 182:	jbe    2f8 <lp_competition_main___lam__7+0x2f8>
+ 188:	test   rsi,rsi
+ 18b:	je     363 <lp_competition_main___lam__7+0x363>
+ 191:	xor    eax,eax
+ 193:	mov    rcx,rsi
+ 196:	shr    rcx,0x20
+ 19a:	cmove  rcx,rsi
+ 19e:	setne  al
+ 1a1:	shl    eax,0x5
+ 1a4:	mov    r8,rcx
+ 1a7:	shr    r8,0x10
+ 1ab:	test   r8,r8
+ 1ae:	cmove  r8,rcx
+ 1b2:	lea    rcx,[rax+0x10]
+ 1b6:	cmove  rcx,rax
+ 1ba:	mov    rax,r8
+ 1bd:	shr    rax,0x8
+ 1c1:	test   rax,rax
+ 1c4:	cmove  rax,r8
+ 1c8:	lea    r8,[rcx+0x8]
+ 1cc:	cmove  r8,rcx
+ 1d0:	mov    rcx,rax
+ 1d3:	shr    rcx,0x4
+ 1d7:	test   rcx,rcx
+ 1da:	cmove  rcx,rax
+ 1de:	lea    r9,[r8+0x4]
+ 1e2:	cmove  r9,r8
+ 1e6:	mov    r8,rcx
+ 1e9:	shr    r8,0x2
+ 1ed:	test   r8,r8
+ 1f0:	cmove  r8,rcx
+ 1f4:	lea    rax,[r9+0x2]
+ 1f8:	cmove  rax,r9
+ 1fc:	cmp    r8,0x2
+ 200:	sbb    rax,0xffffffffffffffff
+ 204:	lea    r8,[rax+rdx*1]
+ 208:	cmp    r8,0xab
+ 20f:	jbe    304 <lp_competition_main___lam__7+0x304>
+ 215:	cmp    rax,0x17
+ 219:	jb     3a0 <lp_competition_main___lam__7+0x3a0>
+ 21f:	mov    rcx,rax
+ 222:	add    rcx,0xffffffffffffffe9
+ 226:	je     3a7 <lp_competition_main___lam__7+0x3a7>
+ 22c:	mov    rdx,rsi
+ 22f:	shr    rdx,cl
+ 232:	mov    r9,0xffffffffffffffff
+ 239:	shl    r9,cl
+ 23c:	not    r9
+ 23f:	and    r9,rsi
+ 242:	add    al,0x28
+ 244:	mov    esi,0x1
+ 249:	mov    ecx,eax
+ 24b:	shl    rsi,cl
+ 24e:	cmp    r9,rsi
+ 251:	jb     25c <lp_competition_main___lam__7+0x25c>
+ 253:	jbe    403 <lp_competition_main___lam__7+0x403>
+ 259:	inc    rdx
+ 25c:	mov    rsi,rdx
+ 25f:	cmp    rsi,0x1000000
+ 266:	je     3b4 <lp_competition_main___lam__7+0x3b4>
+ 26c:	test   dil,dil
+ 26f:	sete   cl
+ 272:	mov    edx,0x7f800000
+ 277:	mov    eax,0xff800000
+ 27c:	cmove  eax,edx
+ 27f:	cmp    r8,0x1aa
+ 286:	jae    36e <lp_competition_main___lam__7+0x36e>
+ 28c:	add    r8d,0xffffff55
+ 293:	xor    edx,edx
+ 295:	cmp    rsi,0x800000
+ 29c:	jb     3e8 <lp_competition_main___lam__7+0x3e8>
+ 2a2:	jmp    3e0 <lp_competition_main___lam__7+0x3e0>
+ 2a7:	mov    eax,ebx
+ 2a9:	and    eax,0x7fffff
+ 2ae:	or     eax,0x800000
+ 2b3:	xorps  xmm0,xmm0
+ 2b6:	cvtsi2ss xmm0,eax
+ 2ba:	mov    rax,QWORD PTR [rip+0x0]        # 2c1 <lp_competition_main___lam__7+0x2c1>
+			2bd: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 2c1:	mov    rax,QWORD PTR [rax]
+ 2c4:	mov    ecx,ebp
+ 2c6:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 2cb:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 2d0:	mulss  xmm1,xmm0
+ 2d4:	ucomiss xmm1,xmm1
+ 2d7:	jp     430 <lp_competition_main___lam__7+0x430>
+ 2dd:	movaps xmm0,xmm1
+ 2e0:	add    rsp,0x10
+ 2e4:	pop    rbx
+ 2e5:	pop    r12
+ 2e7:	pop    r14
+ 2e9:	pop    r15
+ 2eb:	pop    rbp
+ 2ec:	jmp    2f1 <lp_competition_main___lam__7+0x2f1>
+			2ed: R_X86_64_PLT32	lean_float32_to_bits-0x4
+ 2f1:	shr    rbx,1
+ 2f4:	mov    eax,ebx
+ 2f6:	jmp    36e <lp_competition_main___lam__7+0x36e>
+ 2f8:	test   rsi,rsi
+ 2fb:	je     363 <lp_competition_main___lam__7+0x363>
+ 2fd:	cmp    edx,0x56
+ 300:	jb     363 <lp_competition_main___lam__7+0x363>
+ 302:	jmp    319 <lp_competition_main___lam__7+0x319>
+ 304:	cmp    edx,0x95
+ 30a:	jb     319 <lp_competition_main___lam__7+0x319>
+ 30c:	add    dl,0x2b
+ 30f:	mov    ecx,edx
+ 311:	shl    rsi,cl
+ 314:	mov    rax,rsi
+ 317:	jmp    344 <lp_competition_main___lam__7+0x344>
+ 319:	mov    cl,0x15
+ 31b:	sub    cl,dl
+ 31d:	mov    rax,rsi
+ 320:	shr    rax,cl
+ 323:	mov    r8,0xffffffffffffffff
+ 32a:	shl    r8,cl
+ 32d:	not    r8
+ 330:	and    r8,rsi
+ 333:	mov    cl,0x14
+ 335:	sub    cl,dl
+ 337:	mov    edx,0x1
+ 33c:	shl    rdx,cl
+ 33f:	cmp    r8,rdx
+ 342:	jae    37b <lp_competition_main___lam__7+0x37b>
+ 344:	test   rax,rax
+ 347:	je     363 <lp_competition_main___lam__7+0x363>
+ 349:	cmp    rax,0x800000
+ 34f:	jne    38c <lp_competition_main___lam__7+0x38c>
+ 351:	test   dil,dil
+ 354:	mov    ecx,0x800000
+ 359:	mov    eax,0x80800000
+ 35e:	cmove  eax,ecx
+ 361:	jmp    36e <lp_competition_main___lam__7+0x36e>
+ 363:	xor    eax,eax
+ 365:	test   dil,dil
+ 368:	setne  al
+ 36b:	shl    eax,0x1f
+ 36e:	add    rsp,0x10
+ 372:	pop    rbx
+ 373:	pop    r12
+ 375:	pop    r14
+ 377:	pop    r15
+ 379:	pop    rbp
+ 37a:	ret
+ 37b:	ja     381 <lp_competition_main___lam__7+0x381>
+ 37d:	test   al,0x1
+ 37f:	je     344 <lp_competition_main___lam__7+0x344>
+ 381:	inc    rax
+ 384:	cmp    rax,0x800000
+ 38a:	je     351 <lp_competition_main___lam__7+0x351>
+ 38c:	xor    ecx,ecx
+ 38e:	test   dil,dil
+ 391:	setne  cl
+ 394:	shl    ecx,0x1f
+ 397:	and    eax,0x7fffff
+ 39c:	or     eax,ecx
+ 39e:	jmp    36e <lp_competition_main___lam__7+0x36e>
+ 3a0:	mov    cl,0x17
+ 3a2:	sub    cl,al
+ 3a4:	shl    rsi,cl
+ 3a7:	cmp    rsi,0x1000000
+ 3ae:	jne    26c <lp_competition_main___lam__7+0x26c>
+ 3b4:	lea    rdx,[r8+0x1]
+ 3b8:	test   dil,dil
+ 3bb:	sete   cl
+ 3be:	mov    esi,0x7f800000
+ 3c3:	mov    eax,0xff800000
+ 3c8:	cmove  eax,esi
+ 3cb:	cmp    rdx,0x1a9
+ 3d2:	ja     36e <lp_competition_main___lam__7+0x36e>
+ 3d4:	add    r8d,0xffffff56
+ 3db:	mov    esi,0x800000
+ 3e0:	and    esi,0x7fffff
+ 3e6:	mov    edx,esi
+ 3e8:	xor    esi,esi
+ 3ea:	test   cl,cl
+ 3ec:	sete   sil
+ 3f0:	shl    esi,0x1f
+ 3f3:	movzx  eax,r8b
+ 3f7:	shl    eax,0x17
+ 3fa:	or     eax,esi
+ 3fc:	or     eax,edx
+ 3fe:	jmp    36e <lp_competition_main___lam__7+0x36e>
+ 403:	mov    esi,edx
+ 405:	and    esi,0x1
+ 408:	add    rsi,rdx
+ 40b:	cmp    rsi,0x1000000
+ 412:	je     3b4 <lp_competition_main___lam__7+0x3b4>
+ 414:	jmp    26c <lp_competition_main___lam__7+0x26c>
+ 419:	mov    r14,rax
+ 41c:	test   ecx,ecx
+ 41e:	je     428 <lp_competition_main___lam__7+0x428>
+ 420:	mov    rdi,rbx
+ 423:	call   428 <lp_competition_main___lam__7+0x428>
+			424: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 428:	mov    rax,r14
+ 42b:	jmp    36e <lp_competition_main___lam__7+0x36e>
+ 430:	cmp    r15d,0xff
+ 437:	jne    450 <lp_competition_main___lam__7+0x450>
+ 439:	mov    rax,r14
+ 43c:	test   eax,0x7fffff
+ 441:	setne  cl
+ 444:	test   eax,0x400000
+ 449:	sete   al
+ 44c:	test   cl,al
+ 44e:	jne    4ca <lp_competition_main___lam__7+0x4ca>
+ 450:	cmp    r12d,0xff
+ 457:	jne    49c <lp_competition_main___lam__7+0x49c>
+ 459:	test   ebx,0x7fffff
+ 45f:	setne  al
+ 462:	test   ebx,0x400000
+ 468:	sete   cl
+ 46b:	test   al,cl
+ 46d:	jne    48f <lp_competition_main___lam__7+0x48f>
+ 46f:	cmp    r15d,0xff
+ 476:	setne  al
+ 479:	test   r14d,0x7fffff
+ 480:	sete   cl
+ 483:	or     cl,al
+ 485:	je     4ca <lp_competition_main___lam__7+0x4ca>
+ 487:	test   ebx,0x7fffff
+ 48d:	je     4b4 <lp_competition_main___lam__7+0x4b4>
+ 48f:	or     ebx,0x400000
+ 495:	mov    eax,ebx
+ 497:	jmp    36e <lp_competition_main___lam__7+0x36e>
+ 49c:	cmp    r15d,0xff
+ 4a3:	setne  al
+ 4a6:	test   r14d,0x7fffff
+ 4ad:	sete   cl
+ 4b0:	or     cl,al
+ 4b2:	je     4ca <lp_competition_main___lam__7+0x4ca>
+ 4b4:	mov    edi,r14d
+ 4b7:	mov    esi,ebx
+ 4b9:	add    rsp,0x10
+ 4bd:	pop    rbx
+ 4be:	pop    r12
+ 4c0:	pop    r14
+ 4c2:	pop    r15
+ 4c4:	pop    rbp
+ 4c5:	jmp    4ca <lp_competition_main___lam__7+0x4ca>
+			4c6: R_X86_64_PLT32	lp_competition_Submission_FastMul_mul-0x4
+ 4ca:	mov    rax,r14
+ 4cd:	or     eax,0x400000
+ 4d2:	jmp    36e <lp_competition_main___lam__7+0x36e>
+
+Disassembly of section .text.lp_competition_main___lam__7___boxed:
+
+0000000000000000 <lp_competition_main___lam__7___boxed>:
+   0:	push   r15
+   2:	push   r14
+   4:	push   rbx
+   5:	test   sil,0x1
+   9:	jne    16 <lp_competition_main___lam__7___boxed+0x16>
+   b:	mov    eax,DWORD PTR [rsi]
+   d:	cmp    eax,0x2
+  10:	jl     47 <lp_competition_main___lam__7___boxed+0x47>
+  12:	dec    eax
+  14:	mov    DWORD PTR [rsi],eax
+  16:	test   dl,0x1
+  19:	jne    26 <lp_competition_main___lam__7___boxed+0x26>
+  1b:	mov    eax,DWORD PTR [rdx]
+  1d:	cmp    eax,0x2
+  20:	jl     67 <lp_competition_main___lam__7___boxed+0x67>
+  22:	dec    eax
+  24:	mov    DWORD PTR [rdx],eax
+  26:	shr    rdx,1
+  29:	shr    rsi,1
+  2c:	shr    edi,1
+  2e:	movzx  edi,dil
+  32:	call   37 <lp_competition_main___lam__7___boxed+0x37>
+			33: R_X86_64_PLT32	lp_competition_main___lam__7-0x4
+  37:	mov    eax,eax
+  39:	lea    rax,[rax*2+0x1]
+  41:	pop    rbx
+  42:	pop    r14
+  44:	pop    r15
+  46:	ret
+  47:	test   eax,eax
+  49:	je     16 <lp_competition_main___lam__7___boxed+0x16>
+  4b:	mov    rbx,rdi
+  4e:	mov    rdi,rsi
+  51:	mov    r14,rdx
+  54:	mov    r15,rsi
+  57:	call   5c <lp_competition_main___lam__7___boxed+0x5c>
+			58: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  5c:	mov    rdi,rbx
+  5f:	mov    rsi,r15
+  62:	mov    rdx,r14
+  65:	jmp    16 <lp_competition_main___lam__7___boxed+0x16>
+  67:	test   eax,eax
+  69:	je     26 <lp_competition_main___lam__7___boxed+0x26>
+  6b:	mov    rbx,rdi
+  6e:	mov    rdi,rdx
+  71:	mov    r14,rdx
+  74:	mov    r15,rsi
+  77:	call   7c <lp_competition_main___lam__7___boxed+0x7c>
+			78: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  7c:	mov    rdi,rbx
+  7f:	mov    rsi,r15
+  82:	mov    rdx,r14
+  85:	jmp    26 <lp_competition_main___lam__7___boxed+0x26>
+
+Disassembly of section .text.lp_competition_main___lam__8:
+
+0000000000000000 <lp_competition_main___lam__8>:
+   0:	push   rbp
+   1:	push   r15
+   3:	push   r14
+   5:	push   r12
+   7:	push   rbx
+   8:	sub    rsp,0x10
+   c:	mov    ebx,edx
+   e:	mov    eax,esi
+  10:	shr    eax,0x17
+  13:	movzx  r15d,al
+  17:	mov    ebp,edx
+  19:	shr    ebp,0x17
+  1c:	movzx  r12d,bpl
+  20:	lea    ecx,[r12+r15*1]
+  24:	cmp    ecx,0x80
+  2a:	jb     5f <lp_competition_main___lam__8+0x5f>
+  2c:	mov    ecx,esi
+  2e:	and    ecx,0x7fffffff
+  34:	lea    edx,[rcx-0x1]
+  37:	cmp    edx,0xbffffff
+  3d:	setb   dl
+  40:	cmp    ecx,0x7f800000
+  46:	setae  cl
+  49:	or     cl,dl
+  4b:	mov    r14,rsi
+  4e:	je     bf <lp_competition_main___lam__8+0xbf>
+  50:	mov    edi,esi
+  52:	call   57 <lp_competition_main___lam__8+0x57>
+			53: R_X86_64_PLT32	lean_float32_of_bits-0x4
+  57:	movaps xmm1,xmm0
+  5a:	jmp    e7 <lp_competition_main___lam__8+0xe7>
+  5f:	lea    eax,[rsi+rsi*1]
+  62:	cmp    eax,0xff000000
+  67:	setae  al
+  6a:	lea    ecx,[rbx+rbx*1]
+  6d:	cmp    ecx,0xff000000
+  73:	setae  cl
+  76:	or     cl,al
+  78:	je     122 <lp_competition_main___lam__8+0x122>
+  7e:	mov    eax,esi
+  80:	lea    rdi,[rax*2+0x1]
+  88:	mov    eax,ebx
+  8a:	lea    rsi,[rax*2+0x1]
+  92:	call   97 <lp_competition_main___lam__8+0x97>
+			93: R_X86_64_PLT32	lp_floatlib_FloatLib_Floats_Formats_BinaryInterchange_Model_MulBackend_word___at___00FloatLib_Floats_Formats_BinaryInterchange_Configured_Plan_softwareMul32Certified_spec__1-0x4
+  97:	mov    rbx,rax
+  9a:	test   bl,0x1
+  9d:	jne    2f1 <lp_competition_main___lam__8+0x2f1>
+  a3:	mov    rdi,rbx
+  a6:	call   ab <lp_competition_main___lam__8+0xab>
+			a7: R_X86_64_PLT32	lean_uint32_of_big_nat-0x4
+  ab:	mov    ecx,DWORD PTR [rbx]
+  ad:	cmp    ecx,0x2
+  b0:	jl     419 <lp_competition_main___lam__8+0x419>
+  b6:	dec    ecx
+  b8:	mov    DWORD PTR [rbx],ecx
+  ba:	jmp    36e <lp_competition_main___lam__8+0x36e>
+  bf:	mov    ecx,esi
+  c1:	and    ecx,0x7fffff
+  c7:	or     ecx,0x800000
+  cd:	cvtsi2ss xmm1,ecx
+  d1:	mov    rcx,QWORD PTR [rip+0x0]        # d8 <lp_competition_main___lam__8+0xd8>
+			d4: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+  d8:	mov    rcx,QWORD PTR [rcx]
+  db:	mov    eax,eax
+  dd:	mov    rax,QWORD PTR [rcx+rax*8+0x18]
+  e2:	mulss  xmm1,DWORD PTR [rax+0x8]
+  e7:	mov    eax,ebx
+  e9:	and    eax,0x7fffffff
+  ee:	lea    ecx,[rax-0x1]
+  f1:	cmp    ecx,0xbffffff
+  f7:	setb   cl
+  fa:	cmp    eax,0x7f800000
+  ff:	setae  al
+ 102:	or     al,cl
+ 104:	je     2a7 <lp_competition_main___lam__8+0x2a7>
+ 10a:	mov    edi,ebx
+ 10c:	movss  DWORD PTR [rsp+0xc],xmm1
+ 112:	call   117 <lp_competition_main___lam__8+0x117>
+			113: R_X86_64_PLT32	lean_float32_of_bits-0x4
+ 117:	movss  xmm1,DWORD PTR [rsp+0xc]
+ 11d:	jmp    2d0 <lp_competition_main___lam__8+0x2d0>
+ 122:	test   esi,esi
+ 124:	setns  al
+ 127:	test   ebx,ebx
+ 129:	setns  cl
+ 12c:	test   dil,dil
+ 12f:	sete   dl
+ 132:	or     dl,al
+ 134:	xor    eax,eax
+ 136:	xor    dl,cl
+ 138:	movzx  edi,dil
+ 13c:	cmove  edi,eax
+ 13f:	and    esi,0x7fffff
+ 145:	and    ebx,0x7fffff
+ 14b:	lea    ecx,[rsi+0x800000]
+ 151:	mov    r8d,r15d
+ 154:	dec    r8
+ 157:	test   r15d,r15d
+ 15a:	cmove  ecx,esi
+ 15d:	cmove  r8,rax
+ 161:	lea    esi,[rbx+0x800000]
+ 167:	mov    edx,r12d
+ 16a:	dec    rdx
+ 16d:	test   r12d,r12d
+ 170:	cmove  esi,ebx
+ 173:	cmove  rdx,rax
+ 177:	imul   rsi,rcx
+ 17b:	add    rdx,r8
+ 17e:	cmp    rdx,0x7b
+ 182:	jbe    2f8 <lp_competition_main___lam__8+0x2f8>
+ 188:	test   rsi,rsi
+ 18b:	je     363 <lp_competition_main___lam__8+0x363>
+ 191:	xor    eax,eax
+ 193:	mov    rcx,rsi
+ 196:	shr    rcx,0x20
+ 19a:	cmove  rcx,rsi
+ 19e:	setne  al
+ 1a1:	shl    eax,0x5
+ 1a4:	mov    r8,rcx
+ 1a7:	shr    r8,0x10
+ 1ab:	test   r8,r8
+ 1ae:	cmove  r8,rcx
+ 1b2:	lea    rcx,[rax+0x10]
+ 1b6:	cmove  rcx,rax
+ 1ba:	mov    rax,r8
+ 1bd:	shr    rax,0x8
+ 1c1:	test   rax,rax
+ 1c4:	cmove  rax,r8
+ 1c8:	lea    r8,[rcx+0x8]
+ 1cc:	cmove  r8,rcx
+ 1d0:	mov    rcx,rax
+ 1d3:	shr    rcx,0x4
+ 1d7:	test   rcx,rcx
+ 1da:	cmove  rcx,rax
+ 1de:	lea    r9,[r8+0x4]
+ 1e2:	cmove  r9,r8
+ 1e6:	mov    r8,rcx
+ 1e9:	shr    r8,0x2
+ 1ed:	test   r8,r8
+ 1f0:	cmove  r8,rcx
+ 1f4:	lea    rax,[r9+0x2]
+ 1f8:	cmove  rax,r9
+ 1fc:	cmp    r8,0x2
+ 200:	sbb    rax,0xffffffffffffffff
+ 204:	lea    r8,[rax+rdx*1]
+ 208:	cmp    r8,0xab
+ 20f:	jbe    304 <lp_competition_main___lam__8+0x304>
+ 215:	cmp    rax,0x17
+ 219:	jb     3a0 <lp_competition_main___lam__8+0x3a0>
+ 21f:	mov    rcx,rax
+ 222:	add    rcx,0xffffffffffffffe9
+ 226:	je     3a7 <lp_competition_main___lam__8+0x3a7>
+ 22c:	mov    rdx,rsi
+ 22f:	shr    rdx,cl
+ 232:	mov    r9,0xffffffffffffffff
+ 239:	shl    r9,cl
+ 23c:	not    r9
+ 23f:	and    r9,rsi
+ 242:	add    al,0x28
+ 244:	mov    esi,0x1
+ 249:	mov    ecx,eax
+ 24b:	shl    rsi,cl
+ 24e:	cmp    r9,rsi
+ 251:	jb     25c <lp_competition_main___lam__8+0x25c>
+ 253:	jbe    403 <lp_competition_main___lam__8+0x403>
+ 259:	inc    rdx
+ 25c:	mov    rsi,rdx
+ 25f:	cmp    rsi,0x1000000
+ 266:	je     3b4 <lp_competition_main___lam__8+0x3b4>
+ 26c:	test   dil,dil
+ 26f:	sete   cl
+ 272:	mov    edx,0x7f800000
+ 277:	mov    eax,0xff800000
+ 27c:	cmove  eax,edx
+ 27f:	cmp    r8,0x1aa
+ 286:	jae    36e <lp_competition_main___lam__8+0x36e>
+ 28c:	add    r8d,0xffffff55
+ 293:	xor    edx,edx
+ 295:	cmp    rsi,0x800000
+ 29c:	jb     3e8 <lp_competition_main___lam__8+0x3e8>
+ 2a2:	jmp    3e0 <lp_competition_main___lam__8+0x3e0>
+ 2a7:	mov    eax,ebx
+ 2a9:	and    eax,0x7fffff
+ 2ae:	or     eax,0x800000
+ 2b3:	xorps  xmm0,xmm0
+ 2b6:	cvtsi2ss xmm0,eax
+ 2ba:	mov    rax,QWORD PTR [rip+0x0]        # 2c1 <lp_competition_main___lam__8+0x2c1>
+			2bd: R_X86_64_REX_GOTPCRELX	lp_competition_R2W01b_scaleTable-0x4
+ 2c1:	mov    rax,QWORD PTR [rax]
+ 2c4:	mov    ecx,ebp
+ 2c6:	mov    rax,QWORD PTR [rax+rcx*8+0x18]
+ 2cb:	mulss  xmm0,DWORD PTR [rax+0x8]
+ 2d0:	mulss  xmm1,xmm0
+ 2d4:	ucomiss xmm1,xmm1
+ 2d7:	jp     430 <lp_competition_main___lam__8+0x430>
+ 2dd:	movaps xmm0,xmm1
+ 2e0:	add    rsp,0x10
+ 2e4:	pop    rbx
+ 2e5:	pop    r12
+ 2e7:	pop    r14
+ 2e9:	pop    r15
+ 2eb:	pop    rbp
+ 2ec:	jmp    2f1 <lp_competition_main___lam__8+0x2f1>
+			2ed: R_X86_64_PLT32	lean_float32_to_bits-0x4
+ 2f1:	shr    rbx,1
+ 2f4:	mov    eax,ebx
+ 2f6:	jmp    36e <lp_competition_main___lam__8+0x36e>
+ 2f8:	test   rsi,rsi
+ 2fb:	je     363 <lp_competition_main___lam__8+0x363>
+ 2fd:	cmp    edx,0x56
+ 300:	jb     363 <lp_competition_main___lam__8+0x363>
+ 302:	jmp    319 <lp_competition_main___lam__8+0x319>
+ 304:	cmp    edx,0x95
+ 30a:	jb     319 <lp_competition_main___lam__8+0x319>
+ 30c:	add    dl,0x2b
+ 30f:	mov    ecx,edx
+ 311:	shl    rsi,cl
+ 314:	mov    rax,rsi
+ 317:	jmp    344 <lp_competition_main___lam__8+0x344>
+ 319:	mov    cl,0x15
+ 31b:	sub    cl,dl
+ 31d:	mov    rax,rsi
+ 320:	shr    rax,cl
+ 323:	mov    r8,0xffffffffffffffff
+ 32a:	shl    r8,cl
+ 32d:	not    r8
+ 330:	and    r8,rsi
+ 333:	mov    cl,0x14
+ 335:	sub    cl,dl
+ 337:	mov    edx,0x1
+ 33c:	shl    rdx,cl
+ 33f:	cmp    r8,rdx
+ 342:	jae    37b <lp_competition_main___lam__8+0x37b>
+ 344:	test   rax,rax
+ 347:	je     363 <lp_competition_main___lam__8+0x363>
+ 349:	cmp    rax,0x800000
+ 34f:	jne    38c <lp_competition_main___lam__8+0x38c>
+ 351:	test   dil,dil
+ 354:	mov    ecx,0x800000
+ 359:	mov    eax,0x80800000
+ 35e:	cmove  eax,ecx
+ 361:	jmp    36e <lp_competition_main___lam__8+0x36e>
+ 363:	xor    eax,eax
+ 365:	test   dil,dil
+ 368:	setne  al
+ 36b:	shl    eax,0x1f
+ 36e:	add    rsp,0x10
+ 372:	pop    rbx
+ 373:	pop    r12
+ 375:	pop    r14
+ 377:	pop    r15
+ 379:	pop    rbp
+ 37a:	ret
+ 37b:	ja     381 <lp_competition_main___lam__8+0x381>
+ 37d:	test   al,0x1
+ 37f:	je     344 <lp_competition_main___lam__8+0x344>
+ 381:	inc    rax
+ 384:	cmp    rax,0x800000
+ 38a:	je     351 <lp_competition_main___lam__8+0x351>
+ 38c:	xor    ecx,ecx
+ 38e:	test   dil,dil
+ 391:	setne  cl
+ 394:	shl    ecx,0x1f
+ 397:	and    eax,0x7fffff
+ 39c:	or     eax,ecx
+ 39e:	jmp    36e <lp_competition_main___lam__8+0x36e>
+ 3a0:	mov    cl,0x17
+ 3a2:	sub    cl,al
+ 3a4:	shl    rsi,cl
+ 3a7:	cmp    rsi,0x1000000
+ 3ae:	jne    26c <lp_competition_main___lam__8+0x26c>
+ 3b4:	lea    rdx,[r8+0x1]
+ 3b8:	test   dil,dil
+ 3bb:	sete   cl
+ 3be:	mov    esi,0x7f800000
+ 3c3:	mov    eax,0xff800000
+ 3c8:	cmove  eax,esi
+ 3cb:	cmp    rdx,0x1a9
+ 3d2:	ja     36e <lp_competition_main___lam__8+0x36e>
+ 3d4:	add    r8d,0xffffff56
+ 3db:	mov    esi,0x800000
+ 3e0:	and    esi,0x7fffff
+ 3e6:	mov    edx,esi
+ 3e8:	xor    esi,esi
+ 3ea:	test   cl,cl
+ 3ec:	sete   sil
+ 3f0:	shl    esi,0x1f
+ 3f3:	movzx  eax,r8b
+ 3f7:	shl    eax,0x17
+ 3fa:	or     eax,esi
+ 3fc:	or     eax,edx
+ 3fe:	jmp    36e <lp_competition_main___lam__8+0x36e>
+ 403:	mov    esi,edx
+ 405:	and    esi,0x1
+ 408:	add    rsi,rdx
+ 40b:	cmp    rsi,0x1000000
+ 412:	je     3b4 <lp_competition_main___lam__8+0x3b4>
+ 414:	jmp    26c <lp_competition_main___lam__8+0x26c>
+ 419:	mov    r14,rax
+ 41c:	test   ecx,ecx
+ 41e:	je     428 <lp_competition_main___lam__8+0x428>
+ 420:	mov    rdi,rbx
+ 423:	call   428 <lp_competition_main___lam__8+0x428>
+			424: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 428:	mov    rax,r14
+ 42b:	jmp    36e <lp_competition_main___lam__8+0x36e>
+ 430:	cmp    r15d,0xff
+ 437:	jne    450 <lp_competition_main___lam__8+0x450>
+ 439:	mov    rax,r14
+ 43c:	test   eax,0x7fffff
+ 441:	setne  cl
+ 444:	test   eax,0x400000
+ 449:	sete   al
+ 44c:	test   cl,al
+ 44e:	jne    4ca <lp_competition_main___lam__8+0x4ca>
+ 450:	cmp    r12d,0xff
+ 457:	jne    49c <lp_competition_main___lam__8+0x49c>
+ 459:	test   ebx,0x7fffff
+ 45f:	setne  al
+ 462:	test   ebx,0x400000
+ 468:	sete   cl
+ 46b:	test   al,cl
+ 46d:	jne    48f <lp_competition_main___lam__8+0x48f>
+ 46f:	cmp    r15d,0xff
+ 476:	setne  al
+ 479:	test   r14d,0x7fffff
+ 480:	sete   cl
+ 483:	or     cl,al
+ 485:	je     4ca <lp_competition_main___lam__8+0x4ca>
+ 487:	test   ebx,0x7fffff
+ 48d:	je     4b4 <lp_competition_main___lam__8+0x4b4>
+ 48f:	or     ebx,0x400000
+ 495:	mov    eax,ebx
+ 497:	jmp    36e <lp_competition_main___lam__8+0x36e>
+ 49c:	cmp    r15d,0xff
+ 4a3:	setne  al
+ 4a6:	test   r14d,0x7fffff
+ 4ad:	sete   cl
+ 4b0:	or     cl,al
+ 4b2:	je     4ca <lp_competition_main___lam__8+0x4ca>
+ 4b4:	mov    edi,r14d
+ 4b7:	mov    esi,ebx
+ 4b9:	add    rsp,0x10
+ 4bd:	pop    rbx
+ 4be:	pop    r12
+ 4c0:	pop    r14
+ 4c2:	pop    r15
+ 4c4:	pop    rbp
+ 4c5:	jmp    4ca <lp_competition_main___lam__8+0x4ca>
+			4c6: R_X86_64_PLT32	lp_competition_Submission_FastMul_mul-0x4
+ 4ca:	mov    rax,r14
+ 4cd:	or     eax,0x400000
+ 4d2:	jmp    36e <lp_competition_main___lam__8+0x36e>
+
+Disassembly of section .text.lp_competition_main___lam__8___boxed:
+
+0000000000000000 <lp_competition_main___lam__8___boxed>:
+   0:	push   r15
+   2:	push   r14
+   4:	push   rbx
+   5:	test   sil,0x1
+   9:	jne    16 <lp_competition_main___lam__8___boxed+0x16>
+   b:	mov    eax,DWORD PTR [rsi]
+   d:	cmp    eax,0x2
+  10:	jl     47 <lp_competition_main___lam__8___boxed+0x47>
+  12:	dec    eax
+  14:	mov    DWORD PTR [rsi],eax
+  16:	test   dl,0x1
+  19:	jne    26 <lp_competition_main___lam__8___boxed+0x26>
+  1b:	mov    eax,DWORD PTR [rdx]
+  1d:	cmp    eax,0x2
+  20:	jl     67 <lp_competition_main___lam__8___boxed+0x67>
+  22:	dec    eax
+  24:	mov    DWORD PTR [rdx],eax
+  26:	shr    rdx,1
+  29:	shr    rsi,1
+  2c:	shr    edi,1
+  2e:	movzx  edi,dil
+  32:	call   37 <lp_competition_main___lam__8___boxed+0x37>
+			33: R_X86_64_PLT32	lp_competition_main___lam__8-0x4
+  37:	mov    eax,eax
+  39:	lea    rax,[rax*2+0x1]
+  41:	pop    rbx
+  42:	pop    r14
+  44:	pop    r15
+  46:	ret
+  47:	test   eax,eax
+  49:	je     16 <lp_competition_main___lam__8___boxed+0x16>
+  4b:	mov    rbx,rdi
+  4e:	mov    rdi,rsi
+  51:	mov    r14,rdx
+  54:	mov    r15,rsi
+  57:	call   5c <lp_competition_main___lam__8___boxed+0x5c>
+			58: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  5c:	mov    rdi,rbx
+  5f:	mov    rsi,r15
+  62:	mov    rdx,r14
+  65:	jmp    16 <lp_competition_main___lam__8___boxed+0x16>
+  67:	test   eax,eax
+  69:	je     26 <lp_competition_main___lam__8___boxed+0x26>
+  6b:	mov    rbx,rdi
+  6e:	mov    rdi,rdx
+  71:	mov    r14,rdx
+  74:	mov    r15,rsi
+  77:	call   7c <lp_competition_main___lam__8___boxed+0x7c>
+			78: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  7c:	mov    rdi,rbx
+  7f:	mov    rsi,r15
+  82:	mov    rdx,r14
+  85:	jmp    26 <lp_competition_main___lam__8___boxed+0x26>
+
+Disassembly of section .text._lean_main:
+
+0000000000000000 <_lean_main>:
+   0:	push   rbx
+   1:	lea    rdi,[rip+0x0]        # 8 <_lean_main+0x8>
+			4: R_X86_64_PC32	.rodata.lp_competition_main___closed__0_value-0x4
+   8:	call   d <_lean_main+0xd>
+			9: R_X86_64_PLT32	lean_io_getenv-0x4
+   d:	mov    rbx,rax
+  10:	lea    rsi,[rip+0x0]        # 17 <_lean_main+0x17>
+			13: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__2_value-0x4
+  17:	mov    rdi,rax
+  1a:	call   1f <_lean_main+0x1f>
+			1b: R_X86_64_PLT32	l_Option_instBEq_beq___at___00Lean_Server_moduleFromDocumentUri_spec__0-0x4
+  1f:	test   al,al
+  21:	je     8c <_lean_main+0x8c>
+  23:	test   bl,0x1
+  26:	jne    37 <_lean_main+0x37>
+  28:	mov    ecx,DWORD PTR [rbx]
+  2a:	cmp    ecx,0x2
+  2d:	jl     2d5 <_lean_main+0x2d5>
+  33:	dec    ecx
+  35:	mov    DWORD PTR [rbx],ecx
+  37:	movzx  eax,al
+  3a:	lea    rbx,[rax*2+0x1]
+  42:	mov    edi,0x20
+  47:	call   4c <_lean_main+0x4c>
+			48: R_X86_64_PLT32	lean_alloc_object-0x4
+  4c:	mov    DWORD PTR [rax],0x1
+  52:	mov    WORD PTR [rax+0x6],0xf500
+  58:	mov    rcx,QWORD PTR [rip+0x0]        # 5f <_lean_main+0x5f>
+			5b: R_X86_64_REX_GOTPCRELX	lp_competition_main___lam__8___boxed-0x4
+  5f:	mov    QWORD PTR [rax+0x8],rcx
+  63:	mov    DWORD PTR [rax+0x10],0x10003
+  6a:	mov    QWORD PTR [rax+0x18],rbx
+  6e:	lea    rdi,[rip+0x0]        # 75 <_lean_main+0x75>
+			71: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__18_value-0x4
+  75:	lea    rdx,[rip+0x0]        # 7c <_lean_main+0x7c>
+			78: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__16_value-0x4
+  7c:	lea    rcx,[rip+0x0]        # 83 <_lean_main+0x83>
+			7f: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__17_value-0x4
+  83:	mov    rsi,rax
+  86:	pop    rbx
+  87:	jmp    8c <_lean_main+0x8c>
+			88: R_X86_64_PLT32	lp_competition_Bench_Suite_run-0x4
+  8c:	lea    rsi,[rip+0x0]        # 93 <_lean_main+0x93>
+			8f: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__4_value-0x4
+  93:	mov    rdi,rbx
+  96:	call   9b <_lean_main+0x9b>
+			97: R_X86_64_PLT32	l_Option_instBEq_beq___at___00Lean_Server_moduleFromDocumentUri_spec__0-0x4
+  9b:	test   al,al
+  9d:	je     108 <_lean_main+0x108>
+  9f:	test   bl,0x1
+  a2:	jne    b3 <_lean_main+0xb3>
+  a4:	mov    ecx,DWORD PTR [rbx]
+  a6:	cmp    ecx,0x2
+  a9:	jl     2ee <_lean_main+0x2ee>
+  af:	dec    ecx
+  b1:	mov    DWORD PTR [rbx],ecx
+  b3:	movzx  eax,al
+  b6:	lea    rbx,[rax*2+0x1]
+  be:	mov    edi,0x20
+  c3:	call   c8 <_lean_main+0xc8>
+			c4: R_X86_64_PLT32	lean_alloc_object-0x4
+  c8:	mov    DWORD PTR [rax],0x1
+  ce:	mov    WORD PTR [rax+0x6],0xf500
+  d4:	mov    rcx,QWORD PTR [rip+0x0]        # db <_lean_main+0xdb>
+			d7: R_X86_64_REX_GOTPCRELX	lp_competition_main___lam__7___boxed-0x4
+  db:	mov    QWORD PTR [rax+0x8],rcx
+  df:	mov    DWORD PTR [rax+0x10],0x10003
+  e6:	mov    QWORD PTR [rax+0x18],rbx
+  ea:	lea    rdi,[rip+0x0]        # f1 <_lean_main+0xf1>
+			ed: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__18_value-0x4
+  f1:	lea    rdx,[rip+0x0]        # f8 <_lean_main+0xf8>
+			f4: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__16_value-0x4
+  f8:	lea    rcx,[rip+0x0]        # ff <_lean_main+0xff>
+			fb: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__21_value-0x4
+  ff:	mov    rsi,rax
+ 102:	pop    rbx
+ 103:	jmp    108 <_lean_main+0x108>
+			104: R_X86_64_PLT32	lp_competition_Bench_Suite_run-0x4
+ 108:	lea    rsi,[rip+0x0]        # 10f <_lean_main+0x10f>
+			10b: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__6_value-0x4
+ 10f:	mov    rdi,rbx
+ 112:	call   117 <_lean_main+0x117>
+			113: R_X86_64_PLT32	l_Option_instBEq_beq___at___00Lean_Server_moduleFromDocumentUri_spec__0-0x4
+ 117:	test   al,al
+ 119:	je     184 <_lean_main+0x184>
+ 11b:	test   bl,0x1
+ 11e:	jne    12f <_lean_main+0x12f>
+ 120:	mov    ecx,DWORD PTR [rbx]
+ 122:	cmp    ecx,0x2
+ 125:	jl     307 <_lean_main+0x307>
+ 12b:	dec    ecx
+ 12d:	mov    DWORD PTR [rbx],ecx
+ 12f:	movzx  eax,al
+ 132:	lea    rbx,[rax*2+0x1]
+ 13a:	mov    edi,0x20
+ 13f:	call   144 <_lean_main+0x144>
+			140: R_X86_64_PLT32	lean_alloc_object-0x4
+ 144:	mov    DWORD PTR [rax],0x1
+ 14a:	mov    WORD PTR [rax+0x6],0xf500
+ 150:	mov    rcx,QWORD PTR [rip+0x0]        # 157 <_lean_main+0x157>
+			153: R_X86_64_REX_GOTPCRELX	lp_competition_main___lam__6___boxed-0x4
+ 157:	mov    QWORD PTR [rax+0x8],rcx
+ 15b:	mov    DWORD PTR [rax+0x10],0x10003
+ 162:	mov    QWORD PTR [rax+0x18],rbx
+ 166:	lea    rdi,[rip+0x0]        # 16d <_lean_main+0x16d>
+			169: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__18_value-0x4
+ 16d:	lea    rdx,[rip+0x0]        # 174 <_lean_main+0x174>
+			170: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__16_value-0x4
+ 174:	lea    rcx,[rip+0x0]        # 17b <_lean_main+0x17b>
+			177: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__20_value-0x4
+ 17b:	mov    rsi,rax
+ 17e:	pop    rbx
+ 17f:	jmp    184 <_lean_main+0x184>
+			180: R_X86_64_PLT32	lp_competition_Bench_Suite_run-0x4
+ 184:	lea    rsi,[rip+0x0]        # 18b <_lean_main+0x18b>
+			187: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__8_value-0x4
+ 18b:	mov    rdi,rbx
+ 18e:	call   193 <_lean_main+0x193>
+			18f: R_X86_64_PLT32	l_Option_instBEq_beq___at___00Lean_Server_moduleFromDocumentUri_spec__0-0x4
+ 193:	test   al,al
+ 195:	je     200 <_lean_main+0x200>
+ 197:	test   bl,0x1
+ 19a:	jne    1ab <_lean_main+0x1ab>
+ 19c:	mov    ecx,DWORD PTR [rbx]
+ 19e:	cmp    ecx,0x2
+ 1a1:	jl     320 <_lean_main+0x320>
+ 1a7:	dec    ecx
+ 1a9:	mov    DWORD PTR [rbx],ecx
+ 1ab:	movzx  eax,al
+ 1ae:	lea    rbx,[rax*2+0x1]
+ 1b6:	mov    edi,0x20
+ 1bb:	call   1c0 <_lean_main+0x1c0>
+			1bc: R_X86_64_PLT32	lean_alloc_object-0x4
+ 1c0:	mov    DWORD PTR [rax],0x1
+ 1c6:	mov    WORD PTR [rax+0x6],0xf500
+ 1cc:	mov    rcx,QWORD PTR [rip+0x0]        # 1d3 <_lean_main+0x1d3>
+			1cf: R_X86_64_REX_GOTPCRELX	lp_competition_main___lam__5___boxed-0x4
+ 1d3:	mov    QWORD PTR [rax+0x8],rcx
+ 1d7:	mov    DWORD PTR [rax+0x10],0x10003
+ 1de:	mov    QWORD PTR [rax+0x18],rbx
+ 1e2:	lea    rdi,[rip+0x0]        # 1e9 <_lean_main+0x1e9>
+			1e5: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__18_value-0x4
+ 1e9:	lea    rdx,[rip+0x0]        # 1f0 <_lean_main+0x1f0>
+			1ec: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__16_value-0x4
+ 1f0:	lea    rcx,[rip+0x0]        # 1f7 <_lean_main+0x1f7>
+			1f3: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__19_value-0x4
+ 1f7:	mov    rsi,rax
+ 1fa:	pop    rbx
+ 1fb:	jmp    200 <_lean_main+0x200>
+			1fc: R_X86_64_PLT32	lp_competition_Bench_Suite_run-0x4
+ 200:	lea    rsi,[rip+0x0]        # 207 <_lean_main+0x207>
+			203: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__10_value-0x4
+ 207:	mov    rdi,rbx
+ 20a:	call   20f <_lean_main+0x20f>
+			20b: R_X86_64_PLT32	l_Option_instBEq_beq___at___00Lean_Server_moduleFromDocumentUri_spec__0-0x4
+ 20f:	test   al,al
+ 211:	je     254 <_lean_main+0x254>
+ 213:	test   bl,0x1
+ 216:	jne    227 <_lean_main+0x227>
+ 218:	mov    ecx,DWORD PTR [rbx]
+ 21a:	cmp    ecx,0x2
+ 21d:	jl     339 <_lean_main+0x339>
+ 223:	dec    ecx
+ 225:	mov    DWORD PTR [rbx],ecx
+ 227:	movzx  eax,al
+ 22a:	lea    rbx,[rax*2+0x1]
+ 232:	mov    edi,0x20
+ 237:	call   23c <_lean_main+0x23c>
+			238: R_X86_64_PLT32	lean_alloc_object-0x4
+ 23c:	mov    DWORD PTR [rax],0x1
+ 242:	mov    WORD PTR [rax+0x6],0xf500
+ 248:	mov    rcx,QWORD PTR [rip+0x0]        # 24f <_lean_main+0x24f>
+			24b: R_X86_64_REX_GOTPCRELX	lp_competition_main___lam__3___boxed-0x4
+ 24f:	jmp    5f <_lean_main+0x5f>
+ 254:	lea    rsi,[rip+0x0]        # 25b <_lean_main+0x25b>
+			257: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__12_value-0x4
+ 25b:	mov    rdi,rbx
+ 25e:	call   263 <_lean_main+0x263>
+			25f: R_X86_64_PLT32	l_Option_instBEq_beq___at___00Lean_Server_moduleFromDocumentUri_spec__0-0x4
+ 263:	test   bl,0x1
+ 266:	jne    277 <_lean_main+0x277>
+ 268:	mov    ecx,DWORD PTR [rbx]
+ 26a:	cmp    ecx,0x2
+ 26d:	jl     352 <_lean_main+0x352>
+ 273:	dec    ecx
+ 275:	mov    DWORD PTR [rbx],ecx
+ 277:	test   al,al
+ 279:	je     2be <_lean_main+0x2be>
+ 27b:	movzx  eax,al
+ 27e:	lea    rbx,[rax*2+0x1]
+ 286:	mov    edi,0x20
+ 28b:	call   290 <_lean_main+0x290>
+			28c: R_X86_64_PLT32	lean_alloc_object-0x4
+ 290:	mov    DWORD PTR [rax],0x1
+ 296:	mov    WORD PTR [rax+0x6],0xf500
+ 29c:	mov    rcx,QWORD PTR [rip+0x0]        # 2a3 <_lean_main+0x2a3>
+			29f: R_X86_64_REX_GOTPCRELX	lp_competition_main___lam__1___boxed-0x4
+ 2a3:	mov    QWORD PTR [rax+0x8],rcx
+ 2a7:	mov    DWORD PTR [rax+0x10],0x10003
+ 2ae:	mov    QWORD PTR [rax+0x18],rbx
+ 2b2:	lea    rdi,[rip+0x0]        # 2b9 <_lean_main+0x2b9>
+			2b5: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__15_value-0x4
+ 2b9:	jmp    75 <_lean_main+0x75>
+ 2be:	mov    edi,0x1
+ 2c3:	call   2c8 <_lean_main+0x2c8>
+			2c4: R_X86_64_PLT32	.text.lean_alloc_ctor-0x4
+ 2c8:	lea    rcx,[rip+0x0]        # 2cf <_lean_main+0x2cf>
+			2cb: R_X86_64_PC32	.data.rel.ro.lp_competition_main___closed__14_value-0x4
+ 2cf:	mov    QWORD PTR [rax+0x8],rcx
+ 2d3:	pop    rbx
+ 2d4:	ret
+ 2d5:	test   ecx,ecx
+ 2d7:	je     37 <_lean_main+0x37>
+ 2dd:	mov    rdi,rbx
+ 2e0:	mov    ebx,eax
+ 2e2:	call   2e7 <_lean_main+0x2e7>
+			2e3: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 2e7:	mov    eax,ebx
+ 2e9:	jmp    37 <_lean_main+0x37>
+ 2ee:	test   ecx,ecx
+ 2f0:	je     b3 <_lean_main+0xb3>
+ 2f6:	mov    rdi,rbx
+ 2f9:	mov    ebx,eax
+ 2fb:	call   300 <_lean_main+0x300>
+			2fc: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 300:	mov    eax,ebx
+ 302:	jmp    b3 <_lean_main+0xb3>
+ 307:	test   ecx,ecx
+ 309:	je     12f <_lean_main+0x12f>
+ 30f:	mov    rdi,rbx
+ 312:	mov    ebx,eax
+ 314:	call   319 <_lean_main+0x319>
+			315: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 319:	mov    eax,ebx
+ 31b:	jmp    12f <_lean_main+0x12f>
+ 320:	test   ecx,ecx
+ 322:	je     1ab <_lean_main+0x1ab>
+ 328:	mov    rdi,rbx
+ 32b:	mov    ebx,eax
+ 32d:	call   332 <_lean_main+0x332>
+			32e: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 332:	mov    eax,ebx
+ 334:	jmp    1ab <_lean_main+0x1ab>
+ 339:	test   ecx,ecx
+ 33b:	je     227 <_lean_main+0x227>
+ 341:	mov    rdi,rbx
+ 344:	mov    ebx,eax
+ 346:	call   34b <_lean_main+0x34b>
+			347: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 34b:	mov    eax,ebx
+ 34d:	jmp    227 <_lean_main+0x227>
+ 352:	test   ecx,ecx
+ 354:	je     277 <_lean_main+0x277>
+ 35a:	mov    rdi,rbx
+ 35d:	mov    ebx,eax
+ 35f:	call   364 <_lean_main+0x364>
+			360: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 364:	mov    eax,ebx
+ 366:	jmp    277 <_lean_main+0x277>
+
+Disassembly of section .text.lean_alloc_ctor:
+
+0000000000000000 <lean_alloc_ctor>:
+   0:	push   rbx
+   1:	mov    ebx,edi
+   3:	call   8 <lean_alloc_ctor+0x8>
+			4: R_X86_64_PLT32	lean_inc_heartbeat-0x4
+   8:	mov    edi,0x10
+   d:	call   12 <lean_alloc_ctor+0x12>
+			e: R_X86_64_PLT32	mi_malloc_small-0x4
+  12:	test   rax,rax
+  15:	je     2b <lean_alloc_ctor+0x2b>
+  17:	mov    DWORD PTR [rax],0x1
+  1d:	shl    ebx,0x18
+  20:	or     ebx,0x10010
+  26:	mov    DWORD PTR [rax+0x4],ebx
+  29:	pop    rbx
+  2a:	ret
+  2b:	call   30 <.LCPI10_0+0x2c>
+			2c: R_X86_64_PLT32	lean_internal_panic_out_of_memory-0x4
+
+Disassembly of section .text.lp_competition_main___boxed:
+
+0000000000000000 <lp_competition_main___boxed>:
+   0:	jmp    5 <.LCPI10_0+0x1>
+			1: R_X86_64_PLT32	_lean_main-0x4
+
+Disassembly of section .text.initialize_competition_R22RuntimeCost3Main:
+
+0000000000000000 <initialize_competition_R22RuntimeCost3Main>:
+   0:	push   rbx
+   1:	cmp    BYTE PTR [rip+0x0],0x1        # 8 <initialize_competition_R22RuntimeCost3Main+0x8>
+			3: R_X86_64_PC32	.bss._G_initialized-0x5
+   8:	jne    39 <initialize_competition_R22RuntimeCost3Main+0x39>
+   a:	call   f <initialize_competition_R22RuntimeCost3Main+0xf>
+			b: R_X86_64_PLT32	lean_inc_heartbeat-0x4
+   f:	mov    edi,0x10
+  14:	call   19 <initialize_competition_R22RuntimeCost3Main+0x19>
+			15: R_X86_64_PLT32	mi_malloc_small-0x4
+  19:	test   rax,rax
+  1c:	je     16a <initialize_competition_R22RuntimeCost3Main+0x16a>
+  22:	movabs rcx,0x1001000000001
+  2c:	mov    QWORD PTR [rax],rcx
+  2f:	mov    QWORD PTR [rax+0x8],0x1
+  37:	pop    rbx
+  38:	ret
+  39:	mov    ebx,edi
+  3b:	mov    BYTE PTR [rip+0x0],0x1        # 42 <initialize_competition_R22RuntimeCost3Main+0x42>
+			3d: R_X86_64_PC32	.bss._G_initialized-0x5
+  42:	xor    eax,eax
+  44:	call   49 <initialize_competition_R22RuntimeCost3Main+0x49>
+			45: R_X86_64_PLT32	lean_initialize-0x4
+  49:	movzx  ebx,bl
+  4c:	mov    edi,ebx
+  4e:	call   53 <initialize_competition_R22RuntimeCost3Main+0x53>
+			4f: R_X86_64_PLT32	initialize_Init-0x4
+  53:	movzx  ecx,BYTE PTR [rax+0x7]
+  57:	shl    ecx,0x18
+  5a:	cmp    ecx,0x1000000
+  60:	je     f2 <initialize_competition_R22RuntimeCost3Main+0xf2>
+  66:	mov    ecx,DWORD PTR [rax]
+  68:	cmp    ecx,0x2
+  6b:	jl     10a <initialize_competition_R22RuntimeCost3Main+0x10a>
+  71:	dec    ecx
+  73:	mov    DWORD PTR [rax],ecx
+  75:	mov    edi,ebx
+  77:	call   7c <initialize_competition_R22RuntimeCost3Main+0x7c>
+			78: R_X86_64_PLT32	initialize_Init-0x4
+  7c:	movzx  ecx,BYTE PTR [rax+0x7]
+  80:	shl    ecx,0x18
+  83:	cmp    ecx,0x1000000
+  89:	je     f2 <initialize_competition_R22RuntimeCost3Main+0xf2>
+  8b:	mov    ecx,DWORD PTR [rax]
+  8d:	cmp    ecx,0x2
+  90:	jl     11f <initialize_competition_R22RuntimeCost3Main+0x11f>
+  96:	dec    ecx
+  98:	mov    DWORD PTR [rax],ecx
+  9a:	mov    edi,ebx
+  9c:	call   a1 <initialize_competition_R22RuntimeCost3Main+0xa1>
+			9d: R_X86_64_PLT32	initialize_competition_BenchFull-0x4
+  a1:	movzx  ecx,BYTE PTR [rax+0x7]
+  a5:	shl    ecx,0x18
+  a8:	cmp    ecx,0x1000000
+  ae:	je     f2 <initialize_competition_R22RuntimeCost3Main+0xf2>
+  b0:	mov    ecx,DWORD PTR [rax]
+  b2:	cmp    ecx,0x2
+  b5:	jl     134 <initialize_competition_R22RuntimeCost3Main+0x134>
+  b7:	dec    ecx
+  b9:	mov    DWORD PTR [rax],ecx
+  bb:	mov    edi,ebx
+  bd:	call   c2 <initialize_competition_R22RuntimeCost3Main+0xc2>
+			be: R_X86_64_PLT32	initialize_competition_BenchSuite-0x4
+  c2:	movzx  ecx,BYTE PTR [rax+0x7]
+  c6:	shl    ecx,0x18
+  c9:	cmp    ecx,0x1000000
+  cf:	je     f2 <initialize_competition_R22RuntimeCost3Main+0xf2>
+  d1:	mov    ecx,DWORD PTR [rax]
+  d3:	cmp    ecx,0x2
+  d6:	jl     145 <initialize_competition_R22RuntimeCost3Main+0x145>
+  d8:	dec    ecx
+  da:	mov    DWORD PTR [rax],ecx
+  dc:	mov    edi,ebx
+  de:	call   e3 <initialize_competition_R22RuntimeCost3Main+0xe3>
+			df: R_X86_64_PLT32	initialize_competition_Submission-0x4
+  e3:	movzx  ecx,BYTE PTR [rax+0x7]
+  e7:	shl    ecx,0x18
+  ea:	cmp    ecx,0x1000000
+  f0:	jne    f4 <initialize_competition_R22RuntimeCost3Main+0xf4>
+  f2:	pop    rbx
+  f3:	ret
+  f4:	mov    ecx,DWORD PTR [rax]
+  f6:	cmp    ecx,0x2
+  f9:	jl     153 <initialize_competition_R22RuntimeCost3Main+0x153>
+  fb:	dec    ecx
+  fd:	mov    DWORD PTR [rax],ecx
+  ff:	mov    edi,0x1
+ 104:	pop    rbx
+ 105:	jmp    10a <initialize_competition_R22RuntimeCost3Main+0x10a>
+			106: R_X86_64_PLT32	.text.lean_io_result_mk_ok-0x4
+ 10a:	test   ecx,ecx
+ 10c:	je     75 <initialize_competition_R22RuntimeCost3Main+0x75>
+ 112:	mov    rdi,rax
+ 115:	call   11a <initialize_competition_R22RuntimeCost3Main+0x11a>
+			116: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 11a:	jmp    75 <initialize_competition_R22RuntimeCost3Main+0x75>
+ 11f:	test   ecx,ecx
+ 121:	je     9a <initialize_competition_R22RuntimeCost3Main+0x9a>
+ 127:	mov    rdi,rax
+ 12a:	call   12f <initialize_competition_R22RuntimeCost3Main+0x12f>
+			12b: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 12f:	jmp    9a <initialize_competition_R22RuntimeCost3Main+0x9a>
+ 134:	test   ecx,ecx
+ 136:	je     bb <initialize_competition_R22RuntimeCost3Main+0xbb>
+ 138:	mov    rdi,rax
+ 13b:	call   140 <initialize_competition_R22RuntimeCost3Main+0x140>
+			13c: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 140:	jmp    bb <initialize_competition_R22RuntimeCost3Main+0xbb>
+ 145:	test   ecx,ecx
+ 147:	je     dc <initialize_competition_R22RuntimeCost3Main+0xdc>
+ 149:	mov    rdi,rax
+ 14c:	call   151 <initialize_competition_R22RuntimeCost3Main+0x151>
+			14d: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 151:	jmp    dc <initialize_competition_R22RuntimeCost3Main+0xdc>
+ 153:	test   ecx,ecx
+ 155:	je     ff <initialize_competition_R22RuntimeCost3Main+0xff>
+ 157:	mov    rdi,rax
+ 15a:	call   15f <initialize_competition_R22RuntimeCost3Main+0x15f>
+			15b: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+ 15f:	mov    edi,0x1
+ 164:	pop    rbx
+ 165:	jmp    16a <initialize_competition_R22RuntimeCost3Main+0x16a>
+			166: R_X86_64_PLT32	.text.lean_io_result_mk_ok-0x4
+ 16a:	call   16f <.LCPI10_0+0x16b>
+			16b: R_X86_64_PLT32	lean_internal_panic_out_of_memory-0x4
+
+Disassembly of section .text.lean_io_result_mk_ok:
+
+0000000000000000 <lean_io_result_mk_ok>:
+   0:	push   rbx
+   1:	mov    rbx,rdi
+   4:	call   9 <lean_io_result_mk_ok+0x9>
+			5: R_X86_64_PLT32	lean_inc_heartbeat-0x4
+   9:	mov    edi,0x10
+   e:	call   13 <lean_io_result_mk_ok+0x13>
+			f: R_X86_64_PLT32	mi_malloc_small-0x4
+  13:	test   rax,rax
+  16:	je     2b <lean_io_result_mk_ok+0x2b>
+  18:	movabs rcx,0x1001000000001
+  22:	mov    QWORD PTR [rax],rcx
+  25:	mov    QWORD PTR [rax+0x8],rbx
+  29:	pop    rbx
+  2a:	ret
+  2b:	call   30 <.LCPI10_0+0x2c>
+			2c: R_X86_64_PLT32	lean_internal_panic_out_of_memory-0x4
+
+Disassembly of section .text.run_main:
+
+0000000000000000 <run_main>:
+   0:	jmp    5 <.LCPI10_0+0x1>
+			1: R_X86_64_PLT32	_lean_main-0x4
+
+Disassembly of section .text.main:
+
+0000000000000000 <main>:
+   0:	push   rbp
+   1:	push   r14
+   3:	push   rbx
+   4:	mov    ebp,edi
+   6:	call   b <main+0xb>
+			7: R_X86_64_PLT32	lean_setup_args-0x4
+   b:	mov    r14,rax
+   e:	mov    edi,0x1
+  13:	call   18 <main+0x18>
+			14: R_X86_64_PLT32	initialize_competition_R22RuntimeCost3Main-0x4
+  18:	mov    rbx,rax
+  1b:	call   20 <main+0x20>
+			1c: R_X86_64_PLT32	lean_io_mark_end_initialization-0x4
+  20:	cmp    DWORD PTR [rbx+0x4],0xffffff
+  27:	ja     4d <main+0x4d>
+  29:	mov    eax,DWORD PTR [rbx]
+  2b:	cmp    eax,0x2
+  2e:	jl     8f <main+0x8f>
+  30:	dec    eax
+  32:	mov    DWORD PTR [rbx],eax
+  34:	call   39 <main+0x39>
+			35: R_X86_64_PLT32	lean_init_task_manager-0x4
+  39:	lea    rdi,[rip+0x0]        # 40 <main+0x40>
+			3c: R_X86_64_PC32	run_main-0x4
+  40:	mov    esi,ebp
+  42:	mov    rdx,r14
+  45:	call   4a <main+0x4a>
+			46: R_X86_64_PLT32	lean_run_main-0x4
+  4a:	mov    rbx,rax
+  4d:	call   52 <main+0x52>
+			4e: R_X86_64_PLT32	lean_finalize_task_manager-0x4
+  52:	cmp    DWORD PTR [rbx+0x4],0xffffff
+  59:	ja     72 <main+0x72>
+  5b:	mov    rax,QWORD PTR [rbx+0x8]
+  5f:	shr    rax,1
+  62:	mov    ecx,DWORD PTR [rbx]
+  64:	cmp    ecx,0x2
+  67:	jl     9d <main+0x9d>
+  69:	dec    ecx
+  6b:	mov    DWORD PTR [rbx],ecx
+  6d:	pop    rbx
+  6e:	pop    r14
+  70:	pop    rbp
+  71:	ret
+  72:	mov    rdi,rbx
+  75:	call   7a <main+0x7a>
+			76: R_X86_64_PLT32	lean_io_result_show_error-0x4
+  7a:	mov    ecx,DWORD PTR [rbx]
+  7c:	cmp    ecx,0x2
+  7f:	jl     b4 <main+0xb4>
+  81:	dec    ecx
+  83:	mov    DWORD PTR [rbx],ecx
+  85:	mov    eax,0x1
+  8a:	pop    rbx
+  8b:	pop    r14
+  8d:	pop    rbp
+  8e:	ret
+  8f:	test   eax,eax
+  91:	je     34 <main+0x34>
+  93:	mov    rdi,rbx
+  96:	call   9b <main+0x9b>
+			97: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  9b:	jmp    34 <main+0x34>
+  9d:	test   ecx,ecx
+  9f:	je     6d <main+0x6d>
+  a1:	mov    rdi,rbx
+  a4:	mov    rbx,rax
+  a7:	call   ac <main+0xac>
+			a8: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  ac:	mov    rax,rbx
+  af:	pop    rbx
+  b0:	pop    r14
+  b2:	pop    rbp
+  b3:	ret
+  b4:	mov    eax,0x1
+  b9:	test   ecx,ecx
+  bb:	je     6d <main+0x6d>
+  bd:	mov    rdi,rbx
+  c0:	call   c5 <main+0xc5>
+			c1: R_X86_64_PLT32	lean_dec_ref_cold-0x4
+  c5:	jmp    85 <main+0x85>

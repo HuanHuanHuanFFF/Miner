@@ -1,0 +1,45 @@
+{
+  "status": "REPAIR_SOURCE_ONLY_NOT_COMPILED",
+  "created_at_utc": "2026-10-29T00:10:07.098245+00:00",
+  "failed_run": 40790240320,
+  "failed_island_source_sha256": "dddf4f7a89934cd6d1a705b7e4bc78db3f6448047a2ee7901c31b6bd50ece0ec",
+  "failed_log": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/ci-runs/40790240320/download-bb16f0118e144ff29b6e39122b6838ef/diagnostics/f01-d7-public-suite/public-suite/diagnostics/f01-r24-dev-portable-island3/full-build-output.txt",
+  "failed_log_sha256": "46dfa8447385d04914eaad918eceaea4161ca5e76320c840cf281ab091652ceb",
+  "old_fragment": "competitions/floatlib/candidates/f01-r24-research-native-mul-bridge2/NativeMul.lean.inc",
+  "old_fragment_sha256": "b016c09f334131935918e3858b244e3d4106e0036d42e68d71dfbbfa630ffc8b",
+  "new_fragment": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/rounding-review/NativeMul-v3.lean.inc",
+  "new_fragment_sha256": "ca3636a2ebbc18090e9cff79014a8c015214976ff31fc7fc23b42d4ae9290153",
+  "new_fragment_bytes": 8039,
+  "change": "Replace only private mul_view proof with same-catalog-F64 native expansion plus retained generic modelMulFinite; no configured Binary adapter transport.",
+  "root_statements_unchanged": true,
+  "roots": [
+    "Submission.R24NativeMul.native_mul_toModel",
+    "Submission.R24NativeMul.native_mul_finite_roundAt",
+    "Submission.R24NativeMul.native_mul_exact_from_raw32_values"
+  ],
+  "max32_squared_le_max64_byte_identical": true,
+  "failure_1688": [
+    "error: work/Submission.lean:1688:2: Type mismatch: After simplification, term",
+    "  native_mul_toModel x y hx hy",
+    " has type",
+    "  @Eq",
+    "    (Model",
+    "      (ExecFloat.Binary.format 11 52 FloatFormat.Encoding.ieee (FloatFormat.Encoding.ieee.defaultBias 11)",
+    "        ExecFloat.Binary.ofBits64._proof_1 ExecFloat.Binary.ofBits64._proof_2 ExecFloat.Binary.ofBits64._proof_3",
+    "        ExecFloat.Binary.ofBits64._proof_4))",
+    "    (Model.ofFloatModel (x * y).toModel) ((Model.ofFloatModel x.toModel).mul (Model.ofFloatModel y.toModel))",
+    "but is expected to have type",
+    "  @Eq (Model F64) (view (x * y)) ((view x).mul (view y))"
+  ],
+  "failure_1735": [
+    "error: work/Submission.lean:1735:2: maximum recursion depth has been reached",
+    "use `set_option maxRecDepth <num>` to increase limit",
+    "use `set_option diagnostics true` to get diagnostic information"
+  ],
+  "recursion_diagnosis": "Failure occurs at constant change elaboration, before norm_num. Numeric M32/M64 identity is unchanged. D should first retry with authorized maxRecDepth4096/maxHeartbeats1000000; sufficiency UNKNOWN until real CI.",
+  "requested_next_action": "D composes this new component with its integration repairs and approved bounded options, then reruns actual statement/module/helper replay and axiom audit. No pass is inferred for previously silent declarations.",
+  "frozen_old_files_untouched": true,
+  "local_Lean": false,
+  "CI_dispatched_by_C": false,
+  "shared_deadline_utc": "2026-10-29T03:38:56Z"
+}

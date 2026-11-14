@@ -1,0 +1,205 @@
+{
+  "run": 40786223288,
+  "source_commit": "c839fd40ab06520f1786d00dd3d3e2f5fca26ae9",
+  "upstream_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+  "summary_sha256": "4a25e183c84ca3c4bcddb28aab3b2ff609b287822cde83dd9e2c7cfa06ae8ca8",
+  "raw_files": 22,
+  "raw_bytes": 135697,
+  "cpu": [
+    "AMD EPYC 7763 64-Core Processor"
+  ],
+  "profile_cpu": 0,
+  "scope": "One original profile per model, normal/batch1, model42/input7, layer best5 INCLUDING hash/touch/ownership. No printed output checksums, independent audit, current5 source, new candidate or official score.",
+  "reference_order": [
+    "former2",
+    "shipped"
+  ],
+  "references": [
+    {
+      "name": "former2",
+      "source_sha256": "cea4422fb6d3bd613b306127e7017331560875ddb840a7f2e174f6c03bdb480f",
+      "original_VerifyExact_build": "ORIGINAL_VERIFYEXACT_TARGET_BUILD_PASS_NOT_INDEPENDENT_REPLAY_OR_AXIOM_AUDIT",
+      "models": [
+        {
+          "model": "nmlp",
+          "total_us": 484,
+          "category_us": {
+            "linear": 452,
+            "rmsnorm": 15,
+            "layernorm": 15
+          },
+          "dot_layer_us": 452,
+          "norm_layer_us": 30,
+          "dot_layer_share": 0.9338842975206612,
+          "norm_layer_share": 0.06198347107438017,
+          "truncation_gap_us": 2
+        },
+        {
+          "model": "mixer",
+          "total_us": 464,
+          "category_us": {
+            "save": 0,
+            "layernorm": 121,
+            "gemm": 30,
+            "addRelu": 12,
+            "linear": 296,
+            "rmsnorm": 0
+          },
+          "dot_layer_us": 326,
+          "norm_layer_us": 121,
+          "dot_layer_share": 0.7025862068965517,
+          "norm_layer_share": 0.2607758620689655,
+          "truncation_gap_us": 5
+        },
+        {
+          "model": "mlp",
+          "total_us": 475,
+          "category_us": {
+            "linear": 474,
+            "rmsnorm": 0,
+            "layernorm": 0
+          },
+          "dot_layer_us": 474,
+          "norm_layer_us": 0,
+          "dot_layer_share": 0.9978947368421053,
+          "norm_layer_share": 0.0,
+          "truncation_gap_us": 1
+        },
+        {
+          "model": "mnet",
+          "total_us": 534,
+          "category_us": {
+            "conv2d": 257,
+            "scaleShift": 101,
+            "depthwise": 94,
+            "avgpool": 74,
+            "linear": 1,
+            "rmsnorm": 0,
+            "layernorm": 0
+          },
+          "dot_layer_us": 352,
+          "norm_layer_us": 0,
+          "dot_layer_share": 0.6591760299625468,
+          "norm_layer_share": 0.0,
+          "truncation_gap_us": 7
+        },
+        {
+          "model": "cnn",
+          "total_us": 567,
+          "category_us": {
+            "conv2d": 437,
+            "scaleShift": 58,
+            "save": 1,
+            "addRelu": 27,
+            "maxpool": 13,
+            "avgpool": 22,
+            "linear": 1,
+            "rmsnorm": 0,
+            "layernorm": 0
+          },
+          "dot_layer_us": 438,
+          "norm_layer_us": 0,
+          "dot_layer_share": 0.7724867724867724,
+          "norm_layer_share": 0.0,
+          "truncation_gap_us": 8
+        }
+      ],
+      "hypothetical_equal_family_layer_scenarios": {
+        "half_dot_affected_layer_cost_ratio": 0.5896697271983913,
+        "half_norm_affected_layer_cost_ratio": 0.9663414488002485,
+        "boundary": "Analytic scenario only: assumes half of FULL affected layer time, includes observers. Not measured primitive speed, actual weighted profiles, current champion comparison, or a score forecast."
+      }
+    },
+    {
+      "name": "shipped",
+      "source_sha256": "9b2d940338dfcc42a38443324d63041a27cc9b5df1b18675103c7d67934d1df8",
+      "original_VerifyExact_build": "ORIGINAL_VERIFYEXACT_TARGET_BUILD_PASS_NOT_INDEPENDENT_REPLAY_OR_AXIOM_AUDIT",
+      "models": [
+        {
+          "model": "nmlp",
+          "total_us": 4770,
+          "category_us": {
+            "linear": 2953,
+            "rmsnorm": 1021,
+            "layernorm": 794
+          },
+          "dot_layer_us": 2953,
+          "norm_layer_us": 1815,
+          "dot_layer_share": 0.6190775681341719,
+          "norm_layer_share": 0.3805031446540881,
+          "truncation_gap_us": 2
+        },
+        {
+          "model": "mixer",
+          "total_us": 9728,
+          "category_us": {
+            "save": 0,
+            "layernorm": 6808,
+            "gemm": 410,
+            "addRelu": 176,
+            "linear": 2330,
+            "rmsnorm": 0
+          },
+          "dot_layer_us": 2740,
+          "norm_layer_us": 6808,
+          "dot_layer_share": 0.2816611842105263,
+          "norm_layer_share": 0.6998355263157895,
+          "truncation_gap_us": 4
+        },
+        {
+          "model": "mlp",
+          "total_us": 3101,
+          "category_us": {
+            "linear": 3099,
+            "rmsnorm": 0,
+            "layernorm": 0
+          },
+          "dot_layer_us": 3099,
+          "norm_layer_us": 0,
+          "dot_layer_share": 0.9993550467591099,
+          "norm_layer_share": 0.0,
+          "truncation_gap_us": 2
+        },
+        {
+          "model": "mnet",
+          "total_us": 13538,
+          "category_us": {
+            "conv2d": 7414,
+            "scaleShift": 2542,
+            "depthwise": 2659,
+            "avgpool": 906,
+            "linear": 11,
+            "rmsnorm": 0,
+            "layernorm": 0
+          },
+          "dot_layer_us": 10084,
+          "norm_layer_us": 0,
+          "dot_layer_share": 0.7448663022603044,
+          "norm_layer_share": 0.0,
+          "truncation_gap_us": 6
+        },
+        {
+          "model": "cnn",
+          "total_us": 12661,
+          "category_us": {
+            "conv2d": 10346,
+            "scaleShift": 1571,
+            "save": 1,
+            "addRelu": 320,
+            "maxpool": 378,
+            "avgpool": 29,
+            "linear": 12,
+            "rmsnorm": 0,
+            "layernorm": 0
+          },
+          "dot_layer_us": 10358,
+          "norm_layer_us": 0,
+          "dot_layer_share": 0.8181028354790301,
+          "norm_layer_share": 0.0,
+          "truncation_gap_us": 4
+        }
+      ]
+    }
+  ],
+  "decision": "Prioritize fused dot/dense/conv path; norm certificates remain secondary. Former2 nmlp normalization exposure is6.20%, not shipped38.05%. Mixer26.08% norm alone cannot establish a10% overall route."
+}

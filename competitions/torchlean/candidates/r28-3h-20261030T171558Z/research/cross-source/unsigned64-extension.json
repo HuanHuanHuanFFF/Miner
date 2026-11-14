@@ -1,0 +1,64 @@
+{
+  "at_utc": "2026-10-30T18:03:01.485844+00:00",
+  "state": "FINITE_UNSIGNED64_EXTENSION_AND_SHARP_RAW_COUNTEREXAMPLE",
+  "source_sha256": "29f9cbfc5a109f5d369dba65a7fdd2dd7d956a191b69638a988ddf97600c3d4e",
+  "counts": {
+    "representation_cap61_macs": 478956,
+    "representation_cap62_macs": 116819,
+    "gemm_cap61_macs": 80961,
+    "gemm_cap62_macs": 13289,
+    "paired_cap61_macs": 272894,
+    "paired_cap62_macs": 99718,
+    "actual_candidate61_macs": 353855,
+    "additional_cap62_macs": 113007,
+    "potential_candidate62_macs": 466862
+  },
+  "old_native_matching_cells": 18,
+  "sharp_cases": [
+    {
+      "offset_bit_sum": 62,
+      "a_words": [
+        "407fffff",
+        "3c800001"
+      ],
+      "b_words": [
+        "407fffff",
+        "3c800001"
+      ],
+      "old_lo": 240,
+      "old_hi": 254,
+      "old_span_guard": true,
+      "positive_first_product": 18446742974197940224,
+      "first_product_above_signed63": true,
+      "first_product_above_unsigned64": false,
+      "expected_word": "4180007f",
+      "outcome": "Valid unsigned product above signed63 limit; current61 guard unnecessarily excludes it"
+    },
+    {
+      "offset_bit_sum": 63,
+      "a_words": [
+        "407fffff",
+        "3c800001"
+      ],
+      "b_words": [
+        "40ffffff",
+        "3c800001"
+      ],
+      "old_lo": 240,
+      "old_hi": 255,
+      "old_span_guard": true,
+      "positive_first_product": 36893485948395880448,
+      "first_product_above_signed63": true,
+      "first_product_above_unsigned64": true,
+      "expected_word": "4200003f",
+      "outcome": "Illegal63 guard aliases product; expected0x4200003f, computed0xc1ffff82"
+    }
+  ],
+  "scope": "No frozen recipe modified; original centered51fd uses<=61. <=62 needs unsigned carry lemma, not the old signed63 Z128 premise. 63 is invalid even under the original source36 span<=15 gate.",
+  "proof": "CenteredArithmetic.lean contains uncompiled product_unsigned64 and unsigned128_step interfaces. Actual producer/glue/all12 still OPEN.",
+  "limits": [
+    "Counts not elapsed-time share",
+    "No runtime candidate or CI queue added",
+    "All inputs here old seen or independently constructed, no confirmation data"
+  ]
+}

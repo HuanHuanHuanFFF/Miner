@@ -1,0 +1,69 @@
+{
+  "created_at_utc": "2026-10-28T01:16:39.857428+00:00",
+  "phase_start_utc": "2026-10-28T01:10:02Z",
+  "phase_limit_utc": "2026-10-28T01:30:02Z",
+  "shared_deadline_utc": "2026-10-28T03:12:47Z",
+  "source": {
+    "path": "Kernel-probe.lean",
+    "bytes": 235009,
+    "sha256": "303a239716b2521a72093453f7d363553055bc2702f481a09837a6ed53724da1"
+  },
+  "fragments": [
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-r15-dev-packed-b2-1\\Kernel.lean",
+      "bytes": 226829,
+      "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\streaming-public\\PairEmitSizeOnly.lean.inc",
+      "bytes": 547,
+      "sha256": "53ea2b908fc63d644650427f84d85373a8f997de0206df3d0b5abfac852befff"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\floatarray-bridge-review\\NativeTarget.lean.inc",
+      "bytes": 1225,
+      "sha256": "fb7d71540db5b0fee7ae9a9b73440b10224713ebd646c4cd812d145c4dfbc1b1"
+    },
+    {
+      "path": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\streaming-public\\floatarray-storage\\Runtime.lean.inc",
+      "bytes": 6405,
+      "sha256": "f5a6cbc6a89ccccd1e08cb861ce483d447d9b8dc30feed21ef24a2f30e5cacf8"
+    }
+  ],
+  "public_roots_unchanged": [
+    "Submission.add_spec",
+    "Submission.mul_spec",
+    "Submission.sum_spec",
+    "Submission.bmm_spec"
+  ],
+  "new_helper_proofs": [
+    "Submission.R21StreamingPair.emit_size",
+    "Submission.R22FloatArrayBridgeReview.checked_import",
+    "Submission.R22FloatArrayBridgeReview.checked_native",
+    "Submission.R22FloatArrayBridgeReview.checked_convert",
+    "Submission.R22FloatArrayB2.push_size",
+    "Submission.R22FloatArrayB2.group_size",
+    "Submission.R22FloatArrayB2.row_size",
+    "Submission.R22FloatArrayB2.output_size"
+  ],
+  "callback": "Submission.R22FloatArrayB2.guarded",
+  "callback_correctness": "NOT_PROVED; original public bmm_spec still describes B2 only",
+  "validation": "NOT_RUN",
+  "native_cost": "UNKNOWN",
+  "actual_codegen": "UNKNOWN",
+  "CI": false,
+  "semantic_choices": [
+    "Exact existing underflow-zero branch; eligible p2..8,n>1,m>=4 only",
+    "Single checked build, no Array Float intermediate, no .data runtime access",
+    "Native-target bit check from fb7d; failure invokes original full B2 on raw A/B",
+    "Old odd right read including next row/batch/default is preserved",
+    "Safe Nat get with erased 2*k and2*k+1 bounds; no USize or unrolling",
+    "RawA codec, two Float32 chains, old finish/NaN replay and writer ordering unchanged"
+  ],
+  "missing": [
+    "Pinned compiler typing including size proofs",
+    "Producer native Prefix/read agreement and loop/public refinement",
+    "Actual selected C/ASM and exact full-call cost/checksum",
+    "Gate/replay/audit for any later public source"
+  ]
+}

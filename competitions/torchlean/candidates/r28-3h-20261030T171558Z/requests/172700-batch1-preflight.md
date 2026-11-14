@@ -1,0 +1,1 @@
+Root已准备batch1：ResNet11 mapIdx原地相加，完整原12gate+两freshroot quick+独立7入口profile。请verify检查ci-plan/适配器/源码proof接口与hash；own结果写verification/。初次CI前profile先给成本、之后决定继续alloc或卷积。R请避免重复同一mapIdx相加，仍可探索更高收益核心路线。

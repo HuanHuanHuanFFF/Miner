@@ -1,0 +1,105 @@
+{
+  "at_utc": "2026-10-29T23:12:53.617175+00:00",
+  "state": "HOLD_NEXT_ROUND_NOT_CURRENT_CI_QUEUE",
+  "id": "R27-WORD-BAND64-FOUR-COLUMN-COST",
+  "candidate_sha256": "b8eade4e11a0b465c17e987944971f98f1267388836b5f808c7c5e1597df2287",
+  "candidate_bytes": 253142,
+  "recipe": "build_band_native.py",
+  "entry": "transform(raw,23,band64-four-column-cost)",
+  "helper": "BandNative.lean.inc",
+  "new_correct": false,
+  "full_gate": false,
+  "declares_correct": false,
+  "static_policy": {
+    "intake": null,
+    "policy": null,
+    "passed": true,
+    "sources": {
+      "sandbox.py": {
+        "git_blob_sha": "13c4f7b71e678a27d024613e5198e0d75667de4e",
+        "bytes": 21304,
+        "sha256": "ba8e1a0f23692928f080ad278c35b36493199fb90e3768f90710b85ffef84126"
+      },
+      "duplicates.py": {
+        "git_blob_sha": "3e8eb21d1a50cce44090e29a816e3b55c0ad3fd9",
+        "bytes": 1759,
+        "sha256": "e1859b11011797b5012795d067383ef619a291769ea40dd0cd017791f127f4f8"
+      }
+    }
+  },
+  "official_base": "27fb1d19c712ead50ad34b4ad0d4ba597161e616",
+  "target": "Any current board. R27 development target was normalized_mlp43; refresh target/policy before any later queue. Retired23 is calibration only.",
+  "first_acceptance": "Exact native compile/typecheck then complete model paired checksums/cost; do not spend on full proof first. Droot owns any publicCI; allow_private=false.",
+  "source_handling": "Only own fragment/recipe/compactor/model/receipt public. Reconstruct whole unknown-license source ephemeral on runner; never upload it.",
+  "input_manifest": [
+    {
+      "path": "competition-state/source-private/submission23-Kernel.lean",
+      "sha256": "1010c0744f0506974c64601e8ce7335bea56d0cb21b655543d390794df0665fe",
+      "role": "Local read-only base; not copied or published"
+    },
+    {
+      "path": "research/board-frontier/norm-frontier-result.json",
+      "sha256": "28c4c8be040176ab0f2462c68141767cd3104ad50244063fcdebb30c0743e27a",
+      "role": "Seen seed27051001 formula cells only; not confirmation"
+    },
+    {
+      "path": "research/word-proof/WordBlockModular64-v3.lean",
+      "sha256": "c21efe437d955f7356671ef35c2a642634baa2f7a63e7b20d31fdfdf1102ba83",
+      "role": "Accepted block arithmetic pattern; no proof inheritance into this candidate"
+    }
+  ],
+  "limits": [
+    "No local Lean/native compile",
+    "No new official submission or chain action",
+    "No actual all12 correctness claim",
+    "No alteration of running/frozen current candidates"
+  ],
+  "files": [
+    {
+      "file": "BandNative.lean.inc",
+      "bytes": 4822,
+      "sha256": "f30b0bab8380e0d4b7e79a05fa28c335e4bcf0dc7471950659042227e2ea7588"
+    },
+    {
+      "file": "build_band_native.py",
+      "bytes": 5060,
+      "sha256": "f9509962592b8552fe254c3088e591b6547f73c9e060030e09c64ce89b50bd05"
+    },
+    {
+      "file": "frozen_compact_public23.py",
+      "bytes": 8834,
+      "sha256": "4c3dd79284f6701d3b128687f9f973f47d9236f8d9db502d398e2eb4d131e129"
+    },
+    {
+      "file": "receipt.json",
+      "bytes": 3023,
+      "sha256": "c784d890a6d2f732c067d0ca62bc64861667211f6ba58a10833e83d414f2154b"
+    },
+    {
+      "file": "replay_native_shape.py",
+      "bytes": 11740,
+      "sha256": "1345b71f2e8a301aa6875b4adfdba29103d46a02c7125fdb06420f0a6ec2dca3"
+    },
+    {
+      "file": "native-shape-replay.json",
+      "bytes": 23985,
+      "sha256": "8ee47aa897b2b700c67146224aec1db7cc1e765fa2c22c903ca33eeee416d180"
+    },
+    {
+      "file": "HANDOFF.md",
+      "bytes": 2280,
+      "sha256": "18ae6727fe9a75fa9f4d61818fbeff1e6172e1e98ebfaf0d6de0df0ed2928089"
+    },
+    {
+      "file": "directed_terminal_replay.py",
+      "bytes": 3294,
+      "sha256": "4c3611b6e89b9fa841fb3f73d48d5a3f7c7e9ea49ed0e43107e105d57f53f854"
+    },
+    {
+      "file": "directed-terminal-replay.json",
+      "bytes": 3269,
+      "sha256": "4886fba67e90131fa58e6b81b7b79534b257ab03efee9340e4a9312c52d0dd11"
+    }
+  ],
+  "extra_finite_edges": "directed-terminal-replay.json:7 dyadic formula cases, incl nonzero negative underflow to80000000, overflow, subnormal and power-of-two metadata padding. Not native execution."
+}

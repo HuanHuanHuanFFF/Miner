@@ -1,0 +1,120 @@
+{
+  "status": "FINITE_MODEL_PASS",
+  "lean_status": "NOT_COMPILED",
+  "native_timing_status": "NOT_RUN",
+  "seed": 20261030,
+  "word_arithmetic": {
+    "mul64x24_cases": 3000,
+    "add_sub_cases": 6000,
+    "shift_cases": 33650
+  },
+  "toy_formats": {
+    "precisions": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "exponent_fields": [
+      1,
+      6
+    ],
+    "denominators": [
+      1,
+      7
+    ],
+    "local_grid_cases": 41020,
+    "accepted": 18340
+  },
+  "binary32_boundary_grid": {
+    "cases": 33528,
+    "accepted": 15240,
+    "exact_midpoints_rejected": 6096
+  },
+  "random_adversarial_proposals": {
+    "cases": 24000,
+    "accepted": 2801,
+    "correct_proposals_rejected": 3199
+  },
+  "synthetic_rows": {
+    "description": "Synthetic inputs only; not frozen board inputs and not representative performance evidence.",
+    "total_elements": 11888,
+    "zero_aware": {
+      "accepted": 5944,
+      "alignment_guard": 2972,
+      "row_guard": 2972
+    },
+    "minimum_of_both_raw_exponents": {
+      "accepted": 2972,
+      "alignment_guard": 5944,
+      "row_guard": 2972
+    },
+    "groups": {
+      "compact_full_bias": {
+        "accepted": 2972
+      },
+      "zero_bias": {
+        "accepted": 2972
+      },
+      "mixed_subnormal": {
+        "alignment_guard": 2972
+      },
+      "wide_exponents": {
+        "row_guard": 2972
+      }
+    }
+  },
+  "counterexamples_and_guards": [
+    {
+      "name": "symmetric_power_of_two_lower_is_unsound",
+      "proposal": "0x3f800000",
+      "correct": "0x3f7fffff"
+    },
+    {
+      "name": "closed_cell_accepts_odd_midpoint",
+      "proposal": "0x3f800001",
+      "correct": "0x3f800002"
+    },
+    {
+      "name": "minimum_normal_needs_full_lower_gap",
+      "correct": "0x800000"
+    },
+    {
+      "name": "exact_rational_zero_is_not_native_negative_zero",
+      "native": "0x80000000",
+      "correct": "0x0"
+    },
+    {
+      "name": "truncated_numerator_can_certify_its_own_error",
+      "note": "machine-arithmetic counterexample, not claimed as a full row"
+    },
+    {
+      "name": "full_row_bias_cancellation",
+      "row": [
+        "0x3f800000",
+        "0x3f800000",
+        "0x3f800001"
+      ],
+      "g": "0x40400000",
+      "b": "0x34000001",
+      "dw": "0x3f800000",
+      "native_affine_proposal": "0x287c0000",
+      "numerator_first_accepted": "0x28800000",
+      "correct": "0x28800000"
+    },
+    {
+      "name": "word_shift_64_is_not_integer_shift_64"
+    },
+    {
+      "name": "maximum_finite_upper_tie_overflows",
+      "correct": "0x7f800000"
+    },
+    {
+      "name": "guard_cases_rejected",
+      "cases": 14,
+      "note": "forged metadata exercises guards only; no claim that these are valid stable rows"
+    }
+  ],
+  "false_accepts": 0,
+  "scope": "Finite, independently checked arithmetic models only. No all-input formal proof, no whole-model performance result."
+}

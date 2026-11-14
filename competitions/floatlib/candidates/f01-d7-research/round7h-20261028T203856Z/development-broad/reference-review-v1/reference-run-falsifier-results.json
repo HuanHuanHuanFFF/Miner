@@ -1,0 +1,148 @@
+{
+  "reviewed_profile_sha256": "3d211f41074e0ef03eea4c3fe62f876916fefeb3cae6fc2147b263d803583b01",
+  "source_sha256": "861d827e3c07d9c791d258b55b16876a410f7a4ad6b361fe3a41bc374aa62f03",
+  "scope": "Only run() AST executed with fake Popen/systemctl/killpg. No native build, network or process.",
+  "tests": [
+    {
+      "mode": "cleanup_command_timeout",
+      "caught": "ObservationTimeout",
+      "workload_still_alive": false,
+      "descendant_can_remain_alive": false,
+      "wait_calls": 3,
+      "killpg_calls": 2,
+      "command_record_saved_before_verified_exit": true,
+      "cleanup_confirmed": false,
+      "abort_after_timeout": "No subsequent reference, build or profile is allowed",
+      "later_append_invalidates_recorded_log_hash": null,
+      "events": [
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "--property=ControlGroup",
+            "--value",
+            "r24-ref-mock-2b1b9e01c8.scope"
+          ]
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGTERM",
+            "r24-ref-mock-2b1b9e01c8.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGTERM"
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGKILL",
+            "r24-ref-mock-2b1b9e01c8.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGKILL"
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "0"
+        }
+      ]
+    },
+    {
+      "mode": "kill_does_not_finish_workload",
+      "caught": "ObservationTimeout",
+      "workload_still_alive": true,
+      "descendant_can_remain_alive": true,
+      "wait_calls": 3,
+      "killpg_calls": 2,
+      "command_record_saved_before_verified_exit": true,
+      "cleanup_confirmed": false,
+      "abort_after_timeout": "No subsequent reference, build or profile is allowed",
+      "later_append_invalidates_recorded_log_hash": true,
+      "events": [
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "show",
+            "--property=ControlGroup",
+            "--value",
+            "r24-ref-mock-50955a3e7b.scope"
+          ]
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGTERM",
+            "r24-ref-mock-50955a3e7b.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGTERM"
+        },
+        {
+          "event": "systemctl",
+          "argv": [
+            "systemctl",
+            "--user",
+            "kill",
+            "--kill-whom=all",
+            "--signal",
+            "SIGKILL",
+            "r24-ref-mock-50955a3e7b.scope"
+          ]
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "SIGKILL"
+        },
+        {
+          "event": "killpg",
+          "pid": 42,
+          "signal": "0"
+        }
+      ]
+    },
+    {
+      "mode": "nonzero_parent_child_alive",
+      "caught": "RuntimeError",
+      "workload_still_alive": false,
+      "descendant_can_remain_alive": true,
+      "wait_calls": 1,
+      "killpg_calls": 0,
+      "command_record_saved_before_verified_exit": true,
+      "cleanup_confirmed": null,
+      "abort_after_timeout": null,
+      "later_append_invalidates_recorded_log_hash": null,
+      "events": []
+    }
+  ]
+}

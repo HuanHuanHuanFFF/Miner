@@ -1,0 +1,268 @@
+{
+  "checked_at_utc": "2026-10-28T14:58:41.108789+00:00",
+  "source": "competitions\\floatlib\\candidates\\f01-d7-research\\round40m-20261028T142626Z\\research\\reader2-assembly.NOT_RUN.lean",
+  "source_sha256": "ef890a0be94bf05566188f73b750a0cc0ced0c4f92794a7290f95d2288a5425b",
+  "source_bytes": 268463,
+  "output_bytes": 249735,
+  "output_sha256": "7a41b05c0ed9a12e61dcfa9a34a70afb0b52dc9532f425eb3913b079220a3ebf",
+  "headroom": 6265,
+  "removed_proof_count": 36,
+  "removed_proofs": [
+    {
+      "iteration": 0,
+      "name": "modelDotFold_absorb",
+      "bytes": 415,
+      "sha256": "39ad25592c6d4b13e9e19474140113c277347b9ffcfe1b161e684e76fb8359e4",
+      "body": "theorem modelDotFold_absorb {\u03b9 : Type} (a b : \u03b9 \u2192 M32) (indices : List \u03b9)\n    (q : M32) (hn : q.isNaN = true) (hs : q.isSNaN = false) :\n    modelDotFold a b indices q = q := by\n  induction indices generalizing q with\n  | nil => rfl\n  | cons i is ih =>\n      change modelDotFold a b is (Model.Spec.add q (Model.Spec.mul (a i) (b i))) = q\n      rw [add_mul_absorb q (a i) (b i) hn hs]\n      exact ih q hn hs\n\n\n\n\n"
+    },
+    {
+      "iteration": 1,
+      "name": "exec_toModel_bits_eq_raw",
+      "bytes": 165,
+      "sha256": "719b4c8bb2836324d15d60e095318cc278e0fb7d7e9a2b3d7f8ce49d6a22a9dc",
+      "body": "theorem exec_toModel_bits_eq_raw (q : Competition.Binary32) :\n    (ExecFloat.Binary.toModel q).bits = q.raw.1.toBitVec := by\n  rw [exec_toModel_eq_rawModel]\n  rfl\n\n\n"
+    },
+    {
+      "iteration": 2,
+      "name": "step_raw",
+      "bytes": 186,
+      "sha256": "7dee19fd6d9b75d050342692f4ae4335fe893bdae12fc43229220fbee593e50e",
+      "body": "theorem step_raw (q x : Competition.Binary32) :\n    (step q x).raw.1 =\n      if rawSNaN x.raw.1 then quietRaw x.raw.1 else q.raw.1 := by\n  cases h : rawSNaN x.raw.1 <;> simp [step, h]\n\n\n"
+    },
+    {
+      "iteration": 3,
+      "name": "scaleTable_entry",
+      "bytes": 211,
+      "sha256": "4d0eda33df0e6fbb57a6697010bd5af08a55cdbcdb0a78ad437efdc20825eef7",
+      "body": "theorem scaleTable_entry (j : Fin 512) :\n    scaleTable[j.val]'(by rw [scaleTable_size]; exact j.isLt) =\n      Float32.ofBits (scaleBits (UInt32.ofNat j.val)) := by\n  simp only [scaleTable, Array.getElem_ofFn]\n\n"
+    },
+    {
+      "iteration": 4,
+      "name": "zero_fields",
+      "bytes": 418,
+      "sha256": "392d8b9948b42533cf2ca51794c4a2daf1c7da5a680b99b9402c5bfec1bb84a3",
+      "body": "theorem zero_fields (u : UInt32) (h : magnitude u = 0) :\n    (u = 0 \u2227 tableIndex u = 0 \u2227 mantissa u = 0x800000 \u2227\n      scaleBits (tableIndex u) = 0) \u2228\n    (u = 0x80000000 \u2227 tableIndex u = 256 \u2227 mantissa u = 0x800000 \u2227\n      scaleBits (tableIndex u) = 0x80000000) := by\n  cases (magnitude_zero_iff u).mp h with\n  | inl hu =>\n    subst u\n    left\n    decide\n  | inr hu =>\n    subst u\n    right\n    decide\n\n"
+    },
+    {
+      "iteration": 5,
+      "name": "tableProduct_zero_bits_eq",
+      "bytes": 193,
+      "sha256": "56393915f75cf4bf8b1b7c6926d6a446b8c02d872eb9dc2a2594a3ea64177b74",
+      "body": "theorem tableProduct_zero_bits_eq (u : UInt32) (h : magnitude u = 0) :\n    (tableProduct u).toBits = (Float32.ofBits u).toBits := by\n  exact congrArg Float32.toBits (tableProduct_zero_eq u h)\n\n"
+    },
+    {
+      "iteration": 6,
+      "name": "zero_ofBits_toBits",
+      "bytes": 207,
+      "sha256": "8533a7d6be07e48b4a0c0c91469e465390e31822f9dd7dfa9a4e2f1d9c88b578",
+      "body": "theorem zero_ofBits_toBits (u : UInt32) (h : magnitude u = 0) :\n    (Float32.ofBits u).toBits = u := by\n  cases (magnitude_zero_iff u).mp h with\n  | inl hu => subst u; decide\n  | inr hu => subst u; decide\n\n\n"
+    },
+    {
+      "iteration": 7,
+      "name": "normal_value_of_bits",
+      "bytes": 266,
+      "sha256": "b0f552c2ab39df77b43b19f51ee7e1f3bdcd809efcc0880842c9c1be50829fbd",
+      "body": "theorem normal_value_of_bits\n    (hNormalBits : \u2200 u, NormalBand u \u2192\n      (tableProduct u).toBits = (Float32.ofBits u).toBits) :\n    \u2200 u, NormalBand u \u2192 tableProduct u = Float32.ofBits u := by\n  intro u hn\n  exact float32_eq_of_toBits_eq (hNormalBits u hn)\n\n"
+    },
+    {
+      "iteration": 8,
+      "name": "float32_eq_of_toBits_eq",
+      "bytes": 309,
+      "sha256": "c338869ae27cd86a6b8e7decd2fc7ce64e685edf018fcb2c7f7bb4f0314ce584",
+      "body": "theorem float32_eq_of_toBits_eq {x y : Float32} (h : x.toBits = y.toBits) :\n    x = y := by\n  cases x with\n  | ofModel xm =>\n    cases y with\n    | ofModel ym =>\n      cases xm with\n      | mk xb xv =>\n        cases ym with\n        | mk yb yv =>\n          change xb = yb at h\n          cases h\n          rfl\n\n"
+    },
+    {
+      "iteration": 9,
+      "name": "normal_value_of_raw_bits",
+      "bytes": 245,
+      "sha256": "4037bda091ceb3edc38969af4849b780d4b3408d27be753faacaea23b1965501",
+      "body": "theorem normal_value_of_raw_bits\n    (hNormalRawBits : \u2200 u, NormalBand u \u2192 (tableProduct u).toBits = u) :\n    \u2200 u, NormalBand u \u2192 tableProduct u = Float32.ofBits u := by\n  intro u hn\n  exact float32_eq_of_raw_bits (hNormalRawBits u hn)\n\n"
+    },
+    {
+      "iteration": 10,
+      "name": "float32_eq_of_raw_bits",
+      "bytes": 238,
+      "sha256": "88ea4a48d95f4aa8271347ffe2434d2f966b83c0ad54ea2c3c69dfd67dbd42f3",
+      "body": "theorem float32_eq_of_raw_bits {x : Float32} {u : UInt32} (h : x.toBits = u) :\n    x = Float32.ofBits u := by\n  calc\n    x = Float32.ofBits x.toBits := (float32_ofBits_toBits x).symm\n    _ = Float32.ofBits u := congrArg Float32.ofBits h\n\n"
+    },
+    {
+      "iteration": 11,
+      "name": "float32_ofBits_toBits",
+      "bytes": 261,
+      "sha256": "a235efc119faf2d4e0c6ca4377107b18f07324cf2f4e23dfcce89bbb6e1e5aaf",
+      "body": "theorem float32_ofBits_toBits (x : Float32) : Float32.ofBits x.toBits = x := by\n  simpa only [FloatLib.Floats.ExecFloat.Binary.toFloat32,\n    FloatLib.Floats.ExecFloat.Binary.toBits32_ofFloat32] using\n    FloatLib.Floats.ExecFloat.Binary.toFloat32_ofFloat32 x\n\n"
+    },
+    {
+      "iteration": 12,
+      "name": "convert_fallback",
+      "bytes": 123,
+      "sha256": "880c80d86ce466b5fb1ceaabfa188d7651b668be7abff8b4f218674bad640ab6",
+      "body": "theorem convert_fallback (u : UInt32) (h : fastOK u = false) :\n    convert u = Float32.ofBits u := by\n  simp [convert, h]\n\n"
+    },
+    {
+      "iteration": 13,
+      "name": "native_eq_of_model_eq",
+      "bytes": 327,
+      "sha256": "11f5553d5f6bddff0f1d86c7d4bd99190dc1af0fbe925f9360fb7b2583033bc4",
+      "body": "theorem native_eq_of_model_eq (x y : Float32)\n    (h : nativeModel x = nativeModel y) : x = y := by\n  have hw : ExecFloat.Binary.ofFloat32 x = ExecFloat.Binary.ofFloat32 y :=\n    ExecFloat.Binary.toModel_inj.mp h\n  have hn := congrArg ExecFloat.Binary.toFloat32 hw\n  simpa only [ExecFloat.Binary.toFloat32_ofFloat32] using hn\n\n"
+    },
+    {
+      "iteration": 14,
+      "name": "native_mul_bits_eq_of_raw_model_mul_eq",
+      "bytes": 570,
+      "sha256": "b0d139a4403066909e73428c4b75e171c39f4b6b130a693d61e1a2722f1c953a",
+      "body": "theorem native_mul_bits_eq_of_raw_model_mul_eq\n    (x y : Float32) (u : UInt32)\n    (hx : x.isFinite = true) (hy : y.isFinite = true)\n    (hm : Model.mul (nativeModel x) (nativeModel y) = rawModel u) :\n    (x * y).toBits = u := by\n  have hw : ExecFloat.Binary.ofFloat32 (x * y) = ExecFloat.Binary.ofBits32 u := by\n    apply ExecFloat.Binary.toModel_inj.mp\n    rw [NativeBridge.toModelNativeMul x y hx hy]\n    exact hm\n  have hn := congrArg ExecFloat.Binary.toBits32 hw\n  simpa only [ExecFloat.Binary.toBits32_ofFloat32,\n    ExecFloat.Binary.toBits32_ofBits32] using hn\n\n"
+    },
+    {
+      "iteration": 15,
+      "name": "nativeFiniteOfExp",
+      "bytes": 381,
+      "sha256": "802c126d8c4aa2bbf779933622ca108135ceb918ceb1500cf9c92ce5f7a37c0d",
+      "body": "theorem nativeFiniteOfExp (x : Competition.Binary32)\n    (hx : FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32.expField x.raw.1 \u2260 0xff) :\n    (ExecFloat.Binary.toFloat32 x).isFinite = true := by\n  change ((Model.toFloat32Model (Model.NativeBinary32.ofUInt32 x.raw.1)).unpack).isFinite = true\n  rw [Model.unpack_toFloat32Model]\n  exact modelFiniteOfExp x.raw.1 hx\n\n"
+    },
+    {
+      "iteration": 16,
+      "name": "modelFiniteOfExp",
+      "bytes": 760,
+      "sha256": "04b0f1cdfe9470e1d8211d534a469c4ddac9f343c6bb6cb6538bdd33f6eeef5a",
+      "body": "theorem modelFiniteOfExp (w : UInt32)\n    (hw : FloatLib.Floats.Formats.BinaryInterchange.Model.NativeBinary32.expField w \u2260 0xff) :\n    (Model.toModel (Model.NativeBinary32.ofUInt32 w)).isFinite = true := by\n  have hd : \u2203 d, Model.toDyadic? (Model.NativeBinary32.ofUInt32 w) = some d := by\n    rw [\u2190 Model.NativeBinary32.toDyadic_eq]\n    simp only [Model.NativeBinary32.toUInt32_ofUInt32]\n    unfold Model.NativeBinary32.toDyadic?\n    simp only [beq_iff_eq, hw, ite_false]\n    split_ifs <;> exact \u27e8_, rfl\u27e9\n  obtain \u27e8d, hd\u27e9 := hd\n  rw [Model.toDyadic?_ieee_eq_model FloatFormat.binary32 (by decide)] at hd\n  cases hm : Model.toModel (Model.NativeBinary32.ofUInt32 w) <;>\n    simp_all [Model.unpackedToDyadic?, Float.Model.UnpackedFloat.isFinite]\n\n"
+    },
+    {
+      "iteration": 17,
+      "name": "mul_finite_inputs",
+      "bytes": 555,
+      "sha256": "72550da2762ad0e8eea3403ce65f8996b76027beac2f8fa01c72443de071e519",
+      "body": "theorem mul_finite_inputs (x y : Float32) (h : (x * y).isFinite = true) :\n    x.isFinite = true \u2227 y.isFinite = true := by\n  change (Float32.Model.pack\n    (Float.Model.UnpackedFloat.mul Float.Model.Format.binary32\n      x.toModel.unpack y.toModel.unpack)).isFinite = true at h\n  change x.toModel.unpack.isFinite = true \u2227 y.toModel.unpack.isFinite = true\n  cases hx : x.toModel.unpack <;> cases hy : y.toModel.unpack <;>\n    simp_all [Float.Model.UnpackedFloat.mul, Float.Model.UnpackedFloat.isFinite,\n      packNaN_notFinite, packInfinity_notFinite]\n\n"
+    },
+    {
+      "iteration": 18,
+      "name": "packNaN_notFinite",
+      "bytes": 123,
+      "sha256": "9c738b7a2d8b182899350e7b6063545dcd382ab043501b1dd35233e9679d7f72",
+      "body": "theorem packNaN_notFinite :\n    (Float32.Model.pack Float.Model.UnpackedFloat.notANumber).isFinite = false := by\n  decide\n\n"
+    },
+    {
+      "iteration": 19,
+      "name": "packInfinity_notFinite",
+      "bytes": 191,
+      "sha256": "102c66b8a9efc8448a878d20357467ddcc2cf333018661dee9beac0a6328afcf",
+      "body": "theorem packInfinity_notFinite (sign : Float.Model.UnpackedFloat.Sign) :\n    (Float32.Model.pack (Float.Model.UnpackedFloat.infinity sign)).isFinite = false := by\n  cases sign <;> decide\n\n\n\n\n"
+    },
+    {
+      "iteration": 20,
+      "name": "model_add_of_right_snan_isQNaN",
+      "bytes": 266,
+      "sha256": "d15e090da0daa37821c3d09af2865e9cf52e8dace021a2b6453e6a24c087b666",
+      "body": "theorem model_add_of_right_snan_isQNaN (x y : Model FloatFormat.binary32)\n    (hx : isSNaN x = false) (hy : isSNaN y = true) :\n    isQNaN (Spec.add x y) = true := by\n  rw [model_add_of_right_snan x y hx hy]\n  exact R7W01.quietNaN32_is_qnan y (isNaN_of_isSNaN hy)\n\n\n\n"
+    },
+    {
+      "iteration": 21,
+      "name": "quietNaN32_is_qnan",
+      "bytes": 200,
+      "sha256": "f29d08f5ca83cd77ce76f5fd05a77a77e0169b26b7ee6a2e400b72998a692892",
+      "body": "theorem quietNaN32_is_qnan (x : M32) (hx : isNaN x = true) :\n    isQNaN (quietNaN x) = true := by\n  rw [isQNaN_eq_nan_and_not_signaling]\n  rw [quietNaN32_is_nan x hx, quietNaN32_not_snan x]\n  rfl\n\n\n\n\n"
+    },
+    {
+      "iteration": 22,
+      "name": "model_add_of_right_snan",
+      "bytes": 417,
+      "sha256": "079ca8b1038edefb36395155d881125b9662b61b41d4fd517c6fe8690fccf326",
+      "body": "theorem model_add_of_right_snan (x y : Model FloatFormat.binary32)\n    (hx : isSNaN x = false) (hy : isSNaN y = true) :\n    Spec.add x y = quietNaN y := by\n  have hny : isNaN y = true := isNaN_of_isSNaN hy\n  have hdy : toDyadic? y = none := toDyadic?_eq_none_of_isNaN hny\n  have hc : chooseNaN2 x y = some (quietNaN y) := by\n    simp [chooseNaN2, hx, hy]\n  cases hdx : toDyadic? x <;> simp [Spec.add, hdx, hdy, hc]\n\n\n"
+    },
+    {
+      "iteration": 23,
+      "name": "add_isNaN_false_iff",
+      "bytes": 244,
+      "sha256": "1c1479627faa1f13657b7fe525c5e9e0996aab10cfa1a0f4536e25cea6baafe9",
+      "body": "theorem add_isNaN_false_iff (x y : Competition.Binary32) :\n\n\n    ExecFloat.Binary.isNaN (ExecFloat.add x y) = false \u2194\n\n\n      (ExecFloat.Binary.toFloat32 x + ExecFloat.Binary.toFloat32 y).isNaN = false := by\n\n\n  rw [add_isNaN_eq_native]\n\n\n\n\n\n"
+    },
+    {
+      "iteration": 24,
+      "name": "mul_isNaN_false_iff",
+      "bytes": 244,
+      "sha256": "2d63e034861ab08f2d1092db2cc2ad723bec82e593b715b0ada743df3ffa2fef",
+      "body": "theorem mul_isNaN_false_iff (x y : Competition.Binary32) :\n\n\n    ExecFloat.Binary.isNaN (ExecFloat.mul x y) = false \u2194\n\n\n      (ExecFloat.Binary.toFloat32 x * ExecFloat.Binary.toFloat32 y).isNaN = false := by\n\n\n  rw [mul_isNaN_eq_native]\n\n\n\n\n\n"
+    },
+    {
+      "iteration": 25,
+      "name": "repairDotStep_eq_original",
+      "bytes": 346,
+      "sha256": "d372a0428b45a983f55f17e37cc60b7bc93af3581dc203359ca9980a673ba93e",
+      "body": "theorem repairDotStep_eq_original (q : Competition.Binary32) (acc : Float32)\n\n\n    (x y : Competition.Binary32)\n\n\n    (hmatch : ExecFloat.Binary.toFloat32 q = acc) (hacc : acc.isNaN = false) :\n\n\n    repairDotStep acc x y = ExecFloat.add q (ExecFloat.mul x y) := by\n\n\n  unfold repairDotStep\n\n\n  rw [native_acc_roundtrip q acc hmatch hacc]\n\n\n\n\n\n\n\n\n"
+    },
+    {
+      "iteration": 26,
+      "name": "native_acc_roundtrip",
+      "bytes": 306,
+      "sha256": "7ac5083d464da7e51a6ca07c983938d7bb4a0449ea876a00e0ab6803b1dff393",
+      "body": "theorem native_acc_roundtrip (q : Competition.Binary32) (acc : Float32)\n\n\n    (hmatch : ExecFloat.Binary.toFloat32 q = acc) (hacc : acc.isNaN = false) :\n\n\n    ExecFloat.Binary.ofFloat32 acc = q := by\n\n\n  rw [\u2190 hmatch]\n\n\n  apply Submission.NotNaNProbe.roundtrip\n\n\n  simpa only [hmatch] using hacc\n\n\n\n\n\n\n\n\n"
+    },
+    {
+      "iteration": 27,
+      "name": "repairDotStep_isNaN_eq",
+      "bytes": 358,
+      "sha256": "10d2af7172d6841454c2432941f5edc3db798eb205116e74c7a88a14f55c5d50",
+      "body": "theorem repairDotStep_isNaN_eq (acc : Float32) (x y : Competition.Binary32) :\n\n\n    Model.isNaN (ExecFloat.Binary.toModel (repairDotStep acc x y)) =\n\n\n      (nativeDotStep acc x y).isNaN := by\n\n\n  have h := native_dot_isNaN_eq_raw (ExecFloat.Binary.ofFloat32 acc) x y\n\n\n  simpa only [ExecFloat.Binary.toFloat32_ofFloat32, repairDotStep] using h.symm\n\n\n\n\n\n\n\n\n"
+    },
+    {
+      "iteration": 28,
+      "name": "native_dot_isNaN_eq_raw",
+      "bytes": 367,
+      "sha256": "dc168b6f306295399358511961c2d9141c7e664c2019b8fea87943a64b404f8a",
+      "body": "theorem native_dot_isNaN_eq_raw (q x y : Competition.Binary32) :\n\n\n    (nativeDotStep (ExecFloat.Binary.toFloat32 q) x y).isNaN =\n\n\n      Model.isNaN (ExecFloat.Binary.toModel (ExecFloat.add q (ExecFloat.mul x y))) := by\n\n\n  exact (congrArg Float32.isNaN (dot_toFloat32 q x y)).symm.trans\n\n\n    (toFloat32_isNaN (ExecFloat.add q (ExecFloat.mul x y)))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+    },
+    {
+      "iteration": 29,
+      "name": "dot_toFloat32",
+      "bytes": 245,
+      "sha256": "a4952bb831cdbce61ddf9ead4215f9878236e1aebbe93db79963b18a6a9f8fcb",
+      "body": "theorem dot_toFloat32 (q x y : Competition.Binary32) :\n\n\n    ExecFloat.Binary.toFloat32 (ExecFloat.add q (ExecFloat.mul x y)) =\n\n\n      nativeDotStep (ExecFloat.Binary.toFloat32 q) x y := by\n\n\n  rw [add_toFloat32, mul_toFloat32]\n\n\n  rfl\n\n\n\n\n\n\n\n\n"
+    },
+    {
+      "iteration": 30,
+      "name": "ofFloat32_mul",
+      "bytes": 599,
+      "sha256": "3ad6c2bdb376b9e817f1083ad67959e51cbe32aee60d39396eb865ab6fd77852",
+      "body": "theorem ofFloat32_mul (a b : Float32) :\n    ExecFloat.Binary.ofFloat32 (a * b) =\n      ExecFloat.mul (ExecFloat.Binary.ofFloat32 a) (ExecFloat.Binary.ofFloat32 b) := by\n  cases ha : a.isNaN with\n  | false =>\n      cases hb : b.isNaN with\n      | false => exact Submission.R7Native.ofFloat32Mul a b ha hb\n      | true =>\n          rw [R7W05.native_mul_nan_right a b hb, R7W05.native_eq_nan_of_isNaN b hb]\n          exact (exec_mul_import_nan_right a ha).symm\n  | true =>\n      rw [R7W05.native_mul_nan_left a b ha, R7W05.native_eq_nan_of_isNaN a ha]\n      exact (exec_mul_import_nan_left b).symm\n\n\n\n\n"
+    },
+    {
+      "iteration": 31,
+      "name": "exec_mul_import_nan_left",
+      "bytes": 717,
+      "sha256": "88947119e968984b5c70fecd8ebb9e7cc9c2b830189f65da52610dc3cd80c3da",
+      "body": "theorem exec_mul_import_nan_left (x : Float32) :\n    ExecFloat.mul (ExecFloat.Binary.ofFloat32 Float32.nan) (ExecFloat.Binary.ofFloat32 x) =\n      ExecFloat.Binary.ofFloat32 Float32.nan := by\n  apply Configured.Family.toModel_injective\n  change ExecFloat.Binary.toModel\n    (ExecFloat.mul (ExecFloat.Binary.ofFloat32 Float32.nan) (ExecFloat.Binary.ofFloat32 x)) =\n      ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 Float32.nan)\n  rw [Submission.NativeBridge.toModelExecMul]\n  change Model.Spec.mul (Model.canonicalNaN FloatFormat.binary32)\n    (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x)) =\n      Model.canonicalNaN FloatFormat.binary32\n  exact model_mul_canonical_left _ (ofFloat32_not_snan x)\n\n"
+    },
+    {
+      "iteration": 32,
+      "name": "model_mul_canonical_left",
+      "bytes": 344,
+      "sha256": "f982b8d4800011eb2c7fa8fb274e45efaa9295a549f1ea8aa50688a1b21a51b4",
+      "body": "theorem model_mul_canonical_left (q : Model FloatFormat.binary32)\n    (hs : Model.isSNaN q = false) :\n    Model.Spec.mul (Model.canonicalNaN FloatFormat.binary32) q =\n      Model.canonicalNaN FloatFormat.binary32 := by\n  have hd := Model.toDyadic?_eq_none_of_isNaN canonicalNaN_is_nan\n  simp [Model.Spec.mul, hd, chooseCanonicalNaN_left q hs]\n\n"
+    },
+    {
+      "iteration": 33,
+      "name": "exec_mul_import_nan_right",
+      "bytes": 745,
+      "sha256": "49fe2c293c88d11070cad4104f8df8e13ef1d05f9f871dd149e69abd68a004cc",
+      "body": "theorem exec_mul_import_nan_right (x : Float32) (hx : x.isNaN = false) :\n    ExecFloat.mul (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 Float32.nan) =\n      ExecFloat.Binary.ofFloat32 Float32.nan := by\n  apply Configured.Family.toModel_injective\n  change ExecFloat.Binary.toModel\n    (ExecFloat.mul (ExecFloat.Binary.ofFloat32 x) (ExecFloat.Binary.ofFloat32 Float32.nan)) =\n      ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 Float32.nan)\n  rw [Submission.NativeBridge.toModelExecMul]\n  change Model.Spec.mul (ExecFloat.Binary.toModel (ExecFloat.Binary.ofFloat32 x))\n    (Model.canonicalNaN FloatFormat.binary32) = Model.canonicalNaN FloatFormat.binary32\n  exact model_mul_canonical_right _ ((ofFloat32_isNaN x).trans hx)\n\n\n"
+    },
+    {
+      "iteration": 34,
+      "name": "model_mul_canonical_right",
+      "bytes": 387,
+      "sha256": "bcf631a60239ab555c5bee9052581a62c25614cd7392c245c46a905b811e00fa",
+      "body": "theorem model_mul_canonical_right (q : Model FloatFormat.binary32)\n    (hn : Model.isNaN q = false) :\n    Model.Spec.mul q (Model.canonicalNaN FloatFormat.binary32) =\n      Model.canonicalNaN FloatFormat.binary32 := by\n  have hd := Model.toDyadic?_eq_none_of_isNaN canonicalNaN_is_nan\n  cases hq : Model.toDyadic? q <;>\n    simp [Model.Spec.mul, hd, hq, chooseCanonicalNaN_right q hn]\n\n\n"
+    },
+    {
+      "iteration": 35,
+      "name": "replay_eq",
+      "bytes": 403,
+      "sha256": "1575fbf1e2de50e112c3586d5271c7bbdebea508298812f34e46780ec8468e1e",
+      "body": "theorem replay_eq (n baseA baseB p : Nat) (Araw Braw : Array Binary32) (result : Float32) :\n    replay n baseA baseB p Araw Braw result =\n      Fin.foldl n (fun acc i => Submission.add acc\n        (Submission.mul (Araw.getD (baseA + i.val) posZero)\n          (Braw.getD (baseB + i.val * p) posZero))) posZero := by\n  unfold replay\n  split\n  \u00b7 exact replayEarly_eq n baseA baseB p Araw Braw\n  \u00b7 rfl\n\n\n\n"
+    }
+  ],
+  "duplicate_legal_bytes_removed": 4603,
+  "complete_legal_notice_preserved": true,
+  "rule": "Delete only theorem/lemma bodies whose leaf identifier occurs once, no attributes, keep all4 public *_spec; iterate dependency leaves. No def/structure/abbrev removed. Dedup two exact MIT blocks and remove blank lines.",
+  "limitation": "NOT_RUN. Lexical name count is a source screen, not elaboration/dependency proof. Implicit automation resolution and namespace declarations require original gate; no correctness or speed claim."
+}

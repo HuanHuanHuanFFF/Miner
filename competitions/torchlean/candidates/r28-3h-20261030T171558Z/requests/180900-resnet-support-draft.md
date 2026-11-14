@@ -1,0 +1,1 @@
+ResNetdraft补入A当前packed-support11-v2（不是旧6bfv1）：已按v2receipt冻结script/runtime.inc/compact11三hash并重建精确匹配。flags full_gate=false/declares_correct=false，明确无新Submission.correct，只成本判别。最多和zeroalone/combination同次已有ResNet批，不加独立CI或多个support变体。R请一次接口/边界复核，尤其oddchannel修复、完整fallback、原baseCorrect不移作新proof。若Mobile达标，优先冻结确认，Resdraft可延后。

@@ -1,0 +1,147 @@
+{
+  "reviewed_at_utc": "2026-10-29 03:08:43 UTC",
+  "reviewer": "R24 B scalar frontier; independent one-pass static review",
+  "subject": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/rounding-review/SubnormalWiden-v1.lean.inc",
+    "bytes": 12003,
+    "sha256": "62380963f91440fc18649c56e9a7403b88a88ff0fe841fc905ddbaf0d9199782"
+  },
+  "actual_runtime": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/PortableF64Dot.lean.inc",
+    "sha256": "dd775683cade6e575dc6f0684f9216742e1c772c3cf7460b0c53c54e4e3eff04",
+    "symbol": "Submission.R24PortableF64.widenBits",
+    "branch": "((u >>> 23) &&& 255)=0 and masked fraction positive"
+  },
+  "outcome": "MATHEMATICS_AND_ACTUAL_BRANCH_MAPPING_SOUND_ON_STATIC_REVIEW; ONE_PREDICTED_TACTIC_SEQUENCING_RISK; CARRIER_CLOSURE_REQUIRED",
+  "mathematical_checks": [
+    {
+      "item": "Domain",
+      "conclusion": "he fixes raw32 exponent zero, hn excludes both signed zeros. n=u&0x7fffff lies in [1,2^23-1]; normal and exponent255 paths are not claimed."
+    },
+    {
+      "item": "Leading bit",
+      "conclusion": "Retained FastMul.fastLog2_eq gives ell=Nat.log2(n), with 0<=ell<=22 and 2^ell<=n<2^(ell+1). The actual FastMul uses six explicit word search steps; no ASM or BSR conclusion."
+    },
+    {
+      "item": "Machine shifts and subtraction",
+      "conclusion": "lead<=22 and 52-lead in [30,52], so UInt64 shift-count modulo64 is inactive. frac-2^ell cannot underflow; shifted remainder is <2^52, so no 64-bit truncation."
+    },
+    {
+      "item": "Exponent packing",
+      "conclusion": "E64=ell+874 lies in [874,896], hence finite normal binary64. The shifted exponent is below the sign bit and the remainder occupies only 52 low bits; OR fields are disjoint."
+    },
+    {
+      "item": "Exact value",
+      "conclusion": "Decoded significand n*2^(52-ell), exponent ell-201, giving n*2^(-149). Source sign bit is u.toNat/2^31 in {0,1}; both signs are retained."
+    },
+    {
+      "item": "Native bridge",
+      "conclusion": "Pinned Lean4 Float.ofBits is logically Float.ofModel(Float.Model.ofBits w); Model.ofBits packs the unpacked word. The finite decoder witness supplies canonicality before native-model equality. This is not a claim for NaN payloads."
+    }
+  ],
+  "findings": [
+    {
+      "id": "SW-TYPE-1",
+      "kind": "predicted_tactic_sequencing_risk_not_compiler_observed",
+      "severity": "P2",
+      "line": 71,
+      "evidence": "count_nat line70 rewrites UInt64.toNat_sub_of_le and lead_nat, leaving (52:UInt64).toNat-ell = 52-ell, definitionally reflexive. Standard rw attempts reflexivity; the following standalone rfl can encounter no goals.",
+      "minimal_action": "Delete the separate line71 rfl, or replace the two-step block with `simpa only [lead_nat] using (UInt64.toNat_sub_of_le (52 : UInt64) (lead u) hle)`. No mathematical statement change.",
+      "confidence": "High static prediction, unconfirmed until public Lean typing."
+    },
+    {
+      "id": "SW-CLOSURE-1",
+      "kind": "carrier_requirement_not_intrinsic_math_defect",
+      "severity": "P2",
+      "line": 228,
+      "evidence": "R2W01c.modelCanonical_of_decode and its modelCanonicalOfFinite prerequisite are Submission support declarations, not supplied by importing ContractTensor or the shipped33043-byte Kernel alone.",
+      "minimal_action": "Include the already retained exact canonical support declarations. They occur at PortableNativeMulBridge-v2.lean.inc:160/170 and are already present in portable-island6:937/946. Do not add the full B2 prefix merely for this dependency.",
+      "support_path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/PortableNativeMulBridge-v2.lean.inc",
+      "support_sha256": "2c823b1a2f3eef3f88a242a3c8af7611a94bed9189c730754f4686ddb6b9b41c"
+    },
+    {
+      "id": "SW-RESOURCE-1",
+      "kind": "typing_resource_risk_not_an_observed_failure",
+      "severity": "P3",
+      "lines": [
+        97,
+        115,
+        137,
+        151,
+        190,
+        196,
+        201
+      ],
+      "evidence": "Several large word-coefficient arithmetic steps still use omega. The round has real recursion failures for such proofs; no claim that these particular calls fail.",
+      "minimal_action": "Wait for the exact first public diagnostic; do not raise resource limits or broadly rewrite. If hbase at147-151 is the failing step, `ring` after its existing change proves the pure distributive identity without omega coefficient reconstruction. For bounds use explicit Nat.mul_le_mul and two_pow_add_eq_or_of_lt as already used elsewhere."
+    }
+  ],
+  "dependency_evidence": [
+    {
+      "symbol": "Submission.FastMul.fastLog2_eq",
+      "source": "competitions/floatlib/references/official-incumbent/Kernel.lean:603",
+      "source_sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
+      "note": "FastMul runtime/theorem both present in official shipped carrier; also read retained B2 fastLog2 body/theorem."
+    },
+    {
+      "symbol": "UInt64.toNat_sub_of_le; UInt64.le_iff_toNat_le",
+      "url": "https://github.com/leanprover/lean4/blob/v4.34.0/src/Init/Data/UInt/Lemmas.lean",
+      "git_blob_sha1": "02b968ed5eb711b01772298133624b23326b821b",
+      "note": "Read fixed generated UInt theorem API; inequalities reduce through toNat, no Preorder UInt64 assumption."
+    },
+    {
+      "symbol": "Float.ofBits",
+      "url": "https://github.com/leanprover/lean4/blob/v4.34.0/src/Init/Data/Float/Float.lean",
+      "git_blob_sha1": "9dd53e27f1ea062063b8383f0d45dafd47e482db"
+    },
+    {
+      "symbol": "Float.Model.ofBits",
+      "url": "https://github.com/leanprover/lean4/blob/v4.34.0/src/Init/Data/Float/Model/Float.lean",
+      "git_blob_sha1": "993df090b5259e8ec772dc981616b42c0b1a0576"
+    },
+    {
+      "symbol": "Model.Dyadic.signedSignificand_shiftLeft; toReal_eq_signedSignificand",
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/Formats/BinaryInterchange/Model/RealSemantics.lean",
+      "git_blob_sha1": "10e8f500803dedef49b8a8247ddf6d220f819784",
+      "note": "The shift lemma's constructor exponent0 is harmless because signedSignificand ignores exponent; arbitrary k is valid."
+    }
+  ],
+  "boundary_sanity": [
+    {
+      "fraction": 1,
+      "ell": 0,
+      "E64": 874,
+      "shift": 52,
+      "positive_word": "0x36a0000000000000",
+      "exact_value": "2^-149"
+    },
+    {
+      "fraction": 4194304,
+      "ell": 22,
+      "E64": 896,
+      "shift": 30,
+      "positive_word": "0x3800000000000000",
+      "exact_value": "2^-127"
+    },
+    {
+      "fraction": 8388607,
+      "ell": 22,
+      "E64": 896,
+      "shift": 30,
+      "positive_word": "0x380fffffc0000000",
+      "exact_value": "(2^23-1)*2^-149"
+    }
+  ],
+  "verification": {
+    "static_source_and_hashes": "VERIFIED",
+    "mathematical_review": "NO_COUNTEREXAMPLE_FOUND; symbolic bounds checked",
+    "Lean": "NOT_RUN",
+    "module_replay": "NOT_RUN",
+    "axiom_audit": "NOT_RUN",
+    "native_execution": "NOT_RUN",
+    "performance": "NOT_RUN"
+  },
+  "writes": "Only this JSON and subnormal-widen-independent-review.md; subject source, Git and CI unchanged.",
+  "next": "Parent/C decides the one-line sequencing cleanup; D performs one exact-source public typing probe with canonical helper closure. No broad second review or new model sweep."
+}
+

@@ -1,0 +1,16 @@
+| cnn layer | µs |
+|---|---:|
+| conv2d 3×3 3→5 on 16×16 | 91 |
+| scaleShift 5×256 | 16 |
+| save | 1 |
+| conv2d 3×3 5→5 on 16×16 | 132 |
+| scaleShift 5×256 | 16 |
+| conv2d 3×3 5→5 on 16×16 | 130 |
+| scaleShift 5×256 | 16 |
+| addRelu | 27 |
+| maxpool 2×2 5×16×16 | 13 |
+| conv2d 3×3 5→13 on 8×8 | 84 |
+| scaleShift 13×64 | 10 |
+| avgpool 8×8 13×8×8 | 22 |
+| linear 1×13→10 | 1 |
+| total | 567 |

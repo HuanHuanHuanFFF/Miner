@@ -1,0 +1,28 @@
+{
+  "verified_at_utc": "2026-10-28T22:31:58.955252+00:00",
+  "candidate": "f01-r24-research-representation-widen1",
+  "source_sha256": "75a1c0ae7d1f1db2836becfe8d26e9fd1e881013a2f427b4ec669b5fcf521c55",
+  "bytes": 238814,
+  "base_prefix_unchanged": true,
+  "manifest_source_match": true,
+  "helper_match": true,
+  "timeout": 180,
+  "components": [
+    "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/representation/WidenNormal.lean.inc"
+  ],
+  "review": "R independent static semantic/source review; no definite mathematical mismatch in normal-or-zero embedding, semantic chain reaches actual nativeFloat64 model/real/finite; all typing/replay/axioms NOT_RUN",
+  "domain": "normal exponent1..254 ORsignedzero only; futurecaller must guardDomain, not fullfinite decoder",
+  "key_relations": [
+    "normal exp64=exp32+896, frac64=frac32<<29, sign64=sign32<<32",
+    "signedzero retains rawsign",
+    "Float.ofBits actual samewidth model is related through canonical finite decode",
+    "Dyadic significand shift29 and exponent minus29 preserve value"
+  ],
+  "missing": [
+    "ActualLean/API typechecking",
+    "Originalmodule/kernel/axiom replay",
+    "CallerDomain guard/reflection",
+    "Subnormal/nonfinite implementation",
+    "Cost/codegen and newtrackobligation"
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "round": "R26",
+  "review_kind": "frozen-input delta review after initial single static review",
+  "reviewed_utc": "2026-10-29T09:30:35Z",
+  "status": "DELTA_STATIC_REVIEW_COMPLETE_CI_IN_PROGRESS_AT_LAST_RECEIPT",
+  "supersedes_initial_preflight_for_this_run": true,
+  "initial_review": {
+    "plan_sha256": "2cc6a756be52376f34d85c05ed303ac74cf712be4023601c0ebd5213d93a3c9c",
+    "runner_sha256": "9759a967c2763d626fa904fc591224082868b486cdeff1e5e4d85c70df28c790",
+    "selected_candidates": [
+      "fp1",
+      "fp-word-conv3"
+    ]
+  },
+  "actual_dispatch": {
+    "run_id": 40849705068,
+    "recorded_status_at_dispatch": "in_progress",
+    "created_at_utc": "2026-10-29T09:26:56Z",
+    "source_commit": "9a2e9451fc0ab16bfea3584423e9ff5f16afe214",
+    "plan_sha256": "f2b3bc9e425626f51ec93fe73b0924c4f796cd31325d3d6174ca91ecb9cc6de1",
+    "runner_sha256": "2029d04df764ff9e9d27766a2608963188e435562c9bef22e682c92ded8411a8",
+    "client_sha256_local": "cb8db65d9f2f7ce33751ada8a6b074e06f2a75ce244fc210f4f8fced0f77ce83",
+    "dispatch_inputs": {
+      "competition": "floatlib",
+      "candidates": "__torchlean_r26__",
+      "seed": "26102901",
+      "allow_private": false
+    },
+    "current_status_note": "development-status.json still listed active_CI=[] at 09:30; this is stale relative to the RUN_IDENTIFIED dispatch receipt. No external status query was made by this verifier."
+  },
+  "frozen_sources": {
+    "runner_path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/ci-bridge/runner.py",
+    "workflow_sha256": "1935c9fe74391d7d3de19e9cdd8c7e043a6e04e5845d3f3074a77a6a7d3d24b5",
+    "ci_prepare_sha256": "5ee136d53c2b0e8fcd66fb2c3810788f113232588f589b68ea018970fbb5efdb",
+    "candidate": {
+      "name": "fp-word-conv6",
+      "path": "competitions/torchlean/candidates/r26-1h-20261029T085515Z/development/native/fp-word-conv6-local/Kernel.lean",
+      "bytes": 60479,
+      "sha256": "ad9bde3e9e8490df15f3d8d15c08805f85d4451e0a5f2d20977632c0b4b22540",
+      "source_receipt_matches": true,
+      "claim": "UNPROVED_NATIVE_RESEARCH_ONLY"
+    },
+    "reference": {
+      "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/development/contract-port/norm-cache-proof1/Kernel.lean",
+      "bytes": 42013,
+      "sha256": "bcb8172381346b26afc69e2582442510865f74415c657d7ee208045474ca1ea7",
+      "prior_original_12_gate_pass": true
+    },
+    "proof_diagnostics": [
+      {
+        "name": "order-key-policy1",
+        "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/research/order-key/policy1/Kernel.lean",
+        "sha256": "82399ee3da291a1ad82dbb0432bc2c5bd2a4097db9dcc37bdbca111ff4867111",
+        "measure": false
+      },
+      {
+        "name": "finite-widen",
+        "path": "competitions/torchlean/candidates/r25-90m-20261029T064916Z/research/widen/finite-bridge/Kernel.lean",
+        "sha256": "e5613ee190d4185d665b0cd52482e37dc0770ac468c19ee676cac7a6ba964ab6",
+        "measure": false
+      }
+    ]
+  },
+  "changed_runner_review": {
+    "native_target_and_main": "same reviewed design: one new r26Native target; reads original bench/MainExact.lean and asserts byte-identical copy; no edit to base Lakefile or official MainExact",
+    "flags": "same raw compile/link/response trace capture and exact comparison after expected target-name mapping",
+    "measurement": "same original config, multiseed workload generation, benchmark.run_binary paired path, 5 rounds, 2 seeds, alternating reference-first order, runner-side checksum assert",
+    "proof_boundary": "candidate still receives only official intake/policy then native build; no original full proof/Correct invocation; retained reference gets full original proof replay",
+    "added_behavior": "after native measurements, optional proof_diagnostics entries run lake build VerifyExact against old R25 sources, record raw statement logs and mark RAW_STATEMENT_DIAGNOSTIC_ONLY_NOT_FULL_GATE; they are measure=false, do not affect candidate score or proof state, and do not print helper axioms",
+    "candidate_scan": "fp-word-conv6-local has local Inhabited instances and retainedCorrect only; no candidate theorem correct, originalVerifyExact, fastkernels, AX6, or #print axioms match",
+    "workflow_and_billing": "same public ubuntu-24.04 torchlean_r26 path with allow_private=false"
+  },
+  "scope_notes": {
+    "direct_originalshipped_comparison": "NOT_INCLUDED; retained is the only measurement reference",
+    "old_r25_sources": "two separate measure=false statement diagnostics; not candidate inputs or proof acceptance",
+    "no_score_yet": true,
+    "proof_for_candidate": "NOT_RUN_NOT_CLAIMED",
+    "MainExact_raw_source_in_artifact": "NOT_INCLUDED; frozen runner asserts copy equality and will record source hash"
+  },
+  "plan_binding": {
+    "bytes": 5435,
+    "sha256": "f2b3bc9e425626f51ec93fe73b0924c4f796cd31325d3d6174ca91ecb9cc6de1",
+    "ready_metadata": "ci-plan-batch1.json",
+    "files_byte_equal_at_delta_review": true,
+    "runner_and_client_load": "ci-plan.json"
+  }
+}

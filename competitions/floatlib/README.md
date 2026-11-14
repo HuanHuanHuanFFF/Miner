@@ -2,16 +2,18 @@
 
 共同约束见根 [AGENTS.md](../../AGENTS.md)，赛道技术要求见 [track-rules.md](docs/track-rules.md)。官方固定版本见 [pins.json](pins.json)。
 
+**2026-10-29已核：FloatLib停止接收新提交。** [官方状态原件](candidates/f01-d7-research/round7h-20261028T203856Z/competition-state-check/floatlib.raw)明确`submissions_open=false`；下列#323/#336及四算子成绩作为旧赛道记录保留。新开放TorchLean采用12算子与不同契约；R24正等待用户确认是否迁移，截止不变。[本轮入口](candidates/f01-d7-research/round7h-20261028T203856Z/README.md)。
+
 新公开／付费私有套件适用范围先看[套件变更](docs/suite-transition-20261022.md)。
 
-正式包是一个 `Kernel.lean`，包含 add、mul、sum、bmm 及四个全输入等价证明。开发比较统一以评测时的现任冠军为基准；当前尚未正式上传。
+正式包是一个 `Kernel.lean`，包含 add、mul、sum、bmm 及四个全输入等价证明。B2已正式提交为 **#336**，官方完整验证通过，当前第13，整包耗时为冠军#323的 **1.6287×**，未晋升。[原始官方报告及预估对照](evidence/formal-b2-336/comparison.json)取代该精确源在本次评估中的旧1.25×预估；历史模型保留原字节。
 
 - [冲冠看板](../../dashboard.md)：按 add、mul、sum、bmm 四项查看现任冠军与我方首选。
 - [当前开发状态](coordination/development-status.json)：当前比较口径、候选选择及证据入口。
 - [继续开发与双 worktree](../../DEVELOPMENT.md)：双方最新提交已合入main；开发分支重建、研究资产和新一轮冻结入口。
 - [数学结论与可复用证明](research/RESULTS.md)：按四项运算整理已验结论、数学储备、反例，索引R1–R6十二包、R11三份网页交付及全部候选证据。
 - [R11资料与开发承接](research/materials/20261024-r11/README.md)：97份原件、数学与性能提炼、来源哈希和许可证；保留原始未验证状态及后续负结果。
-- [当前研究记录](candidates/f01-d7-research/round9h-20261026T194639Z/README.md)：R19九小时三方协作，R主动派Astra，DeepSeek独立探索，普通交流用留言板。[上一轮](candidates/f01-d7-research/round11h-20261025T173831Z/README.md)和[历史轮次](candidates/f01-d7-research/README.md)保留原验收。
+- [当前研究记录](candidates/f01-d7-research/round40m-20261028T142626Z/README.md)：R23四十分钟协作，整数乘法公共四义务／两模块／49根已验；矩阵循环与条件输出新增6根已验，实际缓存producer新增5根已验，reader仍有右lane目标，所有CI已回收。没有新速度或正式成绩。旧轮次见[R22](candidates/f01-d7-research/round6h-20261027T211247Z/README.md)与[历史记录](candidates/f01-d7-research/README.md)。
 - [DeepSeek已合并研究](research/deepseek-20261025/SUMMARY.md)：p≤8路由、输入异质性、word-add边界检查及完整原件；首D未达标，作为研究储备，不替换当前B2。
 - [前轮Astra／开发一小时协作](candidates/f01-d1-inline-all/window1h/README.md)：原生算术证明起点、逐项验收与原始回执。
 

@@ -1,0 +1,15 @@
+{
+  "at_utc": "2026-10-30T17:37:20.839087+00:00",
+  "state": "ALL12_CONNECTED_UNCOMPILED_NEXT_ROUTE",
+  "source_submission": 36,
+  "base_sha256": "595a90fa2b6bc5d3657434fae7d1292b27910ef653da2b7f409ed9c34c956e2b",
+  "candidate_sha256": "c849054efd13c242a6d721f49cac3db7c6fa0670cdec421d90c344da0462e787",
+  "candidate_bytes": 255644,
+  "recipe_sha256": "a52919c85c7a5cdcc59a3584f135d8393cfbcb45877834bb38638d3057324f3b",
+  "mechanism": "Existing MD2 loads one shared prepared weight, tests decoded value zero, and directly recurs with all four accumulator words unchanged; eliminates both input loads/products/shifts/carry updates for this term. Original finish/bias/zero fallback unchanged.",
+  "proof_interface": "ZMD2 structural induction splits on exact wordzero. A zero product has no carry or sign-extension contribution for arbitrary UInt64 h/l. Exact new proof and all12 require compile.",
+  "not_changed": "Scalar MD/GEMM, singleton path, source36 native LayerNorm/add, all existing guards/fallbacks, all12 endpoints",
+  "risk": "Adds a predictable not-taken branch on dense weights, potentially unpredictable on sparse weights. Need complete paired cost; operation counts are not speed.",
+  "request": "No immediate extra CI request; keep as isolated next-route until planned Mixer feedback. If exercised, original all12 gate and complete model cost.",
+  "publication": "Own recipe/receipt only; full source private/ephemeral"
+}

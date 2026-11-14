@@ -1,0 +1,78 @@
+{
+  "candidate": "f01-r24-dev-scalar-f64array-cost1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "08a0208ec09eeb583f9d8e451234a4f5e29cfa75eaa90d525073b7296b5584a2",
+  "candidate_bytes": 229522,
+  "parent_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "validation_mode": "statement-only",
+  "diagnostic_only": true,
+  "diagnostic_timeout_seconds": 600,
+  "helper_audit_module": "f64-cost-audit.py",
+  "helper_audit_module_path": "f01-d7-research/round7h-20261028T203856Z/development-scalar/f64-cost/f64-cost-audit.py",
+  "helper_audit_module_sha256": "f2c54acd267b7fd5d7c757b706912ec41784a304cd45e8b7272bfebb6c04500d",
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/f64-cost/driver.py",
+      "bytes": 19769,
+      "sha256": "053f20a9efc4967fe9068f254140654314c4b6b54296e63e790b29504d856e89"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/f64-cost/f64-cost-audit.py",
+      "bytes": 4075,
+      "sha256": "f2c54acd267b7fd5d7c757b706912ec41784a304cd45e8b7272bfebb6c04500d"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/f64-cost/F64ArrayAdd.lean.inc",
+      "bytes": 2693,
+      "sha256": "ea49a7dcdb630e45f7c6ac12b6d7090954d7f430137adcb7833fc3cdaa2b914a"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/f64-cost/R24ScalarF64CostMain.lean",
+      "bytes": 967,
+      "sha256": "b80d7c6f1a10fe65033f117c133358142d6b264a2543ae7448ffbe2d1fa22fde"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/f64-cost/static_runner_audit.py",
+      "bytes": 9804,
+      "sha256": "1806bb3c9a6aa4285a22a7a811d070c3257537d92295b9c8b79be832ce1efe00"
+    }
+  ],
+  "proof_status": "NOT_RUN_PUBLIC4SPEC_B2_NEW_F64_DECODE_ADD_GRS_HELPERS_UNPROVED_CAST_CONTROL_OPAQUE",
+  "performance": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "official_submission_inherited": false,
+  "runtime_cost": {
+    "overall_budget_seconds_from_stage_registration": 580,
+    "build_cap_seconds": 180,
+    "measure_phase_cap_seconds": 300,
+    "seeds": [
+      2240101,
+      2240103
+    ],
+    "order_per_seed": [
+      "control",
+      "f64native",
+      "f64native",
+      "control",
+      "control",
+      "f64boxed",
+      "f64boxed",
+      "control",
+      "control",
+      "f64cast",
+      "f64cast",
+      "control"
+    ],
+    "processes": 24,
+    "pairs": 500000,
+    "inner": 3,
+    "observer": false
+  },
+  "scope": "Full156-case/152 timed diagnostic,24 complete processes,two discovery seeds. ADD changes only; MUL/SUM/BMM fixed B2. F64 fullfinite numeric decode/native binary64 ADD, then same-width Float.toBits and new UInt64 GRS/RNE word narrowing for f64native/f64boxed. f64cast uses opaque Float.toFloat32 as an engineering lower-bound control only, never a provable-candidate claim. NaN/Inf retain B2. FloatArray versus ArrayFloat signed scale tables attribute layout. Case ns exclude operand/global preparation; full-process wall separately includes both tables/prep/cleanup. All new helpers NOT_PROVED, not admissible score/adoption; standalone package startup cost UNKNOWN.",
+  "source_parts": {
+    "exact_B2_prefix": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+    "runtime": "ea49a7dcdb630e45f7c6ac12b6d7090954d7f430137adcb7833fc3cdaa2b914a"
+  },
+  "semantic_domain": "All finite binary32 E0..254 including signed zeros/subnormals; e=0 scale2^-149, e>0 scale2^(e-150), signed Float64 scales all normal. NaN/Inf fallback B2.",
+  "trust_gap": "Legal paths use fixed-model primitives plus new unproved UInt64 GRS core; finite decode/native ADD/double-round bridge and fallback composition remain unproved. The opaque Float.toFloat32 control is engineering lower-bound only and cannot be adopted or substitute for legal-path cost."
+}

@@ -1,0 +1,146 @@
+⚠ [10040/10044] Replayed ExactToolkit.SqrtProof
+warning: contract/ExactToolkit/SqrtProof.lean:94:28: This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [bpow, FloatLib.Numerics.binaryRadix, FloatLib.Numerics.Radix.toReal, zpow_neg, zpow_natCast]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✖ [10042/10044] Building Submission (9.6s)
+trace: .> LEAN_PATH=/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/MD4Lean/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/BibtexQuery/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/UnicodeBasic/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/Cli/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/leansqlite/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/batteries/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/Qq/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/aesop/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/importGraph/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/plausible/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/doc-gen4/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/mathlib/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/floatlib/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages/TorchLean/.lake/build/lib/lean:/home/runner/work/_temp/floatlib-upstream/lean/.lake/build/lib/lean /home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/bin/lean /home/runner/work/_temp/floatlib-upstream/lean/work/Submission.lean -o /home/runner/work/_temp/floatlib-upstream/lean/.lake/build/lib/lean/Submission.olean -i /home/runner/work/_temp/floatlib-upstream/lean/.lake/build/lib/lean/Submission.ilean -c /home/runner/work/_temp/floatlib-upstream/lean/.lake/build/ir/Submission.c --setup /home/runner/work/_temp/floatlib-upstream/lean/.lake/build/ir/Submission.setup.json --json
+error: work/Submission.lean:909:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?w &&& 9218868437227405312).toNat
+in the target expression
+  w &&& 9218868437227405312 ≠ 9218868437227405312 ↔ exponent w < 2047
+
+w : UInt64
+he : exponent w < 2048
+⊢ w &&& 9218868437227405312 ≠ 9218868437227405312 ↔ exponent w < 2047
+warning: work/Submission.lean:908:35: This simp argument is unused:
+  ← UInt64.toNat_inj
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [finite64, bne_iff_ne]
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: work/Submission.lean:985:12: failed to prove positivity/nonnegativity/nonzeroness
+error: work/Submission.lean:997:38: mod_cast has type
+  a % 4503599627370496 < b % 4503599627370496
+but is expected to have type
+  ↑a % 4503599627370496 < ↑b % 4503599627370496
+warning: work/Submission.lean:1013:6: `if_neg` has been deprecated: Use `ite_eq_right` instead
+warning: work/Submission.lean:1015:8: `if_pos` has been deprecated: Use `ite_eq_left` instead
+error: work/Submission.lean:1022:36: mod_cast has type
+  a % 4503599627370496 < 4503599627370496
+but is expected to have type
+  ↑a % 4503599627370496 < 4503599627370496
+warning: work/Submission.lean:1028:8: `if_neg` has been deprecated: Use `ite_eq_right` instead
+error: work/Submission.lean:1075:42: unsolved goals
+case neg.false
+w : UInt64
+hfin : finite64 w = true
+he : exponent w < 2048
+hf : fraction w < 4503599627370496
+hmodel : (raw w).isFinite = true
+hd :
+  (raw w).toDyadic? =
+    if exponent w = 0 then
+      if fraction w = 0 then some { negative := negative w, significand := 0, exponent := 0 }
+      else some { negative := negative w, significand := fraction w, exponent := -1074 }
+    else
+      some
+        { negative := negative w, significand := 4503599627370496 + fraction w, exponent := ↑(exponent w) - 1023 - 52 }
+hE : exponent w = 0
+hF : ¬fraction w = 0
+hs : negative w = false
+⊢ False
+
+case neg.true
+w : UInt64
+hfin : finite64 w = true
+he : exponent w < 2048
+hf : fraction w < 4503599627370496
+hmodel : (raw w).isFinite = true
+hd :
+  (raw w).toDyadic? =
+    if exponent w = 0 then
+      if fraction w = 0 then some { negative := negative w, significand := 0, exponent := 0 }
+      else some { negative := negative w, significand := fraction w, exponent := -1074 }
+    else
+      some
+        { negative := negative w, significand := 4503599627370496 + fraction w, exponent := ↑(exponent w) - 1023 - 52 }
+hE : exponent w = 0
+hF : ¬fraction w = 0
+hs : negative w = true
+⊢ False
+
+case neg.true
+w : UInt64
+hfin : finite64 w = true
+he : exponent w < 2048
+hf : fraction w < 4503599627370496
+hmodel : (raw w).isFinite = true
+hd :
+  (raw w).toDyadic? =
+    if exponent w = 0 then
+      if fraction w = 0 then some { negative := negative w, significand := 0, exponent := 0 }
+      else some { negative := negative w, significand := fraction w, exponent := -1074 }
+    else
+      some
+        { negative := negative w, significand := 4503599627370496 + fraction w, exponent := ↑(exponent w) - 1023 - 52 }
+hE : ¬exponent w = 0
+hF : ¬fraction w = 0
+hs : negative w = true
+⊢ (-↑(fraction w) + -4503599627370496) * 2 ^ (↑(exponent w) - 1075) =
+    -((4503599627370496 + ↑(fraction w)) * 2 ^ (↑(exponent w) - 1075))
+warning: work/Submission.lean:1094:18: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hE, hF, FloatLib.Numerics.Dyadic.toReal, FloatLib.Numerics.Dyadic.signedSignificand,
+    FloatLib.Floats.Formats.Flocq.bpow, FloatLib.Numerics.binaryRadix, FloatLib.Numerics.Radix.toReal, sub_sub, neg_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: work/Submission.lean:1096:6: This simp argument is unused:
+  FloatLib.Floats.Formats.Flocq.bpow
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hE, hF, hs, FloatLib.Numerics.Dyadic.toReal, FloatLib.Numerics.Dyadic.signedSignificand,
+    FloatLib.Numerics.binaryRadix, FloatLib.Numerics.Radix.toReal, sub_sub, neg_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: work/Submission.lean:1096:42: This simp argument is unused:
+  FloatLib.Numerics.binaryRadix
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hE, hF, hs, FloatLib.Numerics.Dyadic.toReal, FloatLib.Numerics.Dyadic.signedSignificand,
+    FloatLib.Floats.Formats.Flocq.bpow, FloatLib.Numerics.Radix.toReal, sub_sub, neg_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: work/Submission.lean:1097:6: This simp argument is unused:
+  FloatLib.Numerics.Radix.toReal
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hE, hF, hs, FloatLib.Numerics.Dyadic.toReal, FloatLib.Numerics.Dyadic.signedSignificand,
+    FloatLib.Floats.Formats.Flocq.bpow, FloatLib.Numerics.binaryRadix, sub_sub, neg_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+error: work/Submission.lean:1215:8: Type mismatch: After simplification, term
+  hf
+ has type
+  (!(finite64 sumWord && (finite64 (sum - radius).toBits && finite64 (sum + radius).toBits))) = false
+but is expected to have type
+  finite64 sumWord = true ∧ finite64 (sum - radius).toBits = true ∧ finite64 (sum + radius).toBits = true
+error: work/Submission.lean:1298:64: Application type mismatch: The argument
+  h
+has type
+  w.toNat < 9223372036854775808
+but is expected to have type
+  ?m.36 < 2 ^ ?m.35
+in the application
+  Nat.two_pow_add_eq_or_of_lt h
+Some required targets logged failures:
+- Submission
+error: build failed

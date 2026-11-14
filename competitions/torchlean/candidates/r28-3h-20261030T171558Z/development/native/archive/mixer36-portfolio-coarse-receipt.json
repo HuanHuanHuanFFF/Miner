@@ -1,0 +1,37 @@
+{
+  "at_utc": "2026-10-30T18:27:41.712016+00:00",
+  "candidate_sha256": "6b6415014defa7999f1645c548503f60f10cd2433670b836383f06ede61fe2a8",
+  "candidate_bytes": 253080,
+  "free_bytes": 2920,
+  "recipe_sha256": "2c9a97355d8ac2efac035823ae393bd8cf2822b5228b18ad66d88578a9dcc12a",
+  "pairlinear_control_sha256": "7b6e0cbaa7165488eef9fdd2f482bef522bb9b6d165649a88494e210f2a06ae3",
+  "norm_component_sha256": "79615bd5c5c697d27631b999d7211c41dc5d0c4374cd9604324b417b1ad417d7",
+  "dependencies": {
+    "pair": {
+      "path": "development\\native\\build_gemm36_pairlinear_v2.py",
+      "sha256": "8a59c56f8c92d9f62d85375f3606224cd5bb9c756d4168519940fc4381391e08"
+    },
+    "norm": {
+      "path": "research\\cross-source\\build_norm26_36.py",
+      "sha256": "fe05b956373f898af7e09ca43924583af81c56a357e98f0b4e674f3c9de84c48"
+    },
+    "single": {
+      "path": "research\\cross-source\\build_single_row36.py",
+      "sha256": "faeae0cb57787e0a156accb8c800f033fbe05a2f9979658af0eda1bdf270dfb1"
+    }
+  },
+  "runtime_changes": [
+    "finitepositivek paired128GEMM fromv2",
+    "Ya7G guard8to26 with quotientboundproof",
+    "YaVM singleton64+ admission and BX.any narrowmetadata filter"
+  ],
+  "exact_filter": "BX.any (lambda v=>Yk(v&0xffff)-Yk(v>>16)<=15), unsigned64. If no inputrow passes, skip XP/WP/MVi and execute original YaU fallback over alreadycomputed BX/BV.",
+  "proof": "Norm26 changes Ya7Ge with required ra/D<2^26 bound. YaVM dispatch change retains original ZMV0 theorem body, which extracts only inW<1048576; all12actualcorrect connected. NOT_COMPILED.",
+  "scope": "Do not call this public36champion or approvedgate. Complete model cost includes metadata any scan, all admitted cache prep, transpose, extraction, output and fallback.",
+  "source_choice": "After currentRes64gap grew to19.015%, preserve frozenRescombo but make this stronger complete Mixer candidate available for the planned Mixer batch; no extraCI request.",
+  "publication": "Ownrecipe/receipt only; whole upstream/reconstructed source private/ephemeral",
+  "state": "FULL_PORTFOLIO_ACTUAL_ALL12_NOT_COMPILED",
+  "gate": "UNKNOWN",
+  "native_speed": "UNKNOWN",
+  "extra_CI_request": false
+}

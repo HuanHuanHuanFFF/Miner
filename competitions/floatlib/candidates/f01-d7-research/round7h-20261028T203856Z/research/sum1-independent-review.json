@@ -1,0 +1,30 @@
+{
+  "reviewed_at_utc": "2026-10-28T23:19:08.105309+00:00",
+  "candidate": "f01-r24-research-representation-sum1",
+  "sha256": "02808a2ad06a7fffa7cb0fb123a7d0272334397372edee48c542ab94d5698f23",
+  "bytes": 240443,
+  "checks": {
+    "kernel_hash_match": true,
+    "kernel_bytes_match": true,
+    "base_prefix_equal": true,
+    "cap_ok": true,
+    "all_components_match": true,
+    "helper_match": true,
+    "deadline": "2026-10-29T03:38:56Z"
+  },
+  "review_kind": "One independent critical static mathematical/interface review; typing/replay/AX NOT_RUN",
+  "mathematical_findings": [
+    "Actual Float.add is connected to generic Model.add using fixed imported native-add theorem; no assumed abstract step-error operation.",
+    "Finite bound is proved before real roundAt semantics: abs(acc)+abs(term)<(j+1)*2^k<=2^(k+L)<=2^286<=max64.",
+    "j*2^k belongs to binary64 grid because j<=2^30<2^53 and k>=-250>-1074. Monotone rounding fixes +/-jM and bounds each native prefix.",
+    "Per-step full-ULP radius follows public half-ULP lemma and cexp<=k+L-53; using full ULP is conservative. No cancellation-lattice assumption needed in this version.",
+    "Induction sums actual per-step real errors and then count<=2^L yields2^(k+2L-53); k=H-250 gives proposed2^(H+2L-303).",
+    "Controller strict-pullback roots invoke actual FloatLib roundAt_mono and roundAt_toReal_eq; they do not assume outward enclosure."
+  ],
+  "limitations": [
+    "No Lean acceptance, root replay or axiom audit yet.",
+    "List actual fold only; FloatArray/dot indexing, widening+MUL composition, raw midpoint cell and full kernel remain missing.",
+    "No checksum, timing, hit-rate or adoption result."
+  ],
+  "decision": "READY_FOR_D_COMPONENT_CI_NO_BROAD_REVIEW_REPEAT"
+}

@@ -1,0 +1,30 @@
+{
+  "at_utc": "2026-10-29T20:25:28.612172+00:00",
+  "kind": "Historical emitted-C mechanism audit, not a new performance comparison",
+  "source": "competitions\\torchlean\\candidates\\r26-1h-20261029T085515Z\\evidence\\40852769757\\download-988ea0459868494bb525e3d8f8795129\\fp-word-conv6\\Submission.c",
+  "sha256": "103523f22ef030bfa5d3631312b2049665175a08ddb7957a20ed0dbd0846f847",
+  "candidate": "R26 ad9bde3e native-only",
+  "functions": [
+    {
+      "signature": "LEAN_EXPORT double lp_competition_Submission_R24PortableF64_sumRemaining(lean_object* v_a_8249_, lean_object* v_b_8250_, lean_object* v_index_8251_, double v_acc_8252_, lean_object* v_remaining_8253_){",
+      "generated_function_bytes": 1189,
+      "function_sha256": "4c8976ad711bf7be233cfab42852b01e7b4f18b7d752e075f10dd234c3ed6350",
+      "direct_alloc_ctor_calls": 0,
+      "direct_box_float_calls": 0,
+      "notes": "Unboxed double accumulator and tail goto; Nat index/fuel and FloatArray.get calls remain"
+    },
+    {
+      "signature": "LEAN_EXPORT lean_object* lp_competition_Submission_R26WordFallback_prepare(lean_object* v_raw_9128_){",
+      "generated_function_bytes": 532,
+      "function_sha256": "dbd46eaf25f8b2b9a5d29703fda2bc643ff79b9040196cc69a10606c3d85640c",
+      "direct_alloc_ctor_calls": 1,
+      "direct_box_float_calls": 0,
+      "notes": "Unconditionally invokes both R24PortableF64.prepare and R24ExactDotCost.prepareOperand before creating pair"
+    }
+  ],
+  "rejected_explanation": "No direct per-MAC Float boxing or constructor allocation in actual sumRemaining generated loop. This does not prove all transitive runtime calls allocation-free.",
+  "observation": "Dual preparation is eager even when FP certification will succeed; source alone does not identify runtime cost share or prove that changing it is faster.",
+  "next_discriminator": "Use frozen old exploratory inputs to count actual certificate accept/reject reasons; or a small FP-only preparation+lazy-strong-fallback native control with same whole-call boundary before large producer proof investment.",
+  "current_champion_comparison": "UNKNOWN; no new originalshipped run or result generated",
+  "constraints": "All12 actual proof still mandatory; no after-fact promotion from C/finite data"
+}

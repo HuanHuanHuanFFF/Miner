@@ -1,0 +1,85 @@
+{
+  "status": "ACTUAL_SELECTED_FP_MAC_FLOAT_BOXING_CONFIRMED_TAIL_CONDITION_MET",
+  "run": 40801622733,
+  "input_C": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round7h-20261028T203856Z\\ci-runs\\40801622733\\download-97d8744240234398acfcef2a61f34e19\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r24-dev-dot-cost1\\runtime-cost\\Submission.c",
+    "sha256": "be640672b6f6ed893610f3cf6a2c8517bf23a00b3572e7c68ffcf56e7d46dab9",
+    "bytes": 761076
+  },
+  "input_ASM": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round7h-20261028T203856Z\\ci-runs\\40801622733\\download-97d8744240234398acfcef2a61f34e19\\diagnostics\\f01-d7-public-suite\\public-suite\\diagnostics\\f01-r24-dev-dot-cost1\\runtime-cost\\Submission-asm.txt",
+    "sha256": "22a13b08a34367b4c25fac6e8aeb373b71474ceb3e0ce22d8ab5c944038458db",
+    "bytes": 877693
+  },
+  "selected_path": [
+    {
+      "symbol": "lp_competition_Submission_R24DotProbe_eagerPrepared",
+      "header": "LEAN_EXPORT uint32_t lp_competition_Submission_R24DotProbe_eagerPrepared(lean_object* v_a_8576_, lean_object* v_b_8577_)",
+      "definition_line": 24696,
+      "definition_sha256": "ebcce7b2c4852dca8d950109fc93fcbb6eb2148eb5dc507ab4a5dd23d2959c23"
+    },
+    {
+      "symbol": "lp_competition_Submission_R24DotProbe_lazyPrepared",
+      "header": "LEAN_EXPORT uint32_t lp_competition_Submission_R24DotProbe_lazyPrepared(lean_object* v_a_8599_, lean_object* v_b_8600_)",
+      "definition_line": 24757,
+      "definition_sha256": "72f3ab82b55b1db2a74617b38fe530f5c65137bf1023714ad81b4e25252a7946"
+    },
+    {
+      "symbol": "lp_competition_Submission_R24PortableF64_attemptPrepared",
+      "header": "LEAN_EXPORT uint32_t lp_competition_Submission_R24PortableF64_attemptPrepared(lean_object* v_x_8111_, lean_object* v_y_8112_)",
+      "definition_line": 23524,
+      "definition_sha256": "94a97857e2a8dcce6fb34ae892fb60a9fb20a9ab55292083deeb3e63e2c975e1"
+    },
+    {
+      "symbol": "lp_competition___private_Init_While_0__repeatM_erased___at___00Submission_R24PortableF64_attemptPrepared_spec__0___redArg",
+      "header": "LEAN_EXPORT lean_object* lp_competition___private_Init_While_0__repeatM_erased___at___00Submission_R24PortableF64_attemptPrepared_spec__0___redArg(lean_object* v_n_8073_, lean_object* v_x_8074_, lean_object* v_y_8075_, lean_object* v_a_8076_)",
+      "definition_line": 23404,
+      "definition_sha256": "981c1ca7039ab6ec41c83348e09c12892f11528041d45dad8aeff85af37296c9"
+    }
+  ],
+  "actual_loop_call_line": 24438,
+  "C_evidence": {
+    "unbox_old_acc_line": 23460,
+    "box_new_acc_line": 23466,
+    "tuple_state": "Exclusive-state path reuses constructor; shared-state path conditionally allocates. Do not claim a fresh tuple per MAC."
+  },
+  "ASM_evidence": {
+    "function_header_line": 18559,
+    "normal_MAC_float_box_allocation": "0x144 mov edi,0x10; 0x149 call mi_malloc_small (reloc0x14a)",
+    "floating_ops": [
+      "0x160 mulsd",
+      "0x16c addsd",
+      "0x17e store double into new Float box"
+    ],
+    "backedges": [
+      "0x188\u21920x30\u21920x3b exclusive-state loop",
+      "0x1bb\u21920x3b shared-state loop"
+    ],
+    "state_tuple_allocation": "0x198 call mi_malloc_small with edi0x18 is conditional shared continuation;0x28e exit allocation also conditional.",
+    "frame": "6 callee-save pushes and0x28-byte stack frame; accumulator and both loaded input doubles are spilled around allocator/free work.",
+    "input_loads": "FloatArray getters lower to native double loads, not boxed Float elements."
+  },
+  "interpretation": "On each continued MAC, the accumulator is unboxed, previous box reference released, next accumulator boxed via a surviving16-byte allocation. State constructor bookkeeping is also present but tuple allocation is conditional.",
+  "activation": "Evidence supports testing the single already-frozen Tail5bd alternative, subject to root decision. It does not establish Tail unboxing or speed.",
+  "performance": "NO_NEW_COST_CLAIM; pilot timings partial after outer120s timeout; full32 rerun required.",
+  "Tail_native": "NOT_RUN",
+  "Tail_cost": "NOT_RUN",
+  "fixed_parser_sha256": "ca42b9f70b34f3c7914684abe05002769694649db38be7c62cd36fdb55e0a4d0",
+  "snippets": [
+    {
+      "path": "selected-callers.c.txt",
+      "bytes": 2837,
+      "sha256": "f7252dbea3d57b27625483c46e408a51f954140becae9c8070f59a52d94865b4"
+    },
+    {
+      "path": "selected-mac.asm.txt",
+      "bytes": 11638,
+      "sha256": "41db0c93e2a1151f2d708056fc2693282c23d32655153a10fc67a7992489068b"
+    },
+    {
+      "path": "selected-mac.c.txt",
+      "bytes": 2696,
+      "sha256": "cf51121130ee58416547d282d814a71b6b5c6e8d748c6af040faa73a696c7376"
+    }
+  ]
+}

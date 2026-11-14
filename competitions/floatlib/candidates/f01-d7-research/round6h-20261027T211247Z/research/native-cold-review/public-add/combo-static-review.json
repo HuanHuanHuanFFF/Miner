@@ -1,0 +1,38 @@
+{
+  "checked_utc": "2026-10-28T01:29:43.010308+00:00",
+  "first_tool_utc": "2026-10-28T01:28:04Z",
+  "source": {
+    "path": "competitions/floatlib/candidates/f01-r22-dev-nativecombo-public1/Kernel.lean",
+    "sha256": "f7ba2ddb12939f518e5beb60daf927d9d9d80d24262edd740eefd5e8e917cc03",
+    "bytes": 233664
+  },
+  "parts": {
+    "NativeCold.lean.inc": {
+      "sha256": "e3b93d3ab1383ce09da56dbf7b203760c037b8d779fc2aedae9e9b704fa1ce13",
+      "bytes": 784
+    },
+    "PairDomain.lean.inc": {
+      "sha256": "56811947704d21dd10671be33e69f1dff4075f055de8e9bff8e1dc869bc8859a",
+      "bytes": 1172
+    },
+    "MulEntryProof.lean.inc": {
+      "sha256": "b1cdb633d22d283231d4d96588fe891039e1f1cb760a3073f517dfa68c5924d2",
+      "bytes": 634
+    }
+  },
+  "original75da_body_unchanged": true,
+  "inverse_splice_exact": true,
+  "review_scope": "Only added native-MUL runtime, PairDomain, MulEntryProof and public MUL alias/spec; no repeated ADD review",
+  "finding": "NO_DEFINITE_INTERFACE_ERROR_FOUND_STATIC_ONLY",
+  "checked": [
+    "relative namespace binds to R22NativeAddBase.Submission inner modules",
+    "pairOK wrapping OR implies both NormalBand then fastOK",
+    "hotMul unfolds to existing native_mul_spec_of_fastOK",
+    "cold retainedMul unfolds to old carrier Submission.mul, not new outside public MUL",
+    "public MUL alias/spec targets matching coldMul/coldMul_spec; ADD/SUM/BMM suffix otherwise exact"
+  ],
+  "parent_metadata_notice": "Root separately identified stale files.Kernel path/hash/bytes and other_public_operations/carrier strings; D owns metadata repair. Not independently re-audited here.",
+  "Lean": "NOT_RUN",
+  "CI": "NOT_RUN",
+  "performance": "NOT_RUN_FOR_COMBINED_PUBLIC_SOURCE"
+}

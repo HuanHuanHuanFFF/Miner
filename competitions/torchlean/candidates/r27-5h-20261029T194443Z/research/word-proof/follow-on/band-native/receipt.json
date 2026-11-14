@@ -1,0 +1,46 @@
+{
+  "at_utc": "2026-10-29T23:09:26.092312+00:00",
+  "state": "NEXT_ROUND_COST_SOURCE_ONLY_NOT_COMPILED_NOT_QUEUED",
+  "base_submission": 23,
+  "base_sha256": "1010c0744f0506974c64601e8ce7335bea56d0cb21b655543d390794df0665fe",
+  "candidate_sha256": "b8eade4e11a0b465c17e987944971f98f1267388836b5f808c7c5e1597df2287",
+  "candidate_bytes": 253142,
+  "free_bytes": 2858,
+  "runtime_sha256": "f30b0bab8380e0d4b7e79a05fa28c335e4bcf0dc7471950659042227e2ea7588",
+  "runtime_bytes": 4822,
+  "recipe_sha256": "f9509962592b8552fe254c3088e591b6547f73c9e060030e09c64ce89b50bd05",
+  "compactor_sha256": "4c3dd79284f6701d3b128687f9f973f47d9236f8d9db502d398e2eb4d131e129",
+  "policy": {
+    "intake": null,
+    "policy": null,
+    "passed": true,
+    "sources": {
+      "sandbox.py": {
+        "git_blob_sha": "13c4f7b71e678a27d024613e5198e0d75667de4e",
+        "bytes": 21304,
+        "sha256": "ba8e1a0f23692928f080ad278c35b36493199fb90e3768f90710b85ffef84126"
+      },
+      "duplicates.py": {
+        "git_blob_sha": "3e8eb21d1a50cce44090e29a816e3b55c0ad3fd9",
+        "bytes": 1759,
+        "sha256": "e1859b11011797b5012795d067383ef619a291769ea40dd0cd017791f127f4f8"
+      }
+    }
+  },
+  "new_correct": false,
+  "retained_proof": "Original retainedCorrect binds retainedKernels only. No assertion for new kernels.",
+  "runtime_scope": "Whole dense.linear for compatible finite shape/range; four columns share grouped input/index loads; final outW%4 columns and outer failures use public23. Other kernels remain public23.",
+  "terminal": "Bias-aware Yp/Yu guard range<=58, pair rebase, original YL/YD, original Yai on zero sentinel; act relu outside terminal.",
+  "cost_boundary": "Includes BX/BV scans, global pair guard, all weight factor preparation, per-row groups/index arrays, every gather, block/group carry, original bias/finalizer/fallback and output allocation/destruction in an eventual full-call harness.",
+  "risks": [
+    "Nat recursion per MAC may cost more than the original USize loop.",
+    "Four-column sharing loses original four-row weight reuse.",
+    "Weight preparation adds a pass even for batch1.",
+    "Array UInt32 entries remain pointer-sized.",
+    "New source and its actual metadata/partition/getter proofs have not been accepted."
+  ],
+  "finite_evidence": "../../band-full-model-census-v3.json and ../../band-guard-counterexamples.json model the arithmetic/guards; actual Lean source has additional scheduling and tail fallback, not executed.",
+  "priority": "Hold outside current frozen candidates. First small compile plus complete native cost only if next-round owner selects this route; do not build large proof first.",
+  "publication": "Only owned fragment/recipe/compactor/receipt. Reconstructed whole source stayed in memory; no source file written.",
+  "actual_shape_finite_replay": "native-shape-replay.json: literal Yc metadata, ascending bands,8856 grouped/54 old tail dots, six complete old formula outputs match. No Lean/native execution."
+}

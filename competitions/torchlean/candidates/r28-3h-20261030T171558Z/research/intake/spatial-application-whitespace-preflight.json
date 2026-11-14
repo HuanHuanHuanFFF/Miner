@@ -1,0 +1,38 @@
+{
+  "at_utc": "2026-10-30T19:10:45.514646+00:00",
+  "state": "PINNED_PARSER_SOURCE_PREFLIGHT_ISSUE_NOT_EXECUTED_LEAN",
+  "candidate": "8e5b27c0/255962B uncompiled",
+  "runtime_sha256": "0886ec7b545380673ce4836bd4fdf8454f7de640dad68ccf97e16c9f9a62ccab",
+  "examples": [
+    " let mut v:=Array.mkEmpty(co*ci*16)",
+    "   v:=v.push((r00+r00+R8Q).toNat)",
+    "   v:=v.push((r00+r10+r20+R8Q).toNat)",
+    "   v:=v.push((r00-r10+r20+R8Q).toNat)"
+  ],
+  "cause": "Broad removal of space-before( andspace-after) innewruntime termapplications",
+  "primary_sources": [
+    {
+      "repo": "leanprover/lean4",
+      "ref": "v4.34.0",
+      "path": "src/Lean/Parser/Term.lean",
+      "lines": [
+        890,
+        897
+      ],
+      "fact": "argument requirescheckWsBefore expectedspace"
+    },
+    {
+      "repo": "leanprover/lean4",
+      "ref": "v4.34.0",
+      "path": "src/Lean/Parser/Basic.lean",
+      "lines": [
+        1176,
+        1186
+      ],
+      "fact": "Requires actualtrailing whitespace, not merelytoken separation"
+    }
+  ],
+  "original_source11_has_custom_paren_application_notation": false,
+  "not_claimed": "No actualLean error or formalcounterexample; mathematical transforms are unaffected",
+  "action": "A restoreapplicationwhitespace undernewversion, choosecapturing-freeshortnames forbudget; do notedit frozenoldsource"
+}

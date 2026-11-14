@@ -1,0 +1,26 @@
+{
+  "request_id": "R27-native01-raw-direct1",
+  "created_at_utc": "2026-10-29T19:49:11Z",
+  "owner": "Droot",
+  "priority": "First executable feedback; small frozen source available now",
+  "candidate": {
+    "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/development/native/raw-direct1/Kernel.lean",
+    "sha256": "e312669368a8c008f713555d3477a7ac42728469057c591a869cb9f7b344ad9d",
+    "bytes": 67781,
+    "entry": "Submission.kernels",
+    "proof_status": "UNPROVED_NATIVE_RESEARCH_ONLY",
+    "retainedCorrect": "Applies only to preserved Submission.retainedKernels"
+  },
+  "request": [
+    "Build pinned Lean4.34 Kernel and original MainExact native target; preserve exact candidate, C, object/link flags and complete error logs.",
+    "Run original MainExact finite correctness/output checksum fixture path against retained bcb817 as internal correctness oracle only. Add any existing fallback fixture target if same compile artifact can be reused cheaply.",
+    "If build/checksum pass, use champion-only full-model measurement according to Droot available champion sources/calibration; no original shipped performance run. Preserve all30cells and exact per-board/batch results; do not score retained as the target.",
+    "Inspect generated C functions containing R27DirectWord scan/loop64/loop128/dot and R26RawWord native64/native128; report per-MAC boxing, closure calls and copy behavior without assuming source-level UInt64 is unboxed."
+  ],
+  "main_cost_question": "Does removing FP/encoded prep plus direct single-use dense getters remove R26 b1 regressions, and does official finishWord terminal undo word arithmetic gain?",
+  "correctness_edge_cases": "Bias is final term before one rounding; empty output extents; n0; ±0/allnegativezero; subnormal; NaN/Inf triggers old exact fallback; raw width beyond128 uses old exact fallback.",
+  "build_expected_seconds": "UNKNOWN",
+  "scope": "Diagnostic native build/checksum/per-board performance, never original gate/adoption claim",
+  "no_local_build": true,
+  "allow_private": false
+}

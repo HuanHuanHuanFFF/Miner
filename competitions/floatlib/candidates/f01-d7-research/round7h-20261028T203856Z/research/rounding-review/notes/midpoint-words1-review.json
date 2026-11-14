@@ -1,0 +1,48 @@
+{
+  "reviewer": "C independent critical review",
+  "reviewed_at_utc": "2026-10-28T23:35:42.044299+00:00",
+  "scope": "One static review of the new6156B fragment and package identities only. No B2 rereview, model rerun, Lean/native execution, CI or Git action.",
+  "candidate": "f01-r24-research-midpoint-words1",
+  "kernel_sha256": "175e2646d26742dac2c894963c8a21e528717cdf38235616bf4062f642cc64ad",
+  "kernel_bytes": 232986,
+  "fragment_sha256": "f5dbbdaf457823ba26857f5804184583e47e64d540629b45a1c7319ea554bd12",
+  "fragment_bytes": 6156,
+  "base_prefix_byte_identical": true,
+  "manifest_roots_timeout_paths_verified": true,
+  "verdict": "NO_CONCRETE_STATIC_BLOCKER_FOUND_NOT_COMPILED",
+  "actionable_findings": [],
+  "mathematical_checks": [
+    {
+      "branch": "upper",
+      "result": "center+(1<<28) has mantissa2^52+(2f+1)2^28 and exponent e-179; exact upper midpoint including max-finite overflow threshold. Since f<2^23, fraction stays below2^52."
+    },
+    {
+      "branch": "lower_inner",
+      "result": "f>0 prevents underflow/borrow; mantissa2^52+(2f-1)2^28 at exponent e-179 gives the ordinary lower midpoint."
+    },
+    {
+      "branch": "lower_power",
+      "result": "e>1,f=0 borrows into double exponent e+895, mantissa2^53-2^28 at exponent e-180, giving value2^(e-127)-2^(e-152), the quarter upper-ULP lower midpoint."
+    },
+    {
+      "branch": "lower_min_normal",
+      "result": "e=1,f=0 subtracts2^29 raw units, giving mantissa2^53-2^29 at exponent-179, value2^-126-2^-150; this is the correct widened lower cell at minimum normal."
+    },
+    {
+      "branch": "machine_bounds",
+      "result": "e in1..254,f<2^23 keeps center/upper below1151*2^52<2^63; fixed shifts52/29 are below64 and subtractions are bounded before using toNat_sub_of_le."
+    }
+  ],
+  "API_typing_review": [
+    "decode_fields supplies nonzero exponent via Nat.ne_of_gt and correct binary64 exponent/fraction bounds to toDyadic?_ofFields_normal.",
+    "raw sign/exponent/fraction identities have matching UInt64/BitVec domains and explicit64-bit modulus bounds.",
+    "lower_power final exact hd relies only on normalization of closed Nat numerals; no omitted branch or exponent correction found.",
+    "The concrete lower_minNormal by decide and all omega/change elaboration remain unexecuted; this review is not Lean acceptance."
+  ],
+  "excluded_claims": [
+    "No negative-sign wrapper or raw32 field extraction verified",
+    "No real RNE32 cell theorem or endpoint error composition",
+    "No native comparison/caller/cost claim"
+  ],
+  "next_action": "Coordinator may queue the four frozen helper roots for actual statement/module/root replay and axiom audit."
+}

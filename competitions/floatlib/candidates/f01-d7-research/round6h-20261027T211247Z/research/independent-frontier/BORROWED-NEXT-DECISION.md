@@ -1,0 +1,11 @@
+# First decision after the ABI probe
+
+Do not build another public kernel before the unchanged 680ca1b3 probe answers the native ABI question. Its two Array UInt32 parameters and toy arithmetic are deliberately not a model of the prepared-B worker. A successful sibling jump or equivalent fused loop would establish only a compiler prerequisite.
+
+For any later real 4-row/2-column worker, the clean ownership-free cut is before the first accumulator update of an iteration. A failed qualification can hand the original eight float states, arrays and cursors to a cold function that performs the whole current iteration once, then resumes at k+1. A cut after some q updates would require an explicit phase/partial-state design or a proof that no update is replayed or skipped; the current toy supplies neither. Reloading raw A or a prepared-B cache record in the cold function would be real extra work, not a free consequence of a tail jump.
+
+The existing eight-scalar state is a machine-signature question, not permission to change rounding order. Each q lane must retain the original per-k MUL then ADD sequence, original positive-zero start, existing odd/tail handling and original exceptional-value behavior. Any tableProduct substitution still requires the existing exact converter-domain bridge, and its complete eligibility test remains charged on the normal path. No reassociation is authorized or implied.
+
+The actual prepared-B array element type differs from the toy's UInt32 element type. Its object access and float projections can introduce different ownership/liveness behavior even though an array parameter is a pointer at the C boundary. Pinned ExplicitRC.lean:117–136 already records object projections and Array.getInternal/uget as derived from their parent; a different element type is not itself proof that RC must remain. Therefore, after a positive ABI prerequisite, the next falsifier is the selected real-loop C/ASM: no decoder call on its qualified path and no remaining per-k q-stack traffic. If either remains, stop before public proof expansion. Only a subsequent complete guarded cost measurement could justify the integration and proof work.
+
+This document is a boundary for the next decision, not a new runtime or an experiment request. No cache layout, indexed8 source, threshold, compiler flag, input or frozen candidate is changed.

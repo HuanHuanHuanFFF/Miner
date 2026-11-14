@@ -1,0 +1,15 @@
+# Self-contained mathematical review question
+
+We are evaluating a Lean4.34 CPU-kernel competition with exact binary32 output. Do not write a full implementation. Seek counterexamples and the smallest exact checker/proof interface for a possibly fast approach; report costs/unknowns honestly.
+
+In stable RMS normalization, one output is RNE32(sign * (P/D) * 2^E), where P is a product of two binary32 integer mantissas (0≤P<2^48), D is the positive rounded row-denominator mantissa (normally2^23≤D<2^24), and E is an integer raw-exponent combination. The same D is shared across a row. Current optimized public code uses exact integer quotient/remainder rounding. Native Float64/Float32 can cheaply *propose* a binary32 quotient, but some cross-format functions lack public mathematical equations. We can accept an arbitrary proposal only after an exact integer certificate; otherwise use the unchanged exact fallback. No new axioms, unsafe/extern code or reassociation of specified rounded operations is allowed. The native proposal need not be assumed correct.
+
+Candidate checker for positive normal proposal z with field Z∈103..152 and mantissa M=2^23+f: set k=151−Z; for k≥0 set A=P*2^k,B=D, otherwise A=P,B=D*2^(−k). Compare A with upper midpoint B*(2M+1). If M>2^23 compare lower midpoint with B*(2M−1); at M=2^23 compare2A with B*(4M−1). Accept strict interior, endpoints only when M is even. Guard every word overflow/shift. Handle P=0 separately. Then exponent-translate only on a target-normal domain where the exact RNE result is preserved; leave boundary/subnormal/overflow cases to fallback initially.
+
+Please (1) attack this checker, including power-of-two transitions, lower minnormal boundary, sign/zero and ties; (2) derive a simple sound theorem for an arbitrary proposed word and the exact fallback, minimizing proof dependencies; (3) suggest a lower-cost exact certificate or denominator-amortized alternative using64-bit words, with realistic division versus multiplication costs and no assumed compiler intrinsics; (4) identify the exact bridge needed to a public roundRat/nearest-even model. Also examine a square-root proposal certified by r²D≤N<(r+1)²D; do not apply same-precision no-midpoint claims to arbitrary rational inputs. A useful related bound is whether all stable finite-input RMS/layernorm denominators are positive finite normal binary32 when epsilon is positive finite. Give concrete falsifiers and avoid recommending an algorithm already subsumed by this certificate.
+
+Public semantics: https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/accb82b6e2adeda1b41a57a260d68fb3879c427e/docs/CONTRACT.md
+
+Public base rounding/statistics source: https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/accb82b6e2adeda1b41a57a260d68fb3879c427e/lean/contract/ExactToolkit/StableNorm.lean
+
+The task is read-only mathematical assessment; no authorization to change target, submit, benchmark or use hidden sources follows from these materials.

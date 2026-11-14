@@ -1,0 +1,46 @@
+/- Original, uncompiled helper fragment for the actual UInt64 Ybh update.
+   Insert inside exact public53 Submission. This does NOT close array scanning,
+   global Ybg extraction, pointwise layout, or the final all12 obligation. -/
+
+lemma r28CapStep (m w x:UInt64)
+ (hm:m.toNat<=510) (hw:w.toNat<=510) (hxw:w<=x):
+ (if x<m+w then x-w else m)=min m (x-w):=by
+ have hs:(m+w).toNat=m.toNat+w.toNat:=by
+  rw[UInt64.toNat_add]
+  apply Nat.mod_eq_of_lt
+  omega
+ have hd:(x-w).toNat=x.toNat-w.toNat:=UInt64.toNat_sub_of_le _ _ hxw
+ have hxwN:w.toNat<=x.toNat:=UInt64.le_iff_toNat_le.mp hxw
+ by_cases h:x<m+w
+ · rw[if_pos h]
+   have hl:x-w<=m:=by
+    apply UInt64.le_iff_toNat_le.mpr
+    have hh:=UInt64.lt_iff_toNat_lt.mp h
+    rw[hs]at hh
+    rw[hd]
+    omega
+   exact (min_eq_right hl).symm
+ · rw[if_neg h]
+   have hl:m<=x-w:=by
+    apply UInt64.le_iff_toNat_le.mpr
+    have hh:¬x.toNat<(m+w).toNat:=by
+     intro q
+     exact h (UInt64.lt_iff_toNat_lt.mpr q)
+    rw[hs]at hh
+    rw[hd]
+    omega
+   exact (min_eq_left hl).symm
+
+lemma r28FoldMin {α:Type} (f:α→UInt64) (l:List α) (x z:UInt64):
+ l.foldl (fun m a=>min m (f a)) (min x z)=
+ min x (l.foldl (fun m a=>min m (f a)) z):=by
+ induction l generalizing z with
+ | nil=>rfl
+ | cons a l ih=>
+   simp only[List.foldl_cons,min_assoc]
+   exact ih (min z (f a))
+
+lemma r28FoldCap {α:Type} (f:α→UInt64) (l:List α) (x:UInt64) (hx:x<=510):
+ l.foldl (fun m a=>min m (f a)) x=
+ min x (l.foldl (fun m a=>min m (f a)) 510):=by
+ simpa only[min_eq_left hx] using r28FoldMin f l x 510

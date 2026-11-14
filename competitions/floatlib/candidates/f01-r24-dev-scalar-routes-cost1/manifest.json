@@ -1,0 +1,87 @@
+{
+  "candidate": "f01-r24-dev-scalar-routes-cost1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "e31d270e161bf35e400e5912347ac3e0b4fee30bbe8d9ff5b62c82f386818b7b",
+  "candidate_bytes": 254738,
+  "parent_sha256": "f90d42e346a1634ffeb537ea7e9980e0a91baea8499dc6c2235da5ab8fe0e85f",
+  "validation_mode": "statement-only",
+  "diagnostic_only": true,
+  "diagnostic_timeout_seconds": 600,
+  "helper_audit_module": "scalar-cost-audit.py",
+  "helper_audit_module_path": "f01-d7-research/round7h-20261028T203856Z/development-scalar/scalar-cost-audit.py",
+  "helper_audit_module_sha256": "5336966b5a35fff55729d81a631caf1667dda35f6083cf3bc8185bced54ad933",
+  "proof_status": "NOT_RUN_NEW_DIAGNOSTIC_HELPERS_PUBLIC_ENDPOINTS_RETAIN_EXACT_F90_PREFIX",
+  "performance": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "official_submission_inherited": false,
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/driver.py",
+      "bytes": 22731,
+      "sha256": "f3a3f7852fe1058dbb67c94d4f13c6fc22cddd33a2cc3951691834780e54aeac"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/scalar-cost-audit.py",
+      "bytes": 4042,
+      "sha256": "5336966b5a35fff55729d81a631caf1667dda35f6083cf3bc8185bced54ad933"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/ScalarRoutes.lean.inc",
+      "bytes": 760,
+      "sha256": "95122f555c36f2cf76606b8119a0c89b8b185352c122e165c5b3a11e992dcf96"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/R24ScalarCostMain.lean",
+      "bytes": 1167,
+      "sha256": "b3164ee84f5f09a8e0542cdfdb9d3faa0a9d5b66ad7b63f2811e86034ba5170b"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/R24ScalarDomainMain.lean",
+      "bytes": 1992,
+      "sha256": "0c38f158564d3b053d24767fbe63b26c5f7186b74ba7ea419719562f6ef71909"
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/static_runner_audit.py",
+      "bytes": 9804,
+      "sha256": "1806bb3c9a6aa4285a22a7a811d070c3257537d92295b9c8b79be832ce1efe00"
+    }
+  ],
+  "runtime_cost": {
+    "overall_budget_seconds_from_stage_registration": 580,
+    "build_cap_seconds": 180,
+    "measure_phase_cap_seconds": 300,
+    "seeds": [
+      2240001,
+      2240003
+    ],
+    "order_per_seed": [
+      "control",
+      "native",
+      "native",
+      "control",
+      "control",
+      "integer",
+      "integer",
+      "control",
+      "control",
+      "nativefirst",
+      "nativefirst",
+      "control",
+      "control",
+      "integerfirst",
+      "integerfirst",
+      "control"
+    ],
+    "processes": 32,
+    "pairs": 500000,
+    "inner": 3,
+    "observer_in_measured_process": false,
+    "domain_processes_after_measurement": 2
+  },
+  "scope": "Five separate static Suite IO entries; all miss routes retain B2. Native pair guard E64..191; integer normal E1..254,S128..380. ADD/SUM/BMM fixed B2, scalar MUL route only. Includes complete official caller, callbacks, misses, boxing and release; process wall reports input preparation/cleanup separately from official case ns. Exact F7 ADD is intentionally absent to isolate MUL; F7 source is a negative mechanism reference, not a seed-retry candidate.",
+  "source_parts": {
+    "f90_exact_prefix": "f90d42e346a1634ffeb537ea7e9980e0a91baea8499dc6c2235da5ab8fe0e85f",
+    "appended_runtime": "95122f555c36f2cf76606b8119a0c89b8b185352c122e165c5b3a11e992dcf96"
+  },
+  "pending_parent_action": "Wire existing statement-only diagnostic stage to this driver; inspect static callback chain/C/ASM before cost decision. No CI dispatched by scalar agent."
+}

@@ -1,0 +1,9 @@
+# R24 actual native64 strict comparison
+
+Kernel SHA**8c7a1509ac9ba7e3d1e5b34cf7dd395f48645f1b4db954a1f737e8d97d76d805**,235559B; fragment**34769149311e8784001883fbb3a4341d7b12526ac5cdaf40398335758f1a4920**,8729B. B2/622d first226829B and four public endpoints are unchanged. Static package/hash/path checks pass; **Lean/module/replay/axiom status NOT_RUN**.
+
+- One root: `Submission.R24NativeCompare.native_lt_iff_real`. For actual native Float x,y with only x/y.isFinite=true, proves `Float.lt x y=true` iff their imported Model real values are strictly ordered. Includes signed zeros and finite subnormals. Does not require guessed bounds, a supplied comparison theorem or an opaque-cast assumption.
+- The source gap is real: core Unpacked.compare uses sign and lexicographic(exponent,mantissa) under a common numerical canonical form. Fixed NativeFPU exports software FMA, not this bridge. Arbitrary finite unpacked tuples2*2^0 and1*2^1 compare lexically.lt despite equal values; they cannot be substituted for actual native unpack decodes.
+- Private proof uses `Model.cexp_toDyadic?`, `Flocq.cexp_mono_abs` and explicit `fltMonotoneExp` for actual decoded numerical exponents, then same-exponent mantissas and sign/zero cases. It does not use `IsModelCanonical` as a numeric normalization condition. No runtime Model.compare/totalOrder/ExecFloat.compare or raw-key framework is introduced.
+- Root does one independent key source review, then D owns helper-v8 CI,180s,one root. Frozen source stays unchanged until actual diagnostics. Main typing checkpoints are Bool/Prop reduction in native_lt_unpacked and the final sign-case simp composition; this is source, not claimed acceptance or speed.
+- Common window remains2026-10-28 20:38:56–2026-10-29 03:38:56UTC. C first clock for midpoint review/native-compare task23:33:49; source frozen23:54:44. No local Lean, Git mutation, CI dispatch, benchmark or new-track implementation.

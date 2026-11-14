@@ -1,0 +1,11 @@
+# 冠军比较配置差异：当前结论与最小补证
+
+20:08 UTC记录，当前champion/source/evaluation链接已核，不等于新测量与冠军报告的功能政策相同。Dverify已确认所有live board hash与champion report hash不同，原因当前UNKNOWN。父target-chain-independent-review.json追加了此边界；早先0.93335/0.92884只是报告链规划点。
+
+原固定validator/config.py的Config.identity=digest(Config.plan)，plan同时包含initial_reference、seed_mode/strata、timing、admission、proof_identity与benchmark_identity。因此哈希不同不能单独说明是参照变化，也不能单独说明benchmark算法变了。已核GitHub固定commit accb82b6目录中的config.py blob6743c5c0060b7babab5155ffe1e0dc94dbf8a742与本地pinned source一致。只读查询官方仓库未发现可直接提供两份完整服务配置的入口；未猜测/绕过受限API。
+
+D可在下一确认队列前核对：模型cells/权重、workload生成policy与benchmark_identity、proof/合同版本、timing/inner/rounds、旧报告实际seed/strata与环境构成。现有helper/native探索不必因此阻塞。不同local环境会使整份Config.identity不同；若要做跨环境INFERRED换算，应明确展示被有意变化的环境身份和经过验证的功能投影，不能仅把旧report hash贴在新quick request上。无法归约的差异保留UNKNOWN。
+
+先有小源类型反馈与完整调用成本，再决定花预算复制旧报告输入作校准，或保留当前冠军倍数UNKNOWN而仍推进正确性。即使投影相同，local/predecessor与prod current/predecessor的比值也不严格可传递，3%窄门槛不能由点校准保证；正式冠军/证明/计时各自验收。
+
+本次只记录证据差异与归约条件，不修改验证器/门槛/官方工具，也不新增全面审查流程。Dverify拥有verification，父R不覆盖其记录。

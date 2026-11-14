@@ -1,0 +1,44 @@
+{
+  "at_utc": "2026-10-30T18:58:57.876663+00:00",
+  "state": "ISOLATED_NEXT_ROUTE_LITERAL_WORD_MODEL_NOT_CANDIDATE",
+  "source_sha256": "b5213ca36fa372dfa36769ee7ecfd3feafac9b0b1c34d4e25499bac154e72083",
+  "fixture_sequences": 2000,
+  "native_matching_oldcells": 18,
+  "counts": {
+    "old_yau_macs": 153422,
+    "new_fallback128_macs": 153422,
+    "new_fallback128_dots": 2355,
+    "classifier_macs": 64500
+  },
+  "negative_controls": {
+    "without_count_guard": {
+      "n": 65538,
+      "x": "one3c800001 then65537copies5c7fffff",
+      "w": "65538copies3cffffff",
+      "bias": "00000000",
+      "lo": 240,
+      "span": 63,
+      "source36_nlt1048576": true,
+      "expected_word": "6200007f",
+      "wrong_signed128_word": "e1ffff02"
+    },
+    "drop_negative_count_counterexample": {
+      "a": "bf800000",
+      "b": "3f800000",
+      "bias": "3f800000",
+      "lo": 252,
+      "negative_count": 1,
+      "expected_word": "00000000",
+      "wrong_word_without_count": "a8800000"
+    }
+  },
+  "proof": "Perterm absproduct<2^(48+63)=2^111; n<=2^16 gives bodyabs<2^127. Normalize c into low/high, signextend body into192, then originalbias/finish. Finaltotalneed not fit128 becausebiasisadded in192.",
+  "scope": "Source36 contiguous-linear YS6 fallback only; existing MD/MD2 and GEMM untouched. No extra preparation/cache.",
+  "cost_hypothesis": "Use original inlineYL6 with highword0 and continuation discardingtop output; compiler mayremove two highcarry comparisons/or/topaddition. ActualgeneratedC/ASM/nativecost UNKNOWN.",
+  "limits": [
+    "No new CIrequest or fullsource",
+    "No newcorrect/root acceptance",
+    "Counts not time share",
+    "Counterexample n65538 proves a countbound is needed, not that65536 is the optimal maximal guard"
+  ]
+}

@@ -1,0 +1,1077 @@
+{
+  "source_commit": "c839fd40ab06520f1786d00dd3d3e2f5fca26ae9",
+  "run_id": "40786223288",
+  "scope": "IMMUTABLE_PUBLIC_REFERENCE_OBSERVATION_ONLY_NOT_NEW_CANDIDATE_OR_SCORE",
+  "upstream_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+  "started_at_utc": "2026-10-28T23:18:17.632415+00:00",
+  "model_profile": "Original exactDev profile, batch1/normal, model seed42, input seed7, best5; includes hashArr/touch inside timing",
+  "no_current_champion_source_or_score_inherited": true,
+  "references": [
+    {
+      "name": "former2",
+      "receipt": {
+        "url": "https://conjectures.io/v1/competitions/torchlean/submissions/2/source",
+        "http_status": 200,
+        "input_sha256": "cea4422fb6d3bd613b306127e7017331560875ddb840a7f2e174f6c03bdb480f",
+        "source_publication": "Not included in artifacts; primary public-source availability is not a reuse license"
+      },
+      "input_bytes": 254884,
+      "profiles": [
+        {
+          "model": "nmlp",
+          "output_sha256": "a822a7baf0dd124803e5567eb1db9eb09d5c69924a3b673648468ae87bc2df7a",
+          "rows": [
+            {
+              "layer": "linear 1×503→243",
+              "microseconds_integer_truncated": 357
+            },
+            {
+              "layer": "rmsnorm 1×243",
+              "microseconds_integer_truncated": 15
+            },
+            {
+              "layer": "linear 1×243→87",
+              "microseconds_integer_truncated": 91
+            },
+            {
+              "layer": "layernorm 1×87",
+              "microseconds_integer_truncated": 15
+            },
+            {
+              "layer": "linear 1×87→10",
+              "microseconds_integer_truncated": 4
+            },
+            {
+              "layer": "total",
+              "microseconds_integer_truncated": 484
+            }
+          ],
+          "reported_total_microseconds": 484,
+          "scope": "Layer+hash/touch observer; not pure kernel time or official model score"
+        },
+        {
+          "model": "mixer",
+          "output_sha256": "7f32323b3bda542ac950db9f95eafb5e7d8e0cc28617e2a56d2a78c152878dd4",
+          "rows": [
+            {
+              "layer": "save",
+              "microseconds_integer_truncated": 0
+            },
+            {
+              "layer": "layernorm 8×46",
+              "microseconds_integer_truncated": 59
+            },
+            {
+              "layer": "gemm 8×8·8×46",
+              "microseconds_integer_truncated": 30
+            },
+            {
+              "layer": "addRelu",
+              "microseconds_integer_truncated": 6
+            },
+            {
+              "layer": "save",
+              "microseconds_integer_truncated": 0
+            },
+            {
+              "layer": "layernorm 8×46",
+              "microseconds_integer_truncated": 62
+            },
+            {
+              "layer": "linear 8×46→92",
+              "microseconds_integer_truncated": 148
+            },
+            {
+              "layer": "linear 8×92→46",
+              "microseconds_integer_truncated": 132
+            },
+            {
+              "layer": "addRelu",
+              "microseconds_integer_truncated": 6
+            },
+            {
+              "layer": "linear 1×368→10",
+              "microseconds_integer_truncated": 16
+            },
+            {
+              "layer": "total",
+              "microseconds_integer_truncated": 464
+            }
+          ],
+          "reported_total_microseconds": 464,
+          "scope": "Layer+hash/touch observer; not pure kernel time or official model score"
+        },
+        {
+          "model": "mlp",
+          "output_sha256": "abb9442be01f3a2dff83ec7382229332a6e49c2c840a2bfc770fae92d969bfc6",
+          "rows": [
+            {
+              "layer": "linear 1×537→243",
+              "microseconds_integer_truncated": 379
+            },
+            {
+              "layer": "linear 1×243→87",
+              "microseconds_integer_truncated": 92
+            },
+            {
+              "layer": "linear 1×87→10",
+              "microseconds_integer_truncated": 3
+            },
+            {
+              "layer": "total",
+              "microseconds_integer_truncated": 475
+            }
+          ],
+          "reported_total_microseconds": 475,
+          "scope": "Layer+hash/touch observer; not pure kernel time or official model score"
+        },
+        {
+          "model": "mnet",
+          "output_sha256": "b2a5cb033aa4d9d579261177fdcbb7b5f6e2297a5e5971671c8e75a0a326a2d4",
+          "rows": [
+            {
+              "layer": "conv2d 3×3 3→5 on 16×16",
+              "microseconds_integer_truncated": 103
+            },
+            {
+              "layer": "scaleShift 5×256",
+              "microseconds_integer_truncated": 18
+            },
+            {
+              "layer": "depthwise 3×3 5 on 16×16",
+              "microseconds_integer_truncated": 56
+            },
+            {
+              "layer": "scaleShift 5×256",
+              "microseconds_integer_truncated": 16
+            },
+            {
+              "layer": "conv2d 1×1 5→13 on 16×16",
+              "microseconds_integer_truncated": 110
+            },
+            {
+              "layer": "scaleShift 13×256",
+              "microseconds_integer_truncated": 47
+            },
+            {
+              "layer": "avgpool 2×2 13×16×16",
+              "microseconds_integer_truncated": 53
+            },
+            {
+              "layer": "depthwise 3×3 13 on 8×8",
+              "microseconds_integer_truncated": 38
+            },
+            {
+              "layer": "scaleShift 13×64",
+              "microseconds_integer_truncated": 10
+            },
+            {
+              "layer": "conv2d 1×1 13→13 on 8×8",
+              "microseconds_integer_truncated": 44
+            },
+            {
+              "layer": "scaleShift 13×64",
+              "microseconds_integer_truncated": 10
+            },
+            {
+              "layer": "avgpool 8×8 13×8×8",
+              "microseconds_integer_truncated": 21
+            },
+            {
+              "layer": "linear 1×13→10",
+              "microseconds_integer_truncated": 1
+            },
+            {
+              "layer": "total",
+              "microseconds_integer_truncated": 534
+            }
+          ],
+          "reported_total_microseconds": 534,
+          "scope": "Layer+hash/touch observer; not pure kernel time or official model score"
+        },
+        {
+          "model": "cnn",
+          "output_sha256": "c193e65163e6936996dc3a766d71ee73471ae3e9706288c6678724f8b2f8e0dd",
+          "rows": [
+            {
+              "layer": "conv2d 3×3 3→5 on 16×16",
+              "microseconds_integer_truncated": 91
+            },
+            {
+              "layer": "scaleShift 5×256",
+              "microseconds_integer_truncated": 16
+            },
+            {
+              "layer": "save",
+              "microseconds_integer_truncated": 1
+            },
+            {
+              "layer": "conv2d 3×3 5→5 on 16×16",
+              "microseconds_integer_truncated": 132
+            },
+            {
+              "layer": "scaleShift 5×256",
+              "microseconds_integer_truncated": 16
+            },
+            {
+              "layer": "conv2d 3×3 5→5 on 16×16",
+              "microseconds_integer_truncated": 130
+            },
+            {
+              "layer": "scaleShift 5×256",
+              "microseconds_integer_truncated": 16
+            },
+            {
+              "layer": "addRelu",
+              "microseconds_integer_truncated": 27
+            },
+            {
+              "layer": "maxpool 2×2 5×16×16",
+              "microseconds_integer_truncated": 13
+            },
+            {
+              "layer": "conv2d 3×3 5→13 on 8×8",
+              "microseconds_integer_truncated": 84
+            },
+            {
+              "layer": "scaleShift 13×64",
+              "microseconds_integer_truncated": 10
+            },
+            {
+              "layer": "avgpool 8×8 13×8×8",
+              "microseconds_integer_truncated": 22
+            },
+            {
+              "layer": "linear 1×13→10",
+              "microseconds_integer_truncated": 1
+            },
+            {
+              "layer": "total",
+              "microseconds_integer_truncated": 567
+            }
+          ],
+          "reported_total_microseconds": 567,
+          "scope": "Layer+hash/touch observer; not pure kernel time or official model score"
+        }
+      ],
+      "typecheck": "ORIGINAL_VERIFYEXACT_TARGET_BUILD_PASS_NOT_INDEPENDENT_REPLAY_OR_AXIOM_AUDIT",
+      "complete": true,
+      "binary_sha256": "219aa0efd3668861efc7bdf0e3b5b08a667d820a9f034941d315b41b91f547b3",
+      "static_c_metadata": {
+        "file": "former2-c-metadata.json",
+        "sha256": "d1e14f72e2eed2c5ef91ed32872e444a337cea4d424618906ab301afca137d9e",
+        "exported_bodies": 28
+      }
+    },
+    {
+      "name": "shipped",
+      "receipt": {
+        "origin": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels.git",
+        "upstream_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+        "input_sha256": "9b2d940338dfcc42a38443324d63041a27cc9b5df1b18675103c7d67934d1df8"
+      },
+      "input_bytes": 38506,
+      "profiles": [
+        {
+          "model": "nmlp",
+          "output_sha256": "10cf232042e9500f50f13071daa27f1eb5b53b07be066a88736719e0ae874a27",
+          "rows": [
+            {
+              "layer": "linear 1×503→243",
+              "microseconds_integer_truncated": 2502
+            },
+            {
+              "layer": "rmsnorm 1×243",
+              "microseconds_integer_truncated": 1021
+            },
+            {
+              "layer": "linear 1×243→87",
+              "microseconds_integer_truncated": 426
+            },
+            {
+              "layer": "layernorm 1×87",
+              "microseconds_integer_truncated": 794
+            },
+            {
+              "layer": "linear 1×87→10",
+              "microseconds_integer_truncated": 25
+            },
+            {
+              "layer": "total",
+              "microseconds_integer_truncated": 4770
+            }
+          ],
+          "reported_total_microseconds": 4770,
+          "scope": "Layer+hash/touch observer; not pure kernel time or official model score"
+        },
+        {
+          "model": "mixer",
+          "output_sha256": "4df88bec8fbb7b9b768f28ef1bdee0edecd8539f1900c3700d8fb1950aeb5c8c",
+          "rows": [
+            {
+              "layer": "save",
+              "microseconds_integer_truncated": 0
+            },
+            {
+              "layer": "layernorm 8×46",
+              "microseconds_integer_truncated": 3388
+            },
+            {
+              "layer": "gemm 8×8·8×46",
+              "microseconds_integer_truncated": 410
+            },
+            {
+              "layer": "addRelu",
+              "microseconds_integer_truncated": 88
+            },
+            {
+              "layer": "save",
+              "microseconds_integer_truncated": 0
+            },
+            {
+              "layer": "layernorm 8×46",
+              "microseconds_integer_truncated": 3420
+            },
+            {
+              "layer": "linear 8×46→92",
+              "microseconds_integer_truncated": 1366
+            },
+            {
+              "layer": "linear 8×92→46",
+              "microseconds_integer_truncated": 887
+            },
+            {
+              "layer": "addRelu",
+              "microseconds_integer_truncated": 88
+            },
+            {
+              "layer": "linear 1×368→10",
+              "microseconds_integer_truncated": 77
+            },
+            {
+              "layer": "total",
+              "microseconds_integer_truncated": 9728
+            }
+          ],
+          "reported_total_microseconds": 9728,
+          "scope": "Layer+hash/touch observer; not pure kernel time or official model score"
+        },
+        {
+          "model": "mlp",
+          "output_sha256": "1aa01bb92b70d7ae6caadf644c723463c9a9ed1bb89be1b9f93c199ae0a0233a",
+          "rows": [
+            {
+              "layer": "linear 1×537→243",
+              "microseconds_integer_truncated": 2651
+            },
+            {
+              "layer": "linear 1×243→87",
+              "microseconds_integer_truncated": 426
+            },
+            {
+              "layer": "linear 1×87→10",
+              "microseconds_integer_truncated": 22
+            },
+            {
+              "layer": "total",
+              "microseconds_integer_truncated": 3101
+            }
+          ],
+          "reported_total_microseconds": 3101,
+          "scope": "Layer+hash/touch observer; not pure kernel time or official model score"
+        },
+        {
+          "model": "mnet",
+          "output_sha256": "2c85cb1051349d94925079c649ab0a1a92c7ad7e8ad215ae31f235cfb4dd9d02",
+          "rows": [
+            {
+              "layer": "conv2d 3×3 3→5 on 16×16",
+              "microseconds_integer_truncated": 2413
+            },
+            {
+              "layer": "scaleShift 5×256",
+              "microseconds_integer_truncated": 433
+            },
+            {
+              "layer": "depthwise 3×3 5 on 16×16",
+              "microseconds_integer_truncated": 1592
+            },
+            {
+              "layer": "scaleShift 5×256",
+              "microseconds_integer_truncated": 427
+            },
+            {
+              "layer": "conv2d 1×1 5→13 on 16×16",
+              "microseconds_integer_truncated": 3841
+            },
+            {
+              "layer": "scaleShift 13×256",
+              "microseconds_integer_truncated": 1123
+            },
+            {
+              "layer": "avgpool 2×2 13×16×16",
+              "microseconds_integer_truncated": 878
+            },
+            {
+              "layer": "depthwise 3×3 13 on 8×8",
+              "microseconds_integer_truncated": 1067
+            },
+            {
+              "layer": "scaleShift 13×64",
+              "microseconds_integer_truncated": 280
+            },
+            {
+              "layer": "conv2d 1×1 13→13 on 8×8",
+              "microseconds_integer_truncated": 1160
+            },
+            {
+              "layer": "scaleShift 13×64",
+              "microseconds_integer_truncated": 279
+            },
+            {
+              "layer": "avgpool 8×8 13×8×8",
+              "microseconds_integer_truncated": 28
+            },
+            {
+              "layer": "linear 1×13→10",
+              "microseconds_integer_truncated": 11
+            },
+            {
+              "layer": "total",
+              "microseconds_integer_truncated": 13538
+            }
+          ],
+          "reported_total_microseconds": 13538,
+          "scope": "Layer+hash/touch observer; not pure kernel time or official model score"
+        },
+        {
+          "model": "cnn",
+          "output_sha256": "edc805703e1198d2cdeef667565d18cb8635170beb4829dd726f7ef983fd1f86",
+          "rows": [
+            {
+              "layer": "conv2d 3×3 3→5 on 16×16",
+              "microseconds_integer_truncated": 2395
+            },
+            {
+              "layer": "scaleShift 5×256",
+              "microseconds_integer_truncated": 434
+            },
+            {
+              "layer": "save",
+              "microseconds_integer_truncated": 1
+            },
+            {
+              "layer": "conv2d 3×3 5→5 on 16×16",
+              "microseconds_integer_truncated": 3071
+            },
+            {
+              "layer": "scaleShift 5×256",
+              "microseconds_integer_truncated": 431
+            },
+            {
+              "layer": "conv2d 3×3 5→5 on 16×16",
+              "microseconds_integer_truncated": 3010
+            },
+            {
+              "layer": "scaleShift 5×256",
+              "microseconds_integer_truncated": 427
+            },
+            {
+              "layer": "addRelu",
+              "microseconds_integer_truncated": 320
+            },
+            {
+              "layer": "maxpool 2×2 5×16×16",
+              "microseconds_integer_truncated": 378
+            },
+            {
+              "layer": "conv2d 3×3 5→13 on 8×8",
+              "microseconds_integer_truncated": 1870
+            },
+            {
+              "layer": "scaleShift 13×64",
+              "microseconds_integer_truncated": 279
+            },
+            {
+              "layer": "avgpool 8×8 13×8×8",
+              "microseconds_integer_truncated": 29
+            },
+            {
+              "layer": "linear 1×13→10",
+              "microseconds_integer_truncated": 12
+            },
+            {
+              "layer": "total",
+              "microseconds_integer_truncated": 12661
+            }
+          ],
+          "reported_total_microseconds": 12661,
+          "scope": "Layer+hash/touch observer; not pure kernel time or official model score"
+        }
+      ],
+      "typecheck": "ORIGINAL_VERIFYEXACT_TARGET_BUILD_PASS_NOT_INDEPENDENT_REPLAY_OR_AXIOM_AUDIT",
+      "complete": true,
+      "binary_sha256": "c1e13826828d176ddf63d4919d5c60054893455a17e38e7ea52236778c3eb7f0",
+      "static_c_metadata": {
+        "file": "shipped-c-metadata.json",
+        "sha256": "6d82826525f032cf444264bc50906536fb93497d938b2d63141b08a205a3e360",
+        "exported_bodies": 36
+      }
+    }
+  ],
+  "complete": true,
+  "commands": [
+    {
+      "label": "clone",
+      "argv": [
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "--no-checkout",
+        "--no-tags",
+        "https://github.com/conjectures-io/conjectures-optimisation-float-kernels.git",
+        "/home/runner/work/_temp/r24-readonly-upstream"
+      ],
+      "cwd": "/home/runner/work/Miner/Miner",
+      "timeout_seconds": 90,
+      "memory_cap_mb": null,
+      "exit_code": 0,
+      "seconds": 0.3149842909999876,
+      "log_sha256": "bfc80ab43718178811e49ad4477e64d7da49c4b42318be72d30325ad014b728b",
+      "log_bytes": 64,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "fetch",
+      "argv": [
+        "git",
+        "fetch",
+        "--depth",
+        "1",
+        "origin",
+        "accb82b6e2adeda1b41a57a260d68fb3879c427e"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 90,
+      "memory_cap_mb": null,
+      "exit_code": 0,
+      "seconds": 0.16449965900000052,
+      "log_sha256": "44e04feef37e78b54d841a4d18338244475e3b76c15f77bc342850e8d78d35e5",
+      "log_bytes": 154,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "checkout",
+      "argv": [
+        "git",
+        "checkout",
+        "--detach",
+        "accb82b6e2adeda1b41a57a260d68fb3879c427e"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 45,
+      "memory_cap_mb": null,
+      "exit_code": 0,
+      "seconds": 0.31495721599999627,
+      "log_sha256": "a29e76fa304ffa3e0e2552cb6e66765063d0b521eac620aa4ef0da2649b39d62",
+      "log_bytes": 95,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "reuse-dependencies-only",
+      "argv": [
+        "cp",
+        "-al",
+        "/home/runner/work/_temp/floatlib-upstream/lean/.lake/packages",
+        "/home/runner/work/_temp/r24-readonly-upstream/lean/.lake/packages"
+      ],
+      "cwd": "/home/runner/work/Miner/Miner",
+      "timeout_seconds": 180,
+      "memory_cap_mb": null,
+      "exit_code": 0,
+      "seconds": 3.9238466949999946,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "setup-benchmark-worker",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-3ba88e8709.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "bash",
+        "./setup.sh",
+        "--benchmark-worker"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 960,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 613.372269567,
+      "log_sha256": "7ffc16d8f0140f4a68d1de855b902cfa4ec04d314aa5f3f752e96b54a08fad10",
+      "log_bytes": 9710,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "setup-check",
+      "argv": [
+        "bash",
+        "./setup.sh",
+        "--check"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 90,
+      "memory_cap_mb": null,
+      "exit_code": 0,
+      "seconds": 0.03222982900001625,
+      "log_sha256": "d591d3ca6fbc20dd6c36a36faea9401710bc2b1a2fa96dfe17252ed2f3f6a6e3",
+      "log_bytes": 399,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "former2-build-original-targets",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-3532d2a200.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "/home/runner/.elan/bin/lake",
+        "build",
+        "VerifyExact",
+        "exactDev"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream/lean",
+      "timeout_seconds": 960,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 138.14843746099996,
+      "log_sha256": "9ee357fb0e196d50d0b82e5bcf246800ae61a0a9a170fd835d4b2955159e1847",
+      "log_bytes": 21313,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "former2-profile-nmlp",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-73649c364b.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "taskset",
+        "-c",
+        "0",
+        "/home/runner/work/_temp/r24-readonly-upstream/lean/.lake/build/bin/exactDev",
+        "profile",
+        "nmlp"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 180,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 0.11440886599996247,
+      "log_sha256": "a822a7baf0dd124803e5567eb1db9eb09d5c69924a3b673648468ae87bc2df7a",
+      "log_bytes": 181,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "former2-profile-mixer",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-0d664f1d9a.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "taskset",
+        "-c",
+        "0",
+        "/home/runner/work/_temp/r24-readonly-upstream/lean/.lake/build/bin/exactDev",
+        "profile",
+        "mixer"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 180,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 0.11441708999996081,
+      "log_sha256": "7f32323b3bda542ac950db9f95eafb5e7d8e0cc28617e2a56d2a78c152878dd4",
+      "log_bytes": 267,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "former2-profile-mlp",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-01d5a82da7.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "taskset",
+        "-c",
+        "0",
+        "/home/runner/work/_temp/r24-readonly-upstream/lean/.lake/build/bin/exactDev",
+        "profile",
+        "mlp"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 180,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 0.11452514899997368,
+      "log_sha256": "abb9442be01f3a2dff83ec7382229332a6e49c2c840a2bfc770fae92d969bfc6",
+      "log_bytes": 131,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "former2-profile-mnet",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-f4e9c2dd15.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "taskset",
+        "-c",
+        "0",
+        "/home/runner/work/_temp/r24-readonly-upstream/lean/.lake/build/bin/exactDev",
+        "profile",
+        "mnet"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 180,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 0.11447282199992515,
+      "log_sha256": "b2a5cb033aa4d9d579261177fdcbb7b5f6e2297a5e5971671c8e75a0a326a2d4",
+      "log_bytes": 459,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "former2-profile-cnn",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-ca9b0091db.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "taskset",
+        "-c",
+        "0",
+        "/home/runner/work/_temp/r24-readonly-upstream/lean/.lake/build/bin/exactDev",
+        "profile",
+        "cnn"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 180,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 0.1145808549999856,
+      "log_sha256": "c193e65163e6936996dc3a766d71ee73471ae3e9706288c6678724f8b2f8e0dd",
+      "log_bytes": 423,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "shipped-build-original-targets",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-38e3ed1d10.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "/home/runner/.elan/bin/lake",
+        "build",
+        "VerifyExact",
+        "exactDev"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream/lean",
+      "timeout_seconds": 960,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 27.98619941800007,
+      "log_sha256": "863226e566aa2d8cc84093418a9a7398d0dd49d41c4c1506eaef0a0e0e010c0c",
+      "log_bytes": 743,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "shipped-profile-nmlp",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-d8eb754275.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "taskset",
+        "-c",
+        "0",
+        "/home/runner/work/_temp/r24-readonly-upstream/lean/.lake/build/bin/exactDev",
+        "profile",
+        "nmlp"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 180,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 0.16481064499998865,
+      "log_sha256": "10cf232042e9500f50f13071daa27f1eb5b53b07be066a88736719e0ae874a27",
+      "log_bytes": 188,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "shipped-profile-mixer",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-3bcf8ed144.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "taskset",
+        "-c",
+        "0",
+        "/home/runner/work/_temp/r24-readonly-upstream/lean/.lake/build/bin/exactDev",
+        "profile",
+        "mixer"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 180,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 0.16467667599999913,
+      "log_sha256": "4df88bec8fbb7b9b768f28ef1bdee0edecd8539f1900c3700d8fb1950aeb5c8c",
+      "log_bytes": 276,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "shipped-profile-mlp",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-3b58cd90bc.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "taskset",
+        "-c",
+        "0",
+        "/home/runner/work/_temp/r24-readonly-upstream/lean/.lake/build/bin/exactDev",
+        "profile",
+        "mlp"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 180,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 0.16458898999997018,
+      "log_sha256": "1aa01bb92b70d7ae6caadf644c723463c9a9ed1bb89be1b9f93c199ae0a0233a",
+      "log_bytes": 135,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "shipped-profile-mnet",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-498bfd0491.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "taskset",
+        "-c",
+        "0",
+        "/home/runner/work/_temp/r24-readonly-upstream/lean/.lake/build/bin/exactDev",
+        "profile",
+        "mnet"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 180,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 0.16452583700004197,
+      "log_sha256": "2c85cb1051349d94925079c649ab0a1a92c7ad7e8ad215ae31f235cfb4dd9d02",
+      "log_bytes": 477,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    },
+    {
+      "label": "shipped-profile-cnn",
+      "argv": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--quiet",
+        "--unit",
+        "r24-ref-40786223288-5e6e4653a6.scope",
+        "-p",
+        "MemoryMax=4096M",
+        "-p",
+        "MemorySwapMax=0",
+        "taskset",
+        "-c",
+        "0",
+        "/home/runner/work/_temp/r24-readonly-upstream/lean/.lake/build/bin/exactDev",
+        "profile",
+        "cnn"
+      ],
+      "cwd": "/home/runner/work/_temp/r24-readonly-upstream",
+      "timeout_seconds": 180,
+      "memory_cap_mb": 4096,
+      "exit_code": 0,
+      "seconds": 0.16448018799997044,
+      "log_sha256": "edc805703e1198d2cdeef667565d18cb8635170beb4829dd726f7ef983fd1f86",
+      "log_bytes": 438,
+      "log_receipt": "FROZEN_COMMAND_LOG"
+    }
+  ],
+  "cache_scope": "Only pinned dependency package tree; own project build not reused",
+  "protected_source_hashes_before": {
+    "lean/lakefile.lean": "78e2eb89ea1cad84285469a65493fa4bb2af828bdc2ddf6822233460f820337b",
+    "lean/lake-manifest.json": "2d2896739b47158bb8d28ffe3303860ee58109bbaad95c9748dc18ccdd1438ad",
+    "lean/lean-toolchain": "8733782dc070a99b312039cda424f601b80f3be6f6f512627da5ba25adc27632",
+    "setup.sh": "777f6eb57a966aed22ef882db59e7a8dc6a9c8210b535e882851fba2617aa406",
+    "lean/contract/ContractExact.lean": "bddd6bd9caa19f9419e0e38cd553b109a7675fc710fdf82a6d6f7d0f2a4c8b1b",
+    "lean/contract/ContractTensor.lean": "65f31bc0d7793f0208465ca554486834b572a45c21c35772789551ac8a82a26c",
+    "lean/contract/ContractExactChecked.lean": "7eb84a0e8165da3d828530481665d346d0cf862e3eca30ddbe5b35eaeebf7d39",
+    "lean/contract/Contract.lean": "454d6ffe93f13b39e2dabdda5ead4a042dcd201bf025e79663ef711c1d63ee5b",
+    "lean/contract/ExactToolkit/Decode.lean": "0c7203b023d5544448da1b73f11b771d2806460d42b94eaa255afdc42a00ae06",
+    "lean/contract/ExactToolkit/StableNorm.lean": "e0dc4989c80b2aa6661c345183ff41298a4ac0d331666fd002bf58e3ac6eed81",
+    "lean/contract/ExactToolkit/ModelProofs.lean": "d2fcda927bab68acbfe816929a9ae6fd56522cb1a5c6a3d6da0a89acfe1a05ee",
+    "lean/contract/ExactToolkit/SqrtProof.lean": "5ff8f9755a578ba9260ee8535b79dd102f01d8e405cdbd1cbc9ddffc9cb979a9",
+    "lean/contract/ExactToolkit/Values.lean": "34e5482fa27a4a2cd33e86ffdbcac02916e59306f12a441cb659273dc633da0f",
+    "lean/contract/ExactToolkit/Limbs.lean": "50c78dd60755137d7fdf48615e72ac25561c7b7a578264bcdf22b166c67da008",
+    "lean/contract/ExactToolkit/TensorProofs.lean": "6f5cb15103542b5043ea529947cf8a7c51157d6de975854dddec37f2234fc447",
+    "lean/contract/ExactToolkit/Congr.lean": "a29aabd2776deefe2e3a67bad9718d9c5df4c7e68aba3380f7021f3d02f9f7bb",
+    "lean/contract/ExactToolkit/Round.lean": "9097c68e8ea5fbc5613fe3131447dbb135052938b65f03bf2509e66f07a8a5a3",
+    "lean/bench/MainDiv.lean": "68cb6dc56c5b8714cb6689839ad3b23ecd5b192c1fcc165d9db3680ada629e3f",
+    "lean/bench/MainMul.lean": "3c8657f740ff53ff35262ae016307f9df60970f2242dc486375e4dbb3c3d2c6b",
+    "lean/bench/Micro.lean": "905f5c2562d5c389456b9a52f60cda2562a7b5a33a02f3ac43b468017da7f02a",
+    "lean/bench/BenchBmm.lean": "646c471678d9d4e1c99e8fe5735920b5f21371e642e0a4e6af0dac5f9d4deb9e",
+    "lean/bench/BenchDivSqrt.lean": "a39897ad6cfe4278be2e9874552af3c0b0a822798841f5a5f7346cff54a0a782",
+    "lean/bench/ExactSuite.lean": "99574dc2925d7db5cba56c4452cc1fc9b6fa27625e9ba81fde9f9b74db147530",
+    "lean/bench/Main.lean": "048db0652dc016daed115f388e2b529a163af0111d3df4aa08f0f075b8b1ca1f",
+    "lean/bench/Bench.lean": "e4552e256c7cd238826895741fb8b3a4d2d7d5bffe4c178daeff029096249e6b",
+    "lean/bench/ExactDev.lean": "f6aaf92caf352e0c5232f07993a91d1fc9d7848f162bc7e87c77f66bdbf9d888",
+    "lean/bench/MainExact.lean": "b324bad32bc4ce449eb69be00e252163b77de4a0295736debe4081b53c4681ab",
+    "lean/bench/MainFma.lean": "e147cb6a169116a84f5b59212cd096392fd79f2e4cf6e5236829efc89d1d88bb",
+    "lean/bench/BenchFull.lean": "033fdbe9b365fd5a7e9c595dd8f4f8d5bf8ba99d404eea7c8d2de8b2e9ce44d5",
+    "lean/bench/MainSum.lean": "8f1dd46150c8608a3091918a1305d9c674263b9bff924668833b10a6737aa9d7",
+    "lean/bench/MainFull.lean": "2554b9717191d3828389c6cbb3ba58a61a2f7b7d42ab7c225a67ed9db47c8da4",
+    "lean/bench/BenchTensor.lean": "bc02b959400fca18d557eb10c061b90f4320a2dcc062184432228fc7716f7db6",
+    "lean/bench/MainBmm.lean": "ae523f4c302120aa0f4e4c6440d9daddf357e92ae149bb3d297b83f2ad35c7d2",
+    "lean/bench/MainSqrt.lean": "b97bdd52f9f09245f5317a7d9981c0382e1f1a29e9a99dcf5174f6423712b7ff"
+  },
+  "cpuinfo_sha256": "d0411789ac258a734e8b6fe02791aaf5966d7083c79a3a1072d7ab697fb6559e",
+  "available_cpus": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "profile_cpu": 0,
+  "former2_download": {
+    "at_utc": "2026-10-28T23:28:36.203213+00:00",
+    "url": "https://conjectures.io/v1/competitions/torchlean/submissions/2/source",
+    "http_status": 200,
+    "bytes_read": 254884,
+    "sha256": "cea4422fb6d3bd613b306127e7017331560875ddb840a7f2e174f6c03bdb480f",
+    "content_type": "text/plain; charset=utf-8",
+    "raw_source_export": "EXCLUDED_REUSE_LICENSE_UNKNOWN"
+  },
+  "protected_source_hashes_after": {
+    "lean/lakefile.lean": "78e2eb89ea1cad84285469a65493fa4bb2af828bdc2ddf6822233460f820337b",
+    "lean/lake-manifest.json": "2d2896739b47158bb8d28ffe3303860ee58109bbaad95c9748dc18ccdd1438ad",
+    "lean/lean-toolchain": "8733782dc070a99b312039cda424f601b80f3be6f6f512627da5ba25adc27632",
+    "setup.sh": "777f6eb57a966aed22ef882db59e7a8dc6a9c8210b535e882851fba2617aa406",
+    "lean/contract/ContractExact.lean": "bddd6bd9caa19f9419e0e38cd553b109a7675fc710fdf82a6d6f7d0f2a4c8b1b",
+    "lean/contract/ContractTensor.lean": "65f31bc0d7793f0208465ca554486834b572a45c21c35772789551ac8a82a26c",
+    "lean/contract/ContractExactChecked.lean": "7eb84a0e8165da3d828530481665d346d0cf862e3eca30ddbe5b35eaeebf7d39",
+    "lean/contract/Contract.lean": "454d6ffe93f13b39e2dabdda5ead4a042dcd201bf025e79663ef711c1d63ee5b",
+    "lean/contract/ExactToolkit/Decode.lean": "0c7203b023d5544448da1b73f11b771d2806460d42b94eaa255afdc42a00ae06",
+    "lean/contract/ExactToolkit/StableNorm.lean": "e0dc4989c80b2aa6661c345183ff41298a4ac0d331666fd002bf58e3ac6eed81",
+    "lean/contract/ExactToolkit/ModelProofs.lean": "d2fcda927bab68acbfe816929a9ae6fd56522cb1a5c6a3d6da0a89acfe1a05ee",
+    "lean/contract/ExactToolkit/SqrtProof.lean": "5ff8f9755a578ba9260ee8535b79dd102f01d8e405cdbd1cbc9ddffc9cb979a9",
+    "lean/contract/ExactToolkit/Values.lean": "34e5482fa27a4a2cd33e86ffdbcac02916e59306f12a441cb659273dc633da0f",
+    "lean/contract/ExactToolkit/Limbs.lean": "50c78dd60755137d7fdf48615e72ac25561c7b7a578264bcdf22b166c67da008",
+    "lean/contract/ExactToolkit/TensorProofs.lean": "6f5cb15103542b5043ea529947cf8a7c51157d6de975854dddec37f2234fc447",
+    "lean/contract/ExactToolkit/Congr.lean": "a29aabd2776deefe2e3a67bad9718d9c5df4c7e68aba3380f7021f3d02f9f7bb",
+    "lean/contract/ExactToolkit/Round.lean": "9097c68e8ea5fbc5613fe3131447dbb135052938b65f03bf2509e66f07a8a5a3",
+    "lean/bench/MainDiv.lean": "68cb6dc56c5b8714cb6689839ad3b23ecd5b192c1fcc165d9db3680ada629e3f",
+    "lean/bench/MainMul.lean": "3c8657f740ff53ff35262ae016307f9df60970f2242dc486375e4dbb3c3d2c6b",
+    "lean/bench/Micro.lean": "905f5c2562d5c389456b9a52f60cda2562a7b5a33a02f3ac43b468017da7f02a",
+    "lean/bench/BenchBmm.lean": "646c471678d9d4e1c99e8fe5735920b5f21371e642e0a4e6af0dac5f9d4deb9e",
+    "lean/bench/BenchDivSqrt.lean": "a39897ad6cfe4278be2e9874552af3c0b0a822798841f5a5f7346cff54a0a782",
+    "lean/bench/ExactSuite.lean": "99574dc2925d7db5cba56c4452cc1fc9b6fa27625e9ba81fde9f9b74db147530",
+    "lean/bench/Main.lean": "048db0652dc016daed115f388e2b529a163af0111d3df4aa08f0f075b8b1ca1f",
+    "lean/bench/Bench.lean": "e4552e256c7cd238826895741fb8b3a4d2d7d5bffe4c178daeff029096249e6b",
+    "lean/bench/ExactDev.lean": "f6aaf92caf352e0c5232f07993a91d1fc9d7848f162bc7e87c77f66bdbf9d888",
+    "lean/bench/MainExact.lean": "b324bad32bc4ce449eb69be00e252163b77de4a0295736debe4081b53c4681ab",
+    "lean/bench/MainFma.lean": "e147cb6a169116a84f5b59212cd096392fd79f2e4cf6e5236829efc89d1d88bb",
+    "lean/bench/BenchFull.lean": "033fdbe9b365fd5a7e9c595dd8f4f8d5bf8ba99d404eea7c8d2de8b2e9ce44d5",
+    "lean/bench/MainSum.lean": "8f1dd46150c8608a3091918a1305d9c674263b9bff924668833b10a6737aa9d7",
+    "lean/bench/MainFull.lean": "2554b9717191d3828389c6cbb3ba58a61a2f7b7d42ab7c225a67ed9db47c8da4",
+    "lean/bench/BenchTensor.lean": "bc02b959400fca18d557eb10c061b90f4320a2dcc062184432228fc7716f7db6",
+    "lean/bench/MainBmm.lean": "ae523f4c302120aa0f4e4c6440d9daddf357e92ae149bb3d297b83f2ad35c7d2",
+    "lean/bench/MainSqrt.lean": "b97bdd52f9f09245f5317a7d9981c0382e1f1a29e9a99dcf5174f6423712b7ff"
+  },
+  "protected_upstream_unchanged": true,
+  "elapsed_seconds": 786.808181781,
+  "finished_at_utc": "2026-10-28T23:31:24.440293+00:00"
+}

@@ -1,0 +1,11 @@
+# Prepared word block16: actual interface and falsifier
+
+This is a different route from normalization division. Native research candidate252115B/14ab9f4f uses the existing source23 prepared input P/I and its scalar product callback. It changes only rows1 prepared dense dots; every other entry routes to the existing implementation. No new metadata scan or factor32 cache is introduced.
+
+The new per-dot guard is sumspan<=11, rather than the original15. A nonzero decoded mantissa has fewer than24bits, so existing metadata must establish each shifted product magnitude<2^(48+11)=2^59. Any16 terms then have total absolute mass<2^63. The fixed16 UInt64 sum is therefore its exact signed64 value, and QhiS can merge that sum into the original128 accumulator once. The remaining terms, bias insertion and final rounding use the original QY6G/YL/YD endpoint. Zero uses its original sentinel/fallback.
+
+The guard cannot become12. `block16-model.json` includes a concrete term of1152921367167897600, a16-term positive sum18446741874686361600, and signed low64 value-2199023190016. This is a generic integer witness, not a full Float32 kernel counterexample.228 finite signed/carry cases covering79308 terms passed; no original gate or native timing was run locally.
+
+Accepted WordMod3's `add_represents64`, `mul_represents64` and `signed64_unique` can prove an arbitrary UInt64 product/sum endpoint. Its existing `block_exact` theorem assumes two sign-extended UInt32 factors; it does **not** directly cover this candidate, since a prepared coefficient may have35bits. Do not claim inherited block correctness. Actual required interfaces are the source23 prepared-product bound from QPa guard, unrolled16 sum modulo64, signed uniqueness under the mass bound, equivalence of sourceQhiS and the128 carry model, and final original endpoint equality. All remain unconnected for this exact source.
+
+First falsifier: compile the small provider and full actual source, then collect complete paired MLP/NMLP model costs and checksums on one public runner. Fixed16 unrolling avoids introducing a Nat fuel operation per MAC; instruction-cache growth, callback specialization and carry savings still need measurement. If complete model cost is insufficient, retain the finite witness and stop costly endpoint proof work. NativeOnly and all12 acceptance remain separate.

@@ -4,7 +4,22 @@ Replay stops at statement compilation and is never an acceptance result.
 The original upstream files and original verdict remain unchanged.
 """
 from pathlib import Path
-import argparse,json,os,signal,subprocess,sys,time
+
+def r24_statement_replay_timeout(name, compile_only, kernel, candidates):
+    """Honor the reviewed R24 600s statement diagnostic; never extend a gate."""
+    if not compile_only or not name.startswith('f01-r24-'):
+        return None
+    path = Path(candidates) / name / 'manifest.json'
+    if not path.is_file():
+        return None
+    request = json.loads(path.read_bytes())
+    if (request.get('candidate') == name and request.get('diagnostic_only') is True
+            and request.get('validation_mode') == 'statement-only'
+            and request.get('diagnostic_timeout_seconds') == 600
+            and request.get('candidate_sha256') == hashlib.sha256(Path(kernel).read_bytes()).hexdigest()):
+        return 590
+    return None
+import argparse,hashlib,json,os,signal,subprocess,sys,time
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--upstream',type=Path,required=True);ap.add_argument('--kernel',type=Path,required=True);ap.add_argument('--reports',type=Path,required=True);ap.add_argument('--name',required=True);ap.add_argument('--verdict',type=Path,required=True);ap.add_argument('--compile-only',action='store_true');a=ap.parse_args()
@@ -88,6 +103,22 @@ def statement(src,verdict):
                     and (name.startswith('lp_competition_Submission_R19Column4Temporal_')
                          or (name.startswith('lp_competition_Fin_foldl_loop_') and 'R19Column4Temporal' in name))
                     and any(part in name for part in ('loop','runDot','pack'))]
+                names += [name for name in new_core_functions if name not in names and 'boxed' not in name
+                    and name.startswith(('lp_competition_Submission_R20TerminalPair_',
+                                         'lp_competition_Submission_R20RowBroadcast_'))
+                    and any(part in name for part in ('loop', 'runDot', 'control', 'terminal', 'row8'))]
+                names += [name for name in new_core_functions if name not in names and 'boxed' not in name
+                    and name.startswith('lp_competition_Submission_R21StreamingPair_')
+                    and any(part in name for part in ('loop', 'advance', 'updateCell', 'streamed', 'control'))]
+                names += [name for name in new_core_functions if name not in names and 'boxed' not in name
+                    and name.startswith('lp_competition_Submission_R21ScaledU32_')
+                    and any(part in name for part in ('normalCore', 'guardedMul', 'diagnosticEntry'))]
+                names += [name for name in new_core_functions if name not in names and 'boxed' not in name
+                    and any(part in name for part in ('R22StreamingQuad', 'R22PreparedQuad', 'R22Pair8', 'R22Resident8', 'R22Resident16', 'R22IndexedResident8', 'R22OutlineMul', 'R22WordCarry', 'R22NativeProductScale', 'R22NativeCold', 'R22ExtremeNativeCold', 'R22FarOnlyAdd', 'R22Log2SourceProbe', 'R22BroadWordAdd', 'R22FloatProduct', 'R22SameExponent'))
+                    and any(part in name for part in ('loop', 'advance', 'update', 'rows4', 'guarded', 'normalCore', 'core', 'diagnosticEntry', 'retainedMul', 'packRow', 'packB', 'packA', 'tile', 'wordLoop', 'runDot', 'word32', 'word64', 'hotMul', 'inlineMul', 'coldMul', 'coldAdd', 'endpointMiss'))]
+                names += [name for name in new_core_functions if name not in names and 'boxed' not in name
+                    and 'R22FlatScale' in name
+                    and any(part in name for part in ('pick', 'lookup', 'convert', 'add', 'mul', 'nativeMul'))]
             for symbol in names:
                 result=optional_object_tool(['objdump','-dr','--no-show-raw-insn','-Mintel','--disassemble='+symbol,str(path)],data,capture_output=True,timeout=15)
                 if result is None:
@@ -114,14 +145,78 @@ def statement(src,verdict):
             adapter=profiler.parent.parent/research_dir/'public-suite.py'
             if kernel.parent.name=='f01-d7-public-suite':
                 request=json.loads((profiler.parent.parent/'f01-d7-public-suite/suite-plan.json').read_bytes())
-                if request.get('profile_current'):
+                if request.get('r24_cost_diagnostic'):
+                    assert not request.get('profile_current') and not request.get('confirmation_candidates')
+                    adapter=profiler.parent.parent/research_dir/'round7h-20261028T203856Z/development-cost-suite.py'
+                elif request.get('r22_cost_diagnostic'):
+                    assert not request.get('profile_current') and not request.get('confirmation_candidates')
+                    adapter=profiler.parent.parent/research_dir/'round6h-20261027T211247Z/development-cost-suite.py'
+                elif request.get('profile_current'):
                     adapter=profiler.parent.parent/research_dir/'round2h-20261023T170031Z/profile-wrapper.py'
             ps=importlib.util.spec_from_file_location('current_public_suite',adapter)
             pm=importlib.util.module_from_spec(ps);ps.loader.exec_module(pm)
             pm.run(g,kernel,out)
     return reason
 g.STAGES=[('intake',g.intake),('policy',g.policy),('statement',statement)]
-if kernel.parent.name == 'f01-r16-dev-u32-roundtrip-probe1':
+if kernel.parent.name.startswith(('f01-r23-', 'f01-r24-')):
+    manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
+    helper_manifest=json.loads(manifest_path.read_bytes())
+    if helper_manifest.get('helper_audit_module_sha256'):
+        helper_relative=Path(helper_manifest['helper_audit_module_path'])
+        assert not helper_relative.is_absolute() and '..' not in helper_relative.parts
+        helper_path=(profiler.parent.parent/helper_relative).resolve()
+        round_dir='round7h-20261028T203856Z' if kernel.parent.name.startswith('f01-r24-') else 'round40m-20261028T142626Z'
+        allowed_root=(profiler.parent.parent/'f01-d7-research'/round_dir).resolve()
+        legacy=(profiler.parent.parent/'f01-d7-research/round9h-20261026T194639Z/development-helper-audit-v8.py').resolve()
+        assert helper_path.is_relative_to(allowed_root) or helper_path==legacy
+        assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
+        hs=importlib.util.spec_from_file_location('r23_explicit_diagnostic_audit',helper_path)
+        hm=importlib.util.module_from_spec(hs);hs.loader.exec_module(hm)
+        g.STAGES += hm.stages(g,kernel,out,helper_manifest)
+elif kernel.parent.name.startswith('f01-r22-'):
+    manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
+    helper_manifest=json.loads(manifest_path.read_bytes())
+    if helper_manifest.get('helper_audit_module_sha256'):
+        helper_name=helper_manifest['helper_audit_module']
+        if kernel.parent.name in ('f01-r22-dev-runtime-cost1', 'f01-r22-dev-runtime-cost2', 'f01-r22-dev-runtime-cost3', 'f01-r22-dev-flat-scale-cost1', 'f01-r22-dev-flat-scale-cost2', 'f01-r22-dev-pair8-cost1', 'f01-r22-dev-resident8-cost1', 'f01-r22-dev-broadword-cost1', 'f01-r22-dev-multistatic-cost1', 'f01-r22-dev-farstatic-cost1', 'f01-r22-dev-nativecold-cost1', 'f01-r22-dev-indexed8-cost1', 'f01-r22-dev-outline-isolation1', 'f01-r22-dev-wordcarry-cost1', 'f01-r22-dev-nat-prefix1', 'f01-r22-dev-nat-bias-repair1', 'f01-r22-dev-endpoint-cost1', 'f01-r22-dev-nat-light-repair1'):
+            assert helper_name == {'f01-r22-dev-runtime-cost1':'development-cost-audit.py',
+                                   'f01-r22-dev-runtime-cost2':'development-cost2-audit.py',
+                                   'f01-r22-dev-runtime-cost3':'development-cost3-audit.py',
+                                   'f01-r22-dev-flat-scale-cost1':'development-flat-cost-audit.py',
+                                   'f01-r22-dev-flat-scale-cost2':'development-flat-cost2-audit.py',
+                                   'f01-r22-dev-pair8-cost1':'development-pair8-cost-audit.py',
+                                   'f01-r22-dev-resident8-cost1':'development-resident8-cost-audit.py',
+                                   'f01-r22-dev-broadword-cost1':'development-broadword-cost-audit.py',
+                                   'f01-r22-dev-multistatic-cost1':'development-multistatic-cost-audit.py',
+                                   'f01-r22-dev-farstatic-cost1':'development-farstatic-cost-audit.py',
+                                   'f01-r22-dev-nativecold-cost1':'development-nativecold-cost-audit.py',
+                                   'f01-r22-dev-indexed8-cost1':'development-indexed8-cost-audit.py',
+                                   'f01-r22-dev-outline-isolation1':'development-outline-isolation-audit.py',
+                                   'f01-r22-dev-wordcarry-cost1':'development-wordcarry-cost-audit.py',
+                                   'f01-r22-dev-nat-prefix1':'development-nat-prefix-audit.py',
+                                   'f01-r22-dev-nat-bias-repair1':'development-nat-bias-repair-audit.py',
+                                   'f01-r22-dev-endpoint-cost1':'development-endpoint-cost-audit.py',
+                                   'f01-r22-dev-nat-light-repair1':'development-nat-light-repair-audit.py'}[kernel.parent.name]
+            helper_path=profiler.parent.parent/'f01-d7-research/round6h-20261027T211247Z'/helper_name
+        else:
+            assert helper_name == 'development-helper-audit-v8.py'
+            helper_path=profiler.parent.parent/'f01-d7-research/round9h-20261026T194639Z'/helper_name
+        assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
+        hs=importlib.util.spec_from_file_location('r22_explicit_diagnostic_audit',helper_path)
+        hm=importlib.util.module_from_spec(hs);hs.loader.exec_module(hm)
+        g.STAGES += hm.stages(g,kernel,out,helper_manifest)
+elif kernel.parent.name.startswith(('f01-r20-', 'f01-r21-')):
+    manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
+    helper_manifest=json.loads(manifest_path.read_bytes())
+    if helper_manifest.get('helper_audit_module_sha256'):
+        helper_name='development-helper-audit-v8.py'
+        assert helper_manifest['helper_audit_module']==helper_name
+        helper_path=profiler.parent.parent/'f01-d7-research/round9h-20261026T194639Z'/helper_name
+        assert hashlib.sha256(helper_path.read_bytes()).hexdigest()==helper_manifest['helper_audit_module_sha256']
+        hs=importlib.util.spec_from_file_location('r20_explicit_math_helper_audit',helper_path)
+        hm=importlib.util.module_from_spec(hs);hs.loader.exec_module(hm)
+        g.STAGES += hm.stages(g,kernel,out,helper_manifest)
+elif kernel.parent.name == 'f01-r16-dev-u32-roundtrip-probe1':
     manifest_path=profiler.parent.parent/kernel.parent.name/'manifest.json'
     helper_manifest=json.loads(manifest_path.read_bytes())
     helper_path=profiler.parent.parent/'f01-d7-research/round3h-20261025T091810Z/development-helper-audit.py'
@@ -165,7 +260,11 @@ sys.exit(0 if verdict.passed else 1)
             try:
                 profiler=Path(__file__).resolve().parent.parent/'f01-d5-costsplit/profile-native.py'
                 p=subprocess.Popen([str(a.upstream/'.venv/bin/python'),'-c',code,str(a.upstream),str(a.kernel),str(out),str(profiler)],cwd=a.upstream,env=os.environ.copy(),stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
-                replay_timeout=1800 if a.name=='f01-d13-cost-profile' else 2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 580 if a.name in ('f01-r19-dev-runtime-cost1', 'f01-r19-dev-add-cost1') else 170 if a.name=='f01-r19-dev-math-outlet-isolation1' else 120
+                replay_timeout=1800 if a.name=='f01-d13-cost-profile' else 2400 if a.name in ('f01-d6-public-suite','f01-d7-public-suite') else 580 if a.name in ('f01-r19-dev-runtime-cost1', 'f01-r19-dev-add-cost1', 'f01-r22-dev-runtime-cost1', 'f01-r22-dev-runtime-cost2', 'f01-r22-dev-runtime-cost3', 'f01-r22-dev-flat-scale-cost1', 'f01-r22-dev-flat-scale-cost2', 'f01-r22-dev-pair8-cost1', 'f01-r22-dev-resident8-cost1', 'f01-r22-dev-broadword-cost1', 'f01-r22-dev-multistatic-cost1', 'f01-r22-dev-farstatic-cost1', 'f01-r22-dev-nativecold-cost1', 'f01-r22-dev-indexed8-cost1', 'f01-r22-dev-outline-isolation1', 'f01-r22-dev-wordcarry-cost1', 'f01-r22-dev-nat-prefix1', 'f01-r22-dev-nat-bias-repair1', 'f01-r22-dev-endpoint-cost1', 'f01-r22-dev-nat-light-repair1') else 240 if a.name.startswith('f01-r22-') else 170 if a.name=='f01-r19-dev-math-outlet-isolation1' else 120
+                r24_timeout=r24_statement_replay_timeout(a.name,a.compile_only,a.kernel,profiler.parent.parent)
+                if r24_timeout is not None:
+                    replay_timeout=r24_timeout
+                    report['r24_statement_timeout']={'seconds':replay_timeout,'manifest_sha256':hashlib.sha256((profiler.parent.parent/a.name/'manifest.json').read_bytes()).hexdigest(),'scope':'Reviewed600s statement diagnostic only; original gate/adoption timeouts unchanged'}
                 report['replay_exit_code']=p.wait(timeout=replay_timeout)
             except subprocess.TimeoutExpired:
                 os.killpg(p.pid,signal.SIGKILL);p.wait();report['replay']=f'diagnostic-only replay process group timed out at {replay_timeout}s'

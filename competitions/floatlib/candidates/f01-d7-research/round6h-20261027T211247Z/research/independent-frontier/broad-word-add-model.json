@@ -1,0 +1,100 @@
+{
+  "at_utc": "2026-10-27T23:02:16.780569+00:00",
+  "status": "PASS_FIXED_DIRECTED_INTEGER_ORACLE_ONLY",
+  "cases": 6480,
+  "differences": 0,
+  "branch_counts": {
+    "far": 1920,
+    "leading_carry": 2196,
+    "RNE_carry": 212,
+    "early_overflow": 258,
+    "ties": 880
+  },
+  "witnesses": {
+    "rounding": {
+      "u": "3fffffff",
+      "v": "33800000",
+      "result": "40000000",
+      "far": false,
+      "carry": 0,
+      "rne_carry": 1,
+      "early_overflow": false,
+      "tie": true
+    },
+    "tie": {
+      "u": "3fffffff",
+      "v": "33800000",
+      "result": "40000000",
+      "far": false,
+      "carry": 0,
+      "rne_carry": 1,
+      "early_overflow": false,
+      "tie": true
+    },
+    "overflow": {
+      "u": "7f7fffff",
+      "v": "73000000",
+      "result": "7f800000",
+      "far": false,
+      "carry": 0,
+      "rne_carry": 1,
+      "early_overflow": false,
+      "tie": true
+    },
+    "leading": {
+      "u": "3f800000",
+      "v": "3f800001",
+      "result": "40000000",
+      "far": false,
+      "carry": 1,
+      "rne_carry": 0,
+      "early_overflow": false,
+      "tie": true
+    },
+    "far": {
+      "u": "3fffffff",
+      "v": "337fffff",
+      "result": "3fffffff",
+      "far": true,
+      "carry": 0,
+      "rne_carry": 0
+    }
+  },
+  "rejected_guard_examples": [
+    [
+      "00000000",
+      "3f800000"
+    ],
+    [
+      "80000000",
+      "80000000"
+    ],
+    [
+      "00000001",
+      "00800000"
+    ],
+    [
+      "007fffff",
+      "007fffff"
+    ],
+    [
+      "7f800000",
+      "7f800000"
+    ],
+    [
+      "7fc00001",
+      "3f800000"
+    ],
+    [
+      "3f800000",
+      "bf800000"
+    ]
+  ],
+  "trace_sha256": "2f1e4b9d034030293eda9ac1d21a5b9166ae9f66858937a07126029176ccf5a1",
+  "runtime_sha256": "5655df5c8a8fbfbf40101bba782788d4a59ee716a95ab8e2bd58bff05e715bf9",
+  "runtime_bytes": 1467,
+  "script_sha256": "4e89556009034ec2130dd39d1c1265415dd90925f876c94f7207de16ea7ce35c",
+  "oracle_module_sha256": "b97a136a25b4fe8da8a8bf0789a0e15743de5708a7685f2a1a3882ef89531feb",
+  "elapsed_seconds": 0.029393099999651895,
+  "limitations": "First finite integer oracle only. Directed fixed fractions/exponents/gaps, no random trials. Rejects preserve B2 by source; no new all-input theorem, Lean/compiler run, actual host Float32 comparison or performance."
+}

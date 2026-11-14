@@ -1,0 +1,52 @@
+{
+  "at_utc": "2026-10-30T19:41:53.830798+00:00",
+  "state": "MINIMAL_TYPED_SOURCE_REPAIR_REBUILD_SCOPE_PASS_NOT_COMPILED",
+  "old_sha256": "5ecfdd8cd0073e37185d4f88126db886372429b10efb429f84210710557afe5d",
+  "candidate_sha256": "17befe6a4afb7dac0dc19090970812b1890d147154932f610f015b6dd1b0d044",
+  "bytes": 245601,
+  "recipe_sha256": "1bfedefc523e59189c1283908de284014b28a1bae38707ff421f163164388814",
+  "exact_diff_lines": [
+    "- rw[E1 _ _ _ (by decide) (by rw[Za _ hk32];exact hk) _ _ hn]",
+    "+ rw[E1 _ _ _ (by simp) (by rw[Za _ hk32];exact hk) _ _ hn]",
+    "-   (h0+(0-(p>>>63))+(if m<l0 then 1 else 0)) m",
+    "-   (h1+(0-(q>>>63))+(if z<l1 then 1 else 0)) z (k+1)",
+    "+   (h0+((0:UInt64)-(p>>>63))+(if m<l0 then (1:UInt64) else 0)) m",
+    "+   (h1+((0:UInt64)-(q>>>63))+(if z<l1 then (1:UInt64) else 0)) z (k+1)",
+    "-  let BX:=Array.ofFn (n:=hw) (fun p=>r28PixScan x hw p.val k 0 0x01FF0000)",
+    "+  let BX:Array UInt32:=Array.ofFn (n:=hw) (fun p=>r28PixScan x hw p.val k 0 0x01FF0000)",
+    "-  let BW:=Array.ofFn (n:=C) (fun o=>Yc w k o.val)",
+    "+  let BW:Array UInt32:=Array.ofFn (n:=C) (fun o=>Yc w k o.val)",
+    "-    if Yf b[o]! == 0 then m else min m ((Yd oneW+Yd b[o]!)-Yk (BW[o]!>>>16))) 510",
+    "-   let MS:=BX.map (fun v=>(min (Yk (v>>>16)) cap).toNat)",
+    "+    if Yf b[o]! == 0 then m else min m ((Yd oneW+Yd b[o]!)-Yk ((BW[o]! : UInt32)>>>16))) 510",
+    "+   let MS:Array Nat:=BX.map (fun (v:UInt32)=>(min (Yk (v>>>16)) cap).toNat)",
+    "+     dsimp only[W]",
+    "-     qCtx1 (mm+Yk (BW[o]!>>>16)) b[o]!)",
+    "+     qCtx1 (mm+Yk ((BW[o]! : UInt32)>>>16)) b[o]!)",
+    "-      let B:=mm+Yk (BW[o.toNat]!>>>16)",
+    "+      let B:=mm+Yk ((BW[o.toNat]! : UInt32)>>>16)",
+    "-       let D:=mm+Yk (BW[o.toNat+1]!>>>16)",
+    "+       let D:=mm+Yk ((BW[o.toNat+1]! : UInt32)>>>16)",
+    "-       let empty:=BX[p]!>>>16==511",
+    "-       let fast:=(empty || Yk (BX[p]!&&&0xFFFF)-mm+YU BW[o.toNat]!<=15) &&",
+    "-        (empty || Yk (BX[p]!&&&0xFFFF)-mm+YU BW[o.toNat+1]!<=15)",
+    "+       let empty:=((BX[p]! : UInt32)>>>16)==511",
+    "+       let fast:=(empty || Yk ((BX[p]! : UInt32)&&&0xFFFF)-mm+YU BW[o.toNat]!<=15) &&",
+    "+        (empty || Yk ((BX[p]! : UInt32)&&&0xFFFF)-mm+YU BW[o.toNat+1]!<=15)"
+  ],
+  "assessment": [
+    "ClosedUSizeone usesknownNatconversionlemma; no new numericprecondition",
+    "Signedhigh zero constants explicitlyUInt64, matching wordmodel; do not clampnegativeMathtoNat",
+    "BW/BX elementtypeexplicitUInt32 andtypedmapper/result; shift/Yk retainUInt32/UInt64 semantics",
+    "LocalW unfolded only insideits sizeproof beforeoriginalB7",
+    "No arithmeticthreshold15, scalar/pairedlayout, global/localguard, biascap, fallback, zero provenance or cacheintervalchanged",
+    "Onlyownedtypedhelpertext/proof changes; oldbaseline and source5ecf preserved",
+    "No newSubmission.correct; originalpointwise5ecf hadbuildfailureandno candidate time"
+  ],
+  "remaining": [
+    "ActualLean/nativecost",
+    "Fullproducer/loop/all12proof",
+    "Proof-restoredsourcebytes",
+    "Freshindependentconfirmation"
+  ]
+}

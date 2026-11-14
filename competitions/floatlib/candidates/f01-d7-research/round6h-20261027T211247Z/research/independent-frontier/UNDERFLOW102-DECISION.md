@@ -1,0 +1,25 @@
+# UnderflowZero expansion: PARK, no new implementation
+
+The fifteen-minute prerequisite stage started22:01:36 UTC, deadline22:16:36 within the common window. It completed the three exposed-plan scans and finite new-witness checks before the deadline. No threshold sweep, new Lean proof, candidate, CI or public-input change.
+
+**Main finding:** widening the retained whole-array `E<=43` rule to both`E<=51`, max effective-exponent sum102, or max raw-exponent sum102 adds **zero whole-matrix cases in all three plans**. At the same row/column summary granularity, widening the mathematical domain adds0/0/7 outputs; the symmetric51 domain adds0/0/2. The seven outputs are all in third draw `bmm:dense:1` (batch650,m3,n2,p9), so only14 further MACs can disappear. This does not support a roughly10% whole target.
+
+| Exposed B2 run | Complete A+B words | Old43 short-circuit reads | Fixed51 reads | Effective102 max-scan reads | New whole cases | New row/col outputs from effective102 over43 |
+|---|---:|---:|---:|---:|---:|---:|
+|40168687803|2890628|341242|341249|576235|0|0|
+|40169957447|2307906|14335|14335|58437|0|0|
+|40171180249|2928022|90457|90458|90459|0|7|
+
+Every word in all34 timed BMM cases per draw was summarized, not a prefix. Full scans ran sequentially in8.83/6.88/9.65 seconds with individual25-second external limits. Source-derived A/B byte hashes are in each receipt. The official fixed `runBmm` uses exactly the role/index/row parameters inspected here. The existing Python transcription still lacks an independent actual Lean array comparison, so coverage remains SOURCE_MODEL evidence.
+
+**Separate the new architecture from a wider threshold.** Applying the old43 mathematics to individual row/column pairs would already certify41210/107950/8289 outputs outside the retained whole-array path. The widening changes only the seven outputs above. Old-domain row/column hits occur only in sparse/subnormal cells whose whole shares total5.79%/6.80%/6.96%. The third draw's seven widened hits touch a dense cell whose *entire* whole share is4.095%; adding that whole cell produces an11.05% coarse affected-cell ceiling, but attributing its complete time to seven of17550 outputs is unjustified. Eligible-subset elapsed cost is UNKNOWN. Additional finite all-zero row/column certificates are tracked separately and are not a consequence of the new underflow bound.
+
+**Summary cost is real.** A stand-alone row/column pass reads all2.89M/2.31M/2.93M words and records `batch*(m+p)` summaries, compared with the old early-stopping guard. Max-exp scanning increases old read counts without yielding a new whole hit. These are executed-transcription source counts, not machine timings. Fusing B summaries into existing preparation might avoid one separate pass, but would be a different implementation needing cost/proof; no such saving is assumed. Output fill, allocation, bookkeeping, failures and normal fallback also remain.
+
+**Exact boundary and E0 treatment (paper, not a new accepted zero theorem).** With `e_eff=max(e,1)`, `scale=e_eff-1`, finite mantissa is `<2^24`, so `P<2^48`. A product is `P*2^(scaleA+scaleB-298)`. Effective-exponent sum<=102 means scale sum<=100, hence magnitude strictly below2^-150, half minsub. Its individually rounded product is XOR-signed zero. For raw E0 the mantissa is `<2^23`; using this tighter width shows the older raw-exponent sum<=102 bound is also sound. Symmetric E<=51 is sufficient. Zero values retain their sign until the original +0-seeded add; each +/-zero product then leaves the accumulator+0. No tiny nonzero product is deleted.
+
+`underflow-expansion-witnesses.json` records all seven newly reached dots and their fourteen original-order operand pairs. Exact integer products are strictly below the corresponding half-minsub threshold. This is a finite check only. Existing counterexample at raw exponent sum103 (`19ffffff * 1a7fffff -> 00000001`) is retained; no threshold extension beyond the stated condition.
+
+**History/proof status.** R9 already recorded raw exponent sum102 and the103 counterexample, with zero whole hits on its exposed direct cases; paper only. R11's complete901/902/904 scan compared fixed43, max scale sum84 and100 and found no new whole cases, so dynamic max certification was parked. `f01-r6-web-lowguards` contains the accepted general24-bit mantissa product `<2^48` lemma; current B2's whole zero proof only consumes its stronger scale<=84 premise for arbitraryUInt64 product. The wider product-bound-to-RNE-zero bridge and summary-to-input transport have not been newly Lean-checked here. Existing scalar cutoff84/zero shortcuts do not establish the wider matrix implementation or speed.
+
+Decision: stop this expansion before candidate/proof construction. Receipts `underflow-summary-<run>.json`, `underflow-expansion-witnesses.json`, and `underflow-screen-verification.json` preserve counts, identities and limitations. Their raw metadata phrase35 timed cases is corrected by the verification receipt: there are34 timed cases plus one untimed check; original bytes retained. New whole gain remains UNKNOWN, not zero measured performance.

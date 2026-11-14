@@ -1,0 +1,96 @@
+{
+  "request_id": "R27-FP-002",
+  "updated_at_utc": "2026-10-29T19:50:57.982930+00:00",
+  "state": "READY_AFTER_FP001_THROUGHPUT",
+  "owner": "fp-proof",
+  "executor": "Droot",
+  "purpose": "Actual producer structural agreement and finite widening repairs; statement/axiom only, not gate/performance",
+  "candidates": [
+    {
+      "name": "FiniteWidenContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/producer-v1/FiniteWidenContractOnly.lean",
+      "bytes": 38493,
+      "sha256": "2f07e19355ab4eff8d91d081d9b1d9cd50f531a818f457e5d2a1556708587f64",
+      "helper_roots": [
+        "Submission.R25ActualWiden.actual_widenBits_eq",
+        "Submission.R24SubnormalWiden.subnormal_finite_value",
+        "Submission.R25FiniteWiden.finite_actual_value"
+      ],
+      "stage": 1,
+      "depends_on": []
+    },
+    {
+      "name": "PrepareCoreContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/producer-v1/PrepareCoreContractOnly.lean",
+      "bytes": 4432,
+      "sha256": "14034d10beed18b520bc6160140ae7bb15dd8640f1e656b14e90cb4971d7b9f4",
+      "helper_roots": [
+        "Submission.R25PrepareAgreement.prepare_eq_forIn",
+        "Submission.R25PrepareAgreement.prepare_eq_fold"
+      ],
+      "stage": 1,
+      "depends_on": []
+    },
+    {
+      "name": "PrepareAgreementContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/producer-v1/PrepareAgreementContractOnly.lean",
+      "bytes": 8110,
+      "sha256": "b0651de62eaae101d336fd19d5d4508fb0aecc7b76e818378445715d58f6c578",
+      "helper_roots": [
+        "Submission.R25PrepareAgreement.prepare_valid_rawfinite",
+        "Submission.R25PrepareAgreement.prepare_getter_interface"
+      ],
+      "stage": 2,
+      "depends_on": [
+        "PrepareCoreContractOnly"
+      ]
+    },
+    {
+      "name": "PreparePeakContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/producer-v1/PreparePeakContractOnly.lean",
+      "bytes": 13193,
+      "sha256": "db6213be28bf61f01e45f274427667a78961acfb3a638cdb9b8b9c82adf15227",
+      "helper_roots": [
+        "Submission.R26PreparePeak.prepare_peak_bound",
+        "Submission.R26PreparePeak.prepare_index_bound",
+        "Submission.R26PreparePeak.prepare_full_interface"
+      ],
+      "stage": 2,
+      "depends_on": [
+        "PrepareAgreementContractOnly"
+      ]
+    },
+    {
+      "name": "TailContractOnly",
+      "path": "competitions/torchlean/candidates/r27-5h-20261029T194443Z/research/fp-proof/producer-v1/TailContractOnly.lean",
+      "bytes": 1618,
+      "sha256": "1156d745db74fd3fd21d11051937ef9464d1328a8db8271a87a0f7ee5a3ccd18",
+      "helper_roots": [
+        "Submission.R26TailAgreement.sumRemaining_eq_loop",
+        "Submission.R26TailAgreement.sumRemaining_zero_eq_sum"
+      ],
+      "stage": 1,
+      "depends_on": []
+    }
+  ],
+  "priority": "Run stage1 after FP001; stage2 only once actual prepare core passes. FiniteWiden imports only ContractExact and is standalone reduced support, 37KB class not old105KB producer.",
+  "changes": [
+    "normal actual guard BEq->Prop before expanding expWord",
+    "normalize 2^64 modulus in one_shift_nat",
+    "normalize literal UInt64.toNat in count_nat",
+    "narrow hbody simplifier preserves cast UInt32 fraction",
+    "concrete binary64 field type before rewrite in subnormal_decode",
+    "reduce Option match before Dyadic shift theorem",
+    "rewrite n_eq_wordFrac before simp unfolds n; expose pinned min-subnormal exponent"
+  ],
+  "proof": "NOT_RUN",
+  "formal_submission": false,
+  "measurement": false,
+  "allow_private": false,
+  "local_Lean": false,
+  "command": "Same raw statement/helper audit commands as FP001, exact byte/hash checked, full logs preserved",
+  "resources": {
+    "compile_seconds_per_source": 180,
+    "memory_mib": 4096
+  }
+}

@@ -1,0 +1,2 @@
+# CI6最后标准组隔离
+本批源/门槛即将冻结：Norm26 exact79615bd5为指定确认对象，原all12证明已在CI3同源通过；原3a工具不变。另一29e输入零原型只作experimental标准成本，NoCorrect不采用。新标准组种子/输入/中途结果仅Droot与verification验收；research/native不得读取ci-plan.seeds或重放该组，用冻结前已见材料研究下一轮直到20:15:58。完成整组后再公开结果，后续候选另用新确认组。此为研究隔离，不改变实际文件访问权限。

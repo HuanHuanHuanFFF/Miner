@@ -1,0 +1,15 @@
+# R24 inexpensive strict RNE32 cell certificate: adversarial review request
+
+Read-only mathematical and cost research. No new kernels, Lean execution, CI, source changes or internal subagents. Use this chat's cached context; do not retry blocked report APIs. Produce at most two pages plus one downloadable Markdown original.
+
+Goal: remove two full binary32 software rounders from a prospective approximate native binary64 dot's acceptance check. Current target choice is pending; this is a portable mathematical component, not a new-track implementation.
+
+For finite binary32 products t_i = sign*p_i*2^(I_i-298), p_i<2^48, 0<=I_i<=H<=506, n<=2^L and L<=30, let s be actual binary64 leftfold starting+0 and exact S=sum(t_i). A separate native proof is establishing finiteness and |s-S|<=B=2^(H+2L-303). Bias, if present, must be included in both count and H. Here assume this bound; do not spend the review re-proving it.
+
+Let q be ANY raw binary32 proposal, even from opaque s.toFloat32. We assume no cast theorem. Require q's magnitude a=q&0x7fffffff to have exponent1..254 (nonzero normal). Define unsigned64 w=((e+896)<<52)|(frac<<29), delta=2^28, dLower=2^29 if a==0x00800000 else delta. Positive lower/upper midpoint words are w-dLower, w+delta. For negative q, OR sign64 and reverse the two words. These are claimed exact binary64 representations of q's two RNE32 cell midpoints. At maximum finite, the upper midpoint means the finite overflow threshold against virtual next2^128. Min-normal special delta is required because binary32 spacing does not halve below that boundary. Subnormal/zero/NaN/Inf proposals fall back.
+
+Let rlo=RNE64(s-B) and rhi=RNE64(s+B), computed with actual native finite additions/subtractions. Accept q iff lower<rlo AND rhi<upper, STRICTLY. Claim: although rlo/rhi need not enclose S outwardly, RNE64 monotonicity and exact representability of lower/upper imply s-B>lower and s+B<upper, hence exact RNE32(S)=q, including raw sign. Midpoints/ties, exact zero and ambiguous cases fall back. For comparing finite64 rawwords use key(u)=~u if signbit else u^2^63; signedzero keys differ but cell boundaries are nonzero.
+
+An exact Fraction model covered all254 exponent fields, seven significand samples each, both signs (3556 cases), found no midpoint mismatch. This is finite evidence only; no hit-rate, cost or speed claim.
+
+Please (1) find a valid counterexample to ANY soundness step or give a concise proof with every necessary premise, including minnormal/overflow/sign/zero; (2) identify the cheapest correct raw-word implementation of the two boundaries/comparisons and prove whether strict word order could accept a false real inequality; (3) assess whether the checker actually deletes costly work versus two NativeBinary32.roundProduct endpoints and versus exact128 accumulation, counting mandatory radius/H/proposal/fallback and shape-dependent amortization. Distinguish math, imported theorem interfaces, native compiler/codegen and measured cost. If blocked, give first falsifier and one decisive minimal diagnostic, not a benchmark grid.

@@ -1,0 +1,31 @@
+{
+  "at_utc": "2026-10-29T22:45:01.498930+00:00",
+  "state": "INDEPENDENT_SOURCE_RECONSTRUCTION_AND_MATH_INTERFACE_REVIEW_ONLY",
+  "base_sha256": "1010c0744f0506974c64601e8ce7335bea56d0cb21b655543d390794df0665fe",
+  "formal_sha256": "d0e60a6e1757c6947ec6e5700e6ce5f489d5c30c6489105527643944fdf7838b",
+  "formal_bytes": 254137,
+  "cost_sha256": "24b04283f93f8214d6dcc68ce7468c2d3de2722bad67250da7df159ae180d14e",
+  "cost_bytes": 253275,
+  "shared_terminal_runtime_text_identical_after_line_ending_normalization": true,
+  "formal_actual_call": "Ybb2 output uses R27RmsFinish; T4b rewrites unconditional R27RmsFinish_eq.",
+  "formal_acceptance": "UNKNOWN: no Lean or original all12 result in this review.",
+  "cost_proof_boundary": "retainedCorrect proves old retainedKernels only; new kernels has no correct.",
+  "math_review": [
+    "Nonpositive denominator returns the exact old Ya7 call.",
+    "Yf multiplication fits UInt64 because each mantissa is below 2^24; K4 is the existing exact product bridge.",
+    "Zero product returns positive zero, matching old Ya7 sign masking by Pn != 0; no dot-of-signed-zero rule is imported here.",
+    "Native branch checks D <= N. Positive sv dw supplies positive mantissa D; mantissa bound supplies D < 2^40.",
+    "U=idx(w)+idx(g) is at most 508; V=idx(dw)+22 is at most 276. Both satisfy existing rrsGe limits below 2^20 without UInt64 wrap.",
+    "E=idx(w)+idx(g)-idx(dw)-149 gives E+127=U-V, including the required +22 offset.",
+    "rrsGe retains its normal-range fallback; neither underflow nor overflow is silently clamped by this patch.",
+    "No mathematical counterexample was identified in this source review. This does not establish tactic execution or native gain."
+  ],
+  "difference_from_word_dot_endpoint": "RMS is one rational product divided by a positive rounded denominator; it does not reuse the body-only YL bias offset that had the 23-bit mismatch.",
+  "next_decision": "Use actual complete-model cost; repair exact compiler goals only if this source is selected. No duplicate full proof review absent changes.",
+  "source_handling": "Whole upstream input and reconstructed candidates remained in memory only; only owned recipe hashes and review were written.",
+  "input_hashes": {
+    "build_rms_native_finish.py": "51b54a600701c19d03944a05d1d4529adf6dfcef79de2c41d12d313da1fe8e35",
+    "build_rms_native_cost.py": "6f2ddfafcb897cd41e56ead220219013c20b7a424fc3d7ff90fc91c8bd9f3dfd",
+    "RmsNativeFinish.lean.inc": "460d81146ce96b4a0681afa3df3e7530432b3e16cd937627c86f95dec0adc419"
+  }
+}

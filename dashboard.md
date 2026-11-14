@@ -1,14 +1,16 @@
-# FloatLib 冲冠看板
+# TorchLean 冲冠看板
 
-冠军核对：[2026-10-27 12:42 北京时间](competitions/floatlib/candidates/f01-d7-research/official-20261027T044250Z/receipts.json)｜各项均以现任完整包冠军为 1.00×，耗时越低越好。
+目标：任意一榜冠军。10月31日04:12官方快照；冠军耗时均为 **1.00×**，越低越好。下表为冠军倍数估算。
 
-| 运算 | 现任冠军 | 我方首选 | 我方／冠军耗时（预估） | 验证 |
-| --- | --- | --- | ---: | --- |
-| 加法 add | [#323](https://conjectures.io/v1/competitions/floatlib/submissions/323) | [原生加法＋特殊值选择](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **约 1.03×** | 完整通过16次 |
-| 乘法 mul | #323 | [数值转换＋特殊值选择](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **约 1.16×** | 完整通过16次 |
-| 求和 sum | #323 | [单遍求和＋快速修复](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **约 1.17×** | 完整通过16次 |
-| 矩阵乘法 bmm | #323 | [双列复用＋B2成对存储](competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean) | **约 3.00×** | 完整通过16次 |
+| 赛道 | 现任冠军 | 当前最强起点／候选 | 耗时／冠军 |
+| --- | --- | --- | ---: |
+| MobileNet | #57 | 已公开退任冠军 #53 | **1.05×** |
+| Mixer | #56 | norm26（全证明＋标准确认通过） | **1.11×** |
+| ResNet | #64 | 已公开退任冠军 #11 | **1.20×** |
+| 归一化MLP | #51 | 已公开退任冠军 #43 | **1.32×** |
+| overall | #59 | 已公开退任冠军 #54 | **1.33×** |
+| MLP | #33 | 已公开退任冠军 #13 | **1.59×** |
 
-整包预估耗时：冠军的 **约 1.25×**。
+**结论：目前尚不能取代冠军；Mixer完整证明候选标准确认为1.11×。**
 
-**结论：预估暂不能取代#323；主要差距在矩阵乘法（约3.00倍耗时）。** [计算依据](competitions/floatlib/candidates/f01-d7-research/champion-time-estimate.json)
+[本轮进展](competitions/torchlean/candidates/r28-3h-20261030T171558Z/README.md) · [冠军依据](competitions/torchlean/candidates/r28-3h-20261030T171558Z/competition-state/refresh-20261030T201235Z/receipt.json)

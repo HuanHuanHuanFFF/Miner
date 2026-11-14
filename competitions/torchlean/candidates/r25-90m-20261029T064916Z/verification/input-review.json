@@ -1,0 +1,138 @@
+{
+  "round": "R25",
+  "reviewer_role": "Dverification",
+  "review_started_utc": "UNKNOWN",
+  "review_updated_utc": "2026-10-29T06:58:23Z",
+  "window_start_utc": "2026-10-29T06:49:16Z",
+  "window_deadline_utc": "2026-10-29T08:19:16Z",
+  "stop_new_long_ci_utc": "2026-10-29T08:00:00Z",
+  "time_accounting": {
+    "active_wall_seconds": "UNKNOWN",
+    "tokens": "UNKNOWN",
+    "cpu": "UNKNOWN"
+  },
+  "official": {
+    "repository": "conjectures-io/conjectures-optimisation-float-kernels",
+    "commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+    "lean_toolchain": "leanprover/lean4:v4.34.0",
+    "lean_toolchain_source": "lean/lean-toolchain at official_commit; local blob matches official blob 12359f928f18e4a89ebd1444a0310b025931b17d",
+    "lean_toolchain_local_sha256": "8733782dc070a99b312039cda424f601b80f3be6f6f512627da5ba25adc27632",
+    "current_champion": "UNKNOWN_API_LAST_REFRESH_403_NOT_RETRIED",
+    "allow_private": false,
+    "formal_uploads": 0
+  },
+  "source_copy_review": {
+    "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/source-snapshot/torchlean",
+    "official_receipt": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-broad/torchlean-source/receipt.json",
+    "receipt_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+    "verified_files": {
+      "README.md": {
+        "official_git_blob_sha": "b23b39117229c0dc2934fea8e6f50ae2df7310f6",
+        "local_git_blob_sha": "b23b39117229c0dc2934fea8e6f50ae2df7310f6",
+        "status": "MATCH"
+      },
+      "MANUAL.md": {
+        "official_git_blob_sha": "9eb1afe1a43525f32be7b1dd70100a9a495ad4d7",
+        "local_git_blob_sha": "9eb1afe1a43525f32be7b1dd70100a9a495ad4d7",
+        "status": "MATCH"
+      },
+      "docs/CONTRACT.md": {
+        "sha256": "4215a093ef06f74d0ee545047d0152a5bc94ec92c42c7f681bcd8c2b37f6837f",
+        "status": "MATCH_OFFICIAL_RECEIPT"
+      },
+      "docs/BENCHMARKING.md": {
+        "sha256": "337b29608c5adb38aa9c8f03d9888194c88cb2859b73d563e128959c32dd4f59",
+        "status": "MATCH_OFFICIAL_RECEIPT"
+      },
+      "lean/contract/ContractExact.lean": {
+        "sha256": "bddd6bd9caa19f9419e0e38cd553b109a7675fc710fdf82a6d6f7d0f2a4c8b1b",
+        "status": "MATCH_OFFICIAL_RECEIPT"
+      },
+      "kernels/exact/incumbent/Kernel.lean": {
+        "sha256": "9b2d940338dfcc42a38443324d63041a27cc9b5df1b18675103c7d67934d1df8",
+        "status": "MATCH_OFFICIAL_RECEIPT"
+      }
+    },
+    "source_copy_complete": false,
+    "missing_from_local_copy": [
+      "lean/contract/ExactToolkit/Values.lean",
+      "lean/contract/ExactToolkit/Limbs.lean",
+      "lean/contract/ExactToolkit/TensorProofs.lean",
+      "lean/bench/ExactSuite.lean"
+    ],
+    "use_as_full_gate_checkout": false
+  },
+  "contract": {
+    "kernel_count": 12,
+    "kernels": [
+      "sum",
+      "dot",
+      "linear",
+      "gemm",
+      "conv2d",
+      "depthwise",
+      "avgpool",
+      "maxpool",
+      "addRelu",
+      "scaleShift",
+      "rmsnorm",
+      "layernorm"
+    ],
+    "entry": "one Kernel.lean importing only ContractExact; Submission.kernels and Submission.correct",
+    "max_kernel_bytes": 256000,
+    "allowed_axioms": ["propext", "Classical.choice", "Quot.sound"]
+  },
+  "official_verifier": {
+    "argv_shape": ["python", "-m", "verification", "<entry-directory>", "--verdict", "<verdict-path>"],
+    "proof_gate_stages": ["intake", "source policy", "full statement", "independent kernel replay", "allowed axioms"],
+    "exit_codes": {
+      "0": "passed",
+      "1": "rejected",
+      "2": "infrastructure"
+    },
+    "worker_timeout_mapping": "exit 1, stage timeout",
+    "worker_infrastructure_mapping": "retry",
+    "statuses": ["queued", "proving", "waiting", "benchmarking", "completed", "rejected", "disqualified"],
+    "proof_budget_default_seconds": 1800,
+    "timeout_source": "immutable worker config; do not infer completion from timeout alone"
+  },
+  "score_contract": {
+    "boards": ["mlp", "resnet", "mobilenet", "normalized_mlp", "mixer", "overall"],
+    "basis": "paired candidate/reference workload ratios, aggregated by weighted geometric means",
+    "development_workload_cells_per_environment_seed": {
+      "each_family": 36,
+      "overall": 180
+    },
+    "development_defaults_only": {
+      "score_bar": 0.97,
+      "bootstrap": "positive fifth-percentile gain, stratified resampling",
+      "per_cell_median_ratio_guard": 1.10
+    },
+    "live_production_policy": "UNKNOWN",
+    "current_champion_and_ratio": "UNKNOWN"
+  },
+  "root_check_migration": {
+    "current_check": "links/workflow policies/script paths/FloatLib manifest hashes plus DEFLATE local check",
+    "torchlean_enumerated": false,
+    "minimum_delta": "add TorchLean candidate manifest/input preflight and track listing; keep original gate separate"
+  },
+  "r24_408113": {
+    "classification": "synthetic FloatLib dot-bank cost experiment",
+    "official_score": "NONE",
+    "all_input_runtime_proof": "UNPROVED",
+    "new_torchlean_implementation": false,
+    "usable_as_torchlean_gate": false
+  },
+  "r25_actual_entry_check": {
+    "manifest": "PENDING_ROOT_DRIVER",
+    "driver": "PENDING_ROOT_DRIVER",
+    "workflow_and_manual": "PENDING_ROOT_DRIVER",
+    "candidate_sha256": "UNKNOWN",
+    "python_ast": "NOT_RUN",
+    "original_verifier": "NOT_RUN",
+    "full_gate": "NOT_RUN",
+    "raw_artifact_hashes": "NOT_AVAILABLE",
+    "score_checksum_lineage": "NOT_AVAILABLE",
+    "source_immutability_after_run": "NOT_CHECKED"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "candidate": "f01-r24-research-native-mul-bridge1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "78383e92dfcbdb67d21ba0caf282e346af1d53c212e3162cb476dbd286f7015b",
+  "candidate_bytes": 234396,
+  "created_at_utc": "2026-10-28T22:57:19.144484+00:00",
+  "validation_mode": "statement-only",
+  "diagnostic_only": true,
+  "diagnostic_timeout_seconds": 180,
+  "proof_status": "NOT_RUN_NATIVE64_MODEL_FINITE_REAL_EXACT_BRIDGE",
+  "performance": "NOT_RUN_NO_CHANGED_PUBLIC_ENDPOINTS",
+  "formal_submission": "NOT_SUBMITTED",
+  "official_submission_inherited": false,
+  "helper_audit_module": "development-helper-audit-v8.py",
+  "helper_audit_module_path": "f01-d7-research/round9h-20261026T194639Z/development-helper-audit-v8.py",
+  "helper_audit_module_sha256": "5b58eece211bd9cdaa270fc82bef624a5974c7d056732e19f54547c0fe6ef975",
+  "explicit_helper_audit": [
+    "Submission.R24NativeMul.native_mul_toModel",
+    "Submission.R24NativeMul.native_mul_finite_roundAt",
+    "Submission.R24NativeMul.native_mul_exact_from_raw32_values"
+  ],
+  "helper_audit_required_endpoints": [
+    "Submission.R24NativeMul.native_mul_toModel",
+    "Submission.R24NativeMul.native_mul_finite_roundAt",
+    "Submission.R24NativeMul.native_mul_exact_from_raw32_values"
+  ],
+  "helper_audit_expected_count": 3,
+  "helper_audit_source_sha256": "78383e92dfcbdb67d21ba0caf282e346af1d53c212e3162cb476dbd286f7015b",
+  "diagnostic_evaluations": [],
+  "runtime_prefix": {
+    "path": "competitions/floatlib/candidates/f01-r15-dev-packed-b2-1/Kernel.lean",
+    "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+    "bytes": 226829,
+    "byte_identical": true
+  },
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-r24-research-native-mul-bridge1/NativeMul.lean.inc",
+      "sha256": "49be0dfd820ab9c53d3522bc687a2a4d5700dcc38b22c0510f1f979fd3276245",
+      "bytes": 7566
+    }
+  ],
+  "scope": "Portable old ContractTensor/B2 helper. Actual native Float64 MUL to generic Model.mul, then proven output finiteness/roundAt under an input-value bound, then exact multiplication of native values corresponding to finite raw binary32 words. All four B2 public endpoints remain byte-identical.",
+  "reused_semantic_interface": "R2W01c.NativeBridge.modelMulFinite in unchanged retained B2 prefix is polymorphic in FloatFormat and includes signed-zero cases. Only the original existing Float32 wrapper was width-specific.",
+  "exact_root_premises": "Native x,y finite; raw32 a,b finite; Model real values of native x,y equal the exact raw32 values. No output-finiteness, product-exactness, rounding-cell, or opaque-cast correctness premise.",
+  "missing": [
+    "New helper not compiled or axiom-audited yet",
+    "No definition or proof of raw32-to-Float widening is included; compose only with a separately verified finite/value bridge",
+    "No bound for an accumulated Float64 fold",
+    "No new-track kernel, benchmark, whole-model gain or formal submission"
+  ],
+  "shared_deadline_utc": "2026-10-29T03:38:56Z",
+  "CI_owner": "D",
+  "local_Lean": false
+}

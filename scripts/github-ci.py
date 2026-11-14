@@ -21,12 +21,13 @@ def gh(args,e):
 def save(p,value):p.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('mode',choices=['dispatch','status','collect']);ap.add_argument('--run');ap.add_argument('--workflow',default='floatlib-validate.yml');ap.add_argument('--candidates',default='baseline');ap.add_argument('--seed',default='42');ap.add_argument('--branch',default='codex/multi-track-floatlib',help='Explicit authorized experimental branch; must match checked-out branch');args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('mode',choices=['dispatch','status','collect']);ap.add_argument('--run');ap.add_argument('--workflow',default='floatlib-validate.yml');ap.add_argument('--candidates',default='baseline');ap.add_argument('--seed',default='42');ap.add_argument('--branch',default='codex/multi-track-floatlib',help='Explicit authorized experimental branch; must match checked-out branch');ap.add_argument('--expect-commit',help='Abort before dispatch unless HEAD equals this reviewed exact commit');args=ap.parse_args()
     e=env();evidence=ROOT/'competitions/floatlib/evidence';evidence.mkdir(exist_ok=True)
     if args.mode=='dispatch':
         assert re.fullmatch(r'(?:baseline|f01-[a-z0-9-]+)(?:,(?:baseline|f01-[a-z0-9-]+))*',args.candidates)
         assert args.seed.isdecimal();assert args.workflow in ['floatlib-validate.yml','deflate-baseline.yml']
         branch=subprocess.check_output(['git','branch','--show-current'],cwd=ROOT,text=True).strip();sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip();assert branch==args.branch and branch.startswith(('codex/','huan/')),'Explicit experimental branch must match checkout'
+        if args.expect_commit:assert sha==args.expect_commit,'Reviewed dispatch commit differs from HEAD'
         subprocess.run(['git','check-ref-format','--branch',branch],cwd=ROOT,check=True,stdout=subprocess.DEVNULL)
         raw=gh(['api',f'repos/{REPO}'],e);repository=json.loads(raw);assert repository['private'] is False
         remote=json.loads(gh(['api',f'repos/{REPO}/commits/{branch}'],e));assert remote['sha']==sha,'Push precise commit before dispatch'
@@ -34,8 +35,45 @@ def main():
         (receipt/'repository.response.json').write_text(raw,encoding='utf-8')
         checked={}
         paths=['competitions/floatlib/pins.json','.github/workflows/'+args.workflow,'competitions/floatlib/scripts/ci-prepare.sh','competitions/floatlib/scripts/ci-setup.sh','competitions/floatlib/scripts/ci-validate.sh','competitions/floatlib/scripts/run-gates.py']
-        paths += ['competitions/floatlib/candidates/'+n+'/Kernel.lean' for n in args.candidates.split(',') if n!='baseline']
-        for path in paths:
+        paths += ['scripts/github-ci.py','competitions/floatlib/candidates/f01-word-tensors/ci-diagnostics.py']
+        candidates=[n for n in args.candidates.split(',') if n!='baseline']
+        if 'f01-d7-public-suite' in candidates:
+            plan_path='competitions/floatlib/candidates/f01-d7-public-suite/suite-plan.json'
+            plan=json.loads((ROOT/plan_path).read_bytes());assert plan.get('dispatch_state','READY')=='READY'
+            assert plan['seed']==int(args.seed),'Nested public plan seed differs before dispatch'
+            if not (plan.get('r22_cost_diagnostic') or plan.get('r24_cost_diagnostic')):
+                for entry in plan['candidates']:
+                    timeout=entry.get('diagnostic_timeout_seconds',180)
+                    assert timeout==180 or (entry['candidate'] in ('f01-r19-dev-runtime-cost1','f01-r19-dev-add-cost1') and timeout==600 and entry.get('validation_mode')=='statement-only' and plan.get('sample_role')=='STATEMENT_DIAGNOSTIC'),'Original public adapter rejects this diagnostic timeout'
+            paths += [plan_path,'competitions/floatlib/candidates/f01-d7-research/public-suite.py']
+            if plan.get('r24_cost_diagnostic'):
+                paths.append('competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-cost-suite.py')
+            if plan.get('r22_cost_diagnostic'):paths += ['competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-cost-suite.py','competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/development-cost-audit.py']
+            candidates += [e['candidate'] for e in plan['candidates'] if e['candidate']!='baseline']
+        for name in dict.fromkeys(candidates):
+            paths.append('competitions/floatlib/candidates/'+name+'/Kernel.lean')
+            manifest='competitions/floatlib/candidates/'+name+'/manifest.json'
+            if (ROOT/manifest).is_file():
+                paths.append(manifest)
+                data=json.loads((ROOT/manifest).read_bytes())
+                helper=data.get('helper_audit_module')
+                if name.startswith(('f01-r23-','f01-r24-')) and data.get('helper_audit_module_path'):
+                    helper_path='competitions/floatlib/candidates/'+data['helper_audit_module_path']
+                    resolved_helper=(ROOT/helper_path).resolve()
+                    round_dir='round7h-20261028T203856Z' if name.startswith('f01-r24-') else 'round40m-20261028T142626Z'
+                    allowed_helper_root=ROOT/'competitions/floatlib/candidates/f01-d7-research'/round_dir
+                    legacy_helper=ROOT/'competitions/floatlib/candidates/f01-d7-research/round9h-20261026T194639Z/development-helper-audit-v8.py'
+                    assert resolved_helper.is_relative_to(allowed_helper_root) or resolved_helper==legacy_helper
+                    assert hashlib.sha256(resolved_helper.read_bytes()).hexdigest()==data['helper_audit_module_sha256']
+                    paths.append(helper_path)
+                if name.startswith('f01-r22-') and helper in ('development-cost-audit.py','development-cost2-audit.py','development-cost3-audit.py','development-flat-cost-audit.py','development-flat-cost2-audit.py','development-pair8-cost-audit.py','development-resident8-cost-audit.py','development-broadword-cost-audit.py','development-multistatic-cost-audit.py','development-farstatic-cost-audit.py','development-nativecold-cost-audit.py','development-indexed8-cost-audit.py','development-outline-isolation-audit.py','development-wordcarry-cost-audit.py','development-nat-prefix-audit.py','development-nat-bias-repair-audit.py','development-endpoint-cost-audit.py','development-nat-light-repair-audit.py'):
+                    paths.append('competitions/floatlib/candidates/f01-d7-research/round6h-20261027T211247Z/'+helper)
+                for component in data.get('components',[]):
+                    component_path=component['path'];resolved=(ROOT/component_path).resolve()
+                    assert resolved.is_relative_to(ROOT/'competitions/floatlib/candidates')
+                    assert hashlib.sha256(resolved.read_bytes()).hexdigest()==component['sha256']
+                    paths.append(component_path)
+        for path in dict.fromkeys(paths):
             blob=subprocess.check_output(['git','show',sha+':'+path],cwd=ROOT);assert blob==(ROOT/path).read_bytes();checked[path]=hashlib.sha256(blob).hexdigest()
         listing=['run','list','--repo',REPO,'--branch',branch,'--workflow',args.workflow,'--limit','25','--json','databaseId,headSha,status,createdAt,url']
         seen={x['databaseId'] for x in json.loads(gh(listing,e))}

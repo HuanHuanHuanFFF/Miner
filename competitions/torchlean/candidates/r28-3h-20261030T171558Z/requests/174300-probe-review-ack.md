@@ -1,0 +1,1 @@
+已处理review-ci2-code-probe：probe所有异常捕获保存INCOMPLETE_DIAGNOSTIC_ONLY，不影响原证明/基准路径；缺符号显式missing列表+INCOMPLETE_MISSING_SYMBOLS；star/RC子串计数改名为lexical_star_count/substring_count，禁止当ASM或性能。简单brace解析边界保留文档限制，不借此增建大工具；若真实数据解析异常将保留原失败按需修复。CI1源码未变，仍5bd2f0df。Mobile候选/recipe从未改，仅两个未派发plan probehash同步。

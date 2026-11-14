@@ -1,0 +1,53 @@
+0000000000000000 <lp_competition_runF64Cast___lam__0>:
+   0:	mov    edx,edi
+   2:	and    edx,0x7f800000
+   8:	cmp    edx,0x7f800000
+   e:	je     1e <lp_competition_runF64Cast___lam__0+0x1e>
+  10:	mov    eax,esi
+  12:	and    eax,0x7f800000
+  17:	cmp    eax,0x7f800000
+  1c:	jne    23 <lp_competition_runF64Cast___lam__0+0x23>
+  1e:	jmp    23 <lp_competition_runF64Cast___lam__0+0x23>
+			1f: R_X86_64_PLT32	lp_competition_Submission_R24F64Add_retainedAdd-0x4
+  23:	mov    rcx,QWORD PTR [rip+0x0]        # 2a <lp_competition_runF64Cast___lam__0+0x2a>
+			26: R_X86_64_REX_GOTPCRELX	lp_competition_Submission_R24F64Add_nativeScales-0x4
+  2a:	mov    rcx,QWORD PTR [rcx]
+  2d:	mov    r9d,edi
+  30:	shr    r9d,0x17
+  34:	mov    r8,QWORD PTR [rcx+0x8]
+  38:	xorpd  xmm0,xmm0
+  3c:	xorpd  xmm1,xmm1
+  40:	cmp    r8,r9
+  43:	ja     5f <lp_competition_runF64Cast___lam__0+0x5f>
+  45:	mov    edx,esi
+  47:	shr    edx,0x17
+  4a:	cmp    r8,rdx
+  4d:	ja     8b <lp_competition_runF64Cast___lam__0+0x8b>
+  4f:	addsd  xmm1,xmm0
+  53:	xorps  xmm0,xmm0
+  56:	cvtsd2ss xmm0,xmm1
+  5a:	jmp    5f <lp_competition_runF64Cast___lam__0+0x5f>
+			5b: R_X86_64_PLT32	lean_float32_to_bits-0x4
+  5f:	and    edi,0x7fffff
+  65:	lea    r10d,[rdi+0x800000]
+  6c:	test   edx,edx
+  6e:	cmove  r10d,edi
+  72:	xorps  xmm1,xmm1
+  75:	cvtsi2sd xmm1,r10d
+  7a:	mulsd  xmm1,QWORD PTR [rcx+r9*8+0x18]
+  81:	mov    edx,esi
+  83:	shr    edx,0x17
+  86:	cmp    r8,rdx
+  89:	jbe    4f <lp_competition_runF64Cast___lam__0+0x4f>
+  8b:	and    esi,0x7fffff
+  91:	lea    edi,[rsi+0x800000]
+  97:	test   eax,eax
+  99:	cmove  edi,esi
+  9c:	xorps  xmm0,xmm0
+  9f:	cvtsi2sd xmm0,edi
+  a3:	mulsd  xmm0,QWORD PTR [rcx+rdx*8+0x18]
+  a9:	addsd  xmm1,xmm0
+  ad:	xorps  xmm0,xmm0
+  b0:	cvtsd2ss xmm0,xmm1
+  b4:	jmp    b9 <lp_competition_runF64Cast___lam__0+0xb9>
+			b5: R_X86_64_PLT32	lean_float32_to_bits-0x4

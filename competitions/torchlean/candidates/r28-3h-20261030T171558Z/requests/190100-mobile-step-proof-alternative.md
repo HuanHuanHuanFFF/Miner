@@ -1,0 +1,3 @@
+# Mobile证明备选：非递归step展开等价，复用旧recursive证明
+如果即将跑的repairq14 controlledrw仍慢，可只新增qCtx7_step/qCtx13_step非递归等价lemma：把新zero branch的单步展开，用已闭合r28Z9/r28Z1化成原来的无zero分支递推式（递归call仍为新qCtx7/13，acc按原表达式更新）。再把原qCtx8/qCtx14证明body逐字复用，只把unfold/rw[qCtx7/13]替成新stepLemma；如此主recursive equality仍只有原先单次递归，避免新by_cases将递归证明项复制/类型化简。
+新stepLemma本身bycaseszero、controlledword rw即可，不递归；全输入前提不得变。此为建议非已证，不能声称修复成功，先看成本+prefix信号，不改已冻结120b/85eb/474eff。若值得推进用新版本/新hash；source53 proof-only alias reuse再省2990/总6431空间可支撑两wrapper但要实际bytecheck。完整all12+新标准确认仍必需。

@@ -1,0 +1,2 @@
+from pathlib import Path
+H=Path(__file__).parent;p=H/'map_thin_prepare.py';s=p.read_text(encoding='utf-8-sig');needle="def cut(s,x,y):\n i=s.index(x);return s[i:s.index(y,i)].rstrip()+'\\n'";replacement="def scope(s):\n i=s.index('namespace Submission.R24PortableF64');return s[i:s.index('end Submission.R24PortableF64',i)]\na,b=scope(a),scope(b)\ndef cut(s,x,y):\n assert s.count(x)==1,(x,s.count(x))\n i=s.index(x);return s[i:s.index(y,i)].rstrip()+'\\n'";assert needle in s;s=s.replace(needle,replacement);p.write_text(s,encoding='utf-8',newline='\n')

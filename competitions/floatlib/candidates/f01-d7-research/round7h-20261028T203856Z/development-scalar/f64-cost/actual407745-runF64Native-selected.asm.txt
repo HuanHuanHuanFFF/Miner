@@ -1,0 +1,87 @@
+0000000000000000 <lp_competition_runF64Native___lam__0>:
+   0:	mov    edx,edi
+   2:	and    edx,0x7f800000
+   8:	cmp    edx,0x7f800000
+   e:	je     1e <lp_competition_runF64Native___lam__0+0x1e>
+  10:	mov    eax,esi
+  12:	and    eax,0x7f800000
+  17:	cmp    eax,0x7f800000
+  1c:	jne    23 <lp_competition_runF64Native___lam__0+0x23>
+  1e:	jmp    23 <lp_competition_runF64Native___lam__0+0x23>
+			1f: R_X86_64_PLT32	lp_competition_Submission_R24F64Add_retainedAdd-0x4
+  23:	mov    rcx,QWORD PTR [rip+0x0]        # 2a <lp_competition_runF64Native___lam__0+0x2a>
+			26: R_X86_64_REX_GOTPCRELX	lp_competition_Submission_R24F64Add_nativeScales-0x4
+  2a:	mov    rcx,QWORD PTR [rcx]
+  2d:	mov    r9d,edi
+  30:	shr    r9d,0x17
+  34:	mov    r8,QWORD PTR [rcx+0x8]
+  38:	xorpd  xmm1,xmm1
+  3c:	xorpd  xmm0,xmm0
+  40:	cmp    r8,r9
+  43:	jbe    67 <lp_competition_runF64Native___lam__0+0x67>
+  45:	and    edi,0x7fffff
+  4b:	lea    r10d,[rdi+0x800000]
+  52:	test   edx,edx
+  54:	cmove  r10d,edi
+  58:	xorps  xmm0,xmm0
+  5b:	cvtsi2sd xmm0,r10d
+  60:	mulsd  xmm0,QWORD PTR [rcx+r9*8+0x18]
+  67:	mov    edx,esi
+  69:	shr    edx,0x17
+  6c:	cmp    r8,rdx
+  6f:	jbe    8f <lp_competition_runF64Native___lam__0+0x8f>
+  71:	and    esi,0x7fffff
+  77:	lea    edi,[rsi+0x800000]
+  7d:	test   eax,eax
+  7f:	cmove  edi,esi
+  82:	xorps  xmm1,xmm1
+  85:	cvtsi2sd xmm1,edi
+  89:	mulsd  xmm1,QWORD PTR [rcx+rdx*8+0x18]
+  8f:	push   rax
+  90:	addsd  xmm0,xmm1
+  94:	call   99 <lp_competition_runF64Native___lam__0+0x99>
+			95: R_X86_64_PLT32	lean_float_to_bits-0x4
+  99:	mov    rcx,rax
+  9c:	shr    rax,0x20
+  a0:	and    eax,0x80000000
+  a5:	mov    rsi,rcx
+  a8:	shr    rsi,0x34
+  ac:	mov    edi,esi
+  ae:	and    edi,0x7ff
+  b4:	cmp    rdi,0x368
+  bb:	lea    rsp,[rsp+0x8]
+  c0:	jbe    10a <lp_competition_runF64Native___lam__0+0x10a>
+  c2:	cmp    edi,0x47e
+  c8:	ja     105 <lp_competition_runF64Native___lam__0+0x105>
+  ca:	movabs r8,0xfffffffffffff
+  d4:	mov    rdx,rcx
+  d7:	and    rdx,r8
+  da:	cmp    edi,0x381
+  e0:	jb     10b <lp_competition_runF64Native___lam__0+0x10b>
+  e2:	add    r8,0x10000000
+  e9:	bt     ecx,0x1d
+  ed:	adc    rdx,r8
+  f0:	shr    rdx,0x1d
+  f4:	shl    esi,0x17
+  f7:	lea    ecx,[rsi+rdx*1]
+  fa:	add    ecx,0x3f800000
+ 100:	or     ecx,eax
+ 102:	mov    eax,ecx
+ 104:	ret
+ 105:	or     eax,0x7f800000
+ 10a:	ret
+ 10b:	lea    rdi,[r8+rdx*1]
+ 10f:	inc    rdi
+ 112:	mov    edx,0x1e
+ 117:	sub    edx,esi
+ 119:	mov    cl,0x1d
+ 11b:	sub    cl,sil
+ 11e:	mov    rsi,0xffffffffffffffff
+ 125:	shl    rsi,cl
+ 128:	not    rsi
+ 12b:	bt     rdi,rdx
+ 12f:	adc    rsi,rdi
+ 132:	mov    ecx,edx
+ 134:	shr    rsi,cl
+ 137:	or     eax,esi
+ 139:	ret

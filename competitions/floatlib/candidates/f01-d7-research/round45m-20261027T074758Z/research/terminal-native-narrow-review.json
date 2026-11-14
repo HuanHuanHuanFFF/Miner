@@ -1,0 +1,34 @@
+{
+  "verified_utc": "2026-10-27T08:26:22.265726+00:00",
+  "run": 40472418849,
+  "source_sha256": "b6b77553d49e968db27639b84f104783a9cf474ed963ec9cff7753a7adb17962",
+  "status": "SELECTED_TWO_PAIR_DIAGNOSTIC_BODIES_READ_NOT_TIME_MEASUREMENT",
+  "bodies": {
+    "control": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round45m-20261027T074758Z\\ci-runs\\40472418849\\download-68fc49c08a86470bb410dfb38279db2d\\diagnostics\\f01-r20-dev-terminal-pair-probe1\\native-loop-10.asm.txt",
+      "sha256": "e1a56ae85c828f1a7f941a91b415a118fb9a6af517b6f7eee54b5fe34ea69639"
+    },
+    "emit": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round45m-20261027T074758Z\\ci-runs\\40472418849\\download-68fc49c08a86470bb410dfb38279db2d\\diagnostics\\f01-r20-dev-terminal-pair-probe1\\native-loop-11.asm.txt",
+      "sha256": "0b816746b0bf9b54e50acb01c4faa698d04211b30ab7b037265dcd303ff68030"
+    },
+    "pair": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round45m-20261027T074758Z\\ci-runs\\40472418849\\download-68fc49c08a86470bb410dfb38279db2d\\diagnostics\\f01-r20-dev-terminal-pair-probe1\\native-loop-12.asm.txt",
+      "sha256": "3fdd933900290a513eaa1c88e456dbc0d5230c7d13f33393c52739d3789173cc"
+    },
+    "terminal": {
+      "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round45m-20261027T074758Z\\ci-runs\\40472418849\\download-68fc49c08a86470bb410dfb38279db2d\\diagnostics\\f01-r20-dev-terminal-pair-probe1\\native-loop-13.asm.txt",
+      "sha256": "808ed202a70bfdd14dce93e8dd364ce90a79e2707654914291051b9cff481356"
+    }
+  },
+  "observations": [
+    "Both loopPair and loopEmit retain three direct of_bits relocations; no codec-count gain versus paired control.",
+    "Both prologues save six integer registers. loopPair reserves0xa8=168B; loopEmit0x78=120B. This is individual frame size, not combined peak.",
+    "loopPair retains two-lane mulps/addps and16B vector stack accesses. loopEmit has two scalar mulss/addss chains and4B stack accesses.",
+    "In ordinary repeated k path, loopPair explicit FP stack sites:0x116/0x1b3/0x279 stores and0x257/0x263/0x271 loads, six16B accesses=96 explicit bytes.",
+    "loopEmit repeated k sites:0x115/0x1b7 decoded stores,0x299/0x2a3 accumulator stores,0x26f/0x275/0x27a/0x280 loads, eight4B accesses=32 explicit bytes. Entry stores0x7b/0x85 are not multiplied into steady iterations.",
+    "loopPair terminal directly calls heartbeat/malloc forF2; loopEmit has neither direct relocation and performs two original array_push operations."
+  ],
+  "decision": "The exact terminal rewrite changes the former rawpair negative cost premise: it removes F2 and narrows cross-codec spills, while also losing vector arithmetic. Preserve for one future full-call measurement after real public integration; do not infer speed from bytes/instructions.",
+  "limits": "No timed invocation, new public BMMspec, or full-score. Array.push internal allocation, NaN replay, output checksum, and full dispatch cost remain. Ordinary steady-path explicit stack-byte counts are not latency or actual memory-bandwidth measurements; no speedup ratio derived."
+}

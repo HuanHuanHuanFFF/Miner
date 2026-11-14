@@ -1,0 +1,21 @@
+--- CI2-dc2-0f389.lean
++++ count2-local-bridge.lean
+@@ -5962,8 +5962,16 @@
+   · have hc : min 2 (p - 2 * g.val) = 2 := by omega
+     simp only [groupFrom, groupFromOriginal, h, ite_false]
+     rw [loopEmit_eq]
+-    simp only [hc]
+-    rfl
++    have emit_two (count : Nat) (hcount : count=2) (read : Fin count → Binary32) :
++        RowStream.emit count read out =
++          (out.push (read ⟨0,by omega⟩)).push (read ⟨1,by omega⟩) := by
++      subst count
++      unfold RowStream.emit
++      rw [Fin.foldl_succ, Fin.foldl_succ, Fin.foldl_zero] <;> rfl
++    exact (emit_two (min 2 (p - 2 * g.val)) hc
++      (fun l => Packed10.finish n baseA ((baseB + 2 * g.val) + l.val) p A B
++        (select (loop n baseA (baseB + 2 * g.val) p A B
++          0 Packed10.zero32 Packed10.zero32) l.val))).symm
+ 
+ @[inline] def group (batch m n p : Nat)
+     (A : Vector Binary32 (batch * m * n))

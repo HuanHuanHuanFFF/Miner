@@ -1,0 +1,104 @@
+{
+  "at_utc": "2026-10-29T08:11:29.717823+00:00",
+  "resumed_first_tool_utc": "2026-10-29T07:56:17Z",
+  "deadline_utc": "2026-10-29T08:19:16Z",
+  "official_commit": "accb82b6e2adeda1b41a57a260d68fb3879c427e",
+  "FloatLib": "0d91825727839f597fd06b22fdd038ea21480f0c",
+  "sources": [
+    {
+      "path": "source-private/Values.lean",
+      "git_blob_sha1": "9662350c91092ee5b18ed93fb10e71858d3f7dd2",
+      "bytes": 12821,
+      "sha256": "34e5482fa27a4a2cd33e86ffdbcac02916e59306f12a441cb659273dc633da0f",
+      "url": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/accb82b6e2adeda1b41a57a260d68fb3879c427e/lean/contract/ExactToolkit/Values.lean",
+      "public_source_copy": false,
+      "blob_verified": true
+    },
+    {
+      "path": "source-private/Round.lean",
+      "git_blob_sha1": "b135b1c53167600a53638e9f474e3ef4e7390ab6",
+      "bytes": 4439,
+      "sha256": "9097c68e8ea5fbc5613fe3131447dbb135052938b65f03bf2509e66f07a8a5a3",
+      "url": "https://github.com/conjectures-io/conjectures-optimisation-float-kernels/blob/accb82b6e2adeda1b41a57a260d68fb3879c427e/lean/contract/ExactToolkit/Round.lean",
+      "public_source_copy": false,
+      "blob_verified": true
+    },
+    {
+      "path": "sources/Narrow-Agreement.lean.raw",
+      "git_blob_sha1": "f319e0d19a7aa8f421a169c0c4f8bf6d2497722a",
+      "bytes": 20646,
+      "sha256": "83b97e39faa73fd66e1efcd579bfe41ffd827fb0bbb17c8c929c510330c7ce6d",
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/ExecFloat/Backends/Word/Narrow/Agreement.lean",
+      "public_source_copy": true,
+      "blob_verified": true
+    },
+    {
+      "path": "sources/Reduction-Proof.lean.raw",
+      "git_blob_sha1": "c0dbc2f67929605cdace2655b3b5bd76db38c01d",
+      "bytes": 36668,
+      "sha256": "dcde03320834ebc076274d596539e749e3e560b1086a3124fff58f5aa4101d3d",
+      "url": "https://github.com/lean-dojo/FloatLib/blob/0d91825727839f597fd06b22fdd038ea21480f0c/FloatLib/Floats/Formats/BinaryInterchange/Reduction/Proof.lean",
+      "public_source_copy": true,
+      "blob_verified": true
+    }
+  ],
+  "policy": {
+    "intake": null,
+    "policy": null,
+    "status": "PASS_ORIGINAL_AST_ONLY"
+  },
+  "files": [
+    {
+      "path": "ContractWordBridge.lean",
+      "bytes": 4295,
+      "sha256": "9a79cd70b8c33dd28cf15e97850264aa5892fc8bd9e75b42412ab754c6811d9a"
+    },
+    {
+      "path": "ContractWordBridge.lean.inc",
+      "bytes": 4274,
+      "sha256": "32b7320cad0359fb1427b2ed1cc55e6cb030524a2dd109c6aab3021205882eb4"
+    }
+  ],
+  "explicit_axiom_roots": [
+    "Submission.R25ContractWordBridge.toWord_native32",
+    "Submission.R25ContractWordBridge.native_dyadic_word",
+    "Submission.R25ContractWordBridge.native_ratScaled_word",
+    "Submission.R25ContractWordBridge.native_dyadic_result",
+    "Submission.R25ContractWordBridge.native_ratScaled_result",
+    "Submission.R25ContractWordBridge.finishWord_of_native_result",
+    "Submission.R25ContractWordBridge.finishWord_of_native_real_result",
+    "Submission.R25ContractWordBridge.finishWord_exact_zero",
+    "Submission.R25ContractWordBridge.finishWord_exact_zero_native",
+    "Submission.R25ContractWordBridge.zero_sign_cannot_be_erased",
+    "Submission.R25ContractWordBridge.inputModels_size",
+    "Submission.R25ContractWordBridge.dotOf_of_native_nonzero"
+  ],
+  "proof_status": "NOT_RUN",
+  "full_gate": "NOT_APPLICABLE_PROBE_ONLY",
+  "kernel_replay": "NOT_RUN",
+  "axiom_audit": "NOT_RUN",
+  "optional_interfaces": [
+    {
+      "path": "DotZeroBridge.lean.inc",
+      "bytes": 1451,
+      "sha256": "b7d892cb461fb30bb4656c61f8ab4042bb6d39e3b0df9f09a867b45e575867ee",
+      "proof_status": "NOT_RUN"
+    },
+    {
+      "path": "RationalDenOneBridge.lean.inc",
+      "bytes": 737,
+      "sha256": "98ecda089cb57768faaa38289419301fc9df290b7d64558c899407978c80dc10",
+      "proof_status": "NOT_RUN"
+    }
+  ],
+  "new_Kernel": false,
+  "local_Lean": false,
+  "CI_started": false,
+  "existing_policy1_unchanged": true,
+  "nonzero_finish_scope": "T != 0 and d.toRat = (T:Rat)*2^e; NB.roundDyadic d=q implies actual finishWord T e negZero=q for any negZero.",
+  "zero_scope": "finishWord 0 e negZero equals NB.roundDyadic of the zero dyadic with sign=negZero; erasing sign through ofIntDyadic 0 e is explicitly unequal when negZero=true.",
+  "actual_dot_scope": "The exact official dotState of the actual n input functions is used. Requires all actual input models finite, semantic finiteDot not .ok 0, and NB rounding of that exact state equals q.",
+  "remaining": "These thin bridges are not compiled. Producer equality to actualDotExact and nonzero semantic condition still need proofs. Prior cell/Native32 internal agreement remains separately unaccepted.",
+  "tokens": "UNKNOWN",
+  "cached_input_tokens": "UNKNOWN"
+}

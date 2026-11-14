@@ -1,0 +1,72 @@
+abbrev R28CRow := Array Nat × UInt64 × Nat
+
+@[inline] def R28CBits (b:UInt32):Nat :=
+ let l:=(Yk (b>>>16)).toNat
+ let h:=(Yk (b&&&0xFFFF)).toNat
+ if h<l then 0 else 24+h-l
+
+def R28CPrepGo (a:Array Nat) (q:UInt64) (i:Nat) (out:Array Nat) (sum:UInt64):Array Nat × UInt64 :=
+ if i<a.size then
+  let value:=a[i]!.toUInt64-0x4000000000000000+q
+  R28CPrepGo a q (i+1) (out.push value.toNat) (sum+value)
+ else (out,sum)
+termination_by a.size-i
+
+def R28CPrep (a:Array Nat) (b:UInt32):R28CRow :=
+ let bits:=R28CBits b
+ if bits<=39 && (b&&&0xFFFF)!=255 then
+  let pair:=R28CPrepGo a ((1:UInt64)<<<bits.toUInt64) 0 (Array.mkEmpty a.size) 0
+  (pair.1,pair.2,bits)
+ else (#[],0,bits)
+
+@[inline] def R28CFinish (n:Nat) (xb wb:Nat) (xs ws:UInt64) (d lo:UInt64) (bw:UInt32) (h l:UInt64):UInt64 :=
+ let aL:=xs<<<wb.toUInt64
+ let aH:=if wb=0 then 0 else xs>>>(64-wb.toUInt64)
+ let la:=l-aL
+ let ha:=h-aH-(if l<aL then 1 else 0)
+ let bL:=ws<<<xb.toUInt64
+ let bH:=if xb=0 then 0 else ws>>>(64-xb.toUInt64)
+ let lb:=la-bL
+ let hb:=ha-bH-(if la<bL then 1 else 0)
+ let bits:=(xb+wb).toUInt64
+ let cL:=n.toUInt64<<<bits
+ let cH:=if bits=0 then 0 else n.toUInt64>>>(64-bits)
+ let lc:=lb+cL
+ let hc:=hb+cH+(if lc<lb then 1 else 0)
+ let ld:=lc<<<d
+ let hd:=if d=0 then hc else (hc<<<d)|||(lc>>>(64-d))
+ YL lo ExactRuntime.oneW bw ((0:UInt64)-(hd>>>63)) hd ld 0
+  (fun v2 v1 v0 c=>YD v2 v1 v0 c ((lo.toNat:Int)-298))
+
+def R28CPair (X W b:Array UInt32) (inW outW:Nat) (relu:Bool) (i j:Nat)
+ (n:USize) (A1 A2 B:Array Nat) (hA1:n.toNat<=A1.size) (hA2:n.toNat<=A2.size) (hB:n.toNat<=B.size)
+ (xb1 xb2 wb:Nat) (xs1 xs2 ws:UInt64) (d1 d2 lo1 lo2:UInt64) (bw:UInt32)
+ (h1 l1 h2 l2:UInt64) (k:USize) (out:Array UInt32):Array UInt32 :=
+ if hk:k<n then
+  let w:=(B.uget k (by have:=USize.lt_iff_toNat_lt.mp hk;omega)).toUInt64
+  let p1:=(A1.uget k (by have:=USize.lt_iff_toNat_lt.mp hk;omega)).toUInt64*w
+  let p2:=(A2.uget k (by have:=USize.lt_iff_toNat_lt.mp hk;omega)).toUInt64*w
+  let m1:=l1+p1
+  let m2:=l2+p2
+  R28CPair X W b inW outW relu i j n A1 A2 B hA1 hA2 hB xb1 xb2 wb xs1 xs2 ws d1 d2 lo1 lo2 bw
+   (h1+(if m1<l1 then 1 else 0)) m1 (h2+(if m2<l2 then 1 else 0)) m2 (k+1) out
+ else
+  let r1:=R28CFinish inW xb1 wb xs1 ws d1 lo1 bw h1 l1
+  let r2:=R28CFinish inW xb2 wb xs2 ws d2 lo2 bw h2 l2
+  let o1:=act relu (if r1<0x100000000 then r1.toUInt32 else Yai X W b inW i j)
+  let o2:=act relu (if r2<0x100000000 then r2.toUInt32 else Yai X W b inW (i+1) j)
+  (out.set! (i*outW+j) o1).set! ((i+1)*outW+j) o2
+termination_by n.toNat-k.toNat
+decreasing_by exact ZI n k hk
+
+def R28COne (n:USize) (A B:Array Nat) (hA:n.toNat<=A.size) (hB:n.toNat<=B.size)
+ (xb wb:Nat) (xs ws:UInt64) (d lo:UInt64) (bw:UInt32) (h l:UInt64) (k:USize):UInt64 :=
+ if hk:k<n then
+  let a:=(A.uget k (by have:=USize.lt_iff_toNat_lt.mp hk;omega)).toUInt64
+  let b:=(B.uget k (by have:=USize.lt_iff_toNat_lt.mp hk;omega)).toUInt64
+  let p:=a*b
+  let low:=l+p
+  R28COne n A B hA hB xb wb xs ws d lo bw (h+(if low<l then 1 else 0)) low (k+1)
+ else R28CFinish n.toNat xb wb xs ws d lo bw h l
+termination_by n.toNat-k.toNat
+decreasing_by exact ZI n k hk

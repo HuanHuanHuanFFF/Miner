@@ -1,0 +1,11 @@
+--- CI1-39626d.lean
++++ D-frozen-dc2.lean
+@@ -5960,7 +5960,7 @@
+   by_cases h : min 2 (p - 2 * g.val) = 1
+   · simp only [groupFrom, h, if_pos]
+   · have hc : min 2 (p - 2 * g.val) = 2 := by omega
+-    simp only [groupFrom, groupFromOriginal, h, if_neg]
++    simp only [groupFrom, groupFromOriginal, h, ite_false]
+     rw [loopEmit_eq]
+     simp only [hc]
+     rfl

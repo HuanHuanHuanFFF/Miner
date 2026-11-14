@@ -1,0 +1,67 @@
+{
+  "at_utc": "2026-10-28T00:34:27.072062+00:00",
+  "first_tool_utc": "2026-10-28T00:31:35Z",
+  "source": {
+    "file": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\independent-frontier\\Kernel-native-cold-add-probe.lean",
+    "bytes": 227320,
+    "sha256": "93170f5c460ce15dbba842e983cc4f127ef654b9736717537a28acf6c184f787"
+  },
+  "fragment": {
+    "file": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\independent-frontier\\Runtime-native-cold-add.lean.inc",
+    "bytes": 490,
+    "sha256": "21cd91284ee5bc31fed0e7aaa3b1cf35e6a705cbe2e680d8095baf2388551f50"
+  },
+  "helper": {
+    "file": "competitions\\floatlib\\candidates\\f01-d7-research\\round6h-20261027T211247Z\\research\\independent-frontier\\HelperAudit-native-cold-add.lean.inc",
+    "bytes": 265,
+    "sha256": "011ee182d5fd26d1ff74888798c8bd63d88ca50540742d60abc29184a9d41c04"
+  },
+  "base": {
+    "file": "competitions\\floatlib\\candidates\\f01-r15-dev-packed-b2-1\\Kernel.lean",
+    "bytes": 226829,
+    "sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58"
+  },
+  "exact_B2_prefix": true,
+  "root_count": 6,
+  "roots": [
+    "Submission.add_spec",
+    "Submission.mul_spec",
+    "Submission.sum_spec",
+    "Submission.bmm_spec",
+    "Submission.R22NativeColdAdd.coldAdd",
+    "Submission.R22NativeColdAdd.diagnosticEntry"
+  ],
+  "historical_sources": [
+    {
+      "file": "competitions\\floatlib\\candidates\\f01-r6-fused-add-proof1\\Kernel.lean",
+      "bytes": 141487,
+      "sha256": "bdbcdd13217166bcb2a086fa228b061316c98eb2ccba247eecb744b1e9619f45"
+    },
+    {
+      "file": "competitions\\floatlib\\candidates\\f01-r6-normal-add-proof1\\Kernel.lean",
+      "bytes": 142431,
+      "sha256": "8a0e40fb8154987496d751827e382003c88b5f096df0ee4baeb55e2ca8a4b373"
+    },
+    {
+      "file": "competitions\\floatlib\\candidates\\f01-d6-finite-decode-proof1\\Kernel.lean",
+      "bytes": 141218,
+      "sha256": "e46dd1560a682c15747a876b80382afaeb78a7e025163abc7319069976346669"
+    },
+    {
+      "file": "competitions\\floatlib\\candidates\\f01-d11-scalar-normal-band\\Kernel.lean",
+      "bytes": 240454,
+      "sha256": "e279b35413de1a753dc38edafcca3f476745390ede518ddeab93f0ccc1b8ef1d"
+    }
+  ],
+  "novelty_boundary": "The full fastOK domain and arithmetic are old R6 bdbc. Only the separate noinline exact B2 fallback boundary is the new cost hypothesis; current ADD frame/tail effect UNKNOWN.",
+  "entry": "Submission.R22NativeColdAdd.diagnosticEntry",
+  "caller": "Inline complete entry in a static scalar callback; retain coldAdd noinline and original operand order",
+  "guard": "Existing fastOK pair; each accepts +0/-0 or normal raw exponent24..254; no thresholds changed",
+  "removed_source_work": "Inside accepted arm: both convert eligibility checks and output result self-BEq. Native output toBits and its own NaN normalization remain.",
+  "public_four": "B2_UNCHANGED",
+  "new_ADD_spec": "NOT_PROVED",
+  "Lean": "NOT_RUN",
+  "cost": "UNKNOWN",
+  "new_numeric_model": "NONE; arithmetic and guard reuse existing B2 proven helpers",
+  "stop_rule": "If actual selected callback retains comparable frame/guard/import work or loses complete cost, close; do not claim gain from noinline spelling or resweep guard."
+}

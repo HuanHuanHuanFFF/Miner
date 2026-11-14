@@ -1,0 +1,51 @@
+{
+  "at_utc": "2026-10-29T20:11:10.845148+00:00",
+  "id": "R27-WORD-RECIPROCAL-001",
+  "owner": "Droot",
+  "priority": "Do not duplicate D07 full helper. Use explicit-cancellation Nat root only if D07 Nat automation fails; modular64 remains separate requested core.",
+  "source": {
+    "file": "ReciprocalNatCore.lean",
+    "bytes": 3103,
+    "sha256": "abc6707b180fcb497be514e180ddd6a7b8f0a9ca2bb131ece90802df46ee0b61",
+    "intake": null,
+    "policy": null
+  },
+  "roots": [
+    "Submission.R27Reciprocal.reciprocal_bounds",
+    "Submission.R27Reciprocal.corrected_exact"
+  ],
+  "compile": "Standalone ContractExact-only mathematical helper; retain full diagnostics; no native/full12 claim",
+  "mechanism": "Prove floor((B-1)/d) multiply-high estimate needs at most one correction, for every0<a+1<=B andd>0",
+  "next_link": "Public27 m64_v provides a source reference only; public12 lacks that helper. Need self-authored standalone high64 proof for12 or verified licensed port, then actual UInt64 no-wrap quotient/remainder bridge. d=0 stays original behavior.",
+  "state": "DEFERRED_ALTERNATE_ONLY_D07_IS_ACTUAL_PRIMARY",
+  "comparison": "No performance claim. Current champion ratio UNKNOWN pending config reconciliation.",
+  "source_correction": "Verified20:12: m64/m64_v not declared in12; earlier handoff generalized12/27 incorrectly.27 does contain it.",
+  "mulhigh_helpers": [
+    {
+      "file": "MulHighNatCore.lean",
+      "bytes": 2095,
+      "sha256": "2e5dd1bb8c422ff460ceea17528e6be9af50508c694dcad64ec2c40cd27955de",
+      "roots": [
+        "Submission.R27MulHigh.product_identity",
+        "Submission.R27MulHigh.highProduct_exact"
+      ],
+      "state": "NOT_COMPILED"
+    },
+    {
+      "file": "MulHighContractOnly.lean",
+      "bytes": 6843,
+      "sha256": "5323af7b9467ed7d40825e75f8de61b6597cb4bd0dfaf445d1118ffb8893d0b2",
+      "roots": [
+        "Submission.R27MulHigh.mulHigh_exact"
+      ],
+      "state": "NOT_COMPILED"
+    }
+  ],
+  "priority_order": [
+    "ReciprocalNatCore.lean independent",
+    "MulHighNatCore.lean",
+    "MulHighContractOnly.lean only after Nat root passes"
+  ],
+  "updated_utc": "2026-10-29T20:20:48.469849+00:00",
+  "independent_review": "RECIPROCAL-REVIEW.md"
+}

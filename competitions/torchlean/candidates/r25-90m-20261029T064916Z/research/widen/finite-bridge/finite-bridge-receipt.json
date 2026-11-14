@@ -1,0 +1,64 @@
+{
+  "created_at_utc": "2026-10-29T07:07:36.677372+00:00",
+  "proof_status": "NOT_RUN",
+  "status": "STATIC_SOURCE_CHECKS_PASS_LEAN_NOT_RUN",
+  "new_roots": [
+    "Submission.FastMul.fastLog2_eq",
+    "Submission.R24SubnormalWiden.subnormal_finite_value",
+    "Submission.R25FiniteWiden.subnormal_actual_value",
+    "Submission.R25FiniteWiden.finite_domain_split",
+    "Submission.R25FiniteWiden.finite_actual_value"
+  ],
+  "inherited_roots": [
+    "Submission.R24RepresentationWiden.normal_decode",
+    "Submission.R24RepresentationWiden.native_model",
+    "Submission.R24RepresentationWiden.native_finite",
+    "Submission.R24RepresentationWiden.actual_native_value",
+    "Submission.R24RepresentationWiden.signed_zero_bits",
+    "Submission.R24RepresentationWiden.shift29_toReal",
+    "Submission.R25ActualWiden.actual_sign_eq",
+    "Submission.R25ActualWiden.actual_widenBits_eq",
+    "Submission.R25ActualWiden.actual_native_model",
+    "Submission.R25ActualWiden.actual_native_finite",
+    "Submission.R25ActualWiden.actual_native_value",
+    "Submission.R25ActualWiden.actual_signed_zero_bits"
+  ],
+  "scope": "Actual widening on every finite binary32 input; no new runtime definitions or changes beyond the exact extracted sx/sr/fastLog2/widenBits",
+  "source_subnormal_sha256": "62380963f91440fc18649c56e9a7403b88a88ff0fe841fc905ddbaf0d9199782",
+  "source_subnormal_path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/rounding-review/SubnormalWiden-v1.lean.inc",
+  "changes": [
+    "count_nat uses a single simpa to avoid potential no-goals rfl",
+    "native_ofBits_decode reuses minimal W7 support theorem",
+    "shift_value uses W7-style explicit sign/cast/zpow proof; avoids old shift-helper whnf timeout route"
+  ],
+  "log2_helper_theorems": [
+    "log2_shift",
+    "log2_lt_64",
+    "step",
+    "log2_lt_two",
+    "fastLog2_eq"
+  ],
+  "outputs": [
+    {
+      "path": "FastLog2Proof.lean.inc",
+      "bytes": 3183,
+      "sha256": "a25be025b3c4ad59b79438e1a84c07d7b1d25caaa6133b6e6c492a4b58ef56ab"
+    },
+    {
+      "path": "SubnormalWiden2.lean.inc",
+      "bytes": 12130,
+      "sha256": "fee3d8ba404977f0f493b7630539df1b4ce756debf2f4fb8fe103c6193beb4cc"
+    },
+    {
+      "path": "FiniteWidenCarrier.lean",
+      "bytes": 37776,
+      "sha256": "5460ffc4a24fbd5eb833396af20910a112943e707b7a98d90b316d94c110c443"
+    },
+    {
+      "path": "Kernel.lean",
+      "bytes": 76261,
+      "sha256": "e5613ee190d4185d665b0cd52482e37dc0770ac468c19ee676cac7a6ba964ab6"
+    }
+  ],
+  "limits": "Nonzero subnormal branch never compiled in R24; no previous PASS inferred. Need exact fixed-source statement/replay/axiom checks. No prepare/getter/Tail/checker/fallback proof or timing claim."
+}

@@ -1,0 +1,52 @@
+{
+  "candidate": "f01-r24-dev-scalar-rescale-native321",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "8dad3a1fdefabab670502e0dde2454882de17c375635cc9546a964fc8b0e0c6f",
+  "candidate_bytes": 36803,
+  "validation_mode": "statement-only",
+  "diagnostic_only": true,
+  "diagnostic_timeout_seconds": 600,
+  "proof_status": "NOT_RUN_ACTUAL_NATIVE32_ROUNDRATSCALED_ALL_BRANCHES_RESCALE",
+  "performance": "NOT_A_PERFORMANCE_CANDIDATE",
+  "formal_submission": "NOT_SUBMITTED",
+  "official_submission_inherited": false,
+  "helper_audit_module": "development-helper-audit-v8.py",
+  "helper_audit_module_path": "f01-d7-research/round9h-20261026T194639Z/development-helper-audit-v8.py",
+  "helper_audit_module_sha256": "5b58eece211bd9cdaa270fc82bef624a5974c7d056732e19f54547c0fe6ef975",
+  "explicit_helper_audit": [
+    "Submission.add_spec",
+    "Submission.mul_spec",
+    "Submission.sum_spec",
+    "Submission.bmm_spec",
+    "Submission.R24RescaleNative32.roundRatScaled_rescale"
+  ],
+  "helper_audit_required_endpoints": [
+    "Submission.add_spec",
+    "Submission.mul_spec",
+    "Submission.sum_spec",
+    "Submission.bmm_spec",
+    "Submission.R24RescaleNative32.roundRatScaled_rescale"
+  ],
+  "helper_audit_expected_count": 5,
+  "helper_audit_source_sha256": "8dad3a1fdefabab670502e0dde2454882de17c375635cc9546a964fc8b0e0c6f",
+  "diagnostic_evaluations": [],
+  "components": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/quotient-boundary/RescaleNative32.lean.inc",
+      "bytes": 3758,
+      "sha256": "6d704ea38d73e8daadce7e6a2308dc2c25d550eba67e8de8c485b4629af25d90"
+    }
+  ],
+  "runtime_prefix": {
+    "path": "competitions/floatlib/references/official-incumbent/Kernel.lean",
+    "bytes": 33043,
+    "sha256": "5d0cef3ff21093ca05cde92e516edfe45afca8e11996ad4858e7fb2407d65868",
+    "byte_identical": true
+  },
+  "public_fixed_dependencies": {
+    "FloatLib_commit": "0d91825727839f597fd06b22fdd038ea21480f0c",
+    "Model.floorLog2_scaleByPowerOfTwo": "Rational/Logarithm.lean:327, blob88c6df468dcb07bcc68e78c998e74a6a9eb7fe01",
+    "Model.roundQuotientEven_scaleByPowerOfTwo_add": "Rational/NearestEven.lean:201, blob796a22ce1c8601df415e600d3677b730b80c0a4e"
+  },
+  "scope": "Old ContractTensor mathematical primitive, original shipped four endpoints. For all sign,num,den,source,target, exact logical scale source-target preserves the actual NativeBinary32.roundRatScaled word. Includes zero numerator, zero denominator canonical NaN, subnormal/normal, carry, underflow and overflow. No floating intermediate, new runtime scale allocation, target kernel, cost or adoption claim."
+}

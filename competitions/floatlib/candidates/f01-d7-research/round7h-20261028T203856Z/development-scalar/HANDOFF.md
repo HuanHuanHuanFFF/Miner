@@ -1,0 +1,11 @@
+# R24 scalar：wholebank完整结果与后续覆盖已交接
+
+D唯一Git/index/push/CI/采用；本方仅ownscope，无子agent／本机Lean/native／独立CI／Git／正式上传／资金。实际首工具UTC20:41:50；共同截止2026-10-29T03:38:56Z，03:15后runtime冻结。Sol/xhigh；tokens/cache/reasoning/队列占用UNKNOWN。
+
+- **实测闭环**：原FP dd775683、Main254a106f、Barrier3d374250、输入b146/f490均冻结。40801622733实际while每MAC16B Floatbox，Root仅把结构Float acc/result体接入原R24PortableF64（派生98784d4e、Kernel e50bf876）；40804860824原5bf＋Tail e50各32进程完整，148dot＋1049RNE／known86accept51 PASS。native-f64-tail-review实查actual attempt→double worker，无per-MAC Float/tuple分配；父方统计wholeLazy .671–.725、preparedEager .595–.688，子方不另重算统计／不推官方收益。
+- **Wholebank冻结**：dot-bank/GenericDotBank c76f6b1d／2393B，Main7f6fcc53／9381B，Barrier aabd8cd1／246B，fixtures986eaf0d／109728B。6banks／2seeds／464outputs／44032MAC。40810384656 typing、464words×3backend、typed C/ASM PASS，driver旧API失败原件留存；Root只改driver后40811305126完整SUCCESS，父方报eager/control .2723–.2892、lazy .3657–.3756；Luna全16logs／144ns独立核。cost1→cost2六份C/ASM原字节一致。
+- **实际C/ASM审阅**：dot-bank/review-native-bank/review.json ef744dbf。三bank入口逐行构建主缓存，output分配与缓存释放在bank内；三pass同out变量hashAll→dec_ref→回边，observer实际逐元素load/add；FP仍double ABI无MAC boxing。主缓存O(rows+cols) calls，但lazy miss另付per-pair exact prep；限定selected witnesses，非通用C证明。完整片段与cost2-same-body.json齐。
+- **覆盖／下一确认**：coverage-summary.json 36fce4b2、NEXT-CONFIRM.md 8d12cc61，fixed verify重放PASS。仅已见6banks模型346接受/118拒；108精确零=102零积+6相消，84dot active span≥64，无exacttie/subnormal/nonfinite输出；108行occurrences/90raw-unique，不去重。tier-cross：word64接受6/拒108(零)，word128接受260/拒0，replay接受80/拒10。NEXT-CONFIRM-STRATA.md特别补nonzero narrow-span word64盲区；未生成新确认输入／CI，不估官方分数。无非零subnormal/NaN/Inf/minnormal/overflow/n>128等bank覆盖。
+- **下一proof接口**：proof-frontier/FloatArrayReadBridge.lean.inc b953bace／2198B为actual98784 worker→ReadFold f9d3的两条erased证明草稿，保留actual FloatArray getters，无runtime data投影；NOT_COMPILED。FINITE-LATTICE-INTERFACE.md＋72dots/46050prefix有限模型支持product精确、2^-298格点、normal-or-zero及B界纸面分解，全部Lean桥仍UNPROVED。forged-prepared-counterexample.json反驳仅valid=true即sound的弱接口；实际prepare wrappers不受影响。
+
+旧合法F64 ADD全负停放／MUL因关榜NOT_RUN／数学typing失败与冻结未知保留，见history及各READY。当前是generic portable primitive/bank研究，无ContractExact kernels／官方BMM／全称正确性／采用。终态原件已收；完整清单final-scalar-receipt.json，资源checkpoint-bank-coverage.json。

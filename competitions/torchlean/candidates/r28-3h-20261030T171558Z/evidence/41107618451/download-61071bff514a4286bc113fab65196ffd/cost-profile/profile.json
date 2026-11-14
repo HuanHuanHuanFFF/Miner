@@ -1,0 +1,256 @@
+{
+  "source_sha256": "595a90fa2b6bc5d3657434fae7d1292b27910ef653da2b7f409ed9c34c956e2b",
+  "original_C_sha256": "e5a5081c361f1e53e31d13d410318c88a8f9eef3e9e7babb6677ba1d1fdf2bb0",
+  "instrumented_C_sha256": "08ad508be348c42989fa87708c10f7d4999c0193dea1fe1b88d4735c3a72104d",
+  "control_binary_sha256": "d4dbef878098459310473d2d10735136701e1729e321d9302f317d8781fe5a47",
+  "profiled_binary_sha256": "e43a340ce8177d8edb410b4d3c2462f48e3a5ce80da67a12f9d13afa04f1ee18",
+  "symbols": [
+    "layernorm",
+    "add_relu",
+    "linear",
+    "gemm"
+  ],
+  "commands": [
+    {
+      "label": "profile-compile",
+      "argv": [
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/bin/clang",
+        "-c",
+        "-o",
+        ".lake/build/ir/R27EntryProfile.c.o.export",
+        "work/R27EntryProfile.c",
+        "-I",
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/include",
+        "-fstack-clash-protection",
+        "-ffp-contract=off",
+        "-fdata-sections",
+        "-ffunction-sections",
+        "-fPIC",
+        "-fvisibility=hidden",
+        "-Wno-unused-command-line-argument",
+        "--sysroot",
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0",
+        "-nostdinc",
+        "-isystem",
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/include/clang",
+        "-O3",
+        "-DNDEBUG",
+        "-DLEAN_EXPORTING",
+        "-isystem",
+        "/usr/include",
+        "-isystem",
+        "/usr/include/x86_64-linux-gnu"
+      ],
+      "exit_code": 0,
+      "seconds": 67.00988275700001
+    },
+    {
+      "label": "profile-link",
+      "argv": [
+        "/home/runner/.elan/toolchains/leanprover--lean4---v4.34.0/bin/clang",
+        "-o",
+        ".lake/build/bin/R27EntryProfile",
+        "@work/R27EntryProfile.rsp"
+      ],
+      "exit_code": 0,
+      "seconds": 2.8199403369999914
+    }
+  ],
+  "rows": [
+    {
+      "cell": "mixer:b1:normal",
+      "instrumented_kernel_entry_times": {
+        "layernorm": {
+          "calls": 384,
+          "inclusive_ns": 13775040,
+          "exclusive_ns": 13775040
+        },
+        "add_relu": {
+          "calls": 384,
+          "inclusive_ns": 2595082,
+          "exclusive_ns": 2595082
+        },
+        "linear": {
+          "calls": 576,
+          "inclusive_ns": 36137345,
+          "exclusive_ns": 36137345
+        },
+        "gemm": {
+          "calls": 192,
+          "inclusive_ns": 6822697,
+          "exclusive_ns": 6822697
+        }
+      },
+      "share_within_profiled_entries": {
+        "layernorm": 0.2321759973560835,
+        "add_relu": 0.043739673465254536,
+        "linear": 0.6090889113335335,
+        "gemm": 0.1149954178451285
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "mixer:b1:wide",
+      "instrumented_kernel_entry_times": {
+        "layernorm": {
+          "calls": 384,
+          "inclusive_ns": 38416345,
+          "exclusive_ns": 38416345
+        },
+        "add_relu": {
+          "calls": 384,
+          "inclusive_ns": 2596913,
+          "exclusive_ns": 2596913
+        },
+        "linear": {
+          "calls": 576,
+          "inclusive_ns": 37816373,
+          "exclusive_ns": 37816373
+        },
+        "gemm": {
+          "calls": 192,
+          "inclusive_ns": 7076454,
+          "exclusive_ns": 7076454
+        }
+      },
+      "share_within_profiled_entries": {
+        "layernorm": 0.44719003316237727,
+        "add_relu": 0.03022967464993894,
+        "linear": 0.44020598773649156,
+        "gemm": 0.08237430445119225
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "mixer:b1:sparse",
+      "instrumented_kernel_entry_times": {
+        "layernorm": {
+          "calls": 384,
+          "inclusive_ns": 12973240,
+          "exclusive_ns": 12973240
+        },
+        "add_relu": {
+          "calls": 384,
+          "inclusive_ns": 2831699,
+          "exclusive_ns": 2831699
+        },
+        "linear": {
+          "calls": 576,
+          "inclusive_ns": 36345330,
+          "exclusive_ns": 36345330
+        },
+        "gemm": {
+          "calls": 192,
+          "inclusive_ns": 6744611,
+          "exclusive_ns": 6744611
+        }
+      },
+      "share_within_profiled_entries": {
+        "layernorm": 0.22027789172844905,
+        "add_relu": 0.04808056320006086,
+        "linear": 0.6171220656192864,
+        "gemm": 0.11451947945220366
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "mixer:b4:normal",
+      "instrumented_kernel_entry_times": {
+        "layernorm": {
+          "calls": 1536,
+          "inclusive_ns": 62571631,
+          "exclusive_ns": 62571631
+        },
+        "add_relu": {
+          "calls": 1536,
+          "inclusive_ns": 10244966,
+          "exclusive_ns": 10244966
+        },
+        "linear": {
+          "calls": 2304,
+          "inclusive_ns": 143054034,
+          "exclusive_ns": 143054034
+        },
+        "gemm": {
+          "calls": 768,
+          "inclusive_ns": 29662982,
+          "exclusive_ns": 29662982
+        }
+      },
+      "share_within_profiled_entries": {
+        "layernorm": 0.2548393689787801,
+        "add_relu": 0.041725309520045224,
+        "linear": 0.5826250518294618,
+        "gemm": 0.12081026967171293
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "mixer:b4:wide",
+      "instrumented_kernel_entry_times": {
+        "layernorm": {
+          "calls": 1536,
+          "inclusive_ns": 164153461,
+          "exclusive_ns": 164153461
+        },
+        "add_relu": {
+          "calls": 1536,
+          "inclusive_ns": 10538923,
+          "exclusive_ns": 10538923
+        },
+        "linear": {
+          "calls": 2304,
+          "inclusive_ns": 155501976,
+          "exclusive_ns": 155501976
+        },
+        "gemm": {
+          "calls": 768,
+          "inclusive_ns": 30548533,
+          "exclusive_ns": 30548533
+        }
+      },
+      "share_within_profiled_entries": {
+        "layernorm": 0.4550428135530864,
+        "add_relu": 0.029214499313781353,
+        "linear": 0.4310604006826546,
+        "gemm": 0.08468228645047762
+      },
+      "checksum_pairs": 6
+    },
+    {
+      "cell": "mixer:b4:sparse",
+      "instrumented_kernel_entry_times": {
+        "layernorm": {
+          "calls": 1536,
+          "inclusive_ns": 63323398,
+          "exclusive_ns": 63323398
+        },
+        "add_relu": {
+          "calls": 1536,
+          "inclusive_ns": 11459691,
+          "exclusive_ns": 11459691
+        },
+        "linear": {
+          "calls": 2304,
+          "inclusive_ns": 147742631,
+          "exclusive_ns": 147742631
+        },
+        "gemm": {
+          "calls": 768,
+          "inclusive_ns": 29959873,
+          "exclusive_ns": 29959873
+        }
+      },
+      "share_within_profiled_entries": {
+        "layernorm": 0.2508000446583897,
+        "add_relu": 0.045387504545655405,
+        "linear": 0.5851527180008247,
+        "gemm": 0.11865973279513022
+      },
+      "checksum_pairs": 6
+    }
+  ],
+  "scope": "INSTRUMENTED_COST_DISCRIMINATOR_ONLY_NOT_OFFICIAL_TIMING_OR_GATE",
+  "boundary": "Pure kernel-entry wall time; nested profiled entries removed from exclusive sums. Output destruction outside these calls is excluded. Bench warmups may enter counters. One root, six cells, six workloads; no champion score or whole-model-share equality claim.",
+  "publication": "Only derived counters/own transform and hashes; whole source/C stays ephemeral"
+}

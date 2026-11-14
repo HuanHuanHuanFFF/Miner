@@ -1,0 +1,2 @@
+CI4 draft已按R选择仅pointwise128-nat53 5ecfdd8c/245424B，selfcontainedrecipe a5a99f31（无外部文件依赖），重建逐字一致。两个helper私有重建prefix0161443f/a74e72ac硬cap120、异常逐项记录并继续；新whole85eb4a9d只在两prefix都exit0时原all12，否则SKIPPED。NativeOnly完整成本排fullgate之前。所有source/输入/门槛已预冻结在batch4/plan-draft.json，尚未派发，若CI3强结果先确认。
+helper原prefix源码绝不存OUT/不公开。原始Lean检查日志按已授权原始CI证据保留字节/hash，日志只打印AX/错误诊断，未请求dump整源；回收后检查是否含整源，不能因假设额外删掉关键错误证据或新增用户审批。本轮私保全上游Kernel/私人聊天不变。已知四函数计数是C派生词法计数，非ASM/性能结论。verify只复核新helper控制流/数据绑定/条件全gate后用固定audit。

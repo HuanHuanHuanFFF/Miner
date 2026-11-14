@@ -1,0 +1,49 @@
+{
+  "at_utc": "2026-10-30T00:16:13.027825+00:00",
+  "state": "FINITE_ENDPOINT_MUTANTS_AND_ACTUAL_YC_METADATA_NOT_NATIVE",
+  "helper_sha256": "32d8265764f818866634a2d4be978e5629767cb6c6ee643801512664784a5a26",
+  "actual_code_preserves_both_guards": true,
+  "bias_mutant": {
+    "rows": 4,
+    "n": 16,
+    "outW": 1,
+    "X": "all3f800000",
+    "W": "alternating3f800000,bf800000",
+    "bias": "3f800000",
+    "Xmeta": {
+      "base": 125,
+      "high": 126,
+      "span": 1
+    },
+    "Wmeta": {
+      "base": 125,
+      "high": 126,
+      "span": 1
+    },
+    "base": 250,
+    "correct": "3f800000",
+    "wrong_use126_in_bias_shift": "34000000"
+  },
+  "zero_shift_mutant": {
+    "rows": 4,
+    "n": 16,
+    "outW": 1,
+    "X": "all3f800000",
+    "W": "all3f800000",
+    "bias": "00000000",
+    "base": 250,
+    "group_lo": 4503599627370496,
+    "group_hi": 0,
+    "delta": 0,
+    "correct": "41800000",
+    "wrong_uint64_shift64_wrap": "61800000"
+  },
+  "all_zero_metadata": {
+    "base": 510,
+    "high": 0,
+    "span": 18446744073709551106
+  },
+  "all_zero_scope": "Yc rawmin ignoreszero throughUInt32(v-1)wrap; allzero minfield511 ->Yk510, wrappedspan failsdenseguard. Do notassumeallzero metadataisbase254/zero span.",
+  "proof_bounds": "Xlocal<2^27,Wfactor<2^30 ->64productmass<2^63; n<=2^20 and actualrawrange<=58 ->bodymass<2^126, bias<2^105, total<2^127. NeedactualYc/coherence, notthreeindependentloosebounds.",
+  "build_state": "D reportsBand11twoNat/UInt64typeerrors; NOmeasurements, notalgorithmnegative. NoCnewCI ornativecompile."
+}

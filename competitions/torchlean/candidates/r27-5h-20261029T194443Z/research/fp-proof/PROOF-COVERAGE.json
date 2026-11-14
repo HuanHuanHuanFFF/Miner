@@ -1,0 +1,244 @@
+{
+  "at_utc": "2026-10-29T22:55:40.689246+00:00",
+  "scope": "Current FP proof coverage and missing exact runtime edges, not an acceptance claim for uncompiled sources",
+  "accepted_helper_unique_named_roots": 19,
+  "accepted_helper_exact_files": 5,
+  "original_all12_gate": "NOT_RUN_FOR_FP_ROUTE",
+  "current_champion_performance": "DirectcurrentchampionmeasurementUNKNOWN; frozenFP23run8nativecostnegative, snapshot43ratio2.405218 INFERRED",
+  "nodes": [
+    {
+      "id": "key",
+      "path": "sources-v1/KeyCoreContractOnly.lean",
+      "bytes": 7648,
+      "sha256": "4e1ed0b471a74b5c6f019c956c2d564dadf91736a295900dba7ef5aa6a80b26b",
+      "state": "HELPER_ACCEPTED",
+      "roots": [
+        "orderKey_nat",
+        "orderKey_lt_cases",
+        "finite64_iff_exp",
+        "finite64_model"
+      ],
+      "requires": [],
+      "scope": "Actual UInt64 bit operations / finite64 model"
+    },
+    {
+      "id": "real_order",
+      "path": "sources-v1/RealStrictContractOnly.lean",
+      "bytes": 16126,
+      "sha256": "e004d3d726e3aa0ac342488853bdadcfa10fb2838a4374b876bf62d20c53dcb9",
+      "state": "HELPER_ACCEPTED",
+      "roots": [
+        "raw_value",
+        "magnitudeReal_strictMono",
+        "orderKey_lt_real",
+        "native_ofBits",
+        "orderKey_native_endpoints"
+      ],
+      "requires": [
+        "key"
+      ],
+      "scope": "Strict real order with signed-zero exception explicit"
+    },
+    {
+      "id": "prepare_getter",
+      "path": "producer-v2/PrepareAgreementContractOnly.lean",
+      "bytes": 8163,
+      "sha256": "ab8b70b9db08c74a806e73b0fa0cf1b7bd94b34eb235aed5b4caeba7eb4ede72",
+      "state": "HELPER_ACCEPTED",
+      "roots": [
+        "prepare_getter_interface"
+      ],
+      "requires": [],
+      "scope": "Actual R26 raw-array prepare value getters, validity and length. Not new ThinPrepared."
+    },
+    {
+      "id": "guarded_checker",
+      "path": "boundary-v2/GuardedNonzeroContractOnly.lean",
+      "bytes": 36650,
+      "sha256": "fdb7fc1e77abbfbf03b9d0a0ed9a917d270c3fafd16f1ba9f8d2b7b491c938a0",
+      "state": "HELPER_ACCEPTED",
+      "roots": [
+        "actual_acceptance_bounds",
+        "accepted_endpoint_equations",
+        "actual_acceptance_contains_exact_of_error",
+        "actual_accepted_total_nonzero"
+      ],
+      "requires": [
+        "real_order"
+      ],
+      "scope": "Actual certify and RNE midpoint fixed-point pullback; only radius finite + real sum error remain producer premises",
+      "receipt": "batch6-proof-receipt.json"
+    },
+    {
+      "id": "prepare_peak",
+      "path": "producer-v2/PreparePeakContractOnly.lean",
+      "bytes": 13246,
+      "sha256": "169fc73b25980a29a965e92964c188ec3798ee5ba9d7caaba43484823f5320f0",
+      "state": "NOT_RUN",
+      "roots": [
+        "prepare_full_interface"
+      ],
+      "requires": [
+        "prepare_getter"
+      ],
+      "scope": "Actual prepared max exponent bounds"
+    },
+    {
+      "id": "finite_widen",
+      "path": "producer-v1/FiniteWidenContractOnly.lean",
+      "bytes": 38493,
+      "sha256": "2f07e19355ab4eff8d91d081d9b1d9cd50f531a818f457e5d2a1556708587f64",
+      "state": "NOT_RUN",
+      "roots": [
+        "finite_actual_value"
+      ],
+      "requires": [],
+      "scope": "Full finite including nonzero subnormal; normal/zero accepted predecessor cannot replace this"
+    },
+    {
+      "id": "native_mul",
+      "path": "numerics-v1/NativeMulContractOnly.lean",
+      "bytes": 16633,
+      "sha256": "6d5f347a62a27d4ec665a59999fe0e1c0b7785189d97570031883ddc38c9ec1c",
+      "state": "NOT_RUN",
+      "roots": [
+        "native_mul_exact_from_raw32_values"
+      ],
+      "requires": [
+        "finite_widen"
+      ],
+      "scope": "Exact binary64 product of actual finite binary32 values"
+    },
+    {
+      "id": "sum_forward",
+      "path": "numerics-v1/Sum3ContractOnly.lean",
+      "bytes": 11602,
+      "sha256": "dddd68ad8cb498f97001da511e462867ddb8cd93977d97931e9319140bbaa762",
+      "state": "NOT_RUN",
+      "roots": [
+        "sum_enclosure"
+      ],
+      "requires": [
+        "native_mul"
+      ],
+      "scope": "Reusable SUM3 round-grid sum proof; actual indexed list/caller binding remains"
+    },
+    {
+      "id": "radius",
+      "path": "numerics-v1/RadiusContractOnly.lean",
+      "bytes": 10716,
+      "sha256": "bac402df0055373afbaec14ea7fed230a65520bb934a77ce7514aaa9e1913cab",
+      "state": "NOT_RUN",
+      "roots": [
+        "radius_finite_value"
+      ],
+      "requires": [
+        "prepare_peak"
+      ],
+      "scope": "Actual bit-built radius finite/value; endpoint magnitude half unnecessary after guard bridge"
+    },
+    {
+      "id": "tail_binding",
+      "path": "producer-v1/TailContractOnly.lean",
+      "bytes": 1618,
+      "sha256": "1156d745db74fd3fd21d11051937ef9464d1328a8db8271a87a0f7ee5a3ccd18",
+      "state": "NOT_RUN",
+      "roots": [
+        "sumRemaining_zero_eq_sum"
+      ],
+      "requires": [
+        "sum_forward"
+      ],
+      "scope": "Actual tail native sum equals the sum primitive"
+    },
+    {
+      "id": "official_total",
+      "path": "numerics-v1/ExactRawTotalContractOnly.lean",
+      "bytes": 2412,
+      "sha256": "103b8934463d371cb9f46fadd7702a93ea23b684e8d028b52205218a1f873bdd",
+      "state": "NOT_RUN",
+      "roots": [
+        "slice_eq_scaled_dsum"
+      ],
+      "requires": [],
+      "scope": "Actual input words -> official dsum scaled2^-298"
+    },
+    {
+      "id": "official_finish",
+      "path": "numerics-v1/FiniteDotFinishContractOnly.lean",
+      "bytes": 2847,
+      "sha256": "232c37f43d912e873040e6b6f0f0702302dd5a386000d9d28adfb5ceff9cc3d4",
+      "state": "NOT_RUN",
+      "roots": [
+        "dotSpec_eq_finishWord_nonzero"
+      ],
+      "requires": [
+        "official_total",
+        "guarded_checker"
+      ],
+      "scope": "Original finite dotSpec -> official finishWord with nonzero total"
+    },
+    {
+      "id": "raw_midpoint_values",
+      "path": "boundary-v1/MidpointDirectContractOnly.lean",
+      "bytes": 35331,
+      "sha256": "70a73a3845d63004f196d93241f4b6e5dbee7d0135ebb9360a739c0af2374e3d",
+      "state": "NOT_RUN_NEEDS_SAME_LITERAL_FIX",
+      "roots": [
+        "unsigned_midpoint_values",
+        "signed_midpoint_values"
+      ],
+      "requires": [
+        "real_order"
+      ],
+      "scope": "Actual raw midpoint bits -> exact real cells. Current draft embeds same signed_magnitude literal issue; repair before any request."
+    },
+    {
+      "id": "narrow_fixed_rounder",
+      "path": "fixed-scale/Fixed298RealCellContractOnly.lean",
+      "bytes": 7490,
+      "sha256": "10ecf38bbc23462950a484501de0e8c22598495b1b952b0c92517edd00c1ec14",
+      "state": "NOT_RUN_NOT_QUEUED",
+      "roots": [
+        "native32_fixed298_strict",
+        "real_cell_to_nat_cross",
+        "native32_fixed298_real_cell",
+        "finishWord_fixed298_of_cross"
+      ],
+      "requires": [],
+      "scope": "Interior normal nonpower q only; explicit runtime guard and exact fallback required in final total kernel"
+    },
+    {
+      "id": "accepted_total_sign",
+      "path": "fixed-scale/ActualTotalSign.lean.inc",
+      "bytes": 1907,
+      "sha256": "8789a84f82517f474375af54db59b4d8ccf3c59c137a611eacafe19466b74a8b",
+      "state": "NOT_RUN_NOT_QUEUED",
+      "roots": [
+        "actual_accepted_total_sign"
+      ],
+      "requires": [
+        "guarded_checker"
+      ],
+      "scope": "Sign derived from real accepted cell, not supplied by caller"
+    }
+  ],
+  "unimplemented_final_edges": [
+    "Producer theorem binds exact current runtime prepare/getters/maxIndex/ceilLog2 and actual sumRemaining to official dsum error+finite radius",
+    "Checker cell/sign + actual native32 final rounding yields q=dotSpec on accepted branch",
+    "Actual fast dot miss uses proved exact fallback including arbitrary lengths/NaN/Inf/signed zero",
+    "Actual getter caches, bias appended as exact term, output indexing and all12 record original Obligation"
+  ],
+  "conditional_narrow_route": {
+    "original_all_input_quantifiers": "UNCHANGED_REQUIRED",
+    "actual_operand_guard": "normal exponent1..254 or signedzero only",
+    "actual_proposal_guard": "E2..253 and fraction nonzero",
+    "allowed_reuse": "R25 Widen7 a88c only after actual runtime guarded branch equivalence",
+    "unseen_confirmation_policy": "No post-freeze unseen data used; only old R26 inputs used in census"
+  },
+  "cost_decision": "STOPBROADFP_PRODUCER_PROOF_THIS_ROUND_AFTER_ACTUAL_NEGATIVE_COST; no activeproofCI requests",
+  "CI_owner": "Droot",
+  "local_Lean": false,
+  "current_helper_request": "CI-REQUEST.json",
+  "native_cost_receipt": "FP23-COST-NEGATIVE-RECEIPT.json"
+}

@@ -1,0 +1,27 @@
+{
+  "verified_utc": "2026-10-27T08:03:20.816354+00:00",
+  "status": "VERIFIED_PINNED_64BIT_ABI_AND_ONE_NATIVE_EMITTER_NOT_TIMING",
+  "header": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round45m-20261027T074758Z\\research\\source-intake\\lean-runtime-293d5d0c\\lean.h",
+    "bytes": 136786,
+    "sha256": "982c731a1fbacc7688006f44f9f7af9d9e3e0247d310a728827f49e7f1466c13",
+    "fixed_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b"
+  },
+  "emitter": {
+    "path": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\development-workers\\anchor-323\\b16-ci21-codegen\\actual-emit.asm.txt",
+    "bytes": 21059,
+    "sha256": "bc9e5c2957a1ebb852fa83645f992934eda365bfe9da6106817e1753f965df23",
+    "receipt": "D:\\CodingProject\\Bitget\\competitions\\floatlib\\candidates\\f01-d7-research\\round9h-20261026T194639Z\\development-workers\\anchor-323\\b16-ci21-codegen\\receipt.json",
+    "source_scope": "R19 B16 CI21 actual emit, not a new B2 native measurement"
+  },
+  "facts": [
+    "On 64-bit, lean_box_uint32 returns tagged immediate lean_box(v), no allocation in that primitive.",
+    "On 32-bit the same primitive uses lean_alloc_ctor; that branch is not the x86_64 runner.",
+    "Selected historical native emitter: to_bits relocation 0x377, tagged lea rsi,[rax*2+1] at 0x3ac, array_push relocation 0x3b8.",
+    "Float32/F2/F4 boxes, Array allocation/copy/destruction, finish codecs and checksum costs are separate and not ruled out."
+  ],
+  "decision": "Do not allocate research to eliminating one hypothetical heap object per Binary32 output. Terminal F2/F4 lifecycle fusion still has a distinct measured-source premise.",
+  "new_lean_compilation": false,
+  "new_timing": false,
+  "whole_speedup": "UNKNOWN"
+}

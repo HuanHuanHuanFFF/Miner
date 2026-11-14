@@ -1,0 +1,11 @@
+# Exact support packing on source11
+
+This is a distinct implementation of zero elimination, not an independent statistical trial. The inline zero-pair candidate charges an unpredictable zero branch for every output pair. A support cache can charge that branch once per spatial patch and reuse its result across all output channels.
+
+The old admitted input integer X satisfies −2^55<X<2^55. Under additional K<128, store a live term at original weight index t as `q=t*2^56+(X+2^55)`. Then0<q<2^63: the payload is strictly between0 and2^56, and0≤t<128. All stored entries fit Lean's immediate Nat on a64-bit runner. Decoding is exact: `t=q>>56`, `X=(q & (2^56−1))−2^55`. Existing Y9/cq1 input is recovered by adding `2^57−2^55` to the low56 bits. A zero word can delimit each output's patch because no live encoded payload is0. For `q≠0`, no separate per-output length table is needed.
+
+Actual CNN shapes have K27 or36–72, so this packing guard covers their dimensions; actual numerical/hit coverage remains separate. Inputs skipped are exact signed integer zeros (both floating zero signs). Bias is not in the support cache and stays in the existing once-rounded finalizer. If the final exact numerator is zero, the old `zW` full input/bias sign replay must remain: support pruning cannot decide −0 versus+0.
+
+Memory tradeoff: copying live patch terms duplicates overlapping input values, about9×density versus one padded input cache, plus one sentinel per spatial output. It saves input reloading/index arithmetic and zero branches across output channels, but costs preparation, allocation and bandwidth. Dense first layers should usually retain source11; a generic support-density guard needs native cost evidence, not tuning on frozen confirmation inputs. A source-only Nat-loop prototype will initially quantify feasibility; no full gate or speed claim follows from the packing identity.
+
+Formal interfaces remaining:1) encode/decode and immediate-Nat bound;2) support order/list fold equals original two accumulator folds, with omitted terms exactlyzero;3) sentinel position and output order;4) existing signed-zero replay preservation;5) top-level source11 guard/fallback integration and exact all12 obligation. The first is cheap arithmetic; the remaining loop integration must be compiled, never assumed inherited.

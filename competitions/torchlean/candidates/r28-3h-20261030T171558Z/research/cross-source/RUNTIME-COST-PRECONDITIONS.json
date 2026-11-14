@@ -1,0 +1,47 @@
+{
+  "at_utc": "2026-10-30T18:13:49.622273+00:00",
+  "state": "PINNED_RUNTIME_SOURCE_PRECONDITION_REVIEW_NOT_NATIVE_COST",
+  "fixed_commit": "293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+  "header_path": "competitions\\floatlib\\candidates\\f01-d7-research\\round45m-20261027T074758Z\\research\\source-intake\\lean-runtime-293d5d0c\\lean.h",
+  "header_sha256": "982c731a1fbacc7688006f44f9f7af9d9e3e0247d310a728827f49e7f1466c13",
+  "anchors": {
+    "#define LEAN_MAX_SMALL_NAT": [
+      1476
+    ],
+    "#define LEAN_MAX_SMALL_INT": [
+      1686
+    ],
+    "lean_uint64_to_nat(uint64_t": [
+      1505
+    ],
+    "lean_int64_to_int(int64_t": [
+      1716
+    ],
+    "lean_scalar_to_int64": [
+      1723,
+      1753,
+      1768,
+      1776,
+      1784,
+      1842,
+      1843,
+      1909,
+      1910,
+      2234,
+      2375,
+      2515,
+      2655,
+      2797
+    ],
+    "lean_box_uint64(uint64_t": [
+      2977
+    ]
+  },
+  "findings": {
+    "small_nat": "SIZE_MAX>>1, thus every centered cachepayload<2^40 stays immediate on64bitrunner; source36 old offsetpayloadalsoimmediate, so this is not a boxing-eliminationclaim",
+    "small_int": "INT_MAX even on64bitrunner; tempting ArrayInt signed-storage rewrite cannot assume39bit factorsstay immediate. HistoricalInt-MACnegative applies toperMACIntarithmetic; storage-onlywouldstillneed itsown completecost, not a blanket impossibilityclaim",
+    "uint64_boxing": "UInt64 inside polymorphic Prod mayrequire heapboxing; exact generatedC/ASM forcurrentCRow isUNKNOWN. Metadataoneperrow, notperMAC. Dedicatedstructure/fusedprep remain unmeasured hypotheses only",
+    "cost_counts": "Actualcurrentcentered64 cachewalk84333items versus84348allvectorupperbound;1producerrejects15items beforewalk.8776items could befilteredbybounds/oddrowwithoutlosinganyoldseeneligiblebranch, but no newcandidate/CI created"
+  },
+  "decision": "Keep frozen centered c5acf195. Do not add an Intstorage or FloatArray variant on a false zero-allocation premise. Root-owned completecost and optionalgeneratedC probe decide furtherproof/producerwork."
+}

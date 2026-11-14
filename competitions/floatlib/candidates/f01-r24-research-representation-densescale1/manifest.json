@@ -1,0 +1,41 @@
+{
+  "candidate": "f01-r24-research-representation-densescale1",
+  "candidate_file": "Kernel.lean",
+  "candidate_sha256": "28542912254e009ab7c3e047e2fc3b7145a9205eb4b862401abea5fe28230fbf",
+  "candidate_bytes": 228600,
+  "created_at_utc": "2026-10-28T20:50:46.965352+00:00",
+  "validation_mode": "statement-only",
+  "diagnostic_only": true,
+  "diagnostic_timeout_seconds": 240,
+  "proof_status": "NOT_RUN",
+  "performance": "NOT_RUN",
+  "formal_submission": "NOT_SUBMITTED",
+  "official_submission_inherited": false,
+  "helper_audit_module": "development-helper-audit-v8.py",
+  "helper_audit_module_path": "f01-d7-research/round9h-20261026T194639Z/development-helper-audit-v8.py",
+  "helper_audit_module_sha256": "5b58eece211bd9cdaa270fc82bef624a5974c7d056732e19f54547c0fe6ef975",
+  "explicit_helper_audit": [
+    "R2W01b.denseScaleTable_size",
+    "R2W01b.denseScaleFloat_eq",
+    "R2W01b.denseScaleRead_eq",
+    "R2W01b.scaleAt_eq"
+  ],
+  "helper_audit_required_endpoints": [
+    "R2W01b.denseScaleTable_size",
+    "R2W01b.denseScaleFloat_eq",
+    "R2W01b.denseScaleRead_eq",
+    "R2W01b.scaleAt_eq"
+  ],
+  "helper_audit_expected_count": 4,
+  "helper_audit_source_sha256": "28542912254e009ab7c3e047e2fc3b7145a9205eb4b862401abea5fe28230fbf",
+  "diagnostic_evaluations": [],
+  "runtime_base_sha256": "622d8394a7127e93dcaf992c62c6dfcff7208d212738409a5e34525dfafd1a58",
+  "old_reader_sha256": "b43ef4b60e5e2026b163cfa9fe0eb31a515f5125d236117650da69600ed11006",
+  "fragment_sha256": "bec1bdca0a32bc842ea8af8d5f2b7ea52420d87eabf3a198f56fc45f37be6f67",
+  "byte_identical_base_prefix": 30849,
+  "byte_identical_base_suffix": 195661,
+  "semantics": "Only scaleAt storage/reader changed, original scaleAt_eq preserved. Every scalar and fold arithmetic order and fallback is byte-identical.",
+  "mechanism": "Static checked FloatArray scale table replaces Array Float32 pointer chase with direct double load plus inline narrowing. Original 512-entry table remains for validation and fallback. One global bool read/branch is charged.",
+  "first_falsifier": "Actual hot scalar path has extra calls, per-op checks/boxing/allocation, or the dense load and narrowing fail to reduce complete scalar cost. Module initialization must also be reported.",
+  "cost_boundary": "Original public full call; no benchmark/gate/compiler modifications and no assumption opaque wide/narrow roundtrip is generally exact."
+}

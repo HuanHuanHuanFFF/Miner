@@ -1,0 +1,79 @@
+{
+  "reviewer": "C independent critical static review",
+  "observed_start_utc": "2026-10-29T03:00:53Z",
+  "finished_at_utc": "2026-10-29T03:12:51.481088+00:00",
+  "verdict": "NO_CONCRETE_STATIC_BLOCKER_IN_THE_TWO_NEW_COMPONENTS",
+  "acceptance": "NOT_COMPILED_NOT_REPLAYED_NOT_AXIOM_AUDITED",
+  "scope": "RawMidpoint and NativeSignOr plus declared dependency signatures, fixed public prototypes and actual PortableF64 certify expressions. No old model rerun or broad B2 review.",
+  "checked_source_identities": [
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/NativeSignOr.lean.inc",
+      "sha256": "0ea8f87918d4aa3e364ae6d945a0378e241edcc53cb9552cf8e8735dcaf830e0",
+      "bytes": 2740
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/RawMidpoint.lean.inc",
+      "sha256": "85a54ce35d770ee8978fe70d00aff3971f7ecf2a312c5b0de8fc939ba561dfbe",
+      "bytes": 8937
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/controller/MidpointWords.lean.inc",
+      "sha256": "f5dbbdaf457823ba26857f5804184583e47e64d540629b45a1c7319ea554bd12",
+      "bytes": 6156
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/representation/WidenNormal4.lean.inc",
+      "sha256": "abe567751440563b142cf1b479681f81f8afe5b0ca9bd3038efcbde5e1fb4c5d",
+      "bytes": 12225
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/MidpointReal.lean.inc",
+      "sha256": "96050a50bcbc1d00bd062fbeedfaa69bea779100cfbb208e1ba008bc3519f0a2",
+      "bytes": 3879
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/research/scalar/midpoint/NormalCell.lean.inc",
+      "sha256": "43958f8bb657966dcf05b328dc7bd38ac8ddb1f81a228cfcf7eee8636dddebd4",
+      "bytes": 10125
+    },
+    {
+      "path": "competitions/floatlib/candidates/f01-d7-research/round7h-20261028T203856Z/development-scalar/PortableF64Dot.lean.inc",
+      "sha256": "dd775683cade6e575dc6f0684f9216742e1c772c3cf7460b0c53c54e4e3eff04",
+      "bytes": 4338
+    }
+  ],
+  "actionable_findings": [],
+  "confirmed_points": [
+    "Pinned NativeBinary32.signBit is (q&&&0x80000000)!=0; expField and fracField are the same shifts/masks as actual certify, so the view interface matches actual raw expressions.",
+    "magnitude_exp/magnitude_frac preserve fields after clearing the sign; minnormal_iff uses the actual Nat.mod_mul argument order and reconstructs the low31-bit word correctly.",
+    "base_eq_center proves OR/add equivalence using disjoint52-bit fraction and a bounded UInt64 sum; its referenced Widen field-shift lemmas are unconditional in q.",
+    "NativeSignOr first proves stored raw64 equality to Model.neg under w<2^63. native_real_neg derives that sign-clear bound from a finite positive-sign decode and applies finite real negation only afterward.",
+    "For negative q, lowerWord uses signOR(above), upperWord uses signOR(below), matching lowerSigned=-upperMagnitude and upperSigned=-lowerMagnitude.",
+    "e=1,f=0 uses doubled lower raw delta and produces2^-126-2^-150. e=254,f=8388607 uses finite64 overflow midpoint2^128-2^103. Both signs and strict-cell boundaries are consistent.",
+    "roundRatScaled_of_endpoint_bounds supplies exactly the normal exponent/fraction, denominator and signed-source premises required by existing NormalCell.native32_raw_strict; no finite-result premise is silently added."
+  ],
+  "remaining_actual_integration_risk": {
+    "status": "REQUIRED_CALLER_OBLIGATION_NOT_A_DEFECT_IN_THE_REVIEWED_ENDPOINT_THEOREMS",
+    "description": "Actual certify uses UInt64 orderKey comparisons, not Float.lt. RawMidpoint only supplies endpoint real equalities. The separate native Float.lt bridge does not close this caller.",
+    "minimum_next_proof": "For finite raw64 a,b with at least one nonzero real value, orderKey(a)<orderKey(b) implies real(a)<real(b), then connect the actual Boolean conjunction and radius/exact-sum enclosure. Show the normal-q boundary words are finite and nonzero from their decodes/geometry.",
+    "signed_zero_counterexample": {
+      "left": "0x8000000000000000",
+      "right": "0x0000000000000000",
+      "left_key": "0x7fffffffffffffff",
+      "right_key": "0x8000000000000000",
+      "real_values_equal": true
+    }
+  },
+  "typing_and_dependency_limits": [
+    "No specific new mathematical/API mismatch was found; all new declarations and their exact dependency chain still require actual Lean elaboration/replay/AX.",
+    "The review binds WidenNormal4 abe56775, MidpointWords f5dbbdaf, MidpointReal96050a50 and NormalCell43958f8b as declared; acceptance from core13 or different source snapshots is not inherited.",
+    "Nat/UInt64 coercions and simp/omega steps were inspected statically but not executed. No proposed speculative code rewrite is justified before actual diagnostics."
+  ],
+  "prototype_review": {
+    "file": "check_raw_midpoint.py",
+    "execution": "NOT_RUN_BY_REVIEWER",
+    "interpretation": "Its24normal/48endpoint equalities and10excluded field cases are finite model evidence only. value32(0x7f800000) deliberately denotes the virtual2^128 neighbor solely for max-finite cell geometry, not IEEE infinity semantics."
+  },
+  "mutations": "Only this new JSON and the accompanying new Markdown review; no B source/Git/CI changes",
+  "shared_deadline_utc": "2026-10-29T03:38:56Z"
+}
